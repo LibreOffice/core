@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZDriverWrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-19 10:53:59 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,7 @@ namespace connectivity
     Any SAL_CALL ODriverWrapper::queryInterface( const Type& _rType ) throw (RuntimeException)
     {
         Any aReturn = ODriverWrapper_BASE::queryInterface(_rType);
-        if (!aReturn.hasValue() && m_xDriverAggregate.is())
-            aReturn = m_xDriverAggregate->queryAggregation(_rType);
-        return aReturn;
+        return aReturn.hasValue() ? aReturn : (m_xDriverAggregate.is() ? m_xDriverAggregate->queryAggregation(_rType) : aReturn);
     }
 
     //--------------------------------------------------------------------
@@ -175,6 +173,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/06/19 10:53:59  fs
+ *  #88434# overload queryInterface to delegate calls to the aggregate
+ *
  *  Revision 1.1  2001/05/25 10:56:17  fs
  *  initial checkin - driver rerouting it's connect through the connection pool
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-06 06:21:03 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,9 +343,13 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 m_aValue.m_bBool    = _rRH.m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
+                m_aValue.m_nInt8    = _rRH.m_aValue.m_nInt8;
+                break;
             case DataType::SMALLINT:
+                m_aValue.m_nInt16   = _rRH.m_aValue.m_nInt16;
+                break;
             case DataType::INTEGER:
-                m_aValue.m_nInt32 = _rRH.m_aValue.m_nInt32;
+                m_aValue.m_nInt32   = _rRH.m_aValue.m_nInt32;
                 break;
             default:
                 (*(Any*)m_aValue.m_pValue)  = (*(Any*)_rRH.m_aValue.m_pValue);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:11 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ namespace connectivity
 
         class OAdabasConnection :    public OConnection_BASE2
         {
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>      m_xCatalog;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>      m_xCatalog;
 
             sal_Bool isStarted();
 

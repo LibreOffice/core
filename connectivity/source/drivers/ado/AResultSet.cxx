@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:12 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,9 +208,7 @@ void OResultSet::disposing(void)
 Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OPropertySetHelper::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = OResultSet_BASE::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : OResultSet_BASE::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)

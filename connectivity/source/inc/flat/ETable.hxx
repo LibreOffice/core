@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:08 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace connectivity
             OFlatString(){}
 
             xub_StrLen  GetTokenCount( sal_uInt8 cTok = ';', sal_uInt8 cStrDel = '\0' ) const;
-            ByteString  GetToken( xub_StrLen nToken, sal_uInt8 cTok = ';', sal_uInt8 cStrDel = '\0' ) const;
+            void        GetTokenSpecial( ByteString& _rStr,xub_StrLen& nStartPos, sal_uInt8 cTok = ';', sal_uInt8 cStrDel = '\0' ) const;
         };
 
 

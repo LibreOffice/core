@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,10 +244,11 @@ Sequence< sal_Int8 > OAdoTable::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OAdoTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return OTable_TYPEDEF::getSomething(rId);
+    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+                ?
+            (sal_Int64)this
+                :
+            OTable_TYPEDEF::getSomething(rId);
 }
 // -------------------------------------------------------------------------
 // XRename

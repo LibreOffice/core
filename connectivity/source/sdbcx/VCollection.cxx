@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::M
                      ,m_aRefreshListeners(_rMutex)
                      ,m_aNameMap(_bCase ? true : false)
 {
+    m_aElements.reserve(_rVector.size());
     for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
         m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,WeakReference< ::com::sun::star::container::XNamed >())));
 }
@@ -144,7 +145,7 @@ void OCollection::disposing(void)
 Any SAL_CALL OCollection::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    if (Index < 0 || Index >= getCount())
+    if (Index < 0 || Index >= m_aNameMap.size())
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(Index),*this);
 
     ObjectIter aIter = m_aElements[Index];
@@ -162,7 +163,7 @@ Any SAL_CALL OCollection::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsEx
         (*aIter).second = xName;
     }
 
-    return makeAny( Reference< XPropertySet >(xName,UNO_QUERY));
+    return makeAny(xName);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OCollection::getByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
@@ -186,7 +187,7 @@ Any SAL_CALL OCollection::getByName( const ::rtl::OUString& aName ) throw(NoSuch
         (*aIter).second = xName;
     }
 
-    return makeAny( Reference< XPropertySet >(xName,UNO_QUERY));
+    return makeAny(xName);
 }
 // -------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OCollection::getElementNames(  ) throw(RuntimeException)
@@ -226,6 +227,8 @@ void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
 void OCollection::reFill(const TStringVector &_rVector)
 {
     OSL_ENSURE(!m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
+    m_aElements.reserve(_rVector.size());
+
     for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
         m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,WeakReference< ::com::sun::star::container::XNamed >())));
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETables.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:18 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ void SAL_CALL OFlatTables::dropByIndex( sal_Int32 index ) throw(SQLException, In
     if (index < 0 || index >= getCount())
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
-    dropByName((*m_aElements[index]).first);
+    dropByName(getElementName(index));
 }
 // -------------------------------------------------------------------------
 

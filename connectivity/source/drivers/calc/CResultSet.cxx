@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CResultSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 09:58:39 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,7 @@ sal_Bool SAL_CALL OCalcResultSet::supportsService( const ::rtl::OUString& _rServ
 Any SAL_CALL OCalcResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OResultSet::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = OCalcResultSet_BASE::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : OCalcResultSet_BASE::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
  Sequence<  Type > SAL_CALL OCalcResultSet::getTypes(  ) throw( RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VUser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,8 @@ void OUser::disposing(void)
 // -------------------------------------------------------------------------
 Any SAL_CALL OUser::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-        Any aRet = ODescriptor::queryInterface( rType);
-    if(aRet.hasValue())
-        return aRet;
-    return OUser_BASE::queryInterface( rType);
+    Any aRet = ODescriptor::queryInterface( rType);
+    return aRet.hasValue() ? aRet : OUser_BASE::queryInterface( rType);
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OUser::getTypes(  ) throw(RuntimeException)

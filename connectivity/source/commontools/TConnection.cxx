@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:42:00 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,10 @@ using namespace::osl;
 //XUnoTunnel
 sal_Int64 SAL_CALL OMetaConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return 0;
+    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        ?
+        (sal_Int64)this
+        : sal_Int64(0);
 }
 // -----------------------------------------------------------------------------
 Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()

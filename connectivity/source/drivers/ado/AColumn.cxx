@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 07:40:32 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,11 @@ Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OAdoColumn::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return OColumn_ADO::getSomething(rId);
+    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+                ?
+            (sal_Int64)this
+                :
+            OColumn_ADO::getSomething(rId);
 }
 // -------------------------------------------------------------------------
 void OAdoColumn::construct()

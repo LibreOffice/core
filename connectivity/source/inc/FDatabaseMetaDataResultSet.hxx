@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:17:56 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef _VOS_REFERNCE_HXX_
+#include <vos/refernce.hxx>
+#endif
 
 namespace connectivity
 {
@@ -119,8 +122,7 @@ namespace connectivity
                                                 ::com::sun::star::sdbc::XCloseable,
                                                 ::com::sun::star::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
-    DECLARE_STL_VECTOR(ORowSetValue,ORow);
-    DECLARE_STL_VECTOR(ORow, ORows);
+
     //  typedef ORefVector<ORowSetValue>    ORow;
     //  typedef ORefVector<ORow>            ORows;
 
@@ -130,9 +132,32 @@ namespace connectivity
                                         public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
     {
 
+    public:
+        /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
+        class ORowSetValueDecorator : public ::vos::OReference
+        {
+            ORowSetValue    m_aValue;   // my own value
+        public:
+            ORowSetValueDecorator(){m_aValue.setBound(sal_True);}
+            ORowSetValueDecorator(const ORowSetValue& _aValue) : m_aValue(_aValue){m_aValue.setBound(sal_True);}
+            ORowSetValueDecorator& operator=(const ORowSetValue& _aValue);
 
+            operator const ORowSetValue&()  const   { return m_aValue; }
+            const ORowSetValue& getValue()  const   { return m_aValue; }
+            void setValue(const ORowSetValue& _aValue) { m_aValue = _aValue; }
+            void setNull() { m_aValue.setNull(); }
+
+        };
+
+        typedef ::vos::ORef<ORowSetValueDecorator> ORowSetValueDecoratorRef;
+
+        DECLARE_STL_VECTOR(ORowSetValueDecoratorRef,ORow);
+        DECLARE_STL_VECTOR(ORow, ORows);
+
+    private:
         ORows                           m_aRows;
         ORows::iterator                 m_aRowsIter;
+        ORowSetValue                    m_aEmptyValue;
         ::com::sun::star::uno::WeakReferenceHelper    m_aStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
         sal_Int32                       m_nRowPos;
@@ -150,12 +175,14 @@ namespace connectivity
         void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
 
     protected:
+        const ORowSetValue& getValue(sal_Int32 columnIndex);
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-        ~ODatabaseMetaDataResultSet();
+
+        virtual ~ODatabaseMetaDataResultSet();
     public:
         virtual void    SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
         virtual void    SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
@@ -241,6 +268,36 @@ namespace connectivity
         void setTypeInfoMap();
         void setBestRowIdentifierMap();
         void setVersionColumnsMap();
+
+        // some methods to get already defined ORowSetValues
+        // this increase the reuse of ORowSetValues
+        /// return an empty ORowSetValueDecorator
+        static ORowSetValueDecoratorRef getEmptyValue();
+        /// return an ORowSetValueDecorator with 0 as value
+        static ORowSetValueDecoratorRef get0Value();
+        /// return an ORowSetValueDecorator with 1 as value
+        static ORowSetValueDecoratorRef get1Value();
+        /// return an ORowSetValueDecorator with ColumnSearch::BASIC as value
+        static ORowSetValueDecoratorRef getBasicValue();
+        /// return an ORowSetValueDecorator with string SELECT as value
+        static ORowSetValueDecoratorRef getSelectValue();
+        /// return an ORowSetValueDecorator with string INSERT as value
+        static ORowSetValueDecoratorRef getInsertValue();
+        /// return an ORowSetValueDecorator with string DELETE as value
+        static ORowSetValueDecoratorRef getDeleteValue();
+        /// return an ORowSetValueDecorator with string UPDATE as value
+        static ORowSetValueDecoratorRef getUpdateValue();
+        /// return an ORowSetValueDecorator with string CREATE as value
+        static ORowSetValueDecoratorRef getCreateValue();
+        /// return an ORowSetValueDecorator with string READ as value
+        static ORowSetValueDecoratorRef getReadValue();
+        /// return an ORowSetValueDecorator with string ALTER as value
+        static ORowSetValueDecoratorRef getAlterValue();
+        /// return an ORowSetValueDecorator with string DROP as value
+        static ORowSetValueDecoratorRef getDropValue();
+        /// return an ORowSetValueDecorator with string ' as value
+        static ORowSetValueDecoratorRef getQuoteValue();
+
     };
 }
 #endif // _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:07 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,9 +175,7 @@ void SAL_CALL OStatement_Base::release() throw(RuntimeException)
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OStatement_BASE::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = OPropertySetHelper::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OStatement_Base::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -385,9 +383,7 @@ Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLEx
 Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ::cppu::queryInterface(rType,static_cast< XBatchExecution*> (this));
-    if(!aRet.hasValue())
-        aRet = OStatement_Base::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : OStatement_Base::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:35:05 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,10 +251,11 @@ void OSDBCDriverManager::initializeDriverPrecedence()
                     Reference< XServiceInfo > xDriverSI(*aDriverLoop, UNO_QUERY);
                     OSL_ENSURE(xDriverSI.is(), "OSDBCDriverManager::initializeDriverPrecedence: encountered a driver without service info!");
                     if (xDriverSI.is())
-                        aDriverImplNames[xDriverSI->getImplementationName()] = sal_Int32(aDriverLoop - m_aDriversBS.begin());
+                        aDriverImplNames.insert(MapString2Int::value_type(xDriverSI->getImplementationName(),sal_Int32(aDriverLoop - m_aDriversBS.begin())));
                 }
 
                 BootstrappedDrivers aSortedDrivers;
+                aSortedDrivers.reserve(3);
                     // this will be the sorted drivers
                 ::std::set< sal_Int32 > aPreferedDriversOriginalPos;
                     // the drivers in m_aDriversBS which have been inserted in aSortedDrivers

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:53 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,81 +92,79 @@ Reference< XResultSet > SAL_CALL OAdabasDatabaseMetaData::getTypeInfo(  ) throw(
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
     Reference< XResultSet > xNewRes = pResult;
     pResult->setTypeInfoMap();
-    static ORows aRows;
-    if(!aRows.size())
+    static ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
+    if(aRows.empty())
     {
+        aRows.reserve(19);
         Reference< XResultSet > xRes = OAdabasDatabaseMetaData_BASE::getTypeInfo();
 
         if(xRes.is())
         {
-            ORow aRow(19);
-            ORow::iterator aIter = aRow.begin();
-            for(;aIter != aRow.end();++aIter)
-                aIter->setBound(sal_True);
+            ::connectivity::ODatabaseMetaDataResultSet::ORow aRow(19);
 
             Reference< XRow> xRow(xRes,UNO_QUERY);
             while(xRes->next())
             {
                 sal_Int32 nPos = 1;
-                aRow[nPos++] = xRow->getString  (1);
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getString    (1));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getInt     (2);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getInt       (2));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getInt     (3);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getInt       (3));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getString  (4);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getString    (4));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getString  (5);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getString    (5));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getString  (6);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getString    (6));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getInt     (7);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getInt       (7));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getBoolean (8);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getBoolean   (8));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getShort   (9);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getShort     (9));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getBoolean (10);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getBoolean   (10));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getInt     (11);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getInt       (11));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getBoolean (12);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getBoolean   (12));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getString  (13);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getString    (13));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getShort   (14);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getShort     (14));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getShort   (15);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getShort     (15));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getInt     (16);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getInt       (16));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = xRow->getInt     (17);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(xRow->getInt       (17));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
-                aRow[nPos++] = (sal_Int16)xRow->getInt(18);
+                    aRow[nPos-1]->setNull();
+                aRow[nPos++] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int16)xRow->getInt(18));
                 if(xRow->wasNull())
-                    aRow[nPos-1].setNull();
+                    aRow[nPos-1]->setNull();
 
                 // we have to fix some incorrect entries
-                if(!aRow[2].isNull())
+                if(!aRow[2]->getValue().isNull())
                 {
-                    switch((sal_Int32)aRow[2])
+                    switch((sal_Int32)aRow[2]->getValue())
                     {
                         case DataType::FLOAT:
 //                          aRow[3] = sal_Int32(15);
@@ -175,11 +173,11 @@ Reference< XResultSet > SAL_CALL OAdabasDatabaseMetaData::getTypeInfo(  ) throw(
 //                          aRow[3] = sal_Int32(16);
 //                          break;
                         case DataType::DOUBLE:
-                            aRow[2] = DataType::DOUBLE;
-                            aRow[3] = sal_Int32(18);
+                            aRow[2]->setValue(DataType::DOUBLE);
+                            aRow[3]->setValue(sal_Int32(18));
                             break;
                         case DataType::TIMESTAMP:
-                            aRow[3] = sal_Int32(27);
+                            aRow[3]->setValue(sal_Int32(27));
                             break;
                         default:
                             break;

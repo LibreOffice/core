@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 14:29:40 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ void OAdabasConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    Reference< XComponent > xComp2(m_xCatalog.get(), UNO_QUERY);
+    Reference< XComponent > xComp2(m_xCatalog, UNO_QUERY);
     if(xComp2.is())
         xComp2->dispose();
 
@@ -232,14 +232,9 @@ void OAdabasConnection::disposing()
 ::com::sun::star::uno::Reference< XTablesSupplier > OAdabasConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    Reference< XTablesSupplier > xTab = m_xCatalog;
-    if(!m_xCatalog.get().is())
-    {
-        OAdabasCatalog *pCat = new OAdabasCatalog(m_aConnectionHandle,this);
-        xTab = pCat;
-        m_xCatalog = xTab;
-    }
-    return xTab;
+    if(!m_xCatalog.is())
+        m_xCatalog = new OAdabasCatalog(m_aConnectionHandle,this);
+    return m_xCatalog;
 }
 // --------------------------------------------------------------------------------
 Reference< XDatabaseMetaData > SAL_CALL OAdabasConnection::getMetaData(  ) throw(SQLException, RuntimeException)
@@ -289,10 +284,11 @@ Reference< XPreparedStatement > SAL_CALL OAdabasConnection::prepareStatement( co
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL OAdabasConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return OConnection_BASE2::getSomething(rId);
+    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+                ?
+            (sal_Int64)this
+                :
+            OConnection_BASE2::getSomething(rId);
 }
 // -----------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdabasConnection::getUnoTunnelImplementationId()

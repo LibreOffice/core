@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDescriptor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 07:33:30 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,11 @@ namespace connectivity
         // com::sun::star::lang::XUnoTunnel
         sal_Int64 SAL_CALL ODescriptor::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
         {
-            if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-                return (sal_Int64)this;
-
-            return 0;
+            return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+                ?
+            (sal_Int64)this
+                :
+                0;
         }
 
         // -----------------------------------------------------------------------------
@@ -115,9 +116,7 @@ namespace connectivity
         Any SAL_CALL ODescriptor::queryInterface( const Type & rType ) throw(RuntimeException)
         {
             Any aRet = ::cppu::queryInterface(rType,static_cast< XUnoTunnel*> (this));
-            if(!aRet.hasValue())
-                aRet = ODescriptor_PBASE::queryInterface(rType);
-            return aRet;
+            return aRet.hasValue() ? aRet : ODescriptor_PBASE::queryInterface(rType);
         }
 
         // -----------------------------------------------------------------------------
@@ -142,6 +141,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/19 07:33:30  fs
+ *  initial checkin - implementation of ODescriptor
+ *
  *
  *  Revision 1.0 19.03.01 08:21:59  fs
  ************************************************************************/

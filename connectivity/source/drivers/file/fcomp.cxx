@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 12:54:45 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ void OPredicateCompiler::dispose()
 {
     Clean();
     m_orgColumns        = NULL;
-    m_aParameterColumns = NULL;
     m_xIndexes          = NULL;
 }
 //------------------------------------------------------------------
@@ -157,20 +156,10 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         DBG_ASSERT(pSQLParseNode->count() == 5,"OFILECursor: Fehler im Parse Tree");
         pWhereClause = pSQLParseNode->getChild(4);
     }
-    else if (SQL_ISRULE(pSQLParseNode,update_statement_positioned))
-    {
-        // nyi
-        DBG_ERROR("OPredicateCompiler: update positioned nyi");
-    }
     else if (SQL_ISRULE(pSQLParseNode,delete_statement_searched))
     {
         DBG_ASSERT(pSQLParseNode->count() == 4,"Fehler im Parse Tree");
         pWhereClause = pSQLParseNode->getChild(3);
-    }
-    else if (SQL_ISRULE(pSQLParseNode,delete_statement_positioned))
-    {
-        // nyi
-        DBG_ERROR("OPredicateCompiler: positioned nyi");
     }
     else
             // Anderes Statement. Keine Selektionskriterien.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-23 07:55:59 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,13 +102,18 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-
+            ::std::vector<sal_Int32>                            m_aParameterIndexes; // maps the parameter index to column index
             ::rtl::OUString                                     m_aSql;
-            OValueRow                                           m_aRow;
+            OValueRow                                           m_aEvaluateRow; // contains all values of a row
+            OValueRow                                           m_aParameterRow;
+            ORefAssignValues                                    m_aAssignValues; // needed for insert,update and parameters
+                                                                    // to compare with the restrictions
+
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
-            //  ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet >      m_xRS; // only to enshure that the result isn't deleted
+
             OResultSet*                                         m_pResultSet;
-            OFileTable*                                         m_pTable;
+            TIntVector*                                         m_pEvaluationKeySet;
+            ::vos::ORef<connectivity::OSQLColumns>              m_xParamColumns;    // the parameter columns
 
             // factory method for resultset's
             virtual OResultSet* createResultSet();
@@ -117,12 +122,28 @@ namespace connectivity
             void checkAndResizeParameters(sal_Int32 parameterIndex);
             void setParameter(sal_Int32 parameterIndex, const ORowSetValue& x);
 
+
+            void GetAssignValues();
+            void SetAssignValue(const String& aColumnName,
+                                   const String& aValue,
+                                   BOOL bSetNull = FALSE,
+                                   UINT32 nParameter=SQL_NO_PARAMETER);
+            UINT32 AddParameter(connectivity::OSQLParseNode * pParameter,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol);
+            void scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes);
+            void describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable);
+            void describeParameter();
+
+            void ParseAssignValues( const ::std::vector< String>& aColumnNameList,
+                                    connectivity::OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex);
+
+            virtual void initializeResultSet(OResultSet* _pResult);
         public:
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OPreparedStatement( OConnection* _pConnection);
 
-            void construct(const ::rtl::OUString& sql)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void construct(const ::rtl::OUString& sql)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // OComponentHelper
             virtual void SAL_CALL disposing(void);

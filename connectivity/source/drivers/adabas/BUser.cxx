@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 07:23:54 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,26 +109,19 @@ OAdabasUser::OAdabasUser(   OAdabasConnection* _pConnection,
     construct();
 }
 // -------------------------------------------------------------------------
-Any SAL_CALL OAdabasUser::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-//      if(rType == ::getCppuType((const ::com::sun::star::uno::Reference< XGroupsSupplier>*)0))
-//              return Any();
-
-    return OUser_TYPEDEF::queryInterface(rType);
-}
-// -------------------------------------------------------------------------
 void OAdabasUser::refreshGroups()
 {
     if(!m_pConnection)
         return;
 
     TStringVector aVector;
-        Reference< XStatement > xStmt = m_pConnection->createStatement(  );
+    aVector.reserve(7); // we don't know the excatly count of users but this should fit the normal need
+    Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("SELECT DISTINCT GROUPNAME FROM DOMAIN.USERS WHERE GROUPNAME IS NOT NULL AND GROUPNAME <> ' ' AND USERNAME = '");
     aSql += getName( );
     aSql += ::rtl::OUString::createFromAscii("'");
 
-        Reference< XResultSet > xResult = xStmt->executeQuery(aSql);
+    Reference< XResultSet > xResult = xStmt->executeQuery(aSql);
     if(xResult.is())
     {
                 Reference< XRow > xRow(xResult,UNO_QUERY);

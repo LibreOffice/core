@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-06 07:41:49 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,12 +438,6 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 
@@ -451,47 +445,23 @@ Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 col
 
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
 
 Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
 
 Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-
-    columnIndex = mapColumn(columnIndex);
     return Any();
 }
 // -------------------------------------------------------------------------

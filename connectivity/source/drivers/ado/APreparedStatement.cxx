@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:26:59 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,13 +119,11 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OStatement_Base::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = ::cppu::queryInterface(  rType,
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface( rType,
                                         static_cast< XPreparedStatement*>(this),
                                         static_cast< XParameters*>(this),
                                         static_cast< XPreparedBatchExecution*>(this),
                                         static_cast< XResultSetMetaDataSupplier*>(this));
-    return aRet;
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)

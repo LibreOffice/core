@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,8 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
             Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
             Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
             Reference< XPropertySet > xColProp;
-            for(sal_Int32 i=0;i<xColumns->getCount();++i)
+            sal_Int32 nCount = xColumns->getCount();
+            for(sal_Int32 i=0;i<nCount;++i)
             {
                 xColumns->getByIndex(i) >>= xColProp;
                 aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;

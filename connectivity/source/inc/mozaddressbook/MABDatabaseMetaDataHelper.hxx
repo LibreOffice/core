@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABDatabaseMetaDataHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 10:21:57 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 05:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ namespace connectivity
         public:
             OMozabDatabaseMetaDataHelper( );
             ~OMozabDatabaseMetaDataHelper();
-            connectivity::ORows &getTables( OMozabConnection* _pCon );
+            ODatabaseMetaDataResultSet::ORows& getTables( OMozabConnection* _pCon );
         private:
             sal_Bool m_bProfileExists ;
         };

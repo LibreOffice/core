@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKey.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:49:41 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,10 +154,11 @@ Sequence< sal_Int8 > OAdoKey::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OAdoKey::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return OKey_ADO::getSomething(rId);
+    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+                ?
+            (sal_Int64)this
+                :
+            OKey_ADO::getSomething(rId);
 }
 // -------------------------------------------------------------------------
 void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)

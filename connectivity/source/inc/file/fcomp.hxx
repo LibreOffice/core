@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:10:29 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ namespace connectivity
 
             OCodeList                               m_aCodeList;
             OFileColumns                            m_orgColumns; // in filecurs this are the filecolumns
-            ::vos::ORef< connectivity::OSQLColumns> m_aParameterColumns;
             OSQLAnalyzer*                           m_pAnalyzer;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xIndexes;
             sal_Int32                               m_nParamCounter;
@@ -104,12 +103,6 @@ namespace connectivity
             sal_Bool hasORCondition() const {return m_bORCondition;}
             void     setOrigColumns(const OFileColumns& rCols) { m_orgColumns = rCols; }
             const OFileColumns getOrigColumns() const { return m_orgColumns; }
-
-            void setParameterColumns(::vos::ORef< connectivity::OSQLColumns > _rParaCols)
-            {
-                m_aParameterColumns = _rParaCols;
-            }
-
         protected:
             OOperand* execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             OOperand* execute_LIKE(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

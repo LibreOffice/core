@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-06 07:41:49 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,9 +139,7 @@ void SAL_CALL OPreparedStatement::release() throw(::com::sun::star::uno::Runtime
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OStatement_BASE2::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = OPreparedStatement_BASE::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : OPreparedStatement_BASE::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)

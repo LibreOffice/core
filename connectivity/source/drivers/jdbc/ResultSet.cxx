@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,9 +183,7 @@ void java_sql_ResultSet::disposing(void)
 ::com::sun::star::uno::Any SAL_CALL java_sql_ResultSet::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = OPropertySetHelper::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = java_sql_ResultSet_BASE::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : java_sql_ResultSet_BASE::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_ResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:10 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,20 +134,10 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
             OSL_ENSURE(pSQLParseNode->count() == 5,"OFILECursor: Fehler im Parse Tree");
             pWhereClause = pSQLParseNode->getChild(4);
         }
-        else if (SQL_ISRULE(pSQLParseNode,update_statement_positioned))
-        {
-            // nyi
-            DBG_ERROR("OPredicateCompiler: update positioned nyi");
-        }
         else if (SQL_ISRULE(pSQLParseNode,delete_statement_searched))
         {
             OSL_ENSURE(pSQLParseNode->count() == 4,"Fehler im Parse Tree");
             pWhereClause = pSQLParseNode->getChild(3);
-        }
-        else if (SQL_ISRULE(pSQLParseNode,delete_statement_positioned))
-        {
-            // nyi
-            DBG_ERROR("OPredicateCompiler: positioned nyi");
         }
         else
                 // Anderes Statement. Keine Selektionskriterien.
@@ -296,7 +286,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
         delete pOperand;
 
     rParameterColumns = aNewParamColumns;
-    m_aCompiler.setParameterColumns(rParameterColumns);
+    //  m_aCompiler.setParameterColumns(rParameterColumns);
 }
 
 // -----------------------------------------------------------------------------

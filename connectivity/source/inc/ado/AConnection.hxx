@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:12 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace connectivity
             connectivity::OWeakRefArray m_aStatements;  //  vector containing a list
                                                                                 //  of all the Statement objects
                                                                                 //  for this Connection
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>      m_xCatalog;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>      m_xCatalog;
             ODriver*                    m_pDriver;
         private:
             WpADOConnection*            m_pAdoConnection;

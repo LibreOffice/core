@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DColumns.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 10:44:15 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,7 @@ void ODbaseColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > ODbaseColumns::createEmptyObject()
 {
-    sdbcx::OColumn* pRet = new sdbcx::OColumn(isCaseSensitive());
-    Reference< XPropertySet > xRet = pRet;
-    return xRet;
+    return new sdbcx::OColumn(isCaseSensitive());
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------

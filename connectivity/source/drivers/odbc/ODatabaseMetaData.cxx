@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 11:26:05 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,18 +716,14 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CREATE_VIEW,nValue,*this);
     sal_Bool bViewsSupported = (nValue & SQL_CV_CREATE_VIEW) == SQL_CV_CREATE_VIEW;
 
-    ORows aRows;
+    ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
     for(sal_Int32 i=0;i < nSize;++i)
     {
         if( !bViewsSupported && i == 1)
             continue; // no views supported
-        ORow aRow;
-        aRow.push_back(ORowSetValue());
-        aRow.push_back(ORowSetValue(sTableTypes[i]));
-        // bound row
-        ORow::iterator aIter = aRow.begin();
-        for(;aIter != aRow.end();++aIter)
-            aIter->setBound(sal_True);
+        ::connectivity::ODatabaseMetaDataResultSet::ORow aRow;
+        aRow.push_back(::connectivity::ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(sTableTypes[i]));
         aRows.push_back(aRow);
     }
     pResult->setRows(aRows);

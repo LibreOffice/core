@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABQueryHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-07-20 15:34:17 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 05:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,21 @@
 
 #include <MABNSInclude.hxx>
 
+#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#include <map>
-#include <vector>
+#endif
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
+#endif
+#ifndef _OSL_CONDITN_HXX_
 #include <osl/conditn.hxx>
+#endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 
 namespace connectivity
@@ -81,12 +90,7 @@ namespace connectivity
         private:
             mutable ::osl::Mutex        m_aMutex;
 
-            struct ltstr
-            {
-                sal_Bool operator()( const ::rtl::OUString &s1, const ::rtl::OUString &s2) const;
-            };
-
-            typedef std::map< rtl::OUString, rtl::OUString, ltstr >  fieldMap;
+            DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUString,fieldMap);
 
             fieldMap    m_Fields;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-06 07:41:49 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ OResultSetMetaData::~OResultSetMetaData()
                                     ),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(nRealLen > BUFFER_LEN)
     {
-        delete pName;
+        delete [] pName;
         pName = new char[nRealLen];
         OTools::ThrowException(m_pConnection,N3SQLColAttribute(m_aStatementHandle,
                                     (SQLUSMALLINT)column,
@@ -107,7 +107,9 @@ OResultSetMetaData::~OResultSetMetaData()
                                     ),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     }
 
-    return ::rtl::OUString::createFromAscii(pName);
+    ::rtl::OUString sValue = ::rtl::OUString::createFromAscii(pName);
+    delete [] pName;
+    return  sValue;
 }
 // -------------------------------------------------------------------------
 sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident) throw(SQLException, RuntimeException)

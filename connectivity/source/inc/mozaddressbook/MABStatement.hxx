@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABStatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-28 22:02:59 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 05:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,16 +65,35 @@
 #ifndef _CONNECTIVITY_FILE_OSTATEMENT_HXX_
 #include "file/FStatement.hxx"
 #endif
+#ifndef _CONNECTIVITY_FILE_FANALYZER_HXX_
+#include "file/fanalyzer.hxx"
+#endif
 
 namespace connectivity
 {
     namespace mozaddressbook
     {
+        // -----------------------------------------------------------------------------
+        typedef ::connectivity::file::OSQLAnalyzer OMozabAnalyzer_BASE;
+        /** little helper class to avoid filtering by the file resultset
+            this analyzer doesn't soppurt restrictions
+        */
+
+        class OMozabAnalyzer : public OMozabAnalyzer_BASE
+        {
+        public:
+            OMozabAnalyzer(){}
+            virtual BOOL hasRestriction() const;
+        };
+
         class OConnection;
         class OMozabStatement : public file::OStatement
         {
         protected:
             virtual file::OResultSet* createResultSet();
+            // here we create a SQL analyzer which doesn't support any restrictions
+            // these are already done by the server side
+            virtual file::OSQLAnalyzer* createAnalyzer();
         public:
             //  DECLARE_CTY_DEFAULTS(file::OStatement);
             OMozabStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABTypeConverter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: wvd $ $Date: 2001-08-09 09:28:11 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 05:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include "file/FTable.hxx"
 #endif
 
-#include<string>
+#include <string>
 
 namespace connectivity
 {
@@ -75,23 +75,17 @@ namespace connectivity
     {
         class OMozabTypeConverter
         {
-        private:
-        protected:
-            ::osl::Mutex m_aMutex;
         public:
-            void  ouStringToNsString(const ::rtl::OUString&, nsString&) const;
-            void  nsStringToOUString(const nsString&, ::rtl::OUString&) const;
-            void  prUnicharToOUString(const PRUnichar*, ::rtl::OUString&) const;
+            static void  ouStringToNsString(const ::rtl::OUString&, nsString&);
+            static void  nsStringToOUString(const nsString&, ::rtl::OUString&);
+            static void  prUnicharToOUString(const PRUnichar*, ::rtl::OUString&);
             // Use free() for the following 3 calls.
-            char *ouStringToCCharStringAscii(const ::rtl::OUString&) const;
-            char *nsStringToCCharStringAscii(const nsString&) const;
-            char *ouStringToCCharStringUtf8(const ::rtl::OUString&) const;
+            static char *ouStringToCCharStringAscii(const ::rtl::OUString&);
+            static char *nsStringToCCharStringAscii(const nsString&);
+            static char *ouStringToCCharStringUtf8(const ::rtl::OUString&);
             // Convert to stl-string.
-            ::std::string ouStringToStlString(const ::rtl::OUString&) const;
-            ::std::string nsStringToStlString(const nsString&) const;
-        public:
-            OMozabTypeConverter();
-            virtual ~OMozabTypeConverter();
+            static ::std::string ouStringToStlString(const ::rtl::OUString&);
+            static ::std::string nsStringToStlString(const nsString&);
         };
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,10 +164,6 @@ void OFlatTable::fillColumns()
         }
     }
 
-    m_aTypes.clear();
-    m_aPrecisions.clear();
-    m_aScales.clear();
-
     // read first row
     OFlatString aFirstLine;
 
@@ -184,17 +180,36 @@ void OFlatTable::fillColumns()
     }
     // column count
     xub_StrLen nFieldCount = aHeaderLine.GetTokenCount(pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
+
+    if(!m_aColumns.isValid())
+        m_aColumns = new OSQLColumns();
+    else
+        m_aColumns->clear();
+
+    m_aTypes.clear();
+    m_aPrecisions.clear();
+    m_aScales.clear();
+    // reserve some space
+    m_aColumns->reserve(nFieldCount);
+    m_aTypes.reserve(nFieldCount);
+    m_aPrecisions.reserve(nFieldCount);
+    m_aScales.reserve(nFieldCount);
+
+    sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
     // read description
     char cDecimalDelimiter  = pConnection->getDecimalDelimiter();
     char cThousandDelimiter = pConnection->getThousandDelimiter();
     ByteString aColumnName;
     ::rtl::OUString aTypeName;
-    ::comphelper::UStringMixEqual aCase(pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual aCase(bCase);
+    xub_StrLen nStartPosHeaderLine = 0; // use for eficient way to get the tokens
+    xub_StrLen nStartPosFirstLine = 0; // use for eficient way to get the tokens
+    xub_StrLen nStartPosFirstLine2 = 0;
     for (xub_StrLen i = 0; i < nFieldCount; i++)
     {
         if (pConnection->isHeaderLine())
         {
-            aColumnName = aHeaderLine.GetToken(i,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
+            aHeaderLine.GetTokenSpecial(aColumnName,nStartPosHeaderLine,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
             aColumnName.Convert(pConnection->getTextEncoding(),pConnection->getTextEncoding());
         }
         else
@@ -212,7 +227,8 @@ void OFlatTable::fillColumns()
         ULONG  nIndex = 0;
 
         // first without fielddelimiter
-        ByteString aField(aFirstLine.GetToken(i,pConnection->getFieldDelimiter(),'\0'));
+        ByteString aField;
+        aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine,pConnection->getFieldDelimiter(),'\0');
         if (aField.Len() == 0 ||
             (pConnection->getStringDelimiter() && pConnection->getStringDelimiter() == aField.GetChar(0)))
         {
@@ -220,7 +236,11 @@ void OFlatTable::fillColumns()
         }
         else
         {
-            ByteString aField2(aFirstLine.GetToken(i,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter()));
+            ByteString aField2;
+            if(pConnection->getStringDelimiter() != '\0')
+                aFirstLine.GetTokenSpecial(aField2,nStartPosFirstLine2,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
+            else
+                aField2 = aField;
 
             if (aField2.Len() == 0)
             {
@@ -340,8 +360,14 @@ void OFlatTable::fillColumns()
         }
 
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeName,::rtl::OUString(),
-                                                ColumnValue::NULLABLE,nPrecision,nScale,eType,sal_False,sal_False,sal_False,
-                                                getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                                                ColumnValue::NULLABLE,
+                                                nPrecision,
+                                                nScale,
+                                                eType,
+                                                sal_False,
+                                                sal_False,
+                                                sal_False,
+                                                bCase);
         Reference< XPropertySet> xCol = pColumn;
         m_aColumns->push_back(xCol);
         m_aTypes.push_back(eType);
@@ -453,6 +479,7 @@ void OFlatTable::refreshColumns()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     TStringVector aVector;
+    aVector.reserve(m_aColumns->size());
 
     for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != m_aColumns->end();++aIter)
         aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
@@ -502,11 +529,8 @@ Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeExcep
         rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0))
         return Any();
 
-    Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
-    if(aRet.hasValue())
-        return aRet;
-
-    return OTable_TYPEDEF::queryInterface(rType);
+    Any aRet = OTable_TYPEDEF::queryInterface(rType);
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
 }
 
 //--------------------------------------------------------------------------
@@ -529,10 +553,11 @@ Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return OFlatTable_BASE::getSomething(rId);
+    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+                ?
+            (sal_Int64)this
+                :
+            OFlatTable_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
 sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
@@ -545,13 +570,15 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
     OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
     sal_Int32 nByteOffset = 1;
     // Felder:
+    xub_StrLen nStartPos = 0;
+    ByteString aStr;
     OSQLColumns::const_iterator aIter = _rCols.begin();
-    for (sal_Int32 i = 1; aIter != _rCols.end();++aIter, i++)
+    for (sal_Int32 i = 0; aIter != _rCols.end();++aIter, ++i)
     {
-        ByteString aStr(m_aCurrentLine.GetToken(i-1,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter()));
+        m_aCurrentLine.GetTokenSpecial(aStr,nStartPos,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
 
         if (aStr.Len() == 0)
-            (*_rRow)[i].setNull();
+            (*_rRow)[i+1].setNull();
         else
         {
             // Laengen je nach Datentyp:
@@ -559,8 +586,8 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                         nType;
             if(bIsTable)
             {
-                nLen    = m_aPrecisions[i-1];
-                nType   = m_aTypes[i-1];
+                nLen    = m_aPrecisions[i];
+                nType   = m_aTypes[i];
             }
             else
             {
@@ -585,18 +612,18 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                         switch(nType)
                         {
                             case DataType::DATE:
-                                (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
+                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
                                 break;
                             case DataType::TIMESTAMP:
-                                (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
+                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
                                 break;
                             default:
-                                (*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
+                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
                         }
                     }
                     catch(Exception&)
                     {
-                        (*_rRow)[i].setNull();
+                        (*_rRow)[i+1].setNull();
                     }
                 }   break;
                 case DataType::DOUBLE:
@@ -623,14 +650,14 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                             aStrConverted += aStr.GetChar(j) ;
                     }
                     double nVal = toDouble(aStrConverted,pConnection->getTextEncoding());
-                    (*_rRow)[i] = nVal;
+                    (*_rRow)[i+1] = nVal;
                 } break;
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
                 default:
                 {
                     // Wert als String in Variable der Row uebernehmen
-                    (*_rRow)[i] = String(aStr, pConnection->getTextEncoding());
+                    (*_rRow)[i+1] = String(aStr, pConnection->getTextEncoding());
                 }
                 break;
             }
@@ -652,19 +679,19 @@ BOOL OFlatTable::DropImpl()
 //------------------------------------------------------------------
 BOOL OFlatTable::InsertRow(OValueVector& rRow, BOOL bFlush,const Reference<XIndexAccess>& _xCols)
 {
-    return sal_True;;
+    return sal_False;
 }
 
 //------------------------------------------------------------------
 BOOL OFlatTable::UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
-    return sal_True;
+    return sal_False;
 }
 
 //------------------------------------------------------------------
 BOOL OFlatTable::DeleteRow(const OSQLColumns& _rCols)
 {
-    return sal_True;;
+    return sal_False;
 }
 
 //------------------------------------------------------------------
@@ -681,7 +708,7 @@ double toDouble(const ByteString& rString,rtl_TextEncoding _nTextEncoding)
 //------------------------------------------------------------------
 BOOL OFlatTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
-    return sal_True;
+    return sal_False;
 }
 // -----------------------------------------------------------------------------
 

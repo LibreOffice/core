@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-06 10:58:36 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,10 +307,10 @@ void OResultSet::releaseBuffer()
                 delete static_cast< double* >((void*)*pValue);
                 break;
             case DataType::LONGVARCHAR:
-                delete static_cast< char* >((void*)*pValue);
+                delete [] static_cast< char* >((void*)*pValue);
                 break;
             case DataType::LONGVARBINARY:
-                delete static_cast< char* >((void*)*pValue);
+                delete [] static_cast< char* >((void*)*pValue);
                 break;
             case DataType::DATE:
                 delete static_cast< DATE_STRUCT* >((void*)*pValue);
@@ -346,9 +346,7 @@ void OResultSet::releaseBuffer()
 Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OPropertySetHelper::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = OResultSet_BASE::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : OResultSet_BASE::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
  Sequence<  Type > SAL_CALL OResultSet::getTypes(  ) throw( RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:28:23 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,17 +192,9 @@ void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
     {
         m_eStatementType = SQL_STATEMENT_INSERT;
     }
-    else if (SQL_ISRULE(m_pParseTree,update_statement_positioned))
-    {
-        m_eStatementType = SQL_STATEMENT_UPDATE;
-    }
     else if (SQL_ISRULE(m_pParseTree,update_statement_searched))
     {
         m_eStatementType = SQL_STATEMENT_UPDATE;
-    }
-    else if (SQL_ISRULE(m_pParseTree,delete_statement_positioned))
-    {
-        m_eStatementType = SQL_STATEMENT_DELETE;
     }
     else if (SQL_ISRULE(m_pParseTree,delete_statement_searched))
     {
@@ -770,9 +762,6 @@ void OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
     } else if (SQL_ISRULE(pSelectNode,update_statement_searched)) {
         OSL_ENSURE(pSelectNode->count() == 5,"OSQLParseTreeIterator: Fehler im Parse Tree");
         pWhereClause = pSelectNode->getChild(4);
-    } else if (SQL_ISRULE(pSelectNode,update_statement_positioned)) {
-        // nyi
-        OSL_ASSERT("OSQLParseTreeIterator::getSelectionCriteria: positioned nyi");
     } else if (SQL_ISRULE(pSelectNode,delete_statement_searched)) {
         OSL_ENSURE(pSelectNode->count() == 4,"OSQLParseTreeIterator: Fehler im Parse Tree");
         pWhereClause = pSelectNode->getChild(3);
@@ -1194,6 +1183,7 @@ void OSQLParseTreeIterator::appendColumns(const ::rtl::OUString& _rTableAlias,co
     const ::rtl::OUString* pBegin = aColNames.getConstArray();
     const ::rtl::OUString* pEnd = pBegin + aColNames.getLength();
 
+    sal_Bool bCase = m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers();
     for(;pBegin != pEnd;++pBegin)
     {
 
@@ -1210,7 +1200,7 @@ void OSQLParseTreeIterator::appendColumns(const ::rtl::OUString& _rTableAlias,co
                                                 ,   getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))
                                                 ,   getBOOL(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)))
                                                 ,   getBOOL(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))
-                                                ,   m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+                                                ,   bCase);
 
             pColumn->setTableName(_rTableAlias);
             pColumn->setRealName(*pBegin);
@@ -1267,7 +1257,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
                         OSL_ENSURE(xColumn.is(),"Column isn't a propertyset!");
                         ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
-                        OParseColumn* pColumn = new OParseColumn(xColumn,m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+                        OParseColumn* pColumn = new OParseColumn(xColumn,m_aCaseEqual.isCaseSensitive());
                         pColumn->setTableName(aIter->first);
                         pColumn->setName(aNewColName);
                         pColumn->setRealName(rColumnName);
@@ -1291,7 +1281,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
             ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
             OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),
-                ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+                ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
             pColumn->setFunction(bFkt);
             pColumn->setRealName(rColumnName);
 
@@ -1312,7 +1302,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
                 ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
                 OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),
-                    ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+                    ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
                 pColumn->setFunction(sal_True);
                 pColumn->setRealName(rColumnName);
                 pColumn->setTableName(aFind->first);
@@ -1327,7 +1317,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
                 {
                     ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
-                    OParseColumn* pColumn = new OParseColumn(xColumn,m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+                    OParseColumn* pColumn = new OParseColumn(xColumn,m_aCaseEqual.isCaseSensitive());
                     pColumn->setName(aNewColName);
                     pColumn->setRealName(rColumnName);
                     pColumn->setTableName(aFind->first);
@@ -1353,7 +1343,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
             ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
             OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),
-                ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+                ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
             pColumn->setFunction(sal_True);
 
 

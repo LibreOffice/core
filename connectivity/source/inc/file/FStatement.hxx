@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:05:55 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,11 +114,15 @@
 #include <comphelper/broadcasthelper.hxx>
 #endif
 
+#define SQL_ORDERBYKEYS 10
+#define SQL_COLUMN_NOTFOUND STRING_NOTFOUND
+
 namespace connectivity
 {
     namespace file
     {
         class OResultSet;
+        class OFileTable;
         typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
                                                     ::com::sun::star::util::XCancellable,
@@ -134,17 +138,26 @@ namespace connectivity
 
         {
         protected:
+            ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
+            ::std::vector<sal_Int16>                    m_aOrderbyAscending;
+
             ::com::sun::star::sdbc::SQLWarning                                           m_aLastWarning;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
-                                                                        //  for this Statement
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> m_xDBMetaData;
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>  m_xColNames; // table columns                                                          //  for this Statement
 
 
             connectivity::OSQLParser                    m_aParser;
             connectivity::OSQLParseTreeIterator         m_aSQLIterator;
 
-
             OConnection*                                m_pConnection;// The owning Connection object
             connectivity::OSQLParseNode*                m_pParseTree;
+            OSQLAnalyzer*                               m_pSQLAnalyzer; //the sql analyzer used by the resultset
+
+            OFileTable*                                 m_pTable;       // the current table
+            OValueRow                                   m_aRow;
+
 
             ::rtl::OUString                             m_aCursorName;
             sal_Int32                                   m_nMaxFieldSize;
@@ -155,7 +168,19 @@ namespace connectivity
             sal_Int32                                   m_nFetchDirection;
             sal_Int32                                   m_nResultSetConcurrency;
             sal_Bool                                    m_bEscapeProcessing;
+
         protected:
+            // initialize the column index map (mapping select columns to table columns)
+            void createColumnMapping();
+            // searches the statement for sort criteria
+            void anylizeSQL();
+            void setOrderbyColumn(UINT16 nOrderbyColumnNo,
+                                     connectivity::OSQLParseNode* pColumnRef,
+                                     connectivity::OSQLParseNode* pAscendingDescending);
+
+            virtual void initializeResultSet(OResultSet* _pResult);
+            // create the analyzer
+            virtual OSQLAnalyzer* createAnalyzer();
 
             void reset () throw( ::com::sun::star::sdbc::SQLException);
             void clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
@@ -180,6 +205,9 @@ namespace connectivity
             OConnection* getOwnConnection() const { return m_pConnection;}
 
             using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
+
+            virtual void construct(const ::rtl::OUString& sql)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,9 +148,7 @@ Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::container::XNamed*> (this),
                     static_cast< XServiceInfo*> (this));
-    if(aRet.hasValue())
-        return aRet;
-    return ODescriptor::queryInterface( rType);
+    return aRet.hasValue() ? aRet : ODescriptor::queryInterface( rType);
 }
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OView::createArrayHelper(sal_Int32 _nId) const

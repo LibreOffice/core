@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 11:56:02 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@
 #include <comphelper/types.hxx>
 #endif
 
+
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::file;
@@ -157,6 +158,7 @@ using namespace com::sun::star::container;
 #endif
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","com.sun.star.sdbc.ResultSet");
+DBG_NAME(OResultSet )
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
                         ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
@@ -187,15 +189,11 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
                         ,m_nCurrentPosition(0)
                         ,m_bShowDeleted(pStmt->getOwnConnection()->showDeleted())
+                        ,m_pSQLAnalyzer(NULL)
 {
+    DBG_CTOR(OResultSet ,NULL);
     osl_incrementInterlockedCount( &m_refCount );
 
-
-    for (int jj = 0; jj < sizeof m_nOrderbyColumnNumber / sizeof (* m_nOrderbyColumnNumber); jj++)
-    {
-        m_nOrderbyColumnNumber[jj] = SQL_COLUMN_NOTFOUND;
-        bOrderbyAscending[jj] = TRUE;
-    }
     m_nResultSetConcurrency = isCount() ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
     construct();
     osl_decrementInterlockedCount( &m_refCount );
@@ -204,7 +202,9 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()
 {
-    delete m_pSQLAnalyzer;
+    osl_incrementInterlockedCount( &m_refCount );
+    disposing();
+    DBG_DTOR(OResultSet ,NULL);
 }
 // -------------------------------------------------------------------------
 void OResultSet::construct()
@@ -226,39 +226,32 @@ void OResultSet::disposing(void)
     m_xColNames     = NULL;
     m_xColumns      = NULL;
     m_xParamColumns = NULL;
+    m_xColsIdx      = NULL;
 
-    if(m_pSQLAnalyzer)
-        m_pSQLAnalyzer->dispose();
     if(m_pTable)
     {
         m_pTable->release();
         m_pTable = NULL;
     }
+    clear();
+}
+// -----------------------------------------------------------------------------
+void OResultSet::clear()
+{
     DELETEZ(m_pFileSet);
-    DELETEZ(m_pEvaluationKeySet);
     DELETEZ(m_pSortIndex);
 
-    if(m_aRow.isValid())
-        m_aRow->clear();
-    if(m_aEvaluateRow.isValid())
-        m_aEvaluateRow->clear();
     if(m_aInsertRow.isValid())
         m_aInsertRow->clear();
-    if(m_aAssignValues.isValid())
-        m_aAssignValues->clear();
 
-    m_aBookmarksPositions.clear();
-    m_aBookmarks.clear();
+    ::std::vector<TInt2IntMap::iterator>().swap(m_aBookmarksPositions);
+    TInt2IntMap().swap(m_aBookmarks);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     Any aRet = OPropertySetHelper::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = OResultSet_BASE::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : OResultSet_BASE::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OResultSet::getTypes(  ) throw(RuntimeException)
@@ -310,17 +303,11 @@ void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
     return NULL;
 }
 
@@ -502,17 +489,21 @@ void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 
 void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 {
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    }
-    dispose();
+//  {
+//      ::osl::MutexGuard aGuard( m_aMutex );
+//      checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+//
+//  }
+//  dispose();
+    ::osl::MutexGuard aGuard( m_aMutex );
+    clear();
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return SkipDeleted(OFileTable::FILE_FIRST,1,sal_True);
 }
 // -------------------------------------------------------------------------
@@ -520,21 +511,29 @@ sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
 {
     // here I know definitely that I stand on the last record
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return SkipDeleted(OFileTable::FILE_LAST,1,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return SkipDeleted(OFileTable::FILE_ABSOLUTE,row,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return SkipDeleted(OFileTable::FILE_RELATIVE,row,sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     return SkipDeleted(OFileTable::FILE_PRIOR,0,sal_True);
 }
 // -------------------------------------------------------------------------
@@ -714,7 +713,6 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
     }
 }
 // -------------------------------------------------------------------------
-
 void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -745,8 +743,6 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
 
     if(m_pTable->isReadOnly())
         throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
-
-    Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
 
     m_bInserted     = sal_True;
 
@@ -941,7 +937,7 @@ again:
     }
     else
     {
-        m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,TRUE);
+        m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,bRetrieveData || m_pSQLAnalyzer->hasRestriction());
 
         if ((!m_bShowDeleted && m_aEvaluateRow->isDeleted()) ||
             (m_pSQLAnalyzer->hasRestriction() && //!bShowDeleted && m_aEvaluateRow->isDeleted() ||// keine Anzeige von geloeschten Sätzen
@@ -1142,7 +1138,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
                             }
                         }
                         else
-                            bOK = ExecuteRow(OFileTable::FILE_NEXT,1,FALSE,TRUE, bRetrieveData);
+                            bOK = ExecuteRow(OFileTable::FILE_NEXT,1,FALSE,TRUE, FALSE);//bRetrieveData);
                     }
 
                     if (bOK)
@@ -1158,7 +1154,8 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
                         //m_pFileSet->Freeze();
                         m_pFileSet->setFrozen();
 
-                        DELETEZ(m_pEvaluationKeySet);
+                        //  DELETEZ(m_pEvaluationKeySet);
+                        m_pEvaluationKeySet = NULL;
                         //  aStatus.Set(SQL_STAT_NO_DATA_FOUND);
                         goto Error;
                     }
@@ -1251,9 +1248,6 @@ Error:
 //------------------------------------------------------------------
 BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
     OSL_ENSURE(eCursorPosition != OFileTable::FILE_BOOKMARK,"OResultSet::SkipDeleted can't be called for BOOKMARK");
 
@@ -1385,7 +1379,7 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
             }
             else
             {
-                bDataFound = Move(OFileTable::FILE_FIRST, 1, _bRetrieveData);
+                bDataFound = Move(OFileTable::FILE_FIRST, 1, _bRetrieveData );
                 if(bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
                 {
                     ++nCurPos;
@@ -1426,108 +1420,73 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
 // -------------------------------------------------------------------------
 BOOL OResultSet::OpenImpl()
 {
-    m_pSQLAnalyzer = createAnalyzer();
-    const OSQLTables& xTabs = m_aSQLIterator.getTables();
-    if ((xTabs.begin() == xTabs.end()) || !xTabs.begin()->second.is())
-        throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid."),
-                                    static_cast<XWeak*>(this),
-                                    makeAny(m_aSQLIterator.getWarning())
-                                );
+    OSL_ENSURE(m_pSQLAnalyzer,"No analyzer set with setSqlAnalyzer!");
+    if(!m_pTable)
+    {
+        const OSQLTables& xTabs = m_aSQLIterator.getTables();
+        if ((xTabs.begin() == xTabs.end()) || !xTabs.begin()->second.is())
+            throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid."),
+                                        static_cast<XWeak*>(this),
+                                        makeAny(m_aSQLIterator.getWarning())
+                                    );
 
-    OSQLTable xTable = xTabs.begin()->second;
-    m_xColumns = m_aSQLIterator.getSelectColumns();
+        OSQLTable xTable = xTabs.begin()->second;
+        m_xColumns = m_aSQLIterator.getSelectColumns();
 
-    m_xColNames = xTable->getColumns();
+        m_xColNames = xTable->getColumns();
+        m_xColsIdx = Reference<XIndexAccess>(m_xColNames,UNO_QUERY);
+        doTableSpecials(xTable);
+    }
 
-    Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
+    sal_Int32 nColumnCount = m_xColsIdx->getCount();
 
-    m_aRow          = new OValueVector(xNames->getCount());
-    m_aEvaluateRow  = new OValueVector(xNames->getCount());
-    m_aInsertRow    = new OValueVector(xNames->getCount());
+    initializeRow(m_aRow,nColumnCount);
+    initializeRow(m_aEvaluateRow,nColumnCount);
+    initializeRow(m_aInsertRow,nColumnCount);
 
-    (*m_aRow)[0].setBound(sal_True);
-    (*m_aEvaluateRow)[0].setBound(sal_True);
-    (*m_aInsertRow)[0].setBound(sal_True);
-    // unbound all values so that we only update the really needed columns
-    OValueVector::iterator aInsertIter = m_aInsertRow->begin()+1;
-    for(;aInsertIter != m_aInsertRow->end();++aInsertIter)
-        aInsertIter->setBound(sal_False);
 
-    if(m_aAssignValues.isValid())
-        m_aAssignValues->clear();
-    m_aAssignValues = new OAssignValues();
-
-    if(!m_xParamColumns.isValid())
-        m_xParamColumns = new OSQLColumns();
-
-    OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::OpenImpl: Analyzer isn't set!");
-    m_pSQLAnalyzer->clean();
-
-    doTableSpecials(xTable);
-
-    OSL_ENSURE(m_pTable,"We need a table object!");
-    Reference<XIndexesSupplier> xIndexSup(xTable,UNO_QUERY);
-    if(xIndexSup.is())
-        m_pSQLAnalyzer->setIndexes(xIndexSup->getIndexes());
     m_nResultSetConcurrency = (m_pTable->isReadOnly() || isCount()) ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
 
-    GetAssignValues(); // assign values and describe parameter columns
-    m_pSQLAnalyzer->setParameterColumns(m_xParamColumns);
-    anylizeSQL();
-    if (m_xParamColumns->size())
-        m_pSQLAnalyzer->describeParam(m_xParamColumns);
+//  if(m_aParameterRow.isValid())
+//      m_xParamColumns->reserve(m_aParameterRow->size());
 
-    sal_Int32 i=0;
-    // initialize the column index map (mapping select columns to table columns)
-    m_aColMapping.resize(m_xColumns->size() + 1);
-    for (i=0; i<(sal_Int32)m_aColMapping.size(); ++i)
-        m_aColMapping[i] = i;
+    //  sal_Int32 i=0;
 
-    // now check which columns are bound
-    setBoundedColumns(m_aRow,m_xColumns,xNames,sal_True);
-    // Parameter substituieren (AssignValues und Kriterien):
-    if (m_xParamColumns->size())
-    {
-        // Zunächst AssignValues
-        USHORT nParaCount=0; // gibt die aktuelle Anzahl der bisher gesetzen Parameter an
-
-        // Nach zu substituierenden Parametern suchen:
-        UINT16 nCount = m_aAssignValues.isValid() ? m_aAssignValues->size() : 1; // 1 ist wichtig für die Kriterien
-        for (UINT16 j = 1; j < nCount; j++)
-        {
-//          if ((*m_aAssignValues)[j].isNull())
-//              continue;
-
-            UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
-            if (nParameter == SQL_NO_PARAMETER)
-                continue;   // dieser AssignValue ist kein Parameter
-
-            ++nParaCount; // ab hier ist der Parameter gueltig
-            // Parameter ersetzen. Wenn Parameter nicht verfuegbar,
-            // Value auf NULL setzen.
-            (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
-        }
-
-        if (m_aParameterRow.isValid() &&  nParaCount < m_aParameterRow->size())
-        {
-            setBoundedColumns(m_aEvaluateRow,m_xParamColumns,xNames,sal_False);
-            m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
-        }
-    }
+//  // Parameter substituieren (AssignValues und Kriterien):
+//  if (m_xParamColumns.isValid() && !m_xParamColumns->empty())
+//  {
+//      // Zunächst AssignValues
+//      USHORT nParaCount=0; // gibt die aktuelle Anzahl der bisher gesetzen Parameter an
+//
+//      // Nach zu substituierenden Parametern suchen:
+//      UINT16 nCount = m_aAssignValues.isValid() ? m_aAssignValues->size() : 1; // 1 ist wichtig für die Kriterien
+//      for (UINT16 j = 1; j < nCount; j++)
+//      {
+//          UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
+//          if (nParameter == SQL_NO_PARAMETER)
+//              continue;   // dieser AssignValue ist kein Parameter
+//
+//          ++nParaCount; // ab hier ist der Parameter gueltig
+//          // Parameter ersetzen. Wenn Parameter nicht verfuegbar,
+//          // Value auf NULL setzen.
+//          (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
+//      }
+//
+//      if (m_aParameterRow.isValid() &&  nParaCount < m_aParameterRow->size())
+//      {
+//          //  setBoundedColumns(m_aEvaluateRow,m_xParamColumns,xNames,sal_False);
+//          m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
+//      }
+//  }
 
     // Neuen Index aufbauen:
     DELETEZ(m_pFileSet);
-    DELETEZ(m_pEvaluationKeySet);
-
-    //  if (!aEvaluateRow.Is())
-    {
-        //  aEvaluateRow = new ODbRow(*aFileColumns, FALSE);
-        //  (*aEvaluateRow)[0] = new ODbVariant();
+    //  DELETEZ(m_pEvaluationKeySet);
 
         // Row zur Auswertung binden, wenn Preprocessing erfolg, dann bereits ein Keyset
-        m_pEvaluationKeySet = m_pSQLAnalyzer->bindResultRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
+    //  m_pEvaluationKeySet = m_pSQLAnalyzer->bindResultRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
                                                     // (Verbindung zur ResultRow herstellen)
-    }
+
 
     // An den Anfang positionieren
     m_nRowPos = -1;
@@ -1577,7 +1536,8 @@ BOOL OResultSet::OpenImpl()
                     // Ergebnis von COUNT(*) in m_nRowCountResult merken.
                     // nRowCount, also die Anzahl der Rows in der Ergebnismenge, ist bei dieser
                     // Anfrage = 1!
-                    DELETEZ(m_pEvaluationKeySet);
+                    m_pEvaluationKeySet = NULL;
+                    //  DELETEZ(m_pEvaluationKeySet);
                 }
             }
             else
@@ -1591,8 +1551,8 @@ BOOL OResultSet::OpenImpl()
                 {
                     if(!IsSorted())
                     {
-                        m_nOrderbyColumnNumber[0] = m_aColMapping[1];
-                        bOrderbyAscending[0] = FALSE;
+                        m_aOrderbyColumnNumber[0] = m_aColMapping[1];
+                        m_aOrderbyAscending[0] = 0;
                     }
                     else
                         bWasSorted = TRUE;
@@ -1602,17 +1562,17 @@ BOOL OResultSet::OpenImpl()
                 //  if (!HasRestriction() && !IsSorted() && bShowDeleted)
                     //  SetRowCount(MaxRowCount());
 
-                OSL_ENSURE(sizeof m_nOrderbyColumnNumber / sizeof (* m_nOrderbyColumnNumber) == SQL_ORDERBYKEYS,"Maximale Anzahl der ORDER BY Columns muss derzeit genau 3 sein!");
+                OSL_ENSURE(m_aOrderbyColumnNumber.size() == SQL_ORDERBYKEYS,"Maximale Anzahl der ORDER BY Columns muss derzeit genau 3 sein!");
                 OKeyType eKeyType[SQL_ORDERBYKEYS];
                 OValueVector::iterator aRowIter = m_aRow->begin()+1;
                 for (int i = 0; i < SQL_ORDERBYKEYS; i++)
                 {
-                    if (m_nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND)
+                    if (m_aOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND)
                         eKeyType[i] = SQL_ORDERBYKEY_NONE;
                     else
                     {
-                        OSL_ENSURE((sal_Int32)m_aRow->size() > m_nOrderbyColumnNumber[i],"Invalid Index");
-                        switch ((m_aRow->begin()+m_nOrderbyColumnNumber[i])->getTypeKind())
+                        OSL_ENSURE((sal_Int32)m_aRow->size() > m_aOrderbyColumnNumber[i],"Invalid Index");
+                        switch ((m_aRow->begin()+m_aOrderbyColumnNumber[i])->getTypeKind())
                         {
                         case DataType::CHAR:
                             case DataType::VARCHAR:
@@ -1640,7 +1600,7 @@ BOOL OResultSet::OpenImpl()
                                 OSL_ASSERT("OFILECursor::Execute: Datentyp nicht implementiert");
                                 break;
                         }
-                        (*m_aEvaluateRow)[m_nOrderbyColumnNumber[i]].setBound(sal_True);
+                        (*m_aEvaluateRow)[m_aOrderbyColumnNumber[i]].setBound(sal_True);
                     }
                 }
 
@@ -1648,19 +1608,21 @@ BOOL OResultSet::OpenImpl()
                 // dabei den "Key", nach dem sortiert werden soll, in den Index eintragen:
                 if (IsSorted())
                 {
-                    if (!m_pSQLAnalyzer->hasRestriction() && m_nOrderbyColumnNumber[1] == SQL_COLUMN_NOTFOUND)
+                    if (!m_pSQLAnalyzer->hasRestriction() && m_aOrderbyColumnNumber[1] == SQL_COLUMN_NOTFOUND)
                     {
                         // Ist nur ein Feld fuer die Sortierung angegeben
                         // Und diese Feld ist indiziert, dann den Index ausnutzen
-                        Reference<XIndexesSupplier> xIndexSup(xTable,UNO_QUERY);
+                        Reference<XIndexesSupplier> xIndexSup;
+                        m_pTable->queryInterface(::getCppuType((const Reference<XIndexesSupplier>*)0)) >>= xIndexSup;
+                        //  Reference<XIndexesSupplier> xIndexSup(m_pTable,UNO_QUERY);
                         Reference<XIndexAccess> xIndexes;
                         if(xIndexSup.is())
                         {
                             xIndexes = Reference<XIndexAccess>(xIndexSup->getIndexes(),UNO_QUERY);
                             Reference<XPropertySet> xColProp;
-                            if(m_nOrderbyColumnNumber[0] < xIndexes->getCount())
+                            if(m_aOrderbyColumnNumber[0] < xIndexes->getCount())
                             {
-                                ::cppu::extractInterface(xColProp,xIndexes->getByIndex(m_nOrderbyColumnNumber[0]));
+                                ::cppu::extractInterface(xColProp,xIndexes->getByIndex(m_aOrderbyColumnNumber[0]));
                                 // iterate through the indexes to find the matching column
                                 for(sal_Int32 i=0;i<xIndexes->getCount();++i)
                                 {
@@ -1680,7 +1642,7 @@ BOOL OResultSet::OpenImpl()
                     }
 
                     m_pSortIndex = new OFILESortIndex(eKeyType,
-                                                      bOrderbyAscending,
+                                                      m_aOrderbyAscending,
                                                       nMaxRowCount,m_nTextEncoding);
 
                     sal_Bool bOK = sal_True;
@@ -1703,7 +1665,8 @@ BOOL OResultSet::OpenImpl()
                     }
 
                     // Sortiertes Keyset erzeugen
-                    DELETEZ(m_pEvaluationKeySet);
+                    //  DELETEZ(m_pEvaluationKeySet);
+                    m_pEvaluationKeySet = NULL;
                     if(m_pFileSet)
                         delete m_pFileSet;
                     m_pFileSet = m_pSortIndex->CreateKeySet();
@@ -1722,6 +1685,8 @@ BOOL OResultSet::OpenImpl()
                     // Aber Achtung: es wird davon ausgegangen, das die FilePositionen als Folge 1..n
                     // abgelegt werden!
                     {
+                        if(m_pTable->getCurrentLastPos() > 0)
+                            m_pFileSet->reserve(m_pTable->getCurrentLastPos() );
                         for (sal_Int32 i = 0; i < m_pTable->getCurrentLastPos(); i++)
                            m_pFileSet->push_back(i + 1);
                     }
@@ -1736,9 +1701,7 @@ BOOL OResultSet::OpenImpl()
                             aRowIter != m_aRow->end();
                             ++aRowIter,++aSearchIter)
                                 aSearchIter->setBound(aRowIter->isBound());
-                    //  ODbRowRef aSearchRow = new ODbRow(*aFileRow); // nach dieser wird gesucht
-                    //  const ODbRow &rSearchRow = *aSearchRow,
-                        //  &rFileRow = *aFileRow;
+
                     INT32 nPos;
                     UINT16 nMaxRow = m_pFileSet->size();
                     if (nMaxRow)
@@ -1798,7 +1761,7 @@ BOOL OResultSet::OpenImpl()
 
                         if (!bWasSorted)
                         {
-                            m_nOrderbyColumnNumber[0] = SQL_COLUMN_NOTFOUND;
+                            m_aOrderbyColumnNumber[0] = SQL_COLUMN_NOTFOUND;
                             sort(m_pFileSet->begin(),m_pFileSet->end());
                         }
                     }
@@ -1844,14 +1807,16 @@ BOOL OResultSet::OpenImpl()
                 // Ergebnis von COUNT(*) in nRowCountResult merken.
                 // nRowCount, also die Anzahl der Rows in der Ergebnismenge, ist bei dieser
                 // Anfrage = 1!
-                DELETEZ(m_pEvaluationKeySet);
+                //  DELETEZ(m_pEvaluationKeySet);
+                m_pEvaluationKeySet = NULL;
             }
             //  SetRowCount(1);
             break;
         case SQL_STATEMENT_INSERT:
             m_nRowCountResult = 0;
 
-            if(!m_pTable->InsertRow(m_aAssignValues.getBody(), TRUE,Reference<XIndexAccess>(m_xColNames,UNO_QUERY)))
+            OSL_ENSURE(m_aAssignValues.isValid(),"No assign values set!");
+            if(!m_pTable->InsertRow(m_aAssignValues.getBody(), TRUE,m_xColsIdx))
             {
                 m_nFilePos  = 0;
                 return sal_False;
@@ -1866,84 +1831,6 @@ BOOL OResultSet::OpenImpl()
 
     return sal_True;
 }
-//------------------------------------------------------------------
-void OResultSet::anylizeSQL()
-{
-    OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::anylizeSQL: Analyzer isn't set!");
-    // start analysing the statement
-    m_pSQLAnalyzer->setOrigColumns(m_xColNames);
-    m_pSQLAnalyzer->start(m_pParseTree);
-
-    const OSQLParseNode* pOrderbyClause = m_aSQLIterator.getOrderTree();
-    if(pOrderbyClause)
-    {
-        OSQLParseNode * pOrderingSpecCommalist = pOrderbyClause->getChild(2);
-        OSL_ENSURE(SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OResultSet: Fehler im Parse Tree");
-
-        for (sal_uInt32 m = 0; m < pOrderingSpecCommalist->count(); m++)
-        {
-            OSQLParseNode * pOrderingSpec = pOrderingSpecCommalist->getChild(m);
-            OSL_ENSURE(SQL_ISRULE(pOrderingSpec,ordering_spec),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(pOrderingSpec->count() == 2,"OResultSet: Fehler im Parse Tree");
-
-            OSQLParseNode * pColumnRef = pOrderingSpec->getChild(0);
-            if(!SQL_ISRULE(pColumnRef,column_ref))
-            {
-                //  aStatus.SetStatementTooComplex();
-                return;
-            }
-            OSQLParseNode * pAscendingDescending = pOrderingSpec->getChild(1);
-            setOrderbyColumn((UINT16)m,pColumnRef,pAscendingDescending);
-        }
-    }
-}
-
-
-//------------------------------------------------------------------
-void OResultSet::setOrderbyColumn(UINT16 nOrderbyColumnNo,
-                                     OSQLParseNode* pColumnRef,
-                                     OSQLParseNode* pAscendingDescending)
-{
-    if (nOrderbyColumnNo >= (sizeof m_nOrderbyColumnNumber / sizeof (* m_nOrderbyColumnNumber)))
-    {
-        //  aStatus.SetStatementTooComplex();
-        return;
-    }
-
-    ::rtl::OUString aColumnName;
-    if (pColumnRef->count() == 1)
-        aColumnName = pColumnRef->getChild(0)->getTokenValue();
-    else if (pColumnRef->count() == 3)
-    {
-        // Nur die Table Range-Variable darf hier vorkommen:
-//      if (!(pColumnRef->getChild(0)->getTokenValue() == aTableRange))
-//      {
-//          aStatus.Set(SQL_STAT_ERROR,
-//                      String::CreateFromAscii("S1000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_INVALID_RANGE_VAR))),
-//                      0, String() );
-            //  return;
-        //  }
-        pColumnRef->getChild(2)->parseNodeToStr(aColumnName,m_xDBMetaData,NULL,sal_False,sal_False);
-    }
-    else
-    {
-        //  aStatus.SetStatementTooComplex();
-        return;
-    }
-
-    Reference<XColumnLocate> xColLocate(m_xColNames,UNO_QUERY);
-    if(!xColLocate.is())
-        return;
-    // Alles geprueft und wir haben den Namen der Column.
-    // Die wievielte Column ist das?
-    m_nOrderbyColumnNumber[nOrderbyColumnNo] = xColLocate->findColumn(aColumnName);
-
-    // Ascending or Descending?
-    bOrderbyAscending[nOrderbyColumnNo]  = (SQL_ISTOKEN(pAscendingDescending,DESC)) ?
-                                            FALSE : TRUE;
-}
-
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()
 {
@@ -1964,428 +1851,29 @@ Sequence< sal_Int8 > OResultSet::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OResultSet::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return 0;
-}
-//------------------------------------------------------------------
-void OResultSet::GetAssignValues()
-{
-    if (m_pParseTree == NULL)
-    {
-        ::dbtools::throwFunctionSequenceException(*this);
-        return;
-    }
-
-    if (SQL_ISRULE(m_pParseTree,select_statement))
-        // Keine zu setzenden Werte bei SELECT
-        return;
-    else if (SQL_ISRULE(m_pParseTree,insert_statement))
-    {
-        // Row fuer die zu setzenden Werte anlegen (Referenz durch new)
-        if(m_aAssignValues.isValid())
-            m_aAssignValues->clear();
-        m_aAssignValues = new OAssignValues(Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount());
-
-        // Liste der Columns-Namen, die in der column_commalist vorkommen (mit ; getrennt):
-        ::std::vector<String> aColumnNameList;
-
-        OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
-
-        OSQLParseNode * pOptColumnCommalist = m_pParseTree->getChild(3);
-        OSL_ENSURE(pOptColumnCommalist != NULL,"OResultSet: Fehler im Parse Tree");
-        OSL_ENSURE(SQL_ISRULE(pOptColumnCommalist,opt_column_commalist),"OResultSet: Fehler im Parse Tree");
-        if (pOptColumnCommalist->count() == 0)
-        {
-            const Sequence< ::rtl::OUString>& aNames = m_xColNames->getElementNames();
-            const ::rtl::OUString* pBegin = aNames.getConstArray();
-            aColumnNameList.insert(aColumnNameList.begin(),::std::vector<String>::const_iterator(pBegin),::std::vector<String>::const_iterator(pBegin + aNames.getLength()));
-        }
-        else
-        {
-            OSL_ENSURE(pOptColumnCommalist->count() == 3,"OResultSet: Fehler im Parse Tree");
-
-            OSQLParseNode * pColumnCommalist = pOptColumnCommalist->getChild(1);
-            OSL_ENSURE(pColumnCommalist != NULL,"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(SQL_ISRULE(pColumnCommalist,column_commalist),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(pColumnCommalist->count() > 0,"OResultSet: Fehler im Parse Tree");
-
-            // Alle Columns in der column_commalist ...
-            for (sal_uInt32 i = 0; i < pColumnCommalist->count(); i++)
-            {
-                OSQLParseNode * pCol = pColumnCommalist->getChild(i);
-                OSL_ENSURE(pCol != NULL,"OResultSet: Fehler im Parse Tree");
-                aColumnNameList.push_back(pCol->getTokenValue());
-            }
-        }
-        if(!aColumnNameList.size())
-            throwFunctionSequenceException(*this);
-
-        // Werte ...
-        OSQLParseNode * pValuesOrQuerySpec = m_pParseTree->getChild(4);
-        OSL_ENSURE(pValuesOrQuerySpec != NULL,"OResultSet: pValuesOrQuerySpec darf nicht NULL sein!");
-        OSL_ENSURE(SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec),"OResultSet: ! SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec)");
-        OSL_ENSURE(pValuesOrQuerySpec->count() > 0,"OResultSet: pValuesOrQuerySpec->count() <= 0");
-
-        // nur "VALUES" ist erlaubt ...
-        if (! SQL_ISTOKEN(pValuesOrQuerySpec->getChild(0),VALUES))
-            throwFunctionSequenceException(*this);
-
-        OSL_ENSURE(pValuesOrQuerySpec->count() == 2,"OResultSet: pValuesOrQuerySpec->count() != 2");
-
-        // Liste von Werten
-        OSQLParseNode * pInsertAtomCommalist = pValuesOrQuerySpec->getChild(1);
-        OSL_ENSURE(pInsertAtomCommalist != NULL,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
-        OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
-
-        String aColumnName;
-        OSQLParseNode * pRow_Value_Const;
-        xub_StrLen nIndex=0;
-        for (sal_uInt32 i = 0; i < pInsertAtomCommalist->count(); i++)
-        {
-            pRow_Value_Const = pInsertAtomCommalist->getChild(i); // row_value_constructor
-            if(pRow_Value_Const->count() == 3)  // '(' row_value_const_list ')'
-            {
-                pRow_Value_Const = pRow_Value_Const->getChild(1); // row_value_const_list
-                OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
-                if(SQL_ISRULE(pRow_Value_Const,parameter))
-                {
-                    if(pRow_Value_Const->count() == aColumnNameList.size())
-                        ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // kann nur ein Columnname vorhanden sein pro Schleife
-                    else
-                    {
-//                      aStatus.Set(SQL_STAT_ERROR,
-//                      String::CreateFromAscii("S1000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_SYNTAX_ERROR))),
-//                      0, String() );
-                        throwFunctionSequenceException(*this);
-                    }
-                }
-                else
-                {
-                    if(pRow_Value_Const->count() == aColumnNameList.size())
-                    {
-                        for (sal_uInt32 j = 0; j < pRow_Value_Const->count(); ++j)
-                            ParseAssignValues(aColumnNameList,pRow_Value_Const->getChild(j),nIndex++);
-                    }
-                    else
-                    {
-//                      aStatus.Set(SQL_STAT_ERROR,
-//                      String::CreateFromAscii("S1000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_SYNTAX_ERROR))),
-//                      0, String() );
-                        throwFunctionSequenceException(*this);
-                    }
-
-                }
-            }
-            else
-            {
-                //  aStatus.SetStatementTooComplex();
-                throwFunctionSequenceException(*this);
-            }
-        }
-    }
-    else if (SQL_ISRULE(m_pParseTree,update_statement_positioned) ||
-               SQL_ISRULE(m_pParseTree,update_statement_searched))
-    {
-        if(m_aAssignValues.isValid())
-            m_aAssignValues->clear();
-        m_aAssignValues = new OAssignValues(Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount());
-
-        OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
-
-        OSQLParseNode * pAssignmentCommalist = m_pParseTree->getChild(3);
-        OSL_ENSURE(pAssignmentCommalist != NULL,"OResultSet: pAssignmentCommalist == NULL");
-        OSL_ENSURE(SQL_ISRULE(pAssignmentCommalist,assignment_commalist),"OResultSet: Fehler im Parse Tree");
-        OSL_ENSURE(pAssignmentCommalist->count() > 0,"OResultSet: pAssignmentCommalist->count() <= 0");
-
-        // Alle Zuweisungen (Kommaliste) bearbeiten ...
-        ::std::vector< String> aList(1);
-        for (sal_uInt32 i = 0; i < pAssignmentCommalist->count(); i++)
-        {
-            OSQLParseNode * pAssignment = pAssignmentCommalist->getChild(i);
-            OSL_ENSURE(pAssignment != NULL,"OResultSet: pAssignment == NULL");
-            OSL_ENSURE(SQL_ISRULE(pAssignment,assignment),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(pAssignment->count() == 3,"OResultSet: pAssignment->count() != 3");
-
-            OSQLParseNode * pCol = pAssignment->getChild(0);
-            OSL_ENSURE(pCol != NULL,"OResultSet: pCol == NULL");
-
-            OSQLParseNode * pComp = pAssignment->getChild(1);
-            OSL_ENSURE(pComp != NULL,"OResultSet: pComp == NULL");
-            OSL_ENSURE(pComp->getNodeType() == SQL_NODE_EQUAL,"OResultSet: pComp->getNodeType() != SQL_NODE_COMPARISON");
-            if (pComp->getTokenValue().toChar() != '=')
-            {
-                //  aStatus.SetInvalidStatement();
-                throwFunctionSequenceException(*this);
-            }
-
-            OSQLParseNode * pVal = pAssignment->getChild(2);
-            OSL_ENSURE(pVal != NULL,"OResultSet: pVal == NULL");
-            aList[0] = pCol->getTokenValue();
-            ParseAssignValues(aList,pVal,0);
-        }
-
-    }
-}
-// -------------------------------------------------------------------------
-void OResultSet::ParseAssignValues(const ::std::vector< String>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex)
-{
-    OSL_ENSURE(nIndex <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
-    String aColumnName(aColumnNameList[nIndex]);
-    OSL_ENSURE(aColumnName.Len() > 0,"OResultSet: Column-Name nicht gefunden");
-    OSL_ENSURE(pRow_Value_Constructor_Elem != NULL,"OResultSet: pRow_Value_Constructor_Elem darf nicht NULL sein!");
-
-    if (pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_STRING ||
-        pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_INTNUM ||
-        pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_APPROXNUM)
-    {
-        // Wert setzen:
-        SetAssignValue(aColumnName, pRow_Value_Constructor_Elem->getTokenValue());
-    }
-    else if (SQL_ISTOKEN(pRow_Value_Constructor_Elem,NULL))
-    {
-        // NULL setzen
-        SetAssignValue(aColumnName, String(), TRUE);
-    }
-    else if (SQL_ISRULE(pRow_Value_Constructor_Elem,parameter))
-    {
-        // Parameter hinzufuegen, Typ ... entsprechend der Column, der der Wert zugewiesen wird
-        Reference<XPropertySet> xCol;
-        m_xColNames->getByName(aColumnName) >>= xCol;
-        sal_Int32 nParameter = -1;
-        if(m_xParamColumns.isValid())
-        {
-            OSQLColumns::const_iterator aIter = find(m_xParamColumns->begin(),m_xParamColumns->end(),aColumnName,::comphelper::UStringMixEqual(m_pTable->isCaseSensitive()));
-            if(aIter != m_xParamColumns->end())
-                nParameter = m_xParamColumns->size() - (m_xParamColumns->end() - aIter) +1;// +1 because the rows start at 1
-        }
-        if(nParameter == -1)
-            nParameter = AddParameter(pRow_Value_Constructor_Elem,xCol);
-        // Nr. des Parameters in der Variablen merken:
-        SetAssignValue(aColumnName, String(), TRUE, nParameter);
-    }
-    else
-    {
-        //  aStatus.SetStatementTooComplex();
-        throwFunctionSequenceException(*this);
-    }
-}
-//------------------------------------------------------------------
-void OResultSet::SetAssignValue(const String& aColumnName,
-                                   const String& aValue,
-                                   BOOL bSetNull,
-                                   UINT32 nParameter)
-{
-    Reference<XPropertySet> xCol;
-    ::cppu::extractInterface(xCol,m_xColNames->getByName(aColumnName));
-    sal_Int32 nId = Reference<XColumnLocate>(m_xColNames,UNO_QUERY)->findColumn(aColumnName);
-    // Kommt diese Column ueberhaupt in der Datei vor?
-
-    if (!xCol.is())
-    {
-        // Diese Column gibt es nicht!
-//      aStatus.Set(SQL_STAT_ERROR,
-//                  String::CreateFromAscii("S0022"),
-//                  aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_COLUMN_NOT_FOUND))),
-//                  0, String() );
-        throwFunctionSequenceException(*this);
-    }
-
-    // Value an die Row mit den zuzuweisenden Werten binden:
-    //  const ODbVariantRef& xValue = (*aAssignValues)[pFileColumn->GetId()];
-
-    // Alles geprueft und wir haben den Namen der Column.
-    // Jetzt eine Value allozieren, den Wert setzen und die Value an die Row binden.
-    if (bSetNull)
-        (*m_aAssignValues)[nId].setNull();
-    else
-    {
-        switch (getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
-        {
-            // Kriterium je nach Typ als String oder double in die Variable packen ...
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-                (*m_aAssignValues)[nId] = aValue;
-                // Zeichensatz ist bereits konvertiert, da ja das gesamte Statement konvertiert wurde
-                break;
-
-            case DataType::BIT:
-                {
-                    // nyi: gemischte Gross-/Kleinschreibung???
-                    if (aValue.EqualsIgnoreCaseAscii("TRUE")  || aValue.GetChar(0) == '1')
-                        (*m_aAssignValues)[nId] = sal_True;
-                    else if (aValue.EqualsIgnoreCaseAscii("FALSE") || aValue.GetChar(0) == '0')
-                        (*m_aAssignValues)[nId] = sal_False;
-                    else
-                    {
-                        //  aStatus.Set(SQL_STAT_ERROR);    // nyi: genauer!
-                        throwFunctionSequenceException(*this);
-                    }
-                }
-                break;
-            case DataType::TINYINT:
-            case DataType::SMALLINT:
-            case DataType::INTEGER:
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-            case DataType::REAL:
-            case DataType::DOUBLE:
-            case DataType::DATE:
-            case DataType::TIME:
-            case DataType::TIMESTAMP:
-            {
-                (*m_aAssignValues)[nId] = aValue; // .ToDouble
-//              try
-//              {
-//                  double n = xValue->toDouble();
-//                  xValue->setDouble(n);
-//              }
-//              catch ( ... )
-//              {
-//                  aStatus.SetDriverNotCapableError();
-//              }
-            }   break;
-            default:
-                throwFunctionSequenceException(*this);
-        }
-    }
-
-    // Parameter-Nr. merken (als User Data)
-    // SQL_NO_PARAMETER = kein Parameter.
-    m_aAssignValues->setParameterIndex(nId,nParameter);
-    //  ((ODbAssignRow*)aAssignValues.getBodyPtr())->setAssignedIndex(pFileColumn->GetId(), nParameter);
-}
-
-//------------------------------------------------------------------
-UINT32 OResultSet::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
-{
-
-    // Nr. des neu hinzuzufuegenden Parameters:
-    UINT32 nParameter = m_xParamColumns->size()+1;
-
-    OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument ist kein Parameter");
-    OSL_ENSURE(pParameter->count() > 0,"OResultSet: Fehler im Parse Tree");
-    OSQLParseNode * pMark = pParameter->getChild(0);
-
-    String aParameterName;
-    if (SQL_ISPUNCTUATION(pMark,"?"))
-        aParameterName = '?';
-    else if (SQL_ISPUNCTUATION(pMark,":"))
-        aParameterName = pParameter->getChild(1)->getTokenValue();
-    else if (SQL_ISPUNCTUATION(pMark,"["))
-        aParameterName = pParameter->getChild(1)->getTokenValue();
-    else
-    {
-        OSL_ASSERT("OResultSet: Fehler im Parse Tree");
-    }
-
-    // Parameter-Column aufsetzen:
-    sal_Int32 eType = DataType::VARCHAR;
-    UINT32 nPrecision = 255;
-    sal_Int32 nScale = 0;
-    sal_Int32 nNullable = ColumnValue::NULLABLE;
-
-    if (_xCol.is())
-    {
-        // Typ, Precision, Scale ... der angegebenen Column verwenden,
-        // denn dieser Column wird der Wert zugewiesen bzw. mit dieser
-        // Column wird der Wert verglichen.
-        eType = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
-        nPrecision = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
-        nScale = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
-        nNullable = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));;
-    }
-
-    Reference<XPropertySet> xParaColumn = new connectivity::sdbcx::OColumn(aParameterName
-                                                    ,::rtl::OUString()
-                                                    ,::rtl::OUString()
-                                                    ,nNullable
-                                                    ,nPrecision
-                                                    ,nScale
-                                                    ,eType
-                                                    ,sal_False
-                                                    ,sal_False
-                                                    ,sal_False
-                                                    ,m_aSQLIterator.isCaseSensitive());
-    m_xParamColumns->push_back(xParaColumn);
-    return nParameter;
-}
-// -----------------------------------------------------------------------------
-void OResultSet::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable)
-{
-    Reference<XPropertySet> xProp;
-    if(SQL_ISRULE(_pNode,column_ref))
-    {
-        ::rtl::OUString sColumnName,sTableRange;
-        m_aSQLIterator.getColumnRange(_pNode,sColumnName,sTableRange);
-        if(sColumnName.getLength())
-        {
-            Reference<XNameAccess> xNameAccess = _xTable->getColumns();
-            if(xNameAccess->hasByName(sColumnName))
-                xNameAccess->getByName(sColumnName) >>= xProp;;
-            AddParameter(_pParameter,xProp);
-        }
-    }
-    else
-        AddParameter(_pParameter,xProp);
-//  else if(SQL_ISRULE(_pNode,num_value_exp))
-//  {
-//      describeColumn(*aIter,_pNode->getChild(),_xTable);
-//  }
-//  else if(SQL_ISRULE(_pNode,term))
-//  {
-//      describeColumn(*aIter,,_xTable);
-//  }
-//  else
-//  {
-//      describeColumn(*aIter,,_xTable);
-//  }
-}
-// -------------------------------------------------------------------------
-void OResultSet::describeParameter()
-{
-    ::std::vector< OSQLParseNode*> aParseNodes;
-    scanParameter(m_pParseTree,aParseNodes);
-    if(aParseNodes.size())
-    {
-        m_xParamColumns = new OSQLColumns();
-        const OSQLTables& xTabs = m_aSQLIterator.getTables();
-        if(xTabs.size())
-        {
-            OSQLTable xTable = xTabs.begin()->second;
-            ::std::vector< OSQLParseNode*>::const_iterator aIter = aParseNodes.begin();
-            for (;aIter != aParseNodes.end();++aIter )
-            {
-                describeColumn(*aIter,(*aIter)->getParent()->getChild(0),xTable);
-            }
-        }
-
-//      ::vos::ORef<OSQLColumns> xColumns = m_aSQLIterator.getParameters();
-//      if(xColumns.isValid())
-//      {
-//          OSL_ENSURE(aParseNodes.size() == xColumns->size(),"Not all parameters found!");
-//          ::rtl::OUString aTabName,aColName,aParameterName;
-//          OSQLColumns::iterator aIter = xColumns->begin();
-//          for(;aIter != xColumns->end();++aIter)
-//          {
-//              m_xParamColumns->push_back(*aIter);
-//          }
-//      }
-    }
+    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+                ?
+            (sal_Int64)this
+                :
+            0;
 }
 // -----------------------------------------------------------------------------
 void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                                    const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
                                    const Reference<XIndexAccess>& _xNames,
-                                   sal_Bool _bSetColumnMapping)
+                                   sal_Bool _bSetColumnMapping,
+                                   const Reference<XDatabaseMetaData>& _xMetaData,
+                                   ::std::vector<sal_Int32>& _rColMapping)
 {
-    ::comphelper::UStringMixEqual aCase(m_xDBMetaData->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual aCase(_xMetaData->storesMixedCaseQuotedIdentifiers());
 
     Reference<XPropertySet> xTableColumn;
     ::rtl::OUString sTableColumnName, sSelectColumnRealName;
+
+    const ::rtl::OUString sName     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+    const ::rtl::OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
+    const ::rtl::OUString sType     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE);
+
     OValueVector::iterator aRowIter = _rRow->begin()+1;
     for (sal_Int32 i=0; // the first column is the bookmark column
             aRowIter != _rRow->end();
@@ -2398,7 +1886,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
             _xNames->getByIndex(i) >>= xTableColumn;
             OSL_ENSURE(xTableColumn.is(), "OResultSet::OpenImpl: invalid table column!");
             if (xTableColumn.is())
-                xTableColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sTableColumnName;
+                xTableColumn->getPropertyValue(sName) >>= sTableColumnName;
             else
                 sTableColumnName = ::rtl::OUString();
 
@@ -2409,30 +1897,28 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                     ++aIter
                 )
             {
-                if((*aIter)->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)))
-                    (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)) >>= sSelectColumnRealName;
+                if((*aIter)->getPropertySetInfo()->hasPropertyByName(sRealName))
+                    (*aIter)->getPropertyValue(sRealName) >>= sSelectColumnRealName;
                 else
-                    (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sSelectColumnRealName;
+                    (*aIter)->getPropertyValue(sName) >>= sSelectColumnRealName;
 
                 if (aCase(sTableColumnName, sSelectColumnRealName))
                 {
                     if(_bSetColumnMapping)
                     {
-                        sal_Int32 nSelectColumnPos = aIter - m_xColumns->begin() + 1;
+                        sal_Int32 nSelectColumnPos = aIter - _rxColumns->begin() + 1;
                             // the getXXX methods are 1-based ...
                         sal_Int32 nTableColumnPos = i + 1;
                             // get first table column is the bookmark column ...
-                        m_aColMapping[nSelectColumnPos] = nTableColumnPos;
+                        _rColMapping[nSelectColumnPos] = nTableColumnPos;
                     }
 
                     aRowIter->setBound(sal_True);
                     sal_Int32 nType = DataType::OTHER;
                     if (xTableColumn.is())
-                        xTableColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
+                        xTableColumn->getPropertyValue(sType) >>= nType;
                     aRowIter->setTypeKind(nType);
                 }
-                else
-                    aRowIter->setBound(sal_False);
             }
         }
         catch (Exception&)
@@ -2456,11 +1942,6 @@ void SAL_CALL OResultSet::release() throw(RuntimeException)
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-}
-// -----------------------------------------------------------------------------
-OSQLAnalyzer* OResultSet::createAnalyzer()
-{
-    return new OSQLAnalyzer();
 }
 // -----------------------------------------------------------------------------
 void OResultSet::doTableSpecials(const OSQLTable& _xTable)
@@ -2490,4 +1971,18 @@ void OResultSet::clearInsertRow()
     }
 }
 // -----------------------------------------------------------------------------
-
+void OResultSet::initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount)
+{
+    if(!_rRow.isValid())
+    {
+        _rRow   = new OValueVector(_nColumnCount);
+        (*_rRow)[0].setBound(sal_True);
+        ::std::for_each(_rRow->begin()+1,_rRow->end(),TSetBound(sal_False));
+    }
+}
+// -----------------------------------------------------------------------------
+sal_Bool OResultSet::fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex)
+{
+    return sal_False;
+}
+// -----------------------------------------------------------------------------

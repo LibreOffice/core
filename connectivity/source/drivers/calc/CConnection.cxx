@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 09:58:39 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;
-    if(!m_xCatalog.get().is())
+    if(!m_xCatalog.is())
     {
         OCalcCatalog *pCat = new OCalcCatalog(this);
         xTab = pCat;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABResultSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-27 10:02:08 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 05:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
             virtual sal_Bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex);
 
-            // here we create a SQL analyzer which doesn't support any restrictions
-            // these are already done by the server side
-            virtual file::OSQLAnalyzer* createAnalyzer();
         public:
             DECLARE_SERVICE_INFO();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:15:43 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,34 +435,33 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
         xRef = pResult;
         pResult->setTablePrivilegesMap();
-        ORows aRows;
-        ORow aRow(8);
-        aRow[0] = ORowSetValue();
-        aRow[1] = ORowSetValue();
-        aRow[2] = ORowSetValue(tableNamePattern);
-        aRow[3] = ORowSetValue();
-        aRow[4] = ORowSetValue();
-        aRow[5] = ORowSetValue(getUserName());
-        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("SELECT"));
-        aRow[7] = ORowSetValue(::rtl::OUString::createFromAscii("NO"));
-        // bound row
-        ORow::iterator aIter = aRow.begin();
-        for(;aIter != aRow.end();++aIter)
-            aIter->setBound(sal_True);
+        ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
+        ::connectivity::ODatabaseMetaDataResultSet::ORow aRow(8);
+        aRows.reserve(8);
+
+        aRow[0] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
+        aRow[1] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
+        aRow[2] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(tableNamePattern);
+        aRow[3] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
+        aRow[4] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
+        aRow[5] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(getUserName());
+        aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getSelectValue();
+        aRow[7] = new ::connectivity::ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("NO"));
+
         aRows.push_back(aRow);
-        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("INSERT"));
+        aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getInsertValue();
         aRows.push_back(aRow);
-        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("DELETE"));
+        aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getDeleteValue();
         aRows.push_back(aRow);
-        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("UPDATE"));
+        aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getUpdateValue();
         aRows.push_back(aRow);
-        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("CREATE"));
+        aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getCreateValue();
         aRows.push_back(aRow);
-        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("READ"));
+        aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getReadValue();
         aRows.push_back(aRow);
-        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("ALTER"));
+        aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getAlterValue();
         aRows.push_back(aRow);
-        aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("DROP"));
+        aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getDropValue();
         aRows.push_back(aRow);
         pResult->setRows(aRows);
     }

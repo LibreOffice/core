@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACallableStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:26 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,7 @@ OCallableStatement::OCallableStatement( OConnection* _pConnection,const OTypeInf
 Any SAL_CALL OCallableStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OPreparedStatement::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = ::cppu::queryInterface(rType,static_cast< XRow*>(this));
-    return aRet;
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< XRow*>(this));
 }
 // -------------------------------------------------------------------------
 

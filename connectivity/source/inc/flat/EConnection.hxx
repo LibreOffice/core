@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EConnection.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:46:14 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,12 @@ namespace connectivity
             virtual void construct(const ::rtl::OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException);
 
             // own methods
-            sal_Bool    isFixedLength()         const { return m_bFixedLength;      }
-            sal_Bool    isHeaderLine()          const { return m_bHeaderLine;       }
-            sal_uInt8   getFieldDelimiter()     const { return m_cFieldDelimiter;   }
-            sal_uInt8   getStringDelimiter()    const { return m_cStringDelimiter;  }
-            sal_uInt8   getDecimalDelimiter()   const { return m_cDecimalDelimiter; }
-            sal_uInt8   getThousandDelimiter()  const { return m_cThousandDelimiter;}
+            inline sal_Bool     isFixedLength()         const { return m_bFixedLength;      }
+            inline sal_Bool     isHeaderLine()          const { return m_bHeaderLine;       }
+            inline sal_uInt8    getFieldDelimiter()     const { return m_cFieldDelimiter;   }
+            inline sal_uInt8    getStringDelimiter()    const { return m_cStringDelimiter;  }
+            inline sal_uInt8    getDecimalDelimiter()   const { return m_cDecimalDelimiter; }
+            inline sal_uInt8    getThousandDelimiter()  const { return m_cThousandDelimiter;}
             // XServiceInfo
             DECLARE_SERVICE_INFO();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:17:53 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,9 +129,7 @@ Any SAL_CALL OFlatResultSet::queryInterface( const Type & rType ) throw(RuntimeE
         return Any();
 
     Any aRet = OResultSet::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = OFlatResultSet_BASE::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : OFlatResultSet_BASE::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException)
@@ -192,10 +190,6 @@ sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OFlatResultSet::compareBookmarks( const  Any& first, const  Any& second ) throw( SQLException,  RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
     return (first == second) ? 0 : 2;
 }
 // -------------------------------------------------------------------------
@@ -206,10 +200,6 @@ sal_Bool SAL_CALL OFlatResultSet::hasOrderedBookmarks(  ) throw( SQLException,  
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OFlatResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
     return comphelper::getINT32(bookmark);
 }
 // -------------------------------------------------------------------------
@@ -239,4 +229,5 @@ void SAL_CALL OFlatResultSet::release() throw(::com::sun::star::uno::RuntimeExce
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
+// -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FNoException.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:17:04 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _CONNECTIVITY_FILE_FRESULTSET_HXX_
 #include "file/FResultSet.hxx"
 #endif
+#ifndef _CONNECTIVITY_FILE_OPREPAREDSTATEMENT_HXX_
+#include "file/FPreparedStatement.hxx"
+#endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include "FValue.hxx"
 #endif
@@ -134,7 +137,7 @@ sal_Bool OResultSet::isCount() const
             );
 }
 // -----------------------------------------------------------------------------
-void OResultSet::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
+void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
 {
     DBG_ASSERT(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
 
@@ -172,7 +175,7 @@ connectivity::file::OFILEKeyCompare(const void * elem1, const void * elem2)
     // oder alle Columns gleich.
     for (UINT16 i = 0; i < SQL_ORDERBYKEYS && pIndex->eKeyType[i] != SQL_ORDERBYKEY_NONE; i++)
     {
-        const int nGreater = (pIndex->bAscending[i]) ? 1 : -1;
+        const int nGreater = (pIndex->m_aAscending[i]) ? 1 : -1;
         const int nLess = - nGreater;
 
         // Vergleich (je nach Datentyp):
@@ -256,16 +259,17 @@ OFILESortIndex * OFILESortIndex::pCurrentIndex;
 CharSet OFILESortIndex::eCurrentCharSet;
 //------------------------------------------------------------------
 OFILESortIndex::OFILESortIndex(const OKeyType eKeyType2[],  // Genau 3 Eintraege!
-                           const BOOL bAscending2[],        // Genau 3 Eintraege!
+                           const ::std::vector<sal_Int16>& _aAscending,     // Genau 3 Eintraege!
                            INT32 nMaxNumberOfRows, rtl_TextEncoding eSet)   // Obere Schranke fuer die Anzahl indizierbarer Zeilen
     : nMaxCount(nMaxNumberOfRows),
       nCount(0),
-      bFrozen(FALSE), eCharSet(eSet)
+      bFrozen(FALSE),
+      eCharSet(eSet),
+      m_aAscending(_aAscending)
 {
     for (int j = 0; j < SQL_ORDERBYKEYS; j++)
     {
         eKeyType[j] = eKeyType2[j];
-        bAscending[j] = bAscending2[j];
     }
 
 #if defined MAX_KEYSET_SIZE
@@ -396,11 +400,11 @@ OFILEKeyValue* OResultSet::GetOrderbyKeyValue(OValueRow _rRow)
     UINT32 nBookmarkValue = Abs((sal_Int32)(*_rRow)[0]);
 
     OFILEKeyValue* pKeyValue = new OFILEKeyValue((UINT32)nBookmarkValue);
-    for (int i = 0; i < sizeof m_nOrderbyColumnNumber / sizeof (* m_nOrderbyColumnNumber); i++)
+    for (int i = 0; i < m_aOrderbyColumnNumber.size(); ++i)
     {
-        if (m_nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND) break;
+        if (m_aOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND) break;
 
-        ORowSetValue xKey = (*_rRow)[m_nOrderbyColumnNumber[i]];
+        ORowSetValue xKey = (*_rRow)[m_aOrderbyColumnNumber[i]];
         switch (xKey.getTypeKind())
         {
             case ::com::sun::star::sdbc::DataType::VARCHAR:

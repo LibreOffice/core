@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 15:56:13 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1586,10 +1586,10 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                 _xParams->setBoolean(parameterIndex,::cppu::any2bool(x));
                 break;
             case DataType::TINYINT:
-                _xParams->setByte(parameterIndex,::comphelper::getINT32(x));
+                _xParams->setByte(parameterIndex,(sal_Int8)::comphelper::getINT32(x));
                 break;
             case DataType::SMALLINT:
-                _xParams->setShort(parameterIndex,::comphelper::getINT32(x));
+                _xParams->setShort(parameterIndex,(sal_Int16)::comphelper::getINT32(x));
                 break;
             case DataType::INTEGER:
                 _xParams->setInt(parameterIndex,::comphelper::getINT32(x));
@@ -1664,9 +1664,8 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
     {
-        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),_rVal))
-            ++__first;
-        return __first;
+        ::rtl::OUString sName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+        return find(__first,__last,sName,_rVal,_rCase);
     }
     // -------------------------------------------------------------------------
     OSQLColumns::const_iterator findRealName(   OSQLColumns::const_iterator __first,
@@ -1674,9 +1673,8 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
     {
-        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME))),_rVal))
-            ++__first;
-        return __first;
+        ::rtl::OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
+        return find(__first,__last,sRealName,_rVal,_rCase);
     }
     // -------------------------------------------------------------------------
     OSQLColumns::const_iterator find(   OSQLColumns::const_iterator __first,
@@ -1685,7 +1683,7 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
                                         const ::rtl::OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase)
     {
-        while (__first != __last && !_rCase(getString(Reference<XPropertySet>((*__first),UNO_QUERY)->getPropertyValue(_rProp)),_rVal))
+        while (__first != __last && !_rCase(getString((*__first)->getPropertyValue(_rProp)),_rVal))
             ++__first;
         return __first;
     }
@@ -1697,6 +1695,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.38  2001/08/06 15:56:13  fs
+ *  #90664# TransferFormComponentProperties: properly check for formatted fields
+ *
  *  Revision 1.37  2001/08/06 14:49:22  fs
  *  #87690# +connectRowset
  *

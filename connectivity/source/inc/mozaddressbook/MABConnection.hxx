@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABConnection.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: wvd $ $Date: 2001-07-19 13:57:25 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 05:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@ namespace connectivity
         class OMozabDriver;
         class OMozabConnection : public file::OConnection
         {
-        OMozabColumnAlias m_aColumnAlias;
+            OMozabColumnAlias m_aColumnAlias;
+            ::rtl::OUString m_sURL;                 // contains the real url set by construct
             rtl::OUString   m_sMozillaURI;
             sal_Int32       m_nAnonABCount;
             sal_Int32       m_nMaxResultRecords;
@@ -114,6 +115,8 @@ namespace connectivity
             // no interface methods
             rtl::OUString getMozURI() const
                 { return m_sMozillaURI; }
+
+            ::rtl::OUString getConnectionURL() const { return m_sURL; }
 
             sal_Bool usesFactory(void) const { return m_UsesFactory ; }
             sal_Bool isLDAP(void) const { return m_IsLDAP ; }

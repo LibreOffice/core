@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ENoException.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:17:42 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,73 +120,61 @@ xub_StrLen OFlatString::GetTokenCount( sal_uInt8 cTok, sal_uInt8 cStrDel ) const
 }
 
 //------------------------------------------------------------------
-ByteString OFlatString::GetToken( xub_StrLen nToken, sal_uInt8 cTok, sal_uInt8 cStrDel ) const
+void OFlatString::GetTokenSpecial( ByteString& _rStr,xub_StrLen& nStartPos, sal_uInt8 cTok, sal_uInt8 cStrDel ) const
 {
-    if ( !Len() )
-        return ByteString();
-
-    xub_StrLen nTok = 0;
-    BOOL bStart = TRUE;     // Stehen wir auf dem ersten Zeichen im Token?
-    BOOL bInString = FALSE; // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
-    ByteString aResult;         // Ergebnisstring
-
-    // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
-    for( xub_StrLen i = 0; i < Len(); i++ )
+    _rStr.Erase();
+    xub_StrLen nLen = Len();
+    if ( nLen )
     {
-        if (bStart) {
-            bStart = FALSE;
-            // Erstes Zeichen ein String-Delimiter?
-            if ((*this).GetChar(i) == cStrDel) {
-                bInString = TRUE;   // dann sind wir jetzt INNERHALB des Strings!
-                continue;           // dieses Zeichen ueberlesen!
-            }
-        }
+        BOOL bInString = (nStartPos < nLen) && ((*this).GetChar(nStartPos) == cStrDel); // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
-        if (bInString) {
-            // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
-            if ( (*this).GetChar(i) == cStrDel ) {
-                if ((i+1 < Len()) && ((*this).GetChar(i+1) == cStrDel))
+        // Erstes Zeichen ein String-Delimiter?
+        if (bInString )
+            ++nStartPos;            // dieses Zeichen ueberlesen!
+        // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
+        for( xub_StrLen i = nStartPos; i < nLen; ++i )
+        {
+            if (bInString)
+            {
+                // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
+                if ( (*this).GetChar(i) == cStrDel )
                 {
-                    // Verdoppeltes String-Delimiter-Zeichen:
-                    i++;    // kein String-Ende, naechstes Zeichen ueberlesen.
-
-                    if (nTok == nToken)
+                    if ((i+1 < nLen) && ((*this).GetChar(i+1) == cStrDel))
                     {
-                        aResult += (*this).GetChar(i);  // Zeichen gehoert zum Resultat-String
+                        // Verdoppeltes String-Delimiter-Zeichen:
+                        ++i;    // kein String-Ende, naechstes Zeichen ueberlesen.
+
+                        _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
+                    }
+                    else
+                    {
+                        // String-Ende
+                        bInString = FALSE;
                     }
                 }
                 else
                 {
-                    // String-Ende
-                    bInString = FALSE;
+                    _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
                 }
-            } else {
-                if (nTok == nToken) {
-                    aResult += (*this).GetChar(i);  // Zeichen gehoert zum Resultat-String
-                }
+
             }
-
-        } else {
-            // Stimmt das Tokenzeichen ueberein, dann erhoehe nTok
-            if ( (*this).GetChar(i) == cTok ) {
-                nTok++;
-                bStart = TRUE;
-
-                if ( nTok > nToken )
+            else
+            {
+                // Stimmt das Tokenzeichen ueberein, dann erhoehe nTok
+                if ( (*this).GetChar(i) == cTok )
                 {
                     // Vorzeitiger Abbruch der Schleife moeglich, denn
                     // wir haben, was wir wollten.
-                    return aResult;
+                    nStartPos = i+1;
+                    break;
                 }
-            } else {
-                if (nTok == nToken) {
-                    aResult += (*this).GetChar(i);  // Zeichen gehoert zum Resultat-String
+                else
+                {
+                    _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
                 }
             }
         }
     }
-
-    return aResult;
 }
 // -----------------------------------------------------------------------------
 void OFlatTable::refreshIndexes()
@@ -195,8 +183,7 @@ void OFlatTable::refreshIndexes()
 // -----------------------------------------------------------------------------
 sal_Bool OFlatTable::checkHeaderLine()
 {
-    OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
-    if (m_nFilePos == 0 && pConnection->isHeaderLine())
+    if (m_nFilePos == 0 && ((OFlatConnection*)m_pConnection)->isHeaderLine())
     {
         BOOL bRead2;
         do
@@ -237,7 +224,7 @@ sal_Bool OFlatTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sa
                 return sal_False;
             }
 
-            m_aRowToFilePos[m_nRowPos] = m_nFilePos;
+            m_aRowToFilePos.insert(::std::map<sal_Int32,sal_Int32>::value_type(m_nRowPos,m_nFilePos));
 
             m_pFileStream->ReadLine(m_aCurrentLine);
             if (m_pFileStream->IsEof())

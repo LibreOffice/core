@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABPreparedStatement.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:06:43 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 05:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@ namespace connectivity
         {
         protected:
             virtual file::OResultSet* createResultSet();
+            // here we create a SQL analyzer which doesn't support any restrictions
+            // these are already done by the server side
+            virtual file::OSQLAnalyzer* createAnalyzer();
         public:
             //  DECLARE_CTY_DEFAULTS(file::OStatement);
             OMozabPreparedStatement( file::OConnection* _pConnection ) : file::OPreparedStatement( _pConnection ){}

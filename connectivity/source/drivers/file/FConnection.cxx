@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:11 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,8 @@ void OConnection::disposing()
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
     m_xDir      = NULL;
     m_xContent  = NULL;
-    m_xCatalog  = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>();
+    ::comphelper::disposeComponent(m_xCatalog);
+    m_xCatalog  = ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>();
 
     dispose_ChildImpl();
     OConnection_BASE::disposing();
@@ -442,7 +443,7 @@ void OConnection::disposing()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;
-    if(!m_xCatalog.get().is())
+    if(!m_xCatalog.is())
     {
         xTab = new OFileCatalog(this);
         m_xCatalog = xTab;
@@ -470,10 +471,10 @@ void OConnection::disposing()
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL OConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return 0;
+    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        ?
+        (sal_Int64)this
+        : sal_Int64(0);
 }
 // -----------------------------------------------------------------------------
 Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()

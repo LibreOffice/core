@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 10:54:30 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,13 +136,11 @@ void java_sql_PreparedStatement::saveClassRef( jclass pClass )
 ::com::sun::star::uno::Any SAL_CALL java_sql_PreparedStatement::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = OStatement_BASE2::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = ::cppu::queryInterface(  rType,
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface( rType,
                                         static_cast< XPreparedStatement*>(this),
                                         static_cast< XParameters*>(this),
                                         static_cast< XResultSetMetaDataSupplier*>(this),
                                         static_cast< XPreparedBatchExecution*>(this));
-    return aRet;
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_PreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)

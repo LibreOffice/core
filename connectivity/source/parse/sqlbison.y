@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.30 2001-08-14 13:23:51 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.31 2001-08-24 06:07:23 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-08-14 13:23:51 $ $Revision: 1.30 $
+//	$Author: oj $ $Date: 2001-08-24 06:07:23 $ $Revision: 1.31 $
 //
 // Description:
 //
@@ -3371,12 +3371,12 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 				s_nRuleIDs[eRule] = StrToRuleID("range_variable"); break;
 			case OSQLParseNode::column:
 				s_nRuleIDs[eRule] = StrToRuleID("column"); break;
-			case OSQLParseNode::delete_statement_positioned:
-				s_nRuleIDs[eRule] = StrToRuleID("delete_statement_positioned"); break;
+//			case OSQLParseNode::delete_statement_positioned:
+//				s_nRuleIDs[eRule] = StrToRuleID("delete_statement_positioned"); break;
 			case OSQLParseNode::delete_statement_searched:
 				s_nRuleIDs[eRule] = StrToRuleID("delete_statement_searched"); break;
-			case OSQLParseNode::update_statement_positioned:
-				s_nRuleIDs[eRule] = StrToRuleID("update_statement_positioned"); break;
+//			case OSQLParseNode::update_statement_positioned:
+//				s_nRuleIDs[eRule] = StrToRuleID("update_statement_positioned"); break;
 			case OSQLParseNode::update_statement_searched:
 				s_nRuleIDs[eRule] = StrToRuleID("update_statement_searched"); break;
 			case OSQLParseNode::assignment_commalist:

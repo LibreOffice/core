@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-27 10:02:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@ namespace connectivity
             virtual BOOL hasRestriction() const;
             BOOL evaluateRestriction() {return m_aInterpreter.start();}
             void setOrigColumns(const OFileColumns& rCols) { m_aCompiler.setOrigColumns(rCols); }
-            void setParameterColumns(::vos::ORef< connectivity::OSQLColumns > _rParaCols) { m_aCompiler.setParameterColumns(_rParaCols); }
             virtual OOperandAttr* createOperandAttr(sal_Int32 _nPos,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 06:11:58 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,10 +738,7 @@ Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeExcep
         return Any();
 
     Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
-    if(aRet.hasValue())
-        return aRet;
-
-    return OTable_TYPEDEF::queryInterface(rType);
+    return aRet.hasValue() ? aRet : OTable_TYPEDEF::queryInterface(rType);
 }
 
 //--------------------------------------------------------------------------
@@ -764,10 +761,11 @@ Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return OCalcTable_BASE::getSomething(rId);
+    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+                ?
+            (sal_Int64)this
+                :
+            OCalcTable_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
 sal_Int32 OCalcTable::getCurrentLastPos() const

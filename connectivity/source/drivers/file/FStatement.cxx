@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:11 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,11 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
     ,m_nResultSetType(ResultSetType::FORWARD_ONLY)
     ,m_nFetchDirection(FetchDirection::FORWARD)
     ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
+    ,m_pSQLAnalyzer(NULL)
+    ,m_aOrderbyColumnNumber(SQL_ORDERBYKEYS,SQL_COLUMN_NOTFOUND)
+    ,m_aOrderbyAscending(SQL_ORDERBYKEYS,1)
+    ,m_xDBMetaData(_pConnection->getMetaData())
+    ,m_pTable(NULL)
 {
     m_pConnection->acquire();
 
@@ -152,6 +157,9 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
 // -----------------------------------------------------------------------------
 OStatement_Base::~OStatement_Base()
 {
+    osl_incrementInterlockedCount( &m_refCount );
+    disposing();
+    delete m_pSQLAnalyzer;
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::disposeResultSet()
@@ -169,7 +177,23 @@ void OStatement_BASE2::disposing()
 
     disposeResultSet();
 
+    if(m_pSQLAnalyzer)
+        m_pSQLAnalyzer->dispose();
+
+    if(m_aRow.isValid())
+    {
+        m_aRow->clear();
+        m_aRow = NULL;
+    }
+
     m_aSQLIterator.dispose();
+
+    if(m_pTable)
+    {
+        m_pTable->release();
+        m_pTable = NULL;
+    }
+
     if (m_pConnection)
         m_pConnection->release();
 
@@ -189,10 +213,8 @@ void SAL_CALL OStatement_BASE2::release() throw(RuntimeException)
 //-----------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-        Any aRet = OStatement_BASE::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = OPropertySetHelper::queryInterface(rType);
-    return aRet;
+    Any aRet = OStatement_BASE::queryInterface(rType);
+    return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
@@ -279,52 +301,12 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
+    construct(sql);
+    OResultSet* pResult = createResultSet();
+    Reference< XResultSet > xRS = pResult;
+    initializeResultSet(pResult);
 
-    Reference< XResultSet > xRS = NULL;
-
-    ::rtl::OUString aErr;
-    m_pParseTree = m_aParser.parseTree(aErr,sql);
-    if(m_pParseTree)
-    {
-        m_aSQLIterator.setParseTree(m_pParseTree);
-        m_aSQLIterator.traverseAll();
-        if(m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT)
-        {
-            const OSQLTables& xTabs = m_aSQLIterator.getTables();
-            if(xTabs.begin() == xTabs.end())
-            {
-                if(!aErr.getLength())
-                {
-                    aErr = ::rtl::OUString::createFromAscii("Unknown table name in SELECT statement:\n");
-                    aErr += sql;
-                }
-                throw SQLException(aErr,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
-            }
-
-            OResultSet* pResult = createResultSet();
-            pResult->OpenImpl();
-            xRS = pResult;
-        }
-        else
-        {
-            const OSQLTables& xTabs = m_aSQLIterator.getTables();
-            if(xTabs.begin() == xTabs.end())
-            {
-                if(!aErr.getLength())
-                {
-                    aErr = ::rtl::OUString::createFromAscii("Unknown table name in SELECT statement:\n");
-                    aErr += sql;
-                }
-                throw SQLException(aErr,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
-            }
-            throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
-        }
-    }
-    else
-        throw SQLException(aErr,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
-
-    // Execute the statement.  If execute returns true, a result
-    // set exists.
+    pResult->OpenImpl();
     return xRS;
 }
 // -------------------------------------------------------------------------
@@ -339,27 +321,13 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) 
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    Reference< XResultSet > xRS = NULL;
+    construct(sql);
+    OResultSet* pResult = createResultSet();
+    Reference< XResultSet > xRS = pResult;
+    initializeResultSet(pResult);
+    pResult->OpenImpl();
 
-    ::rtl::OUString aErr;
-    m_pParseTree = m_aParser.parseTree(aErr,sql);
-    if(m_pParseTree)
-    {
-        m_aSQLIterator.setParseTree(m_pParseTree);
-        m_aSQLIterator.traverseAll();
-        const OSQLTables& xTabs = m_aSQLIterator.getTables();
-        if(xTabs.begin() == xTabs.end())
-            throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
-
-        OResultSet* pResult = createResultSet();
-        pResult->OpenImpl();
-        xRS = pResult;
-        return pResult->getRowCountResult();
-    }
-    else
-        throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
-
-    return 0;
+    return pResult->getRowCountResult();
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
@@ -370,8 +338,6 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 
     return makeAny(m_aLastWarning);
 }
-// -------------------------------------------------------------------------
-
 // -------------------------------------------------------------------------
 void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
@@ -427,8 +393,153 @@ void SAL_CALL OStatement_Base::disposing(void)
     return OStatement_BASE2::queryInterface( rType);
 }
 // -----------------------------------------------------------------------------
+OSQLAnalyzer* OStatement_Base::createAnalyzer()
+{
+    return new OSQLAnalyzer();
+}
+// -----------------------------------------------------------------------------
+void OStatement_Base::anylizeSQL()
+{
+    OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::anylizeSQL: Analyzer isn't set!");
+    // start analysing the statement
+    m_pSQLAnalyzer->setOrigColumns(m_xColNames);
+    m_pSQLAnalyzer->start(m_pParseTree);
 
+    const OSQLParseNode* pOrderbyClause = m_aSQLIterator.getOrderTree();
+    if(pOrderbyClause)
+    {
+        OSQLParseNode * pOrderingSpecCommalist = pOrderbyClause->getChild(2);
+        OSL_ENSURE(SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OResultSet: Fehler im Parse Tree");
 
+        for (sal_uInt32 m = 0; m < pOrderingSpecCommalist->count(); m++)
+        {
+            OSQLParseNode * pOrderingSpec = pOrderingSpecCommalist->getChild(m);
+            OSL_ENSURE(SQL_ISRULE(pOrderingSpec,ordering_spec),"OResultSet: Fehler im Parse Tree");
+            OSL_ENSURE(pOrderingSpec->count() == 2,"OResultSet: Fehler im Parse Tree");
+
+            OSQLParseNode * pColumnRef = pOrderingSpec->getChild(0);
+            if(!SQL_ISRULE(pColumnRef,column_ref))
+            {
+                throw SQLException();
+            }
+            OSQLParseNode * pAscendingDescending = pOrderingSpec->getChild(1);
+            setOrderbyColumn((UINT16)m,pColumnRef,pAscendingDescending);
+        }
+    }
+}
+//------------------------------------------------------------------
+void OStatement_Base::setOrderbyColumn(UINT16 nOrderbyColumnNo,
+                                     OSQLParseNode* pColumnRef,
+                                     OSQLParseNode* pAscendingDescending)
+{
+    if (nOrderbyColumnNo >= m_aOrderbyColumnNumber.size())
+    {
+        throw SQLException();
+    }
+
+    ::rtl::OUString aColumnName;
+    if (pColumnRef->count() == 1)
+        aColumnName = pColumnRef->getChild(0)->getTokenValue();
+    else if (pColumnRef->count() == 3)
+    {
+        // Nur die Table Range-Variable darf hier vorkommen:
+//      if (!(pColumnRef->getChild(0)->getTokenValue() == aTableRange))
+//      {
+//          aStatus.Set(SQL_STAT_ERROR,
+//                      String::CreateFromAscii("S1000"),
+//                      aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_INVALID_RANGE_VAR))),
+//                      0, String() );
+            //  return;
+        //  }
+        pColumnRef->getChild(2)->parseNodeToStr(aColumnName,m_xDBMetaData,NULL,sal_False,sal_False);
+    }
+    else
+    {
+        //  aStatus.SetStatementTooComplex();
+        throw SQLException();
+    }
+
+    Reference<XColumnLocate> xColLocate(m_xColNames,UNO_QUERY);
+    if(!xColLocate.is())
+        return;
+    // Alles geprueft und wir haben den Namen der Column.
+    // Die wievielte Column ist das?
+    m_aOrderbyColumnNumber[nOrderbyColumnNo] = xColLocate->findColumn(aColumnName);
+
+    // Ascending or Descending?
+    m_aOrderbyAscending[nOrderbyColumnNo]  = (SQL_ISTOKEN(pAscendingDescending,DESC)) ?
+                                            FALSE : TRUE;
+}
+
+// -----------------------------------------------------------------------------
+void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aErr;
+    m_pParseTree = m_aParser.parseTree(aErr,sql);
+    if(m_pParseTree)
+    {
+        m_aSQLIterator.setParseTree(m_pParseTree);
+        m_aSQLIterator.traverseAll();
+        const OSQLTables& xTabs = m_aSQLIterator.getTables();
+        if(xTabs.empty())
+            throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+
+        // at this moment we support only one table per select statement
+        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);
+        if(xTunnel.is())
+        {
+            if(m_pTable)
+                m_pTable->release();
+            m_pTable = (OFileTable*)xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId());
+            if(m_pTable)
+                m_pTable->acquire();
+        }
+        OSL_ENSURE(m_pTable,"No table!");
+        m_xColNames     = m_pTable->getColumns();
+        Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
+        // set the binding of the resultrow
+        m_aRow          = new OValueVector(xNames->getCount());
+        (*m_aRow)[0].setBound(sal_True);
+        ::std::for_each(m_aRow->begin()+1,m_aRow->end(),TSetBound(sal_False));
+        // create teh column mapping
+        createColumnMapping();
+
+        m_pSQLAnalyzer  = createAnalyzer();
+
+        OSL_ENSURE(m_pTable,"We need a table object!");
+        Reference<XIndexesSupplier> xIndexSup(xTunnel,UNO_QUERY);
+        if(xIndexSup.is())
+            m_pSQLAnalyzer->setIndexes(xIndexSup->getIndexes());
+
+        anylizeSQL();
+    }
+    else
+        throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+}
+// -----------------------------------------------------------------------------
+void OStatement_Base::createColumnMapping()
+{
+    // initialize the column index map (mapping select columns to table columns)
+    ::vos::ORef<connectivity::OSQLColumns>  xColumns = m_aSQLIterator.getSelectColumns();
+    m_aColMapping.resize(xColumns->size() + 1);
+    for (sal_Int32 i=0; i<(sal_Int32)m_aColMapping.size(); ++i)
+        m_aColMapping[i] = i;
+
+    Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
+    // now check which columns are bound
+    OResultSet::setBoundedColumns(m_aRow,xColumns,xNames,sal_True,m_xDBMetaData,m_aColMapping);
+}
+// -----------------------------------------------------------------------------
+void OStatement_Base::initializeResultSet(OResultSet* _pResult)
+{
+    _pResult->setSqlAnalyzer(m_pSQLAnalyzer);
+    _pResult->setOrderByColumns(m_aOrderbyColumnNumber);
+    _pResult->setOrderByAscending(m_aOrderbyAscending);
+    _pResult->setBindingRow(m_aRow);
+    _pResult->setColumnMapping(m_aColMapping);
+    //  _pResult->setTable(m_pTable);
+
+}
     }
 }
 // -----------------------------------------------------------------------------

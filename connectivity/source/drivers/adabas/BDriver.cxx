@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-14 09:15:25 $
+ *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,9 +204,7 @@ Sequence< ::rtl::OUString > SAL_CALL ODriver::getSupportedServiceNames(  ) throw
 Any SAL_CALL ODriver::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ::cppu::queryInterface(rType, static_cast<XDataDefinitionSupplier*>(this));
-    if(aRet.hasValue())
-       return aRet;
-    return ODriver_BASE::queryInterface(rType);
+    return aRet.hasValue() ? aRet : ODriver_BASE::queryInterface(rType);
 }
 //------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ) throw( ::com::sun::star::uno::Exception )
