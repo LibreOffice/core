@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-09 16:42:31 $
+ *  last change: $Author: mt $ $Date: 2001-02-15 11:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1169,14 +1169,15 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         // Zeilenhoehe auf Window-Pixel alignen?
         // Nein, waere Positionsabhaengig.
 
-        if ( aStatus.AutoPageWidth() )
+        if ( ( !IsVertical() && aStatus.AutoPageWidth() ) ||
+             ( IsVertical() && aStatus.AutoPageHeight() ) )
         {
             // Wenn die Zeile in die aktuelle Papierbreite passt, muss
             // diese Breite fuer die Ausrichting verwendet werden.
             // Wenn sie nicht passt oder sie die Papierbreite aendert,
             // wird bei Justification != LEFT sowieso noch mal formatiert.
-            long nMaxLineWidthFix = aPaperSize.Width() -
-                                        GetXValue( rLRItem.GetRight() ) - nStartX;
+            long nMaxLineWidthFix = ( !IsVertical() ? aPaperSize.Width() : aPaperSize.Height() )
+                                        - GetXValue( rLRItem.GetRight() ) - nStartX;
             if ( aTextSize.Width() < nMaxLineWidthFix )
                 nMaxLineWidth = nMaxLineWidthFix;
         }
@@ -3356,8 +3357,17 @@ void ImpEditEngine::SetFlatMode( sal_Bool bFlat )
 
 void ImpEditEngine::SetCharStretching( sal_uInt16 nX, sal_uInt16 nY )
 {
-    nStretchX = nX;
-    nStretchY = nY;
+    if ( !IsVertical() )
+    {
+        nStretchX = nX;
+        nStretchY = nY;
+    }
+    else
+    {
+        nStretchX = nY;
+        nStretchY = nX;
+    }
+
     if ( aStatus.DoStretch() )
     {
         FormatFullDoc();
