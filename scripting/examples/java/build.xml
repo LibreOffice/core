@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-10-15 17:17:21 $
+#   last change: $Author: dfoster $ $Date: 2003-11-04 17:46:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,23 +105,11 @@
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/unoil.jar"/>
     <pathelement location="${out}/class/js.jar"/>
-    <pathelement location="${solar.jar}/bsh-1.2b7.jar"/>
+    <pathelement location="${solar.jar}/bsh.jar"/>
   </path>
 
-  <!-- ===================== Patch the Rhino js.jar ======================-->
-  <target name="patchesJS">
-    <unzip src="${solar.bin}/js.jar"
-        dest="${out}/class/jsjartmp"/>
-    <javac srcdir="${prj}/examples/java/debugger"
-           destdir="${out}/class/jsjartmp"
-              includes="rhino/Main.java" classpathref="debuggerclasspath"
-       debug="${debug}" optimize="${optimize}" deprecation="on"/>
-
-    <zip destfile="${out}/class/js.jar"
-        basedir="${out}/class/jsjartmp" includes="**"/>
-  </target>
   <!-- ===================== Build the examples ========================= -->
-  <target name="buildexamples" depends="patchesJS">
+  <target name="buildexamples">
 
     <mkdir dir="${out}/class/examples/java/selector"/>
     <javac srcdir="${prj}/examples/java/selector"
