@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
+ *  last change: $Author: os $ $Date: 2001-06-01 07:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ inline void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
 SwNumFmt::SwNumFmt() :
     SwClient( 0 ),
     SvxNumberFormat(SVX_NUM_ARABIC),
-    pVertOrient(0)
+    pVertOrient(new SwFmtVertOrient( 0, VERT_NONE))
 {
 }
 /* -----------------------------22.02.01 13:42--------------------------------
@@ -165,19 +165,22 @@ SwNumFmt::SwNumFmt() :
 SwNumFmt::SwNumFmt( const SwNumFmt& rFmt) :
     SwClient( rFmt.pRegisteredIn ),
     SvxNumberFormat(rFmt),
-    pVertOrient(0)
+    pVertOrient(new SwFmtVertOrient( 0, (SwVertOrient)rFmt.GetVertOrient()))
 {
-    SvxFrameVertOrient eOrient = rFmt.GetVertOrient();
+    SvxFrameVertOrient eVertOrient = rFmt.GetVertOrient();
     SetGraphicBrush( rFmt.GetBrush(), &rFmt.GetGraphicSize(),
-                SVX_VERT_NONE == eOrient ? 0 : &eOrient);
+                                                &eVertOrient);
 }
 /* -----------------------------22.02.01 13:58--------------------------------
 
  ---------------------------------------------------------------------------*/
 SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
     SvxNumberFormat(rNumFmt),
-    pVertOrient(0)
+    pVertOrient(new SwFmtVertOrient( 0, (SwVertOrient)rNumFmt.GetVertOrient()))
 {
+    SvxFrameVertOrient eVertOrient = rNumFmt.GetVertOrient();
+    SetGraphicBrush( rNumFmt.GetBrush(), &rNumFmt.GetGraphicSize(),
+                                                &eVertOrient);
     const String& rCharStyleName = rNumFmt.SvxNumberFormat::GetCharFmtName();
     if( rCharStyleName.Len() )
     {
@@ -222,14 +225,6 @@ BOOL SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
 {
     BOOL bRet = SvxNumberFormat::operator==(rNumFmt) &&
         pRegisteredIn == rNumFmt.pRegisteredIn;
-    if(bRet && GetNumberingType() == SVX_NUM_BITMAP)
-    {
-        if(pVertOrient
-                        ? ( !rNumFmt.pVertOrient ||
-                                *pVertOrient != *rNumFmt.pVertOrient )
-                        : 0 != rNumFmt.pVertOrient );
-            bRet = FALSE;
-    }
     return bRet;
 }
 
@@ -297,9 +292,8 @@ const String&   SwNumFmt::GetCharFmtName() const
 void    SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize,
     const SvxFrameVertOrient* pOrient)
 {
-    DELETEZ(pVertOrient);
     if(pOrient)
-        pVertOrient = new SwFmtVertOrient( 0, (SwVertOrient) *pOrient);
+        pVertOrient->SetVertOrient( (SwVertOrient)*pOrient );
     SvxNumberFormat::SetGraphicBrush( pBrushItem, pSize, pOrient);
 }
 /* -----------------------------22.02.01 16:05--------------------------------
@@ -308,17 +302,13 @@ void    SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* p
 void    SwNumFmt::SetVertOrient(SvxFrameVertOrient eSet)
 {
     SvxNumberFormat::SetVertOrient(eSet);
-    DELETEZ(pVertOrient);
-    if(VERT_NONE != eSet)
-        pVertOrient = new SwFmtVertOrient( 0, (SwVertOrient) eSet);
-
 }
 /* -----------------------------22.02.01 16:05--------------------------------
 
  ---------------------------------------------------------------------------*/
 SvxFrameVertOrient  SwNumFmt::GetVertOrient() const
 {
-    return pVertOrient ? (SvxFrameVertOrient)pVertOrient->GetVertOrient() : SVX_VERT_NONE;
+    return SvxNumberFormat::GetVertOrient();
 }
 /* -----------------------------22.02.01 13:54--------------------------------
 
@@ -397,6 +387,20 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
 
     if( bFnd && !bDocIsModified )
         pDoc->ResetModified();
+}
+/* -----------------------------31.05.01 16:08--------------------------------
+
+ ---------------------------------------------------------------------------*/
+const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
+{
+    SvxFrameVertOrient  eOrient = SvxNumberFormat::GetVertOrient();
+    if(SVX_VERT_NONE == eOrient)
+        return 0;
+    else
+    {
+        pVertOrient->SetVertOrient((SwVertOrient)eOrient);
+        return pVertOrient;
+    }
 }
 
 BOOL SwNodeNum::operator==( const SwNodeNum& rNum ) const
