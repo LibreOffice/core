@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:21:57 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,7 @@ public:
     sal_Bool bStreamReady: 1;
     sal_Bool bIsStorage: 1;
     sal_Bool bUseInteractionHandler: 1;
+    sal_Bool bAllowDefaultIntHdl: 1;
     sal_Bool bIsDiskSpannedJAR: 1;
     sal_Bool bIsCharsetInitialized: 1;
 
@@ -490,12 +491,14 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bUpdatePickList(sal_True), bIsTemp( sal_False ), pOrigFilter( 0 ),
     bUsesCache(sal_True), pCancellable( 0 ),
     nPrio( 99 ), aExpireTime( Date() + 10, Time() ),
-    bForceSynchron( sal_False ), bStreamReady( sal_False ), bIsStorage( sal_False ), bUseInteractionHandler( sal_False ),
+    bForceSynchron( sal_False ), bStreamReady( sal_False ), bIsStorage( sal_False ),
     pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
     bDontCreateCancellable( sal_False ), pTempDir( NULL ), bIsDiskSpannedJAR( sal_False ),
     bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL ),
     nLastStorageError( 0 ),
     bIsCharsetInitialized( sal_False ),
+    bUseInteractionHandler( sal_True ),
+    bAllowDefaultIntHdl( sal_False ),
     m_bRemoveBackup( sal_False )
 {
     aHandler = new SfxLockBytesHandler_Impl( pAntiImpl );
@@ -1028,7 +1031,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                    SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False);
                    if ( pItem && pItem->GetValue() )
                 {
-                    CreateTempFile();
+                    // CreateTempFile();
                     Reference< ::com::sun::star::ucb::XProgressHandler > xProgressHandler;
                     Reference< ::com::sun::star::task::XStatusIndicator > xStatusIndicator;
                     SFX_ITEMSET_ARG( GetItemSet(), pxProgressItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, sal_False );
@@ -1044,8 +1047,6 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                            aObj.SetURL( aURL );
                        }
 
-                       GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
-                       nStorOpenMode = SFX_STREAM_READONLY;
                     UCBStorage* pUCBStorage = new UCBStorage( aObj.GetMainURL( INetURLObject::NO_DECODE ),
                                                               nStorOpenMode,
                                                               bDirect ? 0 : STORAGE_TRANSACTED,
@@ -2009,7 +2010,7 @@ SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
 
 void SfxMedium::UseInteractionHandler( BOOL bUse )
 {
-    pImp->bUseInteractionHandler = bUse;
+    pImp->bAllowDefaultIntHdl = bUse;
 }
 
 //------------------------------------------------------------------
@@ -2021,10 +2022,6 @@ SfxMedium::GetInteractionHandler()
     if ( !pImp->bUseInteractionHandler )
         return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
 
-    // otherwhise return cached default handler ... if it exist.
-    if ( pImp->xInteraction.is() )
-        return pImp->xInteraction;
-
     // search a possible existing handler inside cached item set
     if ( pSet )
     {
@@ -2033,6 +2030,14 @@ SfxMedium::GetInteractionHandler()
         if ( pHandler && (pHandler->GetValue() >>= xHandler) && xHandler.is() )
             return xHandler;
     }
+
+    // if default interaction isnt allowed explicitly ... return empty reference!
+    if ( !pImp->bAllowDefaultIntHdl )
+        return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
+
+    // otherwhise return cached default handler ... if it exist.
+    if ( pImp->xInteraction.is() )
+        return pImp->xInteraction;
 
     // create default handler and cache it!
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
@@ -2776,11 +2781,6 @@ sal_Bool SfxMedium::IsReadOnly()
         SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
         if ( pItem )
             bReadOnly = pItem->GetValue();
-
-        // repair mode is used
-        SFX_ITEMSET_ARG( GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
-        if ( pRepairItem && pRepairItem->GetValue() )
-            bReadOnly = sal_True;
     }
 
     return bReadOnly;
