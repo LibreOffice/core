@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 07:58:23 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 10:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,7 +889,7 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT [ english_us ] = "Should the template \"$(TEXT)\" become the default template?" ;
     TEXT[ chinese_simplified ] = "ÄúÒª½«ÑùÊ½¡°$(TEXT)¡±Éè¶¨³É±ê×¼ÑùÊ½Âğ£¿";
     TEXT[ russian ] = "Âû õîòèòå, ÷òîáû øàáëîí \"$(TEXT)\" ñòàë ñòàíäàğòíûì?";
-    TEXT[ polish ] = "Czy chcesz przekszta³ciæ \"$(TEXT)\" na szablon domyœlny?";
+    TEXT[ polish ] = "Czy przekszta³ciæ \"$(TEXT)\" na szablon domyœlny?";
     TEXT[ japanese ] = "ÃİÌßÚ°Ä\"$(TEXT)\"‚ğ•W€½À²Ù‚É‚µ‚Ü‚·‚©?";
     TEXT[ chinese_traditional ] = "­n±N³o­Ó¼Ë¦¡¡§$(TEXT)¡¨³]©w¦¨¼Ğ·Ç¼Ë¦¡¡H";
     TEXT[ arabic ] = "åá ÊÑíÏ ÌÚá ÇáŞÇáÈ \"$(TEXT)\" ŞÇáÈÇğ ÇİÊÑÇÖíÇğ¿";
@@ -1055,7 +1055,7 @@ String STR_QUERY_MUSTOWNFORMAT
     Text [ portuguese ] = "Impossível guardar documentos no formato $(FORMAT).\nDeseja guardar o documento no formato $(OWNFORMAT)?" ;
     Text[ chinese_simplified ] = "ÎŞ·¨ÓÃ $(FORMAT) ¸ñÊ½´æÅÌÎÄµµ¡£\nÄúÒªÊ¹ÓÃ $(OWNFORMAT) ¸ñÊ½´æÅÌÂğ£¿";
     Text[ russian ] = "Ñîõğàíèòü äîêóìåíòû â ôîğìàòå $(FORMAT) íå óäàåòñÿ.\nÂû õîòèòå ñîõğàíèòü ıòîò äîêóìåíò â\nôîğìàòå $(OWNFORMAT)?";
-    Text[ polish ] = "Nie mo¿na zapisaæ dokumentów w formacie $(FORMAT).\nCzy chcesz zapisaæ dokument\nw formacie $(OWNFORMAT) ?";
+    Text[ polish ] = "Dokumentów nie mo¿na zapisaæ w formacie $(FORMAT).\nCzy zapisaæ dokument\nw formacie $(OWNFORMAT) ?";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚Í $(FORMAT) ‘®‚É\n•Û‘¶‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½BÄŞ·­ÒİÄ‚ğ $(OWNFORMAT) ‘®‚É\n•Û‘¶‚µ‚Ü‚·‚©B";
     Text[ chinese_traditional ] = "µLªk¥Î $(FORMAT) ®æ¦¡Àx¦s¤å¥ó¡C\n±z­n¨Ï¥Î $(OWNFORMAT) ®æ¦¡Àx¦s¡H";
     Text[ arabic ] = "áÇ íãßä ÍİÙ ÇáãÓÊäÏÇÊ ÈÇáÊäÓíŞ $(FORMAT).\nåá ÊÑíÏ ÍİÙ ÇáãÓÊäÏ ÈÇáÊäÓíŞ\n$(OWNFORMAT)";
@@ -1902,7 +1902,7 @@ String STR_NOSAVEANDCLOSE
     Text[ dutch ] = "~Verwerpen";
     Text[ chinese_simplified ] = "ÉáÆú(~D)";
     Text[ greek ] = "Áğüññéøç";
-    Text[ korean ] = "Ãë¼Ò(~D)";
+    Text[ korean ] = "¾Æ´Ï¿À(~D)";
     Text[ turkish ] = "~Sil";
     Text[ language_user1 ] = " ";
 };
