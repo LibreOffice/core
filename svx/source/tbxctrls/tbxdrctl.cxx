@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdrctl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 18:10:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,124 +84,83 @@
 
 #include "tbxctl.hxx"
 #include "tbxdraw.hxx"
+#include "tbxcolor.hxx"
 #include "tbxdraw.hrc"
+
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxAllEnumItem);
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
+using namespace ::com::sun::star::uno;
+using namespace ::drafts::com::sun::star::frame;
+
+// -----------------------------------------------------------------------
 
 SvxTbxCtlDraw::SvxTbxCtlDraw( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    nLastAction( 0 )
+
+    m_sToolboxName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/drawbar" ) )
 
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_CHECKABLE | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 }
 
-/*************************************************************************
-|*
-|* Benachrichtigung, wenn sich der Applikationsstatus geaendert hat
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------
 
 void SvxTbxCtlDraw::StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
-
     GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
-    if ( SFX_ITEM_AVAILABLE == eState )
-    {
-        USHORT nTemp = ( (SfxEnumItem*)pState )->GetValue();
-
-        if( GetSlotId() == SID_INSERT_DRAW && nTemp != USHRT_MAX )
-        {
-            // Check whether we are in high contrast mode or not!
-            BOOL bHiContrast = GetToolBox().GetBackground().GetColor().IsDark();
-
-            nLastAction = nTemp;
-
-            USHORT nImage = nLastAction ? nLastAction : GetSlotId();
-            rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-            aSlotURL += rtl::OUString::valueOf( sal_Int32( nImage ));
-            Image aImage = GetImage( m_xFrame,
-                                     aSlotURL,
-                                     hasBigImages(),
-                                     GetToolBox().GetDisplayBackground().GetColor().IsDark() );
-
-            GetToolBox().SetItemImage( GetId(), aImage );
-        }
-    }
-
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
+
+    Reference< XLayoutManager > xLayoutMgr = getLayoutManager();
+    if ( xLayoutMgr.is() )
+        GetToolBox().CheckItem(
+            GetId(), xLayoutMgr->isElementVisible( m_sToolboxName ) != sal_False );
 }
 
-/*************************************************************************
-|*
-|* Wenn man ein PopupWindow erzeugen will
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------
 
 SfxPopupWindowType SvxTbxCtlDraw::GetPopupWindowType() const
 {
-    return( nLastAction == 0 ? SFX_POPUPWINDOW_ONCLICK : SFX_POPUPWINDOW_ONTIMEOUT);
+    return SFX_POPUPWINDOW_ONCLICK;
 }
 
-/*************************************************************************
-|*
-|* Hier wird das Fenster erzeugt
-|* Lage der Toolbox mit GetToolBox() abfragbar
-|* rItemRect sind die Screen-Koordinaten
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------
 
-SfxPopupWindow* SvxTbxCtlDraw::CreatePopupWindow()
+void SvxTbxCtlDraw::toggleToolbox()
 {
-    rtl::OUString aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/drawbar" ));
-    createAndPositionSubToolBar( aSubTbxResName );
-
-/*
-    if ( GetId() == SID_INSERT_DRAW )
+    Reference< XLayoutManager > xLayoutMgr = getLayoutManager();
+    if ( xLayoutMgr.is() )
     {
-        SvxPopupWindowTbxMgr* pWin =
-            new SvxPopupWindowTbxMgr( GetId(), this,
-                                      SVX_RES( RID_SVXTBX_DRAW ),
-                                      SVX_RES( TBX_DRAW ),
-                                      GetBindings() );
-        pWin->StartPopupMode( &GetToolBox(), TRUE );
-        pWin->StartSelection();
-        pWin->Show();
-        return pWin;
+        BOOL bCheck = FALSE;
+        if ( xLayoutMgr->isElementVisible( m_sToolboxName ) )
+        {
+            xLayoutMgr->hideElement( m_sToolboxName );
+            xLayoutMgr->destroyElement( m_sToolboxName );
+        }
+        else
+        {
+            bCheck = TRUE;
+            xLayoutMgr->createElement( m_sToolboxName );
+            xLayoutMgr->showElement( m_sToolboxName );
+            ::com::sun::star::awt::Point aPos;
+            xLayoutMgr->dockWindow( m_sToolboxName,
+                ::drafts::com::sun::star::ui::DockingArea_DOCKINGAREA_BOTTOM, aPos );
+        }
+
+        GetToolBox().CheckItem( GetId(), bCheck );
     }
-*/
-    return NULL;
 }
 
 // -----------------------------------------------------------------------
 
 void SvxTbxCtlDraw::Select( BOOL bMod1 )
 {
-    if ( nLastAction )
-    {
-        SfxDispatcher* pDisp = SfxViewFrame::Current() ? SfxViewFrame::Current()->GetDispatcher() : NULL;
-        if ( pDisp )
-            pDisp->Execute( nLastAction, SFX_CALLMODE_SLOT, NULL, ( bMod1 ? KEY_MOD1 : 0 ) );
-/*
-        GetBindings().GetDispatcher()->Execute( nLastAction,
-            SFX_CALLMODE_SLOT, NULL, ( bMod1 ? KEY_MOD1 : 0 ) );
-*/
-        if ( bMod1 )
-        {
-            //  #99013# if selected with control key, return focus to current view
-            Window* pShellWnd = SfxViewShell::Current()->GetWindow();
-            if ( pShellWnd )
-                pShellWnd->GrabFocus();
-        }
-    }
+    toggleToolbox();
 }
 
