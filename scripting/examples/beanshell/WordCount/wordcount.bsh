@@ -1,0 +1,55 @@
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.frame.XModel;
+import com.sun.star.view.XSelectionSupplier;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextRange;
+import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+
+void doDisplay(numWords) {
+    wordsLabel = new JLabel("Word count = " + numWords);
+    closeButton = new JButton("Close");
+    frame = new JFrame("Word Count");
+    closeButton.addActionListener(new ActionListener() {
+        actionPerformed(ActionEvent e) {
+            frame.setVisible(false);
+        }
+    });
+    frame.getContentPane().setLayout(new GridLayout(2,1));
+    frame.getContentPane().add(wordsLabel);
+    frame.getContentPane().add(closeButton);
+    frame.pack();
+    frame.setVisible(true);
+}
+
+int wordcount() {
+
+    result = 0;
+
+    count = xIndexAccess.getCount();
+    for(i=0;i<count;i++) {
+        xTextRange = (XTextRange)
+            UnoRuntime.queryInterface(XTextRange.class, xIndexAccess.getByIndex(i));
+        System.out.println("string: "+xTextRange.getString());
+        strTok = new StringTokenizer(xTextRange.getString());
+        result += strTok.countTokens();
+    }
+
+    doDisplay(result);
+    return result;
+}
+
+// The context variable is of type XScriptContext and is available to
+// all BeanShell scripts executed by the Script Framework
+xModel = (XModel)
+    UnoRuntime.queryInterface(XModel.class, context.getDocument());
+//the writer controller impl supports the css.view.XSelectionSupplier interface
+xSelectionSupplier = (XSelectionSupplier)
+    UnoRuntime.queryInterface(XSelectionSupplier.class, xModel.getCurrentController());
+//see section 7.5.1 of developers' guide
+xIndexAccess = (XIndexAccess)
+    UnoRuntime.queryInterface(XIndexAccess.class, xSelectionSupplier.getSelection());
+
+count = wordcount();
+System.out.println("count = "+count);
+return 0;

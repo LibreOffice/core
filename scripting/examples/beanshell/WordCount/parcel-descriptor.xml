@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<parcel language="BeanShell" xmlns:parcel="scripting.dtd">
+
+    <script language="BeanShell">
+        <locale lang="en">
+            <displayname value="Word Count"/>
+            <description>
+                Provides a word count of the selected text in A Writer document.
+            </description>
+        </locale>
+        <functionname value="wordcount.bsh"/>
+        <logicalname value="WordCount.BeanShell"/>
+    </script>
+
+</parcel>
