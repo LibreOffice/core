@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:49:25 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,10 +486,11 @@ void OPrimKeyUndoAct::Undo()
 {
     ::std::vector<OTableRow*>* pRowList = pTabEdCtrl->GetRowList();
     OTableRow* pRow = NULL;
+    long nIndex;
 
     //////////////////////////////////////////////////////////////////////
     // Die eingefuegten Keys loeschen
-    for( long nIndex = m_aInsKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
+    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
     {
         OSL_ENSURE(nIndex <= pRowList->size(),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
@@ -514,10 +515,11 @@ void OPrimKeyUndoAct::Redo()
 {
     ::std::vector<OTableRow*>* pRowList = pTabEdCtrl->GetRowList();
     OTableRow* pRow = NULL;
+    long nIndex;
 
     //////////////////////////////////////////////////////////////////////
     // Die geloeschten Keys loeschen
-    for( long nIndex = m_aDelKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
+    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
     {
         pRow = (*pRowList)[nIndex];
         pRow->SetPrimaryKey( FALSE );
