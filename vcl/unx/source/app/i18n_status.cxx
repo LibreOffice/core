@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-14 14:45:46 $
+ *  last change: $Author: pl $ $Date: 2001-11-19 17:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ class XIMStatusWindow : public StatusWindow
     Size                    m_aWindowSize;
 
     Point updatePosition();
+    void layout();
 public:
     XIMStatusWindow();
     virtual ~XIMStatusWindow();
@@ -140,6 +141,9 @@ public:
     virtual void setText( const String & );
     virtual const String& getText() const;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason );
+
+    // overload WorkWindow::DataChanged
+    virtual void DataChanged( const DataChangedEvent& rEvt );
 };
 
 }
@@ -149,15 +153,23 @@ XIMStatusWindow::XIMStatusWindow() :
         m_aStatusText( this, 0 ),
         m_pLastParent( NULL )
 {
-    m_aWindowSize = Size( PixelToLogic( Size( 150, 2 ) ) );
-    Size aControlSize( PixelToLogic( Size( 146, 2 ) ) );
+    layout();
+}
 
+XIMStatusWindow::~XIMStatusWindow()
+{
+}
+
+void XIMStatusWindow::layout()
+{
+    m_aWindowSize.Width() = m_aStatusText.GetTextWidth( m_aStatusText.GetText() )+8;
     Font aFont( m_aStatusText.GetFont() );
-    if( aFont.GetHeight() < 12 )
-        aFont.SetHeight( 12 );
     m_aWindowSize.Height() = aFont.GetHeight()+10;
     m_aWindowSize = LogicToPixel( m_aWindowSize );
-    aControlSize.Height() = m_aWindowSize.Height()-4;
+
+    Size aControlSize( m_aWindowSize );
+    aControlSize.Width()  -= 4;
+    aControlSize.Height() -= 4;
 
     m_aStatusText.SetPosSizePixel( Point( 1, 1 ), aControlSize );
     m_aStatusText.SetFont( aFont );
@@ -166,8 +178,10 @@ XIMStatusWindow::XIMStatusWindow() :
     SetOutputSizePixel( m_aWindowSize );
 }
 
-XIMStatusWindow::~XIMStatusWindow()
+void XIMStatusWindow::DataChanged( const DataChangedEvent& rEvt )
 {
+    m_aStatusText.SetSettings( GetSettings() );
+    layout();
 }
 
 Point XIMStatusWindow::updatePosition()
@@ -223,7 +237,11 @@ void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
     const SystemEnvData* pData = GetSystemData();
     SalFrame* pStatusFrame = (SalFrame*)pData->pSalFrame;
     if( bShow )
+    {
+        Size aControlSize( m_aWindowSize.Width()-4, m_aWindowSize.Height()-4 );
+        m_aStatusText.SetPosSizePixel( Point( 1, 1 ), aControlSize );
         pStatusFrame->maFrameData.setPosSize( Rectangle( updatePosition(), m_aWindowSize ) );
+    }
     Show( bShow );
     if( bShow )
     {
@@ -235,7 +253,7 @@ void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
 void XIMStatusWindow::setText( const String& rText )
 {
     m_aStatusText.SetText( rText );
-    m_aWindowSize.Width() = GetTextWidth( rText )+8;
+    m_aWindowSize.Width() = m_aStatusText.GetTextWidth( rText )+8;
 }
 
 const String& XIMStatusWindow::getText() const
@@ -261,9 +279,12 @@ public:
     virtual void setText( const String & );
     virtual const String& getText() const;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason );
+    void layout();
 
     // overload Window focus handler
     virtual void        GetFocus();
+    // overload WorkWindow::DataChanged
+    virtual void DataChanged( const DataChangedEvent& rEvt );
 };
 
 }
@@ -275,22 +296,9 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
 {
     SetText( String( RTL_CONSTASCII_USTRINGPARAM( "IME Status" ) ) );
 
-    Size aSize( PixelToLogic( Size( 180, 2 ) ) );
-    Size aControlSize( 180, 2 );
-
-    const SystemEnvData* pEnvData = GetSystemData();
-    const SystemEnvData* pParentEnvData = pParent->GetSystemData();
+    layout();
 
     m_aStatusBtn.SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
-    Font aFont( m_aStatusBtn.GetFont() );
-    if( aFont.GetHeight() < 12 )
-        aFont.SetHeight( 12 );
-    aSize.Height() = aFont.GetHeight()+10;
-    aSize = LogicToPixel( aSize );
-    aControlSize.Height() = aSize.Height();
-
-    m_aStatusBtn.SetPosSizePixel( Point( 0, 0 ), aControlSize );
-    m_aStatusBtn.SetFont( aFont );
     m_aStatusBtn.SetPopupMenu( &m_aMenu );
     m_aStatusBtn.Show( TRUE );
 
@@ -299,15 +307,19 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
     for( ::std::vector< I18NStatus::ChoiceData >::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it, i++ )
         m_aMenu.InsertItem( i, it->aString );
 
-    SetOutputSizePixel( aSize );
-
     if( pParent )
     {
+        const SystemEnvData* pEnvData = GetSystemData();
+        const SystemEnvData* pParentEnvData = pParent->GetSystemData();
+
         const SalFrame::Geometry& rGeom( pParent->GetGeometry() );
+        int nDistance = rGeom.nTopDecoration;
+        if( nDistance < 20 )
+            nDistance = 20;
         XMoveWindow( (Display*)pEnvData->pDisplay,
                      (XLIB_Window)pEnvData->aShellWindow,
                      rGeom.nX,
-                     rGeom.nY + rGeom.nHeight + 20 // leave a little more space
+                     rGeom.nY + rGeom.nHeight + nDistance
                      );
     }
 #ifdef DEBUG
@@ -319,6 +331,24 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
 
 IIIMPStatusWindow::~IIIMPStatusWindow()
 {
+}
+
+void IIIMPStatusWindow::layout()
+{
+    Font aFont( m_aStatusBtn.GetFont() );
+    Size aSize( 15*aFont.GetHeight(), aFont.GetHeight()+14 );
+    aSize = m_aStatusBtn.LogicToPixel( aSize );
+
+    m_aStatusBtn.SetPosSizePixel( Point( 0, 0 ), aSize );
+    SetOutputSizePixel( aSize );
+    if( IsVisible() )
+        Invalidate();
+}
+
+void IIIMPStatusWindow::DataChanged( const DataChangedEvent& rEvt )
+{
+    m_aStatusBtn.SetSettings( GetSettings() );
+    layout();
 }
 
 void IIIMPStatusWindow::setText( const String& rText )
