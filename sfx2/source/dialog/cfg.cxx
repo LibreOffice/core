@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-24 17:59:25 $
+ *  last change: $Author: cd $ $Date: 2002-08-27 06:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,12 @@ void SfxMenuConfigEntry::SetId( USHORT nNew )
     {
         SFX_APP()->GetMacroConfig()->RegisterSlotId( nId );
         aCommand = SFX_APP()->GetMacroConfig()->GetMacroInfo( nId )->GetURL();
+    }
+    else
+    {
+        // Remove command string to fix problems if macro menu entry is overwritten
+        // by a normal function!
+        aCommand = String();
     }
 }
 
