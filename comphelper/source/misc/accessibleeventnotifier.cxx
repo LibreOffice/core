@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleeventnotifier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:27:22 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,12 +187,18 @@ namespace comphelper
         EventObject aDisposalEvent;
         aDisposalEvent.Source = _rxEventSource;
 
-        // now do the notification
-        aClientPos->second->disposeAndClear( aDisposalEvent );
+        // notify the listeners
+        EventListeners* pListeners = aClientPos->second;
 
         // we do not need the entry in the clients map anymore
-        delete aClientPos->second;
+        // (do this before actually notifying, because some client implementations have re-entrance
+        // problems and call into revokeClient while we are notifying from hereing)
         s_aClients.erase( aClientPos );
+
+        // now really do the notification
+        pListeners->disposeAndClear( aDisposalEvent );
+        delete pListeners;
+
     }
 
     //---------------------------------------------------------------------
