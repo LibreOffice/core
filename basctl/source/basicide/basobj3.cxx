@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:20:43 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifndef _SFX_IPFRM_HXX
-#include <sfx2/ipfrm.hxx>
-#endif
 
 #include <ide_pch.hxx>
 
@@ -914,18 +910,9 @@ long BasicIDE::HandleBasicError( StarBASIC* pBasic )
                 pIDEShell = IDE_DLL()->GetShell();
                 if ( !pIDEShell )
                 {
-                    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-                    SfxDispatcher* pDispatcher = ( pViewFrame && !pViewFrame->ISA( SfxInPlaceFrame ) ) ? pViewFrame->GetDispatcher() : NULL;
-                    if ( pDispatcher )
-                    {
-                        pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
-                    }
-                    else
-                    {
-                        SfxAllItemSet aArgs( SFX_APP()->GetPool() );
-                        SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
-                        SFX_APP()->ExecuteSlot( aRequest );
-                    }
+                    SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+                    SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+                    SFX_APP()->ExecuteSlot( aRequest );
                     pIDEShell = IDE_DLL()->GetShell();
                 }
             }
