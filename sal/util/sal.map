@@ -1,5 +1,6 @@
 UDK_2_0_0 {
     global:
+        GetVersionInfo;
         osl_acceptConnectionOnSocket;
         osl_acceptPipe;
         osl_acquireSocket;
