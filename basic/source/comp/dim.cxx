@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 07:43:08 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         Next(), bConst = TRUE;
 
     // #110004 It can also be a sub/function
-    if( !bConst && (eCurTok == SUB || eCurTok == FUNCTION || eCurTok == STATIC ) )
+    if( !bConst && (eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY || eCurTok == STATIC ) )
     {
         // Next token is read here, because !bConst
         bool bPrivate = ( eFirstTok == PRIVATE );
@@ -240,8 +240,15 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             Next();
             DefStatic( bPrivate );
         }
-        else if( eCurTok == SUB || eCurTok == FUNCTION )
+        else if( eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY )
         {
+            // End global chain if necessary (not done in
+            // SbiParser::Parse() under these conditions
+            if( bNewGblDefs && nGblChain == 0 )
+            {
+                nGblChain = aGen.Gen( _JUMP, 0 );
+                bNewGblDefs = FALSE;
+            }
             Next();
             DefProc( FALSE, bPrivate );
             return;
@@ -812,15 +819,33 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
 {
     USHORT l1 = nLine, l2 = nLine;
     BOOL bSub = BOOL( eCurTok == SUB );
+    BOOL bProperty = BOOL( eCurTok == PROPERTY );
+    PropertyMode ePropertyMode = PROPERTY_MODE_NONE;
+    if( bProperty )
+    {
+        Next();
+        if( eCurTok == GET )
+            ePropertyMode = PROPERTY_MODE_GET;
+        else if( eCurTok == LET )
+            ePropertyMode = PROPERTY_MODE_LET;
+        else if( eCurTok == SET )
+            ePropertyMode = PROPERTY_MODE_SET;
+        else
+            Error( SbERR_EXPECTED, "Get or Let or Set" );
+    }
+
     SbiToken eExit = eCurTok;
     SbiProcDef* pDef = ProcDecl( FALSE );
     if( !pDef )
         return;
+    pDef->setPropertyMode( ePropertyMode );
 
     // Ist die Proc bereits deklariert?
     SbiSymDef* pOld = aPublics.Find( pDef->GetName() );
     if( pOld )
     {
+        bool bError = false;
+
         pProc = pOld->GetProcDef();
         if( !pProc )
         {
@@ -828,16 +853,23 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
             Error( SbERR_BAD_DECLARATION, pDef->GetName() );
             delete pDef;
             pProc = NULL;
+            bError = true;
         }
         // #100027: Multiple declaration -> Error
         // #112787: Not for setup, REMOVE for 8
         else if( !runsInSetup() && pProc->IsUsedForProcDecl() )
         {
-            Error( SbERR_PROC_DEFINED, pDef->GetName() );
-            delete pDef;
-            pProc = NULL;
+            PropertyMode ePropMode = pDef->getPropertyMode();
+            if( ePropMode == PROPERTY_MODE_NONE || ePropMode == pProc->getPropertyMode() )
+            {
+                Error( SbERR_PROC_DEFINED, pDef->GetName() );
+                delete pDef;
+                pProc = NULL;
+                bError = true;
+            }
         }
-        else
+
+        if( !bError )
         {
             pDef->Match( pProc );
             pProc = pDef;
@@ -867,7 +899,7 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
 
     pProc->Define();
     OpenBlock( eExit );
-    StmntBlock( bSub ? ENDSUB : ENDFUNC );
+    StmntBlock( bSub ? ENDSUB : (bProperty ? ENDPROPERTY : ENDFUNC) );
     l2 = nLine;
     pProc->SetLine1( l1 );
     pProc->SetLine2( l2 );
@@ -893,6 +925,14 @@ void SbiParser::DefStatic( BOOL bPrivate )
     {
         case SUB:
         case FUNCTION:
+        case PROPERTY:
+            // End global chain if necessary (not done in
+            // SbiParser::Parse() under these conditions
+            if( bNewGblDefs && nGblChain == 0 )
+            {
+                nGblChain = aGen.Gen( _JUMP, 0 );
+                bNewGblDefs = FALSE;
+            }
             Next();
             DefProc( TRUE, bPrivate );
             break;
