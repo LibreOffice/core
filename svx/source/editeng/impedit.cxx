@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 12:26:49 $
+ *  last change: $Author: thb $ $Date: 2002-07-16 14:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,9 @@ void ImpEditView::SetBackgroundColor( const Color& rColor )
 
 void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 {
+    // #100856# set state before notification
+    aEditSelection = rEditSelection;
+
     if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_TEXTVIEWSELECTIONCHANGED );
@@ -202,8 +205,6 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
         aNotify.pEditView = GetEditViewPtr();
         pEditEngine->pImpEditEngine->CallNotify( aNotify );
     }
-
-    aEditSelection = rEditSelection;
 }
 
 
