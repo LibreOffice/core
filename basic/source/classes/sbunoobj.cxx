@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-08 09:53:13 $
+ *  last change: $Author: ab $ $Date: 2002-08-12 08:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2722,5 +2722,28 @@ void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     refVar->PutObject( p->xSbxObj );
 }
 
+//========================================================================
+// Represents the DefaultContext property of the ProcessServiceManager
+// in the Basic runtime system.
+void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
+{
+    SbxVariableRef refVar = rPar.Get(0);
 
+    Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+    Reference< XPropertySet> xPSMPropertySet( xFactory, UNO_QUERY );
+    if( xPSMPropertySet.is() )
+    {
+        Any aContextAny = xPSMPropertySet->getPropertyValue(
+            String( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) );
+
+        SbUnoObjectRef xUnoObj = new SbUnoObject
+            ( String( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ),
+              aContextAny );
+        refVar->PutObject( (SbUnoObject*)xUnoObj );
+    }
+    else
+    {
+        refVar->PutObject( NULL );
+    }
+}
 

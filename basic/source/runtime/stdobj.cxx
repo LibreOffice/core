@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-10-26 13:33:25 $
+ *  last change: $Author: ab $ $Date: 2002-08-12 09:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ static Methods aMethods[] = {
 
 { "GetAttr",        SbxINTEGER,   1 | _FUNCTION, RTLNAME(GetAttr)           },
   { "filename",     SbxSTRING },
+{ "GetDefaultContext", SbxOBJECT, 0 | _FUNCTION, RTLNAME(GetDefaultContext) },
 { "GetDialogZoomFactorX",  SbxDOUBLE,     _FUNCTION,RTLNAME(GetDialogZoomFactorX)      },
 { "GetDialogZoomFactorY",  SbxDOUBLE,     _FUNCTION,RTLNAME(GetDialogZoomFactorY)      },
 { "GetGUIType",  SbxINTEGER,     _FUNCTION,RTLNAME(GetGUIType)      },

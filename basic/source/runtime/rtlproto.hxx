@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtlproto.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-10-26 13:32:16 $
+ *  last change: $Author: ab $ $Date: 2002-08-12 09:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,7 @@ extern RTLFUNC(ResolvePath);
 extern RTLFUNC(CreateUnoStruct);
 extern RTLFUNC(CreateUnoService);
 extern RTLFUNC(GetProcessServiceManager);
+extern RTLFUNC(GetDefaultContext);
 extern RTLFUNC(CreatePropertySet);
 extern RTLFUNC(CreateUnoListener);
 extern RTLFUNC(HasUnoInterfaces);

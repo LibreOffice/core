@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
+ *  last change: $Author: ab $ $Date: 2002-08-12 09:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,3 +1330,8 @@ RTLFUNC(ConvertFromUrl)
 }
 
 
+// Provide DefaultContext
+RTLFUNC(GetDefaultContext)
+{
+    RTL_Impl_GetDefaultContext( pBasic, rPar, bWrite );
+}
