@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStringWrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:56:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,16 +89,28 @@ AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, 
 sal_Bool AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRect )
 {
     DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
-               "AccessibleStringWrap::GetCharacterBounds: index value overflow");
+               "SvxAccessibleStringWrap::GetCharacterBounds: index value overflow");
 
     mrFont.SetPhysFont( &mrDev );
 
-    long aXArray[2];
-    mrDev.GetCaretPositions( maText, aXArray, static_cast< USHORT >(nIndex), 1 );
-    rRect.Left() = 0;
-    rRect.Right() = 0;
-    rRect.SetSize( Size(mrDev.GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
-    rRect.Move( ::std::min(aXArray[0], aXArray[1]), 0 );
+    // #108900# Handle virtual position one-past-the end of the string
+    if( nIndex >= maText.Len() )
+    {
+        // create a caret bounding rect that has the height of the
+        // current font and is one pixel wide.
+        rRect.Left() = mrDev.GetTextWidth(maText);
+        rRect.Top() = 0;
+        rRect.SetSize( Size(mrDev.GetTextHeight(), 1) );
+    }
+    else
+    {
+        long aXArray[2];
+        mrDev.GetCaretPositions( maText, aXArray, static_cast< USHORT >(nIndex), 1 );
+        rRect.Left() = 0;
+        rRect.Top() = 0;
+        rRect.SetSize( Size(mrDev.GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
+        rRect.Move( ::std::min(aXArray[0], aXArray[1]), 0 );
+    }
 
     if( mrFont.IsVertical() )
     {
