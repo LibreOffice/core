@@ -1,6 +1,6 @@
 #include <rtl/ustring>
 #include <stdio.h>
-#include <typeinfo.h>
+#include <typeinfo>
 #include "samplelibrtti.hxx"
 
 

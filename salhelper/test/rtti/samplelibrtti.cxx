@@ -3,6 +3,7 @@
 // MyClassA =============================================================
 void MyClassA::funcA()
 {
+    printf("MyClassA::funcA \n");
 }
 
 void MyClassA::funcB()
@@ -20,6 +21,8 @@ void MyClassA::funcD()
 // MyClassB ===============================================================
 void MyClassB::funcA()
 {
+
+    printf("MyClassA::funcB \n");
 }
 
 void MyClassB::funcB()
