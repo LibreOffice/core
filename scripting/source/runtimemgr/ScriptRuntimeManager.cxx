@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-21 15:40:49 $
+ *  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ ScriptRuntimeManager::ScriptRuntimeManager(
     validateXRef( m_xMgr,
         "ScriptRuntimeManager::ScriptRuntimeManager: cannot get ServiceManager" );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    // test
+    //scripting_securitymgr::ScriptSecurityManager ssm(xContext);
 }
 
 //*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: npower $ $Date: 2003-01-16 18:50:55 $
+ *  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,18 @@
 #include <map>
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptStorageRefresh.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
+#include <drafts/com/sun/star/script/framework/security/XScriptSecurity.hpp>
+#include "ScriptSecurityManager.hxx"
+
 
 namespace scripting_impl
 {
@@ -89,8 +94,9 @@ typedef ::std::hash_map < ::rtl::OUString, sal_Int32, ::rtl::OUStringHash>
     StorageId_hash;
 
 class ScriptStorageManager : public
-    ::cppu::WeakImplHelper3 < dcsssf::storage::XScriptStorageManager,
-    css::lang::XServiceInfo, css::lang::XEventListener >
+    ::cppu::WeakImplHelper4 < dcsssf::storage::XScriptStorageManager,
+    dcsssf::security::XScriptSecurity, css::lang::XServiceInfo,
+    css::lang::XEventListener >
 {
 public:
     explicit ScriptStorageManager(
@@ -168,6 +174,27 @@ public:
     throw ( css::uno::RuntimeException );
     //======================================================================
 
+    //XScriptSecurity
+    //======================================================================
+    //----------------------------------------------------------------------
+    /**
+        the language independent interface for invocation
+
+        @param scriptURI
+            a string containing the script URI
+
+        @returns
+            the value returned from the function being invoked
+
+        @throws IllegalArgumentException
+            if there is no matching script name
+
+    */
+    virtual sal_Bool ScriptStorageManager::checkPermission(
+        const css::uno::Reference< dcsssf::storage::XScriptInfo > & scriptInfo,
+        const rtl::OUString & permissionRequest )
+        throw ( css::uno::RuntimeException );
+    //======================================================================
 
     //XEventListener
     //======================================================================
@@ -189,6 +216,7 @@ private:
     ScriptStorage_map m_ScriptStorageMap;
     StorageId_hash m_StorageIdOrigURIHash;
     sal_Int32 m_count;
+    scripting_securitymgr::ScriptSecurityManager m_securityMgr;
 
     void setupAppStorage( const css::uno::Reference< css::util::XMacroExpander > & xME,
         const ::rtl::OUString & storageStr,

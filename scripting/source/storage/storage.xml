@@ -21,6 +21,7 @@
         <type>com.sun.star.registry.XRegistryKey</type>
         <type>drafts.com.sun.star.script.framework.storage.XScriptInfo</type>
         <type>drafts.com.sun.star.script.framework.storage.XScriptInfoAccess</type>
+        <type>drafts.com.sun.star.script.framework.security.XScriptSecurity</type>
         <type>drafts.com.sun.star.script.framework.storage.XScriptStorageExport</type>
     <type>drafts.com.sun.star.script.framework.storage.XScriptStorageRefresh</type>
         <type>com.sun.star.lang.XInitialization</type>

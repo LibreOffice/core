@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSecurityManager.hxx,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-01-23 15:57:12 $
+*  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:21 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
 
 namespace scripting_securitymgr
 {
@@ -98,7 +99,9 @@ public:
  * we can't see a good reason not to return a bool, rather than throw
  * an exception if the request is not granted (as is the case in Java).
  */
-    bool checkPermission( /*ScriptPermission scriptPerm*/ ) throw (css::uno::RuntimeException);
+    bool checkPermission( const css::uno::Reference<
+    dcsssf::storage::XScriptInfo > & scriptInfo, const rtl::OUString &
+    permissionRequest ) throw (css::uno::RuntimeException);
 private:
     void readConfiguration() throw (css::uno::RuntimeException);
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

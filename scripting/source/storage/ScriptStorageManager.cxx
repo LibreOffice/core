@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.15 $
+*  $Revision: 1.16 $
 *
-*  last change: $Author: npower $ $Date: 2003-01-16 18:50:55 $
+*  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:22 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -72,7 +72,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <drafts/com/sun/star/script/framework/storage/XScriptStorageRefresh.hpp>
 
 #include "ScriptStorageManager.hxx"
 #include <util/util.hxx>
@@ -99,7 +98,7 @@ extern ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 // ScriptStorageManager Constructor
 ScriptStorageManager::ScriptStorageManager( const Reference<
         XComponentContext > & xContext ) SAL_THROW ( ( RuntimeException ) )
-        : m_xContext( xContext ), m_count( 0 )
+        : m_xContext( xContext ), m_count( 0 ), m_securityMgr( xContext )
 {
     OSL_TRACE( "< ScriptStorageManager ctor called >\n" );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
@@ -267,7 +266,9 @@ throw ( RuntimeException )
                                         rtl_UriCharClassUricNoSlash, rtl_UriEncodeCheckEscapes,
                                         RTL_TEXTENCODING_ASCII_US ) );
 
-    return setupAnyStorage( xSFA, canonicalURI, stringURI );
+    sal_Int32 returnedID = setupAnyStorage( xSFA, canonicalURI, stringURI );
+    m_securityMgr.addScriptStorage( stringURI, returnedID );
+    return returnedID;
 }
 
 //*************************************************************************
@@ -369,6 +370,14 @@ throw( RuntimeException )
             OUSTR( "ScriptStorageManager::refreshScriptStorage: " ).concat(
                 e.Message ), Reference< XInterface >() );
     }
+}
+
+//*************************************************************************
+sal_Bool ScriptStorageManager::checkPermission( const Reference<
+storage::XScriptInfo > & scriptInfo, const OUString & permissionRequest )
+throw ( css::uno::RuntimeException )
+{
+    return m_securityMgr.checkPermission( scriptInfo, permissionRequest );
 }
 
 //*************************************************************************

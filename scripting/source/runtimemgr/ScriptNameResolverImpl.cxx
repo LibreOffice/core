@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-21 15:40:49 $
+ *  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <util/scriptingconstants.hxx>
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
+#include <drafts/com/sun/star/script/framework/security/XScriptSecurity.hpp>
 
 #include "ScriptNameResolverImpl.hxx"
 #include "ScriptRuntimeManager.hxx"
@@ -411,6 +412,23 @@ ScriptNameResolverImpl::getStorageInstance( sal_Int32 sid ) SAL_THROW ( ( Runtim
         }
         validateXRef( xInterface,
                       "ScriptNameResolverImpl::getStorageInstance: cannot get Storage service" );
+        // check that we have permissions for this storage
+        Reference< security::XScriptSecurity > xScriptSecurity( xInterface, UNO_QUERY_THROW );
+        validateXRef( xScriptSecurity,
+                      "ScriptNameResolverImpl::getStorageInstance:  cannot get Script Security service" );
+        scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
+                scripting_constants::ScriptingConstantsPool::instance();
+        // if we dealing with a document storage (ie. not user or share
+        // we need to check the permission
+        if( ( sid != scriptingConstantsPool.USER_STORAGE_ID ) &&
+            ( sid != scriptingConstantsPool.SHARED_STORAGE_ID ) &&
+            ( xScriptSecurity->checkPermission( Reference<
+                        storage::XScriptInfo> (),
+                OUString::createFromAscii( "execute" ) ) == false ) )
+        {
+            OSL_TRACE( "ScriptNameResolverImpl::getStorageInstance: no permission for ID=%d", sid );
+            return xScriptInfoAccess;
+        }
         Reference< storage::XScriptStorageManager > xScriptStorageManager( xInterface, UNO_QUERY_THROW );
         validateXRef( xScriptStorageManager,
                       "ScriptNameResolverImpl::getStorageInstance:  cannot get Script Storage Manager service" );

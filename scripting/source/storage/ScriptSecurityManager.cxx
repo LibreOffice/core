@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-01-23 15:57:12 $
+ *  last change: $Author: dfoster $ $Date: 2003-01-27 17:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,8 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
  * we can't see a good reason not to return a bool, rather than throw
  * an exception if the request is not granted (as is the case in Java).
  */
-bool ScriptSecurityManager::checkPermission( /*ScriptPermission scriptPerm*/ )
+bool ScriptSecurityManager::checkPermission( const Reference<
+storage::XScriptInfo > & scriptInfo, const OUString & permissionRequest )
     throw ( RuntimeException )
 {
     // warning dialog if necessary
