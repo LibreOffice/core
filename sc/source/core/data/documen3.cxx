@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 10:57:27 $
+ *  last change: $Author: nn $ $Date: 2000-10-30 11:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,6 +717,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             if ( pDPCollection )
                 pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
+            UpdateRefAreaLinks( eUpdateRefMode, aRange, nDx, nDy, nDz );
             if ( pCondFormList )
                 pCondFormList->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             if ( pDetOpList )

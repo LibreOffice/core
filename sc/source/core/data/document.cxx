@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 16:43:14 $
+ *  last change: $Author: nn $ $Date: 2000-10-30 11:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,7 @@ BOOL ScDocument::InsertTab( USHORT nPos, const String& rName,
                 if (pDetOpList)
                     pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,1 );
                 UpdateChartRef( URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
+                UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,1 );
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
 
@@ -346,6 +347,7 @@ BOOL ScDocument::DeleteTab( USHORT nTab, ScDocument* pRefUndoDoc )
                 if (pDetOpList)
                     pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,-1 );
                 UpdateChartRef( URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
+                UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1 );
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
                 if ( pUnoBroadcaster )

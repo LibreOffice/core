@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:12:06 $
+ *  last change: $Author: nn $ $Date: 2000-10-30 11:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1453,6 +1453,7 @@ BOOL ScDocument::MoveTab( USHORT nOldPos, USHORT nNewPos )
                     pDetOpList->UpdateReference( this, URM_REORDER, aSourceRange, 0,0,nDz );
                 UpdateChartRef( URM_REORDER,
                                     0,0,nOldPos, MAXCOL,MAXROW,nOldPos, 0,0,nDz );
+                UpdateRefAreaLinks( URM_REORDER, aSourceRange, 0,0,nDz );
                 if ( pCondFormList )
                     pCondFormList->UpdateMoveTab( nOldPos, nNewPos );
                 if ( pUnoBroadcaster )
@@ -1540,6 +1541,7 @@ BOOL ScDocument::CopyTab( USHORT nOldPos, USHORT nNewPos, const ScMarkData* pOnl
                 if (pDetOpList)
                     pDetOpList->UpdateReference( this, URM_INSDEL, aRange, 0,0,1 );
                 UpdateChartRef( URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
+                UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,1 );
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,1 ) );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 10:45:19 $
+ *  last change: $Author: nn $ $Date: 2000-10-30 11:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include "progress.hxx"
 #include "document.hxx"
 #include "chartlis.hxx"
+#include "refupdat.hxx"
 #include "validat.hxx"      // fuer HasMacroCalls
 #include "globstr.hrc"
 #include "sc.hrc"
@@ -1184,6 +1185,37 @@ void ScDocument::UpdateAreaLinks()
         SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScAreaLink))
             pBase->Update();
+    }
+}
+
+void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
+                             const ScRange& rRange, short nDx, short nDy, short nDz )
+{
+    const SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    USHORT nCount = rLinks.Count();
+    for (USHORT i=0; i<nCount; i++)
+    {
+        SvBaseLink* pBase = *rLinks[i];
+        if (pBase->ISA(ScAreaLink))
+        {
+            ScAreaLink* pLink = (ScAreaLink*) pBase;
+            ScRange aOutRange = pLink->GetDestArea();
+
+            USHORT nCol1 = aOutRange.aStart.Col();
+            USHORT nRow1 = aOutRange.aStart.Row();
+            USHORT nTab1 = aOutRange.aStart.Tab();
+            USHORT nCol2 = aOutRange.aEnd.Col();
+            USHORT nRow2 = aOutRange.aEnd.Row();
+            USHORT nTab2 = aOutRange.aEnd.Tab();
+
+            ScRefUpdateRes eRes =
+                ScRefUpdate::Update( this, eUpdateRefMode,
+                    rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
+                    rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
+                    nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+            if ( eRes != UR_NOTHING )
+                pLink->SetDestArea( ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 ) );
+        }
     }
 }
 
