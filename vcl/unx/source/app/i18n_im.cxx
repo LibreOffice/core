@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:55:10 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,10 +328,10 @@ SalI18N_InputMethod::PosixLocale()
 //
 // ------------------------------------------------------------------------
 
-SalI18N_InputMethod::SalI18N_InputMethod( ) : maMethod( (XIM)NULL ),
-                                                mpStyles( (XIMStyles*)NULL ),
-                                                mbUseable( bUseInputMethodDefault ),
-                                              mbMultiLingual( False )
+SalI18N_InputMethod::SalI18N_InputMethod( ) : mbUseable( bUseInputMethodDefault ),
+                                              mbMultiLingual( False ),
+                                              maMethod( (XIM)NULL ),
+                                                mpStyles( (XIMStyles*)NULL )
 {
     const char *pUseInputMethod = getenv( "SAL_USEINPUTMETHOD" );
     if ( pUseInputMethod != NULL )
