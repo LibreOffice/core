@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astinterface.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:58:23 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,37 +68,69 @@
 #include <idlc/astoperation.hxx>
 #endif
 
+#include "registry/version.h"
+#include "registry/writer.hxx"
+
 using namespace ::rtl;
 
 AstInterface::AstInterface(const ::rtl::OString& name,
-                           AstDeclaration* pInherits,
+                           AstInterface const * pInherits,
                            AstScope* pScope)
     : AstType(NT_interface, name, pScope)
     , AstScope(NT_interface)
+    , m_mandatoryInterfaces(0)
     , m_bIsDefined(false)
     , m_bForwarded(sal_False)
     , m_bForwardedInSameFile(sal_False)
     , m_bSingleInheritance(pInherits != 0)
 {
-    if ( pInherits )
-        m_inheritedInterfaces.push_back(pInherits);
+    if (pInherits != 0) {
+        addInheritedInterface(pInherits, false, rtl::OUString());
+    }
 }
 
 AstInterface::~AstInterface()
 {
 }
 
-bool AstInterface::addInheritedInterface(AstInterface * pInherits)
+AstInterface::DoubleDeclarations AstInterface::checkInheritedInterfaceClashes(
+    AstInterface const * ifc, bool optional) const
 {
-    for (DeclList::iterator i(m_inheritedInterfaces.begin());
-         i != m_inheritedInterfaces.end(); ++i)
-    {
-        if ((*i)->getScopedName() == pInherits->getScopedName()) {
-            return false;
-        }
+    DoubleDeclarations doubleDecls;
+    std::set< rtl::OString > seen;
+    checkInheritedInterfaceClashes(
+        doubleDecls, seen, ifc, true, optional, optional);
+    return doubleDecls;
+}
+
+void AstInterface::addInheritedInterface(
+    AstInterface const * ifc, bool optional,
+    rtl::OUString const & documentation)
+{
+    m_inheritedInterfaces.push_back(
+        InheritedInterface(ifc, optional, documentation));
+    if (!optional) {
+        ++m_mandatoryInterfaces;
     }
-    m_inheritedInterfaces.push_back(pInherits);
-    return true;
+    addVisibleInterface(ifc, true, optional);
+    if (optional) {
+        addOptionalVisibleMembers(ifc);
+    }
+}
+
+AstInterface::DoubleMemberDeclarations AstInterface::checkMemberClashes(
+    AstDeclaration const * member) const
+{
+    DoubleMemberDeclarations doubleMembers;
+    checkMemberClashes(doubleMembers, member, true);
+    return doubleMembers;
+}
+
+void AstInterface::addMember(AstDeclaration /*TODO: const*/ * member) {
+    addDeclaration(member);
+    m_visibleMembers.insert(
+        VisibleMembers::value_type(
+            member->getLocalName(), VisibleMember(member)));
 }
 
 void AstInterface::forwardDefined(AstInterface const & def)
@@ -109,10 +141,11 @@ void AstInterface::forwardDefined(AstInterface const & def)
     setFileName(def.getFileName());
     setDocumentation(def.getDocumentation());
     m_inheritedInterfaces = def.m_inheritedInterfaces;
+    m_mandatoryInterfaces = def.m_mandatoryInterfaces;
     m_bIsDefined = true;
 }
 
-sal_Bool AstInterface::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
+sal_Bool AstInterface::dump(RegistryKey& rKey)
 {
     if ( !isDefined() )
         return sal_True;
@@ -126,61 +159,139 @@ sal_Bool AstInterface::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader
         return sal_False;
     }
 
-    if (m_inheritedInterfaces.size() > SAL_MAX_UINT16) {
-        //TODO
+    if (m_mandatoryInterfaces > SAL_MAX_UINT16
+        || m_inheritedInterfaces.size() - m_mandatoryInterfaces
+            > SAL_MAX_UINT16)
+    {
+        fprintf(
+            stderr, "%s: interface %s has too many direct base interfaces\n",
+            idlc()->getOptions()->getProgramName().getStr(),
+            getScopedName().getStr());
+        return false;
     }
-    sal_uInt16 nBaseTypes = static_cast< sal_uInt16 >(
-        m_inheritedInterfaces.size());
-    sal_uInt16 nAttributes = getNodeCount(NT_attribute);
-    sal_uInt16 nMethods = getNodeCount(NT_operation);
+    sal_uInt16 nBaseTypes = static_cast< sal_uInt16 >(m_mandatoryInterfaces);
+    sal_uInt16 nAttributes = 0;
+    sal_uInt16 nMethods = 0;
+    sal_uInt16 nReferences = static_cast< sal_uInt16 >(
+        m_inheritedInterfaces.size() - m_mandatoryInterfaces);
+    typereg_Version version = nBaseTypes <= 1 && nReferences == 0
+        ? TYPEREG_VERSION_0 : TYPEREG_VERSION_1;
+    {for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
+          ++i)
+    {
+        switch ((*i)->getNodeType()) {
+        case NT_attribute:
+            {
+                if (!increment(&nAttributes, "attributes")) {
+                    return false;
+                }
+                AstAttribute * attr = static_cast< AstAttribute * >(*i);
+                if (attr->isBound()) {
+                    version = TYPEREG_VERSION_1;
+                }
+                DeclList::size_type getCount = attr->getGetExceptionCount();
+                if (getCount > SAL_MAX_UINT16) {
+                    fprintf(
+                        stderr,
+                        ("%s: raises clause of getter for attribute %s of"
+                         " interface %s is too long\n"),
+                        idlc()->getOptions()->getProgramName().getStr(),
+                        (*i)->getLocalName().getStr(),
+                        getScopedName().getStr());
+                    return false;
+                }
+                if (getCount > 0) {
+                    version = TYPEREG_VERSION_1;
+                    if (!increment(&nMethods, "attributes")) {
+                        return false;
+                    }
+                }
+                DeclList::size_type setCount = attr->getSetExceptionCount();
+                if (setCount > SAL_MAX_UINT16) {
+                    fprintf(
+                        stderr,
+                        ("%s: raises clause of setter for attribute %s of"
+                         " interface %s is too long\n"),
+                        idlc()->getOptions()->getProgramName().getStr(),
+                        (*i)->getLocalName().getStr(),
+                        getScopedName().getStr());
+                    return false;
+                }
+                if (setCount > 0) {
+                    version = TYPEREG_VERSION_1;
+                    if (!increment(&nMethods, "attributes")) {
+                        return false;
+                    }
+                }
+                break;
+            }
 
-    RegistryTypeWriter aBlob(pLoader->getApi(), RT_TYPE_INTERFACE,
-                             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                             nBaseTypes, nAttributes, nMethods, 0);
+        case NT_operation:
+            if (!increment(&nMethods, "methods")) {
+                return false;
+            }
+            break;
 
-    aBlob.setDoku( getDocumentation() );
-    aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
+        default:
+            OSL_ASSERT(false);
+            break;
+        }
+    }}
 
-    RTUik aUik;
-    aUik.m_Data1 = 0;
-    aUik.m_Data2 = 0;
-    aUik.m_Data3 = 0;
-    aUik.m_Data4 = 0;
-    aUik.m_Data5 = 0;
-    aBlob.setUik(aUik);
+    typereg::Writer aBlob(
+        version, getDocumentation(),
+        OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
+        RT_TYPE_INTERFACE,
+        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), nBaseTypes,
+        nAttributes, nMethods, nReferences);
 
     sal_uInt16 superTypeIndex = 0;
-    for (DeclList::iterator i = m_inheritedInterfaces.begin();
-         i != m_inheritedInterfaces.end(); ++i)
+    sal_uInt16 referenceIndex = 0;
+    {for (InheritedInterfaces::iterator i = m_inheritedInterfaces.begin();
+          i != m_inheritedInterfaces.end(); ++i)
     {
-        aBlob.setMISuperTypeData(
-            superTypeIndex++,
-            OStringToOUString((*i)->getRelativName(), RTL_TEXTENCODING_UTF8));
-    }
-
-    DeclList::iterator iter = getIteratorBegin();
-    DeclList::iterator end = getIteratorEnd();
-    AstDeclaration* pDecl = NULL;
-    sal_uInt16  attrIndex = 0;
-    sal_uInt16  methodIndex = 0;
-    while ( iter != end )
-    {
-        pDecl = *iter;
-        if ( pDecl->getNodeType() == NT_attribute )
-        {
-            ((AstAttribute*)pDecl)->dumpBlob(aBlob, attrIndex++);
-        } else
-        if ( pDecl->getNodeType() == NT_operation )
-        {
-            ((AstOperation*)pDecl)->dumpBlob(aBlob, methodIndex++);
+        if (i->isOptional()) {
+            aBlob.setReferenceData(
+                referenceIndex++, i->getDocumentation(), RT_REF_SUPPORTS,
+                RT_ACCESS_OPTIONAL,
+                OStringToOUString(
+                    i->getInterface()->getRelativName(),
+                    RTL_TEXTENCODING_UTF8));
+        } else {
+            aBlob.setSuperTypeName(
+                superTypeIndex++,
+                OStringToOUString(
+                    i->getInterface()->getRelativName(),
+                    RTL_TEXTENCODING_UTF8));
         }
-        ++iter;
-    }
+    }}
 
-    const sal_uInt8*    pBlob = aBlob.getBlop();
-    sal_uInt32          aBlobSize = aBlob.getBlopSize();
+    sal_uInt16 attributeIndex = 0;
+    sal_uInt16 methodIndex = 0;
+    {for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
+          ++i)
+    {
+        switch ((*i)->getNodeType()) {
+        case NT_attribute:
+            static_cast< AstAttribute * >(*i)->dumpBlob(
+                aBlob, attributeIndex++, &methodIndex);
+            break;
 
-    if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY, (RegValue)pBlob, aBlobSize))
+        case NT_operation:
+            static_cast< AstOperation * >(*i)->dumpBlob(aBlob, methodIndex++);
+            break;
+
+        default:
+            OSL_ASSERT(false);
+            break;
+        }
+    }}
+
+    sal_uInt32 aBlobSize;
+    void const * pBlob = aBlob.getBlob(&aBlobSize);
+
+    if (localKey.setValue(
+            OUString(), RG_VALUETYPE_BINARY, (RegValue)pBlob, aBlobSize))
     {
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
@@ -188,5 +299,162 @@ sal_Bool AstInterface::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader
         return sal_False;
     }
 
-    return AstDeclaration::dump(rKey, pLoader);
+    return true;
+}
+
+void AstInterface::checkInheritedInterfaceClashes(
+    DoubleDeclarations & doubleDeclarations,
+    std::set< rtl::OString > & seenInterfaces, AstInterface const * ifc,
+    bool direct, bool optional, bool mainOptional) const
+{
+    if (direct || optional
+        || seenInterfaces.insert(ifc->getScopedName()).second)
+    {
+        VisibleInterfaces::const_iterator visible(
+            m_visibleInterfaces.find(ifc->getScopedName()));
+        if (visible != m_visibleInterfaces.end()) {
+            switch (visible->second) {
+            case INTERFACE_INDIRECT_OPTIONAL:
+                if (direct && optional) {
+                    doubleDeclarations.interfaces.push_back(ifc);
+                    return;
+                }
+                break;
+
+            case INTERFACE_DIRECT_OPTIONAL:
+                if (direct || !mainOptional) {
+                    doubleDeclarations.interfaces.push_back(ifc);
+                }
+                return;
+
+            case INTERFACE_INDIRECT_MANDATORY:
+                if (direct) {
+                    doubleDeclarations.interfaces.push_back(ifc);
+                }
+                return;
+
+            case INTERFACE_DIRECT_MANDATORY:
+                if (direct || !optional && !mainOptional) {
+                    doubleDeclarations.interfaces.push_back(ifc);
+                }
+                return;
+            }
+        }
+        if (direct || !optional) {
+            {for (DeclList::const_iterator i(ifc->getIteratorBegin());
+                  i != ifc->getIteratorEnd(); ++i)
+            {
+                checkMemberClashes(
+                    doubleDeclarations.members, *i, !mainOptional);
+            }}
+            {for (InheritedInterfaces::const_iterator i(
+                      ifc->m_inheritedInterfaces.begin());
+                  i != ifc->m_inheritedInterfaces.end(); ++i)
+            {
+                checkInheritedInterfaceClashes(
+                    doubleDeclarations, seenInterfaces, i->getInterface(),
+                    false, i->isOptional(), mainOptional);
+            }}
+        }
+    }
+}
+
+void AstInterface::checkMemberClashes(
+    DoubleMemberDeclarations & doubleMembers, AstDeclaration const * member,
+    bool checkOptional) const
+{
+    VisibleMembers::const_iterator i(
+        m_visibleMembers.find(member->getLocalName()));
+    if (i != m_visibleMembers.end()) {
+        if (i->second.mandatory != 0) {
+            if (i->second.mandatory->getScopedName() != member->getScopedName())
+            {
+                DoubleMemberDeclaration d;
+                d.first = i->second.mandatory;
+                d.second = member;
+                doubleMembers.push_back(d);
+            }
+        } else if (checkOptional) {
+            for (VisibleMember::Optionals::const_iterator j(
+                     i->second.optionals.begin());
+                 j != i->second.optionals.end(); ++j)
+            {
+                if (j->second->getScopedName() != member->getScopedName()) {
+                    DoubleMemberDeclaration d;
+                    d.first = j->second;
+                    d.second = member;
+                    doubleMembers.push_back(d);
+                }
+            }
+        }
+    }
+}
+
+void AstInterface::addVisibleInterface(
+    AstInterface const * ifc, bool direct, bool optional)
+{
+    InterfaceKind kind = optional
+        ? direct ? INTERFACE_DIRECT_OPTIONAL : INTERFACE_INDIRECT_OPTIONAL
+        : direct ? INTERFACE_DIRECT_MANDATORY : INTERFACE_INDIRECT_MANDATORY;
+    std::pair< VisibleInterfaces::iterator, bool > result(
+        m_visibleInterfaces.insert(
+            VisibleInterfaces::value_type(ifc->getScopedName(), kind)));
+    bool seen = !result.second
+        && result.first->second >= INTERFACE_INDIRECT_MANDATORY;
+    if (!result.second && kind > result.first->second) {
+        result.first->second = kind;
+    }
+    if (!optional && !seen) {
+        {for (DeclList::const_iterator i(ifc->getIteratorBegin());
+              i != ifc->getIteratorEnd(); ++i)
+        {
+            m_visibleMembers.insert(
+                VisibleMembers::value_type(
+                    (*i)->getLocalName(), VisibleMember(*i)));
+        }}
+        {for (InheritedInterfaces::const_iterator i(
+                  ifc->m_inheritedInterfaces.begin());
+              i != ifc->m_inheritedInterfaces.end(); ++i)
+        {
+            addVisibleInterface(i->getInterface(), false, i->isOptional());
+        }}
+    }
+}
+
+void AstInterface::addOptionalVisibleMembers(AstInterface const * ifc) {
+    {for (DeclList::const_iterator i(ifc->getIteratorBegin());
+          i != ifc->getIteratorEnd(); ++i)
+    {
+        VisibleMembers::iterator visible(
+            m_visibleMembers.find((*i)->getLocalName()));
+        if (visible == m_visibleMembers.end()) {
+            visible = m_visibleMembers.insert(
+                VisibleMembers::value_type(
+                    (*i)->getLocalName(), VisibleMember())).first;
+        }
+        if (visible->second.mandatory == 0) {
+            visible->second.optionals.insert(
+                VisibleMember::Optionals::value_type(ifc->getScopedName(), *i));
+        }
+    }}
+    {for (InheritedInterfaces::const_iterator i(
+              ifc->m_inheritedInterfaces.begin());
+          i != ifc->m_inheritedInterfaces.end(); ++i)
+    {
+        if (!i->isOptional()) {
+            addOptionalVisibleMembers(i->getInterface());
+        }
+    }}
+}
+
+bool AstInterface::increment(sal_uInt16 * counter, char const * sort) const {
+    if (*counter == SAL_MAX_UINT16) {
+        fprintf(
+            stderr, "%s: interface %s has too many direct %s\n",
+            idlc()->getOptions()->getProgramName().getStr(),
+            getScopedName().getStr(), sort);
+        return false;
+    }
+    ++*counter;
+    return true;
 }
