@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 10:02:02 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 17:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,11 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
             xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTDIRECTION_2 ), uno::makeAny(drawing::Direction3D(1,1,1)) );
 
             xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_SHADE_MODE ), uno::makeAny(drawing::ShadeMode_PHONG) ); //FLAT, PHONG, SMOOTH, DRAFT
+
+            //D3DSceneTwoSidedLighting
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_TWO_SIDED_LIGHTING )
+                , uno::makeAny( (sal_Bool)true) );
+
 
             //UNO_NAME_3D_SCENE_DISTANCE D3DSceneDistance sal_Int32
             //UNO_NAME_3D_SCENE_FOCAL_LENGTH sal_Int32
