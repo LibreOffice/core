@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obr $ $Date: 2002-11-08 13:55:37 $
+ *  last change: $Author: sab $ $Date: 2002-11-19 13:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ public class AccessibleObjectFactory implements XGlobalFocusListener {
                         break;
                     case AccessibleRole.TABLE:
                         xStateSet = xAccessibleContext.getAccessibleStateSet();
-                        if(xStateSet != null && ! xStateSet.contains(AccessibleStateType.CHILDREN_TRANSIENT)) {
+                        if(xStateSet != null && ! xStateSet.contains(AccessibleStateType.MANAGES_DESCENDANT)) {
                             ac = new AccessibleTextTable(xAccessibleContext);
                         } else {
                             ac = new AccessibleSpreadsheet(xAccessibleContext);
@@ -404,7 +404,7 @@ public class AccessibleObjectFactory implements XGlobalFocusListener {
             AccessibleStateSet as = ac.getAccessibleStateSet();
             if( null != as &&
                 !as.contains(javax.accessibility.AccessibleState.TRANSIENT) &&
-                !as.contains(AccessibleStateTypeMap.get(AccessibleStateType.CHILDREN_TRANSIENT))
+                !as.contains(AccessibleStateTypeMap.get(AccessibleStateType.MANAGES_DESCENDANT))
             )
             {
                 int n = ac.getAccessibleChildrenCount();
