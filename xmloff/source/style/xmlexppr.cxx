@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-25 15:31:11 $
+ *  last change: $Author: dvo $ $Date: 2001-09-14 15:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,12 @@ public:
         aIndexes.push_back(nIndex);
         nCount++;
     }
+
+    // for sort
+    sal_Bool operator< ( const FilterPropertyInfo_Impl& rArg )
+    {
+        return (GetApiName() < rArg.GetApiName());
+    }
 };
 
 FilterPropertyInfo_Impl::FilterPropertyInfo_Impl(
@@ -240,6 +246,7 @@ FilterPropertyInfo_Impl::FilterPropertyInfo_Impl(
 {
     aIndexes.push_back(nIndex);
 }
+
 
 typedef std::list<FilterPropertyInfo_Impl> FilterPropertyInfoList_Impl;
 
@@ -384,16 +391,6 @@ void FilterPropertiesInfo_Impl::AddProperty(
         pApiNames = NULL;
     }
 }
-
-struct lcl_FilterPropertyInfo_Less
-{
-    bool operator() ( const FilterPropertyInfo_Impl& aInfo1,
-                      const FilterPropertyInfo_Impl& aInfo2 )
-    {
-        return aInfo1.GetApiName() < aInfo2.GetApiName() ? true : false;
-    }
-};
-
 const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 {
     OSL_ENSURE(nCount == aPropInfos.size(), "wrong property count");
@@ -405,7 +402,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
         // 3) construct sequence
 
         // sort names
-        aPropInfos.sort( lcl_FilterPropertyInfo_Less() );
+        aPropInfos.sort();
 
         // merge duplicates
         if ( nCount > 1 )
