@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ ModalDialog DLG_VECTORIZE
         Text[ italian ] = "Riduzione punti:";
         Text[ portuguese_brazilian ] = "~Point reduction:";
         Text[ portuguese ] = "~Redução de pontos:";
-        Text[ danish ] = "Punkt-reduktion:";
+        Text[ danish ] = "Punktreduktion:";
         Text[ french ] = "~Réduction de points :";
         Text[ swedish ] = "~Punktreduktion:";
         Text[ dutch ] = "~Punten reduceren";
@@ -265,7 +265,7 @@ ModalDialog DLG_VECTORIZE
         Text[ spanish ] = "~Rellenar agujeros";
         Text[ chinese_simplified ] = "Ìî³ä¿Õ¶´(~F)";
         Text[ russian ] = "~Çàïîëíèòü äûğû";
-        Text[ polish ] = "Wype³nij dziurki";
+        Text[ polish ] = "Wype³nij puste miejsca";
         Text[ japanese ] = "ŒŠ‚ğ“h‚è‚Â‚Ô‚·(~F)";
         Text[ chinese_traditional ] = "¶ñ¥RªÅ¬}(~F)";
         Text[ arabic ] = "ÊÚÈÆÉ ÇáËŞæÈ";
@@ -410,7 +410,7 @@ ModalDialog DLG_VECTORIZE
         Text[ polish ] = "Postêp";
         Text[ japanese ] = "is";
         Text[ chinese_traditional ] = "¶i®i";
-        Text[ arabic ] = "ÊŞÏã";
+        Text[ arabic ] = "ÇáÊŞÏã";
         Text[ greek ] = "Ğñüïäïò";
         Text[ korean ] = "ÁøÇà";
         Text[ turkish ] = "Artış";
