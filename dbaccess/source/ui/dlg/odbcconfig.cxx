@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-26 13:11:36 $
+ *  last change: $Author: kz $ $Date: 2000-10-26 13:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,10 @@
 #ifdef WIN
 #define ODBC_LIBRARY    "ODBC.DLL"
 #define ODBC_UI_LIBRARY "ODBCINST.DLL"
+#endif
 #if defined WNT
 #define ODBC_LIBRARY    "ODBC32.DLL"
 #define ODBC_UI_LIBRARY "ODBCCP32.DLL"
-#endif
 #endif
 #ifdef UNX
 #define ODBC_LIBRARY    "libodbc.so"
@@ -112,11 +112,11 @@ typedef SQLRETURN (SQL_API* TSQLSetEnvAttr) (SQLHENV EnvironmentHandle, SQLINTEG
 typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMALLINT   Direction, SQLCHAR* ServerName,
                                 SQLSMALLINT BufferLength1, SQLSMALLINT* NameLength1Ptr, SQLCHAR* Description, SQLSMALLINT BufferLength2, SQLSMALLINT* NameLength2Ptr);
 
-#define NSQLManageDataSource(a) (*reinterpret_cast<TSQLManageDataSource>(m_pSQLManageDataSource))(a)
-#define NSQLAllocHandle(a,b,c) (*reinterpret_cast<TSQLAllocHandle>(m_pAllocHandle))(a,b,c)
-#define NSQLFreeHandle(a,b) (*reinterpret_cast<TSQLFreeHandle>(m_pFreeHandle))(a,b)
-#define NSQLSetEnvAttr(a,b,c,d) (*reinterpret_cast<TSQLSetEnvAttr>(m_pSetEnvAttr))(a,b,c,d)
-#define NSQLDataSources(a,b,c,d,e,f,g,h) (*reinterpret_cast<TSQLDataSources>(m_pDataSources))(a,b,c,d,e,f,g,h)
+#define NSQLManageDataSource(a) (*(TSQLManageDataSource)(m_pSQLManageDataSource))(a)
+#define NSQLAllocHandle(a,b,c) (*(TSQLAllocHandle)(m_pAllocHandle))(a,b,c)
+#define NSQLFreeHandle(a,b) (*(TSQLFreeHandle)(m_pFreeHandle))(a,b)
+#define NSQLSetEnvAttr(a,b,c,d) (*(TSQLSetEnvAttr)(m_pSetEnvAttr))(a,b,c,d)
+#define NSQLDataSources(a,b,c,d,e,f,g,h) (*(TSQLDataSources)(m_pDataSources))(a,b,c,d,e,f,g,h)
 #endif
 
 //=========================================================================
@@ -329,6 +329,9 @@ void OOdbcManagement::manageDataSources(void* _pParentSysWindowHandle)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/26 13:11:36  obo
+ *  #65293# cant compile for linux
+ *
  *  Revision 1.1  2000/10/24 12:48:36  fs
  *  initial checkin - wrapping (system) data source related ODBC functionality
  *
