@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-04 12:26:52 $
+ *  last change: $Author: vg $ $Date: 2002-06-05 11:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,8 @@ SvxAlignmentTabPage::~SvxAlignmentTabPage()
 
 void SvxAlignmentTabPage::FillForLockMode()
 {
-    ImageList   aIlLock( ResId( GetBackground().GetColor().IsDark()? IL_LOCK_BMPS_HC : IL_LOCK_BMPS ) );
+    ResId TmpId( GetBackground().GetColor().IsDark()? IL_LOCK_BMPS_HC : IL_LOCK_BMPS );
+    ImageList   aIlLock( TmpId );
     Size        aItemSize = aIlLock.GetImage(IID_BOTTOMLOCK).GetSizePixel();
     Size        aSize;
 
@@ -219,7 +220,8 @@ void SvxAlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        svt::OLocalResourceAccess   aLocalResAcc( SVX_RES( RID_SVXPAGE_ALIGNMENT ), RSC_TABPAGE );
+        ResId TmpRes = SVX_RES( RID_SVXPAGE_ALIGNMENT );
+        svt::OLocalResourceAccess   aLocalResAcc( TmpRes, RSC_TABPAGE );
         aWinOrient.GetVSLockMode().Clear();
         FillForLockMode();
 
