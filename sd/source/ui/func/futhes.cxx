@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-25 10:27:48 $
+ *  last change: $Author: obo $ $Date: 2000-10-31 15:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 if ( xSpellChecker.is() )
                     pOutliner->SetSpeller( xSpellChecker );
 
-                Reference< XHyphenator1 > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
+                Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
                 if( xHyphenator.is() )
                     pOutliner->SetHyphenator( xHyphenator );
             }
