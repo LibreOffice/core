@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlelstnr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-02 13:35:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 
 #include <com/sun/star/uno/Reference.h>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _VOS_MUTEX_HXX_
@@ -115,7 +115,7 @@ SwDicListEvtListener::SwDicListEvtListener(
         xDicList->addDictionaryListEventListener( this, sal_False );
     }
 
-    Reference< XMultiServiceFactory > xMgr( utl::getProcessServiceFactory() );
+    Reference< XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory() );
     if (xMgr.is())
     {
         OUString aSvcName( OUString::createFromAscii(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:07:02 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ void SwIndexMarkDlg::InsertUpdate()
 void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
 {
     rSh.Push();
-    SearchParam aParam( rSh.GetSelTxt(), SearchParam::SRCH_NORMAL,
+    utl::SearchParam aParam( rSh.GetSelTxt(), utl::SearchParam::SRCH_NORMAL,
                                                 TRUE, FALSE, FALSE );
 
     aParam.SetCaseSensitive( bCaseSensitive );
@@ -1754,6 +1754,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/25 12:07:02  jp
+    Spellchecker/Hyphenator are not longer member of the shells
+
     Revision 1.2  2000/10/20 14:18:04  os
     use comphelper methods
 
