@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-28 18:05:39 $
+ *  last change: $Author: mt $ $Date: 2001-03-01 09:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,6 +755,8 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         long nTextLineHeight = 0;
         if ( GetTextRanger() )
         {
+            GetTextRanger()->SetVertical( IsVertical() );
+
             long nTextY = nStartPosY + GetEditCursor( pParaPortion, pLine->GetStart() ).Top();
             if ( !bSameLineAgain )
             {
@@ -774,7 +776,15 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             nXWidth = 0;
             while ( !nXWidth )
             {
-                pTextRanges = GetTextRanger()->GetTextRanges( Range( nTextY + nTextExtraYOffset, nTextY + nTextExtraYOffset + nTextLineHeight ) );
+                long nYOff = nTextY + nTextExtraYOffset;
+                long nYDiff = nTextLineHeight;
+                if ( IsVertical() )
+                {
+                    long nMaxPolygonX = GetTextRanger()->GetBoundRect().Right();
+                    nYOff = nMaxPolygonX-nYOff;
+                    nYDiff = -nTextLineHeight;
+                }
+                pTextRanges = GetTextRanger()->GetTextRanges( Range( nYOff, nYOff + nYDiff ) );
                 DBG_ASSERT( pTextRanges, "GetTextRanges?!" );
                 long nMaxRangeWidth = 0;
                 // Den breitesten Bereich verwenden...
@@ -804,7 +814,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                     nTextExtraYOffset += Max( (long)(nTextLineHeight / 10), (long)1 );
                     if ( ( nTextY + nTextExtraYOffset  ) > GetTextRanger()->GetBoundRect().Bottom() )
                     {
-                        nXWidth = GetPaperSize().Width();
+                        nXWidth = !IsVertical() ? GetPaperSize().Width() : GetPaperSize().Height();
                         if ( !nXWidth ) // AutoPaperSize
                             nXWidth = 0x7FFFFFFF;
                     }

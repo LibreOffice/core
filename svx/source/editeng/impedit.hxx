@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-27 16:37:36 $
+ *  last change: $Author: mt $ $Date: 2001-03-01 09:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,7 @@ public:
     BOOL                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
 
     void                    SetTextRanger( TextRanger* pRanger );
-    TextRanger*             GetTextRanger( BOOL bUseInVerticalMode = FALSE ) const { return (!IsVertical()||bUseInVerticalMode) ? pTextRanger : NULL; }
+    TextRanger*             GetTextRanger() const { return pTextRanger; }
 
     const Size&             GetMinAutoPaperSize() const             { return aMinAutoPaperSize; }
     void                    SetMinAutoPaperSize( const Size& rSz )  { aMinAutoPaperSize = rSz; }
