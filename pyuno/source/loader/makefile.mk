@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 13:12:31 $
+#   last change: $Author: obo $ $Date: 2005-01-25 13:00:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,19 +77,18 @@ DIRECT = $(LINKFLAGSDEFS)
 .ENDIF
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
-SHL1NOCHECK=yes
 PYTHONLIB=$(PYTHON_LIBS)
 CFLAGS+=$(PYTHON_CFLAGS)
 .ELSE
 .INCLUDE :  pyversion.mk
 
 CFLAGS+=-I$(SOLARINCDIR)$/python
+.ENDIF
 
 .IF "$(GUI)" == "UNX"
 PYUNOLIB=-lpyuno
 .ELSE
 PYUNOLIB=ipyuno.lib
-.ENDIF
 .ENDIF
 
 SHL1TARGET=	$(TARGET)
