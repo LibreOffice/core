@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-29 17:51:30 $
+ *  last change: $Author: hdu $ $Date: 2002-06-06 14:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,8 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
     // set char width array
     for( i = 0; i < nCharCapacity; )
     {
-        long nClusterWidth = pMaxPos[i] - pMinPos[i];
+        // assume clusterwidth 0 for untouched chars e.g. in Indic scripts
+        long nClusterWidth = (pMaxPos[i] >= 0) ? pMaxPos[i] - pMinPos[i] : 0;
 
         // ligature glyphs correspond to more than one sal_Unicode, so
         // some character widths are still uninitialized. This is solved
@@ -415,17 +416,17 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
 
     // adjust to requested positions
     long nDelta = 0;
-    const long* pCurrentDX = pDXArray;
     for(; i < mnGlyphCount; ++i, ++pG )
     {
         int n = pG->mnCharIndex;
         if( n < mnEndCharIndex )
         {
+            // move with cluster granularity only and inside substring
             n -= mnFirstCharIndex;
-            if( (n >= 0) && !pTouched[n] )
+            if( (n > 0) && !pTouched[n] )
             {
                 pTouched[n] = 1;
-                long nNewDelta = *(pCurrentDX++);
+                long nNewDelta = pDXArray[n-1];
                 nNewDelta += nBasePointX - pG->maLinearPos.X();
                 nDelta = nNewDelta;
             }
