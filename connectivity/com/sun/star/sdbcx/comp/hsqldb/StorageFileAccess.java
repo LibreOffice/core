@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageFileAccess.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 09:56:27 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 11:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
         }
         public void sync() throws java.io.IOException
         {
+            os.sync();
         }
     }
 
