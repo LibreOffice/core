@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 14:16:06 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,7 +463,7 @@ DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
     m_aPrevBtn.SetSymbol(SYMBOL_PREV);
     m_aNextBtn.SetSymbol(SYMBOL_NEXT);
     m_aLastBtn.SetSymbol(SYMBOL_LAST);
-    m_aNewBtn.SetImage(((DbGridControl*)pParent)->GetImage(DbBrowseBox::NEW));
+    m_aNewBtn.SetImage(((DbGridControl*)pParent)->GetImage(DbGridControl_Base::NEW));
 
     m_aFirstBtn.SetHelpId(HID_GRID_TRAVEL_FIRST);
     m_aPrevBtn.SetHelpId(HID_GRID_TRAVEL_PREV);
@@ -961,7 +961,7 @@ DbGridControl::DbGridControl(
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxFactory,
                 Window* pParent,
                 WinBits nBits)
-            :DbBrowseBox(pParent, DBBF_NONE, nBits,
+            :DbGridControl_Base(pParent, EBBF_NONE, nBits,
                        BROWSER_KEEPSELECTION |
                        BROWSER_COLUMNSELECTION |
                        BROWSER_MULTISELECTION |
@@ -997,7 +997,7 @@ DbGridControl::DbGridControl(
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxFactory,
                 Window* pParent,
                 const ResId& rId)
-            :DbBrowseBox(pParent, rId, DBBF_NONE,
+            :DbGridControl_Base(pParent, rId, EBBF_NONE,
                     BROWSER_KEEPSELECTION |
                     BROWSER_COLUMNSELECTION |
                     BROWSER_MULTISELECTION |
@@ -1116,7 +1116,7 @@ DbGridControl::~DbGridControl()
 //------------------------------------------------------------------------------
 void DbGridControl::StateChanged( StateChangedType nType )
 {
-    DbBrowseBox::StateChanged( nType );
+    DbGridControl_Base::StateChanged( nType );
     switch (nType)
     {
         case STATE_CHANGE_ZOOM:
@@ -1151,7 +1151,7 @@ void DbGridControl::StateChanged( StateChangedType nType )
 //------------------------------------------------------------------------------
 void DbGridControl::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    DbBrowseBox::DataChanged( rDCEvt );
+    DbGridControl_Base::DataChanged( rDCEvt );
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS ) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
@@ -1163,7 +1163,7 @@ void DbGridControl::DataChanged( const DataChangedEvent& rDCEvt )
 //------------------------------------------------------------------------------
 void DbGridControl::Select()
 {
-    DbBrowseBox::Select();
+    DbGridControl_Base::Select();
 
     // as the selected rows may have changed, udate the according display in our navigation bar
     m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
@@ -1238,7 +1238,7 @@ void DbGridControl::RemoveRows()
     m_nOptions  = OPT_READONLY;
 
     // Anzahl Saetze im Browser auf 0 zuruecksetzen
-    DbBrowseBox::RemoveRows();
+    DbGridControl_Base::RemoveRows();
     m_aBar.InvalidateAll(m_nCurrentPos, sal_True);
 }
 
@@ -1650,7 +1650,7 @@ void DbGridControl::RemoveColumns()
         delete m_aColumns.GetObject(i);
     m_aColumns.Clear();
 
-    DbBrowseBox::RemoveColumns();
+    DbGridControl_Base::RemoveColumns();
 }
 
 //------------------------------------------------------------------------------
@@ -1686,7 +1686,7 @@ sal_uInt16 DbGridControl::AppendColumn(const XubString& rName, sal_uInt16 nWidth
     DBG_ASSERT(GetViewColumnPos(nId) == (sal_uInt16)-1, "DbGridControl::AppendColumn : inconsistent internal state !");
         // my column's models say "there is no column with id nId", but the view (the base class) says "there is a column ..."
 
-    DbBrowseBox::AppendColumn(rName, nWidth, nRealPos, nId);
+    DbGridControl_Base::AppendColumn(rName, nWidth, nRealPos, nId);
     if (nModelPos == HEADERBAR_APPEND)
         m_aColumns.Insert(CreateColumn(nId, m_xCurrentRow), LIST_APPEND);
     else
@@ -1699,14 +1699,14 @@ sal_uInt16 DbGridControl::AppendColumn(const XubString& rName, sal_uInt16 nWidth
 void DbGridControl::RemoveColumn(sal_uInt16 nId)
 {
     sal_uInt16 nIndex = GetModelColumnPos(nId);
-    DbBrowseBox::RemoveColumn(nId);
+    DbGridControl_Base::RemoveColumn(nId);
     delete m_aColumns.Remove(nIndex);
 }
 
 //------------------------------------------------------------------------------
 void DbGridControl::ColumnMoved(sal_uInt16 nId)
 {
-    DbBrowseBox::ColumnMoved(nId);
+    DbGridControl_Base::ColumnMoved(nId);
 
     // remove the col from the model
     sal_uInt16 nOldModelPos = GetModelColumnPos(nId);
@@ -1820,7 +1820,7 @@ sal_Bool DbGridControl::SeekRow(long nRow)
             DBG_ASSERT(IsFilterRow(nRow), "DbGridControl::SeekRow(): No filter row, wrong mode");
             m_xPaintRow = m_xEmptyRow;
         }
-        DbBrowseBox::SeekRow(nRow);
+        DbGridControl_Base::SeekRow(nRow);
     }
     return m_nSeekPos >= 0;
 }
@@ -1906,7 +1906,7 @@ void DbGridControl::RowInserted(long nRow, long nNumRows, sal_Bool bDoPaint)
         else if (m_nTotalCount >= 0)
             m_nTotalCount += nNumRows;
 
-        DbBrowseBox::RowInserted(nRow, nNumRows, bDoPaint);
+        DbGridControl_Base::RowInserted(nRow, nNumRows, bDoPaint);
         m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
     }
 }
@@ -1926,7 +1926,7 @@ void DbGridControl::RowRemoved(long nRow, long nNumRows, sal_Bool bDoPaint)
         else if (m_nTotalCount >= 0)
             m_nTotalCount -= nNumRows;
 
-        DbBrowseBox::RowRemoved(nRow, nNumRows, bDoPaint);
+        DbGridControl_Base::RowRemoved(nRow, nNumRows, bDoPaint);
         m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
     }
 }
@@ -1986,34 +1986,34 @@ void DbGridControl::AdjustRows()
 }
 
 //------------------------------------------------------------------------------
-DbBrowseBox::RowStatus DbGridControl::GetRowStatus(long nRow) const
+DbGridControl_Base::RowStatus DbGridControl::GetRowStatus(long nRow) const
 {
     if (IsFilterRow(nRow))
-        return DbBrowseBox::FILTER;
+        return DbGridControl_Base::FILTER;
     else if (m_nCurrentPos >= 0 && nRow == m_nCurrentPos)
     {
         // neue Zeile
         if (!IsValid(m_xCurrentRow))
-            return DbBrowseBox::DELETED;
+            return DbGridControl_Base::DELETED;
         else if (IsModified())
-            return DbBrowseBox::MODIFIED;
+            return DbGridControl_Base::MODIFIED;
         else if (m_xCurrentRow->IsNew())
-            return DbBrowseBox::CURRENTNEW;
+            return DbGridControl_Base::CURRENTNEW;
         else
-            return DbBrowseBox::CURRENT;
+            return DbGridControl_Base::CURRENT;
     }
     else if (IsEmptyRow(nRow))
-        return DbBrowseBox::NEW;
+        return DbGridControl_Base::NEW;
     else if (!IsValid(m_xSeekRow))
-        return DbBrowseBox::DELETED;
+        return DbGridControl_Base::DELETED;
     else
-        return DbBrowseBox::CLEAN;
+        return DbGridControl_Base::CLEAN;
 }
 
 //------------------------------------------------------------------------------
 void DbGridControl::PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const
 {
-    DbBrowseBox::PaintStatusCell(rDev, rRect);
+    DbGridControl_Base::PaintStatusCell(rDev, rRect);
 }
 
 //------------------------------------------------------------------------------
@@ -2044,7 +2044,7 @@ sal_Bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
         !SetCurrent(nNewRow, !m_bInAdjustDataSource))
         return sal_False;
 
-    return DbBrowseBox::CursorMoving(nNewRow, nNewCol);
+    return DbGridControl_Base::CursorMoving(nNewRow, nNewCol);
 }
 
 //------------------------------------------------------------------------------
@@ -2147,7 +2147,7 @@ void DbGridControl::CursorMoved()
         SetCurrent(GetCurRow(), sal_False);
     }
 
-    DbBrowseBox::CursorMoved();
+    DbGridControl_Base::CursorMoved();
     m_aBar.InvalidateAll(m_nCurrentPos);
 }
 
@@ -2185,12 +2185,12 @@ void DbGridControl::forceROController(sal_Bool bForce)
         if (!pColumn)
             continue;
 
-        DbCellController* pReturn = &pColumn->GetController();
+        CellController* pReturn = &pColumn->GetController();
         if (!pReturn)
             continue;
 
         // nur wenn es eine Edit-Zeile ist, kann ich ihr das forced read-only mitgeben
-        if (!pReturn->ISA(DbEditCellController) && !pReturn->ISA(DbSpinCellController))
+        if (!pReturn->ISA(EditCellController) && !pReturn->ISA(SpinCellController))
             continue;
 
         Edit& rEdit = (Edit&)pReturn->GetWindow();
@@ -2249,7 +2249,7 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
     if (nNewPos != m_nCurrentPos)
     {
         if (m_bSynchDisplay)
-            DbBrowseBox::GoToRow(nNewPos);
+            DbGridControl_Base::GoToRow(nNewPos);
 
         if (!m_xCurrentRow.Is())
             // das tritt zum Beispiel auf, wenn man die n (n>1) letzten Datensaetze geloescht hat, waehrend der Cursor auf dem letzten
@@ -2528,7 +2528,7 @@ void DbGridControl::MoveToPosition(sal_uInt32 nPos)
                 return;
             }
         }
-        DbBrowseBox::GoToRow(nPos);
+        DbGridControl_Base::GoToRow(nPos);
         m_aBar.InvalidateAll(m_nCurrentPos);
     }
 }
@@ -2778,7 +2778,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
         {
             if (!rEvt.IsMouseEvent() || !m_pSeekCursor)
             {
-                DbBrowseBox::Command(rEvt);
+                DbGridControl_Base::Command(rEvt);
                 return;
             }
 
@@ -2806,12 +2806,12 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             }
             else
             {
-                DbBrowseBox::Command(rEvt);
+                DbGridControl_Base::Command(rEvt);
                 return;
             }
         }
         default:
-            DbBrowseBox::Command(rEvt);
+            DbGridControl_Base::Command(rEvt);
     }
 }
 
@@ -2888,7 +2888,7 @@ void DbGridControl::DeleteSelectedRows()
 }
 
 //------------------------------------------------------------------------------
-DbCellController* DbGridControl::GetController(long nRow, sal_uInt16 nColumnId)
+CellController* DbGridControl::GetController(long nRow, sal_uInt16 nColumnId)
 {
     if (!IsValid(m_xCurrentRow) || !IsEnabled())
         return NULL;
@@ -2897,7 +2897,7 @@ DbCellController* DbGridControl::GetController(long nRow, sal_uInt16 nColumnId)
     if (!pColumn)
         return NULL;
 
-    DbCellController* pReturn = NULL;
+    CellController* pReturn = NULL;
     if (IsFilterMode())
         pReturn = &pColumn->GetController();
     else
@@ -2917,7 +2917,7 @@ DbCellController* DbGridControl::GetController(long nRow, sal_uInt16 nColumnId)
             if (pReturn)
             {
                 // wenn es eine Edit-Zeile ist, kann ich ihr das forced read-only mitgeben
-                if (!pReturn->ISA(DbEditCellController) && !pReturn->ISA(DbSpinCellController))
+                if (!pReturn->ISA(EditCellController) && !pReturn->ISA(SpinCellController))
                     // ich konnte den Controller in forceROController nicht auf ReadOnly setzen
                     if (!bInsert && !bUpdate)
                         // ich bin nur hier, da m_bForceROController gesetzt war
@@ -2930,7 +2930,7 @@ DbCellController* DbGridControl::GetController(long nRow, sal_uInt16 nColumnId)
 }
 
 //------------------------------------------------------------------------------
-void DbGridControl::InitController(DbCellControllerRef& rController, long nRow, sal_uInt16 nColumnId)
+void DbGridControl::InitController(CellControllerRef& rController, long nRow, sal_uInt16 nColumnId)
 {
     DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColumnId));
     if (pColumn)
@@ -2998,7 +2998,7 @@ void DbGridControl::Dispatch(sal_uInt16 nId)
             MoveToLast();
     }
     else
-        DbBrowseBox::Dispatch(nId);
+        DbGridControl_Base::Dispatch(nId);
 }
 
 //------------------------------------------------------------------------------
@@ -3051,7 +3051,7 @@ void DbGridControl::Undo()
         else
             m_xCurrentRow = m_xDataRow;
 
-        if (bAppending && (DbBrowseBox::IsModified() || bDirty))
+        if (bAppending && (DbGridControl_Base::IsModified() || bDirty))
         // remove the row
             if (m_nCurrentPos == GetRowCount() - 2)
             {   // maybe we already removed it (in resetCurrentRow, called if the above moveToInsertRow
@@ -3106,17 +3106,17 @@ void DbGridControl::RowModified( long nRow, sal_uInt16 nColId )
 {
     if (nRow == m_nCurrentPos && IsEditing())
     {
-        DbCellControllerRef aTmpRef = Controller();
+        CellControllerRef aTmpRef = Controller();
         aTmpRef->ClearModified();
         InitController(aTmpRef, m_nCurrentPos, GetCurColumnId());
     }
-    DbBrowseBox::RowModified(nRow);
+    DbGridControl_Base::RowModified(nRow);
 }
 
 //------------------------------------------------------------------------------
 sal_Bool DbGridControl::IsModified() const
 {
-    return !IsFilterMode() && IsValid(m_xCurrentRow) && (m_xCurrentRow->IsModified() || DbBrowseBox::IsModified());
+    return !IsFilterMode() && IsValid(m_xCurrentRow) && (m_xCurrentRow->IsModified() || DbGridControl_Base::IsModified());
 }
 
 //------------------------------------------------------------------------------
@@ -3141,7 +3141,7 @@ sal_Bool DbGridControl::SaveModified()
 
     // Uebernimmt die Dateneingabe fuer das Feld
     // Hat es aenderungen im aktuellen Eingabefeld gegeben ?
-    if (!DbBrowseBox::IsModified())
+    if (!DbGridControl_Base::IsModified())
         return sal_True;
 
     DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(GetCurColumnId()));
@@ -3277,7 +3277,7 @@ long DbGridControl::PreNotify(NotifyEvent& rEvt)
             }
         }   // kein break!
         default:
-            return DbBrowseBox::PreNotify(rEvt);
+            return DbGridControl_Base::PreNotify(rEvt);
     }
 }
 
@@ -3310,7 +3310,7 @@ void DbGridControl::KeyInput( const KeyEvent& rEvt )
             return;
         }
     }
-    DbBrowseBox::KeyInput(rEvt);
+    DbGridControl_Base::KeyInput(rEvt);
 }
 
 //------------------------------------------------------------------------------
@@ -3325,7 +3325,7 @@ void DbGridControl::HideColumn(sal_uInt16 nId)
         : GetColumnIdFromViewPos(nPos+1);   // take the next
 
     long lCurrentWidth = GetColumnWidth(nId);
-    DbBrowseBox::RemoveColumn(nId);
+    DbGridControl_Base::RemoveColumn(nId);
         // don't use my own RemoveColumn, this would remove it from m_aColumns, too
 
     // update my model
@@ -3582,7 +3582,7 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const ::com::sun::star::b
 {
     osl::MutexGuard aPreventDestruction(m_aDestructionSafety);
     // needed as this may run in a thread other than the main one
-    if (GetRowStatus(GetCurRow()) != DbBrowseBox::MODIFIED)
+    if (GetRowStatus(GetCurRow()) != DbGridControl_Base::MODIFIED)
         // all other cases are handled elsewhere
         return;
 

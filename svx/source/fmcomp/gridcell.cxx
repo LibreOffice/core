@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:45:16 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,23 +170,24 @@
 
 using namespace ::connectivity;
 using namespace ::svxform;
+using namespace ::svt;
 using namespace ::com::sun::star::uno;
 
 // An irgendeiner Stelle dieser include-Orgie hier gehen die defines fuer WB_LEFT und WB_RIGHT verloren, und ich habe einfach
 // nicht herausgefunden, wo. Also eben ein Hack.
-#define WB_LEFT                 ((WinBits)0x00004000)
-#define WB_CENTER               ((WinBits)0x00008000)
-#define WB_RIGHT                ((WinBits)0x00010000)
+//#define WB_LEFT                 ((WinBits)0x00004000)
+//#define WB_CENTER               ((WinBits)0x00008000)
+//#define WB_RIGHT                ((WinBits)0x00010000)
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbGridColumn::s_xEmptyController;
+CellControllerRef DbGridColumn::s_xEmptyController;
 
 //------------------------------------------------------------------------------
 void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xField, sal_Int32 nTypeId)
 {
     Clear();
 
-    m_nTypeId = nTypeId;
+    m_nTypeId = (sal_Int16)nTypeId;
     if (xField != m_xField)
     {
         // Grundeinstellung
@@ -195,7 +196,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const ::com::sun::star::u
         m_nFieldPos   = (sal_Int16)_nFieldPos;
         m_bReadOnly   = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISREADONLY));
         m_bAutoValue  = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_AUTOINCREMENT));
-        m_nFieldType  = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
+        m_nFieldType  = (sal_Int16)::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
 
         switch (m_nFieldType)
         {
@@ -765,9 +766,9 @@ void DbTextField::Init(Window* pParent, const ::com::sun::star::uno::Reference< 
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbTextField::CreateController() const
+CellControllerRef DbTextField::CreateController() const
 {
-    return new DbEditCellController((Edit*)m_pWindow);
+    return new EditCellController((Edit*)m_pWindow);
 }
 
 //------------------------------------------------------------------------------
@@ -1038,9 +1039,9 @@ void DbFormattedField::Init(Window* pParent, const ::com::sun::star::uno::Refere
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbFormattedField::CreateController() const
+CellControllerRef DbFormattedField::CreateController() const
 {
-    return new DbEditCellController((Edit*)m_pWindow);
+    return new EditCellController((Edit*)m_pWindow);
 }
 
 //------------------------------------------------------------------------------
@@ -1158,8 +1159,8 @@ void DbCheckBox::Init(Window* pParent, const ::com::sun::star::uno::Reference< :
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xModel(m_rColumn.getModel());
     sal_Bool bEnable  = ::comphelper::getBOOL(xModel->getPropertyValue(FM_PROP_ENABLED));
 
-    m_pWindow  = new DbCheckBoxCtrl(pParent);
-    m_pPainter = new DbCheckBoxCtrl(pParent);
+    m_pWindow  = new CheckBoxControl(pParent);
+    m_pPainter = new CheckBoxControl(pParent);
     m_pWindow->Enable(bEnable);
     m_pWindow->SetPaintTransparent( sal_True );
 
@@ -1170,9 +1171,9 @@ void DbCheckBox::Init(Window* pParent, const ::com::sun::star::uno::Reference< :
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbCheckBox::CreateController() const
+CellControllerRef DbCheckBox::CreateController() const
 {
-    return new DbCheckBoxCellController((DbCheckBoxCtrl*)m_pWindow);
+    return new CheckBoxCellController((CheckBoxControl*)m_pWindow);
 }
 
 //------------------------------------------------------------------------------
@@ -1186,7 +1187,7 @@ void DbCheckBox::UpdateFromField(const ::com::sun::star::uno::Reference< ::com::
         else if (!_xVariant->wasNull())
             eState = STATE_NOCHECK;
     }
-    ((DbCheckBoxCtrl*)m_pWindow)->GetBox().SetState(eState);
+    ((CheckBoxControl*)m_pWindow)->GetBox().SetState(eState);
 }
 
 //------------------------------------------------------------------------------
@@ -1202,7 +1203,7 @@ void DbCheckBox::Paint(OutputDevice& rDev, const Rectangle& rRect,
         else if (!_xVariant->wasNull())
             eState = STATE_NOCHECK;
     }
-    ((DbCheckBoxCtrl*)m_pPainter)->GetBox().SetState(eState);
+    ((CheckBoxControl*)m_pPainter)->GetBox().SetState(eState);
     DbCellControl::Paint(rDev, rRect);
 }
 
@@ -1210,7 +1211,7 @@ void DbCheckBox::Paint(OutputDevice& rDev, const Rectangle& rRect,
 sal_Bool DbCheckBox::Commit()
 {
     ::com::sun::star::uno::Any aVal;
-    aVal <<= (sal_Int16) (((DbCheckBoxCtrl*)m_pWindow)->GetBox().GetState());
+    aVal <<= (sal_Int16) (((CheckBoxControl*)m_pWindow)->GetBox().GetState());
     m_rColumn.getModel()->setPropertyValue(FM_PROP_STATE, aVal);
     return sal_True;
 }
@@ -1247,9 +1248,9 @@ void DbPatternField::Init(Window* pParent, const ::com::sun::star::uno::Referenc
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbPatternField::CreateController() const
+CellControllerRef DbPatternField::CreateController() const
 {
-    return new DbSpinCellController((PatternField*)m_pWindow);
+    return new SpinCellController((PatternField*)m_pWindow);
 }
 
 //------------------------------------------------------------------------------
@@ -1354,9 +1355,9 @@ void DbNumericField::Init(Window* pParent, const ::com::sun::star::uno::Referenc
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbNumericField::CreateController() const
+CellControllerRef DbNumericField::CreateController() const
 {
-    return new DbSpinCellController((SpinField*)m_pWindow);
+    return new SpinCellController((SpinField*)m_pWindow);
 }
 
 //------------------------------------------------------------------------------
@@ -1465,9 +1466,9 @@ void DbCurrencyField::Init(Window* pParent, const ::com::sun::star::uno::Referen
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbCurrencyField::CreateController() const
+CellControllerRef DbCurrencyField::CreateController() const
 {
-    return new DbSpinCellController((SpinField*)m_pWindow);
+    return new SpinCellController((SpinField*)m_pWindow);
 }
 
 //------------------------------------------------------------------------------
@@ -1583,9 +1584,9 @@ void DbDateField::Init(Window* pParent, const ::com::sun::star::uno::Reference< 
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbDateField::CreateController() const
+CellControllerRef DbDateField::CreateController() const
 {
-    return new DbSpinCellController((SpinField*)m_pWindow);
+    return new SpinCellController((SpinField*)m_pWindow);
 }
 
 //------------------------------------------------------------------------------
@@ -1680,9 +1681,9 @@ void DbTimeField::Init(Window* pParent, const ::com::sun::star::uno::Reference< 
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbTimeField::CreateController() const
+CellControllerRef DbTimeField::CreateController() const
 {
-    return new DbSpinCellController((SpinField*)m_pWindow);
+    return new SpinCellController((SpinField*)m_pWindow);
 }
 
 //------------------------------------------------------------------------------
@@ -1752,7 +1753,7 @@ void DbComboBox::_propertyChanged( const ::com::sun::star::beans::PropertyChange
 //------------------------------------------------------------------------------
 void DbComboBox::SetList(const ::com::sun::star::uno::Any& rItems)
 {
-    DbComboBoxCtrl* pField = (DbComboBoxCtrl*)m_pWindow;
+    ComboBoxControl* pField = (ComboBoxControl*)m_pWindow;
     pField->Clear();
 
     ::comphelper::StringSequence aTest;
@@ -1777,8 +1778,8 @@ void DbComboBox::Init(Window* pParent, const ::com::sun::star::uno::Reference< :
 
     m_rColumn.SetAlignmentFromModel(::com::sun::star::awt::TextAlign::LEFT);
 
-    DbComboBoxCtrl* pField;
-    pField  = new DbComboBoxCtrl(pParent);
+    ComboBoxControl* pField;
+    pField  = new ComboBoxControl(pParent);
     m_pWindow = pField;
 
     // selection von rechts nach links
@@ -1809,9 +1810,9 @@ void DbComboBox::Init(Window* pParent, const ::com::sun::star::uno::Reference< :
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbComboBox::CreateController() const
+CellControllerRef DbComboBox::CreateController() const
 {
-    return new DbComboBoxCellController((DbComboBoxCtrl*)m_pWindow);
+    return new ComboBoxCellController((ComboBoxControl*)m_pWindow);
 }
 
 //------------------------------------------------------------------------------
@@ -1859,7 +1860,7 @@ void DbListBox::_propertyChanged( const ::com::sun::star::beans::PropertyChangeE
 //------------------------------------------------------------------------------
 void DbListBox::SetList(const ::com::sun::star::uno::Any& rItems)
 {
-    DbListBoxCtrl* pField = (DbListBoxCtrl*)m_pWindow;
+    ListBoxControl* pField = (ListBoxControl*)m_pWindow;
 
     pField->Clear();
     m_bBound = sal_False;
@@ -1890,8 +1891,8 @@ void DbListBox::Init(Window* pParent, const ::com::sun::star::uno::Reference< ::
     sal_Bool bEnable   = ::comphelper::getBOOL(xModel->getPropertyValue(FM_PROP_ENABLED));
     m_rColumn.SetAlignment(::com::sun::star::awt::TextAlign::LEFT);
 
-    DbListBoxCtrl* pField;
-    pField      = new DbListBoxCtrl(pParent);
+    ListBoxControl* pField;
+    pField      = new ListBoxControl(pParent);
     m_pWindow   = pField;
 
     sal_Int16  nLines   = ::comphelper::getINT16(xModel->getPropertyValue(FM_PROP_LINECOUNT));
@@ -1910,9 +1911,9 @@ void DbListBox::Init(Window* pParent, const ::com::sun::star::uno::Reference< ::
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbListBox::CreateController() const
+CellControllerRef DbListBox::CreateController() const
 {
-    return new DbListBoxCellController((DbListBoxCtrl*)m_pWindow);
+    return new ListBoxCellController((ListBoxControl*)m_pWindow);
 }
 
 //------------------------------------------------------------------------------
@@ -1976,7 +1977,7 @@ DbFilterField::DbFilterField(const ::com::sun::star::uno::Reference< ::com::sun:
 DbFilterField::~DbFilterField()
 {
     if (m_nControlClass == ::com::sun::star::form::FormComponentType::CHECKBOX)
-        ((DbCheckBoxCtrl*)m_pWindow)->SetClickHdl( Link() );
+        ((CheckBoxControl*)m_pWindow)->SetClickHdl( Link() );
 
     DBG_DTOR(DbFilterField,NULL);
 }
@@ -2031,17 +2032,17 @@ void DbFilterField::CreateControl(Window* pParent, const ::com::sun::star::uno::
     switch (m_nControlClass)
     {
         case ::com::sun::star::form::FormComponentType::CHECKBOX:
-            m_pWindow = new DbCheckBoxCtrl(pParent);
+            m_pWindow = new CheckBoxControl(pParent);
             m_pWindow->SetPaintTransparent( sal_True );
-            ((DbCheckBoxCtrl*)m_pWindow)->SetClickHdl( LINK( this, DbFilterField, OnClick ) );
+            ((CheckBoxControl*)m_pWindow)->SetClickHdl( LINK( this, DbFilterField, OnClick ) );
 
-            m_pPainter = new DbCheckBoxCtrl(pParent);
+            m_pPainter = new CheckBoxControl(pParent);
             m_pPainter->SetPaintTransparent( sal_True );
             m_pPainter->SetBackground();
             break;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
         {
-            m_pWindow = new DbListBoxCtrl(pParent);
+            m_pWindow = new ListBoxControl(pParent);
             sal_Int16  nLines       = ::comphelper::getINT16(xModel->getPropertyValue(FM_PROP_LINECOUNT));
             ::com::sun::star::uno::Any  aItems      = xModel->getPropertyValue(FM_PROP_STRINGITEMLIST);
             SetList(aItems, m_nControlClass == ::com::sun::star::form::FormComponentType::COMBOBOX);
@@ -2049,7 +2050,7 @@ void DbFilterField::CreateControl(Window* pParent, const ::com::sun::star::uno::
         }   break;
         case ::com::sun::star::form::FormComponentType::COMBOBOX:
         {
-            m_pWindow = new DbComboBoxCtrl(pParent);
+            m_pWindow = new ComboBoxControl(pParent);
 
             AllSettings     aSettings = m_pWindow->GetSettings();
             StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
@@ -2117,25 +2118,25 @@ void DbFilterField::Init(Window* pParent, const ::com::sun::star::uno::Reference
 }
 
 //------------------------------------------------------------------------------
-DbCellControllerRef DbFilterField::CreateController() const
+CellControllerRef DbFilterField::CreateController() const
 {
-    DbCellControllerRef xController;
+    CellControllerRef xController;
     switch (m_nControlClass)
     {
         case ::com::sun::star::form::FormComponentType::CHECKBOX:
-            xController = new DbCheckBoxCellController((DbCheckBoxCtrl*)m_pWindow);
+            xController = new CheckBoxCellController((CheckBoxControl*)m_pWindow);
             break;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
-            xController = new DbListBoxCellController((DbListBoxCtrl*)m_pWindow);
+            xController = new ListBoxCellController((ListBoxControl*)m_pWindow);
             break;
         case ::com::sun::star::form::FormComponentType::COMBOBOX:
-            xController = new DbComboBoxCellController((DbComboBoxCtrl*)m_pWindow);
+            xController = new ComboBoxCellController((ComboBoxControl*)m_pWindow);
             break;
         default:
             if (m_bFilterList)
-                xController = new DbComboBoxCellController((DbComboBoxCtrl*)m_pWindow);
+                xController = new ComboBoxCellController((ComboBoxControl*)m_pWindow);
             else
-                xController = new DbEditCellController((Edit*)m_pWindow);
+                xController = new EditCellController((Edit*)m_pWindow);
     }
     return xController;
 }
@@ -2234,8 +2235,8 @@ void DbFilterField::SetText(const XubString& rText)
             else
                 eState = STATE_DONTKNOW;
 
-            ((DbCheckBoxCtrl*)m_pWindow)->GetBox().SetState(eState);
-            ((DbCheckBoxCtrl*)m_pPainter)->GetBox().SetState(eState);
+            ((CheckBoxControl*)m_pWindow)->GetBox().SetState(eState);
+            ((CheckBoxControl*)m_pPainter)->GetBox().SetState(eState);
         }   break;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
         {
@@ -2405,7 +2406,7 @@ void DbFilterField::Update()
 //------------------------------------------------------------------
 IMPL_LINK( DbFilterField, OnClick, void*, EMPTYARG )
 {
-    TriState eState = ((DbCheckBoxCtrl*)m_pWindow)->GetBox().GetState();
+    TriState eState = ((CheckBoxControl*)m_pWindow)->GetBox().GetState();
     XubString aText;
 
     switch (eState)
@@ -2810,11 +2811,11 @@ DBG_NAME(FmXCheckBoxCell);
 FmXCheckBoxCell::FmXCheckBoxCell(DbGridColumn* pColumn, DbCellControl* pControl)
                 :FmXDataCell(pColumn, pControl)
                 ,m_aItemListeners(m_aMutex)
-                ,m_pBox(&((DbCheckBoxCtrl*)pControl->GetControl())->GetBox())
+                ,m_pBox(&((CheckBoxControl*)pControl->GetControl())->GetBox())
 {
     DBG_CTOR(FmXCheckBoxCell,NULL);
 
-    ((DbCheckBoxCtrl*)pControl->GetControl())->SetClickHdl( LINK( this, FmXCheckBoxCell, OnClick ) );
+    ((CheckBoxControl*)pControl->GetControl())->SetClickHdl( LINK( this, FmXCheckBoxCell, OnClick ) );
 }
 
 //------------------------------------------------------------------
@@ -2836,7 +2837,7 @@ void FmXCheckBoxCell::disposing()
     ::com::sun::star::lang::EventObject aEvt(*this);
     m_aItemListeners.disposeAndClear(aEvt);
 
-    ((DbCheckBoxCtrl*)m_pCellControl->GetControl())->SetClickHdl(Link());
+    ((CheckBoxControl*)m_pCellControl->GetControl())->SetClickHdl(Link());
     m_pBox = NULL;
 
     FmXDataCell::disposing();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-07 07:09:46 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void SetMenuItem(const ImageList& rList, sal_uInt16 nID, Menu* pMenu, Menu& rNew
 
 //------------------------------------------------------------------------------
 FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
-        :DbBrowseHeader(pParent, nWinBits)
+        :EditBrowserHeader(pParent, nWinBits)
         ,DropTargetHelper(this)
         ,m_pImpl(new FmGridHeaderData)
 {
@@ -321,7 +321,7 @@ sal_uInt16 FmGridHeader::GetModelColumnPos(sal_uInt16 nId) const
 //------------------------------------------------------------------------------
 void FmGridHeader::Select()
 {
-    DbBrowseHeader::Select();
+    EditBrowserHeader::Select();
     if (static_cast<FmGridControl*>(GetParent())->IsDesignMode())
     {
         sal_uInt16 nPos = GetModelColumnPos(GetCurItemId());
@@ -374,7 +374,7 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
             }
         }
     }
-    DbBrowseHeader::RequestHelp( rHEvt );
+    EditBrowserHeader::RequestHelp( rHEvt );
 }
 
 //------------------------------------------------------------------------------
@@ -1143,7 +1143,7 @@ void FmGridHeader::Command(const CommandEvent& rEvt)
         }
         break;
         default:
-            DbBrowseHeader::Command(rEvt);
+            EditBrowserHeader::Command(rEvt);
     }
 }
 
@@ -1500,7 +1500,7 @@ void FmGridControl::restored(const ::com::sun::star::lang::EventObject& rEvent)
 
     sal_Bool bAppending = GetCurrentRow()->IsNew();
     sal_Bool bDirty     = GetCurrentRow()->IsModified();
-    if (bAppending && (DbBrowseBox::IsModified() || bDirty))
+    if (bAppending && (EditBrowseBox::IsModified() || bDirty))
     {
         if (Controller().Is())
             Controller()->ClearModified();

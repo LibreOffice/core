@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 08:42:02 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,8 +161,8 @@ using namespace ::com::sun::star::util;
     ::com::sun::star::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetName();
     aFD.StyleName = rFont.GetStyleName();
-    aFD.Height = rFont.GetSize().Height();
-    aFD.Width = rFont.GetSize().Width();
+    aFD.Height = (sal_Int16)rFont.GetSize().Height();
+    aFD.Width = (sal_Int16)rFont.GetSize().Width();
     aFD.Family = rFont.GetFamily();
     aFD.CharSet = rFont.GetCharSet();
     aFD.Pitch = rFont.GetPitch();
@@ -193,7 +193,7 @@ Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
     aFont.SetItalic( (FontItalic)rDescr.Slant );
     aFont.SetUnderline( (::FontUnderline)rDescr.Underline );
     aFont.SetStrikeout( (::FontStrikeout)rDescr.Strikeout );
-    aFont.SetOrientation( rDescr.Orientation );
+    aFont.SetOrientation( (sal_Int16)rDescr.Orientation );
     aFont.SetKerning( rDescr.Kerning );
     aFont.SetWordLineMode( rDescr.WordLineMode );
     return aFont;
@@ -1256,7 +1256,7 @@ void FmXGridPeer::removeModifyListener(const ::com::sun::star::uno::Reference< :
 
         pReturnArray[i] = sal_False;
 
-        sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos(i));
+        sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos((sal_uInt16)i));
         DBG_ASSERT(nModelPos != (sal_uInt16)-1, "FmXGridPeer::queryFieldDataType : no model pos !");
 
         pCol = aColumns.GetObject(nModelPos);
@@ -1318,7 +1318,7 @@ void FmXGridPeer::removeModifyListener(const ::com::sun::star::uno::Reference< :
     DbGridColumn* pCol;
     for (sal_Int32 i=0; i < nColumnCount; ++i)
     {
-        sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos(i));
+        sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos((sal_uInt16)i));
         DBG_ASSERT(nModelPos != (sal_uInt16)-1, "FmXGridPeer::queryFieldData : invalid model pos !");
 
         // don't use GetCurrentFieldValue to determine the field content as this isn't affected by the above SeekRow
@@ -1399,7 +1399,7 @@ void FmXGridPeer::propertyChange(const ::com::sun::star::beans::PropertyChangeEv
             // this is valid because we are listening at the cursor, too (RecordCount, -status, edit mode)
             return;
 
-        sal_uInt16 nId = pGrid->GetColumnIdFromModelPos(i);
+        sal_uInt16 nId = pGrid->GetColumnIdFromModelPos((sal_uInt16)i);
         sal_Bool bInvalidateColumn = sal_False;
 
         if (evt.PropertyName == FM_PROP_LABEL)
@@ -1721,7 +1721,7 @@ void FmXGridPeer::elementInserted(const ::com::sun::star::container::ContainerEv
     if (aWidth >>= nWidth)
         nWidth = pGrid->LogicToPixel(Point(nWidth,0),MAP_10TH_MM).X();
 
-    pGrid->AppendColumn(aName, nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
+    pGrid->AppendColumn(aName, (sal_uInt16)nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
 
     // jetzt die Spalte setzen
     DbGridColumn* pCol = pGrid->GetColumns().GetObject(::comphelper::getINT32(evt.Accessor));
@@ -1746,7 +1746,7 @@ void FmXGridPeer::elementReplaced(const ::com::sun::star::container::ContainerEv
     ::cppu::extractInterface(xNewColumn, evt.Element);
     ::cppu::extractInterface(xOldColumn, evt.ReplacedElement);
 
-    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos(::comphelper::getINT32(evt.Accessor)));
+    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos((sal_uInt16)::comphelper::getINT32(evt.Accessor)));
     removeColumnListeners(xOldColumn);
 
     String aName = ::comphelper::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
@@ -1754,7 +1754,7 @@ void FmXGridPeer::elementReplaced(const ::com::sun::star::container::ContainerEv
     sal_Int32 nWidth = 0;
     if (aWidth >>= nWidth)
         nWidth = pGrid->LogicToPixel(Point(nWidth,0),MAP_10TH_MM).X();
-    sal_uInt16 nNewId = pGrid->AppendColumn(aName, nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
+    sal_uInt16 nNewId = pGrid->AppendColumn(aName, (sal_uInt16)nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
     sal_uInt16 nNewPos = pGrid->GetModelColumnPos(nNewId);
 
     // set the model of the new column
@@ -1773,7 +1773,7 @@ void FmXGridPeer::elementRemoved(const ::com::sun::star::container::ContainerEve
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
         return;
 
-    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos(::comphelper::getINT32(evt.Accessor)));
+    pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos((sal_uInt16)::comphelper::getINT32(evt.Accessor)));
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xOldColumn;
     ::cppu::extractInterface(xOldColumn, evt.Element);
@@ -1783,7 +1783,7 @@ void FmXGridPeer::elementRemoved(const ::com::sun::star::container::ContainerEve
 //------------------------------------------------------------------------------
 void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw( ::com::sun::star::uno::RuntimeException )
 {
-    sal_uInt16 nId = FmPropertyInfoService::getPropertyId(PropertyName);
+    sal_Int32 nId = FmPropertyInfoService::getPropertyId(PropertyName);
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     sal_Bool bVoid = !Value.hasValue();
     switch (nId)
@@ -1975,7 +1975,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const ::com:
     {
         FmGridControl* pGrid = (FmGridControl*) GetWindow();
         Window* pDataWindow  = &pGrid->GetDataWindow();
-        sal_uInt16 nId = FmPropertyInfoService::getPropertyId(PropertyName);
+        sal_Int32 nId = FmPropertyInfoService::getPropertyId(PropertyName);
         switch (nId)
         {
             case FM_ATTR_FONT:
@@ -2170,12 +2170,12 @@ void FmXGridPeer::selectionChanged(const ::com::sun::star::lang::EventObject& ev
         if (xSelection.is())
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCol;
-            for (sal_uInt32 i = 0; i < m_xColumns->getCount(); i++)
+            for (sal_Int32 i = 0; i < m_xColumns->getCount(); i++)
             {
                 ::cppu::extractInterface(xCol, m_xColumns->getByIndex(i));
                 if (xCol == xSelection)
                 {
-                    pGrid->markColumn(pGrid->GetColumnIdFromModelPos(i));
+                    pGrid->markColumn(pGrid->GetColumnIdFromModelPos((sal_uInt16)i));
                     break;
                 }
             }
@@ -2226,7 +2226,7 @@ sal_Int32 FmXGridPeer::getCount() throw( ::com::sun::star::uno::RuntimeException
 
     ::com::sun::star::uno::Any aElement;
     // get the columnid
-    sal_uInt16 nId = pGrid->GetColumnIdFromViewPos(_nIndex);
+    sal_uInt16 nId = pGrid->GetColumnIdFromViewPos((sal_uInt16)_nIndex);
     // get the list position
     sal_uInt16 nPos = pGrid->GetModelColumnPos(nId);
 
@@ -2328,7 +2328,7 @@ void FmXGridPeer::draw( long x, long y )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     sal_Int32 nOldFlags = pGrid->GetBrowserFlags();
-    pGrid->SetBrowserFlags(nOldFlags | DBBF_NOROWPICTURE);
+    pGrid->SetBrowserFlags(nOldFlags | EBBF_NOROWPICTURE);
 
     VCLXWindow::draw(x, y);
 

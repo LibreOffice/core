@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: fs $ $Date: 2001-03-26 15:05:37 $
+#   last change: $Author: fs $ $Date: 2001-06-29 08:33:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,9 +81,6 @@ BMP_IN=$(PRJ)$/win/res
 
 CXXFILES= \
     dbaexchange.cxx	\
-    dbbrowse.cxx	\
-    dbbrwcbx.cxx	\
-    dbbrwchk.cxx	\
     showcols.cxx	\
     gridcols.cxx	\
     gridctrl.cxx	\
@@ -94,15 +91,11 @@ CXXFILES= \
 
 SRS1NAME=fmcomp
 SRC1FILES= \
-    dbbrowse.src 	\
     gridctrl.src	\
     showcols.src
 
 SLOFILES= \
     $(SLO)$/dbaexchange.obj	\
-    $(SLO)$/dbbrowse.obj	\
-    $(SLO)$/dbbrwchk.obj	\
-    $(SLO)$/dbbrwcbx.obj	\
     $(SLO)$/showcols.obj	\
     $(SLO)$/gridcols.obj	\
     $(SLO)$/gridctrl.obj	\
