@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:06:28 $
+ *  last change: $Author: cl $ $Date: 2001-02-11 15:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "TextAutoGrowHeight",             XML_NAMESPACE_DRAW, sXML_auto_grow_width,       XML_TYPE_BOOL, 0 },
     { "TextAutoGrowWidth",              XML_NAMESPACE_DRAW, sXML_auto_grow_height,      XML_TYPE_BOOL, 0 },
     { "TextFitToSize",                  XML_NAMESPACE_DRAW, sXML_fit_to_size,           XML_SD_TYPE_FITTOSIZE, 0 },
+    { "TextContourFrame",               XML_NAMESPACE_DRAW, sXML_fit_to_contour,        XML_TYPE_BOOL, 0 },
     { "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   sXML_max_height,            XML_TYPE_MEASURE, 0 },
     { "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   sXML_max_width,             XML_TYPE_MEASURE, 0 },
     { "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   sXML_min_height,            XML_TYPE_MEASURE, 0 },

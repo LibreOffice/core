@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.35 2001-02-07 16:18:34 cl Exp $
+	$Id: drawing.mod,v 1.36 2001-02-11 15:05:07 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -336,6 +336,7 @@
 <!ATTLIST style:properties draw:auto-grow-width %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:auto-grow-height %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:fit-to-size %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:fit-to-contour %boolean; #IMPLIED>
 <!ATTLIST style:properties fo:vertical-align (top | middle | bottom ) #IMPLIED>
 
 <!-- fill attributes -->
