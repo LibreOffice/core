@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoUrlResolver.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:10:30 $
+ *  last change:$Date: 2003-12-11 12:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,18 +89,7 @@ public class UnoUrlResolver extends TestCase {
                                         "com.sun.star.connection.Acceptor") ;
             tEnv.addObjRelation("ACCEPTOR", oAcctr);
 
-            String os = System.getProperty("OS");
-            System.out.println("OS: " + os);
-            int port = 20004;
-            if (os.equalsIgnoreCase("wntmsci"))
-              port = 20004;
-            if (os.equalsIgnoreCase("unxsols"))
-              port = 20004;
-            if (os.equalsIgnoreCase("unxsoli"))
-              port = 30004;
-            if (os.equalsIgnoreCase("unxlngi"))
-              port = 20006;
-
+            int port = util.utils.getNextFreePort(20004);
             tEnv.addObjRelation("PORT", new Integer(port));
 
             return tEnv;
