@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:56:58 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,31 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
+#include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
+#include <com/sun/star/document/XEventBroadcaster.hpp>
+#endif
+
+#include <cppuhelper/implbase2.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -112,6 +137,10 @@
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
 #endif
+
+#include <vcl/graph.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <svtools/filter.hxx>
 #ifndef _SW3IO_HXX
 #include <sw3io.hxx>
 #endif
@@ -122,6 +151,7 @@
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
+using namespace com::sun::star;
 
 
 class SwOLELRUCache : private SvPtrarr, private utl::ConfigItem
@@ -159,11 +189,13 @@ SwOLELRUCache* SwOLEObj::pOLELRU_Cache = 0;
 // --------------------
 
 SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
-                    SvInPlaceObject *pObj,
+                    const svt::EmbeddedObjectRef& xObj,
                     SwGrfFmtColl *pGrfColl,
                     SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
-    aOLEObj( pObj ),
+    aOLEObj( xObj ),
+    pGraphic(0),
+    nViewAspect( embed::Aspects::MSOLE_CONTENT ),
     bOLESizeInvalid( FALSE )
 {
     aOLEObj.SetNode( this );
@@ -175,9 +207,23 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
     aOLEObj( rString ),
+    pGraphic(0),
+    nViewAspect( embed::Aspects::MSOLE_CONTENT ),
     bOLESizeInvalid( FALSE )
 {
     aOLEObj.SetNode( this );
+}
+
+SwOLENode::~SwOLENode()
+{
+    delete pGraphic;
+}
+
+Graphic* SwOLENode::GetGraphic()
+{
+    if ( aOLEObj.GetOleRef().is() )
+        return aOLEObj.xOLERef.GetGraphic();
+    return pGraphic;
 }
 
 SwCntntNode *SwOLENode::SplitNode( const SwPosition & )
@@ -191,15 +237,32 @@ SwCntntNode *SwOLENode::SplitNode( const SwPosition & )
 
 BOOL SwOLENode::RestorePersistentData()
 {
-    aOLEObj.GetOleRef();
-    if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
+    DBG_ASSERT( aOLEObj.GetOleRef().is(), "No object to restore!" );
+    if ( aOLEObj.xOLERef.is() )
     {
-        SvPersist* p = GetDoc()->GetPersist();
-        if( p )     // muss da sein
+        // Falls bereits eine SvPersist-Instanz existiert, nehmen wir diese
+        SfxObjectShell* p = GetDoc()->GetPersist();
+        if( !p )
         {
-            SvInfoObjectRef aRef( p->Find( aOLEObj.aName ) );
-            if( aRef.Is() )
-                aRef->SetDeleted( FALSE );
+            // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
+            // diesem Dokument?
+            ASSERT( !this, "warum wird hier eine DocShell angelegt?" );
+            p = new SwDocShell( GetDoc(), SFX_CREATE_MODE_INTERNAL );
+            p->DoInitNew( NULL );
+        }
+
+        DBG_ASSERT( aOLEObj.aName.Len(), "No object name!" );
+        ::rtl::OUString aObjName;
+        if ( !p->GetEmbeddedObjectContainer().InsertEmbeddedObject( aOLEObj.xOLERef.GetObject(), aObjName ) )
+        {
+            DBG_ERROR( "InsertObject failed" );
+        }
+        else
+        {
+            aOLEObj.aName = aObjName;
+            // TODO/LATER: allow to work in loaded state
+            svt::EmbeddedObjectRef::TryRunningState( aOLEObj.xOLERef.GetObject() );
+            aOLEObj.xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
         }
     }
 
@@ -209,45 +272,43 @@ BOOL SwOLENode::RestorePersistentData()
     return TRUE;
 }
 
-// Sichern eines in den Undo-Bereich zu verschiebenden OLE-Objekts
-
+// OLE object is transported into UNDO area
 BOOL SwOLENode::SavePersistentData()
 {
-    if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
+    if( aOLEObj.xOLERef.is() )
     {
-        SvPersist* p = GetDoc()->GetPersist();
+        SfxObjectShell* p = GetDoc()->GetPersist();
         if( p )     // muss da sein
         {
-            SvInfoObjectRef aRef( p->Find( aOLEObj.aName ) );
-            if( aRef.Is() )
+            p->GetEmbeddedObjectContainer().RemoveEmbeddedObject( aOLEObj.aName);
+            aOLEObj.xOLERef.AssignToContainer( 0, aOLEObj.aName );
+            try
             {
-                aRef->SetDeleted( TRUE );
-                aRef->SetObj(0);
+                // "unload" object
+                aOLEObj.xOLERef->changeState( embed::EmbedStates::LOADED );
+            }
+            catch ( uno::Exception& )
+            {
             }
         }
-
-        (*aOLEObj.pOLERef)->DoClose();
     }
 
     if( SwOLEObj::pOLELRU_Cache )
         SwOLEObj::pOLELRU_Cache->RemovePtr( &aOLEObj );
-
-    if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
-        (*aOLEObj.pOLERef).Clear();
 
     return TRUE;
 }
 
 
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
-                                    SvInPlaceObject *pObj,
+                    const svt::EmbeddedObjectRef& xObj,
                                     SwGrfFmtColl* pGrfColl,
                                     SwAttrSet* pAutoAttr )
 {
     ASSERT( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
 
     SwOLENode *pNode =
-        new SwOLENode( rWhere, pObj, pGrfColl, pAutoAttr );
+        new SwOLENode( rWhere, xObj, pGrfColl, pAutoAttr );
 
 #if 0
 JP 02.10.97 - OLE Objecte stehen immer alleine im Rahmen, also hat es
@@ -306,20 +367,23 @@ JP 02.10.97 - OLE Objecte stehen immer alleine im Rahmen, also hat es
 
 Size SwOLENode::GetTwipSize() const
 {
-    SvInPlaceObjectRef xRef( ((SwOLENode*)this)->aOLEObj.GetOleRef() );
-    Size aSz( xRef->GetVisArea().GetSize() );
+    uno::Reference < embed::XEmbeddedObject > xObj = ((SwOLENode*)this)->aOLEObj.GetOleRef();
+    uno::Reference < embed::XVisualObject > xVis( xObj, uno::UNO_QUERY );
+    awt::Size aSize = xVis->getVisualAreaSize( nViewAspect );
+    Size aSz( aSize.Width, aSize.Height );
     const MapMode aDest( MAP_TWIP );
-    const MapMode aSrc ( xRef->GetMapUnit() );
+    const MapMode aSrc ( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) ) );
     return OutputDevice::LogicToLogic( aSz, aSrc, aDest );
 }
-
 
 SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
     // Falls bereits eine SvPersist-Instanz existiert, nehmen wir diese
-    SvPersist* p = pDoc->GetPersist();
+    SfxObjectShell* p = pDoc->GetPersist();
     if( !p )
     {
+        // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
+        // diesem Dokument?
         ASSERT( pDoc->GetRefForDocShell(),
                         "wo ist die Ref-Klasse fuer die DocShell?")
         p = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
@@ -328,10 +392,11 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
 
     // Wir hauen das Ding auf SvPersist-Ebene rein
-    String aNewName( Sw3Io::UniqueName( p->GetStorage(), "Obj" ) );
-    SvPersist* pSrc = GetDoc()->GetPersist();
+    // TODO/LATER: check if using the same naming scheme for all apps works here
+    ::rtl::OUString aNewName/*( Sw3Io::UniqueName( p->GetStorage(), "Obj" ) )*/;
+    SfxObjectShell* pSrc = GetDoc()->GetPersist();
 
-    p->CopyObject( aOLEObj.aName, aNewName, pSrc );
+    p->GetEmbeddedObjectContainer().CopyEmbeddedObject( pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( aOLEObj.aName ), aNewName );
     SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName,
                                     (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl(),
                                     (SwAttrSet*)GetpSwAttrSet() );
@@ -385,51 +450,56 @@ BOOL SwOLENode::IsInGlobalDocSection() const
 BOOL SwOLENode::IsOLEObjectDeleted() const
 {
     BOOL bRet = FALSE;
-    if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
+    if( aOLEObj.xOLERef.is() )
     {
-        SvPersist* p = GetDoc()->GetPersist();
+        SfxObjectShell* p = GetDoc()->GetPersist();
         if( p )     // muss da sein
         {
-            SvInfoObjectRef aRef( p->Find( aOLEObj.aName ) );
-            if( aRef.Is() )
-                bRet = aRef->IsDeleted();
+            return p->GetEmbeddedObjectContainer().HasEmbeddedObject( aOLEObj.aName );
+            //SvInfoObjectRef aRef( p->Find( aOLEObj.aName ) );
+            //if( aRef.Is() )
+            //    bRet = aRef->IsDeleted();
         }
     }
     return bRet;
 }
 
 
-SwOLEObj::SwOLEObj( SvInPlaceObject *pObj ) :
-    pOLERef( new SvInPlaceObjectRef( pObj ) ),
+SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
+    xOLERef( xObj ),
     pOLENd( 0 )
 {
+    xOLERef.Lock( TRUE );
 }
 
 
 SwOLEObj::SwOLEObj( const String &rString ) :
-    pOLERef( 0 ),
     pOLENd( 0 ),
     aName( rString )
 {
+    xOLERef.Lock( TRUE );
 }
 
 
 SwOLEObj::~SwOLEObj()
 {
-    if( pOLERef && pOLERef->Is() )
-        //#41499# Kein DoClose(). Beim Beenden ruft der Sfx ein DoClose auf
-        //die offenen Objekte. Dadurch wird ggf. eine temp. OLE-Grafik wieder
-        //in eine Grafik gewandelt. Der OLE-Node wird zerstoert. Das DoClose
-        //wueder in das leere laufen, weil das Objekt bereits im DoClose steht.
-        //Durch das remove unten waere das DoClose aber nicht vollstaendig.
-        (*pOLERef)->GetProtocol().Reset();
-    delete pOLERef;
+    xOLERef.Clear();
+
     // Object aus dem Storage removen!!
     if( pOLENd && !pOLENd->GetDoc()->IsInDtor() )   //NIcht notwendig im DTor (MM)
     {
-        SvPersist* p = pOLENd->GetDoc()->GetPersist();
+        SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
+        DBG_ASSERT( p, "No document!" );
         if( p )     // muss er existieren ?
-            p->Remove( aName );
+        {
+            comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
+            if ( rCnt.HasEmbeddedObject( aName ) )
+            {
+                // not already removed by deleting the object
+                xOLERef.AssignToContainer( 0, aName );
+                rCnt.RemoveEmbeddedObject( aName );
+            }
+        }
     }
 
     if( pOLELRU_Cache )
@@ -445,47 +515,43 @@ SwOLEObj::~SwOLEObj()
 void SwOLEObj::SetNode( SwOLENode* pNode )
 {
     pOLENd = pNode;
-    if ( pOLERef && !aName.Len() )
+    if ( !aName.Len() )
     {
         SwDoc* pDoc = pNode->GetDoc();
 
         // Falls bereits eine SvPersist-Instanz existiert, nehmen wir diese
-        SvPersist* p = pDoc->GetPersist();
+        SfxObjectShell* p = pDoc->GetPersist();
         if( !p )
         {
+            // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
+            // diesem Dokument?
             ASSERT( !this, "warum wird hier eine DocShell angelegt?" );
             p = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
             p->DoInitNew( NULL );
         }
-        // Wir hauen das Ding auf SvPersist-Ebene rein
-        aName = Sw3Io::UniqueName( p->GetStorage(), "Obj" );
-        SvInfoObjectRef refObj = new SvEmbeddedInfoObject( *pOLERef, aName );
 
-        ULONG nLstLen = p->GetObjectList() ? p->GetObjectList()->Count() : 0;
-        if ( !p->Move( refObj, aName ) ) // Eigentuemer Uebergang!
-            refObj.Clear();
-        else if( nLstLen == p->GetObjectList()->Count() )
+        ::rtl::OUString aObjName;
+        if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( xOLERef.GetObject(), aObjName ) )
         {
-            // Task 91051: Info-Object not insertet, so it exist another
-            //              InfoObject to the same Object and the Objects
-            //              is stored in the persist. This InfoObject we must
-            //              found.
-            p->Insert( refObj );
+            DBG_ERROR( "InsertObject failed" );
         }
-        ASSERT( refObj.Is(), "InsertObject failed" );
+        else
+            xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
+
+        aName = aObjName;
     }
 }
 
 BOOL SwOLEObj::IsOleRef() const
 {
-    return pOLERef && pOLERef->Is();
+    return xOLERef.is();
 }
 
-SvInPlaceObjectRef SwOLEObj::GetOleRef()
+uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
 {
-    if( !pOLERef || !pOLERef->Is() )
+    if( !xOLERef.is() )
     {
-        SvPersist* p = pOLENd->GetDoc()->GetPersist();
+        SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
         ASSERT( p, "kein SvPersist vorhanden" );
 
         // MIB 18.5.97: DIe Base-URL wird jetzt gesetzt, damit Plugins
@@ -498,13 +564,12 @@ SvInPlaceObjectRef SwOLEObj::GetOleRef()
             pMedium->GetName() != sBaseURL )
                 INetURLObject::SetBaseURL( pMedium->GetName() );
 
-        SvPersistRef xObj = p->GetObject( aName );
-        ASSERT( !pOLERef || !pOLERef->Is(),
-                "rekursiver Aufruf von GetOleRef() ist nicht erlaubt" )
+        uno::Reference < embed::XEmbeddedObject > xObj = p->GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
+        ASSERT( !xOLERef.is(), "rekursiver Aufruf von GetOleRef() ist nicht erlaubt" )
 
         INetURLObject::SetBaseURL( sBaseURL );
 
-        if ( !xObj.Is() )
+        if ( !xObj.is() )
         {
             //Das Teil konnte nicht geladen werden (wahrsch. Kaputt).
             Rectangle aArea;
@@ -519,54 +584,88 @@ SvInPlaceObjectRef SwOLEObj::GetOleRef()
             }
             else
                 aArea.SetSize( Size( 5000,  5000 ) );
-            xObj = new SvDeathObject( aArea );
+            // TODO/LATER: set replacement graphic for dead object
+            // It looks as if it should work even without the object, because the replace will be generated automatically
+            // The only possible problem might be that we will try to create the object again and again
+            //xObj = new SvDeathObject( aArea );
+            // It would be better to make the code fit for the fact that no object is available!
+            // Of course we also must prevent permanent calls to this function
         }
-
-        if( pOLERef )
-            *pOLERef = &xObj;
         else
-            pOLERef = new SvInPlaceObjectRef( xObj );
+        {
+            xOLERef.Assign( xObj, xOLERef.GetViewAspect() );
+            xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aName );
+        }
     }
+
+    // TODO/LATER: allow loaded state
+    svt::EmbeddedObjectRef::TryRunningState( xOLERef.GetObject() );
 
     if( !pOLELRU_Cache )
         pOLELRU_Cache = new SwOLELRUCache;
 
     pOLELRU_Cache->Insert( *this );
 
-    return *pOLERef;
+    return xOLERef.GetObject();
 }
+
+svt::EmbeddedObjectRef& SwOLEObj::GetObject()
+{
+    GetOleRef();
+    return xOLERef;
+}
+
+// void SwOLEObj::Unload()
+// {
+//     if( pOLELRU_Cache )
+//      pOLELRU_Cache->Remove( *this );
+// }
 
 BOOL SwOLEObj::RemovedFromLRU()
 {
     BOOL bRet = TRUE;
     //Nicht notwendig im Doc DTor (MM)
-    ASSERT( pOLERef && pOLERef->Is() && 1 < (*pOLERef)->GetRefCount(),
-            "Falscher RefCount fuers Unload" );
+    //ASSERT( pOLERef && pOLERef->Is() && 1 < (*pOLERef)->GetRefCount(),
+    //        "Falscher RefCount fuers Unload" );
     const SwDoc* pDoc;
-    if( pOLERef && pOLERef->Is() && pOLENd &&
+
+    sal_Int32 nState = xOLERef.is() ? xOLERef->getCurrentState() : embed::EmbedStates::LOADED;
+    BOOL bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
+    if( xOLERef.is() && pOLENd &&
         !( pDoc = pOLENd->GetDoc())->IsInDtor() &&
-        SVOBJ_MISCSTATUS_ALWAYSACTIVATE != (*pOLERef)->GetMiscStatus() &&
-        1 < (*pOLERef)->GetRefCount() &&
-        !(*pOLERef)->GetProtocol().IsConnect() &&
-        !(*pOLERef)->GetProtocol().IsInPlaceActive() )
+        embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != xOLERef->getStatus( pOLENd->GetAspect() ) &&
+        //1 < (*pOLERef)->GetRefCount() &&
+        !bIsActive )
+        //!(*pOLERef)->GetProtocol().IsConnect() &&
+        //!(*pOLERef)->GetProtocol().IsInPlaceActive() )
     {
-        SvPersist* p = pDoc->GetPersist();
+        SfxObjectShell* p = pDoc->GetPersist();
         if( p )
         {
             if( pDoc->IsPurgeOLE() )
             {
-                pOLELRU_Cache->SetInUnload( TRUE );
-                SvPersist* pO = *pOLERef;
-
-                if( pO->IsModified() && !pO->IsHandsOff() )
+                if ( xOLERef->getCurrentState() != embed::EmbedStates::LOADED )
                 {
-                    pO->DoSave();
-                    pO->DoSaveCompleted();
-                }
+                    pOLELRU_Cache->SetInUnload( TRUE );
 
-                pOLERef->Clear();
-                if( !p->Unload( pO ) )
-                    *pOLERef = pO;
+                    try
+                    {
+                        uno::Reference < util::XModifiable > xMod( xOLERef->getComponent(), uno::UNO_QUERY );
+                        if( xMod.is() && xMod->isModified() )
+                        {
+                            uno::Reference < embed::XEmbedPersist > xPers( xOLERef.GetObject(), uno::UNO_QUERY );
+                            if ( xPers.is() )
+                                xPers->storeOwn();
+                            else
+                                DBG_ERROR("Modified object without persistance in cache!");
+                        }
+
+                        xOLERef->changeState( embed::EmbedStates::LOADED );
+                    }
+                    catch ( uno::Exception& )
+                    {
+                    }
+                }
 
                 pOLELRU_Cache->SetInUnload( FALSE );
             }
@@ -581,13 +680,14 @@ BOOL SwOLEObj::RemovedFromLRU()
 String SwOLEObj::GetDescription()
 {
     String aResult;
-    SvInPlaceObject * pOLE = GetOleRef();
+    uno::Reference< embed::XEmbeddedObject > xEmbObj = GetOleRef();
 
-    if (pOLE)
+    if ( xEmbObj.is() )
     {
-        if (SotExchange::IsMath(*pOLE->GetSvFactory()))
+        SvGlobalName aClassID( xEmbObj->getClassID() );
+        if ( SotExchange::IsMath( aClassID ) )
             aResult = SW_RES(STR_FORMULA);
-        else if (SotExchange::IsChart(*pOLE->GetSvFactory()))
+        else if ( SotExchange::IsChart( aClassID ) )
             aResult = SW_RES(STR_CHART);
         else
             aResult = SW_RES(STR_OLE);
