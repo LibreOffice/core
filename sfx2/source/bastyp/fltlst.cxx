@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltlst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:07:31 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #endif
 
 #include "sfxuno.hxx"
+#include "docfac.hxx"
+
+#include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 
 //*****************************************************************************************************************
 //  namespaces
@@ -110,154 +114,47 @@ using namespace ::com::sun::star;
 
     @last_change    17.10.2001 10:27
 *//*-*************************************************************************************************************/
-SfxFilterListener::SfxFilterListener( const ::rtl::OUString&    sFactory   ,
-                                            SfxFilterContainer* pContainer )
-    :   m_aMutex    (            )
-    ,   m_pContainer( pContainer )
+SfxFilterListener::SfxFilterListener()
 {
-    // search for right factory long name by using given shortname.
-    // These value is neccessary for "ReadExternalFilter()" call during our "flushed()" function.
-    m_sFactory = ::rtl::OUString();
-    if( sFactory == DEFINE_CONST_OUSTRING("swriter") )
-        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.text.TextDocument");
-    else
-    if( sFactory == DEFINE_CONST_OUSTRING("swriter/web") )
-        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.text.WebDocument");
-    else
-    if( sFactory == DEFINE_CONST_OUSTRING("swriter/GlobalDocument") )
-        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.text.GlobalDocument");
-    else
-    if( sFactory == DEFINE_CONST_OUSTRING("schart") )
-        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.chart.ChartDocument");
-    else
-    if( sFactory == DEFINE_CONST_OUSTRING("scalc") )
-        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.sheet.SpreadsheetDocument");
-    else
-    if( sFactory == DEFINE_CONST_OUSTRING("sdraw") )
-        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.drawing.DrawingDocument");
-    else
-    if( sFactory == DEFINE_CONST_OUSTRING("simpress") )
-        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.presentation.PresentationDocument");
-    else
-    if( sFactory == DEFINE_CONST_OUSTRING("smath") )
-        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.formula.FormulaProperties");
-
-    OSL_ENSURE( !(m_sFactory.getLength()<1), "SfxFilterListener::SfxFilterListener()\nUnknown factory found! Can't listen for nothing ...\n" );
-
-    // Start listening on framework filter cache only, if factory is valid!
-    if( m_sFactory.getLength() > 0 )
+    uno::Reference< lang::XMultiServiceFactory > xSmgr = ::comphelper::getProcessServiceFactory();
+    if( xSmgr.is() == sal_True )
     {
-        uno::Reference< lang::XMultiServiceFactory > xSmgr = ::comphelper::getProcessServiceFactory();
-        if( xSmgr.is() == sal_True )
+        uno::Reference< util::XFlushable > xNotifier( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.FilterFactory") ), uno::UNO_QUERY );
+        if( xNotifier.is() == sal_True )
         {
-            uno::Reference< util::XFlushable > xNotifier( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.FilterFactory") ), uno::UNO_QUERY );
-            if( xNotifier.is() == sal_True )
-            {
-                m_xFilterCache = xNotifier;
-                m_xFilterCache->addFlushListener( this );
-            }
+            m_xFilterCache = xNotifier;
+            m_xFilterCache->addFlushListener( this );
+        }
 
-            xNotifier = uno::Reference< util::XFlushable >( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.TypeDetection") ), uno::UNO_QUERY );
-            if( xNotifier.is() == sal_True )
-            {
-                m_xTypeCache = xNotifier;
-                m_xTypeCache->addFlushListener( this );
-            }
+        xNotifier = uno::Reference< util::XFlushable >( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.TypeDetection") ), uno::UNO_QUERY );
+        if( xNotifier.is() == sal_True )
+        {
+            m_xTypeCache = xNotifier;
+            m_xTypeCache->addFlushListener( this );
         }
     }
 }
 
-/*-************************************************************************************************************//**
-    @short          dtor
-    @descr          These deinitialize instance. If our corresponding SfxFilterContainer will die - he release our
-                    reference. Normaly it should be the only one - so we can die too.
-
-    @seealso        ctor
-    @seealso        method diposing()
-
-    @param          -
-    @return         -
-
-    @onerror        -
-    @threadsafe     yes
-
-    @last_change    16.10.2001 14:26
-*//*-*************************************************************************************************************/
 SfxFilterListener::~SfxFilterListener()
 {
-    if( m_xTypeCache.is() )
-    {
-        m_xTypeCache->removeFlushListener( this );
-        m_xTypeCache = uno::Reference< util::XFlushable >();
-    }
-    if( m_xFilterCache.is() )
-    {
-        m_xFilterCache->removeFlushListener( this );
-        m_xFilterCache = uno::Reference< util::XFlushable >();
-    }
-
-    m_sFactory   = ::rtl::OUString();
-    m_pContainer = NULL;
 }
 
-/*-************************************************************************************************************//**
-    @short          callback from framework FilterCache
-    @descr          If some filter was changed in framework cache - we are notified by FilterFactory service
-                    by calling this method. We have to get all neccessary informations about changes and
-                    sysnchronize our internal set SfxFilterContainer with it.
-                    In the moment we don't support selective changes - we reload ALL filters for current factory!
-
-    @seealso        interface XFlushable
-    @seealso        interface XFlushListener
-    @seealso        service ::document::FilterFactory
-
-    @param          "aEvent", describe source of event
-    @return         -
-
-    @onerror        We ignore call!
-    @threadsafe     yes
-
-    @last_change    17.10.2001 10:28
-*//*-*************************************************************************************************************/
 void SAL_CALL SfxFilterListener::flushed( const lang::EventObject& aSource ) throw( uno::RuntimeException )
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
-
-    if( m_pContainer != NULL )
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    uno::Reference< util::XFlushable > xContainer( aSource.Source, uno::UNO_QUERY );
+    if(
+        (xContainer.is()                                       ) &&
+        (xContainer==m_xTypeCache || xContainer==m_xFilterCache)
+      )
     {
-        uno::Reference< util::XFlushable > xContainer( aSource.Source, uno::UNO_QUERY );
-        if(
-            (xContainer.is()                                       ) &&
-            (xContainer==m_xTypeCache || xContainer==m_xFilterCache) &&
-            (m_sFactory.getLength() > 0                            )
-          )
-        {
-            m_pContainer->ReadExternalFilters( m_sFactory );
-        }
+        SfxFilterContainer::ReadFilters_Impl();
     }
 }
 
-/*-************************************************************************************************************//**
-    @short          deinitialize object
-    @descr          If our framework filter cache will die BEFORE SfxFilterContainer will do that ...
-                    we get this disposing message. So we should cancel all further work ...
-
-    @seealso        dtor
-
-    @param          "aSource", source of event
-    @return         -
-
-    @onerror        -
-    @threadsafe     yes
-
-    @last_change    16.10.2001 14:30
-*//*-*************************************************************************************************************/
 void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource ) throw( uno::RuntimeException )
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
-
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     uno::Reference< util::XFlushable > xNotifier( aSource.Source, uno::UNO_QUERY );
     if (!xNotifier.is())
         return;
