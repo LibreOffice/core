@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 09:01:19 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,8 @@
 #ifndef _SFXSLSTITM_HXX
 #include <svtools/slstitm.hxx>
 #endif
+
+#include <sfx2/ipclient.hxx>
 
 #pragma hdrstop
 
@@ -1793,7 +1795,7 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
 
         OSL_ASSERT (GetViewShell()!=NULL);
         SfxInPlaceClient* pIpClient = GetViewShell()->GetIPClient();
-        if (pIpClient!=NULL && pIpClient->IsInPlaceActive())
+        if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
         {
             nOptions |= SDRINSERT_DONTMARK;
         }
