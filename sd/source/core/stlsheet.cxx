@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: dl $ $Date: 2000-09-28 08:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,25 +349,11 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     if (pViewShell && pViewShell->ISA(SdViewShell) &&
         ((SdViewShell*) pViewShell)->GetDoc() == pDoc)
     {
-        if (pViewShell->ISA(SdDrawViewShell))
-        {
-            SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
-            DBG_ASSERT(pPage, "aktuelle Seite nicht gefunden");
-            aRealStyle = pPage->GetLayoutName();
-            // hinter dem Separator abschneiden
-            aRealStyle.Erase(aRealStyle.Search(aSep) + aSep.Len());
-        }
-        else if (pViewShell->ISA(SdOutlineViewShell))
-        {
-            // ergibt die Selektion ein eindeutiges Praesentationslayout?
-            // wenn nicht, duerfen die Vorlagen nicht bearbeitet werden
-            // const as const can
-            SfxItemSet aSet( ((SdStyleSheet*) this)->GetPool().GetPool(),
-                              SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
-            ((SdOutlineViewShell*) pViewShell)->GetStatusBarState(aSet);
-            aRealStyle = ((SfxStringItem&) aSet.Get(SID_STATUS_LAYOUT)).GetValue();
-            aRealStyle += aSep;
-        }
+        SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
+        DBG_ASSERT(pPage, "aktuelle Seite nicht gefunden");
+        aRealStyle = pPage->GetLayoutName();
+        // hinter dem Separator abschneiden
+        aRealStyle.Erase(aRealStyle.Search(aSep) + aSep.Len());
     }
 #else
     SdrPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
