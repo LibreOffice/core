@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:49:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <sal/main.h>
 #include <osl/diagnose.h>
 
 #if OSL_DEBUG_LEVEL > 0
@@ -395,11 +396,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     return sal_True;
 }
 
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN()
 {
     sal_Bool bSucc = sal_False;
     try
