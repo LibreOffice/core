@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawModelBroadcaster.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:01:16 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 16:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
