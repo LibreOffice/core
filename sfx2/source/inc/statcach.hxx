@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-20 17:16:18 $
+ *  last change: $Author: mba $ $Date: 2002-03-28 16:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ friend class SfxStateCache;
     ::com::sun::star::util::URL                     aURL;
     ::com::sun::star::frame::FeatureStateEvent      aStatus;
     SfxStateCache*          pCache;
+    const SfxSlot*          pSlot;
 
 public:
                             BindDispatch_Impl(

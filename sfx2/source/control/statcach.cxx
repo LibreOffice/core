@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:22:34 $
+ *  last change: $Author: mba $ $Date: 2002-03-28 16:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,11 @@ BindDispatch_Impl::BindDispatch_Impl( const ::com::sun::star::uno::Reference< ::
     : xDisp( rDisp )
     , aURL( rURL )
     , pCache( pStateCache )
+    , pSlot( pCache->aSlotServ.GetSlot() )
 {
+    if ( !pSlot )
+        const SfxSlot* pSlot = SFX_SLOTPOOL().GetSlot( pCache->GetId() );
+    DBG_ASSERT( pSlot, "Unknown slot!");
     aStatus.IsEnabled = sal_True;
 }
 
@@ -148,10 +152,10 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
         {
             sal_uInt16 nId = pCache->GetId();
             SfxItemState eState = SFX_ITEM_AVAILABLE;
-            SfxPoolItem *pItem=NULL;
             ::com::sun::star::uno::Any aAny = aStatus.State;
-            ::com::sun::star::uno::Type pType = aAny.getValueType();
 
+            SfxPoolItem *pItem=NULL;
+            ::com::sun::star::uno::Type pType = aAny.getValueType();
             if ( pType == ::getBooleanCppuType() )
             {
                 sal_Bool bTemp ;
@@ -177,7 +181,18 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
                 pItem = new SfxStringItem( nId, sTemp );
             }
             else
-                pItem = new SfxVoidItem( nId );
+            {
+                if ( pSlot )
+                    pItem = pSlot->GetType()->CreateItem();
+                if ( pItem )
+                {
+                    pItem->SetWhich( nId );
+                    pItem->PutValue( aAny );
+                }
+                else
+                    pItem = new SfxVoidItem( nId );
+            }
+
             pCache->SetState_Impl( eState, pItem );
             delete pItem;
         }
@@ -350,6 +365,8 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 }
                 else
                 {
+                    rDispat._FindServer( nId, aSlotServ, sal_False );
+                    const SfxSlot* pSlot = aSlotServ.GetSlot();
                     pDispatch = new BindDispatch_Impl( xDisp, aURL, this );
                     pDispatch->acquire();
 
