@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-26 15:23:02 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 08:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 
 #ifndef _EEITEMID_HXX
 #include <svx/eeitemid.hxx>
+#endif
+#ifndef _SVX_DBAEXCHANGE_HXX_
+#include <svx/dbaexchange.hxx>
 #endif
 
 #ifndef _SBA_GRID_HXX
@@ -283,15 +286,23 @@
 #include "FieldDescriptions.hxx"
 #endif
 
+#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
+#include <svtools/stringtransfer.hxx>
+#endif
+
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::view;
-using namespace dbaui;
+using namespace ::com::sun::star::form;
+using namespace ::dbaui;
+using namespace ::svx;
 
 extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl()
 {
@@ -313,36 +324,6 @@ Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiS
 
 /// translate the given font into SBA_DEF_...-items, put them into the set
 void            BuildItemsFromFont(SfxItemSet* pAttr, const ::com::sun::star::awt::FontDescriptor& rFont);
-
-//------------------------------------------------------------------------------
-sal_uInt32 RegisterRowExchangeFormatName()
-{
-    static sal_uInt32 nFormat = 0;
-    if (!nFormat)
-        nFormat = Clipboard::RegisterFormatName(String::CreateFromAscii(SBA_DATAEXCHANGE_FORMAT));
-
-    return nFormat;
-}
-
-//------------------------------------------------------------------------------
-sal_uInt32 RegisterColumnExchangeFormatName()
-{
-    static sal_uInt32 nFormat = 0;
-    if (!nFormat)
-        nFormat = Clipboard::RegisterFormatName(String::CreateFromAscii(SBA_FIELDEXCHANGE_FORMAT));
-
-    return nFormat;
-}
-
-//------------------------------------------------------------------------------
-sal_uInt32 RegisterFieldExchangeFormatName()
-{
-    static sal_uInt32 nFormat = 0;
-    if (!nFormat)
-        nFormat = Clipboard::RegisterFormatName(String::CreateFromAscii(SBA_FIELDDATAEXCHANGE_FORMAT));
-
-    return nFormat;
-}
 
 //------------------------------------------------------------------
 String Any2String(const Any& rValue)
@@ -854,7 +835,7 @@ void SbaXGridPeer::removeColumnListeners(const Reference< XPropertySet > & xCol)
 //---------------------------------------------------------------------------------------
 FmGridControl* SbaXGridPeer::imp_CreateControl(Window* pParent, WinBits nStyle)
 {
-    return new SbaGridControl(m_xServiceFactory, pParent, this, nStyle);
+        return new SbaGridControl(m_xServiceFactory, pParent, this, nStyle);
 }
 
 //==================================================================
@@ -871,7 +852,10 @@ SbaGridHeader::SbaGridHeader(BrowseBox* pParent, WinBits nWinBits)
 //---------------------------------------------------------------------------------------
 void SbaGridHeader::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
-    ImplStartColumnDrag( _rPosPixel );
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+        // in the new DnD API, the solar mutex is not locked when StartDrag get's called
+
+    ImplStartColumnDrag( _nAction, _rPosPixel );
 }
 
 //---------------------------------------------------------------------------------------
@@ -894,16 +878,15 @@ void SbaGridHeader::MouseButtonDown( const MouseEvent& _rMEvt )
 {
     if (_rMEvt.IsLeft())
         if (_rMEvt.GetClicks() != 2)
-        {
-            if (ImplStartColumnDrag(_rMEvt.GetPosPixel()))
-                return;
-        }
+            // the base class will start a column move here, which we don't want to allow
+            // (at the moment. If we store relative positions with the columns, we can allow column moves ....)
+            return;
 
     FmGridHeader::MouseButtonDown(_rMEvt);
 }
 
 //---------------------------------------------------------------------------------------
-sal_Bool SbaGridHeader::ImplStartColumnDrag(const Point& _rMousePos)
+sal_Bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos)
 {
     sal_uInt16 nId = GetItemId(_rMousePos);
     sal_Bool bResizingCol = sal_False;
@@ -921,16 +904,12 @@ sal_Bool SbaGridHeader::ImplStartColumnDrag(const Point& _rMousePos)
         // so for optical reasons we select the column before really starting the drag operation.
         ImplSelect(nId);
 
-        ((SbaGridControl*)GetParent())->GetDataWindow().Command(
-            CommandEvent(
+        static_cast<SbaGridControl*>(GetParent())->StartDrag(_nAction,
                 Point(
                     _rMousePos.X() + GetPosPixel().X(),     // we aren't left-justified with our parent, in contrast to the data window
                     _rMousePos.Y() - GetSizePixel().Height()
-                ),
-                COMMAND_STARTDRAG,
-                sal_True
-            )
-        );
+                )
+            );
         return sal_True;
     }
 
@@ -1203,7 +1182,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
     if (xAffectedCol.is() && xField.is())
     {
         // the allowed format changes depend of the type of the field ...
-        XubString sColName = ::comphelper::getString(xField->getPropertyValue(PROPERTY_NAME));
+        String sColName = ::comphelper::getString(xField->getPropertyValue(PROPERTY_NAME));
 
         sal_uInt16  nFlags = TP_ATTR_ALIGN;
         Reference< XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
@@ -1613,6 +1592,9 @@ void SbaGridControl::MouseButtonDown( const BrowserMouseEvent& rMEvt)
 //---------------------------------------------------------------------------------------
 void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+        // in the new DnD API, the solar mutex is not locked when StartDrag get's called
+
     sal_Bool bHandled = sal_False;
 
     do
@@ -1702,102 +1684,28 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 {
     Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
     DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
-    // collect some properties from our data source
-    sal_Int32               nDataType;
-    XubString               sDataSource;
-    XubString               sDBAlias;
-    try
-    {
-        nDataType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
-        sDataSource = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_COMMAND));
-        sDBAlias = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_DATASOURCENAME));
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("SbaGridControl::DoColumnDrag : could not collect essential data source attributes !");
-        return;
-    }
 
-
-    XubString sObjectKind = (nDataType == CommandType::TABLE) ? XubString('0') : XubString('1');
-
-    // If the data source is an SQL-statement and simple enough (means "select <field list> from <table> where ....")
-    // we are able to fake the drag information we are about to create.
-    sal_Bool bTryToParse = sal_False;
-    if (nDataType == CommandType::COMMAND)
-    {
-        try
-        {
-            bTryToParse = ::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("SbaGridControl::DoColumnDrag : could not ask for the escape processing property ! ignoring this ...");
-        }
-    }
-    if (bTryToParse)
-    {
-        try
-        {
-            ::rtl::OUString sFilter;
-            if (::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_APPLYFILTER)))
-                sFilter = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_FILTER));
-            ::rtl::OUString sSort = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_ORDER));
-
-            if (m_xComposer.is())
-            {
-                m_xComposer->setQuery(::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_ACTIVECOMMAND)));
-                m_xComposer->setFilter(sFilter);
-                m_xComposer->setOrder(sSort);
-                Reference<XTablesSupplier> xSupTab(m_xComposer,UNO_QUERY);
-                if(xSupTab.is())
-                {
-                    Reference<XNameAccess> xNames = xSupTab->getTables();
-                    sDataSource = xNames->getElementNames()[0];
-                    sObjectKind = '0';                  // means type 'table'
-                }
-            }
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("SbaGridControl::DoColumnDrag : could not collect essential data source attributes (part two) !");
-            return;
-        }
-    }
-
-    XubString aCopyData = sDBAlias;
-    aCopyData   += sal_Unicode(11);
-    aCopyData   += sDataSource;
-    aCopyData   += sal_Unicode(11);
-    aCopyData   += sObjectKind;
-    aCopyData   += sal_Unicode(11);
-
-    XubString sField;
+    // determine the field to drag
+    ::rtl::OUString sField;
     try
     {
         sal_uInt16 nModelPos = GetModelColumnPos(GetColumnIdFromViewPos(nColumnPos));
         Reference< XIndexContainer >  xCols(GetPeer()->getColumns(), UNO_QUERY);
         Reference< XPropertySet >  xAffectedCol;
-        ::cppu::extractInterface(xAffectedCol,xCols->getByIndex(nModelPos));
-        sField = (const sal_Unicode*)::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
+        xCols->getByIndex(nModelPos) >>= xAffectedCol;
+        if (xAffectedCol.is())
+            xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE) >>= sField;
     }
     catch(Exception&)
     {
         DBG_ERROR("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
-        return;
     }
-
-    aCopyData   += sField;
-
-    DragServer::Clear();
-    ByteString aStr( aCopyData, gsl_getSystemTextEncoding() );
-    if (!DragServer::CopyData(aStr.GetBuffer(), aStr.Len()+1, RegisterColumnExchangeFormatName()))
+    if (0 == sField.getLength())
         return;
 
-    Pointer aMovePtr(POINTER_MOVEDATA),
-            aCopyPtr(POINTER_COPYDATA),
-            aLinkPtr(POINTER_LINKDATA);
-    ExecuteDrag(aMovePtr, aCopyPtr, aLinkPtr, DRAG_COPYABLE | DRAG_LINKABLE);
+    OColumnTransferable* pDataTransfer = new OColumnTransferable(xDataSource, sField, CTF_FIELD_DESCRIPTOR);
+    Reference< XTransferable > xEnsureDelete = pDataTransfer;
+    pDataTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
 }
 
 // -----------------------------------------------------------------------
@@ -1807,8 +1715,8 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
     DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoRowDrag : invalid data source !");
     // collect some data source properties
     sal_Int32               nDataType;
-    XubString               sDataSource;
-    XubString               sDBAlias;
+    String              sDataSource;
+    String              sDBAlias;
 
     try
     {
@@ -1823,16 +1731,11 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
     }
 
     sal_Bool bIsStatement = CommandType::COMMAND == nDataType;
-    XubString sObjectKind = (CommandType::TABLE == nDataType) ? XubString('1') : XubString('0');
-
-//  XubString sDBAlias = EnsureDBLink(m_aDbEnv, GetFormDatabase(xDataSource), sal_True /* allow ui */, sal_True /* really need an alias */ );
-//  if (!sDBAlias.Len())
-//      // the user did not allow us to create an alias
-//      return;
+    String sObjectKind = (CommandType::TABLE == nDataType) ? String('1') : String('0');
 
     // check if the SQL-statement is modified
     sal_Bool bHasFilterOrSort(sal_False);
-    XubString sCompleteStatement;
+    String sCompleteStatement;
     try
     {
         ::rtl::OUString sFilter;
@@ -1858,14 +1761,14 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
     }
 
 
-    XubString aCopyData = sDBAlias;
+    String aCopyData = sDBAlias;
     aCopyData   += char(11);
-    aCopyData   += bIsStatement ? XubString() : sDataSource;
+    aCopyData   += bIsStatement ? String() : sDataSource;
     aCopyData   += char(11);
     aCopyData   += sObjectKind;
     aCopyData   += char(11);
     aCopyData   += (CommandType::QUERY == nDataType) && !bHasFilterOrSort
-        ? XubString()
+        ? String()
         : sCompleteStatement;
         // compatibility says : always add the statement, but don't if it is a "pure" query
     aCopyData   += char(11);
@@ -1904,146 +1807,20 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
 // -----------------------------------------------------------------------
 void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
 {
-    Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
-    DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoFieldDrag : invalid data source !");
-    // collect some properties from our data source
-    sal_Int32               nDataType;
-    XubString               sDataSource;
-    XubString               sDBAlias;
+    // the only thing to do here is dragging the pure cell text
+    // the old implementation copied a SBA_FIELDDATAEXCHANGE_FORMAT, too, (which was rather expensive to obtain),
+    // but we have no client for this DnD format anymore (the mail part of SO 5.2 was the only client)
+
+    ::rtl::OUString sCellText;
     try
     {
-        nDataType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
-        sDataSource = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_COMMAND));
-        sDBAlias = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_DATASOURCENAME));
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("SbaGridControl::DoFieldDrag : could not collect essential data source attributes !");
-        return;
-    }
-
-
-    sal_Bool bIsStatement = CommandType::COMMAND == nDataType;
-    XubString sObjectKind = (CommandType::TABLE == nDataType) ? XubString('1') : XubString('0');
-
-//  XubString sDBAlias = EnsureDBLink(m_aDbEnv, GetFormDatabase(xDataSource), sal_True /* allow ui */, sal_True /* really need an alias */ );
-//  if (!sDBAlias.Len())
-//      // the user did not allow us to create an alias
-//      return;
-
-    // build the SBA_FIELDDATAEXCHANGE_FORMAT
-    XubString aCopyData = sDBAlias;
-    aCopyData   += char(11);
-    aCopyData   += bIsStatement ? XubString() : sDataSource;
-    aCopyData   += char(11);
-    aCopyData   += sObjectKind;
-    aCopyData   += char(11);
-
-    Reference< XPropertySet >  xAffectedCol;
-    // append the control source of the column
-    XubString sField;
-    try
-    {
-        sal_uInt16 nModelPos = GetModelColumnPos(GetColumnIdFromViewPos(nColumnPos));
-        Reference< XIndexContainer >  xCols(GetPeer()->getColumns(), UNO_QUERY);
-        ::cppu::extractInterface(xAffectedCol,xCols->getByIndex(nModelPos));
-        sField = (const sal_Unicode*)::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("SbaGridControl::DoFieldDrag : something went wrong while retrieving the column's control source !");
-        return;
-    }
-
-    aCopyData   += sField;
-    aCopyData   += char(11);
-
-    // append the field contents formatted as input string
-    XubString sInputFormatted;
-    Reference< XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
-    if (xInfo->hasPropertyByName(PROPERTY_FORMATKEY))       // no chance if the column model doesn't know a format key
-    {
-        try
-        {
-            // the number formatter of the connection
-            Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter = getNumberFormatter();
-            DBG_ASSERT(xFormatter.is(), "SbaGridControl::DoFieldDrag : have no number formatter !");
-
-            // the field the affected col is bound to
-            Reference< ::com::sun::star::form::XGridFieldDataSupplier >  xFieldData((::com::sun::star::form::XGridPeer*)GetPeer(), UNO_QUERY);
-#ifdef DBG_UTIL
-            Sequence<sal_Bool> aSupportingAny = xFieldData->queryFieldDataType(::getCppuType((const Any*)0));
-            DBG_ASSERT(aSupportingAny.getConstArray()[nColumnPos],
-                "SbaGridControl::DoFieldDrag : the GridFieldDataSupplier should supply UsrAnys !");
-#endif
-            Sequence< Any> aCellContents = xFieldData->queryFieldData(nRowPos, ::getCppuType((const Any*)0));
-            Any aFieldValue = aCellContents.getConstArray()[nColumnPos];
-
-            // the format key of the column (we don't use the one supplied by the bound field because it may be out-of-date :
-            // modifying a column format is propagated only to the column's model, not to the database field)
-            sal_Int32 nKey = ::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY));
-
-            // check if the key indicates a text format
-            sal_Int16 nType = ::com::sun::star::util::NumberFormat::UNDEFINED;
-            Reference< ::com::sun::star::util::XNumberFormats >  xFormats = xFormatter->getNumberFormatsSupplier()->getNumberFormats();
-            Reference< XPropertySet >  xFormat = xFormats->getByKey(nKey);
-            if (xFormat.is())
-            {
-                try
-                {
-
-                    sal_Bool bCheck = xFormat->getPropertyValue(PROPERTY_TYPE) >>= nType;
-                    OSL_ENSHURE(bCheck,"Cann't get the numberformat property TYPE!");
-                }
-                catch(Exception&)
-                {
-                }
-            }
-
-            // if it is a text format we can ask for the string
-            if ((nType & ~::com::sun::star::util::NumberFormat::DEFINED) == ::com::sun::star::util::NumberFormat::TEXT) // mask the 'user defined' flag
-                sInputFormatted = Any2String(aFieldValue);
-            else
-            {   // else we have to make one distinction more : a currency field always needs an output string
-                Reference< XPropertySet >  xFieldSet;
-                ::cppu::extractInterface(xFieldSet, xAffectedCol->getPropertyValue(PROPERTY_BOUNDFIELD));
-                if (xFieldSet.is())
-                {
-                    sal_Int32 nFieldType = ::comphelper::getINT32(xFieldSet->getPropertyValue(PROPERTY_TYPE));
-                    if (::comphelper::getBOOL(xFieldSet->getPropertyValue(::rtl::OUString::createFromAscii("IsCurrency"))))
-                        sInputFormatted = (const sal_Unicode*)xFormatter->convertNumberToString(nKey, Any2Double(aFieldValue));
-                    else
-                        sInputFormatted = (const sal_Unicode*)xFormatter->getInputString(nKey, Any2Double(aFieldValue));
-                }
-                else
-                    sInputFormatted.Erase();
-            }
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("SbaGridControl::DoFieldDrag : could not retrieve the cell's input string !");
-            return;
-        }
-
-    }
-    aCopyData += sInputFormatted;
-
-    // feed the drag server with the format just built
-    DragServer::Clear();
-    ByteString aStr( aCopyData, gsl_getSystemTextEncoding() );
-    if (!DragServer::CopyData(aStr.GetBuffer(), aStr.Len() + 1, RegisterFieldExchangeFormatName()))
-        return;
-
-    // and supply - as an additional pure-text format - the cell contents
-    try
-    {
-        Reference< ::com::sun::star::form::XGridFieldDataSupplier >  xFieldData((::com::sun::star::form::XGridPeer*)GetPeer(), UNO_QUERY);
-        Sequence<sal_Bool> aSupportingText = xFieldData->queryFieldDataType(::getCppuType((const ::rtl::OUString*)0));
+        Reference< XGridFieldDataSupplier >  xFieldData(static_cast< XGridPeer* >(GetPeer()), UNO_QUERY);
+        Sequence<sal_Bool> aSupportingText = xFieldData->queryFieldDataType(::getCppuType(&sCellText));
         if (aSupportingText.getConstArray()[nColumnPos])
         {
-            Sequence< Any> aCellContents = xFieldData->queryFieldData(nRowPos, ::getCppuType((const ::rtl::OUString*)0));
-            ::rtl::OUString aText = ::comphelper::getString(aCellContents.getConstArray()[nColumnPos]);
-            DragServer::CopyString(aText);
+            Sequence< Any> aCellContents = xFieldData->queryFieldData(nRowPos, ::getCppuType(&sCellText));
+            sCellText = ::comphelper::getString(aCellContents.getConstArray()[nColumnPos]);
+            ::svt::OStringTransfer::StartStringDrag(sCellText, this, DND_ACTION_COPY);
         }
     }
     catch(Exception&)
@@ -2052,12 +1829,6 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
         return;
     }
 
-
-
-    Pointer aMovePtr(POINTER_MOVEDATA),
-            aCopyPtr(POINTER_COPYDATA),
-            aLinkPtr(POINTER_LINKDATA);
-    ExecuteDrag(aMovePtr, aCopyPtr, aLinkPtr, DRAG_COPYABLE);
 }
 
 //------------------------------------------------------------------------------
@@ -2174,7 +1945,7 @@ sal_Bool SbaGridControl::Drop(const BrowserDropEvent& rEvt)
         return sal_False;
 
     //////////////////////////////////////////////////////////////////////
-    // DataExch-XubString holen
+    // DataExch-String holen
     SotDataObjectRef xDataObj = ((DropEvent&)rEvt).GetData();
     const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
 
@@ -2209,7 +1980,7 @@ sal_Bool SbaGridControl::Drop(const BrowserDropEvent& rEvt)
         if (!xDataObj->GetData(&aData))
             return sal_False;
 
-        XubString sDropped;
+        String sDropped;
         aData.GetData(sDropped);
         rEdit.SetText(sDropped);
         xCurrentController->SetModified();
@@ -2226,7 +1997,7 @@ sal_Bool SbaGridControl::Drop(const BrowserDropEvent& rEvt)
 
     SvData aData(nSbaDataExchangeFormat);
     xDataObj->GetData(&aData);
-    XubString sDataExchStr;
+    String sDataExchStr;
     if (!aData.GetData(sDataExchStr))
         return sal_False;
 
