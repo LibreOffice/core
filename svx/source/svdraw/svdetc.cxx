@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-09 11:54:13 $
+ *  last change: $Author: cl $ $Date: 2001-04-04 16:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include "forbiddencharacterstable.hxx"
+#endif
 
 #include "svdetc.hxx"
 #include "svditext.hxx"
@@ -739,6 +743,7 @@ SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pModel )
     pOutl->SetEditTextObjectPool( pPool );
     pOutl->SetStyleSheetPool( (SfxStyleSheetPool*) pModel->GetStyleSheetPool() );
     pOutl->SetDefTab( pModel->GetDefaultTabulator() );
+    pOutl->SetForbiddenCharsTable( pModel->GetForbiddenCharsTable() );
 
     return pOutl;
 }

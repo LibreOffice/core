@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:49:17 $
+ *  last change: $Author: cl $ $Date: 2001-04-04 16:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,10 @@
 
 #ifndef _OUTLOBJ_HXX
 #include <outlobj.hxx>
+#endif
+
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include "forbiddencharacterstable.hxx"
 #endif
 
 using namespace ::com::sun::star;
@@ -326,6 +330,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     bStarDrawPreviewMode = FALSE;
     nStarDrawPreviewMasterPageNum = SDRPAGE_NOTFOUND;
     pModelStorage = NULL;
+    mpForbiddenCharactersTable = NULL;
 
 #ifdef __LITTLEENDIAN
     nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;
@@ -446,6 +451,9 @@ SdrModel::~SdrModel()
         // referenzieren (Joe)
         delete pOutlPool;
     }
+
+    if( mpForbiddenCharactersTable )
+        mpForbiddenCharactersTable->release();
 
     delete pLoadedModel;
 
@@ -829,6 +837,8 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, BOOL bInit )
     }
 
     pOutliner->SetRefDevice(GetRefDevice());
+    pOutliner->SetForbiddenCharsTable(GetForbiddenCharsTable());
+
     if ( !GetRefDevice() )
     {
         MapMode aMapMode(eObjUnit, Point(0,0), aObjUnit, aObjUnit);
@@ -846,6 +856,9 @@ void SdrModel::SetRefDevice(OutputDevice* pDev)
 
 void SdrModel::ImpReformatAllTextObjects()
 {
+    if( isLocked() )
+        return;
+
     USHORT nAnz=GetMasterPageCount();
     USHORT nNum;
     for (nNum=0; nNum<nAnz; nNum++) {
@@ -2445,6 +2458,32 @@ uno::Reference< uno::XInterface > SdrModel::createUnoModel()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void SdrModel::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+{
+    if( mpForbiddenCharactersTable )
+        mpForbiddenCharactersTable->release();
+
+    mpForbiddenCharactersTable = xForbiddenChars.getBodyPtr();
+
+    if( mpForbiddenCharactersTable )
+        mpForbiddenCharactersTable->acquire();
+
+    ImpSetOutlinerDefaults( pDrawOutliner );
+    ImpSetOutlinerDefaults( pHitTestOutliner );
+}
+
+vos::ORef<SvxForbiddenCharactersTable> SdrModel::GetForbiddenCharsTable() const
+{
+    return mpForbiddenCharactersTable;
+}
+
+void SdrModel::ReformatAllTextObjects()
+{
+    ImpReformatAllTextObjects();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 TYPEINIT1(SdrHint,SfxHint);
 
 SdrHint::SdrHint(const SdrPage& rNewPage)
@@ -2476,4 +2515,3 @@ SdrHint::SdrHint(const SdrObject& rNewObj, const Rectangle& rRect)
     bNeedRepaint = TRUE;
     eHint = HINT_OBJCHG;
 }
-
