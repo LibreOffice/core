@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:32:38 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,109 +382,6 @@ void SfxMenuManager::InsertVerbs(const SvVerbList *pList)
 
 BOOL SfxMenuManager::StoreMenu( SvStream& rStream, Menu* pMenu, SfxModule* pMod )
 {
-    LanguageType eLangType = Application::GetSettings().GetUILanguage();
-    rStream << nVersion
-            << (USHORT) eLangType;
-
-    SfxMenuIter_Impl *pIterator = SfxMenuIter_Impl::Create( pMenu );
-    if ( !pIterator )
-        return TRUE;
-
-    rtl_TextEncoding nEnc = osl_getThreadTextEncoding();
-    SfxMacroConfig* pMC = SfxMacroConfig::GetOrCreate();
-    SvUShorts aMacroSlots;
-
-    SfxMenuIter_Impl *pFirstIter = pIterator;
-    USHORT nFirstLevel = pFirstIter->GetLevel();
-    USHORT nLevel = nFirstLevel;
-    do
-    {
-        while ( pIterator->GetLevel() < nLevel )
-        {
-            // Ein Popup wurde verlassen
-            // Ende-Markierung setzen
-            rStream << 'E';
-            nLevel--;
-        }
-
-        nLevel = pIterator->GetLevel();
-
-        if ( pIterator->IsSeparator() )
-        {
-            rStream << 'S';
-        }
-        else
-        {
-            USHORT nId = pIterator->GetItemId();
-            String aTitle = pIterator->GetItemText();
-            if( pIterator->IsBinding( pMod ) )
-            {
-                String aCmd( pIterator->GetCommand() );
-                BOOL bIsMacroSlot = SfxMacroConfig::IsMacroSlot(nId);
-
-                if ( aCmd.CompareToAscii("macro:", 6) == 0 && !bIsMacroSlot )
-                {
-                    SfxMacroInfo aInfo( aCmd );
-                    pMC->GetSlotId( &aInfo );
-                    nId = aInfo.GetSlotId();
-                    aMacroSlots.Insert( nId, aMacroSlots.Count() );
-                }
-
-                if ( bIsMacroSlot )
-                {
-                    SfxMacroInfo* pInfo = pMC->GetMacroInfo(nId);
-                    if ( pInfo )
-                    {
-                        rStream << 'I';
-                        rStream << nId;
-                        rStream.WriteByteString(aTitle, nEnc );
-                        rStream << *(pInfo);
-                    }
-                    else
-                    {
-                        // trashed config entry, avoid disaster
-                        rStream << 'S';
-                    }
-                }
-                else
-                {
-                    rStream << 'I';
-                    rStream << nId;
-                    rStream.WriteByteString(aTitle, nEnc );
-
-                    if ( pIterator->GetPopupMenu() )
-                        // Unechtes Popup "uberspringen
-                        pIterator->RemovePopup();
-                }
-            }
-            else if ( pIterator->GetPopupMenu() )
-            {
-                rStream << 'P';
-                rStream << nId;
-                rStream.WriteByteString(aTitle, nEnc );
-                if ( !pIterator->GetPopupMenu()->GetItemCount() )
-                    rStream << 'E';
-            }
-            else
-                DBG_ERROR( "Invalid menu configuration!" );
-        }
-    }
-    while ( ( pIterator = pIterator->NextItem() ) != 0 );
-
-    while ( nLevel > nFirstLevel )
-    {
-        // Ein Popup wurde verlassen
-        // Ende-Markierung setzen
-        rStream << 'E';
-        nLevel--;
-    }
-
-    // Ende-Markierung f"ur MenuBar setzen
-    rStream << 'E';
-
-    for ( USHORT n=0; n<aMacroSlots.Count(); n++ )
-        pMC->ReleaseSlotId( aMacroSlots[n] );
-
     return TRUE;
 }
 
@@ -499,27 +396,7 @@ void SfxMenuManager::SetForceCtrlCreateMode( BOOL bCreate )
 
 Menu* SfxMenuManager::LoadMenu( SvStream& rStream )
 {
-    // Config-Version und Sprache der Menuetexte
-    USHORT nFileVersion, nLanguage;
-    rStream >> nFileVersion;
-    if(nFileVersion < nCompatVersion)
-        return NULL;
-
-    rStream >> nLanguage;
-    LanguageType eLangType = Application::GetSettings().GetUILanguage();
-    if ( eLangType != (LanguageType) nLanguage )
-        return NULL;
-
-    BOOL bCompat = FALSE;
-    if ( nFileVersion == nCompatVersion )
-        bCompat = TRUE;
-    BOOL bWithHelp = FALSE;
-//    if ( bCompat )
-//        bWithHelp = TRUE;
-
-    MenuBar* pSVMenu = new MenuBar;
-    ConstructSvMenu( pSVMenu, rStream, bWithHelp, bCompat );
-    return pSVMenu;
+    return NULL;
 }
 
 int SfxMenuManager::Load( SvStream& rStream )
@@ -1335,43 +1212,14 @@ void SfxMenuManager::RestoreMacroIDs( Menu* pMenu )
 
 MenuBar* SfxMenuBarManager::LoadMenuBar( SvStream& rStream )
 {
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream =
-        new ::utl::OInputStreamWrapper( rStream );
-    MenuBar *pSVMenu = NULL;
-    try
-    {
-        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
-        ::framework::MenuConfiguration aConfig( aXMultiServiceFactory );
-        pSVMenu = aConfig.CreateMenuBarFromConfiguration( xInputStream );
-        if ( pSVMenu )
-            SfxMenuManager::RestoreMacroIDs( pSVMenu );
-    }
-    catch ( ::com::sun::star::lang::WrappedTargetException&  )
-    {
-    }
-
-    return pSVMenu;
+    return NULL;
 }
 
 //------------------------------------------------------------------------
 
 BOOL SfxMenuBarManager::StoreMenuBar( SvStream& rStream, MenuBar* pMenuBar )
 {
-    BOOL bRet = TRUE;
-    ::utl::OOutputStreamWrapper* pHelper = new ::utl::OOutputStreamWrapper( rStream );
-    com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOut( pHelper );
-    try
-    {
-        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
-        framework::MenuConfiguration aCfg( aXMultiServiceFactory );
-        aCfg.StoreMenuBar( pMenuBar, xOut );
-    }
-    catch ( ::com::sun::star::lang::WrappedTargetException&  )
-    {
-        bRet = FALSE;
-    }
-
-    return bRet;
+    return FALSE;
 }
 
 //------------------------------------------------------------------------
