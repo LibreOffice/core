@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:38:17 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,15 @@
 #ifndef _SVDUNDO_HXX
 #include <svx/svdundo.hxx>
 #endif
-#include <memory>
 
+#ifndef INCLUDED_MEMORY
+#include <memory>
+#define INCLUDED_MEMORY
+#endif
+
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
 #ifndef _SDPAGE_HXX
 #include "sdpage.hxx"
 #endif
@@ -162,7 +169,7 @@ enum DocCreationMode
 // the undo/redo of PresObjs correctly. It can also add/remove the object
 // from the PresObjList of that page.
 
-class SdrUndoUserCallObj : public SdrUndoObj
+class SD_DLLPUBLIC SdrUndoUserCallObj : public SdrUndoObj
 {
 protected:
     SdPage*                         mpOld;
@@ -277,7 +284,7 @@ public:
     SfxItemPool&        GetPool() { return( *pItemPool ); }
 
     ::sd::Outliner* GetOutliner(BOOL bCreateOutliner=TRUE);
-    ::sd::Outliner* GetInternalOutliner(BOOL bCreateOutliner=TRUE);
+    SD_DLLPUBLIC ::sd::Outliner* GetInternalOutliner(BOOL bCreateOutliner=TRUE);
 
     ::sd::DrawDocShell*     GetDocSh() const { return(pDocSh) ; }
 
@@ -294,7 +301,7 @@ public:
 
     void                CreatingDataObj( SdTransferable* pTransferable ) { pCreatingTransferable = pTransferable; }
 
-    void                CreateFirstPages();
+    SD_DLLPUBLIC void   CreateFirstPages();
     BOOL                CreateMissingNotesAndHandoutPages();
 
     void                MovePage(USHORT nPgNum, USHORT nNewPos);
@@ -302,10 +309,10 @@ public:
     void                DeletePage(USHORT nPgNum);
     SdrPage*            RemovePage(USHORT nPgNum);
     void                RemoveUnnessesaryMasterPages( SdPage* pMaster=NULL, BOOL bOnlyDuplicatePages=FALSE, BOOL bUndo=TRUE );
-    void                SetMasterPage(USHORT nSdPageNum, const String& rLayoutName,
+    SD_DLLPUBLIC void   SetMasterPage(USHORT nSdPageNum, const String& rLayoutName,
                                       SdDrawDocument* pSourceDoc, BOOL bMaster, BOOL bCheckMasters);
 
-    SdDrawDocument*     OpenBookmarkDoc(const String& rBookmarkFile);
+    SD_DLLPUBLIC SdDrawDocument* OpenBookmarkDoc(const String& rBookmarkFile);
     SdDrawDocument*     OpenBookmarkDoc(SfxMedium& rMedium);
     BOOL                InsertBookmark(List* pBookmarkList, List* pExchangeList, BOOL bLink,
                                         BOOL bReplace, USHORT nPgPos, BOOL bNoDialogs,
@@ -371,7 +378,7 @@ public:
     void                IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList,
                                               USHORT nBMSdPageCount,
                                               InsertBookmarkAsPage_PageFunctorBase& rPageIterator );
-    void                CloseBookmarkDoc();
+    SD_DLLPUBLIC void   CloseBookmarkDoc();
 
     SdrObject*          GetObj(const String& rObjName) const;
 
@@ -389,13 +396,14 @@ public:
             SDRPAGE_NOTFOUND (=0xffff) when such a page does not exist.
     */
     USHORT GetPageByName(const String& rPgName, BOOL& rbIsMasterPage ) const;
-    SdPage*             GetSdPage(USHORT nPgNum, PageKind ePgKind) const;
-    USHORT              GetSdPageCount(PageKind ePgKind) const;
+    SD_DLLPUBLIC SdPage*GetSdPage(USHORT nPgNum, PageKind ePgKind) const;
+    SD_DLLPUBLIC USHORT GetSdPageCount(PageKind ePgKind) const;
+
     void                SetSelected(SdPage* pPage, BOOL bSelect);
     BOOL                MovePages(USHORT nTargetPage);
 
-    SdPage*             GetMasterSdPage(USHORT nPgNum, PageKind ePgKind);
-    USHORT              GetMasterSdPageCount(PageKind ePgKind) const;
+    SD_DLLPUBLIC SdPage*GetMasterSdPage(USHORT nPgNum, PageKind ePgKind);
+    SD_DLLPUBLIC USHORT GetMasterSdPageCount(PageKind ePgKind) const;
 
     USHORT              GetMasterPageUserCount(SdrPage* pMaster) const;
 
@@ -405,7 +413,7 @@ public:
     void                SetPresAll(BOOL bNewPresAll);
     BOOL                GetPresAll() const       { return bPresAll; }
 
-    void                SetPresEndless(BOOL bNewPresEndless);
+    SD_DLLPUBLIC void   SetPresEndless(BOOL bNewPresEndless);
     BOOL                GetPresEndless() const   { return bPresEndless; }
 
     void                SetPresManual(BOOL bNewPresManual);
@@ -482,7 +490,7 @@ public:
     ULONG               GetLinkCount();
 
     List*               GetFrameViewList() const { return pFrameViewList; }
-    List*               GetCustomShowList(BOOL bCreate = FALSE);
+    SD_DLLPUBLIC List*  GetCustomShowList(BOOL bCreate = FALSE);
 
     void                SetCustomShow(BOOL bCustShow) { bCustomShow = bCustShow; }
     BOOL                IsCustomShow() const { return bCustomShow; }
@@ -494,7 +502,7 @@ public:
     void                CreateLayoutTemplates();
     void                RenameLayoutTemplate(const String& rOldLayoutName, const String& rNewName);
 
-    void                StopWorkStartupDelay();
+    SD_DLLPUBLIC void   StopWorkStartupDelay();
 
     void                NewOrLoadCompleted(DocCreationMode eMode);
     void                NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool );
@@ -533,7 +541,7 @@ public:
                                 FASTBOOL bMergeMasterPages=FALSE, FASTBOOL bAllMasterPages=FALSE,
                                 FASTBOOL bUndo=TRUE, FASTBOOL bTreadSourceAsConst=FALSE);
 
-    ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
+    SD_DLLPUBLIC ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
     void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );
 
 public:
