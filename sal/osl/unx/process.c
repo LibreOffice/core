@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-03 14:03:06 $
+ *  last change: $Author: svesik $ $Date: 2000-11-06 14:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 
 #ifdef LINUX
 #include <asm/param.h>
+#endif
+
+#ifdef FREEBSD
+#include <machine/param.h>
 #endif
 
 #include "system.h"
