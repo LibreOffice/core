@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:41:00 $
+ *  last change: $Author: hdu $ $Date: 2002-08-29 15:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ public:
 
     virtual bool    LayoutText( const ImplLayoutArgs& ) = 0;
     virtual void    Draw() const = 0;
+    virtual void    GetCursorPositions( long* ) const = 0;
 };
 
 // =======================================================================
@@ -104,13 +105,15 @@ public:
 
     virtual bool    LayoutText( const ImplLayoutArgs& );
     virtual void    Draw() const;
+
+    virtual bool    HasGlyphs() const { return mbEnableGlyphs; }
     virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
                         long* pGlyphAdvances, int* pCharIndexes ) const;
 
     virtual Point   GetCharPosition( int nCharIndex, bool bRTL ) const;
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
-    virtual bool    HasGlyphs() const { return mbEnableGlyphs; }
+    virtual void    GetCursorPositions( long* ) const;
 
 protected:
     void            Justify( long nNewWidth );
@@ -198,12 +201,11 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         nGcpOption |= GCP_USEKERNING;
 
     // apply reordering if requested
-    char pGcpClass[2];
-    if( 0 == (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) )
+    if( (nMaxGlyphCount > 1) && !(rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) )
     {
-        if( nMaxGlyphCount > 1 )
-            aGCP.lpOrder = mpGlyphs2Chars = new UINT[ nMaxGlyphCount ];
+        aGCP.lpOrder = mpGlyphs2Chars = new UINT[ nMaxGlyphCount ];
 
+        char* pGcpClass = (char*)alloca( nMaxGlyphCount );
         aGCP.lpClass = pGcpClass;
         nGcpOption  |= GCP_REORDER;
         if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL )
@@ -495,6 +497,60 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor 
 
 // -----------------------------------------------------------------------
 
+void SimpleWinLayout::GetCursorPositions( long* pCursorXArray ) const
+{
+    long nXPos = 0;
+    int nMaxIdx = 2 * (mnEndCharIndex - mnFirstCharIndex), i;
+
+    if( !mpGlyphs2Chars )
+    {
+        for( i = 0; i < nMaxIdx; i += 2 )
+        {
+            pCursorXArray[ i ] = nXPos;
+            nXPos += mpGlyphAdvances[ i>>1 ];
+            pCursorXArray[ i+1 ] = nXPos;
+        }
+    }
+    else
+    {
+        for( i = 0; i < nMaxIdx; ++i )
+            pCursorXArray[ i ] = -1;
+
+        // assign glyph positions to character positions
+        int nLeftIdx = 0;
+        for( i = 0; i < mnGlyphCount; ++i )
+        {
+            long nXRight = nXPos + mpGlyphAdvances[ i ];
+            int nCurrIdx = 2 * mpGlyphs2Chars[ i ];
+            if( nLeftIdx <= nCurrIdx )
+            {
+                // normal positions for LTR case
+                pCursorXArray[ nCurrIdx ]   = nXPos;
+                pCursorXArray[ nCurrIdx+1 ] = nXRight;
+            }
+            else
+            {
+                // reverse positions for RTL case
+                pCursorXArray[ nCurrIdx ]   = nXRight;
+                pCursorXArray[ nCurrIdx+1 ] = nXPos;
+            }
+            nLeftIdx = nCurrIdx;
+            nXPos = nXRight;
+        }
+
+        // fixup unknown character positions to neighbor
+        for( i = 0; i < nMaxIdx; ++i )
+        {
+            if( pCursorXArray[ i ] >= 0 )
+                nXPos = pCursorXArray[ i ];
+            else
+                pCursorXArray[ i ] = nXPos;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 Point SimpleWinLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 {
     //TODO: implement reordering using mpChars2Glyphs[i]
@@ -603,6 +659,7 @@ struct VisualItem
     int             mnMinCharPos;
     int             mnEndCharPos;
     long            mnPixelWidth;
+    ABC             maABCWidths;
 };
 
 class UniscribeLayout : public WinLayout
@@ -616,9 +673,10 @@ public:
     virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
                         long* pGlyphAdvances, int* pCharIndexes ) const;
 
-    virtual Point   GetCharPosition( int nCharIndex, bool bRTL ) const;
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
+    virtual void    GetCursorPositions( long* ) const;
+    virtual Point   GetCharPosition( int nCharIndex, bool bRTL ) const;
 
 protected:
     void            Justify( long nNewWidth );
@@ -791,24 +849,30 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
 {
     // determine script items from string
     // TODO: try to avoid itemization since it costs a lot of performance
-    SCRIPT_STATE aScriptState = {0,false,false,false,false,false,true,false,false,0,0};
-    aScriptState.uBidiLevel = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
+    // TODO: determine relevant substring and work only on it
+    SCRIPT_STATE aScriptState = {0,false,false,false,false,false,false,false,false,0,0};
+    aScriptState.uBidiLevel         = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
     aScriptState.fOverrideDirection = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG));
+    aScriptState.fDigitSubstitute   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
+    aScriptState.fArabicNumContext  = aScriptState.fDigitSubstitute & aScriptState.uBidiLevel;
+    DWORD nLangId = 0;  // TODO: get language from font
+    SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
+    aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
     for( int nItemCapacity = 8; /*FOREVER*/; nItemCapacity *= 2 )
     {
         mpScriptItems = new SCRIPT_ITEM[ nItemCapacity ];
         HRESULT nRC = (*pScriptItemize)( rArgs.mpStr, rArgs.mnLength,
-            nItemCapacity, NULL, &aScriptState, mpScriptItems, &mnItemCount );
-        if( !nRC )
+            nItemCapacity, &aScriptControl, &aScriptState, mpScriptItems, &mnItemCount );
+        if( !nRC )  // break loop when everything is correctly itemized
             break;
-        if( (nRC != E_OUTOFMEMORY) || (nItemCapacity > rArgs.mnLength) )
-            return false;
         delete[] mpScriptItems;
         mpScriptItems = NULL;
+        if( (nRC != E_OUTOFMEMORY) || (nItemCapacity > rArgs.mnLength) )
+            return false;
     }
 
     // allocate arrays
-    // TODO: when reusing class try to reuse old allocations
+    // TODO: when reusing object reuse old allocations or delete them
     mnCharCapacity  = rArgs.mnLength;
     mpLogClusters   = new WORD[ mnCharCapacity ];
     mpCharWidths    = new int[ mnCharCapacity ];
@@ -822,41 +886,86 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
     mpVisualItems   = new VisualItem[ mnItemCount ];
 
-    int i;
-    for( i = 0; i < mnItemCount; ++i )
+    // default item ordering
+    int nItem;
+    for( nItem = 0; nItem < mnItemCount; ++nItem )
+        mpVisualItems[ nItem ].mpScriptItem = &mpScriptItems[ nItem ];
+
+    if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
     {
-        VisualItem& r = mpVisualItems[ i ];
+        // override item ordering if requested
+        if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL )
+        {
+            for( nItem = 0; nItem < mnItemCount; ++nItem )
+                mpVisualItems[ nItem ].mpScriptItem
+                    = &mpScriptItems[ mnItemCount - nItem ];
+        }
+    }
+    else
+    {
+        // apply bidi algorithm's rule L2 on item level
+        // TODO: use faster L2 algorithm
+        int nMaxBidiLevel = 0;
+        VisualItem* pVI = &mpVisualItems[0];
+        VisualItem* const pVIend = pVI + mnItemCount;
+        for(; pVI < pVIend; ++pVI )
+            if( nMaxBidiLevel < pVI->mpScriptItem->a.s.uBidiLevel )
+                nMaxBidiLevel = pVI->mpScriptItem->a.s.uBidiLevel;
 
-        // TODO: complex item ordering
-        int j = i;
-        if( (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) && (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) )
-            j = mnItemCount - i - 1;
+        while( --nMaxBidiLevel >= 0 )
+        {
+            for( pVI = &mpVisualItems[0]; pVI < pVIend; )
+            {
+                // find item range that needs reordering
+                for(; pVI < pVIend; ++pVI )
+                    if( nMaxBidiLevel < pVI->mpScriptItem->a.s.uBidiLevel )
+                        break;
+                VisualItem* pVImin = pVI++;
+                for(; pVI < pVIend; ++pVI )
+                    if( nMaxBidiLevel >= pVI->mpScriptItem->a.s.uBidiLevel )
+                        break;
+                VisualItem* pVImax = pVI++;
 
-        r.mpScriptItem  = &mpScriptItems[ j ];
-        r.mnMinGlyphPos = 0;
-        r.mnEndGlyphPos = 0;
-        r.mnMinCharPos  = r.mpScriptItem->iCharPos;
-        r.mnEndCharPos  = (r.mpScriptItem+1)->iCharPos;
-        r.mnPixelWidth  = 0;
+                // reverse order of items in this range
+                for(; pVImin < --pVImax; ++pVImin )
+                {
+                    SCRIPT_ITEM* pSI = pVImin->mpScriptItem;
+                    pVImin->mpScriptItem = pVImax->mpScriptItem;
+                    pVImax->mpScriptItem = pSI;
+                }
+
+            }
+        }
     }
 
     // layout script items
-    for( int nItem = 0; nItem < mnItemCount; ++nItem )
+    for( nItem = 0; nItem < mnItemCount; ++nItem )
     {
         VisualItem& rVisualItem = mpVisualItems[ nItem ];
+
+        // intitialize visual item info
         rVisualItem.mnMinGlyphPos = mnGlyphCount;
+        rVisualItem.mnEndGlyphPos = 0;
+        rVisualItem.mnMinCharPos  = rVisualItem.mpScriptItem[0].iCharPos;
+        rVisualItem.mnEndCharPos  = rVisualItem.mpScriptItem[1].iCharPos;
+        rVisualItem.mnPixelWidth  = 0;
 
         // shortcut for skipped items
         if( (rArgs.mnEndCharIndex <= rVisualItem.mnMinCharPos)
          || (rArgs.mnFirstCharIndex >= rVisualItem.mnEndCharPos) )
         {
-            for( i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
+            for( int i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
                 mpLogClusters[ i ] = 0;
             continue;
         }
 
-        if( 0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) )
-            rVisualItem.mpScriptItem->a.fRTL = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) );
+        // override bidi analysis if requested
+        if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
+        {
+            rVisualItem.mpScriptItem->a.fRTL                 = aScriptState.uBidiLevel;;
+            rVisualItem.mpScriptItem->a.s.uBidiLevel         = aScriptState.uBidiLevel;
+            rVisualItem.mpScriptItem->a.s.fOverrideDirection = aScriptState.fOverrideDirection;
+        }
 
         int nGlyphCount = 0;
         int nCharCount = rVisualItem.mnEndCharPos - rVisualItem.mnMinCharPos;
@@ -889,7 +998,6 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
         if( nRC != 0 )
             continue;
 
-        ABC aAbcInfo;
         nRC = (*pScriptPlace)( mhDC, &maScriptCache,
             mpOutGlyphs + rVisualItem.mnMinGlyphPos,
             nGlyphCount,
@@ -897,12 +1005,13 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
             &rVisualItem.mpScriptItem->a,
             mpGlyphAdvances + rVisualItem.mnMinGlyphPos,
             mpGlyphOffsets + rVisualItem.mnMinGlyphPos,
-            &aAbcInfo );
+            &rVisualItem.maABCWidths );
 
         if( nRC != 0 )
             continue;
 
-        rVisualItem.mnPixelWidth = aAbcInfo.abcA + aAbcInfo.abcB + aAbcInfo.abcC;
+        const ABC& rABC = rVisualItem.maABCWidths;
+        rVisualItem.mnPixelWidth = rABC.abcA + rABC.abcB + rABC.abcC;
 
         nRC = (*pScriptGetLogicalWidths)(
             &rVisualItem.mpScriptItem->a,
@@ -1199,6 +1308,68 @@ int UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor 
 
 // -----------------------------------------------------------------------
 
+void UniscribeLayout::GetCursorPositions( long* pCursorXArray ) const
+{
+    const int nMaxIdx = 2 * (mnEndCharIndex - mnFirstCharIndex);
+    int i;
+    for( i = 0; i < nMaxIdx; ++i )
+        pCursorXArray[ i ] = -1;
+    long* const pGlyphPos = (long*)alloca( (mnGlyphCount+1) * sizeof(long) );
+    for( i = 0; i <= mnGlyphCount; ++i )
+        pGlyphPos[ i ] = -1;
+
+    long nXPos = 0;
+    for( int nItem = 0; nItem < mnItemCount; ++nItem )
+    {
+        const VisualItem& rVisualItem = mpVisualItems[ nItem ];
+        if( rVisualItem.mnEndGlyphPos <= 0 )
+            continue;
+
+        // get glyph positions
+        // TODO: rVisualItem's glyph range only partially used
+        for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
+        {
+            pGlyphPos[ i ] = nXPos;
+            nXPos += mpGlyphAdvances[ i ];
+        }
+        // rightmost position of this visualitem
+        pGlyphPos[ i ] = nXPos;
+
+        // convert glyph positions to character positions
+        i = rVisualItem.mnMinCharPos;
+        if( i < mnFirstCharIndex )
+            i = mnFirstCharIndex;
+        for(; (i < rVisualItem.mnEndCharPos) && (i < mnEndCharIndex); ++i )
+        {
+            int j = mpLogClusters[ i ] + rVisualItem.mnMinGlyphPos;
+            int nCurrIdx = i * 2;
+            if( !rVisualItem.mpScriptItem->a.fRTL )
+            {
+                // normal positions for LTR case
+                pCursorXArray[ nCurrIdx ]   = pGlyphPos[ j ];
+                pCursorXArray[ nCurrIdx+1 ] = pGlyphPos[ j+1 ];
+            }
+            else
+            {
+                // reverse positions for RTL case
+                pCursorXArray[ nCurrIdx ]   = pGlyphPos[ j+1 ];
+                pCursorXArray[ nCurrIdx+1 ] = pGlyphPos[ j ];
+            }
+        }
+    }
+
+    // fixup unknown character positions to neighbor
+    for( i = 0; i < nMaxIdx; ++i )
+    {
+        if( pCursorXArray[ i ] >= 0 )
+            nXPos = pCursorXArray[ i ];
+        else
+            pCursorXArray[ i ] = nXPos;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 Point UniscribeLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 {
     int nStartIndex = mnGlyphCapacity;  // mark as untouched
@@ -1279,7 +1450,7 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
     // apply new widths to script items
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
-        const VisualItem& rVisualItem = mpVisualItems[ nItem ];
+        VisualItem& rVisualItem = mpVisualItems[ nItem ];
         if( rVisualItem.mnEndGlyphPos <= 0 )
             continue;
 
@@ -1294,8 +1465,11 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
                 mpVisualAttrs + rVisualItem.mnMinGlyphPos,
                 mpGlyphAdvances + rVisualItem.mnMinGlyphPos,
                 &rVisualItem.mpScriptItem->a,
-                NULL,
+                &rVisualItem.maABCWidths,
                 mpJustifications + rVisualItem.mnMinGlyphPos );
+
+            const ABC& rABC = rVisualItem.maABCWidths;
+            rVisualItem.mnPixelWidth = rABC.abcA + rABC.abcB + rABC.abcC;
         }
     }
 }
@@ -1383,7 +1557,11 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs, const OutputDev
         pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, rArgs, bEnableGlyphs );
     }
 
-    pWinLayout->LayoutText( rArgs );
+    if( !pWinLayout->LayoutText( rArgs ) )
+    {
+        pWinLayout->Release();
+        pWinLayout = NULL;
+    }
 
     return pWinLayout;
 }
