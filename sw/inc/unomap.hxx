@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-21 14:52:57 $
+ *  last change: $Author: mtg $ $Date: 2001-03-28 11:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,12 @@
 #define WID_DOC_HIDE_TIPS                       1007
 #define WID_DOC_REDLINE_DISPLAY                 1008
 #define WID_DOC_FORBIDDEN_CHARS                 1009
+#define WID_DOC_LINK_UPDATE_MODE                1010
+#define WID_DOC_FIELD_AUTO_UPDATE               1011
+#define WID_DOC_CHART_AUTO_UPDATE               1012
+#define WID_DOC_ADD_PARA_TABLE_SPACING          1013
+#define WID_DOC_ADD_PARA_TABLE_SPACING_AT_START 1014
+#define WID_DOC_PRINTER_NAME                    1015
 
 //AutoText
 #define WID_GROUP_PATH                          0
