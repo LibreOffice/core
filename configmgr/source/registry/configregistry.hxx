@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configregistry.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:39:30 $
+ *  last change: $Author: jb $ $Date: 2001-02-27 10:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,8 @@ protected:
 
     void implCheckOpen() throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
 
-    sal_Bool implIsOpen();
+    sal_Bool implIsOpen()
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
 
