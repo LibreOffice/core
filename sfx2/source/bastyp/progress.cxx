@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:41:25 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 15:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,13 @@ void SfxProgress::Stop()
 */
 
 {
-    if( pImp->pActiveProgress ) return;
+    if( pImp->pActiveProgress )
+    {
+        if ( pImp->xObjSh.Is() && pImp->xObjSh->GetProgress() == this )
+            pImp->xObjSh->SetProgress_Impl(0);
+        return;
+    }
+
     if ( !pImp->bRunning )
         return;
     pImp->bRunning = FALSE;
