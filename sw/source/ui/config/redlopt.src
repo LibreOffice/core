@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 21:00:58 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,21 +1114,21 @@ TabPage TP_REDLINE_OPT
         Text = "Ma~rkierung" ;
         Text [ English ] = "Mark" ;
         Text [ portuguese ] = "Marca" ;
-        Text [ english_us ] = "Mark" ;
+        Text [ english_us ] = "Mar~k" ;
         Text [ portuguese_brazilian ] = "Markierung" ;
-        Text [ swedish ] = "Markering" ;
+        Text [ swedish ] = "Ma~rkering" ;
         Text [ danish ] = "Markering" ;
         Text [ italian ] = "Contrassegno" ;
-        Text [ spanish ] = "Marca" ;
-        Text [ french ] = "Marque" ;
+        Text [ spanish ] = "~Marca" ;
+        Text [ french ] = "Ma~rque" ;
         Text [ dutch ] = "Markering" ;
         Text[ chinese_simplified ] = "±ê¼Ç";
         Text[ russian ] = "Âûäåëåíèå";
         Text[ polish ] = "Zaznaczenie";
-        Text[ japanese ] = "‘I‘ğ";
+        Text[ japanese ] = "‹L†";
         Text[ chinese_traditional ] = "¼Ğ°O";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
-        Text[ greek ] = "ÌáñêÜñéóìá";
+        Text[ greek ] = "ÓŞìáíóç";
         Text[ korean ] = "¸¶Å·";
         Text[ turkish ] = "İşaret";
         Text[ language_user1 ] = " ";
@@ -1314,13 +1314,13 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "Far~be" ;
         Text [ English ] = "Color" ;
-        Text [ english_us ] = "Color" ;
+        Text [ english_us ] = "~Color" ;
         Text [ portuguese_brazilian ] = "Farbe" ;
-        Text [ swedish ] = "Färg" ;
+        Text [ swedish ] = "Fär~g" ;
         Text [ danish ] = "Farve" ;
         Text [ italian ] = "Colore" ;
-        Text [ spanish ] = "Color" ;
-        Text [ french ] = "Couleur" ;
+        Text [ spanish ] = "~Color" ;
+        Text [ french ] = "~Couleur" ;
         Text [ dutch ] = "Kleur" ;
         Text [ portuguese ] = "Cor" ;
         Text[ chinese_simplified ] = "ÑÕÉ«";
