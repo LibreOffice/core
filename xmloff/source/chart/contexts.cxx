@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contexts.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
+ *  last change: $Author: bm $ $Date: 2002-02-11 09:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,12 +132,10 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
     {
         case XML_TOK_DOC_AUTOSTYLES:
             if( nFlags & IMPORT_AUTOSTYLES )
-            {
-                SvXMLStylesContext* pStylesCtxt =
-                    new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
-                mrImportHelper.SetAutoStylesContext( pStylesCtxt );
-                pContext = pStylesCtxt;
-            }
+                // not nice, but this is safe, as the SchXMLDocContext class can only by
+                // instantiated by the chart import class SchXMLImport (header is not exported)
+                pContext =
+                    static_cast< SchXMLImport& >( GetImport() ).CreateStylesContext( rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_STYLES:
             // for draw styles containing gradients/hatches/markers and dashes
