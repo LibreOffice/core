@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:40:12 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,17 @@ namespace dbp
         m_pFormContentType          = new FixedText(this,  ResId(FT_FORMCONTENTTYPE));
         m_pFormTableLabel           = new FixedText(this,  ResId(FT_FORMTABLELABEL));
         m_pFormTable                = new FixedText(this,  ResId(FT_FORMTABLE));
+
+        const OControlWizardContext& rContext = getContext();
+        if ( rContext.bEmbedded )
+        {
+            m_pFormDatasourceLabel->Hide();
+            m_pFormDatasource->Hide();
+            m_pFormContentTypeLabel->SetPosPixel(m_pFormDatasourceLabel->GetPosPixel());
+            m_pFormContentType->SetPosPixel(m_pFormDatasource->GetPosPixel());
+            m_pFormTableLabel->SetPosPixel(::Point(m_pFormDatasourceLabel->GetPosPixel().X(),m_pFormTableLabel->GetPosPixel().Y()));
+            m_pFormTable->SetPosPixel(::Point(m_pFormDatasource->GetPosPixel().X(),m_pFormTable->GetPosPixel().Y()));
+        }
     }
 
     //---------------------------------------------------------------------
@@ -328,7 +339,7 @@ namespace dbp
 
             INetURLObject aURL( sDataSource );
             if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-                sDataSource = aURL.GetName();
+                sDataSource = aURL.GetName(INetURLObject::DECODE_WITH_CHARSET);
             m_pFormDatasource->SetText(sDataSource);
             m_pFormTable->SetText(sCommand);
 
@@ -604,6 +615,7 @@ namespace dbp
 
         m_aContext.xObjectContainer.clear();
         m_aContext.aTypes.clear();
+        m_aContext.bEmbedded = sal_False;
 
         Any aSQLException;
         Reference< XPreparedStatement >  xStatement;
@@ -627,12 +639,13 @@ namespace dbp
             if (m_aContext.xForm.is())
             {
                 // collect some properties of the form
-                ::rtl::OUString sDataSourceName = ::comphelper::getString(m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")));
                 ::rtl::OUString sObjectName = ::comphelper::getString(m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")));
                 sal_Int32 nObjectType = ::comphelper::getINT32(m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("CommandType")));
 
                 // calculate the connection the rowset is working with
-                Reference< XConnection >   xConnection = ::dbtools::calcConnection(m_aContext.xRowSet, getServiceFactory());
+                Reference< XConnection > xConnection;
+                if ( !(m_aContext.bEmbedded = ::dbtools::isEmbeddedInDatabase(m_aContext.xForm,xConnection)) )
+                    xConnection = ::dbtools::calcConnection(m_aContext.xRowSet, getServiceFactory());
 
                 // get the fields
                 if (xConnection.is())
