@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 03:19:41 $
+#   last change: $Author: rt $ $Date: 2004-08-20 09:26:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,7 +127,7 @@ CFLAGS += -DEXTRA_MAPPING
 
 .INCLUDE :  target.mk
 
-CPPUMAKERFLAGS = -C
+CPPUMAKERFLAGS = -L
 
 TYPES:=		-Ttest.XLanguageBindingTest \
         -Ttest.XSimpleInterface \
