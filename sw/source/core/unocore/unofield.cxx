@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 13:01:41 $
+ *  last change: $Author: os $ $Date: 2000-11-07 09:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,9 @@
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
+#endif
+#ifndef _POOLFMT_HRC
+#include <poolfmt.hrc>
 #endif
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
@@ -1073,7 +1076,8 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
         aValue >>= uTmp;
         String sTypeName(uTmp);
         SwFieldType* pType = m_pDoc->GetFldType(nResTypeId, sTypeName);
-        if(pType)
+        if(pType ||
+            (RES_SETEXPFLD == nResTypeId && sTypeName != String(SwXFieldMaster::GetSetExpProgrammaticName(sTypeName))))
         {
             throw IllegalArgumentException();
         }
@@ -1218,7 +1222,9 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
     if(pType)
     {
         if(COMPARE_EQUAL == rPropertyName.compareToAscii("Name"))
-            aRet <<= OUString(pType->GetName());
+        {
+            aRet <<= OUString(SwXFieldMaster::GetProgrammaticName(*pType, *GetDoc()));
+        }
         else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DEPENDENT_TEXT_FIELDS))
         {
             //fill all text fields into a sequence
@@ -1364,6 +1370,116 @@ void SwXFieldMaster::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         m_pDoc = 0;
     }
 }
+/* -----------------------------06.11.00 09:44--------------------------------
+
+ ---------------------------------------------------------------------------*/
+const Programmatic2UIName_Impl* lcl_GetFieldNameTable()
+{
+    static BOOL bInitialized = FALSE;
+    static Programmatic2UIName_Impl aFieldNames[5];
+    if(!bInitialized)
+    {
+        bInitialized = TRUE;
+        int nName = 0;
+        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_ABB ));
+        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_ABB));
+        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_TABLE ));
+        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_TABLE));
+        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_FRAME));
+        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_FRAME));
+        aFieldNames[nName].sUIName = String             (SW_RES(STR_POOLCOLL_LABEL_DRAWING ));
+        aFieldNames[nName++].sProgrammaticName = String (SW_RES(STR_POCO_PRGM_LABEL_DRAWING));
+    }
+    return &aFieldNames[0];
+}
+/* -----------------------------06.11.00 10:26--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
+{
+    OUString sRet(rType.GetName());
+    if(RES_SETEXPFLD == rType.Which())
+    {
+        const SwFldTypes* pTypes = rDoc.GetFldTypes();
+        for( sal_uInt16 i = 0; i <= INIT_FLDTYPES; i++ )
+        {
+            if((*pTypes)[i] == &rType)
+            {
+                const Programmatic2UIName_Impl* pTable = lcl_GetFieldNameTable();
+                while(pTable->sUIName.Len())
+                {
+                    if(sRet == OUString(pTable->sUIName))
+                    {
+                        sRet = pTable->sProgrammaticName;
+                        break;
+                    }
+                    ++pTable;
+                }
+                break;
+            }
+        }
+    }
+    return sRet;
+}
+/* -----------------------------06.11.00 10:57--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SwXFieldMaster::GetSetExpProgrammaticName(const OUString& rUIName)
+{
+    const Programmatic2UIName_Impl* pTable = lcl_GetFieldNameTable();
+    OUString sRet(rUIName);
+    while(pTable->sUIName.Len())
+    {
+        if(sRet == OUString(pTable->sUIName))
+        {
+            sRet = pTable->sProgrammaticName;
+            break;
+        }
+        ++pTable;
+    }
+    return sRet;
+}
+/* -----------------------------06.11.00 10:57--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SwXFieldMaster::GetSetExpUIName(const rtl::OUString& rName)
+{
+    const Programmatic2UIName_Impl* pTable = lcl_GetFieldNameTable();
+    OUString sRet(rName);
+    while(pTable->sUIName.Len())
+    {
+        if(sRet == OUString(pTable->sProgrammaticName))
+        {
+            sRet = pTable->sUIName;
+            break;
+        }
+        ++pTable;
+    }
+    return sRet;
+}
+/* -----------------------------06.11.00 14:12--------------------------------
+
+ ---------------------------------------------------------------------------*/
+OUString SwXFieldMaster::LocalizeFormula(
+    const SwSetExpField& rFld,
+    const OUString& rFormula,
+    sal_Bool bQuery)
+{
+    OUString sTypeName(rFld.GetTyp()->GetName());
+    OUString sProgName = SwXFieldMaster::GetSetExpProgrammaticName(sTypeName);
+    if(sProgName != sTypeName)
+    {
+        OUString sSource = bQuery ? sTypeName : sProgName;
+        OUString sDest = bQuery ? sProgName : sTypeName;
+        if(!rFormula.compareTo(sSource, sSource.getLength()))
+        {
+            OUString sTmpFormula = sDest;
+            sTmpFormula += rFormula.copy(sSource.getLength());
+            return sTmpFormula;
+        }
+    }
+    return rFormula;
+}
 /******************************************************************
  *
  ******************************************************************/
@@ -1400,13 +1516,6 @@ struct SwFieldProperties_Impl
 };
 
 TYPEINIT1(SwXTextField, SwClient);
-/*-- 14.12.98 11:37:14---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-/*uno::Reference< uno::XInterface >  SwXTextField_NewInstance_Impl()
-{
-    return (UsrObject *)new SwXTextField(USHRT_MAX);
-};
 /* -----------------------------13.03.00 12:15--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2526,7 +2635,13 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     else if(COMPARE_EQUAL == sTypeName.CompareToAscii("DDE"))
         nResId = RES_DDEFLD;
     else if(COMPARE_EQUAL == sTypeName.CompareToAscii("SetExpression"))
+    {
         nResId = RES_SETEXPFLD;
+        OUString sTypeName(sName.GetToken(1, '.'));
+        OUString sUIName = SwXFieldMaster::GetSetExpUIName(sTypeName);
+        if(sUIName != sTypeName)
+            sName.SetToken(1, '.', sUIName);
+    }
     else if(COMPARE_EQUAL == sTypeName.CompareToAscii("DataBase"))
     {
         if(!lcl_ConvertDatabaseName(sName))
@@ -2585,7 +2700,7 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
         {
             String* pString = new String(sPrefix);
             *pString += C2S("SetExpression.");
-            *pString += rFldType.GetName();
+            *pString += String(SwXFieldMaster::GetSetExpProgrammaticName(rFldType.GetName()));
             aFldNames.Insert(pString, aFldNames.Count());
         }
         if(RES_DBFLD == nWhich)
@@ -2630,7 +2745,13 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( RuntimeExc
     else if(COMPARE_EQUAL == sTypeName.CompareToAscii("DDE"))
         nResId = RES_DDEFLD;
     else if(COMPARE_EQUAL == sTypeName.CompareToAscii("SetExpression"))
+    {
         nResId = RES_SETEXPFLD;
+        OUString sTypeName(sName.GetToken(1, '.'));
+        OUString sUIName = SwXFieldMaster::GetSetExpUIName(sTypeName);
+        if(sUIName != sTypeName)
+            sName.SetToken(1, '.', sUIName);
+    }
     else if(COMPARE_EQUAL == sTypeName.CompareToAscii("DataBase"))
     {
         if(!lcl_ConvertDatabaseName(sName))
@@ -2923,5 +3044,4 @@ void SwXFieldEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     if(!GetRegisteredIn())
         pDoc = 0;
 }
-
 

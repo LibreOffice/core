@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-11-07 09:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ class SwFieldType;
 class SwDoc;
 class SwFmtFld;
 class SwField;
+class SwSetExpField;
 /* -----------------04.12.98 12:49-------------------
  *
  * --------------------------------------------------*/
@@ -142,6 +143,11 @@ public:
 
     //SwClient
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+    static rtl::OUString GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc);
+    static rtl::OUString GetSetExpProgrammaticName(const rtl::OUString& rName);
+    static rtl::OUString GetSetExpUIName(const rtl::OUString& rName);
+    static rtl::OUString LocalizeFormula(const SwSetExpField& rFld, const rtl::OUString& rFormula, sal_Bool bQuery);
 
     SwFieldType* GetFldType() const { return (SwFieldType*)GetRegisteredIn(); }
     SwDoc*      GetDoc() {return m_pDoc;}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 10:14:03 $
+ *  last change: $Author: os $ $Date: 2000-11-07 09:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,20 +252,15 @@ const unsigned short aStyleByIndex[] =
     SFX_STYLE_FAMILY_PSEUDO
 };
 
-struct Programmatic2UIName
+const Programmatic2UIName_Impl* lcl_GetStyleNameTable(SfxStyleFamily eFamily)
 {
-    String sProgrammaticName;
-    String sUIName;
-};
-const Programmatic2UIName* lcl_GetStyleNameTable(SfxStyleFamily eFamily)
-{
-    const Programmatic2UIName* pRet = 0;
+    const Programmatic2UIName_Impl* pRet = 0;
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
         {
             static BOOL bInitialized = FALSE;
-            static Programmatic2UIName aCharFamilyNames[(STR_POOLCHR_PRGM_CURRENT_END - RC_POOLCHRFMT_PRGM_BEGIN) +
+            static Programmatic2UIName_Impl aCharFamilyNames[(STR_POOLCHR_PRGM_CURRENT_END - RC_POOLCHRFMT_PRGM_BEGIN) +
                                                         (STR_POOLCHR_PRGM_HTML_CURRENT_END - RC_POOLCHRFMT_PRGM_HTML_BEGIN) + 3];
             if(!bInitialized)
             {
@@ -292,7 +287,7 @@ const Programmatic2UIName* lcl_GetStyleNameTable(SfxStyleFamily eFamily)
         case SFX_STYLE_FAMILY_PARA:
         {
             static BOOL bInitialized = FALSE;
-            static Programmatic2UIName aParaFamilyNames[
+            static Programmatic2UIName_Impl aParaFamilyNames[
                     ( STR_POCO_PRGM_HEADLINE10    -  STR_POCO_PRGM_STANDARD     ) +
                     ( STR_POCO_PRGM_BUL_NONUM5    -  STR_POCO_PRGM_NUMBUL_BASE   )+
                     ( STR_POCO_PRGM_LABEL_DRAWING -  STR_POCO_PRGM_HEADER        )+
@@ -335,7 +330,7 @@ const Programmatic2UIName* lcl_GetStyleNameTable(SfxStyleFamily eFamily)
         case SFX_STYLE_FAMILY_FRAME:
         {
             static BOOL bInitialized = FALSE;
-            static Programmatic2UIName aFrameFamilyNames[(STR_POOLFRM_PRGM_LABEL - STR_POOLFRM_PRGM_FRAME) + 2];
+            static Programmatic2UIName_Impl aFrameFamilyNames[(STR_POOLFRM_PRGM_LABEL - STR_POOLFRM_PRGM_FRAME) + 2];
             if(!bInitialized)
             {
                 bInitialized = TRUE;
@@ -355,7 +350,7 @@ const Programmatic2UIName* lcl_GetStyleNameTable(SfxStyleFamily eFamily)
         case SFX_STYLE_FAMILY_PAGE:
         {
             static BOOL bInitialized = FALSE;
-            static Programmatic2UIName aPageFamilyNames[(STR_POOLPAGE_PRGM_ENDNOTE - STR_POOLPAGE_PRGM_STANDARD) + 2];
+            static Programmatic2UIName_Impl aPageFamilyNames[(STR_POOLPAGE_PRGM_ENDNOTE - STR_POOLPAGE_PRGM_STANDARD) + 2];
             if(!bInitialized)
             {
                 bInitialized = TRUE;
@@ -375,7 +370,7 @@ const Programmatic2UIName* lcl_GetStyleNameTable(SfxStyleFamily eFamily)
         case SFX_STYLE_FAMILY_PSEUDO:
         {
             static BOOL bInitialized = FALSE;
-            static Programmatic2UIName aNumFamilyNames[(STR_POOLNUMRULE_PRGM_BUL5 - STR_POOLNUMRULE_PRGM_NUM1) + 2];
+            static Programmatic2UIName_Impl aNumFamilyNames[(STR_POOLNUMRULE_PRGM_BUL5 - STR_POOLNUMRULE_PRGM_NUM1) + 2];
             if(!bInitialized)
             {
                 bInitialized = TRUE;
@@ -397,7 +392,7 @@ const Programmatic2UIName* lcl_GetStyleNameTable(SfxStyleFamily eFamily)
 }
 const String&   SwXStyleFamilies::GetProgrammaticName(const String& rUIName, SfxStyleFamily eFamily)
 {
-    const Programmatic2UIName* pNames =lcl_GetStyleNameTable(eFamily);
+    const Programmatic2UIName_Impl* pNames =lcl_GetStyleNameTable(eFamily);
     DBG_ASSERT(pNames, "no mapping found!!!")
     if(pNames)
     do
@@ -410,7 +405,7 @@ const String&   SwXStyleFamilies::GetProgrammaticName(const String& rUIName, Sfx
 }
 const String&   SwXStyleFamilies::GetUIName(const String& rProgrammaticName, SfxStyleFamily eFamily)
 {
-    const Programmatic2UIName* pNames = lcl_GetStyleNameTable(eFamily);
+    const Programmatic2UIName_Impl* pNames = lcl_GetStyleNameTable(eFamily);
     do
     {
         if(pNames->sProgrammaticName == rProgrammaticName)
