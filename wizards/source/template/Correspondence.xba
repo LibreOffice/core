@@ -152,6 +152,7 @@ Dim oDocSettings as Object
 	
 	GENERALERROR:
 	If Err &lt;&gt; 0 Then
+		Msgbox(msgError$,16, GetProductName())
 		Resume LETSGO
 	End If
 	LETSGO:
