@@ -208,15 +208,7 @@
         </xs:element>
       </xs:sequence>
       <xs:attribute name="name" type="xs:NMTOKEN" use="required"/>
-      <xs:attribute name="package" type="xs:NMTOKEN" use="required">
-        <xs:annotation>
-          <xs:documentation>contains the name of the package. 
-                    Package names are composed similar to java packages. 
-                    Packages are used to structure component configuration data. 
-                    An example of a package is 'org.openoffice', 
-                    where 'org' and 'openoffice' each define a package.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
+      <xs:attribute ref="oor:package"/>
       <xs:attribute name="version" type="xs:string" use="optional">
         <xs:annotation>
           <xs:documentation>identifies the version of the component. The version number is build of major.minor.micro</xs:documentation>

@@ -43,7 +43,6 @@
 <!ATTLIST group
     oor:name CDATA #REQUIRED
     oor:extensible (true | false) #IMPLIED
-    oor:component CDATA #IMPLIED
 >
 
 <!ELEMENT set (info?, prop*, item*)>

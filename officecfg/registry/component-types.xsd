@@ -11,9 +11,13 @@
       <xs:documentation>identifies a node or an attribute within a tree, must be unique for all siblings.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
-  <xs:attribute name="context" type="xs:string" use="optional">
+  <xs:attribute name="package" type="xs:NMTOKEN" use="required">
     <xs:annotation>
-      <xs:documentation>specifies the environment of a node fragment, typically contains a component path and optionally a node path</xs:documentation>
+      <xs:documentation>contains the name of the package. 
+                Package names are composed similar to java packages. 
+                Packages are used to structure component configuration data. 
+                An example of a package is 'org.openoffice', 
+                where 'org' and 'openoffice' each define a package.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
   <xs:attribute name="node-type" type="xs:NMTOKEN">

@@ -2,13 +2,10 @@
 
 <!ELEMENT oor:node ((prop|node)*)>
 <!ATTLIST oor:node
-  oor:name CDATA #REQUIRED
-  oor:context CDATA #REQUIRED
-  oor:component CDATA #IMPLIED
+  oor:name NMTOKEN #REQUIRED
+  oor:package NMTOKEN #REQUIRED
   oor:finalized (true | false) #IMPLIED
-  oor:mandatory (true | false) #IMPLIED
   oor:op (modify | replace | remove | reset) #IMPLIED
-  oor:node-type NMTOKEN #IMPLIED
   xmlns:oor CDATA #FIXED "http://openoffice.org/2001/registry"
   xmlns:xs CDATA #FIXED "http://www.w3.org/2001/XMLSchema"
   xmlns:xsi CDATA #FIXED "http://www.w3.org/2001/XMLSchema-instance"

@@ -22,6 +22,7 @@
 						</xs:element>
 					</xs:choice>
 					<xs:attributeGroup ref="oor:update-info"/>
+                    <xs:attribute ref="oor:package" use="optional"/>
 					<xs:attribute ref="oor:node-type" use="optional"/>
 				</xs:extension>
 			</xs:complexContent>
@@ -55,7 +56,6 @@
 	</xs:redefine>
 	<xs:attributeGroup name="update-info">
 		<xs:attribute ref="oor:finalized"/>
-		<xs:attribute ref="oor:context"/>
 		<xs:attribute ref="oor:mandatory"/>
 		<xs:attribute ref="oor:readonly"/>
 		<xs:attribute ref="oor:op"/>
