@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:41:47 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,14 +95,14 @@ String RID_SVXSTR_TRANSPARENT
     Text [ danish ] = "Ingen fyld" ;
     Text [ portuguese ] = "Sem preenchimento" ;
     Text [ portuguese_brazilian ] = "Keine F?lung" ;
-    Text[ chinese_simplified ] = "²»Ìî³ä";
+    Text[ chinese_simplified ] = "ä¸å¡«å……";
     Text[ russian ] = "Áåç çàëèâêè";
     Text[ polish ] = "Bez wype³nienia";
-    Text[ japanese ] = "“h‚è‚Â‚Ô‚µ‚È‚µ";
-    Text[ chinese_traditional ] = "¤£¥R¶ñ";
+    Text[ japanese ] = "å¡—ã‚Šã¤ã¶ã—ãªã—";
+    Text[ chinese_traditional ] = "ä¸å……å¡«";
     Text[ arabic ] = "ÈÏæä ÊÚÈÆÉ";
     Text[ greek ] = "×ùñßò ãİìéóìá";
-    Text[ korean ] = "Ã¤¿ì±â ¾øÀ½";
+    Text[ korean ] = "ì±„ìš°ê¸° ì—†ìŒ";
     Text[ turkish ] = "Dolgu yok";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sin relleno";
@@ -123,14 +123,14 @@ String RID_SVXSTR_FILLPATTERN
     Text [ dutch ] = "Patroon" ;
     Text [ spanish ] = "Modelo" ;
     Text [ english_us ] = "Pattern" ;
-    Text[ chinese_simplified ] = "Í¼°¸";
+    Text[ chinese_simplified ] = "å›¾æ¡ˆ";
     Text[ russian ] = "Óçîğ";
     Text[ polish ] = "Deseñ";
-    Text[ japanese ] = "ÊßÀ°İ";
-    Text[ chinese_traditional ] = "¹Ï®×";
+    Text[ japanese ] = "ï¾Šï¾Ÿï¾€ï½°ï¾";
+    Text[ chinese_traditional ] = "åœ–æ¡ˆ";
     Text[ arabic ] = "äŞÔ";
     Text[ greek ] = "Ìïôßâï";
-    Text[ korean ] = "ÆĞÅÏ";
+    Text[ korean ] = "íŒ¨í„´";
     Text[ turkish ] = "Desen";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modelo";
@@ -150,14 +150,14 @@ String RID_SVXSTR_FRAME
     Text [ dutch ] = "Omranding" ;
     Text [ spanish ] = "Borde" ;
     Text [ english_us ] = "Borders" ;
-    Text[ chinese_simplified ] = "±ß¿ò";
+    Text[ chinese_simplified ] = "è¾¹æ¡†";
     Text[ russian ] = "Îáğàìëåíèå";
     Text[ polish ] = "Obramowanie";
-    Text[ japanese ] = "ŠO˜g";
-    Text[ chinese_traditional ] = "Ãä®Ø";
+    Text[ japanese ] = "å¤–æ ";
+    Text[ chinese_traditional ] = "é‚Šæ¡†";
     Text[ arabic ] = "ÇáÍÏæÏ";
     Text[ greek ] = "Ğåñßãñáììá";
-    Text[ korean ] = "Å×µÎ¸®";
+    Text[ korean ] = "í…Œë‘ë¦¬";
     Text[ turkish ] = "Kenarlık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Borde";
@@ -177,14 +177,14 @@ String RID_SVXSTR_FRAME_STYLE
     Text [ dutch ] = "Omrandingstype" ;
     Text [ spanish ] = "Estilo de borde" ;
     Text [ english_us ] = "Border Style" ;
-    Text[ chinese_simplified ] = "±ß¾àÑùÊ½";
+    Text[ chinese_simplified ] = "è¾¹è·æ ·å¼";
     Text[ russian ] = "Ñòèëü îáğàìëåíèÿ";
     Text[ polish ] = "Styl obramowania";
-    Text[ japanese ] = "ŠO˜g½À²Ù";
-    Text[ chinese_traditional ] = "Ãä®Ø¼Ë¦¡";
+    Text[ japanese ] = "å¤–æ ï½½ï¾€ï½²ï¾™";
+    Text[ chinese_traditional ] = "é‚Šæ¡†æ¨£å¼";
     Text[ arabic ] = "äãØ ÇáÍÏæÏ";
     Text[ greek ] = "Óôõë ğåñéãñÜììáôïò";
-    Text[ korean ] = "Å×µÎ¸® À¯Çü";
+    Text[ korean ] = "í…Œë‘ë¦¬ ìœ í˜•";
     Text[ turkish ] = "Kenarlık biçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de borde";
@@ -204,14 +204,14 @@ String RID_SVXSTR_FRAME_COLOR
     Text [ dutch ] = "Omrandingskleur" ;
     Text [ spanish ] = "Color del borde" ;
     Text [ english_us ] = "Border Color" ;
-    Text[ chinese_simplified ] = "±ß¿òÑÕÉ«";
+    Text[ chinese_simplified ] = "è¾¹æ¡†é¢œè‰²";
     Text[ russian ] = "Öâåò îáğàìëåíèÿ";
     Text[ polish ] = "Kolor obramowania";
-    Text[ japanese ] = "ŠO˜g‚ÌF";
-    Text[ chinese_traditional ] = "Ãä®ØÃC¦â";
+    Text[ japanese ] = "å¤–æ ã®è‰²";
+    Text[ chinese_traditional ] = "é‚Šæ¡†é¡”è‰²";
     Text[ arabic ] = "áæä ÇáÍÏæÏ";
     Text[ greek ] = "×ñşìáôá ğåñéãñáììÜôùí";
-    Text[ korean ] = "Å×µÎ¸® »ö";
+    Text[ korean ] = "í…Œë‘ë¦¬ ìƒ‰";
     Text[ turkish ] = "Kenarlık rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color del borde";
@@ -240,14 +240,14 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text [ french ] = "Trame de fond" ;
     Text [ dutch ] = "Tekenachtergrond" ;
     Text [ portuguese ] = "Destacar caracteres" ;
-    Text[ chinese_simplified ] = "×Ö·û±³¾°";
+    Text[ chinese_simplified ] = "å­—ç¬¦èƒŒæ™¯";
     Text[ russian ] = "Ôîí çíàêîâ";
     Text[ polish ] = "T³o znaków";
-    Text[ japanese ] = "•¶š‚Ì”wŒi";
-    Text[ chinese_traditional ] = "¦r¤¸­I´º";
+    Text[ japanese ] = "æ–‡å­—ã®èƒŒæ™¯";
+    Text[ chinese_traditional ] = "å­—å…ƒèƒŒæ™¯";
     Text[ arabic ] = "ÎáİíÉ ÇáÎØ";
     Text[ greek ] = "Öüíôï ÷áñáêôŞñùí";
-    Text[ korean ] = "°­Á¶";
+    Text[ korean ] = "ê°•ì¡°";
     Text[ turkish ] = "Vurgu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fondo de carácter";
@@ -269,10 +269,10 @@ String RID_SVXSTR_BACKGROUND
     Text[ swedish ] = "Bakgrund";
     Text[ polish ] = "T³o";
     Text[ portuguese_brazilian ] = "Background";
-    Text[ japanese ] = "”wŒi";
-    Text[ korean ] = "¹è°æ";
-    Text[ chinese_simplified ] = "±³¾°";
-    Text[ chinese_traditional ] = "­I´º";
+    Text[ japanese ] = "èƒŒæ™¯";
+    Text[ korean ] = "ë°°ê²½";
+    Text[ chinese_simplified ] = "èƒŒæ™¯";
+    Text[ chinese_traditional ] = "èƒŒæ™¯";
     Text[ arabic ] = "ÇáÎáİíÉ";
     Text[ turkish ] = "Artalan";
     Text[ catalan ] = "Fondo";
@@ -294,10 +294,10 @@ String RID_SVXSTR_AUTOMATIC
     Text[ swedish ] = "Automatiskt";
     Text[ polish ] = "Automatycznie";
     Text[ portuguese_brazilian ] = "Automatic";
-    Text[ japanese ] = "©“®";
-    Text[ korean ] = "ÀÚµ¿";
-    Text[ chinese_simplified ] = "×Ô¶¯";
-    Text[ chinese_traditional ] = "¦Û°Ê";
+    Text[ japanese ] = "è‡ªå‹•";
+    Text[ korean ] = "ìë™";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨";
+    Text[ chinese_traditional ] = "è‡ªå‹•";
     Text[ turkish ] = "Automatic";
     Text[ arabic ] = "ÊáŞÇÆí";
     Text[ catalan ] = "Automatic";
@@ -340,6 +340,7 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE
 };
 
 // ********************************************************************** EOF
+
 
 
 
