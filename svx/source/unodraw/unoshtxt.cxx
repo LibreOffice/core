@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-06 13:31:47 $
+ *  last change: $Author: aw $ $Date: 2001-08-20 14:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,8 +314,12 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
         {
             mpOutliner->SetText( *mpOutlinerParaObject );
 
-//          if( mpObject->IsEmptyPresObj() )
-//              mpObject->SetEmptyPresObj( FALSE );
+            // #91254# put text to object and set EmptyPresObj to FALSE
+            if( pTextObj && bTextEditActive && mpOutlinerParaObject && mpObject->IsEmptyPresObj() )
+            {
+                mpObject->SetEmptyPresObj( FALSE );
+                pTextObj->SetOutlinerParaObject( mpOutlinerParaObject );
+            }
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 14:02:04 $
+ *  last change: $Author: aw $ $Date: 2001-08-20 14:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1841,6 +1841,10 @@ void SdrTextObj::WriteData(SvStream& rOut) const
         OutlinerParaObject* pPara=GetEditOutlinerParaObject();
         // casting auf nicht-const
         ((SdrTextObj*)this)->SetOutlinerParaObject(pPara);
+
+        // #91254# put text to object and set EmptyPresObj to FALSE
+        if(pPara && IsEmptyPresObj())
+            ((SdrTextObj*)this)->SetEmptyPresObj(FALSE);
     }
     OutlinerParaObject* pPara=pOutlinerParaObject;
 
