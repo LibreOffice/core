@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-20 13:03:08 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 12:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,12 @@ struct MenuItemData
 
 MenuItemData::~MenuItemData()
 {
-    delete pAutoSubMenu;
+    if( pAutoSubMenu )
+    {
+        *(((PopupMenu*)pAutoSubMenu)->pRefAutoSubMenu) = NULL;
+        delete pAutoSubMenu;
+        pAutoSubMenu = NULL;
+    }
     if( pSalMenuItem )
         ImplGetSVData()->mpDefInst->DestroyMenuItem( pSalMenuItem );
 }
@@ -1143,6 +1148,8 @@ void Menu::InsertItem( const ResId& rResId, USHORT nPos )
             {
                 PopupMenu* pSubMenu = new PopupMenu( ResId( (RSHEADER_TYPE*)GetClassRes() ) );
                 pData->pAutoSubMenu = pSubMenu;
+                // #111060# keep track of this pointer, may be it will be deleted from outside
+                pSubMenu->pRefAutoSubMenu = &pData->pAutoSubMenu;
                 SetPopupMenu( nItemId, pSubMenu );
             }
         }
@@ -2084,9 +2091,9 @@ Size Menu::ImplCalcSize( Window* pWin )
     if ( !bIsMenuBar )
     {
 #if (_MSC_VER < 1300)
-        USHORT gfxExtra = std::max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
+        USHORT gfxExtra = (USHORT) std::max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
 #else
-        USHORT gfxExtra = max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
+        USHORT gfxExtra = (USHORT) max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
 #endif
         nCheckPos = (USHORT)nExtra;
         nImagePos = (USHORT)(nCheckPos + nFontHeight/2 + gfxExtra );
@@ -2484,7 +2491,7 @@ Rectangle Menu::GetCharacterBounds( USHORT nItemID, long nIndex ) const
         ImplFillLayoutData();
     if( mpLayoutData )
     {
-        for( int i = 0; i < mpLayoutData->m_aLineItemIds.size(); i++ )
+        for( int i = 0; i < (int) mpLayoutData->m_aLineItemIds.size(); i++ )
         {
             if( mpLayoutData->m_aLineItemIds[i] == nItemID )
             {
@@ -2506,7 +2513,7 @@ long Menu::GetIndexForPoint( const Point& rPoint, USHORT& rItemID ) const
     if( mpLayoutData )
     {
         nIndex = mpLayoutData->GetIndexForPoint( rPoint );
-        for( int i = 0; i < mpLayoutData->m_aLineIndices.size(); i++ )
+        for( int i = 0; i < (int) mpLayoutData->m_aLineIndices.size(); i++ )
         {
             if( mpLayoutData->m_aLineIndices[i] <= nIndex &&
                 (i == mpLayoutData->m_aLineIndices.size()-1 || mpLayoutData->m_aLineIndices[i+1] > nIndex) )
@@ -2540,7 +2547,7 @@ Pair Menu::GetItemStartEnd( USHORT nItem ) const
     if( ! mpLayoutData )
         ImplFillLayoutData();
 
-    for( long i = 0; i < mpLayoutData->m_aLineItemIds.size(); i++ )
+    for( long i = 0; i < (long) mpLayoutData->m_aLineItemIds.size(); i++ )
         if( mpLayoutData->m_aLineItemIds[i] == nItem )
             return GetLineStartEnd( i );
 
@@ -2552,7 +2559,7 @@ USHORT Menu::GetDisplayItemId( long nLine ) const
     USHORT nItemId = 0;
     if( ! mpLayoutData )
         ImplFillLayoutData();
-    if( mpLayoutData && nLine >= 0 && nLine < mpLayoutData->m_aLineItemIds.size() )
+    if( mpLayoutData && nLine >= 0 && nLine < (long) mpLayoutData->m_aLineItemIds.size() )
         nItemId = mpLayoutData->m_aLineItemIds[nLine];
     return nItemId;
 }
@@ -2860,20 +2867,25 @@ BOOL MenuBar::HandleMenuCommandEvent( Menu *pMenu, USHORT nEventId ) const
 
 PopupMenu::PopupMenu()
 {
+    pRefAutoSubMenu = NULL;
 }
 
 PopupMenu::PopupMenu( const ResId& rResId )
 {
+    pRefAutoSubMenu = NULL;
     ImplLoadRes( rResId );
 }
 
 PopupMenu::PopupMenu( const PopupMenu& rMenu )
 {
+    pRefAutoSubMenu = NULL;
     *this = rMenu;
 }
 
 PopupMenu::~PopupMenu()
 {
+    if( pRefAutoSubMenu && *pRefAutoSubMenu == this )
+        *pRefAutoSubMenu = NULL;    // #111060# avoid second delete in ~MenuItemData
 }
 
 BOOL PopupMenu::IsInExecute()
