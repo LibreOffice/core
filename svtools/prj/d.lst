@@ -180,6 +180,8 @@ hedabu: ..\inc\sbxprop.hxx %_DEST%\inc%_EXT%\svtools\sbxprop.hxx
 hedabu: ..\inc\sbxvar.hxx %_DEST%\inc%_EXT%\svtools\sbxvar.hxx
 hedabu: ..\source\search\levdis.hxx %_DEST%\inc%_EXT%\svtools\levdis.hxx
 hedabu: ..\inc\transfer.hxx %_DEST%\inc%_EXT%\svtools\transfer.hxx
+hedabu: ..\inc\embedtransfer.hxx %_DEST%\inc%_EXT%\svtools\embedtransfer.hxx
+hedabu: ..\inc\embedhlp.hxx %_DEST%\inc%_EXT%\svtools\embedhlp.hxx
 hedabu: ..\inc\cliplistener.hxx %_DEST%\inc%_EXT%\svtools\cliplistener.hxx
 hedabu: ..\inc\txtcmp.hxx %_DEST%\inc%_EXT%\svtools\txtcmp.hxx
 hedabu: ..\inc\urlbmk.hxx %_DEST%\inc%_EXT%\svtools\urlbmk.hxx
@@ -374,6 +376,9 @@ hedabu: ..\inc\AccessibleBrowseBoxTableCell.hxx %_DEST%\inc%_EXT%\svtools\access
 
 hedabu: ..\inc\helpid.hrc %_DEST%\inc%_EXT%\svtools\helpid.hrc
 hedabu: ..\inc\wizardheader.hxx %_DEST%\inc%_EXT%\svtools\wizardheader.hxx
+hedabu: ..\inc\insdlg.hxx %_DEST%\inc%_EXT%\svtools\insdlg.hxx
+hedabu: ..\inc\soerr.hxx %_DEST%\inc%_EXT%\svtools\soerr.hxx
+hedabu: ..\inc\sores.hxx %_DEST%\inc%_EXT%\svtools\sores.hxx
 
 hedabu: ..\inc\textwindowaccessibility.hxx %_DEST%\inc%_EXT%\svtools\textwindowaccessibility.hxx
 
