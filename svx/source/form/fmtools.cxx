@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 09:50:40 $
+ *  last change: $Author: fs $ $Date: 2001-07-23 10:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,7 +773,7 @@ Sequence<sal_Int16> findValueINT16(const Sequence< ::rtl::OUString>& rList, cons
         // An welcher Position finde ich den Wert?
         sal_Int32 nPos = -1;
         const ::rtl::OUString* pTArray = (const ::rtl::OUString*)rList.getConstArray();
-        for (sal_uInt32 i = 0; i < rList.getLength(); i++)
+        for (sal_uInt32 i = 0; i < (sal_uInt32)rList.getLength(); i++)
         {
             if( rValue==pTArray[i] )
             {
@@ -802,7 +802,7 @@ Sequence<sal_Int16> findValueINT16(const Sequence< ::rtl::OUString>& rList, cons
         sal_uInt32 nCount = 0;
         const ::rtl::OUString* pTArray = (const ::rtl::OUString*)rList.getConstArray();
         sal_uInt32 i;
-        for (i = 0; i < rList.getLength(); i++)
+        for (i = 0; i < (sal_uInt32)rList.getLength(); i++)
         {
             if( rValue==pTArray[i] )
                 nCount++;
@@ -812,7 +812,7 @@ Sequence<sal_Int16> findValueINT16(const Sequence< ::rtl::OUString>& rList, cons
         // Jetzt Sequence fuellen
         Sequence<sal_Int16> aRetSeq( nCount );
         sal_uInt32 j = 0;
-        for (i = 0; i < rList.getLength(); i++)
+        for (i = 0; i < (sal_uInt32)rList.getLength(); i++)
         {
             if( rValue==pTArray[i] )
             {
@@ -834,7 +834,7 @@ Sequence<sal_Int16> findValue(const Sequence< ::rtl::OUString>& rList, const ::r
         // An welcher Position finde ich den Wert?
         sal_Int32 nPos = -1;
         const ::rtl::OUString* pTArray = (const ::rtl::OUString*)rList.getConstArray();
-        for (sal_uInt32 i = 0; i < rList.getLength(); ++i, ++pTArray)
+        for (sal_uInt32 i = 0; i < (sal_uInt32)rList.getLength(); ++i, ++pTArray)
         {
             if( rValue == *pTArray )
             {
@@ -864,7 +864,7 @@ Sequence<sal_Int16> findValue(const Sequence< ::rtl::OUString>& rList, const ::r
         sal_uInt32 nCount = 0;
         const ::rtl::OUString* pTArray = (const ::rtl::OUString*)rList.getConstArray();
         sal_uInt32 i;
-        for (i = 0; i < rList.getLength(); i++)
+        for (i = 0; i < (sal_uInt32)rList.getLength(); i++)
         {
             if( rValue==pTArray[i] )
                 ++nCount;
@@ -874,7 +874,7 @@ Sequence<sal_Int16> findValue(const Sequence< ::rtl::OUString>& rList, const ::r
         // Jetzt Sequence fuellen
         Sequence<sal_Int16> aRetSeq( nCount );
         sal_uInt32 j = 0;
-        for (i = 0; i < rList.getLength(); i++)
+        for (i = 0; i < (sal_uInt32)rList.getLength(); i++)
         {
             if( rValue==pTArray[i] )
             {
@@ -893,13 +893,13 @@ sal_uInt32 findValue1(const Sequence< ::rtl::OUString>& rList, const ::rtl::OUSt
     const ::rtl::OUString* pTArray = (const ::rtl::OUString*)rList.getConstArray();
     ::rtl::OString aStr1 = S(rValue);
     sal_uInt32 i;
-    for (i = 0; i < rList.getLength(); i++)
+    for (i = 0; i < (sal_uInt32)rList.getLength(); i++)
     {
         ::rtl::OString aStr2 = S(pTArray[i]);
         if( rValue==pTArray[i] )
             break;
     }
-    return (i < rList.getLength()) ? i : LIST_ENTRY_NOTFOUND;
+    return (i < (sal_uInt32)rList.getLength()) ? i : LIST_ENTRY_NOTFOUND;
 }
 
 
@@ -976,7 +976,7 @@ Any StringToAny( ::rtl::OUString _Str, TypeClass eTargetType )
             }
         case TypeClass_CHAR:
             {
-                sal_Char cC = (aStr.GetChar(0));
+                sal_Char cC = (sal_Char)(aStr.GetChar(0));
                 aRetAny.setValue(&cC,getCharCppuType() );       break;
             }
         case TypeClass_STRING:          aRetAny <<= _Str;           break;
@@ -1589,7 +1589,7 @@ sal_Int16   GridViewColumnCount(const Reference< ::com::sun::star::container::XI
     {
         if (rColumns.is())
         {
-            sal_Int16 nCount = rColumns->getCount();
+            sal_Int16 nCount = (sal_Int16)rColumns->getCount();
             // loop through all columns
             Reference< ::com::sun::star::beans::XPropertySet> xCur;
             for (sal_Int16 i=0; i<rColumns->getCount(); ++i)
@@ -1801,10 +1801,10 @@ Reference< ::com::sun::star::sdbc::XConnection> findConnection(const Reference< 
 DBG_NAME(FmXDispatchInterceptorImpl);
 //------------------------------------------------------------------------
 FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(
-            const Reference< XDispatchProviderInterception>& _rToIntercept, FmDispatchInterceptor* _pMaster,
+            const Reference< XDispatchProviderInterception>& _rxToIntercept, FmDispatchInterceptor* _pMaster,
             sal_Int16 _nId, Sequence< ::rtl::OUString > _rInterceptedSchemes)
     :FmXDispatchInterceptorImpl_BASE(_pMaster && _pMaster->getInterceptorMutex() ? *_pMaster->getInterceptorMutex() : m_aFallback)
-    ,m_xIntercepted(_rToIntercept)
+    ,m_xIntercepted(_rxToIntercept)
     ,m_pMaster(_pMaster)
     ,m_nId(_nId)
     ,m_aInterceptedURLSchemes(_rInterceptedSchemes)
@@ -1813,12 +1813,12 @@ FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(
 
     ::osl::MutexGuard aGuard(getAccessSafety());
     ::comphelper::increment(m_refCount);
-    if (m_xIntercepted.is())
+    if (_rxToIntercept.is())
     {
-        m_xIntercepted->registerDispatchProviderInterceptor((::com::sun::star::frame::XDispatchProviderInterceptor*)this);
+        _rxToIntercept->registerDispatchProviderInterceptor((::com::sun::star::frame::XDispatchProviderInterceptor*)this);
         // this should make us the top-level dispatch-provider for the component, via a call to our
         // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fullfill
-        Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(m_xIntercepted, UNO_QUERY);
+        Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(_rxToIntercept, UNO_QUERY);
         if (xInterceptedComponent.is())
             xInterceptedComponent->addEventListener(this);
     }
@@ -1907,7 +1907,8 @@ Sequence< ::rtl::OUString > SAL_CALL FmXDispatchInterceptorImpl::getInterceptedU
 //------------------------------------------------------------------------------
 void SAL_CALL FmXDispatchInterceptorImpl::disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException )
 {
-    if (Source.Source == m_xIntercepted)
+    Reference< XDispatchProviderInterception > xIntercepted(m_xIntercepted.get(), UNO_QUERY);
+    if (Source.Source == xIntercepted)
         ImplDetach();
 }
 
@@ -1917,10 +1918,14 @@ void FmXDispatchInterceptorImpl::ImplDetach()
     ::osl::MutexGuard aGuard(getAccessSafety());
 
     // deregister ourself from the interception component
-    if (m_xIntercepted.is())
-        m_xIntercepted->releaseDispatchProviderInterceptor((::com::sun::star::frame::XDispatchProviderInterceptor*)this);
+    Reference< XDispatchProviderInterception > xIntercepted(m_xIntercepted.get(), UNO_QUERY);
+    if (xIntercepted.is())
+        xIntercepted->releaseDispatchProviderInterceptor(static_cast<XDispatchProviderInterceptor*>(this));
 
-    m_xIntercepted = NULL;
+//  m_xIntercepted = Reference< XDispatchProviderInterception >();
+        // Don't reset m_xIntercepted: It may be needed by our owner to check for which object we were
+        // responsible. As we hold the object with a weak reference only, this should be no problem.
+        // 88936 - 23.07.2001 - frank.schoenheit@sun.com
     m_pMaster = NULL;
 }
 
@@ -1928,9 +1933,9 @@ void FmXDispatchInterceptorImpl::ImplDetach()
 void FmXDispatchInterceptorImpl::disposing()
 {
     // remove ourself as event listener from the interception component
-    Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(m_xIntercepted, UNO_QUERY);
+    Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(m_xIntercepted.get(), UNO_QUERY);
     if (xInterceptedComponent.is())
-        xInterceptedComponent->removeEventListener((::com::sun::star::lang::XEventListener*)this);
+        xInterceptedComponent->removeEventListener(static_cast<XEventListener*>(this));
 
     // detach from the interception component
     ImplDetach();

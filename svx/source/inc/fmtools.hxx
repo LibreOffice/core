@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 07:49:20 $
+ *  last change: $Author: fs $ $Date: 2001-07-23 10:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,9 @@
 #endif
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
+#endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -573,7 +576,8 @@ class FmXDispatchInterceptorImpl : public FmXDispatchInterceptorImpl_BASE
     ::form::OImplementationIdsRef   m_aHoldImplIdHelper;
 
     // the component which's dispatches we're intercepting
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>   m_xIntercepted;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProviderInterception>   m_xIntercepted;
+
     // the real interceptor
     FmDispatchInterceptor*          m_pMaster;
 
