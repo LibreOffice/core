@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:03:31 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 14:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_OUTERJOINESCAPE,  "EnableOuterJoinEscape")
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_AS_TEMPLATE,      "AsTemplate");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_HAVING_CLAUSE,    "HavingClause");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_GROUP_BY,         "GroupBy");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_EDIT_WIDTH, "EditWidth");
 
 //============================================================
 //= service names
