@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:36:46 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:40:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ = ..$/..
 
 PRJNAME	= lingucomponent
 TARGET	= ulingu
-USE_DEFFILE=TRUE
+LIBTARGET=NO
 
 #----- Settings ---------------------------------------------------------
 
@@ -72,21 +72,12 @@ USE_DEFFILE=TRUE
 
 
 SLOFILES=	\
-        $(SLO)$/dictmgr.obj \
-        $(SLO)$/csutil.obj
+        $(SLO)$/dictmgr.obj
 
 
-#SHL1TARGET=	$(TARGET)
-SHL1TARGET= 	$(TARGET)$(UPD)$(DLLPOSTFIX)
-
-SHL1STDLIBS= 
-
-# build DLL
-SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=	$(SHL1TARGET)
+LIB1TARGET= $(SLB)$/lib$(TARGET).lib
+LIB1ARCHIV= $(LB)/lib$(TARGET).a
+LIB1OBJFILES= $(SLOFILES)
 
 
 # --- Targets ------------------------------------------------------
