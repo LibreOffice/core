@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-09 16:57:56 $
+ *  last change: $Author: mba $ $Date: 2002-01-11 16:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,8 +584,6 @@ BOOL SfxProgress::SetState
                 pImp->pWorkWin = SFX_APP()->GetWorkWindow_Impl( pImp->pView );
                 if( pImp->pWorkWin )
                 {
-                    if ( pImp->pView )
-                        pImp->pView->GetDispatcher()->Update_Impl();
                     pImp->pWorkWin->SetTempStatusBar_Impl( TRUE );
                     pImp->pMgr = pImp->pWorkWin->GetStatusBarManager_Impl();
                 }

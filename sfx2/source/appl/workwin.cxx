@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-08 08:47:50 $
+ *  last change: $Author: mba $ $Date: 2002-01-11 16:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "splitwin.hxx"
 #include "msgpool.hxx"
 #include "stbmgr.hxx"
+#include "sfxresid.hxx"
 
 DBG_NAME(SfxWorkWindow);
 
@@ -1530,11 +1531,18 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
     {
         BOOL bOn = FALSE;
         SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
+        BOOL bReset = FALSE;
+        if ( bSet && !aStatBar.nId )
+        {
+            bReset = TRUE;
+            SetStatusBar_Impl( SfxResId(SFX_ITEMTYPE_STATBAR), SFX_APP(), GetBindings() );
+        }
+
         if ( aStatBar.nId && aStatBar.bOn && !bIsFullScreen && ( !pTbxCfg || pTbxCfg->IsStatusBarVisible() ) )
             bOn = TRUE;
 
         aStatBar.bTemp = bSet;
-        if ( !bOn )
+        if ( !bOn || bReset )
         {
             if ( aStatBar.pStatusBar && !aStatBar.pStatusBar->GetBindings_Impl() )
             {
@@ -1556,6 +1564,9 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
 
             ShowChilds_Impl();
         }
+
+        if ( bReset )
+            ResetStatusBar_Impl();
     }
 }
 
