@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:10:02 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 
 #pragma hdrstop
@@ -522,7 +526,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
 void SwFldDokPage::AddSubType(USHORT nTypeId)
 {
-    USHORT nPos = aSelectionLB.InsertEntry(*SwFieldType::GetFldNames()->GetObject(nTypeId));
+    USHORT nPos = aSelectionLB.InsertEntry(SwFieldType::GetTypeStr(nTypeId));
     aSelectionLB.SetEntryData(nPos, (void*)nTypeId);
 }
 
