@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-05 10:29:14 $
+ *  last change: $Author: fs $ $Date: 2001-09-11 13:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,7 +811,6 @@ void SvtFileView::OpenFolder( const Sequence< OUString >& aContents )
     mpImp->mpView->ClearAll();
     const OUString* pFileProperties  = aContents.getConstArray();
     UINT32 i, nCount = aContents.getLength();
-    sal_Bool bExecFilter = ( mpImp->maCurrentFilter.Len() > 0 ) && ( mpImp->maCurrentFilter != mpImp->maAllFilter );
     for ( i = 0; i < nCount; ++i )
     {
         String aRow( pFileProperties[i] );
@@ -984,17 +983,7 @@ void SvtFileView::Initialize( const String& rURL, const String& rFilter )
     WaitObject aWaitCursor( this );
 
     mpImp->maViewURL = rURL;
-    mpImp->maCurrentFilter = rFilter;
-    mpImp->maCurrentFilter.ToLowerAscii();
-
-    mpImp->Clear();
-    mpImp->GetFolderContent_Impl( rURL );
-    mpImp->FilterFolderContent_Impl( rFilter );
-
-    mpImp->SortFolderContent_Impl();
-    mpImp->CreateDisplayText_Impl();
-
-    mpImp->OpenFolder_Impl();
+    ExecuteFilter( rFilter );
     mpImp->maOpenDoneLink.Call( this );
 }
 
@@ -1318,6 +1307,22 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
 }
+// -----------------------------------------------------------------------
+namespace
+{
+    struct FilterMatch : public ::std::unary_function< bool, WildCard >
+    {
+    private:
+        const String&   m_rCompareString;
+    public:
+        FilterMatch( const String& _rCompareString ) : m_rCompareString( _rCompareString ) { }
+
+        bool operator()( const WildCard& _rMatcher )
+        {
+            return _rMatcher.Matches( m_rCompareString ) ? true : false;
+        }
+    };
+}
 
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
@@ -1331,41 +1336,73 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
     if ( maContent.size() == 0 )
         return;
 
-    sal_Bool bDelete;
+    // count (estimate) the number of filter tokens
+    sal_Int32 nTokens;
+    const sal_Unicode* pStart = rFilter.getStr();
+    const sal_Unicode* pEnd = pStart + rFilter.getLength();
+    while ( pStart != pEnd )
+        if ( *pStart++ == ';' )
+            ++nTokens;
 
-    std::vector< SortingData_Impl* >::iterator aIt;
-    aIt = maContent.begin();
-
+    // collect the filter tokens
+    ::std::vector< WildCard > aFilters;
+    aFilters.reserve( nTokens );
+    sal_Int32 nIndex = 0;
+    ::rtl::OUString sToken;
     do
     {
-        if ( (*aIt)->mbIsFolder == sal_True )
-            aIt++;
-        else
+        sToken = rFilter.getToken( 0, ';', nIndex );
+        if ( sToken.getLength() )
         {
-            bDelete = sal_True;
-
-            sal_Int32 nIndex = 0;
-            do
-            {
-                WildCard aWild( rFilter.getToken( 0, ';', nIndex ) );
-                if ( aWild.Matches( (*aIt)->maTitle ) )
-                {
-                    bDelete = sal_False;
-                    break;
-                }
-            }
-            while ( nIndex >= 0 );
-
-            if ( bDelete )
-            {
-                delete (*aIt);
-                maContent.erase( aIt );
-            }
-            else
-                aIt++;
+            aFilters.push_back( WildCard( sToken.toAsciiUpperCase() ) );
         }
     }
-    while ( aIt != maContent.end() );
+    while ( nIndex >= 0 );
+
+    // do the filtering
+    ::std::vector< SortingData_Impl* >::iterator aContentLoop = maContent.begin();
+    sal_Bool bDeleteThisOne = sal_True;
+    String sCompareString;
+    do
+    {
+        if ( (*aContentLoop)->mbIsFolder == sal_True )
+            ++aContentLoop;
+        else
+        {
+            // normalize the content title (we always match case-insensitive)
+            // 91872 - 11.09.2001 - frank.schoenheit@sun.com
+            sCompareString = (*aContentLoop)->maTitle.toAsciiUpperCase();
+
+            // search for the first filter which matches
+            ::std::vector< WildCard >::const_iterator pMatchingFilter =
+                ::std::find_if(
+                    aFilters.begin(),
+                    aFilters.end(),
+                    FilterMatch( sCompareString )
+                );
+            if ( aFilters.end() == pMatchingFilter )
+            {
+                // none of the filters did match
+                delete (*aContentLoop);
+
+                if ( maContent.begin() == aContentLoop )
+                {
+                    maContent.erase( aContentLoop );
+                    aContentLoop = maContent.begin();
+                }
+                else
+                {
+                    std::vector< SortingData_Impl* >::iterator aDelete = aContentLoop;
+                    --aContentLoop; // move the iterator to a position which is not invalidated by the erase
+                    maContent.erase( aDelete );
+                    ++aContentLoop; // this is now the next one ....
+                }
+            }
+            else
+                ++aContentLoop;
+        }
+    }
+    while ( aContentLoop != maContent.end() );
 }
 
 // -----------------------------------------------------------------------
