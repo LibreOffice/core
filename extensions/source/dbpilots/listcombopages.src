@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
     Text[ danish ] = "Tabeludvalg";
     Text[ swedish ] = "Tabellurval";
     Text[ polish ] = "Wyb�r tabeli";
-    Text[ portuguese_brazilian ] = "Tabellenauswahl";
+    Text[ portuguese_brazilian ] = "Sele��o de tabela";
     Text[ japanese ] = "テーブルの選択";
     Text[ chinese_simplified ] = "选择表格";
     Text[ chinese_traditional ] = "選擇表格";
@@ -109,16 +109,19 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Text[ italian ] = "Campo di controllo";
         Text[ danish ] = "Kontrolelement";
         Text[ swedish ] = "Kontrollf�lt";
-        Text[ polish ] = "Pole kontrolne";
-        Text[ portuguese_brazilian ] = "Control";
+        Text[ polish ] = "Formant";
+        Text[ portuguese_brazilian ] = "Controle";
         Text[ japanese ] = "コントロール";
         Text[ korean ] = "컨트롤";
         Text[ chinese_simplified ] = "控制";
         Text[ chinese_traditional ] = "控制項";
-        Text[ turkish ] = "Control";
-        Text[ arabic ] = "Control";
+        Text[ turkish ] = "Kontrol";
+        Text[ arabic ] = "���� ����";
         Text[ catalan ] = "Control";
         Text[ thai ] = "ควบคุม";
+        Text[ czech ] = "Ovládací prvek";
+        Text[ hebrew ] = "Kontrollfeld";
+        Text[ hindi ] = "नियंत्रण";
     };
 
     FixedText FT_SELECTTABLE_LABEL
@@ -141,17 +144,20 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Text[ italian ] = "Al lato destro vedrete le tabelle dalla sorgente dati del formulario.\n\nSelezionate le tabelle i cui dati dovranno costituire la base del contenuto dell'elenco:";
         Text[ danish ] = "P� h�jre side ses alle tabeller fra datakilden i formularen.\n\n\nV�lg den tabel, hvis data skal danne grundlag for listeindholdet:";
         Text[ swedish ] = "P� den h�gra sidan ser du alla tabeller fr�n datak�llan till formul�ret.\n\n\nV�lj tabellen vars data ska ligga till grund f�r listinneh�llet:";
-        Text[ polish ] = "Po prawej stronie widoczne s� wszystkie tabele ze �r�d�a danych formularza.\n\nNale�y wybra� tabel�, kt�rej dane b�d� s�u�y�y jako podstawa zawarto�ci listy.";
-        Text[ portuguese_brazilian ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
+        Text[ polish ] = "Po prawej stronie s� widoczne wszystkie tabele ze �r�d�a danych formularza.\n\n\nWybierz tabel�, kt�rej dane b�d� s�u�y�y jako podstawa zawarto�ci listy:";
+        Text[ portuguese_brazilian ] = "O lado direito mostra todas as tabelas da fonte de dados do formul�rio.\n\n\nSelecione a tabela com os dados que v�o servir de base para o conte�do da lista:";
         Text[ japanese ] = "右側にフォームのデータソースからのすべてのテーブルが表示されています。\n\n\nこの中からリスト内容のベースとなるテーブルを選択してください。";
         Text[ korean ] = "오른쪽에 양식 데이터 원본의 모든 테이블을 볼 수 있습니다.\n\n\n데이터가 목록 내용의 기준으로 사용될 테이블을 선택하십시오:";
         Text[ chinese_simplified ] = "在右边您能够看到表单数据源的所有数据表格。\n\n\n请选择一些用于组成列单内容的基本数据的表格：";
         Text[ chinese_traditional ] = "在右邊您能夠看到表單資料源的所有資料表格。\n\n\n請選擇一些用於組成清單內容的基本資料的表格：";
-        Text[ turkish ] = "On the right hand side, you see all tables of the form's data source.\n\n\nPlease choose the table, whichs data should be the base for the list content:";
+        Text[ turkish ] = "Sa� tarafta ,formun veri kayna�� ile ilgili b�t�n tablolar� g�receksiniz.\n\n\nL�tfen ,listeye kaynak olu�turacak vrilerin al�naca�� tabloyu se�iniz:";
         Text[ arabic ] = "�� ������ ������ ��� ��� ���� ����� ���� ������ ���������.\n\n\n������ ������ ������ ���� ��� ���� ������� ������� �������� �������:";
         Text[ catalan ] = "A la dreta teniu totes les taules de la font de les dades del formulari.\n\n\nTrieu la taula des de la qual s'han d'utilitzar les dades com a base del contingut de la llista:";
         Text[ finnish ] = "Oikealla puolella n�kyv�t kaikki lomakkeen tietol�hteest� tulevat taulukot.\n\n\nValitse taulukko, jonka tietoja tulee k�ytt�� luettelosis�ll�n perustana:";
         Text[ thai ] = "ทางขวามือ  คุณเห็นตารางทั้งหมดจากแหล่งข้อมูลของแบบฟอร์ม \n\n\nเลือกตารางจากข้อมูลที่ควรถูกใช้เป็นพื้นฐานสำหรับเนื้อหารายการ:";
+        Text[ czech ] = "Na pravé straně vidíte všechny tabulky ze zdroje dat formuláře.\n\nZvolte tabulku, ze které mají být použita data pro obsah seznamu:";
+        Text[ hebrew ] = "Auf der rechten Seite sehen Sie alle Tabellen aus der Datenquelle des Formulars.\n\n\nWählen Sie bitte die Tabelle, deren Daten die Grundlage für den Listeninhalt bilden sollen:";
+        Text[ hindi ] = "दाहिना भाग पर, फ़ॉर्म का ड़ॉटा मूल का सभी सारणियों को आप देख सकते है ।\n\n\nसारणी को चुनिए जिसका ड़ॉटा को सूची विषय केलिए आधार जैसे उपयोग किया जायेगा :";
     };
     ListBox LB_SELECTTABLE
     {
@@ -166,6 +172,9 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
     Text[ catalan ] = "Selecci� de taula";
     Text[ finnish ] = "Taulukon valinta";
     Text[ thai ] = "เลือกตาราง";
+    Text[ czech ] = "Výběr tabulky";
+    Text[ hebrew ] = "Tabellenauswahl";
+    Text[ hindi ] = "सारणी चुनाव";
 };
 
 TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
@@ -184,8 +193,8 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
     Text[ italian ] = "Selezione campo";
     Text[ danish ] = "Feltudvalg";
     Text[ swedish ] = "F�lturval";
-    Text[ polish ] = "Wyb�r pola";
-    Text[ portuguese_brazilian ] = "Feldauswahl";
+    Text[ polish ] = "Wyb�r p�l";
+    Text[ portuguese_brazilian ] = "Sele��o de campo";
     Text[ japanese ] = "フィールドの選択";
     Text[ chinese_simplified ] = "选择字段";
     Text[ chinese_traditional ] = "選擇欄位";
@@ -220,7 +229,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ danish ] = "~Eksisterende felter";
         Text [ swedish ] = "~Existerande f�lt";
         Text [ polish ] = "Istniej�ce pola";
-        Text [ portuguese_brazilian ] = "Should one option button be the default choice?";
+        Text [ portuguese_brazilian ] = "Campos dispon�veis";
         Text [ japanese ] = "使用できるフィールド";
         Text [ chinese_simplified ] = "现有的字段";
         Text [ chinese_traditional ] = "現存的欄位";
@@ -229,10 +238,13 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ chinese_simplified ] = "现有的字段";
         Text [ greek ] = "��������� �����";
         Text [ korean ] = "사용할 수 있는 필드";
-        Text [ turkish ] = "~Mevcut alanlar";
+        Text [ turkish ] = "Mevcut alanlar";
         Text[ catalan ] = "Camps existents";
         Text[ finnish ] = "Nykyiset kent�t";
         Text[ thai ] = "เขตข้อมูลที่มีอยู่";
+        Text[ czech ] = "Existující pole";
+        Text[ hebrew ] = "~Vorhandene Felder";
+        Text[ hindi ] = "अस्तित्व में रहनेवाला क्षेत्रें";
     };
     ListBox LB_SELECTFIELD
     {
@@ -259,7 +271,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ danish ] = "~Visningsfelt";
         Text [ swedish ] = "~Visningsf�lt:";
         Text [ polish ] = "Pole-wy�wietlacz";
-        Text [ portuguese_brazilian ] = "Yes, the default choice is:";
+        Text [ portuguese_brazilian ] = "Exibir campo";
         Text [ japanese ] = "表示フィールド";
         Text [ chinese_simplified ] = "显示栏";
         Text [ chinese_traditional ] = "顯示欄位";
@@ -268,10 +280,13 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ chinese_simplified ] = "显示栏";
         Text [ greek ] = "����� ��������";
         Text [ korean ] = "표시 필드";
-        Text [ turkish ] = "~G�r�nt� alan�";
+        Text [ turkish ] = "G�r�n�m alan�";
         Text[ catalan ] = "Camp de visualitzaci�";
         Text[ finnish ] = "N�yt� kentt�";
         Text[ thai ] = "แสดงผลเขตข้อมูล";
+        Text[ czech ] = "Zobrazit pole";
+        Text[ hebrew ] = "~Anzeigefeld";
+        Text[ hindi ] = "क्षेत्र को दिखाओ";
     };
     Edit ET_DISPLAYEDFIELD
     {
@@ -300,8 +315,8 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ italian ] = "Il contenuto del campo selezionto viene mostrato nell'elenco della casella combinata.";
         Text [ danish ] = "Indholdet af det valgte felt vises p� kombinationsfeltets liste.";
         Text [ swedish ] = "Inneh�llet i det utvalda f�ltet visas i kombinationsf�ltets lista.";
-        Text [ polish ] = "Zawarto�� wybranego pola wy�wietlona zostanie na li�cie pola kombi.";
-        Text [ portuguese_brazilian ] = "No, no I don't want an option to be the default.";
+        Text [ polish ] = "Zawarto�� wybranego pola zostanie wy�wietlona na li�cie pola kombi.";
+        Text [ portuguese_brazilian ] = "O conte�do do campo selecionado ser� mostrado na lista da caixa de combina��o.";
         Text [ japanese ] = "選択したフィールドの内容は、コンボボックスのリストに表示されます。";
         Text [ chinese_simplified ] = "已经选择的字段会显示在组合栏的列单内。";
         Text [ chinese_traditional ] = "選擇的欄位內容會顯示在組合欄位的清單之中。";
@@ -310,10 +325,13 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text [ chinese_simplified ] = "已经选择的字段会显示在组合栏的列单内。";
         Text [ greek ] = "�� ����������� ��� ����������� ������ ����������� ���� ����� ��� ������ ����������.";
         Text [ korean ] = "선택된 필드의 내용이 콤보 상자의 목록에 표시됩니다.";
-        Text [ turkish ] = "Se�ilen alan�n i�eri�i, kombinasyon alan� listesinde g�r�nt�lenecek.";
+        Text [ turkish ] = "Se�ilen alan i�erikleri A��lan Kutu'da g�sterilmi� olacak.";
         Text[ catalan ] = "El contingut del camp seleccionat apareixer� en la llista del quadre combinat.";
         Text[ finnish ] = "Valitun kent�n sis�lt� n�ytet��n yhdistelm�ruudun luettelossa.";
         Text[ thai ] = "เนื้อหาของเขตข้อมูลที่เลือกไม่แสดงในรายการกล่องคอมโบ้ ";
+        Text[ czech ] = "Obsah vybraného pole bude zobrazen v rozbalovacím seznamu.";
+        Text[ hebrew ] = "Der Inhalt des ausgewählten Feldes wird in der Liste des Kombinationsfeldes angezeigt.";
+        Text[ hindi ] = "चुने हुए क्षेत्र का विषयों कॉम्बो बॉक्स् सूची में दिखलाया जाएगा ।";
     };
 
     String STR_FIELDINFO_LISTBOX
@@ -330,21 +348,27 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text[ italian ] = "Il contenuto del campo selezionato verr� mostrato nella casella di riepilogo quando i campi collegati coincidono.";
         Text[ danish ] = "Indholdet af det valgte felt vises p� rullelisten, n�r de k�dede felter stemmer overens";
         Text[ swedish ] = "Inneh�llet i det utvalda f�ltet visas i listrutan om de l�nkade f�lten st�mmer �verens.";
-        Text[ polish ] = "Je�li po��czone pola si� zgadzaj�, zawarto�� wybranego pola wy�wietlona zostanie w polu listy.";
-        Text[ portuguese_brazilian ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
+        Text[ polish ] = "Je�li po��czone pola s� identyczne, to zawarto�� wybranego pola zostanie wy�wietlona w polu listy.";
+        Text[ portuguese_brazilian ] = "O conte�do do campo selecionado ser� mostrado na lista se os campos conectados coincidirem.";
         Text[ japanese ] = "リンクするフィールドが同一だと、選択したフィールドの内容がリストボックスに表示されます。";
         Text[ korean ] = "연결된 필드가 일치할 경우 선택된 필드의 내용이 목록 필드에 나타납니다.";
         Text[ chinese_simplified ] = "如果相连结的字段一致，列单内会显示出选择的字段内容。";
         Text[ chinese_traditional ] = "如果連結的欄位相符，所選擇的欄位內容就會顯示在清單方塊之中。";
-        Text[ turkish ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
+        Text[ turkish ] = "E�er ba�lant� kurulmu� alanlar �zde� ise se�ilen alan�n i�erikleri listesi, liste kutusunda g�r�nt�lenecektir.";
         Text[ arabic ] = "��� ���� ������� ����� ������� �� ���� ������� �� ���� ����� ������ ��������";
         Text[ catalan ] = "El contingut del camp seleccionat apareixer� en el quadre de llista si els camps enlla�ats s�n id�ntics.";
         Text[ finnish ] = "Valitun kent�n sis�lt� n�ytet��n luetteloruudussa, jos linkitetyt kent�t ovat identtiset.";
         Text[ thai ] = "เนื้อหาของเขตข้อมูลที่เลือกจะแสดงในกล่องรายการถ้าระบุเขตข้อมูลที่เชื่อมโยง";
+        Text[ czech ] = "Obsah vybraného pole bude zobrazen v rozbalovacím seznamu, pokud jsou propojená pole identická.";
+        Text[ hebrew ] = "Der Inhalt des ausgewählten Feldes wird in dem Listenfeld angezeigt, wenn die ver- knüpften Felder überein- stimmen";
+        Text[ hindi ] = "अगर लिंक की हुयी क्षेत्र समान है तो चुने हुए क्षेत्र का विषय को सूची बॉक्स में दिखाया जाएगा ।";
     };
     Text[ catalan ] = "Selecci� de camp";
     Text[ finnish ] = "Kent�n valinta";
     Text[ thai ] = "เลือกเขตข้อมูล";
+    Text[ czech ] = "Výběr polí";
+    Text[ hebrew ] = "Feldauswahl";
+    Text[ hindi ] = "क्षेत्र चुनाव";
 };
 
 TabPage RID_PAGE_LCW_FIELDLINK
@@ -364,7 +388,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
     Text [ danish ] = "Feltk�de";
     Text [ swedish ] = "F�ltl�nk";
     Text [ polish ] = "Po��czenie p�l";
-    Text [ portuguese_brazilian ] = "Database Field";
+    Text [ portuguese_brazilian ] = "Conex�o de campo";
     Text [ japanese ] = "フィールドのリンク";
     Text [ chinese_simplified ] = "字段链结";
     Text [ chinese_traditional ] = "欄位捷徑";
@@ -392,17 +416,20 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text[ italian ] = "Selezionate il campo con il contenuto corrispondente per visualizzare il valore dal campo di visualizzazione.";
         Text[ danish ] = "V�lg her de felter, hvis indhold skal stemme overens, for at v�rdien fra visningsfeltet vises.";
         Text[ swedish ] = "Markera f�lten vars inneh�ll m�ste st�mma �verens f�r att v�rdet fr�n visningsf�ltet ska visas.";
-        Text[ polish ] = "Aby wy�wietlona zosta�a warto�� z pola wy�wietlania, nale�y w tym miejscu wybra� pola o tej samej zawarto�ci.";
-        Text[ portuguese_brazilian ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
+        Text[ polish ] = "Aby zosta�a pokazana warto�� z pola wy�wietlania, nale�y w tym miejscu wybra� pola o zgodnej zawarto�ci.";
+        Text[ portuguese_brazilian ] = "Os conte�dos dos campos que voc� selecionar aqui devem coincidir, de forma a poder ver os respectivos valores no campo de visualiza��o.";
         Text[ japanese ] = "表示フィールドから値が表示されるように、それと一致する内容のフィールドをここで選択します。";
         Text[ korean ] = "표시 필드에 값을 표시하기 위해 내용이 일치해야 하는 필드를 선택하십시오.";
         Text[ chinese_simplified ] = "在这里选择的是内容必须相同的字段，以便在显示框内显示相关的数值。";
         Text[ chinese_traditional ] = "在這裡選擇其內容必須相同的欄位，用於在顯示欄位內顯示相關的數值。";
-        Text[ turkish ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
+        Text[ turkish ] = "Buradan i�erikle e�le�en alanlar� se�ebilirsiniz b�ylece de�er g�r�nt� alan�ndan g�sterilececektir. ";
         Text[ arabic ] = "Here, choose the fields which's contents must equal to show the value in the display field.";
         Text[ catalan ] = "Aqu� �s on es seleccionen els camps amb contingut coincident a fi de mostrar el valor del camp de visualitzaci�";
         Text[ finnish ] = "T�st� voit valita kent�t, joiden sis�lt� vastaa ehtoja. Valitun n�ytt�kent�n arvo tulee n�kyviin.";
         Text[ thai ] = "นี้คือที่ที่คุณเลือกเขตข้อมูลด้วยเนื้อหาที่เข้ากันเพื่อว่าค่าจากเขตข้อมูลที่แสดงผลจะถูกแสดง";
+        Text[ czech ] = "Zde vybíráte pole s odpovídajícím obsahem tak, aby se ukázala hodnota z políčka zobrazení.";
+        Text[ hebrew ] = "Wählen Sie hier die Felder aus, deren Inhalt übereinstimmen muss, damit der Wert aus dem Anzeigefeld angezeigt wird.";
+        Text[ hindi ] = "यहाँ पर आप समान विषय के क्षेत्रों को चुन सकते है, जिससे दिखाव क्षेत्र का मूल्य को दिखा सकते है । ";
     };
     FixedLine FL_FRAME
     {
@@ -425,8 +452,8 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ italian ] = "Campo dalla tabella dei ~valori";
         Text [ danish ] = "Felt fra ~v�rditabellen";
         Text [ swedish ] = "F�lt fr�n ~v�rdetabellen";
-        Text [ polish ] = "Pole z tabeli warto�ci";
-        Text [ portuguese_brazilian ] = "You can save the option group value in a database field or use it for a later action.";
+        Text [ polish ] = "Pole z tabeli ~warto�ci";
+        Text [ portuguese_brazilian ] = "Campo da Tabela de ~Valores";
         Text [ japanese ] = "数値テーブルからのフィールド(~V)";
         Text [ chinese_simplified ] = "从数值表格生成字段(~V)";
         Text [ chinese_traditional ] = "從數值表格組成欄位(~V)";
@@ -435,10 +462,13 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ chinese_simplified ] = "从数值表格生成字段(~V)";
         Text [ greek ] = "����� ��� ��� ������ �����";
         Text [ korean ] = "값 테이블로부터의 필드(~V)";
-        Text [ turkish ] = "De�er tablosu alan�";
+        Text [ turkish ] = "~De�er Toblosundaki Alan";
         Text[ catalan ] = "Camp de la Taula de ~valors";
         Text[ finnish ] = "~Arvotaulukon kentt�";
         Text[ thai ] = "เขตข้อมูลจากตาราง~ค่า";
+        Text[ czech ] = "Pole z tabulky hodnot";
+        Text[ hebrew ] = "Feld aus der ~Wertetabelle";
+        Text[ hindi ] = "मूल्य ~सारणी का क्षेत्र";
     };
     ComboBox CMB_VALUELISTFIELD
     {
@@ -466,8 +496,8 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ italian ] = "Campo dalla tabella di ~elenco";
         Text [ danish ] = "Felt fra ~listetabellen";
         Text [ swedish ] = "F�lt fr�n ~listtabellen";
-        Text [ polish ] = "Pole z tabeli listy";
-        Text [ portuguese_brazilian ] = "Do you want to save the value in a database field?";
+        Text [ polish ] = "Pole z tabeli ~listy";
+        Text [ portuguese_brazilian ] = "Campo da Tabela de ~Listagem";
         Text [ japanese ] = "リストテーブルからのフィールド(~L)";
         Text [ chinese_simplified ] = "从列单表格生成字段(~L)";
         Text [ chinese_traditional ] = "從清單表格組成欄位(~L)";
@@ -476,10 +506,13 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text [ chinese_simplified ] = "从列单表格生成字段(~L)";
         Text [ greek ] = "����� ��� ��� ������ ������";
         Text [ korean ] = "목록 테이블로부터의 필드(~L)";
-        Text [ turkish ] = "Liste tablosu alan�";
+        Text [ turkish ] = "~Liste Tablosundaki Alan";
         Text[ catalan ] = "Camp de la Taula de ~llista";
         Text[ finnish ] = "~Luettelotaulukon kentt�";
         Text[ thai ] = "เขตข้อมูลจากตาราง~รายการ";
+        Text[ czech ] = "Pole z tabulky seznamu";
+        Text[ hebrew ] = "Feld aus der ~Listentabelle";
+        Text[ hindi ] = "सूची सार~णी का क्षेत्र";
     };
     ComboBox CMB_TABLEFIELD
     {
@@ -494,6 +527,9 @@ TabPage RID_PAGE_LCW_FIELDLINK
     Text[ catalan ] = "Enlla� de camp";
     Text[ finnish ] = "Kentt�linkki";
     Text[ thai ] = "เชื่อมโยงเขตข้อมูล";
+    Text[ czech ] = "Propojení polí";
+    Text[ hebrew ] = "Feldverknüpfung";
+    Text[ hindi ] = "क्षेत्र लिंक";
 };
 
 String RID_STR_COMBOWIZ_DBFIELD
@@ -510,7 +546,7 @@ String RID_STR_COMBOWIZ_DBFIELD
     Text [ danish ] = "V�rdien fra kombinationsboksen kan enten gemmes i et databasefelt eller anvendes udelukkende til visning.";
     Text [ swedish ] = "Du kan antingen spara kombinationsf�ltets v�rde i ett databasf�lt eller bara anv�nda det f�r visning.";
     Text [ polish ] = "Warto�� pola kombi mo�na zapisa� w polu bazy danych lub u�y� jej tylko do wy�wietlenia.";
-    Text [ portuguese_brazilian ] = "Yes, in the following database:";
+    Text [ portuguese_brazilian ] = "Voc� pode salvar o valor da caixa de combina��o num campo da base de dados ou utiliz�-lo apenas para visualiza��o.";
     Text [ japanese ] = "コンボボックスの値は、データベースフィールドに保存するか、あるいは表示用でしか使用できません。";
     Text [ chinese_simplified ] = "您能够将组合栏中的数值存入数据库字段内或用于显示。";
     Text [ chinese_traditional ] = "您能夠將組合欄位的數值存入一個資料庫欄位或用於顯示。";
@@ -519,9 +555,22 @@ String RID_STR_COMBOWIZ_DBFIELD
     Text [ chinese_simplified ] = "您能够将组合栏中的数值存入数据库字段内或用于显示。";
     Text [ greek ] = "�������� �� ������������ ��� ���� ��� ������ ���������� �� ��� ����� ��� ����� ��������� � �� �� ��������������� ���� ��� ��� �������� ���. ";
     Text [ korean ] = "콤보 상자의 값을 데이터베이스 필드에 저장하거나 표시할 때만 사용할 수 있습니다.";
-    Text [ turkish ] = "Kombinasyon alan�n�n de�erini bir veritaban� alan�nda kaydedebilir ya da yaln�zca g�r�nt�leme i�in kullanabilirsiniz.";
+    Text [ turkish ] = "Siz isterseniz A��lan Kutu de�erini saklars�n�z veya g�stermek i�in kullan�rs�n�z.";
     Text[ catalan ] = "Podeu desar el valor del quadre combinat en un camp d'una base de dades o b� utilitzar-lo amb finalitats de visualitzaci�";
     Text[ finnish ] = "Voit joko tallentaa yhdistelm�ruudun arvon tietokannan kentt��n tai n�ytt�� sen.";
     Text[ thai ] = "คุณสามารถบันทึกค่าของกล่องคอมโบ้ในเขตข้อมูลฐานข้อมูลหรือไม่ก็ใช้มันเพื่อจุดประสงค์การแสดงผล";
+    Text[ czech ] = "Buď můžete vybranou hodnotu uložit do pole v databázi a nebo ji použít k nějaké další akci.";
+    Text[ hebrew ] = "Sie können den Wert des Kombinationsfeldes entweder in einem Datenbankfeld speichern oder ihn nur zum Anzeigen verwenden.";
+    Text[ hindi ] = "आप कॉम्बो क्षेत्र का मूल्य को लेखासंचय क्षेत्र में संचित कर सकते है अथवा दिखाने के लिए उपयोग कर सकते है ।";
 };
+
+
+
+
+
+
+
+
+
+
 
