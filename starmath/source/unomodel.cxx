@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-16 12:24:13 $
+ *  last change: $Author: tl $ $Date: 2001-08-28 13:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,10 +314,16 @@ uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeExce
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
     sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 2);
+    aTypes.realloc(nLen + 4);
     uno::Type* pTypes = aTypes.getArray();
     pTypes[nLen++] = ::getCppuType((Reference<XServiceInfo>*)0);
     pTypes[nLen++] = ::getCppuType((Reference<XUnoTunnel>*)0);
+    pTypes[nLen++] = ::getCppuType((Reference<XPropertySet>*)0);
+    pTypes[nLen++] = ::getCppuType((Reference<XMultiPropertySet>*)0);
+
+    // XPropertyState not supported?? (respective virtual functions from
+    // PropertySetHelper not overloaded)
+    //pTypes[nLen++] = ::getCppuType((Reference<XPropertyState>*)0);
 
     return aTypes;
 }
