@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-24 09:35:47 $
+ *  last change: $Author: ka $ $Date: 2000-12-02 08:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,8 @@ TYPEINIT1_AUTOFACTORY( GraphicObject, SvDataCopyStream );
 // -----------------------------------------------------------------------------
 
 GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
-    mpLink  ( NULL )
+    mpLink      ( NULL ),
+    mpUserData  ( NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
@@ -122,7 +123,8 @@ GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
 
 GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr ) :
     maGraphic   ( rGraphic ),
-    mpLink      ( NULL )
+    mpLink      ( NULL ),
+    mpUserData  ( NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
@@ -133,7 +135,8 @@ GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMg
 
 GraphicObject::GraphicObject( const Graphic& rGraphic, const String& rLink, const GraphicManager* pMgr ) :
     maGraphic   ( rGraphic ),
-    mpLink      ( rLink.Len() ? ( new String( rLink ) ) : NULL )
+    mpLink      ( rLink.Len() ? ( new String( rLink ) ) : NULL ),
+    mpUserData  ( NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
@@ -145,6 +148,7 @@ GraphicObject::GraphicObject( const Graphic& rGraphic, const String& rLink, cons
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
     maGraphic   ( rGraphicObj.GetGraphic() ),
     mpLink      ( rGraphicObj.mpLink ? ( new String( *rGraphicObj.mpLink ) ) : NULL ),
+    mpUserData  ( rGraphicObj.mpUserData ? ( new String( *rGraphicObj.mpUserData ) ) : NULL ),
     maAttr      ( rGraphicObj.maAttr )
 {
     ImplConstruct();
@@ -155,7 +159,8 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
 // -----------------------------------------------------------------------------
 
 GraphicObject::GraphicObject( const ByteString& rUniqueID, const GraphicManager* pMgr ) :
-    mpLink  ( NULL )
+    mpLink      ( NULL ),
+    mpUserData  ( NULL )
 {
     ImplConstruct();
     ImplSetGraphicManager( pMgr, &rUniqueID );
@@ -177,6 +182,7 @@ GraphicObject::~GraphicObject()
     delete mpSwapOutTimer;
     delete mpSwapStreamHdl;
     delete mpLink;
+    delete mpUserData;
     delete mpSimpleCache;
 }
 
@@ -387,10 +393,12 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         delete mpSwapStreamHdl, mpSwapStreamHdl = NULL;
         delete mpSimpleCache, mpSimpleCache = NULL;
         delete mpLink;
+        delete mpUserData;
 
         maGraphic = rGraphicObj.GetGraphic();
         maAttr = rGraphicObj.maAttr;
         mpLink = rGraphicObj.mpLink ? new String( *rGraphicObj.mpLink ) : NULL;
+        mpUserData = rGraphicObj.mpUserData ? new String( *rGraphicObj.mpUserData ) : NULL;
         ImplAssignGraphicData();
         mbAutoSwapped = FALSE;
         mpMgr = rGraphicObj.mpMgr;
@@ -496,6 +504,31 @@ String GraphicObject::GetLink() const
 {
     if( mpLink )
         return *mpLink;
+    else
+        return String();
+}
+
+// -----------------------------------------------------------------------------
+
+void GraphicObject::SetUserData()
+{
+    if( mpUserData )
+        delete mpUserData, mpUserData = NULL;
+}
+
+// -----------------------------------------------------------------------------
+
+void GraphicObject::SetUserData( const String& rUserData )
+{
+    delete mpUserData, mpUserData = new String( rUserData );
+}
+
+// -----------------------------------------------------------------------------
+
+String GraphicObject::GetUserData() const
+{
+    if( mpUserData )
+        return *mpUserData;
     else
         return String();
 }
@@ -770,6 +803,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic )
     mbAutoSwapped = FALSE;
     ImplAssignGraphicData();
     delete mpLink, mpLink = NULL;
+    delete mpUserData, mpUserData = NULL;
     delete mpSimpleCache, mpSimpleCache = NULL;
 
     mpMgr->ImplRegisterObj( *this, maGraphic, NULL );

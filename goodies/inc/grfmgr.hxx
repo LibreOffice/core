@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-11 15:14:04 $
+ *  last change: $Author: ka $ $Date: 2000-12-02 08:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ private:
     GraphicManager*         mpMgr;
     String*                 mpLink;
     Link*                   mpSwapStreamHdl;
-    void*                   mpDummy1;
+    String*                 mpUserData;
     Timer*                  mpSwapOutTimer;
     GrfSimpleCacheObj*      mpSimpleCache;
     void*                   mpDummy2;
@@ -320,6 +320,11 @@ public:
     void                    SetLink();
     void                    SetLink( const String& rLink );
     String                  GetLink() const;
+
+    BOOL                    HasUserData() const { return( mpUserData != NULL && mpUserData->Len() > 0 ); }
+    void                    SetUserData();
+    void                    SetUserData( const String& rUserData );
+    String                  GetUserData() const;
 
     ByteString              GetUniqueID() const;
 
