@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-06 16:25:16 $
+ *  last change: $Author: sab $ $Date: 2001-03-06 16:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,13 +790,13 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                     aAny <<= aValidation.sImputTitle;
                     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)), aAny);
                 }
-                aAny <<= ::cppu::bool2any(aValidation.bShowErrorMessage);
+                aAny = ::cppu::bool2any(aValidation.bShowErrorMessage);
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)), aAny);
-                aAny <<= ::cppu::bool2any(aValidation.bShowImputMessage);
+                aAny = ::cppu::bool2any(aValidation.bShowImputMessage);
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)), aAny);
                 aAny <<= aValidation.aValidationType;
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)), aAny);
-                aAny <<= ::cppu::bool2any(aValidation.bIgnoreBlanks);
+                aAny = ::cppu::bool2any(aValidation.bIgnoreBlanks);
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)), aAny);
                 aAny <<= aValidation.aAlertStyle;
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)), aAny);

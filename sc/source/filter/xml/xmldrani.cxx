@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: sab $ $Date: 2001-03-06 16:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 #define SC_ENABLEUSERSORTLIST   "EnableUserSortList"
 #define SC_USERSORTLISTINDEX    "UserSortListIndex"
@@ -322,11 +325,11 @@ void ScXMLDatabaseRangeContext::EndElement()
                     if (xDatabaseRangePropertySet.is())
                     {
                         uno::Any aTempValue;
-                        aTempValue <<= bKeepFormats;
+                        aTempValue = ::cppu::bool2any(bKeepFormats);
                         xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_KEEPFORM)), aTempValue);
-                        aTempValue <<= bMoveCells;
+                        aTempValue = ::cppu::bool2any(bMoveCells);
                         xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_MOVCELLS)), aTempValue);
-                        aTempValue <<= bStripData;
+                        aTempValue = ::cppu::bool2any(bStripData);
                         xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)), aTempValue);
                     }
                     uno::Sequence <beans::PropertyValue> aImportDescriptor = xDatabaseRange->getImportDescriptor();
@@ -354,7 +357,7 @@ void ScXMLDatabaseRangeContext::EndElement()
                         else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NATIVE)))
                         {
                             uno::Any aNative;
-                            aNative <<= bNative;
+                            aNative = ::cppu::bool2any(bNative);
                             aImportDescriptor[i].Value = aNative;
                         }
                     }
@@ -381,17 +384,17 @@ void ScXMLDatabaseRangeContext::EndElement()
                         if (xFilterPropertySet.is())
                         {
                             uno::Any aTemp;
-                            aTemp <<= bOrientation;
+                            aTemp = ::cppu::bool2any(bOrientation);
                             xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)), aTemp);
-                            aTemp <<= bContainsHeader;
+                            aTemp = ::cppu::bool2any(bContainsHeader);
                             xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONTHDR)), aTemp);
-                            aTemp <<= bFilterCopyOutputData;
+                            aTemp = ::cppu::bool2any(bFilterCopyOutputData);
                             xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT)), aTemp);
-                            aTemp <<= bFilterIsCaseSensitive;
+                            aTemp = ::cppu::bool2any(bFilterIsCaseSensitive);
                             xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)), aTemp);
-                            aTemp <<= bFilterSkipDuplicates;
+                            aTemp = ::cppu::bool2any(bFilterSkipDuplicates);
                             xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SKIPDUP)), aTemp);
-                            aTemp <<= bFilterUseRegularExpressions;
+                            aTemp = ::cppu::bool2any(bFilterUseRegularExpressions);
                             xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_USEREGEX)), aTemp);
                             aTemp <<= aFilterOutputPosition;
                             xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS)), aTemp);
@@ -411,15 +414,15 @@ void ScXMLDatabaseRangeContext::EndElement()
                         if( xSubTotalPropertySet.is())
                         {
                             uno::Any aTemp;
-                            aTemp <<= bSubTotalsBindFormatsToContent;
+                            aTemp = ::cppu::bool2any(bSubTotalsBindFormatsToContent);
                             xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT)), aTemp);
-                            aTemp <<= bSubTotalsEnabledUserList;
+                            aTemp = ::cppu::bool2any(bSubTotalsEnabledUserList);
                             xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ENABLEUSERSORTLIST)), aTemp);
                             aTemp <<= nSubTotalsUserListIndex;
                             xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERSORTLISTINDEX)), aTemp);
-                            aTemp <<= bSubTotalsInsertPageBreaks;
+                            aTemp = ::cppu::bool2any(bSubTotalsInsertPageBreaks);
                             xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INSBRK)), aTemp);
-                            aTemp <<= bSubTotalsIsCaseSensitive;
+                            aTemp = ::cppu::bool2any(bSubTotalsIsCaseSensitive);
                             xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)), aTemp);
                         }
                         ScSubTotalParam aSubTotalParam;

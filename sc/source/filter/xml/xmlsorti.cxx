@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: sab $ $Date: 2001-03-06 16:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlkywd.hxx>
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 #define SC_USERLIST "UserList"
 #define SC_BINDFORMATSTOCONTENT "BindFormatstoContent"
@@ -182,19 +185,19 @@ void ScXMLSortContext::EndElement()
     uno::Sequence <beans::PropertyValue> aSortDescriptor(7);
     uno::Any aTemp;
     beans::PropertyValue aPropertyValue;
-    aTemp <<= bBindFormatsToContent;
+    aTemp = ::cppu::bool2any(bBindFormatsToContent);
     aPropertyValue.Name = rtl::OUString::createFromAscii(SC_BINDFORMATSTOCONTENT);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[0] = aPropertyValue;
-    aTemp <<= bCopyOutputData;
+    aTemp = ::cppu::bool2any(bCopyOutputData);
     aPropertyValue.Name = rtl::OUString::createFromAscii(SC_COPYOUTPUTDATA);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[1] = aPropertyValue;
-    aTemp <<= bIsCaseSensitive;
+    aTemp = ::cppu::bool2any(bIsCaseSensitive);
     aPropertyValue.Name = rtl::OUString::createFromAscii(SC_ISCASESENSITIVE);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[2] = aPropertyValue;
-    aTemp <<= bEnabledUserList;
+    aTemp = ::cppu::bool2any(bEnabledUserList);
     aPropertyValue.Name = rtl::OUString::createFromAscii(SC_ISUSERLISTENABLED);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[3] = aPropertyValue;
