@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:19:43 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2541,7 +2541,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     xub_StrLen nOffset = 0;
     String aOutlineTxt;
     String aFullText;
-    if( pNd->GetOutlineNum() && !pNd->GetNum() )
+    if( pNd->GetOutlineNum() && !pNd->GetNumNoOutline() )
     {
         aOutlineTxt = pNd->GetNumString();
         nOffset += aOutlineTxt.Len();
