@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNSInclude.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2002-10-18 08:51:22 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,7 @@
 
 #include <nsCOMPtr.h>
 #include <nsISupportsArray.h>
-#include <nsStr.h>
 #include <nsString.h>
-#include <nsString2.h>
 #include <nsMemory.h>
 #include <prtypes.h>
 #include <nsRDFCID.h>
@@ -117,6 +115,7 @@
 #include <nsIAbDirectoryQuery.h>
 #include <nsIAbDirectoryQueryProxy.h>
 #include <nsIAbDirFactory.h>
+#include <nsIRunnable.h>
 
 #ifdef MOZ_BOOL
 # undef BOOL
