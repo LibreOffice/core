@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:52:17 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,7 +802,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
         {
             const SwFmtFrmSize *pSize = ((const SwFmtFrmSize *)pItem);
             nWidth = pSize->GetWidth();
-            bRelWidth = ATT_VAR_SIZE == pSize->GetSizeType();
+            bRelWidth = ATT_VAR_SIZE == pSize->GetHeightSizeType();
         }
     }
 
