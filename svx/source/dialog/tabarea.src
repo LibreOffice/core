@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:53:38 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1085,7 +1085,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ spanish ] = "Color de ~fondo";
         Text[ italian ] = "Colore di s~fondo";
         Text[ danish ] = "Baggrundsfarve";
-        Text[ swedish ] = "~Bakgrundsfärg";
+        Text[ swedish ] = "Ba~kgrundsfärg";
         Text[ polish ] = "Kolor t³a";
         Text[ portuguese_brazilian ] = "~Backgroundcolor";
         Text[ japanese ] = "èƒŒæ™¯è‰²(~B)";
@@ -1207,7 +1207,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ spanish ] = "Ancho" ;
         Text [ french ] = "Largeur" ;
         Text [ dutch ] = "B~reedte" ;
-        Text [ swedish ] = "B~redd" ;
+        Text [ swedish ] = "Br~edd" ;
         Text [ danish ] = "Bredde" ;
         Text [ portuguese_brazilian ] = "B~reite" ;
         Text [ portuguese ] = "~Largura" ;
@@ -1533,7 +1533,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ English ] = "Colu~mn" ;
         Text [ english_us ] = "Colu~mn" ;
         Text [ italian ] = "Colonna" ;
-        Text [ spanish ] = "~Columna" ;
+        Text [ spanish ] = "Columna" ;
         Text [ french ] = "Colonne" ;
         Text [ dutch ] = "K~olom" ;
         Text [ swedish ] = "~Kolumn" ;
