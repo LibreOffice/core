@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-01 16:54:16 $
+ *  last change: $Author: mba $ $Date: 2001-11-09 15:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,8 @@ ULONG CheckPasswd_Impl
 
             if ( bIsEncrypted )
             {
+                if ( pWin )
+                    pWin->Show();
                 SfxPasswordDialog *pDlg = new SfxPasswordDialog(pWin);
                 String aTitle( pDlg->GetText() );
                 aTitle += String::CreateFromAscii(" [");
