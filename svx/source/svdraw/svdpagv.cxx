@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:33:41 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2571,7 +2571,28 @@ void SdrPageView::SetLayer(const XubString& rName, SetOfByte& rBS, sal_Bool bJa)
 
     if(SDRLAYER_NOTFOUND != nID)
     {
+        // #116657#
+        // Remember if change took place
+        sal_Bool bChangeTookPlace(bJa != rBS.IsSet(nID));
+
         rBS.Set(nID, bJa);
+
+        // #116657#
+        // If yes, let the UnoControlRec update to evtl. visibility change
+        if(bChangeTookPlace)
+        {
+            for(sal_uInt32 i(0L); i < WindowCount(); i++)
+            {
+                SdrPageViewWindow& rPageViewWindow = *GetWindow(i);
+                SdrUnoControlList& rControlList = rPageViewWindow.GetControlList();
+
+                for(sal_uInt32 j(0L); j < rControlList.GetCount(); j++)
+                {
+                    SdrUnoControlRec& rControlRec = rControlList[(sal_uInt16) j];
+                    rControlRec.adjustControlVisibility( false );
+                }
+            }
+        }
     }
 }
 
