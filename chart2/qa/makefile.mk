@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-06 09:58:23 $
+#   last change: $Author: rt $ $Date: 2004-07-23 15:14:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,14 +77,14 @@ MAXLINELENGTH = 100000
 RDB 		= $(BIN)$/$(PRJNAME).rdb
 EXTRA_RDB   = $(SOLARBINDIR)$/types.rdb
 JAVADIR 	= $(OUT)$/misc$/java
-JARFILES	= sandbox.jar ridl.jar
+JARFILES	= ridl.jar
 
 # --- Files --------------------------------------------------------
 
 JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/TestCaseOldAPI.class
 
-JARFILES  = sandbox.jar ridl.jar jurt.jar unoil.jar juh.jar OOoRunner.jar
+JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar OOoRunner.jar
 JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
 # --- Targets ------------------------------------------------------
