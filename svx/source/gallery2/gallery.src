@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:40:53 $
+ *  last change: $Author: ka $ $Date: 2001-04-02 14:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2391,6 +2391,7 @@ Menu RID_SVXMN_GALLERY2
         MenuItem
         {
             Identifier = MN_COPYCLIPBOARD;
+            HelpId = HID_GALLERY_MN_COPYCLIPBOARD;
             Text = "~Kopieren" ; \
             Text [ English ] = "~Copy" ; \
             Text [ norwegian ] = "~Kopier" ; \
@@ -2419,6 +2420,7 @@ Menu RID_SVXMN_GALLERY2
         MenuItem
         {
             Identifier = MN_PASTECLIPBOARD;
+            HelpId = HID_GALLERY_MN_PASTECLIPBOARD;
             Text = "~Einfügen" ; \
             Text [ ENGLISH ] = "Insert" ; \
             Text [ norwegian ] = "Sett inn" ; \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-23 08:11:39 $
+ *  last change: $Author: ka $ $Date: 2001-04-02 14:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,11 +482,15 @@
 
 #define HID_SVXPAGE_JSEARCH_OPTIONS             (HID_SVX_START + 400)
 
+#define HID_GALLERY_MN_COPYCLIPBOARD            (HID_SVX_START + 402)
+#define HID_GALLERY_MN_PASTECLIPBOARD           (HID_SVX_START + 403)
+
+
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END         HID_RUBY_DIALOG
+#define ACT_SVX_HID_END         HID_GALLERY_MN_PASTECLIPBOARD
 
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file
