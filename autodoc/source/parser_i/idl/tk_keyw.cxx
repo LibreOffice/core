@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_keyw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:07:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ TokBuiltInType::EV_TokenId  ev_bty_long(TokBuiltInType::bty_long,"long");
 TokBuiltInType::EV_TokenId  ev_bty_short(TokBuiltInType::bty_short,"short");
 TokBuiltInType::EV_TokenId  ev_bty_string(TokBuiltInType::bty_string,"string");
 TokBuiltInType::EV_TokenId  ev_bty_void(TokBuiltInType::bty_void,"void");
+TokBuiltInType::EV_TokenId  ev_bty_ellipse(TokBuiltInType::bty_ellipse,"...");
 
 
 lux::EnumValueMap           G_aTokTypeModifier_EV_TokenId_Values;
