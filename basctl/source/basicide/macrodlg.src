@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-04 18:58:18 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 16:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ chinese_simplified ] = "ε®εη§°(~M)";
         Text[ russian ] = "Θμÿ μΰκπξρΰ";
         Text[ polish ] = "Nazwa makra";
-        Text[ japanese ] = "οΎο½ΈοΎ›ε(~M)";
+        Text[ japanese ] = "γƒγ‚―γƒ­ε(~M)";
         Text[ chinese_traditional ] = "ε·¨ι›†εη¨±(~M)";
         Text[ arabic ] = "ΗΣγ ΗαγΗίΡζ";
         Text[ greek ] = "Όνομα ~μακροεντολής";
@@ -150,7 +150,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ chinese_simplified ] = "ε®η„ζ¥ζΊ(~F)";
         Text[ russian ] = "Μΰκπξρ θη";
         Text[ polish ] = "Makro z";
-        Text[ japanese ] = "οΎο½ΈοΎ›γ®θ¨ι²ε…(~F)";
+        Text[ japanese ] = "γƒγ‚―γƒ­γ®θ¨ι²ε…(~F)";
         Text[ chinese_traditional ] = "ε·¨ι›†η„δΎ†ζΊ(~F)";
         Text[ arabic ] = "γΗίΡζ γδ";
         Text[ greek ] = "Μακροεντολή από";
@@ -387,7 +387,7 @@ ModalDialog RID_MACROCHOOSER
     Text[ chinese_simplified ] = "ε®";
     Text[ russian ] = "Μΰκπξρ";
     Text[ polish ] = "Makro";
-    Text[ japanese ] = "οΎο½ΈοΎ›";
+    Text[ japanese ] = "γƒγ‚―γƒ­";
     Text[ chinese_traditional ] = "ε·¨ι›†";
     Text[ arabic ] = "γΗίΡζ";
     Text[ greek ] = "Μακροεντολή";
@@ -413,7 +413,7 @@ String RID_STR_STDMACRONAME
     Text[ chinese_simplified ] = "ε®";
     Text[ russian ] = "Μΰκπξρ";
     Text[ polish ] = "Makro";
-    Text[ japanese ] = "οΎο½ΈοΎ›";
+    Text[ japanese ] = "γƒγ‚―γƒ­";
     Text[ chinese_traditional ] = "ε·¨ι›†";
     Text[ arabic ] = "γΗίΡζ";
     Text[ greek ] = "Μακροεντολή";
@@ -559,6 +559,7 @@ String RID_STR_RUN
     Text[ turkish ] = "Yόrόt";
     Text[ catalan ] = "Executar";
 };
+
 
 
 
