@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 14:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,5 +310,6 @@ void ScXMLTableContext::EndElement()
     }
 
     GetScImport().GetTables().DeleteTable();
+    GetScImport().GetProgressBarHelper()->Increment();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 14:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,10 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
             pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
                 rXMLImport, nPrefix, rLName, xAttrList, xShapes);
             if (pContext)
+            {
                 bIsEmpty = sal_False;
+                GetScImport().GetProgressBarHelper()->Increment();
+            }
         }
     }
 
@@ -790,6 +793,7 @@ void ScXMLTableRowCellContext::EndElement()
                                                 if (i > 0)
                                                     xText->setString(sOUText);
                                         }
+                                        GetScImport().GetProgressBarHelper()->Increment();
                                     }
                                     break;
                                 case util::NumberFormat::NUMBER:
@@ -797,12 +801,14 @@ void ScXMLTableRowCellContext::EndElement()
                                 case util::NumberFormat::CURRENCY:
                                     {
                                         xCell->setValue(fValue);
+                                        GetScImport().GetProgressBarHelper()->Increment();
                                     }
                                     break;
                                 case util::NumberFormat::TIME:
                                     {
                                         rXMLImport.GetMM100UnitConverter().convertTime(fValue, sOUTimeValue);
                                         xCell->setValue(fValue);
+                                        GetScImport().GetProgressBarHelper()->Increment();
                                     }
                                     break;
                                 case util::NumberFormat::DATETIME:
@@ -811,6 +817,7 @@ void ScXMLTableRowCellContext::EndElement()
                                         {
                                             rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sOUDateValue);
                                             xCell->setValue(fValue);
+                                            GetScImport().GetProgressBarHelper()->Increment();
                                         }
                                     }
                                     break;
@@ -820,6 +827,7 @@ void ScXMLTableRowCellContext::EndElement()
                                             xCell->setValue(1.0);
                                         else
                                             xCell->setValue(0.0);
+                                        GetScImport().GetProgressBarHelper()->Increment();
                                     }
                                     break;
                                 default:
@@ -886,6 +894,7 @@ void ScXMLTableRowCellContext::EndElement()
                 SetAnnotation(xCell);
                 SetDetectiveObj( aCellPos );
                 SetCellRangeSource( aCellPos );
+                GetScImport().GetProgressBarHelper()->Increment();
             }
         }
     }

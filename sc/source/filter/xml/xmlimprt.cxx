@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 14:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1681,6 +1681,40 @@ SvXMLImportContext *ScXMLImport::CreateScriptContext(
 
 void ScXMLImport::SetStatisticAttributes( const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
+    sal_uInt32 nCount(0);
+    INT16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( INT16 i=0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        sal_uInt16 nPrefix = GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        if ( nPrefix == XML_NAMESPACE_META)
+        {
+            rtl::OUString sValue = xAttrList->getValueByIndex( i );
+            sal_Int32 nValue(0);
+            if (IsXMLToken(aLocalName, XML_TABLE_COUNT))
+            {
+                if (GetMM100UnitConverter().convertNumber(nValue, sValue))
+                    nCount += nValue;
+            }
+            else if (IsXMLToken(aLocalName, XML_CELL_COUNT))
+            {
+                if (GetMM100UnitConverter().convertNumber(nValue, sValue))
+                    nCount += nValue;
+            }
+            else if (IsXMLToken(aLocalName, XML_OBJECT_COUNT))
+            {
+                if (GetMM100UnitConverter().convertNumber(nValue, sValue))
+                    nCount += nValue;
+            }
+        }
+    }
+    if (nCount)
+    {
+        GetProgressBarHelper()->SetReference(nCount);
+        GetProgressBarHelper()->SetValue(0);
+    }
 }
 
 XMLShapeImportHelper* ScXMLImport::CreateShapeImport()

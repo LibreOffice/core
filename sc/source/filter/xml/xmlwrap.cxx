@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 14:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,15 @@
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svtools/sfxecode.hxx>
+#ifndef _SFXFRAME_HXX
+#include <sfx2/frame.hxx>
+#endif
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+#ifndef _SFXSIDS_HRC
+#include <sfx2/sfxsids.hrc>
+#endif
 
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
@@ -171,6 +180,25 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator(
                         DBG_ERROR("Exception while trying to get a Status Indicator");
                     }
                 }
+            }
+        }
+    }
+    return xStatusIndicator;
+}
+
+uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
+{
+    uno::Reference<task::XStatusIndicator> xStatusIndicator;
+    if (pMedium)
+    {
+        SfxItemSet* pSet = pMedium->GetItemSet();
+        if (pSet)
+        {
+            const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
+            if (pItem)
+            {
+                uno::Any aAny(pItem->GetValue());
+                aAny >>= xStatusIndicator;
             }
         }
     }
@@ -326,12 +354,25 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
 
         /** property map for export info set */
-        comphelper::PropertyMapEntry aExportInfoMap[] =
+        comphelper::PropertyMapEntry aImportInfoMap[] =
         {
+            { MAP_LEN( "ProgressRange" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressMax" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "NumberStyles" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { NULL, 0, 0, NULL, 0, 0 }
         };
-        uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
+        uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
+
+        uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
+        if (xStatusIndicator.is())
+        {
+            sal_Int32 nProgressRange(1000000);
+            xStatusIndicator->start(rtl::OUString(ScGlobal::GetRscString(STR_LOAD_DOC)), nProgressRange);
+            uno::Any aProgRange;
+            aProgRange <<= nProgressRange;
+            xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
+        }
 
         if(!bStylesOnly)
         {
@@ -364,7 +405,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         uno::Sequence<uno::Any> aStylesArgs(4);
         uno::Any* pStylesArgs = aStylesArgs.getArray();
         pStylesArgs[0] <<= xGrfContainer;
-        pStylesArgs[1] <<= GetStatusIndicator(xModel);
+        pStylesArgs[1] <<= xStatusIndicator;
         pStylesArgs[2] <<= xObjectResolver;
         pStylesArgs[3] <<= xInfoSet;
 
@@ -389,7 +430,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
             uno::Sequence<uno::Any> aDocArgs(4);
             uno::Any* pDocArgs = aDocArgs.getArray();
             pDocArgs[0] <<= xGrfContainer;
-            pDocArgs[1] <<= GetStatusIndicator(xModel);
+            pDocArgs[1] <<= xStatusIndicator;
             pDocArgs[2] <<= xObjectResolver;
             pDocArgs[3] <<= xInfoSet;
 
@@ -403,6 +444,9 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
 
         if( pObjectHelper )
             SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
+
+        if (xStatusIndicator.is())
+            xStatusIndicator->end();
 
         // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
         return !bStylesOnly ? bDocRetval : bStylesRetval;
