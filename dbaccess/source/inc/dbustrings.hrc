@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbustrings.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 16:54:01 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,16 @@ namespace dbaui
     //============================================================
     DECLARE_CONSTASCII_USTRING(URL_COMPONENT_QUERYDESIGN);
     DECLARE_CONSTASCII_USTRING(URL_COMPONENT_TABLEDESIGN);
+    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_FORMGRIDVIEW);
+    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_DATASOURCEBROWSER);
     DECLARE_CONSTASCII_USTRING(URL_COMPONENT_RELATIONDESIGN);
+    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_APPLICATION);
+
+    //============================================================
+    //= service names
+    //============================================================
+    DECLARE_CONSTASCII_USTRING(SERVICE_SDB_APPLICATIONCONTROLLER);
+    DECLARE_CONSTASCII_USTRING(SERVICE_SDB_DIRECTSQLDIALOG);
 
     //============================================================
     //= other DBU relevant strings
@@ -86,12 +95,11 @@ namespace dbaui
     DECLARE_CONSTASCII_USTRING(PROPERTY_ENABLETABLEALIAS);
     DECLARE_CONSTASCII_USTRING( PARAM_INDEPENDENT_SQL_COMMAND );
     DECLARE_CONSTASCII_USTRING(SERVICE_CONTROLDEFAULT);
-
     //============================================================
     //= other DBU properties
     //============================================================
     DECLARE_CONSTASCII_USTRING(PROPERTY_TRISTATE);
-
+    DECLARE_CONSTASCII_USTRING(PROPERTY_ENABLEOUTERJOIN);
     DECLARE_CONSTASCII_USTRING(PROPERTY_DEFAULTCONTROL);
     DECLARE_CONSTASCII_USTRING(PROPERTY_TABSTOP);
     DECLARE_CONSTASCII_USTRING(PROPERTY_ENABLED);
@@ -99,3 +107,4 @@ namespace dbaui
 }
 
 #endif // DBACCESS_SHARED_DBUSTRINGS_HRC
+
