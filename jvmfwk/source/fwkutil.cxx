@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-27 15:22:14 $
+ *  last change: $Author: jl $ $Date: 2004-04-28 09:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,22 +530,25 @@ javaFrameworkError getVersionInformation(
     jfw::CXPathObjectPtr xPathObjectVersions;
     xPathObjectVersions =
         xmlXPathEvalExpression((xmlChar*) sExpresion.getStr(), context);
-    xmlNode* cur = xPathObjectVersions->nodesetval->nodeTab[0];
-    while (cur != NULL)
+    if (xPathObjectVersions->nodesetval)
     {
-        if (cur->type == XML_ELEMENT_NODE )
+        xmlNode* cur = xPathObjectVersions->nodesetval->nodeTab[0];
+        while (cur != NULL)
         {
-            if (xmlStrcmp(cur->name, (xmlChar*) "version") == 0)
+            if (cur->type == XML_ELEMENT_NODE )
             {
-                jfw::CXmlCharPtr sVersion;
-                sVersion = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
-                rtl::OString osVersion((sal_Char*)(xmlChar*) sVersion);
-                rtl::OUString usVersion = rtl::OStringToOUString(
-                    osVersion, RTL_TEXTENCODING_UTF8);
-                pVersionInfo->addExcludeVersion(usVersion);
+                if (xmlStrcmp(cur->name, (xmlChar*) "version") == 0)
+                {
+                    jfw::CXmlCharPtr sVersion;
+                    sVersion = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+                    rtl::OString osVersion((sal_Char*)(xmlChar*) sVersion);
+                    rtl::OUString usVersion = rtl::OStringToOUString(
+                        osVersion, RTL_TEXTENCODING_UTF8);
+                    pVersionInfo->addExcludeVersion(usVersion);
+                }
             }
+            cur = cur->next;
         }
-        cur = cur->next;
     }
     return JFW_E_NONE;
 }
