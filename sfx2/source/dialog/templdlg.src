@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:15:37 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,14 +130,14 @@ ModalDialog RID_STYLECATALOG
         Text [ finnish ] = "~Järjestelytyökalu" ;
         Text [ english_us ] = "~Organizer..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¹ÜÀí(~O)...";
+        Text[ chinese_simplified ] = "ç®¡ç†(~O)...";
         Text[ russian ] = "Îğãàíèçàöèÿ...";
         Text[ polish ] = "Zarz¹dzaj...";
-        Text[ japanese ] = "ŠÇ—(~O)...";
-        Text[ chinese_traditional ] = "ºŞ²z(~O)...";
+        Text[ japanese ] = "ç®¡ç†(~O)...";
+        Text[ chinese_traditional ] = "ç®¡ç†(~O)...";
         Text[ arabic ] = "ÇáÅÏÇÑÉ...";
         Text[ greek ] = "Äéá÷åßñéóç...";
-        Text[ korean ] = "°ü¸®(~O)...";
+        Text[ korean ] = "ê´€ë¦¬(~O)...";
         Text[ turkish ] = "~Yönet...";
         Text[ catalan ] = "~Administrar...";
     };
@@ -161,14 +161,14 @@ ModalDialog RID_STYLECATALOG
         Text [ finnish ] = "~Poista" ;
         Text [ english_us ] = "~Delete..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)...";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)...";
         Text[ russian ] = "Óäàëèòü...";
         Text[ polish ] = "Usuñ...";
-        Text[ japanese ] = "íœ(~D)...";
-        Text[ chinese_traditional ] = "§R°£(~D)...";
+        Text[ japanese ] = "å‰Šé™¤(~D)...";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
         Text[ arabic ] = "ÍĞİ...";
         Text[ greek ] = "ÄéáãñáöŞ...";
-        Text[ korean ] = "»èÁ¦(~D)...";
+        Text[ korean ] = "ì‚­ì œ(~D)...";
         Text[ turkish ] = "~Sil...";
         Text[ catalan ] = "~Eliminar...";
     };
@@ -184,7 +184,7 @@ ModalDialog RID_STYLECATALOG
         Text [ italian ] = "Mo~difica..." ;
         Text [ portuguese_brazilian ] = "~Change..." ;
         Text [ portuguese ] = "~Modificar..." ;
-        Text [ french ] = "~Modifier..." ;
+        Text [ french ] = "Modifier..." ;
         Text [ dutch ] = "~Wijzigen..." ;
         Text [ spanish ] = "~Modificar..." ;
         Text [ danish ] = "Modificer..." ;
@@ -192,14 +192,14 @@ ModalDialog RID_STYLECATALOG
         Text [ finnish ] = "~Muokkaa" ;
         Text [ english_us ] = "~Modify..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¸ü¸Ä(~M)...";
+        Text[ chinese_simplified ] = "æ›´æ”¹(~M)...";
         Text[ russian ] = "Èçìåíèòü...";
         Text[ polish ] = "Modyfikuj...";
-        Text[ japanese ] = "•ÏX(~M)...";
-        Text[ chinese_traditional ] = "ÅÜ§ó(~M)...";
+        Text[ japanese ] = "å¤‰æ›´(~M)...";
+        Text[ chinese_traditional ] = "è®Šæ›´(~M)...";
         Text[ arabic ] = "ÊÚÏíá...";
         Text[ greek ] = "Ôñïğïğïßçóç...";
-        Text[ korean ] = "º¯°æ(~M)...";
+        Text[ korean ] = "ë³€ê²½(~M)...";
         Text[ turkish ] = "~Değiştir...";
         Text[ catalan ] = "~Modificar...";
     };
@@ -221,14 +221,14 @@ ModalDialog RID_STYLECATALOG
         Text [ dutch ] = "~Nieuw.." ;
         Text [ spanish ] = "~Nuevo..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ĞÂ½¨(~N)...";
+        Text[ chinese_simplified ] = "æ–°å»º(~N)...";
         Text[ russian ] = "Ñîçäàòü...";
         Text[ polish ] = "Nowy...";
-        Text[ japanese ] = "V‹Kì¬(~N)...";
-        Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)...";
+        Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)...";
+        Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)...";
         Text[ arabic ] = "...ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá...";
-        Text[ korean ] = "»õ·Î(~N)...";
+        Text[ korean ] = "ìƒˆë¡œ(~N)...";
         Text[ turkish ] = "~Yeni...";
         Text[ catalan ] = "~Nuevo...";
     };
@@ -263,14 +263,14 @@ ModalDialog RID_STYLECATALOG
         Hide = TRUE ;
         DropDown = TRUE ;
     };
-    Text[ chinese_simplified ] = "ÑùÊ½Ä¿Â¼";
+    Text[ chinese_simplified ] = "æ ·å¼ç›®å½•";
     Text[ russian ] = "Ñïèñîê ñòèëåé";
     Text[ polish ] = "Katalog stylów";
-    Text[ japanese ] = "½À²Ù‚Ì¶ÀÛ¸Ş";
-    Text[ chinese_traditional ] = "¼Ë¦¡¥Ø¿ı";
+    Text[ japanese ] = "ï½½ï¾€ï½²ï¾™ã®ï½¶ï¾€ï¾›ï½¸ï¾";
+    Text[ chinese_traditional ] = "æ¨£å¼ç›®éŒ„";
     Text[ arabic ] = "ßÊÇáæÌ ÇáÃäãÇØ";
     Text[ greek ] = "ÊáôÜëïãïò ğñïôığùí";
-    Text[ korean ] = "¼­½Ä ÆÄÀÏ Ä«Å»·Î±×";
+    Text[ korean ] = "ì„œì‹ íŒŒì¼ ì¹´íƒˆë¡œê·¸";
     Text[ turkish ] = "Biçim kataloğu";
     Text[ catalan ] = "Catálogo de estilos";
 };
@@ -288,14 +288,14 @@ String DLG_STYLE_DESIGNER
     Text [ french ] = "Styliste" ;
     Text [ dutch ] = "Stylist" ;
     Text [ portuguese ] = "Estilista" ;
-    Text[ chinese_simplified ] = "¸÷ÀàÑùÊ½";
+    Text[ chinese_simplified ] = "å„ç±»æ ·å¼";
     Text[ russian ] = "Ñòèëèñò";
     Text[ polish ] = "Stylista";
-    Text[ japanese ] = "½À²Ø½Ä";
-    Text[ chinese_traditional ] = "¦UÃş¼Ë¦¡";
+    Text[ japanese ] = "ï½½ï¾€ï½²ï¾˜ï½½ï¾„";
+    Text[ chinese_traditional ] = "å„é¡æ¨£å¼";
     Text[ arabic ] = "ÇáãõÕãã";
     Text[ greek ] = "Stylist";
-    Text[ korean ] = "½ºÅ¸ÀÏ¸®½ºÆ®";
+    Text[ korean ] = "ìŠ¤íƒ€ì¼ë¦¬ìŠ¤íŠ¸";
     Text[ turkish ] = "Stylist";
     Text[ catalan ] = "Estilista";
     Text[ finnish ] = "Tyylityökalu";
@@ -315,14 +315,14 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT [ dutch ] = "Hiërarchisch" ;
     TEXT [ spanish ] = "Jerárquico" ;
     TEXT [ english_us ] = "Hierarchical" ;
-    TEXT[ chinese_simplified ] = "µÈ¼¶Ê½";
+    TEXT[ chinese_simplified ] = "ç­‰çº§å¼";
     TEXT[ russian ] = "Ïî èåğàğõèè";
     TEXT[ polish ] = "Hierarchicznie";
-    TEXT[ japanese ] = "ŠK‘w";
-    TEXT[ chinese_traditional ] = "µ¥¯Å¦¡";
+    TEXT[ japanese ] = "éšå±¤";
+    TEXT[ chinese_traditional ] = "ç­‰ç´šå¼";
     TEXT[ arabic ] = "åíßáí";
     TEXT[ greek ] = "Éåñáñ÷éêÜ";
-    TEXT[ korean ] = "°èÃş";
+    TEXT[ korean ] = "ê³„ì¸µ";
     TEXT[ turkish ] = "Hiyerarşik";
     TEXT[ catalan ] = "Jerárquico";
 };
@@ -373,14 +373,14 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ spanish ] = "Modo regadera" ;
                 /* ### ACHTUNG: Neuer Text in Resource? Vorlagen im Gießkannenmodus anwenden : Vorlagen im Gie˜kannenmodus anwenden */
                 /* ### ACHTUNG: Neuer Text in Resource? Vorlagen im Gie˜kannenmodus anwenden : Vorlagen im GieÃkannenmodus anwenden */
-                Text[ chinese_simplified ] = "³äÌîÄ£Ê½";
+                Text[ chinese_simplified ] = "å……å¡«æ¨¡å¼";
                 Text[ russian ] = "Ğåæèì çàëèâêè";
                 Text[ polish ] = "Tryb konewki";
-                Text[ japanese ] = "…‚â‚èÓ°ÄŞ";
-                Text[ chinese_traditional ] = "¥R¶ñ¼Ò¦¡";
+                Text[ japanese ] = "æ°´ã‚„ã‚Šï¾“ï½°ï¾„ï¾";
+                Text[ chinese_traditional ] = "å……å¡«æ¨¡å¼";
                 Text[ arabic ] = "æÖÚ ÇáÑÔÇÔÉ";
                 Text[ greek ] = "ÊáôÜóôáóç ãåìßóìáôïò";
-                Text[ korean ] = "Ã¤¿ì±â¸ğµå";
+                Text[ korean ] = "ì±„ìš°ê¸°ëª¨ë“œ";
                 Text[ turkish ] = "Doldur kipi";
                 Text[ catalan ] = "Modo regadera";
             };
@@ -401,14 +401,14 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ swedish ] = "Ny formatmall från markering" ;
                 Text [ dutch ] = "Nieuw opmaakprofiel uit selectie" ;
                 Text [ spanish ] = "Nuevo estilo a partir de selección" ;
-                Text[ chinese_simplified ] = "Ñ¡ÖĞµÄĞÂÑùÊ½";
+                Text[ chinese_simplified ] = "é€‰ä¸­çš„æ–°æ ·å¼";
                 Text[ russian ] = "Ñîçäàòü ñòèëü èç âûáğàííîãî";
                 Text[ polish ] = "Nowy styl z selekcji";
-                Text[ japanese ] = "‘I‘ğ½À²Ù‚©‚çV‹Kì¬";
-                Text[ chinese_traditional ] = "·s¼Ë¦¡±q¿ï¨ú";
+                Text[ japanese ] = "é¸æŠï½½ï¾€ï½²ï¾™ã‹ã‚‰æ–°è¦ä½œæˆ";
+                Text[ chinese_traditional ] = "æ–°æ¨£å¼å¾é¸å–";
                 Text[ arabic ] = "äãØ ÌÏíÏ ãä ÇáÊÍÏíÏ";
                 Text[ greek ] = "Íİï ğñüôõğï áğü åğéëïãŞ";
-                Text[ korean ] = "¼±ÅÃ¿¡ ÀÖ´Â »õ À¯Çü";
+                Text[ korean ] = "ì„ íƒì— ìˆëŠ” ìƒˆ ìœ í˜•";
                 Text[ turkish ] = "Yeni biçim seçimi";
                 Text[ catalan ] = "Nuevo estilo a partir de selección";
             };
@@ -429,14 +429,14 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ swedish ] = "Uppdatera formatmall" ;
                 Text [ dutch ] = "Opmaakprofiel actualiseren" ;
                 Text [ spanish ] = "Actualizar estilo" ;
-                Text[ chinese_simplified ] = "¸üĞÂÑùÊ½";
+                Text[ chinese_simplified ] = "æ›´æ–°æ ·å¼";
                 Text[ russian ] = "Îáíîâèòü ñòèëü";
                 Text[ polish ] = "Aktualizuj styl";
-                Text[ japanese ] = "½À²Ù‚ÌXV";
-                Text[ chinese_traditional ] = "§ó·s¼Ë¦¡";
+                Text[ japanese ] = "ï½½ï¾€ï½²ï¾™ã®æ›´æ–°";
+                Text[ chinese_traditional ] = "æ›´æ–°æ¨£å¼";
                 Text[ arabic ] = "ÊÍÏíË ÇáäãØ";
                 Text[ greek ] = "Åíçìİñùóç ğñïôığïõ";
-                Text[ korean ] = "À¯Çü ¾÷µ¥ÀÌÆ®";
+                Text[ korean ] = "ìœ í˜• ì—…ë°ì´íŠ¸";
                 Text[ turkish ] = "Biçimi güncelle";
                 Text[ catalan ] = "Actualizar estilo";
             };
@@ -444,6 +444,7 @@ DockingWindow DLG_STYLE_DESIGNER
     };
 };
  // ********************************************************************** EOF
+
 
 
 
