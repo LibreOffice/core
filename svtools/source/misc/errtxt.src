@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:12:19 $
+ *  last change: $Author: kz $ $Date: 2001-08-16 20:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2480,7 +2480,7 @@ Resource RID_ERRHDL
         Text [ danish ] = "Det var ikke muligt at gemme konfigurationen på de URLs, som skulle gemmes lokalt" ;
         Text [ italian ] = "Non è stato possibile salvare la configurazione delle URL da salvare localmente" ;
         Text [ spanish ] = "No se pudo guardar la configuración de las URLs a guardar localmente." ;
-        Text [ french ] = "Impossible d'enregistrer la configuration pour l'enregistrement local des URLs" ;
+        Text [ french ] = "Impossible d'enregistrer la configuration des URL à enregistrer localement !" ;
         Text [ portuguese ] = "Foi impossível guardar a configuração dos URLs a serem guardados localmente." ;
         Text [ portuguese_brazilian ] = "Die Konfiguration der lokal zu speichernden URLs konnte nicht gespeichert werden" ;
         Text[ chinese_simplified ] = "æ— æ³•å­˜ç›˜è¦å±€éƒ¨å‚¨å­˜ URL åœ°å€çš„é…ç½®æ–‡ä»¶";
@@ -2507,7 +2507,7 @@ Resource RID_ERRHDL
         Text [ danish ] = "Konfigurationsformatet på de URLs, som skulle gemmes lokalt, er ugyldigt" ;
         Text [ italian ] = "Il formato della configurazione delle URL da salvare localmente non è valido" ;
         Text [ spanish ] = "No es válido el formato de la configuración de las URLs a guardar localmente." ;
-        Text [ french ] = "Le format configuré pour les URLs à enregistrer localement est incorrect" ;
+        Text [ french ] = "Le format de la configuration des URL à enregistrer localement est incorrect." ;
         Text [ portuguese ] = "O formato da configuração dos URLs a serem guardados localmente não é válido." ;
         Text [ portuguese_brazilian ] = "Das Format der Konfiguration der lokal zu speichernden URLs ist ung?tig" ;
         Text[ chinese_simplified ] = "å±€éƒ¨å‚¨å­˜ URL åœ°å€çš„é…ç½®æ–‡ä»¶æ ¼å¼æ— æ•ˆ";
@@ -3016,6 +3016,7 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
 
 
