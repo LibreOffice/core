@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestParameters.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:57:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,8 +277,8 @@ public class TestParameters extends Hashtable {
         put(PropertyName.CONNECTION_STRING,ConnectionString);
         put(PropertyName.TEST_BASE,TestBase);
         put(PropertyName.TEST_DOCUMENT_PATH,TestDocumentPath);
-        put(PropertyName.LOGGING_IS_ACTIVE,Boolean.valueOf(LoggingIsActive));
-        put(PropertyName.DEBUG_IS_ACTIVE,Boolean.valueOf(DebugIsActive));
+        put(PropertyName.LOGGING_IS_ACTIVE,LoggingIsActive?Boolean.TRUE:Boolean.FALSE);
+        put(PropertyName.DEBUG_IS_ACTIVE,DebugIsActive?Boolean.TRUE:Boolean.FALSE);
         put(PropertyName.OUT_PRODUCER,OutProducer);
         put(PropertyName.SHORT_WAIT,new Integer(ShortWait));
         put(PropertyName.OFFICE_PROVIDER,OfficeProvider);
