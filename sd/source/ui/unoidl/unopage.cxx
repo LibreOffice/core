@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sj $ $Date: 2002-01-31 17:26:12 $
+ *  last change: $Author: cl $ $Date: 2002-02-05 13:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,8 +1438,6 @@ uno::Any SAL_CALL SdPageLinkTargets::getByName( const OUString& aName )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    uno::Any aAny;
-
     SdPage* pPage = mpUnoPage->GetPage();
     if( pPage != NULL )
     {
@@ -1447,11 +1445,11 @@ uno::Any SAL_CALL SdPageLinkTargets::getByName( const OUString& aName )
         if( pObj )
         {
             uno::Reference< beans::XPropertySet > aRef( pObj->getUnoShape(), uno::UNO_QUERY );
-            aAny <<= aRef;
+            return uno::makeAny( aRef );
         }
     }
 
-    return aAny;
+    throw container::NoSuchElementException();
 }
 
 uno::Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
