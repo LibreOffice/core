@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-13 18:27:52 $
+#   last change: $Author: mh $ $Date: 2001-11-08 09:52:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ UNOUCROUT=	$(OUT)$/inc
 
 $(MISC)$/$(TARGET).don : $(UNOUCRRDB)
     @+-$(RM) $@ >& $(NULLDEV)
-    +cppumaker $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOUCRRDB) && echo > $@
+    +cppumaker -Gc $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOUCRRDB) && echo > $@
 
 # --- Targets ------------------------------------------------------
 
