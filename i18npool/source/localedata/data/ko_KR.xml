@@ -612,10 +612,10 @@
 <quarter4Word>4</quarter4Word>
 <aboveWord>위</aboveWord>
 <belowWord>아래</belowWord>
-<quarter1Abbreviation>Q1</quarter1Abbreviation>
-<quarter2Abbreviation>Q2</quarter2Abbreviation>
-<quarter3Abbreviation>Q3</quarter3Abbreviation>
-<quarter4Abbreviation>Q4</quarter4Abbreviation>
+<quarter1Abbreviation>1</quarter1Abbreviation>
+<quarter2Abbreviation>2</quarter2Abbreviation>
+<quarter3Abbreviation>3</quarter3Abbreviation>
+<quarter4Abbreviation>4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 

@@ -6,13 +6,11 @@
 <LangID>zh</LangID>
 <DefaultName>Simplified Chinese</DefaultName>
 </Language>
-
 <Country>
 <CountryID>CN</CountryID>
 <DefaultName>China</DefaultName>
 </Country>
 </LC_INFO>
-
 <LC_CTYPE unoid="generic">
 <Separators>
 <DateSeparator>／</DateSeparator>
@@ -36,53 +34,41 @@
 <TimePM>下午</TimePM>
 <MeasurementSystem>metric</MeasurementSystem>
 </LC_CTYPE>
-
-
 <LC_FORMAT>
-
 <!-- Fix number formats. Index range is from 0 to 5. -->
-
 <FormatElement msgid="NumberFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
 <FormatCode>General</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="NumberFormatskey2" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="1">
 <FormatCode>0</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="NumberFormatskey3" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="2">
 <FormatCode>0.00</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="NumberFormatskey4" default="true" type="short" usage="FIXED_NUMBER"  formatindex="3">
 <FormatCode>#,##0</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="NumberFormatskey5" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="4">
 <FormatCode>#,##0.00</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="NumberFormatskey6" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="5">
 <FormatCode>#,###.00</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <!-- Scientific number formats. Index range is from 6 to 7. -->
 <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
 <FormatCode>0.00E+000</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
 <FormatCode>0.00E+00</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <!-- Percent number formats. Index range is from 8 to 9. -->
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
 <FormatCode>0%</FormatCode>
@@ -92,64 +78,52 @@
 <FormatCode>0.00%</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <!-- Currency formats. Code range is from 12 to 17. -->
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="medium" usage="CURRENCY" formatindex="12">
 <FormatCode>[$￥-804]#,##0;-[$￥-804]#,##0</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
 <FormatCode>[$￥-804]#,##0.00;-[$￥-804]##0.00</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
 <FormatCode>[$￥-804]#,##0;[RED]-[$￥-804]#,##0</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="long" usage="CURRENCY" formatindex="15">
 <FormatCode>[$￥-804]#,##0.00;[RED]-[$￥-804]#,##0.00</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
 <FormatCode>#,##0.00 CCC</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
 <FormatCode>[$￥-804]#,##0.--;[RED]-[$￥-804]#,##0.--</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <!-- Date formats. Index range is from 18 to 38 -->
 <FormatElement msgid="DateFormatskey1" default="true" type="medium" usage="DATE" formatindex="18">
 <FormatCode>YY"年"M"月"D"日"</FormatCode>
 <DefaultName>System</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey2" default="true" type="long" usage="DATE" formatindex="19">
 <FormatCode>YYYY"年"M"月"D"日"　NNNN</FormatCode>
 <DefaultName>System</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="20">
 <FormatCode>YY／M／D</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="21">
 <FormatCode>YYYY／M／D</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey22" default="false" type="short" usage="DATE" formatindex="22">
 <FormatCode>YYYY"年"M"月"</FormatCode>
 <DefaultName>def/System</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="23">
 <FormatCode>YYYY"年"MMM"月"D"日"</FormatCode>
 <DefaultName>def/System</DefaultName>
@@ -158,172 +132,138 @@
 <FormatCode>YYYY "年" MMM "月" D "日"</FormatCode>
 <DefaultName>DIN 5008(EN 28601)</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
 <FormatCode>YYYY"年"M"月"D"日"</FormatCode>
 <DefaultName>def/System</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="26">
 <FormatCode>YYYY "年"M"月"D"日"</FormatCode>
 <DefaultName>DIN 5008 (EN 28601)</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
 <FormatCode>YY"年"M"月"D"日" NNNN</FormatCode>
 <DefaultName>def/System</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey11" default="false" type="medium" usage="DATE" formatindex="28">
 <FormatCode>YY／M／D NNNN</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="29">
 <FormatCode>YYYY／M／D NNNN</FormatCode>
 <DefaultName>def/System</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="30">
 <FormatCode>YYYY"年"M"月"D"日" NNNN</FormatCode>
 <DefaultName>def/System</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey14" default="true" type="short" usage="DATE" formatindex="31">
 <FormatCode>M"月"D"日"</FormatCode>
 <DefaultName>DIN 5008 (EN 28601)</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey15" default="false" type="medium" usage="DATE" formatindex="32">
 <FormatCode>YY-MM-DD</FormatCode>
 <DefaultName>DIN 5008 (EN 28601)</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="33">
 <FormatCode>YYYY-MM-DD</FormatCode>
 <DefaultName>DIN 5008 (EN 28601)</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey17" default="false" type="short" usage="DATE" formatindex="34">
 <FormatCode>YY"年"M"日"</FormatCode>
 <DefaultName>def/System</DefaultName>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="35">
 <FormatCode>M"月"D"日"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey19" default="false" type="short" usage="DATE" formatindex="36">
 <FormatCode>MMMM</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="37">
 <FormatCode>YYYY"年"QQ</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="DateFormatskey21" default="false" type="short" usage="DATE" formatindex="38">
 <FormatCode>"第"WW"周"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <!-- Time formats. Index range is from 39 to 45. -->
 <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME"  formatindex="39">
 <FormatCode>HH:MM</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey2" default="true" type="medium" usage="TIME"  formatindex="40">
 <FormatCode>HH:MM:SS</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey3" default="false" type="medium" usage="TIME"  formatindex="41">
 <FormatCode>AM/PM HH:MM</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME"  formatindex="42">
 <FormatCode>AM/PM HH:MM:SS</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME"  formatindex="43">
 <FormatCode>[HH]:MM:SS</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey6" default="false" type="medium" usage="TIME"  formatindex="44">
 <FormatCode>MM:SS.00</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey7" default="true" type="long" usage="TIME"  formatindex="45">
 <FormatCode>[HH]:MM:SS.00</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <!-- Time format extension. -->
 <FormatElement msgid="TimeFormatskey8" default="false" type="medium" usage="TIME"  formatindex="50">
 <FormatCode>HH"时"MM"分"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey9" default="false" type="long" usage="TIME"  formatindex="51">
 <FormatCode>HH"时"MM"分"SS"秒"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey10" default="false" type="medium" usage="TIME"  formatindex="52">
 <FormatCode>AM/PM HH"时"MM"分"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey11" default="false" type="long" usage="TIME"  formatindex="53">
 <FormatCode>AM/PM HH"时"MM"分"SS"秒"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey12" default="false" type="medium" usage="TIME"  formatindex="54">
 <FormatCode>[HH]"时"MM"分"SS"秒"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey13" default="false" type="medium" usage="TIME"  formatindex="55">
 <FormatCode>MM"分"SS"秒"00"毫秒"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="TimeFormatskey14" default="false" type="long" usage="TIME"  formatindex="56">
 <FormatCode>[HH]"时"MM"分"SS"秒"00"毫秒"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <!-- Date_Time formats. Index range is from 46 to 47. -->
 <FormatElement msgid="DateTimeFormatskey4" default="true" type="long" usage="DATE_TIME"  formatindex="46">
 <FormatCode>YYYY"年"MM"月"D"日"HH"时"MM"分"SS"秒"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="DateTimeFormatskey3" default="false" type="long" usage="DATE_TIME"  formatindex="47">
 <FormatCode>YY"年"M"月"D"日"HH"时"MM"分"</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="DateTimeFormatskey1" default="false" type="long" usage="DATE_TIME"  formatindex="58">
 <FormatCode>M／D／YY HH:MM</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 <FormatElement msgid="DateTimeFormatskey2" default="false" type="long" usage="DATE_TIME"  formatindex="59">
 <FormatCode>MM／DD／YYYY HH:MM:SS</FormatCode>
 <DefaultName/>
 </FormatElement>
-
 </LC_FORMAT>
-
 <LC_COLLATION>
 <Collator unoid="pinyin" default="true"/>
 <Collator unoid="stroke" default="false"/>
@@ -333,14 +273,12 @@
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 </CollationOptions>
 </LC_COLLATION>
-
 <LC_SEARCH>
 <SearchOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 <TransliterationModules>IGNORE_WIDTH</TransliterationModules>
 </SearchOptions>
 </LC_SEARCH>
-
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
@@ -442,7 +380,6 @@
 <DefaultFullName>十二月</DefaultFullName>
 </Month>
 </MonthsOfYear>
-
 <Eras>
 <Era>
 <EraID>bc</EraID>
@@ -457,11 +394,8 @@
 </Eras>
 <StartDayOfWeek><DayID>mon</DayID></StartDayOfWeek>
 <MinimalDaysInFirstWeek>7</MinimalDaysInFirstWeek>
-
 </Calendar>
-
 </LC_CALENDAR>
-
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
 <CurrencyID>yuan</CurrencyID>
@@ -472,8 +406,6 @@
 </Currency>
 <!--more currency should be put here -->
 </LC_CURRENCY>
-
-
 <LC_TRANSLITERATION>
 <Transliteration unoid="UPPERCASE_LOWERCASE"/>
 <Transliteration unoid="LOWERCASE_UPPERCASE"/>
@@ -486,12 +418,10 @@
 <Transliteration unoid="IGNORE_CASE"/>
 <Transliteration unoid="IGNORE_WIDTH"/>
 </LC_TRANSLITERATION>
-
-
 <LC_MISC>
 <ForbiddenCharacters>
 <ForbiddenLineBeginCharacters>:!),.:;?]}¢·ˇˉ―‖々--'"?¨E...•′?、。〉》」』】〕〗〞︰︱︳︴︶︸︺︼︾﹀﹂﹄﹏﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝､～￠ </ForbiddenLineBeginCharacters>
-<ForbiddenLineEndCharacters>([{£￥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛</ForbiddenLineEndCharacters>
+<ForbiddenLineEndCharacters>([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛</ForbiddenLineEndCharacters>
 </ForbiddenCharacters>
 <ReservedWords>
 <trueWord>真</trueWord>
@@ -500,15 +430,14 @@
 <quarter2Word>第2季度</quarter2Word>
 <quarter3Word>第3季度</quarter3Word>
 <quarter4Word>第4季度</quarter4Word>
+<quarter1Abbreviation>1季</quarter1Abbreviation>
+<quarter2Abbreviation>2季</quarter2Abbreviation>
+<quarter3Abbreviation>3季</quarter3Abbreviation>
+<quarter4Abbreviation>4季</quarter4Abbreviation>
 <aboveWord>上面</aboveWord>
 <belowWord>下面</belowWord>
-<quarter1Abbreviation>Q1</quarter1Abbreviation>
-<quarter2Abbreviation>Q2</quarter2Abbreviation>
-<quarter3Abbreviation>Q3</quarter3Abbreviation>
-<quarter4Abbreviation>Q4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
-
 <LC_NumberingLevel>
 <NumberingLevel Prefix="(" NumType="11" Suffix=")" Transliteration="NumToTextLower_zh_CN"/>
 <NumberingLevel Prefix="(" NumType="11" Suffix=")" Transliteration="NumToTextUpper_zh_CN"/>
@@ -519,9 +448,7 @@
 <NumberingLevel Prefix="(" NumType="1" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="3" Suffix="." />
 </LC_NumberingLevel>
-
 <LC_OutLineNumberingLevel>
-
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="11" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextLower_zh_CN"/>
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
@@ -529,7 +456,6 @@
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
-
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
@@ -537,7 +463,6 @@
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
-
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
@@ -545,7 +470,6 @@
 <OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix="." BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
-
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
@@ -553,7 +477,6 @@
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
-
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
@@ -561,7 +484,6 @@
 <OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
-
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
@@ -569,7 +491,6 @@
 <OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
-
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
@@ -577,7 +498,6 @@
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
-
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="27A2"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E006"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
@@ -585,7 +505,5 @@
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
-
 </LC_OutLineNumberingLevel>
-
 </Locale>
