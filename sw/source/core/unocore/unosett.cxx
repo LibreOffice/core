@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-03-19 08:39:10 $
+ *  last change: $Author: os $ $Date: 2001-03-19 09:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,8 +493,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                     aValue >>= nTmp;
                     if(nTmp >= 0 &&
                         (nTmp <= SVX_NUM_ARABIC ||
-                            nTmp == SVX_NUM_CHARS_UPPER_LETTER_N||
-                                nTmp == SVX_NUM_CHARS_LOWER_LETTER_N))
+                            nTmp > SVX_NUM_BITMAP))
                         aFtnInfo.aFmt.SetNumberingType(nTmp);
                     else
                         throw lang::IllegalArgumentException();
