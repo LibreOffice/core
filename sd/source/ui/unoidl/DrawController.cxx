@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:48:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 07:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ Any SAL_CALL DrawController::getSelection()
     DBG_ASSERT (&mrView != NULL,
         "view is NULL in SdUnoDrawView::getSelection()");
 
-    const SdrMarkList& rMarkList = mrView.GetMarkList();
+    const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
     sal_uInt32 nCount = rMarkList.GetMarkCount();
     for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
     {
