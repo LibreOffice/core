@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-03 15:06:31 $
+ *  last change: $Author: sb $ $Date: 2001-05-03 08:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,7 +785,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
 
     Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
     xLockBytes->SetSynchronMode( !pHandler );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 07:48:54 $
+ *  last change: $Author: sb $ $Date: 2001-05-03 08:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
                     Reference< XInteractionHandler > xInteractionHandler(
                          pBroker->getServiceManager()->createInstance(
                                 OUString::createFromAscii(
-                                    "com.sun.star.uui.InteractionHandler" ) ),
+                                    "com.sun.star.task.InteractionHandler" ) ),
                         UNO_QUERY );
 
                     Reference< XProgressHandler > xProgressHandler
@@ -1111,7 +1111,7 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
             Reference< XInteractionHandler > xInteractionHandler(
                  pBroker->getServiceManager()->createInstance(
                         OUString::createFromAscii(
-                            "com.sun.star.uui.InteractionHandler" ) ),
+                            "com.sun.star.task.InteractionHandler" ) ),
                 UNO_QUERY );
 
             Reference< XProgressHandler > xProgressHandler
