@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-05 10:54:43 $
+ *  last change: $Author: pb $ $Date: 2001-11-07 09:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,6 +483,8 @@ void ContentTabPage_Impl::Resize()
     aSize.Height() -= 8;
     aContentBox.SetPosSizePixel( Point( 4, 4 ), aSize );
 }
+
+// -----------------------------------------------------------------------
 
 void ContentTabPage_Impl::ActivatePage()
 {
@@ -1158,6 +1160,13 @@ void SearchTabPage_Impl::Resize()
 
 // -----------------------------------------------------------------------
 
+void SearchTabPage_Impl::ActivatePage()
+{
+    aSearchED.GrabFocus();
+}
+
+// -----------------------------------------------------------------------
+
 void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
     aResultsLB.SetDoubleClickHdl( rLink );
@@ -1180,13 +1189,6 @@ void SearchTabPage_Impl::ClearPage()
 {
     ClearSearchResults();
     aSearchED.SetText( String() );
-}
-
-// -----------------------------------------------------------------------
-
-void SearchTabPage_Impl::ActivatePage()
-{
-    aSearchED.GrabFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -1421,6 +1423,13 @@ void BookmarksTabPage_Impl::Resize()
 
 // -----------------------------------------------------------------------
 
+void BookmarksTabPage_Impl::ActivatePage()
+{
+    SetFocusOnBox();
+}
+
+// -----------------------------------------------------------------------
+
 void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
     aBookmarksBox.SetDoubleClickHdl( rLink );
@@ -1445,11 +1454,6 @@ void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rU
     aImageURL += INetURLObject( rURL ).GetHost();
     USHORT nPos = aBookmarksBox.InsertEntry( rTitle, SvFileInformationManager::GetImage( aImageURL ) );
     aBookmarksBox.SetEntryData( nPos, (void*)(ULONG)( new String( rURL ) ) );
-}
-
-void BookmarksTabPage_Impl::ActivatePage()
-{
-    SetFocusOnBox();
 }
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
@@ -1794,6 +1798,16 @@ String SfxHelpIndexWindow_Impl::GetSearchText() const
 
 // -----------------------------------------------------------------------
 
+sal_Bool SfxHelpIndexWindow_Impl::IsFullWordSearch() const
+{
+    sal_Bool bRet = sal_False;
+    if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
+        bRet = pSPage->IsFullWordSearch();
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
 void SfxHelpIndexWindow_Impl::OpenKeyword( const String& rKeyword )
 {
     sKeyword = rKeyword;
@@ -1950,6 +1964,11 @@ IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
             {
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
+                if ( bIsFullWordSearch )
+                {
+                    Reference < XPropertySet > xPropSet( xSrchDesc, UNO_QUERY );
+                    xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchWords"), makeAny( sal_Bool( sal_True ) ) );
+                }
                 xSrchDesc->setSearchString( aSearchText );
                 Reference< XIndexAccess > xSelection = xSearchable->findAll( xSrchDesc );
                 // then select all found words
@@ -2103,9 +2122,10 @@ void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
 
 // -----------------------------------------------------------------------
 
-void SfxHelpTextWindow_Impl::SelectSearchText( const String& rSearchText )
+void SfxHelpTextWindow_Impl::SelectSearchText( const String& rSearchText, sal_Bool _bIsFullWordSearch )
 {
     aSearchText = rSearchText;
+    bIsFullWordSearch = _bIsFullWordSearch;
     aSelectTimer.Start();
 }
 
@@ -2489,7 +2509,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
         // When the SearchPage opens the help doc, then select all words, which are equal to its text
         String sSearchText = pIndexWin->GetSearchText();
         if ( sSearchText.Len() > 0 )
-            pTextWin->SelectSearchText( sSearchText );
+            pTextWin->SelectSearchText( sSearchText, pIndexWin->IsFullWordSearch() );
 
         // no page style header -> this prevents a print output of the URL
         pTextWin->SetPageStyleHeaderOff();

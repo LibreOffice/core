@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-05 10:54:43 $
+ *  last change: $Author: pb $ $Date: 2001-11-07 09:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ public:
     virtual void    RequestingChilds( SvLBoxEntry* pParent );
     virtual long    Notify( NotifyEvent& rNEvt );
 
-    void            SetOpenHdl( const Link& rLink ) { SetDoubleClickHdl( rLink ); }
+    inline void     SetOpenHdl( const Link& rLink ) { SetDoubleClickHdl( rLink ); }
     String          GetSelectEntry() const;
 };
 
@@ -153,12 +153,11 @@ public:
     ContentTabPage_Impl( Window* pParent );
 
     virtual void    Resize();
-
-    void            SetOpenHdl( const Link& rLink ) { aContentBox.SetOpenHdl( rLink ); }
-    String          GetSelectEntry() const { return aContentBox.GetSelectEntry(); }
-    void            SetFocusOnBox() { aContentBox.GrabFocus(); }
-
     virtual void    ActivatePage();
+
+    inline void     SetOpenHdl( const Link& rLink ) { aContentBox.SetOpenHdl( rLink ); }
+    inline String   GetSelectEntry() const { return aContentBox.GetSelectEntry(); }
+    inline void     SetFocusOnBox() { aContentBox.GrabFocus(); }
 };
 
 // class IndexTabPage_Impl -----------------------------------------------
@@ -206,12 +205,12 @@ public:
 
     void                SetDoubleClickHdl( const Link& rLink );
     void                SetFactory( const String& rFactory );
-    String              GetFactory() const { return sFactory; }
+    inline String       GetFactory() const { return sFactory; }
     String              GetSelectEntry() const;
-    void                SetFocusOnBox() { aIndexCB.GrabFocus(); }
-    sal_Bool            HasFocusOnEdit() const { return aIndexCB.HasChildPathFocus(); }
+    inline void         SetFocusOnBox() { aIndexCB.GrabFocus(); }
+    inline sal_Bool     HasFocusOnEdit() const { return aIndexCB.HasChildPathFocus(); }
 
-    void                SetKeywordHdl( const Link& rLink ) { aKeywordLink = rLink; }
+    inline void         SetKeywordHdl( const Link& rLink ) { aKeywordLink = rLink; }
     void                SetKeyword( const String& rKeyword );
     sal_Bool            HasKeyword() const;
     void                OpenKeyword();
@@ -231,7 +230,7 @@ public:
     virtual long        PreNotify( NotifyEvent& rNEvt );
     virtual void        Select();
 
-    void                SetSearchLink( const Link& rLink ) { aSearchLink = rLink; }
+    inline void         SetSearchLink( const Link& rLink ) { aSearchLink = rLink; }
 };
 
 class SearchResultsBox_Impl : public ListBox
@@ -267,15 +266,16 @@ public:
     ~SearchTabPage_Impl();
 
     virtual void        Resize();
+    virtual void        ActivatePage();
 
     void                SetDoubleClickHdl( const Link& rLink );
-    void                SetFactory( const String& rFactory ) { aFactory = rFactory; }
+    inline void         SetFactory( const String& rFactory ) { aFactory = rFactory; }
     String              GetSelectEntry() const;
     void                ClearPage();
-    void                SetFocusOnBox() { aResultsLB.GrabFocus(); }
-    sal_Bool            HasFocusOnEdit() const { return aSearchED.HasChildPathFocus(); }
-    virtual void        ActivatePage();
-    String              GetSearchText() const { return aSearchED.GetText(); }
+    inline void         SetFocusOnBox() { aResultsLB.GrabFocus(); }
+    inline sal_Bool     HasFocusOnEdit() const { return aSearchED.HasChildPathFocus(); }
+    inline String       GetSearchText() const { return aSearchED.GetText(); }
+    inline sal_Bool     IsFullWordSearch() const { return aFullWordsCB.IsChecked(); }
     sal_Bool            OpenKeyword( const String& rKeyword );
 };
 
@@ -308,12 +308,12 @@ public:
     BookmarksTabPage_Impl( Window* pParent );
 
     virtual void        Resize();
+    virtual void        ActivatePage();
 
     void                SetDoubleClickHdl( const Link& rLink );
     String              GetSelectEntry() const;
     void                AddBookmarks( const String& rTitle, const String& rURL );
-    void                SetFocusOnBox() { aBookmarksBox.GrabFocus(); }
-    virtual void        ActivatePage();
+    inline void         SetFocusOnBox() { aBookmarksBox.GrabFocus(); }
 };
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
@@ -356,17 +356,18 @@ public:
     virtual void        Resize();
 
     void                SetDoubleClickHdl( const Link& rLink );
-    void                SetSelectFactoryHdl( const Link& rLink ) { aSelectFactoryLink = rLink; }
+    inline void         SetSelectFactoryHdl( const Link& rLink ) { aSelectFactoryLink = rLink; }
     void                SetFactory( const String& rFactory, sal_Bool bActive );
-    String              GetFactory() const { return pIPage->GetFactory(); }
+    inline String       GetFactory() const { return pIPage->GetFactory(); }
     String              GetSelectEntry() const;
     void                AddBookmarks( const String& rTitle, const String& rURL );
-    String              GetActiveFactoryTitle() const { return aActiveLB.GetSelectEntry(); }
-    void                UpdateTabControl() { aTabCtrl.Invalidate(); }
+    inline String       GetActiveFactoryTitle() const { return aActiveLB.GetSelectEntry(); }
+    inline void         UpdateTabControl() { aTabCtrl.Invalidate(); }
     void                ClearSearchPage();
     void                GrabFocusBack();
     sal_Bool            HasFocusOnEdit() const;
     String              GetSearchText() const;
+    sal_Bool            IsFullWordSearch() const;
     void                OpenKeyword( const String& rKeyword );
 };
 
@@ -397,6 +398,7 @@ private:
     sal_Bool                bIsDebug;
     sal_Bool                bIsIndexOn;
     sal_Bool                bIsInClose;
+    sal_Bool                bIsFullWordSearch;
 
     String                  aIndexOnText;
     String                  aIndexOffText;
@@ -416,14 +418,13 @@ public:
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual void            GetFocus();
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
+    inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             getFrame() const { return xFrame; }
 
-    void                    SetSelectHdl( const Link& rLink ) { aToolBox.SetSelectHdl( rLink ); }
+    inline void             SetSelectHdl( const Link& rLink ) { aToolBox.SetSelectHdl( rLink ); }
     void                    ToggleIndex( sal_Bool bOn );
-    void                    SelectSearchText( const String& rSearchText );
+    void                    SelectSearchText( const String& rSearchText, sal_Bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
-
     inline ToolBox&         GetToolBox() { return aToolBox; }
 };
 
@@ -480,7 +481,7 @@ public:
 
     void                setContainerWindow(
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
+    inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                         getTextFrame() const { return pTextWin->getFrame(); }
 
     void                SetFactory( const String& rFactory );
@@ -490,8 +491,8 @@ public:
     void                UpdateToolbox();
     void                AddURLListener( const ::com::sun::star::util::URL& aURL,
                                         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDisp );
-    void                OpenKeyword( const String& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
-    String              GetFactory() const { return pIndexWin->GetFactory(); }
+    inline void         OpenKeyword( const String& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
+    inline String       GetFactory() const { return pIndexWin->GetFactory(); }
 
     sal_Bool            HasHistoryPredecessor() const;      // forward to interceptor
     sal_Bool            HasHistorySuccessor() const;        // forward to interceptor
@@ -511,7 +512,7 @@ public:
     ~SfxAddHelpBookmarkDialog_Impl();
 
     void            SetTitle( const String& rTitle );
-    String          GetTitle() const { return aTitleED.GetText(); }
+    inline String   GetTitle() const { return aTitleED.GetText(); }
 };
 
 #endif // #ifndef INCLUDED_SFX_NEWHELP_HXX
