@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YCatalog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-27 08:07:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,8 @@ Sequence< Type > SAL_CALL OMySQLCatalog::getTypes(  ) throw(RuntimeException)
             aOwnTypes.push_back(*pBegin);
         }
     }
-    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
+    const Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
+    return Sequence< Type >(pTypes, aOwnTypes.size());
 }
 // -----------------------------------------------------------------------------
 
