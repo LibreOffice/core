@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:02:56 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ TabDialog RID_SCDLG_ATTR
                 PageResID = 262 ;
                 Text = "Schrifteffekt" ;
                 Text [ ENGLISH ] = "Character Extension" ;
-                Text[ english_us ] = "Font effect";
+                Text[ english_us ] = "Font Effects";
                 Text[ portuguese ] = "Efeitos de caracteres";
                 Text[ russian ] = "İôôåêò øğèôòà";
                 Text[ greek ] = "Åöİ ãñáöŞò";
@@ -208,15 +208,15 @@ TabDialog RID_SCDLG_ATTR
                 Text = "Asiatische Typographie" ;
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
-                Text[ portuguese ] = "Asian typography";
-                Text[ russian ] = "Àçèàòñêàÿ òèïîãğàôèÿ";
-                Text[ greek ] = "Asian typography";
-                Text[ dutch ] = "Asian typography";
+                Text[ portuguese ] = "Tipografia asiática";
+                Text[ russian ] = "Àçèàòñêèå øğèôòû";
+                Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
+                Text[ dutch ] = "Asiatische typografie";
                 Text[ french ] = "Typographie asiatique";
-                Text[ spanish ] = "Asian typography";
-                Text[ italian ] = "Asian typography";
+                Text[ spanish ] = "Tipografía asiática";
+                Text[ italian ] = "Tipografia asiatica";
                 Text[ danish ] = "Asian typography";
-                Text[ swedish ] = "Asian typography";
+                Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
