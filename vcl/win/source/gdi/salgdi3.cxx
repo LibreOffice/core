@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:50:38 $
+ *  last change: $Author: hdu $ $Date: 2002-09-12 07:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1597,19 +1597,17 @@ void SalGraphics::DrawTextArray( long nX, long nY,
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool bIsGlyphIndex, Rectangle& rRect, const OutputDevice* )
+BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool /*bIsGlyphIndex*/, Rectangle& rRect, const OutputDevice* )
 {
     HDC hDC = maGraphicsData.mhDC;
 
     // use unity matrix
     MAT2 aMat;
-    aMat.eM11 = FixedFromDouble( 1.0 );
-    aMat.eM12 = FixedFromDouble( 0.0 );
-    aMat.eM21 = FixedFromDouble( 0.0 );
-    aMat.eM22 = FixedFromDouble( 1.0 );
+    aMat.eM11 = aMat.eM22 = FixedFromDouble( 1.0 );
+    aMat.eM12 = aMat.eM21 = FixedFromDouble( 0.0 );
 
     UINT nGGOFlags = GGO_METRICS;
-    if( bIsGlyphIndex )
+    if( !(nIndex & GF_ISCHAR) )
         nGGOFlags |= GGO_GLYPH_INDEX;
     nIndex &= GF_IDXMASK;
 
@@ -1617,7 +1615,7 @@ BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool bIsGlyphIndex, Rectangle&
     DWORD nSize = GDI_ERROR;
     if ( aSalShlData.mbWNT )
         nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
-    else if( bIsGlyphIndex || (nIndex <= 255) )
+    else if( (nGGOFlags & GGO_GLYPH_INDEX) || (nIndex <= 255) )
         nSize = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
 
     if( !nSize )    // blank glyphs are ok
@@ -1633,20 +1631,20 @@ BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool bIsGlyphIndex, Rectangle&
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon& rPolyPoly, const OutputDevice* )
+BOOL SalGraphics::GetGlyphOutline( long nIndex, bool /*bIsGlyphIndex*/, PolyPolygon& rPolyPoly, const OutputDevice* )
 {
+    rPolyPoly.Clear();
+
     BOOL bRet = FALSE;
     HDC  hDC = maGraphicsData.mhDC;
 
     // use unity matrix
     MAT2 aMat;
-    aMat.eM11 = FixedFromDouble( 1.0 );
-    aMat.eM12 = FixedFromDouble( 0.0 );
-    aMat.eM21 = FixedFromDouble( 0.0 );
-    aMat.eM22 = FixedFromDouble( 1.0 );
+    aMat.eM11 = aMat.eM22 = FixedFromDouble( 1.0 );
+    aMat.eM12 = aMat.eM21 = FixedFromDouble( 0.0 );
 
     UINT nGGOFlags = GGO_NATIVE;
-    if( bIsGlyphIndex )
+    if( !(nIndex & GF_ISCHAR) )
         nGGOFlags |= GGO_GLYPH_INDEX;
     nIndex &= GF_IDXMASK;
 
@@ -1654,7 +1652,7 @@ BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon&
     DWORD nSize1 = GDI_ERROR;
     if ( aSalShlData.mbWNT )
         nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
-    else if( bIsGlyphIndex || (nIndex <= 255) )
+    else if( (nGGOFlags & GGO_GLYPH_INDEX) || (nIndex <= 255) )
         nSize1 = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
 
     if( !nSize1 )       // blank glyphs are ok
