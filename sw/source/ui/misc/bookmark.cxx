@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:46:19 $
+ *  last change: $Author: jp $ $Date: 2001-08-16 16:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,10 +341,10 @@ USHORT BookmarkCombo::GetSelectEntryPos( USHORT nSelIndex ) const
 long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( EVENT_KEYINPUT == rNEvt.GetType() &&
+         rNEvt.GetKeyEvent()->GetCharCode() )
     {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        String sKey = pKEvt->GetCharCode();
+        String sKey( rNEvt.GetKeyEvent()->GetCharCode() );
         if(STRING_NOTFOUND != aForbiddenChars.Search(sKey))
             nHandled = 1;
     }
@@ -355,6 +355,9 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
 /*------------------------------------------------------------------------
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/05/29 13:46:19  fme
+      Fix #86988#: Redesign of dialogs
+
       Revision 1.1.1.1  2000/09/18 17:14:44  hr
       initial import
 
