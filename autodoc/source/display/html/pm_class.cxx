@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pm_class.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:36 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ PageMaker_Class::Write_TopArea()
     aFlags.SetColumn( 1, "abstract",
                       Me().Virtuality() == ary::cpp::VIRTUAL_abstract );
     aFlags.SetColumn( 2, "interface",
-                      static_cast< const ary::info::CodeInfo& >(Me().Info()).IsInterface()
+                      Me().Info().IsInterface()
                       OR  Me().Virtuality() == ary::cpp::VIRTUAL_abstract );
     aFlags.SetColumn( 3, "template",
                       Me().TemplateParameters().size() > 0 );
