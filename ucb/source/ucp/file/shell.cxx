@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-15 16:11:28 $
+ *  last change: $Author: abi $ $Date: 2001-11-15 17:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,8 +268,8 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       IsFolder( rtl::OUString::createFromAscii( "IsFolder" ) ),
       DateModified( rtl::OUString::createFromAscii( "DateModified" ) ),
       Size( rtl::OUString::createFromAscii( "Size" ) ),
-      FolderCount( rtl::OUString::createFromAscii( "FolderCount" ) ),
-      DocumentCount( rtl::OUString::createFromAscii( "DocumentCount" ) ),
+//        FolderCount( rtl::OUString::createFromAscii( "FolderCount" ) ),
+//        DocumentCount( rtl::OUString::createFromAscii( "DocumentCount" ) ),
       ContentType( rtl::OUString::createFromAscii( "ContentType" ) ),
       IsReadOnly( rtl::OUString::createFromAscii( "IsReadOnly" ) ),
       FolderContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ) ),
@@ -335,27 +335,27 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              | beans::PropertyAttribute::BOUND ) );
 
 
-    // DocumentCount
-    m_aDefaultProperties.insert( MyProperty( true,
-                                             DocumentCount,
-                                             -1,
-                                             getCppuType( static_cast< sal_Int32* >( 0 ) ),
-                                             uno::Any(),
-                                             beans::PropertyState_DEFAULT_VALUE,
-                                             beans::PropertyAttribute::MAYBEVOID
-                                             | beans::PropertyAttribute::BOUND
-                                             | beans::PropertyAttribute::READONLY ) );
+//      // DocumentCount
+//      m_aDefaultProperties.insert( MyProperty( true,
+//                                               DocumentCount,
+//                                               -1,
+//                                               getCppuType( static_cast< sal_Int32* >( 0 ) ),
+//                                               uno::Any(),
+//                                               beans::PropertyState_DEFAULT_VALUE,
+//                                               beans::PropertyAttribute::MAYBEVOID
+//                                               | beans::PropertyAttribute::BOUND
+//                                               | beans::PropertyAttribute::READONLY ) );
 
-    // FolderCount
-    m_aDefaultProperties.insert( MyProperty( true,
-                                             FolderCount,
-                                             -1,
-                                             getCppuType( static_cast< sal_Int32* >( 0 ) ),
-                                             uno::Any(),
-                                             beans::PropertyState_DEFAULT_VALUE,
-                                             beans::PropertyAttribute::MAYBEVOID
-                                             | beans::PropertyAttribute::BOUND
-                                             | beans::PropertyAttribute::READONLY ) );
+//      // FolderCount
+//      m_aDefaultProperties.insert( MyProperty( true,
+//                                               FolderCount,
+//                                               -1,
+//                                               getCppuType( static_cast< sal_Int32* >( 0 ) ),
+//                                               uno::Any(),
+//                                               beans::PropertyState_DEFAULT_VALUE,
+//                                               beans::PropertyAttribute::MAYBEVOID
+//                                               | beans::PropertyAttribute::BOUND
+//                                               | beans::PropertyAttribute::READONLY ) );
 
     // Size
     m_aDefaultProperties.insert( MyProperty( true,
@@ -2242,6 +2242,17 @@ shell::commit( const shell::ContentMap::iterator& it,
             it1->setValue( emptyAny );
     }
 
+    if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
+    {
+        it1 = properties.find( MyProperty( IsReadOnly ) );
+        if( it1 != properties.end() )
+        {
+            sal_Bool readonly = true;
+            aAny <<= readonly;
+            it1->setValue( aAny );
+        }
+    }
+
     it1 = properties.find( MyProperty( IsReadOnly ) );
     if( it1 != properties.end() )
     {
@@ -2284,34 +2295,6 @@ shell::commit( const shell::ContentMap::iterator& it,
             it1->setValue( emptyAny );
     }
 
-    it1 = properties.find( MyProperty( DateCreated ) );
-    if( it1 != properties.end() )
-    {
-        if( aFileStatus.isValid( FileStatusMask_CreationTime ) )
-        {
-            TimeValue temp = aFileStatus.getCreationTime();
-
-            // Convert system time to local time (for EA)
-            TimeValue   myLocalTime;
-            osl_getLocalTimeFromSystemTime( &temp, &myLocalTime );
-
-            oslDateTime myDateTime;
-            osl_getDateTimeFromTimeValue( &myLocalTime,&myDateTime );
-            util::DateTime aDateTime;
-
-            aDateTime.HundredthSeconds = ( unsigned short )(myDateTime.NanoSeconds / 10000000);
-            aDateTime.Seconds = myDateTime.Seconds;
-            aDateTime.Minutes = myDateTime.Minutes;
-            aDateTime.Hours = myDateTime.Hours;
-            aDateTime.Day = myDateTime.Day;
-            aDateTime.Month = myDateTime.Month;
-            aDateTime.Year = myDateTime.Year;
-            aAny <<= aDateTime;
-            it1->setValue( aAny );
-        }
-        else
-            it1->setValue( emptyAny );
-    }
 }
 
 
