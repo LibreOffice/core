@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2001-05-14 15:46:31 $
+#   last change: $Author: jl $ $Date: 2001-07-30 10:22:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,6 @@ TARGET=base
 NOOPTFILES=\
     $(SLO)$/exchange.obj
 
-.IF "$(TF_SVDATA)"==""
-NOOPTFILES+=$(SLO)$/dtrans.obj
-.ENDIF
 .ENDIF
 
 # --- Settings -----------------------------------------------------
@@ -90,9 +87,6 @@ SLOFILES=                                                           \
                         $(SLO)$/filelist.obj                		\
                         $(SLO)$/formats.obj
 
-.IF "$(TF_SVDATA)"==""
-SLOFILES+=$(SLO)$/dtrans.obj
-.ENDIF
 
 EXCEPTIONSFILES=	$(SLO)$/formats.obj							
 

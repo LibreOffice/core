@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2001-06-27 08:17:53 $
+#   last change: $Author: jl $ $Date: 2001-07-30 10:23:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,6 @@ DEF1NAME	=$(SHL1TARGET)
 DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
          $(PRJ)$/inc$/absdev.hxx	\
          $(PRJ)$/inc$/agg.hxx       \
-         $(PRJ)$/inc$/dtrans.hxx    \
          $(PRJ)$/inc$/exchange.hxx  \
          $(PRJ)$/inc$/factory.hxx   \
          $(PRJ)$/inc$/object.hxx    \

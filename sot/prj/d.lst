@@ -7,7 +7,6 @@ hedabu: ..\inc\agg.hxx %_DEST%\inc%_EXT%\sot\agg.hxx
 hedabu: ..\inc\storage.hxx %_DEST%\inc%_EXT%\sot\storage.hxx
 hedabu: ..\inc\storinfo.hxx %_DEST%\inc%_EXT%\sot\storinfo.hxx
 hedabu: ..\inc\sotref.hxx %_DEST%\inc%_EXT%\sot\sotref.hxx
-hedabu: ..\inc\dtrans.hxx %_DEST%\inc%_EXT%\sot\dtrans.hxx
 hedabu: ..\inc\exchange.hxx %_DEST%\inc%_EXT%\sot\exchange.hxx
 hedabu: ..\inc\formats.hxx %_DEST%\inc%_EXT%\sot\formats.hxx
 hedabu: ..\inc\absdev.hxx %_DEST%\inc%_EXT%\sot\absdev.hxx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-07 09:59:35 $
+ *  last change: $Author: jl $ $Date: 2001-07-30 10:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include <object.hxx>
-#include <dtrans.hxx>
 #include <sotdata.hxx>
 #pragma hdrstop
 
@@ -87,11 +86,6 @@ SotData_Impl::SotData_Impl()
     , pSotObjectFactory( NULL )
     , pSotStorageStreamFactory( NULL )
     , pSotStorageFactory( NULL )
-#ifndef TF_SVDATA
-    , pSotDataObjectFactory( NULL )
-    , pEmptyList( NULL )
-    , pSotDataMemberObjectFactory( NULL )
-#endif
     , pDataFlavorList( NULL )
 {
 }
@@ -166,10 +160,6 @@ void SotFactory::DeInit()
 
     delete pSotData->pObjectList;
     pSotData->pObjectList = NULL;
-#ifndef TF_SVDATA
-    delete pSotData->pEmptyList;
-    pSotData->pEmptyList = NULL;
-#endif
     if( pSotData->pDataFlavorList )
     {
 

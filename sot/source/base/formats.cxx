@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-06 10:34:13 $
+ *  last change: $Author: jl $ $Date: 2001-07-30 10:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 
 #include "exchange.hxx"
 #include "formats.hxx"
-#include "dtrans.hxx"
 #include "filelist.hxx"
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
@@ -1276,179 +1275,8 @@ static SotDestinationEntry_Impl __READONLY_DATA aDestinationArray[] =     \
     }                                                                     \
 };
 
-// ---------------------------------
-// - old style GetExchange methods -
-// ---------------------------------
-#ifndef TF_SVDATA
-static BOOL CheckContext_Impl( const SotDataObject& rData,
-                                const SotAction_Impl& rEntry )
-{
-    BOOL bRet = TRUE;
-    switch( rEntry.nFormatId )
-    {
-    case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
-#ifdef WNT
-        switch( rEntry.nContextCheckId )
-        {
-        case FILEGRPDSC_ONLY_URL:
-            {
-                bRet = FALSE;
-                SvData aData( rEntry.nFormatId, MEDIUM_ALL );
-                if( rData.GetTypeList().Get( SOT_FORMATSTR_ID_FILECONTENT ) &&
-                    ((SotDataObject&)rData).GetData( &aData ))
-                {
-                    // dann als FileGroupDescriptor bereitstellen
-                    void *pData;
-                    aData.GetData( &pData, TRANSFER_REFERENCE );
-                    FILEGROUPDESCRIPTOR* pFDesc = (FILEGROUPDESCRIPTOR*)pData;
-                    // read only URL-Files
-                    if( pFDesc->cItems )
-                    {
-                        ByteString sDesc( pFDesc->fgd[0].cFileName );
-                        bRet = 4 < sDesc.Len() && sDesc.Copy( sDesc.Len()-4 ).
-                            EqualsIgnoreCaseAscii( ".URL" );
-                    }
-                }
-            }
-            break;
-        }
-#endif
-        break;
-    }
-    return bRet;
-}
-#endif
 
-#ifndef TF_SVDATA
-static USHORT GetAction_Impl(const SotDataObject& rData,const SotAction_Impl* pArray,
-                            ULONG& rFormat )
-{
-    const SvDataTypeList& rTypeList = rData.GetTypeList();
-    const SotAction_Impl* pArrayStart = pArray;
-    ULONG nId = pArray->nFormatId;
-    while( nId != 0xffff )
-    {
-        rFormat = nId;
-        if( 0 != rTypeList.Get( SotExchange::RegisterSotFormatName( nId ) ) &&
-            ( !pArray->nContextCheckId ||
-                CheckContext_Impl( rData, *pArray ) ))
-        {
-            if( SOT_FORMAT_FILE_LIST == rFormat &&
-                0 != rTypeList.Get( SotExchange::RegisterSotFormatName(
-                    SOT_FORMAT_FILE ) ) )
-            {
-                SvData aData( SOT_FORMAT_FILE_LIST );
-                ((SotDataObject&)rData).GetData( &aData );
-                FileList aFileList;
-                FileList* pFileList = &aFileList;
-                aData.GetData( (SvDataCopyStream**)&pFileList, pFileList->Type() );
-                // FileList mit einem Eintrag matcht auf FORMAT_FILE!
-                if( aFileList.Count() == 1 )
-                {
-                    // Eintrag fuer FORMAT_FILE suchen
-                    const SotAction_Impl* pCur = pArrayStart;
-                    while( pCur->nFormatId != 0xffff )
-                    {
-                        if( pCur->nFormatId == SOT_FORMAT_FILE )
-                        {
-                            rFormat = SOT_FORMAT_FILE;
-                            return pCur->nAction;
-                        }
-                        pCur++;
-                    }
-                }
-            }
-            return pArray->nAction;
-        }
-        pArray++;
-        nId = pArray->nFormatId;
-    }
-    return EXCHG_INOUT_ACTION_NONE;
-}
-#endif
 
-#ifndef TF_SVDATA
-USHORT SotExchange::GetExchangeAction(
-    const SotDataObject& rData, USHORT nDestination, USHORT nSourceOptions,
-    USHORT nUserAction, ULONG& rFormat, USHORT& rDefaultAction )
-{
-    // hier wird jetzt die oben definierte Tabelle "implementiert"
-    IMPL_DATA_ARRAY_1;
-    IMPL_DATA_ARRAY_2;
-    IMPL_DATA_ARRAY_3;
-
-    rFormat = SOT_FORMAT_STRING;
-
-    //Todo: Binaere Suche einbauen
-    const SotDestinationEntry_Impl* pEntry = aDestinationArray;
-    while( 0xffff != pEntry->nDestination )
-    {
-        if( pEntry->nDestination == nDestination )
-            break;
-        ++pEntry;
-    }
-
-    if( 0xffff == pEntry->nDestination )
-    {
-        return EXCHG_INOUT_ACTION_NONE;
-    }
-
-    nUserAction &= EXCHG_ACTION_MASK;
-    rFormat = 0;
-
-    /* Behandlung der Default-Action nach folgender Vorgehensweise:
-
-       - Das Ziel wird nach der Default-Action gefragt
-       - Unterstuetzt die Quelle diese Aktion so wird sie uebernommen
-       - Anderenfalls wird aus den von der Quelle zur Verfuegung gestellten
-         Aktionen eine ausgewaehlt, die zu einer moeglichst nicht leeren
-          Ergebnisaktion fuehrt. Hierbei wird in dieser Reihenfolge
-          vorgegangen: Copy -> Link -> Move
-    */
-    if( nUserAction == EXCHG_IN_ACTION_DEFAULT )
-    {
-        nUserAction = GetAction_Impl(rData, pEntry->aDefaultActions,rFormat);
-        // Unterstuetzt die Quelle die Aktion?
-        if( !(nUserAction & nSourceOptions ))
-        {
-            // Nein -> Alle Aktionen der Quelle checken
-            rDefaultAction = (EXCHG_IN_ACTION_COPY & nSourceOptions);
-            if( rDefaultAction && (nUserAction=GetAction_Impl(rData,pEntry->aCopyActions,rFormat)))
-                return nUserAction;
-            rDefaultAction = (EXCHG_IN_ACTION_LINK & nSourceOptions);
-            if( rDefaultAction && (nUserAction=GetAction_Impl(rData,pEntry->aLinkActions,rFormat)))
-                return nUserAction;
-            rDefaultAction = (EXCHG_IN_ACTION_MOVE & nSourceOptions);
-            if( rDefaultAction && (nUserAction=GetAction_Impl(rData,pEntry->aMoveActions,rFormat)))
-                return nUserAction;
-            rDefaultAction = 0;
-            return 0;
-        }
-        rDefaultAction = nUserAction;
-    }
-      else
-        rDefaultAction = nUserAction;
-
-    switch( nUserAction )
-    {
-    case EXCHG_IN_ACTION_MOVE:
-        nUserAction = GetAction_Impl(rData, pEntry->aMoveActions, rFormat);
-        break;
-
-    case EXCHG_IN_ACTION_COPY:
-        nUserAction = GetAction_Impl(rData, pEntry->aCopyActions, rFormat);
-        break;
-
-    case EXCHG_IN_ACTION_LINK:
-        nUserAction = GetAction_Impl(rData, pEntry->aLinkActions, rFormat);
-        break;
-
-    default:
-        nUserAction = EXCHG_INOUT_ACTION_NONE;
-    }
-    return nUserAction;
-}
-#endif
 
 // ---------------------------------
 // - new style GetExchange methods -
