@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 18:43:13 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 11:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2704,7 +2704,7 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
     {
         Reference< XIndexAccess > xForms;
         if ( bDesign )
-            xForms = xForms.query( pPage->GetForms( false ) );
+            xForms = xForms.query( pPage->GetForms( true ) );
 
         ResetForms( xForms, sal_False );
     }
