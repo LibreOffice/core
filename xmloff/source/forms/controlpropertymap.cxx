@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-01 17:41:18 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 05:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ namespace xmloff
         { "FontWeight",     XML_NAMESPACE_FO,       sXML_font_weight,           XML_TYPE_TEXT_WEIGHT, 0 },
         { "FontWidth",      XML_NAMESPACE_STYLE,    sXML_font_width,            XML_TYPE_FONT_WIDTH, 0 },
         { "FontWordLineMode",XML_NAMESPACE_FO,      sXML_score_spaces,          XML_TYPE_NBOOL, 0 },
+        { "TextColor",      XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
         { 0, 0, 0, 0 }
     };
 
@@ -146,6 +147,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/02/01 17:41:18  mh
+ *  chg: header
+ *
  *  Revision 1.4  2001/01/18 13:51:30  fs
  *  the background-color is part of the fo (not style) namespace
  *
