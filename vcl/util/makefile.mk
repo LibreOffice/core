@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 16:32:23 $
+#   last change: $Author: obo $ $Date: 2004-08-12 10:47:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -192,7 +192,8 @@ SHL1STDLIBS+=\
             $(VOSLIB)           \
             $(SALLIB)			\
             $(ICUUCLIB)			\
-            $(ICULELIB)
+            $(ICULELIB)			\
+            $(JVMACCESSLIB)		
 
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
