@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:58:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,19 +1128,22 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 }
             }
         }
-        else if (rEntry.bQueryByString &&
-                (rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL) &&
-                (pCell ? pCell->HasValueData() :
-                 HasValueData( static_cast<SCCOL>(rEntry.nField), nRow)))
+        else if (rParam.bMixedComparison)
         {
-            bOk = TRUE;
-        }
-        else if (!rEntry.bQueryByString &&
-                (rEntry.eOp == SC_GREATER || rEntry.eOp == SC_GREATER_EQUAL) &&
-                (pCell ? pCell->HasStringData() :
-                 HasStringData( static_cast<SCCOL>(rEntry.nField), nRow)))
-        {
-            bOk = TRUE;
+            if (rEntry.bQueryByString &&
+                    (rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL) &&
+                    (pCell ? pCell->HasValueData() :
+                     HasValueData( static_cast<SCCOL>(rEntry.nField), nRow)))
+            {
+                bOk = TRUE;
+            }
+            else if (!rEntry.bQueryByString &&
+                    (rEntry.eOp == SC_GREATER || rEntry.eOp == SC_GREATER_EQUAL) &&
+                    (pCell ? pCell->HasStringData() :
+                     HasStringData( static_cast<SCCOL>(rEntry.nField), nRow)))
+            {
+                bOk = TRUE;
+            }
         }
 
         if (nPos == -1)
