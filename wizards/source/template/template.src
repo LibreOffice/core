@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 21:21:03 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 12:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ String STYLES + 1
     Text[ japanese ] = "•\\¦’†‚ÌÄŞ·­ÒİÄ‚ğ¸Ø¯ÌßÎŞ°ÄŞ‚É•Û‘¶‚·‚éÛ‚É´×°”­¶! Ÿ‚Ì±¸¼®İ‚ÍŒ³‚É–ß‚¹‚Ü‚¹‚ñB";
     Text[ korean ] = "ÇöÀç ¹®¼­¸¦ Áß°£ ÀúÀåÇÏ´Â µ¿¾È ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù!  ¿¬¼ÓµÇ´Â ÀÛ¾÷À» ½ÇÇàÃë¼ÒÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÔÚ´æÅÌµ±Ç°ÎÄµµÊ±·¢Éú´íÎó£¡ÎŞ·¨È¡ÏûÏÂÁĞ²Ù×÷¡£";
-    Text[ chinese_traditional ] = "¼È¦s¤å¥óµo¥Í¿ù»~¡IµLªk«ì´_¥H¤Uªº¾Ş§@¡C";
+    Text[ chinese_traditional ] = "¼È¦s¤å¥óµo¥Í¿ù»~¡IµLªk«ì´_¥H¤Uªº°Ê§@¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍİÙ ÇáãÓÊäÏ ÇáÍÇáí İí ÇáÍÇİÙÉ! áä íãßä ÇáÊÑÇÌÚ Úä ÇáÅÌÑÇÁ ÇáŞÇÏã.";
     Text[ turkish ] = "Belgeyi panoya kaydederken hata oluştu! Bir sonraki işlem geri alınamaz.";
 };
@@ -178,10 +178,10 @@ String STYLES + 2
     Text[ greek ] = "&Áêıñùóç";
     Text[ dutch ] = "Stoppen";
     Text[ french ] = "Annuler";
-    Text[ spanish ] = "Cancelar";
+    Text[ spanish ] = "&Cancelar";
     Text[ italian ] = "Annulla";
     Text[ danish ] = "Annuller";
-    Text[ swedish ] = "Avbryt";
+    Text[ swedish ] = "&Avbryt";
     Text[ polish ] = "Anuluj";
     Text[ portuguese_brazilian ] = "Cancel";
     Text[ japanese ] = "·¬İ¾Ù";
@@ -203,10 +203,10 @@ String STYLES + 3
     Text[ greek ] = "&OK";
     Text[ dutch ] = "OK";
     Text[ french ] = "OK";
-    Text[ spanish ] = "Aceptar";
+    Text[ spanish ] = "&Aceptar";
     Text[ italian ] = "OK";
     Text[ danish ] = "OK";
-    Text[ swedish ] = "OK";
+    Text[ swedish ] = "&OK";
     Text[ polish ] = "OK";
     Text[ portuguese_brazilian ] = "OK";
     Text[ japanese ] = "OK";
@@ -486,16 +486,16 @@ String TextField
     Text[ greek ] = "Äåí ïñßóôçêå ôï ğåäßï ôùí äåäïìİíùí ôïõ ÷ñŞóôç!";
     Text[ dutch ] = "Textfield is not defined!";
     Text[ french ] = "Ce champ de données d'identité n'est pas défini !";
-    Text[ spanish ] = "Textfield is not defined!";
+    Text[ spanish ] = "¡El campo de datos de usuario no está definido!";
     Text[ italian ] = "Textfield is not defined!";
     Text[ danish ] = "Textfield is not defined!";
     Text[ swedish ] = "Användardatafält är inte definierat!";
     Text[ polish ] = "Nie zdefiniowano pola danych u¿ytkownika!";
     Text[ portuguese_brazilian ] = "Textfield is not defined!";
-    Text[ japanese ] = "Textfield is not defined!";
+    Text[ japanese ] = "Õ°»Ş°ÃŞ°À‚ÌÌ¨°ÙÄŞ‚ª’è‹`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Text[ korean ] = "Textfield is not defined!";
-    Text[ chinese_simplified ] = "Textfield is not defined!";
+    Text[ chinese_simplified ] = "»¹Ã»ÓĞ¶¨ÒåÊ¹ÓÃÕß×Ö¶Î£¡";
     Text[ chinese_traditional ] = "ÁÙ¨S¦³©w¸q¨Ï¥ÎªÌ¸ê®ÆÄæ¦ì!";
     Text[ turkish ] = "Textfield is not defined!";
-    Text[ arabic ] = "Textfield is not defined!";
+    Text[ arabic ] = "áã íÊã ÊÚííä ÍŞá ÈíÇäÇÊ ÇáãÓÊÎÏã!";
 };
