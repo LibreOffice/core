@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:19:07 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#ifndef _POLY_HXX //autogen
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #define _SVSTDARR_LONGS
 #include <svtools/svstdarr.hxx>
