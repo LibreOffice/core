@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-11 07:53:56 $
+ *  last change: $Author: sab $ $Date: 2002-11-11 12:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,6 +481,7 @@
 #define SC_UNO_VISAREA              "VisibleArea"
 #define SC_UNO_ZOOMTYPE             "ZoomType"
 #define SC_UNO_ZOOMVALUE            "ZoomValue"
+#define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
 
 //  old (5.2) property names for view options - for compatibility only!
 #define OLD_UNO_COLROWHDR           "ColumnRowHeaders"

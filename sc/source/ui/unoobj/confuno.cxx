@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 16:01:00 $
+ *  last change: $Author: sab $ $Date: 2002-11-11 12:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_CHARCOMP),     0,  &getCppuType((sal_Int16*)0),        0},
         {MAP_CHAR_LEN(SC_UNO_ASIANKERN),    0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SCSAVEVERSION),       0,  &getBooleanCppuType(),              0},
+        {MAP_CHAR_LEN(SC_UNO_UPDTEMPL),     0,  &getBooleanCppuType(),              0},
         {0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -271,6 +272,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
                 pDocShell->GetDocInfo().SetSaveVersionOnClose( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+            else if ( aPropertyName.compareToAscii( SC_UNO_UPDTEMPL ) == 0 )
+                pDocShell->GetDocInfo().SetQueryLoadTemplate( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -384,6 +387,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDoc->GetAsianKerning() );
             else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsSaveVersionOnClose() );
+            else if ( aPropertyName.compareToAscii( SC_UNO_UPDTEMPL ) == 0 )
+                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsQueryLoadTemplate());
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
