@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:40:55 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ namespace connectivity
 
         class MQueryExpression : public MQueryExpressionBase
         {
-            friend MQuery;
+            friend class MQuery;
 
         public:
             typedef ::std::vector< MQueryExpressionBase* > ExprVector;
