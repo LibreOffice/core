@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-22 16:19:45 $
+ *  last change: $Author: ka $ $Date: 2002-04-02 12:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
 
     if( pResPath && *pResPath )
     {
-        String                  aLine, aFileName, aInfo, aPrefix, aName( rName );
+        ByteString              aLine;
+        String                  aFileName, aInfo, aPrefix, aName( rName );
         String                  aString( String::CreateFromAscii( ByteString( pResPath ).GetBuffer() ) );
         const String            aResPath( ( DirEntry( aString ) += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "res" ) ) ) ).GetFull() );
         SvFileStream            aOutStream;
@@ -141,23 +142,21 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
         // get number of bitmaps
         while( aLine.Search( '}' ) == STRING_NOTFOUND )
         {
-            ByteString aTmp;
-
-            if( !pSRS->ReadLine( aTmp ) )
+            if( !pSRS->ReadLine( aLine ) )
                 break;
 
-            aTmp.EraseLeadingChars( ' ' );
-            aTmp.EraseLeadingChars( '\t' );
-            aTmp.EraseAllChars( ';' );
+            aLine.EraseLeadingChars( ' ' );
+            aLine.EraseLeadingChars( '\t' );
+            aLine.EraseAllChars( ';' );
 
-            if( aTmp.IsNumericAscii() )
+            if( aLine.IsNumericAscii() )
             {
                 aString = aPrefix;
 
-                if( atoi( aTmp.GetBuffer() ) < 10000 )
+                if( atoi( aLine.GetBuffer() ) < 10000 )
                     aString += String::CreateFromInt32( 0 );
 
-                aString += String( aTmp.GetBuffer(), RTL_TEXTENCODING_UTF8 );
+                aString += String( aLine.GetBuffer(), RTL_TEXTENCODING_UTF8 );
                 aString += String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) );
 
                 aNameVector.push_back( aString );
