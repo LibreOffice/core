@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillinfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:25:41 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,7 @@ SCSIZE ScDocument::FillInfo( RowInfo* pRowInfo, SCCOL nX1, SCROW nY1, SCCOL nX2,
                                 pInfo->pShadowAttr  = pShadowAttr;
                                 //  nWidth wird nicht mehr einzeln gesetzt
 
-                                BOOL bEmbed = bIsEmbedded &&
+                                BOOL bEmbed = FALSE; //bIsEmbedded &&
                                         nTab    >= aEmbedRange.aStart.Tab() &&
                                         nTab    <= aEmbedRange.aEnd.Tab()   &&
                                         nX      >= aEmbedRange.aStart.Col() &&
