@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKey.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,12 @@ void OAdoKey::refreshColumns()
 {
     TStringVector aVector;
 
-    WpADOColumns aColumns = m_aKey.get_Columns();
-    aColumns.fillElementNames(aVector);
+    WpADOColumns aColumns;
+    if ( m_aKey.IsValid() )
+    {
+        aColumns = m_aKey.get_Columns();
+        aColumns.fillElementNames(aVector);
+    }
 
     if(m_pColumns)
         m_pColumns->reFill(aVector);

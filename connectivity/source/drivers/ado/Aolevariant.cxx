@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 06:07:58 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,16 @@ OLEString& OLEString::operator=(const ::rtl::OUString& _rSrc)
     m_sStr = ::SysAllocString(_rSrc);
     return *this;
 }
+OLEString& OLEString::operator=(const OLEString& _rSrc)
+{
+    if(this != &_rSrc)
+    {
+        if(m_sStr)
+            ::SysFreeString(m_sStr);
+        m_sStr = ::SysAllocString(_rSrc.m_sStr);
+    }
+    return *this;
+}
 OLEString& OLEString::operator=(const BSTR& _rSrc)
 {
     if(m_sStr)
@@ -195,8 +205,7 @@ OLEVariant::OLEVariant(const double &x)
 OLEVariant::OLEVariant(IDispatch* pDispInterface)
 {
     VariantInit(this);
-    vt = VT_DISPATCH;
-    pdispVal = pDispInterface;
+    setIDispatch( pDispInterface );
 }
 
 OLEVariant::OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
@@ -245,9 +254,6 @@ void OLEVariant::setBool(sal_Bool b)                {   VariantClear(this); vt =
 void OLEVariant::setString(const rtl::OUString& us){    VariantClear(this); vt = VT_BSTR;   bstrVal     = ::SysAllocString(us);}
 void OLEVariant::setNoArg()                         {   VariantClear(this); vt = VT_ERROR;  scode       = DISP_E_PARAMNOTFOUND;}
 
-void OLEVariant::setIDispatch(IDispatch* pDispInterface)
-                                {   VariantClear(this); vt = VT_DISPATCH; pdispVal = pDispInterface;}
-
 void OLEVariant::setNull()                  {   VariantClear(this); vt = VT_NULL;}
 void OLEVariant::setEmpty()                 {   VariantClear(this); vt = VT_EMPTY;}
 
@@ -256,6 +262,18 @@ void OLEVariant::setUI1SAFEARRAYPtr(SAFEARRAY* pSafeAr)
 
 void OLEVariant::setArray(SAFEARRAY* pSafeArray, VARTYPE vtType)
                                 {   VariantClear(this); vt = VT_ARRAY|vtType; parray = pSafeArray; }
+
+void OLEVariant::setIDispatch(IDispatch* pDispInterface)
+{
+    VariantClear(this);
+
+    vt = VT_DISPATCH;
+    pdispVal = pDispInterface;
+
+    if ( pDispInterface )
+        pDispInterface->AddRef();
+}
+
 
 sal_Bool OLEVariant::isNull() const  {  return (vt == VT_NULL);     }
 sal_Bool OLEVariant::isEmpty() const {  return (vt == VT_EMPTY);    }
@@ -317,6 +335,36 @@ OLEVariant::operator rtl::OUString() const
 
     return V_BSTR(&varDest);
 }
+
+// -----------------------------------------------------------------------------
+void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
+{
+    //
+    // If pDest is NULL, convert type in place
+    //
+    if (pSrc == NULL)
+        pSrc = this;
+
+    if  (   ( this != pSrc )
+        ||  ( vartype != V_VT( this ) )
+        )
+    {
+        if ( FAILED( ::VariantChangeType(   static_cast< VARIANT* >( this ),
+                                            const_cast< VARIANT* >( static_cast< const VARIANT* >( pSrc ) ),
+                                            0,
+                                            vartype ) ) )
+        {
+            throw ::com::sun::star::sdbc::SQLException(
+                ::rtl::OUString::createFromAscii( "Could not convert type!" ),
+                NULL,
+                ::rtl::OUString::createFromAscii( "S1000" ),
+                1000,
+                ::com::sun::star::uno::Any()
+            );
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
 {
@@ -376,7 +424,6 @@ IUnknown* OLEVariant::getIUnknown() const
 {
     if (V_VT(this) == VT_UNKNOWN)
     {
-        V_UNKNOWN(this)->AddRef();
         return V_UNKNOWN(this);
     }
     if(isNull())
@@ -394,7 +441,6 @@ IDispatch* OLEVariant::getIDispatch() const
 {
     if (V_VT(this) == VT_DISPATCH)
     {
-        V_DISPATCH(this)->AddRef();
         return V_DISPATCH(this);
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-28 07:00:09 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,17 @@
 #ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
 #include "ado/AConnection.hxx"
 #endif
-//#ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
-//#include "ado/Awrapadox.hxx"
-//#endif
+#ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
+#include "ado/Awrapadox.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
+#include "ado/ACatalog.hxx"
+#endif
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
 #ifndef _CONNECTIVITY_ADO_ADOIMP_HXX_
 #include "ado/adoimp.hxx"
-#endif
-#ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
-#include "ado/ACatalog.hxx"
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -218,6 +218,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
         }
 
     }
+
     Reference< XTablesSupplier > xTab = NULL;
     if(pConnection)
     {
@@ -238,23 +239,6 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const ::r
     return getDataDefinitionByConnection(connect(url,info));
 }
 
-// -----------------------------------------------------------------------------
-void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
-{
-    //
-    // If pDest is NULL, convert type in place
-    //
-    if (pSrc == NULL)
-        pSrc = this;
-
-    if ((this != pSrc) || (vartype != V_VT(this)))
-    {
-        if(FAILED(::VariantChangeType(static_cast<VARIANT*>(this),
-                          const_cast<VARIANT*>(static_cast<const VARIANT*>(pSrc)),
-                          0, vartype)))
-                          throw ::com::sun::star::sdbc::SQLException(::rtl::OUString::createFromAscii("Could not convert type!"),NULL,::rtl::OUString(),1000,::com::sun::star::uno::Any());
-    }
-}
 // -----------------------------------------------------------------------------
 void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {

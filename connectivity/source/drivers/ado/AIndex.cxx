@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,13 @@ void OAdoIndex::refreshColumns()
 {
     TStringVector aVector;
 
-    WpADOColumns aColumns = m_aIndex.get_Columns();
-    aColumns.fillElementNames(aVector);
+    WpADOColumns aColumns;
+    if ( m_aIndex.IsValid() )
+    {
+        aColumns = m_aIndex.get_Columns();
+        aColumns.fillElementNames(aVector);
+    }
+
     if(m_pColumns)
         m_pColumns->reFill(aVector);
     else

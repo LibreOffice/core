@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-10 14:36:23 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,12 @@ void OStatement_Base::disposing()
 
     disposeResultSet();
 
+    if ( m_Command.IsValid() )
+        m_Command.putref_ActiveConnection( NULL );
     m_Command.clear();
+
+    if ( m_RecordSet.IsValid() )
+        m_RecordSet.PutRefDataSource( NULL );
     m_RecordSet.clear();
 
     if (m_pConnection)
@@ -228,21 +233,6 @@ void OStatement_Base::reset() throw (SQLException)
 
     if (m_xResultSet.get().is())
         clearMyResultSet();
-    else
-    {
-        if(0)
-        {
-            m_Command.clear();
-            m_Command.Create();
-            if(m_Command.IsValid())
-                m_Command.putref_ActiveConnection(m_pConnection->getConnection());
-            else
-                ADOS::ThrowException(*m_pConnection->getConnection(),*this);
-
-            m_RecordsAffected.setNoArg();
-            m_Parameters.setNoArg();
-        }
-    }
 }
 //--------------------------------------------------------------------
 // clearMyResultSet
@@ -309,6 +299,18 @@ void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
     m_aLastWarning = ex;
 }
 // -------------------------------------------------------------------------
+void OStatement_Base::assignRecordSet( ADORecordset* _pRS )
+{
+    WpADORecordset aOldRS( m_RecordSet );
+    m_RecordSet = WpADORecordset( _pRS );
+
+    if ( aOldRS.IsValid() )
+        aOldRS.PutRefDataSource( NULL );
+
+    if ( m_RecordSet.IsValid() )
+        m_RecordSet.PutRefDataSource( (IDispatch*)&m_Command );
+}
+// -------------------------------------------------------------------------
 sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -319,13 +321,16 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
 
     reset();
 
-    try {
+    try
+    {
         ADORecordset* pSet = NULL;
         CHECK_RETURN(m_Command.put_CommandText(sql))
         CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdText,&pSet))
-        m_RecordSet = WpADORecordset(pSet);
+
+        assignRecordSet( pSet );
     }
-    catch (SQLWarning& ex) {
+    catch (SQLWarning& ex)
+    {
 
         // Save pointer to warning and save with ResultSet
         // object once it is created.
@@ -411,15 +416,19 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
     for(::std::list< ::rtl::OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
         aBatchSql = aBatchSql + *i + ::rtl::OUString::createFromAscii(";");
 
-    ADORecordset* pSet=NULL;
+
+    if ( m_RecordSet.IsValid() )
+        m_RecordSet.PutRefDataSource( NULL );
     m_RecordSet.clear();
     m_RecordSet.Create();
 
     CHECK_RETURN(m_Command.put_CommandText(aBatchSql))
-    m_RecordSet.PutRefDataSource((IDispatch*)&m_Command);
+    if ( m_RecordSet.IsValid() )
+        m_RecordSet.PutRefDataSource((IDispatch*)&m_Command);
 
     CHECK_RETURN(m_RecordSet.UpdateBatch(adAffectAll))
 
+    ADORecordset* pSet=NULL;
     Sequence< sal_Int32 > aRet(nLen);
     sal_Int32* pArray = aRet.getArray();
     for(sal_Int32 j=0;j<nLen;++j)
@@ -428,7 +437,8 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
         OLEVariant aRecordsAffected;
         if(m_RecordSet.NextRecordset(aRecordsAffected,&pSet) && pSet)
         {
-            m_RecordSet = WpADORecordset(pSet);
+            assignRecordSet( pSet );
+
             sal_Int32 nValue;
             if(m_RecordSet.get_RecordCount(nValue))
                 pArray[j] = nValue;
@@ -503,13 +513,15 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
 
     // Call SQLMoreResults
 
-    try {
+    try
+    {
         ADORecordset* pSet=NULL;
         OLEVariant aRecordsAffected;
         if(m_RecordSet.IsValid() && m_RecordSet.NextRecordset(aRecordsAffected,&pSet) && pSet)
-            m_RecordSet = WpADORecordset(pSet);
+            assignRecordSet( pSet );
     }
-    catch (SQLWarning &ex) {
+    catch (SQLWarning &ex)
+    {
 
         // Save pointer to warning and save with ResultSet
         // object once it is created.

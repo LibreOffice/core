@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-30 13:20:59 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _CONNECTIVITY_ADO_APREPAREDSTATEMENT_HXX_
 #include "ado/APreparedStatement.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
+#include "ado/ACatalog.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
@@ -109,6 +112,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.star.sdbc.Connection");
@@ -139,8 +143,6 @@ OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyVal
 
     if( !FAILED( hr ) )
     {
-        pIUnknown->AddRef();
-
         ADOConnection *pCon         = NULL;
         hr = pIUnknown->CreateInstanceLic(  pOuter,
                                             NULL,
@@ -150,11 +152,15 @@ OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyVal
 
         if( !FAILED( hr ) )
         {
-            m_pAdoConnection = new WpADOConnection(pCon);
-            // Class Factory is no longer needed
+            OSL_ENSURE( pCon, "OConnection::OConnection: invalid ADO object!" );
 
+            m_pAdoConnection = new WpADOConnection( pCon );
+            // CreateInstanceLic returned an object which was already acquired
+            pCon->Release( );
 
         }
+
+        // Class Factory is no longer needed
         pIUnknown->Release();
     }
 
@@ -164,6 +170,7 @@ OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyVal
 OConnection::~OConnection()
 {
     delete m_pAdoConnection;
+
     ModuleContext::ReleaseRef();
 }
 //-----------------------------------------------------------------------------
@@ -200,31 +207,13 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         if(m_pAdoConnection->get_State() != adStateOpen)
             ::dbtools::throwFunctionSequenceException(*this);
 
-        ADOProperties* pProps=m_pAdoConnection->get_Properties();
-        if(pProps)
+        WpADOProperties aProps = m_pAdoConnection->get_Properties();
+        if(aProps.IsValid())
         {
-            pProps->AddRef();
-            ADOProperty* pProp = NULL;
-            pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Jet OLEDB:ODBC Parsing")),&pProp);
-            {
-                WpADOProperty aProp(pProp);
-                if(pProp)
-                {
-                    aProp.PutValue(OLEVariant(sal_True));
-                    OLEVariant aVar = aProp.GetValue();
-                }
-            }
-            pProp = NULL;
-            pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Jet OLEDB:Engine Type")),&pProp);
-            WpADOProperty aProp(pProp);
-            if(pProp)
-            {
-                OLEVariant aVar = aProp.GetValue();
-                if(!aVar.isNull() && !aVar.isEmpty())
-                    m_nEngineType = aVar;
-            }
-
-            pProps->Release();
+            OTools::putValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Jet OLEDB:ODBC Parsing")),sal_True);
+            OLEVariant aVar(OTools::getValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Jet OLEDB:Engine Type"))));
+            if(!aVar.isNull() && !aVar.isEmpty())
+                m_nEngineType = aVar;
         }
         buildTypeInfo();
         //bErg = TRUE;
@@ -282,23 +271,15 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
 
 
     ::rtl::OUString sql = _sql;
-    ADOProperties* pProps=m_pAdoConnection->get_Properties();
-    if(pProps)
+    WpADOProperties aProps = m_pAdoConnection->get_Properties();
+    if(aProps.IsValid())
     {
-        pProps->AddRef();
-        ADOProperty* pProp = NULL;
-        pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Jet OLEDB:ODBC Parsing")),&pProp);
-        WpADOProperty aProp(pProp);
-        if(pProp)
-        {
-            pProp->put_Value(OLEVariant(sal_True));
-            WpADOCommand aCommand;
-            aCommand.Create();
-            aCommand.put_ActiveConnection((IDispatch*)*m_pAdoConnection);
-            aCommand.put_CommandText(sql);
-            sql = aCommand.get_CommandText();
-        }
-        pProps->Release();
+        OTools::putValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Jet OLEDB:ODBC Parsing")),sal_True);
+        WpADOCommand aCommand;
+        aCommand.Create();
+        aCommand.put_ActiveConnection((IDispatch*)*m_pAdoConnection);
+        aCommand.put_CommandText(sql);
+        sql = aCommand.get_CommandText();
     }
 
     return sql;
@@ -391,7 +372,6 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-
     m_pAdoConnection->PutDefaultDatabase(catalog);
     ADOS::ThrowException(*m_pAdoConnection,*this);
 }
@@ -400,7 +380,6 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
 
     return m_pAdoConnection->GetDefaultDatabase();
 }
@@ -557,10 +536,6 @@ void OConnection::disposing()
             xComp->dispose();
     }
     m_aStatements.clear();
-
-//  Reference< XComponent > xComp2(m_xCatalog.get(), UNO_QUERY);
-//  if(xComp2.is())
-//      xComp2->dispose();
 
     m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();

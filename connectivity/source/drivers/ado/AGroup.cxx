@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,16 +98,19 @@ void WpADOGroup::Create()
     IClassFactory2* pIUnknown   = NULL;
     IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
-    ADOGroup* pCommand;
+    ADOGroup* pGroup = NULL;
     hr = CoCreateInstance(ADOS::CLSID_ADOGROUP_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOGROUP_25,
-                          (void**)&pCommand );
+                          (void**)&pGroup );
 
 
     if( !FAILED( hr ) )
-        operator=(pCommand);
+    {
+        operator=( pGroup );
+        pGroup->Release();
+    }
 }
 // -------------------------------------------------------------------------
 OAdoGroup::OAdoGroup(OCatalog* _pParent,sal_Bool _bCase,    ADOGroup* _pGroup) : OGroup_ADO(_bCase),m_pCatalog(_pParent)

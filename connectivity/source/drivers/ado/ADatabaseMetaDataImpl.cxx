@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 10:50:24 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,16 +465,20 @@ void WpADOIndex::Create()
     IClassFactory2* pIUnknown   = NULL;
     IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
-    _ADOIndex* pCommand;
+
+    _ADOIndex* pIndex = NULL;
     hr = CoCreateInstance(ADOS::CLSID_ADOINDEX_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOINDEX_25,
-                          (void**)&pCommand );
+                          (void**)&pIndex );
 
 
     if( !FAILED( hr ) )
-        operator=(pCommand);
+    {
+        operator=( pIndex );
+        pIndex->Release();
+    }
 }
 // -------------------------------------------------------------------------
 void OAdoIndex::fillPropertyValues()
@@ -493,16 +497,19 @@ void WpADOKey::Create()
     IClassFactory2* pIUnknown   = NULL;
     IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
-    _ADOKey* pCommand;
+    _ADOKey* pKey = NULL;
     hr = CoCreateInstance(ADOS::CLSID_ADOKEY_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOKEY_25,
-                          (void**)&pCommand );
+                          (void**)&pKey );
 
 
     if( !FAILED( hr ) )
-        operator=(pCommand);
+    {
+        operator=( pKey );
+        pKey->Release();
+    }
 }
 // -------------------------------------------------------------------------
 void OAdoKey::fillPropertyValues()
@@ -600,16 +607,19 @@ void WpADOTable::Create()
     IClassFactory2* pIUnknown   = NULL;
     IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
-    _ADOTable* pCommand;
+    _ADOTable* pTable = NULL;
     hr = CoCreateInstance(ADOS::CLSID_ADOTABLE_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOTABLE_25,
-                          (void**)&pCommand );
+                          (void**)&pTable );
 
 
     if( !FAILED( hr ) )
-        operator=(pCommand);
+    {
+        operator=( pTable );
+        pTable->Release();
+    }
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString WpADOCatalog::GetObjectOwner(const ::rtl::OUString& _rName, ObjectTypeEnum _eNum)
@@ -634,17 +644,9 @@ void OAdoTable::fillPropertyValues()
                 m_CatalogName = aCat.GetObjectOwner(m_aTable.get_Name(),adPermObjTable);
         }
         {
-            ADOProperties* pProps = m_aTable.get_Properties();
-            if(pProps)
-            {
-                pProps->AddRef();
-                ADOProperty* pProp = NULL;
-                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
-                WpADOProperty aProp(pProp);
-                if(pProp)
-                    m_Description = aProp.GetValue();
-                pProps->Release();
-            }
+            WpADOProperties aProps = m_aTable.get_Properties();
+            if(aProps.IsValid())
+                m_Description = OTools::getValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")));
         }
     }
 }
@@ -654,16 +656,19 @@ void WpADOUser::Create()
     IClassFactory2* pIUnknown   = NULL;
     IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
-    _ADOUser* pCommand;
+    _ADOUser* pUser = NULL;
     hr = CoCreateInstance(ADOS::CLSID_ADOUSER_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOUSER_25,
-                          (void**)&pCommand );
+                          (void**)&pUser );
 
 
     if( !FAILED( hr ) )
-        operator=(pCommand);
+    {
+        operator=( pUser );
+        pUser->Release();
+    }
 }
 // -------------------------------------------------------------------------
 

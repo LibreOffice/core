@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-30 13:20:58 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,12 @@ const IID ADOS::IID_ADOUSER_25              =   MYADOID(0x00000619);
 
 const CLSID ADOS::CLSID_ADOVIEW_25          =   MYADOID(0x00000612);
 const IID ADOS::IID_ADOVIEW_25              =   MYADOID(0x00000613);
+
+OLEString& ADOS::GetKeyStr()
+{
+    static OLEString sKeyStr(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gxwaezucfyqpwjgqbcmtsncuhwsnyhiohwxz")));
+    return sKeyStr;
+}
 
 // -------------------------------------------------------------------------
 sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)

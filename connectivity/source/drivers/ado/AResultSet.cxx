@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,9 +177,13 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
 void OResultSet::construct()
 {
     osl_incrementInterlockedCount( &m_refCount );
-    OSL_ENSURE(m_pRecordSet,"No RecordSet !");
-    if(!m_pRecordSet)
-        ::dbtools::throwFunctionSequenceException(*this);
+    if (!m_pRecordSet)
+    {
+        OSL_ENSURE( sal_False, "OResultSet::construct: no RecordSet!" );
+        Reference< XInterface > xInt( *this );
+        osl_decrementInterlockedCount( &m_refCount );
+        ::dbtools::throwFunctionSequenceException( xInt );
+    }
     m_pRecordSet->AddRef();
     VARIANT_BOOL bIsAtBOF;
     CHECK_RETURN(m_pRecordSet->get_BOF(&bIsAtBOF))
@@ -925,7 +929,8 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runtim
 
     ADOProperties* pProps = NULL;
     m_pRecordSet->get_Properties(&pProps);
-    WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(pProps);
+    WpADOProperties aProps;
+    aProps.setWithOutAddRef(pProps);
     ADOS::ThrowException(*((OConnection*)m_pStmt->getConnection().get())->getConnection(),*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACatalog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:15:37 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,13 @@ OCatalog::OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon) : connectivity::sd
                 ,m_pConnection(_pCon)
                 ,m_aCatalog(_pCatalog)
 {
+}
+// -----------------------------------------------------------------------------
+OCatalog::~OCatalog()
+{
+    if(m_aCatalog.IsValid())
+        m_aCatalog.putref_ActiveConnection(NULL);
+    m_aCatalog.clear();
 }
 // -----------------------------------------------------------------------------
 void OCatalog::refreshTables()

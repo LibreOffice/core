@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-11 09:10:12 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,18 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
 
     osl_decrementInterlockedCount( &m_refCount );
 }
+
+// -------------------------------------------------------------------------
+OPreparedStatement::~OPreparedStatement()
+{
+    if (m_pParameters)
+    {
+        OSL_ENSURE( sal_False, "OPreparedStatement::~OPreparedStatement: not disposed!" );
+        m_pParameters->Release();
+        m_pParameters = NULL;
+    }
+}
+
 // -------------------------------------------------------------------------
 
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
@@ -170,8 +182,11 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 void OPreparedStatement::disposing()
 {
     m_xMetaData = NULL;
-    if(m_pParameters)
+    if (m_pParameters)
+    {
         m_pParameters->Release();
+        m_pParameters = NULL;
+    }
     OStatement_Base::disposing();
 }
 // -------------------------------------------------------------------------

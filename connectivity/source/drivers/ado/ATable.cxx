@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,12 @@ void OAdoTable::refreshColumns()
 {
     TStringVector aVector;
 
-    WpADOColumns aColumns = m_aTable.get_Columns();
-    aColumns.fillElementNames(aVector);
+    WpADOColumns aColumns;
+    if ( m_aTable.IsValid() )
+    {
+        aColumns = m_aTable.get_Columns();
+        aColumns.fillElementNames(aVector);
+    }
 
     if(m_pColumns)
         m_pColumns->reFill(aVector);
@@ -159,8 +163,12 @@ void OAdoTable::refreshKeys()
 {
     TStringVector aVector;
 
-    WpADOKeys aKeys = m_aTable.get_Keys();
-    aKeys.fillElementNames(aVector);
+    WpADOKeys aKeys;
+    if(m_aTable.IsValid())
+    {
+        aKeys = m_aTable.get_Keys();
+        aKeys.fillElementNames(aVector);
+    }
 
     if(m_pKeys)
         m_pKeys->reFill(aVector);
@@ -172,8 +180,12 @@ void OAdoTable::refreshIndexes()
 {
     TStringVector aVector;
 
-    WpADOIndexes aIndexes = m_aTable.get_Indexes();
-    aIndexes.fillElementNames(aVector);
+    WpADOIndexes aIndexes;
+    if(m_aTable.IsValid())
+    {
+        aIndexes = m_aTable.get_Indexes();
+        aIndexes.fillElementNames(aVector);
+    }
 
     if(m_pIndexes)
         m_pIndexes->reFill(aVector);
@@ -260,32 +272,22 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
             case PROPERTY_ID_NAME:
                 m_aTable.put_Name(getString(rValue));
                 break;
+
             case PROPERTY_ID_TYPE:
-                {
-                    ADOProperties* pProps = m_aTable.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                        aProp.PutValue(getString(rValue));
-                    pProps->Release();
-                }
+                OTools::putValue(   m_aTable.get_Properties(),
+                                OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),
+                                getString(rValue));
                 break;
+
             case PROPERTY_ID_DESCRIPTION:
-                {
-                    ADOProperties* pProps = m_aTable.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                        aProp.PutValue(getString(rValue));
-                    pProps->Release();
-                }
+                OTools::putValue(   m_aTable.get_Properties(),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")),
+                                getString(rValue));
                 break;
+
             case PROPERTY_ID_SCHEMANAME:
                 break;
+
             default:
                                 throw Exception();
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-17 14:09:15 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
 // -------------------------------------------------------------------------
 sal_Int32 ODatabaseMetaData::getInt32Property(const ::rtl::OUString& _aProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(m_pADOConnection->get_Properties());
+    connectivity::ado::WpADOProperties aProps(m_pADOConnection->get_Properties());
     //  ADOS::ThrowException(*m_pADOConnection,*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
     ADO_PROP(_aProperty);
@@ -123,7 +123,7 @@ sal_Int32 ODatabaseMetaData::getInt32Property(const ::rtl::OUString& _aProperty)
 // -------------------------------------------------------------------------
 sal_Bool ODatabaseMetaData::getBoolProperty(const ::rtl::OUString& _aProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(m_pADOConnection->get_Properties());
+    connectivity::ado::WpADOProperties aProps(m_pADOConnection->get_Properties());
     ADOS::ThrowException(*m_pADOConnection,*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
     ADO_PROP(_aProperty);
@@ -132,7 +132,7 @@ sal_Bool ODatabaseMetaData::getBoolProperty(const ::rtl::OUString& _aProperty)  
 // -------------------------------------------------------------------------
 ::rtl::OUString ODatabaseMetaData::getStringProperty(const ::rtl::OUString& _aProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    WpOLEAppendCollection<ADOProperties, ADOProperty, WpADOProperty> aProps(m_pADOConnection->get_Properties());
+    connectivity::ado::WpADOProperties aProps(m_pADOConnection->get_Properties());
     ADOS::ThrowException(*m_pADOConnection,*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
 
@@ -1094,17 +1094,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType( sal_Int32 setType ) 
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) throw(SQLException, RuntimeException)
 {
-//  ADOProperties* pProps = m_pADOConnection->get_Properties();
-//  OSL_ENSURE(pProps,"There are no properties at the connection");
-//  if(!pProps)
-//      return sal_False;
-//  pProps->AddRef();
-//  ADO_PROP("Maximum Row Size"INCLUDESBLOB);
-//  sal_Bool bValue(sal_False);
-//  bValue =  (!aVar.isNull() && !aVar.isEmpty() ? aVar.getBool() : sal_False);
-//  pProps->Release();
-//  return bValue;
-
     return sal_True;
 }
 // -------------------------------------------------------------------------

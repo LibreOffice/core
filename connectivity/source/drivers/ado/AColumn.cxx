@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:15:37 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,16 +97,20 @@ void WpADOColumn::Create()
     IClassFactory2* pIUnknown   = NULL;
     IUnknown        *pOuter     = NULL;
     HRESULT         hr = -1;
-    _ADOColumn* pCommand;
+
+    _ADOColumn* pColumn = NULL;
     hr = CoCreateInstance(ADOS::CLSID_ADOCOLUMN_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOCOLUMN_25,
-                          (void**)&pCommand );
+                          (void**)&pColumn );
 
 
     if( !FAILED( hr ) )
-        operator=(pCommand);
+    {
+        operator=( pColumn );
+        pColumn->Release( );
+    }
 }
 // -------------------------------------------------------------------------
 OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn)
@@ -167,6 +171,8 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
 {
     if(m_aColumn.IsValid())
     {
+        const sal_Char* pAdoPropertyName = NULL;
+
         switch(nHandle)
         {
             case PROPERTY_ID_ISASCENDING:
@@ -222,46 +228,27 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
             case PROPERTY_ID_ISROWVERSION:
                 break;
+
             case PROPERTY_ID_ISAUTOINCREMENT:
-                {
-                    ADOProperties* pProps = m_aColumn.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Autoincrement")),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                        aProp.PutValue(getString(rValue));
-                    pProps->Release();
-                }
+                pAdoPropertyName = "Autoincrement";
                 break;
+
             case PROPERTY_ID_DESCRIPTION:
-                {
-                    ADOProperties* pProps = m_aColumn.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Default")),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                        aProp.PutValue(getString(rValue));
-                    pProps->Release();
-                }
+                pAdoPropertyName = "Default";
                 break;
+
             case PROPERTY_ID_DEFAULTVALUE:
-                {
-                    ADOProperties* pProps = m_aColumn.get_Properties();
-                    pProps->AddRef();
-                    ADOProperty* pProp = NULL;
-                    pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
-                    WpADOProperty aProp(pProp);
-                    if(pProp)
-                        aProp.PutValue(getString(rValue));
-                    pProps->Release();
-                }
+                pAdoPropertyName = "Description";
                 break;
+
             case PROPERTY_ID_ISCURRENCY:
                 m_aColumn.put_Type(adCurrency);
                 break;
         }
+
+        if ( pAdoPropertyName )
+            OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString::createFromAscii( pAdoPropertyName ), getString( rValue ) );
+
     }
     OColumn_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
@@ -286,25 +273,15 @@ void OAdoColumn::fillPropertyValues()
         m_IsCurrency    = (m_aColumn.get_Type() == adCurrency);
         // fill some specific props
         {
-            ADOProperties* pProps = m_aColumn.get_Properties();
-            if(pProps)
-            {
-                pProps->AddRef();
-                ADOProperty* pProp = NULL;
-                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Autoincrement")),&pProp);
-                WpADOProperty aProp(pProp);
-                if(pProp)
-                    m_IsAutoIncrement = aProp.GetValue();
+            WpADOProperties aProps( m_aColumn.get_Properties() );
 
-                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Description")),&pProp);
-                aProp = pProp;
-                if(pProp)
-                    m_Description = (::rtl::OUString)aProp.GetValue();
-                pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Default")),&pProp);
-                aProp = pProp;
-                if(pProp)
-                    m_DefaultValue = (::rtl::OUString)aProp.GetValue();
-                pProps->Release();
+            if ( aProps.IsValid() )
+            {
+                m_IsAutoIncrement = OTools::getValue( aProps, ::rtl::OUString::createFromAscii( "Autoincrement" ) );
+
+                m_Description = OTools::getValue( aProps, ::rtl::OUString::createFromAscii( "Description" ) );
+
+                m_DefaultValue = OTools::getValue( aProps, ::rtl::OUString::createFromAscii( "Default" ) );
             }
         }
     }
