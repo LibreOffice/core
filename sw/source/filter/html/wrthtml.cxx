@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 16:21:48 $
+ *  last change: $Author: jp $ $Date: 2001-02-19 19:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,8 @@ sal_uInt32 SwHTMLWriter::WriteStream()
     eCSS1Unit = (FieldUnit)SW_MOD()->GetMetric( pDoc->IsHTMLMode() );
 
     sal_Bool bWriteUTF8 = sal_False;
-    eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8 : gsl_getSystemTextEncoding();
+    eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8
+                          : pHtmlOptions->GetTextEncoding();
     const sal_Char *pCharSet =
         rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
     eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
@@ -1400,11 +1401,14 @@ void GetHTMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.6 2000-12-21 16:21:48 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.7 2001-02-19 19:34:29 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/12/21 16:21:48  jp
+      writegraphic optional in original format and not general as JPG
+
       Revision 1.5  2000/12/14 09:28:31  mib
       #80006#: Export using utf-8 encoding
 
