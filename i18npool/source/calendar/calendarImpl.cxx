@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:20:45 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,19 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
     if (i >= lookupTable.size()) {
         Reference < XInterface > xI = xMSF->createInstance(
                 OUString::createFromAscii("com.sun.star.i18n.Calendar_") + uniqueID);
+
+        if ( ! xI.is() ) {
+            // check if the calendar is defined in localedata, load gregorian calendar service.
+            Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
+            for (i = 0; i < xC.getLength(); i++) {
+                if (uniqueID == xC[i].Name) {
+                    xI = xMSF->createInstance(
+                        OUString::createFromAscii("com.sun.star.i18n.Calendar_gregorian"));
+                    break;
+                }
+            }
+        }
+
         if ( xI.is() )
             xI->queryInterface(::getCppuType((const Reference< XExtendedCalendar>*)0)) >>= xCalendar;
         else
