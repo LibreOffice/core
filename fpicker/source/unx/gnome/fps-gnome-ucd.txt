@@ -1,0 +1,13 @@
+[ComponentDescriptor]
+ImplementationName=com.sun.star.ui.dialogs.SalGtkFilePicker
+ComponentName=libfps_gnome.so
+LoaderName=com.sun.star.loader.SharedLibrary
+[SupportedServices]
+com.sun.star.ui.dialogs.GtkFilePicker
+
+[ComponentDescriptor]
+ImplementationName=com.sun.star.ui.dialogs.SalGtkFolderPicker
+ComponentName=libfps_gnome.so
+LoaderName=com.sun.star.loader.SharedLibrary
+[SupportedServices]
+com.sun.star.ui.dialogs.GtkFolderPicker
