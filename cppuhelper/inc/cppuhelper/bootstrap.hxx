@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:54:15 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,8 +161,63 @@ defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Ex
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile) SAL_THROW( (::com::sun::star::uno::Exception) );
 
+/**
+ * An exception indicating a bootstrap error.
+ */
+class BootstrapException
+{
+public:
+    /**
+     * Constructs a BootstrapException.
+     */
+    BootstrapException();
+
+    /**
+     * Constructs a BootstrapException with the specified detail message.
+     *
+     * @param rMessage
+     * A message containing any details about the exception.
+     */
+    BootstrapException( const ::rtl::OUString & rMessage );
+
+    /**
+     * Copy constructs a BootstrapException.
+     */
+    BootstrapException( const BootstrapException & e );
+
+    /**
+     * Destructs a BootstrapException.
+     */
+    virtual ~BootstrapException();
+
+    /**
+     * Assigns a BootstrapException.
+     */
+    BootstrapException & operator=( const BootstrapException & e );
+
+    /** Gets the message.
+
+        @return
+        A reference to the message. The reference is valid for the lifetime of
+        this BootstrapException.
+     */
+    const ::rtl::OUString & getMessage() const;
+
+private:
+    ::rtl::OUString m_aMessage;
+};
+
+/**
+ * Bootstraps the component context from a UNO installation.
+ *
+ * @return a bootstrapped component context
+ * @exception BootstrapException
+ * Thrown in case bootstrap() signals an exception due to a
+ * bootstrap error.
+ */
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+SAL_CALL bootstrap();
 
 } // end namespace cppu
 
 #endif
-
