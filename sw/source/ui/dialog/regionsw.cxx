@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 12:10:09 $
+ *  last change: $Author: os $ $Date: 2001-05-16 08:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,6 @@ BOOL SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
         return TRUE;
     sal_Bool bRet = TRUE;
     SvLBoxEntry* pEntry = aTree.FirstSelected();
-    DBG_ASSERT(pEntry,"kein Entry gefunden");
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
@@ -2367,6 +2366,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/04/27 12:10:09  os
+    password at each section
+
     Revision 1.7  2001/03/07 17:18:52  mtg
     Content.xml -> content.xml
 
