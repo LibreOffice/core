@@ -1,5 +1,5 @@
 <!--
-	$Id: dtypes.mod,v 1.4 2000-10-24 11:21:33 mib Exp $
+	$Id: dtypes.mod,v 1.5 2000-11-06 14:43:09 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -155,6 +155,9 @@
 
 <!ENTITY % coordinateOrPercentage	"CDATA">
 
-<!ENTITY % shapes "(draw:rect|draw:line|draw:polyline|draw:polygon|draw:polygonpath|draw:circle|draw:ellipse|draw:g|draw:page-thumbnail|text:text-box)" >
+<!ENTITY % shapes "(draw:rect|draw:line|draw:polyline|draw:polygon|draw:path|
+					draw:circle|draw:ellipse|draw:g|draw:page-thumbnail|
+					text:text-box|office:image|draw:measure|draw:caption|
+					draw:connector)" >
 
 <!ENTITY % anchorType "(page|frame|paragraph|char|as-char)">

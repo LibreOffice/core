@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.4 2000-10-24 11:21:33 mib Exp $
+	$Id: drawing.mod,v 1.5 2000-11-06 14:43:09 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -61,6 +61,7 @@
 <!ENTITY % draw-transform "svg:transform CDATA #IMPLIED">
 <!ENTITY % draw-viewbox "svg:viewBox CDATA #REQUIRED">
 <!ENTITY % draw-style-name "draw:style-name %styleName; #IMPLIED presentation:style-name %styleName; #IMPLIED">
+<!ENTITY % shapeId "CDATA" >
 
 <!-- commont presentation shape attributes -->
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
@@ -95,16 +96,18 @@
 <!ELEMENT draw:polygon (text:p*) >
 <!ATTLIST draw:polygon %draw-position; >
 <!ATTLIST draw:polygon %draw-size; >
+<!ATTLIST draw:polygon %draw-viewbox; >
 <!ATTLIST draw:polygon draw:points %points; #REQUIRED >
 <!ATTLIST draw:polygon %draw-style-name; >
 <!ATTLIST draw:polygon %draw-transform; >
 
-<!ELEMENT draw:polygonpath (text:p)* >
-<!ATTLIST draw:polygonpath %draw-position;>
-<!ATTLIST draw:polygonpath %draw-viewbox; >
-<!ATTLIST draw:polygonpath svg:d %pathData; #REQUIRED >
-<!ATTLIST draw:polygonpath %draw-style-name; >
-<!ATTLIST draw:polygonpath %draw-transform; >
+<!ELEMENT draw:path (text:p)* >
+<!ATTLIST draw:path %draw-position;>
+<!ATTLIST draw:path %draw-size; >
+<!ATTLIST draw:path %draw-viewbox; >
+<!ATTLIST draw:path svg:d %pathData; #REQUIRED >
+<!ATTLIST draw:path %draw-style-name; >
+<!ATTLIST draw:path %draw-transform; >
 
 <!ELEMENT draw:circle (text:p)* >
 <!ATTLIST draw:circle svg:cx %length; #REQUIRED >
@@ -120,6 +123,18 @@
 <!ATTLIST draw:ellipse svg:ry %length; #REQUIRED >
 <!ATTLIST draw:ellipse %draw-style-name; >
 <!ATTLIST draw:ellipse %draw-transform; >
+
+<!ELEMENT draw:connector text:p*>
+<!ATTLIST draw:connector draw:line-skew CDATA #IMPLIED>
+<!ATTLIST draw:connector %draw-style-name>
+<!ATTLIST draw:connector draw:start-x %coordinate; #IMPLIED>
+<!ATTLIST draw:connector draw:start-y %coordinate; #IMPLIED>
+<!ATTLIST draw:connector draw:start-shape %shapeId; #IMPLIED>
+<!ATTLIST draw:connector draw:start-glue-point %integer; #IMPLIED>
+<!ATTLIST draw:connector draw:end-x %coordinate; #IMPLIED>
+<!ATTLIST draw:connector draw:end-y %coordinate; #IMPLIED>
+<!ATTLIST draw:connector draw:end-shape %shapeId; #IMPLIED>
+<!ATTLIST draw:connector draw:end-glue-point %integer; #IMPLIED>
 
 <!ELEMENT draw:g (%shapes;)* >
 <!ATTLIST draw:g %draw-transform; >
@@ -137,12 +152,38 @@
 <!ATTLIST text:text-box %presentation-class; >
 <!ATTLIST text:text-box %draw-transform; >
 
+<!ELEMENT draw:caption (text:p)*>
+<!ATTLIST draw:caption %draw-position; >
+<!ATTLIST draw:caption %draw-size; >
+<!ATTLIST draw:caption %draw-style-name; >
+<!ATTLIST draw:caption %draw-transform; >
+<!ATTLIST draw:caption draw:caption-point-x %coordinate; #IMPLIED>
+<!ATTLIST draw:caption draw:caption-point-y %coordinate; #IMPLIED>
+
+<!ELEMENT draw:measure (text:p)*>
+<!ATTLIST draw:measure %draw-position; >
+<!ATTLIST draw:measure %draw-size; >
+<!ATTLIST draw:measure %draw-style-name; >
+<!ATTLIST draw:measure %draw-transform; >
+
+<!ELEMENT office:image EMPTY>
+<!ATTLIST office:image %draw-position; >
+<!ATTLIST office:image %draw-size; >
+<!ATTLIST office:image %draw-transform; >
+<!ATTLIST office:image %draw-style-name; >
+<!ATTLIST office:image xlink:href %uriReference; #REQUIRED>
+<!ATTLIST office:image xlink:type (simple) #FIXED "simple">
+<!ATTLIST office:image xlink:show (embed) "embed">
+<!ATTLIST office:image xlink:actuate (onLoad) "onLoad">
+
+
+
 <!-- graphic style elements -->
 <!ELEMENT draw:gradient EMPTY >
 <!ATTLIST draw:gradient draw:name %styleName; #REQUIRED>
 <!ATTLIST draw:gradient draw:style %gradient-style; #REQUIRED>
-<!ATTLIST draw:gradient svg:cx %coordinate; #IMPLIED>
-<!ATTLIST draw:gradient svg:cy %coordinate; #IMPLIED>
+<!ATTLIST draw:gradient draw:cx %coordinate; #IMPLIED>
+<!ATTLIST draw:gradient draw:cy %coordinate; #IMPLIED>
 <!ATTLIST draw:gradient draw:start-color %color; #IMPLIED>
 <!ATTLIST draw:gradient draw:end-color %color; #IMPLIED>
 <!ATTLIST draw:gradient draw:start-intensity %percentage; #IMPLIED>
@@ -199,7 +240,7 @@
 <!ATTLIST style:properties draw:fill (none|solid|bitmap|gradient|hatch) #IMPLIED>
 <!ATTLIST style:properties draw:fill-color %color; #IMPLIED>
 <!ATTLIST style:properties draw:fill-gradient-name %styleName; #IMPLIED>
-<!ATTLIST style:properties draw:gradient-step-count (auto|%integer;) #IMPLIED>
+<!ATTLIST style:properties draw:gradient-step-count CDATA #IMPLIED>
 <!ATTLIST style:properties draw:fill-hatch-name %styleName; #IMPLIED>
 <!ATTLIST style:properties draw:fill-image-name %styleName; #IMPLIED>
 <!ATTLIST style:properties style:repeat (no-repeat|repeat|stretch) #IMPLIED>
@@ -216,7 +257,7 @@
 <!ATTLIST style:properties draw:color-mode (greyscale|mono|watermark|standard) #IMPLIED>
 <!ATTLIST style:properties draw:luminance %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:contrast %percentage; #IMPLIED>
-<!ATTLIST style:properties draw:gamme %percentage; #IMPLIED>
+<!ATTLIST style:properties draw:gamma %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:red %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:green %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:blue %percentage; #IMPLIED>
