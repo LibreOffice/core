@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:13:08 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,13 +422,14 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut):
     aAni(*(SdrView*)this),
     aDefaultAttr(pModel1->GetItemPool()),
     aUserMarkers(1024,16,16),
-    mbBufferedOutputAllowed(sal_False)
+    mbBufferedOutputAllowed(sal_False),
+    mbPagePaintingAllowed(sal_True)
 {
     DBG_CTOR(SdrPaintView,NULL);
     pMod=pModel1;
     ImpClearVars();
     if (pOut!=NULL) AddWin(pOut);
-    pXOut=new ExtOutputDevice(pOut);
+    pXOut=new XOutputDevice(pOut);
 
     // Flag zur Visualisierung von Gruppen
     bVisualizeEnteredGroup = TRUE;
@@ -437,12 +438,13 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut):
     onChangeColorConfig();
 }
 
-SdrPaintView::SdrPaintView(SdrModel* pModel1, ExtOutputDevice* pExtOut):
+SdrPaintView::SdrPaintView(SdrModel* pModel1, XOutputDevice* pExtOut):
     aPagV(1024,16,16),
     aAni(*(SdrView*)this),
     aDefaultAttr(pModel1->GetItemPool()),
     aUserMarkers(1024,16,16),
-    mbBufferedOutputAllowed(sal_False)
+    mbBufferedOutputAllowed(sal_False),
+    mbPagePaintingAllowed(sal_True)
 {
     DBG_CTOR(SdrPaintView,NULL);
     pMod=pModel1;
@@ -454,7 +456,7 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, ExtOutputDevice* pExtOut):
         OutputDevice* pO=pXOut->GetOutDev();
         if (pO!=NULL) AddWin(pO);
     } else {
-        pXOut=new ExtOutputDevice(NULL);
+        pXOut=new XOutputDevice(NULL);
     }
 
     // Flag zur Visualisierung von Gruppen
@@ -1461,113 +1463,113 @@ void SdrPaintView::ShowItemBrowser(BOOL bShow)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPaintView::WriteRecords(SvStream& rOut) const
-{
-    {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWPAGEVIEWS);
-        USHORT nv;
-        for (nv=0; nv<GetPageViewCount(); nv++) {
-            SdrPageView* pPV=GetPageViewPvNum(nv);
-            if (pPV->GetPage()->IsInserted()) {
-                rOut<<*pPV;
-            }
-        }
-    } {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWVISIELEM);
-        rOut<<BOOL(sal_False /*bLayerSortedRedraw*/);
-        rOut<<BOOL(bPageVisible);
-        rOut<<BOOL(bBordVisible);
-        rOut<<BOOL(bGridVisible);
-        rOut<<BOOL(bGridFront);
-        rOut<<BOOL(bHlplVisible);
-        rOut<<BOOL(bHlplFront);
-        rOut<<BOOL(bGlueVisible);
-        rOut<<aGridBig;
-        rOut<<aGridFin;
-        rOut<<aGridWdtX;
-        rOut<<aGridWdtY;
-        rOut<<aGridSubdiv;
-    } {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWAKTLAYER);
-
-        // UNICODE: rOut << aAktLayer;
-        rOut.WriteByteString(aAktLayer);
-
-        // UNICODE: rOut << aMeasureLayer;
-        rOut.WriteByteString(aMeasureLayer);
-    }
-}
+//BFS01void SdrPaintView::WriteRecords(SvStream& rOut) const
+//BFS01{
+//BFS01 {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWPAGEVIEWS);
+//BFS01     USHORT nv;
+//BFS01     for (nv=0; nv<GetPageViewCount(); nv++) {
+//BFS01         SdrPageView* pPV=GetPageViewPvNum(nv);
+//BFS01         if (pPV->GetPage()->IsInserted()) {
+//BFS01             rOut<<*pPV;
+//BFS01         }
+//BFS01     }
+//BFS01 } {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWVISIELEM);
+//BFS01     rOut<<BOOL(sal_False /*bLayerSortedRedraw*/);
+//BFS01     rOut<<BOOL(bPageVisible);
+//BFS01     rOut<<BOOL(bBordVisible);
+//BFS01     rOut<<BOOL(bGridVisible);
+//BFS01     rOut<<BOOL(bGridFront);
+//BFS01     rOut<<BOOL(bHlplVisible);
+//BFS01     rOut<<BOOL(bHlplFront);
+//BFS01     rOut<<BOOL(bGlueVisible);
+//BFS01     rOut<<aGridBig;
+//BFS01     rOut<<aGridFin;
+//BFS01     rOut<<aGridWdtX;
+//BFS01     rOut<<aGridWdtY;
+//BFS01     rOut<<aGridSubdiv;
+//BFS01 } {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWAKTLAYER);
+//BFS01
+//BFS01     // UNICODE: rOut << aAktLayer;
+//BFS01     rOut.WriteByteString(aAktLayer);
+//BFS01
+//BFS01     // UNICODE: rOut << aMeasureLayer;
+//BFS01     rOut.WriteByteString(aMeasureLayer);
+//BFS01 }
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL SdrPaintView::ReadRecord(const SdrIOHeader& rViewHead,
-    const SdrNamedSubRecord& rSubHead,
-    SvStream& rIn)
-{
-    BOOL bRet=FALSE;
-    if (rSubHead.GetInventor()==SdrInventor) {
-        bRet=TRUE;
-        switch (rSubHead.GetIdentifier()) {
-            case SDRIORECNAME_VIEWPAGEVIEWS: {
-                while (rSubHead.GetBytesLeft()>0 && rIn.GetError()==0 && !rIn.IsEof()) {
-                    SdrPageView* pPV=new SdrPageView(NULL,Point(),*(SdrView*)this);
-                    rIn>>*pPV;
-                    if (pPV->GetPage()!=NULL) {
-                        if (pPV->IsVisible()) {
-                            aPagV.Insert(pPV,CONTAINER_APPEND);
-                        } else {
-                            // aPagHide.Insert(pPV,CONTAINER_APPEND);
-                            delete pPV;
-                        }
-                    } else {
-                        DBG_ERROR("SdrPaintView::ReadRecord(): Seite der PageView nicht gefunden");
-                        delete pPV;
-                    }
-                }
-            } break;
-
-            case SDRIORECNAME_VIEWVISIELEM:
-            {
-                BOOL bTemp;
-
-                rIn>>bTemp; // bLayerSortedRedraw=bTemp;
-                rIn>>bTemp; bPageVisible      =bTemp;
-                rIn>>bTemp; bBordVisible      =bTemp;
-                rIn>>bTemp; bGridVisible      =bTemp;
-                rIn>>bTemp; bGridFront        =bTemp;
-                rIn>>bTemp; bHlplVisible      =bTemp;
-                rIn>>bTemp; bHlplFront        =bTemp;
-                rIn>>bTemp; bGlueVisible      =bTemp;
-                rIn>>aGridBig;
-                rIn>>aGridFin;
-
-                if(rSubHead.GetBytesLeft() > 0)
-                {
-                    rIn >> aGridWdtX;
-                    rIn >> aGridWdtY;
-                    rIn >> aGridSubdiv;
-                }
-                break;
-            }
-            case SDRIORECNAME_VIEWAKTLAYER:
-            {
-                // UNICODE: rIn >> aAktLayer;
-                rIn.ReadByteString(aAktLayer);
-
-                if(rSubHead.GetBytesLeft() > 0)
-                {
-                    // UNICODE: rIn >> aMeasureLayer;
-                    rIn.ReadByteString(aMeasureLayer);
-                }
-                break;
-            }
-
-            default:
-                bRet = FALSE;
-        }
-    }
-    return bRet;
-}
+//BFS01BOOL SdrPaintView::ReadRecord(const SdrIOHeader& rViewHead,
+//BFS01 const SdrNamedSubRecord& rSubHead,
+//BFS01 SvStream& rIn)
+//BFS01{
+//BFS01 BOOL bRet=FALSE;
+//BFS01 if (rSubHead.GetInventor()==SdrInventor) {
+//BFS01     bRet=TRUE;
+//BFS01     switch (rSubHead.GetIdentifier()) {
+//BFS01         case SDRIORECNAME_VIEWPAGEVIEWS: {
+//BFS01             while (rSubHead.GetBytesLeft()>0 && rIn.GetError()==0 && !rIn.IsEof()) {
+//BFS01                 SdrPageView* pPV=new SdrPageView(NULL,Point(),*(SdrView*)this);
+//BFS01                 rIn>>*pPV;
+//BFS01                 if (pPV->GetPage()!=NULL) {
+//BFS01                     if (pPV->IsVisible()) {
+//BFS01                         aPagV.Insert(pPV,CONTAINER_APPEND);
+//BFS01                     } else {
+//BFS01                         // aPagHide.Insert(pPV,CONTAINER_APPEND);
+//BFS01                         delete pPV;
+//BFS01                     }
+//BFS01                 } else {
+//BFS01                     DBG_ERROR("SdrPaintView::ReadRecord(): Seite der PageView nicht gefunden");
+//BFS01                     delete pPV;
+//BFS01                 }
+//BFS01             }
+//BFS01         } break;
+//BFS01
+//BFS01         case SDRIORECNAME_VIEWVISIELEM:
+//BFS01         {
+//BFS01             BOOL bTemp;
+//BFS01
+//BFS01             rIn>>bTemp; // bLayerSortedRedraw=bTemp;
+//BFS01             rIn>>bTemp; bPageVisible      =bTemp;
+//BFS01             rIn>>bTemp; bBordVisible      =bTemp;
+//BFS01             rIn>>bTemp; bGridVisible      =bTemp;
+//BFS01             rIn>>bTemp; bGridFront        =bTemp;
+//BFS01             rIn>>bTemp; bHlplVisible      =bTemp;
+//BFS01             rIn>>bTemp; bHlplFront        =bTemp;
+//BFS01             rIn>>bTemp; bGlueVisible      =bTemp;
+//BFS01             rIn>>aGridBig;
+//BFS01             rIn>>aGridFin;
+//BFS01
+//BFS01             if(rSubHead.GetBytesLeft() > 0)
+//BFS01             {
+//BFS01                 rIn >> aGridWdtX;
+//BFS01                 rIn >> aGridWdtY;
+//BFS01                 rIn >> aGridSubdiv;
+//BFS01             }
+//BFS01             break;
+//BFS01         }
+//BFS01         case SDRIORECNAME_VIEWAKTLAYER:
+//BFS01         {
+//BFS01             // UNICODE: rIn >> aAktLayer;
+//BFS01             rIn.ReadByteString(aAktLayer);
+//BFS01
+//BFS01             if(rSubHead.GetBytesLeft() > 0)
+//BFS01             {
+//BFS01                 // UNICODE: rIn >> aMeasureLayer;
+//BFS01                 rIn.ReadByteString(aMeasureLayer);
+//BFS01             }
+//BFS01             break;
+//BFS01         }
+//BFS01
+//BFS01         default:
+//BFS01             bRet = FALSE;
+//BFS01     }
+//BFS01 }
+//BFS01 return bRet;
+//BFS01}
 
 void SdrPaintView::MakeVisible(const Rectangle& rRect, Window& rWin)
 {
@@ -1865,6 +1867,21 @@ void SdrPaintView::SetBufferedOutputAllowed(sal_Bool bNew)
     if(bNew != mbBufferedOutputAllowed)
     {
         mbBufferedOutputAllowed = bNew;
+    }
+}
+
+//BFS09
+sal_Bool SdrPaintView::IsPagePaintingAllowed() const
+{
+    return mbPagePaintingAllowed;
+}
+
+//BFS09
+void SdrPaintView::SetPagePaintingAllowed(sal_Bool bNew)
+{
+    if(bNew != mbPagePaintingAllowed)
+    {
+        mbPagePaintingAllowed = bNew;
     }
 }
 
