@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 09:04:45 $
+ *  last change: $Author: os $ $Date: 2002-08-05 05:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,17 +225,15 @@ BOOL SwTextShell::InsertGraphicDlg( SfxRequest& rReq )
         DBG_ERROR("control acces failed")
     }
 
-    if( rReq.GetArgs() || ERRCODE_NONE == pFileDlg->Execute() )
+    SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
+    if( pName || ERRCODE_NONE == pFileDlg->Execute() )
     {
-        SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
-        SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 , sal_False );
-        SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, FN_PARAM_FILTER , sal_False );
-        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 , sal_False );
 
         String aFileName, aFilterName;
         if ( pName )
         {
             aFileName = pName->GetValue();
+            SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, FN_PARAM_FILTER , sal_False );
             if ( pFilter )
                 aFilterName = pFilter->GetValue();
         }
@@ -245,7 +243,34 @@ BOOL SwTextShell::InsertGraphicDlg( SfxRequest& rReq )
             aFilterName = pFileDlg->GetCurrentFilter();
             rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
             rReq.AppendItem( SfxStringItem( FN_PARAM_FILTER, aFilterName ) );
+
+            sal_Bool bAsLink;
+            if(nHtmlMode & HTMLMODE_ON)
+                bAsLink = sal_True;
+            else
+            {
+                try
+                {
+                    Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
+                    DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
+                    bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
+                    Any aTemplateValue = xCtrlAcc->getValue(
+                        ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
+                        ListboxControlActions::GET_SELECTED_ITEM );
+                    OUString sTmpl;
+                    aTemplateValue >>= sTmpl;
+                    rReq.AppendItem( SfxStringItem( FN_PARAM_2, sTmpl) );
+                }
+                catch(Exception& )
+                {
+                    DBG_ERROR("control acces failed")
+                }
+            }
+            rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
         }
+
+        SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 , sal_False );
+        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 , sal_False );
 
         sal_Bool bAsLink;
         if( nHtmlMode & HTMLMODE_ON )
