@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: mba $ $Date: 2005-02-04 15:51:28 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 14:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,7 @@
 #include <shell/systemshell.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/seqstream.hxx>
+#include <comphelper/documentconstants.hxx>
 #include <vcl/bitmapex.hxx>
 #include <svtools/embedhlp.hxx>
 
@@ -420,7 +421,9 @@ SvGlobalName SfxObjectShell::GetClassName() const
 }
 
 //-------------------------------------------------------------------------
-void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xStorage, sal_Int32 nVersion ) const
+void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xStorage,
+                                   sal_Int32 nVersion,
+                                   sal_Bool bTemplate ) const
 {
     uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
 
@@ -440,6 +443,23 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
             SotExchange::GetFormatDataFlavor( nClipFormat, aDataFlavor );
             if ( aDataFlavor.MimeType.getLength() )
             {
+                if ( bTemplate )
+                {
+                    // TODO/LATER: this is a temporary solution for BETA to avoid incompatible change
+                    if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_TEXT ) )
+                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE;
+                    else if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_DRAWING ) )
+                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE;
+                    else if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION ) )
+                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE;
+                    else if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET ) )
+                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE;
+                    else if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_CHART ) )
+                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE;
+                    else if ( aDataFlavor.MimeType.equals( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA ) )
+                        aDataFlavor.MimeType = MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE;
+                }
+
                 try
                 {
                     xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), uno::makeAny( aDataFlavor.MimeType ) );
@@ -474,7 +494,7 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
             {
                 if ( bTypeMustBeSetAlready )
                     OSL_ENSURE( sal_False, "The mediatype must be set already!\n" );
-                SetupStorage( xStorage, SOFFICE_FILEFORMAT_CURRENT );
+                SetupStorage( xStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False );
             }
         }
         catch ( uno::Exception& )
@@ -1671,7 +1691,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, BOOL bCommit )
             if ( !(a>>=aMediaType) || !aMediaType.getLength() )
             {
                 OSL_ENSURE( sal_False, "The mediatype must be set already!\n" );
-                SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT );
+                SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, sal_False );
             }
 
             pImp->bIsSaving = sal_False;
@@ -2756,15 +2776,16 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
     if( xStorage.is() )
     {
         sal_Int32 nVersion = rMedium.GetFilter()->GetVersion();
-        SetupStorage( xStorage, nVersion );
-//REMOVE            xStor->SetVersion( nVersion );
+
+        // OASIS templates have own mediatypes ( SO7 also actually, but it is to late to use them here )
+        sal_Bool bTemplate = ( rMedium.GetFilter()->IsOwnTemplateFormat() && nVersion > SOFFICE_FILEFORMAT_60 );
+
+        SetupStorage( xStorage, nVersion, bTemplate );
 
         // Initialize Basic
         GetBasicManager();
 
         // Save dialog container
-//REMOVE            if( nVersion >= 6200 )
-
         SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
         if( pDialogCont )
             pDialogCont->storeLibrariesToStorage( xStorage );
@@ -2773,18 +2794,6 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
         if( pBasicCont )
             pBasicCont->storeLibrariesToStorage( xStorage );
 
-        // TODO/LATER: replace with the new code after resync to docking1 cws???
-//REMOVE            // Konfiguration schreiben
-//REMOVE            if ( GetConfigManager() )
-//REMOVE            {
-//REMOVE                {
-//REMOVE                    SotStorageRef xCfgStor = pImp->pCfgMgr->GetConfigurationStorage( xStor );
-//REMOVE                    if ( pImp->pCfgMgr->StoreConfiguration( xCfgStor ) )
-//REMOVE                        xCfgStor->Commit();
-//REMOVE                }
-//REMOVE            }
-
-        const SfxFilter* pFilter = rMedium.GetFilter();
         return SaveAs( rMedium );
     }
     else return sal_False;
@@ -2800,7 +2809,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
             pImp->m_xDocStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
             OSL_ENSURE( pImp->m_xDocStorage.is(), "The method must either return storage or throw an exception!" );
 
-            SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT );
+            SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False );
             pImp->m_bCreateTempStor = sal_False;
             SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, this ) );
         }
