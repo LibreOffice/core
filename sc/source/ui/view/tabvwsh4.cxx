@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1327,7 +1327,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         if ( eFunc == KEYFUNC_COPY || eFunc == KEYFUNC_CUT )
         {
             ScRange aDummy;
-            if ( !GetViewData()->GetSimpleArea( aDummy, TRUE ) )    //! macht TRUE aerger ?
+            if ( !GetViewData()->GetSimpleArea( aDummy ) )
             {
                 ErrorMessage(STR_NOMULTISELECT);
                 bUsed = TRUE;
