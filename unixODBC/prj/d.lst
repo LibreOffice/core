@@ -1,5 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\external
 mkdir: %_DEST%\inc%_EXT%\external\odbc
-hedabu: ..\inc\sql.h %_DEST%\inc%_EXT%\external\odbc\sql.h
-hedabu: ..\inc\sqlext.h %_DEST%\inc%_EXT%\external\odbc\sqlext.h
-hedabu: ..\inc\sqltypes.h %_DEST%\inc%_EXT%\external\odbc\sqltypes.h
+..\inc\sql.h %_DEST%\inc%_EXT%\external\odbc\sql.h
+..\inc\sqlext.h %_DEST%\inc%_EXT%\external\odbc\sqlext.h
+..\inc\sqltypes.h %_DEST%\inc%_EXT%\external\odbc\sqltypes.h
