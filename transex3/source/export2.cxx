@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nf $ $Date: 2002-06-26 13:06:47 $
+ *  last change: $Author: nf $ $Date: 2002-11-18 11:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ USHORT Export::LangId[ LANGUAGES ] =
     HEBREW,
     CATALAN,
     THAI,
+    HINDI,
     EXTERN
 };
 
@@ -233,6 +234,8 @@ USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
         return CATALAN;
     else if ( sLang == ByteString( THAI_ISO ).ToUpperAscii())
         return THAI;
+    else if ( sLang == ByteString( HINDI_ISO ).ToUpperAscii())
+        return HINDI;
     else if ( sLang == ByteString( sIsoCode99 ).ToUpperAscii())
         return EXTERN;
 
@@ -273,6 +276,7 @@ ByteString Export::GetIsoLangByIndex( USHORT nIndex )
         case HEBREW_INDEX: return HEBREW_ISO;
         case CATALAN_INDEX: return CATALAN_ISO;
         case THAI_INDEX: return THAI_ISO;
+        case HINDI_INDEX: return HINDI_ISO;
         case EXTERN_INDEX: return sIsoCode99;
     }
     return "";
@@ -399,6 +403,7 @@ const ByteString Export::LangName[ LANGUAGES ] =
     "hebrew",
     "catalan",
     "thai",
+    "hindi",
     "extern"
 };
 

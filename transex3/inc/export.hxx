@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2002-04-04 13:43:21 $
+ *  last change: $Author: nf $ $Date: 2002-11-18 11:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,21 +191,26 @@
 #define THAI_ISO                "th"
 #define THAI_INDEX                  29
 
+#define HINDI                   91
+#define HINDI_ISO               "hi-IN"
+#define HINDI_INDEX                 30
+
 // special language for l10n framework
 #define EXTERN                  99
-#define EXTERN_INDEX                30
+#define EXTERN_INDEX                31
 
-#define LANGUAGES                   31
+#define LANGUAGES                   32
 
-#define LANGUAGE_ALLOWED( n )  (( n != 0xFFFF ) && ( Export::LanguageAllowed( Export::LangId[ n ] )) &&                                                     \
+#define LANGUAGE_ALLOWED( n )  (( n != 0xFFFF ) && ( Export::LanguageAllowed( Export::LangId[ n ] )) &&                                         \
                                (( Export::LangId[ n ] == 01 ) || ( Export::LangId[ n ] == 03 ) || ( Export::LangId[ n ] == 07 ) ||  \
-                                ( Export::LangId[ n ] == 30 ) || ( Export::LangId[ n ] == 31 ) || ( Export::LangId[ n ] == 33 ) ||      \
+                                ( Export::LangId[ n ] == 30 ) || ( Export::LangId[ n ] == 31 ) || ( Export::LangId[ n ] == 33 ) ||  \
                                 ( Export::LangId[ n ] == 34 ) || ( Export::LangId[ n ] == 35 ) || ( Export::LangId[ n ] == 37 ) ||  \
                                 ( Export::LangId[ n ] == 39 ) || ( Export::LangId[ n ] == 45 ) || ( Export::LangId[ n ] == 46 ) ||  \
                                 ( Export::LangId[ n ] == 48 ) || ( Export::LangId[ n ] == 49 ) || ( Export::LangId[ n ] == 55 ) ||  \
                                 ( Export::LangId[ n ] == 81 ) || ( Export::LangId[ n ] == 82 ) || ( Export::LangId[ n ] == 86 ) ||  \
                                 ( Export::LangId[ n ] == 88 ) || ( Export::LangId[ n ] == 90 ) || ( Export::LangId[ n ] == 96 ) ||  \
-                                ( Export::LangId[ n ] == 66 ) || ( Export::LangId[ n ] == 00 ) || ( Export::LangId[ n ] == 99 )))
+                                ( Export::LangId[ n ] == 66 ) || ( Export::LangId[ n ] == 91 ) || ( Export::LangId[ n ] == 00 ) ||  \
+                                ( Export::LangId[ n ] == 99 )))
 
 #define GERMAN_LIST_LINE_INDEX  LANGUAGES
 #define LIST_REFID              (GERMAN_LIST_LINE_INDEX+1)
