@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-27 10:15:06 $
+ *  last change: $Author: tl $ $Date: 2000-11-27 12:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,32 @@ enum EID_OPTIONS
     EID_HYPH_SPECIAL
 };
 
+//! this array must have an entry for every value of EID_OPTIONS.
+//  It is used to get the respective property name.
+static const char * aEidToPropName[] =
+{
+    "IsSpellUpperCase",         // EID_CAPITAL_WORDS
+    "IsSpellWithDigits",        // EID_WORDS_WITH_DIGITS
+    "IsSpellCapitalization",    // EID_CAPITALIZATION
+    "IsSpellSpecial",           // EID_SPELL_SPECIAL
+    "IsSpellInAllLanguages",    // EID_ALL_LANGUAGES
+    "IsSpellAuto",              // EID_SPELL_AUTO
+    "IsSpellHide",              // EID_HIDE_MARKINGS
+    "IsGermanPreReform",        // EID_OLD_GERMAN
+    "HyphMinLeading",           // EID_NUM_PRE_BREAK
+    "HyphMinTrailing",          // EID_NUM_POST_BREAK
+    "IsHyphAuto",               // EID_HYPH_AUTO
+    "IsHyphSpecial"             // EID_HYPH_SPECIAL
+};
+
+
+static inline String lcl_GetPropertyName( EID_OPTIONS eEntryId )
+{
+    DBG_ASSERT( (int) eEntryId < sizeof(aEidToPropName) / sizeof(aEidToPropName[0]),
+            "index out of range" );
+    return String::CreateFromAscii( aEidToPropName[ (int) eEntryId ] );
+}
+
 // class OptionsUserData -------------------------------------------------
 
 class OptionsUserData
@@ -1101,14 +1127,6 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguOptionsCLB.SetDoubleClickHdl(LINK(this, SvxLinguTabPage, DoubleClickHdl_Impl));
     aLinguModulesCLB.SetDoubleClickHdl(LINK(this, SvxLinguTabPage, DoubleClickHdl_Impl));
 
-#ifdef NEVER
-    Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
-    if (xDicList.is())
-        aDics = xDicList->getDictionaries();
-    aDictsTbx.SetSelectHdl( LINK( this, SvxLinguTabPage, BoxSelectHdl_Impl ) );
-    Size aSiz = aDictsTbx.CalcWindowSizePixel();
-    aDictsTbx.SetSizePixel( aSiz );
-
     const SfxSpellCheckItem* pItem = 0;
     SfxItemState eItemState = SFX_ITEM_UNKNOWN;
 
@@ -1120,34 +1138,6 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
         pItem = (const SfxSpellCheckItem*)&(rSet.Get( GetWhich( SID_ATTR_SPELL ) ) );
     else if ( eItemState == SFX_ITEM_DONTCARE )
         pItem = NULL;
-
-
-    // fill box for DefaultLanguage (?) with possible languages
-    const sal_uInt16 nLangCnt = SvxGetSelectableLanguages().getLength();
-    const util::Language *pLang = SvxGetSelectableLanguages().getConstArray();
-    // start with 1 to skip LANGUAGE_NONE
-    for ( sal_uInt16 i = 1; i < nLangCnt; i++ )
-    {
-        sal_uInt16 nPos = aLanguageLB.InsertEntry( GetLanguageString( pLang[i] ) );
-        aLanguageLB.SetEntryData( nPos, (void*)(sal_uInt32)i );
-    }
-
-    // disable button if IgnoreAllList has no elements
-
-    aAutoCheckBtn.SetClickHdl( LINK( this, SvxLinguTabPage, CheckHdl_Impl ) );
-    aDictsLB.SetCheckButtonHdl( LINK( this, SvxLinguTabPage, CheckDicHdl_Impl));
-    aDictsLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectDicHdl_Impl));
-
-    // disable controls that can't be used due to missing services
-    if (!SvxGetLinguPropertySet().is())
-        Enable( sal_False );    // disable everything
-    else if (!xDicList.is())
-    {   // disable dictionary and dictionary list controls
-        aDictsLB .Enable( sal_False );
-        aDictsTbx.Enable( sal_False );
-        aDictsBox.Enable( sal_False );
-    }
-#endif
 
     FreeResource();
 }
@@ -1224,56 +1214,31 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         pLinguData->Reconfigure(aRemove, aInsert);
     }
 
-    if (!SvxGetLinguPropertySet().is())
+    if (!xProp.is())
         return sal_False;
 
-#ifdef NEVER
-    //
-    // build list of active dictionaries
-    // (There has to be at least one active positive dictionary
-    // this usually is the "standard" dictionary. It will be created
-    // if it does not already exist.)
-    //
-
-    Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
-
-    const Reference< XDictionary >  *pDic = aDics.getConstArray();
-    const sal_uInt16 nCount = aDics.getLength();
-    const sal_uInt16 nSize  = (sal_uInt16)aDictsLB.GetEntryCount();
-    //
-    sal_Bool bIsAnyPosDicActive = sal_False;
-    for (sal_uInt16 j = 0;  j < nCount;  j++)
+    USHORT nEntries = (USHORT) aLinguOptionsCLB.GetEntryCount();
+    for (USHORT j = 0;  j < nEntries;  ++j)
     {
-        Reference< XDictionary1 >  xDic( pDic[j], UNO_QUERY );
-        if (!xDic.is())
-            continue;
+        SvLBoxEntry *pEntry = aLinguOptionsCLB.GetEntry( j );
 
-        sal_Bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
-        const String aName( ::GetDicInfoStr( xDic->getName(),
-                                             xDic->getLanguage(),
-                                             bNegativ ) );
+        OptionsUserData aData( (ULONG)pEntry->GetUserData() );
+        String aPropName( lcl_GetPropertyName( (EID_OPTIONS) aData.GetEntryId() ) );
 
-        sal_Bool bActivate = sal_False;
-        for ( sal_uInt16 i = 0; i < nSize; ++i )
+        Any aAny;
+        if (aData.IsCheckable())
         {
-            // Dictionary in der awt::Selection -> Aktivieren
-            if ( aDictsLB.IsChecked(i) && aName == aDictsLB.GetText(i) )
-            {
-                // any dictionary is persistent not readonly and may hold
-                // positive entries?
-                Reference< frame::XStorable >  xStor( xDic, UNO_QUERY );
-                if (xStor.is() && xStor->hasLocation() && !xStor->isReadonly())
-                    bIsAnyPosDicActive =
-                            xDic->getDictionaryType() != DictionaryType_NEGATIVE;
-
-                bActivate = sal_True;
-                break;
-            }
+            BOOL bChecked = aLinguOptionsCLB.IsChecked( j );
+            aAny <<= bChecked;
         }
-        if (xDic != SvxGetIgnoreAllList())
-            xDic->setActive( bActivate );
+        else if (aData.HasNumericValue())
+        {
+            INT16 nVal = aData.GetNumericValue();
+            aAny <<= nVal;
+        }
+
+        xProp->setPropertyValue( aPropName, aAny );
     }
-#endif
 
     // force new spelling and flushing of spell caches
     //! current implementation is a workaround until the correct
@@ -1326,32 +1291,16 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 #endif //NOT_YET_IMPLEMENTED
 
 #ifdef NEVER
-    Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
-    if (xProp.is())
-    {
-        // set spellchecking properties
-        xProp->setPropertyValue( C2U(UPN_IS_SPELL_WITH_DIGITS), lcl_Bool2Any(aNumsBtn.IsChecked()) );
-        xProp->setPropertyValue( C2U(UPN_IS_SPELL_UPPER_CASE), lcl_Bool2Any(aCapsBtn.IsChecked()) );
-        xProp->setPropertyValue( C2U(UPN_IS_SPELL_CAPITALIZATION), lcl_Bool2Any(aUpLowBtn.IsChecked()) );
-        xProp->setPropertyValue( C2U(UPN_IS_SPELL_IN_ALL_LANGUAGES), lcl_Bool2Any(aAllLangBtn.IsChecked()) );
-        xProp->setPropertyValue( C2U(UPN_IS_SPELL_SPECIAL), lcl_Bool2Any(aSpellSpecialBtn.IsChecked()) );
-
-        // set hyphenation properties
-        xProp->setPropertyValue( C2U(UPN_IS_HYPH_AUTO), lcl_Bool2Any(aAutoBtn.IsChecked()) );
-        xProp->setPropertyValue( C2U(UPN_IS_HYPH_SPECIAL), lcl_Bool2Any(aSpecialBtn.IsChecked()) );
-
-        xProp->setPropertyValue( C2U(UPN_IS_GERMAN_PRE_REFORM), lcl_Bool2Any(aGermanPreReformBtn.IsChecked()) );
-    }
-
     // erstmal immer putten!
     rCoreSet.Put( SfxBoolItem( SID_SPELL_MODIFIED, bModified ) );
 
-    const String    &rPreStr    = aPreBreakEdit.GetText(),
-                    &rAfterStr  = aAfterBreakEdit.GetText();
+//  const String    &rPreStr    = aPreBreakEdit.GetText(),
+//                  &rAfterStr  = aAfterBreakEdit.GetText();
 
-    const String    &rSavedPreStr   = aPreBreakEdit.GetSavedValue(),
-                    &rSavedAfterStr = aAfterBreakEdit.GetSavedValue();
+//  const String    &rSavedPreStr   = aPreBreakEdit.GetSavedValue(),
+//                  &rSavedAfterStr = aAfterBreakEdit.GetSavedValue();
 
+    //TODO: alte Werte im REset merken und mit neuen hier vergleichen
     if ( rPreStr != rSavedPreStr || rAfterStr != rSavedAfterStr )
     {
         SfxHyphenRegionItem aHyp( GetWhich( SID_ATTR_HYPHENREGION ) );
@@ -1362,22 +1311,10 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         rCoreSet.Put( aHyp );
     }
 
-    // language
-    sal_uInt16 nPos = aLanguageLB.GetSelectEntryPos();
-    sal_uInt16 nLang = (sal_uInt16)(sal_uInt32)aLanguageLB.GetEntryData( nPos );
-
-    if ( nPos != aLanguageLB.GetSavedValue() &&
-         nPos != LISTBOX_ENTRY_NOTFOUND )
-    {
-        SfxUInt16Item aFmtLang( GetWhich( SID_ATTR_LANGUAGE ),
-                                SvxGetSelectableLanguages().getConstArray()[ nLang ] );
-        rCoreSet.Put( aFmtLang );
-    }
-
 
     // Autom. Rechtschreibung
+    // pOld ist alte Wert wenn wert geändert mit neuen Wert ins Item Set
     const SfxPoolItem* pOld = GetOldItem( rCoreSet, SID_AUTOSPELL_CHECK );
-
     if ( !pOld || ( (SfxBoolItem*)pOld )->GetValue() !=
                     aAutoCheckBtn.IsChecked() )
     {
@@ -1385,8 +1322,9 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
                                    aAutoCheckBtn.IsChecked() ) );
         bModified |= sal_True;
     }
-    pOld = GetItem( rCoreSet, SID_AUTOSPELL_MARKOFF );
 
+    // pOld ist alte Wert wenn wert geändert mit neuen Wert ins Item Set
+    pOld = GetItem( rCoreSet, SID_AUTOSPELL_MARKOFF );
     if ( aMarkOffBtn.IsEnabled() &&
          ( !pOld || ( (SfxBoolItem*)pOld )->GetValue() !=
                       aMarkOffBtn.IsChecked() ) )
@@ -1406,244 +1344,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 {
     // nur Initialisierung
     UpdateBox_Impl();
-
-#ifdef NEVER
-    // #44483#
-    // form::component::CheckBox f"ur die Benutzerw"orterb"ucher
-    // setzen
-    Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
-
-    const sal_uInt16 nCount = aDics.getLength();
-    const Reference< XDictionary >  *pDic = aDics.getConstArray();
-    const sal_uInt16 nSize  = (sal_uInt16)aDictsLB.GetEntryCount();
-    //
-    for ( sal_uInt16 i = 0; i < nSize; ++i )
-    {
-        for ( sal_uInt16 j = 0; j < nCount; ++j )
-        {
-            Reference< XDictionary1 >  xDic( pDic[j], UNO_QUERY );
-            if (!xDic.is())
-                continue;
-
-            sal_Bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
-            const String aName( ::GetDicInfoStr( xDic->getName(),
-                                                 xDic->getLanguage(),
-                                                 bNegativ ) );
-
-            if ( xDic->isActive()  &&  aName == aDictsLB.GetText(i) )
-                break;
-        }
-        aDictsLB.CheckEntryPos( i, j != nCount );
-    }
-    // #44483#
-
-    Reference< XPropertySet >  xProp ( SvxGetLinguPropertySet() );
-    if (xProp.is())
-    {
-        // Optionen aus dem Speller einstellen
-        aCapsBtn        .Check( *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_UPPER_CASE) ).getValue() );
-        aNumsBtn        .Check( *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_WITH_DIGITS) ).getValue() );
-        aUpLowBtn       .Check( *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_CAPITALIZATION) ).getValue() );
-        aAllLangBtn     .Check( *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_IN_ALL_LANGUAGES) ).getValue() );
-        aSpellSpecialBtn.Check( *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_SPECIAL) ).getValue() );
-
-        aAutoBtn.Check( *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_HYPH_AUTO) ).getValue() );
-        aSpecialBtn.Check( *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_HYPH_SPECIAL) ).getValue() );
-
-        aGermanPreReformBtn.Check( *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_GERMAN_PRE_REFORM) ).getValue() );
-    }
-
-    sal_uInt16 nWhich = GetWhich( SID_ATTR_HYPHENREGION );
-
-    if ( rSet.GetItemState( nWhich, sal_False ) >= SFX_ITEM_AVAILABLE )
-    {
-        const SfxHyphenRegionItem& rHyp =
-            (const SfxHyphenRegionItem&)rSet.Get( nWhich );
-        aPreBreakEdit.SetValue(
-            aPreBreakEdit.Normalize( rHyp.GetMinLead() ) ); //TL???
-        aAfterBreakEdit.SetValue(
-            aAfterBreakEdit.Normalize( rHyp.GetMinTrail() ) );
-    }
-
-    // Sprache
-    nWhich = GetWhich( SID_ATTR_LANGUAGE );
-    aLanguageLB.SetNoSelection();
-
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
-    {
-        const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet.Get( nWhich );
-        DBG_ASSERT( (LanguageType)rItem.GetValue() != LANGUAGE_SYSTEM,
-                    "LANGUAGE_SYSTEM nicht erlaubt!" );
-
-        if ( (LanguageType)rItem.GetValue() != LANGUAGE_DONTKNOW )
-        {
-            sal_uInt16 nLang = SvxGetLanguagePos( SvxGetSelectableLanguages(),
-                                              rItem.GetValue() );
-
-            for ( sal_uInt16 i = 0; i < aLanguageLB.GetEntryCount(); ++i )
-            {
-                if ( (sal_uInt16)(sal_uInt32)aLanguageLB.GetEntryData(i) == nLang )
-                {
-                    aLanguageLB.SelectEntryPos(i);
-                    break;
-                }
-            }
-        }
-    }
-
-    // Autom. Rechtschreibung
-    const SfxPoolItem* pItem = GetItem( rSet, SID_AUTOSPELL_CHECK );
-
-    if ( pItem )
-        aAutoCheckBtn.Check( ( (SfxBoolItem*)pItem )->GetValue() );
-    pItem = GetItem( rSet, SID_AUTOSPELL_MARKOFF );
-
-    if ( pItem )
-        aMarkOffBtn.Check( ( (SfxBoolItem*)pItem )->GetValue() );
-
-    CheckHdl_Impl( 0 );
-
-    aNumsBtn.SaveValue();
-    aCapsBtn.SaveValue();
-    aUpLowBtn.SaveValue();
-    aAllLangBtn.SaveValue();
-    aPreBreakEdit.SaveValue();
-    aAfterBreakEdit.SaveValue();
-    aLanguageLB.SaveValue();
-#endif
 }
-
-// -----------------------------------------------------------------------
-
-#ifdef NEVER
-IMPL_LINK( SvxLinguTabPage, NewHdl_Impl, Button *, EMPTYARG )
-{
-    SvxNewDictionaryDialog* pDlg = new SvxNewDictionaryDialog( this, xSpell );
-
-    Reference< XDictionary1 >  xNewDic;
-
-    if ( pDlg->Execute() == RET_OK )
-        xNewDic = pDlg->GetNewDictionary();
-    delete pDlg;
-
-    if ( xNewDic.is() )
-    {
-        // add new Dictionary to snapshot list
-        sal_uInt16 nNewIdx = aDics.getLength();
-        aDics.realloc( nNewIdx + 1 );
-        aDics.getArray()[ nNewIdx ] = Reference< XDictionary > ( xNewDic, UNO_QUERY );
-        const Reference< XDictionary >  *pDic = aDics.getConstArray();
-
-        sal_Bool bNegativ = xNewDic->getDictionaryType() == DictionaryType_NEGATIVE;
-        const String aName( ::GetDicInfoStr( xNewDic->getName(),
-                                             xNewDic->getLanguage(),
-                                             bNegativ ) );
-        aDictsLB.InsertEntry( aName, nNewIdx );
-        if ( aDictsLB.GetCheckedEntryCount() < SVX_MAX_USERDICTS )
-            aDictsLB.CheckEntryPos( nNewIdx );
-        aDictsLB.SelectEntryPos( nNewIdx );
-        aDictsLB.MakeVisible( aDictsLB.GetEntry( nNewIdx ) );
-    }
-    return 1;
-}
-#endif
-// -----------------------------------------------------------------------
-
-#ifdef NEVER
-IMPL_LINK( SvxLinguTabPage, EditHdl_Impl, Button *, EMPTYARG )
-{
-    String sName;
-    sal_uInt16 nId = aDictsLB.GetSelectEntryPos();
-
-    if ( nId != LISTBOX_ENTRY_NOTFOUND )
-        sName = aDictsLB.GetText( nId );
-
-    SvxEditDictionaryDialog* pDlg =
-        new SvxEditDictionaryDialog( this, sName, xSpell );
-    pDlg->Execute();
-
-    UpdateBox_Impl();
-
-    aDictsLB.MakeVisible(aDictsLB.GetEntry(pDlg->GetSelectedDict()));
-    aDictsLB.SelectEntryPos(pDlg->GetSelectedDict());
-
-    delete pDlg;
-    return 1;
-}
-#endif
-
-// -----------------------------------------------------------------------
-#ifdef NEVER
-void lcl_SequenceRemoveElementAt(
-    Sequence<Reference<XDictionary > >& rEntries, int nPos )
-{
-    //TODO: helper for SequenceRemoveElementAt available?
-    if(nPos >= rEntries.getLength())
-        return;
-    Sequence<Reference<XDictionary> > aTmp(rEntries.getLength() - 1);
-    Reference<XDictionary >* pOrig = rEntries.getArray();
-    Reference<XDictionary >* pTemp = aTmp.getArray();
-    int nOffset = 0;
-    for(int i = 0; i < aTmp.getLength(); i++)
-    {
-        if(nPos == i)
-            nOffset++;
-        pTemp[i] = pOrig[i + nOffset];
-    }
-
-    rEntries = aTmp;
-}
-#endif
-// -----------------------------------------------------------------------
-
-#ifdef NEVER
-IMPL_LINK( SvxLinguTabPage, CheckHdl_Impl, CheckBox *, EMPTYARG )
-{
-    if ( !aAutoCheckBtn.IsChecked() )
-        aMarkOffBtn.Disable();
-    else
-        aMarkOffBtn.Enable();
-    return 1;
-}
-#endif
-
-// -----------------------------------------------------------------------
-
-#ifdef NEVER
-IMPL_LINK( SvxLinguTabPage, CheckDicHdl_Impl, SvxCheckListBox *, EMPTYARG )
-{
-    sal_uInt16 nMax=0;
-    sal_Bool bFlag=sal_False;
-
-    if(aDictsLB.GetCheckedEntryCount()>SVX_MAX_USERDICTS)
-    {
-        InfoBox aInfoBox(this,aMaxWarning);
-        aInfoBox.Execute();
-
-        SvLBoxEntry* pEntry=aDictsLB.GetCurEntry();
-        SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
-
-        if(pItem!=NULL)
-        {
-            pItem->SetStateHilighted(sal_False);
-
-        }
-
-        aDictsLB.EndSelection();
-        aDictsLB.CheckEntryPos( aDictsLB.GetSelectEntryPos(),sal_False);
-    }
-
-    // let CheckBox for IgnoreAllList always be checked
-    sal_uInt16 nSel = aDictsLB.GetSelectEntryPos();
-    if (nSel != LISTBOX_ENTRY_NOTFOUND
-        &&  aDictsLB.GetEntryData( nSel ) == (void *) 1)
-    {
-        aDictsLB.CheckEntryPos( nSel, sal_True );
-    }
-
-    return 0;
-}
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -1720,23 +1421,6 @@ IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
 }
 
 // -----------------------------------------------------------------------
-
-#ifdef NEVER
-IMPL_LINK( SvxLinguTabPage, BoxSelectHdl_Impl, ToolBox *, pBox )
-{
-    const sal_uInt16 nEntry = pBox->GetCurItemId();
-
-    if ( TID_NEW == nEntry )
-        NewHdl_Impl( 0 );
-    else if ( TID_EDIT == nEntry )
-        EditHdl_Impl( 0 );
-    else if ( TID_DELETE == nEntry )
-        DeleteHdl_Impl( 0 );
-    return 1;
-}
-#endif
-
-// ----------------------------------------------------------------------
 
 SvLBoxEntry* SvxLinguTabPage::CreateEntry(String& rTxt, USHORT nCol)
 {
@@ -1875,62 +1559,6 @@ void SvxLinguTabPage::UpdateBox_Impl()
 
         aLinguOptionsCLB.SetUpdateMode(TRUE);
     }
-
-#ifdef NEVER
-    // gecheckte Eintr"age merken
-    SvUShorts aArr;
-
-    sal_uInt16 i;
-    sal_uInt16 nOldEntryCount = (sal_uInt16)aDictsLB.GetEntryCount();
-    for ( i = 0; i < nOldEntryCount; ++i )
-        if ( aDictsLB.IsChecked(i) )
-            aArr.Insert( i, aArr.Count() );
-
-    const sal_Int32 nCount = aDics.getLength();
-    const Reference< XDictionary >  *pDic = aDics.getConstArray();
-    aDictsLB.Clear();
-    for ( i = 0; i < nCount; ++i )
-    {
-        Reference< XDictionary1 >  xDic( pDic[i], UNO_QUERY );
-        if (!xDic.is())
-            continue;
-
-        sal_Bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
-        const String aName( ::GetDicInfoStr( xDic->getName(),
-                                             xDic->getLanguage(),
-                                             bNegativ ) );
-        aDictsLB.InsertEntry( aName );
-
-        // Neue Eintr"age evtl. checken
-        if ( nOldEntryCount && i >= nOldEntryCount
-            && xDic->isActive())
-            aDictsLB.CheckEntryPos( (sal_uInt16)aDictsLB.GetEntryCount() - 1  );
-
-        // mark entry for IgnoreAllList as not being allowed to uncheck
-        if (xDic == SvxGetIgnoreAllList())
-        {
-            aDictsLB.SetEntryData( aDictsLB.GetEntryCount() - 1, (void *) 1 );
-        }
-    }
-
-    // gemerkte Eintr"age wieder checken
-    for ( i = 0; i < aArr.Count(); ++i )
-        aDictsLB.CheckEntryPos( aArr[i] );
-
-    if ( aDictsLB.GetEntryCount() )
-    {
-        aDictsTbx.EnableItem( TID_EDIT, sal_True );
-        aDictsTbx.EnableItem( TID_DELETE, sal_True );
-    }
-    else
-    {
-        aDictsTbx.EnableItem( TID_EDIT, sal_False );
-        aDictsTbx.EnableItem( TID_DELETE, sal_False );
-    }
-
-    aDictsLB.SetHighlightRange();
-    aDictsLB.SelectEntryPos( 0 );   //! may implicitly change TID_DELETE
-#endif
 }
 
 // -----------------------------------------------------------------------
