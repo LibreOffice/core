@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:36:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,6 +615,8 @@
 #define UID_OFA_CONNPOOL_DRIVERLIST_BACK    (HID_OFA_START + 122)
 // #define HID_OFA_TP_HELPERPROG               (HID_OFA_START + 123)
 #define HID_OFA_TP_MEMORY                   (HID_OFA_START + 124)
+#define HID_DBPATH_CTL_PATH                 (HID_OFA_START + 125)
+#define HID_DBPATH_HEADERBAR                (HID_OFA_START + 126)
 
 #define HID_OPTIONS_DICT_EDIT_ENTRIES_LIST      (HID_SVX_EXT0_START + 28)
 
