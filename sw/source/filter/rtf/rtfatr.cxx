@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-12 16:18:29 $
+ *  last change: $Author: jp $ $Date: 2001-03-13 19:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,7 @@ public:
     _EndPosLst::operator[];
     _EndPosLst::DeleteAndDestroy;
 
-    RTFEndPosLst( SwRTFWriter& rWrt, const SwTxtNode& rNd );
+    RTFEndPosLst( SwRTFWriter& rWrt, const SwTxtNode& rNd, xub_StrLen nStart );
     ~RTFEndPosLst();
 
     USHORT GetCurScript() const         { return nCurScript; }
@@ -825,7 +825,8 @@ void SttEndPos::AddAttr( const SfxPoolItem& rAttr )
         aArr.Insert( pI, aArr.Count() );
 }
 
-RTFEndPosLst::RTFEndPosLst( SwRTFWriter& rWriter, const SwTxtNode& rNd )
+RTFEndPosLst::RTFEndPosLst( SwRTFWriter& rWriter, const SwTxtNode& rNd,
+                            xub_StrLen nStart )
     : rNode( rNd ), rWrt( rWriter ), nCurPos( -1 )
 {
     pOldPosLst = rWrt.pCurEndPosLst;
@@ -840,7 +841,7 @@ RTFEndPosLst::RTFEndPosLst( SwRTFWriter& rWriter, const SwTxtNode& rNd )
     if( pBreakIt->xBreak.is() )
     {
         const String& rTxt = rNode.GetTxt();
-        xub_StrLen nChg = 0, nLen = rTxt.Len(), nSttPos = 0;
+        xub_StrLen nChg = nStart, nSttPos = nChg, nLen = rTxt.Len();
 
         while( nChg < nLen )
         {
@@ -1120,9 +1121,9 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {
     SwTxtNode * pNd = &((SwTxtNode&)rNode);
     SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
-    RTFEndPosLst aEndPosLst( rRTFWrt, *pNd );
-    USHORT nAttrPos = 0;
     xub_StrLen nStrPos = rRTFWrt.pCurPam->GetPoint()->nContent.GetIndex();
+    RTFEndPosLst aEndPosLst( rRTFWrt, *pNd, nStrPos );
+    USHORT nAttrPos = 0;
 
     const String& rStr = pNd->GetTxt();
     xub_StrLen nEnde = rStr.Len();
@@ -3659,11 +3660,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.14 2001-03-12 16:18:29 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.15 2001-03-13 19:44:57 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/03/12 16:18:29  jp
+      export relief item
+
       Revision 1.13  2001/02/21 12:45:23  os
       use database struct instead of a combined string
 
