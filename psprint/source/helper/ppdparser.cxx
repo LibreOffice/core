@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-06 17:21:18 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 15:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,28 @@ static String GetPPDFile( const String& rFile )
             }
         }
     }
-    return aStream.IsOpen() ? aPPD.PathToFileName() : String();
+
+    String aRet;
+
+    if( aStream.IsOpen() )
+    {
+        ByteString aLine;
+        aStream.ReadLine( aLine );
+        if( aLine.Search( "*PPD-Adobe" ) == 0 )
+            aRet = aPPD.PathToFileName();
+        else
+        {
+            // our *Include hack does usually not begin
+            // with *PPD-Adobe, so try some lines for *Include
+            int nLines = 10;
+            while( aLine.Search( "*Include" ) != 0 && --nLines )
+                aStream.ReadLine( aLine );
+            if( nLines )
+                aRet = aPPD.PathToFileName();
+        }
+    }
+
+    return aRet;
 }
 
 String PPDParser::getPPDPrinterName( const String& rFile )
