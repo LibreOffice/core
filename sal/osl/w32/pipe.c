@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-23 14:32:08 $
+ *  last change: $Author: hro $ $Date: 2001-12-05 14:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,20 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     {
         SetLastError( ERROR_SUCCESS );
 
-        pPipe->m_NamedObject = CreateMutexW( NULL, FALSE, name->buffer );
+        if ( IS_NT )
+            pPipe->m_NamedObject = CreateMutexW( NULL, FALSE, name->buffer );
+        else
+        {
+            CHAR    szBuffer[256];
+            LPSTR   pszTempBuffer = NULL;
+            int     nCharsNeeded;
+
+            nCharsNeeded = WideCharToMultiByte( CP_ACP, 0, name->buffer, name->length, NULL, 0, NULL, NULL );
+            pszTempBuffer = alloca( nCharsNeeded * sizeof(CHAR) );
+            nCharsNeeded = WideCharToMultiByte( CP_ACP, 0, name->buffer, name->length, pszTempBuffer, nCharsNeeded, NULL, NULL );
+
+            pPipe->m_NamedObject = CreateMutexA( NULL, FALSE, pszTempBuffer );
+        }
 
         if ( pPipe->m_NamedObject != INVALID_HANDLE_VALUE && pPipe->m_NamedObject != NULL )
         {
