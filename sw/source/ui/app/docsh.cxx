@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:12:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -826,11 +826,13 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         // gewuenschten Typ ermitteln
         BYTE nSaveType = 0;
         ULONG nSaveClipId = pFlt->GetFormat();
-        if( SOT_FORMATSTR_ID_STARWRITERWEB_60 == nSaveClipId ||
+        if( SOT_FORMATSTR_ID_STARWRITERWEB_8 == nSaveClipId ||
+            SOT_FORMATSTR_ID_STARWRITERWEB_60 == nSaveClipId ||
             SOT_FORMATSTR_ID_STARWRITERWEB_50 == nSaveClipId ||
             SOT_FORMATSTR_ID_STARWRITERWEB_40 == nSaveClipId )
             nSaveType = 1;
-        else if( SOT_FORMATSTR_ID_STARWRITERGLOB_60 == nSaveClipId ||
+        else if( SOT_FORMATSTR_ID_STARWRITERGLOB_8 == nSaveClipId ||
+                 SOT_FORMATSTR_ID_STARWRITERGLOB_60 == nSaveClipId ||
                  SOT_FORMATSTR_ID_STARWRITERGLOB_50 == nSaveClipId ||
                  SOT_FORMATSTR_ID_STARWRITERGLOB_40 == nSaveClipId )
             nSaveType = 2;
