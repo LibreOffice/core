@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-29 14:01:00 $
+ *  last change: $Author: kz $ $Date: 2004-11-29 14:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private static final String BACK_ACTION_PERFORMED = "gotoPreviousAvailableStep";
     private static final String FINISH_ACTION_PERFORMED = "finishWizard_1";
     private static final String CANCEL_ACTION_PERFORMED = "cancelWizard_1";
+    private static final String HELP_ACTION_PERFORMED = "callHelp";
     public VetoableChangeSupport vetos = new VetoableChangeSupport(this);
     private String[] sRightPaneHeaders;
     private int iButtonWidth = 50;
@@ -541,6 +542,10 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     public void cancelWizard() {
         //can be overwritten by extending class
         xDialog.endExecute();
+    }
+
+    public void callHelp() {
+        //should be overwritten by extending class
     }
 
 
