@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-24 07:29:03 $
+ *  last change: $Author: dl $ $Date: 2001-05-16 08:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,14 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
+#endif
+#define ITEMID_EMPHASISMARK       EE_CHAR_EMPHASISMARK
+#define ITEMID_CHARRELIEF         EE_CHAR_RELIEF
+#ifndef _SVX_CHARRELIEFITEM_HXX
+#include <svx/charreliefitem.hxx>
+#endif
+#ifndef _SVX_EMPHITEM_HXX
+#include <svx/emphitem.hxx>
 #endif
 
 
@@ -327,6 +335,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
                 rSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE) );
                 rSet.Put( SvxShadowedItem(FALSE) );
                 rSet.Put( SvxContourItem(FALSE) );
+                rSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
+                rSet.Put( SvxCharReliefItem(RELIEF_NONE) );
                 rSet.Put( SvxColorItem( Color(COL_BLACK)) );
                 rSet.Put( SvxAdjustItem(SVX_ADJUST_LEFT) );
                 rSet.Put( XLineStyleItem(XLINE_NONE) );
@@ -437,6 +447,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rTitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
         rTitleSet.Put(SvxShadowedItem(FALSE));
         rTitleSet.Put(SvxContourItem(FALSE));
+        rTitleSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
+        rTitleSet.Put( SvxCharReliefItem(RELIEF_NONE) );
         rTitleSet.Put(SvxColorItem( Color(COL_BLACK)));
         rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER));
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
@@ -476,6 +488,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rSubtitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
         rSubtitleSet.Put(SvxShadowedItem(FALSE));
         rSubtitleSet.Put(SvxContourItem(FALSE));
+        rSubtitleSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
+        rSubtitleSet.Put( SvxCharReliefItem(RELIEF_NONE) );
         rSubtitleSet.Put(SvxColorItem( Color(COL_BLACK)));
         rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER));
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
@@ -517,6 +531,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rNotesSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE) );
         rNotesSet.Put( SvxShadowedItem(FALSE) );
         rNotesSet.Put( SvxContourItem(FALSE) );
+        rNotesSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
+        rNotesSet.Put( SvxCharReliefItem(RELIEF_NONE) );
         rNotesSet.Put( SvxColorItem( Color(COL_BLACK)) );
         rNotesSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
     }
@@ -1165,7 +1181,7 @@ void SdStyleSheetPool::AdjustLRSpaceItems()
             if ( rSet.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
                 pOldLRSpace = &(const SvxLRSpaceItem&) rSet.Get(EE_PARA_LRSPACE);
 
-            USHORT nLevel = nHelpId - HID_PSEUDOSHEET_OUTLINE;
+            USHORT nLevel = (USHORT) (nHelpId - HID_PSEUDOSHEET_OUTLINE);
 
             if ( nHelpId == HID_PSEUDOSHEET_OUTLINE + 1 )
             {
