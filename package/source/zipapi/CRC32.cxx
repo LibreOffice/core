@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:13:40 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 09:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,16 @@
 #ifndef _ZLIB_H
 #include <external/zlib/zlib.h>
 #endif
+#ifndef _PACKAGE_CONSTANTS_HXX_
+#include <PackageConstants.hxx>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
 
 using namespace rtl;
-using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::io;
 
 /** A class to compute the CRC32 value of a data stream
  */
@@ -79,19 +86,19 @@ CRC32::~CRC32()
 {
 }
 void SAL_CALL CRC32::reset()
-    throw(uno::RuntimeException)
+    throw(RuntimeException)
 {
     nCRC=0;
 }
 sal_Int32 SAL_CALL CRC32::getValue()
-    throw(uno::RuntimeException)
+    throw(RuntimeException)
 {
     return nCRC & 0xFFFFFFFFL;
 }
 /** Update CRC32 with specified byte
  */
 void SAL_CALL CRC32::updateByte (sal_Int8 nByte)
-        throw(uno::RuntimeException)
+        throw(RuntimeException)
 {
     sal_uInt8 pBuf[1];
     pBuf[0] = (sal_uInt8)nByte;
@@ -99,17 +106,34 @@ void SAL_CALL CRC32::updateByte (sal_Int8 nByte)
 }
 /** Update CRC32 with specified sequence of bytes
  */
-void SAL_CALL CRC32::updateSegment(const uno::Sequence< sal_Int8 > &b,
+void SAL_CALL CRC32::updateSegment(const Sequence< sal_Int8 > &b,
                                     sal_Int32 off,
                                     sal_Int32 len)
-        throw(uno::RuntimeException)
+        throw(RuntimeException)
 {
     nCRC = crc32(nCRC, (const unsigned char*)b.getConstArray()+off, len );
 }
 /** Update CRC32 with specified sequence of bytes
  */
-void SAL_CALL CRC32::update(const uno::Sequence< sal_Int8 > &b)
-        throw(uno::RuntimeException)
+void SAL_CALL CRC32::update(const Sequence< sal_Int8 > &b)
+        throw(RuntimeException)
 {
     nCRC = crc32(nCRC, (const unsigned char*)b.getConstArray(),b.getLength());
+}
+
+void SAL_CALL CRC32::updateStream( Reference < XInputStream > & xStream )
+{
+    Reference < XSeekable > xSeek ( xStream, UNO_QUERY );
+    if ( xSeek.is() )
+    {
+        sal_Int32 nLength = n_ConstBufferSize;
+        sal_Int64 nCurrentPos = xSeek->getPosition();
+        Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
+        while ( nLength >= n_ConstBufferSize )
+        {
+            nLength = xStream->readBytes ( aSeq, n_ConstBufferSize );
+            updateSegment ( aSeq, 0, nLength );
+        }
+        xSeek->seek ( nCurrentPos );
+    }
 }
