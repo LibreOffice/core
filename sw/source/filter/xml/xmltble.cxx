@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:30:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,7 +942,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
                 {
                     OUString sQValue =
                         GetNamespaceMap().GetQNameByKey(
-                                XML_NAMESPACE_OOOW, sCellFormula );
+                                XML_NAMESPACE_OOOW, sCellFormula, sal_False );
                     // formula
                     AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue );
                 }
