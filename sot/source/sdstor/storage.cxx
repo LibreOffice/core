@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-17 13:13:49 $
+ *  last change: $Author: mba $ $Date: 2001-05-21 12:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,6 +542,9 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
         }
 
         pStorStm = ::utl::UcbStreamHelper::CreateStream( aName, nMode );
+        if ( pStorStm && pStorStm->GetError() )
+            DELETEZ( pStorStm );
+
         if ( pStorStm )
         {
             // try as UCBStorage, next try as OLEStorage
