@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyLinkContent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-08 10:53:34 $
+ *  last change: $Author: kso $ $Date: 2001-01-09 16:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ service HierarchyLinkContent
         setPropertyValues
         </li>
         <li>
-        insert ( makes a newly created folder persistent )
+        insert ( makes a newly created link persistent )
         </li>
         <li>
         delete
@@ -149,13 +149,13 @@ service HierarchyLinkContent
         <b>Supported Properties</b>
         <ul>
         <li>
-        string ContentType ( read-only, always "application/vnd.sun.star.hier-folder" )
+        string ContentType ( read-only, always "application/vnd.sun.star.hier-link" )
         </li>
         <li>
-        boolean IsDocument ( read-only, always false )
+        boolean IsDocument ( read-only, always true )
         </li>
         <li>
-        boolean IsFolder ( read-only, always true )
+        boolean IsFolder ( read-only, always false )
         </li>
         <li>
         string Title
