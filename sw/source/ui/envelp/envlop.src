@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:50:42 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ TabDialog DLG_ENV
         Text [ portuguese ] = "~Inserir" ;
         Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "~Indsæt" ;
-        Text [ french ] = "In~sérer" ;
+        Text [ french ] = "Insérer" ;
         Text [ swedish ] = "~Infoga" ;
         Text [ dutch ] = "~Invoegen" ;
         Text [ spanish ] = "I~nsertar" ;
@@ -213,7 +213,7 @@ TabDialog DLG_ENV
         Text [ portuguese ] = "~Modificar" ;
         Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "Modificer" ;
-        Text [ french ] = "~Modifier" ;
+        Text [ french ] = "Modifier" ;
         Text [ swedish ] = "~Ändra" ;
         Text [ dutch ] = "~Wijzigen" ;
         Text [ spanish ] = "~Modificar" ;
@@ -262,7 +262,7 @@ TabPage TP_ENV_ENV
         Text [ portuguese ] = "~Destinatário" ;
         Text [ finnish ] = "~Saaja" ;
         Text [ danish ] = "Modtager" ;
-        Text [ french ] = "~Destinataire" ;
+        Text [ french ] = "Destinataire" ;
         Text [ swedish ] = "Mottagar~e" ;
         Text [ dutch ] = "~Geadresseerde" ;
         Text [ spanish ] = "~Destinatario" ;
@@ -384,7 +384,7 @@ TabPage TP_ENV_ENV
         Text [ portuguese ] = "Campo base de dados" ;
         Text [ finnish ] = "~Tietokantakenttä" ;
         Text [ danish ] = "Databasefelt" ;
-        Text [ french ] = "~Champ de BD" ;
+        Text [ french ] = "Champ de BD" ;
         Text [ swedish ] = "Databas~fält" ;
         Text [ dutch ] = "Database~veld" ;
         Text [ spanish ] = "~Campo base de datos" ;
