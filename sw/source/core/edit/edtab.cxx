@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:42:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,11 +214,7 @@ BOOL SwEditShell::TableToText( sal_Unicode cCh )
 
     // verschiebe den akt. Cursor aus dem Tabellen Bereich
     // angemeldet ist
-#ifdef USED
-    SwNodeIndex aTabIdx( pCrsr->GetPoint()->nNode );
-#else
     SwNodeIndex aTabIdx( *pTblNd );
-#endif
     pCrsr->DeleteMark();
     pCrsr->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
     pCrsr->GetPoint()->nContent.Assign( 0, 0 );
@@ -228,15 +224,12 @@ BOOL SwEditShell::TableToText( sal_Unicode cCh )
 
     bRet = GetDoc()->TableToText( pTblNd, cCh );
     pCrsr->GetPoint()->nNode = aTabIdx;
-#ifdef USED
-    pCrsr->Move( fnMoveBackward, fnGoNode );
-#else
+
     SwCntntNode* pCNd = pCrsr->GetCntntNode();
     if( !pCNd )
         pCrsr->Move( fnMoveForward, fnGoCntnt );
     else
         pCrsr->GetPoint()->nContent.Assign( pCNd, 0 );
-#endif
 
     EndAllAction();
     return bRet;
@@ -426,183 +419,6 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
         GetDoc()->SetTblBoxFormulaAttrs( *aBoxes[ n ], rSet );
     GetDoc()->EndUndo( UNDO_END );
     EndAllAction();
-}
-
-    // Zellenbreiten ueber Min/Max Berechnung an Tabellenbreite anpassen
-void SwEditShell::OptimizeTblBoxWidthMinMax()
-{
-    SET_CURR_SHELL( this );
-
-    SwPaM *pCrsr = GetCrsr();
-    SwTableNode* pTblNd = pCrsr->GetNode()->FindTableNode();
-    if( pTblNd && !pTblNd->GetTable().IsTblComplex() )
-    {
-        SwTabFrm* pTabFrm = 0;
-        SvULongs aMinArr( 16, 16 ), aMaxArr( 16, 16 );
-
-        // ueber alle Spalten aller Zeilen und die Min/Max Breiten einsammeln
-        SwTableLines& rTblLns = pTblNd->GetTable().GetTabLines();
-        USHORT n;
-
-        for( n = rTblLns.Count(); n; )
-        {
-            SwTableBoxes& rTblBxs = rTblLns[ --n ]->GetTabBoxes();
-            for( USHORT i = 0; i < rTblBxs.Count(); ++i )
-            {
-                SwTableBox* pBox = rTblBxs[ i ];
-
-                ULONG nMinCell = 0;
-                ULONG nMaxCell = 0;
-
-                // ueber alle Absaetze und die Min/Maxbreiten berechnen
-                const SwStartNode* pSttNd = pBox->GetSttNd();
-                SwNodeIndex aIdx( *pSttNd, 1 );
-                SwNodeIndex aEnd( *pSttNd->EndOfSectionNode() );
-                while( aIdx < aEnd )
-                {
-                    SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
-                    if( pTxtNd )
-                    {
-                        ULONG nMinCnts;
-                        ULONG nMaxCnts;
-                        ULONG nAbsMinCnts;
-                        pTxtNd->GetMinMaxSize( aIdx.GetIndex(), nMinCnts,
-                                               nMaxCnts, nAbsMinCnts );
-
-                        if( nMinCnts > nMinCell )
-                            nMinCell = nMinCnts;
-                        if( nMaxCnts > nMaxCell )
-                            nMaxCell = nMaxCnts;
-
-                        if( !pTabFrm )
-                        {
-                            SwCntntFrm* pCFrm = pTxtNd->GetFrm( 0, 0, FALSE );
-                            if( pCFrm )
-                                pTabFrm = pCFrm->FindTabFrm();
-                        }
-                    }
-                    aIdx++;
-                }
-
-                // Mindestbreite fuer Inhalt einhalten
-                if( nMinCell < MINLAY )
-                    nMinCell = MINLAY;
-                if( nMaxCell < MINLAY )
-                    nMaxCell = MINLAY;
-
-                // Umrandung und Abstand zum Inhalt beachten
-                const SvxBoxItem& rBoxItem = pBox->GetFrmFmt()->GetBox();
-                USHORT nBrdDist = 0;
-                if( rBoxItem.GetLeft() )
-                {
-                    USHORT nWidth = rBoxItem.GetLeft()->GetOutWidth() +
-                                    rBoxItem.GetLeft()->GetInWidth();
-                    if( !nBrdDist )
-                        nBrdDist = rBoxItem.GetLeft()->GetDistance();
-
-                    nMinCell += nWidth;
-                    nMaxCell += nWidth;
-                }
-                if( rBoxItem.GetRight() )
-                {
-                    USHORT nWidth = rBoxItem.GetRight()->GetOutWidth() +
-                                    rBoxItem.GetRight()->GetInWidth();
-                    if( !nBrdDist )
-                        nBrdDist = rBoxItem.GetRight()->GetDistance();
-
-                    nMinCell += nWidth;
-                    nMaxCell += nWidth;
-                }
-                if( !nBrdDist )
-                    nBrdDist = MIN_BORDER_DIST;
-                nMinCell += 2 * nBrdDist;
-                nMaxCell += 2 * nBrdDist;
-
-                // Max/Min-Werte in den Arrays merken
-                if( i >= aMinArr.Count() )
-                    aMinArr.Insert( nMinCell, i );
-                else if( nMinCell > aMinArr[ i ] )
-                    aMinArr.Replace( nMinCell, i );
-
-                if( i >= aMaxArr.Count() )
-                    aMaxArr.Insert( nMaxCell, i );
-                else if( nMaxCell > aMaxArr[ i ] )
-                    aMaxArr.Replace( nMaxCell, i );
-            }
-        }
-
-        ASSERT( pTabFrm, "ohne TabFrm kann nichts berechnet werden" );
-        if( pTabFrm )
-        {
-            // 2. Teil die Zellen an die Breiten anpassen
-            ULONG nTableMin = 0;
-            ULONG nTableMax = 0;
-            for( n = aMinArr.Count(); n; )
-            {
-                nTableMin += aMinArr[ --n ];
-                nTableMax += aMaxArr[   n ];
-            }
-
-            // Dann errechne mal die Breiten fuer die Spalten. Die Werte
-            // werden im MinArray gesammelt!
-
-            // die MinBreite ist schon groesser als der vorgesehene Platz
-            ULONG nAbsTabWidth = pTabFrm->Prt().Width();
-            if( nTableMin > nAbsTabWidth )
-            {
-                for( n = aMinArr.Count(); n; )
-                {
-                    ULONG nColMin = aMinArr[ --n ];
-                    nColMin *= nAbsTabWidth;
-                    nColMin /= nTableMin;
-                    aMinArr.Replace( nColMin, n );
-                }
-            }
-            // die MaxBreite ist kleiner als der vorgesehene Platz
-            else if( nTableMax < nAbsTabWidth )
-            {
-                for( n = aMinArr.Count(); n; )
-                {
-                    ULONG nColMax = aMaxArr[ --n ];
-                    nColMax *= nAbsTabWidth;
-                    nColMax /= nTableMax;
-                    aMinArr.Replace( nColMax, n );
-                }
-            }
-            else
-            {
-                double nW = nAbsTabWidth - nTableMin;
-                double nD = nTableMax == nTableMin ? 1 : nTableMax - nTableMin;
-                for( n = 0; n < aMinArr.Count(); ++n )
-                {
-                    double nd = aMaxArr[ n ] - aMinArr[ n ];
-                    ULONG nAbsColWidth = aMinArr[ n ] + (ULONG)(( nd * nW ) / nD );
-                    aMinArr.Replace( nAbsColWidth, n );
-                }
-            }
-
-            StartAllAction();
-            GetDoc()->AppendUndoForAttrTable( pTblNd->GetTable() );
-
-            for( n = 0; n < rTblLns.Count(); ++n )
-            {
-                SwTableBoxes& rTblBxs = rTblLns[ n ]->GetTabBoxes();
-                for( USHORT i = rTblBxs.Count(); i; )
-                {
-                    SwTableBox* pBox = rTblBxs[ --i ];
-                    pBox->ClaimFrmFmt()->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE,
-                                                    aMinArr[ i ] ));
-                }
-            }
-
-            SwTableFmt* pFmt = (SwTableFmt*)pTblNd->GetTable().GetFrmFmt();
-            pFmt->LockModify();
-            pFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nAbsTabWidth ));
-            pFmt->UnlockModify();
-
-            EndAllAction();
-        }
-    }
 }
 
 BOOL SwEditShell::IsTableBoxTextFormat() const
