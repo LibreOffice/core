@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-07 11:25:00 $
+ *  last change: $Author: cd $ $Date: 2001-08-09 05:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,15 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_MISSINGBOOTSTRAPFILEEXCEPTION_HPP_
+#include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_INVALIDBOOTSTRAPFILEEXCEPTION_HPP_
+#include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_INSTALLATIONINCOMPLETEEXCEPTION_HPP_
+#include <com/sun/star/configuration/InstallationIncompleteException.hpp>
 #endif
 
 #ifndef _SOLAR_H
@@ -549,6 +558,70 @@ void Desktop::StartSetup( const OUString& aParameters )
     }
 }
 
+void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStatus, const OUString& aDiagnosticMessage )
+{
+    if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
+    {
+        sal_Bool        bWorkstationInstallation = sal_False;
+        ::rtl::OUString aBaseInstallURL;
+        ::rtl::OUString aUserInstallURL;
+
+        ::utl::Bootstrap::PathStatus aBaseInstallStatus = ::utl::Bootstrap::locateBaseInstallation( aBaseInstallURL );
+        ::utl::Bootstrap::PathStatus aUserInstallStatus = ::utl::Bootstrap::locateUserInstallation( aUserInstallURL );
+
+        if (( aBaseInstallStatus == ::utl::Bootstrap::PATH_EXISTS &&
+              aUserInstallStatus == ::utl::Bootstrap::PATH_EXISTS       ))
+        {
+            if ( aBaseInstallURL != aUserInstallURL )
+                bWorkstationInstallation = sal_True;
+        }
+
+        if ( Application::IsRemoteServer() )
+        {
+            OString aTmpStr = OUStringToOString( aDiagnosticMessage, RTL_TEXTENCODING_ASCII_US );
+            fprintf( stderr, aTmpStr.getStr() );
+        }
+        else
+        {
+            OUString        aMessage;
+            OUStringBuffer  aBuffer( 100 );
+            aBuffer.append( aDiagnosticMessage );
+
+            if (( aBootstrapStatus == ::utl::Bootstrap::MISSING_USER_INSTALL ) || bWorkstationInstallation )
+            {
+                aBuffer.appendAscii( ".Should I start 'setup' to check your installation?" );
+                aMessage = aBuffer.makeStringAndClear();
+
+                ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
+                int nResult = aBootstrapFailedBox.Execute();
+
+                if ( nResult == RET_YES )
+                {
+                    OUString aParameters;
+                    StartSetup( aParameters );
+                }
+            }
+            else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
+                     ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )    )
+            {
+                aBuffer.appendAscii( ".Should I start 'setup -repair' to repair your installation?" );
+                aMessage = aBuffer.makeStringAndClear();
+
+                ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
+                int nResult = aBootstrapFailedBox.Execute();
+
+                if ( nResult == RET_YES )
+                {
+                     OUString aParameters( RTL_CONSTASCII_USTRINGPARAM( "-repair" ));
+                    StartSetup( aParameters );
+                }
+            }
+        }
+
+        exit( 333 );
+    }
+}
+
 void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
 {
     if ( aBootstrapError == BE_PATHINFO_MISSING )
@@ -558,49 +631,7 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
 
         aBootstrapStatus = ::utl::Bootstrap::checkBootstrapStatus( aDiagnosticMessage );
         if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
-        {
-            if ( Application::IsRemoteServer() )
-            {
-                OString aTmpStr = OUStringToOString( aDiagnosticMessage, RTL_TEXTENCODING_ASCII_US );
-                fprintf( stderr, aTmpStr.getStr() );
-            }
-            else
-            {
-                OUString        aMessage;
-                OUStringBuffer  aBuffer( 100 );
-                aBuffer.append( aDiagnosticMessage );
-
-                if ( aBootstrapStatus == ::utl::Bootstrap::MISSING_USER_INSTALL )
-                {
-                    aBuffer.appendAscii( "Should I start 'setup' to check your installation?" );
-                    aMessage = aBuffer.makeStringAndClear();
-
-                    ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
-                    int nResult = aBootstrapFailedBox.Execute();
-
-                    if ( nResult == RET_YES )
-                    {
-                        OUString aParameters;
-                        StartSetup( aParameters );
-                    }
-                }
-                else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
-                         ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )    )
-                {
-                    aBuffer.appendAscii( "Should I start 'setup -repair' to repair your installation?" );
-                    aMessage = aBuffer.makeStringAndClear();
-
-                    ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
-                    int nResult = aBootstrapFailedBox.Execute();
-
-                    if ( nResult == RET_YES )
-                    {
-                         OUString aParameters( RTL_CONSTASCII_USTRINGPARAM( "-repair" ));
-                        StartSetup( aParameters );
-                    }
-                }
-            }
-        }
+            HandleBootstrapPathErrors( aBootstrapStatus, aDiagnosticMessage );
     }
     else if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
     {
@@ -637,7 +668,7 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         }
     }
 
-    exit( -1 );
+    exit( 333 );
 }
 
 USHORT Desktop::Exception(USHORT nError)
@@ -858,12 +889,17 @@ void Desktop::Main()
         {
             PreloadConfigTrees();
         }
-        catch(com::sun::star::uno::Exception &e)
+        catch( ::com::sun::star::configuration::MissingBootstrapFileException& e )
         {
-            bTerminate = sal_True;
-            rtl::OUString sError = rtl::OUString::createFromAscii("Unable to retrieve application configuration data: ");
-            sError += e.Message;
-            Application::Abort(sError);
+            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_USER_INSTALL, e.Message );
+        }
+        catch( ::com::sun::star::configuration::InvalidBootstrapFileException& e )
+        {
+            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, e.Message );
+        }
+        catch( ::com::sun::star::configuration::InstallationIncompleteException& e )
+        {
+            HandleBootstrapPathErrors( ::utl::Bootstrap::MISSING_USER_INSTALL, e.Message );
         }
     }
 

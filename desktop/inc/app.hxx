@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-07 11:24:59 $
+ *  last change: $Author: cd $ $Date: 2001-08-09 05:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
 #endif
+#ifndef _UTL_BOOTSTRAP_HXX
+#include <unotools/bootstrap.hxx>
+#endif
 
 /*--------------------------------------------------------------------
     Description:    Application-class
@@ -103,6 +106,7 @@ class Desktop : public Application //public SfxApplicationClass
         void                HandleBootstrapErrors( BootstrapError );
 
     private:
+        void                HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
         void                StartSetup( const ::rtl::OUString& aParameters );
 
         void                OpenStartupScreen();
