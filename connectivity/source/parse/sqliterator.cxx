@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:04:15 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,7 +812,7 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 */
                 if(!aColumnAlias.getLength())
                     aColumnAlias = aColumnName;
-                setSelectColumnName(m_aSelectColumns,aColumnName,aColumnAlias,aTableRange,bFkt,nType);
+                setSelectColumnName(m_aSelectColumns,aColumnName,aColumnAlias,aTableRange,bFkt,nType,SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec));
             }
         }
 
@@ -1272,6 +1272,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
                                                             sal_False,
                                                             m_aCaseEqual.isCaseSensitive());
                 pColumn->setFunction(sal_True);
+                pColumn->setAggregateFunction(sal_True);
                 pColumn->setRealName(sFunctionName);
                 m_aParameters->push_back(pColumn);
             }
@@ -1464,7 +1465,7 @@ void OSQLParseTreeIterator::appendColumns(::vos::ORef<OSQLColumns>& _rColumns,co
     }
 }
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt,sal_Int32 _nType)
+void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt,sal_Int32 _nType,sal_Bool bAggFkt)
 {
     if(rColumnName.toChar() == '*' && !rTableRange.getLength())
     {   // Suche "uber alle vorkommenden Tabellen
@@ -1531,6 +1532,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
             OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),
                 ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
             pColumn->setFunction(bFkt);
+            pColumn->setAggregateFunction(bAggFkt);
             pColumn->setRealName(rColumnName);
 
             Reference< XPropertySet> xCol = pColumn;
@@ -1551,6 +1553,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
                 OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),
                     ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
                 pColumn->setFunction(sal_True);
+                pColumn->setAggregateFunction(bAggFkt);
                 pColumn->setRealName(rColumnName);
                 pColumn->setTableName(aFind->first);
 
@@ -1592,7 +1595,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
             OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),
                 ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
             pColumn->setFunction(sal_True);
-
+            pColumn->setAggregateFunction(bAggFkt);
 
             Reference< XPropertySet> xCol = pColumn;
             _rColumns->push_back(xCol);
