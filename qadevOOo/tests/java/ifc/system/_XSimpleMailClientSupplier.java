@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSimpleMailClientSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:54 $
+ *  last change:$Date: 2003-09-08 11:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,11 @@
 
 package ifc.system;
 
+import lib.MultiMethodTest;
+import lib.Status;
+
 import com.sun.star.system.XSimpleMailClient;
 import com.sun.star.system.XSimpleMailClientSupplier;
-import lib.MultiMethodTest;
 
 
 /**
@@ -99,7 +101,7 @@ public class _XSimpleMailClientSupplier extends MultiMethodTest {
             tRes.tested("querySimpleMailClient()",aClient != null);
         } else {
             log.println("SystemMail doesn't exist : nothing to test") ;
-            tRes.tested("querySimpleMailClient()", tRes.skipped(true)) ;
+            tRes.tested("querySimpleMailClient()", Status.skipped(true)) ;
         }
     }
 
