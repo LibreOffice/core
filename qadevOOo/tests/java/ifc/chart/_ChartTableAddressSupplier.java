@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _ChartTableAddressSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:16 $
+ *  last change:$Date: 2003-09-08 10:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 package ifc.chart;
 
-import com.sun.star.chart.ChartSeriesAddress;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
+
+import com.sun.star.chart.ChartSeriesAddress;
 
 /**
 * Testing <code>com.sun.star.chart.ChartTableAddressSupplier</code>
