@@ -2,9 +2,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:51:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,7 @@ struct SdViewRedrawRec
 };
 
 
-class View
-    : public FmFormView
+class View : public FmFormView
 {
 public:
     TYPEINFO();
@@ -126,12 +125,11 @@ public:
         ViewShell* pViewSh=NULL);
     virtual ~View (void);
 
-    void                    InitRedraw( OutputDevice* pOutDev, const Region& rReg, const Link* pPaintProc=NULL );
+    void                    CompleteRedraw( OutputDevice* pOutDev, const Region& rReg, ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
     virtual BOOL            GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE ) const;
     virtual BOOL            SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
     virtual void            MarkListHasChanged();
-    virtual BOOL            HasMarkedObj() const { return SdrView::HasMarkedObj(); }
     virtual void            ModelHasChanged();
     virtual void            SelectAll();
     virtual void            DoCut(::Window* pWindow=NULL);
@@ -222,8 +220,6 @@ protected:
                             DECL_LINK( DropErrorHdl, Timer* );
                             DECL_LINK( DropInsertFileHdl, Timer* );
                             DECL_LINK( ExecuteNavigatorDrop, SdNavigatorDropEvent* pSdNavigatorDropEvent );
-                            DECL_LINK( PaintProc, SdrPaintProcRec* );
-
 };
 
 } // end of namespace sd
