@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-10 19:50:27 $
+ *  last change: $Author: er $ $Date: 2002-10-31 18:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,9 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
                         pOutString = aOS.GetBuffer();
                         break;
                     case CELLTYPE_FORMULA:
-                        if( pAkt->HasValueData() )
+                        if ( ((ScFormulaCell*)pAkt)->GetErrCode() )
+                            pOutString = pNumDataERROR;
+                        else if( pAkt->HasValueData() )
                         {
                             aOS = pNumData;
                             if( bPlain )
