@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GluePoint.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
     @deprecated
     @see GluePoint2
  */
-struct GluePoint
+published struct GluePoint
 {
     // DocMerge from xml: field com::sun::star::drawing::GluePoint::Position
     /** This is the position of this <type>GluePoint</type>.
