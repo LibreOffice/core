@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-08 15:46:08 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 18:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <drafts/com/sun/star/chart2/Symbol.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
 #endif
 
 #ifndef CHART_PROPERTYHELPER_HXX
@@ -182,10 +185,11 @@ LineChartTypeTemplate::LineChartTypeTemplate(
     sal_Int32 nDim /* = 2 */,
     chart2::StackMode eZStackMode /* = NONE */ ) :
         ChartTypeTemplate( xContext, rServiceName ),
-                ::property::OPropertySet( m_aMutex ),
+        ::property::OPropertySet( m_aMutex ),
         m_eYStackMode( eYStackMode ),
         m_eCurveStyle( eCurveStyle ),
-    m_bHasSymbols( bSymbols ),
+        m_bHasSymbols( bSymbols ),
+        m_bHasLines( true ),
         m_nDim( nDim ),
         m_eZStackMode( eZStackMode )
 {}
@@ -285,12 +289,16 @@ uno::Reference< chart2::XDiagram > SAL_CALL
         ? chart2::SymbolStyle_STANDARD
         : chart2::SymbolStyle_NONE;
 
+    uno::Any aLineStyleToSet( uno::makeAny(
+                                  m_bHasLines
+                                  ? drawing::LineStyle_SOLID
+                                  : drawing::LineStyle_NONE ));
     for( sal_Int32 i = 0; i < aSeriesSeq.getLength(); ++i )
     {
         try
         {
             chart2::Symbol aSymbProp;
-            uno::Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
+            Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
             if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp ) )
             {
                 aSymbProp.aStyle = eStyle;
@@ -298,6 +306,19 @@ uno::Reference< chart2::XDiagram > SAL_CALL
                     aSymbProp.nStandardSymbol = i;
                 xProp->setPropertyValue( C2U( "Symbol" ), uno::makeAny( aSymbProp ));
             }
+
+            if( m_bHasLines )
+            {
+                // keep line-styles that are not NONE
+                drawing::LineStyle eLineStyle;
+                if( (xProp->getPropertyValue( C2U( "LineStyle" )) >>= eLineStyle ) &&
+                    eLineStyle == drawing::LineStyle_NONE )
+                {
+                    xProp->setPropertyValue( C2U( "LineStyle" ), aLineStyleToSet );
+                }
+            }
+            else
+                xProp->setPropertyValue( C2U( "LineStyle" ), aLineStyleToSet );
         }
         catch( uno::Exception & ex )
         {
