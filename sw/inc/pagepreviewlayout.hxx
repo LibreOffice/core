@@ -35,14 +35,26 @@ class SwPagePreviewLayout
 private:
     friend class ViewShell;
 
+    /// number of horizontal and vertical twips for spacing between the pages.
     const SwTwips mnXFree;
     const SwTwips mnYFree;
 
+    /// view shell the print preview is generated for.
     ViewShell& mrParentViewShell;
+    /// top layout frame of the layout for accessing the pages
     const SwRootFrm& mrLayoutRootFrm;
 
+    /// boolean indicating, if the layout information (number of columns and rows)
+    /// are valid.
     bool        mbLayoutInfoValid;
+    /// boolean indicating, if the the calculated print preview layout sizes
+    /// ( windows size in twips, maximal page size, column width, row height,
+    ///   width and height of a print preview page, size of the print preview
+    ///   document ) are valid
     bool        mbLayoutSizesValid;
+    /// boolean indicating, if the the paint information ( physical number of
+    ///   start page, start column and row, paint offsets, rectangle visible of
+    ///   the print preview document.
     bool        mbPaintInfoValid;
 
     Size        maWinSize;
@@ -70,7 +82,6 @@ private:
     Point       maAdditionalPaintOffset;
     Rectangle   maPaintedPrevwDocRect;
     sal_uInt16  mnSelectedPageNum;
-    const SwPageFrm*  mpSelectedPageFrm;
 
     std::vector<PrevwPage*> maPrevwPages;
 
@@ -303,6 +314,7 @@ public:
         (parameter <_aProposedStartPoint>).
         The accessibility preview will also be updated via a corresponding
         method call.
+        OD 21.03.2003 #108282# - delete parameter _onStartPageVirtNum
 
         @author OD
 
@@ -324,10 +336,6 @@ public:
         output parameter - physical number of page, which will be painted in the
         left-top-corner in the current output device.
 
-        @param _onStartPageVirtNum
-        output parameter - virtual number of page, which will be painted in the
-        left-top-corner in the current output device.
-
         @param _orDocPreviewPaintRect
         output parameter - rectangle of preview document, which will be painted.
 
@@ -341,7 +349,6 @@ public:
                   const Point      _aProposedStartPos,
                   const Size&      _rPxWinSize,
                   sal_uInt16&      _onStartPageNum,
-                  sal_uInt16&      _onStartPageVirtNum,
                   Rectangle&       _orDocPreviewPaintRect,
                   const bool       _bStartWithPageAtFirstCol = true
                 );
@@ -589,6 +596,21 @@ public:
         @return an object of class <Size>
     */
     Size GetPrevwPageSizeByPageNum( sal_uInt16 _nPageNum ) const;
+
+    /** get virtual page number by its physical page number
+
+        OD 21.03.2003 #108282#
+
+        @author OD
+
+        @param _nPageNum
+        input parameter - pysical page number of preview page, for which the
+        virtual page number has to be determined.
+
+        @return virtual page number of page given by its physical page number,
+        if the page is in the current preview pages vector, otherwise 0.
+    */
+    sal_uInt16 GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) const;
 };
 
 #endif // _PAGEPREVIEWLAYOUT_HXX
