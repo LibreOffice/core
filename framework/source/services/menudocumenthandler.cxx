@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-04 15:36:58 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 07:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <services/menudocumenthandler.hxx>
 #endif
 
+#ifndef __FRAMEWORK_CLASSES_MENUCONFIGURATION_HXX_
+#include <classes/menuconfiguration.hxx>
+#endif
+
 #ifndef __FRAMEWORK_SERVICES_ATTRIBUTELIST_HXX_
 #include <services/attributelist.hxx>
 #endif
@@ -95,16 +99,14 @@ const int ITEMID_START_VALUE = 1000;
 #define SID_SFX_START           5000
 #define SID_NEWDOCDIRECT        (SID_SFX_START + 537)
 #define SID_AUTOPILOTMENU       (SID_SFX_START + 1381)
+#define SID_FORMATMENU          (SID_SFX_START + 780)
 
+const ::rtl::OUString aSlotProtocol( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
 const ::rtl::OUString aSlotNewDocDirect( RTL_CONSTASCII_USTRINGPARAM( "slot:5537" ));
 const ::rtl::OUString aSlotAutoPilot( RTL_CONSTASCII_USTRINGPARAM( "slot:6381" ));
 
 const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
 const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
-
-const USHORT START_ITEMID_PICKLIST      = 4500;
-const USHORT START_ITEMID_WINDOWLIST    = 4600;
-const USHORT END_ITEMID_WINDOWLIST      = 4699;
 
 const ULONG  MENU_SAVE_LABEL            = 0x00000001;
 
@@ -315,7 +317,12 @@ throw( SAXException, RuntimeException )
 
         if ( aCommandId.getLength() > 0 )
         {
-            USHORT nItemId = ++(*m_pItemId);
+            USHORT nItemId;
+            if ( aCommandId.compareTo( aSlotProtocol, aSlotProtocol.getLength() ) == 0 )
+                nItemId = (USHORT) aCommandId.copy( aSlotProtocol.getLength() ).toInt32();
+            else
+                nItemId = ++(*m_pItemId);
+
             m_pMenuBar->InsertItem( nItemId, String() );
             m_pMenuBar->SetPopupMenu( nItemId, pMenu );
             m_pMenuBar->SetItemCommand( nItemId, aCommandId );
@@ -527,7 +534,12 @@ throw( SAXException, RuntimeException )
 
         if ( aCommandId.getLength() > 0 )
         {
-            USHORT nItemId = ++(*m_pItemId);
+            USHORT nItemId;
+            if ( aCommandId.compareTo( aSlotProtocol, aSlotProtocol.getLength() ) == 0 )
+                nItemId = (USHORT) aCommandId.copy( aSlotProtocol.getLength() ).toInt32();
+            else
+                nItemId = ++(*m_pItemId);
+
             m_pMenu->InsertItem( nItemId, String() );
             m_pMenu->SetPopupMenu( nItemId, pMenu );
             m_pMenu->SetItemCommand( nItemId, aCommandId );
@@ -575,7 +587,12 @@ throw( SAXException, RuntimeException )
 
         if ( aCommandId.getLength() > 0 )
         {
-            USHORT nItemId = ++(*m_pItemId);
+            USHORT nItemId;
+            if ( aCommandId.compareTo( aSlotProtocol, aSlotProtocol.getLength() ) == 0 )
+                nItemId = (USHORT) aCommandId.copy( aSlotProtocol.getLength() ).toInt32();
+            else
+                nItemId = ++(*m_pItemId);
+
             m_pMenu->InsertItem( nItemId, String() );
             m_pMenu->SetItemCommand( nItemId, aCommandId );
             if ( nHelpId > 0 )
@@ -714,12 +731,41 @@ throw ( SAXException, RuntimeException )
             OUString aItemCommand = pMenu->GetItemCommand( nItemId );
 
             if ( nItemId == SID_NEWDOCDIRECT ||
-                 nItemId == SID_AUTOPILOTMENU ||
-                 aItemCommand == aSlotNewDocDirect ||
-                 aItemCommand == aSlotAutoPilot )
+                 nItemId == SID_AUTOPILOTMENU )
             {
                 // special popup menus (filled during runtime) must be saved as a menuitem!!!
                 WriteMenuItem( pMenu, nItemId );
+            }
+            else if ( nItemId == SID_FORMATMENU )
+            {
+                // special popup menu - must be written as empty popup!
+                AttributeListImpl* pListMenu = new AttributeListImpl;
+                Reference< XAttributeList > xListMenu( (XAttributeList *)pListMenu , UNO_QUERY );
+
+                String aCommand( pMenu->GetItemCommand( nItemId ) );
+                if ( !aCommand.Len() )
+                {
+                    aCommand = String::CreateFromAscii("slot:");
+                    aCommand += String::CreateFromInt32( nItemId );
+                }
+
+                pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ID )),
+                                         m_aAttributeType,
+                                         aCommand );
+
+//                if ( pMenu->GetUserValue( nItemId ) & MENU_SAVE_LABEL )
+                pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LABEL )),
+                                            m_aAttributeType,
+                                            pMenu->GetItemText( nItemId ) );
+
+                m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENU )), xListMenu );
+                m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+                m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUPOPUP )), m_xEmptyList );
+                m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+                m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUPOPUP )) );
+                m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+                m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENU )) );
+                m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
             }
             else
             {

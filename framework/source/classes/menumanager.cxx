@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-07 06:15:35 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 07:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_MENUMANAGER_HXX_
 #include <classes/menumanager.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_MENUCONFIGURATION_HXX_
+#include <classes/menuconfiguration.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
@@ -171,10 +175,6 @@ namespace framework
 #define BOOKMARK_NEWMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_new" ))
 #define BOOKMARK_WIZARDMENU     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_wizard" ))
 #define DESKTOP_SERVICE         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))
-
-const USHORT START_ITEMID_PICKLIST      = 4500;
-const USHORT START_ITEMID_WINDOWLIST    = 4600;
-const USHORT END_ITEMID_WINDOWLIST      = 4699;
 
 const ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
 const ::rtl::OUString aSlotNewDocDirect( RTL_CONSTASCII_USTRINGPARAM( "slot:5537" ));
@@ -912,7 +912,6 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                 Reference< XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
                                                 DESKTOP_SERVICE ), UNO_QUERY );
                 USHORT  nWindowItemId = START_ITEMID_WINDOWLIST;
-
                 if ( xDesktop.is() )
                 {
                     USHORT nTaskId = START_ITEMID_WINDOWLIST;
@@ -942,7 +941,6 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
                     aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
                     xTrans->parseStrict( aTargetURL );
-
                     if ( nCurItemId >= START_ITEMID_PICKLIST &&
                          nCurItemId <  START_ITEMID_WINDOWLIST )
                     {
@@ -967,7 +965,6 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 
     if ( xDispatch.is() )
         xDispatch->dispatch( aTargetURL, aArgs );
-
     return 1;
 }
 
