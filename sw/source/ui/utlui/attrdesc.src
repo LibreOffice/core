@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:44:07 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ String STR_NO_CHARFMT
     Text[ dutch ] = "geen opmaakprofiel";
     Text[ chinese_simplified ] = "ÎŞÎÄ×ÖÑùÊ½";
     Text[ greek ] = "÷ùñßò óôõë ÷áñáêôŞñùí";
-    Text[ korean ] = "¹®ÀÚ À¯ÇüÀÌ ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "¹®ÀÚ À¯Çü ¾øÀ½.";
     Text[ turkish ] = "Karakter biçimi yok";
     Text[ language_user1 ] = " ";
 };
@@ -1938,7 +1938,7 @@ String STR_DRAWMODE_WATERMARK
     Text[ polish ] = "Znak wodny";
     Text[ portuguese_brazilian ] = "Watermark";
     Text[ japanese ] = "“§‚©‚µ";
-    Text[ korean ] = "ºÒºû¿¡ ºñÃçºÁ¾ß º¸ÀÌ´Â ¹«´Ì (ÁöÆó)";
+    Text[ korean ] = "ºÒºû¿¡ ºñÃçºÁ¾ß º¸ÀÌ´Â ¹«´Ì (¿¹: ÁöÆó)";
     Text[ chinese_simplified ] = "Ë®Ó¡";
     Text[ chinese_traditional ] = "¤ô¦L";
     Text[ turkish ] = "Watermark";
