@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-14 07:56:50 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 09:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,19 +373,24 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case FN_INSERT_BREAK:
         rSh.SplitNode();
+        rReq.Done();
     break;
     case FN_INSERT_PAGEBREAK:
         rSh.InsertPageBreak();
+        rReq.Done();
     break;
     case FN_INSERT_LINEBREAK:
         rSh.InsertLineBreak();
+        rReq.Done();
     break;
     case FN_INSERT_COLUMN_BREAK:
         rSh.InsertColumnBreak();
+        rReq.Done();
     break;
     case SID_HYPERLINK_SETLINK:
         if (pItem)
             InsertHyperlink(*((const SvxHyperlinkItem *)pItem));
+        rReq.Done();
         break;
     case  SID_INSERT_SOUND:
     case  SID_INSERT_VIDEO:
@@ -637,16 +642,30 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         BOOL bSimpleLine = FALSE;
         BOOL bRet = FALSE;
         Window* pParent = GetView().GetWindow();
-        SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(pParent);
-        // MessageBox fuer fehlende Grafiken
-        if(!pDlg->HasImages())
-            InfoBox( pParent, SW_RES(MSG_NO_RULER)).Execute();
-        if(RET_OK == pDlg->Execute())
+        if ( pItem )
         {
-            sPath = pDlg->GetGraphicName();
-            bSimpleLine = pDlg->IsSimpleLine();
+            sPath = ((SfxStringItem*)pItem)->GetValue();
+            SFX_REQUEST_ARG( rReq, pSimple, SfxBoolItem, FN_PARAM_1 , sal_False );
+            if ( pSimple )
+                bSimpleLine = pSimple->GetValue();
         }
-        delete pDlg;
+        else
+        {
+            SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(pParent);
+            // MessageBox fuer fehlende Grafiken
+            if(!pDlg->HasImages())
+                InfoBox( pParent, SW_RES(MSG_NO_RULER)).Execute();
+            if(RET_OK == pDlg->Execute())
+            {
+                sPath = pDlg->GetGraphicName();
+                bSimpleLine = pDlg->IsSimpleLine();
+            }
+
+            delete pDlg;
+            rReq.AppendItem( SfxStringItem( FN_INSERT_HRULER, sPath ) );
+            rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bSimpleLine ) );
+        }
+
         rSh.StartAllAction();
         rSh.StartUndo(UIUNDO_INSERT_RULER);
         if(bSimpleLine)
@@ -680,6 +699,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         rSh.EndAllAction();
         rSh.EndUndo(UIUNDO_INSERT_RULER);
         rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
+        rReq.Done();
     }
     break;
     case FN_FORMAT_COLUMN :
@@ -951,11 +971,25 @@ SwTextShell::~SwTextShell()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwTextShell::InsertSymbol( String& rChars, String& rFontName)
+void SwTextShell::InsertSymbol( SfxRequest& rReq )
 {
-    SwWrtShell &rSh = GetShell();
-    String aChars( rChars );
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    const SfxPoolItem* pItem = 0;
+    if( pArgs )
+        pArgs->GetItemState(GetPool().GetWhich(FN_INSERT_SYMBOL), FALSE, &pItem);
 
+    String aChars, aFontName;
+    if ( pItem )
+    {
+        aChars = ((const SfxStringItem*)pItem)->GetValue();
+        const SfxPoolItem* pFtItem = NULL;
+        pArgs->GetItemState( GetPool().GetWhich(FN_PARAM_1), FALSE, &pFtItem);
+        const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+        if ( pFontItem )
+            aFontName = pFontItem->GetValue();
+    }
+
+    SwWrtShell &rSh = GetShell();
     SfxItemSet aSet( GetPool(), RES_CHRATR_FONT, RES_CHRATR_FONT,
                                 RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
                                 RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT,
@@ -976,17 +1010,15 @@ void SwTextShell::InsertSymbol( String& rChars, String& rFontName)
                         GetScriptTypeOfLanguage( GetAppLanguage() ) ));
     }
 
-    Font aNewFont(rFontName, Size(1,1)); // Size nur wg. CTOR
-    if( !rChars.Len() )
+    Font aNewFont(aFontName, Size(1,1)); // Size nur wg. CTOR
+    if( !aChars.Len() )
     {
         // Eingestellten Font als Default
-        SvxCharacterMap* pDlg = new SvxCharacterMap(
-                            &GetView().GetViewFrame()->GetWindow(), FALSE );
-
+        SvxCharacterMap* pDlg = new SvxCharacterMap( &GetView().GetViewFrame()->GetWindow(), FALSE );
         Font aDlgFont( pDlg->GetCharFont() );
         SwViewOption aOpt(*GetShell().GetViewOptions());
         String sSymbolFont = aOpt.GetSymbolFont();
-        if( !rFontName.Len() && sSymbolFont.Len() )
+        if( !aFontName.Len() && sSymbolFont.Len() )
             aDlgFont.SetName(sSymbolFont);
         else
             aDlgFont.SetName( aFont.GetFamilyName() );
@@ -1056,20 +1088,27 @@ void SwTextShell::InsertSymbol( String& rChars, String& rFontName)
                 rSh.SwapPam();
             rSh.ClearMark();
             rSh.UpdateAttr();
+            aFont = aNewFontItem;
         }
 
         rSh.EndAllAction();
         rSh.EndUndo( UNDO_INSERT );
-    }
 
-    if ( bFontChanged )
-        rFontName = aNewFont.GetName();
-    rChars = aChars;
+        if ( aChars.Len() )
+        {
+            rReq.AppendItem( SfxStringItem( GetPool().GetWhich(FN_INSERT_SYMBOL), aChars ) );
+            rReq.AppendItem( SfxStringItem( FN_PARAM_1, aNewFont.GetName() ) );
+            rReq.Done();
+        }
+    }
 }
 
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.15  2002/06/14 07:56:50  mba
+    #100266#: recording
+
     Revision 1.14  2002/05/06 07:15:01  os
     #98428# recording of text input re-implemented
 

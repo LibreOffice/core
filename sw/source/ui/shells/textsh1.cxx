@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:47:17 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 09:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,8 @@
 #include <svtools/cjkoptions.hxx>
 #endif
 
+#include <svx/fontitem.hxx>
+
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
 #endif
@@ -245,6 +247,9 @@
 #ifndef _WEB_HRC
 #include <web.hrc>
 #endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -288,36 +293,55 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         case FN_INSERT_SYMBOL:
         {
-            String aChars;
-            String aFont;
-            if ( pItem )
-            {
-                aChars = ((const SfxStringItem*)pItem)->GetValue();
-                pArgs->GetItemState( GetPool().GetWhich(FN_INSERT_STRING), FALSE, &pItem);
-                if ( pItem )
-                    aFont = ((const SfxStringItem*)pItem)->GetValue();
-            }
-
-            InsertSymbol(aChars,aFont);
-            if ( aChars.Len() )
-            {
-                rReq.AppendItem( SfxStringItem( GetPool().GetWhich(nSlot), aChars ) );
-                if ( aFont.Len() )
-                    rReq.AppendItem( SfxStringItem( GetPool().GetWhich(FN_INSERT_STRING), aFont ) );
-                rReq.Done();
-            }
+            InsertSymbol( rReq );
         }
         break;
         case FN_INSERT_FOOTNOTE:
         case FN_INSERT_ENDNOTE:
-            rWrtSh.InsertFootnote(aEmptyStr, nSlot == FN_INSERT_ENDNOTE);
+        {
+            String aStr;
+            BOOL bSpecial = FALSE;
+            SFX_REQUEST_ARG( rReq, pFont, SfxStringItem, FN_PARAM_1 , sal_False );
+            SFX_REQUEST_ARG( rReq, pCharset, SfxInt16Item, FN_PARAM_2 , sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot , sal_False );
+            if ( pItem )
+                aStr = pItem->GetValue();
+
+            rWrtSh.StartUndo( UIUNDO_INSERT_FOOTNOTE );
+            rWrtSh.InsertFootnote( aStr, nSlot == FN_INSERT_ENDNOTE, !bSpecial );
+            if ( pFont )
+            {
+                rWrtSh.Left( CRSR_SKIP_CHARS, TRUE, 1, FALSE );
+                SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
+                rWrtSh.GetAttr( aSet );
+                SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
+                SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
+                                    rFont.GetStyleName(), rFont.GetPitch() );
+                                    //pCharset ? (CharSet) pCharset->GetValue() : RTL_TEXTENCODING_DONTKNOW );
+                rWrtSh.SetAttr( aSet, SETATTR_DONTEXPAND );
+                rWrtSh.ResetSelect(0, FALSE);
+                rWrtSh.GotoFtnTxt();
+            }
+
+            rWrtSh.EndUndo( UIUNDO_INSERT_FOOTNOTE );
+            rReq.Done();
+        }
         break;
         case FN_INSERT_FOOTNOTE_DLG:
         {
-            SwInsFootNoteDlg *pDlg = new SwInsFootNoteDlg(
-                                GetView().GetWindow(), rWrtSh, FALSE);
+            SwInsFootNoteDlg *pDlg = new SwInsFootNoteDlg( GetView().GetWindow(), rWrtSh, FALSE );
             pDlg->SetHelpId(nSlot);
-            pDlg->Execute();
+            if ( pDlg->Execute() == RET_OK )
+            {
+                USHORT nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;
+                SfxRequest aReq( GetView().GetViewFrame(), nId );
+                aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
+                aReq.AppendItem( SfxStringItem( FN_PARAM_1, pDlg->GetFontName() ) );
+                //aReq.AppendItem( SfxStringItem( FN_PARAM_2, pDlg->GetCharSet() ) );
+                ExecuteSlot( aReq );
+            }
+
+            rReq.Ignore();
             delete pDlg;
         }
         break;
@@ -329,24 +353,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
             break;
         }
         case SID_INSERT_GRAPHIC:
-            if (!pItem)
+            //if (!pItem)
             {
-                rReq.SetReturnValue(SfxBoolItem(nSlot, InsertGraphicDlg()));
+                rReq.SetReturnValue(SfxBoolItem(nSlot, InsertGraphicDlg( rReq )));
             }
+/*
             else
             {
                 String rName = aEmptyStr;
                 BOOL bLink = FALSE;
-
                 rName = ((const SfxStringItem *)pItem)->GetValue();
-
                 String rFilter = aEmptyStr;
-                if ( SFX_ITEM_SET ==
-                        pArgs->GetItemState(FN_PARAM_FILTER, TRUE, &pItem) )
-                    rFilter = ((const SfxStringItem *)pItem)->GetValue();
 
-                if ( SFX_ITEM_SET ==
-                        pArgs->GetItemState(FN_PARAM_1, TRUE, &pItem) )
+                if ( SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_FILTER, TRUE, &pItem) )
+                    rFilter = ((const SfxStringItem *)pItem)->GetValue();
+                if ( SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_1, TRUE, &pItem) )
                     bLink = ((const SfxBoolItem *)pItem)->GetValue();
 
                 if ( !rName.Len() )
@@ -354,6 +375,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 else
                     rReq.SetReturnValue(SfxBoolItem(nSlot, InsertGraphic( rName, rFilter, bLink )));
             }
+*/
             break;
         case SID_INSERTDOC:
             if (!pItem)
@@ -374,19 +396,76 @@ void SwTextShell::Execute(SfxRequest &rReq)
             break;
         case FN_INSERT_BREAK_DLG:
         {
-            SwBreakDlg *pDlg = new SwBreakDlg(GetView().GetWindow(), rWrtSh);
-            pDlg->Execute();
-            delete pDlg;
-        }
+            USHORT nKind=0, nPageNumber=0;
+            String aTemplateName;
+            if ( pItem )
+            {
+                nKind = ((SfxInt16Item*)pItem)->GetValue();
+                SFX_REQUEST_ARG( rReq, pTemplate, SfxStringItem, FN_PARAM_1 , sal_False );
+                SFX_REQUEST_ARG( rReq, pNumber, SfxUInt16Item, FN_PARAM_2 , sal_False );
+                if ( pTemplate )
+                    aTemplateName = pTemplate->GetValue();
+                if ( pNumber )
+                    nPageNumber = pNumber->GetValue();
+            }
+            else
+            {
+                SwBreakDlg *pDlg = new SwBreakDlg(GetView().GetWindow(), rWrtSh);
+                if ( pDlg->Execute() == RET_OK )
+                {
+                    nKind = pDlg->GetKind();
+                    aTemplateName = pDlg->GetTemplateName();
+                    nPageNumber = pDlg->GetPageNumber();
+                    rReq.AppendItem( SfxInt16Item( FN_INSERT_BREAK_DLG, nKind ) );
+                    rReq.AppendItem( SfxUInt16Item( FN_PARAM_2, nPageNumber ) );
+                    rReq.AppendItem( SfxStringItem( FN_PARAM_1, aTemplateName ) );
+                    rReq.Done();
+                }
+                else
+                    rReq.Ignore();
+                delete pDlg;
+            }
+
+            switch ( nKind )
+            {
+                case 1 :
+                    rWrtSh.InsertLineBreak(); break;
+                case 2 :
+                    rWrtSh.InsertColumnBreak(); break;
+                case 3 :
+                {
+                    rWrtSh.StartAllAction();
+                    if( aTemplateName.Len() )
+                        rWrtSh.InsertPageBreak( &aTemplateName, nPageNumber );
+                    else
+                        rWrtSh.InsertPageBreak();
+                    rWrtSh.EndAllAction();
+                }
+            }
+
             break;
+        }
         case FN_INSERT_BOOKMARK:
         {
-            SwInsertBookmarkDlg *pDlg = new SwInsertBookmarkDlg(
-                                    GetView().GetWindow(), rWrtSh );
-            pDlg->Execute();
-            delete pDlg;
+            if ( pItem )
+            {
+                rWrtSh.SetBookmark( KeyCode(), ((SfxStringItem*)pItem)->GetValue(), aEmptyStr );
+            }
+            else
+            {
+                SwInsertBookmarkDlg *pDlg = new SwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq );
+                pDlg->Execute();
+                delete pDlg;
+            }
+
+            break;
         }
-        break;
+        case FN_DELETE_BOOKMARK:
+        {
+            if ( pItem )
+                rWrtSh.DelBookmark( ((SfxStringItem*)pItem)->GetValue() );
+            break;
+        }
         case FN_AUTOFORMAT_REDLINE_APPLY:
         {
             SvxSwAutoFmtFlags aFlags(OFF_APP()->GetAutoCorrect()->GetSwFlags());
@@ -937,6 +1016,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SfxRequest aReq(nSlot, SFX_CALLMODE_SLOT, SFX_APP()->GetPool());
             GetView().GetViewFrame()->ExecuteSlot( aReq);
+            rReq.Ignore();
         }
         break;
 
