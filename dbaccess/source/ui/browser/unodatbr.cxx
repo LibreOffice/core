@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:16:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2932,10 +2932,7 @@ void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry,sal_Bool _bDis
     {
         SvLBoxEntry* pElements = m_pTreeModel->FirstChild(pContainers);
         if ( pElements )
-        {
-            m_pTreeView->getListBox()->SetCursor( pElements );
             m_pTreeView->getListBox()->Collapse(pContainers);
-        }
         m_pTreeView->getListBox()->EnableExpandHandler(pContainers);
         // and delete their children (they are connection-relative)
         for (; pElements; )
@@ -3382,7 +3379,6 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
         // get the desktop object
         sal_Int32 nFrameSearchFlag = FrameSearchFlag::ALL | FrameSearchFlag::GLOBAL ;
         Reference< XComponentLoader > xFrameLoader(getORB()->createInstance(SERVICE_FRAME_DESKTOP),UNO_QUERY);
-        ::rtl::OUString sTarget = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default"));
 
         if ( xFrameLoader.is() )
         {
@@ -3394,25 +3390,19 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
             if (pTopLevelSelected)
                 sInitialSelection = getDataSourceAcessor( pTopLevelSelected );
 
-            INetURLObject aURLParser( sInitialSelection );
-            ::rtl::OUString sURL;
-            if ( aURLParser.GetProtocol() != INET_PROT_NOT_VALID )
-                sURL = aURLParser.GetMainURL( INetURLObject::NO_DECODE );
-            else if ( m_xDatabaseContext->hasByName( sInitialSelection ) )
-            {
-                Reference< XModel > xDocumentModel =
-                    getDataSourceByName_displayError( m_xDatabaseContext, sInitialSelection, getView(), getORB(), true );
-                if ( xDocumentModel.is() )
-                    sURL = xDocumentModel->getURL();
-            }
+            Reference< XModel > xDocumentModel(
+                getDataSourceOrModel(getDataSourceByName_displayError( m_xDatabaseContext, sInitialSelection, getView(), getORB(), true )),UNO_QUERY);
 
-            if ( sURL.getLength() )
+            if ( xDocumentModel.is() )
             {
+                Sequence<PropertyValue > aArgs(1);
+                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model"));
+                aArgs[0].Value <<= xDocumentModel;
                 xFrameLoader->loadComponentFromURL(
-                    sURL,
+                    xDocumentModel->getURL(),
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
                     nFrameSearchFlag,
-                    Sequence<PropertyValue >()
+                    aArgs
                 );
             }
         }
