@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svunx.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 17:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,6 @@
  *
  *
  ************************************************************************/
-//*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
-//                                                                            //
-// (C) 1997 Star Division GmbH, Hamburg, Germany                              //
-//                                                                            //
-// $Revision: 1.1.1.1 $  $Author: hr $  $Date: 2000-09-18 17:05:41 $    //
-//                                                                            //
-// $Workfile:   svunx.h  $                                                    //
-//  $Modtime:   17 Jul 1997 17:20:22  $                                       //
-//                                                                            //
-//*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
 
 #ifndef _SVUNX_H
 #define _SVUNX_H
