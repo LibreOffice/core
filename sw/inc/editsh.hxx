@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 10:01:45 $
+ *  last change: $Author: os $ $Date: 2001-08-03 14:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,7 @@ public:
     void GetAllUsedDB( SvStringsDtor& rDBNameList,
                         SvStringsDtor* pAllDBNames = 0 );
 
+    BOOL IsAnyDatabaseFieldInDoc()const;
     void UpdateExpFlds(BOOL bCloseDB = FALSE);// nur alle ExpressionFelder updaten
     void SetFixFields( BOOL bOnlyTimeDate = FALSE,
                         const DateTime* pNewDateTime = 0 );

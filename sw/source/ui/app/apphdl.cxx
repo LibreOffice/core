@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 13:50:52 $
+ *  last change: $Author: os $ $Date: 2001-08-03 14:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
                                             IsInsTblFormatNum( bWebView )));
             break;
             case FN_QRY_MERGE:
-                if(!pActView || !pActView->GetWrtShell().GetDBData().sDataSource.getLength())
+                if(!pActView || !pActView->GetWrtShell().IsAnyDatabaseFieldInDoc())
                     rSet.DisableItem(nWhich);
                 break;
             default:

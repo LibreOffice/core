@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:40:22 $
+ *  last change: $Author: os $ $Date: 2001-08-03 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,4 +736,40 @@ void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)
 {
     GetDoc()->ChangeAuthorityData(pNewData);
 }
+/* -----------------------------03.08.2001 12:04------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SwEditShell::IsAnyDatabaseFieldInDoc()const
+{
+    const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
+    const USHORT nSize = pFldTypes->Count();
+    for(USHORT i = 0; i < nSize; ++i)
+    {
+        SwFieldType& rFldType = *((*pFldTypes)[i]);
+        USHORT nWhich = rFldType.Which();
+        if(IsUsed(rFldType))
+        {
+            switch(nWhich)
+            {
+                case RES_DBFLD:
+                case RES_DBNEXTSETFLD:
+                case RES_DBNUMSETFLD:
+                case RES_DBSETNUMBERFLD:
+                {
+                    SwClientIter aIter( rFldType );
+                    SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                    while(pFld)
+                    {
+                        if(pFld->IsFldInDoc())
+                            return TRUE;
+                        pFld = (SwFmtFld*)aIter.Next();
+                    }
+                }
+                break;
+            }
+        }
+    }
+    return FALSE;
+}
+
 
