@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.92 $
- *  last change: $Author: vg $ $Date: 2003-06-10 14:30:09 $
+ *  $Revision: 1.93 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@
 // -----------------------------------------------------------------------
 
 static FT_Library aLibFT = 0;
+static int nFTVERSION = 0;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
 typedef ::std::hash_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
@@ -339,21 +340,19 @@ FreetypeManager::FreetypeManager()
     #ifdef LINUX
     // XXX hack to enable usage of system freetype library.
     // freetype prior to 2.0.9 does not have FT_Library_Version
-     void (*pft_library_version)(FT_Library library,
-            FT_Int *amajor, FT_Int *aminor, FT_Int *apatch);
+    void (*pft_library_version)(FT_Library library,
+        FT_Int *amajor, FT_Int *aminor, FT_Int *apatch);
     pft_library_version = (void (*)(FT_Library library,
-            FT_Int *amajor, FT_Int *aminor, FT_Int *apatch)) dlsym (RTLD_DEFAULT, "FT_Library_Version");
+        FT_Int *amajor, FT_Int *aminor, FT_Int *apatch)) dlsym (RTLD_DEFAULT, "FT_Library_Version");
 
     if (pft_library_version != NULL)
     {
         // XXX disable embedded bitmaps for Freetype-2.1.3 unless explicitly requested
-        // below because it crashes StarOffice
-        FT_Int n_major = 0;
-        FT_Int n_minor = 0;
-        FT_Int n_patch = 0;
-
-        pft_library_version( aLibFT, &n_major, &n_minor, &n_patch );
-        if ((n_major == 2) && (n_minor == 1) && (n_patch == 3))
+        // below because it crashes StarOffice on RH9
+        FT_Int nMajor = 0, nMinor = 0, nPatch = 0;
+        pft_library_version( aLibFT, &nMajor, &nMinor, &nPatch );
+        nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
+        if( nFTVERSION == 2103 )
             nPrioEmbedded = 0;
     }
     #endif
@@ -626,7 +625,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     // TODO: query GASP table for load flags
     mnLoadFlags = FT_LOAD_DEFAULT;
 
-    if( (nSin != 0) && (nCos != 0) )        // hinting for 0/90/180/270 degrees only
+    if( (nSin != 0) && (nCos != 0) ) // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
@@ -635,7 +634,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 #endif
         mnLoadFlags |= FT_LOAD_NO_HINTING;
 
-    if( (nCos!=0 && nSin!=0) || (nPrioEmbedded <= 0) )
+    if( ((nCos != 0) && (nSin != 0)) || (nPrioEmbedded <= 0) )
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
@@ -1052,13 +1051,14 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     {
         if( pGlyphFT->format == ft_glyph_format_outline )
             ((FT_OutlineGlyphRec*)pGlyphFT)->outline.flags |= ft_outline_high_precision;
-        rc = FT_Glyph_To_Bitmap( &pGlyphFT, ft_render_mode_mono, NULL, TRUE );
+        FT_Render_Mode nRenderMode = (FT_Render_Mode)((nFTVERSION<2103) ? 1 : FT_RENDER_MODE_MONO); // #i15743#
+        rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, TRUE );
         if( rc != FT_Err_Ok )
             return false;
     }
 
     const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(pGlyphFT);
-    // autohinting in FT<=2.0.2 miscalculates the offsets below by +-1
+    // NOTE: autohinting in FT<=2.0.2 miscalculates the offsets below by +-1
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
 
