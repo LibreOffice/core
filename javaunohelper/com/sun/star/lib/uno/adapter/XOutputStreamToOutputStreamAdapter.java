@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XOutputStreamToOutputStreamAdapter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2002-02-15 17:56:04 $
+ *  last change: $Author: aidan $ $Date: 2002-04-03 09:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,8 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
     }
 
     public void write(byte[] b) throws IOException {
-        try {
+
+    try {
             xout.writeBytes(b);
         } catch (Exception e) {
             throw new IOException(e.toString());

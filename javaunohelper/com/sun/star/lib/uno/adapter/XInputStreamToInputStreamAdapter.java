@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStreamToInputStreamAdapter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2002-03-05 12:19:33 $
+ *  last change: $Author: aidan $ $Date: 2002-04-03 09:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,16 +112,18 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
     }
 
     public int read () throws IOException {
-
         byte [][] tmp = new byte [1][1];
-
         try {
             long bytesRead = xin.readBytes(tmp, 1);
 
-            if (bytesRead == -1) {
+            if (bytesRead <= 0) {
                return (-1);
             } else {
-                return(tmp[0][0]);
+        int tmpInt = tmp[0][0];
+        if (tmpInt< 0 ){
+            tmpInt = 256 +tmpInt;
+        }
+                return(tmpInt);
             }
 
         } catch (Exception e) {
@@ -136,7 +138,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
 
         try {
             bytesRead = xin.readBytes(tmp, b.length);
-            if (bytesRead == -1) {
+            if (bytesRead <= 0) {
                 return(-1);
             } else if (bytesRead < b.length) {
                 System.arraycopy(tmp[0], 0, b, 0, bytesRead);
@@ -151,37 +153,35 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
-
         int count = 0;
         byte [][] tmp = new byte [1][b.length];
-
         try {
-            long bytesRead = xin.readBytes(tmp, b.length);
-
+            long bytesRead = xin.readBytes(tmp,len);
             // Casting bytesRead to an int is okay, since the user can
             // only pass in an integer length to read, so the bytesRead
             // must <= len.
             //
-            if (bytesRead == -1) {
+            if (bytesRead <= 0) {
                 return(-1);
-            } else if (bytesRead < len) {
-                System.arraycopy(tmp[0], 0, b, off, (int)bytesRead);
-            } else {
+        } else if (bytesRead < len) {
+        System.arraycopy(tmp[0], 0, b, off, (int)bytesRead);
+        } else {
                 System.arraycopy(tmp[0], 0, b, off, len);
-            }
+        }
 
-            return ((int)bytesRead);
+        return ((int)bytesRead);
+
 
         } catch (Exception e) {
-            throw new IOException(e.toString());
+            throw new IOException("reader error: "+e.toString());
         }
     }
 
     public long skip(long n) throws IOException {
 
+        int avail;
         long tmpLongVal = n;
         int  tmpIntVal;
-        int avail;
 
         try {
             avail = xin.available();
@@ -191,10 +191,10 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
 
         do {
             if (tmpLongVal >= Integer.MAX_VALUE) {
-                tmpIntVal = Integer.MAX_VALUE;
+               tmpIntVal = Integer.MAX_VALUE;
             } else {
-                // Casting is safe here.
-                tmpIntVal = (int)tmpLongVal;
+               // Casting is safe here.
+               tmpIntVal = (int)tmpLongVal;
             }
             tmpLongVal -= tmpIntVal;
 
