@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Numeric.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:34 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ void ONumericModel::fillProperties(
         DECL_PROP1(TAG,             ::rtl::OUString,    BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP1(CONTROLSOURCE,   ::rtl::OUString,    BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet,READONLY, TRANSIENT);
+        DECL_IFACE_PROP3(BOUNDFIELD,        XPropertySet,BOUND,READONLY, TRANSIENT);
         DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
