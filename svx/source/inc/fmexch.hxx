@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-26 15:03:45 $
+ *  last change: $Author: fs $ $Date: 2001-04-06 12:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <so3/dtrans.hxx>
 #endif
 
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
@@ -136,19 +140,50 @@ public:
 
 SV_DECL_IMPL_REF( SvxFmExplCtrlExch );
 
-//========================================================================
-//class SvxFmFieldExch : public SotDataObject
-//{
-//  String aFieldDesc;
-//  SvDataTypeList  aDataTypeList;
-//
-//public:
-//  SvxFmFieldExch(const String& rFieldDesc);
-//
-//  virtual const SvDataTypeList& GetTypeList() const { return aDataTypeList; }
-//  virtual sal_Bool  GetData( SvData* );
-//};
+//........................................................................
+namespace svxform
+{
+//........................................................................
 
-//SV_DECL_IMPL_REF( SvxFmFieldExch );
+    //====================================================================
+    //= OFieldNameExchange
+    //====================================================================
+    class OFieldNameExchange : public TransferableHelper
+    {
+    protected:
+        ::std::vector< SvLBoxEntry* >   m_aSelectedEntries;
+        SvLBoxEntry*                    m_pFocusEntry;
+        sal_Bool                        m_bDragging;
+
+    public:
+        OFieldNameExchange( SvLBoxEntry* _pFocusEntry );
+
+        void addSelectedEntry( SvLBoxEntry* _pEntry );
+
+        static sal_uInt32   getFormatId( );
+        static sal_Bool     canAceept( const DataFlavorExVector& _rFormats );
+
+        sal_Bool    isDragging() const { return m_bDragging; }
+        void        startDrag( Window* pWindow, sal_Int8 nDragSourceActions );
+
+        SvLBoxEntry*    focused() const { return m_pFocusEntry; }
+        const ::std::vector< SvLBoxEntry* >&
+                        selected() const { return m_aSelectedEntries; }
+
+    protected:
+        virtual void                AddSupportedFormats();
+        virtual sal_Bool            GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void                DragFinished( sal_Int8 nDropAction );
+
+        void StartDrag( Window* pWindow, sal_Int8 nDragSourceActions, sal_Int32 nDragPointer = DND_POINTER_NONE, sal_Int32 nDragImage = DND_IMAGE_NONE )
+        {   // don't allow this base class method to be called from outside
+            TransferableHelper::StartDrag(pWindow, nDragSourceActions, nDragPointer, nDragImage);
+        }
+    };
+
+//........................................................................
+}   // namespace svxform
+//........................................................................
+
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-26 15:04:39 $
+ *  last change: $Author: fs $ $Date: 2001-04-06 12:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,32 +192,80 @@ void SvxFmExplCtrlExch::AddHiddenControlsFormat(const ::com::sun::star::uno::Seq
     m_seqControls = seqInterfaces;
 }
 
-//========================================================================
-// class SvxFmFieldExch
-//========================================================================
+//........................................................................
+namespace svxform
+{
+//........................................................................
 
-//------------------------------------------------------------------------
-//SvxFmFieldExch::SvxFmFieldExch(const String& rFieldDesc)
-//             :aFieldDesc(rFieldDesc)
-//{
-//  if (!nFieldFormat)
-//      nFieldFormat = Exchange::RegisterFormatName(String::CreateFromAscii(SBA_FIELDEXCHANGE_FORMAT));
-//  if(!nControlFormat)
-//      nControlFormat = Exchange::RegisterSotFormatName(SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE);
-//
-//  aDataTypeList.Insert( *new SvDataType(nControlFormat) );
-//  aDataTypeList.Insert( *new SvDataType(nFieldFormat) );
-//}
+    //--------------------------------------------------------------------
+    OFieldNameExchange::OFieldNameExchange( SvLBoxEntry* _pFocusEntry )
+        :m_pFocusEntry(_pFocusEntry)
+        ,m_bDragging(sal_False)
+    {
+    }
 
-//------------------------------------------------------------------------
-//sal_Bool SvxFmFieldExch::GetData( SvData* pData )
-//{
-//  if (pData->GetFormat() == nFieldFormat || pData->GetFormat() == nControlFormat)
-//  {
-//      pData->SetData(aFieldDesc);
-//      return sal_True;
-//  }
-//  return sal_False;
-//}
+    //--------------------------------------------------------------------
+    void OFieldNameExchange::AddSupportedFormats()
+    {
+        AddFormat(getFormatId());
+    }
+
+    //--------------------------------------------------------------------
+    void OFieldNameExchange::addSelectedEntry( SvLBoxEntry* _pEntry )
+    {
+        m_aSelectedEntries.push_back(_pEntry);
+    }
+
+    //--------------------------------------------------------------------
+    void OFieldNameExchange::startDrag( Window* _pWindow, sal_Int8 _nDragSourceActions )
+    {
+        m_bDragging = sal_True;
+        StartDrag( _pWindow, _nDragSourceActions );
+    }
+
+    //--------------------------------------------------------------------
+    void OFieldNameExchange::DragFinished( sal_Int8 nDropAction )
+    {
+        TransferableHelper::DragFinished( nDropAction );
+        m_bDragging = sal_False;
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool OFieldNameExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor )
+    {
+        if (getFormatId() == SotExchange::GetFormat(_rFlavor))
+            return sal_True;    // dummy
+
+        return sal_False;
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool OFieldNameExchange::canAceept( const DataFlavorExVector& _rFormats )
+    {
+        sal_uInt32 nRecognizedFormat = getFormatId();
+        for (DataFlavorExVector::const_iterator aSearch = _rFormats.begin();
+            aSearch != _rFormats.end();
+            ++aSearch)
+            if (aSearch->mnSotId == nRecognizedFormat)
+                return sal_True;
+
+        return sal_False;
+    }
+
+    //--------------------------------------------------------------------
+    sal_uInt32 OFieldNameExchange::getFormatId()
+    {
+        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
+        if ((sal_uInt32)-1 == s_nFormat)
+        {
+            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.FieldNameExchange"));
+            DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OFieldNameExchange::getFormatId: bad exchange id!");
+        }
+        return s_nFormat;
+    }
+
+//........................................................................
+}
+//........................................................................
 
 
