@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 06:54:43 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 08:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,17 +166,20 @@
 #define HID_DSADMIN_CONNURL_ADOPAGE                 (HID_DBACCESS_START + 82)
 #define HID_DSADMIN_PAGE_ADO                        (HID_DBACCESS_START + 83)
 
-#define HID_DSADMIN_QUERYADMINISTRATION             (HID_DBACCESS_START + 83)
 #define HID_DSADMIN_QUERIES                         (HID_DBACCESS_START + 84)
 #define HID_DSADMIN_QUERIES_NEW                     (HID_DBACCESS_START + 85)
 #define HID_DSADMIN_QUERIES_EDIT                    (HID_DBACCESS_START + 86)
 #define HID_DSADMIN_QUERIES_DELETE                  (HID_DBACCESS_START + 87)
+#define HID_DSADMIN_QUERYADMINISTRATION             (HID_DBACCESS_START + 88)
 
 #endif // _DBA_DBACCESS_HELPID_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/01/26 06:54:43  fs
+ *  some new help ids for the query administration
+ *
  *  Revision 1.15  2001/01/09 15:54:13  oj
  *  #81232# some new help id's
  *
