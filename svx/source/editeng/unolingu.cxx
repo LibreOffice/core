@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ Sequence< OUString > lcl_GetLastFoundSvcs(
         rNodeName += OUString::valueOf( (sal_Unicode)'/' );
         rNodeName += aCfgLocaleStr;
         Sequence< Any > aValues( rCfg.GetProperties( aNames ) );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         const Any *pValue = aValues.getConstArray();
 #endif
         if (aValues.getLength())
@@ -341,7 +341,7 @@ void SvxLinguConfigUpdate::UpdateAll()
                 Sequence< OUString > aSvcImplNames(
                         xLngSvcMgr->getConfiguredServices( aService, pAvailLocale[i] ) );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 INT32 nSvcs = aSvcImplNames.getLength();
                 const OUString *pSvcImplName = aSvcImplNames.getConstArray();
                 for (INT32 j = 0;  j < nSvcs;  ++j)
@@ -1104,7 +1104,7 @@ Reference< XDictionary1 > LinguMgr::GetStandard()
             xTmpDicList->addDictionary( xTmp );
         xDic = Reference< XDictionary1 > ( xTmp, UNO_QUERY );
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     Reference< XStorable >      xStor( xDic, UNO_QUERY );
     DBG_ASSERT( xDic.is() && xDic->getDictionaryType() == DictionaryType_POSITIVE,
             "wrong dictionary type");
