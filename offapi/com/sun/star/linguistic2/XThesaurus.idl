@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XThesaurus.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:28 $
+ *  last change: $Author: arellano $ $Date: 2001-04-09 23:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,11 @@
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/** allows fo the retrieval of possible meanings for a given word and language
+/** allows for the retrieval of possible meanings for a given word and language.
 
     <P>
      The meaning of a word is in essence a descriptive text for that word.
-     Each meaning may have several synonmys where a synonym usually is a word
+     Each meaning may have several synonyms where a synonym is a word
      (or small text) with the same or similar meaning.
     </P>
 
@@ -97,7 +97,7 @@ interface XThesaurus : com::sun::star::linguistic2::XSupportedLocales
     //-------------------------------------------------------------------------
     /**
         @returns
-            a lsit of meanings for the given word and language.
+            a list of meanings for the given word and language.
 
          @param aTerm
              the word to query for its meanings.
@@ -115,13 +115,15 @@ interface XThesaurus : com::sun::star::linguistic2::XSupportedLocales
             the property set.
              the sequence of possible meanings for the given word and language.
 
+    <!-- Dennis: Is this last sentence out of place? -->
+
         @see    com::sun::star::lang::Locale
         @see    com::sun::star::linguistic2::XMeaning
     */
     sequence< com::sun::star::linguistic2::XMeaning > queryMeanings(
             [in] string aTerm,
              [in] com::sun::star::lang::Locale aLocale,
-            [in] com::sun::star::beans::PropertyValues aProperties )
+            [in] com::sun::star::beans::PropertyValues aPropertiesaProperties )
         raises( com::sun::star::lang::IllegalArgumentException );
 
 };
