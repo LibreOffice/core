@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentIndex.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:43:59 $
+ *  last change:$Date: 2003-09-08 12:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,20 @@
 
 package mod._sw;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextContent;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XTextRange;
-import com.sun.star.text.XTextSection;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.*;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
 
 
 /**
@@ -135,17 +134,13 @@ public class SwXDocumentIndex extends TestCase {
     *
     */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-        XInterface oObj = null;
         XTextContent xTC = null;
-        XPropertySet xPS = null;
         Object instance = null;
 
         SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF());
         log.println( "creating a test environment" );
         try {
             xTC = SOF.createIndex(xTextDoc, "com.sun.star.text.DocumentIndex");
-            xPS = (XPropertySet) UnoRuntime.queryInterface
-                (XPropertySet.class, xTC);
             instance = SOF.createIndex(xTextDoc, "com.sun.star.text.DocumentIndex");
         }
         catch ( com.sun.star.uno.Exception e) {
