@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:19:54 $
+ *  last change: $Author: sj $ $Date: 2001-05-08 15:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,14 +63,13 @@
 #include "helpid.hrc"
 #include "hlmarkwn.hrc"
 
-FloatingWindow RID_SVXFLOAT_HYPERLINK_MARKWND
+ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
 {
     HelpID = HID_HYPERLINK_MARKWND;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;//?????
     Sizeable = FALSE ;
-    Zoomable = TRUE ;// ?????
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;

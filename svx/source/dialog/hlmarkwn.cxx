@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pw $ $Date: 2000-11-22 13:44:41 $
+ *  last change: $Author: sj $ $Date: 2001-05-08 15:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 |************************************************************************/
 
 SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
-:   FloatingWindow( (Window*)pParent, SVX_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
+:   ModalDialog( (Window*)pParent, SVX_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
     maBtApply( this, ResId (BT_APPLY) ),
     maBtClose( this, ResId (BT_CLOSE) ),
     maLbTree ( this, ResId (TLB_MARK) ),
@@ -561,7 +561,7 @@ IMPL_LINK ( SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK ( SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, void *, EMPTYARG )
 {
-    Hide();
+    Close();
 
     return( 0L );
 }

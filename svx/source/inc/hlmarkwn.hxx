@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *  last change: $Author: sj $ $Date: 2001-05-08 15:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
-#ifndef _SV_FLOATWIN_HXX
-#include <vcl/floatwin.hxx>
+#ifndef _SV_DIALOG_HXX
+#include <vcl/dialog.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
@@ -111,7 +111,7 @@ public:
 //#                                                                      #
 //########################################################################
 
-class SvxHlinkDlgMarkWnd : public FloatingWindow
+class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
 {
 private:
     friend SvxHlmarkTreeLBox;
