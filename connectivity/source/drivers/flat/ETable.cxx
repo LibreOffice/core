@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-14 08:32:10 $
+ *  last change: $Author: oj $ $Date: 2000-12-14 13:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,7 @@ void OFlatTable::fillColumns()
     char cThousandDelimiter = pConnection->getThousandDelimiter();
     ByteString aColumnName;
     ::rtl::OUString aTypeName;
+    ::comphelper::UStringMixEqual aCase(pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
     for (xub_StrLen i = 0; i < nFieldCount; i++)
     {
         if (pConnection->isHeaderLine())
@@ -455,23 +456,13 @@ void OFlatTable::fillColumns()
         }
 
         String aAlias(aColumnName,pConnection->getTextEncoding());
-//      const SdbColumn* pPrevCol = aOriginalColumns->Column(aAlias);
-//
-//      ULONG nExprCnt(0);
-//      while(pPrevCol)
-//      {
-//          (aAlias = String(aColumnName,pConnection->getTextEncoding())) += String::CreateFromInt32(++nExprCnt);
-//          pPrevCol = aOriginalColumns->Column(aAlias);
-//      }
-//      SdbColumn* pColumn = new SdbFILEColumn(aAlias,eType,nPrecision,nScale,nFlags);
-//
-//      if (!bNumeric)
-//          // CHARACTER-Felder koennen leer (NULL) sein.
-//          pColumn->SetFlag(SDB_FLAGS_NULLALLOWED);
-//
-//      // Column-Beschreibung hinzufuegen.
-//      aOriginalColumns->AddColumn(pColumn);
-//  }
+        OSQLColumns::const_iterator aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+        sal_Int32 nExprCnt = 0;
+        while(aFind != m_aColumns->end())
+        {
+            (aAlias = String(aColumnName,pConnection->getTextEncoding())) += String::CreateFromInt32(++nExprCnt);
+            aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
+        }
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeName,::rtl::OUString(),
                                                 ColumnValue::NULLABLE,nPrecision,nScale,eType,sal_False,sal_False,sal_False,
                                                 getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
@@ -876,7 +867,6 @@ sal_Bool OFlatTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,s
             case DataType::TIME:
             {
                 double nRes = 0.0;
-                ULONG  nIndex;
                 try
                 {
                     nRes = m_xNumberFormatter->convertStringToNumber(::com::sun::star::util::NumberFormat::ALL,String(aStr, pConnection->getTextEncoding()));
