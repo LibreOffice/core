@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 08:13:16 $
+ *  last change: $Author: fs $ $Date: 2001-01-12 14:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,10 +226,6 @@
 
 #ifndef _SVDPAGE_HXX //autogen
 #include <svdpage.hxx>
-#endif
-
-#ifndef _SVX_PROPBRW_HXX
-#include "propbrw.hxx"
 #endif
 
 #ifndef _SVX_FMMODEL_HXX
