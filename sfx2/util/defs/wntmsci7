@@ -8690,3 +8690,16 @@ _TI1?AVException@uno@star@sun@com@@
 ?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx590232027@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\src660\src\sfx2\source\doc\objmisc.cxx2557131280@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\src660\src\sfx2\source\doc\objmisc.cxx291698270@@YAXABVSbxVariableRef@@PAX@Z
+??1ImplUCBPrintWatcher@@UAE@XZ
+??1Thread@osl@@UAE@XZ
+??3Thread@osl@@SAXPAX@Z
+?join@Thread@osl@@UAAXXZ
+?moveAndDeleteTemp@ImplUCBPrintWatcher@@SAXPAPAVTempFile@utl@@ABVString@@@Z
+?onTerminated@ImplUCBPrintWatcher@@UAAXXZ
+?onTerminated@Thread@osl@@MAAXXZ
+?resume@Thread@osl@@UAAXXZ
+?run@ImplUCBPrintWatcher@@UAAXXZ
+?schedule@Thread@osl@@UAAEXZ
+?suspend@Thread@osl@@UAAXXZ
+?terminate@Thread@osl@@UAAXXZ
+threadFunc
