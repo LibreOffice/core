@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignode.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-13 16:27:29 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 15:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,18 +317,25 @@ namespace utl
     //------------------------------------------------------------------------
     OConfigurationNode OConfigurationNode::openNode(const ::rtl::OUString& _rPath) const throw()
     {
+        OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::openNode: object is invalid!");
         OSL_ENSURE(m_xHierarchyAccess.is(), "OConfigurationNode::openNode: object is invalid!");
         try
         {
-            if (m_xHierarchyAccess.is())
-            {
-                Reference< XInterface > xNode;
-                ::rtl::OUString sPath = normalizeName(_rPath, NO_CALLER);
-                if (::cppu::extractInterface(xNode, m_xHierarchyAccess->getByHierarchicalName(sPath)))
-                    return OConfigurationNode(xNode, m_xProvider);
+            ::rtl::OUString sNormalized = normalizeName(_rPath, NO_CALLER);
 
-                OSL_ENSURE(sal_False, "OConfigurationNode::openNode: could not open the node!");
+            Reference< XInterface > xNode;
+            if (m_xDirectAccess.is() && m_xDirectAccess->hasByName(sNormalized))
+            {
+                if (!::cppu::extractInterface(xNode, m_xDirectAccess->getByName(sNormalized)))
+                    OSL_ENSURE(sal_False, "OConfigurationNode::openNode: could not open the node!");
             }
+            else if (m_xHierarchyAccess.is())
+            {
+                if (!::cppu::extractInterface(xNode, m_xHierarchyAccess->getByHierarchicalName(_rPath)))
+                    OSL_ENSURE(sal_False, "OConfigurationNode::openNode: could not open the node!");
+            }
+            if (xNode.is())
+                return OConfigurationNode(xNode, m_xProvider);
         }
         catch(NoSuchElementException& e)
         {
@@ -348,9 +355,9 @@ namespace utl
     //------------------------------------------------------------------------
     void OConfigurationNode::setEscape(sal_Bool _bEnable)
     {
-        m_bEscapeNames = _bEnable;
-        OSL_ENSURE(!m_bEscapeNames || Reference< XStringEscape >(m_xHierarchyAccess, UNO_QUERY).is(),
-            "OConfigurationNode::setEscape: escaping enabled, but missing the appropriate interface on the node!");
+        m_bEscapeNames = _bEnable && Reference< XStringEscape >::query(m_xDirectAccess).is();
+        OSL_ENSURE(m_bEscapeNames || !_bEnable,
+            "OConfigurationNode::setEscape: escaping not enabled - missing the appropriate interface on the node!");
     }
 
     //------------------------------------------------------------------------
@@ -360,7 +367,7 @@ namespace utl
         Reference< XServiceInfo > xSI(m_xHierarchyAccess, UNO_QUERY);
         if (xSI.is())
         {
-            try { bIsSet = xSI->supportsService(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationContainer")); }
+            try { bIsSet = xSI->supportsService(::rtl::OUString::createFromAscii("com.sun.star.configuration.SetAccess")); }
             catch(Exception&) { }
         }
         return bIsSet;
@@ -388,22 +395,77 @@ namespace utl
         OSL_ENSURE(m_xReplaceAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
         if (m_xReplaceAccess.is())
         {
-            // check if the name refers to a indirect descendant
-            sal_Int32 nDelimiterPos = _rPath.indexOf('/');
-            if (-1 != nDelimiterPos)
-            {   //
-                OConfigurationNode aParentAccess = openNode(_rPath.copy(0, nDelimiterPos));
-                if (aParentAccess.isValid())
-                    return aParentAccess.setNodeValue(_rPath.copy(nDelimiterPos+1), _rValue);
-                return sal_False;
-            }
-
-            // now _rPath is definitively a level-1 path
-            ::rtl::OUString sName = normalizeName(_rPath, NO_CALLER);
             try
             {
-                m_xReplaceAccess->replaceByName(sName, _rValue);
-                return sal_True;
+                // check if _rPath is a level-1 path
+                ::rtl::OUString sNormalizedName = normalizeName(_rPath, NO_CALLER);
+                if (m_xReplaceAccess->hasByName(sNormalizedName))
+                {
+                    m_xReplaceAccess->replaceByName(sNormalizedName, _rValue);
+                    return sal_True;
+                }
+
+                // check if the name refers to a indirect descendant
+                else if (m_xHierarchyAccess.is() && m_xHierarchyAccess->hasByHierarchicalName(_rPath))
+                {
+                    OSL_ASSERT(_rPath.getLength());
+
+                    sal_Int32 nStart,nEnd;
+
+                    sal_Int32 nPos = _rPath.getLength()-1;
+                    if (_rPath[ nPos ] == sal_Unicode(']'))
+                    {
+                        OSL_ASSERT(nPos > 0);
+
+                        sal_Unicode chQuote = _rPath[--nPos];
+
+                        if (chQuote == '\'' || chQuote == '\"')
+                        {
+                            nEnd = nPos;
+                            nPos = _rPath.lastIndexOf(chQuote,nEnd);
+                            nStart = nPos + 1;
+                            --nPos;
+                        }
+                        else
+                        {
+                            nEnd = nPos + 1;
+                            nPos = _rPath.lastIndexOf('[',nEnd);
+                            nStart = nPos + 1;
+                        }
+                        OSL_ASSERT(nPos >= 0 && _rPath[nPos] == '[');
+
+                        nPos =  _rPath.lastIndexOf('/',nPos);
+                    }
+                    else
+                    {
+                        nEnd = nPos;
+                        nPos = _rPath.lastIndexOf('/',nEnd);
+                        nStart = nPos + 1;
+                    }
+                    OSL_ASSERT( -1 <= nPos &&
+                                nPos < nStart &&
+                                nStart < nEnd &&
+                                nEnd <= _rPath.getLength() );
+
+                    OSL_ASSERT(nPos == -1 || _rPath[nPos] == '/');
+
+                    sal_Bool bResult = false;
+                    if (-1 != nPos)
+                    {
+                        OConfigurationNode aParentAccess = openNode(_rPath.copy(0, nPos));
+                        if (aParentAccess.isValid())
+                            bResult = aParentAccess.setNodeValue(_rPath.copy(nPos+1), _rValue);
+                    }
+                    else
+                    {
+                        ::rtl::OUString sLocalName = _rPath.copy(nStart,nEnd-nStart);
+
+                        m_xReplaceAccess->replaceByName(sLocalName, _rValue);
+                        bResult = true;
+                    }
+                    return bResult;
+                }
+
             }
             catch(IllegalArgumentException&)
             {
@@ -421,6 +483,8 @@ namespace utl
             {
                 OSL_ENSURE(sal_False, "OConfigurationNode::setNodeValue: could not replace the value: caught a generic Exception!");
             }
+
+
         }
         return sal_False;
     }
@@ -428,23 +492,28 @@ namespace utl
     //------------------------------------------------------------------------
     Any OConfigurationNode::getNodeValue(const ::rtl::OUString& _rPath) const throw()
     {
+        OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
         OSL_ENSURE(m_xHierarchyAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
         Any aReturn;
-        if (m_xHierarchyAccess.is())
+        try
         {
-            try
+            ::rtl::OUString sNormalizedPath = normalizeName(_rPath, NO_CALLER);
+            if (m_xDirectAccess.is() && m_xDirectAccess->hasByName(sNormalizedPath) )
             {
-                ::rtl::OUString sPath = normalizeName(_rPath, NO_CALLER);
-                aReturn = m_xHierarchyAccess->getByHierarchicalName(sPath);
+                aReturn = m_xDirectAccess->getByName(sNormalizedPath);
             }
-            catch(NoSuchElementException& e)
+            else if (m_xHierarchyAccess.is())
             {
-                e;  // make compiler happy
-                OSL_ENSURE(sal_False,
-                    ::rtl::OString("OConfigurationNode::getNodeValue: caught a NoSuchElementException while trying to open ")
-                +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("!"));
+                aReturn = m_xHierarchyAccess->getByHierarchicalName(_rPath);
             }
+        }
+        catch(NoSuchElementException& e)
+        {
+            e;  // make compiler happy
+            OSL_ENSURE(sal_False,
+                ::rtl::OString("OConfigurationNode::getNodeValue: caught a NoSuchElementException while trying to open ")
+            +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
+            +=  ::rtl::OString("!"));
         }
         return aReturn;
     }
@@ -650,6 +719,9 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/06/13 16:27:29  fs
+ *  initial checkin - non-UNO wrapper for configuration nodes
+ *
  *
  *  Revision 1.0 13.06.01 17:05:36  fs
  ************************************************************************/
