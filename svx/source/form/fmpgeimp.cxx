@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 14:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,11 @@
 #include <connectivity/dbtools.hxx>
 #endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
+
 DBG_NAME(FmFormPageImpl);
 //------------------------------------------------------------------------------
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
@@ -180,24 +185,24 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
 
     // copy it by streaming
     // creating a pipe
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >  xOutPipe(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  xInPipe(xOutPipe, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XOutputStream >  xOutPipe(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY);
+    Reference< ::com::sun::star::io::XInputStream >  xInPipe(xOutPipe, UNO_QUERY);
 
     // creating the mark streams
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  xMarkIn(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink >  xMarkSink(xMarkIn, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XInputStream >  xMarkIn(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSink >  xMarkSink(xMarkIn, UNO_QUERY);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >  xMarkOut(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  xMarkSource(xMarkOut, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XOutputStream >  xMarkOut(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSource >  xMarkSource(xMarkOut, UNO_QUERY);
 
     // connect pipe and sink
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink >  xSink(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSink >  xSink(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), UNO_QUERY);
 
     // connect pipe and source
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  xSource(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSource >  xSource(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), UNO_QUERY);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >  xOutStrm(xSource, ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >  xInStrm(xSink, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XObjectOutputStream >  xOutStrm(xSource, UNO_QUERY);
+    Reference< ::com::sun::star::io::XObjectInputStream >  xInStrm(xSink, UNO_QUERY);
 
     if (xMarkSink.is() && xMarkSource.is() && xSink.is() && xSource.is() && xOutStrm.is() && xInStrm.is())
     {
@@ -231,12 +236,12 @@ void FmFormPageImpl::Init()
         m_sPageId = pDrawModel->GetUniquePageId();
     }
 
-    xForms = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > (
+    xForms = Reference< ::com::sun::star::container::XNameContainer > (
         ::comphelper::getProcessServiceFactory()->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.form.FormsCollection")), ::com::sun::star::uno::UNO_QUERY);
+        ::rtl::OUString::createFromAscii("com.sun.star.form.FormsCollection")), UNO_QUERY);
     DBG_ASSERT(xForms.is(), "FmFormPageImpl::Init : could not create a forms collection !");
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xAsChild(xForms, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::container::XChild >  xAsChild(xForms, UNO_QUERY);
     if (xAsChild.is())
         xAsChild->setParent( xModel );
 }
@@ -251,15 +256,15 @@ FmFormPageImpl::~FmFormPageImpl()
 }
 
 //------------------------------------------------------------------------------
-void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm)
+void FmFormPageImpl::setCurForm(Reference< ::com::sun::star::form::XForm >  xForm)
 {
     xCurrentForm = xForm;
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
+Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm;
+    Reference< ::com::sun::star::form::XForm >  xForm;
 
     // wenn noch kein TargetForm gefunden, dann aktuelle oder Default
     if (!xCurrentForm.is())
@@ -289,7 +294,7 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
             // gibt es denn ueberhaupt eine
             if (!xForm.is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xGetFirst(xForms, ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::container::XIndexAccess >  xGetFirst(xForms, UNO_QUERY);
                 DBG_ASSERT(xGetFirst.is(), "FmFormPageImpl::getDefaultForm : no IndexAccess on my form container !");
                     // wenn das anspringt, muesste man sich die Namen des NameContainers geben lassen und dann das Objekt fuer den
                     // ersten Namen erfragen ... aber normalerweise sollte die FOrms-Sammlung auch einen IndexAccess haben
@@ -310,28 +315,28 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
         aUndoStr.SearchAndReplace('#', aStr);
         pModel->BegUndo(aUndoStr);
 
-        xForm = ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), ::com::sun::star::uno::UNO_QUERY);
+        xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
         // a form should always have the command type table as default
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, UNO_QUERY);
         try
         {
-            xSet->setPropertyValue(FM_PROP_COMMANDTYPE, ::com::sun::star::uno::makeAny(sal_Int32(::com::sun::star::sdb::CommandType::TABLE)));
+            xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE)));
         }
         catch(...)
         {
         }
 
         ::rtl::OUString aName = ::rtl::OUString(SVX_RES(RID_STR_STDFORMNAME));
-        xSet->setPropertyValue(FM_PROP_NAME, ::com::sun::star::uno::makeAny(aName));
+        xSet->setPropertyValue(FM_PROP_NAME, makeAny(aName));
 
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xContainer(xForms, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::container::XIndexContainer >  xContainer(xForms, UNO_QUERY);
         pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
                                                    FmUndoContainerAction::Inserted,
                                                    xContainer,
                                                    xForm,
                                                    xContainer->getCount()));
-        xForms->insertByName(aName, ::com::sun::star::uno::makeAny(xForm));
+        xForms->insertByName(aName, makeAny(xForm));
         xCurrentForm = xForm;
         pModel->EndUndo();
     }
@@ -339,8 +344,8 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & rContent,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess > & rDatabase,
+Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Reference< ::com::sun::star::form::XFormComponent > & rContent,
+                                     const Reference< XDataSource > & rDatabase,
                                      const ::rtl::OUString& rDBTitle,
                                      const ::rtl::OUString& rCursorSource,
                                      sal_Int32 nCommandType)
@@ -349,8 +354,8 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
     if (!rContent.is() || rContent->getParent().is())
         return NULL;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet;
+    Reference< ::com::sun::star::form::XForm >  xForm;
+    Reference< ::com::sun::star::beans::XPropertySet >  xSet;
 
     // Wenn Datenbank und CursorSource gesetzt sind, dann wird
     // die ::com::sun::star::form anhand dieser Kriterien gesucht, ansonsten nur aktuelle
@@ -360,12 +365,12 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
         // erst in der aktuellen form suchen
         xForm = FindForm(xCurrentForm, rDatabase, rCursorSource, nCommandType);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xFormsByIndex(xForms, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::container::XIndexAccess >  xFormsByIndex(xForms, UNO_QUERY);
         DBG_ASSERT(xFormsByIndex.is(), "FmFormPageImpl::SetDefaults : no index access for my forms collection !");
         sal_Int32 nCount = xFormsByIndex->getCount();
         for (sal_Int32 i = 0; !xForm.is() && i < nCount; i++)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xToSearch;
+            Reference< ::com::sun::star::form::XForm >  xToSearch;
             xFormsByIndex->getByIndex(i) >>= xToSearch;
             xForm = FindForm(xToSearch, rDatabase, rCursorSource, nCommandType);
         }
@@ -378,28 +383,28 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
             XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
             aUndoStr.SearchAndReplace('#', aStr);
             pModel->BegUndo(aUndoStr);
-            xForm = ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), ::com::sun::star::uno::UNO_QUERY);
+            xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
             // a form should always have the command type table as default
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, ::com::sun::star::uno::UNO_QUERY);
-            try { xSet->setPropertyValue(FM_PROP_COMMANDTYPE, ::com::sun::star::uno::makeAny(sal_Int32(::com::sun::star::sdb::CommandType::TABLE))); }
+            Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, UNO_QUERY);
+            try { xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE))); }
             catch(...) { }
 
             if (rDBTitle.len())
-                xSet->setPropertyValue(FM_PROP_DATASOURCE,::com::sun::star::uno::makeAny(rDBTitle));
+                xSet->setPropertyValue(FM_PROP_DATASOURCE,makeAny(rDBTitle));
             else
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDatabaseProps(rDatabase, ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Any aDatabaseUrl = xDatabaseProps->getPropertyValue(FM_PROP_URL);
+                Reference< ::com::sun::star::beans::XPropertySet >  xDatabaseProps(rDatabase, UNO_QUERY);
+                Any aDatabaseUrl = xDatabaseProps->getPropertyValue(FM_PROP_URL);
                 xSet->setPropertyValue(FM_PROP_DATASOURCE, aDatabaseUrl);
             }
 
-            xSet->setPropertyValue(FM_PROP_COMMAND,::com::sun::star::uno::makeAny(rCursorSource));
-            xSet->setPropertyValue(FM_PROP_COMMANDTYPE, ::com::sun::star::uno::makeAny(nCommandType));
+            xSet->setPropertyValue(FM_PROP_COMMAND,makeAny(rCursorSource));
+            xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  xNamedSet(xForms, ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::container::XNameAccess >  xNamedSet(xForms, UNO_QUERY);
             ::rtl::OUString aName;
 
-            if ((::com::sun::star::sdb::CommandType::TABLE == nCommandType) || (::com::sun::star::sdb::CommandType::QUERY == nCommandType))
+            if ((CommandType::TABLE == nCommandType) || (CommandType::QUERY == nCommandType))
             {
                 // Namen der ::com::sun::star::form ueber den Titel der CursorSource setzen
                 aName = getUniqueName(rCursorSource, xNamedSet);
@@ -408,9 +413,9 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
                 // ansonsten StandardformName verwenden
                 aName = getUniqueName(::rtl::OUString(SVX_RES(RID_STR_STDFORMNAME)), xNamedSet);
 
-            xSet->setPropertyValue(FM_PROP_NAME, ::com::sun::star::uno::makeAny(aName));
+            xSet->setPropertyValue(FM_PROP_NAME, makeAny(aName));
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xContainer(xForms, ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::container::XIndexContainer >  xContainer(xForms, UNO_QUERY);
             pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
                                                      FmUndoContainerAction::Inserted,
                                                      xContainer,
@@ -418,7 +423,7 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
                                                      xContainer->getCount()));
 
 
-            xForms->insertByName(aName, ::com::sun::star::uno::makeAny(xForm));
+            xForms->insertByName(aName, makeAny(xForm));
             pModel->EndUndo();
         }
         xCurrentForm = xForm;
@@ -431,32 +436,33 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::FindForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & rForm,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess > & rDatabase,
+Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::FindForm(const Reference< ::com::sun::star::form::XForm > & rForm,
+                              const Reference< XDataSource > & rDatabase,
                                   const ::rtl::OUString& rCursorSource,
                                   sal_Int32 nCommandType)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xResultForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xDBForm(rForm, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::form::XForm >  xResultForm;
+    Reference< XRowSet >  xDBForm(rForm, UNO_QUERY);
     if (!xDBForm.is())
         return NULL;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xConnAsChild;
+    Reference< ::com::sun::star::container::XChild >  xConnAsChild;
     try
     {
-        xConnAsChild = ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > (::dbtools::calcConnection(xDBForm,::comphelper::getProcessServiceFactory()), ::com::sun::star::uno::UNO_QUERY);
+        xConnAsChild = Reference< ::com::sun::star::container::XChild > (::dbtools::calcConnection(xDBForm,::comphelper::getProcessServiceFactory()), UNO_QUERY);
     }
-    catch(...)
+    catch(Exception&)
     {
+        OSL_ENSHURE(0,"Exception occured!");
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess >  xDB;
+    Reference< XDataSource >  xDB;
     if (xConnAsChild.is())
-        xDB = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess > (xConnAsChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
+        xDB = Reference< XDataSource > (xConnAsChild->getParent(), UNO_QUERY);
     if (xDB.is() && xDB == rDatabase)
     {
         // jetzt noch ueberpruefen ob CursorSource und Type uebereinstimmen
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(rForm, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::beans::XPropertySet >  xSet(rForm, UNO_QUERY);
         ::rtl::OUString aCursorSource = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_COMMAND));
         sal_Int32 nType = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
         if (!aCursorSource.len() || ((nType == nCommandType) && (aCursorSource == rCursorSource))) // found the form
@@ -465,17 +471,17 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
             // Ist noch keine Datenquelle gesetzt, wird dieses hier nachgeholt
             if (!aCursorSource.len())
             {
-                xSet->setPropertyValue(FM_PROP_COMMAND, ::com::sun::star::uno::makeAny(rCursorSource));
-                xSet->setPropertyValue(FM_PROP_COMMANDTYPE, ::com::sun::star::uno::makeAny((sal_Int32)nCommandType));
+                xSet->setPropertyValue(FM_PROP_COMMAND, makeAny(rCursorSource));
+                xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny((sal_Int32)nCommandType));
             }
         }
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xComponents(rForm, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::container::XIndexAccess >  xComponents(rForm, UNO_QUERY);
     sal_Int32 nCount = xComponents->getCount();
     for (sal_Int32 i = 0; !xResultForm.is() && i < nCount; ++i)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xSearchForm;
+        Reference< ::com::sun::star::form::XForm >  xSearchForm;
         xComponents->getByIndex(i) >>= xSearchForm;
         // jetzt innerhalb der ::com::sun::star::form weitersuchen
         if (xSearchForm.is())
@@ -485,20 +491,20 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString FmFormPageImpl::setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xControls)
+::rtl::OUString FmFormPageImpl::setUniqueName(const Reference< ::com::sun::star::form::XFormComponent > & xFormComponent, const Reference< ::com::sun::star::form::XForm > & xControls)
 {
     ::rtl::OUString sName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(xFormComponent, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::beans::XPropertySet >  xSet(xFormComponent, UNO_QUERY);
     if (xSet.is())
     {
-        ::com::sun::star::uno::Any aValue = xSet->getPropertyValue(FM_PROP_NAME);
+        Any aValue = xSet->getPropertyValue(FM_PROP_NAME);
         sName = ::comphelper::getString(aValue);
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  xNameAcc(xControls, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::container::XNameAccess >  xNameAcc(xControls, UNO_QUERY);
 
         if (!sName.len() || xNameAcc->hasByName(sName))
         {
             // setzen eines default Namens ueber die ClassId
-            ::com::sun::star::uno::Any aValue = xSet->getPropertyValue(FM_PROP_CLASSID);
+            Any aValue = xSet->getPropertyValue(FM_PROP_CLASSID);
             sal_Int16 nClassId(::com::sun::star::form::FormComponentType::CONTROL);
             aValue >>= nClassId;
 
@@ -506,7 +512,7 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
             // bei Radiobuttons, die einen Namen haben, diesen nicht ueberschreiben!
             if (!sName.len() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
             {
-                xSet->setPropertyValue(FM_PROP_NAME, ::com::sun::star::uno::makeAny(sDefaultName));
+                xSet->setPropertyValue(FM_PROP_NAME, makeAny(sDefaultName));
             }
 
             //////////////////////////////////////////////////////////////
@@ -531,7 +537,7 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
                 if (!aText.len())
                 {
                     aLabel.SearchAndReplace( getDefaultName(nClassId), ::rtl::OUString(SVX_RES(nResId)) );
-                    xSet->setPropertyValue( FM_PROP_LABEL, ::com::sun::star::uno::makeAny(::rtl::OUString(aLabel)) );
+                    xSet->setPropertyValue( FM_PROP_LABEL, makeAny(::rtl::OUString(aLabel)) );
                 }
             }
 
@@ -577,18 +583,18 @@ UniString FmFormPageImpl::getDefaultName(sal_Int16 nClassId)
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString FmFormPageImpl::getDefaultName(sal_Int16 nClassId, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xControls) const
+::rtl::OUString FmFormPageImpl::getDefaultName(sal_Int16 nClassId, const Reference< ::com::sun::star::form::XForm > & xControls) const
 {
     ::rtl::OUString aClassName=getDefaultName(nClassId);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  xNamedSet(xControls, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::container::XNameAccess >  xNamedSet(xControls, UNO_QUERY);
     return getUniqueName(aClassName, xNamedSet);
 }
 
 //------------------------------------------------------------------
-::rtl::OUString FmFormPageImpl::getUniqueName(const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNamedSet) const
+::rtl::OUString FmFormPageImpl::getUniqueName(const ::rtl::OUString& rName, const Reference< ::com::sun::star::container::XNameAccess > & xNamedSet) const
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xIndexSet(xNamedSet, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::container::XIndexAccess >  xIndexSet(xNamedSet, UNO_QUERY);
     ::rtl::OUString sName;
 
     if ( !xIndexSet.is() )
@@ -607,16 +613,16 @@ UniString FmFormPageImpl::getDefaultName(sal_Int16 nClassId)
 void FmFormPageImpl::WriteData(SvStream& rOut) const
 {
     // anlegen eines output streams fuer UNO
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  xSource(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >  xMarkOut(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  xMarkSource(xMarkOut, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSource >  xSource(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), UNO_QUERY);
+    Reference< ::com::sun::star::io::XOutputStream >  xMarkOut(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSource >  xMarkSource(xMarkOut, UNO_QUERY);
 
     if (xSource.is())
     {
         xMarkSource->setOutputStream(new ::utl::OOutputStreamWrapper(rOut));
         xSource->setOutputStream(xMarkOut);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >  xOutStrm(xSource, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::io::XObjectOutputStream >  xOutStrm(xSource, UNO_QUERY);
         try
         {
             write(xOutStrm);
@@ -647,16 +653,16 @@ void FmFormPageImpl::WriteData(SvStream& rOut) const
 void FmFormPageImpl::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 {
     // Abholen des InputStreams ueber uno
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink >  xSink(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSink >  xSink(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), UNO_QUERY);
 
     // creating the mark streams
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  xMarkIn(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink >  xMarkSink(xMarkIn, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XInputStream >  xMarkIn(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), UNO_QUERY);
+    Reference< ::com::sun::star::io::XActiveDataSink >  xMarkSink(xMarkIn, UNO_QUERY);
 
     if (xSink.is())
     {
         ::utl::OInputStreamWrapper* pUnoStream = new ::utl::OInputStreamWrapper(rIn);
-        xMarkSink->setInputStream(::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > (pUnoStream));
+        xMarkSink->setInputStream(Reference< ::com::sun::star::io::XInputStream > (pUnoStream));
         xSink->setInputStream(xMarkIn);
 
         // freigeben aller forms
@@ -668,7 +674,7 @@ void FmFormPageImpl::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
             Init();
         }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >  xInStrm(xSink,::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::io::XObjectInputStream >  xInStrm(xSink,UNO_QUERY);
         try
         {
             read(xInStrm);
@@ -686,9 +692,9 @@ void FmFormPageImpl::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 }
 
 //------------------------------------------------------------------------------
-void FmFormPageImpl::write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream > & xOutStrm) const
+void FmFormPageImpl::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & xOutStrm) const
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XMarkableStream >  xMarkStrm(xOutStrm, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XMarkableStream >  xMarkStrm(xOutStrm, UNO_QUERY);
     if (!xMarkStrm.is())
         return; // exception
 
@@ -697,7 +703,7 @@ void FmFormPageImpl::write(const ::com::sun::star::uno::Reference< ::com::sun::s
     fillList(aList, *pPage, sal_True);
 
     // schreiben aller forms
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject >  xAsPersist(xForms, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XPersistObject >  xAsPersist(xForms, UNO_QUERY);
     if (xAsPersist.is())
         xAsPersist->write(xOutStrm);
         // don't use the writeObject of the stream, as this wouldn't be compatible with older documents
@@ -712,7 +718,7 @@ void FmFormPageImpl::write(const ::com::sun::star::uno::Reference< ::com::sun::s
     {
         // schreiben des Objects mit Marke
         // Marke um an den Anfang zu springen
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject >  xObj(aList.GetObject(i)->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::io::XPersistObject >  xObj(aList.GetObject(i)->GetUnoControlModel(), UNO_QUERY);
         if (xObj.is())
         {
             xOutStrm->writeObject(xObj);
@@ -723,9 +729,9 @@ void FmFormPageImpl::write(const ::com::sun::star::uno::Reference< ::com::sun::s
 }
 
 //------------------------------------------------------------------------------
-void FmFormPageImpl::read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream > & xInStrm)
+void FmFormPageImpl::read(const Reference< ::com::sun::star::io::XObjectInputStream > & xInStrm)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XMarkableStream >  xMarkStrm(xInStrm, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XMarkableStream >  xMarkStrm(xInStrm, UNO_QUERY);
     if (!xMarkStrm.is())
         return; // exception
 
@@ -734,7 +740,7 @@ void FmFormPageImpl::read(const ::com::sun::star::uno::Reference< ::com::sun::st
     fillList(aList, *pPage, sal_False);
 
     // lesen aller forms
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject >  xAsPersist(xForms, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::io::XPersistObject >  xAsPersist(xForms, UNO_QUERY);
     if (xAsPersist.is())
         xAsPersist->read(xInStrm);
         // don't use the readObject of the stream, as this wouldn't be compatible with older documents
@@ -744,7 +750,7 @@ void FmFormPageImpl::read(const ::com::sun::star::uno::Reference< ::com::sun::st
     DBG_ASSERT(nLength == (sal_Int32) aList.Count(), "Fehler beim Lesen der UnoModels");
     for (sal_Int32 i = 0; i < nLength; i++)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xRef(xInStrm->readObject(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::awt::XControlModel >  xRef(xInStrm->readObject(), UNO_QUERY);
         if (i < (sal_Int32)aList.Count())
             aList.GetObject(i)->SetUnoControlModel(xRef);
     }

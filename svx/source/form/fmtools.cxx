@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 10:03:55 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 14:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XDATABASEENVIRONMENT_HPP_
-#include <com/sun/star/sdb/XDatabaseEnvironment.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>

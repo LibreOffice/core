@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:53:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 14:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2356,7 +2356,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
                 }
             }
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("DbGridControl::SeekCursor : failed ...");
         }
@@ -2376,7 +2376,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
             else
                 m_nSeekPos = -1;
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("DbGridControl::SeekCursor : failed ...");
             m_nSeekPos = -1;                        // kein Datensatz mehr vorhanden

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 14:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,8 @@
 #ifndef _COM_SUN_STAR_SDDB_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XDATABASEACCESS_HPP_
-#include <com/sun/star/sdb/XDatabaseAccess.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XDATABASEENVIRONMENT_HPP_
-#include <com/sun/star/sdb/XDatabaseEnvironment.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -229,14 +223,19 @@
 #include <tools/urlobj.hxx>
 #endif
 
-void getConnectionSpecs(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, ::rtl::OUString& rURL, ::rtl::OUString& _rRegisteredTitle)
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
+
+void getConnectionSpecs(const Reference< XConnection >& _rxConn, ::rtl::OUString& rURL, ::rtl::OUString& _rRegisteredTitle)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xURLSupplier(_rxConn, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::beans::XPropertySet > xURLSupplier(_rxConn, UNO_QUERY);
     if (!::comphelper::hasProperty(FM_PROP_URL, xURLSupplier))
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > xChild(_rxConn, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::container::XChild > xChild(_rxConn, UNO_QUERY);
         if (xChild.is())
-            xURLSupplier = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >(xChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
+            xURLSupplier = Reference< ::com::sun::star::beans::XPropertySet >(xChild->getParent(), UNO_QUERY);
     }
     if (::comphelper::hasProperty(FM_PROP_URL, xURLSupplier))
     {
@@ -370,17 +369,17 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
         if (pPage)
         {
             // Un/Load all forms
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xForms(((FmFormPage*)pPage)->GetForms(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::container::XIndexAccess >  xForms(((FmFormPage*)pPage)->GetForms(), UNO_QUERY);
 
             // during load the environment covers the error handling
             if (!bDesign)
                 ActivateControls(pCurPageView);
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XReset >  xReset;
+            Reference< ::com::sun::star::form::XReset >  xReset;
             for (sal_Int32 i = 0, nCount = xForms->getCount(); i < nCount; i++)
             {
                 xForms->getByIndex(i) >>= xReset;
-                ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xLoad(xReset, ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::form::XLoadable >  xLoad(xReset, UNO_QUERY);
 
                 if (bDesign)
                 {
@@ -452,7 +451,7 @@ SdrPageView* FmFormView::ShowPage(SdrPage* pPage, const Point& rOffs)
         else if (pFormShell && pFormShell->IsDesignMode())
         {
             FmXFormShell* pFormShellImpl = pFormShell->GetImpl();
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xForms(((FmFormPage*)pPage)->GetForms(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::container::XIndexAccess >  xForms(((FmFormPage*)pPage)->GetForms(), UNO_QUERY);
             pFormShellImpl->ResetForms(xForms, sal_True);
 
             // damit der Formular-Navigator auf den Seitenwechsel reagieren kann
@@ -519,7 +518,7 @@ void FmFormView::DeactivateControls(SdrPageView* pPageView)
 //------------------------------------------------------------------------
 void FmFormView::ObjectCreated(FmFormObj* pObj)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(pObj->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::beans::XPropertySet >  xSet(pObj->GetUnoControlModel(), UNO_QUERY);
     if (!xSet.is())
         return;
 
@@ -531,16 +530,16 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
     // no wizards at the moment. The wizards need a complete rewriting, that's why this feature is disable at the
     // moment
 
-    ::com::sun::star::uno::Any aValue = xSet->getPropertyValue(FM_PROP_CLASSID);
+    Any aValue = xSet->getPropertyValue(FM_PROP_CLASSID);
 
     sal_Int16 nClassId;
     if(!(aValue >>= nClassId))
         nClassId = ::com::sun::star::form::FormComponentType::CONTROL;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xChild(xSet, ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xForm(xChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::container::XChild >  xChild(xSet, UNO_QUERY);
+    Reference< XRowSet >  xForm(xChild->getParent(), UNO_QUERY);
     String aWizardName;
-    ::com::sun::star::uno::Any aObj;
+    Any aObj;
 
     switch (nClassId)
     {
@@ -615,21 +614,21 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
 }
 
 //------------------------------------------------------------------------
-void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffsetMM, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField,
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats, sal_uInt16 nObjID, const ::rtl::OUString& rFieldPostfix,
+void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffsetMM, Reference< ::com::sun::star::beans::XPropertySet >  xField,
+    Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats, sal_uInt16 nObjID, const ::rtl::OUString& rFieldPostfix,
     FmFormObj*& pLabel, FmFormObj*& pControl) const
 {
     sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
     sal_Int32 nFormatKey = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FORMATKEY));
 
-    ::com::sun::star::uno::Any aFieldName(xField->getPropertyValue(FM_PROP_NAME));
+    Any aFieldName(xField->getPropertyValue(FM_PROP_NAME));
     ::rtl::OUString sFieldName;
     aFieldName >>= sFieldName;
 
     // das Label
     pLabel = (FmFormObj*)SdrObjFactory::MakeNewObject( FmFormInventor, OBJ_FM_FIXEDTEXT, NULL, NULL );
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xLabelSet(pLabel->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
-    xLabelSet->setPropertyValue(FM_PROP_LABEL, ::com::sun::star::uno::makeAny(sFieldName + rFieldPostfix));
+    Reference< ::com::sun::star::beans::XPropertySet >  xLabelSet(pLabel->GetUnoControlModel(), UNO_QUERY);
+    xLabelSet->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName + rFieldPostfix));
 
     // positionieren unter Beachtung der Einstellungen des Ziel-Output-Devices
     Size aTextSize(pOutDev->GetTextWidth(sFieldName + rFieldPostfix), pOutDev->GetTextHeight());
@@ -663,9 +662,9 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
 
     // positionieren
     Size szControlSize;
-    if (::com::sun::star::sdbc::DataType::BIT == nDataType)
+    if (DataType::BIT == nDataType)
         szControlSize = aDefSize;
-    else if (OBJ_FM_IMAGECONTROL == nObjID || ::com::sun::star::sdbc::DataType::LONGVARCHAR == nDataType)
+    else if (OBJ_FM_IMAGECONTROL == nObjID || DataType::LONGVARCHAR == nDataType)
         szControlSize = aDefImageSize;
     else
         szControlSize = aDefSize;
@@ -679,14 +678,14 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
         ));
 
     // ein paar initiale Einstellungen am ControlModel
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xControlSet = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (pControl->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::beans::XPropertySet >  xControlSet = Reference< ::com::sun::star::beans::XPropertySet > (pControl->GetUnoControlModel(), UNO_QUERY);
     if (xControlSet.is())
     {
         // ein paar numersiche Eigenschaften durchschleifen
         if (::comphelper::hasProperty(FM_PROP_DECIMAL_ACCURACY, xControlSet))
         {
             // Number braucht eine Scale
-            ::com::sun::star::uno::Any aScaleVal(::comphelper::getNumberFormatDecimals(xNumberFormats, nFormatKey));
+            Any aScaleVal(::comphelper::getNumberFormatDecimals(xNumberFormats, nFormatKey));
             xControlSet->setPropertyValue(FM_PROP_DECIMAL_ACCURACY, aScaleVal);
         }
         if (::comphelper::hasProperty(FM_PROP_VALUEMIN, xControlSet) && ::comphelper::hasProperty(FM_PROP_VALUEMAX, xControlSet))
@@ -695,12 +694,12 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
             sal_Int32 nMinValue = -1000000000, nMaxValue = 1000000000;
             switch (nDataType)
             {
-                case ::com::sun::star::sdbc::DataType::TINYINT  : nMinValue = 0; nMaxValue = 255; break;
-                case ::com::sun::star::sdbc::DataType::SMALLINT : nMinValue = -32768; nMaxValue = 32767; break;
-                case ::com::sun::star::sdbc::DataType::INTEGER  : nMinValue = 0x80000000; nMaxValue = 0x7FFFFFFF; break;
+                case DataType::TINYINT  : nMinValue = 0; nMaxValue = 255; break;
+                case DataType::SMALLINT : nMinValue = -32768; nMaxValue = 32767; break;
+                case DataType::INTEGER  : nMinValue = 0x80000000; nMaxValue = 0x7FFFFFFF; break;
                     // um die doubles/singles kuemmere ich mich nicht, da es ein wenig sinnlos ist
             }
-            ::com::sun::star::uno::Any aVal;
+            Any aVal;
             aVal <<= nMinValue;
             xControlSet->setPropertyValue(FM_PROP_VALUEMIN,aVal);
             aVal <<= nMaxValue;
@@ -710,22 +709,22 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
         if (::comphelper::hasProperty(FM_PROP_STRICTFORMAT, xControlSet))
         {   // Formatueberpruefung fue numeric fields standardmaessig sal_True
             sal_Bool bB(sal_True);
-            ::com::sun::star::uno::Any aVal(&bB,getBooleanCppuType());
+            Any aVal(&bB,getBooleanCppuType());
             xControlSet->setPropertyValue(FM_PROP_STRICTFORMAT, aVal);
         }
 
         xControlSet->setPropertyValue(FM_PROP_CONTROLSOURCE, aFieldName);
         xControlSet->setPropertyValue(FM_PROP_NAME, aFieldName);
 
-        if (nDataType == ::com::sun::star::sdbc::DataType::LONGVARCHAR)
+        if (nDataType == DataType::LONGVARCHAR)
         {
             sal_Bool bB(sal_True);
-            xControlSet->setPropertyValue(FM_PROP_MULTILINE,::com::sun::star::uno::Any(&bB,getBooleanCppuType()));
+            xControlSet->setPropertyValue(FM_PROP_MULTILINE,Any(&bB,getBooleanCppuType()));
         }
 
         if (nObjID == OBJ_FM_CHECKBOX)
             xControlSet->setPropertyValue(FM_PROP_TRISTATE,
-                ::com::sun::star::uno::makeAny(xField->getPropertyValue(FM_PROP_ISNULLABLE))
+                makeAny(xField->getPropertyValue(FM_PROP_ISNULLABLE))
             );
     }
 
@@ -736,9 +735,9 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
         // usually a fixed text we use as label should be accepted, but to be sure ....)
         try
         {
-            xControlSet->setPropertyValue(FM_PROP_CONTROLLABEL, ::com::sun::star::uno::makeAny(xLabelSet));
+            xControlSet->setPropertyValue(FM_PROP_CONTROLLABEL, makeAny(xLabelSet));
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("FmFormView::CreateControlWithLabel : could not marry the control and the label !");
         }
@@ -756,62 +755,39 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 
     // SBA_FIELDEXCHANGE_FORMAT
     // "Datenbankname";"Tabellen/QueryName";1/0(fuer Tabelle/Abfrage);"Feldname"
-    ::rtl::OUString aDatabaseName = rFieldDesc.GetToken(0,char(11));
-    ::rtl::OUString aObjectName  = rFieldDesc.GetToken(1,char(11));
-    sal_uInt16 nObjectType = rFieldDesc.GetToken(2,char(11)).ToInt32();
-    ::rtl::OUString aFieldName   = rFieldDesc.GetToken(3,char(11));
+    ::rtl::OUString aDatabaseName   = rFieldDesc.GetToken(0,sal_Unicode(11));
+    ::rtl::OUString aObjectName     = rFieldDesc.GetToken(1,sal_Unicode(11));
+    sal_uInt16 nObjectType          = rFieldDesc.GetToken(2,sal_Unicode(11)).ToInt32();
+    ::rtl::OUString aFieldName      = rFieldDesc.GetToken(3,sal_Unicode(11));
 
     if (!aFieldName.getLength() || !aObjectName.getLength() || !aDatabaseName.getLength())
         return NULL;
 
 
-    // Datenbank, Tabelle/Abfrage und Feld bestimmen
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseEnvironment >  xEnv(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ENVIRONMENT), ::com::sun::star::uno::UNO_QUERY);
-    if (!xEnv.is())
-        return NULL;
-
     // Einlesen des default workspace
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  xConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess >  xDatabase;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >  xStatement;
+    Reference< XConnection >            xConnection;
+    Reference< XDataSource >            xDataSource;
+    Reference< XPreparedStatement >     xStatement;
 
+
+    ::rtl::OUString sDatabaseName = aDatabaseName;
     try
     {
-        ::rtl::OUString sDatabaseName = aDatabaseName;
-        try
-        {
-            xDatabase = xEnv->getDatabaseAccess(sDatabaseName);
-        }
-        catch(::com::sun::star::sdbc::SQLException e)
-        {   // allowed, the env may throw an exception in case of an invalid name
-            e; // make compiler happy
-        }
-
-        if (!xDatabase.is())
-        {   // aDatabaseName isn't a database path. maybe a favorite name ?
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService >  xDatabaseAccesses(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
-            if (xDatabaseAccesses.is())
-            {
-                try
-                {
-                    xDatabase = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess > (xDatabaseAccesses->getRegisteredObject(sDatabaseName), ::com::sun::star::uno::UNO_QUERY);
-                }
-                catch( ::com::sun::star::container::NoSuchElementException&)
-                {   // allowed, means aDatabaseName isn't a valid favorite name ....
-                }
-            }
-        }
-        if (!xDatabase.is())
-        {
-            DBG_ERROR("FmGridHeader::FmFormView::CreateFieldControl : could not retrieve the database access object !");
-            return NULL;
-        }
-        xConnection = xDatabase->getConnection(::rtl::OUString(), ::rtl::OUString());
-        if (!xConnection.is())
-            return NULL;
-
+        xDataSource = dbtools::getDataSource(sDatabaseName,pImpl->getORB());
+        xConnection = dbtools::getConnection(sDatabaseName,::rtl::OUString(),::rtl::OUString(),pImpl->getORB());
+    }
+    catch(SQLException&)
+    {   // allowed, the env may throw an exception in case of an invalid name
+    }
+    if (!xDataSource.is() || !xConnection.is())
+    {
+        DBG_ERROR("FmGridHeader::FmFormView::CreateFieldControl : could not retrieve the database access object !");
+        return NULL;
+    }
+    try
+    {
         // check if the document is able to handle forms with the given data source
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > xDocParentConn = findConnection(rPage.GetForms());
+        Reference< XConnection > xDocParentConn = findConnection(rPage.GetForms());
         if (xDocParentConn.is())
         {   // there is a connection which restricts the allowed data sources for the forms
 
@@ -856,22 +832,22 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         }
 
         // Festellen des Feldes
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  xFields;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField;
+        Reference< ::com::sun::star::container::XNameAccess >   xFields;
+        Reference< ::com::sun::star::beans::XPropertySet >      xField;
         switch (nObjectType)
         {
             case 0: // old : DataSelectionType_TABLE:
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >  xSupplyTables(xConnection, ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
+                Reference< ::com::sun::star::sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
+                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
                 xSupplyTables->getTables()->getByName(aObjectName) >>= xSupplyColumns;
                 xFields = xSupplyColumns->getColumns();
             }
             break;
             case 1: // old : DataSelectionType_QUERY:
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XQueriesSupplier >  xSupplyQueries(xConnection, ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
+                Reference< ::com::sun::star::sdb::XQueriesSupplier >  xSupplyQueries(xConnection, UNO_QUERY);
+                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
                 xSupplyQueries->getQueries()->getByName(aObjectName) >>= xSupplyColumns;
                 xFields  = xSupplyColumns->getColumns();
             }
@@ -880,8 +856,8 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
             {
                 xStatement = xConnection->prepareStatement(aObjectName);
                 // not interested in any results
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (xStatement,::com::sun::star::uno::UNO_QUERY)->setPropertyValue(::rtl::OUString::createFromAscii("MaxRows"),::com::sun::star::uno::makeAny(sal_Int32(0)));
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet > (xStatement,UNO_QUERY)->setPropertyValue(::rtl::OUString::createFromAscii("MaxRows"),makeAny(sal_Int32(0)));
+                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
                 if (xSupplyCols.is())
                     xFields = xSupplyCols->getColumns();
             }
@@ -890,11 +866,11 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         if (xFields.is() && xFields->hasByName(aFieldName))
             xFields->getByName(aFieldName) >>= xField;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(xConnection, sal_False);
-        if (!xSupplier.is())
+        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(xConnection, sal_False);
+        if (!xSupplier.is() || !xField.is())
             return NULL;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats(xSupplier->getNumberFormats());
+        Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats(xSupplier->getNumberFormats());
         if (!xNumberFormats.is())
             return NULL;
 
@@ -931,7 +907,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         if (!pOutDev)
             return NULL;
 
-        if ((::com::sun::star::sdbc::DataType::BINARY == nDataType) || (::com::sun::star::sdbc::DataType::VARBINARY == nDataType))
+        if ((DataType::BINARY == nDataType) || (DataType::VARBINARY == nDataType))
             return NULL;
         //////////////////////////////////////////////////////////////////////
         // Anhand des FormatKeys wird festgestellt, welches Feld benoetigt wird
@@ -947,41 +923,41 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         else
             switch (nDataType)
             {
-                case ::com::sun::star::sdbc::DataType::LONGVARBINARY:
+                case DataType::LONGVARBINARY:
                     nOBJID = OBJ_FM_IMAGECONTROL;
                     break;
-                case ::com::sun::star::sdbc::DataType::LONGVARCHAR:
+                case DataType::LONGVARCHAR:
                     nOBJID = OBJ_FM_EDIT;
                     break;
-                case ::com::sun::star::sdbc::DataType::BINARY:
-                case ::com::sun::star::sdbc::DataType::VARBINARY:
+                case DataType::BINARY:
+                case DataType::VARBINARY:
                     return NULL;
-                case ::com::sun::star::sdbc::DataType::BIT:
+                case DataType::BIT:
                     nOBJID = OBJ_FM_CHECKBOX;
                     break;
-                case ::com::sun::star::sdbc::DataType::TINYINT:
-                case ::com::sun::star::sdbc::DataType::SMALLINT:
-                case ::com::sun::star::sdbc::DataType::INTEGER:
+                case DataType::TINYINT:
+                case DataType::SMALLINT:
+                case DataType::INTEGER:
                     nOBJID = OBJ_FM_NUMERICFIELD;
                     break;
-                case ::com::sun::star::sdbc::DataType::REAL:
-                case ::com::sun::star::sdbc::DataType::DOUBLE:
-                case ::com::sun::star::sdbc::DataType::NUMERIC:
-                case ::com::sun::star::sdbc::DataType::DECIMAL:
+                case DataType::REAL:
+                case DataType::DOUBLE:
+                case DataType::NUMERIC:
+                case DataType::DECIMAL:
                     nOBJID = OBJ_FM_FORMATTEDFIELD;
                     break;
-                case ::com::sun::star::sdbc::DataType::TIMESTAMP:
+                case DataType::TIMESTAMP:
                     bDateNTimeField = sal_True;
                     sLabelPostfix = UniString(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX)).GetToken(0, ';');
                     // DON'T break !
-                case ::com::sun::star::sdbc::DataType::DATE:
+                case DataType::DATE:
                     nOBJID = OBJ_FM_DATEFIELD;
                     break;
-                case ::com::sun::star::sdbc::DataType::TIME:
+                case DataType::TIME:
                     nOBJID = OBJ_FM_TIMEFIELD;
                     break;
-                case ::com::sun::star::sdbc::DataType::CHAR:
-                case ::com::sun::star::sdbc::DataType::VARCHAR:
+                case DataType::CHAR:
+                case DataType::VARCHAR:
                 default:
                     nOBJID = OBJ_FM_EDIT;
                     break;
@@ -1002,15 +978,16 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         //////////////////////////////////////////////////////////////////////
         // Feststellen ob eine ::com::sun::star::form erzeugt werden muss
         // Dieses erledigt die Page fuer uns bzw. die PageImpl
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xContent(pLabel->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xContainer(rPage.GetImpl()->SetDefaults(xContent, xDatabase, aDatabaseName, aObjectName, nObjectType), ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::form::XFormComponent >  xContent(pLabel->GetUnoControlModel(), UNO_QUERY);
+        Reference< ::com::sun::star::container::XIndexContainer >  xContainer(rPage.GetImpl()->SetDefaults(xContent, xDataSource, aDatabaseName, aObjectName, nObjectType), UNO_QUERY);
         if (xContainer.is())
-            xContainer->insertByIndex(xContainer->getCount(), ::com::sun::star::uno::makeAny(xContent));
+            xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
 
-        xContent = ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > (pControl->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
-        xContainer = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > (rPage.GetImpl()->SetDefaults(xContent, xDatabase, aDatabaseName, aObjectName, nObjectType), ::com::sun::star::uno::UNO_QUERY);
+        xContent = Reference< ::com::sun::star::form::XFormComponent > (pControl->GetUnoControlModel(), UNO_QUERY);
+        xContainer = Reference< ::com::sun::star::container::XIndexContainer > (rPage.GetImpl()->SetDefaults(xContent, xDataSource,
+            aDatabaseName, aObjectName, nObjectType), UNO_QUERY);
         if (xContainer.is())
-            xContainer->insertByIndex(xContainer->getCount(), ::com::sun::star::uno::makeAny(xContent));
+            xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
 
         //////////////////////////////////////////////////////////////////////
         // Objekte gruppieren
@@ -1053,7 +1030,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 }
 
 //------------------------------------------------------------------------
-void FmFormView::InsertControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & xCC)
+void FmFormView::InsertControlContainer(const Reference< ::com::sun::star::awt::XControlContainer > & xCC)
 {
     if( !IsDesignMode() )
     {
@@ -1074,7 +1051,7 @@ void FmFormView::InsertControlContainer(const ::com::sun::star::uno::Reference< 
 }
 
 //------------------------------------------------------------------------
-void FmFormView::RemoveControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & xCC)
+void FmFormView::RemoveControlContainer(const Reference< ::com::sun::star::awt::XControlContainer > & xCC)
 {
     if( !IsDesignMode() )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 14:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,9 @@
 #ifndef _SVX_FMUNOPGE_HXX
 #define _SVX_FMUNOPGE_HXX
 
-#ifndef _COM_SUN_STAR_SDB_XDATABASEACCESS_HPP_
-#include <com/sun/star/sdb/XDatabaseAccess.hpp>
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -116,13 +115,10 @@ class FmFormPageImpl
     friend class FmFormObj;
     friend class FmXFormShell;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>            xCurrentForm;   // aktuelles Formular
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>                xCurrentForm;   // aktuelles Formular
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>  xForms;         // Liste aller Forms
-
-    FmFormPage*         pPage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>          xModel;
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>              xModel;
+    FmFormPage*             pPage;
     UniString               m_sPageId;
 
 protected:
@@ -141,7 +137,7 @@ public:
     // Defaults fuer ein Object setzen
     // Eindeutigen Namen, Zuordnen zu einer Form falls noch nicht erfolgt
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> SetDefaults(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& rContent,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess>& rDatabase = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess>(),
+                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>(),
                          const ::rtl::OUString& rDBTitle = ::rtl::OUString(),
                          const ::rtl::OUString& rCursorSource = ::rtl::OUString(),
                          sal_Int32 nCommandType = 0);
@@ -161,7 +157,7 @@ protected:
     void fillList(FmObjectList& rList, const SdrObjList& rObjList, sal_Bool bConnected) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> FindForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& rForm,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseAccess>& rDatabase,
+                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase,
                       const ::rtl::OUString& rCursorSource,
                       sal_Int32 nCommandType);
 

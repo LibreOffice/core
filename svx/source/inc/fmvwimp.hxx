@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:19:53 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 14:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,8 @@ public:
     FmWinRecList::const_iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC ) const;
     const FmWinRecList& getWindowList() const {return m_aWinList;}
 
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xORB; }
 protected:
     FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& rCC );
     void addWindow(const SdrPageViewWinRec*);
