@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-16 20:07:55 $
+ *  last change: $Author: rt $ $Date: 2001-08-21 20:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3016,6 +3016,7 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
 
 
