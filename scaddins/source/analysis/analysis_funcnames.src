@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis_funcnames.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-01 16:09:42 $
+ *  last change: $Author: gt $ $Date: 2001-06-05 10:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,466 +69,559 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
     String ANALYSIS_FUNCNAME_Workday
     {
         Text = "ARBEITSTAG";
+        Text [ english ] = "WORKDAY";
     };
 
     String ANALYSIS_FUNCNAME_Yearfrac
     {
         Text = "BRTEILJAHRE";
+        Text [ english ] = "YEARFRAC";
     };
 
     String ANALYSIS_FUNCNAME_Edate
     {
         Text = "EDATUM";
+        Text [ english ] = "EDATE";
     };
 
     String ANALYSIS_FUNCNAME_Weeknum
     {
         Text = "KALENDERWOCHE";
+        Text [ english ] = "WEEKNUM";
     };
 
     String ANALYSIS_FUNCNAME_Eomonth
     {
         Text = "MONATSENDE";
+        Text [ english ] = "EOMONTH";
     };
 
     String ANALYSIS_FUNCNAME_Networkdays
     {
         Text = "NETTOARBEITSTAGE";
+        Text [ english ] = "NETWORKDAYS";
     };
 
     String ANALYSIS_FUNCNAME_Amordegrc
     {
         Text = "AMORDEGRK";
+        Text [ english ] = "AMORDEGRC";
     };
 
     String ANALYSIS_FUNCNAME_Amorlinc
     {
         Text = "AMORLINEARK";
+        Text [ english ] = "AMORLINC";
     };
 
     String ANALYSIS_FUNCNAME_Accrint
     {
         Text = "AUFGELZINS";
+        Text [ english ] = "ACCRINT";
     };
 
     String ANALYSIS_FUNCNAME_Accrintm
     {
         Text = "AUFGELZINSF";
+        Text [ english ] = "ACCRINTM";
     };
 
     String ANALYSIS_FUNCNAME_Received
     {
         Text = "AUSZAHLUNG";
+        Text [ english ] = "RECEIVED";
     };
 
     String ANALYSIS_FUNCNAME_Disc
     {
         Text = "DISAGIO";
+        Text [ english ] = "DISC";
     };
 
     String ANALYSIS_FUNCNAME_Duration
     {
         Text = "DURATION";
+        Text [ english ] = "DURATION";
     };
 
     String ANALYSIS_FUNCNAME_Effect
     {
         Text = "EFFEKTIV";
+        Text [ english ] = "EFFECT";
     };
 
     String ANALYSIS_FUNCNAME_Cumprinc
     {
         Text = "KUMKAPITAL";
+        Text [ english ] = "CUMPRINC";
     };
 
     String ANALYSIS_FUNCNAME_Cumipmt
     {
         Text = "KUMZINSZ";
+        Text [ english ] = "CUMIPMT";
     };
 
     String ANALYSIS_FUNCNAME_Price
     {
         Text = "KURS";
+        Text [ english ] = "PRICE";
     };
 
     String ANALYSIS_FUNCNAME_Pricedisc
     {
         Text = "KURSDISAGIO";
+        Text [ english ] = "PRICEDISC";
     };
 
     String ANALYSIS_FUNCNAME_Pricemat
     {
         Text = "KURSFÄLLIG";
+        Text [ english ] = "PRICEMAT";
     };
 
     String ANALYSIS_FUNCNAME_Mduration
     {
         Text = "MDURATION";
+        Text [ english ] = "MDURATION";
     };
 
     String ANALYSIS_FUNCNAME_Nominal
     {
         Text = "NOMINAL";
+        Text [ english ] = "NOMINAL";
     };
 
     String ANALYSIS_FUNCNAME_Dollarfr
     {
         Text = "NOTIERUNGBRU";
+        Text [ english ] = "DOLLARFR";
     };
 
     String ANALYSIS_FUNCNAME_Dollarde
     {
         Text = "NOTIERUNGDEZ";
+        Text [ english ] = "DOLLARDE";
     };
 
     String ANALYSIS_FUNCNAME_Yield
     {
         Text = "RENDITE";
+        Text [ english ] = "YIELD";
     };
 
     String ANALYSIS_FUNCNAME_Yielddisc
     {
         Text = "RENDITEDIS";
+        Text [ english ] = "YIELDDISC";
     };
 
     String ANALYSIS_FUNCNAME_Yieldmat
     {
         Text = "RENDITEFÄLL";
+        Text [ english ] = "YIELDMAT";
     };
 
     String ANALYSIS_FUNCNAME_Tbilleq
     {
         Text = "TBILLÄQUIV";
+        Text [ english ] = "TBILLEQ";
     };
 
     String ANALYSIS_FUNCNAME_Tbillprice
     {
         Text = "TBILLKURS";
+        Text [ english ] = "TBILLPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Tbillyield
     {
         Text = "TBILLRENDITE";
+        Text [ english ] = "TBILLYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Oddfprice
     {
         Text = "UNREGER.KURS";
+        Text [ english ] = "ODDFPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Oddfyield
     {
         Text = "UNREGER.REND";
+        Text [ english ] = "ODDFYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Oddlprice
     {
         Text = "UNREGLE.KURS";
+        Text [ english ] = "ODDLPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Oddlyield
     {
         Text = "UNREGLE.REND";
+        Text [ english ] = "ODDLYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Xirr
     {
         Text = "XINTZINSFUSS";
+        Text [ english ] = "XIRR";
     };
 
     String ANALYSIS_FUNCNAME_Xnpv
     {
         Text = "XKAPITALWERT";
+        Text [ english ] = "XNPV";
     };
 
     String ANALYSIS_FUNCNAME_Intrate
     {
         Text = "ZINSSATZ";
+        Text [ english ] = "INTRATE";
     };
 
     String ANALYSIS_FUNCNAME_Coupncd
     {
         Text = "ZINSTERMNZ";
+        Text [ english ] = "COUPNCD";
     };
 
     String ANALYSIS_FUNCNAME_Coupdays
     {
         Text = "ZINSTERMTAGE";
+        Text [ english ] = "COUPDAYS";
     };
 
     String ANALYSIS_FUNCNAME_Coupdaysnc
     {
         Text = "ZINSTERMTAGNZ";
+        Text [ english ] = "COUPDAYSNC";
     };
 
     String ANALYSIS_FUNCNAME_Coupdaybs
     {
         Text = "ZINSTERMTAGVA";
+        Text [ english ] = "COUPDAYBS";
     };
 
     String ANALYSIS_FUNCNAME_Couppcd
     {
         Text = "ZINSTERMVZ";
+        Text [ english ] = "COUPPCD";
     };
 
     String ANALYSIS_FUNCNAME_Coupnum
     {
         Text = "ZINSTERMZAHL";
+        Text [ english ] = "COUPNUM";
     };
 
     String ANALYSIS_FUNCNAME_Fvschedule
     {
         Text = "ZW2";
+        Text [ english ] = "FVSCHEDULE";
     };
 
     String ANALYSIS_FUNCNAME_Iseven
     {
         Text = "ISTGERADE";
+        Text [ english ] = "ISEVEN";
     };
 
     String ANALYSIS_FUNCNAME_Isodd
     {
         Text = "ISTUNGERADE";
+        Text [ english ] = "ISODD";
     };
 
     String ANALYSIS_FUNCNAME_Gcd
     {
         Text = "GGT";
+        Text [ english ] = "GCD";
     };
 
     String ANALYSIS_FUNCNAME_Lcm
     {
         Text = "KGV";
+        Text [ english ] = "LCM";
     };
 
     String ANALYSIS_FUNCNAME_Multinomial
     {
         Text = "POLYNOMIAL";
+        Text [ english ] = "MULTINOMIAL";
     };
 
     String ANALYSIS_FUNCNAME_Seriessum
     {
         Text = "POTENZREIHE";
+        Text [ english ] = "SERIESSUM";
     };
 
     String ANALYSIS_FUNCNAME_Quotient
     {
         Text = "QUOTIENT";
+        Text [ english ] = "QUOTIENT";
     };
 
     String ANALYSIS_FUNCNAME_Mround
     {
         Text = "VRUNDEN";
+        Text [ english ] = "MROUND";
     };
 
     String ANALYSIS_FUNCNAME_Sqrtpi
     {
         Text = "WURZELPI";
+        Text [ english ] = "SQRTPI";
     };
 
     String ANALYSIS_FUNCNAME_Randbetween
     {
         Text = "ZUFALLSBEREICH";
+        Text [ english ] = "RANDBETWEEN";
     };
 
     String ANALYSIS_FUNCNAME_Besseli
     {
         Text = "BESSELI";
+        Text [ english ] = "BESSELI";
     };
 
     String ANALYSIS_FUNCNAME_Besselj
     {
         Text = "BESSELJ";
+        Text [ english ] = "BESSELJ";
     };
 
     String ANALYSIS_FUNCNAME_Besselk
     {
         Text = "BESSELK";
+        Text [ english ] = "BESSELK";
     };
 
     String ANALYSIS_FUNCNAME_Bessely
     {
         Text = "BESSELY";
+        Text [ english ] = "BESSELY";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Dec
     {
         Text = "BININDEZ";
+        Text [ english ] = "BIN2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Hex
     {
         Text = "BININHEX";
+        Text [ english ] = "BIN2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Oct
     {
         Text = "BININOKT";
+        Text [ english ] = "BIN2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Delta
     {
         Text = "DELTA";
+        Text [ english ] = "DELTA";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Bin
     {
         Text = "DEZINBIN";
+        Text [ english ] = "DEC2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Hex
     {
         Text = "DEZINHEX";
+        Text [ english ] = "DEC2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Oct
     {
         Text = "DEZINOKT";
+        Text [ english ] = "DEC2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Erf
     {
         Text = "GAUSSFEHLER";
+        Text [ english ] = "ERF";
     };
 
     String ANALYSIS_FUNCNAME_Erfc
     {
         Text = "GAUSSFKOMPL";
+        Text [ english ] = "ERFC";
     };
 
     String ANALYSIS_FUNCNAME_Gestep
     {
         Text = "GGANZZAHL";
+        Text [ english ] = "GESTEP";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Bin
     {
         Text = "HEXINBIN";
+        Text [ english ] = "HEX2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Dec
     {
         Text = "HEXINDEZ";
+        Text [ english ] = "HEX2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Oct
     {
         Text = "HEXINOKT";
+        Text [ english ] = "HEX2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Imabs
     {
         Text = "IMABS";
+        Text [ english ] = "IMABS";
     };
 
     String ANALYSIS_FUNCNAME_Imaginary
     {
         Text = "IMAGINÄRTEIL";
+        Text [ english ] = "IMAGINARY";
     };
 
     String ANALYSIS_FUNCNAME_Impower
     {
         Text = "IMAPOTENZ";
+        Text [ english ] = "IMPOWER";
     };
 
     String ANALYSIS_FUNCNAME_Imargument
     {
         Text = "IMARGUMENT";
+        Text [ english ] = "IMARGUMENT";
     };
 
     String ANALYSIS_FUNCNAME_Imcos
     {
         Text = "IMCOS";
+        Text [ english ] = "IMCOS";
     };
 
     String ANALYSIS_FUNCNAME_Imdiv
     {
         Text = "IMDIV";
+        Text [ english ] = "IMDIV";
     };
 
     String ANALYSIS_FUNCNAME_Imexp
     {
         Text = "IMEXP";
+        Text [ english ] = "IMEXP";
     };
 
     String ANALYSIS_FUNCNAME_Imconjugate
     {
         Text = "IMKONJUGIERTE";
+        Text [ english ] = "IMCONJUGATE";
     };
 
     String ANALYSIS_FUNCNAME_Imln
     {
         Text = "IMLN";
+        Text [ english ] = "IMLN";
     };
 
     String ANALYSIS_FUNCNAME_Imlog10
     {
         Text = "IMLOG10";
+        Text [ english ] = "IMLOG10";
     };
 
     String ANALYSIS_FUNCNAME_Imlog2
     {
         Text = "IMLOG2";
+        Text [ english ] = "IMLOG2";
     };
 
     String ANALYSIS_FUNCNAME_Improduct
     {
         Text = "IMPRODUKT";
+        Text [ english ] = "IMPRODUCT";
     };
 
     String ANALYSIS_FUNCNAME_Imreal
     {
         Text = "IMREALTEIL";
+        Text [ english ] = "IMREAL";
     };
 
     String ANALYSIS_FUNCNAME_Imsin
     {
         Text = "IMSIN";
+        Text [ english ] = "IMSIN";
     };
 
     String ANALYSIS_FUNCNAME_Imsub
     {
         Text = "IMSUB";
+        Text [ english ] = "IMSUB";
     };
 
     String ANALYSIS_FUNCNAME_Imsum
     {
         Text = "IMSUMME";
+        Text [ english ] = "IMSUM";
     };
 
     String ANALYSIS_FUNCNAME_Imsqrt
     {
         Text = "IMWURZEL";
+        Text [ english ] = "IMSQRT";
     };
 
     String ANALYSIS_FUNCNAME_Complex
     {
         Text = "KOMPLEXE";
+        Text [ english ] = "COMPLEX";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Bin
     {
         Text = "OKTINBIN";
+        Text [ english ] = "OCT2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Dez
     {
         Text = "OKTINDEZ";
+        Text [ english ] = "OCT2DEZ";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Hex
     {
         Text = "OKTINHEX";
+        Text [ english ] = "OCT2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Convert
     {
         Text = "UMWANDELN";
+        Text [ english ] = "CONVERT";
     };
 
     String ANALYSIS_FUNCNAME_Factdouble
     {
         Text = "ZWEIFAKULTÄT";
+        Text [ english ] = "FACTDOUBLE";
     };
 
 };
