@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleAction.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:56:24 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,8 @@ interface XAccessibleAction : ::com::sun::star::uno::XInterface
 
         @throws IndexOutOfBoundsException
             If no action with the given index exists then an
-            <type>IndexOutOfBoundsException</type> exception is thrown.
+            <type scope="::com::sun::star::lang">IndexOutOfBoundsException</type>
+            exception is thrown.
     */
     boolean doAccessibleAction ([in] long nIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
@@ -125,7 +126,8 @@ interface XAccessibleAction : ::com::sun::star::uno::XInterface
 
         @throws IndexOutOfBoundsException
             If the given index lies not in the valid range then an
-            <type>IndexOutOfBoundsException</type> exception is thrown.
+            <type scope="::com::sun::star::lang">IndexOutOfBoundsException</type>
+            exception is thrown.
     */
     string getAccessibleActionDescription ([in] long nIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
