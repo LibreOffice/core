@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-17 11:15:44 $
+ *  last change: $Author: pl $ $Date: 2002-09-17 13:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,6 @@ private:
         Region          m_aClipRegion;
         sal_Int32       m_nAntiAlias;
         sal_Int32       m_nLayoutMode;
-        TextAlign       m_eTextAlign;
         sal_Int32       m_nTransparentPercent;
 
         GraphicsState() :
@@ -321,7 +320,6 @@ private:
                 m_aTextLineColor( COL_BLACK ),
                 m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
-                m_eTextAlign( ALIGN_BASELINE ),
                 m_nTransparentPercent( 0 ) {}
         GraphicsState( const GraphicsState& rState ) :
                 m_aFont( rState.m_aFont ),
@@ -332,7 +330,6 @@ private:
                 m_aClipRegion( rState.m_aClipRegion ),
                 m_nAntiAlias( rState.m_nAntiAlias ),
                 m_nLayoutMode( rState.m_nLayoutMode ),
-                m_eTextAlign( rState.m_eTextAlign ),
                 m_nTransparentPercent( rState.m_nTransparentPercent )
         {
         }
@@ -347,7 +344,6 @@ private:
             m_aClipRegion           = rState.m_aClipRegion;
             m_nAntiAlias            = rState.m_nAntiAlias;
             m_nLayoutMode           = rState.m_nLayoutMode;
-            m_eTextAlign            = rState.m_eTextAlign;
             m_nTransparentPercent   = rState.m_nTransparentPercent;
             return *this;
         }
@@ -514,7 +510,7 @@ public:
     { m_aGraphicsStack.front().m_nLayoutMode = nLayoutMode; }
 
     void setTextAlign( TextAlign eAlign )
-    { m_aGraphicsStack.front().m_eTextAlign = eAlign; }
+    { m_aGraphicsStack.front().m_aFont.SetAlign( eAlign ); }
 
     void setAntiAlias( sal_Int32 nAntiAlias )
     { m_aGraphicsStack.front().m_nAntiAlias = nAntiAlias; }

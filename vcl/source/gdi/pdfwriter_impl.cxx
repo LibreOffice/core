@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-17 12:11:00 $
+ *  last change: $Author: pl $ $Date: 2002-09-17 13:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2254,7 +2254,7 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     int nMinCharPos = 0, nMaxCharPos = rText.Len()-1;
     double fXScale = 1.0;
     sal_Int32 nFontHeight = m_pReferenceDevice->mpFontEntry->maFontSelData.mnHeight;
-    TextAlign eAlign = m_pReferenceDevice->GetTextAlign();
+    TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlign();
     // transform font height back to current units
     nFontHeight = m_pReferenceDevice->ImplDevicePixelToLogicWidth( nFontHeight );
     if( m_aCurrentPDFState.m_aFont.GetWidth() )
@@ -2276,10 +2276,22 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
         // back transformation to current coordinate system
         aPos = m_pReferenceDevice->PixelToLogic( aPos );
 
+        double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
+        double fSin = sin( fAngle );
+        double fCos = cos( fAngle );
+
+        Point aDiff;
         if ( eAlign == ALIGN_BOTTOM )
-            aPos.Y() -= m_pReferenceDevice->GetFontMetric().GetDescent();
+            aDiff.Y() -= m_pReferenceDevice->GetFontMetric().GetDescent();
         else if ( eAlign == ALIGN_TOP )
-            aPos.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
+            aDiff.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
+
+        if( aDiff.X() || aDiff.Y() )
+        {
+            aDiff = Point( (int)(fXScale * fCos * (double)aDiff.X() + fSin * (double)aDiff.Y()),
+                               -(int)(fXScale * fSin * (double)aDiff.X() - fCos * (double)aDiff.Y()) );
+            aPos += aDiff;
+        }
 
         for( int i = 0; i < nGlyphs; i++ )
         {
@@ -2296,10 +2308,6 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
         }
         registerGlyphs( nGlyphs, pGlyphs, pUnicodes, pMappedGlyphs, pMappedFontObjects );
 
-        double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
-        double fSin = sin( fAngle );
-        double fCos = cos( fAngle );
-
         if( pAdvanceWidths )
         {
             // have to emit each glyph on its own
@@ -2314,7 +2322,7 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
                 if( nGlyphFlags[n] & GF_ROTL )
                 {
                     fDeltaAngle = M_PI/2.0;
-                    aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent() + m_pReferenceDevice->GetFontMetric().GetDescent();
+                    aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent();
                     aDeltaPos.Y() = m_pReferenceDevice->GetFontMetric().GetDescent();
                     fYScale = fXScale;
                     fTempXScale = 1.0;
@@ -2323,11 +2331,11 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
                 {
                     fDeltaAngle = -M_PI/2.0;
                     aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetDescent();
-                    aDeltaPos.Y() = -(m_pReferenceDevice->GetFontMetric().GetAscent() + m_pReferenceDevice->GetFontMetric().GetDescent());
+                    aDeltaPos.Y() = -m_pReferenceDevice->GetFontMetric().GetAscent();
                     fYScale = fXScale;
                     fTempXScale = 1.0;
                 }
-                aDeltaPos += m_pReferenceDevice->PixelToLogic( Point( (int)((double)nXOffset/fXScale)/rLayout.GetUnitsPerPixel(), 0 ) );
+                aDeltaPos += (m_pReferenceDevice->PixelToLogic( Point( (int)((double)nXOffset/fXScale)/rLayout.GetUnitsPerPixel(), 0 ) ) - m_pReferenceDevice->PixelToLogic( Point() ) );
                 nXOffset += pAdvanceWidths[n];
 
 
@@ -2481,7 +2489,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
     Point       aPos            = rRect.TopLeft();
 
     long        nTextHeight     = m_pReferenceDevice->GetTextHeight();
-    TextAlign   eAlign          = m_pReferenceDevice->GetTextAlign();
+    TextAlign   eAlign          = m_aCurrentPDFState.m_aFont.GetAlign();
     xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
 
     String aStr = rOrigStr;
