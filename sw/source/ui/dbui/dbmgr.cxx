@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:57:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,8 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     Beschreibung: Daten importieren
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
-                        const ODataAccessDescriptor& _rDescriptor)
+                        const ODataAccessDescriptor& _rDescriptor,
+                        sal_Bool bPrintAsync)
 {
     SetMergeType( nOpt );
 
@@ -642,9 +643,12 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
             // !! Therefore it has to be the 0 pointer when not silent.
             SfxBoolItem aMergeSilent(SID_SILENT, TRUE);
             SfxBoolItem *pMergeSilent = IsMergeSilent() ? &aMergeSilent : 0;
+            // #i25686# printing should be done asynchronously to prevent dangling offices
+            // when mail merge is called as command line macro
+            SfxBoolItem aAsyncItem( SID_ASYNCHRON, bPrintAsync );
 
             pDis->Execute(SID_PRINTDOC,
-                    SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMerge, pMergeSilent, 0L);
+                    SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMerge, &aAsyncItem, pMergeSilent, 0L);
         }
         break;
 
