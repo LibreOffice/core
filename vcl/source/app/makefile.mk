@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cd $ $Date: 2000-10-23 06:42:52 $
+#   last change: $Author: pl $ $Date: 2000-11-08 13:08:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,6 @@ CDEFS+=-DDLLSUFFIX=$(DLLSUFFIX)
 # --- Files --------------------------------------------------------
 
 SLOFILES=	$(SLO)$/access.obj		\
-            $(SLO)$/config.obj		\
             $(SLO)$/dbggui.obj		\
             $(SLO)$/help.obj		\
             $(SLO)$/idlemgr.obj 	\
@@ -99,7 +98,6 @@ SLOFILES=	$(SLO)$/access.obj		\
 EXCEPTIONSFILES=					\
             $(SLO)$/svapp.obj		\
             $(SLO)$/access.obj		\
-            $(SLO)$/config.obj		\
             $(SLO)$/oldsv.obj		\
             $(SLO)$/help.obj		\
             $(SLO)$/resmgr.obj		\
