@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: sj $ $Date: 2000-11-15 13:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,52 @@ void ImplWriteRasterOpAction( SvStream& rOStm, INT16 nRasterOp )
 
 // ------------------------------------------------------------------------
 
+sal_Bool ImplWriteUnicodeComment( SvStream& rOStm, const String& rString )
+{
+    sal_uInt32 i, nStringLen = rString.Len();
+    if ( nStringLen )
+    {
+        sal_uInt32  nSize = ( nStringLen << 1 ) + 4;
+        sal_uInt16  nType = GDI_UNICODE_COMMENT;
+
+        rOStm << nType << nSize;
+        for ( i = 0; i < nStringLen; i++ )
+        {
+            sal_Unicode nUni = rString.GetChar( i );
+            rOStm << nUni;
+        }
+    }
+    return nStringLen != 0;
+}
+
+// ------------------------------------------------------------------------
+
+void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, String& rString )
+{
+    sal_uInt32 nOld = rIStm.Tell();
+    if ( nStrmPos )
+    {
+        sal_uInt16  nType;
+        sal_uInt32  nStringLen, nActionSize;
+
+        rIStm.Seek( nStrmPos );
+        rIStm   >> nType
+                >> nActionSize;
+
+        nStringLen = ( nActionSize - 4 ) >> 1;
+
+        if ( nStringLen && ( nType == GDI_UNICODE_COMMENT ) )
+        {
+            sal_Unicode* pBuffer = rString.AllocBuffer( nStringLen );
+            while ( nStringLen-- )
+                rIStm >> *pBuffer++;
+        }
+    }
+    rIStm.Seek( nOld );
+}
+
+// ------------------------------------------------------------------------
+
 void ImplSkipActions( SvStream& rIStm, ULONG nSkipCount )
 {
     INT32 nActionSize;
@@ -433,6 +479,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         Color       aColor;
         INT32       nTmp, nTmp1, nActionSize;
         INT16       nType;
+
+        sal_uInt32  nUnicodeCommentStreamPos = 0;
+        sal_uInt32  nUnicodeCommentActionNumber = 0;
 
         rMtf.SetPrefSize( aPrefSz );
         rMtf.SetPrefMapMode( aMapMode );
@@ -652,6 +701,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm >> aPt >> nIndex >> nLen >> nTmp;
                     rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
                     UniString aStr( aByteStr, eActualCharSet );
+                    if ( nUnicodeCommentActionNumber == i )
+                        ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                     rMtf.AddAction( new MetaTextAction( aPt, aStr, (USHORT) nIndex, (USHORT) nLen ) );
                 }
                 break;
@@ -673,7 +724,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         for( long i = 0L; i < nAryLen; i++ )
                             rIStm >> nTmp, pDXAry[ i ] = nTmp;
                     }
-
+                    if ( nUnicodeCommentActionNumber == i )
+                        ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                     rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, pDXAry, (USHORT) nIndex, (USHORT) nLen ) );
 
                     if( pDXAry )
@@ -689,6 +741,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nWidth;
                     rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
                     UniString aStr( aByteStr, eActualCharSet );
+                    if ( nUnicodeCommentActionNumber == i )
+                        ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                     rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, (USHORT) nIndex, (USHORT) nLen ) );
                 }
                 break;
@@ -1056,6 +1110,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 }
                 break;
 
+                case ( GDI_UNICODE_COMMENT ):
+                {
+                    nUnicodeCommentActionNumber = i + 1;
+                    nUnicodeCommentStreamPos = rIStm.Tell() - 6;
+                    rIStm.SeekRel( nActionSize - 4 );
+                }
+                break;
+
                 default:
                     rIStm.SeekRel( nActionSize - 4L );
                 break;
@@ -1317,8 +1379,12 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_TEXT_ACTION ):
             {
                 MetaTextAction* pAct = (MetaTextAction*) pAction;
-                ByteString      aText( pAct->GetText(), rActualCharSet );
+                String          aUniText( pAct->GetText() );
+                ByteString      aText( aUniText, rActualCharSet );
                 const ULONG     nStrLen = aText.Len();
+
+                if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
+                    nCount++;
 
                 rOStm << (INT16) GDI_TEXT_ACTION;
                 rOStm << (INT32) ( 24 + ( nStrLen + 1 ) );
@@ -1334,11 +1400,15 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_TEXTARRAY_ACTION ):
             {
                 MetaTextArrayAction*    pAct = (MetaTextArrayAction*)pAction;
-                ByteString              aText( pAct->GetText(), rActualCharSet );
+                String                  aUniText( pAct->GetText() );
+                ByteString              aText( aUniText, rActualCharSet );
                 ULONG                   nAryLen;
                 ULONG                   nLen = pAct->GetLen();
                 const ULONG             nTextLen = aText.Len();
                 long*                   pDXArray = pAct->GetDXArray();
+
+                if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
+                    nCount++;
 
                 if( ( nLen + pAct->GetIndex() ) > nTextLen )
                 {
@@ -1372,8 +1442,12 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_STRETCHTEXT_ACTION ):
             {
                 MetaStretchTextAction*  pAct = (MetaStretchTextAction*) pAction;
-                ByteString              aText( pAct->GetText(), rActualCharSet );
+                String                  aUniText( pAct->GetText() );
+                ByteString              aText( aUniText, rActualCharSet );
                 const ULONG             nStrLen = aText.Len();
+
+                if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
+                    nCount++;
 
                 rOStm << (INT16) GDI_STRETCHTEXT_ACTION;
                 rOStm << (INT32) ( 28 + ( nStrLen + 1 ) );
