@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-09-06 13:55:22 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ italian ] = "Elimina paragrafi vuoti" ;
         Text [ spanish ] = "Eliminar párrafos vacíos" ;
         Text [ french ] = "Supprimer les paragraphes vides" ;
-        Text [ dutch ] = "Lege alinea´s verwijderen" ;
+        Text [ dutch ] = "Lege alinea's verwijderen" ;
         Text [ portuguese_brazilian ] = "Leere Abs?tze entfernen" ;
         Text [ portuguese ] = "Remover parágrafos vazios" ;
         Text[ chinese_simplified ] = "åˆ é™¤ç©ºç™½çš„æ®µè½";
@@ -104,7 +104,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ italian ] = "Applica tabella delle sostituzioni" ;
         Text [ spanish ] = "Usar tabla de sustitución" ;
         Text [ french ] = "Utiliser la table de remplacement" ;
-        Text [ dutch ] = "Vervangingstabel gebruiken" ;
+        Text [ dutch ] = "Vervangende tabel gebruiken" ;
         Text [ portuguese_brazilian ] = "Ersetzungstabelle anwenden" ;
         Text [ portuguese ] = "Aplicar tabela de substituição" ;
         Text[ chinese_simplified ] = "ä½¿ç”¨æ›¿æ¢è¡¨æ ¼";
@@ -311,7 +311,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "Otomatik *kalın*";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "*Negreta* automàtica";
-        Text[ finnish ] = "Automaattinen *lihavointi*";
+        Text[ finnish ] = "Automaattinen *lihavoitu*";
         Text[ thai ] = "*à¸•à¸±à¸§à¸«à¸™à¸²*à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     String STR_AUTOFMTREDL_FRACTION+1
@@ -323,7 +323,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ danish ] = "Erstat 1/2 ...med ½ ..." ;
         Text [ italian ] = "Sostituisci 1/2 ... con ½" ;
         Text [ spanish ] = "Reemplazar 1/2 ... por ½ ..." ;
-        Text [ dutch ] = "1/2 ... vervangen door ½ ..." ;
+        Text [ dutch ] = "1/2 ... vervangen door 1/2 ..." ;
         Text [ portuguese_brazilian ] = "1/2 ... gegen ? ... ersetzen" ;
         Text [ french ] = "Remplacer 1/2 ... par ½ ..." ;
         Text [ portuguese ] = "Substituir 1/2 ... por ½ ..." ;
@@ -338,7 +338,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "1/2 ... yazıldığında ½ ... ile değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplaça 1/2 ... per 1/2 ...";
-        Text[ finnish ] = "Korvaa 1/2 -> Â1/2";
+        Text[ finnish ] = "Korvaa 1/2 -> ½...";
         Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ 1/2 ... à¸”à¹‰à¸§à¸¢ à¸ ...";
     };
     String STR_AUTOFMTREDL_DETECT_URL+1
@@ -419,7 +419,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "1st ... yazıldığında 1^st ... ile değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplaça 1st ... per 1^st ...";
-        Text[ finnish ] = "Korvaa 1st -> 1^st";
+        Text[ finnish ] = "Korvaa 1st -> 1^st...";
         Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ 1st... à¸”à¹‰à¸§à¸¢ 1^st...";
     };
     String STR_AUTOFMTREDL_RIGHT_MARGIN+1
@@ -460,7 +460,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ danish ] = "Anvend typografi \"Brødtekst\"";
         Text[ french ] = "Appliquer le style \"Corps de texte\"";
         Text[ swedish ] = "Använd formatmallen \"Brödtext\"";
-        Text[ dutch ] = "Sjabloon \"Tekstblok\" toepassen";
+        Text[ dutch ] = "Sjabloon 'Tekstblok' toepassen";
         Text[ spanish ] = "Aplicar estilo \"Cuerpo de texto\"";
         Text[ english_us ] = "Set \"Text body\" Style";
         Text[ chinese_simplified ] = "è®¾å®š\"æ­£æ–‡\"æ ·å¼";
@@ -541,7 +541,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ danish ] = "Anvend typografi \"Brødtekst indrykning\"";
         Text[ french ] = "Appliquer le style \"Retrait de corps de texte\"";
         Text[ swedish ] = "Använd formatmallen \"Dra in hela stycket\"";
-        Text[ dutch ] = "Sjabloon \"Tekstblok inspringen\" toepassen";
+        Text[ dutch ] = "Sjabloon 'Tekstblok inspringen' toepassen";
         Text[ spanish ] = "Aplicar estilo \"Cuerpo de texto con sangría\"";
         Text[ english_us ] = "Set \"Text body indent\" Style";
         Text[ chinese_simplified ] = "è®¾å®šæ ·å¼\"æ­£æ–‡ç¼©è¿›\"";
@@ -772,7 +772,7 @@ String STR_EVENT_MOUSECLICK_OBJECT
     Text [ portuguese ] = "Activar hiperligação" ;
     Text [ portuguese_brazilian ] = "Hyperlink ausl?en" ;
     Text[ chinese_simplified ] = "æ‰§è¡Œè¶…é“¾æ¥";
-    Text[ russian ] = "Âûïîëíèòü ãèïåğññûëêó";
+    Text[ russian ] = "Ïåğåõîä ïî ãèïåğññûëêå";
     Text[ polish ] = "Wykonaj hiper³¹cze";
     Text[ japanese ] = "ãƒã‚¤ãƒ‘ãƒ¼ãƒªãƒ³ã‚¯ã®å®Ÿè¡Œ";
     Text[ chinese_traditional ] = "åŸ·è¡Œè¶…é€£çµ";
@@ -800,7 +800,7 @@ String STR_EVENT_MOUSEOUT_OBJECT
     Text [ portuguese ] = "Rato abandona objecto" ;
     Text [ portuguese_brazilian ] = "Maus verl??t Objekt" ;
     Text[ chinese_simplified ] = "é¼ æ ‡ç¦»å¼€å¯¹è±¡";
-    Text[ russian ] = "Ìûøü âíå îáúåêòà";
+    Text[ russian ] = "Ìûøü ïîêèäàåò îáúåêò";
     Text[ polish ] = "Mysz opuszcza obiekt";
     Text[ japanese ] = "ãƒã‚¦ã‚¹ã‚’ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå¤–ã«ç§»å‹•";
     Text[ chinese_traditional ] = "é¼ æ¨™é›¢é–‹ç‰©ä»¶";
@@ -827,7 +827,7 @@ String STR_EVENT_IMAGE_LOAD
     Text [ portuguese ] = "Carregar imagem concluído" ;
     Text [ portuguese_brazilian ] = "Grafik laden erfolgreich" ;
     Text[ chinese_simplified ] = "è£…å…¥å›¾å½¢æˆåŠŸ";
-    Text[ russian ] = "Óñïåøíàÿ çàãğóçêà ãğàôèêè ";
+    Text[ russian ] = "Ãğàôèêà çàãğóæåíà óñïåøíî";
     Text[ polish ] = "Pomyœlne za³adowanie grafiki";
     Text[ japanese ] = "å›³ã®èª­ã¿è¾¼ã¿å®Œäº†";
     Text[ chinese_traditional ] = "è¼‰å…¥åœ–å½¢æˆåŠŸ";
@@ -881,7 +881,7 @@ String STR_EVENT_IMAGE_ERROR
     Text [ portuguese ] = "Erro ao carregar imagem" ;
     Text [ portuguese_brazilian ] = "Grafik laden fehlerhaft" ;
     Text[ chinese_simplified ] = "è£…å…¥çš„å›¾å½¢ä¸å®Œæ•´";
-    Text[ russian ] = "Ñáîé ïğè çàãğóçêå ãğàôèêè";
+    Text[ russian ] = "Îøèáêà ïğè çàãğóçêå ãğàôèêè";
     Text[ polish ] = "B³¹d w ³adowaniu grafiki";
     Text[ japanese ] = "å›³ã®èª­ã¿è¾¼ã¿ã‚¨ãƒ©ãƒ¼";
     Text[ chinese_traditional ] = "è¼‰å…¥åœ–å½¢ä¸å®Œæ•´";
@@ -908,7 +908,7 @@ String STR_EVENT_FRM_KEYINPUT_A
     Text [ french ] = "Saisie de caractères alphanumériques" ;
     Text [ dutch ] = "Invoer van alfanumerieke tekens" ;
     Text[ chinese_simplified ] = "è¾“å…¥å¸Œè…Šè¯­å­—æ¯é˜¿å°”æ³•";
-    Text[ russian ] = "Ââîä àëôàâèòíî-öèôğîâûõ çíàêîâ";
+    Text[ russian ] = "Ââîä àëôàâèòíî-öèôğîâûõ ñèìâîëîâ";
     Text[ polish ] = "Wpisz znaki alfanumeryczne";
     Text[ japanese ] = "ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆæ–‡å­—ã®å…¥åŠ›";
     Text[ chinese_traditional ] = "è¼¸å…¥å¸Œè‡˜èªç¬¬ä¸€å€‹å­—æ¯";
@@ -935,7 +935,7 @@ String STR_EVENT_FRM_KEYINPUT_NOA
     Text [ portuguese_brazilian ] = "Eingabe von nicht Alphazeichen" ;
     Text [ danish ] = "Input af ikke-alfategn" ;
     Text[ chinese_simplified ] = "è¾“å…¥çš„ä¸æ˜¯å¸Œè…Šè¯­å­—æ¯é˜¿å°”æ³•";
-    Text[ russian ] = "Ââîä íå àëôàâèòíî-öèôğîâûõ çíàêîâ";
+    Text[ russian ] = "Ââîä íå àëôàâèòíî-öèôğîâûõ ñèìâîëîâ";
     Text[ polish ] = "Wpisz znaki nie bêd¹ce znakami alfanumerycznymi";
     Text[ japanese ] = "ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆã§ãªã„æ–‡å­—ã®å…¥åŠ›";
     Text[ chinese_traditional ] = "è¼¸å…¥çš„ä¸æ˜¯å¸Œè‡˜èªç¬¬ä¸€å€‹å­—æ¯";
@@ -1072,7 +1072,7 @@ String STR_CONTENT_TYPE_FRAME
     Text [ portuguese ] = "Molduras de texto" ;
     Text [ portuguese_brazilian ] = "Textrahmen" ;
     Text[ chinese_simplified ] = "æ–‡æœ¬æ¡†";
-    Text[ russian ] = "Òåêñòîâàÿ ğàìêà";
+    Text[ russian ] = "Âğåçêà";
     Text[ polish ] = "Ramka tekstu";
     Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆæ ";
     Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š";
@@ -1099,7 +1099,7 @@ String STR_CONTENT_TYPE_GRAPHIC
     Text [ portuguese ] = "Imagens" ;
     Text [ portuguese_brazilian ] = "Grafiken" ;
     Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ russian ] = "Ğèñóíêè";
+    Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
     Text[ polish ] = "Grafiki";
     Text[ japanese ] = "å›³";
     Text[ chinese_traditional ] = "åœ–å½¢";
@@ -1109,7 +1109,7 @@ String STR_CONTENT_TYPE_GRAPHIC
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gràfics";
-    Text[ finnish ] = "Kuvat";
+    Text[ finnish ] = "Grafiikka";
     Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
 };
 String STR_CONTENT_TYPE_OLE
@@ -1126,7 +1126,7 @@ String STR_CONTENT_TYPE_OLE
     Text [ portuguese ] = "Objectos OLE" ;
     Text [ portuguese_brazilian ] = "OLE-Objekte" ;
     Text[ chinese_simplified ] = "OLE-å¯¹è±¡";
-    Text[ russian ] = "Îáúåêòû OLE";
+    Text[ russian ] = "OLE îáúåêòû";
     Text[ polish ] = "Obiekty OLE";
     Text[ japanese ] = "OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "OLE ç‰©ä»¶";
@@ -1153,7 +1153,7 @@ String STR_CONTENT_TYPE_BOOKMARK
     Text [ portuguese ] = "Marcadores de texto" ;
     Text [ portuguese_brazilian ] = "Textmarken" ;
     Text[ chinese_simplified ] = "ä¹¦ç­¾";
-    Text[ russian ] = "Òåêñòîâûå ïîìåòêè";
+    Text[ russian ] = "Çàêëàäêè";
     Text[ polish ] = "Zak³adki";
     Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯";
     Text[ chinese_traditional ] = "å…§æ–‡æ¨™ç±¤";
@@ -1180,7 +1180,7 @@ String STR_CONTENT_TYPE_REGION
     Text [ portuguese ] = "Categorias" ;
     Text [ portuguese_brazilian ] = "Bereiche" ;
     Text[ chinese_simplified ] = "åŒºåŸŸ";
-    Text[ russian ] = "Îáëàñòè";
+    Text[ russian ] = "Ğàçäåëû";
     Text[ polish ] = "Obszary";
     Text[ japanese ] = "ç¯„å›²";
     Text[ chinese_traditional ] = "å€åŸŸ";
@@ -1190,7 +1190,7 @@ String STR_CONTENT_TYPE_REGION
     Text[ turkish ] = "Bölüm";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seccions";
-    Text[ finnish ] = "Osiot";
+    Text[ finnish ] = "Osat";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™";
 };
 String STR_CONTENT_TYPE_URLFIELD
@@ -1353,7 +1353,7 @@ String STR_CONTENT_TYPE_SINGLE_OUTLINE
     Text[ turkish ] = "Başlık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encapçalament";
-    Text[ finnish ] = "Yläotsikko";
+    Text[ finnish ] = "Otsikko";
     Text[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­";
 };
 String STR_CONTENT_TYPE_SINGLE_TABLE
@@ -1397,7 +1397,7 @@ String STR_CONTENT_TYPE_SINGLE_FRAME
     Text [ portuguese ] = "Moldura de texto" ;
     Text [ portuguese_brazilian ] = "Textrahmen" ;
     Text[ chinese_simplified ] = "æ–‡æœ¬æ¡†";
-    Text[ russian ] = "Òåêñòîâàÿ ğàìêà";
+    Text[ russian ] = "Âğåçêà";
     Text[ polish ] = "Ramka tekstu";
     Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆæ ";
     Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š";
@@ -1424,7 +1424,7 @@ String STR_CONTENT_TYPE_SINGLE_GRAPHIC
     Text [ portuguese ] = "Imagem" ;
     Text [ portuguese_brazilian ] = "Grafik" ;
     Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ russian ] = "Ğèñóíîê";
+    Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Grafika";
     Text[ japanese ] = "å›³";
     Text[ chinese_traditional ] = "åœ–å½¢";
@@ -1434,7 +1434,7 @@ String STR_CONTENT_TYPE_SINGLE_GRAPHIC
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gràfics";
-    Text[ finnish ] = "Kuvat";
+    Text[ finnish ] = "Grafiikka";
     Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
 };
 String STR_CONTENT_TYPE_SINGLE_OLE
@@ -1451,7 +1451,7 @@ String STR_CONTENT_TYPE_SINGLE_OLE
     Text [ portuguese ] = "Objecto OLE" ;
     Text [ portuguese_brazilian ] = "OLE-Objekt" ;
     Text[ chinese_simplified ] = "OLE-å¯¹è±¡";
-    Text[ russian ] = "Îáúåêò OLE";
+    Text[ russian ] = "OLE îáúåêò";
     Text[ polish ] = "Obiekt OLE";
     Text[ japanese ] = "OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "OLE ç‰©ä»¶";
@@ -1478,7 +1478,7 @@ String STR_CONTENT_TYPE_SINGLE_BOOKMARK
     Text [ portuguese ] = "Marcador de texto" ;
     Text [ portuguese_brazilian ] = "Textmarke" ;
     Text[ chinese_simplified ] = "ä¹¦ç­¾";
-    Text[ russian ] = "Òåêñòîâàÿ ïîìåòêà";
+    Text[ russian ] = "Çàêëàäêà";
     Text[ polish ] = "Zak³adka";
     Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯";
     Text[ chinese_traditional ] = "å…§æ–‡æ¨™ç±¤";
@@ -1488,7 +1488,7 @@ String STR_CONTENT_TYPE_SINGLE_BOOKMARK
     Text[ turkish ] = "Metin işareti";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Adreça d'interès";
-    Text[ finnish ] = "Kirjanmerkit";
+    Text[ finnish ] = "Kirjanmerkki";
     Text[ thai ] = "à¸—à¸µà¹ˆà¸„à¸±à¹ˆà¸™";
 };
 String STR_CONTENT_TYPE_SINGLE_REGION
@@ -1505,7 +1505,7 @@ String STR_CONTENT_TYPE_SINGLE_REGION
     Text [ portuguese ] = "Área" ;
     Text [ portuguese_brazilian ] = "Bereich" ;
     Text[ chinese_simplified ] = "åŒºåŸŸ";
-    Text[ russian ] = "Îáëàñòü";
+    Text[ russian ] = "Ğàçäåë";
     Text[ polish ] = "Obszar";
     Text[ japanese ] = "ç¯„å›²";
     Text[ chinese_traditional ] = "å€åŸŸ";
@@ -1515,7 +1515,7 @@ String STR_CONTENT_TYPE_SINGLE_REGION
     Text[ turkish ] = "Bölüm";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Secció";
-    Text[ finnish ] = "Osio";
+    Text[ finnish ] = "Osa";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™";
 };
 String STR_CONTENT_TYPE_SINGLE_URLFIELD
@@ -1623,7 +1623,7 @@ String STR_CONTENT_TYPE_SINGLE_POSTIT
     Text[ turkish ] = "Not";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nota";
-    Text[ finnish ] = "Huomautus:";
+    Text[ finnish ] = "Huomautus";
     Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
 };
 String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
@@ -1686,7 +1686,7 @@ String RID_STR_SYSTEM
     Text [ ENGLISH ] = " [System]" ;
     Text[ english_us ] = "[System]";
     Text[ portuguese ] = "[Sistema]";
-    Text[ russian ] = "[Èç ñèñòåìû]";
+    Text[ russian ] = "[Ñèñòåìà]";
     Text[ greek ] = "[Óıóôçìá]";
     Text[ dutch ] = "[Systeem]";
     Text[ french ] = "[Système]";
@@ -1712,7 +1712,7 @@ String STR_MULT_INTERACT_SPELL_WARN
     Text [ ENGLISH ] = "The interactive spelling already active\in a different document" ;
     Text[ english_us ] = "The interactive spellcheck is already active\\in a different document";
     Text[ portuguese ] = "A verificação ortográfica interactiva já está\nactiva noutro documento";
-    Text[ russian ] = "Èíòåğàêòèâíàÿ ïğîâåğêà ïğàâîïèñàíèÿ\nóæå âêëş÷åíà â äğóãîì äîêóìåíòå";
+    Text[ russian ] = "Èíòåğàêòèâíàÿ ïğîâåğêà îğôîãğàôèè\nóæå âêëş÷åíà â äğóãîì äîêóìåíòå";
     Text[ greek ] = "Ôï äéáëïãéêü ğñüãñáììá åëİã÷ïõ ïñèïãñáößáò\n÷ñçóéìïğïéåßôáé áğü êÜğïéï Üëëï İããñáöï";
     Text[ dutch ] = "De interactieve spellingcontrole is\nreeds actief in een ander document.";
     Text[ french ] = "La vérification orthographique interactive est\nen cours d'utilisation dans un autre document.";
@@ -1729,7 +1729,7 @@ String STR_MULT_INTERACT_SPELL_WARN
     Text[ arabic ] = "ÇáÊÏŞíŞ ÇáÅãáÇÆí ÇáÊÈÇÏáí\näÔØ ÈÇáİÚá İí ãÓÊäÏ ÂÎÑ";
     Text[ turkish ] = "Etkileşimli yazım denetimi\nşu an başka bir belgede etkin";
     Text[ catalan ] = "La verificació ortogràfica interactiva ja és activa\\en un altre document";
-    Text[ finnish ] = "Interaktiivinen oikoluku on jo käytössä\toisessa asiakirjassa";
+    Text[ finnish ] = "Vuorovaikutteinen oikeinkirjoituksen tarkistus on jo käytössä toisessa asiakirjassa";
     Text[ thai ] = "à¸à¸²à¸£à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸ªà¸°à¸à¸”à¹à¸šà¸šà¹‚à¸•à¹‰à¸•à¸­à¸šà¸–à¸¹à¸à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§\\à¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸­à¸·à¹ˆà¸™";
 };
 String STR_MULT_INTERACT_HYPH_WARN
@@ -1755,7 +1755,7 @@ String STR_MULT_INTERACT_HYPH_WARN
     Text[ arabic ] = "İÕá ÇáãŞÇØÚ ÇáÊÈÇÏáí\näÔØ ÈÇáİÚá İí ãÓÊäÏ ÂÎÑ";
     Text[ turkish ] = "Etkileşimli heceleme\nşu an başka bir belgede etkin";
     Text[ catalan ] = "La partició de mots interactiva ja és activa\\en un altre document";
-    Text[ finnish ] = "Interaktiivinen tavutus on jo käytössä\toisessa asiakirjassa";
+    Text[ finnish ] = "Vuorovaikutteinen tavutus on jo käytössä toisessa asiakirjassa";
     Text[ thai ] = "à¸à¸²à¸£à¹ƒà¸Šà¹‰à¸¢à¸±à¸•à¸´à¸ à¸±à¸‡à¸„à¹Œà¹à¸šà¸šà¹‚à¸•à¹‰à¸•à¸­à¸šà¸–à¸¹à¸à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§\\à¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸­à¸·à¹ˆà¸™";
 };
 String STR_SPELL_TITLE
@@ -1764,7 +1764,7 @@ String STR_SPELL_TITLE
     Text [ ENGLISH ] = "Spelling" ;
     Text[ english_us ] = "Spellcheck";
     Text[ portuguese ] = "Ortografia";
-    Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ";
+    Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè";
     Text[ greek ] = "¸ëåã÷ïò ïñèïãñáößáò";
     Text[ dutch ] = "Spellingcontrole";
     Text[ french ] = "Vérification orthographique";
