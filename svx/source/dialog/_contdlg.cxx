@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 11:08:59 $
+ *  last change: $Author: thb $ $Date: 2001-11-27 15:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,18 +183,15 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( Window* pParent, USHORT nId,
                                                     SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
             SfxChildWindow( pParent, nId )
 {
-    Point aPt;
-    pWindow = new SvxSuperContourDlg( pBindings, this, pParent, CONT_RESID( RID_SVXDLG_CONTOUR ) );
-
-    if ( pInfo->aSize.Width() && pInfo->aSize.Height() )
-        pWindow->SetPosSizePixel( pInfo->aPos, pInfo->aSize );
-    else
-        pWindow->SetPosPixel( aPt );
+    SvxSuperContourDlg* pDlg = new SvxSuperContourDlg( pBindings, this, pParent, CONT_RESID( RID_SVXDLG_CONTOUR ) );
+    pWindow = pDlg;
 
     if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
-        ( (SvxSuperContourDlg*) pWindow )->RollUp();
+        pDlg->RollUp();
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+
+    pDlg->Initialize( pInfo );
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-22 14:26:06 $
+ *  last change: $Author: thb $ $Date: 2001-11-27 15:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,15 +215,12 @@ SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( Window* pParent, USHORT nId,
     pWindow = new SvxIMapDlg( pBindings, this, pParent, SVX_RES( RID_SVXDLG_IMAP ) );
     SvxIMapDlg* pDlg = (SvxIMapDlg*) pWindow;
 
-    if ( pInfo->aSize.Width() && pInfo->aSize.Height() )
-        pWindow->SetPosSizePixel( pInfo->aPos, pInfo->aSize );
-    else
-        pWindow->SetPosPixel( Point() );
-
     if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
         pDlg->RollUp();
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+
+    pDlg->Initialize( pInfo );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-11-02 11:11:18 $
+ *  last change: $Author: thb $ $Date: 2001-11-27 15:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ SvxRubyChildWindow::SvxRubyChildWindow( Window* pParent, USHORT nId,
         pDlg->RollUp();
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+
+    pDlg->Initialize( pInfo );
 }
 /* -----------------------------10.01.01 13:53--------------------------------
 
