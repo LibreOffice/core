@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:34:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,13 +747,13 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         pViewFrame = pFrame;
 
         const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
-        if ( !pSh )
-        {
-            // otherwise BaseURL is set in activation of document
-            INetURLObject aObject( SvtPathOptions().GetWorkPath() );
-            aObject.setFinalSlash();
-            INetURLObject::SetBaseURL( aObject.GetMainURL( INetURLObject::NO_DECODE ) );
-        }
+        //if ( !pSh )
+        //{
+        //    // otherwise BaseURL is set in activation of document
+        //    INetURLObject aObject( SvtPathOptions().GetWorkPath() );
+        //    aObject.setFinalSlash();
+        //    INetURLObject::SetBaseURL( aObject.GetMainURL( INetURLObject::NO_DECODE ) );
+        //}
 
         if( pNewContainerFrame )
         {
