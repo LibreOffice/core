@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-11 08:41:47 $
+ *  last change: $Author: gh $ $Date: 2001-07-13 14:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,6 +492,7 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
 {
 
     Application::SetDefDialogParent( this );
+    AlwaysEnableInput( TRUE );
     pBasic  = TTBasic::CreateMyBasic();     // depending on what was linked to the executable
     bInBreak = FALSE;
     bDisas = FALSE;
