@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ namespace xmloff
         sal_Int32               m_nIncludeDatabase;     // common database attributes to include
         sal_Int32               m_nIncludeSpecial;      // special attributes to include
         sal_Int32               m_nIncludeEvents;       // events to include
+        sal_Int32               m_nIncludeBindings;     // binding attributes to include
 
         SvXMLElementExport*     m_pOuterElement;        // XML element doing the concrete startElement etc. for the outer element
 
@@ -220,6 +221,11 @@ namespace xmloff
         */
         void exportDatabaseAttributes();
 
+        /** adds the XML attributes which are related to binding controls to
+            external values and/or list sources
+        */
+        void exportBindingAtributes();
+
         /** adds attributes which are special to a control type to the export context's attribute list
         */
         void exportSpecialAttributes();
@@ -255,6 +261,16 @@ namespace xmloff
                 out parameter. The set of integers.
         */
         void getSequenceInt16PropertyAsSet(const ::rtl::OUString& _rPropertyName, Int16Set& _rOut);
+
+        /** exports the attribute which descrives a cell value binding of a control
+            in a spreadsheet document
+        */
+        void exportCellBindingAttributes( bool _bIncludeListLinkageType );
+
+        /** exports the attribute which descrives a cell range which acts as list source for
+            a list-like control
+        */
+        void exportCellListSourceRange( );
     };
 
     //=====================================================================
@@ -319,6 +335,21 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7.198.1  2003/10/01 09:55:18  fs
+ *  #i18994# merging the changes from the CWS fs002
+ *
+ *  Revision 1.7.194.1  2003/09/25 14:28:36  fs
+ *  #18994# merging the changes from cws_srx645_fs002 branch
+ *
+ *  Revision 1.7.190.2  2003/09/18 14:00:36  fs
+ *  #18995# changes for binding list boxes to cells, while exchanging selection indexes instead of strings
+ *
+ *  Revision 1.7.190.1  2003/09/17 12:26:46  fs
+ *  #18999# #19367# persistence for cell value and cell range bindings
+ *
+ *  Revision 1.7  2001/01/03 16:25:34  fs
+ *  file format change (extra wrapper element for controls, similar to columns)
+ *
  *  Revision 1.6  2001/01/02 15:58:21  fs
  *  event ex- & import
  *
