@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:46:35 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,7 @@ PrinterJob::EndJob ()
 #ifndef MACOSX
     {
         PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get();
-        rPrinterInfoManager.endSpool( m_aLastJobData.m_aPrinterName, maJobTitle, pDestFILE );
+        rPrinterInfoManager.endSpool( m_aLastJobData.m_aPrinterName, maJobTitle, pDestFILE, m_aDocumentJobData );
     }
 #else
     {
