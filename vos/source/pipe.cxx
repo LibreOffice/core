@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:16 $
+ *  last change: $Author: jbu $ $Date: 2001-04-27 10:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ sal_Bool OPipe::create( const rtl::OUString& strName, TPipeOption Options )
     // if this was a valid pipe, decrease reference
     if ((m_pPipeRef) && (m_pPipeRef->release() == 0))
     {
-        osl_destroyPipe((*m_pPipeRef)());
+        osl_releasePipe((*m_pPipeRef)());
         delete m_pPipeRef;
         m_pPipeRef= 0;
     }
@@ -179,7 +179,7 @@ sal_Bool OPipe::create( const rtl::OUString& strName,
     // if this was a valid pipe, decrease reference
     if ((m_pPipeRef) && (m_pPipeRef->release() == 0))
     {
-        osl_destroyPipe((*m_pPipeRef)());
+        osl_releasePipe((*m_pPipeRef)());
         delete m_pPipeRef;
         m_pPipeRef= 0;
     }
@@ -207,7 +207,7 @@ OPipe& OPipe::operator= (const OPipe& pipe)
     // if this was a valid pipe, decrease reference
     if ((m_pPipeRef) && (m_pPipeRef->release() == 0))
     {
-        osl_destroyPipe((*m_pPipeRef)());
+        osl_releasePipe((*m_pPipeRef)());
         delete m_pPipeRef;
         m_pPipeRef= 0;
     }
@@ -244,7 +244,7 @@ void OPipe::close()
 {
     if (m_pPipeRef && (m_pPipeRef->release() == 0))
     {
-        osl_destroyPipe((*m_pPipeRef)());
+        osl_releasePipe((*m_pPipeRef)());
         delete m_pPipeRef;
     }
     m_pPipeRef= 0;
@@ -354,7 +354,7 @@ OStreamPipe& OStreamPipe::operator=(oslPipe Pipe)
     // if this was a valid pipe, decrease reference
     if (m_pPipeRef && (m_pPipeRef->release() == 0))
     {
-        osl_destroyPipe((*m_pPipeRef)());
+        osl_releasePipe((*m_pPipeRef)());
         delete m_pPipeRef;
         m_pPipeRef= 0;
     }
