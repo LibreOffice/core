@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 10:38:22 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,6 +431,13 @@ void ScInputHandler::UpdateRefDevice()
 
     MapMode aMode( MAP_100TH_MM, Point(), aScaleX, aScaleY );
     pEngine->SetRefMapMode( aMode );
+
+    //  SetRefDevice(NULL) uses VirtualDevice, SetRefMapMode forces creation of a local VDev,
+    //  so the DigitLanguage can be safely modified (might use an own VDev instead of NULL).
+    if ( !( bTextWysiwyg && pActiveViewSh ) )
+    {
+        pEngine->GetRefDevice()->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+    }
 }
 
 void ScInputHandler::ImplCreateEditEngine()
