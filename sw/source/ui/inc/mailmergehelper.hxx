@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergehelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:31:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,15 +300,15 @@ class SwMailTransferable :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper1< ::com::sun::star::datatransfer::XTransferable >
 {
-    String  m_aMimeType;
-    String  m_sBody;
-    String  m_aURL;
-    String  m_aName;
-    bool    m_bIsBody;
+    rtl::OUString  m_aMimeType;
+    rtl::OUString  m_sBody;
+    rtl::OUString  m_aURL;
+    rtl::OUString  m_aName;
+    bool           m_bIsBody;
 
     public:
-    SwMailTransferable(const String& rURL, const String& rName, const String& rMimeType);
-    SwMailTransferable(const String& rBody, const String& rMimeType);
+    SwMailTransferable(const rtl::OUString& rURL, const rtl::OUString& rName, const rtl::OUString& rMimeType);
+    SwMailTransferable(const rtl::OUString& rBody, const rtl::OUString& rMimeType);
     ~SwMailTransferable();
     virtual ::com::sun::star::uno::Any SAL_CALL
                         getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
