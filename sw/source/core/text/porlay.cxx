@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:28:43 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 09:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,18 @@ sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
 sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
 {
     // Alef, Dal, Thal, Reh, Zain, and Waw do not connect to the left
-    sal_Bool bRet = 0x627 != cPrevCh && 0x62F != cPrevCh && 0x630 != cPrevCh &&
-                    0x631 != cPrevCh && 0x632 != cPrevCh && 0x648 != cPrevCh;
+    // Uh, there seem to be some more characters that are not connectable
+    // to the left. So we look for the characters that are actually connectable
+    // to the left. Here is the complete list of WH:
+    sal_Bool bRet = 0x628 == cPrevCh ||
+                    ( 0x62A <= cPrevCh && cPrevCh <= 0x62E ) ||
+                    ( 0x633 <= cPrevCh && cPrevCh <= 0x643 ) ||
+                    ( 0x645 <= cPrevCh && cPrevCh <= 0x647 ) ||
+                    0x64A == cPrevCh ||
+                    ( 0x678 <= cPrevCh && cPrevCh <= 0x687 ) ||
+                    ( 0x69A <= cPrevCh && cPrevCh <= 0x6B4 ) ||
+                    ( 0x6B9 <= cPrevCh && cPrevCh <= 0x6C0 ) ||
+                    ( 0x6C3 <= cPrevCh && cPrevCh <= 0x6D3 );
 
     // check for ligatures cPrevChar + cChar
     if ( bRet )
