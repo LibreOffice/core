@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-27 13:28:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,14 +111,15 @@ pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDeb
 #endif  /* __cplusplus */
 
 #ifdef _WIN16
-#ifdef _DEBUG
-#undef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
+#undef OSL_DEBUG_LEVEL
+#define OSL_DEBUG_LEVEL 0
 #endif
 #endif
 
 
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 
 #define _OSL_DEBUG_ONLY(f)  (f)
 #define _OSL_TRACE          _OSL_GLOBAL osl_trace
@@ -150,7 +151,7 @@ pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDeb
 #define _OSL_VERIFY(c, f, l)        ((void)(c))
 #define _OSL_ENSURE(c, f, l, m)     ((void)0)
 
-#endif /* !_DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
 #endif /* _OSL_DIAGNOSE_H_ */
 
