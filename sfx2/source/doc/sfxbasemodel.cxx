@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:02:02 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@
 
 #ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
+#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
 #endif
 
 #ifndef _UNO_MAPPING_HXX_
@@ -317,6 +321,7 @@ struct IMPL_SfxBaseModel_DataContainer
     sal_Bool                                        m_bClosing              ;
     REFERENCE< com::sun::star::view::XPrintJob>     m_xPrintJob             ;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aPrintOptions;
+    REFERENCE< XSCRIPTPROVIDER >                        m_xScriptProvider;
 
     IMPL_SfxBaseModel_DataContainer::IMPL_SfxBaseModel_DataContainer(   MUTEX&          aMutex          ,
                                                                         SfxObjectShell* pObjectShell    )
@@ -459,6 +464,8 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                             static_cast< XVIEWDATASUPPLIER*     > ( this )  ,
                                                static_cast< XEVENTBROADCASTER*      > ( this )  ,
                                                static_cast< XUNOTUNNEL*             > ( this )  ,
+                                               static_cast< XDOCUMENTSUBSTORAGESUPPLIER* > ( this ) ,
+                                               static_cast< XSCRIPTPROVIDERSUPPLIER* > ( this ) ,
                                                static_cast< XEVENTSSUPPLIER*        > ( this )  ) ;
     }
     // If searched interface supported by this class ...
@@ -538,6 +545,8 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XPRINTJOBBROADCASTER   >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER        >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XUNOTUNNEL             >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XDOCUMENTSUBSTORAGESUPPLIER >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XSCRIPTPROVIDERSUPPLIER >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XCLOSEBROADCASTER      >*)NULL ) ,
                                                          aTypeCollectionFirst.getTypes()                                   );
 
@@ -2674,5 +2683,44 @@ sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequ
     }
 
     return 0;
+}
+
+REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode )
+    throw ( RUNTIMEEXCEPTION)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    REFERENCE< XSTORAGE > xResult;
+    if ( m_pData->m_pObjectShell.Is() && m_pData->m_pObjectShell->GetMedium() )
+    {
+        SotStorageRef rStorage = m_pData->m_pObjectShell->GetMedium()->GetStorage();
+        if ( rStorage.Is() )
+            xResult = rStorage->GetUNOAPIDuplicate( aStorageName, nMode );
+    }
+
+    return xResult;
+}
+
+REFERENCE< XSCRIPTPROVIDER > SAL_CALL SfxBaseModel::getScriptProvider()
+    throw ( RUNTIMEEXCEPTION )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    if ( !m_pData->m_xScriptProvider.is() )
+    {
+        SEQUENCE< ANY > aArgs( 1 );
+        aArgs[0] <<= REFERENCE< XMODEL >( (XMODEL*)this );
+        m_pData->m_xScriptProvider = REFERENCE< XSCRIPTPROVIDER >(
+                ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii( "drafts.com.sun.star.script.provider.MasterScriptProvider" ),
+                    aArgs ),
+                 UNO_QUERY );
+    }
+
+    return m_pData->m_xScriptProvider;
 }
 
