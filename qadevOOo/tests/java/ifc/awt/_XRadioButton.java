@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRadioButton.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:34 $
+ *  last change:$Date: 2003-09-08 10:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,10 @@
 package ifc.awt;
 
 
-import com.sun.star.awt.XRadioButton;
 import lib.MultiMethodTest;
 import lib.Status;
+
+import com.sun.star.awt.XRadioButton;
 
 /**
 * Testing <code>com.sun.star.awt.XRadioButton</code>
@@ -117,7 +118,6 @@ public class _XRadioButton extends MultiMethodTest {
 
         itemListener = new TestItemListener(log) ;
 
-        boolean result = true ;
         oObj.addItemListener(itemListener) ;
 
         tRes.tested("addItemListener()", Status.skipped(true)) ;
@@ -129,7 +129,6 @@ public class _XRadioButton extends MultiMethodTest {
     public void _removeItemListener() {
         requiredMethod("addItemListener()") ;
 
-        boolean result = true ;
         oObj.removeItemListener(itemListener) ;
 
         tRes.tested("removeItemListener()", Status.skipped(true)) ;
