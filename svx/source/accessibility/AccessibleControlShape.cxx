@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-06-27 12:02:00 $
+ *  last change: $Author: fs $ $Date: 2002-09-11 09:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,12 @@
 #ifndef _SVX_UNOAPI_HXX_
 #include "unoapi.hxx"
 #endif
+#ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include "ShapeTypeHandler.hxx"
+#endif
+#ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #include "SvxShapeTypes.hxx"
+#endif
 #include "svdstr.hrc"
 
 using namespace accessibility;
@@ -171,11 +175,12 @@ void AccessibleControlShape::Init()
         if ( pViewWindow && pUnoObjectImpl )
         {
             // get the context of the control - it will be our "inner" context
-            Reference< XAccessible > xControlAccessible( pUnoObjectImpl->GetUnoControl( pViewWindow ), uno::UNO_QUERY );
+            m_xControlModes = m_xControlModes.query( pUnoObjectImpl->GetUnoControl( pViewWindow ) );
+            Reference< XAccessible > xControlAccessible( m_xControlModes, uno::UNO_QUERY );
             Reference< XAccessibleContext > xNativeControlContext;
             if ( xControlAccessible.is() )
                 xNativeControlContext = xControlAccessible->getAccessibleContext();
-            DBG_ASSERT( xNativeControlContext.is(), "AccessibleControlShape::Init: no AccessibleContext for the control!" );
+            OSL_ENSURE( xNativeControlContext.is(), "AccessibleControlShape::Init: no AccessibleContext for the control!" );
 
             // get a proxy for this context
             // first a factory for the proxy
@@ -200,13 +205,9 @@ void AccessibleControlShape::Init()
 
                 mbDisposeNativeContext = sal_True;
 
-                // Finally, we need to add ourself as dispose listener to the native context. In case it is disposed,
-                // we need to dispose ourself, too. With a "real" aggregation (i.e. not using a proxy), this would be
-                // done automatically, as every access to the XComponent interface of the aggregated object would
-                // be re-routed to ourself. But with aggregating a proxy only we have to take care for this ourself.
-                mxNativeContextComponent = mxNativeContextComponent.query( xNativeControlContext );
-                if ( mxNativeContextComponent.is() )
-                    mxNativeContextComponent->addEventListener( static_cast< AccessibleControlShape_Base* >( this ) );
+                // Finally, we need to add ourself as mode listener to the control. In case the mode switches,
+                // we need to dispose ourself.
+                m_xControlModes->addModeChangeListener( this );
             }
         }
     }
@@ -325,9 +326,8 @@ namespace
 }
 
 //--------------------------------------------------------------------
-IMPLEMENT_FORWARD_XINTERFACE2( AccessibleControlShape, AccessibleShape, AccessibleControlShape_Base )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleControlShape, AccessibleShape, AccessibleControlShape_Base )
-    // order matters in both cases: the second argument is the base class doing the ref counting
+IMPLEMENT_FORWARD_REFCOUNT( AccessibleControlShape, AccessibleShape )
+IMPLEMENT_GET_IMPLEMENTATION_ID( AccessibleControlShape )
 
 //--------------------------------------------------------------------
 void SAL_CALL AccessibleControlShape::propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException)
@@ -352,11 +352,38 @@ void SAL_CALL AccessibleControlShape::propertyChange( const beans::PropertyChang
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL AccessibleControlShape::disposing (const lang::EventObject& _rSource) throw (uno::RuntimeException)
+uno::Any SAL_CALL AccessibleControlShape::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
+{
+    uno::Any aReturn = AccessibleShape::queryInterface( _rType );
+    if ( !aReturn.hasValue() )
+    {
+        aReturn = AccessibleControlShape_Base::queryInterface( _rType );
+        if ( !aReturn.hasValue() )
+            aReturn = m_xControlContextProxy->queryAggregation( _rType );
+    }
+    return aReturn;
+}
+
+//--------------------------------------------------------------------
+uno::Sequence< uno::Type > SAL_CALL AccessibleControlShape::getTypes() throw (uno::RuntimeException)
+{
+    uno::Sequence< uno::Type > aShapeTypes = AccessibleShape::getTypes();
+    uno::Sequence< uno::Type > aOwnTypes = AccessibleControlShape_Base::getTypes();
+
+    uno::Sequence< uno::Type > aAggregateTypes;
+    Reference< lang::XTypeProvider > xAggTypes;
+    if ( ::comphelper::query_aggregation( m_xControlContextProxy, xAggTypes ) )
+        aAggregateTypes = xAggTypes->getTypes();
+
+    return ::comphelper::concatSequences( aShapeTypes, aOwnTypes, aAggregateTypes );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL AccessibleControlShape::modeChanged( const util::ModeChangeEvent& _rSource ) throw (uno::RuntimeException)
 {
     // did it come from our inner context (the real one, not it's proxy!)?
-    OSL_TRACE ("AccessibleControlShape::disposing");
-    if ( _rSource.Source == mxNativeContextComponent )
+    OSL_TRACE ("AccessibleControlShape::modeChanged");
+    if ( _rSource.Source == m_xControlModes )
     {
         // If our "pseudo-aggregated" inner context does not live anymore,
         // we don't want to live, too.  This is accomplished by asking our
@@ -375,8 +402,16 @@ void SAL_CALL AccessibleControlShape::disposing (const lang::EventObject& _rSour
         // safely release the reference.
         mpParent->ReplaceChild (this, pShape);
     }
+#ifdef _DEBUG
     else
-        AccessibleShape::disposing( _rSource );
+        OSL_ENSURE( sal_False, "AccessibleControlShape::modeChanged: where did this come from?" );
+#endif
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL AccessibleControlShape::disposing (const lang::EventObject& _rSource) throw (uno::RuntimeException)
+{
+    AccessibleShape::disposing( _rSource );
 }
 
 //--------------------------------------------------------------------
@@ -438,9 +473,10 @@ void SAL_CALL AccessibleControlShape::disposing (void)
     // forward the disposel to our inner context
     if ( mbDisposeNativeContext )
     {
-        // don't listen for disposals anymore
-        if ( mxNativeContextComponent.is() )
-            mxNativeContextComponent->removeEventListener( static_cast< AccessibleControlShape_Base* >( this ) );
+        // don't listen for mode changes anymore
+        OSL_ENSURE( m_xControlModes.is(), "AccessibleControlShape::disposing: don't have an mode broadcaster anymore!" );
+        if ( m_xControlModes.is() )
+            m_xControlModes->removeModeChangeListener( this );
 
         Reference< XComponent > xInnerComponent;
         if ( ::comphelper::query_aggregation( m_xControlContextProxy, xInnerComponent ) )
@@ -450,7 +486,8 @@ void SAL_CALL AccessibleControlShape::disposing (void)
         // no need to dispose the proxy/inner context anymore
         mbDisposeNativeContext = sal_False;
     }
-    mxNativeContextComponent.clear();
+
+    m_xControlModes.clear();
 
     // let the base do it's stuff
     AccessibleShape::disposing();
