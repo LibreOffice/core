@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-23 13:51:47 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 06:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,6 +440,8 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
                 sCatalog = aDlg.getCatalog();
                 sSchema  = aDlg.getSchema();
             }
+            else
+                return sal_False;
         }
 
         // did we get a name
