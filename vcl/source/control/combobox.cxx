@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-16 16:11:36 $
+ *  last change: $Author: pl $ $Date: 2002-04-19 11:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,8 +328,8 @@ IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
         mpImplLB->SelectEntry( 0 , TRUE );
     mpBtn->SetPressed( TRUE );
     SetSelection( Selection( 0, SELECTION_MAX ) );
-    ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
     mpFloatWin->StartFloat( TRUE );
+    ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
     return 0;
 }
 
@@ -337,8 +337,8 @@ IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
 
 IMPL_LINK( ComboBox, ImplPopupModeEndHdl, void*, p )
 {
-    ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
     mpBtn->SetPressed( FALSE );
+    ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
     return 0;
 }
 
@@ -534,8 +534,8 @@ void ComboBox::ToggleDropDown()
                 mpImplLB->SelectEntry( 0 , TRUE );
             mpBtn->SetPressed( TRUE );
             SetSelection( Selection( 0, SELECTION_MAX ) );
-            ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
             mpFloatWin->StartFloat( TRUE );
+            ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
         }
     }
 }
@@ -749,8 +749,8 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
                     if ( mpImplLB->GetEntryList()->GetMRUCount() )
                         mpImplLB->SelectEntry( 0 , TRUE );
                     SetSelection( Selection( 0, SELECTION_MAX ) );
-                    ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
                     mpFloatWin->StartFloat( FALSE );
+                    ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
                     nDone = 1;
                 }
                 else if( ( nKeyCode == KEY_UP ) && mpFloatWin && mpFloatWin->IsInPopupMode() && aKeyEvt.GetKeyCode().IsMod2() )
@@ -1294,4 +1294,21 @@ void ComboBox::SetEntryData( USHORT nPos, void* pNewData )
 void* ComboBox::GetEntryData( USHORT nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryData( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
+}
+
+// -----------------------------------------------------------------------
+
+void ComboBox::SetTopEntry( USHORT nPos )
+{
+    mpImplLB->SetTopEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
+}
+
+// -----------------------------------------------------------------------
+
+USHORT ComboBox::GetTopEntry() const
+{
+    USHORT nPos = GetEntryCount() ? mpImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;
+    if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
+        nPos = 0;
+    return nPos;
 }

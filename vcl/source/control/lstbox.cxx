@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-16 16:11:36 $
+ *  last change: $Author: pl $ $Date: 2002-04-19 11:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,8 +333,8 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
     {
         mpImplWin->GrabFocus();
         mpBtn->SetPressed( TRUE );
-        ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
         mpFloatWin->StartFloat( TRUE );
+        ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
     }
 
     return 0;
@@ -344,8 +344,8 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
 
 IMPL_LINK( ListBox, ImplPopupModeEndHdl, void*, p )
 {
-    ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
     mpBtn->SetPressed( FALSE );
+    ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
     return 0;
 }
 
@@ -361,8 +361,8 @@ void ListBox::ToggleDropDown()
         {
             mpImplWin->GrabFocus();
             mpBtn->SetPressed( TRUE );
-            ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
             mpFloatWin->StartFloat( TRUE );
+            ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
         }
     }
 }
@@ -700,8 +700,8 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                         aKeyEvt.GetKeyCode().IsMod2() )
                     {
                         mpBtn->SetPressed( TRUE );
-                        ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
                         mpFloatWin->StartFloat( FALSE );
+                        ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
                         nDone = 1;
                     }
                     else
