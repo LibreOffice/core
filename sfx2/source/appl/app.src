@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-21 20:40:50 $
+ *  last change: $Author: kz $ $Date: 2001-09-25 21:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3759,7 +3759,7 @@ String STR_KEY_TEMP_PATH
     Text[ japanese ] = "一時ﾌｧｲﾙ";
     Text[ korean ] = "Temporary base directory";
     Text[ chinese_simplified ] = "临时文件";
-    Text[ chinese_traditional ] = "暫時的根目錄";
+    Text[ chinese_traditional ] = "暫存檔案";
     Text[ turkish ] = "Temporary base directory";
     Text[ arabic ] = "Temporary base directory";
     Text[ catalan ] = "Temporary base directory";
@@ -4125,6 +4125,7 @@ String STR_QUICKSTART_LNKNAME
 
 
  // ********************************************************************** EOF
+
 
 
 
