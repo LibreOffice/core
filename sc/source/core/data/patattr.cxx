@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2000-11-22 11:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,13 +432,26 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
 
     //  Items in Edit-Set stecken
 
+    SvxFontItem aCjkFontItem(EE_CHAR_FONTINFO_CJK);
+    SvxFontItem aCtlFontItem(EE_CHAR_FONTINFO_CTL);
+    aCjkFontItem = aFontItem;
+    aCtlFontItem = aFontItem;
+
     pEditSet->Put( aColorItem );
     pEditSet->Put( aFontItem );
+    pEditSet->Put( aCjkFontItem );
+    pEditSet->Put( aCtlFontItem );
     pEditSet->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
+    pEditSet->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+    pEditSet->Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
     pEditSet->Put( SvxWeightItem    ( eWeight,      EE_CHAR_WEIGHT ) );
+    pEditSet->Put( SvxWeightItem    ( eWeight,      EE_CHAR_WEIGHT_CJK ) );
+    pEditSet->Put( SvxWeightItem    ( eWeight,      EE_CHAR_WEIGHT_CTL ) );
     pEditSet->Put( SvxUnderlineItem ( eUnder,       EE_CHAR_UNDERLINE ) );
     pEditSet->Put( SvxCrossedOutItem( eStrike,      EE_CHAR_STRIKEOUT ) );
     pEditSet->Put( SvxPostureItem   ( eItalic,      EE_CHAR_ITALIC ) );
+    pEditSet->Put( SvxPostureItem   ( eItalic,      EE_CHAR_ITALIC_CJK ) );
+    pEditSet->Put( SvxPostureItem   ( eItalic,      EE_CHAR_ITALIC_CTL ) );
     pEditSet->Put( SvxContourItem   ( bOutline,     EE_CHAR_OUTLINE ) );
     pEditSet->Put( SvxShadowedItem  ( bShadow,      EE_CHAR_SHADOW ) );
 }
