@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_ucb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:53:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,11 +144,11 @@ bool create_folder(
     Reference<XContentCreator> xCreator( parentContent.get(), UNO_QUERY );
     if (xCreator.is())
     {
-        Any title( makeAny( ::rtl::Uri::decode( url.copy( slash + 1 ),
-                                                rtl_UriDecodeWithCharset,
-                                                RTL_TEXTENCODING_UTF8 ) ) );
-
-        Sequence<ContentInfo> infos( xCreator->queryCreatableContentsInfo() );
+        const Any title( ::rtl::Uri::decode( url.copy( slash + 1 ),
+                                             rtl_UriDecodeWithCharset,
+                                             RTL_TEXTENCODING_UTF8 ) );
+        const Sequence<ContentInfo> infos(
+            xCreator->queryCreatableContentsInfo() );
         for ( sal_Int32 pos = 0; pos < infos.getLength(); ++pos )
         {
             // look KIND_FOLDER:
@@ -205,7 +205,7 @@ bool erase_path( OUString const & url,
     {
         try {
             ucb_content.executeCommand(
-                OUSTR("delete"), makeAny( true /* delete physically */ ) );
+                OUSTR("delete"), Any( true /* delete physically */ ) );
         }
         catch (RuntimeException &) {
             throw;
