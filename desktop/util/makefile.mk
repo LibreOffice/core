@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: ghiggins $ $Date: 2002-06-18 09:12:39 $
+#   last change: $Author: cd $ $Date: 2002-08-23 09:32:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,7 +141,8 @@ APP1OBJS= \
             $(OBJ)$/desktopresid.obj	\
             $(OBJ)$/dispatchwatcher.obj		\
             $(OBJ)$/ssoinit.obj				\
-            $(OBJ)$/officeipcmanager.obj
+            $(OBJ)$/officeipcmanager.obj	\
+            $(OBJ)$/javainteractionhandler.obj
 
 APP1DEF=    $(MISCX)$/$(TARGET).def
 
@@ -236,7 +237,8 @@ SLOFILES =	\
     $(SLO)$/desktopresid.obj	\
     $(SLO)$/dispatchwatcher.obj	\
     $(SLO)$/ssoinit.obj			\
-    $(SLO)$/officeipcmanager.obj
+    $(SLO)$/officeipcmanager.obj	\
+    $(SLO)$/javainteractionhandler.obj
 
 SHL1OBJS=	$(SLOFILES)
 SHL1TARGET=	dsk$(UPD)$(DLLPOSTFIX)
