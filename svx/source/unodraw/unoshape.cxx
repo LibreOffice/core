@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-23 13:39:31 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 16:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,12 @@
 #ifndef _SVX_XFLBMTIT_HXX
 #include "xflbmtit.hxx"
 #endif
-
+#ifndef _SVX_XLNSTIT_HXX
+#include "xlnstit.hxx"
+#endif
+#ifndef _SVX_XLNEDIT_HXX
+#include "xlnedit.hxx"
+#endif
 #include "svdmodel.hxx"
 #include "globl3d.hxx"
 #include "fmglob.hxx"
@@ -960,16 +965,35 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
     if( !SetFillAttribute( nWID, rName, aSet ) )
         return sal_False;
 
-//-/    pObj->SetAttributes( aSet, sal_False );
-//-/    SdrBroadcastItemChange aItemChange(*pObj);
     pObj->SetItemSetAndBroadcast(aSet);
-//-/    pObj->BroadcastItemChange(aItemChange);
 
     return sal_True;
 }
 
 sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet )
 {
+    if( rName.getLength() == 0 )
+    {
+        switch( nWID )
+        {
+        case XATTR_LINEEND:
+        case XATTR_LINESTART:
+            {
+                const String aEmpty;
+                const XPolygon aPoly;
+                if( nWID == XATTR_LINEEND )
+                    rSet.Put( XLineStartItem( aEmpty, aPoly ) );
+                else
+                    rSet.Put( XLineEndItem( aEmpty, aPoly ) );
+
+                return sal_True;
+            }
+            break;
+        }
+
+        return sal_False;
+    }
+
     const SfxItemPool* pPool = rSet.GetPool();
 
     const String aSearchName( rName );
