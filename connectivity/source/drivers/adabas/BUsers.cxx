@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 12:22:56 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 07:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
 
 using namespace ::comphelper;
 
@@ -145,13 +148,36 @@ void SAL_CALL OUsers::dropByName( const ::rtl::OUString& elementName ) throw(SQL
     if( aIter == m_aNameMap.end())
         throw NoSuchElementException(elementName,*this);
 
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP USER ");
-    ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
+    {
+        // first we have to check if this user is live relevaant for the database
+        // which means with out these users the database will miss more than one important system table
+        ::rtl::OUString sUsers = ::rtl::OUString::createFromAscii("SELECT USERMODE,USERNAME FROM DOMAIN.USERS WHERE USERNAME = '");
+        sUsers += elementName + ::rtl::OUString::createFromAscii("'");
+        Reference< XStatement > xStmt = m_pConnection->createStatement();
+        if(xStmt.is())
+        {
+            Reference<XResultSet> xRes = xStmt->executeQuery(sUsers);
+            Reference<XRow> xRow(xRes,UNO_QUERY);
+            if(xRes.is() && xRow.is() && xRes->next()) // there can only be one user with this name
+            {
+                static const ::rtl::OUString sDbaUser = ::rtl::OUString::createFromAscii("DBA");
+                if(xRow->getString(1) == sDbaUser)
+                {
+                    ::comphelper::disposeComponent(xStmt);
+                    ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("This user couldn't be deleted. Otherwise the database stays in a inconsistent state."),*this);
+                }
+            }
+        }
+    }
 
-    aSql = aSql + aQuote + elementName + aQuote;
+    {
+        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP USER ");
+        ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
+        aSql = aSql + aQuote + elementName + aQuote;
 
         Reference< XStatement > xStmt = m_pConnection->createStatement(  );
-    xStmt->execute(aSql);
+        xStmt->execute(aSql);
+    }
 
     OCollection_TYPE::dropByName(elementName);
 }
@@ -161,7 +187,7 @@ void SAL_CALL OUsers::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOu
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
+        ::dbtools::throwInvalidIndexException(*this);
 
     dropByName(m_aElements[index]->first);
 }
