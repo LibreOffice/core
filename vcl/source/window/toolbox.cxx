@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-30 15:10:17 $
+ *  last change: $Author: ssa $ $Date: 2002-05-06 15:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4710,7 +4710,8 @@ BOOL ToolBox::ImplOpenItem( KeyCode aKeyCode )
         if( ImplGetSVData()->maWinData.mpFirstFloat )
         {
             FloatingWindow* pLastLevelFloat = ImplGetSVData()->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
-            if( pLastLevelFloat )
+            // only close the floater if it is not our direct parent, which would kill ourself
+            if( pLastLevelFloat && pLastLevelFloat != GetParent() )
             {
                 pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
                 return bRet;
