@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-28 16:30:23 $
+ *  last change: $Author: dvo $ $Date: 2002-03-01 10:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2036,14 +2036,18 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
 {
     sal_Int32 nShapeFeatures = SEF_DEFAULT;
 
-    // draw:name
-    Reference < XNamed > xNamed( rPropSet, UNO_QUERY );
-    if( xNamed.is() )
+    // draw:name (#97662#: not for shapes, since those names will be
+    // treated in the shape export)
+    if( !bShape )
     {
-        OUString sName( xNamed->getName() );
-        if( sName.getLength() )
-            GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
-                                      xNamed->getName() );
+        Reference < XNamed > xNamed( rPropSet, UNO_QUERY );
+        if( xNamed.is() )
+        {
+            OUString sName( xNamed->getName() );
+            if( sName.getLength() )
+                GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
+                                          xNamed->getName() );
+        }
     }
 
     Any aAny;
