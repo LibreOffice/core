@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-15 15:17:54 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 09:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 
 class ZipPackageFolder;
 class ZipFile;
+class OutputThread;
 
 class ZipPackage :
                    public ::cppu::OWeakObject,
@@ -112,18 +113,24 @@ class ZipPackage :
                    public com::sun::star::util::XChangesBatch,
                    public com::sun::star::beans::XPropertySet
 {
+    friend class OutputThread;
 protected:
-    ZipPackageFolder *pRootFolder;
-    ZipFile          *pZipFile;
-    ::ucb::Content   *pContent;
     ::com::sun::star::uno::Sequence < sal_Int8 > aEncryptionKey;
+    NameHash         aRecent;
+    ::rtl::OUString  sURL;
+    sal_Int32        nSegmentSize;
+    sal_Bool         bHasEncryptedEntries;
+
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
+
+    ZipPackageFolder *pRootFolder;
+    ZipFile          *pZipFile;
+    ::ucb::Content   *pContent;
+
     void getZipFileContents();
-    NameHash         aRecent;
-    sal_Bool bHasEncryptedEntries;
 
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
@@ -134,7 +141,6 @@ public:
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw(::com::sun::star::uno::RuntimeException);
-
     virtual void SAL_CALL acquire(  )
         throw();
     virtual void SAL_CALL release(  )
