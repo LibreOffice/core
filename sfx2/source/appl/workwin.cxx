@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 07:03:57 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@ static const ResIdToResName pToolBarResToName[] =
     { 25000,    "viewerbar"            },      //calc   (plugin)
     { 23023,    "viewerbar"            },      //impress(plugin)
     { 23024,    "viewerbar"            },      //draw   (plugin)
+    { 23031,    "mediaobjectbar"       },      //draw/impress
+    { 25060,    "mediaobjectbar"       },      //calc
+    { 23311,    "mediaobjectbar"       },      //writer
     { 0,        ""                     }
 };
 
