@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.16 2001-04-25 16:32:36 bm Exp $
+	$Id: chart.mod,v 1.17 2001-05-15 12:20:24 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -130,7 +130,8 @@
 		  svg:y %coordinate; #IMPLIED
 		  svg:width %length; #IMPLIED
 		  svg:height %length; #IMPLIED
-		  chart:style-name %styleName; #IMPLIED >
+		  chart:style-name %styleName; #IMPLIED
+		  table:cell-range-address %cell-range-address; #IMPLIED >
 
 <!-- 3d scene attributes on plot-area -->
 <!ATTLIST chart:plot-area
