@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-19 17:09:35 $
+ *  last change: $Author: pl $ $Date: 2002-03-22 10:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,10 +970,16 @@ void SalFrame::Show( BOOL bVisible )
          *  to the child on Show(TRUE)
          */
         if( maFrameData.nStyle_ & SAL_FRAME_STYLE_CHILD )
+        {
+            BOOL bIgnore = _GetDisplay()->GetXLib()->GetIgnoreXErrors();
+            _GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
             XSetInputFocus( _GetXDisplay(),
                             maFrameData.GetWindow(),
                             RevertToParent,
                             CurrentTime );
+            XSync( _GetXDisplay(), False );
+            _GetDisplay()->GetXLib()->SetIgnoreXErrors( bIgnore );
+        }
     }
     else
     {
