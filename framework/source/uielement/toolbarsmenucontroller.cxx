@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 19:38:19 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,20 +110,20 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTSETTINGS_HPP_
-#include <drafts/com/sun/star/ui/XUIElementSettings.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENTSETTINGS_HPP_
+#include <com/sun/star/ui/XUIElementSettings.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_UIElementType_HPP_
-#include <drafts/com/sun/star/ui/UIElementType.hpp>
+#ifndef _COM_SUN_STAR_UI_UIElementType_HPP_
+#include <com/sun/star/ui/UIElementType.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -166,8 +166,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
-using namespace ::drafts::com::sun::star::frame;
-using namespace ::drafts::com::sun::star::ui;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::ui;
 
 static const char CONFIGURE_TOOLBARS[]          = ".uno:ConfigureDialog";
 static const char CMD_COLORBAR[]                = ".uno:ColorControl";
@@ -354,7 +354,7 @@ static void fillHashMap( const Sequence< Sequence< ::com::sun::star::beans::Prop
 }
 
 // private function
-Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuController::getLayoutManagerToolbars( const Reference< ::drafts::com::sun::star::frame::XLayoutManager >& rLayoutManager )
+Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuController::getLayoutManagerToolbars( const Reference< ::com::sun::star::frame::XLayoutManager >& rLayoutManager )
 {
     std::vector< ToolBarInfo > aToolBarArray;
     Sequence< Reference< XUIElement > > aUIElements = rLayoutManager->getElements();
@@ -371,7 +371,7 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
                 xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ))) >>= nType;
                 xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))) >>= aResName;
 
-                if (( nType == ::drafts::com::sun::star::ui::UIElementType::TOOLBAR ) &&
+                if (( nType == ::com::sun::star::ui::UIElementType::TOOLBAR ) &&
                     ( aResName.getLength() > 0 ))
                 {
                     ToolBarInfo aToolBarInfo;
