@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-12 14:40:49 $
+ *  last change: $Author: hro $ $Date: 2002-10-15 13:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,10 @@ namespace osl
     template<class T>
     class Guard
     {
+    private:
+        Guard( const Guard& );
+        const Guard& operator = ( const Guard& );
+
     protected:
         T * pT;
     public:
@@ -172,6 +176,9 @@ namespace osl
     template<class T>
     class ClearableGuard
     {
+    private:
+        ClearableGuard( const ClearableGuard& );
+        const ClearableGuard& operator = ( const ClearableGuard& );
     protected:
         T * pT;
     public:
