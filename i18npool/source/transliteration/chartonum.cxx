@@ -55,72 +55,27 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OUString SAL_CALL CharToNum::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-    Sequence< sal_Int32 >& offset ) throw(RuntimeException)
-{
-    const sal_Unicode *str = inStr.getStr() + startPos;
-    rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount + 1);
-    offset.realloc(nCount);
-    sal_Int16 index;
-
-    OUString numberChar, decimalChar, minusChar;
-    if (number == 0) {
-        OUStringBuffer aBuf(NumberChar_Count * 10 + 1);
-        for (sal_Int32 i = 0; i < NumberChar_Count; i++)
-        aBuf.append(NumberChar[i], 10);
-        numberChar = aBuf.makeStringAndClear();
-        decimalChar = OUString(DecimalChar);
-        minusChar = OUString(MinusChar);
-    } else {
-        numberChar = OUString(NumberChar[number], 10);
-        decimalChar = OUString::valueOf(DecimalChar[number]);
-        minusChar = OUString::valueOf(MinusChar[number]);
-    }
-
-    for (sal_Int32 i = 0; i < nCount; i++) {
-        if ((index = numberChar.indexOf(str[i])) >= 0)
-        newStr->buffer[i] = (NUMBER_ZERO + (index % 10));
-        else if ((index = decimalChar.indexOf(str[i]) >= 0) &&
-                i < nCount-1 && numberChar.indexOf(str[i+1]) >= 0)
-        newStr->buffer[i] = NUMBER_DECIMAL;
-        else if ((index = minusChar.indexOf(str[i]) >= 0) &&
-                i < nCount-1 && numberChar.indexOf(str[i+1]) >= 0)
-        newStr->buffer[i] = NUMBER_MINUS;
-        else
-        newStr->buffer[i] = str[i];
-        offset[i] = startPos + i;
-    }
-    return OUString(newStr->buffer, nCount);
-}
-
-CharToNum::CharToNum()
-{
-    number = 0;
-    transliterationName = "CharToNum";
-    implementationName = "com.sun.star.i18n.Transliteration.CharToNum";
-}
-
 #define TRANSLITERATION_CHARTONUM( name, _number ) \
 CharToNum##name::CharToNum##name() \
 { \
-    number = NumberChar_##_number; \
-    transliterationName = "CharToNum"#name; \
-    implementationName = "com.sun.star.i18n.Transliteration.CharToNum"#name; \
+        nNativeNumberMode = 0; \
+        tableSize = 0; \
+        implementationName = "com.sun.star.i18n.Transliteration.CharToNum"#name; \
 }
-TRANSLITERATION_CHARTONUM( Fullwidth, FullWidth)
-TRANSLITERATION_CHARTONUM( Lower_zh_CN, Lower_zh)
-TRANSLITERATION_CHARTONUM( Lower_zh_TW, Lower_zh)
-TRANSLITERATION_CHARTONUM( Upper_zh_CN, Upper_zh)
-TRANSLITERATION_CHARTONUM( Upper_zh_TW, Upper_zh_TW)
-TRANSLITERATION_CHARTONUM( KanjiShort_ja_JP, Modern_ja)
-TRANSLITERATION_CHARTONUM( KanjiTraditional_ja_JP, Traditional_ja)
-TRANSLITERATION_CHARTONUM( Lower_ko, Lower_ko)
-TRANSLITERATION_CHARTONUM( Upper_ko, Upper_ko)
-TRANSLITERATION_CHARTONUM( Hangul_ko, Hangul_ko)
-TRANSLITERATION_CHARTONUM( Indic_ar, Indic_ar)
-TRANSLITERATION_CHARTONUM( EastIndic_ar, EastIndic_ar)
-TRANSLITERATION_CHARTONUM( Indic_hi, Indic_hi)
-TRANSLITERATION_CHARTONUM( _th, th)
+TRANSLITERATION_CHARTONUM( Fullwidth)
+TRANSLITERATION_CHARTONUM( Lower_zh_CN)
+TRANSLITERATION_CHARTONUM( Lower_zh_TW)
+TRANSLITERATION_CHARTONUM( Upper_zh_CN)
+TRANSLITERATION_CHARTONUM( Upper_zh_TW)
+TRANSLITERATION_CHARTONUM( KanjiShort_ja_JP)
+TRANSLITERATION_CHARTONUM( KanjiTraditional_ja_JP)
+TRANSLITERATION_CHARTONUM( Lower_ko)
+TRANSLITERATION_CHARTONUM( Upper_ko)
+TRANSLITERATION_CHARTONUM( Hangul_ko)
+TRANSLITERATION_CHARTONUM( Indic_ar)
+TRANSLITERATION_CHARTONUM( EastIndic_ar)
+TRANSLITERATION_CHARTONUM( Indic_hi)
+TRANSLITERATION_CHARTONUM( _th)
 #undef TRANSLITERATION_CHARTONUM
 
 } } } }
