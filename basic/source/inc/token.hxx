@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:08:27 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ enum SbiToken {
     IF, _IN_, INPUT,
     LET, LINE, LINEINPUT, LOCAL, LOOP, LPRINT, LSET,
     NAME, NEW, NEXT,
-    ON, OPEN, OPTION,
+    ON, OPEN, OPTION, IMPLEMENTS,
     PRINT, PRIVATE, PROPERTY, PUBLIC,
     REDIM, REM, RESUME, RETURN, RSET,
     SELECT, SET, SHARED, STATIC, STEP, STOP, SUB,
@@ -125,7 +125,7 @@ enum SbiToken {
     DIV, IDIV, MOD, PLUS, MINUS,
     EQ, NE, LT, GT, LE, GE,
     NOT, AND, OR, XOR, EQV,
-    IMP, CAT, LIKE, IS,
+    IMP, CAT, LIKE, IS, TYPEOF,
     // Sonstiges:
     FIRSTEXTRA,
     NUMBER=FIRSTEXTRA, FIXSTRING, SYMBOL, _CDECL_, BYVAL, BYREF,
