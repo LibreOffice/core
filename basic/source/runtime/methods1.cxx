@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-18 12:35:41 $
+ *  last change: $Author: ab $ $Date: 2001-08-20 08:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1310,7 +1310,7 @@ RTLFUNC(ConvertToUrl)
     {
         String aStr = rPar.Get(1)->GetString();
         INetURLObject aURLObj( aStr, INET_PROT_FILE );
-        OUString aFileURL = aURLObj.GetMainURL();
+        OUString aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
         if( !aFileURL.getLength() )
             ::osl::File::getFileURLFromSystemPath( aFileURL, aFileURL );
         if( !aFileURL.getLength() )
