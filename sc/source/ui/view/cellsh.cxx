@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-04 15:57:08 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     ScRange aMarkRange;
-    BOOL bSimpleArea = GetViewData()->GetSimpleArea( aMarkRange, TRUE );    //! macht TRUE aerger ?
+    BOOL bSimpleArea = GetViewData()->GetSimpleArea( aMarkRange );
     BOOL bOnlyNotBecauseOfMatrix;
     BOOL bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument* pDoc = GetViewData()->GetDocument();
@@ -535,7 +535,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_RANGE_ADDRESS:
                 {
                     ScRange aRange;
-                    if ( pViewData->GetSimpleArea( aRange, TRUE ) )
+                    if ( pViewData->GetSimpleArea( aRange ) )
                     {
                         String aStr;
                         USHORT nFlags = SCA_VALID | SCA_TAB_3D;
