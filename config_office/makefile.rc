@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: svesik $ $Date: 2000-10-23 09:07:19 $
+#   last change: $Author: svesik $ $Date: 2000-10-23 13:02:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,6 +125,7 @@ RC_SUBDIRS =  \
 	jurt \
 	jut \
 	ldapber \
+	lingu \
 	officecfg \
 	offmgr \
 	offuh \
@@ -249,7 +250,7 @@ starmath : svx
 stoc : bridges rdbmaker xml2cmp
 store : vos
 svtools : toolkit ucbhelper unotools
-svx : sfx2 xmloff
+svx : sfx2 xmloff lingu
 sw : offmgr sd
 toolkit : vcl
 tools : external vos
