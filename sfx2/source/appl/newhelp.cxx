@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-15 07:14:30 $
+ *  last change: $Author: pb $ $Date: 2001-10-15 07:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2286,7 +2286,10 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
             {
                 Reference < XViewSettingsSupplier > xSettings( xController, UNO_QUERY );
                 Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
-                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("PreventHelpTips"), makeAny( sal_Bool( sal_True ) ) );
+                Any aBoolAny = makeAny( sal_Bool( sal_True ) );
+                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("PreventHelpTips"), aBoolAny );
+                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowGraphics"), aBoolAny );
+                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowTables"), aBoolAny );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("HelpURL"), makeAny( DEFINE_CONST_OUSTRING("HID:68245") ) );
             }
         }
