@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:25:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,8 @@ struct SwMergeDescriptor
     SwWrtShell&                                         rSh;
     const ::svx::ODataAccessDescriptor&                 rDescriptor;
     String                                              sSaveToFilter; //export filter to save resulting files
+    String                                              sSaveToFilterOptions; //
+    com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveToFilterData;
 
     String                                              sSubject;
     String                                              sAddressFromColumn;
