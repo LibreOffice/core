@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:02:48 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,15 +254,15 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     Reference< XController >    xController;
     sal_Bool bSuccess = sal_True;
     sal_Bool bAttachModel = sal_False;
-    if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_FORMGRIDVIEW) )
+    if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_FORMGRIDVIEW)
         xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OFormGridView")),UNO_QUERY);
-    else if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_DATASOURCEBROWSER) )// construct the control
+    else if(aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_DATASOURCEBROWSER )// construct the control
         xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceBrowser")),UNO_QUERY);
-    else if ( bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_QUERYDESIGN)) )// construct the control
+    else if ( bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_QUERYDESIGN) )// construct the control
         xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OQueryDesign")),UNO_QUERY);
-    else if ( bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_TABLEDESIGN)) ) // construct the control
+    else if ( bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_TABLEDESIGN) ) // construct the control
         xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OTableDesign")),UNO_QUERY);
-    else if ( bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == String(URL_COMPONENT_RELATIONDESIGN)) )// construct the control
+    else if ( bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_RELATIONDESIGN) )// construct the control
         xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ORelationDesign")),UNO_QUERY);
     else
         OSL_ENSURE(0,"wrong dispatch url!");
