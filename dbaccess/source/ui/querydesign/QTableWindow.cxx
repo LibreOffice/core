@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-02 07:54:11 $
+ *  last change: $Author: vg $ $Date: 2002-05-08 09:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,8 @@ sal_Bool OQueryTableWindow::Init()
 //------------------------------------------------------------------------------
 sal_Bool OQueryTableWindow::FillListBox()
 {
-    ImageList aImageList(ModuleRes(isHiContrast(m_pListBox) ? IMG_JOINS_H : IMG_JOINS));
+    ModuleRes TmpRes(isHiContrast(m_pListBox) ? IMG_JOINS_H : IMG_JOINS);
+    ImageList aImageList(TmpRes);
     Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
 
 
