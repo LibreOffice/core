@@ -1,0 +1,3 @@
+_getScriptLogicalNames;description=Try to get logical names;expected=MemoryUtils.MemUsage
+_getImplementations;description=Try to get a valid implementation;logicalname=script://MemoryUtils.MemUsage?location=document;expected=MemoryUtils.MemUsage
+_refresh;description=Try calling refresh;expected=success
