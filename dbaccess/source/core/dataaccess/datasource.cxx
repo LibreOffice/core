@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ ODatabaseSource::ODatabaseSource(
             ,m_nLoginTimeout(0)
             ,m_sName(_rRegistrationName)
             ,m_xServiceFactory(_rxFactory)
-            ,m_bReadOnly(sal_True)
+            ,m_bReadOnly(sal_True)      // assume readonly for the moment, adjusted below
             ,m_bPasswordRequired(sal_False)
             ,m_aForms(*this, m_aMutex)
             ,m_aReports(*this, m_aMutex)
@@ -191,6 +191,14 @@ ODatabaseSource::ODatabaseSource(
     DBG_ASSERT(m_xConfigurationNode.is(), "ODatabaseSource::ODatabaseSource : use ctor 1 if you can't supply a configuration location at the moment !");
     if (m_xConfigurationNode.is())
         initializeFromConfiguration();
+    // adjust our readonly flag
+    try
+    {
+        m_bReadOnly = !m_xConfigurationNode.is() || m_xConfigurationNode->isReadOnly();
+    }
+    catch (InvalidRegistryException&)
+    {
+    }
 }
 
 //--------------------------------------------------------------------------
