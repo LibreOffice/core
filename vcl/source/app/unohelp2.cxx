@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp2.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2002-03-18 17:36:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,21 @@
 #include <sot/formats.hxx>
 #endif
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#endif
+
 
 using namespace ::com::sun::star;
-
 
 namespace vcl { namespace unohelper {
 
@@ -83,6 +95,30 @@ namespace vcl { namespace unohelper {
 
     TextDataObject::~TextDataObject()
     {
+    }
+
+    void TextDataObject::CopyStringTo( const String& rContent,
+        const uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
+    {
+        DBG_ASSERT( rxClipboard.is(), "TextDataObject::CopyStringTo: invalid clipboard!" );
+        if ( !rxClipboard.is() )
+            return;
+
+        TextDataObject* pDataObj = new TextDataObject( rContent );
+
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        try
+        {
+            rxClipboard->setContents( pDataObj, NULL );
+
+            uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
+            if( xFlushableClipboard.is() )
+                xFlushableClipboard->flushClipboard();
+        }
+        catch( const uno::Exception& )
+        {
+        }
+        Application::AcquireSolarMutex( nRef );
     }
 
     // ::com::sun::star::uno::XInterface
