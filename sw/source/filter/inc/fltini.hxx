@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 13:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,8 +178,6 @@ void GetUndoWriter( const String&, WriterRef& );
 #endif
 #endif
 
-// Zugriff auf die Ini-Datei
-ULONG ReadFilterFlags( const sal_Char* pName, const sal_Char* pAltName = 0 );
 
 // JP 17.03.99 - 63049
 // Umsetzen der LRSpaces im aktuell importierten Doc. Die Fremd-Filter
