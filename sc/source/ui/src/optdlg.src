@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:59:09 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,6 +637,7 @@ TabPage RID_SCPAGE_CALC
         QuickHelpText[ korean ] = "0 corresponds to 12/30/1899";
         Text[ turkish ] = "30.12.1899 ( ~Standart )";
         Text[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Wert 0 entspricht dem 30.12.1899";
     };
     RadioButton BTN_DATESC10
     {
@@ -652,7 +653,7 @@ TabPage RID_SCPAGE_CALC
         Text [ portuguese_brazilian ] = "StarCa~lc 1.0" ;
         Text [ portuguese ] = "01/01/1900 ( Star~Calc 1.0 )" ;
         Text [ finnish ] = "StarCa~lc 1.0" ;
-        Text [ danish ] = "01-01-1900 ( StarOffice Calc 1.0 )" ;
+        Text [ danish ] = "01-01-1900 ( StarCalc 1.0 )" ;
         Text [ french ] = "01.01.1900 ( Star~Calc 1.0 )" ;
         Text [ swedish ] = "1900-01-01 ( Star~Calc 1.0 )" ;
         Text [ dutch ] = "01.01.1900 ( Star~Calc 1.0 )" ;
@@ -683,6 +684,7 @@ TabPage RID_SCPAGE_CALC
         QuickHelpText[ korean ] = "0 corresponds to 01/01/1900";
         Text[ turkish ] = "01.01.1900 ( Star~Calc 1.0 )";
         Text[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Wert 0 entspricht dem 01.01.1900";
     };
     RadioButton BTN_DATE1904
     {
@@ -729,6 +731,7 @@ TabPage RID_SCPAGE_CALC
         QuickHelpText[ korean ] = "0 corresponds to 01/01/1904";
         Text[ turkish ] = "~01.01.1904";
         Text[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Wert 0 entspricht dem 01.01.1904";
     };
     GroupBox GB_DATE
     {
