@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-15 16:38:58 $
+ *  last change: $Author: sj $ $Date: 2002-05-29 14:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     }
                     pOut->DrawPolyLine( aPoly, sal_False, bRecordPath );
                 }
-                delete pnPoints;
+                delete[] pnPoints;
             }
             break;
 
@@ -410,8 +410,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 // PolyPolygon Actions erzeugen
                 PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
                 pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-                delete (char*) pPtAry;
-                delete pnPoints;
+                delete[] (char*) pPtAry;
+                delete[] pnPoints;
             }
             break;
 
@@ -985,7 +985,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         pWMF->Read( pBuf, nLen );
                         String aText( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
                         pOut->DrawText( aPos, aText, NULL, bRecordPath );
-                        delete pBuf;
+                        delete[] pBuf;
                     }
                     else
                     {
@@ -1002,7 +1002,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
 #endif
                         String aText( pBuf, (xub_StrLen)nLen );
                         pOut->DrawText( aPos, aText, NULL, bRecordPath );
-                        delete pBuf;
+                        delete[] pBuf;
                     }
                 }
             }
@@ -1093,7 +1093,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                     }
                     pOut->DrawPolyLine( aPolygon, sal_False, bRecordPath );
                 }
-                delete pnPoints;
+                delete[] pnPoints;
             }
             break;
 
@@ -1124,8 +1124,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 // PolyPolygon Actions erzeugen
                 PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
                 pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
-                delete (char*) pPtAry;
-                delete pnPoints;
+                delete[] (char*) pPtAry;
+                delete[] pnPoints;
             };
             break;
 

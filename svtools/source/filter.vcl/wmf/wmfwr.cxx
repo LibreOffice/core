@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-06 17:11:51 $
+ *  last change: $Author: sj $ $Date: 2002-05-29 14:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,7 +570,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint, const String & rStri
                 *pWMF << (sal_uInt16)0;
         }
     }
-    delete pConvertedDXAry;
+    delete[] pConvertedDXAry;
     UpdateRecordHeader();
 }
 
@@ -593,7 +593,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint, const String & rStri
             pDXAry[ i ] = pDXAry[ i ] * ( (long)nWidth ) / nNormSize;
         WMFRecord_ExtTextOut( rPoint, rString, pDXAry );
     }
-    delete pDXAry;
+    delete[] pDXAry;
 }
 
 

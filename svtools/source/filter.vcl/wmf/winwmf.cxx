@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-16 15:47:31 $
+ *  last change: $Author: sj $ $Date: 2002-05-29 14:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,8 +373,8 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
             // PolyPolygon Actions erzeugen
             PolyPolygon aPolyPoly( nPoly, pnPoints, pPtAry );
             pOut->DrawPolyPolygon( aPolyPoly );
-            delete (char*) pPtAry;
-            delete pnPoints;
+            delete[] (char*) pPtAry;
+            delete[] pnPoints;
         }
         break;
 
@@ -423,7 +423,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                 char*   pChar = new char[ ( nLength + 1 ) &~ 1 ];
                 pWMF->Read( pChar, ( nLength + 1 ) &~ 1 );
                 String aText( pChar, nLength, pOut->GetCharSet() );
-                delete pChar;
+                delete[] pChar;
                 Point aPosition( ReadYX() );
                 pOut->DrawText( aPosition, aText );
             }
@@ -458,7 +458,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                 pWMF->Read( pChar, ( nOriginalTextLen + 1 ) &~ 1 );
                 String aText( pChar, (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
                 nNewTextLen = aText.Len();                                              // less character (japanese version), so the
-                delete pChar;                                                           // dxAry will not fit
+                delete[] pChar;                                                         // dxAry will not fit
 
                 if ( nNewTextLen )
                 {
@@ -497,7 +497,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                         pOut->DrawText( aPosition, aText );
                 }
             }
-            delete pDXAry;
+            delete[] pDXAry;
 
         }
         break;

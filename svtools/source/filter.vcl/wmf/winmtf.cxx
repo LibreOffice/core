@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-16 15:47:31 $
+ *  last change: $Author: sj $ $Date: 2002-05-29 14:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,7 @@ void WinMtfOutput::ImplResizeObjectArry( UINT32 nNewEntrys )
     for ( nIndex = 0; nIndex < mnEntrys; nIndex++ )
         pGDIObj[ nIndex ] = mpGDIObj[ nIndex ];
     for ( mnEntrys = nNewEntrys; nIndex < mnEntrys; pGDIObj[ nIndex++ ] = NULL );
-    delete mpGDIObj, mpGDIObj = pGDIObj;
+    delete[] mpGDIObj, mpGDIObj = pGDIObj;
 }
 
 //-----------------------------------------------------------------------------------
@@ -788,7 +788,7 @@ WinMtfOutput::~WinMtfOutput()
     {
         delete mpGDIObj[ i ];
     }
-    delete mpGDIObj;
+    delete[] mpGDIObj;
 };
 
 //-----------------------------------------------------------------------------------
