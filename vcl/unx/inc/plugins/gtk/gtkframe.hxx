@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:55:02 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ public:
 
 
     // get current modifier and button mask
-    virtual ULONG               GetCurrentModButtons();
+    virtual SalPointerState     GetPointerState();
 
     // set new parent window
     virtual void                SetParent( SalFrame* pNewParent );
