@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:19:39 $
+ *  last change: $Author: os $ $Date: 2001-10-16 11:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
+#include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -1176,6 +1179,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     BOOL bScrollable = TRUE;
     //with the drag and drop interface no result set is initially available
     Reference< sdbc::XStatement > xStatement;
+    BOOL bDisposeResultSet = FALSE;
     if(!xRow.is())
     {
         try
@@ -1194,14 +1198,33 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 xResultSet = xStatement->executeQuery(aDBData.sCommand);
             else
             {
-                rtl::OUString aQuoteChar = xConnection->getMetaData()->getIdentifierQuoteString();
-                rtl::OUString sStatement(C2U("SELECT * FROM "));
-                sStatement = C2U("SELECT * FROM ");
-                sStatement += aQuoteChar;
-                sStatement += aDBData.sCommand;
-                sStatement += aQuoteChar;
-                xResultSet = xStatement->executeQuery( sStatement );
+                Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+                if( xMgr.is() )
+                {
+                    Reference<XInterface> xInstance = xMgr->createInstance(
+                        C2U( "com.sun.star.sdb.RowSet" ));
+                    Reference <XPropertySet> xRowSetPropSet(xInstance, UNO_QUERY);
+                    if(xRowSetPropSet.is())
+                    {
+                        Any aConnection;
+                        aConnection <<= xConnection;
+                        xRowSetPropSet->setPropertyValue(C2U("ActiveConnection"), aConnection);
+                        Any aString;
+                        aString <<= aDBData.sDataSource;
+                        xRowSetPropSet->setPropertyValue(C2U("DataSourceName"), aString);
+                        aString <<= aDBData.sCommand;
+                        xRowSetPropSet->setPropertyValue(C2U("Command"), aString);
+                        Any aInt;
+                        aInt <<= aDBData.nCommandType;
+                        xRowSetPropSet->setPropertyValue(C2U("CommandType"), aInt);
 
+
+                        Reference< XRowSet > xRowSet(xInstance, UNO_QUERY);
+                        xRowSet->execute();
+                        xResultSet = Reference<XResultSet>(xRowSet, UNO_QUERY);
+                        bDisposeResultSet = TRUE;
+                    }
+                }
             }
 
             xRow = Reference< sdbc::XRow >(xResultSet, UNO_QUERY);
@@ -1657,6 +1680,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     rSh.ClearMark();
     rSh.EndAllAction();
     delete pWait;
+    if(bDisposeResultSet)
+    {
+        Reference<XComponent> xComp(xResultSet, UNO_QUERY);
+        if(xComp.is())
+            xComp->dispose();
+    }
+
 }
 void SwInsertDBColAutoPilot::SetTabSet()
 {

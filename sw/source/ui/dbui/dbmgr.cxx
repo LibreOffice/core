@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2001-09-06 13:36:14 $
+ *  last change: $Author: os $ $Date: 2001-10-16 11:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1720,7 +1720,8 @@ BOOL SwNewDBMgr::ToNextRecord(
 BOOL SwNewDBMgr::ToNextRecord(SwDSParam* pParam)
 {
     BOOL bRet = TRUE;
-    if(!pParam || !pParam->xResultSet.is() || pParam->bEndOfDB)
+    if(!pParam || !pParam->xResultSet.is() || pParam->bEndOfDB ||
+            (pParam->aSelection.getLength() && pParam->aSelection.getLength() <= pParam->nSelectionIndex))
     {
         if(pParam)
             pParam->CheckEndOfDB();
