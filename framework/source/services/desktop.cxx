@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: as $ $Date: 2001-07-05 05:10:23 $
+ *  last change: $Author: as $ $Date: 2001-07-20 08:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
     // CHeck incoming parameter and throw an exception for wrong values!
     if(
-        ( &sURL            == NULL )   &&
+        ( &sURL            == NULL )   ||
         ( sURL.getLength() <  1    )
       )
     {
