@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97dum.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:44:13 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,7 @@ const ULONG ExcDummy8_UsesElfs::nMyLen = sizeof(ExcDummy8_UsesElfs::pMyData);
 
 
 const BYTE ExcDummy8_02::pMyData[] = {
-    0x5f, 0x00, 0x02, 0x00, 0x01, 0x00,                     // SAVERECALC
-    0x25, 0x02, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00          // DEFAULTROWHEIGHT
+    0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
     };
 const ULONG ExcDummy8_02::nMyLen = sizeof(ExcDummy8_02::pMyData);
 
