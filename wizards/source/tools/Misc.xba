@@ -371,7 +371,7 @@ Function DuplicateRow(oSheet as Object, RangeName as String)
 Dim oRange as Object
 Dim oCell as Object
 Dim oCellAddress as New com.sun.star.table.CellAddress
-Dim oRangeAddress as New com.sun.star.table.CellRangeAddress 
+Dim oRangeAddress as New com.sun.star.table.CellRangeAddress
 	oRange = oSheet.GetCellRangeByName(RangeName)
 	oRangeAddress = oRange.RangeAddress
 	oCell = oSheet.GetCellByPosition(oRangeAddress.StartColumn,oRangeAddress.StartRow)
@@ -413,9 +413,9 @@ End Sub
 Sub Main
 &apos;	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	oComponents = StarDesktop.Components.CreateEnumeration
-	Do 
+	Do
 		oComponent = oComponents.NextElement
-		ShowSupportedServicenames(oComponent)	
+		ShowSupportedServicenames(oComponent)
 	Loop Until Not oComponents.HasMoreElements
 	For i = 0 To Ubound(StarDesktop.Components())
 		PrintdbgInfo StarDesktop.Components(i)
@@ -585,7 +585,7 @@ End Sub
 
 
 Function GetSheetIndex(oSheets, sName) as Integer
-Dim i as Integer	
+Dim i as Integer
 	For i = 0 To oSheets.Count-1
 		If oSheets(i).Name = sName Then
 			GetSheetIndex = i
@@ -605,7 +605,7 @@ Dim aAddress As Variant
 	oCursor.GotoEndOfUsedArea(True)
 	aAddress = oCursor.RangeAddress
 	GetLastUsedRow = aAddress.EndRow
-End Function		
+End Function
 
 
 &apos; Note To set a one lined frame you have to set the inner width to 0
@@ -664,7 +664,7 @@ Dim i as Integer
 			GetPropertyValueIndex = i
 			Exit Function
 		End If
-	Next i	
+	Next i
 	GetPropertyValueIndex() = -1
 End Function
 
@@ -677,7 +677,7 @@ Dim oDisp as Object
 	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
 	oUrl.Complete = &quot;slot:&quot; &amp; CStr(SlotID)
 	oTrans.parsestrict(oUrl)
-	oDisp = StarDesktop.ActiveFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
+	oDisp = StarDesktop.ActiveFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)
 	oDisp.dispatch(oUrl, oArg())
 End Sub
 
@@ -702,7 +702,7 @@ Dim oLocale as New com.sun.star.lang.Locale
 	oLocale.Language = sLanguage
 	oLocale.Country = sCountry
 	GetLocale = oLocale
-End Function					
+End Function
 
 
 Sub ToggleDesignMode(oDocument as Object)
@@ -712,7 +712,7 @@ Dim aSwitchMode as new com.sun.star.util.URL
 	aTransformer.parseStrict(aSwitchMode)
 	oFrame = oDocument.currentController.Frame
 	oDispatch = oFrame.queryDispatch(aSwitchMode, oFrame.Name, 63)
-	Dim aEmptyArgs() as com.sun.star.bean.PropertyValue
+        Dim aEmptyArgs() as New com.sun.star.bean.PropertyValue
 	oDispatch.dispatch(aSwitchMode, aEmptyArgs())
 	Erase aSwitchMode
 End Sub</script:module>
