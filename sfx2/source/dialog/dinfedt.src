@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:12:42 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,8 @@ ModalDialog DLG_DOCINFO_EDT
     Text[ hindi ] = "क्षेत्र नामों का संपादन";
     Text[ slovak ] = "Upraviť názvy polí­";
 };
+
+
 
 
 
