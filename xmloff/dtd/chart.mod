@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.31 2002-05-06 10:08:55 bm Exp $
+	$Id: chart.mod,v 1.32 2002-09-02 08:18:50 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -280,8 +280,7 @@
 <!-- general text properties -->
 
 <!ATTLIST style:properties 
-		  text:rotation-angle %integer; "0" 
-		  fo:direction (ltr|ttb) #IMPLIED >
+		  text:rotation-angle %integer; "0" >
 
 <!-- symbol properties -->
 
