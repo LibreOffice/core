@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-15 20:21:14 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ greek ] = "Fixed text ~width";
         Text[ dutch ] = "Fixed text ~width";
         Text[ french ] = "Largeur de colonne fixe";
-        Text[ spanish ] = "Fixed text ~width";
+        Text[ spanish ] = "~Ancho de columna fijo";
         Text[ finnish ] = "Fixed text ~width";
         Text[ italian ] = "Ampiezza colonna fissa";
         Text[ danish ] = "Fixed text ~width";
