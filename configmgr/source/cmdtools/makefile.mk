@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:31:19 $
+#   last change: $Author: kz $ $Date: 2004-08-31 14:56:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,15 +67,21 @@ PRJNAME=configmgr
 
 TARGET=configtools
 TARGET1=configimport
+
+# Targettype should be CUI, but we need to be able to run the tools on Windows without a shell
+.IF "$(GUI)" == "WNT"
+TARGETTYPE=GUI
+APP1NOSAL="TRUE"
+.ELSE  # "$(GUI)" == "WNT
 TARGETTYPE=CUI
+.ENDIF # "$(GUI)" == "WNT
+
 LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
