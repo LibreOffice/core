@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-15 12:37:43 $
+ *  last change: $Author: tra $ $Date: 2001-05-25 11:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,12 @@ const Type       CPPUTYPE_OUSTRING   = getCppuType((OUString*)0);
 const Type       CPPUTYPE_SEQSALINT8 = getCppuType((Sequence< sal_Int8>*)0);
 const sal_Int32  MAX_CLIPFORMAT_NAME = 256;
 
+const OUString TEXT_PLAIN_CHARSET   = OUString::createFromAscii( "text/plain;charset=" );
+const OUString HPNAME_OEM_ANSI_TEXT = OUString::createFromAscii( "OEM/ANSI Text" );
+
+const OUString HTML_FORMAT_NAME_WINDOWS = OUString::createFromAscii( "HTML Format" );
+const OUString HTML_FORMAT_NAME_SOFFICE = OUString::createFromAscii( "HTML (HyperText Markup Language)" );
+
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
@@ -137,8 +143,6 @@ CDataFormatTranslator::CDataFormatTranslator( const Reference< XMultiServiceFact
 {
     m_XDataFormatTranslator = Reference< XDataFormatTranslator >(
         m_SrvMgr->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.DataFormatTranslator" ) ), UNO_QUERY );
-
-    OSL_ASSERT( m_XDataFormatTranslator.is( ) );
 }
 
 //------------------------------------------------------------------------
@@ -151,27 +155,30 @@ CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& 
 
     try
     {
-        Any aFormat = m_XDataFormatTranslator->getSystemDataTypeFromDataFlavor( aDataFlavor );
-
-        if ( aFormat.hasValue( ) )
+        if( m_XDataFormatTranslator.is( ) )
         {
-            if ( aFormat.getValueType( ) == CPPUTYPE_SALINT32 )
-            {
-                aFormat >>= cf;
-                OSL_ENSURE( CF_INVALID != cf, "Invalid Clipboard format delivered" );
-            }
-            else if ( aFormat.getValueType( ) == CPPUTYPE_OUSTRING )
-            {
-                OUString aClipFmtName;
-                aFormat >>= aClipFmtName;
+            Any aFormat = m_XDataFormatTranslator->getSystemDataTypeFromDataFlavor( aDataFlavor );
 
-                OSL_ASSERT( aClipFmtName.getLength( ) );
-                cf = RegisterClipboardFormatW( aClipFmtName.getStr( ) );
+            if ( aFormat.hasValue( ) )
+            {
+                if ( aFormat.getValueType( ) == CPPUTYPE_SALINT32 )
+                {
+                    aFormat >>= cf;
+                    OSL_ENSURE( CF_INVALID != cf, "Invalid Clipboard format delivered" );
+                }
+                else if ( aFormat.getValueType( ) == CPPUTYPE_OUSTRING )
+                {
+                    OUString aClipFmtName;
+                    aFormat >>= aClipFmtName;
 
-                OSL_ENSURE( CF_INVALID != cf, "RegisterClipboardFormat failed" );
+                    OSL_ASSERT( aClipFmtName.getLength( ) );
+                    cf = RegisterClipboardFormatW( aClipFmtName.getStr( ) );
+
+                    OSL_ENSURE( CF_INVALID != cf, "RegisterClipboardFormat failed" );
+                }
+                else
+                    OSL_ENSURE( sal_False, "Wrong Any-Type detected" );
             }
-            else
-                OSL_ENSURE( sal_False, "Wrong Any-Type detected" );
         }
     }
     catch( ... )
@@ -190,10 +197,6 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& a
 {
     DataFlavor aFlavor;
 
-    aFlavor.MimeType             = OUString::createFromAscii( "" );
-    aFlavor.HumanPresentableName = OUString::createFromAscii( "" );
-    aFlavor.DataType             = getCppuType( (const Sequence< sal_Int8 >*) 0 );
-
     try
     {
         CLIPFORMAT aClipformat = aFormatEtc.cfFormat;
@@ -203,31 +206,34 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& a
 
         if ( isOemOrAnsiTextFormat( aClipformat ) )
         {
-            aFlavor.MimeType             = OUString::createFromAscii( "text/plain;charset=" );
+            aFlavor.MimeType             = TEXT_PLAIN_CHARSET;
             aFlavor.MimeType            += getTextCharsetFromLCID( lcid, aClipformat );
 
-            aFlavor.HumanPresentableName = OUString::createFromAscii( "OEM/ANSI Text" );
+            aFlavor.HumanPresentableName = HPNAME_OEM_ANSI_TEXT;
             aFlavor.DataType             = CPPUTYPE_SEQSALINT8;
         }
         else if ( CF_INVALID != aClipformat )
         {
-            aFlavor = m_XDataFormatTranslator->getDataFlavorFromSystemDataType( aAny );
-
-            if ( !aFlavor.MimeType.getLength( ) )
+            if ( m_XDataFormatTranslator.is( ) )
             {
-                // lookup of DataFlavor from clipboard format id
-                // failed, so we try to resolve via clipboard
-                // format name
-                OUString clipFormatName = getClipboardFormatName( aClipformat );
+                aFlavor = m_XDataFormatTranslator->getDataFlavorFromSystemDataType( aAny );
 
-                // if we could not get a clipboard format name an
-                // error must have occured or it is a standard
-                // clipboard format that we don't translate, e.g.
-                // CF_BITMAP (the office only uses CF_DIB)
-                if ( clipFormatName.getLength( ) )
+                if ( !aFlavor.MimeType.getLength( ) )
                 {
-                    aAny <<= clipFormatName;
-                    aFlavor = m_XDataFormatTranslator->getDataFlavorFromSystemDataType( aAny );
+                    // lookup of DataFlavor from clipboard format id
+                    // failed, so we try to resolve via clipboard
+                    // format name
+                    OUString clipFormatName = getClipboardFormatName( aClipformat );
+
+                    // if we could not get a clipboard format name an
+                    // error must have occured or it is a standard
+                    // clipboard format that we don't translate, e.g.
+                    // CF_BITMAP (the office only uses CF_DIB)
+                    if ( clipFormatName.getLength( ) )
+                    {
+                        aAny <<= clipFormatName;
+                        aFlavor = m_XDataFormatTranslator->getDataFlavorFromSystemDataType( aAny );
+                    }
                 }
             }
         }
@@ -327,7 +333,7 @@ sal_Bool SAL_CALL CDataFormatTranslator::isTextFormat( CLIPFORMAT cf ) const
 sal_Bool SAL_CALL CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf ) const
 {
     OUString clipFormatName = getClipboardFormatName( cf );
-    return ( clipFormatName == OUString::createFromAscii( "HTML Format" ) );
+    return ( clipFormatName == HTML_FORMAT_NAME_WINDOWS );
 }
 
 //------------------------------------------------------------------------
@@ -337,9 +343,7 @@ sal_Bool SAL_CALL CDataFormatTranslator::isHTMLFormat( CLIPFORMAT cf ) const
 sal_Bool SAL_CALL CDataFormatTranslator::isTextHtmlFormat( CLIPFORMAT cf ) const
 {
     OUString clipFormatName = getClipboardFormatName( cf );
-
-    return ( clipFormatName.equalsIgnoreAsciiCase(
-        OUString::createFromAscii( "HTML (HyperText Markup Language)" ) ) );
+    return ( clipFormatName.equalsIgnoreAsciiCase( HTML_FORMAT_NAME_SOFFICE ) );
 }
 
 //------------------------------------------------------------------------
