@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:38:49 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 15:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -37756,7 +37756,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Text" ;
             Text [ english ] = "text" ;
             Text [ norwegian ] = "Text" ;
-            Text [ italian ] = "testo" ;
+            Text [ italian ] = "Testo" ;
             Text [ portuguese_brazilian ] = "Text" ;
             Text [ portuguese ] = "Texto" ;
             Text [ finnish ] = "teksti" ;
@@ -37785,7 +37785,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Text, aus dem die nicht druckbaren Zeichen entfernt werden." ;
             Text [ english ] = "is any worksheet information from which you want to remove nonprintable characters." ;
             Text [ norwegian ] = "Der Text, aus dem die nichtdruckbaren Zeichen entfernt werden." ;
-            Text [ italian ] = "il testo dal quale vengono eliminati i caratteri non stampabili." ;
+            Text [ italian ] = "Il testo dal quale vengono eliminati i caratteri non stampabili." ;
             Text [ portuguese_brazilian ] = "Der Text, aus dem die nichtdruckbaren Zeichen entfernt werden." ;
             Text [ portuguese ] = "É o texto contendo os caracteres não imprimíveis que irão ser eliminados." ;
             Text [ finnish ] = "Teksti, josta tulostumattomat merkit poistetaan." ;
@@ -37853,7 +37853,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Text " ;
             Text [ english ] = "text " ;
             Text [ norwegian ] = "Text " ;
-            Text [ italian ] = "testo " ;
+            Text [ italian ] = "Testo " ;
             Text [ portuguese_brazilian ] = "Text " ;
             Text [ portuguese ] = "Texto " ;
             Text [ finnish ] = "teksti" ;
@@ -38381,7 +38381,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Text" ;
             Text [ english ] = "within_text" ;
             Text [ norwegian ] = "Text" ;
-            Text [ italian ] = "testo" ;
+            Text [ italian ] = "Testo" ;
             Text [ portuguese_brazilian ] = "Text" ;
             Text [ portuguese ] = "Texto" ;
             Text [ finnish ] = "teksti" ;
@@ -38931,7 +38931,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Text" ;
             Text [ english ] = "text" ;
             Text [ norwegian ] = "Text" ;
-            Text [ italian ] = "testo" ;
+            Text [ italian ] = "Testo" ;
             Text [ portuguese_brazilian ] = "Text" ;
             Text [ portuguese ] = "Texto" ;
             Text [ finnish ] = "teksti" ;
@@ -38960,7 +38960,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Text, der in eine Zahl gewandelt wird." ;
             Text [ english ] = "is the text enclosed in quotation marks or a reference to a cell containing the text you want to convert." ;
             Text [ norwegian ] = "Der Text, der in eine Zahl gewandelt wird." ;
-            Text [ italian ] = "il testo che viene convertito in un numero." ;
+            Text [ italian ] = "Il testo che viene convertito in un numero." ;
             Text [ portuguese_brazilian ] = "Der Text, der in eine Zahl verwandelt wird." ;
             Text [ portuguese ] = "é o texto a converter em número." ;
             Text [ finnish ] = "Luvuksi muunnettava teksti." ;
@@ -39087,7 +39087,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Format" ;
             Text [ english ] = "format_text" ;
             Text [ norwegian ] = "Format" ;
-            Text [ italian ] = "formato" ;
+            Text [ italian ] = "Formato" ;
             Text [ portuguese_brazilian ] = "Format" ;
             Text [ portuguese ] = "Formato" ;
             Text [ finnish ] = "Muoto" ;
@@ -39767,7 +39767,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Text" ;
             Text [ english ] = "text" ;
             Text [ norwegian ] = "Text" ;
-            Text [ italian ] = "testo" ;
+            Text [ italian ] = "Testo" ;
             Text [ portuguese_brazilian ] = "Text" ;
             Text [ portuguese ] = "Texto" ;
             Text [ finnish ] = "teksti" ;
@@ -40021,7 +40021,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Text" ;
             Text [ english ] = "text" ;
             Text [ norwegian ] = "Text" ;
-            Text [ italian ] = "testo" ;
+            Text [ italian ] = "Testo" ;
             Text [ portuguese_brazilian ] = "Text" ;
             Text [ portuguese ] = "Texto" ;
             Text [ finnish ] = "teksti" ;
@@ -40109,7 +40109,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Anzahl der Zeichen für das Endteilwort." ;
             Text [ english ] = "specifies how many characters you want to extract." ;
             Text [ norwegian ] = "Die Anzahl der Zeichen für das Endteilwort." ;
-            Text [ italian ] = "specifica il numero dei caratteri che si desidera estrarre." ;
+            Text [ italian ] = "Specifica il numero dei caratteri che si desidera estrarre." ;
             Text [ portuguese_brazilian ] = "Die Anzahl der Zeichen f? das Endteilwort." ;
             Text [ portuguese ] = "é o número de caracteres a extrair do texto." ;
             Text [ finnish ] = "Lopputekstin merkkien määrä." ;
@@ -40177,7 +40177,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Text" ;
             Text [ english ] = "text" ;
             Text [ norwegian ] = "Text" ;
-            Text [ italian ] = "testo" ;
+            Text [ italian ] = "Testo" ;
             Text [ portuguese_brazilian ] = "Text" ;
             Text [ portuguese ] = "Texto" ;
             Text [ finnish ] = "teksti" ;
