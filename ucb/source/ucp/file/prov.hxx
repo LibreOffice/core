@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-13 11:38:07 $
+ *  last change: $Author: sb $ $Date: 2000-12-15 08:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,20 +243,15 @@ namespace fileaccess {
 
         // XFileIdentifierConverter
 
-        virtual rtl::OUString SAL_CALL getFileURLFromNormalizedPath( const rtl::OUString& HostName,
-                                                                     const rtl::OUString& NormalizedPath )
-            throw( com::sun::star::uno::RuntimeException );
-
-        virtual rtl::OUString SAL_CALL getNormalizedPathFromFileURL( const rtl::OUString& HostName,
-                                                                     const rtl::OUString& URL )
+        virtual sal_Int32 SAL_CALL
+        getFileProviderLocality( const rtl::OUString& BaseURL )
             throw( com::sun::star::uno::RuntimeException );
 
         virtual rtl::OUString SAL_CALL getFileURLFromSystemPath( const rtl::OUString& BaseURL,
                                                                  const rtl::OUString& SystemPath )
             throw( com::sun::star::uno::RuntimeException );
 
-        virtual rtl::OUString SAL_CALL getSystemPathFromFileURL( const rtl::OUString& BaseURL,
-                                                                 const rtl::OUString& URL )
+        virtual rtl::OUString SAL_CALL getSystemPathFromFileURL( const rtl::OUString& URL )
             throw( com::sun::star::uno::RuntimeException );
 
 

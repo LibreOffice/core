@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-06 16:15:02 $
+ *  last change: $Author: sb $ $Date: 2000-12-15 08:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
-#endif
-#ifndef _VOS_SOCKET_HXX_
-#include <vos/socket.hxx>
 #endif
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
@@ -1898,8 +1895,8 @@ void SAL_CALL UcbContent::propertiesChange(
 #define MYWIN_ITEMID_TIMING         18
 #define MYWIN_ITEMID_SORT           19
 #define MYWIN_ITEMID_FETCHSIZE      20
-#define MYWIN_ITEMID_UNC2URI        21
-#define MYWIN_ITEMID_URI2UNC        22
+#define MYWIN_ITEMID_SYS2URI        21
+#define MYWIN_ITEMID_URI2SYS        22
 #define MYWIN_ITEMID_OFFLINE        23
 #define MYWIN_ITEMID_ONLINE         24
 
@@ -2137,23 +2134,23 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
                                 "Set cached cursor fetch size to positive value" ) ) );
 
     m_pTool->InsertSeparator();
-    m_pTool->InsertItem ( MYWIN_ITEMID_UNC2URI,
+    m_pTool->InsertItem ( MYWIN_ITEMID_SYS2URI,
                           UniString::CreateFromAscii(
                               RTL_CONSTASCII_STRINGPARAM(
                                 "UNC>URI" ) ) );
-    m_pTool->SetHelpText( MYWIN_ITEMID_UNC2URI,
+    m_pTool->SetHelpText( MYWIN_ITEMID_SYS2URI,
                           UniString::CreateFromAscii(
                               RTL_CONSTASCII_STRINGPARAM(
-                                "Translate 'Normalized File Path' to URI,"
+                                "Translate 'System File Path' to URI,"
                                     " if possible" ) ) );
-    m_pTool->InsertItem ( MYWIN_ITEMID_URI2UNC,
+    m_pTool->InsertItem ( MYWIN_ITEMID_URI2SYS,
                           UniString::CreateFromAscii(
                               RTL_CONSTASCII_STRINGPARAM(
                                 "URI>UNC" ) ) );
-    m_pTool->SetHelpText( MYWIN_ITEMID_URI2UNC,
+    m_pTool->SetHelpText( MYWIN_ITEMID_URI2SYS,
                           UniString::CreateFromAscii(
                               RTL_CONSTASCII_STRINGPARAM(
-                                "Translate URI to 'Normalized File Path',"
+                                "Translate URI to 'System File Path',"
                                     " if possible" ) ) );
 
     m_pTool->InsertSeparator();
@@ -2463,31 +2460,42 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             break;
         }
 
-        case MYWIN_ITEMID_UNC2URI:
-        case MYWIN_ITEMID_URI2UNC:
-            {
-                Reference< XContentProviderManager >
-                    xManager(m_aUCB.getContentProvider(), UNO_QUERY);
-                DBG_ASSERT(
-                    xManager.is(),
-                    "MyWin::ToolBarHandler(): Service lacks interface");
+        case MYWIN_ITEMID_SYS2URI:
+        {
+            Reference< XContentProviderManager >
+                xManager(m_aUCB.getContentProvider(), UNO_QUERY);
+            DBG_ASSERT(xManager.is(),
+                       "MyWin::ToolBarHandler(): Service lacks interface");
 
-                OUString aHostName;
-                vos::OSocketAddr::getLocalHostname(aHostName);
+            rtl::OUString aURL(ucb::getLocalFileURL(xManager));
 
-                String aText(RTL_CONSTASCII_USTRINGPARAM("Hostname: "));
-                aText += String(aHostName);
-                aText.AppendAscii("\nConversion: ");
-                aText += aCmdLine;
-                aText.AppendAscii(" to ");
-                aText += String(nItemId == MYWIN_ITEMID_UNC2URI ?
-                                    ucb::getFileURLFromNormalizedPath(
-                                        xManager, aHostName, aCmdLine) :
-                                    ucb::getNormalizedPathFromFileURL(
-                                        xManager, aHostName, aCmdLine));
-                print(aText);
-                break;
-            }
+            String aText(RTL_CONSTASCII_USTRINGPARAM("Local file URL: "));
+            aText += String(aURL);
+            aText.AppendAscii("\nConversion: ");
+            aText += aCmdLine;
+            aText.AppendAscii(" to ");
+            aText += String(ucb::getFileURLFromSystemPath(xManager,
+                                                          aURL,
+                                                          aCmdLine));
+            print(aText);
+            break;
+        }
+
+        case MYWIN_ITEMID_URI2SYS:
+        {
+            Reference< XContentProviderManager >
+                xManager(m_aUCB.getContentProvider(), UNO_QUERY);
+            DBG_ASSERT(xManager.is(),
+                       "MyWin::ToolBarHandler(): Service lacks interface");
+
+            String aText(RTL_CONSTASCII_USTRINGPARAM("Conversion: "));
+            aText += aCmdLine;
+            aText.AppendAscii(" to ");
+            aText += String(ucb::getSystemPathFromFileURL(xManager,
+                                                          aCmdLine));
+            print(aText);
+            break;
+        }
 
         case MYWIN_ITEMID_OFFLINE:
         case MYWIN_ITEMID_ONLINE:
@@ -2594,7 +2602,24 @@ void MyApp::Main()
                                                  RTL_CONSTASCII_LENGTH(
                                                      "-rapconnect="))
                      == COMPARE_EQUAL)
+        {
             aRapConnect = aParam.Copy(RTL_CONSTASCII_LENGTH("-rapconnect="));
+            rtl::OUString aUserId;
+            vos::OSecurity().getUserIdent(aUserId);
+            for (sal_Int32 nPos = 0;; nPos += aUserId.getLength())
+            {
+                nPos = aRapConnect.indexOf(rtl::OUString::createFromAscii(
+                                               "$(USERID)"),
+                                           nPos);
+                if (nPos == -1)
+                    break;
+                aRapConnect
+                    = aRapConnect.
+                          replaceAt(nPos,
+                                    RTL_CONSTASCII_LENGTH("$(USERID)"),
+                                    aUserId);
+            }
+        }
     }
 
     //////////////////////////////////////////////////////////////////////

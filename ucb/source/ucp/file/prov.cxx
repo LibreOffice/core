@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2000-11-27 12:49:34 $
+ *  last change: $Author: sb $ $Date: 2000-12-15 08:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,46 +812,20 @@ FileProvider::removeVetoableChangeListener(
 
 // XFileIdentifierConverter
 
-rtl::OUString SAL_CALL FileProvider::getFileURLFromNormalizedPath( const rtl::OUString& HostName,
-                                                                   const rtl::OUString& NormalizedPath )
+sal_Int32 SAL_CALL
+FileProvider::getFileProviderLocality( const rtl::OUString& BaseURL )
     throw( uno::RuntimeException )
 {
-    initProperties();
-    if ( HostName != m_HostName )
-        return rtl::OUString();
-
-    rtl::OUString aRed;
-    sal_Bool success = m_pMyShell->uncheckMountPoint( NormalizedPath,aRed );
-    if( ! success )
-        return rtl::OUString();
-
-    rtl::OUString aUrl;
-    sal_Bool err = m_pMyShell->getUrlFromUnq( aRed,aUrl );
-    if( err )
-        return rtl::OUString();
-
-    return aUrl;
-}
-
-rtl::OUString SAL_CALL FileProvider::getNormalizedPathFromFileURL( const rtl::OUString& HostName,
-                                                                   const rtl::OUString& URL )
-    throw( uno::RuntimeException )
-{
-    initProperties();
-    if ( HostName != m_HostName )
-        return rtl::OUString();
-
-    rtl::OUString aUnq;
-    sal_Bool err = m_pMyShell->getUnqFromUrl( URL,aUnq );
-    if( err )
-        return rtl::OUString();
-
-    rtl::OUString aRed;
-    sal_Bool success = m_pMyShell->checkMountPoint( aUnq,aRed );
-    if( ! success )
-        return rtl::OUString();
-
-    return aRed;
+    // If the base URL is a 'file' URL, return 10 (very 'local'), otherwise
+    // return -1 (missmatch).  What is missing is a fast comparison to ASCII,
+    // ignoring case:
+    return BaseURL.getLength() >= 5
+           && (BaseURL[0] == 'F' || BaseURL[0] == 'f')
+           && (BaseURL[1] == 'I' || BaseURL[1] == 'i')
+           && (BaseURL[2] == 'L' || BaseURL[2] == 'l')
+           && (BaseURL[3] == 'E' || BaseURL[3] == 'e')
+           && BaseURL[4] == ':' ?
+               10 : -1;
 }
 
 rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUString& BaseURL,
@@ -875,8 +849,7 @@ rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUStri
     return aUrl;
 }
 
-rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUString& BaseURL,
-                                                               const rtl::OUString& URL )
+rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUString& URL )
     throw( uno::RuntimeException )
 {
     rtl::OUString aUnq;
