@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:07:32 $
+ *  last change: $Author: mba $ $Date: 2001-06-29 11:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,25 +245,26 @@ struct SfxSplitWin_Impl
 class SfxWorkWindow
 {
 protected:
-    SfxStatBar_Impl         aStatBar;
-    SfxWorkWindow*          pParent;
     SvUShorts               aSortedList;
+    SfxStatBar_Impl         aStatBar;
     SfxObjectBar_Impl       aObjBars[SFX_OBJECTBAR_MAX];
     SfxObjectBarList_Impl   aObjBarLists[SFX_OBJECTBAR_MAX];
+    Rectangle               aClientArea;
+    SfxWorkWindow*          pParent;
     SfxSplitWindow*         pSplit[SFX_SPLITWINDOWS_MAX];
     SfxChildList_Impl*      pChilds;
     SfxChildWindows_Impl*   pChildWins;
     SfxBindings*            pBindings;
     Window*                 pWorkWin;
-    USHORT                  nUpdateMode;
-    USHORT                  nChilds;
-    BOOL                    bSorted;
-    USHORT                  nOrigMode;
-    Rectangle               aClientArea;
-    BOOL                    bDockingAllowed;
-    BOOL                    bAllChildsVisible;
     SfxShell*               pConfigShell;
     Window*                 pActiveChild;
+    USHORT                  nUpdateMode;
+    USHORT                  nChilds;
+    USHORT                  nOrigMode;
+    BOOL                    bSorted : 1;
+    BOOL                    bDockingAllowed : 1;
+    BOOL                    bAllChildsVisible : 1;
+    BOOL                    bIsFullScreen : 1;
 
 protected:
     void                    CreateChildWin_Impl(SfxChildWin_Impl*);
@@ -311,6 +312,8 @@ public:
     void                    ArrangeAutoHideWindows( SfxSplitWindow *pSplit );
     BOOL                    IsAutoHideMode( const SfxSplitWindow *pSplit );
     void                    EndAutoShow_Impl( Point aPos );
+    void                    SetFullScreen_Impl( BOOL bSet ) { bIsFullScreen = bSet; }
+    BOOL                    IsFullScreen_Impl() const { return bIsFullScreen; }
 
     // Methoden f"ur Objectbars
     virtual void            UpdateObjectBars_Impl();

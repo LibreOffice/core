@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:54:33 $
+ *  last change: $Author: mba $ $Date: 2001-06-29 11:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,8 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     nChilds( 0 ),
     nOrigMode( 0 ),
     pConfigShell( 0 ),
-    pActiveChild( 0 )
+    pActiveChild( 0 ),
+    bIsFullScreen( FALSE )
 {
     DBG_CTOR(SfxWorkWindow, 0);
     DBG_ASSERT (pBindings, "Keine Bindings!");
@@ -1139,20 +1140,6 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
     SfxImageManager *pImgMgr = GetBindings().GetImageManager();
     SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
 
-    // die Modi bestimmen, die im Kontext gelten
-    // Geht InPlace nur bein internem InPlace, was aber egal ist, da bei
-    // externem InPlace es schon wegen OLE nicht gehen kann !
-    FASTBOOL bIsFullScreen = FALSE;
-    Window* pSysWin = GetTopWindow();
-    if ( pSysWin )
-    {
-        while ( pSysWin && pSysWin->GetType() != WINDOW_WORKWINDOW )
-            pSysWin = pSysWin->GetParent();
-
-        if ( pSysWin )
-            bIsFullScreen = ((WorkWindow*)pSysWin)->IsFullScreenMode();
-    }
-
     // "uber alle Toolbox-Positionen iterieren
     for ( n = 0; n < SFX_OBJECTBAR_MAX; ++n )
     {
@@ -1302,17 +1289,6 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
 void SfxWorkWindow::UpdateChildWindows_Impl()
 {
-    FASTBOOL bIsFullScreen = FALSE;
-    Window* pSysWin = GetTopWindow();
-    if ( pSysWin )
-    {
-        while ( pSysWin && pSysWin->GetType() != WINDOW_WORKWINDOW )
-            pSysWin = pSysWin->GetParent();
-
-        if ( pSysWin )
-            bIsFullScreen = ((WorkWindow*)pSysWin)->IsFullScreenMode();
-    }
-
     // alle vorhandenen oder in den Kontext gekommenen ChildWindows
     for ( USHORT n=0; n<pChildWins->Count(); n++ )
     {
@@ -1448,17 +1424,6 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW )
             pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()),
                             pChildWin->GetAlignment(), pChildWin->CanGetFocus());
             pCW->pCli->nVisible = CHILD_VISIBLE;
-            FASTBOOL bIsFullScreen = FALSE;
-            Window* pSysWin = GetTopWindow();
-            if ( pSysWin )
-            {
-                while ( pSysWin && pSysWin->GetType() != WINDOW_WORKWINDOW )
-                    pSysWin = pSysWin->GetParent();
-
-                if ( pSysWin )
-                    bIsFullScreen = ((WorkWindow*)pSysWin)->IsFullScreenMode();
-            }
-
             if ( pChildWin->GetAlignment() != SFX_ALIGN_NOALIGNMENT && bIsFullScreen )
                     pCW->pCli->nVisible ^= CHILD_ACTIVE;
         }
@@ -1551,17 +1516,6 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
     {
         BOOL bOn = FALSE;
         SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
-        FASTBOOL bIsFullScreen = FALSE;
-        Window* pSysWin = GetTopWindow();
-        if ( pSysWin )
-        {
-            while ( pSysWin && pSysWin->GetType() != WINDOW_WORKWINDOW )
-                pSysWin = pSysWin->GetParent();
-
-            if ( pSysWin )
-                bIsFullScreen = ((WorkWindow*)pSysWin)->IsFullScreenMode();
-        }
-
         if ( aStatBar.nId && aStatBar.bOn && !bIsFullScreen && pTbxCfg->IsStatusBarVisible() )
             bOn = TRUE;
 
@@ -1627,17 +1581,6 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
 
     // keine Statusleiste, wenn keine Id gew"unscht oder bei FullScreenView
     // oder wenn ausgeschaltet
-    FASTBOOL bIsFullScreen = FALSE;
-    Window* pSysWin = GetTopWindow();
-    if ( pSysWin )
-    {
-        while ( pSysWin && pSysWin->GetType() != WINDOW_WORKWINDOW )
-            pSysWin = pSysWin->GetParent();
-
-        if ( pSysWin )
-            bIsFullScreen = ((WorkWindow*)pSysWin)->IsFullScreenMode();
-    }
-
     if ( aStatBar.nId && IsDockingAllowed() &&
             ( aStatBar.bOn && !bIsFullScreen && pTbxCfg->IsStatusBarVisible() || aStatBar.bTemp ) )
     {
