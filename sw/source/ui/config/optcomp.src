@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcomp.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:07:55 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,12 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
         Text[ language_user1 ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
         Text = "%FORMATNAME %FORMATVERSION Positionierung von Objekten verwenden";
         Text[ english_us ] = "Use %FORMATNAME %FORMATVERSION object positioning";
+    };
+    String STR_USE_OURTEXTWRAPPING
+    {
+        Text[ language_user1 ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
+        Text = "%FORMATNAME %FORMATVERSION Textfluss um Objekte verwenden";
+        Text[ english_us ] = "Use %FORMATNAME %FORMATVERSION text wrapping around objects";
     };
 };
 
