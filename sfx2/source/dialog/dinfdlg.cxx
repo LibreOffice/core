@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 08:28:23 $
+ *  last change: $Author: pb $ $Date: 2001-09-11 07:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,9 +533,9 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL() ) );
     aShowSizeFT.SetText( aSizeText );
 
-    String aDescription( SfxResId( STR_SFX_NEWOFFICEDOC ) );
-    if ( aURL.GetLastName().Len() )
-        aDescription = SvFileInformationManager::GetDescription( rMainURL );
+    String aDescription = SvFileInformationManager::GetDescription( rMainURL );
+    if ( aDescription.Len() == 0 )
+        aDescription = String( SfxResId( STR_SFX_NEWOFFICEDOC ) );
     aShowTypeFT.SetText( aDescription );
 
     // Bestimmung des Ortes
