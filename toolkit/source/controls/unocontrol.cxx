@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 13:34:41 $
+ *  last change: $Author: mt $ $Date: 2001-03-13 15:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,35 +332,40 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
         for( sal_Int32 i = 0; i < nLen; i++ )
         {
             const ::com::sun::star::beans::PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
-            sal_uInt16 nPType = GetPropertyId( rEvt.PropertyName );
-            if ( nPType && mbDesignMode && mbDisposePeer && !mbRefeshingPeer )
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > xModel( rEvt.Source, ::com::sun::star::uno::UNO_QUERY );
+            sal_Bool bOwnModel = (::com::sun::star::awt::XControlModel*)xModel.get() == (::com::sun::star::awt::XControlModel*)getModel().get();
+            if ( bOwnModel )
             {
-                // Im Design-Mode koennen sich Props aendern, die eine
-                // Neuerzeugung der Peer erfordern...
-                if ( ( nPType == BASEPROPERTY_BORDER ) ||
-                        ( nPType == BASEPROPERTY_MULTILINE ) ||
-                        ( nPType == BASEPROPERTY_DROPDOWN ) ||
-                        ( nPType == BASEPROPERTY_HSCROLL ) ||
-                        ( nPType == BASEPROPERTY_VSCROLL ) ||
-                        ( nPType == BASEPROPERTY_SPIN ) ||
-                        ( nPType == BASEPROPERTY_ALIGN ) )
+                sal_uInt16 nPType = GetPropertyId( rEvt.PropertyName );
+                if ( nPType && mbDesignMode && mbDisposePeer && !mbRefeshingPeer )
                 {
-                    bNeedNewPeer = sal_True;
-                    break;
+                    // Im Design-Mode koennen sich Props aendern, die eine
+                    // Neuerzeugung der Peer erfordern...
+                    if ( ( nPType == BASEPROPERTY_BORDER ) ||
+                            ( nPType == BASEPROPERTY_MULTILINE ) ||
+                            ( nPType == BASEPROPERTY_DROPDOWN ) ||
+                            ( nPType == BASEPROPERTY_HSCROLL ) ||
+                            ( nPType == BASEPROPERTY_VSCROLL ) ||
+                            ( nPType == BASEPROPERTY_SPIN ) ||
+                            ( nPType == BASEPROPERTY_ALIGN ) )
+                    {
+                        bNeedNewPeer = sal_True;
+                        break;
+                    }
                 }
-            }
-            if ( nPType && ( nLen > 1 ) && DoesDependOnOthers( nPType ) )
-            {
-                // Properties die von anderen abhaengen erst hinterher einstellen,
-                // weil sie von anderen Properties abhaengig sind, die aber erst spaeter
-                // eingestellt werden, z.B. VALUE nach VALUEMIN/MAX.
-                aPeerPropertiesToSet.push_back(::com::sun::star::beans::PropertyValue(rEvt.PropertyName, 0, rEvt.NewValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE));
-            }
-            else
-            {
-                aPeerPropertiesToSet.insert(aPeerPropertiesToSet.begin() + nIndependentPos,
-                    ::com::sun::star::beans::PropertyValue(rEvt.PropertyName, 0, rEvt.NewValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE));
-                ++nIndependentPos;
+                if ( nPType && ( nLen > 1 ) && DoesDependOnOthers( nPType ) )
+                {
+                    // Properties die von anderen abhaengen erst hinterher einstellen,
+                    // weil sie von anderen Properties abhaengig sind, die aber erst spaeter
+                    // eingestellt werden, z.B. VALUE nach VALUEMIN/MAX.
+                    aPeerPropertiesToSet.push_back(::com::sun::star::beans::PropertyValue(rEvt.PropertyName, 0, rEvt.NewValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE));
+                }
+                else
+                {
+                    aPeerPropertiesToSet.insert(aPeerPropertiesToSet.begin() + nIndependentPos,
+                        ::com::sun::star::beans::PropertyValue(rEvt.PropertyName, 0, rEvt.NewValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE));
+                    ++nIndependentPos;
+                }
             }
         }
 

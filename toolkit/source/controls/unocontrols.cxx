@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-21 11:45:56 $
+ *  last change: $Author: mt $ $Date: 2001-03-13 15:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,8 +648,7 @@ void UnoDialogControl::elementReplaced( const ::com::sun::star::container::Conta
 // beans::XPropertiesChangeListener
 void UnoDialogControl::propertiesChange( const uno::Sequence< beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException)
 {
-    sal_Bool bDone = sal_False;
-    if( !IsUpdatingModel() && !mbCreatingCompatiblePeer )
+    if( !isDesignMode() && !IsUpdatingModel() && !mbCreatingCompatiblePeer )
     {
         ::rtl::OUString s1( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) );
         ::rtl::OUString s2( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) );
@@ -660,10 +659,11 @@ void UnoDialogControl::propertiesChange( const uno::Sequence< beans::PropertyCha
         for( sal_Int32 i = 0; i < nLen; i++ )
         {
             const beans::PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
+            uno::Reference< awt::XControlModel > xModel( rEvt.Source, uno::UNO_QUERY );
+            sal_Bool bOwnModel = (awt::XControlModel*)xModel.get() == (awt::XControlModel*)getModel().get();
             if ( ( rEvt.PropertyName == s1 ) || ( rEvt.PropertyName == s2 ) || ( rEvt.PropertyName == s3 ) || ( rEvt.PropertyName == s4 ) )
             {
-                uno::Reference< awt::XControlModel > xModel( rEvt.Source, uno::UNO_QUERY );
-                if ( (awt::XControlModel*)xModel.get() == (awt::XControlModel*)getModel().get() )
+                if ( bOwnModel )
                 {
                     uno::Reference< awt::XControl > xThis( (uno::XAggregation*)(::cppu::OWeakAggObject*)this, uno::UNO_QUERY );
                     ImplSetPosSize( xThis );
@@ -673,12 +673,12 @@ void UnoDialogControl::propertiesChange( const uno::Sequence< beans::PropertyCha
                     ImplSetPosSize( StdTabController::FindControl( getControls(), xModel ) );
                 }
                 break;
-                bDone = sal_True;
             }
+
         }
     }
-    if ( !bDone )
-        UnoControlContainer::propertiesChange( rEvents );
+
+    UnoControlContainer::propertiesChange( rEvents );
 }
 
 void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(uno::RuntimeException)
