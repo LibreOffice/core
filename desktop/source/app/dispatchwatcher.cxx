@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:51:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,10 +334,19 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 aArgs[nIndex].Value <<= sal_True;
             }
 
+            // if we are called with -start set Start in mediadescriptor
+            if(aDispatchRequest.aRequestType == REQUEST_START) {
+                sal_Int32 nIndex = aArgs.getLength();
+                aArgs.realloc(nIndex+1);
+                aArgs[nIndex].Name = OUString::createFromAscii("StartPresentation");
+                aArgs[nIndex].Value <<= sal_True;
+            }
+
             // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
             xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
-                aDispatchRequest.aRequestType == REQUEST_VIEW ||
+                 aDispatchRequest.aRequestType == REQUEST_VIEW ||
+                 aDispatchRequest.aRequestType == REQUEST_START ||
                  aDispatchRequest.aRequestType == REQUEST_FORCEOPEN ||
                  aDispatchRequest.aRequestType == REQUEST_FORCENEW      )
             {
