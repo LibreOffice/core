@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 12:59:41 $
+#   last change: $Author: rt $ $Date: 2004-08-23 09:19:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -165,7 +165,7 @@ CFLAGS+=-Zm200
 
 #.IF"$(bndchk)"==""
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-CFLAGS+=-Zm500 -wd4290 -wd4786 -wd4800 /Zc:forScope /GR
+CFLAGS+=-Zm500 -wd4251 -wd4275 -wd4290 -wd4786 -wd4800 /Zc:forScope /GR
 .ENDIF
 #.ENDIF
 
@@ -247,7 +247,7 @@ CFLAGSDEBUG=-Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 .ENDIF
 CFLAGSDBGUTIL=
 .IF "$(VC_STANDARD)"==""
-CFLAGSOPT=-Ox -Oy-
+CFLAGSOPT=-Oxs -Oy-
 CFLAGSNOOPT=-Od
 .ELSE			#  "$(VC_STANDARD)"==""
 CFLAGSOPT=
@@ -300,7 +300,7 @@ LINK=link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
 .ELSE			# "$(USE_SHELL)"=="4nt"
 LINK=$(WRAPCMD) link $(NOLOGO) /MACHINE:IX86
 .ENDIF			# "$(USE_SHELL)"=="4nt"
-
+LINKOUTPUTFILTER= |& $(GREP) -v "LNK4197:"
 .IF "$(PRODUCT)"!="full"
 .ELSE
 LINKFLAGS=/MAP /OPT:NOREF
