@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 14:12:22 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 08:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,9 @@ namespace dbaui
 
         m_aTablesList.SetCheckButtonHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
         m_aTablesList.SetCheckHandler(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
+
+        enableToolBoxAcceleration( &m_aActions );
+        addToolboxAccelerator( ID_DROP_TABLE, KeyCode( KEY_DELETE ) );
     }
 
     //------------------------------------------------------------------------
@@ -797,7 +800,7 @@ namespace dbaui
             m_aTablesList.SetCurEntry(pFocusEntry);
 
         if (pMySettings->nDelayedToolboxAction)
-            doToolboxAction(pMySettings->nDelayedToolboxAction);
+            onToolBoxAction(pMySettings->nDelayedToolboxAction);
     }
 
     //------------------------------------------------------------------------
@@ -945,7 +948,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    void OTableSubscriptionPage::doToolboxAction(sal_uInt16 _nId)
+    void OTableSubscriptionPage::onToolBoxAction(sal_uInt16 _nId)
     {
         if (m_pAdminDialog->isCurrentModified())
         {
@@ -968,13 +971,13 @@ namespace dbaui
             pSelected = m_aTablesList.FirstSelected();
             if (!pSelected)
             {
-                DBG_ERROR("OTableSubscriptionPage::doToolboxAction: to be called if at least one entry is selected!");
+                DBG_ERROR("OTableSubscriptionPage::onToolBoxAction: to be called if at least one entry is selected!");
                 return;
             }
 
             if ((m_aTablesList.NextSelected(pSelected)) && (ID_DROP_TABLE != _nId))
             {
-                DBG_ERROR("OTableSubscriptionPage::doToolboxAction: EDIT can't be applied to more than one table!");
+                DBG_ERROR("OTableSubscriptionPage::onToolBoxAction: EDIT can't be applied to more than one table!");
                 return;
             }
 
@@ -987,7 +990,7 @@ namespace dbaui
             {
                 OTableDesignAccess aDispatcher(m_xORB);
                 Reference< XComponent > xComp = aDispatcher.create(m_sDSName, Reference< XConnection >());
-                OSL_ENSURE( xComp.is(), "OTableSubscriptionPage::doToolboxAction: could not load the component!" );
+                OSL_ENSURE( xComp.is(), "OTableSubscriptionPage::onToolBoxAction: could not load the component!" );
 
                 if ( xComp.is() )
                 {   // successfully loaded
@@ -1000,18 +1003,18 @@ namespace dbaui
                         Reference< XPropertySetInfo > xPSI;
                         if ( xCompProps.is() ) xPSI = xCompProps->getPropertySetInfo();
                         OSL_ENSURE( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_ACTIVECONNECTION ),
-                            "OTableSubscriptionPage::doToolboxAction: invalid controller!" );
+                            "OTableSubscriptionPage::onToolBoxAction: invalid controller!" );
 
                         // get the connection the controller is working with
                         if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_ACTIVECONNECTION ) )
                         {
                             Reference< XTablesSupplier > xSuppTables;
                             xCompProps->getPropertyValue( PROPERTY_ACTIVECONNECTION ) >>= xSuppTables;
-                            OSL_ENSURE( xSuppTables.is(), "OTableSubscriptionPage::doToolboxAction: the controller has an invalid connection!" );
+                            OSL_ENSURE( xSuppTables.is(), "OTableSubscriptionPage::onToolBoxAction: the controller has an invalid connection!" );
                             if ( xSuppTables.is() )
                             {
                                 Reference< XContainer > xTables( xSuppTables->getTables(), UNO_QUERY );
-                                OSL_ENSURE( xTables.is(), "OTableSubscriptionPage::doToolboxAction: invalid tables container!" );
+                                OSL_ENSURE( xTables.is(), "OTableSubscriptionPage::onToolBoxAction: invalid tables container!" );
                                 // create a notifier for the container so we know if a table is inserted
                                 if ( xTables.is() )
                                 {
@@ -1046,7 +1049,7 @@ namespace dbaui
     //------------------------------------------------------------------------
     IMPL_LINK( OTableSubscriptionPage, OnToolboxClicked, void*, NOTINTERESTEDIN )
     {
-        doToolboxAction(m_aActions.GetCurItemId());
+        onToolBoxAction(m_aActions.GetCurItemId());
         return 0L;
     }
 
@@ -1303,6 +1306,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/08/14 14:12:22  fs
+ *  #86945# add notifiers to the tables container of newly opened table design components
+ *
  *  Revision 1.4  2001/08/14 12:10:12  fs
  *  preparations for #86945# (be a container listener ...)
  *
