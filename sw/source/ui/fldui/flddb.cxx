@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:26:54 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aTypeFT     (this, SW_RES(FT_DBTYPE)),
     aTypeLB     (this, SW_RES(LB_DBTYPE)),
     aSelectionFT(this, SW_RES(FT_DBSELECTION)),
-    aDatabaseTLB(this, SW_RES(TLB_DBLIST), ::GetActiveView()->GetWrtShell(),aEmptyStr, FALSE),
+    aDatabaseTLB(this, SW_RES(TLB_DBLIST), 0, aEmptyStr, FALSE),
     aConditionFT(this, SW_RES(FT_DBCONDITION)),
     aConditionED(this, SW_RES(ED_DBCONDITION)),
     aValueFT    (this, SW_RES(FT_DBSETNUMBER)),
@@ -596,4 +596,10 @@ void SwFldDBPage::ActivateMailMergeAddress()
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
     aDatabaseTLB.Select(rData.sDataSource, rData.sCommand, aEmptyStr);
 }
+/*-- 07.10.2003 13:59:04---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+void SwFldDBPage::SetWrtShell(SwWrtShell& rSh)
+{
+    aDatabaseTLB.SetWrtShell(rSh);
+}
