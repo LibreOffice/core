@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:14:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,12 +437,6 @@
 #define SID_PREVIEW_QUALITY_GRAYSCALE       (SID_SD_START+370)
 #define SID_PREVIEW_QUALITY_BLACKWHITE      (SID_SD_START+371)
 #define SID_VECTORIZE                       (SID_SD_START+372)
-
-#define SID_GRAFTBX_FILTERS                 (SID_SD_START+373)
-#define SID_GRAFFILTER_INVERT               (SID_SD_START+374)
-#define SID_GRAFFILTER_SMOOTH               (SID_SD_START+375)
-#define SID_GRAFFILTER_SHARPEN              (SID_SD_START+376)
-#define SID_GRAFFILTER_REMOVENOISE          (SID_SD_START+377)
 
 #define SID_CONVERT_TO_BITMAP               (SID_SD_START+378)
 #define SID_CONVERT_TO_METAFILE             (SID_SD_START+379)
