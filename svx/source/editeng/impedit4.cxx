@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-06 16:10:11 $
+ *  last change: $Author: jp $ $Date: 2000-12-09 15:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2044,9 +2044,9 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
         if ( bFound )
         {
             rFoundSel.Min().SetNode( pNode );
-            rFoundSel.Min().SetIndex( !bBack ? nStartPos : (nEndPos+1) );
+            rFoundSel.Min().SetIndex( nStartPos );
             rFoundSel.Max().SetNode( pNode );
-            rFoundSel.Max().SetIndex( !bBack ? nEndPos : (nStartPos+1) );
+            rFoundSel.Max().SetIndex( nEndPos );
             return sal_True;
         }
     }
