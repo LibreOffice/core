@@ -1,2 +1,4 @@
 
-// The end
+
+IDP_SIGNET RCDATA "signet.png"
+
