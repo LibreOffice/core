@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclinkdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-04 12:04:14 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,8 +214,8 @@ namespace svx
         const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
         if ( pFilter )
         {
-            aFileDlg.AddFilter(pFilter->GetFilterName(),pFilter->GetDefaultExtension());
-            aFileDlg.SetCurrentFilter(pFilter->GetFilterName());
+            aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
+            aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
 
         String sPath = m_aURL.GetText();
