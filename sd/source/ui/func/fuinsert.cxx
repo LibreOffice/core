@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-22 17:39:56 $
+ *  last change: $Author: hr $ $Date: 2001-06-25 17:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
                  SdDrawDocument* pDoc, SfxRequest& rReq)
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    SvxOpenGraphicDialog    aDlg(String( SdResId(STR_INSERTGRAPHIC)));
+    SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
 
     if( aDlg.Execute() == GRFILTER_OK )
     {
