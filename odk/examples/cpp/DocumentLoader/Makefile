@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.14 $
+#  $Revision: 1.15 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:40:26 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:29:24 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -86,19 +86,19 @@ include $(SETTINGS)/stdtarget.mk
 $(OUT_BIN)/%.rdb :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
-	regmerge $@ / $(DKREGISTRYNAME) 
+	$(REGMERGE) $@ / $(DKREGISTRYNAME) 
 
 $(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
 	echo flagged > $@
 
 $(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_BIN)/%$(EXE_EXT) : $(OUT_COMP_OBJ)/%.$(OBJ_EXT)
+$(OUT_BIN)/DocumentLoader$(EXE_EXT) : $(OUT_COMP_OBJ)/DocumentLoader.$(OBJ_EXT)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
 ifeq "$(OS)" "WIN"
@@ -115,10 +115,10 @@ $(COMPOENNT_ENV_FLAG) :
 	@echo --------------------------------------------------------------------------------
 	@echo        Register necessary runtime components in the DocumentLoader.rdb 
 	@echo --------------------------------------------------------------------------------
-	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c connector.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c remotebridge.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c bridgefac.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c uuresolver.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(OUT_BIN)/DocumentLoader.rdb -c connector.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(OUT_BIN)/DocumentLoader.rdb -c remotebridge.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(OUT_BIN)/DocumentLoader.rdb -c bridgefac.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(OUT_BIN)/DocumentLoader.rdb -c uuresolver.uno.$(SHAREDLIB_EXT)
 	@echo bla > $@
 
 CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_FLAG)
@@ -131,14 +131,14 @@ CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_F
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/DocumentLoader$(EXE_EXT)
-	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) "../../examples/cpp/DocumentLoader/test.sxw"
+	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) $(subst \\,/,$(subst /,$(PS),"$(OO_SDK_HOME)/examples/cpp/DocumentLoader/test.sxw"))
 
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	-$(DEL) $(subst /,$(PS),$(COMPOENNT_ENV_FLAG))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_RDB))
-	-$(DEL) $(subst /,$(PS),$(OUT_BIN)/DocumentLoader*)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPOENNT_ENV_FLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_RDB)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/DocumentLoader*))
