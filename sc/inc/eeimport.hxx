@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:09:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ public:
                         ScEEImport( ScDocument* pDoc, const ScRange& rRange );
     virtual             ~ScEEImport();
 
-    ULONG               Read( SvStream& rStream );
+    ULONG               Read( SvStream& rStream, const String& rBaseURL );
     ScRange             GetRange()      { return aRange; }
     virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE,
                                         double nOutputFactor = 1.0 );
