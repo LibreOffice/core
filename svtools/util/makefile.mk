@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.21 $
+#*  $Revision: 1.22 $
 #*
-#*  last change: $Author: sb $ $Date: 2001-06-20 12:02:57 $
+#*  last change: $Author: dv $ $Date: 2001-06-28 12:17:55 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -126,7 +126,8 @@ LIB7FILES=	\
         $(SLB)$/urlobj.lib		\
         $(SLB)$/plugapp.lib 	\
         $(SLB)$/svcontnr.lib	\
-        $(SLB)$/svhtml2.lib
+        $(SLB)$/svhtml2.lib     \
+        $(SLB)$/filepicker.lib
 
 
 .IF "$(GUI)" == "OS2"
@@ -165,16 +166,18 @@ LIB8FILES=	\
 # Bilden der dyn. Resourcen-DLL --------------------------------------------------
 
 RESLIB1NAME=	$(RESTARGET)
-RESLIB1SRSFILES=$(SRS)$/filter.srs		\
-        $(SRS)$/misc.srs		\
-        $(SRS)$/sbx.srs 		\
-        $(SRS)$/ctrl.srs		\
-        $(SRS)$/items.srs		\
-        $(SRS)$/dialogs.srs \
-        $(SRS)$/plugapp.srs \
-        $(SRS)$/svcontnr.srs \
-        $(SRS)$/uno.srs \
+RESLIB1SRSFILES=$(SRS)$/filter.srs  \
+        $(SRS)$/misc.srs        \
+        $(SRS)$/sbx.srs         \
+        $(SRS)$/ctrl.srs        \
+        $(SRS)$/items.srs       \
+        $(SRS)$/dialogs.srs     \
+        $(SRS)$/plugapp.srs     \
+        $(SRS)$/svcontnr.srs    \
+        $(SRS)$/filepicker.srs  \
+        $(SRS)$/uno.srs         \
         $(SRS)$/browse.srs
+
 RESLIB2NAME=	$(RESTARGETSIMPLE)
 RESLIB2SRSFILES=\
     $(SRS)$/mediatyp.srs
