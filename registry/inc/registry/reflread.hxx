@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:50:05 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,6 @@ struct RegistryTypeReader_Api
     RTReferenceType     (TYPEREG_CALLTYPE *getReferenceType)    (TypeReaderImpl, sal_uInt16);
     void                (TYPEREG_CALLTYPE *getReferenceDoku)    (TypeReaderImpl, rtl_uString**, sal_uInt16);
     RTFieldAccess       (TYPEREG_CALLTYPE *getReferenceAccess)  (TypeReaderImpl, sal_uInt16);
-
-    sal_uInt32          (TYPEREG_CALLTYPE *getMISuperTypeCount) (TypeReaderImpl);
-    void                (TYPEREG_CALLTYPE *getMISuperTypeName)  (TypeReaderImpl, rtl_uString**, sal_uInt16);
 };
 
 /** specifies a function pointer of the initialization function which is called to initialize
@@ -181,6 +178,9 @@ public:
     This class provides the necessary functions to read type informations
     for all kinds of types of a type blob.
     The class is inline and use a load on call C-Api.
+
+    @deprecated
+    use typereg::Reader instead
 */
 class RegistryTypeReader
 {
@@ -405,17 +405,6 @@ public:
      */
     inline RTFieldAccess    getReferenceAccess( sal_uInt16 index ) const;
 
-    /** returns the number of supertypes (in multiple-inheritance situations).
-     */
-    inline sal_uInt16       getMISuperTypeCount() const;
-
-    /** returns the full qualified name of the supertype specified by index (in
-        multiple-inheritance situations).
-
-        @param index indicates the supertype.
-     */
-    inline ::rtl::OUString  getMISuperTypeName( sal_uInt16 index ) const;
-
 protected:
 
     /// stores the registry type reader Api.
@@ -638,15 +627,5 @@ inline ::rtl::OUString RegistryTypeReader::getReferenceDoku( sal_uInt16 index ) 
 
 inline RTFieldAccess RegistryTypeReader::getReferenceAccess( sal_uInt16 index ) const
     {  return m_pApi->getReferenceAccess(m_hImpl, index); }
-
-inline sal_uInt16 RegistryTypeReader::getMISuperTypeCount() const
-    {  return m_pApi->getMISuperTypeCount(m_hImpl); }
-
-inline ::rtl::OUString RegistryTypeReader::getMISuperTypeName( sal_uInt16 index ) const
-    {
-        ::rtl::OUString sRet;
-        m_pApi->getMISuperTypeName(m_hImpl, &sRet.pData, index);
-        return sRet;
-    }
 
 #endif
