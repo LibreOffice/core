@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventmultiplexer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:41:42 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,16 @@ namespace presentation
             mpListener->removeAudioStoppedHandler( rHandler );
         }
 
+        void EventMultiplexer::addCommandStopAudioHandler( const AnimationEventHandlerSharedPtr& rHandler )
+        {
+            mpListener->addCommandStopAudioHandler( rHandler );
+        }
+
+        void EventMultiplexer::removeCommandStopAudioHandler( const AnimationEventHandlerSharedPtr& rHandler )
+        {
+            mpListener->removeCommandStopAudioHandler( rHandler );
+        }
+
         void EventMultiplexer::addPauseHandler( const PauseEventHandlerSharedPtr& rHandler )
         {
             return mpListener->addPauseHandler( rHandler );
@@ -475,7 +485,10 @@ namespace presentation
         {
             return mpListener->notifyPauseMode( bPauseShow );
         }
-
+        void EventMultiplexer::notifyCommandStopAudio( const AnimationNodeSharedPtr& rNode )
+        {
+            mpListener->notifyCommandStopAudio( rNode );
+        }
 
         EventMultiplexer::Listener::Listener( EventQueue& rEventQueue ) :
             Listener_UnoBase( m_aMutex ),
@@ -488,6 +501,7 @@ namespace presentation
             maAnimationEndHandlers(),
             maSlideAnimationsEndHandlers(),
             maAudioStoppedHandlers(),
+            maCommandStopAudioHandlers(),
             maPauseHandlers(),
             maMouseClickHandlers(),
             maMouseDoubleClickHandlers(),
@@ -596,6 +610,7 @@ namespace presentation
             maAnimationEndHandlers.clear();
             maSlideAnimationsEndHandlers.clear();
             maAudioStoppedHandlers.clear();
+            maCommandStopAudioHandlers.clear();
             maPauseHandlers.clear();
             maMouseClickHandlers.clear();
             maMouseDoubleClickHandlers.clear();
@@ -775,6 +790,18 @@ namespace presentation
                            rHandler );
         }
 
+        void EventMultiplexer::Listener::addCommandStopAudioHandler( const AnimationEventHandlerSharedPtr& rHandler )
+        {
+            addHandler( maCommandStopAudioHandlers,
+                        rHandler );
+        }
+
+        void EventMultiplexer::Listener::removeCommandStopAudioHandler( const AnimationEventHandlerSharedPtr& rHandler )
+        {
+            removeHandler( maCommandStopAudioHandlers,
+                           rHandler );
+        }
+
         void EventMultiplexer::Listener::addPauseHandler( const PauseEventHandlerSharedPtr& rHandler )
         {
             addHandler( maPauseHandlers,
@@ -883,6 +910,12 @@ namespace presentation
         bool EventMultiplexer::Listener::notifyAudioStopped( const AnimationNodeSharedPtr& rNode )
         {
             return notifyHandlers( maAudioStoppedHandlers,
+                                   rNode );
+        }
+
+        void EventMultiplexer::Listener::notifyCommandStopAudio( const AnimationNodeSharedPtr& rNode )
+        {
+            notifyHandlers( maCommandStopAudioHandlers,
                                    rNode );
         }
 
@@ -1034,7 +1067,7 @@ namespace presentation
             }
         }
 
-        void SAL_CALL EventMultiplexer::Listener::mousePressed( const awt::MouseEvent& e ) throw (uno::RuntimeException)
+        void EventMultiplexer::Listener::implMousePressed( const ::com::sun::star::awt::MouseEvent& e )
         {
             ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1069,7 +1102,7 @@ namespace presentation
             }
         }
 
-        void SAL_CALL EventMultiplexer::Listener::mouseReleased( const awt::MouseEvent& e ) throw (uno::RuntimeException)
+        void EventMultiplexer::Listener::implMouseReleased( const ::com::sun::star::awt::MouseEvent& e )
         {
             ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1104,18 +1137,7 @@ namespace presentation
             }
         }
 
-        void SAL_CALL EventMultiplexer::Listener::mouseEntered( const awt::MouseEvent& e ) throw (uno::RuntimeException)
-        {
-            // not used here
-        }
-
-        void SAL_CALL EventMultiplexer::Listener::mouseExited( const awt::MouseEvent& e ) throw (uno::RuntimeException)
-        {
-            // not used here
-        }
-
-        // XMouseMotionListener implementation
-        void SAL_CALL EventMultiplexer::Listener::mouseDragged( const awt::MouseEvent& e ) throw (uno::RuntimeException)
+        void EventMultiplexer::Listener::implMouseDragged( const ::com::sun::star::awt::MouseEvent& e )
         {
             ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
@@ -1151,7 +1173,7 @@ namespace presentation
             }
         }
 
-        void SAL_CALL EventMultiplexer::Listener::mouseMoved( const awt::MouseEvent& e ) throw (uno::RuntimeException)
+        void EventMultiplexer::Listener::implMouseMoved( const ::com::sun::star::awt::MouseEvent& e )
         {
             ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
@@ -1185,6 +1207,65 @@ namespace presentation
 
                 mnLastVolatileMouseCursor = mnMouseCursor;
             }
+        }
+
+        void SAL_CALL EventMultiplexer::Listener::mousePressed( const awt::MouseEvent& e ) throw (uno::RuntimeException)
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            // notify mouse press. Don't call handlers directly, this
+            // might not be the main thread!
+            mrEventQueue.addEvent(
+                makeEvent( ::boost::bind( &EventMultiplexer::Listener::implMousePressed,
+                                          this,
+                                          e ) ) );
+        }
+
+        void SAL_CALL EventMultiplexer::Listener::mouseReleased( const awt::MouseEvent& e ) throw (uno::RuntimeException)
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            // notify mouse release. Don't call handlers directly,
+            // this might not be the main thread!
+            mrEventQueue.addEvent(
+                makeEvent( ::boost::bind( &EventMultiplexer::Listener::implMouseReleased,
+                                          this,
+                                          e ) ) );
+        }
+
+        void SAL_CALL EventMultiplexer::Listener::mouseEntered( const awt::MouseEvent& e ) throw (uno::RuntimeException)
+        {
+            // not used here
+        }
+
+        void SAL_CALL EventMultiplexer::Listener::mouseExited( const awt::MouseEvent& e ) throw (uno::RuntimeException)
+        {
+            // not used here
+        }
+
+        // XMouseMotionListener implementation
+        void SAL_CALL EventMultiplexer::Listener::mouseDragged( const awt::MouseEvent& e ) throw (uno::RuntimeException)
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            // notify mouse drag. Don't call handlers directly, this
+            // might not be the main thread!
+            mrEventQueue.addEvent(
+                makeEvent( ::boost::bind( &EventMultiplexer::Listener::implMouseDragged,
+                                          this,
+                                          e ) ) );
+        }
+
+        void SAL_CALL EventMultiplexer::Listener::mouseMoved( const awt::MouseEvent& e ) throw (uno::RuntimeException)
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            // notify mouse move. Don't call handlers directly, this
+            // might not be the main thread!
+            mrEventQueue.addEvent(
+                makeEvent( ::boost::bind( &EventMultiplexer::Listener::implMouseMoved,
+                                          this,
+                                          e ) ) );
         }
     }
 }
