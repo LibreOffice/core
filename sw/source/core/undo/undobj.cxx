@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:59:51 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,11 @@ String SwUndo::GetComment() const
     }
 
     return aResult;
+}
+
+USHORT SwUndo::GetEffectiveId() const
+{
+    return GetId();
 }
 
 SwRewriter SwUndo::GetRewriter() const
@@ -919,9 +924,20 @@ void SwUndoStart::Repeat( SwUndoIter& rUndoIter )
 
 String SwUndoStart::GetComment() const
 {
-    String sResult(SW_RES(UNDO_BASE + nUserId));
+    String sResult;
 
-    sResult = GetRewriter().Apply(sResult);
+    switch (nUserId)
+    {
+    case UNDO_START:
+    case UNDO_END:
+        sResult = String("??", RTL_TEXTENCODING_ASCII_US);
+
+        break;
+
+    default:
+        sResult = String(SW_RES(UNDO_BASE + nUserId));
+        sResult = GetRewriter().Apply(sResult);
+    }
 
     return sResult;
 }
@@ -929,6 +945,11 @@ String SwUndoStart::GetComment() const
 SwRewriter SwUndoStart::GetRewriter() const
 {
     return mRewriter;
+}
+
+USHORT SwUndoStart::GetEffectiveId() const
+{
+    return GetUserId();
 }
 
 void SwUndoStart::SetRewriter(const SwRewriter & rRewriter)
@@ -965,9 +986,19 @@ void SwUndoEnd::Repeat( SwUndoIter& rUndoIter )
 
 String SwUndoEnd::GetComment() const
 {
-    String sResult(SW_RES(UNDO_BASE + nUserId));
+    String sResult;
 
-    sResult = GetRewriter().Apply(sResult);
+    switch (nUserId)
+    {
+    case UNDO_START:
+    case UNDO_END:
+        sResult = String("??", RTL_TEXTENCODING_ASCII_US);
+
+        break;
+    default:
+        sResult = SW_RES(UNDO_BASE + nUserId);
+        sResult = GetRewriter().Apply(sResult);
+    }
 
     return sResult;
 }
@@ -975,6 +1006,11 @@ String SwUndoEnd::GetComment() const
 void SwUndoEnd::SetRewriter(const SwRewriter & rRewriter)
 {
     mRewriter = rRewriter;
+}
+
+USHORT SwUndoEnd::GetEffectiveId() const
+{
+    return GetUserId();
 }
 
 SwRewriter SwUndoEnd::GetRewriter() const
