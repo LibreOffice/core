@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-22 15:33:31 $
+ *  last change: $Author: tbe $ $Date: 2001-10-24 17:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,6 +420,7 @@ void LibPage::NewLib()
                 */
 
                 SvLBoxEntry* pEntry = aLibBox.InsertEntry( aLibName );
+                aLibBox.SetCurEntry( pEntry );
                 //USHORT nPos = (USHORT)aLibBox.GetModel()->GetAbsPos( pEntry );
                 //aLibBox.CheckEntryPos( nPos, bLoaded );
 
@@ -733,14 +734,10 @@ void LibPage::SetCurLib()
         for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
             ImpInsertLibEntry( pLibNames[ i ], i );
 
-        aLibBox.SetCurEntry( aLibBox.GetEntry( 0 ) );
-        /*
-        String aStdLibName = String::CreateFromAscii("Standard");
-        SvLBoxEntry* pEntry = aLibBox.FindEntry( aStdLibName );
+        SvLBoxEntry* pEntry = aLibBox.FindEntry( String::CreateFromAscii("Standard") );
         if ( !pEntry )
             pEntry = aLibBox.GetEntry( 0 );
         aLibBox.SetCurEntry( pEntry );
-        */
     }
 }
 

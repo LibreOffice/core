@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-29 12:23:06 $
+ *  last change: $Author: tbe $ $Date: 2001-10-24 17:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

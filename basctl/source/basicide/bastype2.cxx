@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:49:01 $
+ *  last change: $Author: tbe $ $Date: 2001-10-24 17:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,10 +284,20 @@ void BasicTreeListBox::UpdateEntries()
     while ( pEntry )
     {
         BOOL bFound = FindVariable( pEntry ) ? TRUE : FALSE;
+
+        // probably it's a BasicManager
         if ( !bFound && !GetModel()->GetDepth( pEntry ) )
         {
-            // Vielleicht ist es ein BasicManager?
             bFound = BasicIDE::FindBasicManager( GetEntryText( pEntry ) ) ? TRUE : FALSE;
+        }
+
+        // probably it's an unloaded library
+        // (FindVariable fails for unloaded libraries!)
+        if ( !bFound && GetModel()->GetDepth( pEntry ) == 1 )
+        {
+            BasicManager* pBasMgr = BasicIDE::FindBasicManager( GetEntryText( GetParent( pEntry ) ) );
+            if ( pBasMgr )
+                bFound = pBasMgr->HasLib( GetEntryText( pEntry ) );
         }
 
         if ( bFound )

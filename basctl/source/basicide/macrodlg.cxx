@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-27 15:53:26 $
+ *  last change: $Author: tbe $ $Date: 2001-10-24 17:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,8 +279,10 @@ short __EXPORT MacroChooser::Execute()
     }
     else
     {
-        // Erstes Macro selektieren:
-        SvLBoxEntry* pEntry = aBasicBox.GetEntry( 0 );
+        // select first macro
+        SvLBoxEntry* pEntry = aBasicBox.FindLibEntry( SFX_APP()->GetBasicManager()->GetLib( String::CreateFromAscii("Standard") ) );
+        if ( !pEntry )
+            pEntry = aBasicBox.GetEntry( 0 );
 //      SvLBoxEntry* pFirstEntry = pEntry;
         SvLBoxEntry* pLastValid = pEntry;
         while ( pEntry )
