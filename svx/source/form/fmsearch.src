@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:42:56 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,6 +1215,10 @@ String RID_STR_SEARCH_COUNTING
     Text[ hindi ] = "लेखाओं को गिनना";
     Text[ slovak ] = "počítať záznamy";
 };
+
+
+
+
 
 
 
