@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-29 12:07:01 $
+ *  last change: $Author: mba $ $Date: 2000-12-04 12:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1816,18 +1816,16 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
             else bOk = sal_False;
         }
 #endif
+        SetError( pMediumTmp->GetErrorCode() );
         if( bNeedsStorage )
             SaveCompleted( xNewTempRef );
 
         SfxMedium *pMed = bCopyTo ? pMedium : pNewFile;
-
-        if ( ! bCopyTo )
+        if ( !bCopyTo )
             bOk = DoSaveCompleted( pMed );
 
         //! Vorsich. Muss nicht immer klappen.
-        DBG_ASSERT( bOk, "DoSaveCompleted nicht geklappt "
-                    "und keine Fehlerbehandlung");
-
+        DBG_ASSERT( bOk, "DoSaveCompleted nicht geklappt und keine Fehlerbehandlung");
         if( bOk )
         {
             if( bCopyTo )
