@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_sfwk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:20:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,19 +99,12 @@ protected:
         Reference<XCommandEnvironment> const & xCmdEnv );
 
 public:
-
-
-    inline BackendImpl(
+    BackendImpl(
+        Sequence<Any> const & args,
         Reference<XComponentContext> const & xComponentContext,
         OUString const & implName,
-        Sequence<OUString> const & supportedMediaTypes )
-        : PackageRegistryBackend(
-            xComponentContext, implName, supportedMediaTypes )
-        {}
+        Sequence<OUString> const & supportedMediaTypes );
 
-    // XInitialization
-    virtual void SAL_CALL initialize( Sequence<Any> const & args )
-        throw (Exception);
     OUString getCtx() { return m_sCtx; }
 };
 
@@ -125,7 +118,7 @@ protected:
         { return static_cast<BackendImpl *>(m_myBackend.get()); }
     void initPackageHandler();
     // Package
-    virtual bool isRegistered_(
+    virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
         ::osl::ResettableMutexGuard & guard,
         ::rtl::Reference<AbortChannel> const & abortChannel,
         Reference<XCommandEnvironment> const & xCmdEnv );
@@ -179,12 +172,14 @@ PackageImpl * PackageImpl::create(
 }
 
 //______________________________________________________________________________
-void BackendImpl::initialize( Sequence< Any > const & args )
-    throw (Exception)
+BackendImpl::BackendImpl(
+    Sequence<Any> const & args,
+    Reference<XComponentContext> const & xComponentContext,
+    OUString const & implName,
+    Sequence<OUString> const & supportedMediaTypes )
+    : PackageRegistryBackend(
+        args, xComponentContext, implName, supportedMediaTypes )
 {
-    OSL_TRACE("BackendImpl::initialize()");
-    PackageRegistryBackend::initialize( args );
-
     if (! transientMode())
     {
 /*
@@ -227,8 +222,6 @@ void BackendImpl::initialize( Sequence< Any > const & args )
         OUString ctx(
             m_eContext == CONTEXT_USER
                 ? OUSTR("user") : OUSTR("share") );
-        OSL_TRACE("******** BackEndImpl setting context %s, m_eContext is %d ",
-            ::rtl::OUStringToOString( ctx , RTL_TEXTENCODING_ASCII_US ).pData->buffer, m_eContext );
         m_sCtx = ctx;
     }
 }
@@ -241,6 +234,7 @@ OUString SAL_CALL getImplementationName()
 
 //==============================================================================
 Reference<XInterface> SAL_CALL create(
+    Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
     SAL_THROW( (Exception) )
 {
@@ -249,7 +243,7 @@ Reference<XInterface> SAL_CALL create(
     };
     return static_cast< ::cppu::OWeakObject * >(
         new BackendImpl(
-            xComponentContext, getImplementationName(),
+            args, xComponentContext, getImplementationName(),
             Sequence<OUString >( mediaTypes, ARLEN(mediaTypes) ) ) );
 }
 
@@ -390,23 +384,17 @@ Any PackageImpl::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
 
 // Package
 //______________________________________________________________________________
-bool PackageImpl::isRegistered_(
+beans::Optional< beans::Ambiguous<sal_Bool> > PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard & guard,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    BackendImpl * that = getMyBackend();
-
-    if ( m_xNameCntrPkgHandler.is() )
-    {
-        if ( m_xNameCntrPkgHandler->hasByName( m_url ) )
-        {
-            return true;
-        }
-    }
-
-    return false;
-
+    return beans::Optional< beans::Ambiguous<sal_Bool> >(
+        true /* IsPresent */,
+        beans::Ambiguous<sal_Bool>(
+            m_xNameCntrPkgHandler.is() && m_xNameCntrPkgHandler->hasByName(
+                m_url ),
+            false /* IsAmbiguous */ ) );
 }
 
 //______________________________________________________________________________
@@ -437,7 +425,7 @@ void PackageImpl::processPackage_(
     }
 }
 
-} // namespace script
+} // namespace sfwk
 } // namespace backend
 } // namespace dp_registry
 
