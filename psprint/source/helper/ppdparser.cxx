@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:02 $
+ *  last change: $Author: pl $ $Date: 2001-10-16 19:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,13 +106,14 @@ static String GetPPDFile( const String& rFile )
     if( ! aStream.IsOpen() )
     {
         // check installation directories
+        String aFile( aPPD.GetName() );
         String aPathList( getPrinterPath() );
         int nTokenCount = aPathList.GetTokenCount( ':' );
         for( int i = 0; i < nTokenCount && ! aStream.IsOpen(); i++ )
         {
             aPPD = INetURLObject( aPathList.GetToken( i, ':' ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
             aPPD.Append( String( RTL_CONSTASCII_USTRINGPARAM( PRINTER_PPDDIR ) ) );
-            aPPD.Append( rFile );
+            aPPD.Append( aFile );
 
             aStream.Open( aPPD.PathToFileName(), STREAM_READ );
             // append .PS if necessary
@@ -142,7 +143,7 @@ String PPDParser::getPPDPrinterName( const String& rFile )
     if( aStream.IsOpen() )
     {
         String aCurLine;
-        while( ! aStream.IsEof() )
+        while( ! aStream.IsEof() && aStream.IsOpen() )
         {
             ByteString aByteLine;
             aStream.ReadLine( aByteLine );
