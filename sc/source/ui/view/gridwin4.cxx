@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-22 19:34:13 $
+ *  last change: $Author: nn $ $Date: 2001-02-26 18:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,11 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/colritem.hxx>
 #include <svx/editview.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/fhgtitem.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <so3/ipenv.hxx>
 
 #ifdef MAC
@@ -95,6 +99,7 @@
 #include "docsh.hxx"            // oder GetSfxInPlaceObject
 #include "cbutton.hxx"
 #include "invmerge.hxx"
+#include "editutil.hxx"
 
 //#include "tabvwsh.hxx"            //! Test !!!!
 
@@ -819,12 +824,36 @@ void ScGridWindow::DrawPagePreview( USHORT nX1, USHORT nY1, USHORT nX2, USHORT n
         Color aManual( COL_LIGHTBLUE );
         Color aAutomatic( COL_BLUE );
 
-        Font aFont;
-        ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont(aFont);
-        aFont.SetColor( Color( COL_LIGHTGRAY ) );
-        //  Groesse wird nach Bedarf eingestellt
         String aPageText = ScGlobal::GetRscString( STR_PAGE );
+        if ( nPageScript == 0 )
+        {
+            //  get script type of translated "Page" string only once
+            nPageScript = pDoc->GetStringScriptType( aPageText );
+            if (nPageScript == 0)
+                nPageScript = SCRIPTTYPE_LATIN;
+        }
         aPageText += ' ';
+
+        Font aFont;
+        ScEditEngineDefaulter* pEditEng = NULL;
+        const ScPatternAttr& rDefPattern = ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
+        if ( nPageScript == SCRIPTTYPE_LATIN )
+        {
+            //  use single font and call DrawText directly
+            rDefPattern.GetFont(aFont);
+            aFont.SetColor( Color( COL_LIGHTGRAY ) );
+            //  font size is set as needed
+        }
+        else
+        {
+            //  use EditEngine to draw mixed-script string
+            pEditEng = new ScEditEngineDefaulter( EditEngine::CreatePool(), TRUE );
+            pEditEng->SetRefMapMode( GetMapMode() );
+            SfxItemSet* pEditDefaults = new SfxItemSet( pEditEng->GetEmptyItemSet() );
+            rDefPattern.FillEditItemSet( pEditDefaults );
+            pEditDefaults->Put( SvxColorItem( Color( COL_LIGHTGRAY ), EE_CHAR_COLOR ) );
+            pEditEng->SetDefaults( pEditDefaults );
+        }
 
         USHORT nCount = pPageData->GetCount();
         for (USHORT nPos=0; nPos<nCount; nPos++)
@@ -931,23 +960,49 @@ void ScGridWindow::DrawPagePreview( USHORT nX1, USHORT nY1, USHORT nX2, USHORT n
                                 String aPageStr = aPageText;
                                 aPageStr += String::CreateFromInt32(nPageNo);
 
-                                //  passende Fontgroesse suchen
-                                aFont.SetSize( Size( 0,100 ) );
-                                SetFont( aFont );
-                                Size aSize100( GetTextWidth( aPageStr ), GetTextHeight() );
-                                //  40% der Breite oder 60% der Hoehe
-                                long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) /
-                                                    aSize100.Width();
-                                long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) /
-                                                    aSize100.Height();
-                                aFont.SetSize( Size( 0,Min(nSizeX,nSizeY) ) );
-                                SetFont( aFont );
+                                if ( pEditEng )
+                                {
+                                    //  find right font size with EditEngine
+                                    long nHeight = 100;
+                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
+                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+                                    pEditEng->SetText( aPageStr );
+                                    Size aSize100( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
 
-                                //  zentriert ausgeben
-                                Size aTextSize( GetTextWidth( aPageStr ), GetTextHeight() );
-                                Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
-                                            (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
-                                DrawText( aPos, aPageStr );
+                                    //  40% of width or 60% of height
+                                    long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
+                                    long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
+                                    nHeight = Min(nSizeX,nSizeY);
+                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
+                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+                                    pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+
+                                    //  centered output with EditEngine
+                                    Size aTextSize( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
+                                    Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
+                                                (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
+                                    pEditEng->Draw( this, aPos );
+                                }
+                                else
+                                {
+                                    //  find right font size for DrawText
+                                    aFont.SetSize( Size( 0,100 ) );
+                                    SetFont( aFont );
+                                    Size aSize100( GetTextWidth( aPageStr ), GetTextHeight() );
+
+                                    //  40% of width or 60% of height
+                                    long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
+                                    long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
+                                    aFont.SetSize( Size( 0,Min(nSizeX,nSizeY) ) );
+                                    SetFont( aFont );
+
+                                    //  centered output with DrawText
+                                    Size aTextSize( GetTextWidth( aPageStr ), GetTextHeight() );
+                                    Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
+                                                (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
+                                    DrawText( aPos, aPageStr );
+                                }
                             }
                             nPrStartX = nPrEndX + 1;
                         }
@@ -956,6 +1011,8 @@ void ScGridWindow::DrawPagePreview( USHORT nX1, USHORT nY1, USHORT nX2, USHORT n
                 }
             }
         }
+
+        delete pEditEng;
     }
 }
 
