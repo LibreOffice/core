@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:09:52 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ String SV_HELPTEXT_CLOSE
     TEXT[ arabic ] = "ÅÛáÇÞ";
     TEXT[ turkish ] = "Kapat";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Cerrar";
 };
 
 String SV_HELPTEXT_MINIMIZE
@@ -113,6 +114,7 @@ String SV_HELPTEXT_MINIMIZE
     TEXT[ arabic ] = "ÇáÍÏ ÇáÃÏäì";
     TEXT[ turkish ] = "Simge durumuna küçült";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Minimizar";
 };
 
 String SV_HELPTEXT_MAXIMIZE
@@ -138,6 +140,7 @@ String SV_HELPTEXT_MAXIMIZE
     TEXT[ arabic ] = "ÇáÍÏ ÇáÃÞÕì";
     TEXT[ turkish ] = "Ekraný kapla";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Maximizar";
 };
 
 String SV_HELPTEXT_RESTORE
@@ -163,6 +166,7 @@ String SV_HELPTEXT_RESTORE
     TEXT[ arabic ] = "ÇÓÊÚÇÏÉ";
     TEXT[ turkish ] = "Baþa al";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Restaurar";
 };
 
 String SV_HELPTEXT_ROLLDOWN
@@ -188,6 +192,7 @@ String SV_HELPTEXT_ROLLDOWN
     TEXT[ arabic ] = "ÝÊÍ";
     TEXT[ turkish ] = "Aç";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Mostrar";
 };
 
 String SV_HELPTEXT_ROLLUP
@@ -213,6 +218,7 @@ String SV_HELPTEXT_ROLLUP
     TEXT[ korean ] = "´Ý±â";
     TEXT[ arabic ] = "Øí";
     TEXT[ turkish ] = "Kapat";
+    TEXT[ catalan ] = "Ocultar";
 };
 
 String SV_HELPTEXT_HELP
@@ -230,7 +236,7 @@ String SV_HELPTEXT_HELP
     TEXT[ english_us ] = "Help";
     TEXT[ russian ] = "Ñïðàâêà";
     TEXT[ polish ] = "Pomoc";
-    TEXT[ japanese ] = "ƒwƒ‹ƒv";
+    TEXT[ japanese ] = "ÍÙÌß";
     TEXT[ chinese_simplified ] = "°ïÖú";
     TEXT[ chinese_traditional ] = "»¡©ú";
     TEXT[ greek ] = "ÂïÞèåéá";
@@ -238,6 +244,7 @@ String SV_HELPTEXT_HELP
     TEXT[ arabic ] = "ãÓÇÚÏÉ";
     TEXT[ turkish ] = "Yardým";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Ayuda";
 };
 
 String SV_HELPTEXT_ALWAYSVISIBLE
@@ -263,6 +270,7 @@ String SV_HELPTEXT_ALWAYSVISIBLE
     TEXT[ arabic ] = "ãÑÆí ÏÇÆãÇð";
     TEXT[ turkish ] = "Daima görünür";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Siempre visible";
 };
 
 String SV_HELPTEXT_FADEIN
@@ -288,6 +296,7 @@ String SV_HELPTEXT_FADEIN
     TEXT[ arabic ] = "ÅÙåÇÑ";
     TEXT[ turkish ] = "Göster";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Mostrar";
 };
 
 String SV_HELPTEXT_FADEOUT
@@ -313,6 +322,7 @@ String SV_HELPTEXT_FADEOUT
     TEXT[ arabic ] = "ÅÎÝÇÁ";
     TEXT[ turkish ] = "Gizle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Ocultar";
 };
 
 String SV_HELPTEXT_SPLITFLOATING
@@ -338,6 +348,7 @@ String SV_HELPTEXT_SPLITFLOATING
     TEXT[ arabic ] = "ÚÇÆã";
     TEXT[ turkish ] = "Serbest";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Flotando";
 };
 
 String SV_HELPTEXT_SPLITFIXED
@@ -363,5 +374,6 @@ String SV_HELPTEXT_SPLITFIXED
     TEXT[ arabic ] = "ÊËÈíÊ";
     TEXT[ turkish ] = "Sabitle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Fijar";
 };
 
