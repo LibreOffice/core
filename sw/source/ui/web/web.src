@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:29:22 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 09:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text[ polish ] = "%PRODUCTNAME 6.0 - Dokument HTML";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 5.0 HTML";
     Text[ japanese ] = "%PRODUCTNAME 6.0 HTML 形式ドキュメント";
-    Text[ korean ] = "%PRODUCTNAME 6.０HTML 문서";
+    Text[ korean ] = "%PRODUCTNAME 6.０ HTML 문서";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 HTML 文档";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 HTML 文件";
     Text[ turkish ] = "%PRODUCTNAME 5.0 HTML";
@@ -612,7 +612,7 @@ String RID_WEBOLE_TOOLBOX
     Text[ dutch ] = "Object";
     Text[ chinese_simplified ] = "对象";
     Text[ greek ] = "�����������";
-    Text[ korean ] = "개체";
+    Text[ korean ] = "개체/웹";
     Text[ turkish ] = "Nesne";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objecte";
