@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 10:29:16 $
+ *  last change: $Author: nn $ $Date: 2000-11-06 10:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
 /*------------------------------------------------------------------------
 
-    $Author: nn $ $Date: 2000-09-29 10:29:16 $ $Revision: 1.2 $
+    $Author: nn $ $Date: 2000-11-06 10:34:25 $ $Revision: 1.3 $
     $Logfile:   T:/sc/source/core/tool/autoform.cxv  $ $Workfile:   autoform.cxx  $
     (c) Copyright 1989 - 1994, Star Division GmbH, Hamburg
 
@@ -868,6 +868,10 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
     BOOL b;
     rStream << nVal;
     rStream.WriteByteString( aName, rStream.GetStreamCharSet() );
+
+#if 0
+    //  This was an internal flag to allow creating AutoFormats with localized names
+
     if ( USHRT_MAX == nStrResId )
     {
         String aIniVal( SFX_APP()->GetIniManager()->Get(
@@ -888,6 +892,7 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
             }
         }
     }
+#endif
 
     rStream << nStrResId;
     rStream << ( b = bIncludeFont );
