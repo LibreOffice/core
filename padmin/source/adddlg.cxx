@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-07 07:18:29 $
+ *  last change: $Author: pl $ $Date: 2001-06-08 12:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,15 +840,15 @@ void AddPrinterDialog::advance()
     }
     else if( m_pCurrentPage == m_pChooseDriverPage )
     {
-        if( ! m_pNamePage )
-            m_pNamePage = new APNamePage( this, m_aPrinter.m_aPrinterName, DeviceKind::Printer );
-        m_pCurrentPage = m_pNamePage;
-    }
-    else if( m_pCurrentPage == m_pNamePage )
-    {
         if( ! m_pCommandPage )
             m_pCommandPage = new APCommandPage( this, DeviceKind::Printer );
         m_pCurrentPage = m_pCommandPage;
+    }
+    else if( m_pCurrentPage == m_pCommandPage )
+    {
+        if( ! m_pNamePage )
+            m_pNamePage = new APNamePage( this, m_aPrinter.m_aPrinterName, DeviceKind::Printer );
+        m_pCurrentPage = m_pNamePage;
         m_aFinishPB.Enable( TRUE );
         m_aNextPB.Enable( FALSE );
     }
@@ -862,22 +862,22 @@ void AddPrinterDialog::advance()
         }
         else
         {
-            if( ! m_pFaxNamePage )
-                m_pFaxNamePage = new APNamePage( this, String(), DeviceKind::Fax );
-            m_pCurrentPage = m_pFaxNamePage;
+            if( ! m_pFaxCommandPage )
+                m_pFaxCommandPage = new APCommandPage( this, DeviceKind::Fax );
+            m_pCurrentPage = m_pFaxCommandPage;
         }
     }
     else if( m_pCurrentPage == m_pFaxSelectDriverPage )
     {
-        if( ! m_pFaxNamePage )
-            m_pFaxNamePage = new APNamePage( this, String(), DeviceKind::Fax );
-        m_pCurrentPage = m_pFaxNamePage;
-    }
-    else if( m_pCurrentPage == m_pFaxNamePage )
-    {
         if( ! m_pFaxCommandPage )
             m_pFaxCommandPage = new APCommandPage( this, DeviceKind::Fax );
         m_pCurrentPage = m_pFaxCommandPage;
+    }
+    else if( m_pCurrentPage == m_pFaxCommandPage )
+    {
+        if( ! m_pFaxNamePage )
+            m_pFaxNamePage = new APNamePage( this, String(), DeviceKind::Fax );
+        m_pCurrentPage = m_pFaxNamePage;
         m_aNextPB.Enable( FALSE );
         m_aFinishPB.Enable( TRUE );
     }
@@ -891,22 +891,22 @@ void AddPrinterDialog::advance()
         }
         else
         {
-            if( ! m_pPdfNamePage )
-                m_pPdfNamePage = new APNamePage( this, String(), DeviceKind::Pdf );
-            m_pCurrentPage = m_pPdfNamePage;
+            if( ! m_pPdfCommandPage )
+                m_pPdfCommandPage = new APCommandPage( this, DeviceKind::Pdf );
+            m_pCurrentPage = m_pPdfCommandPage;
         }
     }
     else if( m_pCurrentPage == m_pPdfSelectDriverPage )
     {
-        if( ! m_pPdfNamePage )
-            m_pPdfNamePage = new APNamePage( this, String(), DeviceKind::Pdf );
-        m_pCurrentPage = m_pPdfNamePage;
-    }
-    else if( m_pCurrentPage == m_pPdfNamePage )
-    {
         if( ! m_pPdfCommandPage )
             m_pPdfCommandPage = new APCommandPage( this, DeviceKind::Pdf );
         m_pCurrentPage = m_pPdfCommandPage;
+    }
+    else if( m_pCurrentPage == m_pPdfCommandPage )
+    {
+        if( ! m_pPdfNamePage )
+            m_pPdfNamePage = new APNamePage( this, String(), DeviceKind::Pdf );
+        m_pCurrentPage = m_pPdfNamePage;
         m_aNextPB.Enable( FALSE );
         m_aFinishPB.Enable( TRUE );
     }
@@ -924,12 +924,12 @@ void AddPrinterDialog::back()
     }
     else if( m_pCurrentPage == m_pNamePage )
     {
-        m_pCurrentPage = m_pChooseDriverPage;
+        m_pCurrentPage = m_pCommandPage;
         m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pCommandPage )
     {
-        m_pCurrentPage = m_pNamePage;
+        m_pCurrentPage = m_pChooseDriverPage;
     }
     else if( m_pCurrentPage == m_pOldPrinterPage )
     {
@@ -948,12 +948,12 @@ void AddPrinterDialog::back()
     }
     else if( m_pCurrentPage == m_pFaxNamePage )
     {
-        m_pCurrentPage = m_pFaxDriverPage->isDefault() ? (APTabPage*)m_pFaxDriverPage : (APTabPage*)m_pFaxSelectDriverPage;
+        m_pCurrentPage = m_pFaxCommandPage;
+        m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pFaxCommandPage )
     {
-        m_pCurrentPage = m_pFaxNamePage;
-        m_aNextPB.Enable( TRUE );
+        m_pCurrentPage = m_pFaxDriverPage->isDefault() ? (APTabPage*)m_pFaxDriverPage : (APTabPage*)m_pFaxSelectDriverPage;
     }
     else if( m_pCurrentPage == m_pPdfDriverPage )
     {
@@ -966,12 +966,12 @@ void AddPrinterDialog::back()
     }
     else if( m_pCurrentPage == m_pPdfNamePage )
     {
-        m_pCurrentPage = m_pPdfDriverPage->isDefault() || m_pPdfDriverPage->isDist() ? (APTabPage*)m_pPdfDriverPage : (APTabPage*)m_pPdfSelectDriverPage;
+        m_pCurrentPage = m_pPdfCommandPage;
+        m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pPdfCommandPage )
     {
-        m_pCurrentPage = m_pPdfNamePage;
-        m_aNextPB.Enable( TRUE );
+        m_pCurrentPage = m_pPdfDriverPage->isDefault() || m_pPdfDriverPage->isDist() ? (APTabPage*)m_pPdfDriverPage : (APTabPage*)m_pPdfSelectDriverPage;
     }
     m_pCurrentPage->Show( TRUE );
 }
