@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:20:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,13 +885,27 @@ ModelessDialog RID_SCDLG_FILTER
          < "=" ; Default ; > ;
         < "<" ; Default ; > ;
         < ">" ; Default ; > ;
-    };
+        < "<=" ; Default ; > ;
+            < ">=" ; Default ; > ;
+            < "<>" ; Default ; > ;
+            < "größte" ; Default ; > ;
+            < "kleinste" ; Default ; > ;
+            < "größte %" ; Default ; > ;
+            < "kleinste %" ; Default ; > ;
+        };
     StringList [ hindi ] =
     {
          < "=" ; Default ; > ;
         < "<" ; Default ; > ;
         < ">" ; Default ; > ;
-    };
+        < "<=" ; Default ; > ;
+            < ">=" ; Default ; > ;
+            < "<>" ; Default ; > ;
+            < "अधिकतम" ; Default ; > ;
+            < "न्यूनतम" ; Default ; > ;
+            < "अधिकतम %" ; Default ; > ;
+            < "न्यूनतम %" ; Default ; > ;
+        };
     StringList [ slovak ] =
     {
          < "=" ; Default ; > ;
@@ -4251,6 +4265,16 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ hindi ] = "फिल्टर";
     Text[ slovak ] = "Filter";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
