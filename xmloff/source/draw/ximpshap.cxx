@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:00:41 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 14:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,10 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSTATES_HPP_
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #endif
 
 #ifndef _XEXPTRANSFORM_HXX
@@ -500,6 +504,15 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 
         UniReference< XMLShapeImportHelper > xImp( GetImport().GetShapeImport() );
         xImp->addShape( xShape, mxAttrList, mxShapes );
+
+        /* We have to temporarily disable this call since it causes the
+           CompanyTakeover presentation from being displayed correctly.
+           This change has been introduced by bugfix #i32217#.
+        uno::Reference<beans::XMultiPropertyStates> xMultiPropertyStates(
+            xShape, uno::UNO_QUERY );
+        if (xMultiPropertyStates.is())
+            xMultiPropertyStates->setAllPropertiesToDefault();
+        */
 
         // #107848#
         if(!mbTemporaryShape && (!GetImport().HasTextImport()
