@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-12 13:34:42 $
+ *  last change: $Author: er $ $Date: 2002-07-17 17:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ public:
             {}
 
     USHORT  GetCode( const String& rDelimiter ) const;
-    String  GetDelimiter( USHORT nCode ) const;
+    String  GetDelimiter( sal_Unicode nCode ) const;
 
     String  FirstDel()  { nIter = 0; return theDelTab.GetToken( nIter, cSep ); }
     String  NextDel()   { nIter +=2; return theDelTab.GetToken( nIter, cSep ); }
@@ -106,7 +106,7 @@ private:
 
 USHORT ScDelimiterTable::GetCode( const String& rDel ) const
 {
-    USHORT nCode = 0;
+    sal_Unicode nCode = 0;
     xub_StrLen i = 0;
 
     if ( nCount >= 2 )
@@ -115,7 +115,7 @@ USHORT ScDelimiterTable::GetCode( const String& rDel ) const
         {
             if ( rDel == theDelTab.GetToken( i, cSep ) )
             {
-                nCode = (USHORT)theDelTab.GetToken( i+1, cSep ).ToInt32();
+                nCode = (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32();
                 i     = nCount;
             }
             else
@@ -128,7 +128,7 @@ USHORT ScDelimiterTable::GetCode( const String& rDel ) const
 
 //------------------------------------------------------------------------
 
-String ScDelimiterTable::GetDelimiter( USHORT nCode ) const
+String ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 {
     String aStrDel;
     xub_StrLen i = 0;
@@ -137,7 +137,7 @@ String ScDelimiterTable::GetDelimiter( USHORT nCode ) const
     {
         while ( i<nCount )
         {
-            if ( nCode == (USHORT)theDelTab.GetToken( i+1, cSep ).ToInt32() )
+            if ( nCode == (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32() )
             {
                 aStrDel = theDelTab.GetToken( i, cSep );
                 i       = nCount;
@@ -180,7 +180,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     pTextSepTab  = new ScDelimiterTable( String(ScResId(SCSTR_TEXTSEP)) );
 
     String aStr = pFieldSepTab->FirstDel();
-    USHORT nCode;
+    sal_Unicode nCode;
 
     while ( aStr.Len() > 0 )
     {
@@ -354,8 +354,8 @@ ScImportOptions::ScImportOptions( const String& rStr )
         if( aToken.EqualsIgnoreCaseAscii( pStrFix ) )
             bFixedWidth = TRUE;
         else
-            nFieldSepCode = (USHORT) aToken.ToInt32();
-        nTextSepCode  = (USHORT) rStr.GetToken(1,',').ToInt32();
+            nFieldSepCode = (sal_Unicode) aToken.ToInt32();
+        nTextSepCode  = (sal_Unicode) rStr.GetToken(1,',').ToInt32();
         aStrFont      = rStr.GetToken(2,',');
         eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
     }
