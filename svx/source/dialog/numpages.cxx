@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-30 11:41:11 $
+ *  last change: $Author: os $ $Date: 2002-11-07 14:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2152,6 +2152,7 @@ void SvxNumOptionsTabPage::InitControls()
 
     }
     SwitchNumberType(bShowBullet ? 1 : bShowBitmap ? 2 : 0);
+    CheckForStartValue_Impl(aNumFmtArr[nLvl]->GetNumberingType());
     if(bShowBitmap)
     {
         if(!bSameVOrient || eFirstOrient == SVX_VERT_NONE)
@@ -2463,7 +2464,8 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
             // PAGEDESC gibt es nicht
             USHORT nNumType = (USHORT)(ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos());
             aNumFmt.SetNumberingType((sal_Int16)nNumType);
-            if(SVX_NUM_BITMAP == (aNumFmt.GetNumberingType()&(~LINK_TOKEN)))
+            sal_uInt16 nNumberingType = aNumFmt.GetNumberingType();
+            if(SVX_NUM_BITMAP == (nNumberingType&(~LINK_TOKEN)))
             {
                 bBmp |= 0 != aNumFmt.GetBrush();
                 aNumFmt.SetIncludeUpperLevels( FALSE );
@@ -2475,7 +2477,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
                 SwitchNumberType(SHOW_BITMAP, bBmp );
                 bShowOrient = TRUE;
             }
-            else if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumberingType() )
+            else if( SVX_NUM_CHAR_SPECIAL == nNumberingType )
             {
                 aNumFmt.SetIncludeUpperLevels( FALSE );
                 aNumFmt.SetSuffix( aEmptyStr );
@@ -2501,6 +2503,8 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
 //              aNumFmt.SetBulletFont(0);
                 SwitchNumberType(SHOW_NUMBERING);
                 pActNum->SetLevel(i, aNumFmt);
+                CheckForStartValue_Impl(nNumberingType);
+
                 // Zuweisung der Zeichenvorlage automatisch
                 if(bAutomaticCharStyles)
                 {
@@ -2530,8 +2534,19 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
         bAutomaticCharStyles = TRUE;
     }
     return 0;
-
-
+}
+/* -----------------06.11.2002 14:27-----------------
+ *
+ * --------------------------------------------------*/
+void SvxNumOptionsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
+{
+    BOOL bIsNull = aStartED.GetValue() == 0;
+    BOOL bNoZeroAllowed = nNumberingType < SVX_NUM_ARABIC ||
+                        SVX_NUM_CHARS_UPPER_LETTER_N == nNumberingType ||
+                        SVX_NUM_CHARS_LOWER_LETTER_N == nNumberingType;
+    aStartED.SetMin(bNoZeroAllowed ? 1 : 0);
+    if(bIsNull && bNoZeroAllowed)
+        aStartED.GetModifyHdl().Call(&aStartED);
 }
 /*-----------------03.12.97 16:43-------------------
 
