@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:31:46 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,14 @@ class OfficeIPCThread : public vos::OThread
     sal_Bool                    mbBlockRequests;
     int                         mnPendingRequests;
     DispatchWatcher*            mpDispatchWatcher;
-    ::osl::Condition cProcessed;    // condition to be set when the request has been processed
+
+    /* condition to be set when the request has been processed */
+    ::osl::Condition cProcessed;
+
+    /* condition to be set when the main event loop is ready
+       otherwise an error dialogs event loop could eat away
+       requests from a 2nd office */
+    ::osl::Condition cReady;
 
     static ::osl::Mutex&        GetMutex();
     static const char *sc_aTerminationSequence;
@@ -164,6 +171,8 @@ class OfficeIPCThread : public vos::OThread
     // return FALSE if second office
     static Status               EnableOfficeIPCThread();
     static void                 DisableOfficeIPCThread();
+    // start dispatching events...
+    static void                 SetReady(OfficeIPCThread* pThread = NULL);
 };
 
 
