@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2001-07-20 18:41:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 21:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ Resource RID_ERRHDLSC
         Text[ russian ] = "Δξκσμενς ρλθψκξμ ρλξζνϋι δλÿ ΰβςξμΰςθχερκθυ βϋχθρλενθι. Δλÿ οξβςξπνξγξ βϋχθρλενθÿ νΰζμθςε F9.";
         Text[ polish ] = "Dokument jest zbyt z³oΏony dla automatycznego obliczenia. Oblicz ponownie, przyciskajΉc F9.";
         Text[ japanese ] = "©“®vZ‚Ι‚ΝAΔή·­ÒέΔ‚ª•΅G‚·‚¬‚ά‚·BF9 ‚π‰‚µ‚ΔΔvZ‚µ‚ά‚·B";
-        Text[ chinese_traditional ] = "¤ε¥σΉL©σ½Ζ¦X΅AµLªk°υ¦ζ¦Ϋ°ΚΉBΊβ¥\\―ΰ΅C½Π«φΐ» F9΅A ­«·sΉBΊβ΅C";
+        Text[ chinese_traditional ] = "¤ε¥σΉL©σ½Ζ¦X΅AµLªk°υ¦ζ¦Ϋ°ΚΉBΊβ¥\\―ΰ΅C½Π«φ F9 ΅A­«·sΉBΊβ΅C";
         Text[ arabic ] = "ΗαγΣΚδΟ γΪήΟ ΜΟΗπ ΘΝνΛ αΗ νγίδ ΕΜΡΗΑ ΗαΝΣΗΘ ΚαήΗΖνΗπ. ΗαΡΜΗΑ ΗαΦΫΨ Ϊαμ F9 αΕΪΗΟΙ ΗαΝΣΗΘ.";
         Text[ greek ] = "Το έγγραφο είναι υπερβολικά περίπλοκο για αυτόματο υπολογισμό. Πατήστε το πλήκτρο F9 για να εκτελεστεί ξανά ο υπολογισμός.";
         Text[ korean ] = "Ή®Ό­°΅ ΐΪµΏ °θ»κΐ» ΗΟ±βΏ£ ³ΚΉ« ΊΉΐβΗΥ΄Ο΄Ω. F9Έ¦ ΄©Έ£ΌΕΌ­ ΐη °θ»κΗΟ½Κ½ΓΏΐ.";
@@ -665,6 +665,7 @@ Resource RID_ERRHDLSC
         Text[ENGLISH_US] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
     };
 };
+
 
 
 
