@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-25 15:33:49 $
+ *  last change: $Author: jp $ $Date: 2001-06-27 14:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,12 @@
 #endif
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
+#endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_STYLE_CASEMAP_HPP_
@@ -4617,57 +4623,27 @@ void SvxScriptSetItem::GetSlotIds( USHORT nSlotId, USHORT& rLatin,
 void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian,
                         SvxFontItem& rComplex )
 {
-    rtl_TextEncoding eFontTextEncoding = ::gsl_getSystemTextEncoding();
-    rLatin.GetFamily() = FAMILY_ROMAN;
-    rLatin.GetFamilyName() = System::GetStandardFont( STDFONT_ROMAN ).GetName();
-    rLatin.GetStyleName().Erase();
-    rLatin.GetPitch() = PITCH_VARIABLE;
-    rLatin.GetCharSet() = eFontTextEncoding;
+    const USHORT nItemCnt = 3;
+    static struct {
+        USHORT nFntType, nLanguage;
+    }  aOutTypeArr[ nItemCnt ] = {
+        {  DEFAULTFONT_LATIN_TEXT, LANGUAGE_ENGLISH_US },
+        {  DEFAULTFONT_CJK_TEXT, LANGUAGE_ENGLISH_US },
+        {  DEFAULTFONT_CTL_TEXT, LANGUAGE_ARABIC_SAUDI_ARABIA }
+    };
+    SvxFontItem* aItemArr[ nItemCnt ] = { &rLatin, &rAsian, &rComplex };
 
-    rAsian.GetFamily() = FAMILY_DONTKNOW;
-    rAsian.GetStyleName().Erase();
-    rAsian.GetPitch() = PITCH_DONTKNOW;
-    rAsian.GetCharSet() = RTL_TEXTENCODING_DONTKNOW;
-
-    rComplex.GetFamily() = FAMILY_DONTKNOW;
-    rComplex.GetStyleName().Erase();
-    rComplex.GetPitch() = PITCH_DONTKNOW;
-    rComplex.GetCharSet() = RTL_TEXTENCODING_DONTKNOW;
-
-    rAsian.GetFamilyName().AssignAscii( RTL_CONSTASCII_STRINGPARAM(
-                        "MS Mincho;HG Mincho L;MS PGothic" ));
-    rComplex.GetFamilyName().AssignAscii( RTL_CONSTASCII_STRINGPARAM(
-                        "Simplified Arabic" ));
-
-    USHORT nLng = System::GetLanguage();
-    switch( nLng )
+    for( USHORT n = 0; n < nItemCnt; ++n )
     {
-    case LANGUAGE_CHINESE:
-     case LANGUAGE_CHINESE_TRADITIONAL:
-     case LANGUAGE_CHINESE_HONGKONG:
-     case LANGUAGE_CHINESE_SINGAPORE:
-     case LANGUAGE_CHINESE_MACAU:
-        rAsian.GetFamilyName().AssignAscii( RTL_CONSTASCII_STRINGPARAM(
-                        "PmingLiU;Ming" ));
-        break;
-
-     case LANGUAGE_CHINESE_SIMPLIFIED:
-        rAsian.GetFamilyName().AssignAscii( RTL_CONSTASCII_STRINGPARAM(
-                        "SimSun;Song" ));
-        break;
-    case LANGUAGE_KOREAN:
-    case LANGUAGE_KOREAN_JOHAB:
-        rAsian.GetFamilyName().AssignAscii( RTL_CONSTASCII_STRINGPARAM(
-                        "Batang;Myeomgjo;Gulim" ));
-        break;
+        Font aFnt( OutputDevice::GetDefaultFont(
+            aOutTypeArr[ n ].nFntType, aOutTypeArr[ n ].nLanguage, 0, 0 ));
+        SvxFontItem* pI = aItemArr[ n ];
+        pI->GetFamily() = aFnt.GetFamily();
+        pI->GetFamilyName() = aFnt.GetName();
+        pI->GetStyleName().Erase();
+        pI->GetPitch() = aFnt.GetPitch();
+        pI->GetCharSet() = aFnt.GetCharSet();
     }
-
-    String sFirst( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                    "Andale WT UI;" )));
-    String sLast( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                    "Arial Unicode MS" )));
-    (rAsian.GetFamilyName().Insert( sFirst, 0 ) += ';' ) += sLast;
-    ((rComplex.GetFamilyName() += ';' ) += sFirst ) += sLast;
 }
 
 
@@ -4677,7 +4653,7 @@ USHORT GetScriptTypeOfLanguage( USHORT nLang )
     if( LANGUAGE_DONTKNOW == nLang )
         nLang = LANGUAGE_ENGLISH_US;
     else if( LANGUAGE_SYSTEM == nLang  )
-        nLang = International::GetRealLanguage( nLang );
+        nLang = Application::GetSettings().GetLanguage();
 
     USHORT nScript;
     switch( nLang )
