@@ -267,5 +267,4 @@ Dim sProdName as String
 	oDialog.SetCurrentFilter(FilterNames(0,0)
 End Sub
 
-
 </script:module>

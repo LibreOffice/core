@@ -20,7 +20,7 @@ Dim NullArray()
 End Sub
 
 
-Sub FormMoveSelected(aEvent as Object)
+Sub FormMoveSelected()
 	Call MoveSelectedListBox(oDialogModel.lstFields, oDialogModel.lstSelFields)
 	Call FormSetMoveRights()
 	oDialogModel.lstSelFields.Tag = True

@@ -89,13 +89,21 @@ Dim oMasterKey
 End Function
 
 
-Function GetRegistryKeyContent(sKeyName as string)
+Function GetRegistryKeyContent(sKeyName as string, Optional bforUpdate as Boolean)
 Dim oConfigProvider as Object
 Dim aNodePath(0) as new com.sun.star.beans.PropertyValue
 	oConfigProvider = createUnoService(&quot;com.sun.star.configuration.ConfigurationProvider&quot;)
 	aNodePath(0).Name = &quot;nodepath&quot;
 	aNodePath(0).Value = sKeyName
-	GetRegistryKeyContent = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, aNodePath())
+	If IsMissing(bForUpdate) Then
+		GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, aNodePath())
+	Else
+		If bForUpdate Then
+			GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationUpdateAccess&quot;, aNodePath())
+		Else
+			GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, aNodePath())
+		End If
+	End If
 End Function
 
 
@@ -406,6 +414,7 @@ Sub Main
 	Next i
 End Sub
 
+
 Function GetDocumentType(oDocument)
 	If oDocument.SupportsService(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;) Then
 		GetDocumentType() = &quot;scalc&quot;
@@ -417,7 +426,6 @@ Function GetDocumentType(oDocument)
 		GetDocumentType() = &quot;smath&quot;
 	End If
 End Function
-
 
 
 Function GetNumberFormatType(oDocFormats, oFormatObject as Object) as Integer

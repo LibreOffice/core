@@ -12,6 +12,7 @@ Dim sObjectStrings(2) as String
 Dim sProperties() as String
 Dim n as Integer
 Dim m as Integer
+Dim MaxIndex as Integer
 	sObjectStrings(0) = LocObject.dbg_Properties
 	sObjectStrings(1) = LocObject.dbg_Methods
 	sObjectStrings(2) = LocObject.dbg_SupportedInterfaces

@@ -285,41 +285,6 @@ Dim i%, OldReplLen%, BigLen%
 End Function
 
 
-&apos; Converts an &quot;ordinary&quot; path to a &quot;URL-Path&quot;
-&apos;Function ConverttoURL(ByVal BigString as String) as String
-&apos;Dim Separator as String
-&apos;	If sProductname = &quot;&quot; Then
-&apos;		sProductname = GetProductname()
-&apos;	End If
-&apos;	If BigString &lt;&gt; &quot;&quot; Then
-&apos;		If IsFatOffice() Then
-&apos;			Separator = GetPathSeparator()
-&apos;			&apos; Is the delivered Path already a URL
-&apos;			If Instr(1,UCase(BigString),&quot;FILE:///&quot;) = 0 Then
-&apos;				BigString = ReplaceString(BigString,&quot;/&quot;,Separator)
-&apos;				BigString = &quot;file:///&quot; &amp; BigString
-&apos;			End If
-&apos;		End If
-&apos;		ConvertToURL = BigString
-&apos;	Else
-&apos;		ConvertToUrl = &quot;&quot;
-&apos;	End If
-&apos;End Function
-
-
-&apos; Converts an &quot;URL-Path&quot; to an ordinary &quot;Path&quot;
-&apos;Function ConvertfromURL(ByVal BigString as String) as String
-&apos;Dim Separator as String
-&apos;	Separator = GetPathSeparator()
-&apos;	If Left(Ucase(BigString),8)= &quot;FILE:///&quot; Then
-&apos;		BigString = Mid(BigString, 9, Len(BigString)-8)
-&apos;		BigString = ReplaceString(BigString,Separator,&quot;/&quot;)
-&apos;		BigString = ReplaceString(BigString,&quot;:&quot;,&quot;|&quot;)
-&apos;		ConvertFromUrl = BigString
-&apos;	End If
-&apos;End Function
-
-
 &apos; Retrieves the second value for a next to &apos;SearchString&apos; in
 &apos; a two-dimensional string-Array
 Function FindSecondValue(SearchString as String, TwoDimList() as String ) as String
@@ -353,7 +318,7 @@ End Function
 Function FileNameoutofPath(ByVal Path as String, Separator as String) as String
 Dim i as Integer
 Dim SepList() as String
-	SepList() = ArrayoutofString(Path,&quot;/&quot;,i)
+	SepList() = ArrayoutofString(Path, Separator,i)
 	FileNameoutofPath = SepList(i)
 End Function
 
