@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 20:26:47 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text [ english ] = "~insert query..." ;
             Text [ english_us ] = "~Paste Query..." ;
             Text[ portuguese ] = "~Inserir consulta...";
-            Text[ russian ] = "~Insert Query...";
+            Text[ russian ] = "~Âñòàâèòü çàïğîñ...";
             Text[ greek ] = "~Insert Query...";
             Text[ dutch ] = "Qu~ery invoegen...";
             Text[ french ] = "~Insérer une requête...";
@@ -1337,13 +1337,13 @@ String STR_DSBROWSER_TITLE
     Text [ english ] = "Data source browser" ;
     Text [ english_us ] = "Data sources view" ;
     Text[ portuguese ] = "Ver fontes de dados";
-        Text[ russian ] = "Data source browser";
+        Text[ russian ] = "Âèä èñòî÷íèêîâ äàííûõ";
         Text[ greek ] = "Data source browser";
         Text[ dutch ] = "Weergave gegevensbron";
         Text[ french ] = "Vue des sources de données";
         Text[ spanish ] = "Vista de fuente de datos";
         Text[ finnish ] = "Data source browser";
-        Text[ italian ] = "Data source browser";
+        Text[ italian ] = "Vista sorgente dati";
         Text[ danish ] = "Data source browser";
         Text[ swedish ] = "Datakällor vy";
         Text[ polish ] = "Widok Ÿróde³ danych";
@@ -1362,11 +1362,11 @@ String STR_NO_TABLE_FORMAT_INSIDE
     Text = "Es konnte kein Tabellenformat gefunden werden." ;
     Text [ english ] = "No table format found." ;
     Text [ english_us ] = "No table format found." ;
-    Text[ portuguese ] = "No table format found.";
-        Text[ russian ] = "No table format found.";
+    Text[ portuguese ] = "Foi impossível encontrar um formato de tabela.";
+        Text[ russian ] = "Ôîğìàò òàáëèöû íàéòè íå óäàëîñü.";
         Text[ greek ] = "No table format found.";
         Text[ dutch ] = "Geen tabelformaat gevonden.";
-        Text[ french ] = "No table format found.";
+        Text[ french ] = "Impossible de détecter un format de table.";
         Text[ spanish ] = "No se pudo encontrar ningún formato de hoja de cálculo.";
         Text[ finnish ] = "No table format found.";
         Text[ italian ] = "Il formato della tabella non è stato trovato";
@@ -1374,7 +1374,7 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ swedish ] = "Det gick inte att hitta något tabellformat.";
         Text[ polish ] = "No table format found.";
         Text[ portuguese_brazilian ] = "No table format found.";
-        Text[ japanese ] = "No table format found.";
+        Text[ japanese ] = "Ã°ÌŞÙ‘®‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ korean ] = "No table format found.";
         Text[ chinese_simplified ] = "No table format found.";
         Text[ chinese_traditional ] = "No table format found.";
@@ -1382,6 +1382,7 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ arabic ] = "No table format found.";
         Text[ catalan ] = "No table format found.";
     };
+
 
 
 
