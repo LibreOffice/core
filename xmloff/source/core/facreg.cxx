@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:29:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#include "sal/config.h"
+
+#include "xmloff/dllapi.h"
 
 #include <string.h>
 
@@ -196,7 +200,7 @@ extern "C"
 {
 #endif
 
-void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+XMLOFF_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -214,7 +218,7 @@ void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& 
 #define WRITEINFO(className)\
     writeInfo( pKey, className##_getImplementationName(), className##_getSupportedServiceNames() )
 
-sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
+XMLOFF_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
 {
     if( pRegistryKey )
     {
@@ -317,7 +321,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
                 classname##_getSupportedServiceNames() );\
         }
 
-void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+XMLOFF_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
     if( pServiceManager )
