@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:47:27 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,6 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-#ifndef SD_SUB_SHELL_MANAGER_HXX
-#include "SubShellManager.hxx"
-#endif
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -187,34 +184,32 @@ namespace sd {
 
 void ViewShell::UpdateScrollBars()
 {
-    short i;
-
-    for (i = 0; i < MAX_HSPLIT_CNT && pHScrlArray[i]; i++)
+    if (mpHorizontalScrollBar.get() != NULL)
     {
-        long nW = (long)(pWinArray[i][0]->GetVisibleWidth() * 32000);
-        long nX = (long)(pWinArray[i][0]->GetVisibleX() * 32000);
-        pHScrlArray[i]->SetVisibleSize(nW);
-        pHScrlArray[i]->SetThumbPos(nX);
+        long nW = (long)(mpContentWindow->GetVisibleWidth() * 32000);
+        long nX = (long)(mpContentWindow->GetVisibleX() * 32000);
+        mpHorizontalScrollBar->SetVisibleSize(nW);
+        mpHorizontalScrollBar->SetThumbPos(nX);
         nW = 32000 - nW;
-        long nLine = (long) (pWinArray[i][0]->GetScrlLineWidth() * nW);
-        long nPage = (long) (pWinArray[i][0]->GetScrlPageWidth() * nW);
-        pHScrlArray[i]->SetLineSize(nLine);
-        pHScrlArray[i]->SetPageSize(nPage);
+        long nLine = (long) (mpContentWindow->GetScrlLineWidth() * nW);
+        long nPage = (long) (mpContentWindow->GetScrlPageWidth() * nW);
+        mpHorizontalScrollBar->SetLineSize(nLine);
+        mpHorizontalScrollBar->SetPageSize(nPage);
     }
 
-    for (i = 0; i < MAX_VSPLIT_CNT && pVScrlArray[i]; i++)
+    if (mpVerticalScrollBar.get() != NULL)
     {
-        long nH = (long)(pWinArray[0][i]->GetVisibleHeight() * 32000);
-        long nY = (long)(pWinArray[0][i]->GetVisibleY() * 32000);
-        pVScrlArray[i]->SetVisibleSize(nH);
-        pVScrlArray[i]->SetThumbPos(nY);
+        long nH = (long)(mpContentWindow->GetVisibleHeight() * 32000);
+        long nY = (long)(mpContentWindow->GetVisibleY() * 32000);
+        mpVerticalScrollBar->SetVisibleSize(nH);
+        mpVerticalScrollBar->SetThumbPos(nY);
         nH = 32000 - nH;
-        long nLine = (long) (pWinArray[0][i]->GetScrlLineHeight() * nH);
-        long nPage = (long) (pWinArray[0][i]->GetScrlPageHeight() * nH);
-        pVScrlArray[i]->SetLineSize(nLine);
-        pVScrlArray[i]->SetPageSize(nPage);
+        long nLine = (long) (mpContentWindow->GetScrlLineHeight() * nH);
+        long nPage = (long) (mpContentWindow->GetScrlPageHeight() * nH);
+        mpVerticalScrollBar->SetLineSize(nLine);
+        mpVerticalScrollBar->SetPageSize(nPage);
     }
-    if ( bHasRuler )
+    if (mbHasRulers)
     {
         UpdateHRuler();
         UpdateVRuler();
@@ -245,47 +240,38 @@ long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 
     if (nDelta != 0)
     {
-        short nX = 0, nY = 0;
-
-        // Spalte der zu scrollenden Fenster bestimmen
-        while ( nX < MAX_HSPLIT_CNT &&  pHScroll != pHScrlArray[nX] )
-            ++nX;
-
         double fX = (double) pHScroll->GetThumbPos() / pHScroll->GetRange().Len();
 
         // alle Fenster der Spalte scrollen
-        while ( nY < MAX_VSPLIT_CNT && pWinArray[nX][nY] )
+        ::sd::View* pView = GetView();
+        OutlinerView* pOLV = NULL;
+
+        if (pView)
+            pOLV = pView->GetTextEditOutlinerView();
+
+        if (pOLV)
+            pOLV->HideCursor();
+
+        mpContentWindow->SetVisibleXY(fX, -1);
+
+        Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
+        Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
+        aVisArea.SetPos(aVisAreaPos);
+        GetDocSh()->SetVisArea(aVisArea);
+
+        Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+        Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+        VisAreaChanged(aVisAreaWin);
+
+        if (pView)
         {
-            ::sd::View* pView = GetView();
-            OutlinerView* pOLV = NULL;
-
-            if (pView)
-                pOLV = pView->GetTextEditOutlinerView();
-
-            if (pOLV)
-                pOLV->HideCursor();
-
-            pWinArray[nX][nY++]->SetVisibleXY(fX, -1);
-
-            Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
-            Point aVisAreaPos = pWindow->PixelToLogic( Point(0,0) );
-            aVisArea.SetPos(aVisAreaPos);
-            GetDocSh()->SetVisArea(aVisArea);
-
-            Size aVisSizePixel = pWindow->GetOutputSizePixel();
-            Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-            VisAreaChanged(aVisAreaWin);
-
-            if (pView)
-            {
-                pView->VisAreaChanged(pWindow);
-            }
-
-            if (pOLV)
-                pOLV->ShowCursor();
+            pView->VisAreaChanged(GetActiveWindow());
         }
 
-        if ( bHasRuler )
+        if (pOLV)
+            pOLV->ShowCursor();
+
+        if (mbHasRulers)
             UpdateHRuler();
 
     }
@@ -317,47 +303,37 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 
     if (nDelta != 0)
     {
-        short nX = 0, nY = 0;
-
-        // Zeile der zu scrollenden Fenster bestimmen
-        while ( nY < MAX_VSPLIT_CNT &&  pVScroll != pVScrlArray[nY] )
-            ++nY;
-
         double fY = (double) pVScroll->GetThumbPos() / pVScroll->GetRange().Len();
 
-        // alle Fenster der Zeile scrollen
-        while ( nX < MAX_HSPLIT_CNT && pWinArray[nX][nY] )
+        ::sd::View* pView = GetView();
+        OutlinerView* pOLV = NULL;
+
+        if (pView)
+            pOLV = pView->GetTextEditOutlinerView();
+
+        if (pOLV)
+            pOLV->HideCursor();
+
+        mpContentWindow->SetVisibleXY(-1, fY);
+
+        Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
+        Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
+        aVisArea.SetPos(aVisAreaPos);
+        GetDocSh()->SetVisArea(aVisArea);
+
+        Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+        Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+        VisAreaChanged(aVisAreaWin);
+
+        if (pView)
         {
-            ::sd::View* pView = GetView();
-            OutlinerView* pOLV = NULL;
-
-            if (pView)
-                pOLV = pView->GetTextEditOutlinerView();
-
-            if (pOLV)
-                pOLV->HideCursor();
-
-            pWinArray[nX++][nY]->SetVisibleXY(-1, fY);
-
-            Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
-            Point aVisAreaPos = pWindow->PixelToLogic( Point(0,0) );
-            aVisArea.SetPos(aVisAreaPos);
-            GetDocSh()->SetVisArea(aVisArea);
-
-            Size aVisSizePixel = pWindow->GetOutputSizePixel();
-            Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
-            VisAreaChanged(aVisAreaWin);
-
-            if (pView)
-            {
-                pView->VisAreaChanged(pWindow);
-            }
-
-            if (pOLV)
-                pOLV->ShowCursor();
+            pView->VisAreaChanged(GetActiveWindow());
         }
 
-        if ( bHasRuler )
+        if (pOLV)
+            pOLV->ShowCursor();
+
+        if (mbHasRulers)
             UpdateVRuler();
 
     }
@@ -374,22 +350,13 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 
 void ViewShell::ScrollLines(long nLinesX, long nLinesY)
 {
-    short nX, nY;
-    for (nX = 0; nX < MAX_HSPLIT_CNT; nX++)
-    {
-        nY = 0;
-        while ( nY < MAX_VSPLIT_CNT && pWindow != pWinArray[nX][nY] )
-            nY++;
-        if ( nY < MAX_VSPLIT_CNT )
-            break;
-    }
     if ( nLinesX )
     {
-        nLinesX *= pHScrlArray[nX]->GetLineSize();
+        nLinesX *= mpHorizontalScrollBar->GetLineSize();
     }
     if ( nLinesY )
     {
-        nLinesY *= pVScrlArray[nY]->GetLineSize();
+        nLinesY *= mpVerticalScrollBar->GetLineSize();
     }
 
     Scroll(nLinesX, nLinesY);
@@ -403,64 +370,41 @@ void ViewShell::ScrollLines(long nLinesX, long nLinesY)
 
 void ViewShell::Scroll(long nScrollX, long nScrollY)
 {
-    short nX, nY;
-    for (nX = 0; nX < MAX_HSPLIT_CNT; nX++)
-    {
-        nY = 0;
-        while ( nY < MAX_VSPLIT_CNT && pWindow != pWinArray[nX][nY] )
-            nY++;
-        if ( nY < MAX_VSPLIT_CNT )
-            break;
-    }
-
     if (nScrollX)
     {
-        long nLineSize = pHScrlArray[nX]->GetLineSize();
+        long nLineSize = mpHorizontalScrollBar->GetLineSize();
 
-        long nNewThumb = pHScrlArray[nX]->GetThumbPos() + nScrollX;
-        pHScrlArray[nX]->SetThumbPos(nNewThumb);
+        long nNewThumb = mpHorizontalScrollBar->GetThumbPos() + nScrollX;
+        mpHorizontalScrollBar->SetThumbPos(nNewThumb);
     }
     if (nScrollY)
     {
-        long nNewThumb = pVScrlArray[nY]->GetThumbPos() + nScrollY;
-        pVScrlArray[nY]->SetThumbPos(nNewThumb);
+        long nNewThumb = mpVerticalScrollBar->GetThumbPos() + nScrollY;
+        mpVerticalScrollBar->SetThumbPos(nNewThumb);
     }
-    double  fX = (double) pHScrlArray[nX]->GetThumbPos() /
-                            pHScrlArray[nX]->GetRange().Len();
-    double  fY = (double) pVScrlArray[nY]->GetThumbPos() /
-                            pVScrlArray[nY]->GetRange().Len();
+    double  fX = (double) mpHorizontalScrollBar->GetThumbPos() /
+                            mpHorizontalScrollBar->GetRange().Len();
+    double  fY = (double) mpVerticalScrollBar->GetThumbPos() /
+                            mpVerticalScrollBar->GetRange().Len();
 
-    pWindow->SetVisibleXY(fX, fY);
-
-    if ( bIsHSplit || bIsVSplit )   // alle Fenster der gleichen Spalte
-    {                               // sowie Zeile scrollen
-        short i;
-
-        for (i = 0; i < MAX_HSPLIT_CNT; i++)
-            if ( i != nX && pWinArray[i][nY] )
-                pWinArray[i][nY]->SetVisibleXY(-1, fY);
-
-        for (i = 0; i < MAX_VSPLIT_CNT; i++)
-            if ( i != nY && pWinArray[nX][i] )
-            pWinArray[nX][i]->SetVisibleXY(fX, -1);
-    }
+    GetActiveWindow()->SetVisibleXY(fX, fY);
 
     Rectangle aVisArea = GetDocSh()->GetVisArea(ASPECT_CONTENT);
-    Point aVisAreaPos = pWindow->PixelToLogic( Point(0,0) );
+    Point aVisAreaPos = GetActiveWindow()->PixelToLogic( Point(0,0) );
     aVisArea.SetPos(aVisAreaPos);
     GetDocSh()->SetVisArea(aVisArea);
 
-    Size aVisSizePixel = pWindow->GetOutputSizePixel();
-    Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->VisAreaChanged(pWindow);
+        pView->VisAreaChanged(GetActiveWindow());
     }
 
-    if ( bHasRuler )
+    if (mbHasRulers)
     {
         UpdateHRuler();
         UpdateVRuler();
@@ -478,32 +422,26 @@ void ViewShell::SetZoom(long nZoom)
     Fraction aUIScale(nZoom, 100);
     aUIScale *= GetDoc()->GetUIScale();
 
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    if (mpHorizontalRuler.get() != NULL)
+        mpHorizontalRuler->SetZoom(aUIScale);
+
+    if (mpVerticalRuler.get() != NULL)
+        mpVerticalRuler->SetZoom(aUIScale);
+
+    if (mpContentWindow.get() != NULL)
     {
-        if ( pHRulerArray[nX] )
-            pHRulerArray[nX]->SetZoom(aUIScale);
-
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-        {
-            if ( nX == 0 && pVRulerArray[nY] )
-                pVRulerArray[nY]->SetZoom(aUIScale);
-
-            if ( pWinArray[nX][nY] )
-            {
-                pWinArray[nX][nY]->SetZoom(nZoom);
-                pWinArray[nX][nY]->Invalidate();
-            }
-        }
+        mpContentWindow->SetZoom(nZoom);
+        mpContentWindow->Invalidate();
     }
 
-    Size aVisSizePixel = pWindow->GetOutputSizePixel();
-    Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->VisAreaChanged(pWindow);
+        pView->VisAreaChanged(GetActiveWindow());
     }
 
     UpdateScrollBars();
@@ -518,49 +456,37 @@ void ViewShell::SetZoom(long nZoom)
 
 void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
 {
-    short nX, nY, nCol, nRow;
-    long nZoom = pWindow->SetZoomRect(rZoomRect);
+    long nZoom = GetActiveWindow()->SetZoomRect(rZoomRect);
     Fraction aUIScale(nZoom, 100);
     aUIScale *= GetDoc()->GetUIScale();
 
-    for (nX = 0; nX < MAX_HSPLIT_CNT; nX++)
-        for (nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-            if ( pWinArray[nX][nY] == pWindow )
-            {   nCol = nX; nRow = nY; }
+    Point aPos = GetActiveWindow()->GetWinViewPos();
 
-    Point aPos = pWindow->GetWinViewPos();
+    if (mpHorizontalRuler.get() != NULL)
+        mpHorizontalRuler->SetZoom(aUIScale);
 
-    for (nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    if (mpVerticalRuler.get() != NULL)
+        mpVerticalRuler->SetZoom(aUIScale);
+
+    if (mpContentWindow.get() != NULL)
     {
-        if ( pHRulerArray[nX] )
-            pHRulerArray[nX]->SetZoom(aUIScale);
-
-        for (nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-        {
-            if ( nX == 0 && pVRulerArray[nY] )
-                pVRulerArray[nY]->SetZoom(aUIScale);
-
-            if ( pWinArray[nX][nY] )
-            {
-                Point aNewPos = pWinArray[nX][nY]->GetWinViewPos();
-                if ( nX == nCol )   aNewPos.X() = aPos.X();
-                if ( nY == nRow )   aNewPos.Y() = aPos.Y();
-                pWinArray[nX][nY]->SetZoom(nZoom);
-                pWinArray[nX][nY]->SetWinViewPos(aNewPos);
-                pWinArray[nX][nY]->UpdateMapOrigin();
-                pWinArray[nX][nY]->Invalidate();
-            }
-        }
+        Point aNewPos = mpContentWindow->GetWinViewPos();
+        aNewPos.X() = aPos.X();
+        aNewPos.Y() = aPos.Y();
+        mpContentWindow->SetZoom(nZoom);
+        mpContentWindow->SetWinViewPos(aNewPos);
+        mpContentWindow->UpdateMapOrigin();
+        mpContentWindow->Invalidate();
     }
 
-    Size aVisSizePixel = pWindow->GetOutputSizePixel();
-    Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->VisAreaChanged(pWindow);
+        pView->VisAreaChanged(GetActiveWindow());
     }
 
     UpdateScrollBars();
@@ -575,33 +501,27 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
 void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
                               const Point& rWinPos, BOOL bUpdate)
 {
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    if (mpContentWindow.get() != NULL)
     {
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-        {
-            if ( pWinArray[nX][nY] )
-            {
-                pWinArray[nX][nY]->SetViewOrigin(rViewOrigin);
-                pWinArray[nX][nY]->SetViewSize(rViewSize);
-                pWinArray[nX][nY]->SetWinViewPos(rWinPos);
+        mpContentWindow->SetViewOrigin(rViewOrigin);
+        mpContentWindow->SetViewSize(rViewSize);
+        mpContentWindow->SetWinViewPos(rWinPos);
 
-                if ( bUpdate )
-                {
-                    pWinArray[nX][nY]->UpdateMapOrigin();
-                    pWinArray[nX][nY]->Invalidate();
-                }
-            }
+        if ( bUpdate )
+        {
+            mpContentWindow->UpdateMapOrigin();
+            mpContentWindow->Invalidate();
         }
     }
 
-    Size aVisSizePixel = pWindow->GetOutputSizePixel();
-    Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->VisAreaChanged(pWindow);
+        pView->VisAreaChanged(GetActiveWindow());
     }
 }
 
@@ -613,10 +533,8 @@ void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
 
 void ViewShell::InvalidateWindows()
 {
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-            if ( pWinArray[nX][nY] )
-                pWinArray[nX][nY]->Invalidate();
+    if (mpContentWindow.get() != NULL)
+        mpContentWindow->Invalidate();
 }
 
 
@@ -629,15 +547,9 @@ void ViewShell::InvalidateWindows()
 
 void ViewShell::DrawMarkRect(const Rectangle& rRect) const
 {
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    if (mpContentWindow.get() != NULL)
     {
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-        {
-            if ( pWinArray[nX][nY] )
-            {
-                pWinArray[nX][nY]->InvertTracking(rRect, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW);
-            }
-        }
+        mpContentWindow->InvertTracking(rRect, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW);
     }
 }
 
@@ -652,88 +564,22 @@ void ViewShell::DrawMarkRect(const Rectangle& rRect) const
 void ViewShell::DrawFilledRect( const Rectangle& rRect, const Color& rLColor,
                                   const Color& rFColor ) const
 {
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    if (mpContentWindow.get() != NULL)
     {
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-        {
-            if ( pWinArray[nX][nY] )
-            {
-                const Color& rOldLineColor = pWinArray[nX][nY]->GetLineColor();
-                const Color& rOldFillColor = pWinArray[nX][nY]->GetFillColor();
+        const Color& rOldLineColor = mpContentWindow->GetLineColor();
+        const Color& rOldFillColor = mpContentWindow->GetFillColor();
 
-                pWinArray[nX][nY]->SetLineColor( rLColor );
-                pWinArray[nX][nY]->SetFillColor( rFColor );
+        mpContentWindow->SetLineColor( rLColor );
+        mpContentWindow->SetFillColor( rFColor );
 
-                pWinArray[nX][nY]->DrawRect(rRect);
+        mpContentWindow->DrawRect(rRect);
 
-                pWinArray[nX][nY]->SetLineColor( rOldLineColor );
-                pWinArray[nX][nY]->SetFillColor( rOldFillColor );
-            }
-        }
+        mpContentWindow->SetLineColor( rOldLineColor );
+        mpContentWindow->SetFillColor( rOldFillColor );
     }
 }
 
-/*************************************************************************
-|*
-|* Modus-Umschaltung (Draw, Slide, Outline)
-|*
-\************************************************************************/
 
-IMPL_LINK(ViewShell, ModeBtnHdl, Button *, pButton )
-{
-    if  ( !((ImageButton*) pButton)->IsChecked() )
-    {
-        SubShellManager& rSubShellManager =
-            GetViewShellBase().GetSubShellManager();
-        ViewShell::ShellType eType =
-            rSubShellManager.GetMainSubShellType();
-        USHORT nSlotId = 0;
-        if ( pButton == &aDrawBtn )
-        {
-            eType = ViewShell::ST_IMPRESS;
-            nSlotId = SID_DRAWINGMODE;
-        }
-        else if ( pButton == &aNotesBtn )
-        {
-            eType = ViewShell::ST_NOTES;
-            nSlotId = SID_NOTESMODE;
-            /*af
-            pFrameView->SetPageKind(PK_NOTES);
-            pFrameView->SetLayerMode(FALSE);
-            */
-        }
-        else if ( pButton == &aHandoutBtn )
-        {
-            eType = ViewShell::ST_HANDOUT;
-            nSlotId = SID_HANDOUTMODE;
-            /*af
-                    pFrameView->SetPageKind(PK_HANDOUT);
-            pFrameView->SetLayerMode(FALSE);
-            */
-        }
-        else if ( pButton == &aSlideBtn )
-        {
-            eType = ViewShell::ST_SLIDE;
-            nSlotId = SID_DIAMODE;
-        }
-        else if ( pButton == &aOutlineBtn )
-        {
-            eType = ViewShell::ST_OUTLINE;
-            nSlotId = SID_OUTLINEMODE;
-        }
-        else if ( pButton == &aPresentationBtn )
-        {
-            eType = ViewShell::ST_PRESENTATION;
-            nSlotId = SID_PRESENTATION;
-        }
-        if (nSlotId != 0)
-            GetDispatcher()->Execute(
-                nSlotId,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-        //        rSubShellManager.SetMainSubShellType (eType);
-    }
-    return 0;
-}
 
 /*************************************************************************
 |*
@@ -938,11 +784,14 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
             pWin->EnableChildTransparentMode();
         }
 
-        pViewShell->SetWindow(pWin);
+        // The ViewShellBase is informed only about the center window.  The
+        // windows of the other panes are not its business.
+        if (IsMainViewShell())
+            pViewShell->SetWindow (pWin);
     }
 
-    if (pWindow != pWin)
-        pWindow = pWin;
+    if (mpActiveWindow != pWin)
+        mpActiveWindow = pWin;
 
     // The rest of this function is not guarded anymore against calling this
     // method with an already active window because the functions may still
@@ -962,6 +811,7 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
         pFuActual->SetWindow(pWin);
     }
 }
+
 
 
 /*************************************************************************
@@ -1000,6 +850,15 @@ FrameView* ViewShell::GetFrameView (void)
 
 
 
+void ViewShell::SetFrameView (FrameView* pNewFrameView)
+{
+    pFrameView = pNewFrameView;
+    ReadFrameViewData (pFrameView);
+}
+
+
+
+
 /*************************************************************************
 |*
 |* Read FrameViews data and set actual views data
@@ -1030,10 +889,8 @@ void ViewShell::WriteFrameViewData()
 
 void ViewShell::UpdateWindows()
 {
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-            if ( pWinArray[nX][nY] )
-                pWinArray[nX][nY]->Update();
+    if (mpContentWindow.get() != NULL)
+        mpContentWindow->Update();
 }
 
 /*************************************************************************
@@ -1045,7 +902,7 @@ void ViewShell::UpdateWindows()
 BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
     ErrCode aErrCode = 0;
-    SfxErrorContext aEC(ERRCTX_SO_DOVERB, pWindow, RID_SO_ERRCTX);
+    SfxErrorContext aEC(ERRCTX_SO_DOVERB, GetActiveWindow(), RID_SO_ERRCTX);
     BOOL bAbort = FALSE;
     BOOL bChartActive = FALSE;
     GetDocSh()->SetWaitCursor( TRUE );
@@ -1134,7 +991,7 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             if( aName.EqualsAscii( "StarChart" ))
             {
                 bChartActive = TRUE;
-                SchDLL::Update(aNewIPObj, NULL, pWindow);       // BM: use different DLL-call
+                SchDLL::Update(aNewIPObj, NULL, GetActiveWindow());     // BM: use different DLL-call
             }
 
             nVerb = SVVERB_SHOW;
@@ -1157,11 +1014,11 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         const SvInPlaceObjectRef& rIPObjRef = pObj->GetObjRef();
         SfxInPlaceClientRef pSdClient =
             static_cast<Client*>(pViewShell->FindIPClient(
-                rIPObjRef, pWindow));
+                rIPObjRef, GetActiveWindow()));
 
         if ( !pSdClient.Is() )
         {
-            pSdClient = new Client(pObj, this, pWindow);
+            pSdClient = new Client(pObj, this, GetActiveWindow());
         }
 
         rIPObjRef->DoConnect(pSdClient);
@@ -1217,8 +1074,9 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
 const Rectangle& ViewShell::GetAllWindowRect()
 {
-    aAllWindowRect.SetPos(pWinArray[0][0]->OutputToScreenPixel(Point(0,0)));
-    return aAllWindowRect;
+    maAllWindowRectangle.SetPos(
+        mpContentWindow->OutputToScreenPixel(Point(0,0)));
+    return maAllWindowRectangle;
 }
 
 
@@ -1239,12 +1097,11 @@ void ViewShell::CancelSearching()
 |* Read user data
 |*
 \************************************************************************/
-    GetDispatcher()->Execute(
-        SID_SIZE_VISAREA,
+void ViewShell::ReadUserData(const String& rString)
+{
+    // Auf an FrameView gemerkte VisArea zoomen
+    GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_VISAREA,
         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-    GetDispatcher()->Execute(
-    SID_SIZE_VISAREA,
-    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
 
 /*************************************************************************
@@ -1268,40 +1125,35 @@ void ViewShell::WriteUserData(String& rString)
 
 void ViewShell::SetRuler(BOOL bRuler)
 {
-    bHasRuler = bRuler;
+    mbHasRulers = bRuler;
 
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    if (mpHorizontalRuler.get() != NULL)
     {
-        if (pHRulerArray[nX])
+        if (mbHasRulers)
         {
-            if (bHasRuler)
-            {
-                pHRulerArray[nX]->Show();
-            }
-            else
-            {
-                pHRulerArray[nX]->Hide();
-            }
+            mpHorizontalRuler->Show();
         }
-
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
+        else
         {
-            if (nX == 0 && pVRulerArray[nY])
-            {
-                if (bHasRuler)
-                {
-                    pVRulerArray[nY]->Show();
-                }
-                else
-                {
-                    pVRulerArray[nY]->Hide();
-                }
-            }
+            mpHorizontalRuler->Hide();
+        }
+    }
+
+    if (mpVerticalRuler.get() != NULL)
+    {
+        if (mbHasRulers)
+        {
+            mpVerticalRuler->Show();
+        }
+        else
+        {
+            mpVerticalRuler->Hide();
         }
     }
 
     OSL_ASSERT(GetViewShell()!=NULL);
-    GetViewShell()->InvalidateBorder();
+    if (IsMainViewShell())
+        GetViewShell()->InvalidateBorder();
 }
 
 /*************************************************************************
@@ -1374,24 +1226,18 @@ void ViewShell::VisAreaChanged(const Rectangle& rRect)
 
 void ViewShell::SetWinViewPos(const Point& rWinPos, bool bUpdate)
 {
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    if (mpContentWindow.get() != NULL)
     {
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-        {
-            if ( pWinArray[nX][nY] )
-            {
-                pWinArray[nX][nY]->SetWinViewPos(rWinPos);
+        mpContentWindow->SetWinViewPos(rWinPos);
 
-                if ( bUpdate )
-                {
-                    pWinArray[nX][nY]->UpdateMapOrigin();
-                    pWinArray[nX][nY]->Invalidate();
-                }
-            }
+        if ( bUpdate )
+        {
+            mpContentWindow->UpdateMapOrigin();
+            mpContentWindow->Invalidate();
         }
     }
 
-    if ( bHasRuler )
+    if (mbHasRulers)
     {
         UpdateHRuler();
         UpdateVRuler();
@@ -1399,25 +1245,25 @@ void ViewShell::SetWinViewPos(const Point& rWinPos, bool bUpdate)
 
     UpdateScrollBars();
 
-    Size aVisSizePixel = pWindow->GetOutputSizePixel();
-    Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
     VisAreaChanged(aVisAreaWin);
 
     ::sd::View* pView = GetView();
     if (pView)
     {
-        pView->VisAreaChanged(pWindow);
+        pView->VisAreaChanged(GetActiveWindow());
     }
 }
 
 Point ViewShell::GetWinViewPos() const
 {
-    return pWinArray[0][0]->GetWinViewPos();
+    return mpContentWindow->GetWinViewPos();
 }
 
 Point ViewShell::GetViewOrigin() const
 {
-    return pWinArray[0][0]->GetViewOrigin();
+    return mpContentWindow->GetViewOrigin();
 }
 
 } // end of namespace sd
