@@ -1,0 +1,5 @@
+ox	sandbox									usr30073	-	none	 NULL
+ox	sandbox									usr1	-	all	ox_mkout NULL
+ox	sandbox\com\sun\star\lib\sandbox		nmake	-	all	ox_sandb NULL
+ox	sandbox\com\sun\star\lib\sandbox\generic			nmake	-	all	ox_gen ox_sandb NULL
+ox	sandbox\util							nmake	-	all	ox_util ox_gen NULL
