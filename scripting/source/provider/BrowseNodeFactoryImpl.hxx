@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BrowseNodeFactoryImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:27:57 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,24 +67,23 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
-#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <drafts/com/sun/star/script/browse/XBrowseNodeFactory.hpp>
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 
 namespace browsenodefactory
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsss ::drafts::com::sun::star::script
 
 class BrowseNodeFactoryImpl :
     public ::cppu::WeakImplHelper2 <
-        dcsss::browse::XBrowseNodeFactory,
+        css::script::browse::XBrowseNodeFactory,
         css::lang::XServiceInfo >
 {
 private:
     css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
-    css::uno::Reference< dcsss::browse::XBrowseNode > m_xSelectorBrowseNode;
+    css::uno::Reference< css::script::browse::XBrowseNode > m_xSelectorBrowseNode;
 
 protected:
     virtual ~BrowseNodeFactoryImpl();
@@ -106,15 +105,15 @@ public:
             throw ( css::uno::RuntimeException );
 
     // XBrowseNodeFactory
-    virtual css::uno::Reference< dcsss::browse::XBrowseNode > SAL_CALL
-        getView( sal_Int16 viewType )
+    virtual css::uno::Reference< css::script::browse::XBrowseNode > SAL_CALL
+        createView( sal_Int16 viewType )
             throw ( css::uno::RuntimeException );
     private:
-    css::uno::Reference< dcsss::browse::XBrowseNode >
+    css::uno::Reference< css::script::browse::XBrowseNode >
         getSelectorHierarchy()
             throw ( css::uno::RuntimeException );
 
-    css::uno::Reference< dcsss::browse::XBrowseNode >
+    css::uno::Reference< css::script::browse::XBrowseNode >
         getOrganizerHierarchy()
             throw ( css::uno::RuntimeException );
 };
