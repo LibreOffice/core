@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-07 12:41:56 $
+ *  last change: $Author: jp $ $Date: 2001-02-13 15:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1049,7 +1049,7 @@ WW8_FC WW8_WrFkp::GetEndFc() const
 //--------------------------------------------------------------------------
 
 WW8_WrPct::WW8_WrPct( WW8_FC nfcMin )
-    : nOldFc( nfcMin ),bIsUni( FALSE ), pPcts( new WW8_WrPcPtrs )
+    : nOldFc( nfcMin ), bIsUni( TRUE ), pPcts( new WW8_WrPcPtrs )
 {
     AppendPc( nOldFc, bIsUni );
 }
@@ -2254,11 +2254,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.8 2001-02-07 12:41:56 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.9 2001-02-13 15:36:26 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/02/07 12:41:56  jp
+      Bug #80745#: InsAsString16 - use Len instead of zero character
+
       Revision 1.7  2001/02/01 16:11:30  cmc
       #83362# Missing i18n header include
 
