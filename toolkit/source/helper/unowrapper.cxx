@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,9 +354,9 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     }
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar )
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar )
 {
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
 
     DBG_ASSERT( pMenu, "UnoWrapper::CreateAccessible: no menu!" );
     if ( pMenu )
