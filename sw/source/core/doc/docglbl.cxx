@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-26 08:23:23 $
+ *  last change: $Author: jp $ $Date: 2001-08-23 16:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,12 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
+#endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -89,6 +95,12 @@
 #endif
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
+#endif
+#ifndef _SFX_BINDINGS_HXX
+#include <sfx2/bindings.hxx>
+#endif
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
 #endif
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
@@ -533,13 +545,15 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
             DelSectionFmt( GetSections()[ 0 ] );
     }
 
-    SfxMedium* pDstMed = new SfxMedium( rPath, STREAM_STD_READWRITE, TRUE );
-    pDstMed->SetFilter( pFilter );
-    // MIB 01/21/01: The class name is now set correctly in SwDocShell::SaveAs
-    GetDocShell()->DoSaveAs( *pDstMed );
-    GetDocShell()->DoSaveCompleted( pDstMed );
-
-    return !GetDocShell()->GetError();
+    //JP 23.8.2001: use ExecuteSlot instead of Save & SaveCompleted - so the
+    //              Medium istn't loked after reopen the document. Bug 91462
+    SfxRequest aReq( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, GetAttrPool() );
+    aReq.AppendItem( SfxStringItem( SID_FILE_NAME, rPath ) );
+    aReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
+    aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+    const SfxBoolItem *pRet = (const SfxBoolItem*)GetDocShell()->
+                                                        ExecuteSlot( aReq );
+    return pRet && pRet->GetValue();
 }
 
 
