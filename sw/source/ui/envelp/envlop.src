@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:46:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabDialog DLG_ENV
     Text [ italian ] = "Busta" ;
     Text [ portuguese_brazilian ] = "Envelope" ;
     Text [ portuguese ] = "Envelope" ;
-    Text [ finnish ] = "Kirjekuori" ;
+    Text [ finnish ] = "Kirjekuori (Envelope)" ;
     Text [ danish ] = "Konvolut" ;
     Text [ french ] = "Enveloppe" ;
     Text [ swedish ] = "Kuvert" ;
@@ -96,7 +96,7 @@ TabDialog DLG_ENV
                 Text [ italian ] = "Busta" ;
                 Text [ portuguese_brazilian ] = "Envelope" ;
                 Text [ portuguese ] = "Envelope" ;
-                Text [ finnish ] = "Kirjekuori" ;
+                Text [ finnish ] = "Kirjekuori (Envelope)" ;
                 Text [ danish ] = "Konvolut" ;
                 Text [ french ] = "Enveloppe" ;
                 Text [ swedish ] = "Kuvert" ;
@@ -141,6 +141,7 @@ TabDialog DLG_ENV
                 Text[ turkish ] = "Format";
                 Text[ arabic ] = "«· ‰”Ìﬁ";
                 Text[ catalan ] = "Formato";
+                Text[ finnish ] = "Muoto";
             };
             PageItem
             {
@@ -151,7 +152,7 @@ TabDialog DLG_ENV
                 Text [ italian ] = "Stampante" ;
                 Text [ portuguese_brazilian ] = "Impressora" ;
                 Text [ portuguese ] = "Impressora" ;
-                Text [ finnish ] = "Kirjoitin" ;
+                Text [ finnish ] = "Tulostin " ;
                 Text [ danish ] = "Printer" ;
                 Text [ french ] = "Imprimante" ;
                 Text [ swedish ] = "Skrivare" ;
@@ -210,7 +211,7 @@ TabDialog DLG_ENV
         Text [ italian ] = "C~ambia" ;
         Text [ portuguese_brazilian ] = "Mudar" ;
         Text [ portuguese ] = "~Modificar" ;
-        Text [ finnish ] = "Muuta" ;
+        Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "Modificer" ;
         Text [ french ] = "~Modifier" ;
         Text [ swedish ] = "~ƒndra" ;
@@ -259,7 +260,7 @@ TabPage TP_ENV_ENV
         Text [ italian ] = "Destinatario" ;
         Text [ portuguese_brazilian ] = "EndereÁo" ;
         Text [ portuguese ] = "~Destinat·rio" ;
-        Text [ finnish ] = "Vastaanottaja" ;
+        Text [ finnish ] = "~Saaja" ;
         Text [ danish ] = "Modtager" ;
         Text [ french ] = "~Destinataire" ;
         Text [ swedish ] = "Mottagar~e" ;
@@ -354,6 +355,7 @@ TabPage TP_ENV_ENV
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tabla";
+        Text[ finnish ] = "Taulukko";
     };
     ListBox LB_TABLE
     {
@@ -381,7 +383,7 @@ TabPage TP_ENV_ENV
         Text [ italian ] = "Campo database" ;
         Text [ portuguese_brazilian ] = "Campo base de dados" ;
         Text [ portuguese ] = "Campo base de dados" ;
-        Text [ finnish ] = "Tietokantakentt‰" ;
+        Text [ finnish ] = "~Tietokantakentt‰" ;
         Text [ danish ] = "Databasefelt" ;
         Text [ french ] = "~Champ de BD" ;
         Text [ swedish ] = "Databas~f‰lt" ;
@@ -418,7 +420,7 @@ TabPage TP_ENV_ENV
         Text [ italian ] = "Mittente" ;
         Text [ portuguese_brazilian ] = "Remetente" ;
         Text [ portuguese ] = "~Remetente" ;
-        Text [ finnish ] = "L‰hett‰j‰" ;
+        Text [ finnish ] = "~L‰hett‰j‰" ;
         Text [ danish ] = "Afsender" ;
         Text [ french ] = "~ExpÈditeur" ;
         Text [ swedish ] = "~Avs‰ndare" ;
@@ -465,7 +467,7 @@ String STR_DOC_TITLE
     Text [ italian ] = "Busta" ;
     Text [ portuguese_brazilian ] = "Envelope" ;
     Text [ portuguese ] = "Envelope" ;
-    Text [ finnish ] = "Kirjekuori" ;
+    Text [ finnish ] = "Kirjekuori (Envelope)" ;
     Text [ danish ] = "Konvolut" ;
     Text [ french ] = "Enveloppe" ;
     Text [ swedish ] = "Kuvert" ;
