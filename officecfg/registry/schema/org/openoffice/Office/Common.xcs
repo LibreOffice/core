@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:26:57 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,23 +745,23 @@
 						<info>
 							<desc xml:lang="en-US">ROMAN</desc>
 							<desc xml:lang="el">ROMAN</desc>
-							<desc xml:lang="nl">ROMAN</desc>
-							<desc xml:lang="fr">ROMAN</desc>
+							<desc xml:lang="nl">ROMEINS</desc>
+							<desc xml:lang="fr">ROMAIN</desc>
 							<desc xml:lang="fi">ROMAN</desc>
 							<desc xml:lang="cs">ROMAN</desc>
-							<desc xml:lang="da">ROMAN</desc>
+							<desc xml:lang="da">ROMERTAL</desc>
 							<desc xml:lang="zh-CN">ROMAN</desc>
 							<desc xml:lang="zh-TW">ROMAN</desc>
 							<desc xml:lang="ar">ROMAN</desc>
-							<desc xml:lang="he">ROMAN</desc>
+							<desc xml:lang="he">RÖMISCH</desc>
 							<desc xml:lang="ca">ROMAN</desc>
-							<desc xml:lang="pt">ROMAN</desc>
+							<desc xml:lang="pt">ROMANO</desc>
 							<desc xml:lang="ru">РИМСКИЕ</desc>
-							<desc xml:lang="es">ROMAN</desc>
-							<desc xml:lang="it">ROMAN</desc>
+							<desc xml:lang="es">ROMANO</desc>
+							<desc xml:lang="it">ROMANO</desc>
 							<desc xml:lang="sv">ROMERSK</desc>
 							<desc xml:lang="pl">RZYMSKIE</desc>
-							<desc xml:lang="pt-BR">ROMAN</desc>
+							<desc xml:lang="pt-BR">ROMANO</desc>
 							<desc xml:lang="ja">ROMAN</desc>
 							<desc xml:lang="ko">ROMAN</desc>
 							<desc xml:lang="tr">ROMAN</desc>
@@ -775,13 +775,13 @@
 							<desc xml:lang="el">SCRIPT</desc>
 							<desc xml:lang="nl">SCRIPT</desc>
 							<desc xml:lang="fr">SCRIPT</desc>
-							<desc xml:lang="fi">SCRIPT</desc>
-							<desc xml:lang="cs">SCRIPT</desc>
+							<desc xml:lang="fi">Komentosarja</desc>
+							<desc xml:lang="cs">Skript</desc>
 							<desc xml:lang="da">SCRIPT</desc>
 							<desc xml:lang="zh-CN">脚本</desc>
 							<desc xml:lang="zh-TW">程式檔</desc>
-							<desc xml:lang="ar">SCRIPT</desc>
-							<desc xml:lang="he">SCRIPT</desc>
+							<desc xml:lang="ar">نص برمجي</desc>
+							<desc xml:lang="he">‮קוד לביצוה‬</desc>
 							<desc xml:lang="ca">SCRIPT</desc>
 							<desc xml:lang="pt">SCRIPT</desc>
 							<desc xml:lang="ru">Скрипт</desc>
@@ -828,17 +828,17 @@
 					<enumeration oor:value="6">
 						<info>
 							<desc xml:lang="en-US">SYSTEM</desc>
-							<desc xml:lang="el">SYSTEM</desc>
-							<desc xml:lang="nl">SYSTEM</desc>
-							<desc xml:lang="fr">SYSTEM</desc>
-							<desc xml:lang="fi">SYSTEM</desc>
+							<desc xml:lang="el">Σύστημα</desc>
+							<desc xml:lang="nl">Systeem</desc>
+							<desc xml:lang="fr">Système</desc>
+							<desc xml:lang="fi">Järjestelmä</desc>
 							<desc xml:lang="cs">SYSTEM</desc>
 							<desc xml:lang="da">SYSTEM</desc>
 							<desc xml:lang="zh-CN">系统</desc>
 							<desc xml:lang="zh-TW">系統</desc>
-							<desc xml:lang="ar">SYSTEM</desc>
+							<desc xml:lang="ar">النظام</desc>
 							<desc xml:lang="he">SYSTEM</desc>
-							<desc xml:lang="ca">SYSTEM</desc>
+							<desc xml:lang="ca">Sistema</desc>
 							<desc xml:lang="pt">Sistema</desc>
 							<desc xml:lang="ru">Из системы</desc>
 							<desc xml:lang="es">Sistema</desc>
@@ -1166,17 +1166,17 @@
 					<enumeration oor:value="9">
 						<info>
 							<desc xml:lang="en-US">SYSTEM</desc>
-							<desc xml:lang="el">SYSTEM</desc>
-							<desc xml:lang="nl">SYSTEM</desc>
-							<desc xml:lang="fr">SYSTEM</desc>
-							<desc xml:lang="fi">SYSTEM</desc>
+							<desc xml:lang="el">Σύστημα</desc>
+							<desc xml:lang="nl">Systeem</desc>
+							<desc xml:lang="fr">Système</desc>
+							<desc xml:lang="fi">Järjestelmä</desc>
 							<desc xml:lang="cs">SYSTEM</desc>
 							<desc xml:lang="da">SYSTEM</desc>
 							<desc xml:lang="zh-CN">系统</desc>
 							<desc xml:lang="zh-TW">系統</desc>
-							<desc xml:lang="ar">SYSTEM</desc>
+							<desc xml:lang="ar">النظام</desc>
 							<desc xml:lang="he">SYSTEM</desc>
-							<desc xml:lang="ca">SYSTEM</desc>
+							<desc xml:lang="ca">Sistema</desc>
 							<desc xml:lang="pt">Sistema</desc>
 							<desc xml:lang="ru">Из системы</desc>
 							<desc xml:lang="es">Sistema</desc>
@@ -1194,15 +1194,15 @@
 					<enumeration oor:value="10">
 						<info>
 							<desc xml:lang="en-US">SYMBOL</desc>
-							<desc xml:lang="el">SYMBOL</desc>
-							<desc xml:lang="nl">SYMBOL</desc>
-							<desc xml:lang="fr">SYMBOL</desc>
-							<desc xml:lang="fi">SYMBOL</desc>
+							<desc xml:lang="el">Σύμβολο</desc>
+							<desc xml:lang="nl">Symbool</desc>
+							<desc xml:lang="fr">Symbole</desc>
+							<desc xml:lang="fi">Symboli</desc>
 							<desc xml:lang="cs">SYMBOL</desc>
 							<desc xml:lang="da">SYMBOL</desc>
 							<desc xml:lang="zh-CN">图标</desc>
 							<desc xml:lang="zh-TW">圖示</desc>
-							<desc xml:lang="ar">SYMBOL</desc>
+							<desc xml:lang="ar">رمز</desc>
 							<desc xml:lang="he">SYMBOL</desc>
 							<desc xml:lang="ca">SYMBOL</desc>
 							<desc xml:lang="pt">Símbolo</desc>
@@ -1280,17 +1280,17 @@
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">FIXED</desc>
-							<desc xml:lang="el">FIXED</desc>
-							<desc xml:lang="nl">FIXED</desc>
+							<desc xml:lang="el">Σταθερά</desc>
+							<desc xml:lang="nl">Vast</desc>
 							<desc xml:lang="fr">CTXT</desc>
-							<desc xml:lang="fi">FIXED</desc>
-							<desc xml:lang="cs">FIXED</desc>
-							<desc xml:lang="da">FIXED</desc>
+							<desc xml:lang="fi">Kiinteä</desc>
+							<desc xml:lang="cs">Písmo s pevnou šířkou (fixed)</desc>
+							<desc xml:lang="da">Fast</desc>
 							<desc xml:lang="zh-CN">固定</desc>
 							<desc xml:lang="zh-TW">固定</desc>
-							<desc xml:lang="ar">FIXED</desc>
-							<desc xml:lang="he">FIXED</desc>
-							<desc xml:lang="ca">FIXED</desc>
+							<desc xml:lang="ar">ثابت</desc>
+							<desc xml:lang="he">‮קבוע‬</desc>
+							<desc xml:lang="ca">Fix</desc>
 							<desc xml:lang="pt">Fixo</desc>
 							<desc xml:lang="ru">Точный</desc>
 							<desc xml:lang="es">Fijo</desc>
@@ -1308,24 +1308,24 @@
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">VARIABLE</desc>
-							<desc xml:lang="el">VARIABLE</desc>
-							<desc xml:lang="nl">VARIABLE</desc>
+							<desc xml:lang="el">Μεταβλητή</desc>
+							<desc xml:lang="nl">Variabele</desc>
 							<desc xml:lang="fr">VARIABLE</desc>
-							<desc xml:lang="fi">VARIABLE</desc>
-							<desc xml:lang="cs">VARIABLE</desc>
-							<desc xml:lang="da">VARIABLE</desc>
+							<desc xml:lang="fi">Muuttuja</desc>
+							<desc xml:lang="cs">Proměnný</desc>
+							<desc xml:lang="da">Variabel</desc>
 							<desc xml:lang="zh-CN">可变</desc>
 							<desc xml:lang="zh-TW">可變</desc>
-							<desc xml:lang="ar">VARIABLE</desc>
-							<desc xml:lang="he">VARIABLE</desc>
+							<desc xml:lang="ar">متغيرة</desc>
+							<desc xml:lang="he">Variabel</desc>
 							<desc xml:lang="ca">VARIABLE</desc>
-							<desc xml:lang="pt">VARIABLE</desc>
+							<desc xml:lang="pt">Variável</desc>
 							<desc xml:lang="ru">Переменная</desc>
 							<desc xml:lang="es">VARIABLE</desc>
-							<desc xml:lang="it">VARIABLE</desc>
-							<desc xml:lang="sv">VARIABLE</desc>
+							<desc xml:lang="it">Variabile</desc>
+							<desc xml:lang="sv">Variabel</desc>
 							<desc xml:lang="pl">Zmienna</desc>
-							<desc xml:lang="pt-BR">VARIABLE</desc>
+							<desc xml:lang="pt-BR">Variável</desc>
 							<desc xml:lang="ja">変数</desc>
 							<desc xml:lang="ko">변수</desc>
 							<desc xml:lang="tr">Değişken</desc>
@@ -1422,17 +1422,17 @@
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">NONE</desc>
-							<desc xml:lang="el">NONE</desc>
-							<desc xml:lang="nl">NONE</desc>
+							<desc xml:lang="el">Κανένα</desc>
+							<desc xml:lang="nl">Geen</desc>
 							<desc xml:lang="fr">Aucun(e)</desc>
-							<desc xml:lang="fi">NONE</desc>
-							<desc xml:lang="cs">NONE</desc>
-							<desc xml:lang="da">NONE</desc>
+							<desc xml:lang="fi">Ei mitään</desc>
+							<desc xml:lang="cs">Žádné</desc>
+							<desc xml:lang="da">Ingen</desc>
 							<desc xml:lang="zh-CN">无</desc>
 							<desc xml:lang="zh-TW">無充填</desc>
-							<desc xml:lang="ar">NONE</desc>
-							<desc xml:lang="he">NONE</desc>
-							<desc xml:lang="ca">NONE</desc>
+							<desc xml:lang="ar">بدون</desc>
+							<desc xml:lang="he">‮ללא‬</desc>
+							<desc xml:lang="ca">Cap</desc>
 							<desc xml:lang="pt">Nenhum</desc>
 							<desc xml:lang="ru">Без</desc>
 							<desc xml:lang="es">Ninguno</desc>
@@ -1450,21 +1450,21 @@
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">OBLIQUE</desc>
-							<desc xml:lang="el">OBLIQUE</desc>
-							<desc xml:lang="nl">OBLIQUE</desc>
+							<desc xml:lang="el">Με κλίση</desc>
+							<desc xml:lang="nl">Schuin</desc>
 							<desc xml:lang="fr">OBLIQUE</desc>
-							<desc xml:lang="fi">OBLIQUE</desc>
+							<desc xml:lang="fi">Kiinteä</desc>
 							<desc xml:lang="cs">OBLIQUE</desc>
-							<desc xml:lang="da">OBLIQUE</desc>
+							<desc xml:lang="da">Skrå</desc>
 							<desc xml:lang="zh-CN">斜体</desc>
 							<desc xml:lang="zh-TW">斜體</desc>
 							<desc xml:lang="ar">OBLIQUE</desc>
-							<desc xml:lang="he">OBLIQUE</desc>
-							<desc xml:lang="ca">OBLIQUE</desc>
+							<desc xml:lang="he">‮נטוי‬</desc>
+							<desc xml:lang="ca">Oblicua</desc>
 							<desc xml:lang="pt">Oblíquo</desc>
 							<desc xml:lang="ru">Наклонный</desc>
-							<desc xml:lang="es">OBLIQUE</desc>
-							<desc xml:lang="it">OBLIQUE</desc>
+							<desc xml:lang="es">Oblicuo</desc>
+							<desc xml:lang="it">Obliquo</desc>
 							<desc xml:lang="sv">Kursiv</desc>
 							<desc xml:lang="pl">Ukośny</desc>
 							<desc xml:lang="pt-BR">Oblíquo</desc>
@@ -1620,17 +1620,17 @@
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">NONE</desc>
-							<desc xml:lang="el">NONE</desc>
-							<desc xml:lang="nl">NONE</desc>
+							<desc xml:lang="el">Κανένα</desc>
+							<desc xml:lang="nl">Geen</desc>
 							<desc xml:lang="fr">Aucun(e)</desc>
-							<desc xml:lang="fi">NONE</desc>
-							<desc xml:lang="cs">NONE</desc>
-							<desc xml:lang="da">NONE</desc>
+							<desc xml:lang="fi">Ei mitään</desc>
+							<desc xml:lang="cs">Žádné</desc>
+							<desc xml:lang="da">Ingen</desc>
 							<desc xml:lang="zh-CN">无</desc>
 							<desc xml:lang="zh-TW">無充填</desc>
-							<desc xml:lang="ar">NONE</desc>
-							<desc xml:lang="he">NONE</desc>
-							<desc xml:lang="ca">NONE</desc>
+							<desc xml:lang="ar">بدون</desc>
+							<desc xml:lang="he">‮ללא‬</desc>
+							<desc xml:lang="ca">Cap</desc>
 							<desc xml:lang="pt">Nenhum</desc>
 							<desc xml:lang="ru">Без</desc>
 							<desc xml:lang="es">Ninguno</desc>
@@ -1648,17 +1648,17 @@
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">SINGLE</desc>
-							<desc xml:lang="el">SINGLE</desc>
-							<desc xml:lang="nl">SINGLE</desc>
+							<desc xml:lang="el">Α~πλό</desc>
+							<desc xml:lang="nl">~Een regel</desc>
 							<desc xml:lang="fr">~Simple</desc>
-							<desc xml:lang="fi">SINGLE</desc>
-							<desc xml:lang="cs">SINGLE</desc>
-							<desc xml:lang="da">SINGLE</desc>
+							<desc xml:lang="fi">Yksittäinen</desc>
+							<desc xml:lang="cs">Jednoduché</desc>
+							<desc xml:lang="da">Enkelt</desc>
 							<desc xml:lang="zh-CN">单行</desc>
 							<desc xml:lang="zh-TW">單行</desc>
-							<desc xml:lang="ar">SINGLE</desc>
-							<desc xml:lang="he">SINGLE</desc>
-							<desc xml:lang="ca">SINGLE</desc>
+							<desc xml:lang="ar">مفرد</desc>
+							<desc xml:lang="he">‮בודד‬</desc>
+							<desc xml:lang="ca">Línia senzilla</desc>
 							<desc xml:lang="pt">~Simples</desc>
 							<desc xml:lang="ru">Одинарный</desc>
 							<desc xml:lang="es">~Sencillo</desc>
@@ -1676,17 +1676,17 @@
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">DOUBLE</desc>
-							<desc xml:lang="el">DOUBLE</desc>
-							<desc xml:lang="nl">DOUBLE</desc>
+							<desc xml:lang="el">Διπλό</desc>
+							<desc xml:lang="nl">Twee regels</desc>
 							<desc xml:lang="fr">DOUBLE</desc>
-							<desc xml:lang="fi">DOUBLE</desc>
-							<desc xml:lang="cs">DOUBLE</desc>
-							<desc xml:lang="da">DOUBLE</desc>
+							<desc xml:lang="fi">Kaksinkertainen</desc>
+							<desc xml:lang="cs">Dvojité</desc>
+							<desc xml:lang="da">Dobbelt</desc>
 							<desc xml:lang="zh-CN">双行</desc>
 							<desc xml:lang="zh-TW">雙行</desc>
-							<desc xml:lang="ar">DOUBLE</desc>
-							<desc xml:lang="he">DOUBLE</desc>
-							<desc xml:lang="ca">DOUBLE</desc>
+							<desc xml:lang="ar">سطرين</desc>
+							<desc xml:lang="he">‮כפול‬</desc>
+							<desc xml:lang="ca">Doble</desc>
 							<desc xml:lang="pt">Duplo</desc>
 							<desc xml:lang="ru">Двойной</desc>
 							<desc xml:lang="es">Doble</desc>
@@ -1704,17 +1704,17 @@
 					<enumeration oor:value="3">
 						<info>
 							<desc xml:lang="en-US">DOTTED</desc>
-							<desc xml:lang="el">DOTTED</desc>
-							<desc xml:lang="nl">DOTTED</desc>
+							<desc xml:lang="el">Διάστικτο</desc>
+							<desc xml:lang="nl">Stippellijn</desc>
 							<desc xml:lang="fr">Pointillé</desc>
-							<desc xml:lang="fi">DOTTED</desc>
-							<desc xml:lang="cs">DOTTED</desc>
-							<desc xml:lang="da">DOTTED</desc>
+							<desc xml:lang="fi">Pisteet</desc>
+							<desc xml:lang="cs">Tečkovaně</desc>
+							<desc xml:lang="da">Punkteret</desc>
 							<desc xml:lang="zh-CN">点线</desc>
 							<desc xml:lang="zh-TW">點線</desc>
-							<desc xml:lang="ar">DOTTED</desc>
-							<desc xml:lang="he">DOTTED</desc>
-							<desc xml:lang="ca">DOTTED</desc>
+							<desc xml:lang="ar">منقط</desc>
+							<desc xml:lang="he">‮מנוקד‬</desc>
+							<desc xml:lang="ca">Puntejat</desc>
 							<desc xml:lang="pt">Pontilhado</desc>
 							<desc xml:lang="ru">Пунктир</desc>
 							<desc xml:lang="es">Punteado</desc>
@@ -1760,17 +1760,17 @@
 					<enumeration oor:value="5">
 						<info>
 							<desc xml:lang="en-US">DASH</desc>
-							<desc xml:lang="el">DASH</desc>
-							<desc xml:lang="nl">DASH</desc>
+							<desc xml:lang="el">Παύλα</desc>
+							<desc xml:lang="nl">Streep</desc>
 							<desc xml:lang="fr">Tiret</desc>
-							<desc xml:lang="fi">DASH</desc>
-							<desc xml:lang="cs">DASH</desc>
-							<desc xml:lang="da">DASH</desc>
+							<desc xml:lang="fi">Väliviiva</desc>
+							<desc xml:lang="cs">Čárka</desc>
+							<desc xml:lang="da">Stiplet</desc>
 							<desc xml:lang="zh-CN">划线</desc>
 							<desc xml:lang="zh-TW">破折號</desc>
-							<desc xml:lang="ar">DASH</desc>
-							<desc xml:lang="he">DASH</desc>
-							<desc xml:lang="ca">DASH</desc>
+							<desc xml:lang="ar">شرطة</desc>
+							<desc xml:lang="he">Strich</desc>
+							<desc xml:lang="ca">Traç</desc>
 							<desc xml:lang="pt">Traço</desc>
 							<desc xml:lang="ru">Штрих</desc>
 							<desc xml:lang="es">Trazo</desc>
@@ -1900,17 +1900,17 @@
 					<enumeration oor:value="10">
 						<info>
 							<desc xml:lang="en-US">WAVE</desc>
-							<desc xml:lang="el">WAVE</desc>
-							<desc xml:lang="nl">WAVE</desc>
+							<desc xml:lang="el">Κυματιστή παύλα</desc>
+							<desc xml:lang="nl">Golf</desc>
 							<desc xml:lang="fr">Ondulation</desc>
-							<desc xml:lang="fi">WAVE</desc>
-							<desc xml:lang="cs">WAVE</desc>
-							<desc xml:lang="da">WAVE</desc>
+							<desc xml:lang="fi">Aaltoviiva</desc>
+							<desc xml:lang="cs">Vlnka</desc>
+							<desc xml:lang="da">Bølge</desc>
 							<desc xml:lang="zh-CN">波浪线</desc>
 							<desc xml:lang="zh-TW">曲線</desc>
-							<desc xml:lang="ar">WAVE</desc>
-							<desc xml:lang="he">WAVE</desc>
-							<desc xml:lang="ca">WAVE</desc>
+							<desc xml:lang="ar">موجة</desc>
+							<desc xml:lang="he">‮גלי‬</desc>
+							<desc xml:lang="ca">Ona</desc>
 							<desc xml:lang="pt">Ondulado</desc>
 							<desc xml:lang="ru">Волна</desc>
 							<desc xml:lang="es">Ondulada</desc>
@@ -1956,17 +1956,17 @@
 					<enumeration oor:value="12">
 						<info>
 							<desc xml:lang="en-US">BOLD</desc>
-							<desc xml:lang="el">BOLD</desc>
-							<desc xml:lang="nl">BOLD</desc>
+							<desc xml:lang="el">Έντ~ονο</desc>
+							<desc xml:lang="nl">~Vet</desc>
 							<desc xml:lang="fr">~Gras</desc>
-							<desc xml:lang="fi">BOLD</desc>
-							<desc xml:lang="cs">BOLD</desc>
-							<desc xml:lang="da">BOLD</desc>
+							<desc xml:lang="fi">Lihavointi</desc>
+							<desc xml:lang="cs">Tučné</desc>
+							<desc xml:lang="da">Fed</desc>
 							<desc xml:lang="zh-CN">粗体</desc>
 							<desc xml:lang="zh-TW">粗體</desc>
-							<desc xml:lang="ar">BOLD</desc>
-							<desc xml:lang="he">BOLD</desc>
-							<desc xml:lang="ca">BOLD</desc>
+							<desc xml:lang="ar">عريض</desc>
+							<desc xml:lang="he">‮מודגש‬</desc>
+							<desc xml:lang="ca">Negreta</desc>
 							<desc xml:lang="pt">Negr~ito</desc>
 							<desc xml:lang="ru">Жирный</desc>
 							<desc xml:lang="es">Neg~rita</desc>
@@ -2182,17 +2182,17 @@
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">NONE</desc>
-							<desc xml:lang="el">NONE</desc>
-							<desc xml:lang="nl">NONE</desc>
+							<desc xml:lang="el">Κανένα</desc>
+							<desc xml:lang="nl">Geen</desc>
 							<desc xml:lang="fr">Aucun(e)</desc>
-							<desc xml:lang="fi">NONE</desc>
-							<desc xml:lang="cs">NONE</desc>
-							<desc xml:lang="da">NONE</desc>
+							<desc xml:lang="fi">Ei mitään</desc>
+							<desc xml:lang="cs">Žádné</desc>
+							<desc xml:lang="da">Ingen</desc>
 							<desc xml:lang="zh-CN">无</desc>
 							<desc xml:lang="zh-TW">無充填</desc>
-							<desc xml:lang="ar">NONE</desc>
-							<desc xml:lang="he">NONE</desc>
-							<desc xml:lang="ca">NONE</desc>
+							<desc xml:lang="ar">بدون</desc>
+							<desc xml:lang="he">‮ללא‬</desc>
+							<desc xml:lang="ca">Cap</desc>
 							<desc xml:lang="pt">Nenhum</desc>
 							<desc xml:lang="ru">Без</desc>
 							<desc xml:lang="es">Ninguno</desc>
@@ -2210,17 +2210,17 @@
 					<enumeration oor:value="1">
 						<info>
 							<desc xml:lang="en-US">SINGLE</desc>
-							<desc xml:lang="el">SINGLE</desc>
-							<desc xml:lang="nl">SINGLE</desc>
+							<desc xml:lang="el">Α~πλό</desc>
+							<desc xml:lang="nl">~Een regel</desc>
 							<desc xml:lang="fr">~Simple</desc>
-							<desc xml:lang="fi">SINGLE</desc>
-							<desc xml:lang="cs">SINGLE</desc>
-							<desc xml:lang="da">SINGLE</desc>
+							<desc xml:lang="fi">Yksittäinen</desc>
+							<desc xml:lang="cs">Jednoduché</desc>
+							<desc xml:lang="da">Enkelt</desc>
 							<desc xml:lang="zh-CN">单行</desc>
 							<desc xml:lang="zh-TW">單行</desc>
-							<desc xml:lang="ar">SINGLE</desc>
-							<desc xml:lang="he">SINGLE</desc>
-							<desc xml:lang="ca">SINGLE</desc>
+							<desc xml:lang="ar">مفرد</desc>
+							<desc xml:lang="he">‮בודד‬</desc>
+							<desc xml:lang="ca">Línia senzilla</desc>
 							<desc xml:lang="pt">~Simples</desc>
 							<desc xml:lang="ru">~Одинарный</desc>
 							<desc xml:lang="es">~Sencillo</desc>
@@ -2238,17 +2238,17 @@
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">DOUBLE</desc>
-							<desc xml:lang="el">DOUBLE</desc>
-							<desc xml:lang="nl">DOUBLE</desc>
+							<desc xml:lang="el">Διπλό</desc>
+							<desc xml:lang="nl">Twee regels</desc>
 							<desc xml:lang="fr">DOUBLE</desc>
-							<desc xml:lang="fi">DOUBLE</desc>
-							<desc xml:lang="cs">DOUBLE</desc>
-							<desc xml:lang="da">DOUBLE</desc>
+							<desc xml:lang="fi">Kaksinkertainen</desc>
+							<desc xml:lang="cs">Dvojité</desc>
+							<desc xml:lang="da">Dobbelt</desc>
 							<desc xml:lang="zh-CN">双行</desc>
 							<desc xml:lang="zh-TW">雙行</desc>
-							<desc xml:lang="ar">DOUBLE</desc>
-							<desc xml:lang="he">DOUBLE</desc>
-							<desc xml:lang="ca">DOUBLE</desc>
+							<desc xml:lang="ar">سطرين</desc>
+							<desc xml:lang="he">‮כפול‬</desc>
+							<desc xml:lang="ca">Doble</desc>
 							<desc xml:lang="pt">Duplo</desc>
 							<desc xml:lang="ru">Двойной</desc>
 							<desc xml:lang="es">Doble</desc>
@@ -2294,17 +2294,17 @@
 					<enumeration oor:value="4">
 						<info>
 							<desc xml:lang="en-US">BOLD</desc>
-							<desc xml:lang="el">BOLD</desc>
-							<desc xml:lang="nl">BOLD</desc>
+							<desc xml:lang="el">Έντ~ονο</desc>
+							<desc xml:lang="nl">~Vet</desc>
 							<desc xml:lang="fr">~Gras</desc>
-							<desc xml:lang="fi">BOLD</desc>
-							<desc xml:lang="cs">BOLD</desc>
-							<desc xml:lang="da">BOLD</desc>
+							<desc xml:lang="fi">Lihavointi</desc>
+							<desc xml:lang="cs">Tučné</desc>
+							<desc xml:lang="da">Fed</desc>
 							<desc xml:lang="zh-CN">粗体</desc>
 							<desc xml:lang="zh-TW">粗體</desc>
-							<desc xml:lang="ar">BOLD</desc>
-							<desc xml:lang="he">BOLD</desc>
-							<desc xml:lang="ca">BOLD</desc>
+							<desc xml:lang="ar">عريض</desc>
+							<desc xml:lang="he">‮מודגש‬</desc>
+							<desc xml:lang="ca">Negreta</desc>
 							<desc xml:lang="pt">Negr~ito</desc>
 							<desc xml:lang="ru">Жирный</desc>
 							<desc xml:lang="es">Neg~rita</desc>
@@ -2350,27 +2350,27 @@
 					<enumeration oor:value="6">
 						<info>
 							<desc xml:lang="en-US">X</desc>
-							<desc xml:lang="el">X</desc>
+							<desc xml:lang="el">Χ</desc>
 							<desc xml:lang="nl">X</desc>
-							<desc xml:lang="fr">X</desc>
+							<desc xml:lang="fr">S_échantillon</desc>
 							<desc xml:lang="fi">X</desc>
 							<desc xml:lang="cs">X</desc>
-							<desc xml:lang="da">X</desc>
-							<desc xml:lang="zh-CN">X</desc>
-							<desc xml:lang="zh-TW">X</desc>
-							<desc xml:lang="ar">X</desc>
+							<desc xml:lang="da">Tal_s</desc>
+							<desc xml:lang="zh-CN">number_s</desc>
+							<desc xml:lang="zh-TW">number_s</desc>
+							<desc xml:lang="ar">Number_s</desc>
 							<desc xml:lang="he">X</desc>
 							<desc xml:lang="ca">X</desc>
-							<desc xml:lang="pt">X</desc>
+							<desc xml:lang="pt">Núm_s</desc>
 							<desc xml:lang="ru">X</desc>
-							<desc xml:lang="es">X</desc>
-							<desc xml:lang="it">X</desc>
+							<desc xml:lang="es">núm_éxito</desc>
+							<desc xml:lang="it">num_successi</desc>
 							<desc xml:lang="sv">X</desc>
-							<desc xml:lang="pl">X</desc>
+							<desc xml:lang="pl">próbka_s</desc>
 							<desc xml:lang="pt-BR">X</desc>
-							<desc xml:lang="ja">X</desc>
+							<desc xml:lang="ja">数値</desc>
 							<desc xml:lang="ko">X</desc>
-							<desc xml:lang="tr">X</desc>
+							<desc xml:lang="tr">Örn</desc>
 							<desc xml:lang="th">X</desc>
 							<desc xml:lang="hi-IN">X</desc>
 						</info>
@@ -2548,17 +2548,17 @@
 					<enumeration oor:value="2">
 						<info>
 							<desc xml:lang="en-US">DEVICE</desc>
-							<desc xml:lang="el">DEVICE</desc>
-							<desc xml:lang="nl">DEVICE</desc>
+							<desc xml:lang="el">Συσκευή</desc>
+							<desc xml:lang="nl">Apparaat</desc>
 							<desc xml:lang="fr">Périphérique</desc>
-							<desc xml:lang="fi">DEVICE</desc>
-							<desc xml:lang="cs">DEVICE</desc>
-							<desc xml:lang="da">DEVICE</desc>
+							<desc xml:lang="fi">Laite</desc>
+							<desc xml:lang="cs">Zařízení</desc>
+							<desc xml:lang="da">Enhed</desc>
 							<desc xml:lang="zh-CN">设备</desc>
 							<desc xml:lang="zh-TW">設備</desc>
-							<desc xml:lang="ar">DEVICE</desc>
-							<desc xml:lang="he">DEVICE</desc>
-							<desc xml:lang="ca">DEVICE</desc>
+							<desc xml:lang="ar">الجهاز</desc>
+							<desc xml:lang="he">‮כונן‬</desc>
+							<desc xml:lang="ca">Dispositiu</desc>
 							<desc xml:lang="pt">Periférico</desc>
 							<desc xml:lang="ru">Устройство</desc>
 							<desc xml:lang="es">Dispositivo</desc>
@@ -4093,10 +4093,54 @@
 			<info>
 				<author>MAV</author>
 				<desc xml:lang="en-US">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="pt">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="ru">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="el">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="nl">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="fr">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="es">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="fi">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="it">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="cs">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="da">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="sv">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="pl">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="pt-BR">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="ja">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="ko">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="zh-CN">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="zh-TW">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="tr">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="ar">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="he">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="ca">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="th">Contains internal MSExport settings that are common for all apps.</desc>
 			</info>
 			<prop oor:name="UseOldExport" oor:type="xs:boolean">
 				<info>
 					<desc xml:lang="en-US">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="pt">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="ru">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="el">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="nl">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="fr">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="es">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="fi">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="it">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="cs">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="da">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="sv">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="pl">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="pt-BR">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="ja">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="ko">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="zh-CN">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="zh-TW">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="tr">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="ar">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="he">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="ca">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="th">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -9885,6 +9929,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
