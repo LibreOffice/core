@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-02 08:53:57 $
+ *  last change: $Author: sab $ $Date: 2001-08-03 14:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,8 +435,8 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     {
         pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_COLUMN_GROUP);
         pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, XML_TABLE_ROW_GROUP);
-        pColumnStyles = new ScColumnRowStyles();
-        pRowStyles = new ScColumnRowStyles();
+        pColumnStyles = new ScColumnStyles();
+        pRowStyles = new ScRowStyles();
         pRowFormatRanges = new ScRowFormatRanges();
         pMergedRangesContainer = new ScMyMergedRangesContainer();
         pValidationsContainer = new ScMyValidationsContainer();
@@ -454,7 +454,7 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     xTableStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesProperties, xScPropHdlFactory);
     xCellStylesExportPropertySetMapper = new ScXMLCellExportPropertyMapper(xCellStylesPropertySetMapper);
     xCellStylesExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateCharExtPropMapper(*this));
-    xColumnStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xColumnStylesPropertySetMapper);
+    xColumnStylesExportPropertySetMapper = new ScXMLColumnExportPropertyMapper(xColumnStylesPropertySetMapper);
     xRowStylesExportPropertySetMapper = new ScXMLRowExportPropertyMapper(xRowStylesPropertySetMapper);
     xTableStylesExportPropertySetMapper = new ScXMLTableExportPropertyMapper(xTableStylesPropertySetMapper);
 
@@ -859,105 +859,86 @@ void ScXMLExport::ExportColumns(const sal_uInt16 nTable, const table::CellRangeA
     sal_Bool bIsClosed (sal_True);
     sal_Bool bIsFirst (sal_False);
     sal_Int32 nPrevIndex (-1);
-    uno::Reference<table::XColumnRowRange> xColumnRowRange (xCurrentTable, uno::UNO_QUERY);
-    if (xColumnRowRange.is())
+    for (sal_Int32 nColumn = 0; nColumn <= pSharedData->GetLastColumn(nTable); nColumn++)
     {
-        uno::Reference<table::XTableColumns> xTableColumns = xColumnRowRange->getColumns();
-        if (xTableColumns.is())
-        {
-            for (sal_Int32 nColumn = 0; nColumn <= pSharedData->GetLastColumn(nTable); nColumn++)
-            {
-                CheckAttrList();
-                uno::Any aColumn = xTableColumns->getByIndex(nColumn);
-                uno::Reference<table::XCellRange> xTableColumn;
-                if (aColumn >>= xTableColumn)
-                {
-                    uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumn, uno::UNO_QUERY);
-                    if (xColumnProperties.is())
-                    {
-                        nIndex = pColumnStyles->GetStyleNameIndex(nTable, nColumn);
+        CheckAttrList();
+        sal_Bool bIsVisible(sal_True);
+        nIndex = pColumnStyles->GetStyleNameIndex(nTable, nColumn, bIsVisible);
 
-                        uno::Any aAny = xColumnProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS)));
-                        sal_Bool bIsVisible(sal_True);
-                        aAny >>= bIsVisible;
-                        bIsHeader = bHasColumnHeader && (aColumnHeaderRange.StartColumn <= nColumn) && (nColumn <= aColumnHeaderRange.EndColumn);
-                        if (bIsHeader != bWasHeader)
-                        {
-                            if (bIsHeader)
-                            {
-                                bIsFirst = sal_False;
-                                if (nColumn > 0)
-                                {
-                                    WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
-                                    if (pGroupColumns->IsGroupEnd(nColumn - 1))
-                                        pGroupColumns->CloseGroups(nColumn - 1);
-                                }
-                                bPrevIsVisible = bIsVisible;
-                                nPrevIndex = nIndex;
-                                nPrevColumn = nColumn;
-                                nColsRepeated = 1;
-                                bIsFirst = sal_True;
-                                if(pGroupColumns->IsGroupStart(nColumn))
-                                    pGroupColumns->OpenGroups(nColumn);
-                                OpenHeaderColumn();
-                                bWasHeader = sal_True;
-                                bIsClosed = sal_False;
-                            }
-                            else
-                            {
-                                WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
-                                CloseHeaderColumn();
-                                if (pGroupColumns->IsGroupEnd(nColumn - 1))
-                                    pGroupColumns->CloseGroups(nColumn - 1);
-                                bPrevIsVisible = bIsVisible;
-                                nPrevIndex = nIndex;
-                                nPrevColumn = nColumn;
-                                nColsRepeated = 1;
-                                bWasHeader = sal_False;
-                                bIsClosed = sal_True;
-                            }
-                        }
-                        else if (nColumn == 0)
-                        {
-                            if (pGroupColumns->IsGroupStart(nColumn))
-                                pGroupColumns->OpenGroups(nColumn);
-                            bPrevIsVisible = bIsVisible;
-                            nPrevIndex = nIndex;
-                            bIsFirst = sal_True;
-                        }
-                        else if ((bIsVisible == bPrevIsVisible) && (nIndex == nPrevIndex) &&
-                            !pGroupColumns->IsGroupStart(nColumn) && !pGroupColumns->IsGroupEnd(nColumn - 1))
-                            nColsRepeated++;
-                        else
-                        {
-                            bIsFirst = sal_False;
-                            WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
-                            if (pGroupColumns->IsGroupEnd(nColumn - 1))
-                                pGroupColumns->CloseGroups(nColumn - 1);
-                            if (pGroupColumns->IsGroupStart(nColumn))
-                            {
-                                if (bIsHeader)
-                                    CloseHeaderColumn();
-                                pGroupColumns->OpenGroups(nColumn);
-                                if (bIsHeader)
-                                    OpenHeaderColumn();
-                            }
-                            bPrevIsVisible = bIsVisible;
-                            nPrevIndex = nIndex;
-                            nPrevColumn = nColumn;
-                            nColsRepeated = 1;
-                        }
-                    }
+        bIsHeader = bHasColumnHeader && (aColumnHeaderRange.StartColumn <= nColumn) && (nColumn <= aColumnHeaderRange.EndColumn);
+        if (bIsHeader != bWasHeader)
+        {
+            if (bIsHeader)
+            {
+                bIsFirst = sal_False;
+                if (nColumn > 0)
+                {
+                    WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
+                    if (pGroupColumns->IsGroupEnd(nColumn - 1))
+                        pGroupColumns->CloseGroups(nColumn - 1);
                 }
+                bPrevIsVisible = bIsVisible;
+                nPrevIndex = nIndex;
+                nPrevColumn = nColumn;
+                nColsRepeated = 1;
+                bIsFirst = sal_True;
+                if(pGroupColumns->IsGroupStart(nColumn))
+                    pGroupColumns->OpenGroups(nColumn);
+                OpenHeaderColumn();
+                bWasHeader = sal_True;
+                bIsClosed = sal_False;
             }
-            //if (nColsRepeated > 1 || bIsFirst)
+            else
+            {
                 WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
-            if (!bIsClosed)
                 CloseHeaderColumn();
+                if (pGroupColumns->IsGroupEnd(nColumn - 1))
+                    pGroupColumns->CloseGroups(nColumn - 1);
+                bPrevIsVisible = bIsVisible;
+                nPrevIndex = nIndex;
+                nPrevColumn = nColumn;
+                nColsRepeated = 1;
+                bWasHeader = sal_False;
+                bIsClosed = sal_True;
+            }
+        }
+        else if (nColumn == 0)
+        {
+            if (pGroupColumns->IsGroupStart(nColumn))
+                pGroupColumns->OpenGroups(nColumn);
+            bPrevIsVisible = bIsVisible;
+            nPrevIndex = nIndex;
+            bIsFirst = sal_True;
+        }
+        else if ((bIsVisible == bPrevIsVisible) && (nIndex == nPrevIndex) &&
+            !pGroupColumns->IsGroupStart(nColumn) && !pGroupColumns->IsGroupEnd(nColumn - 1))
+            nColsRepeated++;
+        else
+        {
+            bIsFirst = sal_False;
+            WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
             if (pGroupColumns->IsGroupEnd(nColumn - 1))
                 pGroupColumns->CloseGroups(nColumn - 1);
+            if (pGroupColumns->IsGroupStart(nColumn))
+            {
+                if (bIsHeader)
+                    CloseHeaderColumn();
+                pGroupColumns->OpenGroups(nColumn);
+                if (bIsHeader)
+                    OpenHeaderColumn();
+            }
+            bPrevIsVisible = bIsVisible;
+            nPrevIndex = nIndex;
+            nPrevColumn = nColumn;
+            nColsRepeated = 1;
         }
     }
+    //if (nColsRepeated > 1 || bIsFirst)
+        WriteColumn(nPrevColumn, nColsRepeated, nPrevIndex, bPrevIsVisible);
+    if (!bIsClosed)
+        CloseHeaderColumn();
+    if (pGroupColumns->IsGroupEnd(nColumn - 1))
+        pGroupColumns->CloseGroups(nColumn - 1);
 }
 
 void ScXMLExport::WriteRowContent()
@@ -1763,7 +1744,8 @@ void ScXMLExport::_ExportAutoStyles()
                                     sal_Int32 nColumn = 0;
                                     while (/*nColumn <= nColumns && */nColumn <= MAXCOL)
                                     {
-                                        sal_Int32 nIndex;
+                                        sal_Int32 nIndex(-1);
+                                        sal_Bool bIsVisible(sal_True);
                                         uno::Any aColumn = xTableColumns->getByIndex(nColumn);
                                         uno::Reference<table::XCellRange> xTableColumn;
                                         if (aColumn >>= xTableColumn)
@@ -1774,6 +1756,16 @@ void ScXMLExport::_ExportAutoStyles()
                                                 std::vector<XMLPropertyState> xPropStates = xColumnStylesExportPropertySetMapper->Filter(xColumnProperties);
                                                 if(xPropStates.size())
                                                 {
+                                                    std::vector< XMLPropertyState >::iterator aItr = xPropStates.begin();
+                                                    while (aItr != xPropStates.end())
+                                                    {
+                                                        if (xColumnStylesPropertySetMapper->GetEntryContextId(aItr->mnIndex) == CTF_SC_ISVISIBLE)
+                                                        {
+                                                            aItr->maValue >>= bIsVisible;
+                                                            break;
+                                                        }
+                                                        aItr++;
+                                                    }
                                                     rtl::OUString sParent;
                                                     rtl::OUString sName;
                                                     if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates))
@@ -1783,7 +1775,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                     }
                                                     else
                                                         nIndex = pColumnStyles->GetIndexOfStyleName(sName, SC_SCOLUMNPREFIX);
-                                                    pColumnStyles->AddFieldStyleName(nTable, nColumn, nIndex);
+                                                    pColumnStyles->AddFieldStyleName(nTable, nColumn, nIndex, bIsVisible);
                                                 }
                                             }
                                         }
@@ -1792,13 +1784,14 @@ void ScXMLExport::_ExportAutoStyles()
                                         if (nColumn == MAXCOL)
                                             nColumn++;
                                         for (sal_Int32 i = nOld + 1; i < nColumn; i++)
-                                            pColumnStyles->AddFieldStyleName(nTable, i, nIndex);
+                                            pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
                                     }
                                     if (aCellAddress.EndColumn > nColumns)
                                     {
-                                        sal_Int32 nIndex = pColumnStyles->GetStyleNameIndex(nTable, nColumns);
+                                        sal_Bool bIsVisible(sal_True);
+                                        sal_Int32 nIndex = pColumnStyles->GetStyleNameIndex(nTable, nColumns, bIsVisible);
                                         for (sal_Int32 i = nColumns + 1; i <= aCellAddress.EndColumn; i++)
-                                            pColumnStyles->AddFieldStyleName(nTable, i, nIndex);
+                                            pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
                                     }
                                 }
                                 uno::Reference<table::XTableRows> xTableRows = xColumnRowRange->getRows();

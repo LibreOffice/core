@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
+ *  last change: $Author: sab $ $Date: 2001-08-03 14:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define XML_SC_TYPE_BORDERBOTTOM                    (XML_SC_TYPES_START + 12)
 #define XML_SC_TYPE_VERTJUSTIFY                     (XML_SC_TYPES_START + 13)
 #define XML_SC_ISTEXTWRAPPED                        (XML_SC_TYPES_START + 14)
+#define XML_SC_TYPE_EQUAL                           (XML_SC_TYPES_START + 15)
 
 #define CTF_SC_HORIJUSTIFY                          (XML_SC_CTF_START +  1)
 #define CTF_SC_HORIJUSTIFY_SOURCE                   (XML_SC_CTF_START +  2)
@@ -137,6 +138,7 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_SC_ROWHEIGHT                            (XML_SC_CTF_START + 50)
 #define CTF_SC_ROWOPTIMALHEIGHT                     (XML_SC_CTF_START + 51)
 #define CTF_SC_ROWBREAKBEFORE                       (XML_SC_CTF_START + 52)
+#define CTF_SC_ISVISIBLE                            (XML_SC_CTF_START + 53)
 
 #define CTF_SC_MASTERPAGENAME                       (XML_SC_CTF_START + 53)
 
@@ -181,6 +183,23 @@ public:
     ScXMLRowExportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper );
     virtual ~ScXMLRowExportPropertyMapper();
+};
+
+class ScXMLColumnExportPropertyMapper : public SvXMLExportPropertyMapper
+{
+public:
+    ScXMLColumnExportPropertyMapper(
+            const UniReference< XMLPropertySetMapper >& rMapper );
+    virtual ~ScXMLColumnExportPropertyMapper();
+
+    /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
+    virtual void handleSpecialItem(
+            SvXMLAttributeList& rAttrList,
+            const XMLPropertyState& rProperty,
+            const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap,
+            const ::std::vector< XMLPropertyState > *pProperties = 0,
+            sal_uInt32 nIdx = 0 ) const;
 };
 
 class ScXMLTableExportPropertyMapper : public SvXMLExportPropertyMapper
@@ -339,4 +358,14 @@ public:
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
+
+class XmlScPropHdl_IsEqual : public XMLPropertyHandler
+{
+public:
+    virtual ~XmlScPropHdl_IsEqual() {}
+    virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const { return sal_True; }
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
 #endif

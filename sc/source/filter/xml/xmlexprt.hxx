@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-02 08:53:57 $
+ *  last change: $Author: sab $ $Date: 2001-08-03 14:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,8 @@ class ScMyMergedRangesContainer;
 class ScMyValidationsContainer;
 class ScMyNotEmptyCellsIterator;
 class ScChangeTrackingExportHelper;
-class ScColumnRowStyles;
+class ScColumnStyles;
+class ScRowStyles;
 class ScFormatRangeStyles;
 class ScRowFormatRanges;
 class ScMyOpenCloseColumnRowGroup;
@@ -121,8 +122,8 @@ class ScXMLExport : public SvXMLExport
     UniReference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
     ScMySharedData*                     pSharedData;
-    ScColumnRowStyles*                  pColumnStyles;
-    ScColumnRowStyles*                  pRowStyles;
+    ScColumnStyles*                 pColumnStyles;
+    ScRowStyles*                    pRowStyles;
     ScFormatRangeStyles*                pCellStyles;
     ScRowFormatRanges*                  pRowFormatRanges;
     std::vector<rtl::OUString>          aTableStyles;

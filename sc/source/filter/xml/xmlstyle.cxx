@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
+ *  last change: $Author: sab $ $Date: 2001-08-03 14:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include <xmloff/attrlist.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_CELLPROTECTION_HPP_
 #include <com/sun/star/util/CellProtection.hpp>
@@ -173,6 +176,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 const XMLPropertyMapEntry aXMLScColumnStylesProperties[] =
 {
     MAP( "IsManualPageBreak", XML_NAMESPACE_FO, XML_BREAK_BEFORE, XML_SC_TYPE_BREAKBEFORE, 0),
+    MAP( "IsVisible", XML_NAMESPACE_TABLE, XML_DISPLAY, XML_SC_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM, CTF_SC_ISVISIBLE ),
     MAP( "Width", XML_NAMESPACE_STYLE, XML_COLUMN_WIDTH, XML_TYPE_MEASURE, 0 ),
 //  MAP( "OptimalWidth", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_COLUMN_WIDTH, XML_TYPE_BOOL, 0),
     { 0L }
@@ -405,6 +409,28 @@ void ScXMLRowExportPropertyMapper::ContextFilter(
         pOptimalHeight->mnIndex = -1;
         pOptimalHeight->maValue.clear();
     }
+}
+
+ScXMLColumnExportPropertyMapper::ScXMLColumnExportPropertyMapper(
+            const UniReference< XMLPropertySetMapper >& rMapper )
+            : SvXMLExportPropertyMapper(rMapper)
+{
+}
+
+ScXMLColumnExportPropertyMapper::~ScXMLColumnExportPropertyMapper()
+{
+}
+
+/** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
+void ScXMLColumnExportPropertyMapper::handleSpecialItem(
+            SvXMLAttributeList& rAttrList,
+            const XMLPropertyState& rProperty,
+            const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap,
+            const ::std::vector< XMLPropertyState > *pProperties,
+            sal_uInt32 nIdx ) const
+{
+    // the SpecialItem IsVisible must not be handled by this method
 }
 
 ScXMLTableExportPropertyMapper::ScXMLTableExportPropertyMapper(
@@ -729,6 +755,11 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SC_ISTEXTWRAPPED :
             {
                 pHdl = new XmlScPropHdl_IsTextWrapped;
+            }
+            break;
+            case XML_SC_TYPE_EQUAL :
+            {
+                pHdl = new XmlScPropHdl_IsEqual;
             }
             break;
         }
@@ -1537,3 +1568,20 @@ sal_Bool XmlScPropHdl_IsTextWrapped::exportXML(
 
     return bRetval;
 }
+
+sal_Bool XmlScPropHdl_IsEqual::importXML( const ::rtl::OUString& rStrImpValue,
+    ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    DBG_ERROR("should never be called");
+    return sal_False;
+}
+
+sal_Bool XmlScPropHdl_IsEqual::exportXML( ::rtl::OUString& rStrExpValue,
+    const ::com::sun::star::uno::Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    DBG_ERROR("should never be called");
+    return sal_False;
+}
+
