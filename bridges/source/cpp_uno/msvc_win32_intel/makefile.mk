@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2001-09-25 09:15:38 $
+#   last change: $Author: vg $ $Date: 2003-10-06 13:15:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(COM)" == "MSC"
 
 .IF "$(debug)" != ""
-CFLAGS += /Ob0
+CFLAGS += -Ob0
 .ENDIF
 
 .IF "$(cppu_no_leak)" == ""
@@ -107,7 +107,7 @@ SHL1STDLIBS= \
     $(CPPULIB)			\
     $(SALLIB)
 
-DEF1NAME=	$(SHL1TARGET)
+DEF1NAME=$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 
