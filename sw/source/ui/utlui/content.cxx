@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-25 17:04:00 $
+ *  last change: $Author: os $ $Date: 2002-08-02 14:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2503,6 +2503,8 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                     !pActiveShell->GetView().GetDocShell()->IsReadOnly())
         {
             EditEntry(pEntry, EDIT_MODE_DELETE);
+            bViewHasChanged = TRUE;
+            GetParentWindow()->UpdateListBox();
             GrabFocus();
         }
     }
