@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pl $ $Date: 2000-11-08 13:11:22 $
+#   last change: $Author: ssa $ $Date: 2002-01-09 13:48:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,9 @@ SLOFILES=       $(SLO)$/toolsin.obj     \
             $(SLO)$/color.obj               \
             $(SLO)$/l2txtenc.obj    \
             $(SLO)$/gen.obj			\
-            $(SLO)$/config.obj
+            $(SLO)$/config.obj		\
+            $(SLO)$/supd.obj
+
 
 .IF "$(UPDATER)"!=""
 OBJFILES=       $(OBJ)$/toolsin.obj     \
@@ -92,7 +94,9 @@ OBJFILES=       $(OBJ)$/toolsin.obj     \
             $(OBJ)$/color.obj               \
             $(OBJ)$/l2txtenc.obj    \
             $(OBJ)$/gen.obj			\
-            $(OBJ)$/config.obj
+            $(OBJ)$/config.obj		\
+            $(SLO)$/supd.obj
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------
