@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-17 15:48:47 $
+ *  last change: $Author: bm $ $Date: 2001-05-28 09:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 #ifndef _XMLOFF_XMLEMENT_HXX
 #include "xmlement.hxx"
@@ -298,6 +301,9 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetPlotAreaAttrTokenMap();
 
+    sal_Bool bColHasLabels = sal_False;
+    sal_Bool bRowHasLabels = sal_False;
+
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -328,9 +334,41 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             case XML_TOK_PA_TABLE_NUMBER_LIST:
                 mrTableNumberList = aValue;
                 break;
+            case XML_TOK_PA_DS_HAS_LABELS:
+                {
+                    if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH )))
+                        bColHasLabels = bRowHasLabels = sal_True;
+                    else if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW )))
+                        bRowHasLabels = sal_True;
+                    else if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_COLUMN )))
+                        bColHasLabels = sal_True;
+                }
+                break;
             default:
                 maSceneImportHelper.processSceneAttribute( nPrefix, aLocalName, aValue );
                 break;
+        }
+    }
+
+    uno::Reference< beans::XPropertySet > xDocProp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+    if( xDocProp.is())
+    {
+        try
+        {
+            uno::Any aAny;
+            aAny <<= (sal_Bool)(bColHasLabels);
+            xDocProp->setPropertyValue(
+                ::rtl::OUString::createFromAscii( "DataSourceLabelsInFirstColumn" ),
+                aAny );
+
+            aAny <<= (sal_Bool)(bRowHasLabels);
+            xDocProp->setPropertyValue(
+                ::rtl::OUString::createFromAscii( "DataSourceLabelsInFirstRow" ),
+                aAny );
+        }
+        catch( beans::UnknownPropertyException )
+        {
+            DBG_ERRORFILE( "Properties missing" );
         }
     }
 }
