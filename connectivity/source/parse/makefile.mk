@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-21 15:50:38 $
+#   last change: $Author: mh $ $Date: 2001-07-31 09:57:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,3 +103,4 @@ $(MISC)$/sqlbison.cxx: sqlbison.y
     -$(MKDIR) $(OUT)$/inc$/connectivity
     +$(COPY) $(MISC)$/sqlbison.cxx.h $(OUT)$/inc$/connectivity$/sqlbison.hxx
 
+sqliterator.cxx:	$(MISC)$/sqlbison.cxx
