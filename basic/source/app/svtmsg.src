@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:46:45 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1447,7 +1447,7 @@ String S_UNPACKING_STORAGE_FAILED
     Text = "Entpacken der Storage \"($Arg1)\" nach \"($Arg2)\" ist fehlgeschlagen";
     Text[ english_us ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ portuguese ] = "Foi impossνvel descomprimir o ficheiro Storage de \"($Arg1)\" para \"($Arg2)\".";
-    Text[ russian ] = "Πΰροΰκξβΰςό νΰκξοθςελό \"($Arg1)\" β \"($Arg2)\" νε σδΰλξρό.";
+    Text[ russian ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed.";
     Text[ greek ] = "Η αποσυμπίεση του αρχείου αποθήκευσης \"($Arg1)\" στο \"($Arg2)\" απέτυχε";
     Text[ dutch ] = "Decomprimeren van Storage \"($Arg1)\" in \"($Arg2)\" mislukt";
     Text[ french ] = "La dιcompression du stockage \"($Arg1)\" vers \"($Arg2)\" a ιchouι.";
@@ -1493,22 +1493,22 @@ String S_NO_LIST_BOX_BUTTON
 String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
 {
     Text = "Konnte UNO Url \"($Arg1)\"nicht ausfόhren: Keinen Dispatcher gefunden";
-    Text[ english_us ] = "Slot ID cannot be run. No ActiveDispatcher";
-    Text[ portuguese ] = "Foi impossνvel executar Slot ID: ActiveDispatcher inexistente";
-    Text[ russian ] = "Slot ID cannot be run. No ActiveDispatcher";
-    Text[ greek ] = "Slot ID cannot be run. No ActiveDispatcher";
-    Text[ dutch ] = "Kon slot ID niet uitvoeren: geen ActiveDispatcher";
-    Text[ french ] = "Impossible d'exιcuter Slot ID : aucun dispatcheur actif";
-    Text[ spanish ] = "No se pudo ejecutar Slot ID. ActiveDispatcher inexistente";
-    Text[ italian ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ english_us ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found.";
+    Text[ portuguese ] = "Foi impossνvel executar o URL UNO \"($Arg1)\": nenhum Dispatcher activo";
+    Text[ russian ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found.";
+    Text[ greek ] = "Δεν ήταν δυνατόν να εκτελεστεί το UNO Url \"($Arg1)\": Δεν βρέθηκε διεκπεραιωτής";
+    Text[ dutch ] = "Kon Url \"($Arg1)\" niet uitvoeren: geen dispatcher gevonden";
+    Text[ french ] = "Impossible d'exιcuter l'URL UNO \"($Arg1)\" : aucun dispatcheur actif";
+    Text[ spanish ] = "No se pudo ejecutar UNO Url \"($Arg1)\". No se encontrσ ningϊn Dispatcher";
+    Text[ italian ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found.";
     Text[ danish ] = "Slot ID cannot be run. No ActiveDispatcher";
-    Text[ swedish ] = "Slot ID cannot be run. No ActiveDispatcher";
-    Text[ polish ] = "Nie mσg³ wykonaζ Slot ID: Brak ActiveDispatcher";
+    Text[ swedish ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found";
+    Text[ polish ] = "Wykonanie UNO Url \"($Arg1)\"nie powiod³o siκ: Brak na pulpicie ActiveFrame.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
-    Text[ japanese ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ japanese ] = "UNO Url \"($Arg1)\" ‚Νΐs‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½F Γή¨½Κί―Α¬°‚ª©‚Β‚©‚θ‚ά‚Ή‚ρB";
     Text[ korean ] = "½½·Τ IDΈ¦ ½ΗΗΰΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω: ΄ΙµΏ µπ½ΊΖΠΓ³°΅ Ύψ½ΐ΄Ο΄Ω.";
-    Text[ chinese_simplified ] = "Slot ID cannot be run. No ActiveDispatcher";
-    Text[ chinese_traditional ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ chinese_simplified ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found.";
+    Text[ chinese_traditional ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found.";
     Text[ arabic ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ turkish ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ catalan ] = "No se pudo ejecutar Slot ID. ActiveDispatcher inexistente";
@@ -1517,25 +1517,26 @@ String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
 String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
 {
     Text = "Konnte UNO Url \"($Arg1)\"nicht ausfόhren: Kein ActiveFrame am Desktop";
-    Text[ english_us ] = "Slot ID could not be run";
-    Text[ portuguese ] = "Impossνvel executar Slot ID.";
-    Text[ russian ] = "Slot ID could not be run";
-    Text[ greek ] = "Slot ID could not be run";
-    Text[ dutch ] = "Kon slot ID niet uitvoeren";
-    Text[ french ] = "Impossible d'exιcuter Slot ID";
-    Text[ spanish ] = "No se pudo ejecutar Slot ID";
-    Text[ italian ] = "Slot ID could not be run";
+    Text[ english_us ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
+    Text[ portuguese ] = "Impossνvel executar o URL UNO \"($Arg1)\": nγo existe nenhum Frame activo no Desktop";
+    Text[ russian ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
+    Text[ greek ] = "Δεν ήταν δυνατόν να εκτελεστεί το UNO Url \"($Arg1)\": Δεν υπάρχει ενεργό πλαίσιο στην επιφάνεια εργασίας";
+    Text[ dutch ] = "Kon UNO Url \"($Arg1)\" niet uitvoeren: geen ActiveFrame aan desktop";
+    Text[ french ] = "Impossible d'exιcuter l'URL UNO \"($Arg1)\" : aucun Frame actif sur le Desktop";
+    Text[ spanish ] = "No se pudo ejecutar UNO Url \"($Arg1)\": No existe ningϊn ActiveFrame en el escritorio";
+    Text[ italian ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ danish ] = "Slot ID could not be run";
-    Text[ swedish ] = "Slot ID could not be run";
-    Text[ polish ] = "Nie mσg³ wykonaζ Slot ID";
+    Text[ swedish ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop";
+    Text[ polish ] = "Wykonanie UNO Url \"($Arg1)\"nie powiod³o siκ: Brak na pulpicie ActiveFrame.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
-    Text[ japanese ] = "Slot ID could not be run";
+    Text[ japanese ] = "UNO Url \"($Arg1)\" ‚Νΐs‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½F Γή½ΈΔ―Μί‚Ι±ΈΓ¨ΜήΜΪ°Ρ‚ª‚ ‚θ‚ά‚Ή‚ρB";
     Text[ korean ] = "½½·Τ IDΈ¦΅΅½ΗΗΰΗΟΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
-    Text[ chinese_simplified ] = "Slot ID could not be run";
-    Text[ chinese_traditional ] = "Slot ID could not be run";
+    Text[ chinese_simplified ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
+    Text[ chinese_traditional ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ arabic ] = "Slot ID could not be run";
     Text[ turkish ] = "Slot ID could not be run";
     Text[ catalan ] = "No se pudo ejecutar Slot ID";
     Text[ finnish ] = "Paikkatunnusta ei voitu suorittaa";
 };
+
 
