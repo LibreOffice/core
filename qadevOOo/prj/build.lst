@@ -29,6 +29,7 @@ qa  qadevOOo\tests\java\ifc\form                         nmake   -   all ifc_for
 qa  qadevOOo\tests\java\ifc\form\binding                 nmake   -   all ifc_form_binding org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\form\component               nmake   -   all ifc_form_component org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\form\validation              nmake   -   all ifc_form_validation org_openoffice NULL
+qa  qadevOOo\tests\java\ifc\form\submission              nmake   -   all ifc_form_submission org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\formula                      nmake   -   all ifc_formula org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\frame                        nmake   -   all ifc_frame org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\i18n                         nmake   -   all ifc_i18n org_openoffice NULL
