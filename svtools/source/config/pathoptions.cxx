@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-14 15:49:49 $
+ *  last change: $Author: mba $ $Date: 2001-01-19 13:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #include <unotools/localfilehelper.hxx>
 #endif
 
+#include <unotools/ucbhelper.hxx>
 #include <vos/process.hxx>
 
 using namespace osl;
@@ -1408,33 +1409,6 @@ String SvtPathOptions::SubstituteVariable( const String& rVar )
 
 // -----------------------------------------------------------------------
 
-sal_Bool IniFileExists_Impl( const String rURL )
-{
-    sal_Bool bRet = sal_False;
-    INetURLObject aObj( rURL );
-    ::rtl::OUString aFileName = aObj.getName(
-        INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).ToLowerAscii();
-    aObj.removeSegment();
-    aObj.removeFinalSlash();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aFiles =
-        ::utl::LocalFileHelper::GetFolderContents( aObj.GetMainURL(), sal_False );
-    const ::rtl::OUString* pFiles  = aFiles.getConstArray();
-    UINT32 i, nCount = aFiles.getLength();
-    for ( i = 0; i < nCount; ++i )
-    {
-        INetURLObject aFileObject( pFiles[i] );
-        ::rtl::OUString aFile = aFileObject.getName(
-            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).ToLowerAscii();
-        if ( aFile == aFileName )
-        {
-            bRet = sal_True;
-            break;
-        }
-    }
-
-    return bRet;
-}
-
 sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
 {
     // check parameter: empty inifile name?
@@ -1452,6 +1426,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
         case PATH_USERCONFIG:
         case PATH_USERDICTIONARY:
         {
+            // path is a URL
             sal_Bool bCfg = ( PATH_USERCONFIG == ePath );
             bRet = sal_True;
             INetURLObject aObj( bCfg ? GetUserConfigPath() : GetUserDictionaryPath() );
@@ -1459,11 +1434,11 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
             for ( i = 0; i < nCount; ++i )
                 aObj.insertName( aIniFile.GetToken( i, '/' ) );
 
-            if ( !IniFileExists_Impl( aObj.GetMainURL() ) )
+            if ( !::utl::UCBContentHelper::Exists( aObj.GetMainURL() ) )
             {
                 aObj.SetSmartURL( bCfg ? GetConfigPath() : GetDictionaryPath() );
                 aObj.insertName( aIniFile );
-                bRet = IniFileExists_Impl( aObj.GetMainURL() );
+                bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL() );
             }
 
             if ( bRet )
@@ -1507,25 +1482,31 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
 #endif
                 case PATH_WORK:         aPath = GetWorkPath();          break;
             }
+
             sal_uInt16 i, nIdx = 0, nCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
             for ( i = 0; i < nCount; ++i )
             {
+                BOOL bIsURL = TRUE;
                 String aPathToken = aPath.GetToken( 0, SEARCHPATH_DELIMITER, nIdx );
                 INetURLObject aObj( aPathToken );
                 if ( aObj.HasError() )
                 {
+                    bIsURL = FALSE;
                     String aURL;
                     if ( LocalFileHelper::ConvertPhysicalNameToURL( aPathToken, aURL ) )
                         aObj.SetURL( aURL );
                 }
+
                 xub_StrLen i, nCount = aIniFile.GetTokenCount( '/' );
                 for ( i = 0; i < nCount; ++i )
                     aObj.insertName( aIniFile.GetToken( i, '/' ) );
-                bRet = IniFileExists_Impl( aObj.GetMainURL() );
+                bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL() );
 
                 if ( bRet )
                 {
                     rIniFile = aObj.GetMainURL();
+                    if ( !bIsURL )
+                        ::utl::LocalFileHelper::ConvertURLToPhysicalName( rIniFile, rIniFile );
                     break;
                 }
             }
