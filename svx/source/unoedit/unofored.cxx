@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-23 11:54:34 $
+ *  last change: $Author: cl $ $Date: 2001-06-05 14:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,10 +200,11 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
             struct EECharAttrib aAttrib = aAttribs.GetObject( nAttrib );
             DBG_ASSERT( aAttrib.pAttr, "GetCharAttribs gives corrupt data" );
 
-            if( aAttrib.nStart >= nEndPos )
+            const sal_Bool bEmptyPortion = aAttrib.nStart == aAttrib.nEnd;
+            if( (!bEmptyPortion && (aAttrib.nStart >= nEndPos)) || (bEmptyPortion && (aAttrib.nStart > nEndPos)) )
                 break;  // break if we are already behind our selektion
 
-            if( aAttrib.nEnd <= nPos )
+            if( (!bEmptyPortion && (aAttrib.nEnd <= nPos)) || (bEmptyPortion && (aAttrib.nEnd < nPos)) )
                 continue;   // or if the attribute ends before our selektion
 
             if( aAttrib.pAttr->Which() != nWhich )
