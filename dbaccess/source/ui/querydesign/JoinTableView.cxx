@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 12:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,8 +376,10 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     {
         OTableConnection* pTabConn = (*aIter);
         if(
-            ( aWinName == pTabConn->GetData()->GetSourceWinName()) ||
-            ( aWinName == pTabConn->GetData()->GetDestWinName())
+            ( aWinName == pTabConn->GetData()->GetSourceWinName())      ||
+            ( aWinName == pTabConn->GetData()->GetDestWinName())        ||
+            ( sComposedName == pTabConn->GetData()->GetSourceWinName()) ||
+            ( sComposedName == pTabConn->GetData()->GetDestWinName())
           )
             bRemove = RemoveConnection( pTabConn );
     }
