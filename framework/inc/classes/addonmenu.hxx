@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonmenu.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:11:47 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ class AddonPopupMenu : public PopupMenu
         rtl::OUString                                                       m_aCommandURL;
         ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >&  m_xFrame;
 
-    friend AddonMenuManager;
+    friend class AddonMenuManager;
 };
 
 class AddonMenuManager
