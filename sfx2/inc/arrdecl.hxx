@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arrdecl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:22 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@ class SfxViewShell;
 SV_DECL_PTRARR( SfxViewShellArr_Impl, SfxViewShell*, 4, 4 );
 
 class SfxObjectFactory;
-SV_DECL_PTRARR( SfxObjectFactoryArr_Impl, SfxObjectFactory*, 3, 3 );
+typedef SfxObjectFactory* SfxObjectFactoryPtr;
+SV_DECL_PTRARR( SfxObjectFactoryArr_Impl, SfxObjectFactoryPtr, 3, 3 );
 
 struct SfxTbxCtrlFactory;
 SV_DECL_PTRARR_DEL( SfxTbxCtrlFactArr_Impl, SfxTbxCtrlFactory*, 8, 4 );
