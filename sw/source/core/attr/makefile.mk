@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 13:40:59 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:16:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ AUTOSEG=true
 CXXFILES = \
         calbck.cxx \
         cellatr.cxx \
+                fmtfollowtextflow.cxx \
         format.cxx \
         hints.cxx \
         swatrset.cxx
@@ -87,6 +88,7 @@ CXXFILES = \
 SLOFILES =  \
         $(SLO)$/calbck.obj \
         $(SLO)$/cellatr.obj \
+                $(SLO)$/fmtfollowtextflow.obj \
         $(SLO)$/format.obj \
         $(SLO)$/hints.obj \
         $(SLO)$/swatrset.obj
