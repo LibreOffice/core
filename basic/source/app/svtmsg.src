@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-27 23:06:51 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 16:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ String S_WIN_DISABLED
     Text[ swedish ] = "($Arg1) could not be accessed";
     Text[ polish ] = "Brak dost�pu do ($Arg1).";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
-    Text[ japanese ] = "($Arg1) にｱｸｾｽできませんでした。";
+    Text[ japanese ] = "($Arg1) にアクセスできませんでした。";
     Text[ korean ] = "($Arg1)을(를) 액세스하지 못했습니다.";
     Text[ chinese_simplified ] = "($Arg1) could not be accessed.";
     Text[ chinese_traditional ] = "($Arg1) could not be accessed.";
@@ -594,7 +594,7 @@ String S_NUMBER_TOO_BIG
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
     Text[ korean ] = "($Arg1)에서 항목 번호($Arg2)는 너무 큽니다. 최대값은 ($Arg3)입니다.";
-    Text[ chinese_simplified ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3).";
+    Text[ chinese_simplified ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
     Text[ chinese_traditional ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
     Text[ arabic ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
     Text[ turkish ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
@@ -618,7 +618,7 @@ String S_NUMBER_TOO_SMALL
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
     Text[ korean ] = "($Arg1)에서 항목 번호($Arg2)는 너무 작습니다. 최소값은 ($Arg3)입니다.";
-    Text[ chinese_simplified ] = "The entry number ($Arg2) is too small in ($Arg1). Min. allowed is ($Arg3).";
+    Text[ chinese_simplified ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
     Text[ chinese_traditional ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
     Text[ arabic ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
     Text[ turkish ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
@@ -874,7 +874,7 @@ String S_ATTEMPT_TO_WRITE_READONLY
     Text[ russian ] = "Attempt to write on read-only ($Arg1)";
     Text[ greek ] = "Attempt to write on read-only ($Arg1)";
     Text[ dutch ] = "Schrijfpoging op ReadOnly ($Arg1)";
-    Text[ french ] = "Tentative d'�citure sur ($Arg1) (en lecture seule)";
+    Text[ french ] = "Tentative d'�criture sur ($Arg1) (en lecture seule)";
     Text[ spanish ] = "Intento de escritura en ReadOnly ($Arg1)";
     Text[ italian ] = "Attempt to write on read-only ($Arg1)";
     Text[ danish ] = "Attempt to write on read-only ($Arg1)";
@@ -1459,7 +1459,7 @@ String S_UNKNOWN_TYPE
     Text[ swedish ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ polish ] = "Nieznany typ obiektu ($Arg1) z UId lub nie obs�ugiwana metoda '($Arg2)'";
     Text[ portuguese_brazilian ] = "dummytext";
-    Text[ japanese ] = "UId あるいはﾒｿｯﾄﾞ'($Arg2)' からの不明なｵﾌﾞｼﾞｪｸﾄの種類 ($Arg1) は支援されません。";
+    Text[ japanese ] = "UId あるいはメソッド'($Arg2)' からの不明なオブジェクトの種類 ($Arg1) は支援されません。";
     Text[ korean ] = "UId로부터의 알려져 있지 않은 개체 형식 ($Arg1)이나 메소드 '($Arg2)'가 지원되지 않습니다";
     Text[ chinese_simplified ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
@@ -1531,7 +1531,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
     Text[ swedish ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found";
     Text[ polish ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
-    Text[ japanese ] = "UNO Url \"($Arg1)\" は実行できませんでした： ﾃﾞｨｽﾊﾟｯﾁｬｰが見つかりません。";
+    Text[ japanese ] = "UNO Url \"($Arg1)\" は実行できませんでした： ディスパッチャーが見つかりません。";
     Text[ korean ] = "슬롯 ID를 실행하지 못했습니다: 능동 디스패처가 없습니다.";
     Text[ chinese_simplified ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found.";
     Text[ chinese_traditional ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found.";
@@ -1555,7 +1555,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
     Text[ swedish ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop";
     Text[ polish ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
-    Text[ japanese ] = "UNO Url \"($Arg1)\" は実行できませんでした： ﾃﾞｽｸﾄｯﾌﾟにｱｸﾃｨﾌﾞﾌﾚｰﾑがありません。";
+    Text[ japanese ] = "UNO Url \"($Arg1)\" は実行できませんでした： デスクトップにアクティブフレームがありません。";
     Text[ korean ] = "실행하지 못했습니다. 바탕화면에 ActiveFrame이 없습니다.";
     Text[ chinese_simplified ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ chinese_traditional ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
@@ -1628,8 +1628,8 @@ String S_NO_SCROLLBAR
     Text[ swedish ] = "No scroll bar at ($Arg1)";
     Text[ polish ] = "No status bar at ($Arg1)";
     Text[ portuguese_brazilian ] = "No status bar at ($Arg1)";
-    Text[ japanese ] = "($Arg1) にはｽｸﾛｰﾙﾊﾞｰがありません。";
-    Text[ korean ] = "No status bar at ($Arg1)";
+    Text[ japanese ] = "($Arg1) にはスクロールバーがありません。";
+    Text[ korean ] = "($Arg1)에 상태 표시줄이 없습니다";
     Text[ chinese_simplified ] = "No scroll bar at ($Arg1)";
     Text[ chinese_traditional ] = "No scroll bar at ($Arg1)";
     Text[ turkish ] = "No status bar at ($Arg1)";
@@ -1639,26 +1639,27 @@ String S_NO_SCROLLBAR
 String S_NO_SAX_PARSER
 {
     Text = "Keine SAX Parser bei ($Arg1). Zuerst mit 'SAXReadFile' initialisieren.";
-    Text[ english_us ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ english_us ] = "No SAX Parser when using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ portuguese ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ russian ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ greek ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ dutch ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
-    Text[ french ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
-    Text[ spanish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ french ] = "Aucun SAX Parser pour ($Arg1). Initialiser avant toute chose avec 'SAXReadFile'.";
+    Text[ spanish ] = "Ning�n SAX Parser para ($Arg1). Inicializar primero con 'SAXReadFile'.";
     Text[ finnish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ italian ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ danish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
-    Text[ swedish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ swedish ] = "No SAX Parser when using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ polish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ portuguese_brazilian ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
-    Text[ japanese ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ japanese ] = "($Arg1)には SAX Parser がありません。最初に 'SAXReadFile' で初期化します。";
     Text[ korean ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
-    Text[ chinese_simplified ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
-    Text[ chinese_traditional ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ chinese_simplified ] = "No SAX Parser when using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ chinese_traditional ] = "No SAX Parser when using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ turkish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ arabic ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ catalan ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
 };
+
 
 
