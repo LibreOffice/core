@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:14:17 $
+ *  last change: $Author: pb $ $Date: 2001-11-29 09:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2891,7 +2891,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "Ge~sch. Leerzeichen" ;
+        Text = "Ge~schützte Leerzeichen" ;
         Text [ ENGLISH ] = "Nonbreaking spaces" ;
         Text [ norwegian ] = "Nonbreaking spaces" ;
         Text [ italian ] = "Spa~zio non divisibile" ;
