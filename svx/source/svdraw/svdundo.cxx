@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:06:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj):
 {
 }
 
-void SdrUndoObj::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, FASTBOOL bRepeat) const
+void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, USHORT nStrCacheID, String& rStr, FASTBOOL bRepeat )
 {
     rStr = ImpGetResStr(nStrCacheID);
     sal_Char aSearchText[] = "%O";
@@ -295,10 +295,16 @@ void SdrUndoObj::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, FAST
         {
             XubString aStr;
 
-            pObj->TakeObjNameSingul(aStr);
+            _rForObject.TakeObjNameSingul(aStr);
             rStr.Insert(aStr, nPos);
         }
     }
+}
+
+void SdrUndoObj::ImpTakeDescriptionStr(USHORT nStrCacheID, XubString& rStr, FASTBOOL bRepeat) const
+{
+    if ( pObj )
+        GetDescriptionStringForObject( *pObj, nStrCacheID, rStr, bRepeat );
 }
 
 // #94278# common call method for evtl. page change when UNDO/REDO
@@ -969,6 +975,13 @@ void SdrUndoNewObj::Redo()
     SdrUndoInsertObj::Redo();
     DBG_ASSERT(IsOwner(),"RedoNewObj: pObj gehoert nicht der UndoAction");
     SetOwner(FALSE);
+}
+
+String SdrUndoNewObj::GetComment( const SdrObject& _rForObject )
+{
+    String sComment;
+    GetDescriptionStringForObject( _rForObject, STR_UndoInsertObj, sComment );
+    return sComment;
 }
 
 XubString SdrUndoNewObj::GetComment() const
