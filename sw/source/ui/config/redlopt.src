@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:50:46 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "Textdarstellung";
         Text[ hindi ] = "टेक्स्ट् दिखाओ";
         Text[ slovak ] = "Zobraziť text";
+        Text[ hungarian ] = "Szöveg megjelenítése";
+        Text[ slovenian ] = "Prikaz besedila";
     };
     FixedText FT_CHG_INSERT
     {
@@ -127,7 +129,7 @@ TabPage TP_REDLINE_OPT
         Text[ spanish ] = "Insertar";
         Text[ finnish ] = "Lis�ykset";
         Text[ italian ] = "Inserisci";
-        Text[ danish ] = "S�t ind";
+        Text[ danish ] = "Inds�ttelser";
         Text[ swedish ] = "Infoga";
         Text[ polish ] = "Wstawki";
         Text[ portuguese_brazilian ] = "Inser��es";
@@ -143,6 +145,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "Einfügen";
         Text[ hindi ] = "जोड़ना";
         Text[ slovak ] = "Vložené položky";
+        Text[ hungarian ] = "Beszúrások";
+        Text[ slovenian ] = "Vstavki";
     };
     FixedText FT_INS_ATTR
     {
@@ -158,7 +162,7 @@ TabPage TP_REDLINE_OPT
         Text[ french ] = "A~ttributs";
         Text[ spanish ] = "Atributos";
         Text[ italian ] = "Attributi";
-        Text[ danish ] = "Attri~butter";
+        Text[ danish ] = "Attributter";
         Text[ swedish ] = "~Attribut";
         Text[ polish ] = "A~trybuty";
         Text[ portuguese_brazilian ] = "Atributos";
@@ -175,6 +179,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
         Text[ slovak ] = "Atribúty";
+        Text[ hungarian ] = "Jellemzők";
+        Text[ slovenian ] = "Atributi";
     };
     ListBox LB_INS_ATTR
     {
@@ -347,7 +353,7 @@ TabPage TP_REDLINE_OPT
         < "Store bogstaver" ; > ;
         < "Sm� bogstaver" ; > ;
         < "Kapit�ler" ; > ;
-        < "Titelskrift" ; > ;
+        < "Titelskrifttype" ; > ;
         < "Baggrundsfarve" ; > ;
     };
     StringList [ swedish ] =
@@ -574,6 +580,34 @@ TabPage TP_REDLINE_OPT
         < "Písmo titulu" ; > ;
         < "Farba pozadia" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "[Semmi]" ; > ;
+        < "Félkövér" ; > ;
+        < "Dőlt" ; > ;
+        < "Aláhúzott" ; > ;
+        < "Aláhúzás: kettős" ; > ;
+        < "Áthúzott" ; > ;
+        < "Nagybetű" ; > ;
+        < "Kisbetű" ; > ;
+        < "Kis kapitálisok" ; > ;
+        < "Cím betűtípusa" ; > ;
+        < "Háttérszín" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "[brez]" ; > ;
+        < "Krepko" ; > ;
+        < "Ležeče" ; > ;
+        < "Podčrtano" ; > ;
+        < "Dvojno podčrtano" ; > ;
+        < "Prečrtano" ; > ;
+        < "Velike črke" ; > ;
+        < "Male črke" ; > ;
+        < "Pomanjšane velike črke" ; > ;
+        < "Naslovna pisava" ; > ;
+        < "Barva ozadja" ; > ;
+    };
     };
     FixedText FT_INS_COL
     {
@@ -585,7 +619,7 @@ TabPage TP_REDLINE_OPT
         Text [ english_us ] = "Color" ;
         Text [ portuguese_brazilian ] = "Cor" ;
         Text [ swedish ] = "~F�rg" ;
-        Text [ danish ] = "Far~ve" ;
+        Text [ danish ] = "Farve" ;
         Text [ italian ] = "Colore" ;
         Text [ spanish ] = "Color" ;
         Text [ french ] = "Couleur" ;
@@ -607,6 +641,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
         Text[ slovak ] = "Farba";
+        Text[ hungarian ] = "Szín";
+        Text[ slovenian ] = "Barva";
     };
     ListBox LB_INS_COL
     {
@@ -630,7 +666,7 @@ TabPage TP_REDLINE_OPT
         Text[ french ] = "Ins�rer";
         Text[ spanish ] = "Insertar";
         Text[ italian ] = "Inserisci";
-        Text[ danish ] = "S�t ind";
+        Text[ danish ] = "Inds�t";
         Text[ swedish ] = "Infoga";
         Text[ polish ] = "Wstaw";
         Text[ portuguese_brazilian ] = "Inserir";
@@ -647,6 +683,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
         Text[ slovak ] = "Vložiť";
+        Text[ hungarian ] = "Beszúrás";
+        Text[ slovenian ] = "Vstavi";
     };
     FixedText FT_CHG_DELETE
     {
@@ -679,6 +717,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "Löschen";
         Text[ hindi ] = "मिटाना";
         Text[ slovak ] = "Zmazané položky";
+        Text[ hungarian ] = "Törlések";
+        Text[ slovenian ] = "Izbrisi";
     };
     FixedText FT_DEL_ATTR
     {
@@ -694,7 +734,7 @@ TabPage TP_REDLINE_OPT
         Text[ french ] = "Attributs";
         Text[ spanish ] = "Atributos";
         Text[ italian ] = "Attributi";
-        Text[ danish ] = "Attrib~utter";
+        Text[ danish ] = "Attributter";
         Text[ swedish ] = "Attrib~ut";
         Text[ polish ] = "Atry~buty";
         Text[ portuguese_brazilian ] = "Atributos";
@@ -711,6 +751,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
         Text[ slovak ] = "Atribúty";
+        Text[ hungarian ] = "Jellemzők";
+        Text[ slovenian ] = "Atributi";
     };
     ListBox LB_DEL_ATTR
     {
@@ -733,7 +775,7 @@ TabPage TP_REDLINE_OPT
         Text[ french ] = "Couleur";
         Text[ spanish ] = "Color";
         Text[ italian ] = "Colore";
-        Text[ danish ] = "F~arve";
+        Text[ danish ] = "Farve";
         Text[ swedish ] = "F~�rg";
         Text[ polish ] = "Kolo~r";
         Text[ portuguese_brazilian ] = "Cor";
@@ -750,6 +792,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
         Text[ slovak ] = "Farba";
+        Text[ hungarian ] = "Szín";
+        Text[ slovenian ] = "Barva";
     };
     ListBox LB_DEL_COL
     {
@@ -790,6 +834,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मिटाओ";
         Text[ slovak ] = "Zmazať";
+        Text[ hungarian ] = "Törlés";
+        Text[ slovenian ] = "Izbriši";
     };
     FixedText FT_CHG_CHANGE
     {
@@ -822,6 +868,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "Attributänderung";
         Text[ hindi ] = "बदला की हुयी ऐट्रिब्यूट्स";
         Text[ slovak ] = "Zmenené atribúty";
+        Text[ hungarian ] = "Megváltozott jellemzők";
+        Text[ slovenian ] = "Spremenjeni atributi";
     };
     FixedText FT_CHG_ATTR
     {
@@ -837,7 +885,7 @@ TabPage TP_REDLINE_OPT
         Text[ french ] = "Attributs";
         Text[ spanish ] = "Atributos";
         Text[ italian ] = "Attributi";
-        Text[ danish ] = "Attributt~er";
+        Text[ danish ] = "Attributter";
         Text[ swedish ] = "Attri~but";
         Text[ polish ] = "~Atrybuty";
         Text[ portuguese_brazilian ] = "Atributos";
@@ -854,6 +902,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
         Text[ slovak ] = "Atribúty";
+        Text[ hungarian ] = "Jellemzők";
+        Text[ slovenian ] = "Atributi";
     };
     ListBox LB_CHG_ATTR
     {
@@ -876,7 +926,7 @@ TabPage TP_REDLINE_OPT
         Text[ french ] = "Couleur";
         Text[ spanish ] = "Color";
         Text[ italian ] = "Colore";
-        Text[ danish ] = "Fa~rve";
+        Text[ danish ] = "Farve";
         Text[ swedish ] = "F�~rg";
         Text[ polish ] = "Ko~lor";
         Text[ portuguese_brazilian ] = "Cor";
@@ -893,6 +943,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
         Text[ slovak ] = "Farba";
+        Text[ hungarian ] = "Szín";
+        Text[ slovenian ] = "Barva";
     };
     ListBox LB_CHG_COL
     {
@@ -933,6 +985,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
         Text[ slovak ] = "Atribúty";
+        Text[ hungarian ] = "Jellemzők";
+        Text[ slovenian ] = "Atributi";
     };
     FixedLine FL_LC
     {
@@ -966,6 +1020,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "Geänderte Zeilen";
         Text[ hindi ] = "रेखाओं को बदला";
         Text[ slovak ] = "Zmenených riadkov";
+        Text[ hungarian ] = "Megváltozott sorok";
+        Text[ slovenian ] = "Vrstice spremenjene";
     };
     FixedText FT_MARKPOS
     {
@@ -999,6 +1055,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "Markieru~ng";
         Text[ hindi ] = "~चिह्न";
         Text[ slovak ] = "O~značiť";
+        Text[ hungarian ] = "~Megjelölés";
+        Text[ slovenian ] = "~Oznaka";
     };
     ListBox LB_MARKPOS
     {
@@ -1230,6 +1288,22 @@ TabPage TP_REDLINE_OPT
         < "Vonkajší okraj" ; > ;
         < "Vnútorný okraj" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "[Semmi]" ; > ;
+        < "Bal margó" ; > ;
+        < "Jobb margó" ; > ;
+        < "Külső margó" ; > ;
+        < "Belső margó" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "[brez]" ; > ;
+        < "Levi rob" ; > ;
+        < "Desni rob" ; > ;
+        < "Zunanji rob" ; > ;
+        < "Notranji rob" ; > ;
+    };
     };
     FixedText FT_LC_COL
     {
@@ -1263,6 +1337,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "~रंग";
         Text[ slovak ] = "~Farba";
+        Text[ hungarian ] = "~Szín";
+        Text[ slovenian ] = "~Barva";
     };
     ListBox LB_LC_COL
     {
@@ -1284,7 +1360,7 @@ TabPage TP_REDLINE_OPT
         Text [ english_us ] = "By author" ;
         Text [ portuguese_brazilian ] = "Por autor" ;
         Text [ swedish ] = "Efter f�rfattare" ;
-        Text [ danish ] = "Efter forfatter" ;
+        Text [ danish ] = "Af forfatter" ;
         Text [ italian ] = "Secondo autore" ;
         Text [ spanish ] = "Seg�n autor" ;
         Text [ french ] = "Par auteur" ;
@@ -1306,6 +1382,8 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "Nach Autor";
         Text[ hindi ] = "लेखक से";
         Text[ slovak ] = "Autor";
+        Text[ hungarian ] = "Szerző szerint";
+        Text[ slovenian ] = "Glede na avtorja";
     };
     String STR_NOTHING
     {
@@ -1336,8 +1414,12 @@ TabPage TP_REDLINE_OPT
         Text[ hebrew ] = "‮[ללא]‬";
         Text[ hindi ] = "[कोई नहीं]";
         Text[ slovak ] = "[Nič]";
+        Text[ hungarian ] = "[Semmi]";
+        Text[ slovenian ] = "[brez]";
     };
 };
+
+
 
 
 
