@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swserv.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _SWSERV_HXX
 
 #ifndef _LINKSRC_HXX
-#include <so3/linksrc.hxx>
+#include <sfx2/linksrc.hxx>
 #endif
 
 class SwBookmark;
@@ -73,7 +73,7 @@ class SwTableNode;
 struct SwPosition;
 class SwPaM;
 
-class SwServerObject : public ::so3::SvLinkSource
+class SwServerObject : public ::sfx2::SvLinkSource
 {
 protected:
     enum ServerModes { BOOKMARK_SERVER, TABLE_SERVER, SECTION_SERVER, NONE_SERVER } eType;

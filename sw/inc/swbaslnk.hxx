@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbaslnk.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,14 +63,14 @@
 
 
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 
 class SwNode;
 class SwCntntNode;
 class SwNodeIndex;
 
-class SwBaseLink : public ::so3::SvBaseLink
+class SwBaseLink : public ::sfx2::SvBaseLink
 {
     SwCntntNode* pCntntNode;
     BOOL bSwapIn : 1;
@@ -80,9 +80,9 @@ class SwBaseLink : public ::so3::SvBaseLink
 protected:
     SwBaseLink() {}
 
-    SwBaseLink( const String& rNm, USHORT nObjectType, ::so3::SvLinkSource* pObj,
+    SwBaseLink( const String& rNm, USHORT nObjectType, ::sfx2::SvLinkSource* pObj,
                  SwCntntNode* pNode = 0 )
-        : ::so3::SvBaseLink( rNm, nObjectType, pObj ), pCntntNode( pNode ),
+        : ::sfx2::SvBaseLink( rNm, nObjectType, pObj ), pCntntNode( pNode ),
         bSwapIn( FALSE ), bNoDataFlag( FALSE ), bIgnoreDataChanged( FALSE )
     {}
 
@@ -90,7 +90,7 @@ public:
     TYPEINFO();
 
     SwBaseLink( USHORT nMode, USHORT nFormat, SwCntntNode* pNode = 0 )
-        : ::so3::SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),
+        : ::sfx2::SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),
         bSwapIn( FALSE ), bNoDataFlag( FALSE ), bIgnoreDataChanged( FALSE )
     {}
     virtual ~SwBaseLink();
