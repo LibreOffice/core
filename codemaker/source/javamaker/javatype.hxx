@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-13 12:04:26 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,27 +70,12 @@
 #include    <codemaker/dependency.hxx>
 #endif
 
-enum BASETYPE
-{
-    BT_INVALID,
-    BT_VOID,
-    BT_ANY,
-    BT_TYPE,
-    BT_BOOLEAN,
-    BT_CHAR,
-    BT_STRING,
-    BT_FLOAT,
-    BT_DOUBLE,
-    BT_OCTET,
-    BT_BYTE,
-    BT_SHORT,
-    BT_LONG,
-    BT_HYPER,
-    BT_UNSIGNED_SHORT,
-    BT_UNSIGNED_LONG,
-    BT_UNSIGNED_HYPER
-};
+#include "codemaker/options.hxx"
 
+#include "registry/reader.hxx"
+#include "registry/types.h"
+
+namespace codemaker { struct ExceptionTreeNode; }
 
 enum JavaTypeDecl
 {
@@ -107,6 +92,7 @@ static const sal_Int32 UIT_ONEWAY    = 0x00000010;
 static const sal_Int32 UIT_CONST     = 0x00000020;
 static const sal_Int32 UIT_ANY       = 0x00000040;
 static const sal_Int32 UIT_INTERFACE = 0x00000080;
+static const sal_Int32 UIT_BOUND     = 0x00000100;
 
 enum UnoTypeInfo
 {
@@ -162,7 +148,7 @@ class FileStream;
 class JavaType
 {
 public:
-    JavaType(TypeReader& typeReader,
+    JavaType(typereg::Reader& typeReader,
              const ::rtl::OString& typeName,
              const TypeManager& typeMgr,
              const TypeDependency& typeDependencies);
@@ -170,24 +156,18 @@ public:
     virtual ~JavaType();
 
     virtual sal_Bool dump(JavaOptions* pOptions) throw( CannotDumpException );
-    virtual sal_Bool dumpDependedTypes(JavaOptions* pOptions)  throw( CannotDumpException );
+    void dumpDependedTypes(JavaOptions * options);
     virtual sal_Bool dumpFile(FileStream& o) throw( CannotDumpException ) { return sal_True; }
 
     void dumpPackage(FileStream& o, sal_Bool bFullScope = sal_False);
 
-    virtual void dumpDepImports(FileStream& o, const ::rtl::OString& typeName);
-
     virtual void dumpType(FileStream& o, const ::rtl::OString& type) throw( CannotDumpException );
-    ::rtl::OString getBaseType(const ::rtl::OString& type);
     void dumpTypeInit(FileStream& o, const ::rtl::OString& name, const ::rtl::OString& type);
-    BASETYPE isBaseType(const ::rtl::OString& type);
     sal_Bool isUnsigned(const ::rtl::OString& type);
     sal_Bool isAny(const ::rtl::OString& type);
     sal_Bool isInterface(const ::rtl::OString& type);
 
     void    dumpConstantValue(FileStream& o, sal_uInt16 index);
-
-    sal_uInt32  getMemberCount();
 
     // only used for structs and exceptions
     sal_Bool    dumpMemberConstructor(FileStream& o);
@@ -201,14 +181,19 @@ public:
     ::rtl::OString  indent();
     ::rtl::OString  indent(sal_uInt32 num);
 protected:
-    ::rtl::OString  checkSpecialJavaType(const ::rtl::OString& type);
+    rtl::OString resolveTypedefs(rtl::OString const & unoType);
+
+    rtl::OString unfoldType(rtl::OString const & unoType, sal_Int32 * rank = 0);
+
     ::rtl::OString  checkRealBaseType(const ::rtl::OString& type);
+
+    virtual rtl::OString translateTypeName() { return m_typeName; }
 
 protected:
     sal_uInt32          m_indentLength;
     ::rtl::OString      m_typeName;
     ::rtl::OString      m_name;
-    TypeReader          m_reader;
+    typereg::Reader     m_reader;
     TypeManager&        m_typeMgr;
     TypeDependency      m_dependencies;
 };
@@ -216,7 +201,7 @@ protected:
 class InterfaceType : public JavaType
 {
 public:
-    InterfaceType(TypeReader& typeReader,
+    InterfaceType(typereg::Reader& typeReader,
                  const ::rtl::OString& typeName,
                  const TypeManager& typeMgr,
                  const TypeDependency& typeDependencies);
@@ -229,12 +214,18 @@ public:
     void        dumpMethods(FileStream& o, UnoInfoList* pUnoInfos);
 
     void        dumpUnoInfo(FileStream& o, const UnoInfo& unoInfo, sal_Int32 * index);
+
+private:
+    void dumpExceptionSpecification(FileStream & out, sal_uInt16 methodIndex);
+
+    void dumpAttributeExceptionSpecification(
+        FileStream & out, rtl::OUString const & name, RTMethodMode sort);
 };
 
 class ModuleType : public JavaType
 {
 public:
-    ModuleType(TypeReader& typeReader,
+    ModuleType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
                const TypeManager& typeMgr,
                const TypeDependency& typeDependencies);
@@ -248,7 +239,7 @@ public:
 class ConstantsType : public JavaType
 {
 public:
-    ConstantsType(TypeReader& typeReader,
+    ConstantsType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
                const TypeManager& typeMgr,
                const TypeDependency& typeDependencies);
@@ -261,7 +252,7 @@ public:
 class StructureType : public JavaType
 {
 public:
-    StructureType(TypeReader& typeReader,
+    StructureType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
                   const TypeManager& typeMgr,
                   const TypeDependency& typeDependencies);
@@ -274,7 +265,7 @@ public:
 class ExceptionType : public JavaType
 {
 public:
-    ExceptionType(TypeReader& typeReader,
+    ExceptionType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
                   const TypeManager& typeMgr,
                   const TypeDependency& typeDependencies);
@@ -288,7 +279,7 @@ public:
 class EnumType : public JavaType
 {
 public:
-    EnumType(TypeReader& typeReader,
+    EnumType(typereg::Reader& typeReader,
               const ::rtl::OString& typeName,
               const TypeManager& typeMgr,
               const TypeDependency& typeDependencies);
@@ -301,7 +292,7 @@ public:
 class TypeDefType : public JavaType
 {
 public:
-    TypeDefType(TypeReader& typeReader,
+    TypeDefType(typereg::Reader& typeReader,
               const ::rtl::OString& typeName,
               const TypeManager& typeMgr,
               const TypeDependency& typeDependencies);
@@ -311,6 +302,42 @@ public:
     sal_Bool    dump(JavaOptions* pOptions) throw( CannotDumpException );
 };
 
+class ServiceType: public JavaType {
+public:
+    ServiceType(
+        typereg::Reader & reader, rtl::OString const & name,
+        TypeManager const & manager, TypeDependency const & dependencies):
+        JavaType(reader, name, manager, dependencies) {}
+
+    bool isSingleInterfaceBased();
+
+    virtual sal_Bool dumpFile(FileStream & out) throw (CannotDumpException);
+
+private:
+    virtual rtl::OString translateTypeName();
+
+    void dumpCatchClauses(
+        FileStream & out, codemaker::ExceptionTreeNode const * node);
+
+    void dumpAny(
+        FileStream & out, rtl::OString const & javaExpression,
+        rtl::OString const & unoType);
+};
+
+class SingletonType: public JavaType {
+public:
+    SingletonType(
+        typereg::Reader & reader, rtl::OString const & name,
+        TypeManager const & manager, TypeDependency const & dependencies):
+        JavaType(reader, name, manager, dependencies) {}
+
+    bool isInterfaceBased();
+
+    virtual sal_Bool dumpFile(FileStream & out) throw (CannotDumpException);
+
+private:
+    virtual rtl::OString translateTypeName();
+};
 
 sal_Bool produceType(const ::rtl::OString& typeName,
                      TypeManager& typeMgr,
