@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-26 16:10:09 $
+ *  last change: $Author: jbu $ $Date: 2001-03-14 17:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <osl/diagnose.h>
 /*#include <osl/signal.h>*/
 #include <osl/thread.h>
+#include <osl/interlck.h>
+
+#include "sockimpl.h"
 
 #define PIPEDEFAULTPATH     "/tmp"
 #define PIPEALTERNATEPATH   "/var/tmp"
@@ -78,20 +81,6 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
 /*#define DEBUG_OSL_PIPE*/
 /*#define TRACE_OSL_PIPE*/
-
-
-/*****************************************************************************/
-/* enum oslPipeImpl */
-/*****************************************************************************/
-
-typedef struct _oslPipeImpl {
-    int  m_Socket;
-    sal_Char m_Name[PATH_MAX + 1];
-#if defined(LINUX)
-    sal_Bool m_bIsAccepting;
-    sal_Bool m_bIsInShutdown;
-#endif
-} oslPipeImpl;
 
 
 /*****************************************************************************/
@@ -157,16 +146,18 @@ static oslPipeError osl_PipeErrorFromNative(int nativeType)
 /* osl_create/destroy-PipeImpl */
 /*****************************************************************************/
 
-oslPipeImpl* __osl_createPipeImpl()
+oslPipe __osl_createPipeImpl()
 {
-    oslPipeImpl* pPipeImpl;
+    oslPipe pPipeImpl;
 
-    pPipeImpl = (oslPipeImpl*)calloc(1, sizeof(oslPipeImpl));
+    pPipeImpl = (oslPipe)calloc(1, sizeof(struct oslPipeImpl));
+    pPipeImpl->m_nRefCount =1;
+    pPipeImpl->m_bClosed = sal_False;
 
-    return (pPipeImpl);
+    return pPipeImpl;
 }
 
-void __osl_destroyPipeImpl(oslPipeImpl *pImpl)
+void __osl_destroyPipeImpl(oslPipe pImpl)
 {
     if (pImpl != NULL)
         free(pImpl);
@@ -210,7 +201,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     struct sockaddr_un addr;
 
     sal_Char     name[PATH_MAX + 1];
-    oslPipeImpl* pPipeImpl;
+    oslPipe  pPipe;
 
     if (access(PIPEDEFAULTPATH, O_RDWR) == 0)
     {
@@ -241,24 +232,24 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
 
     /* alloc memory */
-    pPipeImpl= __osl_createPipeImpl();
+    pPipe= __osl_createPipeImpl();
 
     /* create socket */
-    pPipeImpl->m_Socket = socket(AF_UNIX, SOCK_STREAM, 0);
-    if ( pPipeImpl->m_Socket < 0 )
+    pPipe->m_Socket = socket(AF_UNIX, SOCK_STREAM, 0);
+    if ( pPipe->m_Socket < 0 )
     {
         OSL_TRACE("osl_createPipe socket failed. Errno: %d; %s\n",errno, strerror(errno));
-        __osl_destroyPipeImpl(pPipeImpl);
+        __osl_destroyPipeImpl(pPipe);
         return NULL;
     }
 
-/*    OSL_TRACE("osl_createPipe : new Pipe on fd %i\n",pPipeImpl->m_Socket);*/
+/*    OSL_TRACE("osl_createPipe : new Pipe on fd %i\n",pPipe->m_Socket);*/
 
     /* set close-on-exec flag */
-    if ((Flags = fcntl(pPipeImpl->m_Socket, F_GETFD, 0)) != -1)
+    if ((Flags = fcntl(pPipe->m_Socket, F_GETFD, 0)) != -1)
     {
         Flags |= FD_CLOEXEC;
-        if (fcntl(pPipeImpl->m_Socket, F_SETFD, Flags) == -1)
+        if (fcntl(pPipe->m_Socket, F_SETFD, Flags) == -1)
         {
             OSL_TRACE("osl_createPipe failed changing socket flags. Errno: %d; %s\n",errno,strerror(errno));
         }
@@ -280,11 +271,11 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         if ( ( stat(name, &status) == 0) &&
              ( S_ISSOCK(status.st_mode) || S_ISFIFO(status.st_mode) ) )
         {
-            if ( connect(pPipeImpl->m_Socket,(struct sockaddr *)&addr,len) >= 0 )
+            if ( connect(pPipe->m_Socket,(struct sockaddr *)&addr,len) >= 0 )
             {
                 OSL_TRACE("osl_createPipe : Pipe already in use. Errno: %d; %s\n",errno,strerror(errno));
-                close (pPipeImpl->m_Socket);
-                __osl_destroyPipeImpl(pPipeImpl);
+                close (pPipe->m_Socket);
+                __osl_destroyPipeImpl(pPipe);
                 return NULL;
             }
 
@@ -292,93 +283,94 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         }
 
         /* ok, fs clean */
-        if ( bind(pPipeImpl->m_Socket, (struct sockaddr *)&addr, len) < 0 )
+        if ( bind(pPipe->m_Socket, (struct sockaddr *)&addr, len) < 0 )
         {
             OSL_TRACE("osl_createPipe : failed to bind socket. Errno: %d; %s\n",errno,strerror(errno));
-            close (pPipeImpl->m_Socket);
-            __osl_destroyPipeImpl(pPipeImpl);
+            close (pPipe->m_Socket);
+            __osl_destroyPipeImpl(pPipe);
             return NULL;
         }
         chmod(name,S_IRWXU | S_IRWXG |S_IRWXO);
 
 
-        strcpy(pPipeImpl->m_Name, name);
+        strcpy(pPipe->m_Name, name);
 
-        if ( listen(pPipeImpl->m_Socket, 5) < 0 )
+        if ( listen(pPipe->m_Socket, 5) < 0 )
         {
             OSL_TRACE("osl_createPipe failed to listen. Errno: %d; %s\n",errno,strerror(errno));
             unlink(name);   /* remove filesystem entry */
-            close (pPipeImpl->m_Socket);
-            __osl_destroyPipeImpl(pPipeImpl);
+            close (pPipe->m_Socket);
+            __osl_destroyPipeImpl(pPipe);
             return NULL;
         }
 
-        return (pPipeImpl);
+        return (pPipe);
     }
     else
     {   /* osl_pipe_OPEN */
         if ( access(name, F_OK) != -1 )
         {
-            if ( connect( pPipeImpl->m_Socket, (struct sockaddr *)&addr, len) >= 0 )
+            if ( connect( pPipe->m_Socket, (struct sockaddr *)&addr, len) >= 0 )
             {
-                return (pPipeImpl);
+                return (pPipe);
             }
 
             OSL_TRACE("osl_createPipe failed to connect. Errno: %d; %s\n",errno,strerror(errno));
         }
 
-        close (pPipeImpl->m_Socket);
-        __osl_destroyPipeImpl(pPipeImpl);
+        close (pPipe->m_Socket);
+        __osl_destroyPipeImpl(pPipe);
         return NULL;
     }
 
     /* if we reach here something went wrong */
     /* should never come here */
-    close (pPipeImpl->m_Socket);
-    __osl_destroyPipeImpl(pPipeImpl);
+    close (pPipe->m_Socket);
+    __osl_destroyPipeImpl(pPipe);
     return NULL;
 }
 
 /*****************************************************************************/
 /* osl_copyPipe  */
 /*****************************************************************************/
-oslPipe SAL_CALL osl_copyPipe(oslPipe Pipe)
+oslPipe SAL_CALL osl_copyPipe(oslPipe pPipe)
 {
-    oslPipeImpl* pPipeImpl;
-    oslPipeImpl* pParamPipeImpl;
-
-    OSL_ASSERT(Pipe);
-
-    if ( Pipe == 0 )
-    {
-        return 0;
-    }
-
-    /* alloc memory */
-    pPipeImpl= __osl_createPipeImpl();
-
-    OSL_ASSERT(pPipeImpl);
-
-    if ( pPipeImpl == 0 )
-    {
-        return 0;
-    }
-
-    pParamPipeImpl= (oslPipeImpl*)Pipe;
-
-    /* copy socket */
-    memcpy(pPipeImpl, pParamPipeImpl, sizeof(oslPipeImpl));
-
-    return (oslPipe)pPipeImpl;
+    osl_acceptPipe( pPipe );
+    return pPipe;
 }
 
-
-/*****************************************************************************/
-/* osl_destroyPipe  */
-/*****************************************************************************/
-void SAL_CALL osl_destroyPipe(oslPipe Pipe)
+void SAL_CALL osl_acquirePipe( oslPipe pPipe )
 {
-    oslPipeImpl* pPipeImpl;
+    osl_incrementInterlockedCount( &(pPipe->m_nRefCount) );
+}
+
+void SAL_CALL osl_releasePipe( oslPipe pPipe )
+{
+
+    if( 0 == pPipe )
+        return;
+
+    if( 0 == osl_decrementInterlockedCount( &(pPipe->m_nRefCount) ) )
+    {
+        if( ! pPipe->m_bClosed )
+            osl_closePipe( pPipe );
+
+        /* REMOVE THIS HACK AS SOON AS osl_closePipe MUST change has been applied ! */
+#ifdef LINUX
+        if ( pPipe->m_bIsAccepting == sal_False )
+        {
+#endif
+            /* free memory */
+            __osl_destroyPipeImpl(pPipe);
+#ifdef LINUX
+        }
+#endif
+        __osl_destroyPipeImpl( pPipe );
+    }
+}
+
+void SAL_CALL osl_closePipe( oslPipe pPipe )
+{
     int nRet;
 #if defined(LINUX)
     size_t     len;
@@ -387,27 +379,29 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
 #endif
     int ConnFD;
 
-    /* socket already invalid */
-    if( Pipe == NULL )
-        return;
-
-    OSL_TRACE("In  osl_destroyPipe");
-
-    pPipeImpl = (oslPipeImpl*) Pipe;
-
-    ConnFD = pPipeImpl->m_Socket;
-#if defined(LINUX)
-    if ( pPipeImpl->m_bIsAccepting == sal_True )
+    if( ! pPipe )
     {
-        pPipeImpl->m_bIsInShutdown = sal_True;
-        pPipeImpl->m_Socket = -1;
+        return;
+    }
+
+    if( pPipe->m_bClosed )
+    {
+        return;
+    }
+
+    ConnFD = pPipe->m_Socket;
+#if defined(LINUX)
+    if ( pPipe->m_bIsAccepting == sal_True )
+    {
+        pPipe->m_bIsInShutdown = sal_True;
+        pPipe->m_Socket = -1;
         fd = socket(AF_UNIX, SOCK_STREAM, 0);
         memset(&addr, 0, sizeof(addr));
 
-        OSL_TRACE("osl_destroyPipe : Pipe Name '%s'",pPipeImpl->m_Name);
+        OSL_TRACE("osl_destroyPipe : Pipe Name '%s'",pPipe->m_Name);
 
         addr.sun_family = AF_UNIX;
-        strcpy(addr.sun_path, pPipeImpl->m_Name);
+        strcpy(addr.sun_path, pPipe->m_Name);
         len = sizeof(addr.sun_family) + strlen(addr.sun_path);
 
         nRet = connect( fd, (struct sockaddr *)&addr, len);
@@ -434,51 +428,47 @@ void SAL_CALL osl_destroyPipe(oslPipe Pipe)
         OSL_TRACE("close in destroyPipe failed : '%s'\n",strerror(errno));
     }
     /* remove filesystem entry */
-    if ( strlen(pPipeImpl->m_Name) > 0 )
+    if ( strlen(pPipe->m_Name) > 0 )
     {
-        unlink(pPipeImpl->m_Name);
+        unlink(pPipe->m_Name);
     }
 
-#ifdef LINUX
-    if ( pPipeImpl->m_bIsAccepting == sal_False )
-    {
-#endif
-        /* free memory */
-        __osl_destroyPipeImpl(pPipeImpl);
-#ifdef LINUX
-    }
-#endif
+/*      OSL_TRACE("Out osl_destroyPipe");     */
+}
 
-    OSL_TRACE("Out osl_destroyPipe");
+
+/*****************************************************************************/
+/* osl_destroyPipe  */
+/*****************************************************************************/
+void SAL_CALL osl_destroyPipe(oslPipe pPipe)
+{
+    osl_releasePipe( pPipe );
 }
 
 /*****************************************************************************/
 /* osl_acceptPipe  */
 /*****************************************************************************/
-oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe)
+oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 {
     int          s;
-    oslPipeImpl* pPipeImpl;
-    oslPipeImpl* pParamPipeImpl;
-    OSL_ASSERT(Pipe);
+    oslPipe pAcceptedPipe;
+    OSL_ASSERT(pPipe);
 
-    if ( Pipe == 0 )
+    if ( pPipe == 0 )
     {
         return 0;
     }
 
-    pParamPipeImpl= (oslPipeImpl*)Pipe;
-
-    OSL_ASSERT(strlen(pParamPipeImpl->m_Name) > 0);
+    OSL_ASSERT(strlen(pPipe->m_Name) > 0);
 
 #if defined(LINUX)
     pParamPipeImpl->m_bIsAccepting = sal_True;
 #endif
 
-    s = accept(pParamPipeImpl->m_Socket, NULL, NULL);
+    s = accept(pPipe->m_Socket, NULL, NULL);
 
 #if defined(LINUX)
-    pParamPipeImpl->m_bIsAccepting = sal_False;
+    pPipe->m_bIsAccepting = sal_False;
 #endif
 
     if ( s < 0 )
@@ -490,7 +480,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe)
     }
 
 #if defined(LINUX)
-    if ( pParamPipeImpl->m_bIsInShutdown == sal_True )
+    if ( pPipe->m_bIsInShutdown == sal_True )
     {
         close(s);
         __osl_destroyPipeImpl(pParamPipeImpl);
@@ -504,59 +494,45 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe)
     else
     {
         /* alloc memory */
-        pPipeImpl= __osl_createPipeImpl();
+        pAcceptedPipe= __osl_createPipeImpl();
 
-        OSL_ASSERT(pPipeImpl);
+        OSL_ASSERT(pAcceptedPipe);
 
-        if(pPipeImpl==NULL)
+        if(pAcceptedPipe==NULL)
             return NULL;
 
-        pPipeImpl->m_Socket = s;
+        pAcceptedPipe->m_Socket = s;
     }
 
-
-    return (oslPipe)pPipeImpl;
+    return pAcceptedPipe;
 }
 
 /*****************************************************************************/
 /* osl_receivePipe  */
 /*****************************************************************************/
-sal_Int32 SAL_CALL osl_receivePipe(oslPipe Pipe,
+sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
                         void* pBuffer,
-                        sal_uInt32 BytesToRead)
+                        sal_Int32 BytesToRead)
 {
-    oslPipeImpl* pPipeImpl;
     int nRet = 0;
 
-    OSL_ASSERT(Pipe);
+    OSL_ASSERT(pPipe);
 
-    if ( Pipe == 0 )
+    if ( pPipe == 0 )
     {
         OSL_TRACE("osl_receivePipe : Invalid socket");
         errno=EINVAL;
         return -1;
     }
 
-    pPipeImpl= (oslPipeImpl*)Pipe;
-
-/*    OSL_TRACE("osl_receivePipe : receiving %i bytes on fd %i\n",BytesToRead,pPipeImpl->m_Socket);*/
-
-    nRet = recv(pPipeImpl->m_Socket,
+    nRet = recv(pPipe->m_Socket,
                   (sal_Char*)pBuffer,
                   BytesToRead, 0);
-
 
     if ( nRet <= 0 )
     {
         OSL_TRACE("osl_receivePipe failed : %i '%s'",nRet,strerror(errno));
     }
-
-/*      fprintf(stderr,"osl_receivePipe : received "); */
-/*      for ( i = 0 ; i < nRet  ; i++ ) */
-/*      { */
-/*          fprintf(stderr," '%c'",((sal_Char*)pBuffer)[i]); */
-/*      } */
-/*      fprintf(stderr,"\n"); */
 
       return nRet;
 }
@@ -565,27 +541,22 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe Pipe,
 /*****************************************************************************/
 /* osl_sendPipe  */
 /*****************************************************************************/
-sal_Int32 SAL_CALL osl_sendPipe(oslPipe Pipe,
+sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
                        const void* pBuffer,
-                       sal_uInt32 BytesToSend)
+                       sal_Int32 BytesToSend)
 {
-    oslPipeImpl* pPipeImpl;
     int nRet=0;
 
-    OSL_ASSERT(Pipe);
+    OSL_ASSERT(pPipe);
 
-    if ( Pipe == 0 )
+    if ( pPipe == 0 )
     {
         OSL_TRACE("osl_sendPipe : Invalid socket");
         errno=EINVAL;
         return -1;
     }
 
-    pPipeImpl= (oslPipeImpl*)Pipe;
-
-/*    OSL_TRACE("osl_sendPipe : sending %i bytes on fd %i\n",BytesToSend,pPipeImpl->m_Socket);*/
-
-    nRet = send(pPipeImpl->m_Socket,
+    nRet = send(pPipe->m_Socket,
                   (sal_Char*)pBuffer,
                   BytesToSend, 0);
 
@@ -595,13 +566,6 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe Pipe,
         OSL_TRACE("osl_sendPipe failed : %i '%s'",nRet,strerror(errno));
     }
 
-/*      fprintf(stderr,"osl_sendPipe : sended "); */
-/*      for ( i = 0 ; i < nRet  ; i++ ) */
-/*      { */
-/*          fprintf(stderr," '%c'",((sal_Char*)pBuffer)[i]); */
-/*      } */
-/*      fprintf(stderr,"\n"); */
-
      return nRet;
 }
 
@@ -609,9 +573,62 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe Pipe,
 /*****************************************************************************/
 /* osl_getLastPipeError  */
 /*****************************************************************************/
-oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe)
+oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
 {
     return ERROR_FROM_NATIVE(errno);
+}
+
+
+sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32 n )
+{
+    /* loop until all desired bytes were send or an error occured */
+    sal_Int32 BytesSend= 0;
+    sal_Int32 BytesToSend= n;
+
+    OSL_ASSERT(pPipe);
+    while (BytesToSend > 0)
+    {
+        sal_Int32 RetVal;
+
+        RetVal= osl_sendPipe(pPipe, pBuffer, BytesToSend);
+
+        /* error occured? */
+        if(RetVal <= 0)
+        {
+            break;
+        }
+
+        BytesToSend -= RetVal;
+        BytesSend += RetVal;
+        pBuffer= (sal_Char*)pBuffer + RetVal;
+    }
+
+    return BytesSend;
+}
+
+sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
+{
+    /* loop until all desired bytes were read or an error occured */
+    sal_Int32 BytesRead= 0;
+    sal_Int32 BytesToRead= n;
+
+    OSL_ASSERT( pPipe );
+    while (BytesToRead > 0)
+    {
+        sal_Int32 RetVal;
+        RetVal= osl_receivePipe(pPipe, pBuffer, BytesToRead);
+
+        /* error occured? */
+        if(RetVal <= 0)
+        {
+            break;
+        }
+
+        BytesToRead -= RetVal;
+        BytesRead += RetVal;
+        pBuffer= (sal_Char*)pBuffer + RetVal;
+    }
+    return BytesRead;
 }
 
 

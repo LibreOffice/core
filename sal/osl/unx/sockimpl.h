@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sockimpl.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-26 16:11:46 $
+ *  last change: $Author: jbu $ $Date: 2001-03-14 17:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef _OSL_SOCKETIMPL_H_
 #define _OSL_SOCKETIMPL_H_
 
+#include <osl/pipe.h>
 #include <osl/socket.h>
+#include <osl/interlck.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -70,19 +72,37 @@ extern "C" {
 
 typedef void* (*oslCloseCallback) (void*);
 
-typedef struct _oslSocketImpl {
+struct oslSocketImpl {
     int                 m_Socket;
     int                 m_nLastError;
     oslCloseCallback    m_CloseCallback;
     void*               m_CallbackArg;
+    oslInterlockedCount m_nRefCount;
 #if defined(LINUX)
     sal_Bool            m_bIsAccepting;
     sal_Bool            m_bIsInShutdown;
 #endif
-} oslSocketImpl;
+};
 
-oslSocketImpl* __osl_createSocketImpl(int Socket);
-void __osl_destroySocketImpl(oslSocketImpl *pImpl);
+struct oslSocketAddrImpl
+{
+    sal_Int32 m_nRefCount;
+    struct sockaddr m_sockaddr;
+};
+
+struct oslPipeImpl {
+    int  m_Socket;
+    sal_Char m_Name[PATH_MAX + 1];
+    oslInterlockedCount m_nRefCount;
+    sal_Bool m_bClosed;
+#if defined(LINUX)
+    sal_Bool m_bIsAccepting;
+    sal_Bool m_bIsInShutdown;
+#endif
+};
+
+oslSocket __osl_createSocketImpl(int Socket);
+void __osl_destroySocketImpl(oslSocket pImpl);
 
 #ifdef __cplusplus
 }

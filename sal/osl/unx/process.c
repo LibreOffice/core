@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-26 16:17:49 $
+ *  last change: $Author: jbu $ $Date: 2001-03-14 17:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,15 +94,8 @@
 #include "secimpl.h"
 
 
-
-
-#define FIFO_MODE       (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
 #define MAX_ARGS        255
 #define MAX_ENVS        255
-
-#define PIPEDEFAULTPATH     "/tmp"
-#define PIPEALTERNATEPATH   "/var/tmp"
-#define PIPENAMEMASK        "OSL_IOT_%u"
 
 #if defined(MACOSX) || defined(IORESOURCE_TRANSFER_BSD)
 #define CONTROLLEN (sizeof(struct cmsghdr) + sizeof(int))
@@ -115,21 +108,6 @@
  *                  Data Type Definition
  *
  ******************************************************************************/
-
-typedef enum {
-    MSG_DATA,
-    MSG_END,
-    MSG_ACK,
-    MSG_REL,
-    MSG_UNKNOWN
-} MessageType;
-
-typedef struct {
-    MessageType         m_Type;
-    oslDescriptorFlag   m_Flags;
-    oslDescriptorType   m_Data;
-    int                 m_Value;
-} Message;
 
 typedef struct {
     int  m_hPipe;
@@ -150,11 +128,6 @@ typedef struct {
     oslProcessImpl*  m_pProcImpl;
 } ProcessData;
 
-typedef struct _oslSocketCallbackArg {
-    int     m_ident;
-    Pipe*   m_pipe;
-} oslSocketCallbackArg;
-
 typedef struct _oslPipeImpl {
     int      m_Socket;
     sal_Char m_Name[PATH_MAX + 1];
@@ -168,14 +141,6 @@ typedef struct _oslPipeImpl {
  *****************************************************************************/
 
 static sal_Char *getCmdLine();
-static Pipe* openPipe(pid_t pid);
-static void closePipe(Pipe* pipe);
-static sal_Bool connectPipe(Pipe* pipe);
-static int send_fd(Pipe* pipe, int fd);
-static int recv_fd(Pipe* pipe);
-static void* socketCloseCallback(void* pArg);
-static sal_Bool sendIOResources(Pipe* pipe, oslIOResource ioRes[]);
-static void ChildStatusProc(void *pData);
 
 oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszArguments[],
@@ -616,511 +581,6 @@ oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max)
     return osl_Process_E_None;
 }
 
-
-/******************************************************************************
- *
- *                  Functions pipe stuff and io resource transfer
- *
- *****************************************************************************/
-
-static Pipe* openPipe(pid_t pid)
-{
-    Pipe* ppipe = NULL;
-
-#if defined(IORESOURCE_TRANSFER_SYSV) || defined(IORESOURCE_TRANSFER_BSD)
-      int fd;
-    sal_Char name[PATH_MAX + 1];
-
-      if (access(PIPEDEFAULTPATH, O_RDWR) == 0)
-          strcpy(name, PIPEDEFAULTPATH);
-      else
-          strcpy(name, PIPEALTERNATEPATH);
-
-      strcat(name, "/");
-
-      sprintf(&name[strlen(name)], PIPENAMEMASK, pid);
-
-#ifdef IORESOURCE_TRANSFER_BSD
-    fd = socket(AF_UNIX, SOCK_STREAM, 0);
-
-    if (fd != -1)
-    {
-        int                 len;
-        struct sockaddr_un  addr;
-        struct stat         status;
-
-        memset(&addr, 0, sizeof(addr));
-
-        addr.sun_family = AF_UNIX;
-        strcpy(addr.sun_path, name);
-        len = sizeof(addr.sun_family) + strlen(addr.sun_path);
-
-        if (access(name, O_RDWR) < 0)
-        {
-            int msk;
-
-            /* check if there exists an orphan filesystem entry */
-            if ((stat(name, &status) == 0) &&
-                (S_ISSOCK(status.st_mode) || S_ISFIFO(status.st_mode)) &&
-                (kill((pid_t)status.st_atime, 0) < 0))
-                unlink(name);
-
-            /* try to create a named file a base for the pipe */
-            msk = umask(0);
-            if (bind(fd, (const struct sockaddr *)&addr, len) >= 0)
-            {
-                struct utimbuf times;
-
-                /* set access time to our pid for marking the owner */
-                stat(name, &status);
-                times.actime  = (time_t)getpid();
-                times.modtime = status.st_mtime;
-                utime(name, &times);
-
-                if (listen(fd, 5) >= 0)
-                {
-                    ppipe = (Pipe*) malloc(sizeof(Pipe));
-
-                    ppipe->m_hConn = fd;
-                    ppipe->m_hPipe = -1;
-
-                    strncpy(ppipe->m_Name, name, sizeof(ppipe->m_Name));
-                }
-                else
-                {
-                    unlink(name);   /* remove filesystem entry */
-                }
-            }
-            umask(msk);
-        }
-        else
-        {
-            /* connect to socket */
-            if (connect(fd, (const struct sockaddr *)&addr, len) >= 0)
-            {
-                ppipe = (Pipe*) malloc(sizeof(Pipe));
-                ppipe->m_hPipe = fd;
-                ppipe->m_hConn = -1;
-                ppipe->m_Name[0] = '\0';
-            }
-        }
-
-        if (ppipe == NULL)
-            close(fd);
-    }
-#endif
-
-#ifdef IORESOURCE_TRANSFER_SYSV
-    if (access(name, O_RDWR) < 0)
-    {
-        int pd[2];
-        int msk;
-
-        /* try to create a named file a base for the pipe */
-        msk = umask(0);
-        fd = creat(name, FIFO_MODE);
-        umask(msk);
-
-        if (fd >= 0)
-            close(fd);
-        else
-            return 0;
-
-        /* create pipe */
-        if (pipe(pd) < 0)
-            return 0;
-
-        /* bind pipe to name */
-        if (((fd = ioctl(pd[1], I_PUSH, "connld" )) < 0) ||
-            (fattach(pd[1], name) < 0 ))
-            return 0;
-
-        ppipe = (Pipe*) malloc(sizeof(Pipe));
-
-        ppipe->m_hConn = pd[0];
-        ppipe->m_hPipe = -1;
-
-        strncpy(ppipe->m_Name, name, sizeof(ppipe->m_Name));
-    }
-    else
-    {
-        ppipe = (Pipe*) malloc(sizeof(Pipe));
-        ppipe->m_hPipe = open(name, O_RDWR);
-        ppipe->m_hConn = -1;
-        ppipe->m_Name[0] = '\0';
-    }
-#endif
-
-#endif
-
-    return ppipe;
-}
-
-static void closePipe(Pipe* pipe)
-{
-
-#if defined(IORESOURCE_TRANSFER_SYSV) || defined(IORESOURCE_TRANSFER_BSD)
-    if (pipe->m_hPipe != -1)
-        close(pipe->m_hPipe);
-
-    if (pipe->m_hConn!= -1)
-    {
-        close(pipe->m_hConn);
-
-        if (pipe->m_Name[0] != '\0')
-            unlink(pipe->m_Name);
-    }
-
-    free(pipe);
-#endif
-
-}
-
-static sal_Bool connectPipe(Pipe* pipe)
-{
-
-#ifdef IORESOURCE_TRANSFER_BSD
-    int fd;
-
-    if ((fd = accept(pipe->m_hConn, NULL, NULL)) < 0)
-        return(False);
-
-    pipe->m_hPipe = fd;
-
-    return sal_True;
-#endif
-
-#ifdef IORESOURCE_TRANSFER_SYSV
-    struct strrecvfd recvfd;
-
-    if (ioctl(pipe->m_hConn, I_RECVFD, &recvfd) < 0)
-        return sal_False;
-
-    pipe->m_hPipe = recvfd.fd;
-
-    return sal_True;
-#endif
-
-#if !defined(IORESOURCE_TRANSFER_SYSV) && !defined(IORESOURCE_TRANSFER_BSD)
-    return sal_False;
-#endif
-
-}
-
-static int send_fd(Pipe* pipe, int fd)
-{
-
-#if defined(IORESOURCE_TRANSFER_SYSV) || defined(IORESOURCE_TRANSFER_BSD)
-
-#ifdef IORESOURCE_TRANSFER_BSD
-    struct msghdr msghdr;
-    struct iovec iov[1];
-    char buffer[2];
-
-    struct cmsghdr* cmptr = (struct cmsghdr*)malloc(CONTROLLEN);
-
-    iov[0].iov_base = buffer;
-    iov[0].iov_len = 2;
-    msghdr.msg_iov = iov;
-    msghdr.msg_iovlen = 1;
-    msghdr.msg_name = NULL;
-    msghdr.msg_namelen = 0;
-    msghdr.msg_control = (caddr_t) cmptr;
-    msghdr.msg_controllen = CONTROLLEN;
-
-    cmptr->cmsg_level = SOL_SOCKET;
-    cmptr->cmsg_type = SCM_RIGHTS;
-    cmptr->cmsg_len = CONTROLLEN;
-    *(int*)CMSG_DATA(cmptr) = fd;
-
-    if (sendmsg(pipe->m_hPipe, &msghdr, 0) < 0)
-    {
-        free(cmptr);
-        return(-1);
-    }
-
-    free(cmptr);
-#endif
-
-#ifdef IORESOURCE_TRANSFER_SYSV
-    if (ioctl(pipe->m_hPipe, I_SENDFD, fd) < 0)
-        return(-1);
-#endif
-
-    return(0);
-#endif
-
-#if !defined(IORESOURCE_TRANSFER_SYSV) && !defined(IORESOURCE_TRANSFER_BSD)
-    return(-1);
-#endif
-}
-
-static int recv_fd(Pipe* pipe)
-{
-    int newFd = -1;
-
-#if defined(IORESOURCE_TRANSFER_SYSV) || defined(IORESOURCE_TRANSFER_BSD)
-
-#ifdef IORESOURCE_TRANSFER_BSD
-    struct msghdr msghdr;
-    struct iovec iov[1];
-    char buffer[PATH_MAX];
-
-    struct cmsghdr* cmptr = (struct cmsghdr*)malloc(CONTROLLEN);
-
-    iov[0].iov_base = buffer;
-    iov[0].iov_len = sizeof(buffer);
-    msghdr.msg_name = NULL;
-    msghdr.msg_namelen = 0;
-    msghdr.msg_iov = iov;
-    msghdr.msg_iovlen = 1;
-    msghdr.msg_control = (caddr_t) cmptr;
-    msghdr.msg_controllen = CONTROLLEN;
-
-    if (recvmsg(pipe->m_hPipe, &msghdr, 0) >= 0)
-    {
-        newFd = *(int*) CMSG_DATA(cmptr);
-    }
-
-    free(cmptr);
-#endif
-
-#ifdef IORESOURCE_TRANSFER_SYSV
-    struct strrecvfd recvfd;
-
-    if (ioctl(pipe->m_hPipe, I_RECVFD, &recvfd) >= 0)
-    {
-        newFd = recvfd.fd;
-    }
-#endif
-
-#endif
-
-    return(newFd);
-}
-
-/* Callback is called when the socket is closed by the owner */
-static void* socketCloseCallback(void* pArg)
-{
-    oslSocketCallbackArg* callbackArg = (oslSocketCallbackArg*) pArg;
-    Message msg;
-
-    msg.m_Type      = MSG_REL;
-    msg.m_Data      = osl_Process_TypeSocket;
-    msg.m_Flags     = 0;
-    msg.m_Value = callbackArg->m_ident;
-    write(callbackArg->m_pipe->m_hPipe, &msg, sizeof(msg));
-
-    if (read(callbackArg->m_pipe->m_hPipe, &msg, sizeof(msg)) == sizeof(msg))
-    {
-        if (msg.m_Type == MSG_END)
-            closePipe(callbackArg->m_pipe);
-    }
-
-    free(callbackArg);
-
-    return NULL;
-}
-
-static sal_Bool sendIOResources(Pipe* pipe, oslIOResource ioRes[])
-{
-
-#if defined(IORESOURCE_TRANSFER_SYSV) || defined(IORESOURCE_TRANSFER_BSD)
-    int                     socket;
-    Message                 msg;
-    int                     i = 0;
-    oslSocketCallbackArg*   callbackArg;
-
-    if (connectPipe(pipe))
-    {
-        while (ioRes[i].Type != osl_Process_TypeNone)
-        {
-            switch (ioRes[i].Type)
-            {
-                case osl_Process_TypeSocket:
-                {
-                    socket = ((oslSocketImpl *)(ioRes[0].Descriptor.Socket))->m_Socket;
-
-                    if (ioRes[i].Flags & osl_Process_DFWAIT)
-                    {
-                        callbackArg = (oslSocketCallbackArg*) malloc(sizeof(oslSocketCallbackArg));
-
-                        callbackArg->m_ident = i;
-                        callbackArg->m_pipe      = pipe;
-
-/*                          osl_registerSocketCallBack(ioRes[i].Descriptor.Socket,&socketCloseCallback,callbackArg); */
-
-                          ((oslSocketImpl *)(ioRes[i].Descriptor.Socket))->m_CloseCallback = &socketCloseCallback;
-                          ((oslSocketImpl *)(ioRes[i].Descriptor.Socket))->m_CallbackArg = callbackArg;
-                    }
-
-                    msg.m_Type  = MSG_DATA;
-                    msg.m_Data  = osl_Process_TypeSocket;
-                    msg.m_Flags = ioRes[i].Flags;
-                    msg.m_Value = i;
-
-                    if (write(pipe->m_hPipe, &msg, sizeof(msg)) != sizeof(msg))
-                    {
-                        OSL_TRACE("Write error to pipe while transfering IO-resources, errno=%d (%s)\n", errno, strerror(errno));
-                        return sal_False;
-                    }
-                    else
-                    {
-                        if (send_fd(pipe, socket) < 0)
-                        {
-                            OSL_TRACE("IOCTL error at pipe while transfering IO-resources, errno=%d (%s)\n", errno, strerror(errno));
-                            return sal_False;
-                        }
-                    }
-                    break;
-                }
-
-                default:
-                    OSL_TRACE("Not implemented\n");
-                    OSL_ASSERT(sal_False);
-                    break;
-            }
-
-            i++;
-        }
-
-        msg.m_Type  = MSG_END;
-        msg.m_Data  = osl_Process_TypeNone;
-        msg.m_Flags = 0;
-        msg.m_Value = 0;
-
-        write(pipe->m_hPipe, &msg, sizeof(msg));
-
-        if ((read(pipe->m_hPipe, &msg, sizeof(msg)) == sizeof(msg)) &&
-            ((msg.m_Type == MSG_ACK) || (msg.m_Type == MSG_END)))
-        {
-            if (msg.m_Type == MSG_END)
-                closePipe(pipe);
-
-            return sal_True;
-        }
-        else
-        {
-            closePipe(pipe);
-
-            return sal_False;
-        }
-
-    }
-#endif
-
-    return sal_False;
-}
-
-
-oslProcessError SAL_CALL osl_getIOResources(oslIOResource Resources[], sal_uInt32 Max)
-{
-    oslProcessError ret = osl_Process_E_Unknown;
-
-#if defined(IORESOURCE_TRANSFER_SYSV) || defined(IORESOURCE_TRANSFER_BSD)
-    Message msg;
-    int     wait      = 0;
-    int     i         = 0;
-    int     newFd     = -1;
-    Pipe*   pipe      = NULL;
-/*  sal_Bool acceptMsg = sal_False;*/
-
-    pipe = openPipe(getpid());
-
-    while ((read(pipe->m_hPipe, &msg, sizeof(msg)) == sizeof(msg))
-           && (msg.m_Type != MSG_END))
-    {
-        if (i < (int)Max)
-        {
-            switch (msg.m_Type)
-            {
-                case MSG_DATA:
-                    switch (msg.m_Data)
-                    {
-                        case osl_Process_TypeSocket:
-                            if ((newFd = recv_fd(pipe)) >= 0)
-                            {
-                                oslSocketImpl *pImpl = __osl_createSocketImpl(newFd);
-
-                                OSL_ASSERT(i == msg.m_Value);
-
-                                Resources[i].Type  = osl_Process_TypeSocket;
-                                Resources[i].Flags = msg.m_Flags;
-                                Resources[i].Descriptor.Socket = (oslSocket)pImpl;
-
-                                if (msg.m_Flags & osl_Process_DFWAIT)
-                                    wait++;
-                            }
-
-                            i++;
-
-                            break;
-
-                       default:
-                           OSL_TRACE("Not implemented\n");
-                           OSL_ASSERT(sal_False);
-                           break;
-                    }
-            default:
-                break;
-            }
-        }
-    }
-
-    Resources[i].Type = osl_Process_TypeNone;
-
-    if (msg.m_Type == MSG_END)
-    {
-        if (wait > 0)
-        {
-            msg.m_Type  = MSG_ACK;
-            msg.m_Data  = osl_Process_TypeNone;
-            msg.m_Flags = 0;
-            write(pipe->m_hPipe, &msg, sizeof(msg));
-
-            do
-            {
-                if ((read(pipe->m_hPipe, &msg, sizeof(msg)) != sizeof(msg))
-                    || (msg.m_Type != MSG_REL))
-                    break;
-
-                i = msg.m_Value;
-
-                if (Resources[i].Type != osl_Process_TypeNone)
-                {
-                    OSL_ASSERT(Resources[i].Type == msg.m_Data);
-                    OSL_ASSERT(Resources[i].Flags & osl_Process_DFWAIT);
-
-                    Resources[i].Flags &= ~osl_Process_DFWAIT;
-
-                    if (--wait > 0)
-                    {
-                        msg.m_Type  = MSG_ACK;
-                        msg.m_Data  = osl_Process_TypeNone;
-                        msg.m_Flags = 0;
-                        write(pipe->m_hPipe, &msg, sizeof(msg));
-                    }
-                }
-            }
-            while (wait > 0);
-        }
-
-        msg.m_Type  = MSG_END;
-        msg.m_Data  = osl_Process_TypeNone;
-        msg.m_Flags = 0;
-        write(pipe->m_hPipe, &msg, sizeof(msg));
-
-        ret = osl_Process_E_None;
-    }
-
-    closePipe(pipe);
-
-#endif
-
-    return ret;
-}
-
-
 /******************************************************************************
  *
  *                  New io resource transfer functions
@@ -1208,9 +668,9 @@ sal_Bool sendFdPipe(int PipeFD, int SocketFD)
 }
 
 
-oslSocketImpl* receiveFdPipe(int PipeFD)
+oslSocket receiveFdPipe(int PipeFD)
 {
-    oslSocketImpl* pSocket = 0;
+    oslSocket pSocket = 0;
     struct msghdr msghdr;
     struct iovec iov[1];
     char buffer[PATH_MAX];
@@ -1287,11 +747,8 @@ oslSocketImpl* receiveFdPipe(int PipeFD)
     return pSocket;
 }
 
-sal_Bool osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket)
+sal_Bool osl_sendResourcePipe(oslPipe pPipe, oslSocket pSocket)
 {
-    oslSocketImpl* pSocket = (oslSocketImpl*) Socket;
-    oslPipeImpl* pPipe = (oslPipeImpl*) Pipe;
-
     sal_Bool bRet = sal_False;
 
     if ( pSocket == 0 || pPipe == 0 )
@@ -1305,10 +762,9 @@ sal_Bool osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket)
 }
 
 
-oslSocket osl_receiveResourcePipe(oslPipe Pipe)
+oslSocket osl_receiveResourcePipe(oslPipe pPipe)
 {
-    oslPipeImpl* pPipe = (oslPipeImpl*) Pipe;
-    oslSocketImpl* pSocket=0;
+    oslSocket pSocket=0;
 
     if ( pPipe ==  0 )
     {
@@ -1359,13 +815,13 @@ static void ChildStatusProc(void *pData)
            create the communiction pipe */
         if (data.m_pRes)
         {
-            pid_t   id;
+/*              pid_t   id; */
 
-            while (((i = read(channel[1], &id, sizeof(id))) < 0))
-            {
-                if (errno != EINTR)
-                    break;
-            }
+/*              while (((i = read(channel[1], &id, sizeof(id))) < 0)) */
+/*              { */
+/*                  if (errno != EINTR) */
+/*                      break; */
+/*              } */
         }
 
         if ((data.m_uid != (uid_t)-1) && ((data.m_uid != getuid()) || (data.m_gid != getgid())))
@@ -1421,10 +877,11 @@ static void ChildStatusProc(void *pData)
 
         if (pdata->m_pRes)
         {
-            rpipe = openPipe(pid);
-            write(channel[0], &pid, sizeof(pid));
+/*              jbu: removed
+/*              rpipe = openPipe(pid); */
+/*              write(channel[0], &pid, sizeof(pid)); */
 
-            sendIOResources(rpipe, pdata->m_pRes);
+/*              sendIOResources(rpipe, pdata->m_pRes); */
         }
 
         while (((i = read(channel[0], &status, sizeof(status))) < 0))
