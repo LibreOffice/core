@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:02:35 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ IMPL_LINK( SfxSpecialConfigError_Impl, TimerHdl, Timer*, pTimer )
 //====================================================================
 
 
-SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(0))
+SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 {
     SFX_CHILDWINDOW_REGISTRATION( SID_CUSTOMIZETOOLBOX );
 
