@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jbu $ $Date: 2002-02-15 17:56:04 $
+#   last change: $Author: kz $ $Date: 2004-05-19 10:29:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,10 @@ TARGET  = com_sun_star_lib_uno_adapter
 JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
 
 JAVAFILES=	\
-    XInputStreamToInputStreamAdapter.java		\
-    XOutputStreamToOutputStreamAdapter.java			
+    XInputStreamToInputStreamAdapter.java	\
+    XOutputStreamToOutputStreamAdapter.java	\
+    InputStreamToXInputStreamAdapter.java	\
+    OutputStreamToXOutputStreamAdapter.java	
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
