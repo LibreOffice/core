@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:14:44 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,11 +427,6 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
                         BOOL bCheckPtr = FALSE, SbxArray* pArgs = 0,
                         const Link* pCallBack = 0 );
 
-    void    StartBasicAction();
-    void    EndBasicAction();
-    void    SetBasicActionCount(USHORT nSet);
-    USHORT  EndAllBasicActions();
-
     // ein Klick aus das angegebene Feld. Der Cursor steht auf diesem.
     // Fuehre die vor definierten Aktionen aus.
     void ClickToField( const SwField& rFld, USHORT nFilter = URLLOAD_NOFILTER );
@@ -442,7 +437,6 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     // fall ein URL-Button selektiert ist, dessen URL returnen, ansonsten
     // einen LeerString
     BOOL GetURLFromButton( String& rURL, String& rDescr ) const;
-    BOOL SetURLToButton( const String& rURL, const String& rDescr );
 
     void NavigatorPaste( const NaviContentBookmark& rBkmk,
                          const USHORT nAction );
