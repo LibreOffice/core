@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppSwapWindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:30:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,18 @@ namespace dbaui
         inline ULONG                    GetEntryCount() const { return m_aIconControl.GetEntryCount(); }
         inline SvxIconChoiceCtrlEntry*  GetEntry( ULONG nPos ) const { return m_aIconControl.GetEntry(nPos); }
         inline Rectangle                GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_aIconControl.GetBoundingBox(pEntry); }
+
+        /** automatically creates mnemonics for the icon/texts in our left hand side panel
+        */
+        void    createIconAutoMnemonics();
+
+        /** called to give the window the chance to intercept key events, while it has not
+            the focus
+
+            @return <TRUE/> if and only if the event has been handled, and should not
+                not be further processed
+        */
+        bool    interceptKeyInput( const KeyEvent& _rEvent );
 
         /// return the element of currently select entry
         ElementType getElementType() const;
