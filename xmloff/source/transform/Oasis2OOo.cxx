@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:57:52 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,8 +634,6 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( TEXT, EDITING_DURATION, XML_ETACTION_PROC_ATTRS,
                     OASIS_DATETIME_ACTIONS ),
     ENTRY1( FORM, TIME, XML_ETACTION_PROC_ATTRS, OASIS_DATETIME_ACTIONS ),
-    ENTRY1( PRESENTATION, SHOW_SHAPE, XML_ETACTION_PROC_ATTRS,
-                    OASIS_DATETIME_ACTIONS ),
     ENTRY1( PRESENTATION, SETTINGS, XML_ETACTION_PROC_ATTRS,
                     OASIS_DATETIME_ACTIONS ),
 
@@ -644,6 +642,14 @@ static XMLTransformerActionInit aActionTable[] =
             OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS ),
     ENTRY1( TEXT, ALPHABETICAL_INDEX_MARK_START, XML_ETACTION_PROC_ATTRS,
             OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS ),
+
+    // fix id strings in old animation elements
+    ENTRY1( PRESENTATION, DIM, XML_ETACTION_PROC_ATTRS, OASIS_ANIMATION_ACTIONS ),
+    ENTRY1( PRESENTATION, PLAY, XML_ETACTION_PROC_ATTRS, OASIS_ANIMATION_ACTIONS ),
+    ENTRY1( PRESENTATION, SHOW_TEXT, XML_ETACTION_PROC_ATTRS, OASIS_ANIMATION_ACTIONS ),
+    ENTRY1( PRESENTATION, SHOW_SHAPE, XML_ETACTION_PROC_ATTRS, OASIS_ANIMATION_ACTIONS ),
+    ENTRY1( PRESENTATION, HIDE_TEXT, XML_ETACTION_PROC_ATTRS, OASIS_ANIMATION_ACTIONS ),
+    ENTRY1( PRESENTATION, HIDE_SHAPE, XML_ETACTION_PROC_ATTRS, OASIS_ANIMATION_ACTIONS ),
 
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ETACTION_EOT )
 };
@@ -846,6 +852,19 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY2( CHART, LEGEND_POSITION, XML_ATACTION_RENAME_ATTRIBUTE,
             RENAME_ENTRY( XML_START, XML_LEFT ),
             RENAME_ENTRY( XML_END, XML_RIGHT )),
+
+    ENTRY0( DRAW, ID, XML_ATACTION_DECODE_ID ),
+
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OASIS_ANIMATION_ACTIONS
+static XMLTransformerActionInit aAnimationActionTable[] =
+{
+    ENTRY0( DRAW, SHAPE_ID, XML_ATACTION_DECODE_ID ),
+    ENTRY0( PRESENTATION, DELAY,       XML_ATACTION_RNG2ISO_DATETIME ),
+    ENTRY0( PRESENTATION, PAUSE,       XML_ATACTION_RNG2ISO_DATETIME ),
+
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -874,6 +893,9 @@ static XMLTransformerActionInit aConnectorActionTable[] =
     ENTRY1Q( DRAW, CONTROL, XML_ATACTION_RENAME,
                     XML_NAMESPACE_FORM, XML_ID ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OASIS, sal_True ),
+    ENTRY0( DRAW, START_SHAPE, XML_ATACTION_DECODE_ID ),
+    ENTRY0( DRAW, END_SHAPE, XML_ATACTION_DECODE_ID ),
+
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1994,6 +2016,10 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
                     new XMLTransformerActions( aTableStyleRefActionTable );
                 break;
             // <--
+            case OASIS_ANIMATION_ACTIONS:
+                m_aActions[OASIS_ANIMATION_ACTIONS] =
+                    new XMLTransformerActions( aAnimationActionTable );
+                break;
             }
         }
         pActions = m_aActions[n];
