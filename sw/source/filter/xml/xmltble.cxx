@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 16:00:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,19 +764,24 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                                 (SwFrmFmt *)rTblInfo.GetTblFmt(),
                                                   pBox, 0,
                                                  (SwTable *)rTblInfo.GetTable() );
-                Reference < XText > xText( xCell, UNO_QUERY );
-                if( !rTblInfo.IsBaseSectionValid() )
+                if (xCell.is())
                 {
-                    Reference<XPropertySet> xCellPropertySet( xCell,
-                                                               UNO_QUERY );
-                    OUString sTextSection( RTL_CONSTASCII_USTRINGPARAM("TextSection") );
-                    Any aAny = xCellPropertySet->getPropertyValue(sTextSection);
-                    Reference < XTextSection > xTextSection;
-                    aAny >>= xTextSection;
-                    rTblInfo.SetBaseSection( xTextSection );
+                    Reference < XText > xText( xCell, UNO_QUERY );
+                    if( !rTblInfo.IsBaseSectionValid() )
+                    {
+                        Reference<XPropertySet> xCellPropertySet( xCell,
+                                                                 UNO_QUERY );
+                        OUString sTextSection( RTL_CONSTASCII_USTRINGPARAM("TextSection") );
+                        Any aAny = xCellPropertySet->getPropertyValue(sTextSection);
+                        Reference < XTextSection > xTextSection;
+                        aAny >>= xTextSection;
+                        rTblInfo.SetBaseSection( xTextSection );
+                    }
+                    GetTextParagraphExport()->collectTextAutoStyles(
+                        xText, rTblInfo.GetBaseSection(), IsShowProgress() );
                 }
-                GetTextParagraphExport()->collectTextAutoStyles(
-                    xText, rTblInfo.GetBaseSection(), IsShowProgress() );
+                else
+                    DBG_ERROR("here should be a XCell");
             }
             else
             {
@@ -869,74 +874,83 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
             Reference<XCell> xCell = SwXCell::CreateXCell( (SwFrmFmt *)rTblInfo.GetTblFmt(),
                                                             (SwTableBox *)&rBox, 0,
                                                             (SwTable *)rTblInfo.GetTable() );
-            Reference<XText> xText( xCell, UNO_QUERY );
 
-            // get formula (and protection)
-            OUString sCellFormula = xCell->getFormula();
-
-            // if this cell has a formula, export it
-            //     (with value and number format)
-            if (sCellFormula.getLength()>0)
+            if (xCell.is())
             {
-                // formula
-                AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA,
-                             sCellFormula);
-            }
+                Reference<XText> xText( xCell, UNO_QUERY );
 
-            // value and format (if NumberFormat != -1)
-            Reference<XPropertySet> xCellPropertySet(xCell,
-                                                     UNO_QUERY);
-            if (xCellPropertySet.is())
+                // get formula (and protection)
+                OUString sCellFormula = xCell->getFormula();
+
+                // if this cell has a formula, export it
+                //     (with value and number format)
+                if (sCellFormula.getLength()>0)
+                {
+                    // formula
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA,
+                                sCellFormula);
+                }
+
+                // value and format (if NumberFormat != -1)
+                Reference<XPropertySet> xCellPropertySet(xCell,
+                                                        UNO_QUERY);
+                if (xCellPropertySet.is())
+                {
+                    sal_Int32 nNumberFormat;
+                    Any aAny = xCellPropertySet->getPropertyValue(sNumberFormat);
+                    aAny >>= nNumberFormat;
+
+                    if (NUMBERFORMAT_TEXT == nNumberFormat)
+                    {
+                        // text format
+                        AddAttribute( XML_NAMESPACE_TABLE,
+                                    XML_VALUE_TYPE, XML_STRING );
+                    }
+                    else if (-1 != nNumberFormat)
+                    {
+                        // number format key:
+                        // (export values only if cell contains text;
+                        //  cf. #83755#)
+                        XMLNumberFormatAttributesExportHelper::
+                            SetNumberFormatAttributes(
+                                *this, nNumberFormat, xCell->getValue(),
+                                XML_NAMESPACE_TABLE,
+                                (xText->getString().getLength() > 0) );
+                    }
+                    // else: invalid key; ignore
+
+                    // cell protection
+                    aAny = xCellPropertySet->getPropertyValue(sIsProtected);
+                    if (*(sal_Bool*)aAny.getValue())
+                    {
+                        AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED,
+                                        XML_TRUE );
+                    }
+
+                    if( !rTblInfo.IsBaseSectionValid() )
+                    {
+                        OUString sTextSection( RTL_CONSTASCII_USTRINGPARAM("TextSection") );
+                        aAny = xCellPropertySet->getPropertyValue(sTextSection);
+                        Reference < XTextSection > xTextSection;
+                        aAny >>= xTextSection;
+                        rTblInfo.SetBaseSection( xTextSection );
+                    }
+                }
+
+                // export cell element
+                SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
+                                        XML_TABLE_CELL, sal_True, sal_True );
+
+                // export cell content
+                GetTextParagraphExport()->exportText( xText,
+                                                    rTblInfo.GetBaseSection(),
+                                                    IsShowProgress() );
+            }
+            else
             {
-                sal_Int32 nNumberFormat;
-                Any aAny = xCellPropertySet->getPropertyValue(sNumberFormat);
-                aAny >>= nNumberFormat;
-
-                if (NUMBERFORMAT_TEXT == nNumberFormat)
-                {
-                    // text format
-                    AddAttribute( XML_NAMESPACE_TABLE,
-                                  XML_VALUE_TYPE, XML_STRING );
-                }
-                else if (-1 != nNumberFormat)
-                {
-                    // number format key:
-                    // (export values only if cell contains text;
-                    //  cf. #83755#)
-                    XMLNumberFormatAttributesExportHelper::
-                        SetNumberFormatAttributes(
-                            *this, nNumberFormat, xCell->getValue(),
-                            XML_NAMESPACE_TABLE,
-                            (xText->getString().getLength() > 0) );
-                }
-                // else: invalid key; ignore
-
-                // cell protection
-                aAny = xCellPropertySet->getPropertyValue(sIsProtected);
-                if (*(sal_Bool*)aAny.getValue())
-                {
-                    AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED,
-                                       XML_TRUE );
-                }
-
-                if( !rTblInfo.IsBaseSectionValid() )
-                {
-                    OUString sTextSection( RTL_CONSTASCII_USTRINGPARAM("TextSection") );
-                    aAny = xCellPropertySet->getPropertyValue(sTextSection);
-                    Reference < XTextSection > xTextSection;
-                    aAny >>= xTextSection;
-                    rTblInfo.SetBaseSection( xTextSection );
-                }
+                DBG_ERROR("here should be a XCell");
+                ClearAttrList();
             }
-
-            // export cell element
-            SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                      XML_TABLE_CELL, sal_True, sal_True );
-
-            // export cell content
-            GetTextParagraphExport()->exportText( xText,
-                                                  rTblInfo.GetBaseSection(),
-                                                  IsShowProgress() );
         }
         else
         {
