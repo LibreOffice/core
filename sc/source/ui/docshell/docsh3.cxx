@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-14 18:14:53 $
+ *  last change: $Author: sab $ $Date: 2001-09-28 17:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 #include "sc.hrc"
 #include "inputopt.hxx"
 #include "drwlayer.hxx"
+#include "inputhdl.hxx"
 
 //------------------------------------------------------------------
 
@@ -467,6 +468,21 @@ USHORT ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags )
             PutItem( aFontListItem );
 
             CalcOutputFactor();
+
+            ScModule* pScMod = SC_MOD();
+            SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
+            while (pFrame)
+            {
+                SfxViewShell* pSh = pFrame->GetViewShell();
+                if (pSh && pSh->ISA(ScTabViewShell))
+                {
+                    ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
+                    ScInputHandler* pInputHdl = pScMod->GetInputHdl(pViewSh);
+                    if (pInputHdl)
+                        pInputHdl->UpdateRefDevice();
+                }
+                pFrame = SfxViewFrame::GetNext( *pFrame, this );
+            }
         }
     }
     else if (nDiffFlags & SFX_PRINTER_JOBSETUP)
