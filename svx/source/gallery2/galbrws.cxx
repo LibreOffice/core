@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 14:56:47 $
+ *  last change: $Author: ka $ $Date: 2002-05-22 09:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ GalleryBrowser::~GalleryBrowser()
     delete mpSplitter;
     delete mpBrowser1;
     Gallery::ReleaseGallery( mpGallery );
+    GrabFocusToDocument();
 }
 
 // -----------------------------------------------------------------------------
