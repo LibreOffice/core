@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
+ *  last change: $Author: fme $ $Date: 2002-08-05 11:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,8 @@ String SwFileNameFieldType::Expand(sal_uInt32 nFmt) const
                     {
                         INetURLObject aTemp(rURLObj);
                         aTemp.removeSegment();
-                        aRet = aTemp.GetFull();
+                        // #101947# last slash should belong to the pathname
+                        aRet = aTemp.PathToFileName();//GetFull();
                     }
                     else
                     {
