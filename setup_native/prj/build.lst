@@ -4,3 +4,4 @@ pk	setup_native\source\win32\customactions\regactivex	nmake   -	w	sn_regactivex 
 pk  setup_native\source\win32\customactions\reg4msdoc   nmake   -   w   sn_reg4msdoc NULL
 pk  setup_native\source\win32\customactions\regpython   nmake   -   w   sn_regpython NULL
 pk  setup_native\source\win32\customactions\javafilter  nmake   -   w   sn_javafilter NULL
+pk  setup_native\source\win32\customactions\netframework  nmake   -   w   sn_netframework NULL
