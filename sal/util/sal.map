@@ -391,7 +391,6 @@ UDK_2_0_0 {
         osl_readFile;
         osl_writeFile;
         osl_closeFile;
-        osl_createDirectoryItemFromHandle;
         osl_createDirectory;
         osl_removeDirectory;
         osl_removeFile;
