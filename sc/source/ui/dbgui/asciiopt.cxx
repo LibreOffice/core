@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:57:14 $
+ *  last change: $Author: nn $ $Date: 2001-07-12 10:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include "asciiopt.hxx"
 #include "asciiopt.hrc"
 
-#include <vcl/system.hxx>
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
@@ -567,7 +566,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     FreeResource();
     bVFlag=FALSE;
     String aSizeString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("00000"));
-    Font aTBFont=System::GetStandardFont( STDFONT_FIXED );
+    Font aTBFont=OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US, 0 );
     Size aTBSize=aTableBox.GetFont().GetSize();
     aTBSize.Width()=aTBFont.GetSize().Width();
     aTBFont.SetSize(aTBSize);

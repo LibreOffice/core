@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
+ *  last change: $Author: nn $ $Date: 2001-07-12 10:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
 /*------------------------------------------------------------------------
 
-    $Author: er $ $Date: 2001-07-11 15:28:50 $ $Revision: 1.6 $
+    $Author: nn $ $Date: 2001-07-12 10:46:41 $ $Revision: 1.7 $
     $Logfile:   T:/sc/source/core/tool/autoform.cxv  $ $Workfile:   autoform.cxx  $
     (c) Copyright 1989 - 1994, Star Division GmbH, Hamburg
 
@@ -96,7 +96,7 @@
 #include <svtools/pathoptions.hxx>
 #include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/system.hxx>
+#include <vcl/outdev.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <tools/urlobj.hxx>
@@ -949,7 +949,7 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
     pData->SetName(aName);
 
     //  Default-Font und Groesse
-    Font aStdFont = System::GetStandardFont( STDFONT_SWISS );
+    Font aStdFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, 0 );
     SvxFontItem aFontItem( aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
                             aStdFont.GetPitch(), aStdFont.GetCharSet() );
     SvxFontHeightItem aHeight( 200 );       // 10 pt;
