@@ -113,6 +113,7 @@ common
 		TFDEF
 		TFDIR
 		truetime
+		UDKSTAMP
 		URD_ONLY
 		USE_MAPFILES
 		USE_NAMESPACE
