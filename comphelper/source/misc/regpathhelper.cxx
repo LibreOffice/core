@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-02 11:29:17 $
+ *  last change: $Author: jsc $ $Date: 2000-11-06 12:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _VOS_PROFILE_HXX_
 #include <vos/profile.hxx>
 #endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -132,6 +135,27 @@ static OUString getDefaultLocalRegistry()
         bFindProfile = OProfile::getProfileName(uBuffer,
                                OUString::createFromAscii(REGISTRY_LOCAL_NAME),
                                OUString::createFromAscii(LOCALREGISTRY_PORTALLOCATION));
+
+        if (bFindProfile)
+        {
+            sal_Int32 tokenCount = uBuffer.getTokenCount('/');
+            OUString sSeperator(RTL_CONSTASCII_USTRINGPARAM("/"));
+            OUString sPath(RTL_CONSTASCII_USTRINGPARAM("//"));
+            FileBase::RC retRC = FileBase::E_None;
+
+            sPath += uBuffer.getToken(2, '/');
+            for (sal_Int32 i = 3; i < tokenCount - 1; i++)
+            {
+                sPath += sSeperator;
+                sPath += uBuffer.getToken(i, '/');
+
+                retRC = Directory::create(sPath);
+                if ( retRC != FileBase::E_None && retRC != FileBase::E_EXIST)
+                {
+                    return OUString();
+                }
+            }
+        }
     } else
        {
         bFindProfile = OProfile::getProfileName(uBuffer,
