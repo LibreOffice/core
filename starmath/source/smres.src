@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: os $ $Date: 2002-04-05 08:54:59 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 20:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ ModalDialog RID_FONTDIALOG
         Text[ turkish ] = "Yaz�tipi:";
         Text[ arabic ] = ":��� ����";
         Text[ catalan ] = "~Fuente:";
+        Text[ thai ] = "~ตัวอักษร";
     };
     ComboBox 1
     {
@@ -156,6 +157,7 @@ ModalDialog RID_FONTDIALOG
         Text[ turkish ] = "Kal�n";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Negrita";
+        Text[ thai ] = "~หนา";
     };
     CheckBox 2
     {
@@ -186,6 +188,7 @@ ModalDialog RID_FONTDIALOG
         Text[ turkish ] = "�talik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cursiva";
+        Text[ thai ] = "เ~อียง";
     };
     OKButton 1
     {
@@ -235,6 +238,7 @@ ModalDialog RID_FONTDIALOG
         Text[ turkish ] = "�znitelikler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Atributos";
+        Text[ thai ] = "คุณลักษณะ";
     };
     Text[ chinese_simplified ] = "字体";
     Text[ russian ] = "������";
@@ -247,6 +251,7 @@ ModalDialog RID_FONTDIALOG
     Text[ turkish ] = "Yaz�tipleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fuentes";
+    Text[ thai ] = "ตัวอักษร";
 };
 
 ModalDialog RID_FONTSIZEDIALOG
@@ -298,6 +303,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ turkish ] = "Temel boyut:";
         Text[ arabic ] = "��� �������:";
         Text[ catalan ] = "~Tama�o de base:";
+        Text[ thai ] = "~ขนาดฐาน";
     };
     MetricField 1
     {
@@ -339,6 +345,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ turkish ] = "Metin:";
         Text[ arabic ] = ":����";
         Text[ catalan ] = "~Texto:";
+        Text[ thai ] = "~ข้อความ";
     };
     MetricField 4
     {
@@ -381,6 +388,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ turkish ] = "�ndisler:";
         Text[ arabic ] = ":�����";
         Text[ catalan ] = "�~ndices:";
+        Text[ thai ] = "~ดัชนี";
     };
     MetricField 5
     {
@@ -423,6 +431,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ turkish ] = "Fonksiyonlar:";
         Text[ arabic ] = ":�����";
         Text[ catalan ] = "~Funciones:";
+        Text[ thai ] = "~ฟังก์ชั่น";
     };
     MetricField 6
     {
@@ -465,6 +474,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ turkish ] = "��le�ler:";
         Text[ arabic ] = "����� �������:";
         Text[ catalan ] = "~Operadores:";
+        Text[ thai ] = "~ตัวปฏิบัติการ";
     };
     MetricField 7
     {
@@ -507,6 +517,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ turkish ] = "Limitler:";
         Text[ arabic ] = ":����";
         Text[ catalan ] = "~L�mites:";
+        Text[ thai ] = "~ข้อจำกัด";
     };
     MetricField 8
     {
@@ -551,6 +562,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ turkish ] = "G�receli boyutlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tama�os relativos";
+        Text[ thai ] = "ขนาดสัมพัทธ์";
     };
     OKButton 1
     {
@@ -588,11 +600,12 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "標準(~D)";
         Text[ arabic ] = "�������";
         Text[ greek ] = "����������";
-        Text[ korean ] = "기본 값(~D)";
+        Text[ korean ] = "기본(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
         Text[ finnish ] = "~Oletusarvo";
+        Text[ thai ] = "~ค่าเริ่มต้น";
     };
     Text[ chinese_simplified ] = "字体";
     Text[ russian ] = "������� ������";
@@ -605,6 +618,7 @@ ModalDialog RID_FONTSIZEDIALOG
     Text[ turkish ] = "Yaz�tipi boyutu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tama�os de fuente";
+    Text[ thai ] = "ขนาดตัวอักษร";
 };
 
 ModalDialog RID_FONTTYPEDIALOG
@@ -661,6 +675,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ turkish ] = "Form�l yaz�tipleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fuentes de f�rmula";
+        Text[ thai ] = "ตัวอักษรของสูตรคำนวณ";
     };
     FixedLine 2
     {
@@ -690,6 +705,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ turkish ] = "Kullan�c� yaz�tipleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fuentes del usuario";
+        Text[ thai ] = "ตัวอักษรกำหนดเอง";
     };
     FixedText 1
     {
@@ -718,6 +734,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ turkish ] = "De�i�kenler:";
         Text[ arabic ] = "���������:";
         Text[ catalan ] = "~Variables:";
+        Text[ thai ] = "~ตัวแปร";
     };
     ListBox 1
     {
@@ -754,6 +771,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ turkish ] = "Fonksiyonlar:";
         Text[ arabic ] = ":�����";
         Text[ catalan ] = "~Funciones:";
+        Text[ thai ] = "~ฟังก์ชั่น";
     };
     ListBox 2
     {
@@ -790,6 +808,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ turkish ] = "Say�lar:";
         Text[ arabic ] = ":�����";
         Text[ catalan ] = "~N�meros:";
+        Text[ thai ] = "~ตัวเลข";
     };
     ListBox 3
     {
@@ -826,6 +845,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ turkish ] = "Metin:";
         Text[ arabic ] = ":��";
         Text[ catalan ] = "~Texto:";
+        Text[ thai ] = "~ข้อความ";
     };
     ListBox 4
     {
@@ -862,6 +882,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ turkish ] = "~Serif";
         Text[ arabic ] = "~Serif";
         Text[ catalan ] = "~Serif";
+        Text[ thai ] = "~Serif";
     };
     ListBox 5
     {
@@ -898,6 +919,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ turkish ] = "S~ans";
         Text[ arabic ] = "S~ans";
         Text[ catalan ] = "S~ans";
+        Text[ thai ] = "S~ans";
     };
     ListBox 6
     {
@@ -928,12 +950,13 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ polish ] = "F~ixed";
         Text[ portuguese_brazilian ] = "F~ixed";
         Text[ japanese ] = "固定(~I)";
-        Text[ korean ] = "고정(~I)";
+        Text[ korean ] = "F~ixed";
         Text[ chinese_simplified ] = "固定的(~I)";
         Text[ chinese_traditional ] = "固定的(~I)";
         Text[ turkish ] = "F~ixed";
         Text[ arabic ] = "F~ixed";
         Text[ catalan ] = "F~ixed";
+        Text[ thai ] = "F~ixed";
     };
     ListBox 7
     {
@@ -986,6 +1009,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ turkish ] = "De�i�tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar";
+        Text[ thai ] = "~ดัดแปลงแก้ไข";
     };
     PushButton 2
     {
@@ -1010,17 +1034,19 @@ ModalDialog RID_FONTTYPEDIALOG
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text [ portuguese ] = "~Padr�o" ;
         Text[ greek ] = "����������";
-        Text[ korean ] = "기본 값(~D)";
+        Text[ korean ] = "기본(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
         Text[ finnish ] = "~Oletusarvo";
+        Text[ thai ] = "~ค่าเริ่มต้น";
     };
     Text[ greek ] = "����� ��������������";
     Text[ korean ] = "글꼴 유형";
     Text[ turkish ] = "Yaz�tipleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fuentes";
+    Text[ thai ] = "ตัวอักษร";
 };
 
 ModalDialog RID_DISTANCEDIALOG
@@ -1082,6 +1108,7 @@ ModalDialog RID_DISTANCEDIALOG
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = "%";
         CustomUnitText[ finnish ] = "%";
+        CustomUnitText[ thai ] = "%";
     };
     FixedText 2
     {
@@ -1123,6 +1150,7 @@ ModalDialog RID_DISTANCEDIALOG
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = "%";
         CustomUnitText[ finnish ] = "%";
+        CustomUnitText[ thai ] = "%";
     };
     CheckBox 1
     {
@@ -1152,6 +1180,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dimensionar todos los par�ntesis";
         Text[ finnish ] = "Skaalaa kaikki sulkeet";
+        Text[ thai ] = "สเกลวงเล็บก้ามปูทั้งหมด";
     };
     FixedText 3
     {
@@ -1193,6 +1222,7 @@ ModalDialog RID_DISTANCEDIALOG
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = "%";
         CustomUnitText[ finnish ] = "%";
+        CustomUnitText[ thai ] = "%";
     };
     FixedText 4
     {
@@ -1250,11 +1280,12 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ chinese_traditional ] = "標準(~D)";
         Text[ arabic ] = "�������";
         Text[ greek ] = "����������";
-        Text[ korean ] = "기본 값(~D)";
+        Text[ korean ] = "기본(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
         Text[ finnish ] = "~Oletusarvo";
+        Text[ thai ] = "~ค่าเริ่มต้น";
     };
     MenuButton 1
     {
@@ -1286,6 +1317,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ turkish ] = "Kategori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Categor�a";
+        Text[ thai ] = "~ประเภท";
     };
     FixedBitmap 1
     {
@@ -1321,6 +1353,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ turkish ] = "Kategori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Categor�a";
+        Text[ thai ] = "ประเภท";
     };
     Resource 1
     {
@@ -1351,6 +1384,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Aral�klar";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Espacios";
+            Text[ thai ] = "ระยะห่าง";
         };
         String 2
         {
@@ -1376,6 +1410,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Aral�k:";
             Text[ arabic ] = ":�����";
             Text[ catalan ] = "~Espacio:";
+            Text[ thai ] = "~ระยะห่าง";
         };
         Bitmap 2
         {
@@ -1405,6 +1440,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Sat�r aral���:";
             Text[ arabic ] = ":����� ������";
             Text[ catalan ] = "~Interlineado:";
+            Text[ thai ] = "ระยะห่าง~บรรทัด";
         };
         Bitmap 3
         {
@@ -1434,6 +1470,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "K�k aral���:";
             Text[ arabic ] = ":����� ������";
             Text[ catalan ] = "Intervalo de ~ra�z:";
+            Text[ thai ] = "ระยะห่าง~ราก";
         };
         Bitmap 4
         {
@@ -1466,6 +1503,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "�ndisler";
             Text[ arabic ] = "���� (����)";
             Text[ catalan ] = "�ndices";
+            Text[ thai ] = "ดัชนี";
         };
         String 2
         {
@@ -1491,6 +1529,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "�st simge:";
             Text[ arabic ] = ":�����";
             Text[ catalan ] = "~Super�ndice:";
+            Text[ thai ] = "~ตัวยก";
         };
         Bitmap 2
         {
@@ -1520,6 +1559,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Alt simge:";
             Text[ arabic ] = ":�����";
             Text[ catalan ] = "S~ub�ndice:";
+            Text[ thai ] = "ตั~วห้อย";
         };
         Bitmap 3
         {
@@ -1555,6 +1595,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Kesirler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Fracciones";
+            Text[ thai ] = "เศษส่วน";
         };
         String 2
         {
@@ -1581,6 +1622,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "B�l�nen aral���:";
             Text[ arabic ] = ":��� �����";
             Text[ catalan ] = "Altura del ~numerador:";
+            Text[ thai ] = "เ~ศษ";
         };
         Bitmap 2
         {
@@ -1610,6 +1652,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "B�len aral���:";
             Text[ arabic ] = ":���� �����";
             Text[ catalan ] = "~Altura del denominador:";
+            Text[ thai ] = "~ส่วน";
         };
         Bitmap 3
         {
@@ -1644,6 +1687,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Kesir �izgisi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "L�neas de fracci�n";
+            Text[ thai ] = "ขีดเศษส่วน";
         };
         String 2
         {
@@ -1670,6 +1714,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Ta�ma uzunlu�u:";
             Text[ arabic ] = ":��� ����";
             Text[ catalan ] = "Longitud ~excesiva:";
+            Text[ thai ] = "ความยาวเ~กิน";
         };
         Bitmap 2
         {
@@ -1700,6 +1745,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "�izgi kal�nl���:";
             Text[ arabic ] = "���� ����:";
             Text[ catalan ] = "Espesor del ~trazo:";
+            Text[ thai ] = "~น้ำหนัก";
         };
         Bitmap 3
         {
@@ -1734,6 +1780,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Limitler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "L�mites";
+            Text[ thai ] = "ขีดจำกัด";
         };
         String 2
         {
@@ -1760,6 +1807,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "�st limit:";
             Text[ arabic ] = ":���� ������";
             Text[ catalan ] = "~Altura m�xima:";
+            Text[ thai ] = "ขีดจำกัด~บน";
         };
         Bitmap 2
         {
@@ -1789,6 +1837,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Alt limit:";
             Text[ arabic ] = ":���� ������";
             Text[ catalan ] = "Altura ~m�nima:";
+            Text[ thai ] = "ขีดจำกัด~ล่าง";
         };
         Bitmap 3
         {
@@ -1823,6 +1872,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Ayra�lar";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Par�ntesis";
+            Text[ thai ] = "วงเล็บก้ามปู";
         };
         String 2
         {
@@ -1848,6 +1898,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Sol/sa� ta�ma:";
             Text[ arabic ] = ":��� ���� ����/����";
             Text[ catalan ] = "~Sobredimensi�n izq./der.:";
+            Text[ thai ] = "ขนาดเ~กิน (ซ้าย/ขวา)";
         };
         Bitmap 2
         {
@@ -1877,6 +1928,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Aral�k:";
             Text[ arabic ] = ":�����";
             Text[ catalan ] = "~Espacio:";
+            Text[ thai ] = "~ระยะห่าง";
         };
         Bitmap 3
         {
@@ -1906,6 +1958,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Ta�ma:";
             Text[ arabic ] = ":��� ����";
             Text[ catalan ] = "~Sobredimensi�n:";
+            Text[ thai ] = "ขนาดเ~กิน";
         };
         Bitmap 5
         {
@@ -1940,6 +1993,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Matrisler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Matrices";
+            Text[ thai ] = "เมตริกซ์";
         };
         String 2
         {
@@ -1965,6 +2019,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Sat�r aral���:";
             Text[ arabic ] = ":����� ������";
             Text[ catalan ] = "~Interlineado:";
+            Text[ thai ] = "ระยะห่าง~บรรทัด";
         };
         Bitmap 2
         {
@@ -1994,6 +2049,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "S�tun aral���:";
             Text[ arabic ] = ":����� �������";
             Text[ catalan ] = "Distancia entre ~columnas:";
+            Text[ thai ] = "ระยะห่าง~คอลัมน์";
         };
         Bitmap 3
         {
@@ -2028,6 +2084,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Simgeler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ornamentos";
+            Text[ thai ] = "สัญลักษณ์";
         };
         String 2
         {
@@ -2054,6 +2111,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Birincil y�kseklik:";
             Text[ arabic ] = ":�������� �������";
             Text[ catalan ] = "Altura ~primaria:";
+            Text[ thai ] = "ความสูง~ปฐมภูมิ";
         };
         Bitmap 2
         {
@@ -2083,6 +2141,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Asgari aral�k:";
             Text[ arabic ] = ":��� �����";
             Text[ catalan ] = "Distancia ~m�nima:";
+            Text[ thai ] = "ระยะห่าง~น้อยที่สุด";
         };
         Bitmap 3
         {
@@ -2117,6 +2176,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "��le�ler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Operadores";
+            Text[ thai ] = "ตัวปฏิบัติการ";
         };
         String 2
         {
@@ -2143,6 +2203,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Ta�ma:";
             Text[ arabic ] = ":��� ����";
             Text[ catalan ] = "~Sobredimensi�n:";
+            Text[ thai ] = "ขนาดเ~กิน";
         };
         Bitmap 2
         {
@@ -2172,6 +2233,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Aral�k:";
             Text[ arabic ] = ":�������";
             Text[ catalan ] = "~Espacio:";
+            Text[ thai ] = "~ระยะห่าง";
         };
         Bitmap 3
         {
@@ -2205,6 +2267,7 @@ ModalDialog RID_DISTANCEDIALOG
             TEXT[ language_user1 ] = " ";
             TEXT[ catalan ] = "M�rgenes";
             TEXT[ finnish ] = "Reunat";
+            TEXT[ thai ] = "เส้นขอบ";
         };
         String 2
         {
@@ -2230,6 +2293,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Sol:";
             Text[ arabic ] = ":����";
             Text[ catalan ] = "~Izquierda:";
+            Text[ thai ] = "~ซ้าย";
         };
         Bitmap 2
         {
@@ -2259,6 +2323,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Sa�:";
             Text[ arabic ] = ":����";
             Text[ catalan ] = "~Derecha:";
+            Text[ thai ] = "~ขวา";
         };
         Bitmap 3
         {
@@ -2288,6 +2353,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "�st:";
             Text[ arabic ] = ":����";
             Text[ catalan ] = "~Arriba:";
+            Text[ thai ] = "~บน";
         };
         Bitmap 4
         {
@@ -2317,6 +2383,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ turkish ] = "Alt:";
             Text[ arabic ] = ":����";
             Text[ catalan ] = "~Abajo:";
+            Text[ thai ] = "~ล่าง";
         };
         Bitmap 5
         {
@@ -2334,6 +2401,7 @@ ModalDialog RID_DISTANCEDIALOG
     Text[ turkish ] = "Aral�klar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Espacios";
+    Text[ thai ] = "ระยะห่าง";
 };
 
 
@@ -2386,6 +2454,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ turkish ] = "Sol";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Izquierda";
+        Text[ thai ] = "~ซ้าย";
     };
     RadioButton 2
     {
@@ -2416,6 +2485,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ turkish ] = "Orta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Centrado";
+        Text[ thai ] = "~ตรงกลาง";
     };
     RadioButton 3
     {
@@ -2446,6 +2516,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ turkish ] = "Sa�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Derecha";
+        Text[ thai ] = "~ขวา";
     };
     FixedLine 1
     {
@@ -2474,6 +2545,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Horitzontal";
         Text[ finnish ] = "Vaakataso";
+        Text[ thai ] = "แนวนอน";
     };
     OKButton 1
     {
@@ -2511,11 +2583,12 @@ ModalDialog RID_ALIGNDIALOG
         Text[ chinese_traditional ] = "標準(~D)";
         Text[ arabic ] = "�������";
         Text[ greek ] = "����������";
-        Text[ korean ] = "기본 값(~D)";
+        Text[ korean ] = "기본(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
         Text[ finnish ] = "~Oletusarvo";
+        Text[ thai ] = "~ค่าเริ่มต้น";
     };
     Text[ chinese_simplified ] = "对齐";
     Text[ russian ] = "������������";
@@ -2528,6 +2601,7 @@ ModalDialog RID_ALIGNDIALOG
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alineaci�n";
+    Text[ thai ] = "จัดตำแหน่ง";
 };
 
 TabPage RID_PRINTOPTIONPAGE
@@ -2581,6 +2655,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones de impresi�n";
         Text[ finnish ] = "Tulostusasetukset";
+        Text[ thai ] = "ตัวเลือกการพิมพ์";
     };
     CheckBox CB_TITLEROW
     {
@@ -2610,6 +2685,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fila del t�tulo";
         Text[ finnish ] = "~Otsikkorivi";
+        Text[ thai ] = "~ชื่อแถว";
     };
     CheckBox CB_EQUATION_TEXT
     {
@@ -2639,6 +2715,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Texto de la f�rmula";
         Text[ finnish ] = "~Kaavan teksti";
+        Text[ thai ] = "ข้อความ~สูตรคำนวณ";
     };
     CheckBox CB_FRAME
     {
@@ -2668,6 +2745,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Marco";
         Text[ finnish ] = "~Reunus";
+        Text[ thai ] = "เส้~นขอบ";
     };
     FixedLine FL_PRINT_FORMAT
     {
@@ -2697,6 +2775,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ turkish ] = "Yazd�rma format�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato de impresi�n";
+        Text[ thai ] = "รูปแบบการพิมพ์";
     };
     RadioButton RB_ORIGINAL_SIZE
     {
@@ -2727,6 +2806,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ turkish ] = "Ger�ek boyut";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "T~ama�o original";
+        Text[ thai ] = "ขนาดต้~นฉบับ";
     };
     RadioButton RB_FIT_TO_PAGE
     {
@@ -2757,6 +2837,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ turkish ] = "Sayfaya s��d�r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ajustar ~p�gina";
+        Text[ thai ] = "จัดพอดี~หน้า";
     };
     RadioButton RB_ZOOM
     {
@@ -2783,10 +2864,11 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ chinese_traditional ] = "顯示比例(~S)";
         Text[ arabic ] = "�����";
         Text[ greek ] = "~�������";
-        Text[ korean ] = "확대(~S)";
+        Text[ korean ] = "배율(~S)";
         Text[ turkish ] = "�l�eklendirme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Escala";
+        Text[ thai ] = "~สเกล";
     };
     MetricField MF_ZOOM
     {
@@ -2829,6 +2911,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Otras opciones";
         Text[ finnish ] = "Sekalaiset valinnat";
+        Text[ thai ] = "ตัวเลือกเบ็ดเตล็ด";
     };
     CheckBox CB_IGNORE_SPACING
     {
@@ -2853,14 +2936,16 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ chinese_traditional ] = "忽略行末的符號 ~~ 和 `";
         Text[ arabic ] = "����� ~~ � ` ��� ����� �����";
         Text[ greek ] = "��������� ��� ~~ ��� ` ��� ����� ��� ������";
-        Text[ korean ] = "~~와 `는 줄의 마지막에서 무시(~N)";
+        Text[ korean ] = "와 ` 줄의 마지막에서 무시(~N)";
         Text[ turkish ] = "Sat�r sonundaki ~~ ve ` i�aretlerini dikkate alma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ignorar ~~ y ` al ~final de l�nea";
         Text[ finnish ] = "Ohita merkit ~~ ja ` rivin lopussa";
+        Text[ thai ] = "เพิกเ~ฉย ~~ และ ` ที่จุดสิ้นสุดของบรรทัด";
     };
     Text[ catalan ] = "Opciones de f�rmulas: Configuraci�n";
     Text[ finnish ] = "Kaavavalinnat:Asetukset";
+    Text[ thai ] = "ตัวเลือกสูตรคำนวณ:กำหนดค่าติดตั้ง";
 };
 
 ModalDialog RID_SYMBOLDIALOG
@@ -2910,6 +2995,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ turkish ] = "Simge k�mesi:";
         Text[ arabic ] = ":������ ����";
         Text[ catalan ] = "Conjunto de ~s�mbolos:";
+        Text[ thai ] = "ชุด~สัญลักษณ์";
     };
     ListBox 1
     {
@@ -2963,6 +3049,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ turkish ] = "Bilinmiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desconocido";
+        Text[ thai ] = "ไม่รู้จัก";
     };
     PushButton 2
     {
@@ -2998,6 +3085,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aplicar";
         Text[ finnish ] = "~Lis��";
+        Text[ thai ] = "แ~ทรก";
     };
     PushButton 3
     {
@@ -3028,6 +3116,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cerrar";
         Text[ finnish ] = "~Sulje";
+        Text[ thai ] = "~ปิด";
     };
     PushButton 1
     {
@@ -3058,6 +3147,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ turkish ] = "D�zenle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Editar...";
+        Text[ thai ] = "แ~ก้ไข...";
     };
     Text[ chinese_simplified ] = "图标";
     Text[ russian ] = "�������";
@@ -3070,6 +3160,7 @@ ModalDialog RID_SYMBOLDIALOG
     Text[ turkish ] = "Simgeler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "S�mbolos";
+    Text[ thai ] = "สัญลักษณ์";
 };
 
 ModalDialog RID_SYMDEFINEDIALOG
@@ -3129,6 +3220,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ turkish ] = "Eski simge:";
         Text[ arabic ] = ":��� ����";
         Text[ catalan ] = "~S�mbolo anterior:";
+        Text[ thai ] = "สัญลักษณ์เ~ก่า";
     };
     ComboBox 1
     {
@@ -3165,6 +3257,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ turkish ] = "Eski simge k�mesi:";
         Text[ arabic ] = ":������ ���� �����";
         Text[ catalan ] = "Conjunto ~anterior:";
+        Text[ thai ] = "ชุดสัญลักษณ์เ~ก่า";
     };
     ComboBox 2
     {
@@ -3209,6 +3302,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ turkish ] = "Simge:";
         Text[ arabic ] = ":���";
         Text[ catalan ] = "S�m~bolo:";
+        Text[ thai ] = "~สัญลักษณ์";
     };
     ComboBox 4
     {
@@ -3245,6 +3339,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ turkish ] = "Simge k�mesi:";
         Text[ arabic ] = ":������ ����";
         Text[ catalan ] = "Con~junto de s�mbolos:";
+        Text[ thai ] = "ชุ~ดสัญลักษณ์";
     };
     ComboBox 5
     {
@@ -3281,6 +3376,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ turkish ] = "Yaz�tipi:";
         Text[ arabic ] = ":��� ����";
         Text[ catalan ] = "~Fuente:";
+        Text[ thai ] = "~ตัวอักษร";
     };
     ListBox 1
     {
@@ -3318,6 +3414,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ arabic ] = "������ �����";
         Text[ catalan ] = "~�rea";
         Text[ finnish ] = "~Alijoukko";
+        Text[ thai ] = "~สับเซต";
     };
     ListBox LB_FONTS_SUBSET
     {
@@ -3355,6 +3452,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ turkish ] = "Yaz�tipi varyant�:";
         Text[ arabic ] = "��� ����:";
         Text[ catalan ] = "~Estilo:";
+        Text[ thai ] = "~รูปร่างตัวพิมพ์";
     };
     ComboBox 3
     {
@@ -3441,6 +3539,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~A�adir";
+        Text[ thai ] = "เ~พิ่ม";
     };
     PushButton 2
     {
@@ -3471,6 +3570,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ turkish ] = "De�i�tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar";
+        Text[ thai ] = "~ดัดแปลงแก้ไข";
     };
     PushButton 3
     {
@@ -3501,6 +3601,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ thai ] = "~ลบ";
     };
     OKButton 1
     {
@@ -3515,6 +3616,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
+    Text[ thai ] = "แก้ไขสัญลักษณ์";
 };
 
 WarningBox RID_NOMATHTYPEFACEWARNING
@@ -3543,6 +3645,7 @@ WarningBox RID_NOMATHTYPEFACEWARNING
     Message[ turkish ] = "\"StarMath\" yaz�tipi y�klenmedi!\nBu yaz�tipi olmadan StarMath program� do�ru bir bi�imde �al��maz...\nYaz�tipini y�kleyin ve StarMath program�n� yeniden ba�lat�n.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "�La fuente \"StarMath\" no est� instalada!\nSin esta fuente StarMath no funcionar� correctamente...\nInstale la fuente y reinicie StarMath.";
+    Message[ thai ] = "ยังไม่ได้ติดตั้งตัวอักษร \"StarMath\" \nไม่มีตัวอักษรคณิตศาสตร์ %PRODUCTNAME นี้  ไม่สามารถทำหน้าที่ได้ถูกต้อง.\nกรุณาติดตั้งตัวอักษรนี้และเริ่มคณิตศาสตร์ %PRODUCTNAME อีกครั้ง";
 };
 
 QueryBox RID_DEFAULTSAVEQUERY
@@ -3574,6 +3677,7 @@ QueryBox RID_DEFAULTSAVEQUERY
     Message[ turkish ] = "De�i�iklikler standart de�erler olarak kaydedilsin mi?\n\nBu de�i�iklikler t�m yeni form�lleri etkileyecektir.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "�Desea guardar los cambios como predeterminados?\n\nEstos cambios tendr�n efecto en todas las nuevas f�rmulas.";
+    Message[ thai ] = "ต้องการบันทึกการเปลี่ยนแปลงเป็นค่าเริ่มต้นหรือไม่?\n\nการเปลี่ยนแปลงเหล่านี้จะใช้สำหรับสูตรคำนวณใหม่ทั้งหมด";
 };
 
 String RID_FONTREGULAR
@@ -3602,6 +3706,7 @@ String RID_FONTREGULAR
     Text[ turkish ] = ", standart";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ", Est�ndar";
+    Text[ thai ] = ", มาตรฐาน";
 };
 String RID_FONTITALIC
 {
@@ -3629,6 +3734,7 @@ String RID_FONTITALIC
     Text[ turkish ] = ", italik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ", Cursiva";
+    Text[ thai ] = ", เอียง";
 };
 String RID_FONTBOLD
 {
@@ -3656,6 +3762,7 @@ String RID_FONTBOLD
     Text[ turkish ] = ", kal�n";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ", Negrita";
+    Text[ thai ] = ", หนา";
 };
 String RID_APPLICATION
 {
@@ -3713,6 +3820,7 @@ Menu RID_VIEWMENU
             Text[ turkish ] = "G�r�n�m %~50";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Zoom ~50%";
+            Text[ thai ] = "~มุมมอง 50%";
         };
         MenuItem
         {
@@ -3742,6 +3850,7 @@ Menu RID_VIEWMENU
             Text[ turkish ] = "G�r�n�m %~100";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Zoom ~100%";
+            Text[ thai ] = "มุมมอง ~100%";
         };
         MenuItem
         {
@@ -3771,6 +3880,7 @@ Menu RID_VIEWMENU
             Text[ turkish ] = "G�r�n�m %~200";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Zoom ~200%";
+            Text[ thai ] = "มุมมอง ~200%";
         };
         MenuItem
         {
@@ -3801,6 +3911,7 @@ Menu RID_VIEWMENU
             Text[ turkish ] = "B�y�t";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Aumentar";
+            Text[ thai ] = "~ย่อเข้า";
         };
         MenuItem
         {
@@ -3830,6 +3941,7 @@ Menu RID_VIEWMENU
             Text[ turkish ] = "K���lt";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Reducir";
+            Text[ thai ] = "ขยาย~ออก";
         };
         MenuItem
         {
@@ -3859,6 +3971,7 @@ Menu RID_VIEWMENU
             Text[ turkish ] = "T�m�n� g�r�nt�le";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Mostrar ~todo";
+            Text[ thai ] = "แ~สดงทั้งหมด";
         };
         MenuItem
         {
@@ -3892,6 +4005,7 @@ Menu RID_VIEWMENU
             Text[ turkish ] = "G�ncelle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "A~ctualizar";
+            Text[ thai ] = "ป~รับปรุง";
         };
     };
 };
@@ -3926,6 +4040,7 @@ Menu RID_DISTANCEMENU
             Text[ turkish ] = "Aral�klar";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Espacios";
+            Text[ thai ] = "ระยะห่าง";
         };
         MenuItem
         {
@@ -3953,6 +4068,7 @@ Menu RID_DISTANCEMENU
             Text[ korean ] = "색인";
             Text[ turkish ] = "�ndisler";
             Text[ catalan ] = "�ndices";
+            Text[ thai ] = "ดัชนี";
         };
         MenuItem
         {
@@ -3981,6 +4097,7 @@ Menu RID_DISTANCEMENU
             Text[ korean ] = "분수";
             Text[ turkish ] = "Kesirler";
             Text[ catalan ] = "Fracciones";
+            Text[ thai ] = "เศษส่วน";
         };
         MenuItem
         {
@@ -4008,6 +4125,7 @@ Menu RID_DISTANCEMENU
             Text[ korean ] = "분수 표시줄";
             Text[ turkish ] = "Kesir �izgisi";
             Text[ catalan ] = "L�neas de fracci�n";
+            Text[ thai ] = "ขีดเศษส่วน";
         };
         MenuItem
         {
@@ -4035,6 +4153,7 @@ Menu RID_DISTANCEMENU
             Text[ korean ] = "극한";
             Text[ turkish ] = "Limitler";
             Text[ catalan ] = "L�mites";
+            Text[ thai ] = "ขีดจำกัด";
         };
         MenuItem
         {
@@ -4063,6 +4182,7 @@ Menu RID_DISTANCEMENU
             Text[ turkish ] = "Ayra�lar";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Par�ntesis";
+            Text[ thai ] = "วงเล็บก้ามปู";
         };
         MenuItem
         {
@@ -4090,6 +4210,7 @@ Menu RID_DISTANCEMENU
             Text[ korean ] = "행렬";
             Text[ turkish ] = "Matrisler";
             Text[ catalan ] = "Matrices";
+            Text[ thai ] = "เมตริกซ์";
         };
         MenuItem
         {
@@ -4117,6 +4238,7 @@ Menu RID_DISTANCEMENU
             Text[ korean ] = "기호";
             Text[ turkish ] = "Simgeler";
             Text[ catalan ] = "Ornamentos";
+            Text[ thai ] = "สัญลักษณ์";
         };
         MenuItem
         {
@@ -4144,6 +4266,7 @@ Menu RID_DISTANCEMENU
             Text[ korean ] = "연산자";
             Text[ turkish ] = "��le�ler";
             Text[ catalan ] = "Operadores";
+            Text[ thai ] = "ตัวปฏิบัติการ";
         };
         MenuItem
         {
@@ -4170,6 +4293,7 @@ Menu RID_DISTANCEMENU
             TEXT[ turkish ] = "Kenarlar";
             TEXT[ catalan ] = "M�rgenes";
             TEXT[ finnish ] = "Reunat";
+            TEXT[ thai ] = "เส้นขอบ";
         };
     };
 };
@@ -4204,6 +4328,7 @@ Menu RID_FONTMENU
             Text[ turkish ] = "De�i�kenler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Variables";
+            Text[ thai ] = "ตัวแปร";
         };
         MenuItem
         {
@@ -4231,6 +4356,7 @@ Menu RID_FONTMENU
             Text[ korean ] = "함수";
             Text[ turkish ] = "Fonksiyon";
             Text[ catalan ] = "Funciones";
+            Text[ thai ] = "ฟังก์ชั่น";
         };
         MenuItem
         {
@@ -4258,6 +4384,7 @@ Menu RID_FONTMENU
             Text[ korean ] = "값";
             Text[ turkish ] = "Say�lar";
             Text[ catalan ] = "N�meros";
+            Text[ thai ] = "ตัวเลข";
         };
         MenuItem
         {
@@ -4286,6 +4413,7 @@ Menu RID_FONTMENU
             Text[ turkish ] = "Metin";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Texto";
+            Text[ thai ] = "ข้อความ";
         };
         MenuItem
         {
@@ -4313,6 +4441,7 @@ Menu RID_FONTMENU
             Text[ korean ] = "세리프";
             Text[ turkish ] = "Serif";
             Text[ catalan ] = "Serif";
+            Text[ thai ] = "Serif";
         };
         MenuItem
         {
@@ -4340,6 +4469,7 @@ Menu RID_FONTMENU
             Text[ korean ] = "산";
             Text[ turkish ] = "Sans";
             Text[ catalan ] = "Sans";
+            Text[ thai ] = "Sans";
         };
         MenuItem
         {
@@ -4367,6 +4497,7 @@ Menu RID_FONTMENU
             Text[ korean ] = "고정됨";
             Text[ turkish ] = "Sabit";
             Text[ catalan ] = "Fijo";
+            Text[ thai ] = "คงที่";
         };
     };
 };
@@ -4397,6 +4528,7 @@ ErrorBox RID_WRITESYMBOLERROR
     Message[ turkish ] = "Simge dosyas� '%FILE%' kaydedilemiyor!";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "�No se puede guardar el archivo de s�mbolos '%FILE%'!";
+    Message[ thai ] = "ไม่สามารถบันทึกแฟ้มสัญลักษณ์ '%FILE%' ได้";
 };
 ErrorBox RID_READSYMBOLERROR
 {
@@ -4424,6 +4556,7 @@ ErrorBox RID_READSYMBOLERROR
     Message[ turkish ] = "Simge dosyas� '%FILE%' y�klenemiyor!";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "�No se puede cargar el archivo de s�mbolos '%FILE%'!";
+    Message[ thai ] = "ไม่สามารถโหลดแฟ้มสัญลักษณ์ '%FILE%' ได้";
 };
 
 FloatingWindow RID_TOOLBOXWINDOW
@@ -4507,6 +4640,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Signo +";
                 Text[ finnish ] = "Plusmerkki (+)";
+                Text[ thai ] = "เครื่องหมาย+ ";
             };
             ToolBoxItem
             {
@@ -4535,6 +4669,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Signo -";
                 Text[ finnish ] = "Miinusmerkki (-)";
+                Text[ thai ] = "เครื่องหมาย- ";
             };
             ToolBoxItem
             {
@@ -4563,6 +4698,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Signo +-";
                 Text[ finnish ] = "Plusmiinusmerkki (+-)";
+                Text[ thai ] = "เครื่องหมาย+-";
             };
             ToolBoxItem
             {
@@ -4591,6 +4727,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Signo -+";
                 Text[ finnish ] = "Miinusplusmerkki (-+)";
+                Text[ thai ] = "เครื่องหมาย-+ ";
             };
             ToolBoxItem
             {
@@ -4619,6 +4756,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "NO l�gico";
                 Text[ finnish ] = "Boolen arvo NOT (ei)";
+                Text[ thai ] = "บูลีน NOT";
             };
             ToolBoxItem
             {
@@ -4651,6 +4789,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "+ de suma";
                 Text[ finnish ] = "Yhteenlasku +";
+                Text[ thai ] = "บวก +";
             };
             ToolBoxItem
             {
@@ -4679,6 +4818,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Multiplicaci�n (Punto)";
                 Text[ finnish ] = "Kertolasku (Piste )";
+                Text[ thai ] = "คูณ (จุด )";
             };
             ToolBoxItem
             {
@@ -4707,6 +4847,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Multiplicaci�n (cruz)";
                 Text[ finnish ] = "Kertolasku (x)";
+                Text[ thai ] = "คูณ (x)";
             };
             ToolBoxItem
             {
@@ -4735,6 +4876,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Multiplicaci�n (asterisco)";
                 Text[ finnish ] = "Kertolasku (*)";
+                Text[ thai ] = "คูณ (*)";
             };
             ToolBoxItem
             {
@@ -4763,6 +4905,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Y l�gico";
                 Text[ finnish ] = "Boolen arvo AND (ja)";
+                Text[ thai ] = "บูลีน AND";
             };
             ToolBoxItem
             {
@@ -4795,6 +4938,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Restas -";
                 Text[ finnish ] = "V�hennyslasku -";
+                Text[ thai ] = "ลบ -";
             };
             ToolBoxItem
             {
@@ -4823,6 +4967,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Divisi�n (fracci�n)";
                 Text[ finnish ] = "Jakolasku (Murtoluku)";
+                Text[ thai ] = "หาร (เศษส่วน)";
             };
             ToolBoxItem
             {
@@ -4851,6 +4996,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Divisi�n (dos puntos-raya)";
                 Text[ finnish ] = "Jakolasku (�)";
+                Text[ thai ] = "หาร (๗)";
             };
             ToolBoxItem
             {
@@ -4879,6 +5025,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Divisi�n (barra oblicua)";
                 Text[ finnish ] = "Jakolasku (Kauttaviiva)";
+                Text[ thai ] = "หาร (/)";
             };
             ToolBoxItem
             {
@@ -4907,6 +5054,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "O l�gico";
                 Text[ finnish ] = "Boolen arvo OR (tai)";
+                Text[ thai ] = "บูลีน OR";
             };
             ToolBoxItem
             {
@@ -4939,6 +5087,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Encadenamiento";
                 TEXT[ finnish ] = "Yhdist�";
+                TEXT[ thai ] = "เชื่อม";
             };
         };
     };
@@ -5016,6 +5165,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es igual";
                 Text[ finnish ] = "On yht�suuri";
+                Text[ thai ] = "เท่ากับ";
             };
             ToolBoxItem
             {
@@ -5044,6 +5194,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "no es igual";
                 Text[ finnish ] = "Ei ole yht�suuri";
+                Text[ thai ] = "ไม่เท่ากับ";
             };
             ToolBoxItem
             {
@@ -5072,6 +5223,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es aprox. igual";
                 Text[ finnish ] = "On suunnilleen yht�suuri";
+                Text[ thai ] = "เท่ากันโดยประมาณ";
             };
             ToolBoxItem
             {
@@ -5100,6 +5252,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "divide";
                 TEXT[ finnish ] = "Jakaa";
+                TEXT[ thai ] = "หาร";
             };
             ToolBoxItem
             {
@@ -5128,6 +5281,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "no divide";
                 TEXT[ finnish ] = "Ei jaa";
+                TEXT[ thai ] = "ไม่หาร";
             };
             ToolBoxItem
             {
@@ -5155,11 +5309,12 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "小於";
                 Text[ arabic ] = "��� ��";
                 Text[ greek ] = "����� ��������� ���";
-                Text[ korean ] = "미만";
+                Text[ korean ] = "보다 작다";
                 Text[ turkish ] = "K���kt�r";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que";
                 Text[ finnish ] = "On pienempi kuin";
+                Text[ thai ] = "น้อยกว่า";
             };
             ToolBoxItem
             {
@@ -5183,11 +5338,12 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "大於";
                 Text[ arabic ] = "���� ��";
                 Text[ greek ] = "����� ���������� ���";
-                Text[ korean ] = "초과";
+                Text[ korean ] = "보다 크다";
                 Text[ turkish ] = "B�y�kt�r";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es mayor que";
                 Text[ finnish ] = "On suurempi kuin";
+                Text[ thai ] = "มากกว่า";
             };
             ToolBoxItem
             {
@@ -5217,6 +5373,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es parecido o igual";
                 Text[ finnish ] = "On samanlainen tai yht�suuri";
+                Text[ thai ] = "คล้ายหรือเท่ากัน";
             };
             ToolBoxItem
             {
@@ -5245,6 +5402,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es paralelo a";
                 Text[ finnish ] = "On samansuuntainen kuin";
+                Text[ thai ] = "ขนานกับ";
             };
             ToolBoxItem
             {
@@ -5273,6 +5431,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es ortogonal a";
                 Text[ finnish ] = "On ortogonaalinen suhteessa kohteeseen";
+                Text[ thai ] = "ตั้งฉากกับ";
             };
             ToolBoxItem
             {
@@ -5301,11 +5460,12 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "小於或等於";
                 Text[ arabic ] = "���� �� �� �����";
                 Text[ greek ] = "����� ��������� � ��� �� (����)";
-                Text[ korean ] = "이하";
+                Text[ korean ] = "작거나 같다";
                 Text[ turkish ] = "K���kt�r ya da e�ittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que o igual a (oblicuo)";
                 Text[ finnish ] = "On pienempi tai yht�suuri kuin";
+                Text[ thai ] = "น้อยกว่าหรือเท่ากับ";
             };
             ToolBoxItem
             {
@@ -5334,6 +5494,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es mayor que o igual a (oblicuo)";
                 Text[ finnish ] = "On suurempi tai yht�suuri kuin";
+                Text[ thai ] = "มากกว่าหรือเท่ากับ";
             };
             ToolBoxItem
             {
@@ -5362,6 +5523,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es parecido a";
                 Text[ finnish ] = "On samanlainen kuin";
+                Text[ thai ] = "คล้ายกับ";
             };
             ToolBoxItem
             {
@@ -5390,6 +5552,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es congruente con";
                 Text[ finnish ] = "On yht�pit�v� suhteessa kohteeseen";
+                Text[ thai ] = "สมมูลกับ";
             };
             ToolBoxItem
             {
@@ -5421,11 +5584,12 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "小於或等於";
                 Text[ arabic ] = "���� �� �� �����";
                 Text[ greek ] = "����� ��������� � ��� ��";
-                Text[ korean ] = "이하";
+                Text[ korean ] = "작거나 같다";
                 Text[ turkish ] = "K���kt�r ya da e�ittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que o igual a";
                 Text[ finnish ] = "On pienempi tai yht�suuri kuin";
+                Text[ thai ] = "น้อยกว่าหรือเท่ากับ";
             };
             ToolBoxItem
             {
@@ -5454,6 +5618,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es mayor que o igual a";
                 Text[ finnish ] = "On suurempi tai yht�suuri kuin";
+                Text[ thai ] = "มากกว่าหรือเท่ากับ";
             };
             ToolBoxItem
             {
@@ -5482,6 +5647,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es proporcional a";
                 Text[ finnish ] = "On suhteessa objektiin";
+                Text[ thai ] = "เป็นสัดส่วนกับ";
             };
             ToolBoxItem
             {
@@ -5510,6 +5676,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "tiende a";
                 Text[ finnish ] = "Kohti";
+                Text[ thai ] = "ต่อ";
             };
             ToolBoxItem
             {
@@ -5546,6 +5713,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Flecha doble hacia la izquierda";
                 TEXT[ finnish ] = "Kaksi nuolta vasemmalle";
+                TEXT[ thai ] = "ลูกศรซ้ายคู่";
             };
             ToolBoxItem
             {
@@ -5574,6 +5742,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Flecha doble hacia izquierda y derecha";
                 TEXT[ finnish ] = "Kaksi nuolta vasemmalle ja oikealle";
+                TEXT[ thai ] = "ลูกศรคู่ซ้ายและขวา";
             };
             ToolBoxItem
             {
@@ -5602,6 +5771,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Flecha doble hacia la derecha";
                 TEXT[ finnish ] = "Kaksi nuolta oikealle";
+                TEXT[ thai ] = "ลูกศรคู่ขวา";
             };
         };
     };
@@ -5680,6 +5850,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "est� contenido en";
                 Text[ finnish ] = "Mukana";
+                Text[ thai ] = "อยู่ใน";
             };
             ToolBoxItem
             {
@@ -5708,6 +5879,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "no contenido en";
                 Text[ finnish ] = "Ei mukana";
+                Text[ thai ] = "ไม่อยู่ใน";
             };
             ToolBoxItem
             {
@@ -5736,6 +5908,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "contiene";
                 Text[ finnish ] = "Omistaja";
+                Text[ thai ] = "เป็นเจ้าของ";
             };
             ToolBoxItem
             {
@@ -5768,6 +5941,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ turkish ] = "Bo� k�me";
                 TEXT[ catalan ] = "Conjunto vac�o";
                 TEXT[ finnish ] = "Tyhjenn� joukko";
+                TEXT[ thai ] = "เซตว่าง";
             };
             ToolBoxItem
             {
@@ -5800,6 +5974,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Promedio";
                 Text[ finnish ] = "Leikkauspiste";
+                Text[ thai ] = "จุดตัดประสานกัน";
             };
             ToolBoxItem
             {
@@ -5828,6 +6003,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Uni�n";
                 Text[ finnish ] = "Unioni";
+                Text[ thai ] = "รวมกัน";
             };
             ToolBoxItem
             {
@@ -5856,6 +6032,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Diferencia";
                 Text[ finnish ] = "Erotus";
+                Text[ thai ] = "แตกต่าง";
             };
             ToolBoxItem
             {
@@ -5884,6 +6061,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = "Bitte das Leerzeichen am Ende entfernen";
                 Text[ catalan ] = "Conjunto cociente ";
                 Text[ finnish ] = "Osam��r�joukko ";
+                Text[ thai ] = "เซตผลหาร ";
             };
             ToolBoxItem
             {
@@ -5912,6 +6090,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = "Bitte das Leerzeichen am Ende entfernen";
                 TEXT[ catalan ] = "aleph ";
                 TEXT[ finnish ] = "Aleph ";
+                TEXT[ thai ] = "Aleph";
             };
             ToolBoxItem
             {
@@ -5944,6 +6123,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto parcial";
                 Text[ finnish ] = "Alijoukko";
+                Text[ thai ] = "สับเซต";
             };
             ToolBoxItem
             {
@@ -5972,6 +6152,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto parcial o igual";
                 Text[ finnish ] = "Alijoukko tai yht�suuri kuin";
+                Text[ thai ] = "สับเซตหรือเท่ากับ";
             };
             ToolBoxItem
             {
@@ -6000,6 +6181,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto superior";
                 Text[ finnish ] = "Ylijoukko";
+                Text[ thai ] = "ซุปเปอร์เซต";
             };
             ToolBoxItem
             {
@@ -6028,6 +6210,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto superior o igual";
                 Text[ finnish ] = "Ylijoukko tai yht�suuri kuin";
+                Text[ thai ] = "ซุปเปอร์เซตหรือเท่ากับ";
             };
             ToolBoxItem
             {
@@ -6064,6 +6247,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto no parcial";
                 Text[ finnish ] = "Ei alijoukko";
+                Text[ thai ] = "ไม่เป็นสับเซต";
             };
             ToolBoxItem
             {
@@ -6092,6 +6276,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto no parcial o igual";
                 Text[ finnish ] = "Ei alijoukko tai yht�suuri kuin";
+                Text[ thai ] = "ไม่เป็นสับเซตหรือเท่ากับ";
             };
             ToolBoxItem
             {
@@ -6120,6 +6305,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto no superior";
                 Text[ finnish ] = "Ei ylijoukko";
+                Text[ thai ] = "ไม่เป็นซุปเปอร์เซต";
             };
             ToolBoxItem
             {
@@ -6148,6 +6334,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Conjunto no superior o igual";
                 Text[ finnish ] = "Ei ylijoukko tai yht�suuri kuin";
+                Text[ thai ] = "ไม่เป็นซุปเปอร์เซตหรือเท่ากับ";
             };
             ToolBoxItem
             {
@@ -6184,6 +6371,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Conjunto de n�meros naturales";
                 TEXT[ finnish ] = "Luonnollisten lukujen joukko";
+                TEXT[ thai ] = "เซตจำนวนธรรมชาติ";
             };
             ToolBoxItem
             {
@@ -6212,6 +6400,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Conjunto de n�meros enteros";
                 TEXT[ finnish ] = "Muuttujajoukko";
+                TEXT[ thai ] = "เซตจำนวนเต็ม";
             };
             ToolBoxItem
             {
@@ -6240,6 +6429,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Conjunto de n�meros racionales";
                 TEXT[ finnish ] = "Suhdelukujoukko";
+                TEXT[ thai ] = "เซตจำนวนที่สัมพันธ์กัน";
             };
             ToolBoxItem
             {
@@ -6268,6 +6458,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ catalan ] = "Conjunto de n�meros reales";
                 TEXT[ finnish ] = "Reaalilukujoukko";
                 TEXT[ turkish ] = " ";
+                TEXT[ thai ] = "เชตจำนวนจริง";
             };
             ToolBoxItem
             {
@@ -6296,6 +6487,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Conjunto de n�meros complejos";
                 TEXT[ finnish ] = "Kompleksilukujoukko";
+                TEXT[ thai ] = "เซตจำนวนเชิงซ้อน";
             };
         };
     };
@@ -6378,6 +6570,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Funci�n exponencial";
                 Text[ finnish ] = "Eksponentiaalifunktio";
+                Text[ thai ] = "ฟังก์ชั่นเอ็กซ์โปเนนเชียล";
             };
             ToolBoxItem
             {
@@ -6406,6 +6599,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Logaritmo natural";
                 Text[ finnish ] = "Luonnollinen logaritmi";
+                Text[ thai ] = "ลอการิธึมธรรมชาติ";
             };
             ToolBoxItem
             {
@@ -6434,6 +6628,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Funci�n exponencial";
                 Text[ finnish ] = "Eksponentiaalifunktio";
+                Text[ thai ] = "ฟังก์ชั่นเอ็กซ์โปเนนเชียล";
             };
             ToolBoxItem
             {
@@ -6462,6 +6657,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Logaritmo";
                 Text[ finnish ] = "Logaritmi";
+                Text[ thai ] = "ลอการิธึม";
             };
             ToolBoxItem
             {
@@ -6490,6 +6686,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Potencia";
                 TEXT[ finnish ] = "Potenssim��ritys";
+                TEXT[ thai ] = "ยกกำลัง";
             };
             ToolBoxItem
             {
@@ -6522,6 +6719,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Seno";
                 Text[ finnish ] = "Sini";
+                Text[ thai ] = "Sine";
             };
             ToolBoxItem
             {
@@ -6550,6 +6748,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Coseno";
                 Text[ finnish ] = "Kosini";
+                Text[ thai ] = "Cosine";
             };
             ToolBoxItem
             {
@@ -6578,6 +6777,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tangente";
                 Text[ finnish ] = "Tangentti";
+                Text[ thai ] = "Tangent";
             };
             ToolBoxItem
             {
@@ -6606,6 +6806,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Cotangente";
                 Text[ finnish ] = "Kotangentti";
+                Text[ thai ] = "Cotangent";
             };
             ToolBoxItem
             {
@@ -6634,6 +6835,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Ra�z cuadrada";
                 Text[ finnish ] = "Neli�juuri";
+                Text[ thai ] = "รากที่สอง";
             };
             ToolBoxItem
             {
@@ -6666,6 +6868,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Seno de arco";
                 Text[ finnish ] = "Arkussini";
+                Text[ thai ] = "Arcsine";
             };
             ToolBoxItem
             {
@@ -6694,6 +6897,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Coseno de arco";
                 Text[ finnish ] = "Arkuskosini";
+                Text[ thai ] = "Arccosine";
             };
             ToolBoxItem
             {
@@ -6722,6 +6926,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Arcotangente";
                 Text[ finnish ] = "Arkustangentti";
+                Text[ thai ] = "Arctangent";
             };
             ToolBoxItem
             {
@@ -6750,6 +6955,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Arcocotangente";
                 Text[ finnish ] = "Arkuskotangentti";
+                Text[ thai ] = "Arccotangent";
             };
             ToolBoxItem
             {
@@ -6778,6 +6984,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Ra�z n";
                 Text[ finnish ] = "N:s juuri";
+                Text[ thai ] = "รากที่ N";
             };
             ToolBoxItem
             {
@@ -6810,6 +7017,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Seno hiperb�lico";
                 Text[ finnish ] = "Hyberbolinen sini";
+                Text[ thai ] = "Sine แบบไฮเปอร์โบลา";
             };
             ToolBoxItem
             {
@@ -6838,6 +7046,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Coseno hiperb�lico";
                 Text[ finnish ] = "Hyberbolinen kosini";
+                Text[ thai ] = "Cosine แบบไฮเปอร์โบลา";
             };
             ToolBoxItem
             {
@@ -6866,6 +7075,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tangente hiperb�lica";
                 Text[ finnish ] = "Hyberbolinen tangentti";
+                Text[ thai ] = "Tangent แบบไฮเปอร์โบลา";
             };
             ToolBoxItem
             {
@@ -6894,6 +7104,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Cotangente hiperb�lica";
                 Text[ finnish ] = "Hyberbolinen kotangentti";
+                Text[ thai ] = "Cotangent แบบไฮเปอร์โบลา";
             };
             ToolBoxItem
             {
@@ -6922,6 +7133,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Valor absoluto";
                 Text[ finnish ] = "Itseisarvo";
+                Text[ thai ] = "ค่าสัมบูรณ์";
             };
             ToolBoxItem
             {
@@ -6954,6 +7166,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Seno hiperb�lico de �rea";
                 Text[ finnish ] = "Alueen hyberbolinen sini";
+                Text[ thai ] = "พื้นที่ Sine แบบไฮเปอร์โบลา";
             };
             ToolBoxItem
             {
@@ -6982,6 +7195,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Coseno hiperb�lico de �rea";
                 Text[ finnish ] = "Alueen hyberbolinen kosini";
+                Text[ thai ] = "พื้นที่ Cosine แบบไฮเปอร์โบลา";
             };
             ToolBoxItem
             {
@@ -7010,6 +7224,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tangente hiperb�lica de �rea";
                 Text[ finnish ] = "Alueen hyberbolinen tangentti";
+                Text[ thai ] = "พื้นที่ Tangent แบบไฮเปอร์โบลา";
             };
             ToolBoxItem
             {
@@ -7038,6 +7253,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Cotangente hiperb�lica de �rea";
                 Text[ finnish ] = "Alueen hyberbolinen kotangentti";
+                Text[ thai ] = "พื้นที่ Cotangent แบบไฮเปอร์โบลา";
             };
             ToolBoxItem
             {
@@ -7066,6 +7282,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Factorial";
                 Text[ finnish ] = "Kertoma";
+                Text[ thai ] = "แฟกตอเรียล";
             };
         };
     };
@@ -7135,6 +7352,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�mites";
                 Text[ finnish ] = "Limes";
+                Text[ thai ] = "Limes";
             };
             ToolBoxItem
             {
@@ -7163,6 +7381,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Suma";
                 Text[ finnish ] = "Sum";
+                Text[ thai ] = "ผลรวม";
             };
             ToolBoxItem
             {
@@ -7191,6 +7410,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Producto";
                 Text[ finnish ] = "Tuote";
+                Text[ thai ] = "ผลผลิต";
             };
             ToolBoxItem
             {
@@ -7219,6 +7439,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Coproducto";
                 Text[ finnish ] = "Oheistuote";
+                Text[ thai ] = "ผลผลิตร่วม";
             };
             ToolBoxItem
             {
@@ -7247,6 +7468,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�mites superior e inferior";
                 Text[ finnish ] = "Yl�- ja alaraja";
+                Text[ thai ] = "ขีดจำกัดบนและล่าง";
             };
             ToolBoxItem
             {
@@ -7279,6 +7501,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Integral";
                 Text[ finnish ] = "Kokonaisluku";
+                Text[ thai ] = "อินทิเกรต";
             };
             ToolBoxItem
             {
@@ -7307,6 +7530,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Integral doble";
                 Text[ finnish ] = "Kaksinkertainen integraali";
+                Text[ thai ] = "อินทิเกรตสองชั้น";
             };
             ToolBoxItem
             {
@@ -7335,6 +7559,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Integral triple";
                 Text[ finnish ] = "Kolmoisintegraali";
+                Text[ thai ] = "อินทิเกรตสามชั้น";
             };
             ToolBoxItem
             {
@@ -7367,6 +7592,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�mite inferior";
                 Text[ finnish ] = "Alaraja";
+                Text[ thai ] = "ขีดจำกัดล่าง";
             };
             ToolBoxItem
             {
@@ -7399,6 +7625,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Integral curvil�nea";
                 Text[ finnish ] = "K�yr�integraali";
+                Text[ thai ] = "อินทิเกรตแบบเส้นโค้ง";
             };
             ToolBoxItem
             {
@@ -7427,6 +7654,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Doble integral curvil�nea";
                 Text[ finnish ] = "Kaksinkertainen k�yr�integraali";
+                Text[ thai ] = "อินทิเกรตแบบเส้นโค้งสองชั้น";
             };
             ToolBoxItem
             {
@@ -7455,6 +7683,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Triple integral curvil�nea";
                 Text[ finnish ] = "Kolminkertainen k�yr�integraali";
+                Text[ thai ] = "อินทิเกรตแบบเส้นโค้งสามชั้น";
             };
             ToolBoxItem
             {
@@ -7487,6 +7716,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�mite superior";
                 Text[ finnish ] = "Yl�raja";
+                Text[ thai ] = "ขีดจำกัดบน";
             };
         };
     };
@@ -7565,6 +7795,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Sa�a vurgu";
                 Text[ arabic ] = "������� ������� ��� ������";
                 Text[ catalan ] = "Acento hacia la derecha";
+                Text[ thai ] = "แถบเน้นถึงด้านขวา";
             };
             ToolBoxItem
             {
@@ -7592,6 +7823,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ turkish ] = "Sola vurgu";
                 Text[ arabic ] = "������� ������� ��� ������";
                 Text[ catalan ] = "Acento hacia la izquierda";
+                Text[ thai ] = "แถบเน้นถึงด้านซ้าย";
             };
             ToolBoxItem
             {
@@ -7620,6 +7852,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "circunflejo inverso";
                 Text[ finnish ] = "K��nteinen sirkumfleksi";
+                Text[ thai ] = "สลับเครื่องหมายกำกับเสียง";
             };
             ToolBoxItem
             {
@@ -7648,6 +7881,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Breve";
                 Text[ finnish ] = "Yl�kaari";
+                Text[ thai ] = "เครื่องหมายการออก";
             };
             ToolBoxItem
             {
@@ -7676,6 +7910,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "C�rculo";
                 Text[ finnish ] = "Ympyr�";
+                Text[ thai ] = "วงกลม";
             };
             ToolBoxItem
             {
@@ -7708,6 +7943,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Flecha vectorial";
                 Text[ finnish ] = "Vektorinuoli";
+                Text[ thai ] = "ลูกศรเวกเตอร์";
             };
             ToolBoxItem
             {
@@ -7736,6 +7972,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tilde";
                 Text[ finnish ] = "Tilde";
+                Text[ thai ] = "เครื่องหมายลักษณะเพดานบน";
             };
             ToolBoxItem
             {
@@ -7764,6 +8001,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Circunflejo";
                 Text[ finnish ] = "Sirkumfleksi";
+                Text[ thai ] = "เครื่องหมายกำกับเสียง";
             };
             ToolBoxItem
             {
@@ -7792,6 +8030,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�nea superior";
                 Text[ finnish ] = "Yl�puolinen rivi";
+                Text[ thai ] = "บรรทัดบน";
             };
             ToolBoxItem
             {
@@ -7820,6 +8059,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Punto";
                 Text[ finnish ] = "Pilkku";
+                Text[ thai ] = "จุด";
             };
             ToolBoxItem
             {
@@ -7852,6 +8092,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Flecha vectorial ancha";
                 TEXT[ finnish ] = "Suuri vektorinuoli";
+                TEXT[ thai ] = "ลูกศรเวกเตอร์ใหญ่";
             };
             ToolBoxItem
             {
@@ -7880,6 +8121,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Tilde ancha";
                 TEXT[ finnish ] = "Suuri tilde";
+                TEXT[ thai ] = "เครื่องหมายลักษณะเพดานบน";
             };
             ToolBoxItem
             {
@@ -7908,6 +8150,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Circunflejo ancho";
                 TEXT[ finnish ] = "Suuri sirkumfleksi";
+                TEXT[ thai ] = "เครื่องหมายกำกับเสียงใหญ่";
             };
             ToolBoxItem
             {
@@ -7940,6 +8183,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "punto doble";
                 Text[ finnish ] = "Kaksi pistett�";
+                Text[ thai ] = "สองจุด";
             };
             ToolBoxItem
             {
@@ -7972,6 +8216,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�nea sobre";
                 Text[ finnish ] = "Yl�viiva";
+                Text[ thai ] = "สิ้นสุดบรรทัด";
             };
             ToolBoxItem
             {
@@ -8000,6 +8245,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�nea debajo";
                 Text[ finnish ] = "Alaviiva";
+                Text[ thai ] = "บรรทัดล่าง";
             };
             ToolBoxItem
             {
@@ -8028,6 +8274,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�nea a trav�s";
                 Text[ finnish ] = "Yliviivaus";
+                Text[ thai ] = "ตลอดบรรทัด";
             };
             ToolBoxItem
             {
@@ -8060,6 +8307,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Punto triple";
                 Text[ finnish ] = "Kolme pistett�";
+                Text[ thai ] = "สามจุด";
             };
             ToolBoxItem
             {
@@ -8092,6 +8340,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "transparente";
                 Text[ finnish ] = "L�pin�kyv�";
+                Text[ thai ] = "โปร่งแสง";
             };
             ToolBoxItem
             {
@@ -8120,6 +8369,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Negrita";
                 Text[ finnish ] = "Lihavoitu fontti";
+                Text[ thai ] = "ตัวอักษรหนา";
             };
             ToolBoxItem
             {
@@ -8148,6 +8398,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Cursiva";
                 Text[ finnish ] = "Kursivoitu fontti";
+                Text[ thai ] = "ตัวอักษรเอียง";
             };
             ToolBoxItem
             {
@@ -8176,6 +8427,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Modificar tama�o";
                 Text[ finnish ] = "Muuta kokoa";
+                Text[ thai ] = "ปรับขนาด";
             };
             ToolBoxItem
             {
@@ -8204,6 +8456,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Cambiar fuente";
                 Text[ finnish ] = "Muuta fontti";
+                Text[ thai ] = "เปลี่ยนตัวอักษร";
             };
         };
     };
@@ -8279,6 +8532,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "par�ntesis";
                 Text[ finnish ] = "Kaarisulkeet";
+                Text[ thai ] = "วงเล็บมน";
             };
             ToolBoxItem
             {
@@ -8307,6 +8561,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Corchetes";
                 Text[ finnish ] = "Hakasulkeet";
+                Text[ thai ] = "วงเล็บสี่เหลี่ยม";
             };
             ToolBoxItem
             {
@@ -8335,6 +8590,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "corchetes dobles";
                 Text[ finnish ] = "Kaksinkertaiset hakasulkeet";
+                Text[ thai ] = "วงเล็บสี่เหลี่ยมคู่";
             };
             ToolBoxItem
             {
@@ -8363,6 +8619,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�neas simples";
                 Text[ finnish ] = "Yksitt�iset rivit";
+                Text[ thai ] = "บรรทัดเดียว";
             };
             ToolBoxItem
             {
@@ -8391,6 +8648,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�neas dobles";
                 Text[ finnish ] = "Kaksoisviivat";
+                Text[ thai ] = "สองบรรทัด";
             };
             ToolBoxItem
             {
@@ -8423,6 +8681,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Llaves";
                 Text[ finnish ] = "Aaltosulkeet";
+                Text[ thai ] = "ปีกกา";
             };
             ToolBoxItem
             {
@@ -8451,6 +8710,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Par�ntesis angulares";
                 Text[ finnish ] = "Kulmasulkeet";
+                Text[ thai ] = "วงเล็บเหลี่ยม";
             };
             ToolBoxItem
             {
@@ -8479,6 +8739,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Par�ntesis de operador";
                 Text[ finnish ] = "Operaattorisulkeet";
+                Text[ thai ] = "วงเล็บตัวปฏิบัติการ";
             };
             ToolBoxItem
             {
@@ -8511,6 +8772,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Par�ntesis de agrupamiento";
                 Text[ finnish ] = "Ryhm�sulkeet";
+                Text[ thai ] = "กลุ่มวงเล็บ";
             };
             ToolBoxItem
             {
@@ -8543,6 +8805,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "par�ntesis (graduables)";
                 Text[ finnish ] = "Kaarisulkeet (skaalattavat)";
+                Text[ thai ] = "วงเล็บมน (ปรับอัตราส่วนได้)";
             };
             ToolBoxItem
             {
@@ -8571,6 +8834,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Corchetes (graduables)";
                 Text[ finnish ] = "Hakasulkeet (skaalattavat)";
+                Text[ thai ] = "วงเล็บสี่เหลี่ยม (ปรับอัตราส่วนได้)";
             };
             ToolBoxItem
             {
@@ -8599,6 +8863,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "corchetes (graduables)";
                 Text[ finnish ] = "Kaksinkertaiset hakasulkeet (skaalattavat)";
+                Text[ thai ] = "วงเล็บสี่เหลี่ยมคู่ (ปรับอัตราส่วนได้)";
             };
             ToolBoxItem
             {
@@ -8627,6 +8892,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "l�neas simples (graduables)";
                 Text[ finnish ] = "Yksitt�iset rivit (skaalattavat)";
+                Text[ thai ] = "บรรทัดเดียว (ปรับอัตราส่วนได้)";
             };
             ToolBoxItem
             {
@@ -8655,6 +8921,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "l�neas dobles (graduables)";
                 Text[ finnish ] = "Kaksoisviivat (skaalattava)";
+                Text[ thai ] = "สองบรรทัด (ปรับอัตราส่วนได้)";
             };
             ToolBoxItem
             {
@@ -8687,6 +8954,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Llaves (graduables)";
                 Text[ finnish ] = "Aaltosulkeet (skaalattavat)";
+                Text[ thai ] = "ปีกกา (ปรับอัตราส่วนได้)";
             };
             ToolBoxItem
             {
@@ -8715,6 +8983,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Par�ntesis angulares (graduables)";
                 Text[ finnish ] = "Kulmasulkeet (skaalattavat)";
+                Text[ thai ] = "วงเล็บเหลี่ยม (ปรับอัตราส่วนได้)";
             };
             ToolBoxItem
             {
@@ -8743,6 +9012,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Par�ntesis de operador (graduables)";
                 Text[ finnish ] = "Operaattorisulkeet (skaalattavat)";
+                Text[ thai ] = "วงเล็บตัวปฏิบัติการ (ปรับอัตราส่วนได้)";
             };
             ToolBoxItem
             {
@@ -8775,6 +9045,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "llaves arriba (graduables)";
                 Text[ finnish ] = "Aaltosulkeet ylh��ll� (skaalattavat)";
+                Text[ thai ] = "ปีกกาบน (ปรับอัตราส่วนได้)";
             };
             ToolBoxItem
             {
@@ -8803,6 +9074,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "llaves abajo (graduables)";
                 Text[ finnish ] = "Aaltosulkeet alhaalla (skaalattavat)";
+                Text[ thai ] = "ปีกกาล่าง (ปรับอัตราส่วนได้)";
             };
         };
     };
@@ -8874,6 +9146,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Super�ndice a la izquierda";
                 Text[ finnish ] = "Yl�indeksi vasemmalle";
+                Text[ thai ] = "ตัวยกด้านซ้าย";
             };
             ToolBoxItem
             {
@@ -8902,6 +9175,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Super�ndice arriba";
                 TEXT[ finnish ] = "Yl�indeksi p��lle";
+                TEXT[ thai ] = "ตัวยกด้านบน";
             };
             ToolBoxItem
             {
@@ -8930,6 +9204,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Super�ndice derecha";
                 Text[ finnish ] = "Yl�indeksi oikealle";
+                Text[ thai ] = "ตัวยกด้านขวา";
             };
             ToolBoxItem
             {
@@ -8958,6 +9233,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "disposici�n vertical (2 elementos)";
                 Text[ finnish ] = "Pystypino (2 elementti�)";
+                Text[ thai ] = "กองซ้อนแนวตั้ง (2 องค์ประกอบ)";
             };
             ToolBoxItem
             {
@@ -8986,6 +9262,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Empezar l�nea nueva";
                 Text[ finnish ] = "Uusi viiva";
+                Text[ thai ] = "บรรทัดใหม่";
             };
             ToolBoxItem
             {
@@ -9018,6 +9295,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sub�ndice izquierda";
                 Text[ finnish ] = "Alaindeksi vasemmalle";
+                Text[ thai ] = "ตัวห้อยด้านซ้าย";
             };
             ToolBoxItem
             {
@@ -9046,6 +9324,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Sub�ndice abajo";
                 TEXT[ finnish ] = "Alaindeksi alhaalle";
+                TEXT[ thai ] = "ตัวห้อยด้านล่าง";
             };
             ToolBoxItem
             {
@@ -9074,6 +9353,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sub�ndice derecha";
                 Text[ finnish ] = "Alaindeksi oikealle";
+                Text[ thai ] = "ตัวห้อยด้านขวา";
             };
             ToolBoxItem
             {
@@ -9102,6 +9382,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Disposici�n vertical";
                 Text[ finnish ] = "Pystypino";
+                Text[ thai ] = "กองซ้อนแนวตั้ง";
             };
             ToolBoxItem
             {
@@ -9130,6 +9411,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Espacio peque�o";
                 Text[ finnish ] = "Pieni v�li";
+                Text[ thai ] = "ช่องว่างเล็ก";
             };
             ToolBoxItem
             {
@@ -9162,6 +9444,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "alinear a la izquierda";
                 Text[ finnish ] = "Tasaa vasemmalle";
+                Text[ thai ] = "จัดชิดซ้าย";
             };
             ToolBoxItem
             {
@@ -9191,6 +9474,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "alinear al centro";
                 Text[ finnish ] = "Tasaa keskitys";
+                Text[ thai ] = "จัดตรงกลาง";
             };
             ToolBoxItem
             {
@@ -9219,6 +9503,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "alinear a la derecha";
                 Text[ finnish ] = "Tasaa oikealle";
+                Text[ thai ] = "จัดชิดขวา";
             };
             ToolBoxItem
             {
@@ -9247,6 +9532,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Disposici�n matriz";
                 Text[ finnish ] = "Matriisipino";
+                Text[ thai ] = "กองซ้อนแบบเมตริกซ์";
             };
             ToolBoxItem
             {
@@ -9275,6 +9561,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Espacio";
                 Text[ finnish ] = "V�li";
+                Text[ thai ] = "ช่องว่าง";
             };
         };
     };
@@ -9350,6 +9637,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "infinito";
                 TEXT[ finnish ] = "p��ttym�t�n";
+                TEXT[ thai ] = "ไม่จำกัด";
             };
             ToolBoxItem
             {
@@ -9362,7 +9650,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese ] = "parcial";
                 TEXT[ danish ] = "partiel";
                 TEXT[ french ] = "Partiel";
-                TEXT[ swedish ] = "partial";
+                TEXT[ swedish ] = "Partial";
                 TEXT[ dutch ] = "partieel";
                 TEXT[ spanish ] = "parcial";
                 TEXT[ english_us ] = "Partial";
@@ -9378,6 +9666,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "parcial";
                 TEXT[ finnish ] = "Osittainen";
+                TEXT[ thai ] = "บางส่วน";
             };
             ToolBoxItem
             {
@@ -9406,6 +9695,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Nabla";
                 TEXT[ finnish ] = "Nabla";
+                TEXT[ thai ] = "Nabla";
             };
             ToolBoxItem
             {
@@ -9434,6 +9724,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Existe";
                 TEXT[ finnish ] = "On olemassa";
+                TEXT[ thai ] = "ที่มีอยู่";
             };
             ToolBoxItem
             {
@@ -9462,6 +9753,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Para todos";
                 TEXT[ finnish ] = "Kaikille";
+                TEXT[ thai ] = "สำหรับทั้งหมด";
             };
             ToolBoxItem
             {
@@ -9494,6 +9786,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "h barra";
                 TEXT[ finnish ] = "vaakapalkki";
+                TEXT[ thai ] = "แถบ h ";
             };
             ToolBoxItem
             {
@@ -9522,6 +9815,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ catalan ] = "lambda barra";
                 TEXT[ finnish ] = "Lambda-viiva";
                 TEXT[ turkish ] = " ";
+                TEXT[ thai ] = "แถบแลมบ์ด้า";
             };
             ToolBoxItem
             {
@@ -9550,6 +9844,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Parte real";
                 TEXT[ finnish ] = "Reaaliosa";
+                TEXT[ thai ] = "ส่วนจริง";
             };
             ToolBoxItem
             {
@@ -9578,6 +9873,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Parte imaginaria";
                 TEXT[ finnish ] = "Imaginaariosa";
+                TEXT[ thai ] = "ส่วนจินตนาการ";
             };
             ToolBoxItem
             {
@@ -9606,6 +9902,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "p de Weierstrass";
                 TEXT[ finnish ] = "Weierstrassin p-funktio";
+                TEXT[ thai ] = "Weierstrass p";
             };
             ToolBoxItem
             {
@@ -9638,6 +9935,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Flecha hacia la izquierda";
                 TEXT[ finnish ] = "Nuoli vasemmalle";
+                TEXT[ thai ] = "ลูกศรซ้าย";
             };
             ToolBoxItem
             {
@@ -9666,6 +9964,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Flecha hacia la derecha";
                 TEXT[ finnish ] = "Nuoli oikealle";
+                TEXT[ thai ] = "ลูกศรขวา";
             };
             ToolBoxItem
             {
@@ -9678,7 +9977,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese ] = "Seta para cima";
                 TEXT[ danish ] = "pil opad";
                 TEXT[ french ] = "Fl�che vers le haut";
-                TEXT[ swedish ] = "pil upp�t";
+                TEXT[ swedish ] = "Pil upp�t";
                 TEXT[ dutch ] = "Pijl naar boven";
                 TEXT[ spanish ] = "Flecha hacia arriba";
                 TEXT[ english_us ] = "Up Arrow";
@@ -9694,6 +9993,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Flecha hacia arriba";
                 TEXT[ finnish ] = "Yl�nuoli";
+                TEXT[ thai ] = "ลูกศรขึ้น";
             };
             ToolBoxItem
             {
@@ -9706,7 +10006,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese ] = "Seta para baixo";
                 TEXT[ danish ] = "pil nedad";
                 TEXT[ french ] = "Fl�che vers le bas";
-                TEXT[ swedish ] = "pil ned�t";
+                TEXT[ swedish ] = "Pil ned�t";
                 TEXT[ dutch ] = "Pijl naar beneden";
                 TEXT[ spanish ] = "Flecha hacia abajo";
                 TEXT[ english_us ] = "Down Arrow";
@@ -9722,6 +10022,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Flecha hacia abajo";
                 TEXT[ finnish ] = "Alanuoli";
+                TEXT[ thai ] = "ลูกศรลง";
             };
             ToolBoxItem
             {
@@ -9758,6 +10059,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Puntos abajo";
                 TEXT[ finnish ] = "Pisteet alhaalla";
+                TEXT[ thai ] = "จุดด้านล่าง";
             };
             ToolBoxItem
             {
@@ -9786,6 +10088,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Puntos en el medio";
                 TEXT[ finnish ] = "Pisteet keskell�";
+                TEXT[ thai ] = "จุดตรงกลาง";
             };
             ToolBoxItem
             {
@@ -9814,6 +10117,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Puntos verticalmente";
                 TEXT[ finnish ] = "Pisteet pystysuunnassa";
+                TEXT[ thai ] = "จุดแนวตั้ง";
             };
             ToolBoxItem
             {
@@ -9842,6 +10146,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Puntos hacia arriba";
                 TEXT[ finnish ] = "Pisteet yl�s";
+                TEXT[ thai ] = "จุดด้านบน";
             };
             ToolBoxItem
             {
@@ -9870,6 +10175,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Puntos hacia abajo";
                 TEXT[ finnish ] = "Pisteet alas";
+                TEXT[ thai ] = "จุดด้านล่าง";
             };
         };
     };
@@ -9934,6 +10240,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Operadores unarios/binarios";
                 Text[ finnish ] = "Unaari-/bin��rioperaattorit";
+                Text[ thai ] = "ตัวปฏิบัติการ Unary/Binary ";
             };
             ToolBoxItem
             {
@@ -9962,6 +10269,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Relaciones";
                 Text[ finnish ] = "Suhteet";
+                Text[ thai ] = "ความสัมพันธ์";
             };
             ToolBoxItem
             {
@@ -9990,6 +10298,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Operaciones de conjuntos";
                 Text[ finnish ] = "M��rit� toiminnot";
+                Text[ thai ] = "กำหนดความสัมพันธ์";
             };
             ToolBoxItem
             {
@@ -10018,6 +10327,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Funciones";
                 Text[ finnish ] = "Toiminnot";
+                Text[ thai ] = "ฟังก์ชั่น";
             };
             ToolBoxItem
             {
@@ -10046,6 +10356,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Operadores";
                 Text[ finnish ] = "Operaattorit";
+                Text[ thai ] = "ตัวปฏิบัติการ";
             };
             ToolBoxItem
             {
@@ -10078,6 +10389,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Atributos";
                 Text[ finnish ] = "M��ritteet";
+                Text[ thai ] = "คุณลักษณะ";
             };
             ToolBoxItem
             {
@@ -10106,6 +10418,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ language_user1 ] = " ";
                 TEXT[ catalan ] = "Otros";
                 TEXT[ finnish ] = "Muut";
+                TEXT[ thai ] = "อื่น ๆ";
             };
             ToolBoxItem
             {
@@ -10138,6 +10451,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Par�ntesis";
                 Text[ finnish ] = "Sulkeet";
+                Text[ thai ] = "วงเล็บก้ามปู";
             };
             ToolBoxItem
             {
@@ -10166,6 +10480,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Formatos";
                 Text[ finnish ] = "Muodot";
+                Text[ thai ] = "รูปแบบ";
             };
         };
     };
@@ -10190,6 +10505,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     Text[ turkish ] = "Se�im";
     Text[ catalan ] = "Selecci�n";
     Text[ finnish ] = "Valinta";
+    Text[ thai ] = "เลือก";
 };
 
 
@@ -10228,6 +10544,7 @@ DockingWindow RID_CMDBOXWINDOW
     Text[ turkish ] = "Komutlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Comandos";
+    Text[ thai ] = "คำสั่ง";
 };
 #define _ID_LIST \
     IdList =\
@@ -10348,6 +10665,7 @@ String RID_DOCUMENTSTR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "F�rmula";
     Text[ finnish ] = "Kaava";
+    Text[ thai ] = "สูตรคำนวณ";
 };
 
 String STR_STATSTR_READING
@@ -10378,6 +10696,7 @@ String STR_STATSTR_READING
     Text[ korean ] = "문서 로드 중...";
     Text[ turkish ] = "Belge y�kleniyor...";
     Text[ catalan ] = "Cargando el documento...";
+    Text[ thai ] = "กำลังโหลดเอกสาร...";
 };
 
 String STR_STATSTR_WRITING
@@ -10409,6 +10728,7 @@ String STR_STATSTR_WRITING
     Text[ turkish ] = "Belge kaydediliyor...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardando el documento...";
+    Text[ thai ] = "กำลังบันทึกเอกสาร...";
 };
 
 
@@ -10436,13 +10756,14 @@ String STR_MATH_DOCUMENT_FULLTYPE_60
     Text[ arabic ] = "%PRODUCTNAME 6.0 ����";
     Text[ catalan ] = "%PRODUCTNAME 6.0 F�rmula";
     Text[ finnish ] = "%PRODUCTNAME 6,0 -kaava";
+    Text[ thai ] = "สูตรคำนวณ %PRODUCTNAME 6.0 ";
 };
 String STR_MATH_DOCUMENT_FULLTYPE_50
 {
     Text = "%PRODUCTNAME 5.0 Formel" ;
     Text [ ENGLISH ] = "StarOffice 5.0 Formula" ;
     Text [ english_us ] = "%PRODUCTNAME 5.0 Formula" ;
-    Text [ swedish ] = "%PRODUCTNAME 5.0 Formel" ;
+    Text [ swedish ] = "%PRODUCTNAME 5.0 formel" ;
     Text [ danish ] = "%PRODUCTNAME 5.0 formel" ;
     Text [ italian ] = "Formula %PRODUCTNAME 5.0" ;
     Text [ spanish ] = "%PRODUCTNAME 5.0 F�rmula" ;
@@ -10462,6 +10783,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_50
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 5.0 F�rmula";
     Text[ finnish ] = "%PRODUCTNAME 5.0 -kaava";
+    Text[ thai ] = "สูตรคำนวณ %PRODUCTNAME 5.0 ";
 };
 
 String STR_MATH_DOCUMENT_FULLTYPE_40
@@ -10469,7 +10791,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_40
     Text = "%PRODUCTNAME 4.0 Formel" ;
     Text [ ENGLISH ] = "StarOffice 4.0 Formula" ;
     Text [ english_us ] = "%PRODUCTNAME 4.0 Formula" ;
-    Text [ swedish ] = "%PRODUCTNAME 4.0 Formel" ;
+    Text [ swedish ] = "%PRODUCTNAME 4.0 formel" ;
     Text [ danish ] = "%PRODUCTNAME 4.0 formel" ;
     Text [ italian ] = "Formula %PRODUCTNAME 4.0" ;
     Text [ spanish ] = "%PRODUCTNAME 4.0 F�rmula" ;
@@ -10489,6 +10811,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_40
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 4.0 F�rmula";
     Text[ finnish ] = "%PRODUCTNAME 4,0 -kaava";
+    Text[ thai ] = "สูตรคำนวณ %PRODUCTNAME 4.0 ";
 };
 
 String STR_MATH_DOCUMENT_FULLTYPE_31
@@ -10496,7 +10819,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_31
     Text = "%PRODUCTNAME 3.0 Formel" ;
     Text [ ENGLISH ] = "StarOffice 3.0 Formula" ;
     Text [ english_us ] = "%PRODUCTNAME 3.0 Formula" ;
-    Text [ swedish ] = "%PRODUCTNAME 3.0 Formel" ;
+    Text [ swedish ] = "%PRODUCTNAME 3.0 formel" ;
     Text [ danish ] = "%PRODUCTNAME 3.0 formel" ;
     Text [ italian ] = "Formula %PRODUCTNAME 3.0" ;
     Text [ spanish ] = "%PRODUCTNAME 3.0 F�rmula" ;
@@ -10516,6 +10839,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_31
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 3.0 F�rmula";
     Text[ finnish ] = "%PRODUCTNAME 3,0 -kaava";
+    Text[ thai ] = "สูตรคำนวณ %PRODUCTNAME 3.0 ";
 };
 
 String RID_SYMBOLFILESSTR
@@ -10542,6 +10866,7 @@ String RID_SYMBOLFILESSTR
     Text[ turkish ] = "Simge dosyalar� (*.sms)";
     Text[ catalan ] = "Archivos de s�mbolos (*.sms)";
     Text[ finnish ] = "Symbolitiedostot (*.sms)";
+    Text[ thai ] = "แฟ้มสัญลักษณ์ (*.sms)";
 };
 
 String RID_ALLFILESSTR
@@ -10569,6 +10894,7 @@ String RID_ALLFILESSTR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Todos los archivos (*.*)";
     Text[ finnish ] = "Kaikki tiedostot (*.*)";
+    Text[ thai ] = "แฟ้มทั้งหมด (*.*)";
 };
 
 String RID_ERR_IDENT
@@ -10596,6 +10922,7 @@ String RID_ERR_IDENT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ERROR :  ";
     Text[ finnish ] = "VIRHE: ";
+    Text[ thai ] = "ผิดพลาด : ";
 };
 
 String RID_ERR_UNKOWN
@@ -10623,6 +10950,7 @@ String RID_ERR_UNKOWN
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se ha producido un error desconocido";
     Text[ finnish ] = "Tuntematon virhe ilmeni";
+    Text[ thai ] = "ไม่รู้จักข้อผิดพลาดที่เกิดขึ้น";
 };
 
 String RID_ERR_UNEXPECTEDCHARACTER
@@ -10650,6 +10978,7 @@ String RID_ERR_UNEXPECTEDCHARACTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Car�cter no esperado";
     Text[ finnish ] = "Odottamaton merkki";
+    Text[ thai ] = "ตัวอักขระที่ไม่คาดคิด";
 };
 
 String RID_ERR_OVERFLOW
@@ -10677,6 +11006,7 @@ String RID_ERR_OVERFLOW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La f�rmula es muy compleja";
     Text[ finnish ] = "Kaavamerkint� liian monimutkainen";
+    Text[ thai ] = "ป้อนสูตรคำนวณซับซ้อนเกินไป";
 };
 
 String RID_ERR_LGROUPEXPECTED
@@ -10704,6 +11034,7 @@ String RID_ERR_LGROUPEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere '{'";
     Text[ finnish ] = "'{' oletuksena";
+    Text[ thai ] = "'{' คาดคิด";
 };
 
 String RID_ERR_RGROUPEXPECTED
@@ -10731,6 +11062,7 @@ String RID_ERR_RGROUPEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere '}'";
     Text[ finnish ] = "'}' oletuksena";
+    Text[ thai ] = "'}' คาดคิด";
 };
 
 String RID_ERR_LBRACEEXPECTED
@@ -10758,6 +11090,7 @@ String RID_ERR_LBRACEEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere '(' ";
     Text[ finnish ] = "'(' oletuksena";
+    Text[ thai ] = "'(' คาดคิด";
 };
 
 String RID_ERR_RBRACEEXPECTED
@@ -10785,6 +11118,7 @@ String RID_ERR_RBRACEEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere ')'";
     Text[ finnish ] = "')' oletuksena";
+    Text[ thai ] = "')' คาดคิด";
 };
 
 String RID_ERR_FUNCEXPECTED
@@ -10812,6 +11146,7 @@ String RID_ERR_FUNCEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere una funci�n";
     Text[ finnish ] = "Toiminto oletuksena";
+    Text[ thai ] = "ฟังก์ชั่นที่คาดคิด";
 };
 
 String RID_ERR_UNOPEREXPECTED
@@ -10840,6 +11175,7 @@ String RID_ERR_UNOPEREXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se espera un operador unario";
     Text[ finnish ] = "Unaarioperattori oletuksena";
+    Text[ thai ] = "ตัวปฏิบัติการ Unary ที่คาดคิด";
 };
 
 String RID_ERR_BINOPEREXPECTED
@@ -10868,6 +11204,7 @@ String RID_ERR_BINOPEREXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se espera un operador binario";
     Text[ finnish ] = "Bin��rioperattori oletuksena";
+    Text[ thai ] = "ตัวปฏิบัติการ Binary ที่คาดคิด";
 };
 
 String RID_ERR_SYMBOLEXPECTED
@@ -10895,6 +11232,7 @@ String RID_ERR_SYMBOLEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se necesita un s�mbolo";
     Text[ finnish ] = "Symboli oletuksena";
+    Text[ thai ] = "สัญลักษณ์ที่คาดคิด";
 };
 
 String RID_ERR_IDENTEXPECTED
@@ -10922,6 +11260,7 @@ String RID_ERR_IDENTEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere un identificador";
     Text[ finnish ] = "Tunnus oletuksena";
+    Text[ thai ] = "ตัวบ่งชี้ที่คาดคิด";
 };
 
 String RID_ERR_POUNDEXPECTED
@@ -10949,6 +11288,7 @@ String RID_ERR_POUNDEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere '#'";
     Text[ finnish ] = "'#' oletuksena";
+    Text[ thai ] = "'#'คาดคิด";
 };
 
 String RID_ERR_COLOREXPECTED
@@ -10976,6 +11316,7 @@ String RID_ERR_COLOREXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere un color";
     Text[ finnish ] = "Vaadittu v�ri";
+    Text[ thai ] = "สีที่ต้องการ";
 };
 
 String RID_ERR_LPARENTEXPECTED
@@ -11003,6 +11344,7 @@ String RID_ERR_LPARENTEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere el l�mite izquierdo";
     Text[ finnish ] = "Vasen raja oletuksena";
+    Text[ thai ] = "ขีดจำกัดซ้ายที่คาดคิด";
 };
 
 String RID_ERR_RPARENTEXPECTED
@@ -11030,6 +11372,7 @@ String RID_ERR_RPARENTEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere el l�mite derecho";
     Text[ finnish ] = "Oikea raja oletuksena";
+    Text[ thai ] = "ขีดจำกัดขวาที่คาดคิด";
 };
 
 String RID_ERR_RIGHTEXPECTED
@@ -11057,6 +11400,7 @@ String RID_ERR_RIGHTEXPECTED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se requiere 'RIGHT'";
     Text[ finnish ] = "'RIGHT' oletuksena";
+    Text[ thai ] = "'RIGHT' ที่คาดคิด";
 };
 
 String RID_PLUGINTOOLBOX
@@ -11084,6 +11428,7 @@ String RID_PLUGINTOOLBOX
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de Plug-ins";
     Text[ finnish ] = "Lis�osapalkki";
+    Text[ thai ] = "แถบปลั๊กอิน";
 };
 
 #include "menu.src"
@@ -11136,6 +11481,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Aumentar";
             Text[ finnish ] = "L�henn�";
+            Text[ thai ] = "ย่อเข้า";
         };
         ToolBoxItem
         {
@@ -11164,6 +11510,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Reducir";
             Text[ finnish ] = "Loitonna";
+            Text[ thai ] = "ขยายออก";
         };
         ToolBoxItem
         {
@@ -11193,6 +11540,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Escala 100%";
             Text[ finnish ] = "Zoomaus 100%";
+            Text[ thai ] = "ย่อ/ขยาย 100%";
         };
         ToolBoxItem
         {
@@ -11221,6 +11569,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "F�rmula completa";
             Text[ finnish ] = "Koko kaava";
+            Text[ thai ] = "สูตรคำนวณทั้งหมด";
         };
         ToolBoxItem
         {
@@ -11254,6 +11603,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ turkish ] = "G�ncelle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Actualizar";
+            Text[ thai ] = "ฟื้นฟู";
         };
         ToolBoxItem
         {
@@ -11282,6 +11632,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cursor de f�rmula";
             Text[ finnish ] = "Kaavakohdistin";
+            Text[ thai ] = "เคอร์เซอร์สูตรคำนวณ";
         };
         ToolBoxItem
         {
@@ -11312,6 +11663,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ turkish ] = "Simgeler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "S�mbolos";
+            Text[ thai ] = "สัญลักษณ์";
         };
     };
 };
@@ -11341,6 +11693,7 @@ String RID_MATH_TOOLBOX
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "P��ty�kalurivi";
+    Text[ thai ] = "แถบเครื่องมือหลัก";
 };
 
 
