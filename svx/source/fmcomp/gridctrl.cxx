@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:49:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3476,7 +3476,8 @@ void DbGridControl::HideColumn(sal_uInt16 nId)
     }
 
     // and reset the focus
-    GoToColumnId( nNewColId );
+    if ( nId == GetCurColumnId() )
+        GoToColumnId( nNewColId );
 }
 
 //------------------------------------------------------------------------------
