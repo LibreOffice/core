@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-02 14:31:19 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 11:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,7 +769,8 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 
                 }
 
-                xCurrentCol->setPropertyValue(sPropertyName, aDefault);
+                if(aDefault.hasValue())
+                    xCurrentCol->setPropertyValue(sPropertyName, aDefault);
 
                 // transfer properties from the definition to the UNO-model :
                 // ... the hidden flag
@@ -3445,6 +3446,9 @@ void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
             SQLExceptionInfo aErrorInfo;
             try
             {
+                if(_pApplyTo == m_pCurrentlyDisplayed)  // check if we have to unload otherwise the table will be used by a resultset or is locked
+                    unloadAndCleanup(sal_False, sal_False); // don't dispose the connection, don't flush
+
                 if(xTables->hasByName(sTableName))
                     xDrop->dropByName(sTableName);
                 else
@@ -3972,8 +3976,14 @@ void SbaTableQueryBrowser::ensureObjectExists(SvLBoxEntry* _pApplyTo)
             SvLBoxItem* pTextItem = _pApplyTo->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
             if (pTextItem)
                 sCurrentObject = static_cast<SvLBoxString*>(pTextItem)->GetText();
-            if(xNameAccess.is() && xNameAccess->hasByName(sCurrentObject))  // remember the table or query object
-                xNameAccess->getByName(sCurrentObject) >>= pData->xObject;
+            try
+            {
+                if(xNameAccess.is() && xNameAccess->hasByName(sCurrentObject))  // remember the table or query object
+                    xNameAccess->getByName(sCurrentObject) >>= pData->xObject;
+            }
+            catch(Exception&)
+            {
+            }
         }
     }
 }
