@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 17:10:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-19 11:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,7 +875,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
         }
 
-        INetURLObject::SetBaseURL( aOldURL );
     }
 
     if ( bOk )
