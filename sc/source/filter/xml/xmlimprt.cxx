@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:29:50 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1827,15 +1827,9 @@ sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValida
         {
             if (aItr->sName == sName)
             {
-                if (aItr->sBaseCellAddress.getLength())
-                {
-                    sal_Int32 nOffset(0);
-                    LockSolarMutex();
-                    if (ScXMLConverter::GetAddressFromString(
-                        aItr->aBaseCellAddress, aItr->sBaseCellAddress, GetDocument(), nOffset ))
-                        aItr->sBaseCellAddress = sEmpty;
-                    UnlockSolarMutex();
-                }
+                // #b4974740# source position must be set as string,
+                // so sBaseCellAddress no longer has to be converted here
+
                 bFound = sal_True;
             }
             else
