@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-26 13:42:23 $
+ *  last change: $Author: obr $ $Date: 2002-10-11 08:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ static sal_Bool               bSetWINCHHandler = sal_False;
 static sal_Bool               bSetILLHandler = sal_False;
 
 static void SignalHandlerFunction(int);
-extern oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max);
+extern char * osl_impl_getExecutableName(char * buffer, size_t n);
 oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max);
 
 static sal_Bool InitSignal()
@@ -162,8 +162,8 @@ static sal_Bool InitSignal()
 
     char ProgFile[512];
 
-    if ((osl_psz_getExecutableFile(ProgFile, sizeof(ProgFile)) ==  osl_Process_E_None) &&
-        (strstr(ProgFile, "soffice") != NULL))
+    if( (NULL != osl_impl_getExecutableName(ProgFile, sizeof(ProgFile))) &&
+        (NULL != strstr(ProgFile, "soffice")) )
     {
         char CmdLine[512];
 

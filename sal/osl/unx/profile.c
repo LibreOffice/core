@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obr $ $Date: 2001-11-21 14:29:50 $
+ *  last change: $Author: obr $ $Date: 2002-10-11 08:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,6 @@ extern oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, s
 oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags);
 sal_Bool SAL_CALL osl_psz_getProfileName(const sal_Char* pszPath, const sal_Char* pszName,
                                          sal_Char* pszBuffer, sal_uInt32 MaxLen);
-sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uInt32 MaxLen);
 sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max);
 
@@ -320,9 +319,10 @@ oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfi
     bRet=loadProfile(pFile, pProfile);
     OSL_ASSERT(bRet);
 
-
+/*
     OSL_VERIFY(osl_getFullPath(pszProfileName, pProfile->m_FileName, sizeof(pProfile->m_FileName)));
-
+*/
+    OSL_VERIFY(NULL != realpath(pszProfileName, pProfile->m_FileName));
 
     if (pProfile->m_pFile == NULL)
         closeFileImpl(pFile,pProfile->m_Flags);
@@ -1354,10 +1354,16 @@ sal_Bool SAL_CALL osl_psz_getProfileName(const sal_Char* pszPath, const sal_Char
             pszPath = Dir;
         }
 
+/*
         OSL_VERIFY(osl_getFullPath(Home, Loc, sizeof(Loc)));
+*/
+        OSL_VERIFY(NULL != realpath(Home, Loc));
 
         /* when file is in the home directory it should be hidden */
+/*
         if (osl_getFullPath(pszPath, Path, sizeof(Path)))
+*/
+        if( NULL != realpath(pszPath, Path) )
         {
             if (Path[strlen(Path) - 1] != '/') strcat(Path, "/");
 
