@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 16:57:48 $
+ *  last change: $Author: pb $ $Date: 2002-02-22 08:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,8 +717,9 @@ private:
     ItemListenerMultiplexer     maItemListeners;
 
 protected:
-    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-
+    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+                    createAccessibleContext();
 
 public:
                         VCLXListBox();

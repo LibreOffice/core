@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 12:11:58 $
+ *  last change: $Author: pb $ $Date: 2002-02-22 08:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 
 #include <toolkit/awt/vclxwindows.hxx>
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLELISTBOX_HXX_
+#include <toolkit/awt/vclxaccessiblelistbox.hxx>
+#endif
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -1366,6 +1369,11 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXListBox::createAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new ::toolkit::VCLXAccessibleListBox( this );
+}
+
 void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -2653,7 +2661,7 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
             {
                 sal_Int16 n;
                 if ( Value >>= n )
-                     pComboBox->EnableAutocomplete( n );
+                     pComboBox->EnableAutocomplete( n != 0 );
             }
             break;
             case BASEPROPERTY_STRINGITEMLIST:
@@ -3467,7 +3475,7 @@ void VCLXNumericField::setValue( double Value ) throw(::com::sun::star::uno::Run
         // z.B. 105, 2 Digits => 1,05
         // ein float 1,05 muss also eine 105 einstellen...
         pNumericFormatter->SetValue(
-            ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
+            (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
     }
 }
 
@@ -3488,7 +3496,7 @@ void VCLXNumericField::setMin( double Value ) throw(::com::sun::star::uno::Runti
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     if ( pNumericFormatter )
         pNumericFormatter->SetMin(
-            ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
+            (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
 }
 
 double VCLXNumericField::getMin() throw(::com::sun::star::uno::RuntimeException)
@@ -3508,7 +3516,7 @@ void VCLXNumericField::setMax( double Value ) throw(::com::sun::star::uno::Runti
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     if ( pNumericFormatter )
         pNumericFormatter->SetMax(
-            ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
+            (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
 }
 
 double VCLXNumericField::getMax() throw(::com::sun::star::uno::RuntimeException)
@@ -3528,7 +3536,7 @@ void VCLXNumericField::setFirst( double Value ) throw(::com::sun::star::uno::Run
     NumericField* pNumericField = (NumericField*) GetWindow();
     if ( pNumericField )
         pNumericField->SetFirst(
-            ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
+            (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
 }
 
 double VCLXNumericField::getFirst() throw(::com::sun::star::uno::RuntimeException)
@@ -3548,7 +3556,7 @@ void VCLXNumericField::setLast( double Value ) throw(::com::sun::star::uno::Runt
     NumericField* pNumericField = (NumericField*) GetWindow();
     if ( pNumericField )
         pNumericField->SetLast(
-            ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
+            (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
 }
 
 double VCLXNumericField::getLast() throw(::com::sun::star::uno::RuntimeException)
@@ -3579,7 +3587,7 @@ void VCLXNumericField::setSpinSize( double Value ) throw(::com::sun::star::uno::
     NumericField* pNumericField = (NumericField*) GetWindow();
     if ( pNumericField )
         pNumericField->SetSpinSize(
-            ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
+            (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
 }
 
 double VCLXNumericField::getSpinSize() throw(::com::sun::star::uno::RuntimeException)
