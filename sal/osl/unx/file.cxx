@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:28:43 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
