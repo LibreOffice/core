@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:23:07 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ italian ] = "Ulteriori opzioni";
         Text[ swedish ] = "�vriga alternativ";
         Text[ polish ] = "Pozosta�e opcje";
-        Text[ portuguese_brazilian ] = "Miscel�nea de op��es";
+        Text[ portuguese_brazilian ] = "Op��es diversas";
         Text[ japanese ] = "その他のオプション";
         Text[ korean ] = "기타 옵션";
         Text[ turkish ] = "�e�itli �zellikler";
@@ -122,11 +122,11 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ danish ] = "Support ~assistive technology tools (program restart required)";
         Text[ swedish ] = "St�d f�r hj�lp~program f�r anv�ndare med funktionshinder (program m�ste startas om)";
         Text[ polish ] = "Support ~assistive technology tools (program restart required)";
-        Text[ portuguese_brazilian ] = "Support ~assistive technology tools (program restart required)";
-        Text[ japanese ] = "ユーザー補助機能の支援（プログラム再起動が必要）";
-        Text[ korean ] = "내게 필요한 옵션 기능 지원 (프로그램 재시작 필요)";
-        Text[ chinese_simplified ] = "支持辅助功能程序(需要重新启动程序)";
-        Text[ chinese_traditional ] = "支援協助工具程式(需要重新啓動程式)";
+        Text[ portuguese_brazilian ] = "Suporte para ferramentas de tecnologias de acessibilidade (Ser� necess�rio re-iniciar o programa)";
+        Text[ japanese ] = "ユーザー補助機能の支援（プログラム再起動が必要）(~A)";
+        Text[ korean ] = "내게 필요한 옵션 기능 지원 (프로그램 재시작 필요)(~A)";
+        Text[ chinese_simplified ] = "支持辅助功能程序(需要重新启动程序)(~A)";
+        Text[ chinese_traditional ] = "支援協助工具程式(需要重新啓動程式)(~A)";
         Text[ turkish ] = "Support ~assistive technology tools (program restart required)";
         Text[ arabic ] = "Support ~assistive technology tools (program restart required)";
         Text[ catalan ] = "Support ~assistive technology tools (program restart required)";
@@ -154,11 +154,11 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ danish ] = "Use te~xt selection cursor in read-only text documents";
         Text[ swedish ] = "Anv�nd mark�r f�r te~xtmarkering i skrivskyddade textdokument";
         Text[ polish ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ portuguese_brazilian ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ japanese ] = "読み取り専用の文書ドキュメントでテキスト選択カーソルを使用";
-        Text[ korean ] = "읽기 전용 텍스트 문서에서 텍스트 선택 커서를 사용";
-        Text[ chinese_simplified ] = "受保护的文本文字内使用选中文字的鼠标";
-        Text[ chinese_traditional ] = "在受保護的文字文件内使用選中文字的游標";
+        Text[ portuguese_brazilian ] = "Usar cursor de sele��o em documentos de somente leitura.";
+        Text[ japanese ] = "読み取り専用の文書ドキュメントでテキスト選択カーソルを使用(~X)";
+        Text[ korean ] = "읽기 전용 텍스트 문서에서 텍스트 선택 커서를 사용(~X)";
+        Text[ chinese_simplified ] = "受保护的文本文字内使用选中文字的鼠标(~X)";
+        Text[ chinese_traditional ] = "在受保護的文字文件内使用選中文字的游標(~X)";
         Text[ turkish ] = "Salt-okunur merin d�k�manlar�nda me~tin se�im imlecini kullan";
         Text[ arabic ] = "Use te~xt selection cursor in read-only text documents";
         Text[ catalan ] = "Use te~xt selection cursor in read-only text documents";
@@ -187,11 +187,11 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ danish ] = "Use system ~font for user interface";
         Text[ swedish ] = "Anv�nd ~systemteckensnitt f�r anv�ndargr�nssnittet";
         Text[ polish ] = "Use system ~font for user interface";
-        Text[ portuguese_brazilian ] = "Use system ~font for user interface";
-        Text[ japanese ] = "ユーザーインターフェースにシステムフォントを使用";
-        Text[ korean ] = "시스템 글꼴을 사용자 인터페이스용으로 사용";
-        Text[ chinese_simplified ] = "采用使用者界面的系统字体";
-        Text[ chinese_traditional ] = "採用使用者介面的系統字型";
+        Text[ portuguese_brazilian ] = "Usar a fonte do sistema para a interface do usu�rio";
+        Text[ japanese ] = "ユーザーインターフェースにシステムフォントを使用(~F)";
+        Text[ korean ] = "시스템 글꼴을 사용자 인터페이스용으로 사용(~F)";
+        Text[ chinese_simplified ] = "采用使用者界面的系统字体(~F)";
+        Text[ chinese_traditional ] = "採用使用者介面的系統字型(~F)";
         Text[ turkish ] = "Kullan�c� aray�z� i�in sistem ~yaz�tipini kullan";
         Text[ arabic ] = "Use system ~font for user interface";
         Text[ catalan ] = "Use system ~font for user interface";
@@ -220,11 +220,11 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ danish ] = "Allow animated ~graphics";
         Text[ swedish ] = "Till�t animerad ~grafik";
         Text[ polish ] = "Allow animated ~graphics";
-        Text[ portuguese_brazilian ] = "Allow animated ~graphics";
-        Text[ japanese ] = "アニメーション画像を許可する";
-        Text[ korean ] = "애니메이션된 그림 허용";
-        Text[ chinese_simplified ] = "允许动画图形";
-        Text[ chinese_traditional ] = "允許動畫圖形";
+        Text[ portuguese_brazilian ] = "Permitir figuras animadas";
+        Text[ japanese ] = "アニメーション画像を許可する(~G)";
+        Text[ korean ] = "애니메이션된 그림 허용(~G)";
+        Text[ chinese_simplified ] = "允许动画图形(~G)";
+        Text[ chinese_traditional ] = "允許動畫圖形(~G)";
         Text[ turkish ] = "~Hareketli grafiklere izin ver";
         Text[ arabic ] = "Allow animated ~graphics";
         Text[ catalan ] = "Allow animated ~graphics";
@@ -253,11 +253,11 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ danish ] = "Allow animated ~text";
         Text[ swedish ] = "Till�t animerad t~ext";
         Text[ polish ] = "Allow animated ~text";
-        Text[ portuguese_brazilian ] = "Allow animated ~text";
-        Text[ japanese ] = "アニメーションテキストを許可する";
-        Text[ korean ] = "애니메이션된 텍스트 허용";
+        Text[ portuguese_brazilian ] = "Permitir texto animado";
+        Text[ japanese ] = "アニメーションテキストを許可する(~T)";
+        Text[ korean ] = "애니메이션된 텍스트 허용(~T)";
         Text[ chinese_simplified ] = "允许动画文字(~T)";
-        Text[ chinese_traditional ] = "允許動畫文字";
+        Text[ chinese_traditional ] = "允許動畫文字(~T)";
         Text[ turkish ] = "Oynat�labilen ~metne izin ver";
         Text[ arabic ] = "Allow animated ~text";
         Text[ catalan ] = "Allow animated ~text";
@@ -286,11 +286,11 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ danish ] = "~Help tips disappear after ";
         Text[ swedish ] = "Tips~hj�lp f�rsvinner efter ";
         Text[ polish ] = "~Help tips disappear after ";
-        Text[ portuguese_brazilian ] = "~Help tips disappear after ";
-        Text[ japanese ] = "ヒントの表示時間";
-        Text[ korean ] = "도움말 지속 시간";
-        Text[ chinese_simplified ] = "帮助文显示停留";
-        Text[ chinese_traditional ] = "說明文顯示停留";
+        Text[ portuguese_brazilian ] = "Dicas de ajuda desaparecem em ";
+        Text[ japanese ] = "ヒントの表示時間(~H)";
+        Text[ korean ] = "도움말 지속 시간(~H)";
+        Text[ chinese_simplified ] = "帮助文显示停留(~H)";
+        Text[ chinese_traditional ] = "說明文顯示停留(~H)";
         Text[ turkish ] = "~Yard�m ipu�lar� daha sonra kaybolur";
         Text[ arabic ] = "~Help tips disappear after ";
         Text[ catalan ] = "~Help tips disappear after ";
@@ -358,7 +358,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ italian ] = "Opzioni per la visualizzazione a contrasto elevato";
         Text[ swedish ] = "Alternativ f�r h�gkontrastvisning";
         Text[ polish ] = "Options for high contrast appearance";
-        Text[ portuguese_brazilian ] = "Options for high contrast appearance";
+        Text[ portuguese_brazilian ] = "Op��es para apar�ncia de alto contraste";
         Text[ japanese ] = "高コントラスト表示のオプション";
         Text[ korean ] = "고대비 표시 옵션";
         Text[ turkish ] = "Y�ksek kar��tl�k g�r�n�m� i�in �zellikler";
@@ -391,9 +391,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ italian ] = "Riconosci automaticamente la mo~dalit� a contrasto elevato del sistema operativo";
         Text[ swedish ] = "K�nn igen operativsystemets h�gkontrastl�ge automatiskt";
         Text[ polish ] = "Automatically detect high contrast mode of operating system";
-        Text[ portuguese_brazilian ] = "Automatically detect high contrast mode of operating system";
+        Text[ portuguese_brazilian ] = "Detectar automaticamente o modo de alto contraste do sistema operacional";
         Text[ japanese ] = "オペレーティングシステムの高コントラストモードを自動検出(~D)";
-        Text[ korean ] = "운영 체제의 고대비 모드를 자동으로 추적";
+        Text[ korean ] = "운영 체제의 고대비 모드를 자동으로 추적(~D)";
         Text[ turkish ] = "��letim sistemi i�in otomatik olarak y�ksek z�tl�k modunu ~alg�la";
         Text[ thai ] = "Automatically detect high contrast mode of operating system";
         Text[ greek ] = "Automatically detect high contrast mode of operating system";
@@ -402,7 +402,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ finnish ] = "Automatically detect high contrast mode of operating system";
         Text[ danish ] = "Automatically detect high contrast mode of operating system";
         Text[ chinese_simplified ] = "自动识别作业系统的高对比度模式(~D)";
-        Text[ chinese_traditional ] = "自動偵測操作系統的高對比度模式";
+        Text[ chinese_traditional ] = "自動偵測操作系統的高對比度模式(~D)";
         Text[ arabic ] = "Automatically detect high contrast mode of operating system";
         Text[ catalan ] = "Automatically detect high contrast mode of operating system";
         Text[ czech ] = "Automaticky detekovat, zda je v operačním systému aktivní vysokokontrastní zobrazení";
@@ -430,15 +430,15 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ swedish ] = "Anv�nd automatisk tecken~f�rg f�r bildsk�rmsvisning";
         Text[ polish ] = "Always use automatic font ~color for screen display";
         Text[ japanese ] = "画面表示用フォント色を自動的に使用(~C)";
-        Text[ korean ] = "화면 표시용으로 자동 글꼴 색상을 사용 ";
-        Text[ chinese_simplified ] = "使用屏幕自动显示的字体颜色";
+        Text[ korean ] = "화면 표시용으로 자동 글꼴 색상을 사용 (~C)";
+        Text[ chinese_simplified ] = "使用屏幕自动显示的字体颜色(~C)";
         Text[ chinese_traditional ] = "將自動字型顏色用於螢幕顯示(~C)";
         Text[ turkish ] = "Ekran g�r�nt�leri i�in otomatik yaz� tipi ~rengi kullan";
         Text[ arabic ] = "Always use automatic font ~color for screen display";
         Text[ czech ] = "Vždy použít automatickou barvu písma pro obrazovku";
         Text[ hebrew ] = "‮להשתמש תמיד בצבע גופן אוטומטי בתצוגת המסך‬";
         Text[ catalan ] = "Use automatic font ~color for screen display";
-        Text[ portuguese_brazilian ] = "Use automatic font ~color for screen display";
+        Text[ portuguese_brazilian ] = "Usar cor da fonte autom�tica para exibi��o na tela";
         Text[ thai ] = "Use automatic font ~color for screen display";
         Text[ hindi ] = "Use automatic font ~color for screen display";
         Text[ slovak ] = "Použiť automati~ckú farbu písma pre zobrazenie na obrazovke";
@@ -463,7 +463,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ swedish ] = "An~v�nd systemf�rger f�r f�rhandsgranskning";
         Text[ polish ] = "For page ~previews";
         Text[ japanese ] = "システムカラーを印刷プレビューで使用(~U)";
-        Text[ korean ] = "시스템 색상을 페이지 미리 보기용으로 사용";
+        Text[ korean ] = "시스템 색상을 페이지 미리 보기용으로 사용(~U)";
         Text[ chinese_simplified ] = "使用作业系统预设的页面视图的颜色(~U)";
         Text[ chinese_traditional ] = "將系統顏色用於頁面預覽(~U)";
         Text[ turkish ] = "~Sayfa �nizlemeleri i�in sistem renklerini kullan";
@@ -471,12 +471,13 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "Pro náhledy stránek";
         Text[ hebrew ] = "‮לתצוגה מקדימה של דפים‬";
         Text[ catalan ] = "~Use system colors for page previews";
-        Text[ portuguese_brazilian ] = "~Use system colors for page previews";
+        Text[ portuguese_brazilian ] = "Usar cores do sistema para visualizar p�ginas";
         Text[ thai ] = "~Use system colors for page previews";
         Text[ hindi ] = "~Use system colors for page previews";
         Text[ slovak ] = "Po~užiť systémové farby pre náhľady stránok";
     };
 };
+
 
 
 
