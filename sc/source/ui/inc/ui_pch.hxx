@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ui_pch.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:37:14 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,7 @@
 #include <svtools/memberid.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <svtools/cntwids.hrc>
-#include <vcl/resid.hxx>
 #include <tools/resid.hxx>
-#include <vcl/rc.hxx>
 #include <tools/rc.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/gen.hxx>
@@ -102,13 +100,13 @@
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <tools/globname.hxx>
-#include <vcl/color.hxx>
+#include <tools/color.hxx>
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/bitmap.hxx>
 #include <sot/sotref.hxx>
 #include <svx/svxids.hrc>
-#include <vcl/fonttype.hxx>
+#include <vcl/vclenum.hxx>
 #include <sot/object.hxx>
 #include <sot/sotdata.hxx>
 #include <sot/factory.hxx>
@@ -117,7 +115,6 @@
 #include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/accel.hxx>
-#include <vcl/gdiobj.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -189,7 +186,6 @@
 #include <vcl/apptypes.hxx>
 #include <viewopti.hxx>
 #include <viewdata.hxx>
-#include <vcl/resid.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/clientsh.hxx>
 #include <document.hxx>
@@ -288,7 +284,6 @@
 #include <vcl/print.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/system.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/chalign.hxx>
 #include <sfx2/dispatch.hxx>
@@ -355,7 +350,7 @@
 #include <svx/sdtditm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdtmfitm.hxx>
-#include <vcl/poly.hxx>
+#include <tools/poly.hxx>
 #include <vcl/gdimtf.hxx>
 #include <cell.hxx>
 #include <stddef.h>
