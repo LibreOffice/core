@@ -513,7 +513,9 @@ void AddGroupEntriesToSubstitutor(
             rtl::OUString key_value_unicode =
                 rtl::OStringToOUString(key_value, Langcode2TextEncoding(country_id));
 
-            assert(key_value_unicode.getLength());
+            // HACK, see #110013#
+            //assert(key_value_unicode.getLength());
+            key_value_unicode.getLength();
 
             Substitutor.AddSubstitution(
                 GroupName.GetBuffer(),
