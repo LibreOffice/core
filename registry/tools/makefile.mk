@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-18 15:20:12 $
+#   last change: $Author: obo $ $Date: 2004-06-04 02:46:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,8 @@ TARGET=regmerge
 TARGETTYPE=CUI
 LIBTARGET=NO
 
+ENABLE_EXCEPTIONS := TRUE
+
 # --- Settings -----------------------------------------------------
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
@@ -90,12 +92,6 @@ APP1STDLIBS=\
             $(SALHELPERLIB) \
             $(REGLIB)
 
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
-
-
 APP2TARGET= regview
 APP2OBJS=   $(OBJ)$/regview.obj
 
@@ -103,11 +99,6 @@ APP2STDLIBS=\
             $(SALLIB) \
             $(SALHELPERLIB) \
             $(REGLIB)
-
-.IF "$(GUI)"=="WNT"
-APP2STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
 
 APP3TARGET= regcompare
 APP3OBJS=   $(OBJ)$/regcompare.obj
@@ -117,11 +108,6 @@ APP3STDLIBS=\
             $(SALHELPERLIB) \
             $(REGLIB)
 
-.IF "$(GUI)"=="WNT"
-APP3STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
-
 APP4TARGET= checksingleton
 APP4OBJS=   $(OBJ)$/checksingleton.obj
 
@@ -129,10 +115,5 @@ APP4STDLIBS=\
             $(SALLIB) \
             $(SALHELPERLIB) \
             $(REGLIB)
-
-.IF "$(GUI)"=="WNT"
-APP4STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
 
 .INCLUDE :  target.mk
