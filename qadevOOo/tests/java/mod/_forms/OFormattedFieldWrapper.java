@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFormattedFieldWrapper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:42:45 $
+ *  last change:$Date: 2003-09-08 11:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,20 +58,10 @@
  *
  *
  ************************************************************************/
-
 package mod._forms;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.form.XBoundComponent;
-import com.sun.star.form.XLoadable;
-import com.sun.star.sdbc.XResultSetUpdate;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -79,6 +69,19 @@ import lib.TestParameters;
 import util.FormTools;
 import util.WriterTools;
 import util.utils;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.drawing.XShape;
+import com.sun.star.form.XBoundComponent;
+import com.sun.star.form.XLoadable;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdbc.XResultSetUpdate;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+
 
 /**
  * Test for object which is represented by service
@@ -146,26 +149,32 @@ import util.utils;
  * @see ifc.container._XChild
  */
 public class OFormattedFieldWrapper extends TestCase {
-
     XTextDocument xTextDoc;
 
     /**
      * Creates a new text document.
      */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-
-        log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        log.println("creating a textdocument");
+        xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) tParam.getMSF()));
     }
 
     /**
      * Disposes the text document created before
      */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
-    }
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
 
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
+    }
 
     /**
     * Creating a Testenvironment for the interfaces to be tested.
@@ -186,90 +195,100 @@ public class OFormattedFieldWrapper extends TestCase {
     * </ul>
     * @see ifc.form._XUpdateBroadcaster
     */
-    public synchronized TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
 
         XControlShape aShape = FormTools.createControlShapeWithDefaultControl(
-             xTextDoc,3000,4500,15000,10000,"DatabaseFormattedField");
+                                       xTextDoc, 3000, 4500, 15000, 10000,
+                                       "DatabaseFormattedField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
         oObj = aShape.getControl();
 
         XLoadable formLoader = FormTools.bindForm(xTextDoc);
 
-        final XPropertySet ps = (XPropertySet)UnoRuntime.queryInterface
-            (XPropertySet.class, oObj);
+        final XPropertySet ps = (XPropertySet) UnoRuntime.queryInterface(
+                                        XPropertySet.class, oObj);
+
         try {
-            ps.setPropertyValue("DataField", "Custom2") ;
+            ps.setPropertyValue("DataField", "Custom2");
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't set Default Date", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't set Default Date", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't set Default Date", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't set Default Date", e);
         } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't set Default Date", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't set Default Date", e);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't set Default Date", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't set Default Date", e);
         }
 
-        log.println( "creating a new environment for OFormattedFieldWrapper object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println(
+                "creating a new environment for OFormattedFieldWrapper object");
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
         String objName = "Edit";
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." + objName);
-        aShape = FormTools.createControlShape(
-                                xTextDoc,6000,4500,15000,10000,"FixedText");
+        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
+                            objName);
+        aShape = FormTools.createControlShape(xTextDoc, 6000, 4500, 15000,
+                                              10000, "FixedText");
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
+
         // added LabelControl for 'DataAwareControlModel'
-        tEnv.addObjRelation("LC",aShape.getControl());
+        tEnv.addObjRelation("LC", aShape.getControl());
+
 
         // added FormLoader for 'DataAwareControlModel'
-        tEnv.addObjRelation("FL",formLoader);
+        tEnv.addObjRelation("FL", formLoader);
 
         // adding relation for XUpdateBroadcaster
-        final XInterface ctrl = oObj ;
-        final XLoadable formLoaderF = formLoader ;
-        final PrintWriter fLog = log ;
+        final XInterface ctrl = oObj;
+        final XLoadable formLoaderF = formLoader;
+        final PrintWriter fLog = log;
 
         tEnv.addObjRelation("XUpdateBroadcaster.Checker",
-            new ifc.form._XUpdateBroadcaster.UpdateChecker() {
-                private String lastText = "" ;
-                public void update() throws com.sun.star.uno.Exception {
-                    if (!formLoaderF.isLoaded())
-                        formLoaderF.load() ;
-                    Object gVal = ps.getPropertyValue("Text") ;
-                    fLog.println("Old: '" + gVal + "'") ;
-                    lastText = utils.isVoid(lastText) ? "1" : "1" + (String)gVal ;
-                    fLog.println("New: '" + lastText + "'") ;
-                    ps.setPropertyValue("Text", lastText) ;
-                }
-                public void commit() throws com.sun.star.sdbc.SQLException {
-                    XBoundComponent bound = (XBoundComponent) UnoRuntime.
-                        queryInterface(XBoundComponent.class, ctrl) ;
-                    XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.
-                        queryInterface(XResultSetUpdate.class, formLoaderF) ;
+                            new ifc.form._XUpdateBroadcaster.UpdateChecker() {
+            private String lastText = "";
 
-                    bound.commit() ;
-                    update.updateRow() ;
+            public void update() throws com.sun.star.uno.Exception {
+                if (!formLoaderF.isLoaded()) {
+                    formLoaderF.load();
                 }
-                public boolean wasCommited() throws com.sun.star.uno.Exception {
-                    formLoaderF.reload() ;
 
-                    String getS = (String) ps.getPropertyValue("Text") ;
-                    fLog.println("Result: '" + getS + "'") ;
-                    return lastText.equals(getS) ;
-                }
-            }) ;
+                Object gVal = ps.getPropertyValue("Text");
+                fLog.println("Old: '" + gVal + "'");
+                lastText = utils.isVoid(lastText) ? "1" : "1" +
+                           (String) gVal;
+                fLog.println("New: '" + lastText + "'");
+                ps.setPropertyValue("Text", lastText);
+            }
+
+            public void commit() throws com.sun.star.sdbc.SQLException {
+                XBoundComponent bound = (XBoundComponent) UnoRuntime.queryInterface(
+                                                XBoundComponent.class, ctrl);
+                XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.queryInterface(
+                                                  XResultSetUpdate.class,
+                                                  formLoaderF);
+
+                bound.commit();
+                update.updateRow();
+            }
+
+            public boolean wasCommited() throws com.sun.star.uno.Exception {
+                formLoaderF.reload();
+
+                String getS = (String) ps.getPropertyValue("Text");
+                fLog.println("Result: '" + getS + "'");
+
+                return lastText.equals(getS);
+            }
+        });
 
         return tEnv;
-
     } // finish method getTestEnvironment
-
-}    // finish class OFormattedFieldWrapper
-
+} // finish class OFormattedFieldWrapper
