@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-17 10:54:11 $
+ *  last change: $Author: sb $ $Date: 2002-09-17 15:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -81,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.11 $ $ $Date: 2002-07-17 10:54:11 $
+ * @version     $Revision: 1.12 $ $ $Date: 2002-09-17 15:07:24 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -150,59 +150,72 @@ public class Job {
     }
 
     /**
-     * Executes the job.
-     * <p>
-     * @return  returns true if the operation is a reply
+     * Execute the job.
+     *
+     * @return the result of the message.
      */
     public Object execute() throws Throwable {
-        Object params[][] = new Object[1][];
+        Object[][] msgParams = new Object[1][];
+        Object msgResult = _iMessage.getData(msgParams);
 
-        Object result = _iMessage.getData(params);
-
-         if(DEBUG) System.err.println("##### " + getClass().getName() + ".execute:" + result + " " + _iMessage.isException());
-
-        if(_iMessage.isException())
-            throw (Throwable)result;
-
-        try {
-            if(_iMessage.getOperation() != null) { // it is a request
-                Object xresult = null;
-
-                if(_iMessage.getOperation().equals("queryInterface"))
-                    xresult = dispatch_queryInterface((Type)params[0][0]);
-                else
-                    xresult = dispatch_MethodCall(params[0]);
-
-                if(_iMessage.mustReply())
-                    _iReceiver.sendReply(false, _iMessage.getThreadId(), xresult);
-            }
-        }
-          catch(Exception exception) {
-//          catch(InvocationTargetException invocationTargetException) {
-            Throwable throwable = exception;
-
-            if(exception instanceof InvocationTargetException)
-                throwable = ((InvocationTargetException)exception).getTargetException();;
-
-            if(DEBUG) {
-                System.err.println("##### Job.execute - exception occured:" + throwable);
-                throwable.printStackTrace();
-            }
-            // Here we have to be aware of non UNO exceptions, cause they may kill
-            // a remote side (which does not know anything about theire types)
-            if(!(throwable instanceof com.sun.star.uno.Exception)
-            && !(throwable instanceof com.sun.star.uno.RuntimeException)) {
-                StringWriter stringWriter = new StringWriter();
-                throwable.printStackTrace(new PrintWriter(stringWriter));
-
-                throwable = new com.sun.star.uno.RuntimeException("java exception: " + stringWriter.toString(), null);
-            }
-
-            if(_iMessage.mustReply())
-                _iReceiver.sendReply(true, _iMessage.getThreadId(), throwable);
+        if (DEBUG) {
+            System.err.println("##### " + getClass().getName() + ".execute: "
+                               + msgResult + " " + _iMessage.isException());
         }
 
-        return result;
+        if (_iMessage.isException()) {
+            throw (Throwable) msgResult;
+        }
+
+        String operation = _iMessage.getOperation();
+        if (operation != null) { // if it is a request
+            Object result = null;
+            Throwable exception = null;
+
+            try {
+                result = operation.equals("queryInterface")
+                    ? dispatch_queryInterface((Type) msgParams[0][0])
+                    : dispatch_MethodCall(msgParams[0]);
+            } catch (InvocationTargetException e) {
+                if (DEBUG) {
+                    e.printStackTrace(System.err);
+                }
+                exception = e.getCause();
+                if (exception == null) {
+                    exception = e;
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    e.printStackTrace(System.err);
+                }
+                exception = e;
+            }
+
+            if (_iMessage.mustReply()) {
+                if (exception == null) {
+                    _iReceiver.sendReply(false, _iMessage.getThreadId(),
+                                         result);
+                } else {
+                    // Here we have to be aware of non-UNO exceptions, because
+                    // they may kill a remote side which does not know anything
+                    // about their types:
+                    if (exception != null
+                        && !(exception instanceof com.sun.star.uno.Exception)
+                        && !(exception instanceof
+                             com.sun.star.uno.RuntimeException)) {
+                        StringWriter writer = new StringWriter();
+                        exception.printStackTrace(new PrintWriter(writer));
+                        exception = new com.sun.star.uno.RuntimeException(
+                            "Java exception: " + writer, null);
+                    }
+
+                    _iReceiver.sendReply(true, _iMessage.getThreadId(),
+                                         exception);
+                }
+            }
+        }
+
+        return msgResult;
     }
 
     /**
@@ -281,5 +294,3 @@ public class Job {
 //          _disposeId  = null;
     }
 }
-
-
