@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:21:17 $
+ *  last change: $Author: kz $ $Date: 2001-03-02 20:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ TabDialog TAB_TEMPLATE
                 Text [ ENGLISH ] = "Text animation" ;
                 PageResID = RID_SVXPAGE_TEXTANIMATION ;
                 Text [ english_us ] = "Text Animation" ;
-                Text [ swedish ] = "Löptext" ;
+                Text [ swedish ] = "Animerad text" ;
                 Text [ danish ] = "Animeret tekst" ;
                 Text [ italian ] = "Testo scorrevole" ;
                 Text [ spanish ] = "Animación de texto" ;
@@ -318,7 +318,7 @@ TabDialog TAB_TEMPLATE
                 PageResID = RID_SVXPAGE_MEASURE ;
                 Text [ swedish ] = "Dimensionering" ;
                 Text [ danish ] = "Dimensionering" ;
-                Text [ portuguese ] = "Dimensões" ;
+                Text [ portuguese ] = "Dimensionar" ;
                 Text [ portuguese_brazilian ] = "Bemaßung" ;
                 Text[ chinese_simplified ] = "¶¨³ß¶È";
                 Text[ russian ] = "Çàäàíèå ðàçìåðîâ";
@@ -337,7 +337,7 @@ TabDialog TAB_TEMPLATE
                 Text = "Verbinder" ;
                 Text [ ENGLISH ] = "Connectors" ;
                 Text [ english_us ] = "Connector" ;
-                Text [ portuguese ] = "Conectores" ;
+                Text [ portuguese ] = "Conector" ;
                 Text [ swedish ] = "Förbindelse" ;
                 Text [ danish ] = "Forbindelse" ;
                 Text [ italian ] = "Connettore" ;
