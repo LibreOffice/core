@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-24 13:14:09 $
+ *  last change: $Author: sb $ $Date: 2001-08-31 13:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,9 +253,6 @@ private:
     void
     handleErrorRequest(
         com::sun::star::task::InteractionClassification eClassification,
-        rtl::OUString const & rContext,
-            //TODO! only InteractiveFileIOException needs to override the
-            // context (otherwise, it could be removed from this interface)
         ErrCode nErrorCode,
         std::vector< rtl::OUString > const & rArguments,
         com::sun::star::uno::Sequence<

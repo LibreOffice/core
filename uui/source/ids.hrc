@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-29 13:41:21 $
+ *  last change: $Author: sb $ $Date: 2001-08-31 13:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #define STR_COOKIES_SEND_START (RID_UUI_START + 7)
 #define STR_COOKIES_SEND_COOKIES (RID_UUI_START + 8)
 #define STR_COOKIES_SEND_TITLE (RID_UUI_START + 9)
-#define STR_ERROR_FILEIO (RID_UUI_START + 10)
+// RID_UUI_START + 10 removed
 // RID_UUI_START + 11 moved to ERRCODE_UUI_WRONGMEDIUM
 #define DLG_UUI_PASSWORD (RID_UUI_START + 12)
 #define STR_ERROR_PASSWORDS_NOT_IDENTICAL (RID_UUI_START + 13)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-29 13:41:20 $
+ *  last change: $Author: sb $ $Date: 2001-08-31 13:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,9 +129,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVECHAOSEXCEPTION_HPP_
 #include "com/sun/star/ucb/InteractiveCHAOSException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEFILEIOEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveFileIOException.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKCONNECTEXCEPTION_HPP_
 #include "com/sun/star/ucb/InteractiveNetworkConnectException.hpp"
@@ -310,23 +307,6 @@ bool ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
     *pString = UniString(aResId);
     Resource::GetResManager()->PopContext();
     return true;
-}
-
-//TODO! should be part of rtl::OUString (and optimized when rOld is char *)
-rtl::OUString replace(rtl::OUString const & rOriginal,
-                      rtl::OUString const & rOld,
-                      rtl::OUString const & rNew)
-{
-    rtl::OUString aResult(rOriginal);
-    for (sal_Int32 i = 0;;)
-    {
-        i = aResult.indexOf(rOld, i);
-        if (i == -1)
-            break;
-        aResult = aResult.replaceAt(i, rOld.getLength(), rNew);
-        i += rNew.getLength();
-    }
-    return aResult;
 }
 
 void
@@ -542,30 +522,6 @@ UUIInteractionHandler::handle(
         star::ucb::InteractiveIOException aIoException;
         if (aAnyRequest >>= aIoException)
         {
-            rtl::OUString aContext;
-            star::ucb::InteractiveFileIOException aFileIoException;
-            if (aAnyRequest >>= aFileIoException)
-            {
-                //TODO! context string should rather be passed to the
-                // interaction handler upon initialization...
-
-                {
-                    //TODO! use SimpleResMgr instead?
-                    vos::OGuard aGuard(Application::GetSolarMutex());
-                    std::auto_ptr< ResMgr >
-                        xManager(ResMgr::CreateResMgr(
-                                     CREATEVERSIONRESMGR_NAME(uui)));
-                    aContext
-                        = UniString(ResId(STR_ERROR_FILEIO, xManager.get()));
-                }
-                aContext = replace(aContext,
-                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                     "($URL1)")),
-                                   aFileIoException.FileName);
-            }
-            else
-                aContext = getContextProperty();
-
             star::uno::Sequence< star::uno::Any > aRequestArguments;
             star::ucb::InteractiveAugmentedIOException aAugmentedIoException;
             if (aAnyRequest >>= aAugmentedIoException)
@@ -807,7 +763,6 @@ UUIInteractionHandler::handle(
             }
 
             handleErrorRequest(aIoException.Classification,
-                               aContext,
                                nErrorCode,
                                aArguments,
                                rRequest->getContinuations());
@@ -850,7 +805,6 @@ UUIInteractionHandler::handle(
             else
                 nErrorCode = ERRCODE_INET_GENERAL;
             handleErrorRequest(aNetworkException.Classification,
-                               getContextProperty(),
                                nErrorCode,
                                aArguments,
                                rRequest->getContinuations());
@@ -871,7 +825,6 @@ UUIInteractionHandler::handle(
             for (sal_Int32 i = 0; i < nCount; ++i)
                 aArguments.push_back(aChaosException.Arguments[i]);
             handleErrorRequest(aChaosException.Classification,
-                               getContextProperty(),
                                aChaosException.ID,
                                aArguments,
                                rRequest->getContinuations());
@@ -886,7 +839,6 @@ UUIInteractionHandler::handle(
             std::vector< rtl::OUString > aArguments;
             aArguments.push_back(UniString::CreateFromInt32(nMedium + 1));
             handleErrorRequest(aWrongMediumException.Classification,
-                               getContextProperty(),
                                ERRCODE_UUI_WRONGMEDIUM,
                                aArguments,
                                rRequest->getContinuations());
@@ -927,7 +879,6 @@ UUIInteractionHandler::handle(
                                          LowestSupportedVersion);
             }
             handleErrorRequest(star::task::InteractionClassification_ERROR,
-                               getContextProperty(),
                                nErrorCode,
                                aArguments,
                                rRequest->getContinuations());
@@ -947,7 +898,6 @@ UUIInteractionHandler::handle(
                 aArguments.push_back(aBadPartnershipException.Partnership);
             }
             handleErrorRequest(star::task::InteractionClassification_ERROR,
-                               getContextProperty(),
                                nErrorCode,
                                aArguments,
                                rRequest->getContinuations());
@@ -1564,7 +1514,6 @@ UUIInteractionHandler::handleCookiesRequest(
 void
 UUIInteractionHandler::handleErrorRequest(
     star::task::InteractionClassification eClassification,
-    rtl::OUString const & rContext,
     ErrCode nErrorCode,
     std::vector< rtl::OUString > const & rArguments,
     star::uno::Sequence< star::uno::Reference<
@@ -1632,7 +1581,7 @@ UUIInteractionHandler::handleErrorRequest(
         return;
 
     //TODO! remove this backwards compatibility?
-    rtl::OUString aContext(rContext);
+    rtl::OUString aContext(getContextProperty());
     if (aContext.getLength() == 0 && nErrorCode != 0)
     {
         vos::OGuard aGuard(Application::GetSolarMutex());

@@ -61,7 +61,6 @@
     <type>com.sun.star.ucb.HandleCookiesRequest</type>
     <type>com.sun.star.ucb.InteractiveAugmentedIOException</type>
     <type>com.sun.star.ucb.InteractiveCHAOSException</type>
-    <type>com.sun.star.ucb.InteractiveFileIOException</type>
     <type>com.sun.star.ucb.InteractiveNetworkConnectException</type>
     <type>com.sun.star.ucb.InteractiveNetworkException</type>
     <type>com.sun.star.ucb.InteractiveNetworkGeneralException</type>

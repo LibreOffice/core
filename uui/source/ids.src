@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-29 13:41:21 $
+ *  last change: $Author: sb $ $Date: 2001-08-31 13:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,32 +119,6 @@ String RID_SAVE_PASSWORD
     Text[ turkish ] = "~Save password";
     Text[ catalan ] = "~Guardar contraseña";
     Text[ finnish ] = "~Muista salasana";
-};
-
-String STR_ERROR_FILEIO
-{
-    Text = "Fehler beim Zugriff auf die Datei ($URL1)";
-    Text[english] = "Error accessing file ($URL1)";
-    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ãÍÇæáÉ ÇáæÕæá Åáì Çáãáİ ($URL1)";
-    Text[ chinese_simplified ] = "åœ¨è¯»å–æ–‡ä»¶($URL1)æ—¶å‘ç”Ÿé”™è¯¯";
-    Text[ chinese_traditional ] = "å­˜å–æª”æ¡ˆ ($URL1) ç™¼ç”ŸéŒ¯èª¤";
-    Text[ danish ] = "Fejl ved adgang til filen ($URL1)";
-    Text[ dutch ] = "Fout bij toegang tot bestand ($URL1)";
-    Text[ english_us ] = "Error accessing file ($URL1)";
-    Text[ french ] = "Erreur lors de l'accès au fichier ($URL1)";
-    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí ğñüóâáóç óôï áñ÷åßï ($URL1)";
-    Text[ italian ] = "Errore di accesso al file ($URL1)";
-    Text[ japanese ] = "($URL1) ï¾Œï½§ï½²ï¾™ã¸ï½±ï½¸ï½¾ï½½ã™ã‚‹éš›ã®ï½´ï¾—ï½°";
-    Text[ korean ] = "íŒŒì¼ ($URL1)ì— ì ‘ê·¼ì‹œì— ì˜¤ë¥˜";
-    Text[ polish ] = "B³¹d przy dostêpie do pliku ($URL1)";
-    Text[ portuguese ] = "Erro de acesso ao ficheiro ($URL1)";
-    Text[ portuguese_brazilian ] = "Error accessing file ($URL1)";
-    Text[ russian ] = "Îøèáêà ïğè äîñòóïå ê ôàéëó ($URL1)";
-    Text[ spanish ] = "Error de acceso al archivo ($URL1)";
-    Text[ swedish ] = "Fel vid åtkomst till filen ($URL1)";
-    Text[ turkish ] = "Error accessing file ($URL1)";
-    Text[ catalan ] = "Error de acceso al archivo ($URL1)";
-    Text[ finnish ] = "On ilmennyt virhe käytettäessä tiedostoa ($URL1)";
 };
 
 Resource RID_UUI_ERRHDL
