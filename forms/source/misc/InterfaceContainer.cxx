@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2002-10-09 13:48:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_WRONGFORMATEXCEPTION_HPP_
 #include <com/sun/star/io/WrongFormatException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -455,6 +458,33 @@ void SAL_CALL OInterfaceContainer::write( const Reference< XObjectOutputStream >
 }
 
 //------------------------------------------------------------------------------
+namespace
+{
+    Reference< XPersistObject > lcl_createPlaceHolder( const Reference< XMultiServiceFactory >& _rxORB )
+    {
+        Reference< XPersistObject > xObject( _rxORB->createInstance( FRM_COMPONENT_HIDDENCONTROL ), UNO_QUERY );
+        DBG_ASSERT( xObject.is(), "lcl_createPlaceHolder: could not create a substitute for the unknown object!" );
+        if ( xObject.is() )
+        {
+            // set some properties describing what we did
+            Reference< XPropertySet > xObjProps( xObject, UNO_QUERY );
+            if ( xObject.is()  )
+            {
+                try
+                {
+                    xObjProps->setPropertyValue( PROPERTY_NAME, makeAny( FRM_RES_STRING( RID_STR_CONTROL_SUBSTITUTED_NAME ) ) );
+                    xObjProps->setPropertyValue( PROPERTY_TAG, makeAny( FRM_RES_STRING( RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN ) ) );
+                }
+                catch(Exception&)
+                {
+                }
+            }
+        }
+        return xObject;
+    }
+}
+
+//------------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& _rxInStream ) throw(IOException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -485,27 +515,11 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
             {
                 e;  // make compiler happy
                 // the object could not be read
-                xObj = NULL;
-                // create a dummy starform (so the readEvents below will assign the events to the right controls)
-                xObj = Reference<XPersistObject> (m_xServiceFactory->createInstance(FRM_COMPONENT_HIDDENCONTROL), UNO_QUERY);
-                DBG_ASSERT(xObj.is(), "OInterfaceContainer::read : could not create a substitute for the unknown object !");
-                if (!xObj.is())
-                    // couldn't handle it ...
+                // create a object (so the readEvents below will assign the events to the right controls)
+                xObj = lcl_createPlaceHolder( m_xServiceFactory );
+                if ( !xObj.is() )
+                    // couldn't handle it
                     throw;
-
-                // set some properties describing what we did
-                Reference<XPropertySet>  xObjProps(xObj, UNO_QUERY);
-                if (xObjProps.is())
-                {
-                    try
-                    {
-                        xObjProps->setPropertyValue(PROPERTY_NAME, makeAny(FRM_RES_STRING(RID_STR_CONTROL_SUBSTITUTED_NAME)));
-                        xObjProps->setPropertyValue(PROPERTY_TAG, makeAny(FRM_RES_STRING(RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN)));
-                    }
-                    catch(Exception&)
-                    {
-                    }
-                }
                 // 72133 - 09.02.00 - FS
             }
             catch(Exception&)
@@ -518,13 +532,11 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                 throw;
             }
 
-            if (xObj.is())
+            if ( xObj.is() )
             {
-                Any aElement = xObj->queryInterface(m_aElementType);
-                if (aElement.hasValue())
+                Reference< XPropertySet > xElement( xObj, UNO_QUERY );
+                try
                 {
-                    Reference< XPropertySet > xElement;
-                    aElement >>= xElement;
                     implInsert(
                         m_aItems.size(),    // position
                         xElement,           // element to insert
@@ -533,8 +545,17 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                         sal_True            // fire the event
                     );
                 }
-                else
-                    ; // form konnte nicht gelesen werden; nyi
+                catch( const Exception& )
+                {
+                    DBG_ERROR( "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
+                    // create a placeholder
+                    xElement = xElement.query( lcl_createPlaceHolder( m_xServiceFactory ) );
+                    if ( !xElement.is() )
+                        // couldn't handle it
+                        throw;
+                    // insert the placeholder
+                    implInsert( m_aItems.size(), xElement, sal_False, NULL, sal_True );
+                }
             }
         }
 
@@ -705,7 +726,21 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
     // it has to be a child, and it must not have a parent already
     Reference< XChild > xChild( _rxObject, UNO_QUERY );
     if ( !xChild.is() || xChild->getParent().is() )
+    {
+#ifdef FS_PRIV_DEBUG
+        ::rtl::OUString sChildName, sParentName;
+        Reference< XNamed > xNamed( xChild, UNO_QUERY );
+        if ( xNamed.is() )
+            sChildName = xNamed->getName();
+        if ( xChild.is() )
+        {
+            xNamed = xNamed.query( xChild->getParent() );
+            if ( xNamed.is() )
+                sParentName = xNamed->getName();
+        }
+#endif
         lcl_throwIllegalArgumentException();
+    }
 
     // passed all tests. cache the information we have so far
     DBG_ASSERT( _pElement, "OInterfaceContainer::approveNewElement: invalid event descriptor!" );
@@ -779,13 +814,13 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     // fire the notification about the change
     if ( _bFire )
     {
-        aGuard.clear();
-
         // notify listeners
         ContainerEvent aEvt;
         aEvt.Source   = static_cast<XContainer*>(this);
         aEvt.Accessor <<= _nIndex;
         aEvt.Element  = pElementMetaData->aElementTypeInterface;
+
+        aGuard.clear();
         NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementInserted, aEvt);
     }
 }
@@ -821,26 +856,23 @@ void SAL_CALL OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& 
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& Element) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any& _rNewElement, ::osl::ClearableMutexGuard& _rClearBeforeNotify )
 {
-    if (_nIndex < 0 || _nIndex >= (sal_Int32)m_aItems.size())
-        throw IndexOutOfBoundsException();
-
-    ::osl::ClearableMutexGuard aGuard( m_rMutex );
+    OSL_PRECOND( ( _nIndex >= 0 ) && ( _nIndex < (sal_Int32)m_aItems.size() ), "OInterfaceContainer::implReplaceByIndex: precondition not met (index)!" );
 
     // approve the new object
     ::std::auto_ptr< ElementDescription > aElementMetaData( createElementMetaData() );
-    DBG_ASSERT( aElementMetaData.get(), "OInterfaceContainer::replaceByIndex: createElementMetaData returned nonsense!" );
+    DBG_ASSERT( aElementMetaData.get(), "OInterfaceContainer::implReplaceByIndex: createElementMetaData returned nonsense!" );
     {
         Reference< XPropertySet > xElementProps;
-        Element >>= xElementProps;
+        _rNewElement >>= xElementProps;
         approveNewElement( xElementProps, aElementMetaData.get() );
     }
 
     // get the old element
     InterfaceRef  xOldElement( m_aItems[ _nIndex ] );
     DBG_ASSERT( xOldElement.get() == Reference< XInterface >( xOldElement, UNO_QUERY ).get(),
-        "OInterfaceContainer::replaceByIndex: elements should be held normalized!" );
+        "OInterfaceContainer::implReplaceByIndex: elements should be held normalized!" );
 
     // locate the old element in the map
     OInterfaceMap::iterator j = m_aMap.begin();
@@ -867,7 +899,7 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& 
 
     // examine the new element
     ::rtl::OUString sName;
-    DBG_ASSERT( aElementMetaData.get()->xPropertySet.is(), "OInterfaceContainer::replaceByIndex: what did approveNewElement do?" );
+    DBG_ASSERT( aElementMetaData.get()->xPropertySet.is(), "OInterfaceContainer::implReplaceByIndex: what did approveNewElement do?" );
 
     aElementMetaData.get()->xPropertySet->getPropertyValue(PROPERTY_NAME) >>= sName;
     aElementMetaData.get()->xPropertySet->addPropertyChangeListener(PROPERTY_NAME, this);
@@ -884,21 +916,37 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& 
     implReplaced( xOldElement, aElementMetaData.get() );
 
     // benachrichtigen
-    aGuard.clear();
     ContainerEvent aEvt;
     aEvt.Source   = static_cast<XContainer*>(this);
     aEvt.Accessor <<= _nIndex;
     aEvt.Element  = aElementMetaData.get()->aElementTypeInterface;
     aEvt.ReplacedElement = xOldElement->queryInterface( m_aElementType );
+
+    _rClearBeforeNotify.clear();
     NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementReplaced, aEvt);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+void OInterfaceContainer::implCheckIndex( const sal_Int32 _nIndex ) SAL_THROW( ( ::com::sun::star::lang::IndexOutOfBoundsException ) )
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
     if (_nIndex < 0 || _nIndex >= (sal_Int32)m_aItems.size())
         throw IndexOutOfBoundsException();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& Element) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+{
+    ::osl::ClearableMutexGuard aGuard( m_rMutex );
+    // check the index
+    implCheckIndex( _nIndex );
+    // do the replace
+    implReplaceByIndex( _nIndex, Element, aGuard );
+}
+
+//------------------------------------------------------------------------------
+void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::ClearableMutexGuard& _rClearBeforeNotify )
+{
+    OSL_PRECOND( ( _nIndex >= 0 ) && ( _nIndex < (sal_Int32)m_aItems.size() ), "OInterfaceContainer::implRemoveByIndex: precondition not met (index)!" );
 
     OInterfaceArray::iterator i = m_aItems.begin() + _nIndex;
     InterfaceRef  xElement(*i);
@@ -930,7 +978,19 @@ void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( Index
     aEvt.Source     = static_cast<XContainer*>(this);
     aEvt.Element    = xElement->queryInterface( m_aElementType );
     aEvt.Accessor   <<= _nIndex;
+
+    _rClearBeforeNotify.clear();
     NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementRemoved, aEvt);
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+{
+    ::osl::ClearableMutexGuard aGuard( m_rMutex );
+    // check the index
+    implCheckIndex( _nIndex );
+    // do the removal
+    implRemoveByIndex( _nIndex, aGuard );
 }
 
 //------------------------------------------------------------------------
@@ -973,7 +1033,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, c
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, const Any& Element) throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::ClearableMutexGuard aGuard( m_rMutex );
     pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(Name);
     if (aPair.first == aPair.second)
@@ -994,7 +1054,8 @@ void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, co
 
     // determine the element pos
     sal_Int32 nPos = find(m_aItems.begin(), m_aItems.end(), (*aPair.first).second) - m_aItems.begin();
-    replaceByIndex(nPos, Element);
+
+    implReplaceByIndex( nPos, Element, aGuard );
 }
 
 //------------------------------------------------------------------------

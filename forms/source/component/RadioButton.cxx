@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,18 @@ void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>
 
     // switch off the auto-toggle, we do this ourself ....
     // (formerly this switch-off was done in the toolkit - but the correct place is here ...)
-    Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
-    if (xVclWindowPeer.is())
-        xVclWindowPeer->setProperty(::rtl::OUString::createFromAscii("AutoToggle"), ::cppu::bool2any(sal_False));
+//  Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
+//  if (xVclWindowPeer.is())
+//      xVclWindowPeer->setProperty(::rtl::OUString::createFromAscii("AutoToggle"), ::cppu::bool2any(sal_False));
+    // new order: do _not_ switch off the auto toggle because:
+    // * today, it is not necessary anymore to handle the toggling ourself (everything works fine without it)
+    // * without auto toggle, the AccessibleEvents as fired by the radio buttons are
+    //     a. newly checked button: "unchecked"->"checked"
+    //     b. previously checked button: "checked"->"unchecked"
+    //   This is deadly for AT-tools, which then get the "unchecked" event _immediately_ after the "checked" event,
+    //   and only read the latter. This makes radio buttons pretty unusable in form documents.
+    //   So we switched AutoToggle _on_, again, because then VCL can handle the notifications, and will send
+    //   them in the proper order.
 }
 
 //==================================================================

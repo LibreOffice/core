@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2002-12-02 09:52:09 $
+#   last change: $Author: hr $ $Date: 2003-03-25 18:01:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,6 +141,7 @@ SLOFILES=	$(SLO)$/Grid.obj \
             $(SLO)$/ImageControl.obj \
             $(SLO)$/errorbroadcaster.obj \
             $(SLO)$/cloneable.obj \
+            $(SLO)$/Filter.obj \
 
 # --- Targets ----------------------------------
 

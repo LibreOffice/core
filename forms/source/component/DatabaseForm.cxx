@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-09 14:53:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,8 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _INETTYPE_HXX
 #include <svtools/inettype.hxx>
@@ -1161,9 +1161,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 {
                     sal_Int16 nScale;
                     xComponentSet->getPropertyValue( PROPERTY_DECIMAL_ACCURACY ) >>= nScale;
-                    String aTempText = UniString(aText);
-                        // TODO : remove this if SolarMath works with unicode strings
-                    SolarMath::DoubleToString(aTempText, aDoubleVal, 'F', nScale, '.', sal_True);
+                    aText = ::rtl::math::doubleToUString(aDoubleVal, rtl_math_StringFormat_F, nScale, '.', sal_True);
                 }
                 rList.push_back( HtmlSuccessfulObj(aName, aText) );
             }
@@ -1538,7 +1536,14 @@ void ODatabaseForm::createParameterInfo()
     m_pParameterInfo = new OParameterInfoImpl;
 
     // create and fill a composer
-    Reference<XSQLQueryComposer>  xComposer = getCurrentSettingsComposer(m_xAggregateSet, m_xServiceFactory);
+    Reference<XSQLQueryComposer>  xComposer;
+    try
+    {
+        xComposer = getCurrentSettingsComposer(m_xAggregateSet, m_xServiceFactory);
+    }
+    catch(SQLException&)
+    {
+    }
     Reference<XParametersSupplier>  xSetParameters = Reference<XParametersSupplier> (xComposer, UNO_QUERY);
 
     // if there is no parsable statement return
@@ -4169,7 +4174,7 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getCurrentServiceNames_Stati
     Sequence< ::rtl::OUString > aServices( 5 );
     ::rtl::OUString* pServices = aServices.getArray();
 
-    *pServices++ = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponent");
+    *pServices++ = FRM_SUN_FORMCOMPONENT;
     *pServices++ = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponents");
     *pServices++ = FRM_SUN_COMPONENT_FORM;
     *pServices++ = FRM_SUN_COMPONENT_HTMLFORM;
@@ -4217,13 +4222,12 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() t
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseForm::supportsService(const ::rtl::OUString& ServiceName) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(ServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
+    const ::rtl::OUString* pArray = aSupported.getConstArray();
+    for( sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray )
+        if( pArray->equals( ServiceName ) )
+            return sal_True;
+    return sal_False;
 }
 
 //==============================================================================

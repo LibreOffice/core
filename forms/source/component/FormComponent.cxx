@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-12 16:13:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ OControl::~OControl()
 Any SAL_CALL OControl::queryAggregation( const Type& _rType ) throw(RuntimeException)
 {
     // ask the base class
-    Any aReturn = OComponentHelper::queryAggregation(_rType);
+    Any aReturn( OComponentHelper::queryAggregation(_rType) );
     // ask our own interfaces
     if (!aReturn.hasValue())
     {
@@ -372,7 +372,7 @@ Sequence< Type> OBoundControl::_getTypes()
 Any SAL_CALL OBoundControl::queryAggregation(const Type& _rType) throw(RuntimeException)
 {
     // ask the base class
-    Any aReturn = OControl::queryAggregation(_rType);
+    Any aReturn(OControl::queryAggregation(_rType));
     // ask our own interfaces
     if (!aReturn.hasValue())
         aReturn = OBoundControl_BASE::queryInterface(_rType);
@@ -454,17 +454,17 @@ Sequence<Type> OControlModel::_getTypes()
 Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     // base class 1
-    Any aReturn = OComponentHelper::queryAggregation(_rType);
+    Any aReturn(OComponentHelper::queryAggregation(_rType));
 
     // base class 2
     if (!aReturn.hasValue())
     {
-        aReturn = OPropertySetAggregationHelper::queryInterface(_rType);
+        aReturn = OControlModel_BASE::queryInterface(_rType);
 
         // our own interfaces
         if (!aReturn.hasValue())
         {
-            aReturn = OControlModel_BASE::queryInterface(_rType);
+            aReturn = OPropertySetAggregationHelper::queryInterface(_rType);
             // our aggregate
             if (!aReturn.hasValue() && m_xAggregate.is() && !_rType.equals(::getCppuType(static_cast< Reference< XCloneable>* >(NULL))))
                 aReturn = m_xAggregate->queryAggregation(_rType);
@@ -665,7 +665,7 @@ Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw
 
     aSupported.realloc(aSupported.getLength() + 2);
     ::rtl::OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponent");
+    pArray[aSupported.getLength()-2] = FRM_SUN_FORMCOMPONENT;
     pArray[aSupported.getLength()-1] = ::rtl::OUString::createFromAscii("com.sun.star.form.FormControlModel");
 
     return aSupported;
@@ -923,9 +923,7 @@ DBG_NAME(frm_OBoundControlModel);
 //------------------------------------------------------------------
 Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (RuntimeException)
 {
-    Any aReturn;
-
-    aReturn = OControlModel::queryAggregation(_rType);
+    Any aReturn( OControlModel::queryAggregation(_rType) );
     if (!aReturn.hasValue())
     {
         aReturn = OBoundControlModel_BASE1::queryInterface(_rType);
@@ -1052,7 +1050,7 @@ void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObj
     }
     else if (m_xLabelControl == _rEvent.Source)
     {
-                Reference<XPropertySet> xOldValue = m_xLabelControl;
+        Reference<XPropertySet> xOldValue = m_xLabelControl;
         m_xLabelControl = NULL;
 
         // fire a property change event
@@ -1581,31 +1579,37 @@ void OBoundControlModel::reset() throw (RuntimeException)
     osl::ClearableMutexGuard aGuard(m_aMutex);
     m_bResetting = sal_True;
 
-    // gesondertes Verhalten bei Datenbankverbindung
-    if (m_xField.is())
+    sal_Bool bSimpleReset = !m_xField.is()                      // no connection to a database field
+                        ||  (   m_xCursor.is()                  // OR   we have an improperly positioned cursor
+                            &&  (   m_xCursor->isAfterLast()
+                                ||  m_xCursor->isBeforeFirst()
+                                )
+                            );
+
+    if ( !bSimpleReset )
     {
-        // nur wenn der derzeitige Wert des Feldes auf NULL steht
-        // werden die Defaultwerte gesetzt
-        // ansonsten soll der aktuelle Werte nochmals aus dem Feld gesetzt werden
-        // dieses Verhalten ist noch nicht ganz ausgereift, was passiert wenn das Feld einen Defaultwert besitzt
-        // und das Control auch?
+        // The default values will be set if and only if the current value of the field which we're bound
+        // to is NULL.
+        // Else, the current field value should be refreshed
+        // This behaviour is not completely ... "matured": What should happen if the field as well as the
+        // control have a default value?
 
         sal_Bool bIsNull = sal_True;
         // we have to access the field content at least once to get a reliable result by XColumn::wasNull
         try
         {
             m_xColumn->getString();
+            bIsNull = m_xColumn->wasNull();
         }
         catch(Exception&)
         {
-            DBG_ERROR("OBoundControlModel::reset : XColumn::getString is expected to always succeed !");
+            DBG_ERROR("OBoundControlModel::reset : XColumn::getString and wasNull are expected to always succeed !");
         }
-        bIsNull = m_xColumn->wasNull();
 
         if (bIsNull)
         {
-            Reference<XPropertySet> xSet(m_xCursor, UNO_QUERY);
             sal_Bool bIsNewRecord = sal_False;
+            Reference<XPropertySet> xSet(m_xCursor, UNO_QUERY);
             if (xSet.is())
                 xSet->getPropertyValue(PROPERTY_ISNEW) >>= bIsNewRecord;
             if (bIsNewRecord)

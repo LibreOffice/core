@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-15 15:56:19 $
+#   last change: $Author: hr $ $Date: 2003-03-25 18:01:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,8 @@ SHL1STDLIBS= \
         $(UNOTOOLSLIB) \
         $(COMPHELPERLIB) \
         $(DBTOOLSLIB) \
-        $(TKLIB)
+        $(TKLIB) \
+        $(SVXLIB)
 
 SHL1LIBS=$(LIB1TARGET)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def

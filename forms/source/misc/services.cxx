@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-05 17:07:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,11 @@ IMPLEMENT_CONSTASCII_USTRING(SRV_SDBC_STATEMENT, "com.sun.star.sdbc.Statement");
 
 IMPLEMENT_CONSTASCII_USTRING(SRV_AWT_POINTER, "com.sun.star.awt.Pointer");
 
+// -----------------------
+// common
+// -----------------------
+IMPLEMENT_CONSTASCII_USTRING( FRM_SUN_FORMCOMPONENT, "com.sun.star.form.FormComponent" );
+
 //.........................................................................
 }
 //... namespace frm .......................................................
@@ -247,17 +252,11 @@ namespace starregistry  = ::com::sun::star::registry;
 namespace staruno       = ::com::sun::star::uno;
 namespace starlang      = ::com::sun::star::lang;
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
-
 //---------------------------------------------------------------------------------------
 //.......................................................................................
 #define DECLARE_SERVICE_INFO(classImplName) \
     namespace frm { \
-        extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL \
-            classImplName##_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) \
-                throw (::com::sun::star::uno::RuntimeException); \
+        extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL classImplName##_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory) throw (::com::sun::star::uno::RuntimeException); \
     }
 
 //---------------------------------------------------------------------------------------
@@ -310,6 +309,10 @@ namespace frm { \
 DECLARE_SERVICE_INFO(OFormsCollection)
 
 //---------------------------------------------------------------------------------------
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::registry;
 
 static Sequence< ::rtl::OUString >                      s_aClassImplementationNames;
 static Sequence<Sequence< ::rtl::OUString > >   s_aClassServiceNames;
@@ -500,6 +503,7 @@ extern "C"
 
 //---------------------------------------------------------------------------------------
 void SAL_CALL createRegistryInfo_ODatabaseForm();
+void SAL_CALL createRegistryInfo_OFilterControl();
 
 //---------------------------------------------------------------------------------------
 void SAL_CALL createRegistryInfo_FORMS()
@@ -508,6 +512,7 @@ void SAL_CALL createRegistryInfo_FORMS()
     if (!bInit)
     {
         createRegistryInfo_ODatabaseForm();
+        createRegistryInfo_OFilterControl();
         bInit = sal_True;
     }
 }

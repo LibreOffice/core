@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:49:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,9 @@ DECLARE_CONSTASCII_USTRING(FRM_SUN_CONTROL_FORMATTEDFIELD);
 
 DECLARE_CONSTASCII_USTRING(FRM_SUN_FORMS_COLLECTION);
 DECLARE_CONSTASCII_USTRING(FRM_SUN_INTERNATIONAL_INFO);
+
+
+DECLARE_CONSTASCII_USTRING(FRM_SUN_FORMCOMPONENT);
 
 
 //.........................................................................

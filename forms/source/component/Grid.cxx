@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,9 +289,10 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
 StringSequence OGridControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     ::rtl::OUString*pArray = aSupported.getArray();
+    pArray[aSupported.getLength()-2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlModel"));
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_GRIDCONTROL;
     return aSupported;
 }

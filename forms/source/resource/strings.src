@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:23:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,14 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει αναγνώριση του περιεχομένου ενός πεδίου συνδυασμού ή ενός πεδίου λίστας";
     Text[ dutch ] = "Inhoud combinatieveld of keuzelijst niet gevonden.";
     Text[ french ] = "Impossible de dιterminer le contenu de la zone combinιe/zone de liste.";
-    Text[ spanish ] = "No se pudo determinar el contenido del campo combinado o del listado.";
+    Text[ spanish ] = "No se pudo determinar ni el contenido del cuadro combinado ni el del listado.";
     Text[ italian ] = "Non θ stato possibile determinare il contenuto di una casella combinata o di una casella di riepilogo.";
     Text[ danish ] = "Det var ikke muligt at bestemme indholdet for en kombinationsboks eller rulleliste.";
     Text[ swedish ] = "Innehεllet i ett kombinationsfδlt eller en listruta kunde inte bestδmmas.";
     Text[ polish ] = "Nie moΏna by³o ustaliζ zawartoci pola kombi lub pola listy.";
     Text[ portuguese_brazilian ] = "ComboBox/ListBox : determine the list contents";
     Text[ japanese ] = "γ‚³γƒ³γƒγƒγƒƒγ‚―γ‚ΉγΎγγ―γƒªγ‚Ήγƒγƒγƒƒγ‚―γ‚Ήγ®ε†…ε®ΉγηΆΊθªγ§γγΎγ›γ‚“γ§γ—γγ€‚";
-    Text[ korean ] = "μ½¤λ³΄ μƒμ λλ” λª©λ΅ ν•„λ“μ λ‚΄μ©μ„ μ΅°μ‚¬ν•  μ μ—†μ—μµλ‹λ‹¤.";
+    Text[ korean ] = "μ½¤λ³΄ μƒμ λλ” λª©λ΅ ν•„λ“μ λ‚΄μ©μ„ ν™•μΈν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ— ζ³•η΅®ε®η»„εζ΅†ζ–θ€…ε—θ΅¨ζ΅†ε†…η„ε†…ε®Ήγ€‚";
     Text[ chinese_traditional ] = "η„΅ζ³•εΎθ³‡ζ–™εΊ«ε…§ζΈ¬ε®ηµ„εζ–Ήε΅ζ–ζΈ…ε–®ζ–Ήε΅η„ε…§ε®Ή";
     Text[ arabic ] = "ΚΪΠΡ ΗαΚΪΡέ Ϊαμ γΝΚζνΗΚ γΡΘΪ ΚΝΡνΡ ζΣΡΟ Γζ γΡΘΪ ήΗΖγΙ.";
@@ -109,7 +109,7 @@ String RID_STR_IMPORT_GRAPHIC
     Text[ japanese ] = "ε›³γ®ζΏε…¥";
     Text[ chinese_traditional ] = "ζ’ε…¥ε–ε½Ά";
     Text[ greek ] = "Εισαγωγή γραφικού";
-    Text[ korean ] = "κ·Έλν”½ μ‚½μ…";
+    Text[ korean ] = "κ·Έλ¦Ό μ‚½μ…";
     Text[ arabic ] = "ΕΟΡΗΜ ΥζΡΙ";
     Text[ turkish ] = "Insert graphics";
     Text[ catalan ] = "Insereix grΰfics";
@@ -161,7 +161,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ polish ] = "WystΉpi³ b³Ήd podczas ³adowania pola kontrolnego (control). Z tego powodu zamieniono je na symbol wieloznaczny.";
     Text[ portuguese_brazilian ] = "While loading this control an error occured. Thus it was replaced with a placeholder.";
     Text[ japanese ] = "γ“γ®γ‚³γƒ³γƒγƒ­γƒΌγƒ«γ®θª­γΏθΎΌγΏδΈ­γ«γ‚¨γƒ©γƒΌγη™Ίη”γ—γΎγ—γγ€‚γγ‚γεε› γ§γƒ―γ‚¤γƒ«γƒ‰γ‚«γƒΌγƒ‰γ«η½®ζ›γ•γ‚γΎγ—γγ€‚";
-    Text[ korean ] = "μ΄ μ»¨νΈλ΅¤ λ΅λ“μ‹μ— μ¤λ¥κ°€ λ°μƒν•μ€μµλ‹λ‹¤. κ·Έλ¬λ―€λ΅ ν”λ μ΄μ¤ν™€λ”λ΅ λ³€κ²½λμ—μµλ‹λ‹¤.";
+    Text[ korean ] = "μ΄ μ»¨νΈλ΅¤ λ΅λ“ μ¤‘μ— μ¤λ¥κ°€ λ°μƒν–μµλ‹λ‹¤. μ΄ μ΄μ λ΅ μΈν•΄ ν”λ μ΄μ¤ν™€λ”λ΅ λ€μ²΄λμ—μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "θ£…ε…¥θΏ™δΈªε­—ζ®µζ—¶ε‡Ίη°δΊ†δΈ€δΈªι”™θ――οΌε› ζ­¤η”¨ι€ι…η¬¦δ»£ζ›Ώε­—ζ®µγ€‚";
     Text[ chinese_traditional ] = "θΌ‰ε…¥ι€™ε€‹ζ§ε¶ι …ζ™‚η™Όη”δΈ€ε€‹ι―θª¤γ€‚δ½†ε·²η¶“η”¨δΈ€ε€‹θ¬η”¨ε­—ε…ƒζ›Ώδ»£ε®ƒγ€‚";
     Text[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΚΝγνα ΪδΥΡ ΗαΚΝίγ εΠΗ. αεΠΗ Κγ ΗΣΚΘΟΗαε ΘΪδΥΡ δΗΖΘ.";
@@ -233,7 +233,7 @@ String RID_ERR_LOADING_FORM
     Text [ english ] = "The data content could not be loaded.";
     Text [ english_us ] = "The data content could not be loaded.";
     Text[ portuguese ] = "Foi impossνvel carregar o conteϊdo dos dados.";
-    Text[ russian ] = "Νεβξημξζνξ ηΰγπσηθςό ρξδεπζθμξε δΰννϋυ.";
+    Text[ russian ] = "Νεβξημξζνξ ηΰγπσηθςό δΰννϋε.";
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει φόρτωση των περιεχομένων των δεδομένων.";
     Text[ dutch ] = "De gegevens kunnen niet worden geladen.";
     Text[ french ] = "Impossible de charger le contenu des donnιes.";
@@ -346,7 +346,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ greek ] = "Σφάλμα κατά την διαγραφή της τρέχουσας εγγραφής";
     Text[ dutch ] = "Fout bij wissen van huidige record";
     Text[ french ] = "Erreur lors de la suppression de l'enregistrement actif";
-    Text[ spanish ] = "Error al eliminar el registro actual de datos.";
+    Text[ spanish ] = "Error al borrar el registro actual.";
     Text[ italian ] = "Errore nel cancellare il record di dati corrente.";
     Text[ danish ] = "Fejl ved sletning af den aktuelle datapost";
     Text[ swedish ] = "Fel vid radering av den aktuella dataposten";
@@ -373,14 +373,14 @@ String RID_STR_ERR_DELETERECORDS
     Text[ greek ] = "Σφάλμα κατά την διαγραφή των επιλεγμένων εγγραφών";
     Text[ dutch ] = "Fout bij wissen van opgegeven records";
     Text[ french ] = "Erreur lors de la suppression des enregistrements spιcifiιs";
-    Text[ spanish ] = "Error al eliminar los registros de los datos indicados.";
+    Text[ spanish ] = "Error al borrar los registros indicados.";
     Text[ italian ] = "Errore nel cancellare i record di dati specificati.";
     Text[ danish ] = "Fejl ved sletning af de angivne dataposter";
     Text[ swedish ] = "Fel vid radering av de angivna dataposterna";
     Text[ polish ] = "B³Ήd przy usuwaniu podanych rekordσw";
     Text[ portuguese_brazilian ] = "error deleting the specified records";
     Text[ japanese ] = "ζ‡ε®γ—γγƒ¬γ‚³γƒΌγƒ‰γ‚’ε‰ι™¤γ™γ‚‹ζ™‚γ®γ‚¨γƒ©γƒΌ";
-    Text[ korean ] = "μ§€μ •λ λ μ½”λ“ μ‚­μ μ‹μ— μ¤λ¥";
+    Text[ korean ] = "μ§€μ •λ λ μ½”λ“ μ‚­μ  μ¤‘ μ¤λ¥";
     Text[ chinese_simplified ] = "ε¨ε ι™¤ζ‡ε®η„ζ•°ζ®ζ΅η›®ζ—¶ε‘η”ι”™θ――";
     Text[ chinese_traditional ] = "ε¨εªι™¤ζ‡ε®θ³‡ζ–™ζΆη›®ζ™‚η™Όη”ι―θª¤";
     Text[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΝΠέ ΗαΣΜαΗΚ ΗαγΟΡΜΙ";
@@ -408,7 +408,7 @@ String RID_STR_NEED_NON_NULL_OBJECT
     Text[ polish ] = "Obiekt nie moΏe byζ rσwny ZERO.";
     Text[ portuguese_brazilian ] = "The object must not be NULL.";
     Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ NULL γ§γ―γ„γ‘γΎγ›γ‚“γ€‚";
-    Text[ korean ] = "κ°μ²΄λ” NULLμ΄ μ•„λ‹μ–΄μ•Ό ν•©λ‹λ‹¤.";
+    Text[ korean ] = "κ°μ²΄κ°€ NULLμ΄λ©΄ μ•λ©λ‹λ‹¤.";
     Text[ chinese_simplified ] = "θΏ™δΈªε―Ήθ±΅δΈε―δ»¥ζ― NULL γ€‚";
     Text[ chinese_traditional ] = "ι€™ε€‹η‰©δ»¶δΈε―δ»¥ζ― NULL γ€‚";
     Text[ turkish ] = "The object must not be NULL.";
@@ -435,7 +435,7 @@ String RID_STR_OPEN_GRAPHICS
     Text[ polish ] = "Wstaw grafikκ z...";
     Text[ portuguese_brazilian ] = "Insert graphics from...";
     Text[ japanese ] = "ε›³γ®ζΏε…¥γ«ι–‹γ...";
-    Text[ korean ] = "...μ—μ„ κ·Έλν”½ μ‚­μ ";
+    Text[ korean ] = "μ‚½μ…ν•  κ·Έλ¦Ό... ";
     Text[ chinese_simplified ] = "ζ’ε…¥ε›Ύε½Άδ»...";
     Text[ chinese_traditional ] = "ζ’ε…¥ε–ε½ΆεΎ...";
     Text[ turkish ] = "Insert graphics from...";
@@ -454,7 +454,7 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ greek ] = "Remove graphics";
     Text[ dutch ] = "Afbeelding verwijderen";
     Text[ french ] = "Supprimer l'image";
-    Text[ spanish ] = "Eliminar la imagen";
+    Text[ spanish ] = "Borrar la imagen";
     Text[ finnish ] = "Poista grafiikka";
     Text[ italian ] = "Elimina l'immagine";
     Text[ danish ] = "Fjern grafik";
@@ -462,7 +462,7 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ polish ] = "Usuρ grafikκ";
     Text[ portuguese_brazilian ] = "Remove graphics";
     Text[ japanese ] = "ε›³γ®ε‰ι™¤";
-    Text[ korean ] = "κ·Έλν”½ μ‚­μ ";
+    Text[ korean ] = "κ·Έλ¦Ό μ κ±°";
     Text[ chinese_simplified ] = "ε ι™¤ε›Ύε½Ά";
     Text[ chinese_traditional ] = "εªι™¤ε–ε½Ά";
     Text[ turkish ] = "Remove graphics";
@@ -476,3 +476,31 @@ String RID_STR_INVALIDSTREAM
 {
     Text = "Die όbergebene Stream-Komponente ist ungόltig.";
 };
+
+String RID_STR_SYNTAXERROR
+{
+    Text = "Fehler bei der Analyse des Anfrageausdrucks" ;
+    Text [ english ] = "Syntax error in query expression" ;
+    Text [ english_us ] = "Syntax error in query expression" ;
+    Text [ portuguese ] = "Erro ao analisar a expressγo de consulta." ;
+    Text [ portuguese_brazilian ] = "Fehler bei der Analyse des Anfrageausdrucks" ;
+    Text [ swedish ] = "Fel vid analys av frεgeuttryck" ;
+    Text [ danish ] = "Fejl under analysen af forespψrgseludtrykket" ;
+    Text [ italian ] = "Errore nell'analizzare dell'espressione di ricerca" ;
+    Text [ spanish ] = "Ha ocurrido un error al analizar la expresiσn de la consulta" ;
+    Text [ french ] = "Erreur dans l'analyse de l'expression de la requκte" ;
+    Text [ dutch ] = "Fout bij de analyse van query-afdruk" ;
+    Text[ chinese_simplified ] = "ζ¥θ―Άθ―­ε¥ε‡Ίη°θ―­ζ³•ι”™θ――γ€‚";
+    Text[ russian ] = "Ξψθακΰ ρθνςΰκρθρΰ β βϋπΰζενθθ ηΰοπξρΰ";
+    Text[ polish ] = "B³Ήd przy ocenie wydruku kwerendy";
+    Text[ japanese ] = "γ‚―γ‚¨γƒªγƒΌθ¨€θªε†ζδΈ­γ§γ®γ‚¨γƒ©γƒΌ";
+    Text[ chinese_traditional ] = "ε¨ε†θ§£ζ¥θ©Άθªε¥ζ™‚η™Όη”δΈ€ε€‹ι―θª¤γ€‚";
+    Text[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΚΝανα ΪΘΗΡΙ ΗαΗΣΚέΣΗΡ";
+    Text[ greek ] = "Σφάλμα κατά την ανάλυση του ορίσματος του ερωτήματος";
+    Text[ korean ] = "μΏΌλ¦¬μ‹μ„ λ¶„μ„ν•λ” μ¤‘ μ¤λ¥";
+    Text[ turkish ] = "Sorgu ifadesinde sφzdizim hatasύ";
+    Text[ catalan ] = "S'ha produοt un error en analitzar l'expressiσ de consulta";
+    Text[ finnish ] = "Syntaksivirhe kyselylausekkeessa";
+    Text[ thai ] = "ΰΉ„ΰΈ§ΰΈΆΰΈΰΈ£ΰΈ“ΰΉΰΉƒΰΈ™ΰΈ„ΰΈ³ΰΈ­ΰΈΰΈ΄ΰΈΰΈ²ΰΈΆΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅ΰΈΰΈ΄ΰΈ”ΰΈΰΈ¥ΰΈ²ΰΈ”";
+};
+

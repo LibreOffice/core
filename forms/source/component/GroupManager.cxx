@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-02 14:41:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ OGroupComp::OGroupComp(const OGroupComp& _rSource)
         ,m_xComponent( _rSource.m_xComponent )
         ,m_nTabIndex( _rSource.m_nTabIndex )
         ,m_nPos( _rSource.m_nPos )
+        ,m_xControlModel(_rSource.m_xControlModel)
 {
 }
 
@@ -156,6 +157,7 @@ OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPo
             :m_xComponent( rxSet )
             ,m_nTabIndex(0)
             ,m_nPos( nInsertPos )
+            ,m_xControlModel(rxSet,UNO_QUERY)
 {
     if (m_xComponent.is())
     {
@@ -293,7 +295,7 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
     ConstOGroupCompArrIterator aGroupComps = m_aCompArray.begin();
     for (sal_Int32 i = 0; i < nLen; ++i, ++pModels, ++aGroupComps)
     {
-        *pModels = Reference<XControlModel> ((*aGroupComps).GetComponent(), UNO_QUERY);
+        *pModels = aGroupComps->GetControlModel();
     }
     return aControlModelSeq;
 }
@@ -332,57 +334,51 @@ void OGroupManager::disposing(const EventObject& evt) throw( RuntimeException )
 
         ////////////////////////////////////////////////////////////////
         // Gruppen loeschen
-        m_aGroupArr.erase(m_aGroupArr.begin(), m_aGroupArr.end());
+        m_aGroupArr.clear();
         m_xContainer.clear();
     }
 }
+// -----------------------------------------------------------------------------
+void OGroupManager::removeFromGroupMap(const ::rtl::OUString& _sGroupName,const Reference<XPropertySet>& _xSet)
+{
+    // Component aus CompGroup entfernen
+    m_pCompGroup->RemoveComponent( _xSet );
 
+    OGroupArr::iterator aFind = m_aGroupArr.find(_sGroupName);
+
+    if ( aFind != m_aGroupArr.end() )
+    {
+        // Gruppe vorhanden
+        aFind->second.RemoveComponent( _xSet );
+
+        // Wenn Anzahl der Gruppenelemente == 1 ist, Gruppe deaktivieren
+        if ( aFind->second.Count() == 1 )
+        {
+            OActiveGroups::iterator aActiveFind = ::std::find(m_aActiveGroupMap.begin(),m_aActiveGroupMap.end(),aFind);
+            if ( aActiveFind != m_aActiveGroupMap.end() )
+                m_aActiveGroupMap.erase(aActiveFind);
+        }
+    }
+
+
+    // Bei Component als PropertyChangeListener abmelden
+    _xSet->removePropertyChangeListener( PROPERTY_NAME, this );
+    if (hasProperty(PROPERTY_TABINDEX, _xSet))
+        _xSet->removePropertyChangeListener( PROPERTY_TABINDEX, this );
+}
 //------------------------------------------------------------------
 void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(evt.Source, UNO_QUERY);
 
-    // Component aus CompGroup entfernen
-    m_pCompGroup->RemoveComponent( xSet );
-
     // Component aus Gruppe entfernen
-    sal_Int32       nGroupPos;
     ::rtl::OUString     sGroupName;
     if (evt.PropertyName == PROPERTY_NAME)
         evt.OldValue >>= sGroupName;
     else
         xSet->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
 
-    OGroup      aSearchGroup( sGroupName );
-
-    if (seek_entry(m_aGroupArr, aSearchGroup, nGroupPos, OGroupLess()))
-    {
-        // Gruppe vorhanden
-        OGroup& rFoundGroup = m_aGroupArr[nGroupPos];
-        rFoundGroup.RemoveComponent( xSet );
-
-        // Wenn Anzahl der Gruppenelemente == 1 ist, Gruppe deaktivieren
-        if( rFoundGroup.Count() == 1 )
-        {
-            for (   OUInt32ArrIterator aMapSearch = m_aActiveGroupMap.begin();
-                    aMapSearch < m_aActiveGroupMap.end();
-                    ++aMapSearch
-                )
-            {
-                if( *aMapSearch == nGroupPos )
-                {
-                    m_aActiveGroupMap.erase(aMapSearch);
-                    break;
-                }
-            }
-        }
-    }
-
-
-    // Bei Component als PropertyChangeListener abmelden
-    xSet->removePropertyChangeListener( PROPERTY_NAME, this );
-    if (hasProperty(PROPERTY_TABINDEX, xSet))
-        xSet->removePropertyChangeListener( PROPERTY_TABINDEX, this );
+    removeFromGroupMap(sGroupName,xSet);
 
     // Component neu einordnen
     InsertElement( xSet );
@@ -437,23 +433,18 @@ sal_Int32 OGroupManager::getGroupCount()
 //------------------------------------------------------------------
 void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel> >& _rGroup, ::rtl::OUString& _rName)
 {
-    sal_uInt16 nGroupPos= m_aActiveGroupMap[nGroup];
-    OGroup& rGroup      = m_aGroupArr[nGroupPos];
-    _rName              = rGroup.GetGroupName();
-    _rGroup             = rGroup.GetControlModels();
+    OSL_ENSURE(nGroup >= 0 && nGroup < m_aActiveGroupMap.size(),"OGroupManager::getGroup: Invalid group index!");
+    OGroupArr::iterator aGroupPos   = m_aActiveGroupMap[nGroup];
+    _rName                          = aGroupPos->second.GetGroupName();
+    _rGroup                         = aGroupPos->second.GetControlModels();
 }
 
 //------------------------------------------------------------------
 void OGroupManager::getGroupByName(const ::rtl::OUString& _rName, Sequence< Reference<XControlModel>  >& _rGroup)
 {
-    sal_Int32 nGroupPos;
-    OGroup aSearchGroup( _rName );
-
-    if (seek_entry(m_aGroupArr, aSearchGroup, nGroupPos, OGroupLess()))
-    {
-        OGroup& rGroup = m_aGroupArr[nGroupPos];
-        _rGroup = rGroup.GetControlModels();
-    }
+    OGroupArr::iterator aFind = m_aGroupArr.find(_rName);
+    if ( aFind != m_aGroupArr.end() )
+        _rGroup = aFind->second.GetControlModels();
 }
 
 //------------------------------------------------------------------
@@ -468,44 +459,23 @@ void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
     m_pCompGroup->InsertComponent( xSet );
 
     // Component in Gruppe aufnehmen
-    sal_Int32 nPos;
     ::rtl::OUString sGroupName;
     xSet->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
 
-    OGroup aNewGroup( sGroupName );
-    if (seek_entry(m_aGroupArr, aNewGroup, nPos, OGroupLess()))
-    {
-        // Gruppe existiert schon ...
-    }
-    else
-    {
-        // Gruppe muss neu angelegt werden
-        nPos = insert_sorted(m_aGroupArr, aNewGroup, OGroupLess());
+    OGroupArr::iterator aFind = m_aGroupArr.find(sGroupName);
 
-        // Indizes der ActiveGroupMap anpassen
-        if (seek_entry(m_aGroupArr, aNewGroup, nPos, OGroupLess()))
-        {
-            for (   OUInt32ArrIterator aMapSearch = m_aActiveGroupMap.begin();
-                    aMapSearch < m_aActiveGroupMap.end();
-                    ++aMapSearch
-                )
-            {
-                if( (*aMapSearch) >= nPos )
-                    ++(*aMapSearch);
-            }
-        }
-        else
-            DBG_ERROR("OGroupManager::InsertElement : inserted the element but did not find it afterwards !");
+    if ( aFind == m_aGroupArr.end() )
+    {
+        aFind = m_aGroupArr.insert(OGroupArr::value_type(sGroupName,OGroup(sGroupName))).first;
     }
 
-    OGroup& rNewGroup = m_aGroupArr[nPos];
-    rNewGroup.InsertComponent( xSet );
+    aFind->second.InsertComponent( xSet );
 
 
     // Wenn Anzahl der Gruppenelemente == 2 ist, Gruppe aktivieren
-    if( rNewGroup.Count() == 2 )
+    if ( aFind->second.Count() == 2 )
     {
-        m_aActiveGroupMap.insert( m_aActiveGroupMap.end(), nPos );
+        m_aActiveGroupMap.push_back(  aFind );
     }
 
 
@@ -526,43 +496,11 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
     if (!xControl.is() )
         return;
 
-    // Component aus CompGroup entfernen
-    m_pCompGroup->RemoveComponent( xSet );
-
     // Component aus Gruppe entfernen
-    sal_Int32       nGroupPos;
     ::rtl::OUString     sGroupName;
     xSet->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
-    OGroup      aSearchGroup( sGroupName );
 
-    if (seek_entry(m_aGroupArr, aSearchGroup, nGroupPos, OGroupLess()))
-    {
-        // Gruppe vorhanden
-        OGroup& rGroup = m_aGroupArr[nGroupPos];
-        rGroup.RemoveComponent( xSet );
-
-
-        // Wenn Anzahl der Gruppenelemente == 1 ist, Gruppe deaktivieren
-        if( rGroup.Count() == 1 )
-        {
-            for (   OUInt32ArrIterator aMapSearch = m_aActiveGroupMap.begin();
-                    aMapSearch < m_aActiveGroupMap.end();
-                    ++aMapSearch
-                )
-            {
-                if( *aMapSearch == nGroupPos )
-                {
-                    m_aActiveGroupMap.erase(aMapSearch);
-                    break;
-                }
-            }
-        }
-    }
-
-    // Bei Component als PropertyChangeListener abmelden
-    xSet->removePropertyChangeListener( PROPERTY_NAME, this );
-    if (hasProperty(PROPERTY_TABINDEX, xSet))
-        xSet->removePropertyChangeListener( PROPERTY_TABINDEX, this );
+    removeFromGroupMap(sGroupName,xSet);
 }
 
 //.........................................................................

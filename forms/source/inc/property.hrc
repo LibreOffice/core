@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-02 12:58:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,18 +95,18 @@ namespace frm
 #define PROPERTY_ID_VALUE               (PROPERTY_ID_START + 31)    // INT32
 #define PROPERTY_ID_FORMATKEY           (PROPERTY_ID_START + 33)    // UINT32
 #define PROPERTY_ID_SIZE                (PROPERTY_ID_START + 37)    // UINT32
-#define PROPERTY_ID_HEIGHT              (PROPERTY_ID_START + 41)    // UINT16
+    // free
 #define PROPERTY_ID_WIDTH               (PROPERTY_ID_START + 42)    // UINT16
 #define PROPERTY_ID_DEFAULTCONTROL      (PROPERTY_ID_START + 43)    // string
 #define PROPERTY_ID_BOUNDCOLUMN         (PROPERTY_ID_START + 44)    // UINT16 may be null
 #define PROPERTY_ID_LISTSOURCETYPE      (PROPERTY_ID_START + 45)    // UINT16
 #define PROPERTY_ID_LISTSOURCE          (PROPERTY_ID_START + 46)    // string
-#define PROPERTY_ID_LISTINDEX           (PROPERTY_ID_START + 47)    // UINT32
+    // free
 #define PROPERTY_ID_TEXT                (PROPERTY_ID_START + 48)    // string
 #define PROPERTY_ID_STRINGITEMLIST      (PROPERTY_ID_START + 49)    // wsstringsequence
 #define PROPERTY_ID_LABEL               (PROPERTY_ID_START + 50)    // string
 #define PROPERTY_ID_STATE               (PROPERTY_ID_START + 52)    // UINT16
-#define PROPERTY_ID_GROUPBOX            (PROPERTY_ID_START + 53)    // string
+    //  free
 #define PROPERTY_ID_FONT                (PROPERTY_ID_START + 54)    // font
 #define PROPERTY_ID_HASNAVIGATION       (PROPERTY_ID_START + 55)
 #define PROPERTY_ID_ROWHEIGHT           (PROPERTY_ID_START + 57)    // UINT16
@@ -250,6 +250,8 @@ namespace frm
 #define PROPERTY_ID_FONTRELIEF          (PROPERTY_ID_START +211)
 
 #define PROPERTY_ID_DISPATCHURLINTERNAL (PROPERTY_ID_START +212)    // BOOL
+
+#define PROPERTY_ID_PERSISTENCE_MAXTEXTLENGTH   (PROPERTY_ID_START +213)    // sal_Int16
 
 
 // start ID fuer aggregierte Properties
@@ -423,6 +425,8 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_REALNAME);
 DECLARE_CONSTASCII_USTRING(PROPERTY_USER);
 DECLARE_CONSTASCII_USTRING(PROPERTY_PASSWORD);
 DECLARE_CONSTASCII_USTRING(PROPERTY_DISPATCHURLINTERNAL);
+
+DECLARE_CONSTASCII_USTRING(PROPERTY_PERSISTENCE_MAXTEXTLENGTH);
 
 //.........................................................................
 }

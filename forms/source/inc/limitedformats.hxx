@@ -2,9 +2,9 @@
  *
  *  $RCSfile: limitedformats.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-23 10:12:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,14 +142,4 @@ namespace frm
 //.........................................................................
 
 #endif // _FORMS_LIMITED_FORMATS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/05/18 14:47:28  fs
- *  initial checkin - helper for control models with limited formatting capabilities
- *
- *
- *  Revision 1.0 18.05.01 10:38:19  fs
- ************************************************************************/
 

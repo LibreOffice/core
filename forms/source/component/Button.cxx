@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-02 12:57:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _COMPHELPER_STREAMSECTION_HXX_
+#include <comphelper/streamsection.hxx>
 #endif
 
 //.........................................................................
@@ -177,13 +180,20 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) thr
 {
     OImageModel::write(_rxOutStream);
 
-    _rxOutStream->writeShort(0x0002);   // Version
-    _rxOutStream->writeShort( (sal_uInt16)m_eButtonType );
+    _rxOutStream->writeShort(0x0003);   // Version
 
-    ::rtl::OUString sTmp = INetURLObject::decode(INetURLObject::AbsToRel( m_sTargetURL ), '%', INetURLObject::DECODE_UNAMBIGUOUS);
-    _rxOutStream << sTmp;
-    _rxOutStream << m_sTargetFrame;
-    writeHelpTextCompatibly(_rxOutStream);
+    {
+        OStreamSection aSection( _rxOutStream.get() );
+            // this will allow readers to skip unknown bytes in their dtor
+
+        _rxOutStream->writeShort( (sal_uInt16)m_eButtonType );
+
+        ::rtl::OUString sTmp = INetURLObject::decode(INetURLObject::AbsToRel( m_sTargetURL ), '%', INetURLObject::DECODE_UNAMBIGUOUS);
+        _rxOutStream << sTmp;
+        _rxOutStream << m_sTargetFrame;
+        writeHelpTextCompatibly(_rxOutStream);
+        _rxOutStream << isDispatchUrlInternal();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -204,6 +214,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
             _rxInStream >> m_sTargetFrame;
         }
         break;
+
         case 0x0002:
         {
             m_eButtonType = (FormButtonType)_rxInStream->readShort();
@@ -215,7 +226,34 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
             readHelpTextCompatibly(_rxInStream);
         }
         break;
-        default :
+
+        case 0x0003:
+        {
+            OStreamSection aSection( _rxInStream.get() );
+                // this will skip any unknown bytes in it's dtor
+
+            // button type
+            m_eButtonType = (FormButtonType)_rxInStream->readShort();
+
+            // URL
+            ::rtl::OUString sTmp;
+            _rxInStream >> sTmp;
+            m_sTargetURL = INetURLObject::RelToAbs( sTmp );
+
+            // target frame
+            _rxInStream >> m_sTargetFrame;
+
+            // help text
+            readHelpTextCompatibly(_rxInStream);
+
+            // DispatchInternal
+            sal_Bool bDispath;
+            _rxInStream >> bDispath;
+            setDispatchUrlInternal(bDispath);
+        }
+        break;
+
+        default:
             DBG_ERROR("OButtonModel::read : unknown version !");
             m_eButtonType = FormButtonType_PUSH;
             m_sTargetURL = ::rtl::OUString();

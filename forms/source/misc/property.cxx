@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-02 12:58:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ void PropertyInfoService::initialize()
 {
     if (!s_AllKnownProperties.empty())
         return;
+
+    s_AllKnownProperties.reserve(220);
 
     ADD_PROP_ASSIGNMENT(NAME);
     ADD_PROP_ASSIGNMENT(TAG);
@@ -283,6 +285,7 @@ void PropertyInfoService::initialize()
     ADD_PROP_ASSIGNMENT(ACTIVE_CONNECTION);
     ADD_PROP_ASSIGNMENT(SCALE);
     ADD_PROP_ASSIGNMENT(SORT);
+    ADD_PROP_ASSIGNMENT(PERSISTENCE_MAXTEXTLENGTH);
 
     // now sort the array by name
 
@@ -472,6 +475,8 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CONTROLSOURCEPROPERTY, "DataFieldProperty"
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_USER, "User");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PASSWORD, "Password");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DISPATCHURLINTERNAL, "DispatchURLInternal");
+
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PERSISTENCE_MAXTEXTLENGTH, "PersistenceMaxTextLength");
 
 //.........................................................................
 }

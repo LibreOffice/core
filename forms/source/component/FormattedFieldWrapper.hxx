@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-11 14:21:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,14 @@
 #ifndef _FORMS_FORMCOMPONENT_HXX_
 #include "FormComponent.hxx"
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
 #endif
 
 //.........................................................................
@@ -80,8 +83,9 @@ class OEditModel;
 //==================================================================
 //= OFormattedFieldWrapper
 //==================================================================
-typedef ::cppu::WeakAggImplHelper2  <   ::com::sun::star::io::XPersistObject
+typedef ::cppu::WeakAggImplHelper3  <   ::com::sun::star::io::XPersistObject
                                     ,   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::util::XCloneable
                                     >   OFormattedFieldWrapper_Base;
 
 class OFormattedFieldWrapper : public OFormattedFieldWrapper_Base
@@ -100,6 +104,7 @@ protected:
     OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, sal_Bool _bActAsFormatted);
         // if _bActAsFormatted is sal_False, the state is undetermined until somebody calls ::read or does
         // anything which requires a living aggregate
+    OFormattedFieldWrapper( const OFormattedFieldWrapper* _pCloneSource );
     virtual ~OFormattedFieldWrapper();
 
     friend InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
@@ -115,10 +120,13 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::io::XPersistObject
+    // XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+
+    // XCloneable
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     /// ensure we're in a defined state, which means a FormattedModel _OR_ an EditModel

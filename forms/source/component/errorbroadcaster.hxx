@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorbroadcaster.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:34:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,4 @@ namespace frm
 //.........................................................................
 
 #endif // FORMS_ERRORBROADCASTER_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 28.08.01 12:18:36  fs
- ************************************************************************/
 

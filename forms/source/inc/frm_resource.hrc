@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_resource.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-20 16:15:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #define RID_STR_OPEN_GRAPHICS                   ( RID_FRM_STRINGS_START + 13 )
 #define RID_STR_CLEAR_GRAPHICS                  ( RID_FRM_STRINGS_START + 14 )
 #define RID_STR_INVALIDSTREAM                   ( RID_FRM_STRINGS_START + 15 )
-
+#define RID_STR_SYNTAXERROR                     ( RID_FRM_STRINGS_START + 16 )
 
 #endif // _FRM_RESOURCE_HRC_
 

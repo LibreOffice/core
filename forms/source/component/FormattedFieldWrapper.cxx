@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 13:13:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,39 @@ OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XMultiServiceFact
 }
 
 //------------------------------------------------------------------
+OFormattedFieldWrapper::OFormattedFieldWrapper( const OFormattedFieldWrapper* _pCloneSource )
+    :m_xServiceFactory( _pCloneSource->m_xServiceFactory )
+    ,m_pEditPart( NULL )
+{
+    Reference< XCloneable > xCloneAccess;
+    query_aggregation( _pCloneSource->m_xAggregate, xCloneAccess );
+
+    // clone the aggregate
+    if ( xCloneAccess.is() )
+    {
+        increment( m_refCount );
+        {
+            Reference< XCloneable > xClone = xCloneAccess->createClone();
+            m_xAggregate = Reference< XAggregation >( xClone, UNO_QUERY );
+            DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::OFormattedFieldWrapper : invalid aggregate clone!");
+
+            query_interface( xClone, m_xFormattedPart );
+
+            if ( _pCloneSource->m_pEditPart )
+                m_pEditPart = new OEditModel( _pCloneSource->m_pEditPart, _pCloneSource->m_xServiceFactory );
+        }
+        if ( m_xAggregate.is() )
+        {   // has to be in it's own block because of the temporary variable created by *this
+            m_xAggregate->setDelegator( static_cast< XWeak* >( this ) );
+        }
+        decrement( m_refCount );
+    }
+    else
+    {   // the clone source does not yet have an aggregate -> we don't yet need one, too
+    }
+}
+
+//------------------------------------------------------------------
 OFormattedFieldWrapper::~OFormattedFieldWrapper()
 {
     // release the aggregated object (if any)
@@ -193,12 +226,16 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
 
         if (!aReturn.hasValue())
         {
-            aReturn = ::cppu::queryInterface(_rType,static_cast<XPersistObject*>(this));
+            aReturn = ::cppu::queryInterface( _rType,
+                static_cast< XPersistObject* >( this ),
+                static_cast< XCloneable* >( this )
+            );
 
             if (!aReturn.hasValue())
             {
                 // somebody requests an interface other than the basics (XInterface) and other than
-                // the only one we can supply without an aggregate. So ensure the aggregate exists.
+                // the two we can supply without an aggregate. So ensure
+                // the aggregate exists.
                 ensureAggregate();
                 if (m_xAggregate.is())
                     aReturn = m_xAggregate->queryAggregation(_rType);
@@ -355,6 +392,14 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
     decrement(m_refCount);
+}
+
+//------------------------------------------------------------------
+Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone(  ) throw (RuntimeException)
+{
+    ensureAggregate();
+
+    return new OFormattedFieldWrapper( this );
 }
 
 //------------------------------------------------------------------

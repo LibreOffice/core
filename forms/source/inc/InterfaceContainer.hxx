@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-04 08:08:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,35 @@ protected:
 
     void SAL_CALL writeEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
     void SAL_CALL readEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
+
+    /** replace an element, specified by position
+
+        @precond <arg>_nIndex</arg> is a valid index
+        @precond our mutex is locked exactly once, by the guard specified with <arg>_rClearBeforeNotify</arg>
+
+    */
+    void implReplaceByIndex(
+            const sal_Int32 _nIndex,
+            const ::com::sun::star::uno::Any& _rNewElement,
+            ::osl::ClearableMutexGuard& _rClearBeforeNotify
+        );
+
+    /** removes an element, specified by position
+
+        @precond <arg>_nIndex</arg> is a valid index
+        @precond our mutex is locked exactly once, by the guard specified with <arg>_rClearBeforeNotify</arg>
+
+    */
+    void implRemoveByIndex(
+            const sal_Int32 _nIndex,
+            ::osl::ClearableMutexGuard& _rClearBeforeNotify
+        );
+
+    /** validates the given index
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the given index does not denote a valid position in our childs array
+    */
+    void implCheckIndex( const sal_Int32 _nIndex ) SAL_THROW( ( ::com::sun::star::lang::IndexOutOfBoundsException ) );
 
 private:
     // the runtime event format has changed from version SO5.2 to OOo

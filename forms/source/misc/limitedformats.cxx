@@ -2,9 +2,9 @@
  *
  *  $RCSfile: limitedformats.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-25 12:28:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,20 +444,4 @@ namespace frm
 //.........................................................................
 }   // namespace frm
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/05/23 10:13:05  fs
- *  #86172# clear the format keys in the tables when releasing the number formats supplier
- *
- *  Revision 1.2  2001/05/23 08:32:20  rt
- *  #65293# GCC does not like 'Locale ident(String(), String(), String())'
- *
- *  Revision 1.1  2001/05/18 14:48:05  fs
- *  initial checkin - helper for control models with limited formatting capabilities
- *
- *
- *  Revision 1.0 18.05.01 10:39:57  fs
- ************************************************************************/
 

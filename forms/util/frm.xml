@@ -53,8 +53,6 @@
         <status value="final"/>
         <supported-service>com.sun.star.form.component.HiddenControl</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
-        <supported-service>com.sun.star.form.FormControlModel</supported-service>
-        <supported-service>com.sun.star.awt.UnoControlModel</supported-service>
     </component-description>
     <component-description>
         <author></author>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ DBG_NAME(OEditModel);
 OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
              :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_EDIT, FRM_CONTROL_EDIT )
                                     // use the old control name for compytibility reasons
-    ,m_nMaxLen(0)
+    ,m_bMaxTextLenModified(sal_False)
     ,m_nKeyType(NumberFormat::UNDEFINED)
     ,m_aNullDate(DBTypeConversion::getStandardDate())
     ,m_nFormatKey(0)
@@ -376,7 +376,7 @@ OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
 //------------------------------------------------------------------
 OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
         :OEditBaseModel( _pOriginal, _rxFactory )
-    ,m_nMaxLen(0)
+    ,m_bMaxTextLenModified(sal_False)
     ,m_nKeyType(NumberFormat::UNDEFINED)
     ,m_aNullDate(DBTypeConversion::getStandardDate())
     ,m_nFormatKey(0)
@@ -442,18 +442,34 @@ Reference<XPropertySetInfo> SAL_CALL OEditModel::getPropertySetInfo() throw(Runt
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL OEditModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
+{
+    if ( PROPERTY_ID_PERSISTENCE_MAXTEXTLENGTH == nHandle )
+    {
+        if ( m_bMaxTextLenModified )
+            rValue <<= sal_Int16(0);
+        else if ( m_xAggregateSet.is() )
+            rValue = m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN);
+    }
+    else
+    {
+        OEditBaseModel::getFastPropertyValue(rValue, nHandle );
+    }
+}
 
 //------------------------------------------------------------------------------
 void OEditModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(11)
+    FRM_BEGIN_PROP_HELPER(12)
         // Text auf transient setzen
 //      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TEXT, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP1(NAME,                ::rtl::OUString,        BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,              READONLY, TRANSIENT);
+        DECL_PROP2(PERSISTENCE_MAXTEXTLENGTH,sal_Int16,         READONLY, TRANSIENT);
         DECL_PROP2(DEFAULT_TEXT,        ::rtl::OUString,        BOUND, MAYBEDEFAULT);
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                          BOUND);
         DECL_PROP1(TAG,                 ::rtl::OUString,        BOUND);
@@ -476,22 +492,24 @@ void OEditModel::fillProperties(
 void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     Any aCurrentText;
+    sal_Int16 nOldTextLen = 0;
     // bin ich gerade loaded und habe dazu zeitweilig die MaxTextLen umgesetzt ?
-    if (m_nMaxLen)
+    if ( m_bMaxTextLenModified )
     {   // -> fuer die Dauer des Speicherns meinem aggregierten Model die alte TextLen einreden
 
         // before doing this we have to save the current text value of the aggregate, as this may be affected by resetting the text len
         // FS - 08.12.99 - 70606
         aCurrentText = m_xAggregateSet->getPropertyValue(PROPERTY_TEXT);
 
+        m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN) >>= nOldTextLen;
         m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny((sal_Int16)0));
     }
 
     OEditBaseModel::write(_rxOutStream);
 
-    if (m_nMaxLen)
+    if ( m_bMaxTextLenModified )
     {   // wieder zuruecksetzen
-        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny((sal_Int16)m_nMaxLen));
+        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny(nOldTextLen));
         // and reset the text
         // First we set it to an empty string : Without this the second setPropertyValue would not do anything as it thinks
         // we aren't changing the prop (it didn't notify the - implicite - change of the text prop while setting the max text len)
@@ -584,8 +602,8 @@ void OEditModel::_loaded(const EventObject& rEvent)
 
         if (m_nKeyType != NumberFormat::SCIENTIFIC)
         {
-            m_nMaxLen = getINT16(m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN));
-            if (!m_nMaxLen)
+            m_bMaxTextLenModified = getINT16(m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN)) != 0;
+            if ( !m_bMaxTextLenModified )
             {
                 sal_Int32 nFieldLen;
                 m_xField->getPropertyValue(::rtl::OUString::createFromAscii("Precision")) >>= nFieldLen;
@@ -596,11 +614,11 @@ void OEditModel::_loaded(const EventObject& rEvent)
                     aVal <<= (sal_Int16)nFieldLen;
                     m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
 
-                    m_nMaxLen = static_cast<sal_Int16>(nFieldLen);  // damit das Ganze beim _unloaded wieder zurueckgesetzt wird
+                    m_bMaxTextLenModified = sal_True;
                 }
             }
             else
-                m_nMaxLen = 0;
+                m_bMaxTextLenModified = sal_False; // to get sure that the text len won't be set in unloaded
         }
     }
 }
@@ -611,12 +629,12 @@ void OEditModel::_unloaded()
     OEditBaseModel::_unloaded();
     if (m_xField.is())
     {
-        if (m_nMaxLen)
+        if ( m_bMaxTextLenModified )
         {
             Any aVal;
             aVal <<= (sal_Int16)0;  // nur wenn es 0 war, habe ich es in _loaded umgesetzt
             m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
-            m_nMaxLen = 0;
+            m_bMaxTextLenModified = sal_False;
         }
 
         m_xFormatter = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Hidden.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,11 +196,9 @@ void OHiddenModel::fillProperties(
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
-    StringSequence aSupported = OControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
-
-    ::rtl::OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_HIDDENCONTROL;
+    StringSequence aSupported( 2 );
+    aSupported[ 0 ] = FRM_SUN_COMPONENT_HIDDENCONTROL;
+    aSupported[ 1 ] = FRM_SUN_FORMCOMPONENT;
     return aSupported;
 }
 

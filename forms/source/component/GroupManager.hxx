@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 12:13:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ class OGroupComp
 {
     ::rtl::OUString m_aName;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xComponent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>     m_xControlModel;
     sal_Int32   m_nPos;
     sal_Int16   m_nTabIndex;
 
@@ -173,7 +174,9 @@ public:
 
     sal_Bool operator==( const OGroupComp& rComp ) const;
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>&   GetControlModel() const { return m_xControlModel; }
+
     sal_Int32   GetPos() const { return m_nPos; }
     sal_Int16   GetTabIndex() const { return m_nTabIndex; }
     ::rtl::OUString GetName() const { return m_aName; }
@@ -186,6 +189,7 @@ class OGroupComp;
 class OGroupCompAcc
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xComponent;
+
     OGroupComp                                      m_aGroupComp;
 
     friend class OGroupCompAccLess;
@@ -195,7 +199,7 @@ public:
 
     sal_Bool operator==( const OGroupCompAcc& rCompAcc ) const;
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>&  GetComponent() const { return m_xComponent; }
     const OGroupComp&   GetGroupComponent() const { return m_aGroupComp; }
 };
 
@@ -231,16 +235,16 @@ public:
         { return m_aCompArray[nP].GetComponent(); }
 };
 
-DECLARE_STL_VECTOR(OGroup, OGroupArr);
-DECLARE_STL_VECTOR(sal_uInt32, OUInt32Arr);
+DECLARE_STL_USTRINGACCESS_MAP(OGroup, OGroupArr);
+DECLARE_STL_VECTOR(OGroupArr::iterator, OActiveGroups);
 
 //========================================================================
 class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>
 {
-    OGroup* m_pCompGroup;           // Alle Components nach TabIndizes sortiert
-    OGroupArr   m_aGroupArr;            // Alle Components nach Gruppen sortiert
-    OUInt32Arr m_aActiveGroupMap;   // In dieser Map werden die Indizes aller Gruppen gehalten,
-                                    // die mehr als 1 Element haben
+    OGroup*         m_pCompGroup;           // Alle Components nach TabIndizes sortiert
+    OGroupArr       m_aGroupArr;            // Alle Components nach Gruppen sortiert
+    OActiveGroups   m_aActiveGroupMap;      // In dieser Map werden die Indizes aller Gruppen gehalten,
+                                        // die mehr als 1 Element haben
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >
                     m_xContainer;
@@ -248,6 +252,7 @@ class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::X
     // Helper functions
     void InsertElement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
     void RemoveElement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
+    void removeFromGroupMap(const ::rtl::OUString& _sGroupName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSet);
 
 public:
     OGroupManager(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _rxContainer);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,11 @@ class OEditModel
     ::com::sun::star::util::Date                m_aNullDate;
     sal_Int32                   m_nFieldType;
     sal_Int16                   m_nKeyType;
-    sal_Int16                   m_nMaxLen;
+    sal_Bool                    m_bMaxTextLenModified : 1;  // set to <TRUE/> when we change the MaxTextLen of the aggregate
 
-    sal_Bool    m_bWritingFormattedFake : 1;
+    sal_Bool                    m_bWritingFormattedFake : 1;
         // are we writing something which should be interpreted as formatted upon reading?
-    sal_Bool    m_bNumericField : 1;
+    sal_Bool                    m_bNumericField : 1;
         // are we bound to some kind of numeric field?
 
     static sal_Int32            nTextHandle;
@@ -115,6 +115,8 @@ public:
 // ::com::sun::star::form::XBoundComponent
     virtual sal_Bool _commit();
 
+    // XPropertySet
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
 // ::com::sun::star::io::XPersistObject
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
