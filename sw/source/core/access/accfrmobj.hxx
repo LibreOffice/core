@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:05:18 $
+ *  last change: $Author: rt $ $Date: 2002-04-10 12:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@ class SwFrmOrObj
     const SdrObject *pObj;
     const SwFrm *pFrm;
 
-    inline Init( const SdrObject *pO );
-    inline Init( const SwFrm *pF );
+    inline void Init( const SdrObject *pO );
+    inline void Init( const SwFrm *pF );
 
 public:
 
@@ -102,7 +102,7 @@ public:
     inline SwRect GetBounds() const;
 };
 
-inline SwFrmOrObj::Init( const SdrObject *pO )
+inline void SwFrmOrObj::Init( const SdrObject *pO )
 {
     pObj = pO;
     pFrm = pObj && pObj->IsWriterFlyFrame()
@@ -110,7 +110,7 @@ inline SwFrmOrObj::Init( const SdrObject *pO )
                 : 0;
 }
 
-inline SwFrmOrObj::Init( const SwFrm *pF )
+inline void SwFrmOrObj::Init( const SwFrm *pF )
 {
     pFrm = pF;
     pObj = pFrm && pFrm->IsFlyFrm()
@@ -140,6 +140,7 @@ inline SwFrmOrObj& SwFrmOrObj::operator=( const SwFrmOrObj& r )
 {
     pObj = r.pObj;
     pFrm = r.pFrm;
+    return *this;
 }
 
 inline SwFrmOrObj& SwFrmOrObj::operator=( const SdrObject *pO )
