@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-09 15:54:13 $
+ *  last change: $Author: cmc $ $Date: 2002-07-11 09:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,8 @@ public:
         SetShade(bVer67, nFore, nBack, nIndex);
     }
 private:
-    SetShade(BOOL bVer67, ColorData nFore, ColorData nBack, sal_uInt16 nIndex);
+    void SetShade(BOOL bVer67, ColorData nFore,
+        ColorData nBack, sal_uInt16 nIndex);
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-10 16:36:41 $
+ *  last change: $Author: cmc $ $Date: 2002-07-11 09:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4561,7 +4561,7 @@ SwWW8Shade::SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD )
     SetShade(bVer67, nFore, nBack, b);
 }
 
-SwWW8Shade::SetShade( BOOL bVer67, ColorData nFore, ColorData nBack,
+void SwWW8Shade::SetShade( BOOL bVer67, ColorData nFore, ColorData nBack,
     sal_uInt16 nIndex)
 {
 static ULONG __READONLY_DATA eMSGrayScale[] = {
