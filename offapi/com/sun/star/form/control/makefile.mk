@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: fs $ $Date: 2001-04-19 08:45:41 $
+#   last change: $Author: fs $ $Date: 2001-04-19 10:54:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ IDLFILES=\
         CurrencyField.idl		\
         DateField.idl			\
         FormattedField.idl		\
+        GridControl.idl			\
         GroupBox.idl			\
         ImageButton.idl			\
         ImageControl.idl		\
