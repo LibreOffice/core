@@ -15,6 +15,7 @@ common
 	{
 		*mkout
 		*deliver
+        *copyprj
 		__mgrdir
 		BIG_GOODIES
 		BIG_SVX
@@ -114,6 +115,7 @@ common
 		SOLARVERSION
 		SYSPATH
 		TF_CFG
+		TF_CFGDATA
 		TF_CNTEX
 		TF_FILTER
 		TF_FILEURL
