@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:02 $
+ *  last change: $Author: jsc $ $Date: 2001-07-04 13:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,6 +637,16 @@ void test_DefaultRegistry()
     {
         TEST_ENSHURE(0, "exception InvalidValueExcption raised while doing test_DefaultRegistry()");
     }
+    try
+    {
+        xReg->close();
+    }
+    catch(InvalidRegistryException& e)
+    {
+        TEST_ENSHURE(0, OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).getStr());
+    }
+
+
     xReg.clear();
 
     // shutdown
