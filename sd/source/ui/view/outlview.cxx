@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dl $ $Date: 2001-10-31 08:09:07 $
+ *  last change: $Author: sj $ $Date: 2001-12-04 15:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,24 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
             SvxNumBulletItem aNumBulletItem( (const SvxNumBulletItem&) pTitleSheet->GetItemSet().Get(EE_PARA_NUMBULLET) );
             SvxNumRule aNumRule(* aNumBulletItem.GetNumRule());
             SvxNumberFormat aFormat( aNumRule.GetLevel(0));
+            Font    aBulletFont;
+            const Font* pFont = aFormat.GetBulletFont();
+            if ( pFont )                                        // if available take font size and color from style
+                aBulletFont = *pFont;
+            else
+            {
+                aBulletFont.SetColor( COL_BLACK );
+                aBulletFont.SetHeight( 1552 );
+            }
+            aBulletFont.SetCharSet(RTL_TEXTENCODING_MS_1252);   // and replacing other values by standard
+            aBulletFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "StarSymbol" )) );
+            aBulletFont.SetWeight(WEIGHT_NORMAL);
+            aBulletFont.SetUnderline(UNDERLINE_NONE);
+            aBulletFont.SetStrikeout(STRIKEOUT_NONE);
+            aBulletFont.SetItalic(ITALIC_NONE);
+            aBulletFont.SetOutline(FALSE);
+            aBulletFont.SetShadow(FALSE);
+            aFormat.SetBulletFont( &aBulletFont );
             aFormat.SetBulletChar( 0xE011 );  // StarBats: 0xF000 + 114
             pOutliner->OverwriteLevel0Bullet( aFormat );
         }
