@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:23:51 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <xml/menuconfiguration.hxx>
 #endif
 
+#ifndef __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
+#include <xml/toolboxconfiguration.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -134,7 +138,6 @@
 //  namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::embed;
@@ -197,14 +200,14 @@ static const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
 static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL )
 {
 
-    if (( aResourceURL.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( RESOURCEURL_PREFIX ))) == 0 ) &&
+    if (( aResourceURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( RESOURCEURL_PREFIX ))) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
-        OUString    aTmpStr     = aResourceURL.copy( RESOURCEURL_PREFIX_SIZE );
-        sal_Int32   nIndex      = aTmpStr.indexOf( '/' );
+        rtl::OUString aTmpStr     = aResourceURL.copy( RESOURCEURL_PREFIX_SIZE );
+        sal_Int32     nIndex      = aTmpStr.indexOf( '/' );
         if (( nIndex > 0 ) &&  ( aTmpStr.getLength() > nIndex ))
         {
-            OUString aTypeStr( aTmpStr.copy( 0, nIndex ));
+            rtl::OUString aTypeStr( aTmpStr.copy( 0, nIndex ));
             for ( int i = 0; i < UIElementType::COUNT; i++ )
             {
                 if ( aTypeStr.equalsAscii( UIELEMENTTYPENAMES[i] ))
@@ -216,9 +219,9 @@ static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL 
     return UIElementType::UNKNOWN;
 }
 
-static OUString RetrieveNameFromResourceURL( const rtl::OUString& aResourceURL )
+static rtl::OUString RetrieveNameFromResourceURL( const rtl::OUString& aResourceURL )
 {
-    if (( aResourceURL.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( RESOURCEURL_PREFIX ))) == 0 ) &&
+    if (( aResourceURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( RESOURCEURL_PREFIX ))) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         sal_Int32 nIndex = aResourceURL.lastIndexOf( '/' );
@@ -226,7 +229,7 @@ static OUString RetrieveNameFromResourceURL( const rtl::OUString& aResourceURL )
             return aResourceURL.copy( nIndex+1 );
     }
 
-    return OUString();
+    return rtl::OUString();
 }
 
 void UIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIElementInfoHashMap& aUIElementInfoCollection, sal_Int16 nElementType )
@@ -267,15 +270,15 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
         Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
         if ( xElementTypeStorage.is() )
         {
-            OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
+            rtl::OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
             aBuf.appendAscii( RESOURCEURL_PREFIX );
             aBuf.appendAscii( UIELEMENTTYPENAMES[ nElementType ] );
             aBuf.appendAscii( "/" );
-            OUString aResURLPrefix( aBuf.makeStringAndClear() );
+            rtl::OUString aResURLPrefix( aBuf.makeStringAndClear() );
 
             UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;
             Reference< XNameAccess > xNameAccess( xElementTypeStorage, UNO_QUERY );
-            Sequence< OUString > aUIElementNames = xNameAccess->getElementNames();
+            Sequence< rtl::OUString > aUIElementNames = xNameAccess->getElementNames();
             for ( sal_Int32 n = 0; n < aUIElementNames.getLength(); n++ )
             {
                 UIElementData aUIElementData;
@@ -330,8 +333,10 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                     {
                         try
                         {
+                            Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
                             MenuConfiguration aMenuCfg( m_xServiceManager );
-                            aUIElementData.xSettings = aMenuCfg.CreateMenuBarConfigurationFromXML( xInputStream );
+                            RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
+                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
                             return;
                         }
                         catch ( ::com::sun::star::lang::WrappedTargetException& )
@@ -347,6 +352,18 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
 
                     case drafts::com::sun::star::ui::UIElementType::TOOLBAR:
                     {
+                        try
+                        {
+                            Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
+                            ToolBoxConfiguration::LoadToolBox( m_xServiceManager, xInputStream, xIndexContainer );
+                            RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
+                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
+                            return;
+                        }
+                        catch ( ::com::sun::star::lang::WrappedTargetException& )
+                        {
+                        }
+
                         break;
                     }
 
@@ -433,6 +450,18 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                             {
                                 MenuConfiguration aMenuCfg( m_xServiceManager );
                                 aMenuCfg.StoreMenuBarConfigurationToXML( rElement.xSettings, xOutputStream );
+                            }
+                            catch ( ::com::sun::star::lang::WrappedTargetException& )
+                            {
+                            }
+                        }
+                        break;
+
+                        case drafts::com::sun::star::ui::UIElementType::TOOLBAR:
+                        {
+                            try
+                            {
+                                ToolBoxConfiguration::StoreToolBox( m_xServiceManager, xOutputStream, rElement.xSettings );
                             }
                             catch ( ::com::sun::star::lang::WrappedTargetException& )
                             {
@@ -578,7 +607,7 @@ void UIConfigurationManager::impl_Initialize()
             Reference< XStorage > xElementTypeStorage;
             try
             {
-                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), nModes );
+                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( rtl::OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), nModes );
             }
             catch ( com::sun::star::container::NoSuchElementException& )
             {
@@ -643,6 +672,16 @@ void SAL_CALL UIConfigurationManager::dispose() throw (::com::sun::star::uno::Ru
 
     {
         ResetableGuard aGuard( m_aLock );
+        try
+        {
+            if ( m_xImageManager.is() )
+                m_xImageManager->dispose();
+        }
+        catch ( Exception& )
+        {
+        }
+
+        m_xImageManager.clear();
         m_aUIElements.clear();
         m_xDocConfigStorage.clear();
         m_bConfigRead = false;
@@ -718,7 +757,7 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
                 {
                     bool bCommitSubStorage( false );
                     Reference< XNameAccess > xSubStorageNameAccess( xSubStorage, UNO_QUERY );
-                    Sequence< OUString > aUIElementStreamNames = xSubStorageNameAccess->getElementNames();
+                    Sequence< rtl::OUString > aUIElementStreamNames = xSubStorageNameAccess->getElementNames();
                     for ( sal_Int32 j = 0; j < aUIElementStreamNames.getLength(); j++ )
                     {
                         xSubStorage->removeElement( aUIElementStreamNames[j] );
@@ -864,7 +903,13 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
         if ( pDataSettings )
-            return pDataSettings->xSettings;
+        {
+            // Create a copy of our data if someone wants to change the data.
+            if ( bWriteable )
+                return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( pDataSettings->xSettings ) ), UNO_QUERY );
+            else
+                return pDataSettings->xSettings;
+        }
     }
 
     throw NoSuchElementException();
@@ -1020,6 +1065,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
                 aUIElementData.xSettings = aNewData;
 
             aUIElementData.aName        = RetrieveNameFromResourceURL( NewResourceURL ) + m_aXMLPostfix;
+            aUIElementData.aResourceURL = NewResourceURL;
             m_bModified = true;
 
             UIElementType& rElementType = m_aUIElements[nElementType];
@@ -1051,7 +1097,28 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
 
 Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager() throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XInterface >();
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    if ( !m_xImageManager.is() )
+    {
+        m_xImageManager = Reference< XComponent >( static_cast< cppu::OWeakObject *>( new ImageManager( m_xServiceManager )),
+                                                         UNO_QUERY );
+        Reference< XInitialization > xInit( m_xImageManager, UNO_QUERY );
+
+        Sequence< Any > aPropSeq( 2 );
+        PropertyValue aPropValue;
+        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfigStorage" ));
+        aPropValue.Value = makeAny( m_xDocConfigStorage );
+        aPropSeq[0] = makeAny( aPropValue );
+        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
+        aPropValue.Value = makeAny( m_aModuleIdentifier );
+        aPropSeq[1] = makeAny( aPropValue );
+
+        xInit->initialize( aPropSeq );
+    }
+
+    return Reference< XInterface >( m_xImageManager, UNO_QUERY );
 }
 
 Reference< XInterface > SAL_CALL UIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
@@ -1089,6 +1156,13 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
     // We store the new storage. Be careful it could be an empty reference!
     m_xDocConfigStorage = Storage;
     m_bReadOnly         = sal_True;
+
+    if ( m_xImageManager.is() )
+    {
+        ImageManager* pImageManager = (ImageManager*)m_xImageManager.get();
+        if ( pImageManager )
+            pImageManager->setStorage( m_xDocConfigStorage );
+    }
 
     if ( m_xDocConfigStorage.is() )
     {
@@ -1211,7 +1285,7 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
             try
             {
                 Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
-                                                            OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::READWRITE ));
+                                                           rtl::OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::READWRITE ));
                 UIElementType& rElementType = m_aUIElements[i];
 
                 if ( rElementType.bModified && xElementTypeStorage.is() )
