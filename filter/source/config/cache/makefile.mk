@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-28 15:17:20 $
+#   last change: $Author: obo $ $Date: 2004-04-29 13:43:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,8 @@ PRJNAME             = filter
 TARGET              = filterconfig
 ENABLE_EXCEPTIONS   = TRUE
 VERSION             = 1
+USE_DEFFILE         = TRUE
+LIBTARGET           = NO
 
 # --- Settings ----------------------------------
 
@@ -75,19 +77,21 @@ VERSION             = 1
 
 SHL1TARGET=     $(TARGET)$(VERSION)
 
-SHL1OBJS=       \
+SLOFILES=       \
                 $(SLO)$/basecontainer.obj           \
                 $(SLO)$/cacheitem.obj               \
-                $(SLO)$/cacheupdatelistener.obj     \
-                $(SLO)$/cacheupdatethread.obj       \
                 $(SLO)$/contenthandlerfactory.obj   \
                 $(SLO)$/filtercache.obj             \
                 $(SLO)$/filterfactory.obj           \
                 $(SLO)$/frameloaderfactory.obj      \
+                $(SLO)$/lateinitlistener.obj        \
+                $(SLO)$/lateinitthread.obj          \
                 $(SLO)$/querytokenizer.obj          \
                 $(SLO)$/registration.obj            \
                 $(SLO)$/typedetection.obj
-
+                
+SHL1OBJS=       $(SLOFILES)                
+                
 SHL1STDLIBS=    \
                 $(COMPHELPERLIB)    \
                 $(CPPUHELPERLIB)    \
