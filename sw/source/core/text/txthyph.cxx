@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-19 15:08:16 $
+ *  last change: $Author: fme $ $Date: 2002-09-23 14:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,10 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         CalcTxtSize( aInf );
 
         Insert( pHyphPor );
+
+        short nKern = rInf.GetFont()->CheckKerning();
+        if( nKern )
+            new SwKernPortion( *this, nKern );
 
         return sal_True;
     }
