@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:39:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,7 @@ BOOL SwDrawBase::KeyInput(const KeyEvent& rKEvt)
                     nY = 0;
                 }
 
-                if (pSdrView->HasMarkedObj() && rKEvt.GetKeyCode().IsMod2())
+                if (pSdrView->AreObjectsMarked() && rKEvt.GetKeyCode().IsMod2())
                 {
                     // Objekte verschieben
                     nX *= 100;
