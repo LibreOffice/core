@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:40:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,8 +847,10 @@ DBG_CHKTHIS(TextEdit,0);
     SvFileStream aStrm( aName, STREAM_STD_READ );
     if( aStrm.IsOpen() )
     {
-        String aText, aLine;
+        String aText, aLine, aLineBreak;
         BOOL bIsFirstLine = TRUE;
+        aLineBreak += '\n';
+        aLineBreak.ConvertLineEnd();
         rtl_TextEncoding aFileEncoding = RTL_TEXTENCODING_IBM_850;
         while( !aStrm.IsEof() && bOk )
         {
@@ -861,14 +863,13 @@ DBG_CHKTHIS(TextEdit,0);
             else
             {
                 if ( !bIsFirstLine )
-                    aText += '\n';
+                    aText += aLineBreak;
                 aText += aLine;
                 bIsFirstLine = FALSE;
             }
             if( aStrm.GetError() != SVSTREAM_OK )
                 bOk = FALSE;
         }
-        aText.ConvertLineEnd();
         SetText( aText );
     }
     else
