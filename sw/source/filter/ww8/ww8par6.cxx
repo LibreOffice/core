@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:13:24 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <stdlib.h>
-
-
-#pragma hdrstop
 
 #ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
@@ -405,6 +402,14 @@ bool wwSection::IsVertical() const
     return false;
 }
 
+/*
+  #113694#
+  This is something of festering mapping, I'm open to better ways of doing it,
+  but primarily the grid in writer is different to that in word. In writer the
+  grid elements are squares with ruby rows inbetween. While in word there is no
+  ruby stuff, and the elements are rectangles. By misusing the ruby row I can
+  handle distortions in one direction, but its all a bit of a mess:
+*/
 void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
 {
     if (bVer67)
@@ -423,11 +428,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     nTextareaWidth -= rLR.GetRight();
 
     if (rSection.IsVertical())
-    {
-        SwTwips nSwap = nTextareaHeight;
-        nTextareaHeight = nTextareaWidth;
-        nTextareaWidth = nSwap;
-    }
+        std::swap(nTextareaHeight, nTextareaWidth);
 
     SwTextGridItem aGrid;
     aGrid.SetDisplayGrid(false);
@@ -456,30 +457,21 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
 
     aGrid.SetGridType(eType);
 
+    //Seems to force this behaviour in word ?
+    if (eType != GRID_NONE)
+        rDoc.SetAddExtLeading(true);
+
     //sep.dyaLinePitch
     sal_Int32 nLinePitch = rSection.maSep.dyaLinePitch;
 
-    aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
-
-    //It remains to be seen if a base height of 14points and a ruby height of
-    //4 points should allow 12point text with ruby of 4pt to fit in single
-    //line. I reckon it should (why not), but it doesn't at present :-(
-    //So right now this doesn't always work as I think it should
-
-    //This seems emperically correct, but might require some future tweaking.
-    sal_Int32 nRubyHeight = nLinePitch*2/9;
-    sal_Int32 nBaseHeight = nLinePitch-nRubyHeight;
-    aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nBaseHeight));
-    aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
-
     //Get the size of word's default styles font
-    UINT32 nRubyWidth=240;
-    for (USHORT nI = 0; nI < pStyles->GetCount(); nI++ )
+    sal_uInt32 nCharWidth=240;
+    for (USHORT nI = 0; nI < pStyles->GetCount(); ++nI)
     {
         if (pCollA[nI].bValid && pCollA[nI].pFmt &&
             pCollA[nI].GetWWStyleId() == 0)
         {
-            nRubyWidth = ItemGet<SvxFontHeightItem>(*(pCollA[nI].pFmt),
+            nCharWidth = ItemGet<SvxFontHeightItem>(*(pCollA[nI].pFmt),
                 RES_CHRATR_CJK_FONTSIZE).GetHeight();
             break;
         }
@@ -492,15 +484,19 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
         //main lives in top 20 bits, and is signed.
         INT32 nMain = (nCharSpace & 0xFFFFF000);
         nMain/=0x1000;
-        nRubyWidth += nMain*20;
+        nCharWidth += nMain*20;
 
         int nFraction = (nCharSpace & 0x00000FFF);
         nFraction = (nFraction*20)/0xFFF;
-        nRubyWidth += nFraction;
+        nCharWidth += nFraction;
     }
 
-//    nothing I can do with this value at the moment I think
-//    aGrid.SetNoChars(nTextareaWidth/nRubyWidth);
+    aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
+    aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nCharWidth));
+    sal_Int32 nRubyHeight = nLinePitch - nCharWidth;
+    if (nRubyHeight < 0)
+        nRubyHeight = 0;
+    aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
 
     rFmt.SetAttr(aGrid);
 }
@@ -728,7 +724,10 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
     if( rData.bHasHeader )
     {
         rData.nSwUp  = nWWHTop;             // Header -> umrechnen
-        rData.nSwHLo = nWWUp - nWWHTop;
+        if (nWWUp >= nWWHTop)
+            rData.nSwHLo = nWWUp - nWWHTop;
+        else
+            rData.nSwHLo = 0;
 
         if (rData.nSwHLo < MM50)
             rData.nSwHLo = MM50;
@@ -747,7 +746,10 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
     if( rData.bHasFooter )
     {
         rData.nSwLo = nWWFBot;              // Footer -> Umrechnen
-        rData.nSwFUp = nWWLo - nWWFBot;
+        if (nWWLo >= nWWFBot)
+            rData.nSwFUp = nWWLo - nWWFBot;
+        else
+            rData.nSwFUp = 0;
 
         if (rData.nSwFUp < MM50)
             rData.nSwFUp = MM50;
@@ -838,7 +840,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
     mySegrIter aEnd = maSegments.rend();
     for (mySegrIter aIter = maSegments.rbegin(); aIter != aEnd; ++aIter)
     {
-        if (pPage = aIter->mpPage)
+        if ((pPage = aIter->mpPage))
             break;
     }
 
@@ -969,6 +971,24 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
 
     bool bVer67(mrReader.bVer67);
 
+    // M.M. Create a linked section if the WkbPLCF
+    // has an entry for one at this cp
+    WW8PLCFspecial* pWkb = mrReader.pPlcxMan->GetWkbPLCF();
+    if (pWkb && pWkb->SeekPosExact(nTxtPos) &&
+            pWkb->Where() == nTxtPos)
+    {
+        void* pData;
+        long nTest;
+        pWkb->Get(nTest, pData);
+        String sSectionName = mrReader.aLinkStringMap[SVBT16ToShort( ((WW8_WKB*)pData)->nLinkId) ];
+        mrReader.ConvertFFileName(sSectionName, sSectionName);
+        SwSection aSection(FILE_LINK_SECTION, sSectionName);
+        aSection.SetLinkFileName( sSectionName );
+        aSection.SetProtect(true);
+        SwSection* pSection = mrReader.rDoc.Insert(*mrReader.pPaM, aSection, 0 ,false);
+
+    }
+
     wwSection aLastSection(*mrReader.pPaM->GetPoint());
     if (!maSegments.empty())
         aLastSection = maSegments.back();
@@ -1022,7 +1042,6 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
     if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
     {
         aNewSection.maSep.rgdxaColumnWidthSpacing[0] = 0;
-        USHORT nWidth;
         int nCols = aNewSection.maSep.ccolM1 + 1;
         int nIdx = 0;
         for (int i = 0; i < nCols; ++i)
@@ -1032,8 +1051,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
                 pSep->HasSprm( (bVer67 ? 136 : 0xF203), BYTE( i ) );
 
             ASSERT( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
-            if (pSW)
-                nWidth = SVBT16ToShort(pSW + 1);
+            sal_uInt16 nWidth = pSW ? SVBT16ToShort(pSW + 1) : 1440;
 
             aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
 
@@ -1110,16 +1128,6 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
 
     if (const BYTE* p = pSep->HasSprm( bVer67 ? 131 : 0x3000 ))
         aNewSection.maSep.cnsPgn = *p;
-
-    static const BYTE aPaperBinIds[17] = {5,2,4,0,3,0,0,0,0,0,0,0,0,0,0,0,1};
-        // WW                          SW
-        // ------------------------------
-        //  0 == default                5
-        //  1 == Upper paper tray       2
-        //  2 == Lower paper tray       4
-        //  4 == Manual paper feed      3
-        // 15 == Automatically select   0
-        // 16 == First tray available   1
 
     if(const BYTE* pSprmSDmBinFirst = pSep->HasSprm( bVer67 ? 140 : 0x5007 ))
         aNewSection.maSep.dmBinFirst = *pSprmSDmBinFirst;
@@ -1637,7 +1645,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
 
 
 bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
-    const WW8_BRC pbrc[4]) const
+    const WW8_BRC *pbrc) const
 {
     bool bRet = (
                 ( bVer67 ? (pbrc[WW8_RIGHT].aBits1[ 1 ] & 0x20 )
@@ -1679,7 +1687,7 @@ void SwWW8ImplReader::GetBorderDistance(const WW8_BRC* pbrc,
 
 
 bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
-    const WW8_BRC pbrc[4], short *pSizeArray) const
+    const WW8_BRC *pbrc, short *pSizeArray) const
 {
     bool bShadowed = false;
     if (IsBorder(pbrc))
@@ -2592,15 +2600,6 @@ void SwWW8ImplReader::StopApo()
         }
 
         /*
-        ##582##
-        Take the last paragraph background colour and fill the frame with it.
-        This is how MSWord works
-        */
-        const SfxPoolItem *pItem = GetFmtAttr(RES_BACKGROUND);
-        if (pItem)
-            pSFlyPara->pFlyFmt->SetAttr(*pItem);
-
-        /*
         #104920#
         What we are doing with this temporary nodeindex is as follows: The
         stack of attributes normally only places them into the document when
@@ -2622,8 +2621,26 @@ void SwWW8ImplReader::StopApo()
         if (nNewWidth)
             pSFlyPara->BoxUpWidth(nNewWidth);
 
-        if (SwTxtNode* pNode = aPref.GetNode().GetTxtNode())
-            pNode->JoinNext();
+        Color aBg(0xFE, 0xFF, 0xFF, 0xFF);  //Transparent by default
+
+        if (SwTxtNode* pNd = aPref.GetNode().GetTxtNode())
+        {
+            /*
+            #i582#/#114238#
+            Take the last paragraph background colour and fill the frame with
+            it.  Otherwise, make it transparent, this appears to be how MSWord
+            works
+            */
+            const SfxPoolItem &rItm = pNd->SwCntntNode::GetAttr(RES_BACKGROUND);
+            const SvxBrushItem &rBrush = (const SvxBrushItem&)(rItm);
+            if (rBrush.GetColor().GetColor() != COL_AUTO)
+                aBg = rBrush.GetColor();
+
+            //Get rid of extra empty paragraph
+            pNd->JoinNext();
+        }
+
+        pSFlyPara->pFlyFmt->SetAttr(SvxBrushItem(aBg));
 
         DeleteAnchorStk();
         pAnchorStck = pSFlyPara->pOldAnchorStck;
@@ -3202,8 +3219,10 @@ void SwWW8ImplReader::Read_SubSuperProp( USHORT, const BYTE* pData, short nLen )
     short nPos = SVBT16ToShort( pData );    // Font-Position in HalfPoints
     INT32 nPos2 = nPos * ( 10 * 100 );      // HalfPoints in 100 * tw
     const SvxFontHeightItem* pF
-        = (const SvxFontHeightItem*)GetFmtAttr( RES_CHRATR_FONTSIZE );
-    nPos2 /= (INT32)pF->GetHeight();        // ... nun in % ( gerundet )
+        = (const SvxFontHeightItem*)GetFmtAttr(RES_CHRATR_FONTSIZE);
+    ASSERT(pF, "Expected to have the fontheight available here");
+    INT32 nHeight = pF ? pF->GetHeight() : 240;
+    nPos2 /= nHeight;                       // ... nun in % ( gerundet )
     if( nPos2 > 100 )                       // zur Sicherheit
         nPos2 = 100;
     if( nPos2 < -100 )
@@ -3928,7 +3947,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
             been removed then we will factor the original list applied hanging
             into our calculation.
             */
-            if (pCollA[nAktColl].bHasBrokenWW6List && pPlcxMan)
+            if (pPlcxMan && pCollA[nAktColl].bHasBrokenWW6List)
             {
                 const BYTE *pIsZeroed = pPlcxMan->GetPapPLCF()->HasSprm(0x460B);
                 if (pIsZeroed && *pIsZeroed == 0)
