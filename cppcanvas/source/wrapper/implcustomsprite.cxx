@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implcustomsprite.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#include "implcustomsprite.hxx"
-#include "implcanvas.hxx"
+#include <implcustomsprite.hxx>
+#include <implcanvas.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
@@ -69,11 +69,13 @@ namespace cppcanvas
 {
     namespace internal
     {
-        ImplCustomSprite::ImplCustomSprite( const uno::Reference< rendering::XSpriteCanvas >&   rParentCanvas,
-                                            const uno::Reference< rendering::XCustomSprite >&   rSprite ) :
+        ImplCustomSprite::ImplCustomSprite( const uno::Reference< rendering::XSpriteCanvas >&       rParentCanvas,
+                                            const uno::Reference< rendering::XCustomSprite >&       rSprite,
+                                            const ImplSpriteCanvas::TransformationArbiterSharedPtr& rTransformArbiter ) :
             ImplSprite( rParentCanvas,
                         uno::Reference< rendering::XSprite >(rSprite,
-                                                             uno::UNO_QUERY) ),
+                                                             uno::UNO_QUERY),
+                        rTransformArbiter ),
             mpLastCanvas(),
             mxCustomSprite( rSprite )
         {
