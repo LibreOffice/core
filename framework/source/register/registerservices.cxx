@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-01-26 08:39:47 $
+ *  last change: $Author: rt $ $Date: 2001-02-01 13:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 //_________________________________________________________________________________________________________________
 //  includes of my own project
 //_________________________________________________________________________________________________________________
+
+#include <limits>
 
 #ifndef __FRAMEWORK_MACROS_REGISTRATION_HXX_
 #include <macros/registration.hxx>
