@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rcontrol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:38:33 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,9 @@
 
 #define RC_ActivateDocument ( M_SOFFICE             | 26 )
 
-#define _RC_LAST_NO_RETURN                            26
+#define RC_CatchGPF         ( M_SOFFICE             | 27 )
+
+#define _RC_LAST_NO_RETURN                            27
 
 #if ( _RC_LAST_NO_RETURN >= M_WITH_RETURN )
 #error "Bereich überschritten"
@@ -474,12 +476,6 @@
 #define CONST_ALIGN_TOP         121
 #define CONST_ALIGN_RIGHT       122
 #define CONST_ALIGN_BOTTOM      123
-
-/// What bar to use in RC_ShowBar and RC_IsBarVisible
-#define CONST_MenuBar           200
-#define CONST_ToolBar           201
-#define CONST_LocationBar       202
-#define CONST_PersonalBar       203
 
 /// What dialog to use in RC_CloseSysDialog or RC_ExistsSysDialog
 #define CONST_FilePicker        301
