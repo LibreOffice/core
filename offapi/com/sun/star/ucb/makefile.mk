@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kso $ $Date: 2000-12-20 13:25:30 $
+#   last change: $Author: kso $ $Date: 2001-01-10 08:52:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,6 +150,9 @@ IDLFILES=\
     OpenCommandArgument2.idl\
     OpenMode.idl\
     OutgoingMessageState.idl\
+    PackageContentProvider.idl\
+    PackageFolderContent.idl\
+    PackageStreamContent.idl\
     PersistentPropertySet.idl\
     PostCommandArgument.idl\
     Priority.idl\
