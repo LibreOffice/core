@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:06:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,6 +338,7 @@ namespace framework
             virtual void SAL_CALL endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
             DECL_LINK( MenuBarClose, MenuBar * );
+            DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
             struct DockedData
             {
@@ -369,6 +370,7 @@ namespace framework
                 std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > > aRowColumnWindows;
                 std::vector< ::com::sun::star::awt::Rectangle >                                   aRowColumnWindowSizes;
                 std::vector< sal_Int32 >                                                          aRowColumnSpace;
+                ::com::sun::star::awt::Rectangle                                                  aRowColumnRect;
                 sal_Int32                                                                         nVarSize;
                 sal_Int32                                                                         nStaticSize;
                 sal_Int32                                                                         nSpace;
@@ -379,6 +381,12 @@ namespace framework
             DECL_LINK( AsyncLayoutHdl, Timer * );
 
         private:
+            enum DockingOperation
+            {
+                DOCKOP_BEFORE_COLROW,
+                DOCKOP_ON_COLROW,
+                DOCKOP_AFTER_COLROW
+            };
             struct UIElement
             {
                 UIElement() : m_bFloating( sal_False ),
@@ -453,24 +461,41 @@ namespace framework
             ::com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement > implts_createElement( const rtl::OUString& aName );
 
             // docking methods
-            ::Rectangle implts_calcHotZoneRect( const ::Rectangle& rRect, sal_Int32 nHotZoneOffset );
-            ::Rectangle implts_calcDockingPosSize( UIElement& aUIElement, const ::Rectangle& rTrackingRect, const Point& rMousePos );
-            ::Point     implts_convertVirtualToPhysicalPos( ::drafts::com::sun::star::ui::DockingArea DockingArea, const ::Point& aPoint ) const;
+            ::Rectangle      implts_calcHotZoneRect( const ::Rectangle& rRect, sal_Int32 nHotZoneOffset );
+            void             implts_calcDockingPosSize( UIElement& aUIElement, DockingOperation& eDockOperation, ::Rectangle& rTrackingRect, const Point& rMousePos );
+            DockingOperation implts_determineDockingOperation( ::drafts::com::sun::star::ui::DockingArea DockingArea, const ::Rectangle& rRowColRect, const Point& rMousePos );
+            ::Rectangle      implts_getWindowRectFromRowColumn( drafts::com::sun::star::ui::DockingArea DockingArea, const SingleRowColumnWindowData& rRowColumnWindowData, const ::Point& rMousePos, const rtl::OUString& rExcludeElementName );
+            ::Rectangle      implts_determineFrontDockingRect( ::drafts::com::sun::star::ui::DockingArea eDockingArea,
+                                                               sal_Int32 nRowCol,
+                                                               const ::Rectangle& rDockedElementRect,
+                                                               const ::rtl::OUString& rMovedElementName,
+                                                               const ::Rectangle& rMovedElementRect );
+            void             implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockingArea,
+                                                                        sal_Int32 nOffset,
+                                                                        SingleRowColumnWindowData& rRowColumnWindowData,
+                                                                        const ::Size& rContainerSize );
+            ::Rectangle      implts_calcTrackingAndElementRect( ::drafts::com::sun::star::ui::DockingArea eDockingArea,
+                                                                sal_Int32 nRowCol,
+                                                                UIElement& rUIElement,
+                                                                const ::Rectangle& rTrackingRect,
+                                                                const ::Rectangle& rRowColumnRect,
+                                                                const ::Size& rContainerWinSize );
+            void             implts_renumberRowColumnData( ::drafts::com::sun::star::ui::DockingArea eDockingArea, DockingOperation eDockingOperation, const UIElement& rUIElement );
 
             // layouting methods
             sal_Bool implts_compareRectangles( const ::com::sun::star::awt::Rectangle& rRect1, const ::com::sun::star::awt::Rectangle& rRect2 );
             ::Size  implts_getTopBottomDockingAreaSizes();
             ::Size  implts_getContainerWindowOutputSize();
+            ::com::sun::star::awt::Rectangle implts_getDockingAreaWindowSizes();
             void    implts_getDockingAreaElementInfos( ::drafts::com::sun::star::ui::DockingArea DockingArea, std::vector< SingleRowColumnWindowData >& rRowColumnsWindowData );
+            void    implts_getDockingAreaElementInfoOnSingleRowCol( ::drafts::com::sun::star::ui::DockingArea,
+                                                                     sal_Int32 nRowCol,
+                                                                     SingleRowColumnWindowData& rRowColumnWindowData );
             ::Point implts_findNextCascadeFloatingPos();
             void    implts_findNextDockingPos( ::drafts::com::sun::star::ui::DockingArea DockingArea, const ::Size& aUIElementSize, ::Point& rVirtualPos, ::Point& rPixelPos );
             void    implts_sortActiveElement( const UIElement& aElementData );
             ::com::sun::star::awt::Rectangle implts_calcDockingAreaSizes();
             void    implts_setDockingAreaWindowSizes( const com::sun::star::awt::Rectangle& rBorderSpace );
-            void    implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockingArea,
-                                                               sal_Int32 nOffset,
-                                                               SingleRowColumnWindowData& rRowColumnWindowData,
-                                                               const ::Size& rContainerSize );
             void    implts_doLayout( sal_Bool bForceRequestBorderSpace );
 
             // internal methods to control status/progress bar
@@ -528,6 +553,7 @@ namespace framework
                                                                                         m_bComponentAttached : 1,
                                                                                         m_bDoLayout : 1,
                                                                                         m_bVisible : 1;
+            DockingOperation                                                            m_eDockOperation;
             UIElement                                                                   m_aDockUIElement;
             css::awt::Rectangle                                                         m_aDockingArea;
             css::uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor >   m_xDockingAreaAcceptor;
