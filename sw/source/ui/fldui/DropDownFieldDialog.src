@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropDownFieldDialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:54:27 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,7 @@ ModalDialog DLG_FLD_DROPDOWN
     Text[ hindi ] = "इनपुट् क्षेत्र";
     Text[ slovak ] = "Vyberte položku: ";
 };
+
 
 
 
