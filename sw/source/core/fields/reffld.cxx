@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:06:55 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,7 +948,9 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
         }
         else
         {
-            for( USHORT n = rDestDoc.GetFtnIdxs().Count(); n; )
+            USHORT n;
+
+            for( n = rDestDoc.GetFtnIdxs().Count(); n; )
                 aIds.Insert( rDestDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
             for( n = rDoc.GetFtnIdxs().Count(); n; )
                 aDstIds.Insert( rDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
@@ -967,7 +969,9 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
             rFld.SetSeqNo( aMap[ nPos ] );
         else
         {
-            for( USHORT n = 0; n < aIds.Count(); ++n )
+            USHORT n;
+
+            for( n = 0; n < aIds.Count(); ++n )
                 if( n != aIds[ n ] )
                     break;
 
