@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swunohelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:04:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 16:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@ BOOL UCB_IsReadOnlyFileName( const String& rURL );
 BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
                                 const String* pExtension = 0,
                                 SvPtrarr* pDateTimeList = 0 );
+
+    // is the URL an existing file?
+BOOL UCB_IsFile( const String& rURL );
 
     // is the URL a existing directory?
 BOOL UCB_IsDirectory( const String& rURL );
