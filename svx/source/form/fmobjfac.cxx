@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-24 06:30:08 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 06:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,6 @@
 #include "fmglob.hxx"
 #endif
 
-#ifndef __VC_VCSBXDEF_HXX   // object id's
-//#include "vcsbxdef.hxx"
-#endif
-
 #ifndef _FM_FMOBJ_HXX
 #include "fmobj.hxx"
 #endif
@@ -147,6 +143,8 @@
 #include "fmPropBrw.hxx"
 #endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
 /*************************************************************************
@@ -199,6 +197,23 @@ FmFormObjFactory::~FmFormObjFactory()
 |* ::com::sun::star::form::Form-Objekte erzeugen
 |*
 \************************************************************************/
+namespace
+{
+    void    lcl_initProperty( FmFormObj* _pObject, const ::rtl::OUString& _rPropName, const Any& _rValue )
+    {
+        try
+        {
+            Reference< XPropertySet >  xModelSet( _pObject->GetUnoControlModel(), UNO_QUERY );
+            if ( xModelSet.is() )
+                xModelSet->setPropertyValue( _rPropName, _rValue );
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "lcl_initProperty: caught an exception!" );
+        }
+    }
+}
+
 IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
 {
     if (pObjFactory->nInventor == FmFormInventor)
@@ -239,21 +254,8 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
             }   break;
             case OBJ_FM_COMBOBOX:
             {
-                FmFormObj* pNew = new FmFormObj(FM_COMPONENT_COMBOBOX);
-                pObjFactory->pNewObj = pNew;
-
-                try
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xModelSet(pNew->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
-                    if (xModelSet.is())
-                    {
-                        sal_Bool bB = sal_True;
-                        xModelSet->setPropertyValue(FM_PROP_DROPDOWN, ::com::sun::star::uno::Any(&bB,::getBooleanCppuType()));
-                    }
-                }
-                catch(...)
-                {
-                }
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_COMBOBOX);
+                lcl_initProperty( static_cast< FmFormObj* >( pObjFactory->pNewObj ), FM_PROP_DROPDOWN, makeAny( sal_True ) );
 
             }   break;
             case OBJ_FM_GRID:
@@ -275,6 +277,7 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
             case OBJ_FM_TIMEFIELD:
             {
                 pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_TIMEFIELD);
+                lcl_initProperty( static_cast< FmFormObj* >( pObjFactory->pNewObj ), FM_PROP_TIMEMAX, makeAny( (sal_Int32)( Time( 23, 59, 59, 99 ).GetTime() ) ) );
             }   break;
             case OBJ_FM_NUMERICFIELD:
             {
