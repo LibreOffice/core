@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:55:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,8 +228,6 @@ OLEObjCache::~OLEObjCache()
 {
     pTimer->Stop();
     delete pTimer;
-    // Kein Unload notwendig, da zu diesem Zeitpunkt
-    // die Objekte nicht mehr vorhanden sind
 }
 
 void OLEObjCache::SetSize(ULONG nNewSize)
@@ -239,37 +237,34 @@ void OLEObjCache::SetSize(ULONG nNewSize)
 
 void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
 {
-    if (nSize <= Count())
-    {
-        // Eintraege reduzieren
-        ULONG nIndex = Count() - 1;
-
-        for (ULONG i = nIndex; i + 1 >= nSize; i--)
-        {
-            // Pruefen, ob Objekte entfernt werden koennen
-            SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(i);
-
-            if ( pCacheObj != pObj &&  UnloadObj(pCacheObj) )
-            {
-                 Remove(i);
-            }
-        }
-    }
-
-    // Objekt ggf. entfernen und an erster Position einfuegen
+    // insert object into first position
     Remove(pObj);
     Insert(pObj, (ULONG) 0L);
+
+    if ( nSize < Count() )
+    {
+        // more objects than configured cache size try to remove objects
+        // of course not the freshly inserted one at nIndex=0
+        ULONG nCount = Count();
+        ULONG nIndex = nCount-1;
+        while( nIndex && nCount > nSize )
+        {
+            SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(nIndex--);
+            if ( UnloadObj(pCacheObj) )
+                // object was successfully unloaded
+                nCount--;
+        }
+    }
 }
 
 void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
 {
-    UnloadObj( (SdrOle2Obj*) Remove(pObj) );
+    Remove(pObj);
 }
 
 BOOL OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
 {
     BOOL bUnloaded = FALSE;
-
     if (pObj)
     {
         BOOL bVisible = FALSE;
@@ -279,7 +274,6 @@ BOOL OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
         while (!bVisible && pView!=NULL)
         {
             bVisible = !pView->IsGrafDraft();
-
             if (!bVisible)
                 pView = aIter.NextView();
         }
@@ -293,25 +287,23 @@ BOOL OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
 
 IMPL_LINK(OLEObjCache, UnloadCheckHdl, AutoTimer*, pTim)
 {
-    if (nSize <= Count())
+    if ( nSize < Count() )
     {
-        // Eintraege reduzieren
-        ULONG nIndex = Count() - 1;
-
-        for (ULONG i = nIndex; i + 1 >= nSize; i--)
+        ULONG nCount = Count();
+        ULONG nIndex = nCount;
+        while ( nCount > nSize )
         {
-            // Pruefen, ob Objekte entfernt werden koennen
-            SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject(i);
-
+            SdrOle2Obj* pCacheObj = (SdrOle2Obj*) GetObject( --nIndex );
             if ( UnloadObj(pCacheObj) )
-                Remove(i);
+                nCount--;
+
+            if ( !nIndex )
+                break;
         }
     }
 
     return 0;
 }
-
-
 
 void ContainerSorter::DoSort(ULONG a, ULONG b) const
 {
