@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:13:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,6 +504,10 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, BOOL bTst,  BOOL bInfo )
         else if (nEat > nMaxEat)
             nEat = nMaxEat;
 
+        // OD 10.04.2003 #108719# - Notify fly frame, if header frame
+        // grows. Consider, that 'normal' grow of layout frame already notifys
+        // the fly frames.
+        sal_Bool bNotifyFlys = sal_False;
         if (nEat > 0)
         {
             if ( ! bTst)
@@ -518,6 +522,11 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, BOOL bTst,  BOOL bInfo )
             }
 
             nResult += nEat;
+            // OD 14.04.2003 #108719# - trigger fly frame notify.
+            if ( IsHeaderFrm() )
+            {
+                bNotifyFlys = sal_True;
+            }
         }
 
         if (nDist - nEat > 0)
@@ -526,6 +535,16 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, BOOL bTst,  BOOL bInfo )
                 SwLayoutFrm::GrowFrm( nDist - nEat, bTst, bInfo );
 
             nResult += nFrmGrow;
+            if ( nFrmGrow > 0 )
+            {
+                bNotifyFlys = sal_False;
+            }
+        }
+
+        // OD 10.04.2003 #108719# - notify fly frames, if necessary and triggered.
+        if ( ( nResult > 0 ) && bNotifyFlys )
+        {
+            NotifyFlys();
         }
     }
 
@@ -575,6 +594,10 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                spacing. */
             nRest = nDist;
 
+        // OD 10.04.2003 #108719# - Notify fly frame, if header/footer frame
+        // shrinks. Consider, that 'normal' shrink of layout frame already notifys
+        // the fly frames.
+        sal_Bool bNotifyFlys = sal_False;
         if (nRest > 0)
         {
 
@@ -618,14 +641,30 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                 InvalidateAll();
             }
             nResult += nShrink;
-
+            // OD 14.04.2003 #108719# - trigger fly frame notify.
+            if ( IsHeaderFrm() )
+            {
+                bNotifyFlys = sal_True;
+            }
         }
 
         /* The shrinking not providable by spitting out spacing has to be done
            by the frame. */
         if (nDist - nRest > 0)
-            nResult += SwLayoutFrm::ShrinkFrm( nDist - nRest, bTst,
-                                               bInfo );
+        {
+            SwTwips nShrinkAmount = SwLayoutFrm::ShrinkFrm( nDist - nRest, bTst, bInfo );
+            nResult += nShrinkAmount;
+            if ( nShrinkAmount > 0 )
+            {
+                bNotifyFlys = sal_False;
+            }
+        }
+
+        // OD 10.04.2003 #108719# - notify fly frames, if necessary.
+        if ( ( nResult > 0 ) && bNotifyFlys )
+        {
+            NotifyFlys();
+        }
     }
 
     return nResult;
