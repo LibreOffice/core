@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exporter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 12:22:26 $
+ *  last change: $Author: cl $ $Date: 2002-09-26 07:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,11 +226,10 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 
     Reference< XDrawPage > xDrawPage;
 
-/*
     utl::TempFile aFile;
     aFile.EnableKillingFile();
-*/
-    SvFileStream aFile( OUString( RTL_CONSTASCII_USTRINGPARAM("file:///e:/test.zip") ), STREAM_TRUNC|STREAM_WRITE|STREAM_READ );
+
+//  SvFileStream aFile( OUString( RTL_CONSTASCII_USTRINGPARAM("file:///e:/test.zip") ), STREAM_TRUNC|STREAM_WRITE|STREAM_READ );
 
     vector< PageEntry* > aPageEntries;
 
@@ -239,8 +238,8 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     {
         Reference< XInputStream > xInput;
 
-//      OUString aURL( aFile.GetURL() );
-        OUString aURL( RTL_CONSTASCII_USTRINGPARAM("file:///e:/test.zip") );
+        OUString aURL( aFile.GetURL() );
+//      OUString aURL( RTL_CONSTASCII_USTRINGPARAM("file:///e:/test.zip") );
         Sequence< Any > aArguments( 1 );
         aArguments[ 0 ] <<= aURL;
 
@@ -385,8 +384,8 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
             if( xBatch.is() )
                 xBatch->commitChanges();
 
-//          xInput = new utl::OSeekableInputStreamWrapper( aFile.GetStream( STREAM_READ ) );
-            xInput = new utl::OSeekableInputStreamWrapper( aFile );
+            xInput = new utl::OSeekableInputStreamWrapper( aFile.GetStream( STREAM_READ ) );
+//          xInput = new utl::OSeekableInputStreamWrapper( aFile );
 
             const sal_Int32 nLen = xInput->available();
             Sequence< sal_Int8 > aSeq( nLen );
