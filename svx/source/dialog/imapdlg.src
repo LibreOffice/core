@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:41:52 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text [ swedish ] = "Öppna..." ;
                 Text [ danish ] = "Åbn" ;
                 Text [ portuguese ] = "Abrir..." ;
-                Text [ portuguese_brazilian ] = "Öffnen..." ;
+                Text [ portuguese_brazilian ] = "?ffnen..." ;
                 Text[ chinese_simplified ] = "´ò¿ª...";
                 Text[ russian ] = "Îòêğûòü...";
                 Text[ polish ] = "Otwórz...";
@@ -431,7 +431,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 };
                 Text[ chinese_simplified ] = "ÒÆ¶¯µã";
                 Text[ russian ] = "Ïåğåìåñòèòü òî÷êè";
-                Text[ polish ] = "Przenieœ punkty";
+                Text[ polish ] = "Przenie? punkty";
                 Text[ japanese ] = "§Œä“_‚ÌˆÚ“®";
                 Text[ chinese_traditional ] = "²¾°ÊÂI";
                 Text[ arabic ] = "ÊÍÑíß ÇáäŞÇØ";
@@ -684,7 +684,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text [ dutch ] = "Eigenschappen..." ;
                 Text[ chinese_simplified ] = "ÊôĞÔ...";
                 Text[ russian ] = "Ñâîéñòâà...";
-                Text[ polish ] = "W³aœciwoœci...";
+                Text[ polish ] = "W³a?ciwo?ci...";
                 Text[ japanese ] = "ÌßÛÊßÃ¨...";
                 Text[ chinese_traditional ] = "Äİ©Ê...";
                 Text[ arabic ] = "...ÎÕÇÆÕ";
@@ -1029,7 +1029,7 @@ Menu RID_SVXMN_IMAP
                         Text [ ENGLISH ] = "Send to Bac~k" ;
                         Text [ norwegian ] = "Send to Bac~k" ;
                         Text [ italian ] = "Porta in fondo" ;
-                        Text [ portuguese_brazilian ] = "Enviar para o Último ~Plano" ;
+                        Text [ portuguese_brazilian ] = "Enviar para o ?ltimo ~Plano" ;
                         Text [ portuguese ] = "Enviar para ~trás" ;
                         Text [ finnish ] = "~Vie taakse" ;
                         Text [ danish ] = "Placer ~bagest" ;
@@ -1377,7 +1377,7 @@ String STR_IMAPDLG_SAVE
     Text = "Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
     Text [ swedish ] = "ImageMap har ändrats.\nSkall ändringarna sparas?" ;
     Text [ danish ] = "ImageMap er blevet ændret.\nVil du gemme ændringerne?" ;
-    Text [ portuguese_brazilian ] = "Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Text [ portuguese_brazilian ] = "Die ImageMap wurde ge?ndert.\nSollen die ?nderungen gespeichert werden?" ;
     Text [ portuguese ] = "O ImageMap foi modificado.\nDeseja guardar as modificações?" ;
     Text[ greek ] = "Ôï ImageMap ôñïğïğïéŞèçêå.\nÈİëåôå íá áğïèçêåõôïıí ïé áëëáãİò;";
     Text[ korean ] = "ÀÌ¹ÌÁö ¸ÊÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.\nº¯°æµÈ ³»¿ëÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
@@ -1399,7 +1399,7 @@ String STR_IMAPDLG_MODIFY
     Text [ spanish ] = "Se ha modificado el ImageMap.\n¿Desea guardar las modificaciones?" ;
     Text [ french ] = "L'imageMap a été modifiée.\nAppliquer les modifications ?" ;
     Text [ dutch ] = "De ImageMap werd gewijzigd.\nWilt u de wijzigingen overnemen?" ;
-    Text [ portuguese_brazilian ] = "Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden?" ;
+    Text [ portuguese_brazilian ] = "Die ImageMap wurde ge?ndert.\nSollen die ?nderungen ?ernommen werden?" ;
     Text [ portuguese ] = "O ImageMap foi modificado.\nDeseja aplicar as modificações?" ;
     Text[ chinese_simplified ] = "Í¼ÏñÓ³ÉäÒÑ¾­±»¸Ä¶¯¡£\nÄúÒª½ÓÊÜ¸ü¸ÄÂğ£¿";
     Text[ russian ] = "Image Map èçìåíåí.\nÏğèíÿòü ıòè èçìåíåíèÿ?";
