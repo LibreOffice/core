@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:24:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,19 +343,10 @@ SwTextBlocks::SwTextBlocks( const String& rFile )
         nErr = ERR_SWG_FILE_FORMAT_ERROR;
 }
 
-
-SwTextBlocks::SwTextBlocks( SvStorage& rStg )
-    : nErr( 0 )
-{
-    pImp = new Sw3TextBlocks( rStg );
-}
-
-
 SwTextBlocks::~SwTextBlocks()
 {
     delete pImp;
 }
-
 
 const String& SwTextBlocks::GetName()
 {
@@ -736,25 +727,6 @@ USHORT SwTextBlocks::PutDoc()
     }
     return nIdx;
 }
-
-
-const String& SwTextBlocks::GetText( USHORT n )
-{
-    if( pImp && !pImp->bInPutMuchBlocks )
-    {
-        if( pImp->IsFileChanged() )
-            nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
-        else if( 0 == ( nErr = pImp->OpenFile( TRUE )))
-        {
-            nErr = pImp->GetText( n, pImp->aCur );
-            pImp->CloseFile();
-            if( !nErr )
-                return pImp->aCur;
-        }
-    }
-    return aEmptyStr;
-}
-
 
 USHORT SwTextBlocks::PutText( const String& rShort, const String& rName,
                               const String& rTxt )
