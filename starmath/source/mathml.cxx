@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-11 08:19:40 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 17:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@ one go*/
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
@@ -147,6 +150,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star;
 using namespace rtl;
+using namespace ::xmloff::token;
 
 #ifndef MATHTYPE_HXX
 #include "mathtype.hxx"
@@ -1622,7 +1626,7 @@ void SmXMLOperatorContext_Impl::StartElement(const uno::Reference<
 
 static __FAR_DATA SvXMLTokenMapEntry aMathElemTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   sXML_math,              XML_TOK_MATH   },
+    { XML_NAMESPACE_MATH,   XML_MATH,              XML_TOK_MATH   },
     XML_TOKEN_MAP_END
 };
 
@@ -2004,96 +2008,96 @@ SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPref
 
 static __FAR_DATA SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   sXML_semantics, XML_TOK_SEMANTICS },
-    { XML_NAMESPACE_MATH,   sXML_math,      XML_TOK_MATH   },
-    { XML_NAMESPACE_MATH,   sXML_mstyle,    XML_TOK_MSTYLE  },
-    { XML_NAMESPACE_MATH,   sXML_merror,    XML_TOK_MERROR },
-    { XML_NAMESPACE_MATH,   sXML_mphantom,  XML_TOK_MPHANTOM },
-    { XML_NAMESPACE_MATH,   sXML_mrow,      XML_TOK_MROW },
-    { XML_NAMESPACE_MATH,   sXML_mfrac,     XML_TOK_MFRAC },
-    { XML_NAMESPACE_MATH,   sXML_msqrt,     XML_TOK_MSQRT },
-    { XML_NAMESPACE_MATH,   sXML_mroot,     XML_TOK_MROOT },
-    { XML_NAMESPACE_MATH,   sXML_msub,      XML_TOK_MSUB },
-    { XML_NAMESPACE_MATH,   sXML_msup,      XML_TOK_MSUP },
-    { XML_NAMESPACE_MATH,   sXML_msubsup,   XML_TOK_MSUBSUP },
-    { XML_NAMESPACE_MATH,   sXML_munder,    XML_TOK_MUNDER },
-    { XML_NAMESPACE_MATH,   sXML_mover,     XML_TOK_MOVER },
-    { XML_NAMESPACE_MATH,   sXML_munderover,    XML_TOK_MUNDEROVER },
-    { XML_NAMESPACE_MATH,   sXML_mmultiscripts, XML_TOK_MMULTISCRIPTS },
-    { XML_NAMESPACE_MATH,   sXML_mtable,    XML_TOK_MTABLE },
-    { XML_NAMESPACE_MATH,   sXML_maction,   XML_TOK_MACTION },
-    { XML_NAMESPACE_MATH,   sXML_mfenced,   XML_TOK_MFENCED },
-    { XML_NAMESPACE_MATH,   sXML_mpadded,   XML_TOK_MPADDED },
+    { XML_NAMESPACE_MATH,   XML_SEMANTICS, XML_TOK_SEMANTICS },
+    { XML_NAMESPACE_MATH,   XML_MATH,      XML_TOK_MATH   },
+    { XML_NAMESPACE_MATH,   XML_MSTYLE,    XML_TOK_MSTYLE  },
+    { XML_NAMESPACE_MATH,   XML_MERROR,    XML_TOK_MERROR },
+    { XML_NAMESPACE_MATH,   XML_MPHANTOM,  XML_TOK_MPHANTOM },
+    { XML_NAMESPACE_MATH,   XML_MROW,      XML_TOK_MROW },
+    { XML_NAMESPACE_MATH,   XML_MFRAC,     XML_TOK_MFRAC },
+    { XML_NAMESPACE_MATH,   XML_MSQRT,     XML_TOK_MSQRT },
+    { XML_NAMESPACE_MATH,   XML_MROOT,     XML_TOK_MROOT },
+    { XML_NAMESPACE_MATH,   XML_MSUB,      XML_TOK_MSUB },
+    { XML_NAMESPACE_MATH,   XML_MSUP,      XML_TOK_MSUP },
+    { XML_NAMESPACE_MATH,   XML_MSUBSUP,   XML_TOK_MSUBSUP },
+    { XML_NAMESPACE_MATH,   XML_MUNDER,    XML_TOK_MUNDER },
+    { XML_NAMESPACE_MATH,   XML_MOVER,     XML_TOK_MOVER },
+    { XML_NAMESPACE_MATH,   XML_MUNDEROVER,    XML_TOK_MUNDEROVER },
+    { XML_NAMESPACE_MATH,   XML_MMULTISCRIPTS, XML_TOK_MMULTISCRIPTS },
+    { XML_NAMESPACE_MATH,   XML_MTABLE,    XML_TOK_MTABLE },
+    { XML_NAMESPACE_MATH,   XML_MACTION,   XML_TOK_MACTION },
+    { XML_NAMESPACE_MATH,   XML_MFENCED,   XML_TOK_MFENCED },
+    { XML_NAMESPACE_MATH,   XML_MPADDED,   XML_TOK_MPADDED },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aPresLayoutAttrTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   sXML_fontweight,      XML_TOK_FONTWEIGHT    },
-    { XML_NAMESPACE_MATH,   sXML_fontstyle,       XML_TOK_FONTSTYLE     },
-    { XML_NAMESPACE_MATH,   sXML_fontsize,        XML_TOK_FONTSIZE      },
-    { XML_NAMESPACE_MATH,   sXML_fontfamily,      XML_TOK_FONTFAMILY    },
-    { XML_NAMESPACE_MATH,   sXML_color,           XML_TOK_COLOR },
+    { XML_NAMESPACE_MATH,   XML_FONTWEIGHT,      XML_TOK_FONTWEIGHT    },
+    { XML_NAMESPACE_MATH,   XML_FONTSTYLE,       XML_TOK_FONTSTYLE     },
+    { XML_NAMESPACE_MATH,   XML_FONTSIZE,        XML_TOK_FONTSIZE      },
+    { XML_NAMESPACE_MATH,   XML_FONTFAMILY,      XML_TOK_FONTFAMILY    },
+    { XML_NAMESPACE_MATH,   XML_COLOR,           XML_TOK_COLOR },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aFencedAttrTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   sXML_open,       XML_TOK_OPEN },
-    { XML_NAMESPACE_MATH,   sXML_close,      XML_TOK_CLOSE },
+    { XML_NAMESPACE_MATH,   XML_OPEN,       XML_TOK_OPEN },
+    { XML_NAMESPACE_MATH,   XML_CLOSE,      XML_TOK_CLOSE },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aOperatorAttrTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   sXML_stretchy,      XML_TOK_STRETCHY },
+    { XML_NAMESPACE_MATH,   XML_STRETCHY,      XML_TOK_STRETCHY },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aAnnotationAttrTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   sXML_encoding,      XML_TOK_ENCODING },
+    { XML_NAMESPACE_MATH,   XML_ENCODING,      XML_TOK_ENCODING },
     XML_TOKEN_MAP_END
 };
 
 
 static __FAR_DATA SvXMLTokenMapEntry aPresElemTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   sXML_annotation,    XML_TOK_ANNOTATION },
-    { XML_NAMESPACE_MATH,   sXML_mi,    XML_TOK_MI },
-    { XML_NAMESPACE_MATH,   sXML_mn,    XML_TOK_MN },
-    { XML_NAMESPACE_MATH,   sXML_mo,    XML_TOK_MO },
-    { XML_NAMESPACE_MATH,   sXML_mtext, XML_TOK_MTEXT },
-    { XML_NAMESPACE_MATH,   sXML_mspace,XML_TOK_MSPACE },
-    { XML_NAMESPACE_MATH,   sXML_ms,    XML_TOK_MS },
-    { XML_NAMESPACE_MATH,   sXML_maligngroup,   XML_TOK_MALIGNGROUP },
+    { XML_NAMESPACE_MATH,   XML_ANNOTATION,    XML_TOK_ANNOTATION },
+    { XML_NAMESPACE_MATH,   XML_MI,    XML_TOK_MI },
+    { XML_NAMESPACE_MATH,   XML_MN,    XML_TOK_MN },
+    { XML_NAMESPACE_MATH,   XML_MO,    XML_TOK_MO },
+    { XML_NAMESPACE_MATH,   XML_MTEXT, XML_TOK_MTEXT },
+    { XML_NAMESPACE_MATH,   XML_MSPACE,XML_TOK_MSPACE },
+    { XML_NAMESPACE_MATH,   XML_MS,    XML_TOK_MS },
+    { XML_NAMESPACE_MATH,   XML_MALIGNGROUP,   XML_TOK_MALIGNGROUP },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aPresScriptEmptyElemTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   sXML_mprescripts,   XML_TOK_MPRESCRIPTS },
-    { XML_NAMESPACE_MATH,   sXML_none,  XML_TOK_NONE },
+    { XML_NAMESPACE_MATH,   XML_MPRESCRIPTS,   XML_TOK_MPRESCRIPTS },
+    { XML_NAMESPACE_MATH,   XML_NONE,  XML_TOK_NONE },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aPresTableElemTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   sXML_mtr,       XML_TOK_MTR },
-    { XML_NAMESPACE_MATH,   sXML_mtd,       XML_TOK_MTD },
+    { XML_NAMESPACE_MATH,   XML_MTR,       XML_TOK_MTR },
+    { XML_NAMESPACE_MATH,   XML_MTD,       XML_TOK_MTD },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aColorTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   sXML_black,        TBLACK},
-    { XML_NAMESPACE_MATH,   sXML_white,        TWHITE},
-    { XML_NAMESPACE_MATH,   sXML_red,          TRED},
-    { XML_NAMESPACE_MATH,   sXML_green,        TGREEN},
-    { XML_NAMESPACE_MATH,   sXML_blue,         TBLUE},
-    { XML_NAMESPACE_MATH,   sXML_aqua,         TCYAN},
-    { XML_NAMESPACE_MATH,   sXML_fuchsia,      TMAGENTA},
-    { XML_NAMESPACE_MATH,   sXML_yellow,       TYELLOW},
+    { XML_NAMESPACE_MATH,   XML_BLACK,        TBLACK},
+    { XML_NAMESPACE_MATH,   XML_WHITE,        TWHITE},
+    { XML_NAMESPACE_MATH,   XML_RED,          TRED},
+    { XML_NAMESPACE_MATH,   XML_GREEN,        TGREEN},
+    { XML_NAMESPACE_MATH,   XML_BLUE,         TBLUE},
+    { XML_NAMESPACE_MATH,   XML_AQUA,         TCYAN},
+    { XML_NAMESPACE_MATH,   XML_FUCHSIA,      TMAGENTA},
+    { XML_NAMESPACE_MATH,   XML_YELLOW,       TYELLOW},
     XML_TOKEN_MAP_END
 };
 
