@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:30 $
+ *  last change: $Author: fs $ $Date: 2000-11-17 18:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ XML_CONSTASCII_ACTION( sXML_np_dc, "dc" );
 XML_CONSTASCII_ACTION( sXML_n_dc, "http://purl.org/dc/elements/1.1/" );
 XML_CONSTASCII_ACTION( sXML_np_svg, "svg" );
 XML_CONSTASCII_ACTION( sXML_n_svg, "http://www.w3.org/2000/svg" );
+XML_CONSTASCII_ACTION( sXML_namespace_form, "form" );
+XML_CONSTASCII_ACTION( sXML_url_form, "http://openoffice.org/2000/form" );
 
 
 XML_CONSTASCII_ACTION( sXML_np_math, "math");
