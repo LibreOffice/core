@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:22:51 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
                                                         sdb::CommandType::TABLE );
 
             ::svx::ODataAccessDescriptor aSelection;
-            aSelection[svx::daDataSource]   <<= rtl::OUString( rParam.aDBName );
+            aSelection.setDataSource(rtl::OUString( rParam.aDBName ));
             aSelection[svx::daCommand]      <<= rtl::OUString( rParam.aStatement );
             aSelection[svx::daCommandType]  <<= nType;
 
@@ -406,29 +406,30 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 }
 
                 BOOL bEnd = FALSE;
-                xRowSet->beforeFirst();
-                while ( !bEnd && xRowSet->next() )
+                if ( !bDoSelection )
+                    xRowSet->beforeFirst();
+                while ( !bEnd )
                 {
                     //  skip rows that are not selected
-
-                    if (bDoSelection)
+                    if ( !bDoSelection )
+                    {
+                        if ( !(bEnd = !xRowSet->next()) )
+                            ++nRowsRead;
+                    }
+                    else
                     {
                         if (nListPos < nListCount)
                         {
                             ULONG nNextRow = (ULONG) pSelection->GetObject(nListPos);
-                            while (nRowsRead+1 < nNextRow && !bEnd)
-                            {
+                            if ( nRowsRead+1 < nNextRow )
                                 bRealSelection = TRUE;
-                                if ( !xRowSet->next() )
-                                    bEnd = TRUE;
-                                ++nRowsRead;
-                            }
+                            bEnd = !xRowSet->absolute(nRowsRead = nNextRow);
                             ++nListPos;
                         }
                         else
                         {
-                            bRealSelection = TRUE;  // more data available but not used
-                            bEnd = TRUE;
+                            bRealSelection = xRowSet->next();
+                            bEnd = TRUE; // more data available but not used
                         }
                     }
 
@@ -470,8 +471,6 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                             bTruncated = TRUE;      // warning flag
                         }
                     }
-
-                    ++nRowsRead;
                 }
 
                 bSuccess = TRUE;
