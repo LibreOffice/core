@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-14 12:36:08 $
+ *  last change: $Author: tra $ $Date: 2002-11-29 13:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +89,9 @@
 #include <osl/diagnose.h>
 #endif
 
-/*****************************************************************/
-/* Forward declaration                                           */
-/*****************************************************************/
-
-extern oslFileError _osl_getSystemPathFromFileURL(
-    rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath, sal_Bool bAllowRelative);
+#ifndef _FILE_URL_H_
+#include "file_url.h"
+#endif
 
 /*****************************************************************/
 /* osl_getTempFirURL                                             */
@@ -192,7 +189,7 @@ static oslFileError osl_setup_base_directory_impl_(
 
     if (osl_File_E_None == error)
     {
-        error = _osl_getSystemPathFromFileURL(dir_url, &dir, sal_False);
+        error = osl_getSystemPathFromFileURL_Ex(dir_url, &dir, FURL_DENY_RELATIVE);
         rtl_uString_release(dir_url);
     }
 
