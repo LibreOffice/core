@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:09:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,6 +990,12 @@ String STR_ACC_DATAPILOT_SEL_DESCR
     Text [ de ] = "Hier sind die Felder aufgelistet, die Sie in einen der drei anderen Bereiche bewegen können.";
     Text [ x-comment ] = "EM O; EM Oct 2002: (not \"range\") In the datapilot dialog, description of controls";
     Text [ en-US ] = "Lists the fields that you can drag to one of the other three areas.";
+};
+
+String SCSTR_MEDIASHELL
+{
+    Text [ de ] = "Medienwiedergabe" ;
+    Text [ en-US ] = "Media Playback";
 };
 
 
