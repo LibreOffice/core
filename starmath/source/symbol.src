@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:14:13 $
+ *  last change: $Author: kz $ $Date: 2001-08-27 20:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,8 +973,8 @@ Resource RID_LOCALIZED_NAMES
         < "ETA" ; > ;
         < "theta" ; > ;
         < "THETA" ; > ;
-        < "jota" ; > ;
-        < "JOTA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
         < "lambda" ; > ;
@@ -999,8 +999,8 @@ Resource RID_LOCALIZED_NAMES
         < "ÍPSILON" ; > ;
         < "phi" ; > ;
         < "PHI" ; > ;
-        < "chi" ; > ;
-        < "CHI" ; > ;
+        < "ji" ; > ;
+        < "JI" ; > ;
         < "psi" ; > ;
         < "PSI" ; > ;
         < "omega" ; > ;
@@ -1923,6 +1923,7 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
 
