@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:59:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@
 #include <rtl/tencinfo.h>
 #endif
 
-#define INCR_MIN_SIZE   1024
 #define INCR_TIMEOUT        5
 
 #define DRAG_EVENT_MASK ButtonPressMask         |\
@@ -238,26 +237,8 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
 
 // ------------------------------------------------------------------------
 
-SelectionManager::IncrementalTransfer::IncrementalTransfer(
-                                                           const Sequence< sal_Int8 >& rData,
-                                                           Window aRequestor,
-                                                           Atom aProperty,
-                                                           Atom aTarget,
-                                                           int nFormat
-                                                           ) :
-        m_aData( rData ),
-        m_aRequestor( aRequestor ),
-        m_aProperty( aProperty ),
-        m_aTarget( aTarget ),
-        m_nFormat( nFormat ),
-        m_nBufferPos( 0 ),
-        m_nTransferStartTime( time( NULL ) )
-{
-}
-
-// ------------------------------------------------------------------------
-
 SelectionManager::SelectionManager() :
+        m_nIncrementalThreshold( 15*1024 ),
         m_pDisplay( NULL ),
         m_aWindow( None ),
         m_aDropWindow( None ),
@@ -436,6 +417,11 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             // create a (invisible) message window
             m_aWindow = XCreateSimpleWindow( m_pDisplay, DefaultRootWindow( m_pDisplay ),
                                              10, 10, 10, 10, 0, 0, 1 );
+
+            // initialize threshold for incremetal transfers
+            // ICCCM says it should be smaller that the max request size
+            // which in turn is guaranteed to be at least 16k bytes
+            m_nIncrementalThreshold = XMaxRequestSize( m_pDisplay ) - 1024;
 
             if( m_aWindow )
             {
@@ -1550,24 +1536,43 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
     if( bConverted )
     {
         // conversion succeeded
-        if( aData.getLength() > INCR_MIN_SIZE )
+        if( aData.getLength() > m_nIncrementalThreshold )
         {
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "using INCR protocol\n" );
+            std::hash_map< Window, std::hash_map< Atom, IncrementalTransfer > >::const_iterator win_it = m_aIncrementals.find( requestor );
+            if( win_it != m_aIncrementals.end() )
+            {
+                std::hash_map< Atom, IncrementalTransfer >::const_iterator inc_it = win_it->second.find( property );
+                if( inc_it != win_it->second.end() )
+                {
+                    const IncrementalTransfer& rInc = inc_it->second;
+                    fprintf( stderr, "premature end and new start for INCR transfer for window 0x%x, property %s, type %s\n",
+                             rInc.m_aRequestor,
+                             OUStringToOString( getString( rInc.m_aProperty ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                             OUStringToOString( getString( rInc.m_aTarget ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
+                             );
+                }
+            }
 #endif
-            // use incr protocol
+
+            // insert IncrementalTransfer
+            IncrementalTransfer& rInc   = m_aIncrementals[ requestor ][ property ];
+            rInc.m_aData                = aData;
+            rInc.m_nBufferPos           = 0;
+            rInc.m_aRequestor           = requestor;
+            rInc.m_aProperty            = property;
+            rInc.m_aTarget              = target;
+            rInc.m_nFormat              = nFormat;
+            rInc.m_nTransferStartTime   = time( NULL );
+
+            // use incr protocol, signal start to requestor
             int nBufferPos = 0;
-            int nMinSize = INCR_MIN_SIZE;
+            int nMinSize = m_nIncrementalThreshold;
+            XSelectInput( m_pDisplay, requestor, PropertyChangeMask );
             XChangeProperty( m_pDisplay, requestor, property,
                              m_nINCRAtom, 32,  PropModeReplace, (unsigned char*)&nMinSize, 1 );
-            XSelectInput( m_pDisplay, requestor, PropertyChangeMask );
-            IncrementalTransfer aTransfer( aData,
-                                           requestor,
-                                           property,
-                                           target,
-                                           nFormat
-                                           );
-            m_aIncrementals[ requestor ].push_back( aTransfer );
+            XFlush( m_pDisplay );
         }
         else
             XChangeProperty( m_pDisplay,
@@ -1911,43 +1916,80 @@ void SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
     // feed incrementals
     if( rNotify.state == PropertyDelete )
     {
-        ::std::hash_map< Window, ::std::list< IncrementalTransfer > >::iterator it;
+        std::hash_map< Window, std::hash_map< Atom, IncrementalTransfer > >::iterator it;
         it = m_aIncrementals.find( rNotify.window );
-        int nCurrentTime = time( NULL );
         if( it != m_aIncrementals.end() )
         {
-            ::std::list< IncrementalTransfer >::iterator inc_it = it->second.begin();
-            while( inc_it != it->second.end() )
+            int nCurrentTime = time( NULL );
+            std::hash_map< Atom, IncrementalTransfer >::iterator inc_it;
+            // throw out aborted transfers
+            std::list< Atom > aTimeouts;
+            for( inc_it = it->second.begin(); inc_it != it->second.end(); ++inc_it )
             {
-                bool bDone = false;
-                if( inc_it->m_aProperty == rNotify.atom )
+                if( (nCurrentTime - inc_it->second.m_nTransferStartTime) > INCR_TIMEOUT )
                 {
-                    int nBytes = inc_it->m_aData.getLength() - inc_it->m_nBufferPos;
-                    nBytes = nBytes > INCR_MIN_SIZE ? INCR_MIN_SIZE : nBytes;
-                    XChangeProperty(
-                                    m_pDisplay,
-                                    inc_it->m_aRequestor,
-                                    inc_it->m_aProperty,
-                                    inc_it->m_aTarget,
-                                    inc_it->m_nFormat,
-                                    PropModeReplace,
-                                    (const unsigned char*)inc_it->m_aData.getConstArray()+inc_it->m_nBufferPos,
-                                    nBytes/(inc_it->m_nFormat/8) );
-                    inc_it->m_nBufferPos += nBytes;
-                    if( nBytes == 0 )
-                        bDone = true;
+                    aTimeouts.push_back( inc_it->first );
+#if OSL_DEBUG_LEVEL > 1
+                    const IncrementalTransfer& rInc = inc_it->second;
+                    fprintf( stderr, "timeout on INCR transfer for window 0x%x, property %s, type %s\n",
+                             rInc.m_aRequestor,
+                             OUStringToOString( getString( rInc.m_aProperty ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                             OUStringToOString( getString( rInc.m_aTarget ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
+                             );
+#endif
                 }
-                else if( nCurrentTime - inc_it->m_nTransferStartTime > INCR_TIMEOUT )
-                    bDone = true;
-                if( bDone )
-                {
-                    ::std::list< IncrementalTransfer >::iterator temp_it = inc_it;
-                    ++inc_it;
-                    it->second.erase( temp_it );
-                }
-                else
-                    ++inc_it;
             }
+
+            while( aTimeouts.begin() != aTimeouts.end() )
+            {
+                // transfer broken, might even be a new client with the
+                // same window id
+                it->second.erase( aTimeouts.front() );
+                aTimeouts.pop_front();
+            }
+
+            inc_it = it->second.find( rNotify.atom );
+            if( inc_it != it->second.end() )
+            {
+                IncrementalTransfer& rInc = inc_it->second;
+
+                int nBytes = rInc.m_aData.getLength() - rInc.m_nBufferPos;
+                nBytes = (nBytes > m_nIncrementalThreshold) ? m_nIncrementalThreshold : nBytes;
+                if( nBytes < 0 )  // sanity check
+                    nBytes = 0;
+#if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "pushing %d bytes: \"%.*s\"...\n",
+                         nBytes, nBytes > 32 ? 32 : nBytes,
+                         (const unsigned char*)rInc.m_aData.getConstArray()+rInc.m_nBufferPos );
+#endif
+
+                XChangeProperty( m_pDisplay,
+                                 rInc.m_aRequestor,
+                                 rInc.m_aProperty,
+                                 rInc.m_aTarget,
+                                 rInc.m_nFormat,
+                                 PropModeReplace,
+                                 (const unsigned char*)rInc.m_aData.getConstArray()+rInc.m_nBufferPos,
+                                 nBytes/(rInc.m_nFormat/8) );
+                rInc.m_nBufferPos += nBytes;
+                rInc.m_nTransferStartTime = nCurrentTime;
+
+                if( nBytes == 0 ) // transfer finished
+                {
+#if OSL_DEBUG_LEVEL > 1
+                    fprintf( stderr, "finished INCR transfer for window 0x%x, property %s, type %s\n",
+                             rInc.m_aRequestor,
+                             OUStringToOString( getString( rInc.m_aProperty ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                             OUStringToOString( getString( rInc.m_aTarget ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
+                             );
+#endif
+                    it->second.erase( inc_it );
+                }
+
+            }
+            // eventually clean up the hash map
+            if( it->second.begin() == it->second.end() )
+                m_aIncrementals.erase( it );
         }
     }
 }
