@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: is $ $Date: 2004-07-29 11:09:24 $
+#   last change: $Author: rt $ $Date: 2004-08-02 13:45:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1478,7 +1478,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         # ... copying the setup.exe, instmsia.exe and instmsiw.exe
 
-        installer::windows::msiglobal::copy_windows_installer_files_into_installset($installdir);
+        installer::windows::msiglobal::copy_windows_installer_files_into_installset($installdir, $includepatharrayref);
 
         # ... copying the child projects
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 09:10:25 $
+#   last change: $Author: rt $ $Date: 2004-08-02 13:46:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,7 +112,7 @@ sub get_next_free_number
         {
             $shortname = ${$shortnamesref}[$i];
 
-            if ( $shortname eq $newname )
+            if ( uc($shortname) eq uc($newname) )   # case insensitive
             {
                 $alreadyexists = 1;
                 last;
