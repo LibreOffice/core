@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:55:01 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 14:45:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,8 +103,17 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 SHL1LIBS=$(LIB1TARGET)
+
+.IF "$(OS)"=="MACOSX"
 SHL1STDLIBS= \
-    $(TKLIB)			\
+    $(LIBSTLPORT)		\
+    $(TKLIB)
+.ELSE
+SHL1STDLIBS= \
+    $(TKLIB)
+.ENDIF
+
+SHL1STDLIBS+= \
     $(VCLLIB)			\
     $(SVLLIB)			\
     $(TOOLSLIB)			\
@@ -113,6 +122,10 @@ SHL1STDLIBS= \
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)
+
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS+= -lX11
+.ENDIF
 
 SHL1STDLIBS+=$(SHL1OWNLIBS)
 
