@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:14:35 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <svtools/itempool.hxx>
 #include <svtools/urlbmk.hxx>
 #include <tools/urlobj.hxx>
+#include <vos/mutex.hxx>
 
 #include "drwtrans.hxx"
 #include "docsh.hxx"
@@ -220,6 +221,8 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
 ScDrawTransferObj::~ScDrawTransferObj()
 {
+    Application::GetSolarMutex().acquire();     //! ???
+
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetClipData().pDrawClipboard == this )
     {
@@ -229,6 +232,8 @@ ScDrawTransferObj::~ScDrawTransferObj()
 
     delete pModel;
     delete pBookmark;
+
+    Application::GetSolarMutex().release();     //! ???
 }
 
 // static
@@ -419,6 +424,16 @@ void ScDrawTransferObj::ObjectReleased()
         pScMod->SetClipObject( NULL, NULL );
 
     TransferableHelper::ObjectReleased();
+}
+
+void ScDrawTransferObj::DragFinished( sal_Int8 nDropAction )
+{
+    //! test for internal move
+
+    if ( nDropAction == DND_ACTION_MOVE )
+    {
+        //! delete selected objects in source document
+    }
 }
 
 SvInPlaceObjectRef ScDrawTransferObj::GetSingleObject()

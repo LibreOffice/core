@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-20 16:51:57 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@
 #endif
 #include "dpobject.hxx"
 #include "dpoutput.hxx"
+#include "transobj.hxx"
 
 using namespace com::sun::star;
 
@@ -389,6 +390,8 @@ BOOL lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 //  WB_DIALOGCONTROL noetig fuer UNO-Controls
 ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos ) :
             Window( pParent, WB_CLIPCHILDREN | WB_DIALOGCONTROL ),
+            DropTargetHelper( this ),
+            DragSourceHelper( this ),
             pViewData( pData ),
             eWhich( eWhichPos ),
             pNoteMarker( NULL ),
@@ -439,7 +442,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
     SetBackground();
 
     SetMapMode(pViewData->GetLogicMode(eWhich));
-    EnableDrop();
+//  EnableDrop();
     EnableChildTransparentMode();
     SetDialogControlFlags( WINDOW_DLGCTRL_RETURN | WINDOW_DLGCTRL_WANTFOCUS );
 
@@ -2095,10 +2098,53 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
         MouseMove( rMEvt );
 }
 
+void ScGridWindow::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+    if ( pFilterBox || nPagebreakMouse )
+        return;
+
+    HideNoteMarker();
+
+    CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, TRUE );
+
+    if (bEEMouse)
+    {
+        EditView*   pEditView;
+        USHORT      nEditCol;
+        USHORT      nEditRow;
+        pViewData->GetEditView( eWhich, pEditView, nEditCol, nEditRow );
+
+        // #63263# don't remove the edit view while switching views
+        ScModule* pScMod = SC_MOD();
+        pScMod->SetInEditCommand( TRUE );
+
+        pEditView->Command( aDragEvent );
+
+        ScInputHandler* pHdl = pScMod->GetInputHdl();
+        if (pHdl)
+            pHdl->DataChanged();
+
+        pScMod->SetInEditCommand( FALSE );
+        if (!pViewData->IsActive())             // dropped to different view?
+        {
+            ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
+            if ( pHdl && pViewData->HasEditView( eWhich ) )
+            {
+                pHdl->CancelHandler();
+                ShowCursor();   // missing from KillEditView
+            }
+        }
+    }
+    else
+        if ( !DrawCommand(aDragEvent) )
+            pViewData->GetView()->GetSelEngine()->Command( aDragEvent );
+}
+
 void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
 {
     USHORT nCmd = rCEvt.GetCommand();
     ScModule* pScMod = SC_MOD();
+    DBG_ASSERT( nCmd != COMMAND_STARTDRAG, "ScGridWindow::Command called with COMMAND_STARTDRAG" );
 
     if ( nCmd == COMMAND_STARTEXTTEXTINPUT ||
          nCmd == COMMAND_ENDEXTTEXTINPUT ||
@@ -2132,7 +2178,7 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
         return;
     }
 
-    if ( rCEvt.GetCommand() == COMMAND_VOICE )
+    if ( nCmd == COMMAND_VOICE )
     {
         //  Der Handler wird nur gerufen, wenn ein Text-Cursor aktiv ist,
         //  also muss es eine EditView oder ein editiertes Zeichenobjekt geben
@@ -2172,9 +2218,6 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
             Window::Command(rCEvt);
         return;
     }
-
-    if ( nCmd == COMMAND_STARTDRAG && ( pFilterBox || nPagebreakMouse ) )
-        return;
 
     if ( nCmd == COMMAND_CONTEXTMENU && !SC_MOD()->GetIsWaterCan() )
     {
@@ -2228,45 +2271,6 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
         {
             SfxDispatcher::ExecutePopup();
         }
-    }
-    else
-    {
-        // #53414# Notiz-/Redlining-Tiphilfe wegnehmen
-        if ( nCmd == COMMAND_STARTDRAG )
-            HideNoteMarker();
-
-        if (bEEMouse)
-        {
-            EditView*   pEditView;
-            USHORT      nEditCol;
-            USHORT      nEditRow;
-            pViewData->GetEditView( eWhich, pEditView, nEditCol, nEditRow );
-
-            // #63263# verhindern, dass die EditView beim View-Umschalten wegkommt
-            pScMod->SetInEditCommand( TRUE );
-
-            pEditView->Command( rCEvt );
-            if ( nCmd == COMMAND_STARTDRAG )
-            {
-                ScInputHandler* pHdl = pScMod->GetInputHdl();
-                if (pHdl)
-                    pHdl->DataChanged();
-            }
-
-            pScMod->SetInEditCommand( FALSE );
-            if (!pViewData->IsActive())             // auf andere View gedroppt?
-            {
-                ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
-                if ( pHdl && pViewData->HasEditView( eWhich ) )
-                {
-                    pHdl->CancelHandler();
-                    ShowCursor();   // fehlt bei KillEditView
-                }
-            }
-        }
-        else
-            if ( !DrawCommand(rCEvt) )
-                pViewData->GetView()->GetSelEngine()->Command( rCEvt );
     }
 }
 
@@ -2339,6 +2343,7 @@ BOOL ScGridWindow::QueryDropPrivate( DropEvent& rEvt )
         return TRUE;
     }
 
+#ifdef OLD_DND
     const ScDragData& rData = SC_MOD()->GetDragData();
     if ( rData.nSizeX != 0 && rData.nSizeY != 0 )
     {
@@ -2418,6 +2423,7 @@ BOOL ScGridWindow::QueryDropPrivate( DropEvent& rEvt )
 #endif
         }
     }
+#endif
 
     return TRUE;
 }
@@ -2500,6 +2506,7 @@ BOOL lcl_TestScenarioRedliningDrop( ScDocument* pDoc, const ScRange& aDragRange)
 }
 
 
+#ifdef OLD_DND
 ScRange lcl_MakeDropRange(short nPosX, short nPosY,USHORT nTab, const ScDragData& rData)
 {
     // Liefert den Range fuer einen Drop zurueck
@@ -2519,6 +2526,7 @@ ScRange lcl_MakeDropRange(short nPosX, short nPosY,USHORT nTab, const ScDragData
     return ScRange(nCol1, nRow1, nTab,
                     nCol2, nRow2, nTab);
 }
+#endif
 
 BOOL __EXPORT ScGridWindow::QueryDrop( DropEvent& rEvt )
 {
@@ -2526,8 +2534,8 @@ BOOL __EXPORT ScGridWindow::QueryDrop( DropEvent& rEvt )
     if (rEvt.IsLeaveWindow())
     {
         DrawMarkDropObj( NULL );
-        if (rData.pDoc)
-            return QueryDropPrivate( rEvt );    // internen Drop-Rahmen wegnehmen
+        if (rData.pCellTransfer)
+            return QueryDropPrivate( rEvt );    // hide drop marker for internal D&D
         else
             return TRUE;
     }
@@ -2544,6 +2552,7 @@ BOOL __EXPORT ScGridWindow::QueryDrop( DropEvent& rEvt )
     Point aPos = rEvt.GetPosPixel();
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
 
+#ifdef OLD_DND
     ScRange aDropRange = lcl_MakeDropRange(nPosX,nPosY,nTab,rData);
     ScRange aSourceRange =lcl_MakeDropRange(rData.nStartX,rData.nStartY,nTab,rData);
 
@@ -2557,13 +2566,16 @@ BOOL __EXPORT ScGridWindow::QueryDrop( DropEvent& rEvt )
         }
         return FALSE;
     }
+#endif
 
     BOOL bReturn = FALSE;
 
-    if (rData.pDoc)
+    if (rData.pCellTransfer)
     {
+#ifdef OLD_DND
         if ( rData.nSizeX<=MAXCOL && rData.nSizeY<=MAXROW && !rEvt.IsLeaveWindow() )
             DropScroll( rEvt.GetPosPixel() );
+#endif
         bReturn = QueryDropPrivate( rEvt );
     }
     else
@@ -2592,9 +2604,11 @@ BOOL __EXPORT ScGridWindow::QueryDrop( DropEvent& rEvt )
         {
             //  wenn nicht im Dokument, dann Default = COPY
 
+#ifdef OLD_DND
             if ( !IsMyModel(rData.pSdrView) )               // Drawing innerhalb des Doc?
                 if ( rEvt.IsDefaultAction() && rEvt.GetAction() == DROP_MOVE )
                     rEvt.SetAction( DROP_COPY );
+#endif
 
             SvDataObjectRef pObject = SvDataObject::PasteDragServer(rEvt);
             DropAction eAction = rEvt.GetAction();
@@ -2602,7 +2616,7 @@ BOOL __EXPORT ScGridWindow::QueryDrop( DropEvent& rEvt )
             ScDocument* pThisDoc = pViewData->GetDocument();
             SdrObject* pHitObj = pThisDoc->GetObjectAtPoint(
                 pViewData->GetTabNo(), PixelToLogic(rEvt.GetPosPixel()) );
-            if ( pHitObj && eAction == DROP_LINK && !rData.pSdrModel )
+            if ( pHitObj && eAction == DROP_LINK && !rData.pDrawTransfer )
             {
                 if ( pObject->HasFormat(SOT_FORMATSTR_ID_SVXB)
                     || pObject->HasFormat(FORMAT_GDIMETAFILE)
@@ -2684,6 +2698,8 @@ BOOL ScGridWindow::DropPrivate( const DropEvent& rEvt )
     const ScDragData& rData = pScMod->GetDragData();
 
     BOOL bRet = TRUE;
+
+#ifdef OLD_DND
     ScDocument* pSourceDoc = rData.pDoc;
     ScDocument* pThisDoc   = pViewData->GetDocument();
     ScViewFunc* pView      = pViewData->GetView();
@@ -2847,6 +2863,7 @@ BOOL ScGridWindow::DropPrivate( const DropEvent& rEvt )
             }
         }
     }
+#endif
 
     bDragRect = FALSE;                  // bei naechstem IsLeave-QueryDrop nicht zeichnen
     return bRet;
@@ -2861,7 +2878,7 @@ BOOL __EXPORT ScGridWindow::Drop( const DropEvent& rEvt )
 
     ScModule* pScMod = SC_MOD();
     const ScDragData& rData = pScMod->GetDragData();
-    if (rData.pDoc)
+    if (rData.pCellTransfer)
         return DropPrivate( rEvt );
 
     if ( rData.aLinkDoc.Len() )
@@ -2905,6 +2922,7 @@ BOOL __EXPORT ScGridWindow::Drop( const DropEvent& rEvt )
 
     Point aLogicPos = PixelToLogic(rEvt.GetPosPixel());
 
+#ifdef OLD_DND
     if (rData.pSdrModel)
     {
         bPasteIsMove = (rEvt.GetAction() == DROP_MOVE && !(rData.nFlags & SC_DROP_NAVIGATOR));
@@ -2913,6 +2931,7 @@ BOOL __EXPORT ScGridWindow::Drop( const DropEvent& rEvt )
         bPasteIsMove = FALSE;
         return TRUE;
     }
+#endif
 
     Point   aPos = rEvt.GetPosPixel();
     short   nPosX;
@@ -2956,6 +2975,314 @@ BOOL __EXPORT ScGridWindow::Drop( const DropEvent& rEvt )
     bPasteIsDrop = FALSE;
 
     return bRet;
+}
+
+//--------------------------------------------------------
+
+sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
+{
+    if ( rEvt.mbLeaving )
+    {
+        if (bDragRect)
+            pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+        bDragRect = FALSE;
+        return rEvt.mnAction;
+    }
+
+    const ScDragData& rData = SC_MOD()->GetDragData();
+    if ( rData.pCellTransfer )
+    {
+        Point aPos = rEvt.maPosPixel;
+
+        ScDocument* pSourceDoc = NULL;      //! rData.pDoc;
+        ScDocument* pThisDoc   = pViewData->GetDocument();
+        if (pSourceDoc == pThisDoc)
+        {
+            if ( pThisDoc->HasChartAtPoint(pViewData->GetTabNo(), PixelToLogic(aPos)) )
+            {
+                if (bDragRect)          // Rechteck loeschen
+                {
+                    pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+                    bDragRect = FALSE;
+                }
+
+                //! highlight chart? (selection border?)
+
+                sal_Int8 nRet = rEvt.mnAction;
+//!             if ( rEvt.GetAction() == DROP_LINK )
+//!                 bOk = rEvt.SetAction( DROP_COPY );          // can't link onto chart
+                return nRet;
+            }
+        }
+//!     else
+//!         if ( rEvt.GetAction() == DROP_MOVE )
+//!             rEvt.SetAction( DROP_COPY );                    // different doc: default=COPY
+
+
+//!     if ( rData.nFlags & SC_DROP_TABLE )                     // whole sheet?
+//!     {
+//!         BOOL bOk = pThisDoc->IsDocEditable();
+//!         return bOk ? rEvt.mnAction : 0;                     // don't draw selection frame
+//!     }
+
+        short   nPosX;
+        short   nPosY;
+        pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
+
+        ScRange aSourceRange = rData.pCellTransfer->GetRange();
+        USHORT nSizeX = aSourceRange.aEnd.Col() - aSourceRange.aStart.Col() + 1;
+        USHORT nSizeY = aSourceRange.aEnd.Row() - aSourceRange.aStart.Row() + 1;
+
+        short nNewDragX = nPosX - rData.pCellTransfer->GetDragHandleX();
+        if (nNewDragX<0) nNewDragX=0;
+        if (nNewDragX+(nSizeX-1) > MAXCOL)
+            nNewDragX = MAXCOL-(nSizeX-1);
+        short nNewDragY = nPosY - rData.pCellTransfer->GetDragHandleY();
+        if (nNewDragY<0) nNewDragY=0;
+        if (nNewDragY+(nSizeY-1) > MAXROW)
+            nNewDragY = MAXROW-(nSizeY-1);
+
+        if ( nNewDragX != (short) nDragStartX || nNewDragY != (short) nDragStartY || !bDragRect )
+        {
+            if (bDragRect)
+                pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+
+            nDragStartX = nNewDragX;
+            nDragStartY = nNewDragY;
+            nDragEndX = nDragStartX+nSizeX-1;
+            nDragEndY = nDragStartY+nSizeY-1;
+            bDragRect = TRUE;
+
+            pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+
+            //  Zielposition als Tip-Hilfe anzeigen
+#if 0
+            if (Help::IsQuickHelpEnabled())
+            {
+                USHORT nTab = pViewData->GetTabNo();
+                ScRange aRange( nDragStartX, nDragStartY, nTab, nDragEndX, nDragEndY, nTab );
+                String aHelpStr;
+                aRange.Format( aHelpStr, SCA_VALID );   // nicht-3D
+
+                Point aPos = Pointer::GetPosPixel();
+                USHORT nAlign = QUICKHELP_BOTTOM|QUICKHELP_RIGHT;
+                Rectangle aRect( aPos, aPos );
+                Help::ShowQuickHelp(aRect, aHelpStr, nAlign);
+            }
+#endif
+        }
+    }
+
+    return rEvt.mnAction;
+}
+
+sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    const ScDragData& rData = SC_MOD()->GetDragData();
+    if ( rEvt.mbLeaving )
+    {
+        DrawMarkDropObj( NULL );
+        if ( rData.pCellTransfer )
+            return AcceptPrivateDrop( rEvt );   // hide drop marker for internal D&D
+        else
+            return rEvt.mnAction;
+    }
+
+    if ( pViewData->GetDocShell()->IsReadOnly() )
+        return DND_ACTION_NONE;
+
+    sal_Int8 nRet = DND_ACTION_NONE;
+
+    if (rData.pCellTransfer)
+    {
+#ifdef OLD_DND
+        if ( rData.nSizeX<=MAXCOL && rData.nSizeY<=MAXROW && !rEvt.IsLeaveWindow() )
+            DropScroll( rEvt.GetPosPixel() );
+#endif
+        nRet = AcceptPrivateDrop( rEvt );
+    }
+    else
+    {
+        switch ( rEvt.mnAction )
+        {
+            case DND_ACTION_COPY:
+            case DND_ACTION_MOVE:
+            case DND_ACTION_COPYMOVE:
+                {
+                    BOOL bMove = ( rEvt.mnAction == DND_ACTION_MOVE );
+                    if ( IsDropFormatSupported( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
+                         IsDropFormatSupported( SOT_FORMAT_STRING ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_SYLK ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_LINK ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_HTML ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_HTML_SIMPLE ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_DIF ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB ) ||
+                         IsDropFormatSupported( SOT_FORMAT_RTF ) ||
+                         IsDropFormatSupported( SOT_FORMAT_GDIMETAFILE ) ||
+                         IsDropFormatSupported( SOT_FORMAT_BITMAP ) ||
+                         IsDropFormatSupported( SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) ||
+                         ( !bMove && IsDropFormatSupported( SOT_FORMAT_FILE ) ) )
+                    {
+                        nRet = rEvt.mnAction;
+                    }
+                }
+                //! allow SOT_FORMAT_FILE and INetBookmark formats if not moving
+                break;
+        }
+    }
+
+    return nRet;
+}
+
+ULONG lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xTransfer )
+{
+    ULONG nFormatId = 0;
+    TransferableDataHelper aDataHelper( xTransfer );
+
+    //! if INetBookmark but not SOT_FORMATSTR_ID_SBA_DATAEXCHANGE, use INetBookmark
+
+    if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) )
+        nFormatId = SOT_FORMATSTR_ID_DRAWING;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
+        nFormatId = SOT_FORMATSTR_ID_SVXB;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ) )
+    {
+        //! if this is a Writer object, use RTF
+        nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE;
+    }
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ) )
+        nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) )
+        nFormatId = SOT_FORMATSTR_ID_SBA_DATAEXCHANGE;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) )
+        nFormatId = SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_BIFF_5 ) )
+        nFormatId = SOT_FORMATSTR_ID_BIFF_5;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) )
+        nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) )
+        nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE_OLE;
+    else if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
+        nFormatId = SOT_FORMAT_RTF;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML ) )
+        nFormatId = SOT_FORMATSTR_ID_HTML;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML_SIMPLE ) )
+        nFormatId = SOT_FORMATSTR_ID_HTML_SIMPLE;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SYLK ) )
+        nFormatId = SOT_FORMATSTR_ID_SYLK;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK ) )
+        nFormatId = SOT_FORMATSTR_ID_LINK;
+    else if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
+        nFormatId = SOT_FORMAT_STRING;
+    else if ( aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) )
+        nFormatId = SOT_FORMAT_GDIMETAFILE;
+    else if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) )
+        nFormatId = SOT_FORMAT_BITMAP;
+    else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE ) )
+        nFormatId = SOT_FORMAT_FILE;
+
+    return nFormatId;
+}
+
+sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
+{
+    // hide drop marker
+    if (bDragRect)
+        pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
+    bDragRect = FALSE;
+
+    ScModule* pScMod = SC_MOD();
+    const ScDragData& rData = pScMod->GetDragData();
+    ScTransferObj* pTransObj = rData.pCellTransfer;
+    if ( !pTransObj )
+        return 0;
+
+//! ScDocument* pSourceDoc = ...
+    ScDocument* pSourceDoc = pViewData->GetDocument();      //! Test !!!
+    ScDocument* pThisDoc   = pViewData->GetDocument();
+    ScViewFunc* pView      = pViewData->GetView();
+    USHORT nFlags = 0;  //! rData.nFlags
+
+    BOOL bIsMove = ( rEvt.mnAction == DND_ACTION_MOVE );
+    BOOL bIsLink = ( rEvt.mnAction == DND_ACTION_LINK );
+
+    ScRange aSource = pTransObj->GetRange();
+    BOOL bDone = FALSE;
+
+    if (pSourceDoc == pThisDoc)
+    {
+        if ( nFlags & SC_DROP_TABLE )           // whole sheet?
+        {
+            if ( pThisDoc->IsDocEditable() )
+            {
+                USHORT nSrcTab = aSource.aStart.Tab();
+                USHORT nDestTab = pViewData->GetTabNo();
+                pViewData->GetDocShell()->MoveTable( nSrcTab, nDestTab, !bIsMove, TRUE );   // with Undo
+                pView->SetTabNo( nDestTab, TRUE );
+                bDone = TRUE;
+            }
+        }
+        else                                        // move/copy block
+        {
+            Point aPos = rEvt.maPosPixel;
+            String aChartName;
+            if (pThisDoc->HasChartAtPoint( pViewData->GetTabNo(), PixelToLogic(aPos), &aChartName ))
+            {
+                String aRangeName;
+                aSource.Format( aRangeName, SCR_ABS_3D, pThisDoc );
+                SfxStringItem aNameItem( SID_CHART_NAME, aChartName );
+                SfxStringItem aRangeItem( SID_CHART_SOURCE, aRangeName );
+                USHORT nId = bIsMove ? SID_CHART_SOURCE : SID_CHART_ADDSOURCE;
+                pViewData->GetDispatcher().Execute( nId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                            &aRangeItem, &aNameItem, (void*) NULL );
+            }
+            else if ( nDragStartX != aSource.aStart.Col() || nDragStartY != aSource.aStart.Row() ||
+                        aSource.aStart.Tab() != pViewData->GetTabNo() )
+            {
+                ScAddress aDest( nDragStartX, nDragStartY, pViewData->GetTabNo() );
+                if ( bIsLink )
+                    pView->LinkBlock( aSource, aDest );
+                else
+                    pView->MoveBlockTo( aSource, aDest, bIsMove );
+            }
+
+            pScMod->SetDragIntern();            // don't delete source in ExecuteDrag
+            bDone = TRUE;
+        }
+    }
+
+    sal_Int8 nRet = bDone ? rEvt.mnAction : DND_ACTION_NONE;
+    return nRet;
+}
+
+sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    DrawMarkDropObj( NULL );    // drawing layer
+
+    ScModule* pScMod = SC_MOD();
+    const ScDragData& rData = pScMod->GetDragData();
+    if (rData.pCellTransfer)
+        return ExecutePrivateDrop( rEvt );
+
+    Point   aPos = rEvt.maPosPixel;
+    short   nPosX;
+    short   nPosY;
+    pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
+    Point aLogicPos = PixelToLogic( aPos );
+
+    BOOL bDone = FALSE;
+    ULONG nFormatId = lcl_GetDropFormatId( rEvt.maDropEvent.Transferable );
+    if ( nFormatId )
+        bDone = pViewData->GetView()->PasteDataFormat(
+                    nFormatId, rEvt.maDropEvent.Transferable, nPosX, nPosY, &aLogicPos );
+
+    sal_Int8 nRet = bDone ? rEvt.mnAction : DND_ACTION_NONE;
+    return nRet;
 }
 
 //--------------------------------------------------------

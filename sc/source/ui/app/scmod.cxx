@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:12:19 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,6 +637,9 @@ void ScModule::GetState( SfxItemSet& rSet )
 void ScModule::SetDragObject( const ScMarkData& rMarkData,const ScRange& rRange,
                         USHORT nHandleX, USHORT nHandleY, ScDocument* pDoc, USHORT nFlags )
 {
+    DBG_ERROR("SetDragObject is obsolete");
+
+#ifdef OLD_DND
     aDragData.aMarkData = rMarkData;
     USHORT nStartX = rRange.aStart.Col();
     USHORT nStartY = rRange.aStart.Row();
@@ -659,27 +662,47 @@ void ScModule::SetDragObject( const ScMarkData& rMarkData,const ScRange& rRange,
     aDragData.pJumpLocalDoc = NULL;
     aDragData.aJumpTarget.Erase();
     aDragData.aJumpText.Erase();
+#endif
 }
 
 void ScModule::ResetDragObject()
 {
-    SetDragObject(ScMarkData(),ScRange(),0,0,0,0 );
+    aDragData.pCellTransfer = NULL;
+    aDragData.pDrawTransfer = NULL;
+
+    aDragData.aLinkDoc.Erase();
+    aDragData.aLinkTable.Erase();
+    aDragData.aLinkArea.Erase();
+    aDragData.pJumpLocalDoc = NULL;
+    aDragData.aJumpTarget.Erase();
+    aDragData.aJumpText.Erase();
 
     bDragWasIntern = FALSE;
 }
 
+void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
+{
+    ResetDragObject();
+    aDragData.pCellTransfer = pCellObj;
+    aDragData.pDrawTransfer = pDrawObj;
+}
+
 void ScModule::SetDragObject( SdrModel* pModel, SdrView* pView, USHORT nFlags )
 {
+    DBG_ERROR("SetDragObject is obsolete");
+
+#ifdef OLD_DND
     SetDragObject(ScMarkData(),ScRange(),0,0,0,0 );
 
     aDragData.pSdrModel = pModel;
     aDragData.pSdrView  = pView;
     aDragData.nFlags    = nFlags;
+#endif
 }
 
 void ScModule::SetDragLink( const String& rDoc, const String& rTab, const String& rArea )
 {
-    SetDragObject(ScMarkData(),ScRange(),0,0,0,0 );
+    ResetDragObject();
 
     aDragData.aLinkDoc   = rDoc;
     aDragData.aLinkTable = rTab;
@@ -688,7 +711,7 @@ void ScModule::SetDragLink( const String& rDoc, const String& rTab, const String
 
 void ScModule::SetDragJump( ScDocument* pLocalDoc, const String& rTarget, const String& rText )
 {
-    SetDragObject( ScMarkData(),ScRange(),0,0,0,0 );
+    ResetDragObject();
 
     aDragData.pJumpLocalDoc = pLocalDoc;
     aDragData.aJumpTarget = rTarget;

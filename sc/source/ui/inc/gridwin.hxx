@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-20 16:50:16 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+
 // nur auf dem MAC Auto-Filter per Popup
 #ifdef MAC
 #define AUTOFILTER_POPUP
@@ -73,9 +77,17 @@
 #undef AUTOFILTER_POPUP
 #endif
 
+#ifndef SC_VIEWUTIL_HXX
 #include "viewutil.hxx"
+#endif
+
+#ifndef SC_VIEWDATA_HXX
 #include "viewdata.hxx"
+#endif
+
+#ifndef SC_CBUTTON_HXX
 #include "cbutton.hxx"
+#endif
 
 // ---------------------------------------------------------------------------
 
@@ -129,7 +141,7 @@ public:
 };
 
 
-class ScGridWindow : public Window
+class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHelper
 {
     //  ScFilterListBox wird immer fuer Auswahlliste benutzt
     friend class ScFilterListBox;
@@ -244,6 +256,9 @@ private:
     BOOL            QueryDropPrivate( DropEvent& rEvt );
     BOOL            DropPrivate( const DropEvent& rEvt );
 
+    sal_Int8        AcceptPrivateDrop( const AcceptDropEvent& rEvt );
+    sal_Int8        ExecutePrivateDrop( const ExecuteDropEvent& rEvt );
+
     BOOL            DrawMouseButtonDown(const MouseEvent& rMEvt);
     BOOL            DrawMouseButtonUp(const MouseEvent& rMEvt);
     BOOL            DrawMouseMove(const MouseEvent& rMEvt);
@@ -297,6 +312,10 @@ protected:
 
     virtual void    RequestHelp( const HelpEvent& rEvt );
     virtual void    Command( const CommandEvent& rCEvt );
+
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
 public:
     ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );

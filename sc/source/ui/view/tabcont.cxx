@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:37:38 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,6 +461,7 @@ BOOL __EXPORT ScTabControl::Drop( const DropEvent& rEvt )
 {
     EndSwitchPage();
 
+#ifdef OLD_DND
     ScModule* pScMod = SC_MOD();
     ScDocument* pSourceDoc = pScMod->GetDragData().pDoc;
     if (pSourceDoc && bDragging)
@@ -478,6 +479,7 @@ BOOL __EXPORT ScTabControl::Drop( const DropEvent& rEvt )
         else
             Sound::Beep();
     }
+#endif
 
     return FALSE;
 }

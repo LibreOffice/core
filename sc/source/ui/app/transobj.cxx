@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:14:35 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,9 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
 
 ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc ) :
     aObjDesc( rDesc ),
-    pDoc( pClipDoc )
+    pDoc( pClipDoc ),
+    nDragHandleX( 0 ),
+    nDragHandleY( 0 )
 {
     DBG_ASSERT(pDoc->IsClipboard(), "wrong document");
 
@@ -199,6 +201,11 @@ ScTransferObj::~ScTransferObj()
     {
         DBG_ERROR("ScTransferObj wasn't released");
         pScMod->SetClipObject( NULL, NULL );
+    }
+    if ( pScMod->GetDragData().pCellTransfer == this )
+    {
+        DBG_ERROR("ScTransferObj wasn't released");
+        pScMod->ResetDragObject();
     }
 
     delete pDoc;        // ScTransferObj is owner of clipboard document
@@ -420,6 +427,26 @@ void ScTransferObj::ObjectReleased()
         pScMod->SetClipObject( NULL, NULL );
 
     TransferableHelper::ObjectReleased();
+}
+
+void ScTransferObj::DragFinished( sal_Int8 nDropAction )
+{
+    if ( nDropAction == DND_ACTION_MOVE )
+    {
+        //! ...
+    }
+
+    ScModule* pScMod = SC_MOD();
+    if ( pScMod->GetDragData().pCellTransfer == this )
+        pScMod->ResetDragObject();
+
+    TransferableHelper::DragFinished( nDropAction );
+}
+
+void ScTransferObj::SetDragHandlePos( USHORT nX, USHORT nY )
+{
+    nDragHandleX = nX;
+    nDragHandleY = nY;
 }
 
 //

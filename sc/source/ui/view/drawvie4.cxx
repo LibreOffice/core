@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:27:31 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "docsh.hxx"
-#include "dataobj.hxx"
+//#include "dataobj.hxx"
 #include "drwtrans.hxx"
 #include "drawutil.hxx"
 #include "scmod.hxx"
@@ -494,7 +494,8 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         SdrView aEditView( GetModel() );
         lcl_InitMarks( aEditView, *this, nTab );
 
-        BegUndo( ScGlobal::GetRscString( STR_UNDO_DRAGDROP ) );
+        //BegUndo( ScGlobal::GetRscString( STR_UNDO_DRAGDROP ) );
+        //! in DragDone!
 
         //---------------------------------------------------------
         ScDocShellRef aDragShellRef;
@@ -506,47 +507,63 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         //---------------------------------------------------------
 
         ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
-        SdrModel* pDragModel = GetAllMarkedModel();
+        SdrModel* pModel = GetAllMarkedModel();
         ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-        SvDataObjectRef pDragServer = new ScDataObject(pDragModel,
-                                                        pViewData->GetDocShell(), bOneOle);
-        pScMod->SetDragObject(pDragModel, &aEditView, 0);
-        DropAction eDropAction = pDragServer->ExecuteDrag(pWindow,
-                                        POINTER_MOVEDATA, POINTER_COPYDATA, POINTER_LINKDATA,
-                                        DRAG_ALL, &aRegion);
-        BOOL bIntern = pScMod->GetDragIntern();
-        pScMod->ResetDragObject();
-        pDragServer.Clear();            // enthaelt Referenzen auf pDragShell
+        ScDocShell* pDocSh = pViewData->GetDocShell();
 
-        //---------------------------------------------------------
+        TransferableObjectDescriptor aObjDesc;
+        pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+        aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+        // maSize is set in ScDrawTransferObj ctor
 
-        switch (eDropAction)
-        {
-            case DROP_MOVE:
-            case DROP_DISCARD:
-                if (!bIntern)
-                    aEditView.DeleteMarked();
-                break;
+        ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
+        uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-            case DROP_NONE:
-            case DROP_COPY:
-            case DROP_LINK:
-            case DROP_PRINT:
-                break;
+        //pScMod->SetDragObject(pDragModel, &aEditView, 0);
+        //! keep pTransferObj pointer instead
 
-            default:
-                break;
-        }
-
-        if (eDropAction != DROP_NONE)
-            bReturn = TRUE;
-
-        EndUndo();
+        pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
 
     return bReturn;
 }
+
+#if 0
+
+void ScDrawView::DragDone()
+{
+    BOOL bIntern = pScMod->GetDragIntern();
+    pScMod->ResetDragObject();
+    pDragServer.Clear();            // enthaelt Referenzen auf pDragShell
+
+    //---------------------------------------------------------
+
+    switch (eDropAction)
+    {
+        case DROP_MOVE:
+        case DROP_DISCARD:
+            if (!bIntern)
+                aEditView.DeleteMarked();
+            break;
+
+        case DROP_NONE:
+        case DROP_COPY:
+        case DROP_LINK:
+        case DROP_PRINT:
+            break;
+
+        default:
+            break;
+    }
+
+    if (eDropAction != DROP_NONE)
+        bReturn = TRUE;
+
+    EndUndo();
+}
+
+#endif
 
 void ScDrawView::DoCopy()
 {

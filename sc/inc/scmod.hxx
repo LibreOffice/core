@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:11:26 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,19 +126,23 @@ class ScDrawTransferObj;
 
 struct ScDragData
 {
-    ScDocument*     pDoc;
-    ScMarkData      aMarkData;
-    USHORT          nStartX, nStartY, nTabNo, nSizeX, nSizeY;
-    USHORT          nHandleX, nHandleY;
-    USHORT          nFlags;
-    SdrModel*       pSdrModel;
-    SdrView*        pSdrView;
-    String          aLinkDoc;
-    String          aLinkTable;
-    String          aLinkArea;
-    ScDocument*     pJumpLocalDoc;
-    String          aJumpTarget;
-    String          aJumpText;
+//  ScDocument*     pDoc;
+//  ScMarkData      aMarkData;
+//  USHORT          nStartX, nStartY, nTabNo, nSizeX, nSizeY;
+//  USHORT          nHandleX, nHandleY;
+//  USHORT          nFlags;
+//  SdrModel*       pSdrModel;
+//  SdrView*        pSdrView;
+
+    ScTransferObj*      pCellTransfer;
+    ScDrawTransferObj*  pDrawTransfer;
+
+    String              aLinkDoc;
+    String              aLinkTable;
+    String              aLinkArea;
+    ScDocument*         pJumpLocalDoc;
+    String              aJumpTarget;
+    String              aJumpText;
 };
 
 struct ScClipData
@@ -200,6 +204,7 @@ public:
 
     //  Drag & Drop:
     const ScDragData&   GetDragData() const     { return aDragData; }
+    void                SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
     void                ResetDragObject();
     void                SetDragObject( const ScMarkData& rMarkData, const ScRange& rRange,
                                         USHORT nHandleX, USHORT nHandleY,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:15:49 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ private:
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
     SvEmbeddedObjectRef             aDocShellRef;
+    USHORT                          nDragHandleX;
+    USHORT                          nDragHandleY;
 
     void        InitDocShell();
     static void StripRefs( ScDocument* pDoc, USHORT nStartX, USHORT nStartY,
@@ -102,8 +104,14 @@ public:
     virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        ObjectReleased();
+    virtual void        DragFinished( sal_Int8 nDropAction );
 
-    ScDocument*         GetDocument()   { return pDoc; }
+    ScDocument*         GetDocument()           { return pDoc; }        // owned by ScTransferObj
+    const ScRange&      GetRange() const        { return aBlock; }
+    USHORT              GetDragHandleX() const  { return nDragHandleX; }
+    USHORT              GetDragHandleY() const  { return nDragHandleY; }
+
+    void                SetDragHandlePos( USHORT nX, USHORT nY );
 
     static ScTransferObj* GetOwnClipboard();
 };

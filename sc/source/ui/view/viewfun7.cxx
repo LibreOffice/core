@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:53:32 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,6 +432,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel, BOOL bGrou
         pRef->SetMapMode( MapMode(MAP_100TH_MM) );
     }
 
+#ifdef OLD_DND
     SdrView* pDragEditView = SC_MOD()->GetDragData().pSdrView;
     if (pDragEditView)
     {
@@ -439,11 +440,13 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel, BOOL bGrou
         if (aPos.X() < 0) aPos.X() = 0;
         if (aPos.Y() < 0) aPos.Y() = 0;
     }
+#endif
 
     ScDrawView* pDrawView = GetScDrawView();
     if (bGroup)
         pDrawView->BegUndo( ScGlobal::GetRscString( STR_UNDO_PASTE ) );
 
+#ifdef OLD_DND
     BOOL bSameDoc = ( pDragEditView && pDragEditView->GetModel() == pDrawView->GetModel() );
     if (bSameDoc)
     {
@@ -495,6 +498,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel, BOOL bGrou
         }
     }
     else
+#endif
     {
         bPasteIsMove = FALSE;       // kein internes Verschieben passiert
 

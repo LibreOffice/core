@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,16 +67,22 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <tools/urlobj.hxx>
 #include <vcl/sound.hxx>
+#include <sfx2/docfile.hxx>
 
 #include "select.hxx"
 #include "sc.hrc"
 #include "tabvwsh.hxx"
 #include "scmod.hxx"
 #include "document.hxx"
-#include "dataobj.hxx"
+//#include "dataobj.hxx"
+#include "transobj.hxx"
+#include "docsh.hxx"
 
 extern USHORT nScFillModeMouseModifier;             // global.cxx
+
+using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -141,6 +147,33 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
         rMark.MarkToSimple();
         if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
         {
+            ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+            pViewData->GetView()->CopyToClip( pClipDoc, FALSE );
+
+            ScDocShell* pDocSh = pViewData->GetDocShell();
+            TransferableObjectDescriptor aObjDesc;
+            pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+            aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+            // maSize is set in ScTransferObj ctor
+
+            ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
+            uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+
+            // set position of dragged cell within range
+            ScRange aMarkRange = pTransferObj->GetRange();
+            USHORT nStartX = aMarkRange.aStart.Col();
+            USHORT nStartY = aMarkRange.aStart.Row();
+            USHORT nHandleX = (nPosX >= (short) nStartX) ? nPosX - nStartX : 0;
+            USHORT nHandleY = (nPosY >= (short) nStartY) ? nPosY - nStartY : 0;
+            pTransferObj->SetDragHandlePos( nHandleX, nHandleY );
+
+            Window* pWindow = pViewData->GetActiveWin();
+            SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
+            pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
+
+#if 0
+            // old api:
+
             ScDocument* pDoc = pViewData->GetDocument();
             ScRange aMarkRange;
             rMark.GetMarkArea( aMarkRange );
@@ -182,6 +215,7 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
                 default:
                     break;
             }
+#endif
 
             return;         // Dragging passiert
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-21 18:10:05 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 19:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,8 +1019,10 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
 
                     USHORT nFirstCol, nFirstRow, nLastCol, nLastRow;
-                    pSrcDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow );
-                    pSrcDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
+                    if ( pSrcDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
+                        pSrcDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
+                    else
+                        nFirstCol = nFirstRow = nLastCol = nLastRow = 0;
                     pSrcDoc->CopyToClip( nFirstCol, nFirstRow, nLastCol, nLastRow,
                                             FALSE, pClipDoc, FALSE, &aSrcMark );
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
@@ -1277,8 +1279,10 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 {
                     DBG_ERROR("no dimension");  //! possible?
                     USHORT nFirstCol, nFirstRow, nLastCol, nLastRow;
-                    pInsDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow );
-                    pInsDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
+                    if ( pInsDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
+                        pInsDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
+                    else
+                        nFirstCol = nFirstRow = nLastCol = nLastRow = 0;
                     aSource = ScRange( nFirstCol, nFirstRow, nSrcTab,
                                         nLastCol, nLastRow, nSrcTab );
                 }
