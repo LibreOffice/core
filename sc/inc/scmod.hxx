@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-02 18:26:53 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 13:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@ class SdrView;
 class EditView;
 class SfxErrorHandler;
 class SvxErrorHandler;
+class SvtAccessibilityOptions;
+
+namespace svx { class ColorConfig; }
 
 class ScRange;
 class ScDocument;
@@ -166,6 +169,8 @@ class ScModule: public ScModuleDummy, public SfxListener
     ScInputCfg*         pInputCfg;
     ScPrintCfg*         pPrintCfg;
     ScNavipiCfg*        pNavipiCfg;
+    svx::ColorConfig*   pColorConfig;
+    SvtAccessibilityOptions* pAccessOptions;
     SfxErrorHandler*    pErrorHdl;
     SvxErrorHandler*    pSvxErrorHdl;
     ScFormEditData*     pFormEditData;
@@ -243,6 +248,8 @@ public:
     static BOOL         HasThesaurusLanguage( USHORT nLang );
 
     ScNavipiCfg&        GetNavipiCfg();
+    svx::ColorConfig&   GetColorConfig();
+    SvtAccessibilityOptions& GetAccessOptions();
 
     void                ModifyOptions( const SfxItemSet& rOptSet );
 

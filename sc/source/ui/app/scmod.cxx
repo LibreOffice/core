@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-28 11:47:54 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 13:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,13 @@
 #include <offmgr/hyprlink.hxx>
 #include <offmgr/osplcfg.hxx>
 #include <svtools/ehdl.hxx>
+#include <svtools/accessibilityoptions.hxx>
 #include <vcl/status.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/macrconf.hxx>
 #include <svx/langitem.hxx>
+#include <svx/colorcfg.hxx>
 
 #include <svtools/whiter.hxx>
 #include <offmgr/app.hxx>
@@ -107,6 +109,7 @@
 #include "printopt.hxx"
 #include "navicfg.hxx"
 #include "tabvwsh.hxx"
+#include "prevwsh.hxx"
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 #include "uiitems.hxx"
@@ -161,6 +164,8 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pInputCfg( NULL ),
     pPrintCfg( NULL ),
     pNavipiCfg( NULL ),
+    pColorConfig( NULL ),
+    pAccessOptions( NULL ),
     pTeamDlg( NULL ),
     nCurRefDlgId( 0 ),
     pErrorHdl( NULL ),
@@ -221,11 +226,38 @@ ScModule::~ScModule()
 
 void ScModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.ISA(SfxSimpleHint) &&
-        ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DEINITIALIZING )
+    if ( rHint.ISA(SfxSimpleHint) )
     {
-        //  ConfigItems must be removed before ConfigManager
-        DeleteCfg();
+        ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
+        if ( nHintId == SFX_HINT_DEINITIALIZING )
+        {
+            //  ConfigItems must be removed before ConfigManager
+            DeleteCfg();
+        }
+        else if ( nHintId == SFX_HINT_COLORS_CHANGED || nHintId == SFX_HINT_ACCESSIBILITY_CHANGED )
+        {
+            //  force all views to repaint, using the new options
+
+            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+            while(pViewShell)
+            {
+                if ( pViewShell->ISA(ScTabViewShell) )
+                {
+                    ScTabViewShell* pViewSh = (ScTabViewShell*)pViewShell;
+                    pViewSh->PaintGrid();
+                    pViewSh->PaintTop();
+                    pViewSh->PaintLeft();
+                    pViewSh->PaintExtras();
+                }
+                else if ( pViewShell->ISA(ScPreviewShell) )
+                {
+                    Window* pWin = pViewShell->GetWindow();
+                    if (pWin)
+                        pWin->Invalidate();
+                }
+                pViewShell = SfxViewShell::GetNext( *pViewShell );
+            }
+        }
     }
 }
 
@@ -239,6 +271,17 @@ void ScModule::DeleteCfg()
     DELETEZ( pInputCfg );
     DELETEZ( pPrintCfg );
     DELETEZ( pNavipiCfg );
+
+    if ( pColorConfig )
+    {
+        EndListening(*pColorConfig);
+        DELETEZ( pColorConfig );
+    }
+    if ( pAccessOptions )
+    {
+        EndListening(*pAccessOptions);
+        DELETEZ( pAccessOptions );
+    }
 }
 
 //------------------------------------------------------------------
@@ -822,6 +865,28 @@ ScNavipiCfg& ScModule::GetNavipiCfg()
         pNavipiCfg = new ScNavipiCfg;
 
     return *pNavipiCfg;
+}
+
+svx::ColorConfig& ScModule::GetColorConfig()
+{
+    if ( !pColorConfig )
+    {
+        pColorConfig = new svx::ColorConfig;
+        StartListening(*pColorConfig);
+    }
+
+    return *pColorConfig;
+}
+
+SvtAccessibilityOptions& ScModule::GetAccessOptions()
+{
+    if ( !pAccessOptions )
+    {
+        pAccessOptions = new SvtAccessibilityOptions;
+        StartListening(*pAccessOptions);
+    }
+
+    return *pAccessOptions;
 }
 
 //------------------------------------------------------------------
