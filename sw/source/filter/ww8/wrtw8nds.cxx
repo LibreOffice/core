@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:51:28 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2207,8 +2207,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         else
         {
             const SwFmtFrmSize& rLSz = pLineFmt->GetFrmSize();
-            if( ATT_VAR_SIZE != rLSz.GetSizeType() && rLSz.GetHeight() )
-                nHeight = ATT_MIN_SIZE == rLSz.GetSizeType()
+            if( ATT_VAR_SIZE != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
+                nHeight = ATT_MIN_SIZE == rLSz.GetHeightSizeType()
                                                 ? rLSz.GetHeight()
                                                 : -rLSz.GetHeight();
         }
