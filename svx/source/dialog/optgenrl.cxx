@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-06 11:36:48 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,9 @@
 #include "dialogs.hrc"
 #include "optgenrl.hrc"
 
-#include "adritem.hxx"
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
+#endif
 #include "cuioptgenrl.hxx"
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
@@ -259,31 +261,7 @@ BOOL SvxGeneralTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
     BOOL bModified = FALSE, bChgAddr = FALSE;
     const SfxItemSet& rOldSet = GetItemSet();
-    String sAddress = GetAddress_Impl();
-
-    if ( rOldSet.GetItemState( GetWhich( SID_ATTR_ADDRESS ) ) >= SFX_ITEM_DEFAULT )
-    {
-        const SvxAddressItem& rItem =
-            (const SvxAddressItem&)rOldSet.Get( GetWhich( SID_ATTR_ADDRESS ) );
-
-        if ( ( rItem.GetValue() != sAddress )                   ||
-             ( rItem.GetName() != aName.GetText() )             ||
-             ( rItem.GetFirstName() != aFirstName.GetText() )   ||
-             ( rItem.GetShortName() != aShortName.GetText() )       )
-            bChgAddr = TRUE;
-    }
-    else
-        bChgAddr = TRUE;
-
-    if ( bChgAddr )
-    {
-        SvxAddressItem rItem( sAddress, aShortName.GetText(),
-                              aFirstName.GetText(), aName.GetText(),
-                              GetWhich( SID_ATTR_ADDRESS ) );
-        rCoreSet.Put( rItem );
-        bModified |= TRUE;
-    }
-
+    bModified |= GetAddress_Impl();
     SvtSaveOptions aSaveOpt;
     if ( aUseDataCB.IsChecked() != aSaveOpt.IsUseUserData() )
     {
@@ -297,16 +275,9 @@ BOOL SvxGeneralTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
 void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
 {
-    USHORT nWhich = GetWhich( SID_ATTR_ADDRESS );
+    SetAddress_Impl();
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
-    {
-        const SvxAddressItem& rItem = (SvxAddressItem&)rSet.Get( nWhich );
-        SetAddress_Impl( rItem );
-    }
-
-    nWhich = GetWhich( SID_FIELD_GRABFOCUS );
-
+    USHORT nWhich = GetWhich( SID_FIELD_GRABFOCUS );
     if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET )
     {
         USHORT nField = ( (SfxUInt16Item&)rSet.Get( nWhich ) ).GetValue();
@@ -348,15 +319,6 @@ void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
     }
 
     aUseDataCB.Check( SvtSaveOptions().IsUseUserData() );
-
-    aFirstName.SaveValue();
-    aName.SaveValue();
-    aEmailEdit.SaveValue();
-    aStreetEdit.SaveValue();
-    aPLZEdit.SaveValue();
-    aCityEdit.SaveValue();
-    aUsCityEdit.SaveValue();
-    aUsZipEdit.SaveValue();
 }
 
 //------------------------------------------------------------------------
@@ -389,156 +351,168 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
 
 //------------------------------------------------------------------------
 
-String SvxGeneralTabPage::GetAddress_Impl()
+sal_Bool SvxGeneralTabPage::GetAddress_Impl()
 {
+    BOOL bRet =
+    (   aCompanyEdit.GetSavedValue()  !=        aCompanyEdit.GetText()  ||
+        aFirstName.GetSavedValue()  !=          aFirstName.GetText()  ||
+        aFatherName.GetSavedValue()  !=         aFatherName.GetText()  ||
+        aName.GetSavedValue()  !=               aName.GetText()  ||
+        aShortName.GetSavedValue()  !=          aShortName.GetText()  ||
+        aStreetEdit.GetSavedValue()  !=         aStreetEdit.GetText()  ||
+        aApartmentNrEdit.GetSavedValue()  !=    aApartmentNrEdit.GetText()  ||
+        aPLZEdit.GetSavedValue()  !=            aPLZEdit.GetText()  ||
+        aCityEdit.GetSavedValue()  !=           aCityEdit.GetText()  ||
+        aUsCityEdit.GetSavedValue()  !=         aUsCityEdit.GetText()  ||
+        aUsStateEdit.GetSavedValue()  !=        aUsStateEdit.GetText()  ||
+        aUsZipEdit.GetSavedValue()  !=          aUsZipEdit.GetText()  ||
+        aCountryEdit.GetSavedValue()  !=        aCountryEdit.GetText()  ||
+        aTitleEdit.GetSavedValue()  !=          aTitleEdit.GetText()  ||
+        aPositionEdit.GetSavedValue()  !=       aPositionEdit.GetText()  ||
+        aTelPrivEdit.GetSavedValue()  !=        aTelPrivEdit.GetText()  ||
+        aTelCompanyEdit.GetSavedValue()  !=     aTelCompanyEdit.GetText()  ||
+        aFaxEdit.GetSavedValue()  !=            aFaxEdit.GetText()  ||
+        aEmailEdit.GetSavedValue()  !=          aEmailEdit.GetText() );
+
     LanguageType eLang = Application::GetSettings().GetUILanguage();
     BOOL bUS = ( LANGUAGE_ENGLISH_US == eLang );
 
-    String aAddrStr( ::ConvertToStore_Impl( aCompanyEdit.GetText() ) );
-    aAddrStr += cAdrToken;
+    SvtUserOptions aUserOpt;
+    aUserOpt.SetCompany(aCompanyEdit.GetText());
+    aUserOpt.SetFirstName(aFirstName.GetText());
+    aUserOpt.SetLastName(aName.GetText());
+    aUserOpt.SetID( aShortName.GetText());
 
-    aAddrStr += ::ConvertToStore_Impl( aStreetEdit.GetText() );
-    aAddrStr += cAdrToken;
+    aUserOpt.SetStreet(aStreetEdit.GetText() );
 
-    aAddrStr += ::ConvertToStore_Impl( aCountryEdit.GetText() );
-    aAddrStr += cAdrToken;
+    aUserOpt.SetCountry(aCountryEdit.GetText() );
 
-    aAddrStr += ::ConvertToStore_Impl( bUS ? aUsZipEdit.GetText() : aPLZEdit.GetText() );
-    aAddrStr += cAdrToken;
-    aAddrStr += ::ConvertToStore_Impl( bUS ? aUsCityEdit.GetText() : aCityEdit.GetText() );
-    aAddrStr += cAdrToken;
+    aUserOpt.SetZip(bUS ? aUsZipEdit.GetText() : aPLZEdit.GetText() );
+    aUserOpt.SetCity(bUS ? aUsCityEdit.GetText() : aCityEdit.GetText() );
 
-    aAddrStr += ::ConvertToStore_Impl( aTitleEdit.GetText() );
-    aAddrStr += cAdrToken;
-    aAddrStr += ::ConvertToStore_Impl( aPositionEdit.GetText() );
-    aAddrStr += cAdrToken;
-    aAddrStr += ::ConvertToStore_Impl( aTelPrivEdit.GetText() );
-    aAddrStr += cAdrToken;
-    aAddrStr += ::ConvertToStore_Impl( aTelCompanyEdit.GetText() );
-    aAddrStr += cAdrToken;
-    aAddrStr += ::ConvertToStore_Impl( aFaxEdit.GetText() );
-    aAddrStr += cAdrToken;
-    aAddrStr += ::ConvertToStore_Impl( aEmailEdit.GetText() );
-    aAddrStr += cAdrToken;
-    aAddrStr += ::ConvertToStore_Impl( bUS ? aUsStateEdit.GetText() : String() );
+    aUserOpt.SetTitle( aTitleEdit.GetText() );
+    aUserOpt.SetPosition(aPositionEdit.GetText() );
+    aUserOpt.SetTelephoneHome( aTelPrivEdit.GetText() );
+    aUserOpt.SetTelephoneWork( aTelCompanyEdit.GetText() );
+    aUserOpt.SetFax( aFaxEdit.GetText() );
+    aUserOpt.SetEmail( aEmailEdit.GetText() );
+    aUserOpt.SetState( bUS ? aUsStateEdit.GetText() : String() );
 
     if ( LANGUAGE_RUSSIAN == eLang )
     {
-        aAddrStr += cAdrToken;
-        aAddrStr += ::ConvertToStore_Impl( aFatherName.GetText() );
-        aAddrStr += cAdrToken;
-        aAddrStr += ::ConvertToStore_Impl( aApartmentNrEdit.GetText() );
+        aUserOpt.SetFathersName( aFatherName.GetText() );
+        aUserOpt.SetApartment( aApartmentNrEdit.GetText() );
     }
-
-    return aAddrStr;
+    return bRet;
 }
 
 //------------------------------------------------------------------------
 
-void SvxGeneralTabPage::SetAddress_Impl( const SvxAddressItem& rAddress )
+void SvxGeneralTabPage::SetAddress_Impl()
 {
     LanguageType eLang = Application::GetSettings().GetUILanguage();
     BOOL bUS = ( LANGUAGE_ENGLISH_US == eLang );
-    aCompanyEdit.SetText( rAddress.GetCompany() );
-    if ( rAddress.IsTokenReadonly( POS_COMPANY ) )
+    SvtUserOptions aUserOpt;
+    aCompanyEdit.SetText( aUserOpt.GetCompany() );
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_COMPANY ) )
     {
         aCompanyLbl.Disable();
         aCompanyEdit.Disable();
     }
     sal_Int16 nEditCount = 0;
-    aFirstName.SetText( rAddress.GetFirstName() );
-    if ( rAddress.IsTokenReadonly( POS_FIRSTNAME ) )
+    aFirstName.SetText( aUserOpt.GetFirstName() );
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_FIRSTNAME ) )
     {
         aFirstName.Disable();
         nEditCount++;
     }
-    aName.SetText( rAddress.GetName() );
-    if ( rAddress.IsTokenReadonly( POS_LASTNAME ) )
+    aName.SetText( aUserOpt.GetLastName() );
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_LASTNAME ) )
     {
         aName.Disable();
         nEditCount++;
     }
-    aShortName.SetText( rAddress.GetShortName() );
-    if ( rAddress.IsTokenReadonly( POS_SHORTNAME ) )
+    aShortName.SetText( aUserOpt.GetID() );
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_ID ) )
     {
         aShortName.Disable();
         nEditCount++;
     }
     aNameLbl.Enable( ( nEditCount != 3 ) );
-    aStreetEdit.SetText( rAddress.GetStreet() );
-    if ( rAddress.IsTokenReadonly( POS_STREET ) )
+    aStreetEdit.SetText( aUserOpt.GetStreet() );
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_STREET ) )
     {
         aStreetLbl.Disable();
         aStreetEdit.Disable();
     }
     Edit* pPLZEdit = bUS ? &aUsZipEdit : &aPLZEdit;
     Edit* pCityEdit = bUS ? &aUsCityEdit : &aCityEdit;
-    pPLZEdit->SetText( rAddress.GetPLZ() );
-    pCityEdit->SetText( rAddress.GetCity() );
+    pPLZEdit->SetText( aUserOpt.GetZip() );
+    pCityEdit->SetText( aUserOpt.GetCity() );
     nEditCount = 0;
-    if ( rAddress.IsTokenReadonly( POS_PLZ ) )
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_ZIP ) )
     {
         pPLZEdit->Disable();
         nEditCount++;
     }
-    if ( rAddress.IsTokenReadonly( POS_CITY ) )
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_CITY ) )
     {
         pCityEdit->Disable();
         nEditCount++;
     }
     if ( bUS )
     {
-        aUsStateEdit.SetText( rAddress.GetState() );
-        if ( rAddress.IsTokenReadonly( POS_STATE ) )
+        aUsStateEdit.SetText( aUserOpt.GetState() );
+        if ( aUserOpt.IsTokenReadonly( USER_OPT_STATE ) )
         {
             aUsStateEdit.Disable();
             nEditCount++;
         }
     }
     aCityLbl.Enable( ( nEditCount != ( bUS ? 3 : 2 ) ) );
-    aCountryEdit.SetText( rAddress.GetCountry() );
-    if ( rAddress.IsTokenReadonly( POS_COUNTRY ) )
+    aCountryEdit.SetText( aUserOpt.GetCountry() );
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_COUNTRY ) )
     {
         aCountryLbl.Disable();
         aCountryEdit.Disable();
     }
-    aTitleEdit.SetText( rAddress.GetTitle() );
-    aPositionEdit.SetText( rAddress.GetPosition() );
+    aTitleEdit.SetText( aUserOpt.GetTitle() );
+    aPositionEdit.SetText( aUserOpt.GetPosition() );
     nEditCount = 0;
-    if ( rAddress.IsTokenReadonly( POS_TITLE ) )
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_TITLE ) )
     {
         aTitleEdit.Disable();
         nEditCount++;
     }
-    if ( rAddress.IsTokenReadonly( POS_POSITION ) )
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_POSITION ) )
     {
         aPositionEdit.Disable();
         nEditCount++;
     }
     aTitlePosLbl.Enable( ( nEditCount != 2 ) );
-    aTelPrivEdit.SetText( rAddress.GetTelPriv() );
-    aTelCompanyEdit.SetText( rAddress.GetTelCompany() );
+    aTelPrivEdit.SetText( aUserOpt.GetTelephoneHome() );
+    aTelCompanyEdit.SetText( aUserOpt.GetTelephoneWork() );
     nEditCount = 0;
-    if ( rAddress.IsTokenReadonly( POS_TEL_PRIVATE ) )
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_TELEPHONEHOME ) )
     {
         aTelPrivEdit.Disable();
         nEditCount++;
     }
-    if ( rAddress.IsTokenReadonly( POS_TEL_COMPANY ) )
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_TELEPHONEWORK ) )
     {
         aTelCompanyEdit.Disable();
         nEditCount++;
     }
     aPhoneLbl.Enable( ( nEditCount != 2 ) );
-    aFaxEdit.SetText( rAddress.GetFax() );
-    aEmailEdit.SetText( rAddress.GetEmail() );
+    aFaxEdit.SetText( aUserOpt.GetFax() );
+    aEmailEdit.SetText( aUserOpt.GetEmail() );
     nEditCount = 0;
-    if ( rAddress.IsTokenReadonly( POS_FAX ) )
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_FAX ) )
     {
         aFaxEdit.Disable();
         nEditCount++;
     }
-    if ( rAddress.IsTokenReadonly( POS_EMAIL ) )
+    if ( aUserOpt.IsTokenReadonly( USER_OPT_EMAIL ) )
     {
         aEmailEdit.Disable();
         nEditCount++;
@@ -547,9 +521,29 @@ void SvxGeneralTabPage::SetAddress_Impl( const SvxAddressItem& rAddress )
 
     if ( LANGUAGE_RUSSIAN == eLang )
     {
-        aFatherName.SetText( rAddress.GetFatherName() );
-        aApartmentNrEdit.SetText( rAddress.GetApartmentNr() );
+        aFatherName.SetText( aUserOpt.GetFathersName() );
+        aApartmentNrEdit.SetText( aUserOpt.GetApartment() );
     }
+
+    aCompanyEdit.SaveValue();
+    aFirstName.SaveValue();
+    aFatherName.SaveValue();
+    aName.SaveValue();
+    aShortName.SaveValue();
+    aStreetEdit.SaveValue();
+    aApartmentNrEdit.SaveValue();
+    aPLZEdit.SaveValue();
+    aCityEdit.SaveValue();
+    aUsCityEdit.SaveValue();
+    aUsStateEdit.SaveValue();
+    aUsZipEdit.SaveValue();
+    aCountryEdit.SaveValue();
+    aTitleEdit.SaveValue();
+    aPositionEdit.SaveValue();
+    aTelPrivEdit.SaveValue();
+    aTelCompanyEdit.SaveValue();
+    aFaxEdit.SaveValue();
+    aEmailEdit.SaveValue();
 }
 
 // -----------------------------------------------------------------------
