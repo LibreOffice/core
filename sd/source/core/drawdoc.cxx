@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:29:26 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,7 +1352,7 @@ void SdDrawDocument::SetPresFirstPage(ULONG nNewPresFirstPage)
 |*
 \************************************************************************/
 
-void SdDrawDocument::SetChanged(FASTBOOL bFlag)
+void SdDrawDocument::SetChanged(sal_Bool bFlag)
 {
     if (pDocSh)
     {
@@ -1378,7 +1378,7 @@ void SdDrawDocument::SetChanged(FASTBOOL bFlag)
 |*
 \************************************************************************/
 
-void SdDrawDocument::NbcSetChanged(FASTBOOL bFlag)
+void SdDrawDocument::NbcSetChanged(sal_Bool bFlag)
 {
     // #100237# forward to baseclass
     FmFormModel::SetChanged(bFlag);
