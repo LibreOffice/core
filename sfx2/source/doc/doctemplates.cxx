@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-09 14:50:08 $
+ *  last change: $Author: dv $ $Date: 2001-03-12 15:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,9 +187,11 @@ DECLARE_LIST( NameList_Impl, NamePair_Impl* );
 class SfxDocTplService_Impl
 {
     Reference< XMultiServiceFactory >   mxFactory;
+    Reference < XCommandEnvironment >   maCmdEnv;
 
     Reference< XPersist >       mxInfo;
     Sequence< OUString >        maTemplateDirs;
+    OUString                    maRootURL;
     NameList_Impl               maNames;
     Locale                      maLocale;
     Content                     maRootContent;
@@ -213,15 +215,28 @@ class SfxDocTplService_Impl
                                           const OUString& rTargetURL );
     void                        addToStandard( Content& rRoot,
                                                Content& rFolder );
+
+    sal_Bool                    createFolder( const OUString& rNewFolderURL,
+                                              sal_Bool  bCreateParent,
+                                              Content   &rNewFolder );
+    sal_Bool                    removeFolder( const OUString& rNewFolderURL );
+
+    sal_Bool                    setProperty( Content& rContent,
+                                             const OUString& rPropName,
+                                             const Any& rPropValue );
+
 public:
                                  SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory );
                                 ~SfxDocTplService_Impl();
 
-    void                        init() { if ( !mbIsInitialized ) init_Impl(); }
+    sal_Bool                    init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
     Content                     getContent();
 
     void                        setLocale( const LOCALE & rLocale );
     Locale                      getLocale();
+
+    sal_Bool                    addGroup( const OUString& rGroupName );
+    sal_Bool                    removeGroup( const OUString& rGroupName );
 
     void                        update();
 };
@@ -244,55 +259,19 @@ void SfxDocTplService_Impl::init_Impl()
     // entry if necessary
 
     Reference < XCommandEnvironment > aCmdEnv;
-    OUString aRootURL( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
-    aRootURL += OUString( '/' );
-    aRootURL += aLang;
+    maCmdEnv = aCmdEnv;
 
-    if ( Content::create( aRootURL, aCmdEnv, maRootContent ) )
+    maRootURL = OUString( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
+    maRootURL += OUString( '/' );
+    maRootURL += aLang;
+
+    if ( Content::create( maRootURL, maCmdEnv, maRootContent ) )
     {
         mbIsInitialized = sal_True;
     }
     else
     {
-        try
-        {
-            Sequence< OUString > aNames(2);
-            OUString* pNames = aNames.getArray();
-            pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
-            pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
-
-            Sequence< Any > aValues(2);
-            Any* pValues = aValues.getArray();
-            pValues[1] = makeAny( sal_Bool( sal_True ) );
-
-            OUString aType( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
-            OUString aLangRootURL( RTL_CONSTASCII_USTRINGPARAM( HIERARCHIE_ROOT_URL ) );
-            aLangRootURL += OUString( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_DIR_NAME ) );
-
-            Content aLangRoot;
-
-            if ( ! Content::create( aLangRootURL, aCmdEnv, aLangRoot ) )
-            {
-                OUString aHierRootURL( RTL_CONSTASCII_USTRINGPARAM( HIERARCHIE_ROOT_URL ) );
-                Content aHierRoot( aHierRootURL, aCmdEnv );
-
-                pValues[0] = makeAny( OUString( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_DIR_NAME ) ) );
-                aHierRoot.insertNewContent( aType, aNames, aValues, aLangRoot );
-            }
-
-            pValues[0] = makeAny( aLang );
-
-            aLangRoot.insertNewContent( aType, aNames, aValues, maRootContent );
-            mbIsInitialized = sal_True;
-        }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "Init_Impl(): Could not create hierarchy entry" );
-        }
-        catch( RuntimeException& )
-        {
-            DBG_ERRORFILE( "Init_Impl(): got runtime exception" );
-        }
+        mbIsInitialized = createFolder( maRootURL, sal_True, maRootContent );
     }
 
     if ( mbIsInitialized )
@@ -304,6 +283,10 @@ void SfxDocTplService_Impl::init_Impl()
         getDirList();
         readFolderList();
         update();
+    }
+    else
+    {
+        DBG_ERRORFILE( "init_Impl(): Could not create root" );
     }
 }
 //-----------------------------------------------------------------------------
@@ -402,26 +385,7 @@ void SfxDocTplService_Impl::getDirList()
     }
 
     // Store the template dir list
-    try
-    {
-        aValue <<= maTemplateDirs;
-        Reference< XPropertyContainer > xProperties( maRootContent.get(), UNO_QUERY );
-        if ( xProperties.is() )
-        {
-            try
-            {
-                xProperties->addProperty( aPropName, PropertyAttribute::MAYBEVOID, aValue );
-            }
-            catch( PropertyExistException& ) {}
-            catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
-            catch( IllegalArgumentException& ) { DBG_ERRORFILE( "IllegalArgumentException" ); }
-        }
-
-        maRootContent.setPropertyValue( aPropName, aValue );
-    }
-    catch ( CommandAbortedException& ) {}
-    catch ( RuntimeException& ) {}
-    catch ( Exception& ) {}
+    setProperty( maRootContent, aPropName, aValue );
 }
 
 // -----------------------------------------------------------------------
@@ -449,26 +413,15 @@ void SfxDocTplService_Impl::getFolders( Content& rRoot,
 
     if ( xResultSet.is() )
     {
-        Reference< XCommandEnvironment > aCmdEnv;
         Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
         Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
         OUString aFolderURL = rFolder.get()->getIdentifier()->getContentIdentifier();
-        OUString aRootURL = rRoot.get()->getIdentifier()->getContentIdentifier();
+        OUString aRootURL( maRootURL );
         aRootURL += OUString( '/' );
 
         Content aFolder;
-        Sequence< OUString > aNames(2);
-        OUString* pNames = aNames.getArray();
-        pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
-        pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
-
         OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-
-        Sequence< Any > aValues(2);
-        Any* pValues = aValues.getArray();
-
-        OUString aType = OUString( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
 
         try
         {
@@ -491,50 +444,15 @@ void SfxDocTplService_Impl::getFolders( Content& rRoot,
 
                 OUString aNewFolderURL = aNewFolderObj.GetMainURL();
 
-                if ( ! Content::create( aNewFolderURL, aCmdEnv, aFolder ) )
+                if ( ! Content::create( aNewFolderURL, maCmdEnv, aFolder ) &&
+                     createFolder( aNewFolderURL, sal_False, aFolder ) )
                 {
-                    pValues[0] = makeAny( aTitle );
-                    pValues[1] = makeAny( sal_Bool( sal_True ) );
-
-                    try
-                    {
-                        rRoot.insertNewContent( aType, aNames, aValues, aFolder );
-                        Reference< XPropertySetInfo > xPropSet = aFolder.getProperties();
-                        if ( xPropSet.is() )
-                        {
-                            if ( ! xPropSet->hasPropertyByName( aAdditionalProp ) )
-                            {
-                                Reference< XPropertyContainer > xFolderProp( aFolder.get(), UNO_QUERY );
-                                if ( xFolderProp.is() )
-                                {
-                                    try
-                                    {
-                                        xFolderProp->addProperty( aAdditionalProp,
-                                                                  PropertyAttribute::MAYBEVOID,
-                                                                  makeAny( aId ) );
-                                    }
-                                    catch( PropertyExistException& ) {}
-                                    catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
-                                    catch( IllegalArgumentException& ) { DBG_ERRORFILE( "IllegalArgumentException" ); }
-                                }
-                            }
-
-                            aFolder.setPropertyValue( aAdditionalProp, makeAny( aId ) );
-                        }
-                    }
-                    catch( CommandAbortedException& )
-                    {
-                        DBG_ERRORFILE( "CommandAbortedException" );
-                    }
+                    setProperty( aFolder, aAdditionalProp, makeAny( aId ) );
                 }
 
-                Content aSubFolder( xContentAccess->queryContent(), aCmdEnv );
+                Content aSubFolder( xContentAccess->queryContent(), maCmdEnv );
                 getTemplates( aSubFolder, aFolder );
             }
-        }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "GetFolders::next(): CommandAbortedException" );
         }
         catch ( Exception& ) {}
     }
@@ -643,9 +561,8 @@ void SfxDocTplService_Impl::addEntry( Content& rParentFolder,
     OUString aLinkURL = aLinkObj.GetMainURL();
 
     Content aLink;
-    Reference< XCommandEnvironment > aCmdEnv;
 
-    if ( ! Content::create( aLinkURL, aCmdEnv, aLink ) )
+    if ( ! Content::create( aLinkURL, maCmdEnv, aLink ) )
     {
         Sequence< OUString > aNames(3);
         OUString* pNames = aNames.getArray();
@@ -681,79 +598,156 @@ void SfxDocTplService_Impl::addToStandard( Content& rRoot,
     OUString aFolderURL = rFolder.get()->getIdentifier()->getContentIdentifier();
     Content  aFolder;
 
-    OUString aRootURL = rRoot.get()->getIdentifier()->getContentIdentifier();
-
-    INetURLObject aNewFolderObj( aRootURL );
+    INetURLObject aNewFolderObj( maRootURL );
     aNewFolderObj.insertName( aTitle, false,
           INetURLObject::LAST_SEGMENT, true,
           INetURLObject::ENCODE_ALL );
 
     aNewFolderURL = aNewFolderObj.GetMainURL();
 
-    Reference< XCommandEnvironment > aCmdEnv;
-
-    if ( ! Content::create( aNewFolderURL, aCmdEnv, aFolder ) )
+    if ( ! Content::create( aNewFolderURL, maCmdEnv, aFolder ) &&
+         ! createFolder( aNewFolderURL, sal_False, aFolder ) )
     {
-        OUString aType = OUString( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
-
-        Sequence< OUString > aNames(2);
-        OUString* pNames = aNames.getArray();
-        pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
-        pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
-
-        Sequence< Any > aValues(2);
-        Any* pValues = aValues.getArray();
-
-        pValues[0] = makeAny( aTitle );
-        pValues[1] = makeAny( sal_Bool( sal_True ) );
-
-        try
-        {
-            rRoot.insertNewContent( aType, aNames, aValues, aFolder );
-        }
-        catch( CommandAbortedException& )
-        {
-            DBG_ERRORFILE( "CommandAbortedException" );
-            return;
-        }
-        catch( Exception& ) { return; }
+        DBG_ERRORFILE( "addToStandard(): Could not create Folder!" );
+        return;
     }
 
     // Always set the target URL, because the last one should win!
 
     OUString aAdditionalProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
 
-    try
-    {
-        Reference< XPropertySetInfo > xPropSet = aFolder.getProperties();
-        if ( xPropSet.is() )
-        {
-            if ( ! xPropSet->hasPropertyByName( aAdditionalProp ) )
-            {
-                Reference< XPropertyContainer > xFolderProp( aFolder.get(), UNO_QUERY );
-                if ( xFolderProp.is() )
-                {
-                    try
-                    {
-                        xFolderProp->addProperty( aAdditionalProp,
-                                                  PropertyAttribute::MAYBEVOID,
-                                                  makeAny( aFolderURL ) );
-                    }
-                    catch( PropertyExistException& ) {}
-                    catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
-                    catch( IllegalArgumentException& ) { DBG_ERRORFILE( "IllegalArgumentException" ); }
-                }
-            }
-            aFolder.setPropertyValue( aAdditionalProp, makeAny( aFolderURL ) );
-        }
-    }
-    catch( CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "CommandAbortedException" );
-    }
-    catch( Exception& ) {}
+    setProperty( aFolder, aAdditionalProp, makeAny( aFolderURL ) );
 
     getTemplates( rFolder, aFolder );
+}
+
+
+// -----------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
+                                              sal_Bool  bCreateParent,
+                                              Content   &rNewFolder )
+{
+    Content         aParent;
+    sal_Bool        bCreatedFolder = sal_False;
+    INetURLObject   aParentURL( rNewFolderURL );
+    OUString        aFolderName = aParentURL.getName();
+
+    // compute the parent folder url from the new folder url
+    // and remove the final slash, because Content::create doesn't
+    // like it
+    aParentURL.removeSegment();
+    if ( aParentURL.getSegmentCount() >= 1 )
+        aParentURL.removeFinalSlash();
+
+    // if the parent exists, we can continue with the creation of the
+    // new folder, we have to create the parent otherwise ( as long as
+    // bCreateParent is set to true )
+    if ( Content::create( aParentURL.GetMainURL(), maCmdEnv, aParent ) )
+    {
+        try
+        {
+            Sequence< OUString > aNames(2);
+            OUString* pNames = aNames.getArray();
+            pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
+            pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
+
+            Sequence< Any > aValues(2);
+            Any* pValues = aValues.getArray();
+            pValues[0] = makeAny( aFolderName );
+            pValues[1] = makeAny( sal_Bool( sal_True ) );
+
+            OUString aType( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
+
+            aParent.insertNewContent( aType, aNames, aValues, rNewFolder );
+            bCreatedFolder = sal_True;
+        }
+        catch( CommandAbortedException& )
+        {
+            DBG_ERRORFILE( "createFolder(): Could not create new folder" );
+        }
+        catch( RuntimeException& )
+        {
+            DBG_ERRORFILE( "createFolder(): got runtime exception" );
+        }
+    }
+    else if ( bCreateParent )
+    {
+        // if the parent doesn't exists and bCreateParent is set to true,
+        // we try to create the parent and if this was successful, we
+        // try to create the new folder again ( but this time, we set
+        // bCreateParent to false to avoid endless recusions )
+        if ( ( aParentURL.getSegmentCount() >= 1 ) &&
+               createFolder( aParentURL.GetMainURL(), bCreateParent, aParent ) )
+        {
+            bCreatedFolder = createFolder( rNewFolderURL, sal_False, rNewFolder );
+        }
+    }
+
+    return bCreatedFolder;
+}
+
+// -----------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::removeFolder( const OUString& rFolderURL )
+{
+    Content     aFolder;
+    sal_Bool    bRemovedFolder = sal_False;
+
+    if ( Content::create( rFolderURL, maCmdEnv, aFolder ) )
+    {
+        try
+        {
+            OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_DELETE ) );
+            Any aArg = makeAny( sal_Bool( sal_True ) );
+
+            aFolder.executeCommand( aCmd, aArg );
+            bRemovedFolder = sal_True;
+        }
+        catch ( CommandAbortedException& ) {}
+        catch ( RuntimeException& ) {}
+        catch ( Exception& ) {}
+    }
+
+    return bRemovedFolder;
+}
+
+// -----------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
+                                             const OUString& rPropName,
+                                             const Any& rPropValue )
+{
+    sal_Bool bPropertySet = sal_False;
+
+    // Store the property
+    try
+    {
+        Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
+
+        // check, wether or not the property exists, create it, when not
+        if ( !aPropInfo.is() || !aPropInfo->hasPropertyByName( rPropName ) )
+        {
+            Reference< XPropertyContainer > xProperties( rContent.get(), UNO_QUERY );
+            if ( xProperties.is() )
+            {
+                try
+                {
+                    xProperties->addProperty( rPropName, PropertyAttribute::MAYBEVOID, rPropValue );
+                }
+                catch( PropertyExistException& ) {}
+                catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
+                catch( IllegalArgumentException& ) { DBG_ERRORFILE( "IllegalArgumentException" ); }
+            }
+        }
+
+        // now set the property
+
+        rContent.setPropertyValue( rPropName, rPropValue );
+        bPropertySet = sal_True;
+    }
+    catch ( CommandAbortedException& ) {}
+    catch ( RuntimeException& ) {}
+    catch ( Exception& ) {}
+
+    return bPropertySet;
 }
 
 //-----------------------------------------------------------------------------
@@ -806,8 +800,6 @@ void SfxDocTplService_Impl::update()
 {
     init();
 
-    Reference< XCommandEnvironment > aCmdEnv;
-
     sal_Int32   nCount = maTemplateDirs.getLength();
     OUString*   pDirs = maTemplateDirs.getArray();
     Content     aDirContent;
@@ -815,9 +807,94 @@ void SfxDocTplService_Impl::update()
     while ( nCount )
     {
         nCount--;
-        if ( Content::create( pDirs[ nCount ], aCmdEnv, aDirContent ) )
+        if ( Content::create( pDirs[ nCount ], maCmdEnv, aDirContent ) )
             getFolders( maRootContent, aDirContent );
     }
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
+{
+    // no init, no new group!
+    if ( ! init() )
+        return sal_False;
+
+    // Check, wether or not there is a group with this name
+    Content         aNewGroup;
+    OUString        aNewGroupURL;
+    INetURLObject   aNewGroupObj( maRootURL );
+
+    aNewGroupObj.insertName( rGroupName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+
+    aNewGroupURL = aNewGroupObj.GetMainURL();
+
+    if ( Content::create( aNewGroupURL, maCmdEnv, aNewGroup ) ||
+         ! createFolder( aNewGroupURL, sal_False, aNewGroup ) )
+    {
+        // if there already was a group with this name or the new group
+        // could not be created, we return here
+        return sal_False;
+    }
+
+    // Get the user template path entry ( new group will always
+    // be added in the user template path )
+    sal_Int32   nIndex;
+    OUString    aUserPath;
+
+    nIndex = maTemplateDirs.getLength();
+    if ( nIndex )
+        nIndex--;
+
+    aUserPath = maTemplateDirs[ nIndex ];
+
+    // create a new folder with the given name
+    Content         aNewFolder;
+    OUString        aNewFolderURL;
+    INetURLObject   aNewFolderObj( aUserPath );
+
+    aNewFolderObj.insertName( rGroupName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+
+    aNewFolderURL = aNewFolderObj.GetMainURL();
+
+    if ( ! Content::create( aNewFolderURL, maCmdEnv, aNewFolder ) &&
+         ! createFolder( aNewFolderURL, sal_False, aNewFolder ) )
+    {
+        // we could not create the folder, so we delete the group in the
+        // hierarchy and return
+        removeFolder( aNewGroupURL );
+        return sal_False;
+    }
+
+    // Now set the target url for this group and we are done
+    OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+    Any aValue = makeAny( aNewFolderURL );
+
+    if ( ! setProperty( aNewGroup, aPropName, aValue ) )
+    {
+        removeFolder( aNewGroupURL );
+        return sal_False;
+    }
+
+    return sal_True;
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
+{
+    if ( ! init() )
+        return sal_False;
+
+    INetURLObject aGroupObj( maRootURL );
+
+    aGroupObj.insertName( rGroupName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+
+    return removeFolder( aGroupObj.GetMainURL() );
 }
 
 //-----------------------------------------------------------------------------
@@ -886,25 +963,25 @@ sal_Bool SAL_CALL SfxDocTplService::addTemplate( const ::rtl::OUString& GroupNam
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const ::rtl::OUString& GroupName,
-                                                    const ::rtl::OUString& TemplateName )
+sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const ::rtl::OUString& rGroupName,
+                                                    const ::rtl::OUString& rTemplateName )
     throw( RUNTIMEEXCEPTION )
 {
     return sal_False;
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxDocTplService::addGroup( const ::rtl::OUString& GroupName )
+sal_Bool SAL_CALL SfxDocTplService::addGroup( const ::rtl::OUString& rGroupName )
     throw( RUNTIMEEXCEPTION )
 {
-    return sal_False;
+    return pImp->addGroup( rGroupName );
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxDocTplService::removeGroup( const ::rtl::OUString& GroupName )
+sal_Bool SAL_CALL SfxDocTplService::removeGroup( const ::rtl::OUString& rGroupName )
     throw( RUNTIMEEXCEPTION )
 {
-    return sal_False;
+    return pImp->removeGroup( rGroupName );
 }
 
 //-----------------------------------------------------------------------------
