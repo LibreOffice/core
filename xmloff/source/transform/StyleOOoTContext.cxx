@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:35:05 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,6 +754,106 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         case XML_PTACTION_INTERVAL_MINOR:
             SvXMLUnitConverter::convertDouble( fIntervalMinor, rAttrValue );
             pIntervalMinorDivisorContext = pContext;
+            break;
+        case XML_PTACTION_SYMBOL:
+            {
+                sal_Int32 nSymbolType = rAttrValue.toInt32();
+                OUString aNewAttrName = GetTransformer().GetNamespaceMap().GetQNameByKey(
+                    XML_NAMESPACE_CHART, GetXMLToken( XML_SYMBOL_TYPE ) );
+
+                if( nSymbolType >= 0 )
+                {
+                    pContext->AddAttribute( aNewAttrName, GetXMLToken( XML_NAMED_SYMBOL ));
+                    enum XMLTokenEnum eToken = XML_TOKEN_INVALID;
+                    switch( nSymbolType )
+                    {
+                        // SYMBOL0
+                        case 0:
+                            // "square" has an awkward token name
+                            eToken = XML_GRADIENTSTYLE_SQUARE;
+                            break;
+                        // SYMBOL1
+                        case 1:
+                            eToken = XML_DIAMOND;
+                            break;
+                        // SYMBOL2
+                        case 2:
+                            eToken = XML_ARROW_DOWN;
+                            break;
+                        // SYMBOL3
+                        case 3:
+                            eToken = XML_ARROW_UP;
+                            break;
+                        // SYMBOL4
+                        case 4:
+                            eToken = XML_ARROW_RIGHT;
+                            break;
+                        // SYMBOL5
+                        case 5:
+                            eToken = XML_ARROW_LEFT;
+                            break;
+                        // SYMBOL6
+                        case 6:
+                            eToken = XML_BOW_TIE;
+                            break;
+                        // SYMBOL7
+                        case 7:
+                            eToken = XML_HOURGLASS;
+                            break;
+                        default:
+                            OSL_ENSURE( false, "invalid named symbol" );
+                            break;
+                    }
+
+                    if( eToken != XML_TOKEN_INVALID )
+                    {
+                        pContext->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                                    XML_NAMESPACE_CHART, GetXMLToken( XML_SYMBOL_NAME )),
+                                                GetXMLToken( eToken ));
+                    }
+                }
+                else
+                {
+                    switch( nSymbolType )
+                    {
+                        // NONE
+                        case -3:
+                            pContext->AddAttribute(
+                                aNewAttrName, GetXMLToken( XML_NONE ));
+                            break;
+                            // AUTO
+                        case -2:
+                            pContext->AddAttribute(
+                                aNewAttrName, GetXMLToken( XML_AUTOMATIC ));
+                            break;
+                            // BITMAPURL
+                        case -1:
+                            pContext->AddAttribute(
+                                aNewAttrName, GetXMLToken( XML_IMAGE ));
+                            break;
+                        default:
+                            OSL_ENSURE( false, "invalid symbol type" );
+                            pContext->AddAttribute(
+                                aNewAttrName, GetXMLToken( XML_NONE ));
+                            break;
+                    }
+                }
+            }
+            break;
+        case XML_PTACTION_SYMBOL_IMAGE_NAME:
+            {
+                // create an xlink:href element for URI attribute
+                XMLPersAttrListTContext *pSymbolImageContext = new XMLPersAttrListTContext(
+                    GetTransformer(), GetTransformer().GetNamespaceMap().GetQNameByKey(
+                        XML_NAMESPACE_CHART, GetXMLToken( XML_SYMBOL_IMAGE )));
+
+                OUString aAttrValue( rAttrValue );
+                if( GetTransformer().ConvertURIToOASIS( aAttrValue, sal_True ))
+                {
+                    pSymbolImageContext->AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aAttrValue );
+                    pContext->AddContent( pSymbolImageContext );
+                }
+            }
             break;
 
         // #i25616#
