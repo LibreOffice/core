@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:20:44 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,6 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HDL_
-#include <com/sun/star/text/WritingMode.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
 #include <com/sun/star/drawing/CircleKind.hpp>
 #endif
@@ -135,12 +132,6 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -212,125 +203,6 @@ Size ImplEESdrWriter::ImplMapSize( const Size& rSize )
     return aRetSize;
 }
 
-
-// -------------------------------------------------------------------
-
-void ImplEESdrWriter::ImplWriteTextBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt )
-{
-    if( rObj.ImplGetText() )
-    {
-        ESCHER_AnchorText   eAnchor = ESCHER_AnchorTop;
-        ESCHER_txfl eFlow = ESCHER_txflHorzN;
-        ESCHER_txDir eDir = ESCHER_txdirLTR;
-        UINT32              nTextAttr = 0x40004;    // rotate text with shape
-
-        if ( rObj.ImplGetPropertyValue(
-            ::rtl::OUString::createFromAscii("TextWritingMode") ) )
-        {
-            ::com::sun::star::text::WritingMode eMode;
-            rObj.GetUsrAny() >>= eMode;
-            switch (eMode)
-            {
-                case ::com::sun::star::text::WritingMode_TB_RL:
-                    //Well if it so happens that we are fliped 180 we can use
-                    //this instead.
-                    if (rObj.GetAngle() == 18000)
-                        eFlow = ESCHER_txflBtoT;
-                    else
-                        eFlow = ESCHER_txflTtoBA;
-                    break;
-                case ::com::sun::star::text::WritingMode_RL_TB:
-                    eDir = ESCHER_txdirRTL;
-                    break;
-            }
-        }
-
-        if ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("TextVerticalAdjust") ) )
-        {
-            ::com::sun::star::drawing::TextVerticalAdjust eVA;
-            rObj.GetUsrAny() >>= eVA;
-            switch ( eVA )
-            {
-                case 1 :    // ::com::sun::star::drawing::TextVerticalAdjust_CENTER :
-                    eAnchor = ESCHER_AnchorMiddle;
-                break;
-
-                case 2 :    // ::com::sun::star::drawing::TextVerticalAdjust_BOTTOM :
-                    eAnchor = ESCHER_AnchorBottom;
-                break;
-
-                default :
-                case 0 :    // ::com::sun::star::drawing::TextVerticalAdjust_TOP :
-                    eAnchor = ESCHER_AnchorTop;
-                break;
-            }
-        }
-        if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("TextHorizontalAdjust") ) )
-        {
-            ::com::sun::star::drawing::TextHorizontalAdjust eTA;
-            rObj.GetUsrAny() >>= eTA;
-            switch ( eTA )
-            {
-                case 1 :    // ::com::sun::star::drawing::TextHorizontalAdjust_CENTER :
-                case 2 :    // ::com::sun::star::drawing::TextHorizontalAdjust_RIGHT :
-                case 0 :    // ::com::sun::star::drawing::TextHorizontalAdjust_LEFT :
-                {
-                    switch( eAnchor )
-                    {
-                        case ESCHER_AnchorMiddle :
-                            eAnchor = ESCHER_AnchorMiddleCentered;
-                        break;
-                        case ESCHER_AnchorBottom :
-                            eAnchor = ESCHER_AnchorBottomCentered;
-                        break;
-                        case ESCHER_AnchorTop :
-                            eAnchor = ESCHER_AnchorTopCentered;
-                        break;
-                    }
-                }
-                break;
-                case 3 :    // ::com::sun::star::drawing::TextHorizontalAdjust_BLOCK :
-                 break;
-            }
-        }
-/*
-        if ( ImplGetPropertyValue( L"TextFitToSize" ) )
-        {
-            if ( *( (INT16*)mAny.get() ) == 1 )
-            {
-                nTextAttr |= 0x10001;
-                rPropOpt.AddOpt( ESCHER_Prop_scaleText, ? );
-            }
-        }
-*/
-
-        INT32 nLeft = rObj.ImplGetInt32PropertyValue( ::rtl::OUString::createFromAscii("TextLeftDistance"));
-        INT32 nTop = rObj.ImplGetInt32PropertyValue( ::rtl::OUString::createFromAscii("TextUpperDistance"));
-        INT32 nRight = rObj.ImplGetInt32PropertyValue( ::rtl::OUString::createFromAscii("TextRightDistance"));
-        INT32 nBottom = rObj.ImplGetInt32PropertyValue( ::rtl::OUString::createFromAscii("TextLowerDistance"));
-
-        if ( nLeft >= 200 )
-            nLeft -= 200;
-        if ( nRight >= 200 )
-            nRight -=200;
-
-        rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, nLeft * 360 );
-        rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, nRight * 360 );
-        rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, nTop * 360 );
-        rPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, nBottom * 360 );
-
-        rPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
-        rPropOpt.AddOpt( ESCHER_Prop_AnchorText, eAnchor );
-        rPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, nTextAttr );
-        UINT32 nTxtBxId = mpEscherEx->QueryTextID( rObj.GetShapeRef(),
-                                                    rObj.GetShapeId() );
-        rPropOpt.AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
-        rPropOpt.AddOpt( ESCHER_Prop_txflTextFlow, eFlow );
-        rPropOpt.AddOpt( ESCHER_Prop_cdirFont, eDir );
-    }
-}
-
-
 // -------------------------------------------------------------------
 
 void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
@@ -382,7 +254,10 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );                     \
     if ( bFill )                                                    \
         aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );  \
-    ImplWriteTextBundle( rObj, aPropOpt );                          \
+    if( rObj.ImplGetText() )                                        \
+        aPropOpt.CreateTextProperties( rObj.mXPropSet,              \
+            mpEscherEx->QueryTextID( rObj.GetShapeRef(),            \
+                rObj.GetShapeId() ) );                              \
 }
 
 //Map from twips to export units, generally twips as well, only excel and word
@@ -463,7 +338,23 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if ( !mpPicStrm )
             mpPicStrm = mpEscherEx->QueryPicStream();
         EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpEscherEx, mpPicStrm, aRect100thmm );
-        if ( rObj.GetType().EqualsAscii( "drawing.Rectangle" ))
+
+        if ( rObj.GetType().EqualsAscii( "drawing.Custom" ) )
+        {
+            mpEscherEx->OpenContainer( ESCHER_SpContainer );
+            sal_uInt32 nMirrorFlags;
+            MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( rObj.GetShapeRef(), nMirrorFlags );
+            ADD_SHAPE( eShapeType, nMirrorFlags | 0xa00 );
+            aPropOpt.CreateCustomShapeProperties( eShapeType, rObj.GetShapeRef() );
+            aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
+            if ( rObj.ImplGetText() )
+            {
+                if ( !aPropOpt.IsFontWork() )
+                    aPropOpt.CreateTextProperties( rObj.mXPropSet, mpEscherEx->QueryTextID(
+                        rObj.GetShapeRef(), rObj.GetShapeId() ), sal_True );
+            }
+        }
+        else if ( rObj.GetType().EqualsAscii( "drawing.Rectangle" ))
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             sal_Int32 nRadius = (sal_Int32)rObj.ImplGetInt32PropertyValue(
@@ -487,7 +378,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );           // Flags: Connector | HasSpt
             }
             aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
-            ImplWriteTextBundle( rObj, aPropOpt );
+            if( rObj.ImplGetText() )
+                aPropOpt.CreateTextProperties( rObj.mXPropSet,
+                    mpEscherEx->QueryTextID( rObj.GetShapeRef(),
+                        rObj.GetShapeId() ) );
+
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Ellipse" ))
         {
@@ -580,7 +475,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
                                             ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
             }
-            ImplWriteTextBundle( rObj, aPropOpt );
+            if ( rObj.ImplGetText() )
+                aPropOpt.CreateTextProperties( rObj.mXPropSet,
+                    mpEscherEx->QueryTextID( rObj.GetShapeRef(),
+                        rObj.GetShapeId() ) );
+
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Control" ))
         {
@@ -794,7 +693,10 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                         aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
                         aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x8000000 );
                         aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
-                        ImplWriteTextBundle( rObj, aPropOpt );
+                        if ( rObj.ImplGetText() )
+                            aPropOpt.CreateTextProperties( rObj.mXPropSet,
+                                mpEscherEx->QueryTextID( rObj.GetShapeRef(),
+                                    rObj.GetShapeId() ) );
                     }
                 }
                 else
@@ -974,7 +876,10 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             mpEscherEx->AddShape( ESCHER_ShpInst_TextBox, 0xa00 );
-            ImplWriteTextBundle( rObj, aPropOpt );
+            if ( rObj.ImplGetText() )
+                aPropOpt.CreateTextProperties( rObj.mXPropSet,
+                    mpEscherEx->QueryTextID( rObj.GetShapeRef(),
+                        rObj.GetShapeId() ) );
 
             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
             aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
@@ -989,8 +894,10 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             nShapeID = mpEscherEx->GetShapeID();
             mpEscherEx->AddShape( nShapeType = ESCHER_ShpInst_TextBox, 0xa00, nShapeID );
-            ImplWriteTextBundle( rObj, aPropOpt );
-
+            if ( rObj.ImplGetText() )
+                aPropOpt.CreateTextProperties( rObj.mXPropSet,
+                    mpEscherEx->QueryTextID( rObj.GetShapeRef(),
+                        rObj.GetShapeId() ) );
             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
             aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
 
