@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: fs $ $Date: 2000-10-12 16:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
@@ -145,7 +148,7 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
     OSL_ENSHURE(_xTableSupplier.is(),"TableSupplier cant be null!");
 
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = ConvertIsoStringToLanguage(utl::getString(aValue),'_');
+    LanguageType eLanguage = ConvertIsoStringToLanguage(::comphelper::getString(aValue),'_');
     m_aInternational = International( eLanguage );
 }
 // -------------------------------------------------------------------------
