@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-05 09:09:24 $
+ *  last change: $Author: sab $ $Date: 2000-12-05 09:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1892,7 +1892,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
         {
             rtl::OUStringBuffer sBuffer;
             GetMM100UnitConverter().convertNumber(sBuffer, nZOrder);
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_zindex, sBuffer.makeStringAndClear());
+            AddAttribute(XML_NAMESPACE_DRAW, sXML_zindex, sBuffer.makeStringAndClear());
         }
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xShapeProps->getPropertySetInfo();
         if( xPropSetInfo->hasPropertyByName( sPropCLSID ) )
