@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartPropertySetMapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:24:56 $
+ *  last change: $Author: sab $ $Date: 2000-10-26 10:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,8 @@ public:
         const SvXMLNamespaceMap& rNamespaceMap ) const;
 
     virtual void finished(
-        ::std::vector< XMLPropertyState >& rProperties ) const;
+        ::std::vector< XMLPropertyState >& rProperties,
+        sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const;
 };
 
 #endif  // _XMLOFF_CHARTPROPERTYSETMAPPER_HXX_
