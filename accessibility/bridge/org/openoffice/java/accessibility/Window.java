@@ -182,6 +182,13 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
     public void dispose() {
         setVisible(false);
         postWindowEvent(java.awt.event.WindowEvent.WINDOW_CLOSED);
+
+        // Transfer window focus back to the owner window if it is still the active frame
+        if ((getOwner() instanceof Frame && ((Frame) getOwner()).active) ||
+                (getOwner() instanceof Dialog && ((Dialog) getOwner()).active)) {
+            eventQueue.postEvent(new java.awt.event.WindowEvent(getOwner(),
+                java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS));
+        }
     }
 
     protected void postWindowEvent(int i) {

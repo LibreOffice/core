@@ -65,6 +65,7 @@ public class Frame extends java.awt.Frame implements javax.accessibility.Accessi
 
     boolean opened = false;
     boolean visible = false;
+    boolean active = false;
 
     java.awt.EventQueue eventQueue = null;
 
@@ -205,6 +206,7 @@ public class Frame extends java.awt.Frame implements javax.accessibility.Accessi
         protected void setComponentState(short state, boolean enable) {
             switch (state) {
                 case AccessibleStateType.ACTIVE:
+                    active = enable;
                     if (enable) {
                         AccessibleObjectFactory.postWindowActivated(Frame.this);
                     } else {
