@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 10:45:28 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 09:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2626,7 +2626,8 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
     Reference< ::com::sun::star::container::XIndexAccess >  xCols(xSupplyCols->getColumns(), UNO_QUERY);
     if (!xCols.is() || (xCols->getCount() == 0))
         return sal_False;
-    return !(m_xRowSet->isBeforeFirst() || m_xRowSet->isAfterLast()) ;
+    Reference<XPropertySet> xProp(m_xRowSet,UNO_QUERY);
+    return ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISNEW)) || !(m_xRowSet->isBeforeFirst() || m_xRowSet->isAfterLast()) ;
 }
 
 // -------------------------------------------------------------------------
