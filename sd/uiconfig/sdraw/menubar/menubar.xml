@@ -95,6 +95,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+               <menu:menuitem menu:id=".uno:LeftPaneChildWindow" menu:helpid="27414" menu:label="" />
             <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
             <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow" menu:helpid="6680" menu:label="" />
