@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change:$Date: 2004-12-10 17:00:11 $
+ *  last change:$Date: 2005-02-02 13:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ public class OfficeProvider implements AppProvider {
 
 
                         //System.out.println("CopyLayer: "+copyLayer);
-                        copyDirectory(new File(userLayer), new File(copyLayer));
+                        FileTools.copyDirectory(new File(userLayer), new File(copyLayer), new String[]{"temp"});
                     } catch (com.sun.star.container.NoSuchElementException e) {
                         System.out.println("User Variable '$(user)' not defined.");
                     } catch (java.io.IOException e) {
@@ -459,8 +459,8 @@ public class OfficeProvider implements AppProvider {
             String copyLayer = (String) param.get("copyLayer");
             if (userLayer != null && copyLayer != null) {
                 File copyFile = new File(copyLayer);
-                copyDirectory(copyFile, new File(userLayer));
-                deleteDir(copyFile);
+                FileTools.copyDirectory(copyFile, new File(userLayer), new String[]{"temp"});
+                FileTools.deleteDir(copyFile);
             }
             else
                 System.out.println("Cannot copy layer: " + copyLayer + " back to user layer: " + userLayer);
@@ -500,51 +500,6 @@ public class OfficeProvider implements AppProvider {
         return res;
     }
 
-    // Copies src file to dst file.
-    // If the dst file does not exist, it is created
-    void copyFile(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-
-        // Transfer bytes from in to out
-        byte[] buf = new byte[1024];
-        int len;
-
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-
-        in.close();
-        out.close();
-    }
-
-    // Copies all files under srcDir to dstDir.
-    // If dstDir does not exist, it will be created.
-    public void copyDirectory(File srcDir, File dstDir)
-    throws IOException {
-        if (srcDir.getName().endsWith("temp")) {
-            if (debug) {
-                System.out.println("Ignoring: " + srcDir.getName());
-            }
-
-            return;
-        }
-
-        if (srcDir.isDirectory()) {
-            if (!dstDir.exists()) {
-                dstDir.mkdir();
-            }
-
-            String[] children = srcDir.list();
-
-            for (int i = 0; i < children.length; i++) {
-                copyDirectory(new File(srcDir, children[i]),
-                new File(dstDir, children[i]));
-            }
-        } else {
-            copyFile(srcDir, dstDir);
-        }
-    }
 
     public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF) {
         Object xPathSubst = null;
@@ -605,23 +560,4 @@ public class OfficeProvider implements AppProvider {
         return sysDir;
     }
 
-    // Deletes all files and subdirectories under dir.
-    // Returns true if all deletions were successful.
-    // If a deletion fails, the method stops attempting to delete and returns false.
-    public static boolean deleteDir(File dir) {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-
-        // The directory is now empty so delete it
-        return dir.delete();
-    }
 }
