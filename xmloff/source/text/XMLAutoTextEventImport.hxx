@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventImport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 10:31:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,11 @@ class XMLAutoTextEventImport : public SvXMLImport
         ::com::sun::star::container::XNameReplace> xEvents;
 
 public:
-    XMLAutoTextEventImport() throw();
+    // #110680#
+    // XMLAutoTextEventImport() throw();
+    XMLAutoTextEventImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+        ) throw();
 
     ~XMLAutoTextEventImport() throw();
 
