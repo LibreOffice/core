@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:17:39 $
+#   last change: $Author: ka $ $Date: 2004-08-27 13:31:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,10 @@ SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
 
 .IF "$(ENABLE_GTK)" != ""
 SCPDEFS+=-DENABLE_GTK
+.ENDIF
+
+.IF "$(ENABLE_DIRECTX)" != ""
+SCPDEFS+=-DENABLE_DIRECTX
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl
