@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-27 09:56:36 $
+ *  last change: $Author: kr $ $Date: 2001-01-16 18:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ import java.lang.reflect.InvocationTargetException;
  * calls to the implementing objects and are used instead of casts
  * and identity comparisons.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-10-27 09:56:36 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:07:14 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.container.XSet
@@ -607,17 +607,14 @@ public class ServiceManager implements XMultiServiceFactory,
             throws com.sun.star.uno.RuntimeException
     {
         if ( UNO_TYPE == null )
-        try {
-            UNO_TYPE = new com.sun.star.uno.Type(   com.sun.star.uno.TypeClass.SERVICE,
-                                                      ServiceManager.class.getName(),
-                                                      ServiceManager[].class.getName(),
-                                                      ServiceManager.class );
-        }
-        catch (com.sun.star.uno.Exception e) {
-            com.sun.star.uno.RuntimeException rte = new com.sun.star.uno.RuntimeException();
-            rte.fillInStackTrace();
-            throw rte;
-        }
+          try {
+            UNO_TYPE = new com.sun.star.uno.Type(ServiceManager.class);
+          }
+          catch (com.sun.star.uno.Exception e) {
+              com.sun.star.uno.RuntimeException rte = new com.sun.star.uno.RuntimeException();
+              rte.fillInStackTrace();
+              throw rte;
+          }
 
         return UNO_TYPE;
     }
@@ -701,7 +698,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * implementation of the @see com.sun.star.container.XEnumeration interface.
      * It is a inner wrapper for a java.util.Enumeration object.
      * <p>
-     * @version     $Revision: 1.2 $ $ $Date: 2000-10-27 09:56:36 $
+     * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:07:14 $
      * @author      Markus Herzog
      * @see         com.sun.star.lang.XSingleServiceFactory
      * @see         com.sun.star.lang.XServiceInfo
@@ -774,7 +771,7 @@ public class ServiceManager implements XMultiServiceFactory,
  * com.sun.star.lang.XSingleServiceFactory and the com.sun.star.lang.XServiceInfo
  * interfaces.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-10-27 09:56:36 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:07:14 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XSingleServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
