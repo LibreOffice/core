@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swundo.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:51:49 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,10 @@ enum SwUndoStdId
     UNDO_MERGE_TABLE,                       // 38
     UNDO_TRANSLITERATE,                     // 39
 
-    UNDO_REPEAT_DUMMY_4,                    // 40
-    UNDO_REPEAT_DUMMY_5,                    // 41
+    // -> #111827#
+    UNDO_PASTE_CLIPBOARD,                           // 40
+    UNDO_TYPING,                           // 41
+    // <- #111827#
     UNDO_REPEAT_DUMMY_6,                    // 42
     UNDO_REPEAT_DUMMY_7,                    // 43
     UNDO_REPEAT_DUMMY_8,                    // 44
@@ -160,34 +162,30 @@ enum SwUndoStdId
 
     UNDO_TMPAUTOCORR,                       // 86 #102505#
     UNDO_TOXCHANGE,                         // 87
-    // -> #111827#
-    UNDO_PASTE_CLIPBOARD,                           // 88
-    UNDO_TYPING,                           // 89
-    // <- #111827#
-    UNDO_CREATE_PAGEDESC,                           // 90
-    UNDO_CHANGE_PAGEDESC,                           // 91
-    UNDO_DELETE_PAGEDESC,                           // 92
-    UNDO_HEADER_FOOTER,                           // 93 #i7983#
-    UNDO_FIELD,                             // 94 #111840#
-    UNDO_TXTFMTCOL_CREATE,                   // 95
-    UNDO_TXTFMTCOL_DELETE,                   // 96
-    UNDO_TXTFMTCOL_RENAME, // 97
-    UNDO_CHARFMT_CREATE, // 98
-    UNDO_CHARFMT_DELETE, // 99
-    UNDO_CHARFMT_RENAME, // 100
-    UNDO_FRMFMT_CREATE, // 101
-    UNDO_FRMFMT_DELETE, // 102
-    UNDO_FRMFMT_RENAME, // 103
-    UNDO_NUMRULE_CREATE,// 104
-    UNDO_NUMRULE_DELETE,// 105
-    UNDO_NUMRULE_RENAME,// 106
-    UNDO_BOOKMARK_RENAME, // 107
-    UNDO_INDEX_ENTRY_INSERT, // 108
-    UNDO_INDEX_ENTRY_DELETE, // 109
-    UNDO_COL_DELETE, // 110
-    UNDO_ROW_DELETE, // 111
-    UNDO_RENAME_PAGEDESC, // 112
-    UNDO_NUMDOWN, // 113
+    UNDO_CREATE_PAGEDESC,                           // 88
+    UNDO_CHANGE_PAGEDESC,                           // 89
+    UNDO_DELETE_PAGEDESC,                           // 90
+    UNDO_HEADER_FOOTER,                           // 91 #i7983#
+    UNDO_FIELD,                             // 92 #111840#
+    UNDO_TXTFMTCOL_CREATE,                   // 93
+    UNDO_TXTFMTCOL_DELETE,                   // 94
+    UNDO_TXTFMTCOL_RENAME, // 95
+    UNDO_CHARFMT_CREATE, // 96
+    UNDO_CHARFMT_DELETE, // 97
+    UNDO_CHARFMT_RENAME, // 98
+    UNDO_FRMFMT_CREATE, // 99
+    UNDO_FRMFMT_DELETE, // 100
+    UNDO_FRMFMT_RENAME, // 101
+    UNDO_NUMRULE_CREATE,// 102
+    UNDO_NUMRULE_DELETE,// 103
+    UNDO_NUMRULE_RENAME,// 104
+    UNDO_BOOKMARK_RENAME, // 105
+    UNDO_INDEX_ENTRY_INSERT, // 106
+    UNDO_INDEX_ENTRY_DELETE, // 107
+    UNDO_COL_DELETE, // 108
+    UNDO_ROW_DELETE, // 109
+    UNDO_RENAME_PAGEDESC, // 110
+    UNDO_NUMDOWN, // 111
     UNDO_STD_END= UNDO_NUMDOWN
 };
 
