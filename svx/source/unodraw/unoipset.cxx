@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-26 13:46:09 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 15:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@
 #include "unoshprp.hxx"
 #include "editeng.hxx"
 #include "unoapi.hxx"
+
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
