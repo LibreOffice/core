@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-09 10:41:30 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 13:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
 
     Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
     if ( bModified && xModel.is() )
-        _pImp->_pObjSh->SetModified( sal_True );
+            _pImp->_pObjSh->FlushDocInfo();
 }
 
 //-----------------------------------------------------------------------------
@@ -751,7 +751,7 @@ void  SAL_CALL SfxDocumentInfoObject::setUserFieldName(sal_Int16 nIndex, const :
         _pInfo->SetUserKey( SfxDocUserKey( aName, rKey.GetWord() ), nIndex );
         Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
         if ( xModel.is() )
-            _pImp->_pObjSh->SetModified( sal_True );
+            _pImp->_pObjSh->FlushDocInfo();
     }
 }
 
@@ -765,7 +765,7 @@ void SAL_CALL  SfxDocumentInfoObject::setUserFieldValue( sal_Int16 nIndex, const
         _pInfo->SetUserKey( SfxDocUserKey( rKey.GetTitle(), aValue ), nIndex );
         Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
         if ( xModel.is() )
-            _pImp->_pObjSh->SetModified( sal_True );
+            _pImp->_pObjSh->FlushDocInfo();
     }
 }
 
