@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoTextRangeEnumeration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-10 09:43:41 $
+ *  last change:$Date: 2003-05-27 13:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package mod._svx;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XSimpleText;
 import com.sun.star.text.XTextCursor;
@@ -98,7 +99,7 @@ public class SvxUnoTextRangeEnumeration extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -141,7 +142,7 @@ public class SvxUnoTextRangeEnumeration extends TestCase {
 
         XEnumerationAccess xEA = null ;
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF()) ;
+            SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF()) ;
             XShape oShape = SOF.createShape
                 (xDrawDoc,5000,3500,7500,5000,"Text");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;
