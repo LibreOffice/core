@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:19:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 09:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,10 +369,14 @@ public:
     inline sal_uInt32   GetBlipId() const { return mnBlipId; }
     /** Returns the position in Ctrl stream for additional form control data. */
     inline sal_uInt32   GetCtrlStreamPos() const { return mnCtrlStrmPos; }
-
+    /** Returns control name indicated by MsofbtOPT property DFF_Prop_wzName
+        if present*/
+    inline ::rtl::OUString      GetName() { return msName; }
     /** Sets the BLIP identifier for the meta file. */
-    inline void         SetBlipId( sal_uInt32 nBlipId ) { mnBlipId = nBlipId; }
 
+    inline void         SetBlipId( sal_uInt32 nBlipId ) { mnBlipId = nBlipId; }
+    /** Sets name indicated by MsofbtOPT property DFF_Prop_wzName */
+    inline void                 SetName( const rtl::OUString& sName ) { msName = sName; }
     /** Reads the contents of the ftPioGrbit sub structure in an OBJ record. */
     void                ReadPioGrbit( XclImpStream& rStrm );
     /** Reads the contents of the ftPictFmla sub structure in an OBJ record. */
@@ -387,6 +391,7 @@ public:
 
 private:
     String              maStorageName;  /// Name of the OLE storage for this object.
+    ::rtl::OUString     msName;         /// control name if form control
     sal_uInt32          mnBlipId;       /// The BLIP identifier (meta file).
     sal_uInt32          mnCtrlStrmPos;  /// Position in Ctrl stream for controls.
     bool                mbAsSymbol;     /// true = Show as symbol.
