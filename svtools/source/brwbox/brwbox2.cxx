@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-11 16:20:41 $
+ *  last change: $Author: oj $ $Date: 2002-04-17 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2128,5 +2128,47 @@ void BrowseBox::SetCursorColor(const Color& _rCol)
         DoShowCursor("SetCursorColor - force");
     DoShowCursor("SetCursorColor");
 }
+// -----------------------------------------------------------------------------
+Rectangle BrowseBox::calcHeaderRect(sal_Bool _bIsColumnBar,BOOL _bOnScreen)
+{
+    Window* pParent = NULL;
+    if ( !_bOnScreen )
+        pParent = GetAccessibleParentWindow();
+
+    Point aTopLeft;
+    long nWidth;
+    long nHeight;
+    if ( _bIsColumnBar )
+    {
+        nWidth = GetDataWindow().GetOutputSizePixel().Width();
+        nHeight = GetDataRowHeight();
+    }
+    else
+    {
+        aTopLeft.Y() = GetDataRowHeight();
+        nWidth = GetColumnWidth(0);
+        nHeight = GetWindowExtentsRelative( pParent ).GetHeight() - aTopLeft.Y() - GetControlArea().GetSize().B();
+    }
+    aTopLeft += GetWindowExtentsRelative( pParent ).TopLeft();
+    return Rectangle(aTopLeft,Size(nWidth,nHeight));
+}
+// -----------------------------------------------------------------------------
+Rectangle BrowseBox::calcTableRect(BOOL _bOnScreen)
+{
+    Window* pParent = NULL;
+    if ( !_bOnScreen )
+        pParent = GetAccessibleParentWindow();
+
+    Rectangle aRect( GetWindowExtentsRelative( pParent ) );
+    Rectangle aRowBar = calcHeaderRect(FALSE,pParent == NULL);
+
+    long nX = aRowBar.Right() - aRect.Left();
+    long nY = aRowBar.Top() - aRect.Top();
+    Size aSize(aRect.GetSize());
+
+    return Rectangle(aRowBar.TopRight(), Size(aSize.A() - nX, aSize.B() - nY - aHScroll.GetSizePixel().Height()) );
+}
+// -----------------------------------------------------------------------------
+
 
 

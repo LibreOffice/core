@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-11 16:20:41 $
+ *  last change: $Author: oj $ $Date: 2002-04-17 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,7 +1344,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, BOOL bDoPaint, BOOL bKeep
     }
 
     DoShowCursor( "RowInserted" );
-    //! TODO notify accessible that rows were inserted
+    // notify accessible that rows were inserted
     if ( m_pImpl->m_pAccessible )
         m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
                                     com::sun::star::uno::makeAny( AccessibleTableModelChange(   INSERT,
@@ -1697,7 +1697,6 @@ void BrowseBox::SetNoSelection()
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
 
     if ( m_pImpl->m_pAccessible )
-        //! TODO check if this event is the rght one when the selection changed
         m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
                                             com::sun::star::uno::Any(),
                                             com::sun::star::uno::Any());
@@ -1731,7 +1730,6 @@ void BrowseBox::SetSelection( const MultiSelection &rSel )
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
 
     if ( m_pImpl->m_pAccessible )
-        //! TODO check if this event is the rght one when the selection changed
         m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
                                             com::sun::star::uno::Any(),
                                             com::sun::star::uno::Any());
@@ -1781,7 +1779,6 @@ void BrowseBox::SelectAll()
     // restore screen
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
     if ( m_pImpl->m_pAccessible )
-        //! TODO check if this event is the rght one when the selection changed
         m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
                                             com::sun::star::uno::Any(),
                                             com::sun::star::uno::Any());
@@ -1845,7 +1842,6 @@ void BrowseBox::SelectRow( long nRow, BOOL _bSelect, BOOL bExpand )
     // restore screen
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
     if ( m_pImpl->m_pAccessible )
-        //! TODO check if this event is the rght one when the selection changed
         m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
                                             com::sun::star::uno::Any(),
                                             com::sun::star::uno::Any());
@@ -1911,7 +1907,6 @@ void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL _bSelect, BOOL bMakeVis
             bSelect = TRUE;
 
         if ( m_pImpl->m_pAccessible )
-            //! TODO check if this event is the rght one when the selection changed
             m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
                                                 com::sun::star::uno::Any(),
                                                 com::sun::star::uno::Any());
@@ -2119,7 +2114,7 @@ BOOL BrowseBox::IsFieldVisible( long nRow, USHORT nColumnId,
 //-------------------------------------------------------------------
 
 Rectangle BrowseBox::GetFieldRectPixel( long nRow, USHORT nColumnId,
-                                        BOOL bRelToBrowser ) const
+                                        BOOL bRelToBrowser) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
