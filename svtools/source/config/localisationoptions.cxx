@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localisationoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-26 15:47:24 $
+ *  last change: $Author: as $ $Date: 2000-10-31 10:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,7 @@ SvtLocalisationOptions::~SvtLocalisationOptions()
 //*****************************************************************************************************************
 sal_Bool SvtLocalisationOptions::IsAutoMnemonic() const
 {
+    MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->IsAutoMnemonic();
 }
 
@@ -447,6 +448,7 @@ sal_Bool SvtLocalisationOptions::IsAutoMnemonic() const
 //*****************************************************************************************************************
 void SvtLocalisationOptions::SetAutoMnemonic( sal_Bool bState )
 {
+    MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetAutoMnemonic( bState );
 }
 
@@ -455,6 +457,7 @@ void SvtLocalisationOptions::SetAutoMnemonic( sal_Bool bState )
 //*****************************************************************************************************************
 sal_Int32 SvtLocalisationOptions::GetDialogScale() const
 {
+    MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->GetDialogScale();
 }
 
@@ -463,6 +466,7 @@ sal_Int32 SvtLocalisationOptions::GetDialogScale() const
 //*****************************************************************************************************************
 void SvtLocalisationOptions::SetDialogScale( sal_Int32 nScale )
 {
+    MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetDialogScale( nScale );
 }
 

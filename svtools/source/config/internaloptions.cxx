@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-30 08:19:20 $
+ *  last change: $Author: as $ $Date: 2000-10-31 10:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,7 @@ SvtInternalOptions::~SvtInternalOptions()
 //*****************************************************************************************************************
 sal_Bool SvtInternalOptions::UseSlotCFG() const
 {
+    MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->UseSlotCFG();
 }
 
@@ -374,6 +375,7 @@ sal_Bool SvtInternalOptions::UseSlotCFG() const
 //*****************************************************************************************************************
 sal_Bool SvtInternalOptions::SendCrashMail() const
 {
+    MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->SendCrashMail();
 }
 
