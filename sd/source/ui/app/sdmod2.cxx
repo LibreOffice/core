@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:52:52 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,11 +286,11 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 else
                 {
                     // draw mode, slide mode and preview
-                    SdPage* pPage = NULL;
-                    SdrPageView* pPV = pViewSh->GetDoc()->GetPaintingPageView();
+                    const SdPage* pPage = 0L;
+                    const SdrPageView* pPV = pViewSh->GetDoc()->GetPaintingPageView();
 
                     if (pPV)
-                        pPage = (SdPage*) pPV->GetPage();
+                        pPage = (const SdPage*) pPV->GetPage();
 
                     if ( pPage )
                     {
@@ -311,11 +311,16 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                                     // Handzettelseite
                                     nPgNum = pViewSh->GetPrintedHandoutPageNum();
                                 }
-                                else if ( pPV && pPV->GetPaintingPageObj() )
-                                {
-                                    // Textobjekt innerhalb eines Seitendarstellungsobjekts
-                                    nPgNum = (pPV->GetPaintingPageObj()->GetPageNum() - 1) / 2 + 1;
-                                }
+                                //else if ( pPV && pPV->GetPaintingPageObj() )
+                                //{
+                                //    // Textobjekt innerhalb eines Seitendarstellungsobjekts
+                                //  SdrPage* pPage = pPV->GetPaintingPageObj()->GetReferencedPage();
+                                //
+                                //  if(pPage)
+                                //  {
+                                //      nPgNum = (pPage->GetPageNum() - 1) / 2 + 1;
+                                //  }
+                                //}
                                 else
                                 {
                                     // Textobjekt innerhalb eines Seitendarstellungsobjekts
