@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:58:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 
 #ifdef PCH
 #include "filt_pch.hxx"
-#pragma hdrstop
 #endif
 
 #ifndef __SGI_STL_ALGORITHM
@@ -628,21 +627,13 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
 const SfxPoolItem* SwWW8Writer::HasItem( USHORT nWhich ) const
 {
     const SfxPoolItem* pItem=0;
-    if( pISet )
+    if (pISet)
     {
         // if write a EditEngine text, then the WhichIds are greater as
         // ourer own Ids. So the Id have to translate from our into the
         // EditEngine Range
-        if( RES_WHICHHINT_END < *pISet->GetRanges() )
-        {
-            USHORT nSlotId = pDoc->GetAttrPool().GetSlotId( nWhich );
-            if( !nSlotId || nWhich == nSlotId ||
-                0 == ( nWhich = pISet->GetPool()->GetWhich( nSlotId ) ) ||
-                nWhich != nSlotId )
-                nWhich = 0;
-        }
-        if (nWhich &&
-            SFX_ITEM_SET != pISet->GetItemState(nWhich, true, &pItem))
+        nWhich = sw::hack::GetSetWhichFromSwDocWhich(*pISet, *pDoc, nWhich);
+        if (nWhich && SFX_ITEM_SET != pISet->GetItemState(nWhich, true, &pItem))
             pItem = 0;
     }
     else if( pChpIter )
@@ -655,22 +646,16 @@ const SfxPoolItem* SwWW8Writer::HasItem( USHORT nWhich ) const
     return pItem;
 }
 
-const SfxPoolItem& SwWW8Writer::GetItem( USHORT nWhich ) const
+const SfxPoolItem& SwWW8Writer::GetItem(USHORT nWhich) const
 {
     const SfxPoolItem* pItem;
-    if( pISet )
+    if (pISet)
     {
         // if write a EditEngine text, then the WhichIds are greater as
         // ourer own Ids. So the Id have to translate from our into the
         // EditEngine Range
-        if( RES_WHICHHINT_END < *pISet->GetRanges() )
-        {
-            USHORT nSlotId = pDoc->GetAttrPool().GetSlotId( nWhich );
-            if( !nSlotId || nWhich == nSlotId ||
-                0 == ( nWhich = pISet->GetPool()->GetWhich( nSlotId ) ) ||
-                nWhich != nSlotId )
-                nWhich = 0;
-        }
+        nWhich = sw::hack::GetSetWhichFromSwDocWhich(*pISet, *pDoc, nWhich);
+        ASSERT(nWhich != 0, "All broken, Impossible");
         pItem = &pISet->Get(nWhich, true);
     }
     else if( pChpIter )
