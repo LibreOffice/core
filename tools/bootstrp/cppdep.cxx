@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdep.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oisin $ $Date: 2000-11-02 14:28:09 $
+ *  last change: $Author: hjs $ $Date: 2001-06-13 13:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,9 @@ BOOL CppDep::AddSource( const char* aSource )
 
 BOOL CppDep::Search( ByteString aFileName )
 {
-    //fprintf( stderr, "SEARCH : %s\n", aFileName.GetStr());
+#ifdef DEBUG_VERBOSE
+    fprintf( stderr, "SEARCH : %s\n", aFileName.GetBuffer());
+#endif
     BOOL bRet = FALSE;
 
     SvFileStream aFile;
@@ -148,9 +150,13 @@ BOOL CppDep::Search( ByteString aFileName )
         USHORT nPos;
         if ( nPos = aReadLine.Search( "include" ) != STRING_NOTFOUND  )
         {
-            //fprintf( stderr, "found : %d %s\n", nPos, aReadLine.GetStr() );
+#ifdef DEBUG_VERBOSE
+            fprintf( stderr, "found : %d %s\n", nPos, aReadLine.GetBuffer() );
+#endif
             ByteString aResult = IsIncludeStatement( aReadLine );
-            //fprintf( stderr, "Result : %x\n", aResult.GetStr() );
+#ifdef DEBUG_VERBOSE
+            fprintf( stderr, "Result : %s\n", aResult.GetBuffer() );
+#endif
 
             ByteString aNewFile;
             if ( aResult !="")
@@ -164,10 +170,15 @@ BOOL CppDep::Search( ByteString aFileName )
                     if ( *pStr == aNewFile )
                         bFound = TRUE;
                 }
+#ifdef DEBUG_VERBOSE
+                fprintf( stderr, "not in list : %d %s\n", nPos, aReadLine.GetBuffer() );
+#endif
                 if ( !bFound )
                 {
                     pFileList->Insert( new ByteString( aNewFile ), LIST_APPEND );
-                    //fprintf( stderr, " CppDep %s\\\n", aNewFile.GetStr() );
+#ifdef DEBUG_VERBOSE
+                    fprintf( stderr, " CppDep %s\\\n", aNewFile.GetBuffer() );
+#endif
                     Search(aNewFile);
                 }
             }
@@ -180,7 +191,9 @@ BOOL CppDep::Search( ByteString aFileName )
 
 ByteString CppDep::Exists( ByteString aFileName )
 {
-            //fprintf( stderr, "Searching %s \n", aFileName.GetStr() );
+#ifdef DEBUG_VERBOSE
+            fprintf( stderr, "Searching %s \n", aFileName.GetBuffer() );
+#endif
     ByteString aString;
     ULONG nCount = pSearchPath->Count();
     for ( ULONG n=0; n<nCount; n++)
@@ -193,13 +206,17 @@ ByteString CppDep::Exists( ByteString aFileName )
         strcat( pFullName, DIR_SEP );
         strcat( pFullName, aFileName.GetBuffer());
 
-            //fprintf( stderr, "looking for %s\t ", pFullName );
+#ifdef DEBUG_VERBOSE
+            fprintf( stderr, "looking for %s\t ", pFullName );
+#endif
         if ( stat( pFullName, &aBuf ) == 0 )
         {
 #ifdef DEBUG_VERBOSE
             fprintf( stderr, "Got Dependency ", pFullName );
 #endif
-            //fprintf( stderr, "%s \\\n", pFullName );
+#ifdef DEBUG_VERBOSE
+            fprintf( stderr, "%s \\\n", pFullName );
+#endif
 
             return ByteString(pFullName);
         }
@@ -214,15 +231,24 @@ ByteString CppDep::IsIncludeStatement( ByteString aLine )
     // WhiteSpacesfressen
     aLine.EraseAllChars(' ');
     aLine.EraseAllChars('\t');
-    //fprintf( stderr, "now : %s\n", aLine.GetStr() );
+#ifdef DEBUG_VERBOSE
+    fprintf( stderr, "now : %s\n", aLine.GetBuffer() );
+#endif
     // ist der erste Teil ein #include ?
     ByteString aTmpStr;
-    if ( (aTmpStr = aLine.Erase( 0, 8 )) == "#include" )
+    aTmpStr = aLine.Copy( 0, 8 );
+#ifdef DEBUG_VERBOSE
+    fprintf( stderr, "is include : %s\n", aTmpStr.GetBuffer() );
+#endif
+    if ( aTmpStr.Equals("#include") )
     {
+        aTmpStr = aLine.Erase( 0, 8 );
         USHORT nLen = aLine.Len();
         aLine.Erase( nLen-1, 1 );
         aLine.Erase( 0, 1 );
-        //fprintf( stderr, "Gotcha : %s\n", aLine.GetStr() );
+#ifdef DEBUG_VERBOSE
+        fprintf( stderr, "Gotcha : %s\n", aLine.GetBuffer() );
+#endif
         aRetStr = aLine;
     }
     return aRetStr;
