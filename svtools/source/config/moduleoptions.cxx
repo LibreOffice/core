@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
+ *  last change: $Author: as $ $Date: 2000-11-03 09:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_PORTALDRAW             OUString(RTL_CONSTASCII_USTRINGPARAM("Draw/Install"         ))
 #define PROPERTYNAME_PORTALWRITER           OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/Install"       ))
 #define PROPERTYNAME_PORTALIMPRESS          OUString(RTL_CONSTASCII_USTRINGPARAM("Impress/Install"      ))
+#define PROPERTYNAME_PORTALBASICIDE         OUString(RTL_CONSTASCII_USTRINGPARAM("BasicIDE/Install"     ))
 
 /*TODO:
 
@@ -159,6 +160,7 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_PORTALDRAW            3
 #define PROPERTYHANDLE_PORTALWRITER          4
 #define PROPERTYHANDLE_PORTALIMPRESS         5
+#define PROPERTYHANDLE_PORTALBASICIDE        6
 
 /*TODO:
 
@@ -174,7 +176,7 @@ using namespace ::com::sun::star::uno   ;
 */
 
 //#define   PROPERTYCOUNT                   12
-#define PROPERTYCOUNT                       6
+#define PROPERTYCOUNT                       7
 
 /*-************************************************************************************************************//**
     @descr          The return value of GetFeature() is a combination of different bit-flags. Follow const definitions
@@ -183,6 +185,7 @@ using namespace ::com::sun::star::uno   ;
                     To enable a module information we use ENABLEFEATURE_xxx defines ... to disable it the DISABLEFEATURE_xxx!
 *//*-*************************************************************************************************************/
 
+#define ENABLEFEATURE_BASICIDE              FEATUREFLAG_BASICIDE        // ----------1-----
 #define ENABLEFEATURE_MATH                  FEATUREFLAG_MATH            // -------1--------
 #define ENABLEFEATURE_CHART                 FEATUREFLAG_CHART           // ------1---------
 #define ENABLEFEATURE_CALC                  FEATUREFLAG_CALC            // ----1-----------
@@ -190,6 +193,7 @@ using namespace ::com::sun::star::uno   ;
 #define ENABLEFEATURE_WRITER                FEATUREFLAG_WRITER          // --1-------------
 #define ENABLEFEATURE_IMPRESS               FEATUREFLAG_IMPRESS         // 1---------------
 
+#define DISABLEFEATURE_BASICIDE             0xFFFFFFDF                  // 1111111111-11111
 #define DISABLEFEATURE_MATH                 0xFFFFFEFF                  // 1111111-11111111
 #define DISABLEFEATURE_CHART                0xFFFFFDFF                  // 111111-111111111
 #define DISABLEFEATURE_CALC                 0xFFFFF7FF                  // 1111-11111111111
@@ -301,6 +305,7 @@ class SvtModuleOptions_Impl : public ConfigItem
         sal_Bool    IsDraw      ( sal_Bool bClient = sal_False ) const;
         sal_Bool    IsWriter    ( sal_Bool bClient = sal_False ) const;
         sal_Bool    IsImpress   ( sal_Bool bClient = sal_False ) const;
+        sal_Bool    IsBasicIDE  ( sal_Bool bClient = sal_False ) const;
         sal_uInt32  GetFeatures ( sal_Bool bClient = sal_False ) const;
 
     //-------------------------------------------------------------------------------------------------------------
@@ -513,6 +518,18 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
                                                     }
                                                     break;
 
+            case PROPERTYHANDLE_PORTALBASICIDE  :   {
+                                                        if( bState == INSTALLED )
+                                                        {
+                                                            m_nPortalModules |= ENABLEFEATURE_BASICIDE;
+                                                        }
+                                                        else
+                                                        {
+                                                            m_nPortalModules &= DISABLEFEATURE_BASICIDE;
+                                                        }
+                                                    }
+                                                    break;
+
             default                             :   DBG_ERRORFILE( "SvtModuleOptions_Impl::SvtModuleOptions_Impl()\nWho has changed my property order mechanism?\n" );
         }
     }
@@ -574,6 +591,10 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
     {
         m_nClientModules &= DISABLEFEATURE_IMPRESS;
     }
+
+    // To read the sversion.ini is a hack ... and these new key isn't supported by a sversion entry!
+    // Enable basic ide by default!!!
+    m_nClientModules |= ENABLEFEATURE_BASICIDE;
 
     aSVersion.close();
 
@@ -724,6 +745,26 @@ sal_Bool SvtModuleOptions_Impl::IsImpress( sal_Bool bClient ) const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+sal_Bool SvtModuleOptions_Impl::IsBasicIDE( sal_Bool bClient ) const
+{
+    // Set default return state to "non installed".
+    sal_Bool bState = sal_False;
+    // Try to specify right install state for given search parameter!
+    if( bClient == sal_True )
+    {
+        bState = ( m_nClientModules & FEATUREFLAG_BASICIDE );
+    }
+    else
+    {
+        bState = ( m_nPortalModules & FEATUREFLAG_BASICIDE );
+    }
+    // Return install state.
+    return bState;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
 sal_uInt32 SvtModuleOptions_Impl::GetFeatures( sal_Bool bClient ) const
 {
     // Set default return state to "non installed".
@@ -762,6 +803,7 @@ Sequence< OUString > SvtModuleOptions_Impl::impl_GetPropertyNames()
         PROPERTYNAME_PORTALDRAW     ,
         PROPERTYNAME_PORTALWRITER   ,
         PROPERTYNAME_PORTALIMPRESS  ,
+        PROPERTYNAME_PORTALBASICIDE ,
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -863,6 +905,15 @@ sal_Bool SvtModuleOptions::IsImpress( sal_Bool bClient ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsImpress( bClient );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtModuleOptions::IsBasicIDE( sal_Bool bClient ) const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsBasicIDE( bClient );
 }
 
 //*****************************************************************************************************************
