@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 15:38:36 $
+ *  last change: $Author: sb $ $Date: 2002-07-22 07:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef COMPHELPER_ACCESSIBLE_CONTEXT_HELPER_HXX
 #include <comphelper/accessiblecontexthelper.hxx>
+#endif
+#ifndef INCLUDED_COMPHELPER_ACCESSIBLEEVENTBUFFER_HXX
+#include <comphelper/accessibleeventbuffer.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -269,6 +272,30 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
+    void SAL_CALL OAccessibleContextHelper::NotifyAccessibleEvent( const sal_Int16 _nEventId,
+        const Any& _rOldValue, const Any& _rNewValue,
+        AccessibleEventBuffer & _rBuffer )
+    {
+        // copy our current listeners
+        ::cppu::OInterfaceContainerHelper*  pListeners = m_pImpl->getListenerContainer( sal_False );
+        Sequence< Reference< XInterface > > aListeners;
+        if ( pListeners )
+            aListeners = pListeners->getElements();
+
+        if ( aListeners.getLength() )
+        {
+            AccessibleEventObject aEvent;
+            aEvent.Source = *this;
+            OSL_ENSURE( aEvent.Source.is(), "OAccessibleContextHelper::NotifyAccessibleEvent: invalid creator!" );
+            aEvent.EventId = _nEventId;
+            aEvent.OldValue = _rOldValue;
+            aEvent.NewValue = _rNewValue;
+
+            _rBuffer.addEvent( aEvent, aListeners );
+        }
+    }
+
+    //---------------------------------------------------------------------
     sal_Bool OAccessibleContextHelper::isAlive() const
     {
         return !GetBroadcastHelper().bDisposed && !GetBroadcastHelper().bInDispose;
@@ -382,6 +409,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2002/05/08 15:38:36  fs
+ *  #99218# allow abstract external locks in addition to the own mutex
+ *
  *  Revision 1.6  2002/05/08 07:54:46  fs
  *  #98750# no use the context (not the XAccessible) as event source, again, as usual in the UNO world
  *

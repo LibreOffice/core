@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 15:37:22 $
+ *  last change: $Author: sb $ $Date: 2002-07-22 07:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 namespace comphelper
 {
 //.........................................................................
+
+    class AccessibleEventBuffer;
 
     //=====================================================================
     //= IMutex
@@ -265,6 +267,27 @@ namespace comphelper
                     const ::com::sun::star::uno::Any& _rNewValue
                 );
 
+        /** records a certain event so that all AccessibleEventListeners can
+            be notified later on.
+
+            Can even be called with our mutex locked.
+
+        @param  _nEventId
+            the id of the even. See AccessibleEventType
+        @param  _rOldValue
+            the old value to be notified
+        @param  _rNewValue
+            the new value to be notified
+        @param  _rBuffer
+            the buffer that records the event
+        */
+        void SAL_CALL   NotifyAccessibleEvent(
+                    const sal_Int16 _nEventId,
+                    const ::com::sun::star::uno::Any& _rOldValue,
+                    const ::com::sun::star::uno::Any& _rNewValue,
+                    AccessibleEventBuffer & _rBuffer
+                );
+
         // life time control
         /// checks whether the object is alive (returns <TRUE/> then) or disposed
         sal_Bool    isAlive() const;
@@ -388,6 +411,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2002/05/08 15:37:22  fs
+ *  #99218# allow abstract external locks in addition to the own mutex
+ *
  *  Revision 1.4  2002/04/30 16:11:04  fs
  *  #98750# corrected the access control
  *
