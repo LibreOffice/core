@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:24:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,90 +802,6 @@ public:
                                                   USHORT        nArgs,
                                                   String**      pArgs );
 };
-
-//==================================================================
-// Notiz
-//==================================================================
-
-class ScPostIt
-{
-private:
-    String  aStrText;
-    String  aStrDate;
-    String  aStrAuthor;
-    BOOL    bShown;
-
-public:
-        ScPostIt();
-        ScPostIt( const String& rText );
-        ScPostIt( const String& rText, const String& rDate, const String& rAuthor );
-        ScPostIt( const ScPostIt& rCpy );
-        ~ScPostIt();
-
-    const String&           GetText() const     { return aStrText;   }
-    const String&           GetDate() const     { return aStrDate;   }
-    const String&           GetAuthor() const   { return aStrAuthor; }
-    BOOL                    IsShown() const     { return bShown;     }
-
-    void                    SetText( const String& rNew )   { aStrText   = rNew; }
-    void                    SetDate( const String& rNew )   { aStrDate   = rNew; }
-    void                    SetAuthor( const String& rNew ) { aStrAuthor = rNew; }
-    void                    SetShown( BOOL bNew )           { bShown     = bNew; }
-
-    void                    Clear() { aStrText.Erase(); aStrDate.Erase();
-                                      aStrAuthor.Erase(); bShown = FALSE; }
-    void                    AutoSetText( const String& rNewText );
-
-    inline const ScPostIt&  operator= ( const ScPostIt& rCpy );
-
-    inline int              operator==( const ScPostIt& rPostIt ) const;
-    int                     operator!=( const ScPostIt& rPostIt ) const { return !(operator==(rPostIt)); }
-
-    friend inline SvStream&     operator>>( SvStream& rStream, ScPostIt& rPostIt );
-    friend inline SvStream&     operator<<( SvStream& rStream, const ScPostIt& rPostIt );
-};
-
-inline const ScPostIt& ScPostIt::operator=( const ScPostIt& rCpy )
-{
-    aStrText    = rCpy.aStrText;
-    aStrDate    = rCpy.aStrDate;
-    aStrAuthor  = rCpy.aStrAuthor;
-    bShown      = rCpy.bShown;
-
-    return *this;
-}
-
-inline int ScPostIt::operator==( const ScPostIt& rPostIt ) const
-{
-    return (    aStrText    == rPostIt.aStrText
-            &&  aStrDate    == rPostIt.aStrDate
-            &&  aStrAuthor  == rPostIt.aStrAuthor
-            &&  bShown      == rPostIt.bShown );
-}
-
-inline SvStream& operator>>( SvStream& rStream, ScPostIt& rPostIt )
-{
-    //  ohne bShown !!!
-
-    CharSet eSet = rStream.GetStreamCharSet();
-    rStream.ReadByteString( rPostIt.aStrText, eSet );
-    rStream.ReadByteString( rPostIt.aStrDate, eSet );
-    rStream.ReadByteString( rPostIt.aStrAuthor, eSet );
-
-    return rStream;
-}
-
-inline SvStream& operator<<( SvStream& rStream, const ScPostIt& rPostIt )
-{
-    //  ohne bShown !!!
-
-    CharSet eSet = rStream.GetStreamCharSet();
-    rStream.WriteByteString( rPostIt.aStrText, eSet );
-    rStream.WriteByteString( rPostIt.aStrDate, eSet );
-    rStream.WriteByteString( rPostIt.aStrAuthor, eSet );
-
-    return rStream;
-}
 
 //==================================================================
 // evtl. in dbdata.hxx auslagern (?):
