@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:58:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSLISTENER_HPP_
-#include <com/sun/star/util/XCloseListener.hpp>
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSYNCHRONOUSFRAMELOADER_HPP_
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
@@ -93,7 +93,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx>
 #endif
 
@@ -109,7 +109,7 @@ namespace sfx2
 
 class AppletObject : public ::cppu::WeakImplHelper6 <
         com::sun::star::util::XCloseable,
-        com::sun::star::util::XCloseListener,
+        com::sun::star::lang::XEventListener,
         com::sun::star::frame::XSynchronousFrameLoader,
         com::sun::star::ui::dialogs::XExecutableDialog,
         com::sun::star::lang::XInitialization,
@@ -135,8 +135,6 @@ class AppletObject : public ::cppu::WeakImplHelper6 <
     virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) throw( com::sun::star::util::CloseVetoException, com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) throw (com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int16 SAL_CALL execute(  ) throw (::com::sun::star::uno::RuntimeException);
