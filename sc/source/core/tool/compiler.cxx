@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 16:11:24 $
+ *  last change: $Author: er $ $Date: 2002-11-21 18:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,9 +706,11 @@ xub_StrLen ScCompiler::NextSymbol()
                 {   // this catches also $Sheet1.A1:A$2, for example
                     *pSym++ = c;
                 }
-                else if ( 128 <= c )
-                {   // high values need reparsing with i18n
-                    pSrc =  pStart + nSrcPos + nSpaces;
+                else if ( 128 <= c || '\'' == c )
+                {   // High values need reparsing with i18n,
+                    // single quoted $'sheet' names too (otherwise we'd had to
+                    // implement everything twice).
+                    pSrc = pStart + nSrcPos + nSpaces;
                     pSym = cSymbol;
                     c = *pSrc;
                     bi18n = TRUE;
