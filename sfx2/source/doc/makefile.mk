@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 08:00:59 $
+#   last change: $Author: kz $ $Date: 2004-02-25 15:45:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,6 +100,7 @@ SLOFILES =	\
         $(SLO)$/doctdlg.obj \
         $(SLO)$/frameobj.obj \
         $(SLO)$/sfxbasemodel.obj \
+        $(SLO)$/commitlistener.obj \
         $(SLO)$/xmlversion.obj
 
 EXCEPTIONSFILES=$(SLO)$/objuno.obj \
@@ -109,6 +110,7 @@ EXCEPTIONSFILES=$(SLO)$/objuno.obj \
         $(SLO)$/doctempl.obj \
         $(SLO)$/doctemplates.obj \
         $(SLO)$/sfxbasemodel.obj \
+        $(SLO)$/commitlistener.obj \
         $(SLO)$/objxtor.obj \
         $(SLO)$/objstor.obj \
         $(SLO)$/xmlversion.obj
