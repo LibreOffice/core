@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Alignment.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:11:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 /** The <type>Alignment</type> enumeration is a general way to specify the
     alignment of an object or sub-object relative to another object.
  */
-enum Alignment
+published enum Alignment
 {
     //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR Alignment::    TOP_LEFT,
