@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:22:19 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ danish ] = "Navn" ;
         Text [ italian ] = "Nome" ;
         Text [ spanish ] = "~Nombre" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ portuguese ] = "~Nome" ;
         Text[ chinese_simplified ] = "וח§°(~N)";
@@ -642,7 +642,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ danish ] = "Flere..." ;
         Text [ italian ] = "E~xtra..." ;
         Text [ spanish ] = "~Opciones..." ;
-        Text [ french ] = "~Options..." ;
+        Text [ french ] = "Options..." ;
         Text [ dutch ] = "~Overige..." ;
         Text[ chinese_simplified ] = "ו…¶ה»–(~O)...";
         Text[ russian ] = "ֿאנאלוענû...";
