@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 17:31:43 $
+ *  last change: $Author: dvo $ $Date: 2001-02-16 16:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,6 +1125,7 @@ XML_CONSTASCII_ACTION( sXML_objects, "objects" );
 XML_CONSTASCII_ACTION( sXML_odd_page, "odd-page" );
 XML_CONSTASCII_ACTION( sXML_offset, "offset" );
 XML_CONSTASCII_ACTION( sXML_olive, "olive" );
+XML_CONSTASCII_ACTION( sXML_online, "online" );
 XML_CONSTASCII_ACTION( sXML_onLoad, "onLoad" );
 XML_CONSTASCII_ACTION( sXML_onRequest, "onRequest" );
 XML_CONSTASCII_ACTION( sXML_on_update_keep_size, "on-update-keep-size");
