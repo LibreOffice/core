@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 17:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,13 +157,13 @@ void OImageButtonModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OImageButtonModel::getServiceName()
+::rtl::OUString OImageButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_IMAGEBUTTON;   // old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
-void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
+void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OControlModel::write(_rxOutStream);
 
@@ -178,7 +178,7 @@ void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream
 }
 
 //------------------------------------------------------------------------------
-void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
+void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OControlModel::read(_rxInStream);
 
@@ -278,7 +278,7 @@ Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (Ru
 }
 
 //------------------------------------------------------------------------------
-void OImageButtonControl::mousePressed(const MouseEvent& e)
+void OImageButtonControl::mousePressed(const MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     //////////////////////////////////////////////////////////////////////
     // Nur linke Maustaste
