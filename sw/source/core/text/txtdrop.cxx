@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-21 09:41:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,7 +849,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
         // for growing controll
         long nMax = KSHRT_MAX;
         long nMin = nFactor / 2;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         long nGrow = 0;
 #endif
 
@@ -985,7 +985,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
                 nFactor = ( nFactor * nWishedHeight ) / nHght;
                 bGrow = ( nFactor > nMin ) && ( nFactor < nMax );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 if ( bGrow )
                     nGrow++;
 #endif
