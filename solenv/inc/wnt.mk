@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-21 13:12:05 $
+#   last change: $Author: hjs $ $Date: 2002-07-10 10:51:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -387,7 +387,7 @@ CDEFS+=-D_MT
 .ENDIF
 .IF "$(COMEX)"=="7"
 #CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
-CDEFS+=-DSTLPORT_VERSION=450
+CDEFS+=-DSTLPORT_VERSION=400
 CDEFS+=-D_MT
 .ENDIF
 .IF "$(COMEX)"=="8"
@@ -543,6 +543,7 @@ JAVA=guw.pl java
 SCPCOMP=guw.pl scpcomp
 SCPLINK=guw.pl scplink
 CPPLCC=guw.pl cpplcc
+MAKEDEPEND=guw.pl makedepend
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF              # "$(COM)"=="MSC"
