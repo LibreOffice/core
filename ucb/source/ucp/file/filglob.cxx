@@ -417,6 +417,9 @@ namespace fileaccess {
                 case FileBase::E_BUSY:          // Text file busy<br>
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
+                case FileBase::E_AGAIN:         // Operation would block<br>
+                    ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
+                    break;
                 case FileBase::E_FAULT:         // Bad address<br>
                 case FileBase::E_LOOP:          // Too many symbolic links encountered<br>
                 case FileBase::E_NOSPC:         // No space left on device<br>
@@ -506,11 +509,13 @@ namespace fileaccess {
                 case FileBase::E_ISDIR:             // Is a directory<br>
                     ioErrorCode = IOErrorCode_NO_FILE;
                     break;
+                case FileBase::E_AGAIN:             // Operation would block<br>
+                    ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
+                    break;
                 case FileBase::E_NOLCK:             // No record locks available<br>
                 case FileBase::E_IO:                // I/O error<br>
                 case FileBase::E_BADF:              // Bad file<br>
                 case FileBase::E_FAULT:             // Bad address<br>
-                case FileBase::E_AGAIN:             // Operation would block<br>
                 case FileBase::E_INTR:              // function call was interrupted<br>
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
