@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-27 11:00:49 $
+ *  last change: $Author: obo $ $Date: 2001-11-28 11:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/miscopt.hxx>
-#include <framework/Imagesconfiguration.hxx>
+#include <framework/imagesconfiguration.hxx>
 
 #pragma hdrstop
 
