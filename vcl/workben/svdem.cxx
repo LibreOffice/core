@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 16:03:13 $
+ *  last change: $Author: mm $ $Date: 2001-02-23 18:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ SAL_IMPLEMENT_MAIN()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMS;
     InitVCL( xMS );
-    Main();
+    ::Main();
     DeInitVCL();
     return 0;
 }

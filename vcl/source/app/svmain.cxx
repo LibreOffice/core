@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cp $ $Date: 2001-02-23 18:02:50 $
+ *  last change: $Author: mm $ $Date: 2001-02-23 18:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,10 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 #ifdef REMOTE_APPSERVER
 #include <config.hxx>
 #include <ooffice.hxx>
@@ -297,7 +301,7 @@ public:
     void                Main(){};
 };
 
-BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & )
+BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
 {
     if( pExceptionHandler != NULL )
         return FALSE;
@@ -305,8 +309,8 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     if( !ImplGetSVData()->mpApp )
     {
         pOwnSvApp = new Application_Impl();
-        InitSalMain();
     }
+    InitSalMain();
 
 #ifdef WNT
     // remember data, copied from WinMain
@@ -329,6 +333,9 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     // SV bei den Tools anmelden
     InitTools();
+
+    //DBG_ASSERT( !pSVData->maAppData.mxMSF.is(), "VCL service factory already set" )
+    //pSVData->maAppData.mxMSF = rSMgr;
 
     // Main-Thread-Id merken
     pSVData->mnMainThreadId = ::vos::OThread::getCurrentIdentifier();
@@ -695,9 +702,9 @@ void DeInitVCL()
 
     DeInitTools();
 
+    DeInitSalMain();
     if( pOwnSvApp )
     {
-        DeInitSalMain();
         delete pOwnSvApp;
         pOwnSvApp = NULL;
     }
