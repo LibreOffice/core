@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:05:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,9 @@ void XMLTextImportPropertyMapper::finished(
          property != rProperties.end();
          property++ )
     {
+        if( -1 == property->mnIndex )
+            continue;
+
         switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ) )
         {
         case CTF_FONTFAMILYNAME:    pFontFamilyName = property; break;
