@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
+ *  last change: $Author: oj $ $Date: 2001-10-19 11:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@ void java_lang_Object::ThrowSQLException(JNIEnv * pEnv,const Reference< XInterfa
                                 _rContext,
                                 pException->getSQLState(),
                                 pException->getErrorCode(),
-                                makeAny(pException->getNextException())
+                                Any()
                             );
             delete pException;
             throw  e;
