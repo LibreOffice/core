@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:30:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 
 //........................................................................
 namespace svx
@@ -116,11 +119,15 @@ namespace svx
     //= OColumnTransferable
     //====================================================================
     //--------------------------------------------------------------------
-    OColumnTransferable::OColumnTransferable(const ::rtl::OUString& _rDatasource, const sal_Int32 _nCommandType,
-            const ::rtl::OUString& _rCommand, const ::rtl::OUString& _rFieldName, sal_Int32 _nFormats)
+    OColumnTransferable::OColumnTransferable(const ::rtl::OUString& _rDatasource
+                                            ,const ::rtl::OUString& _rConnectionResource
+                                            ,const sal_Int32        _nCommandType
+                                            ,const ::rtl::OUString& _rCommand
+                                            ,const ::rtl::OUString& _rFieldName
+                                            ,sal_Int32  _nFormats)
         :m_nFormatFlags(_nFormats)
     {
-        implConstruct(_rDatasource, _nCommandType, _rCommand, _rFieldName);
+        implConstruct(_rDatasource,_rConnectionResource,_nCommandType, _rCommand, _rFieldName);
     }
 
     //--------------------------------------------------------------------
@@ -133,7 +140,7 @@ namespace svx
         // collect the necessary information from the form
         ::rtl::OUString sCommand;
         sal_Int32       nCommandType = CommandType::TABLE;
-        ::rtl::OUString sDatasource;
+        ::rtl::OUString sDatasource,sURL;
 
         sal_Bool        bTryToParse = sal_True;
         try
@@ -141,6 +148,7 @@ namespace svx
             _rxForm->getPropertyValue(FM_PROP_COMMANDTYPE)  >>= nCommandType;
             _rxForm->getPropertyValue(FM_PROP_COMMAND)      >>= sCommand;
             _rxForm->getPropertyValue(FM_PROP_DATASOURCE)   >>= sDatasource;
+            _rxForm->getPropertyValue(FM_PROP_URL)          >>= sURL;
             bTryToParse = ::cppu::any2bool(_rxForm->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
         }
         catch(Exception&)
@@ -188,7 +196,7 @@ namespace svx
             }
         }
 
-        implConstruct(sDatasource, nCommandType, sCommand, _rFieldName);
+        implConstruct(sDatasource, sURL,nCommandType, sCommand, _rFieldName);
 
         if ((m_nFormatFlags & CTF_COLUMN_DESCRIPTOR) == CTF_COLUMN_DESCRIPTOR)
         {
@@ -212,8 +220,11 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void OColumnTransferable::implConstruct(const ::rtl::OUString& _rDatasource, const sal_Int32 _nCommandType,
-        const ::rtl::OUString& _rCommand, const ::rtl::OUString& _rFieldName)
+    void OColumnTransferable::implConstruct( const ::rtl::OUString& _rDatasource
+                                            ,const ::rtl::OUString& _rConnectionResource
+                                            ,const sal_Int32 _nCommandType
+                                            ,const ::rtl::OUString& _rCommand
+                                            , const ::rtl::OUString& _rFieldName)
     {
         const sal_Unicode       cSeparator = sal_Unicode(11);
         const ::rtl::OUString   sSeparator(&cSeparator, 1);
@@ -244,7 +255,10 @@ namespace svx
         m_aDescriptor.clear();
         if ((m_nFormatFlags & CTF_COLUMN_DESCRIPTOR) == CTF_COLUMN_DESCRIPTOR)
         {
-            m_aDescriptor[daDataSource]     <<= _rDatasource;
+            m_aDescriptor.setDataSource(_rDatasource);
+            if ( _rConnectionResource.getLength() )
+                m_aDescriptor[daConnectionResource] <<= _rConnectionResource;
+
             m_aDescriptor[daCommand]        <<= _rCommand;
             m_aDescriptor[daCommandType]    <<= _nCommandType;
             m_aDescriptor[daColumnName]     <<= _rFieldName;
@@ -332,14 +346,20 @@ namespace svx
         }
 
         // only the old (compatible) format exists -> use the other extract method ...
-        ::rtl::OUString sDatasource, sCommand, sFieldName;
+        ::rtl::OUString sDatasource, sCommand, sFieldName,sDatabaseLocation,sConnectionResource;
         sal_Int32 nCommandType = CommandType::COMMAND;
 
         ODataAccessDescriptor aDescriptor;
-        if (extractColumnDescriptor(_rData, sDatasource, nCommandType, sCommand, sFieldName))
+        if (extractColumnDescriptor(_rData, sDatasource, sDatabaseLocation,sConnectionResource,nCommandType, sCommand, sFieldName))
         {
             // and build an own descriptor
-            aDescriptor[daDataSource]   <<= sDatasource;
+            if ( sDatasource.getLength() )
+                aDescriptor[daDataSource]   <<= sDatasource;
+            if ( sDatabaseLocation.getLength() )
+                aDescriptor[daDatabaseLocation] <<= sDatabaseLocation;
+            if ( sConnectionResource.getLength() )
+                aDescriptor[daConnectionResource]   <<= sConnectionResource;
+
             aDescriptor[daCommand]      <<= sCommand;
             aDescriptor[daCommandType]  <<= nCommandType;
             aDescriptor[daColumnName]   <<= sFieldName;
@@ -348,16 +368,27 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    sal_Bool OColumnTransferable::extractColumnDescriptor(const TransferableDataHelper& _rData,
-        ::rtl::OUString& _rDatasource, sal_Int32& _nCommandType, ::rtl::OUString& _rCommand, ::rtl::OUString& _rFieldName)
+    sal_Bool OColumnTransferable::extractColumnDescriptor(const TransferableDataHelper& _rData
+                                            ,::rtl::OUString& _rDatasource
+                                            ,::rtl::OUString& _rDatabaseLocation
+                                            ,::rtl::OUString& _rConnectionResource
+                                            ,sal_Int32& _nCommandType
+                                            ,::rtl::OUString& _rCommand
+                                            ,::rtl::OUString& _rFieldName)
     {
-        if (_rData.HasFormat(getDescriptorFormatId()))
+        if ( _rData.HasFormat(getDescriptorFormatId()) )
         {
             ODataAccessDescriptor aDescriptor = extractColumnDescriptor(_rData);
-            aDescriptor[daDataSource]   >>= _rDatasource;
-            aDescriptor[daCommand]      >>= _rCommand;
-            aDescriptor[daCommandType]  >>= _nCommandType;
-            aDescriptor[daColumnName]   >>= _rFieldName;
+            if ( aDescriptor.has(daDataSource) )
+                aDescriptor[daDataSource]           >>= _rDatasource;
+            if ( aDescriptor.has(daDatabaseLocation) )
+                aDescriptor[daDatabaseLocation]     >>= _rDatabaseLocation;
+            if ( aDescriptor.has(daConnectionResource) )
+                aDescriptor[daConnectionResource]   >>= _rConnectionResource;
+
+            aDescriptor[daCommand]              >>= _rCommand;
+            aDescriptor[daCommandType]          >>= _nCommandType;
+            aDescriptor[daColumnName]           >>= _rFieldName;
             return sal_True;
         }
 
@@ -406,29 +437,31 @@ namespace svx
     //= ODataAccessObjectTransferable
     //====================================================================
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(
-            const ::rtl::OUString&  _rDatasource,
-            const sal_Int32         _nCommandType,
-            const ::rtl::OUString&  _rCommand
+            const ::rtl::OUString&  _rDatasource
+            ,const ::rtl::OUString& _rConnectionResource
+            ,const sal_Int32        _nCommandType
+            ,const ::rtl::OUString& _rCommand
         )
     {
-        construct(_rDatasource,_nCommandType,_rCommand,NULL,(CommandType::COMMAND == _nCommandType),_rCommand);
+        construct(_rDatasource,_rConnectionResource,_nCommandType,_rCommand,NULL,(CommandType::COMMAND == _nCommandType),_rCommand);
     }
     //--------------------------------------------------------------------
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(
-                    const ::rtl::OUString&  _rDatasource,
-                    const sal_Int32         _nCommandType,
-                    const ::rtl::OUString&  _rCommand,
-                    const Reference< XConnection >& _rxConnection)
+                    const ::rtl::OUString&  _rDatasource
+                    ,const ::rtl::OUString& _rConnectionResource
+                    ,const sal_Int32        _nCommandType
+                    ,const ::rtl::OUString& _rCommand
+                    ,const Reference< XConnection >& _rxConnection)
     {
         OSL_ENSURE(_rxConnection.is(),"Wrong ctor used.!");
-        construct(_rDatasource,_nCommandType,_rCommand,_rxConnection,(CommandType::COMMAND == _nCommandType),_rCommand);
+        construct(_rDatasource,_rConnectionResource,_nCommandType,_rCommand,_rxConnection,(CommandType::COMMAND == _nCommandType),_rCommand);
     }
 
     // -----------------------------------------------------------------------------
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(const Reference< XPropertySet >& _rxLivingForm)
     {
         // collect some properties of the form
-        ::rtl::OUString sDatasourceName;
+        ::rtl::OUString sDatasourceName,sConnectionResource;
         sal_Int32       nObjectType = CommandType::COMMAND;
         ::rtl::OUString sObjectName;
         Reference< XConnection > xConnection;
@@ -437,6 +470,7 @@ namespace svx
             _rxLivingForm->getPropertyValue(FM_PROP_COMMANDTYPE) >>= nObjectType;
             _rxLivingForm->getPropertyValue(FM_PROP_COMMAND) >>= sObjectName;
             _rxLivingForm->getPropertyValue(FM_PROP_DATASOURCE) >>= sDatasourceName;
+            _rxLivingForm->getPropertyValue(FM_PROP_URL) >>= sConnectionResource;
             _rxLivingForm->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xConnection;
         }
         catch(Exception&)
@@ -485,6 +519,7 @@ namespace svx
         }
 
         construct(  sDatasourceName
+                    ,sConnectionResource
                     ,nObjectType
                     ,sObjectName,xConnection
                     ,!((CommandType::QUERY == nObjectType) && !bHasFilterOrSort)
@@ -622,25 +657,28 @@ namespace svx
         m_aDescriptor.clear();
     }
     // -----------------------------------------------------------------------------
-    void ODataAccessObjectTransferable::construct(  const ::rtl::OUString&  _rDatasource,
-                                                    const sal_Int32         _nCommandType,
-                                                    const ::rtl::OUString&  _rCommand,
-                                                    const Reference< XConnection >& _rxConnection,
-                                                    sal_Bool _bAddCommand,
-                                                    const ::rtl::OUString& _sActiveCommand)
+    void ODataAccessObjectTransferable::construct(  const ::rtl::OUString&  _rDatasource
+                                                    ,const ::rtl::OUString& _rConnectionResource
+                                                    ,const sal_Int32        _nCommandType
+                                                    ,const ::rtl::OUString& _rCommand
+                                                    ,const Reference< XConnection >& _rxConnection
+                                                    ,sal_Bool _bAddCommand
+                                                    ,const ::rtl::OUString& _sActiveCommand)
     {
+        m_aDescriptor.setDataSource(_rDatasource);
         // build the descriptor (the property sequence)
-        m_aDescriptor[daDataSource]     <<= _rDatasource;
+        if ( _rConnectionResource.getLength() )
+            m_aDescriptor[daConnectionResource] <<= _rConnectionResource;
         if ( _rxConnection.is() )
             m_aDescriptor[daConnection]     <<= _rxConnection;
         m_aDescriptor[daCommand]        <<= _rCommand;
         m_aDescriptor[daCommandType]    <<= _nCommandType;
 
         // extract the single values from the sequence
-        ::rtl::OUString sDatasourceName;
+
         ::rtl::OUString sObjectName;
         sal_Bool bEscapeProcessing = sal_True;
-        sDatasourceName = _rDatasource;
+        ::rtl::OUString sDatasourceName = _rDatasource;
         sObjectName = _rCommand;
 
         // for compatibility: create a string which can be used for the SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
