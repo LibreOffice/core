@@ -8042,3 +8042,12 @@ _real@4096800000000000
 ??_C@_0DH@EGDDAHAH@o?3?2SRC680?2wntmsci8?2inc?2cppuhelpe@
 ??_C@_0CH@OANPDINN@o?3?2SRC680?2wntmsci8?2inc?2rtl?1ustri@
 ??_C@_0CG@OKFAEJOB@o?3?2SRC680?2wntmsci8?2inc?2rtl?1strbu@
+?GetLayoutMode@OutputDevice@@QBEKXZ
+??0Matrix3@vcl@@QAE@XZ
+??1Matrix3@vcl@@QAE@XZ
+?rotate@Matrix3@vcl@@QAEXN@Z
+?scale@Matrix3@vcl@@QAEXNN@Z
+?set@Matrix3@vcl@@AAEXPAN@Z
+?skew@Matrix3@vcl@@QAEXNN@Z
+?transform@Matrix3@vcl@@QAE?AVPoint@@ABV3@@Z
+?translate@Matrix3@vcl@@QAEXNN@Z
