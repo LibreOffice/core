@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:05:06 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-#define NOOLDSV
-
 #ifndef _SVWIN_H
 #include <tools/svwin.h>
 #endif
