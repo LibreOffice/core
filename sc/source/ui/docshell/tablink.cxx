@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:15:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ String ScDocumentLoader::GetOptions( SfxMedium& rMedium )       // static
     return EMPTY_STRING;
 }
 
-void ScDocumentLoader::GetFilterName( const String& rFileName,
+BOOL ScDocumentLoader::GetFilterName( const String& rFileName,
                                     String& rFilter, String& rOptions, BOOL bWithContent )  // static
 {
     TypeId aScType = TYPE(ScDocShell);
@@ -425,7 +425,7 @@ void ScDocumentLoader::GetFilterName( const String& rFileName,
             {
                 rFilter = pMed->GetFilter()->GetFilterName();
                 rOptions = GetOptions(*pMed);
-                return;
+                return TRUE;
             }
         }
         pDocSh = SfxObjectShell::GetNext( *pDocSh, &aScType );
@@ -444,12 +444,18 @@ void ScDocumentLoader::GetFilterName( const String& rFileName,
             aMatcher.GuessFilterIgnoringContent( *pMedium, &pSfxFilter );
     }
 
-    if ( pSfxFilter )
-        rFilter = pSfxFilter->GetFilterName();
-    else
-        rFilter = ScDocShell::GetOwnFilterName();       //  sonst Calc-Datei
+    BOOL bOK = FALSE;
+    if ( pMedium->GetError() == ERRCODE_NONE )
+    {
+        if ( pSfxFilter )
+            rFilter = pSfxFilter->GetFilterName();
+        else
+            rFilter = ScDocShell::GetOwnFilterName();       //  sonst Calc-Datei
+        bOK = (rFilter.Len()>0);
+    }
 
     delete pMedium;
+    return bOK;
 }
 
 void ScDocumentLoader::RemoveAppPrefix( String& rFilterName )       // static
