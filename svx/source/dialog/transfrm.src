@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:38:59 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "Position";
+        Text[ slovak ] = "Umiestnenie";
     };
     FixedText FT_POS_X
     {
@@ -142,6 +143,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Pozice X";
         Text[ hebrew ] = "Position ~X";
         Text[ hindi ] = "Position ~X";
+        Text[ slovak ] = "Pozícia ~X";
     };
     FixedText FT_POS_Y
     {
@@ -175,6 +177,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Pozice Y";
         Text[ hebrew ] = "Position ~Y";
         Text[ hindi ] = "Position ~Y";
+        Text[ slovak ] = "Pozícia ~Y";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -236,6 +239,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Základní bod";
         Text[ hebrew ] = "Basispunkt";
         Text[ hindi ] = "Base point";
+        Text[ slovak ] = "Základný bod";
     };
     Control CTL_POSRECT
     {
@@ -272,6 +276,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         QuickHelpText[ czech ] = "Základní bod";
         QuickHelpText[ hebrew ] = "Basispunkt";
         QuickHelpText[ hindi ] = "Base point";
+        QuickHelpText[ slovak ] = "Základný bod";
     };
 
     // size
@@ -308,6 +313,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "Size";
+        Text[ slovak ] = "Veľkosť";
     };
     FixedText FT_WIDTH
     {
@@ -341,6 +347,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "Wi~dth";
+        Text[ slovak ] = "Ší~rka";
     };
     FixedText FT_HEIGHT
     {
@@ -374,6 +381,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "H~eight";
+        Text[ slovak ] = "~Výška";
     };
     MetricField MTR_FLD_WIDTH
     {
@@ -435,6 +443,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Základní bod";
         Text[ hebrew ] = "Basispunkt";
         Text[ hindi ] = "Base point";
+        Text[ slovak ] = "Základný bod";
     };
     Control CTL_SIZERECT
     {
@@ -471,6 +480,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         QuickHelpText[ czech ] = "Základní bod";
         QuickHelpText[ hebrew ] = "Basispunkt";
         QuickHelpText[ hindi ] = "Base point";
+        QuickHelpText[ slovak ] = "Základný bod";
     };
     CheckBox CBX_SCALE
     {
@@ -504,6 +514,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Zachovat poměr";
         Text[ hebrew ] = "~Abgleich";
         Text[ hindi ] = "~Keep ratio";
+        Text[ slovak ] = "~Zachovať pomer";
     };
 
     // Protect
@@ -538,6 +549,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Zamknout";
         Text[ hebrew ] = "Schützen";
         Text[ hindi ] = "Protect";
+        Text[ slovak ] = "Zamknúť";
     };
 
     TriStateBox TSB_POSPROTECT
@@ -571,6 +583,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "Position";
+        Text[ slovak ] = "Umiestnenie";
     };
 
     TriStateBox TSB_SIZEPROTECT
@@ -604,6 +617,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "~Size";
+        Text[ slovak ] = "Veľko~sť";
     };
 
     // Adjust
@@ -639,6 +653,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Adaptovat";
         Text[ hebrew ] = "Anpassen";
         Text[ hindi ] = "Adapt";
+        Text[ slovak ] = "Prispôsobiť";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
@@ -672,6 +687,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Přizpůsobit šířku textu";
         Text[ hebrew ] = "Br~eite an Text anpassen";
         Text[ hindi ] = "~Fit width to text";
+        Text[ slovak ] = "~Prispôsobiť šírku na text";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
@@ -705,6 +721,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Přizpůsobit výšku textu";
         Text[ hebrew ] = "Höhe a~n Text anpassen";
         Text[ hindi ] = "Fit ~height to text";
+        Text[ slovak ] = "Prispôsobiť ~výšku na text";
     };
 
     FixedLine FL_DIVIDER
@@ -748,6 +765,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Ukotvení";
         Text[ hebrew ] = "‮עוגן‬";
         Text[ hindi ] = "Anchor";
+        Text[ slovak ] = "Ukotvenie";
     };
     FixedText FT_ANCHOR
     {
@@ -781,6 +799,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Ukotvení";
         Text[ hebrew ] = "‮עוגן‬";
         Text[ hindi ] = "~Anchor";
+        Text[ slovak ] = "~Ukotvenie";
     };
     ListBox LB_ANCHOR
     {
@@ -977,6 +996,13 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         < "To page" ; > ;
         < "To frame" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Na odstavec" ; > ;
+        < "Ako znak" ; > ;
+        < "Na stránku" ; > ;
+        < "Na rámec" ; > ;
+    };
     };
     FixedText FT_ORIENT
     {
@@ -1009,6 +1035,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "P~osition";
+        Text[ slovak ] = "U~miestnenie";
     };
     ListBox LB_ORIENT
     {
@@ -1367,6 +1394,19 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         < "Center of line" ; > ;
         < "Bottom of line" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Zhora" ; > ;
+        < "Nad" ; > ;
+        < "Na stred" ; > ;
+        < "Pod" ; > ;
+        < "Vrchol znaku" ; > ;
+        < "Stred znaku" ; > ;
+        < "Päta znaku" ; > ;
+        < "Vrchol riadku" ; > ;
+        < "Stred riadku" ; > ;
+        < "Päta riadku" ; > ;
+    };
     };
     Text[ portuguese ] = "Posi��o e tamanho";
     Text[ russian ] = "������� � ������";
@@ -1391,6 +1431,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     Text[ czech ] = "Umístění a velikost";
     Text[ hebrew ] = "Position und Größe";
     Text[ hindi ] = "Position and Size";
+    Text[ slovak ] = "Umiestnenie a veľkosť";
 };
 
  // RID_SVXPAGE_ANGLE --------------------------------------------------------
@@ -1444,6 +1485,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ czech ] = "Bod otáčení";
         Text[ hebrew ] = "Drehpunkt";
         Text[ hindi ] = "प्रधान आधार बिन्दु";
+        Text[ slovak ] = "Rotačný bod";
     };
     FixedText FT_POS_X
     {
@@ -1477,6 +1519,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ czech ] = "Pozice X";
         Text[ hebrew ] = "Position ~X";
         Text[ hindi ] = "स्थान ~X";
+        Text[ slovak ] = "Pozícia ~X";
     };
     FixedText FT_POS_Y
     {
@@ -1510,6 +1553,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ czech ] = "Pozice Y";
         Text[ hebrew ] = "Position ~Y";
         Text[ hindi ] = "स्थान ~Y";
+        Text[ slovak ] = "Pozícia ~Y";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -1571,6 +1615,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ czech ] = "Výchozí nastavení";
         Text[ hebrew ] = "Vorgaben";
         Text[ hindi ] = "अनुपस्थिति निर्धारण";
+        Text[ slovak ] = "Východzie nastavenia";
     };
     Control CTL_RECT
     {
@@ -1607,6 +1652,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ czech ] = "Rotační bod";
         QuickHelpText[ hebrew ] = "Rotationspunkt";
         QuickHelpText[ hindi ] = "घुमाव बिन्दु";
+        QuickHelpText[ slovak ] = "Rotačný bod";
     };
     FixedLine FL_ANGLE
     {
@@ -1640,6 +1686,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ czech ] = "Úhel rotace";
         Text[ hebrew ] = "Drehwinkel";
         Text[ hindi ] = "घुमाव कोण";
+        Text[ slovak ] = "Uhol rotácie";
     };
     FixedText FT_ANGLE
     {
@@ -1673,6 +1720,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ czech ] = "Úhel";
         Text[ hebrew ] = "~Winkel";
         Text[ hindi ] = "~कोण";
+        Text[ slovak ] = "~Uhol";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -1715,6 +1763,7 @@ TabPage RID_SVXPAGE_ANGLE
         CustomUnitText[ czech ] = " stupňů";
         CustomUnitText[ hebrew ] = " ‮מעלות‬";
         CustomUnitText[ hindi ] = " डिग्रियाँ";
+        CustomUnitText[ slovak ] = " stupňov";
     };
     FixedText FT_ANGLEPRESETS
     {
@@ -1746,6 +1795,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ czech ] = "Výchozí nastavení";
         Text[ hebrew ] = "Vorgaben";
         Text[ hindi ] = "अनुपस्थिति निर्धारण";
+        Text[ slovak ] = "Východzie nastavenia";
     };
     Control CTL_ANGLE
     {
@@ -1780,6 +1830,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ czech ] = "Rotační úhel";
         QuickHelpText[ hebrew ] = "Drehwinkel";
         QuickHelpText[ hindi ] = "घुमाव कोण";
+        QuickHelpText[ slovak ] = "Rotačný uhol";
     };
     Text[ chinese_simplified ] = "角度";
     Text[ russian ] = "����";
@@ -1796,6 +1847,7 @@ TabPage RID_SVXPAGE_ANGLE
     Text[ czech ] = "Úhel";
     Text[ hebrew ] = "Winkel";
     Text[ hindi ] = "कोण";
+    Text[ slovak ] = "Uhol";
 };
  // RID_SVXPAGE_SLANT -----------------------------------------------------
 TabPage RID_SVXPAGE_SLANT
@@ -1845,6 +1897,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ czech ] = "Poloměr rohu";
         Text[ hebrew ] = "Eckenradius";
         Text[ hindi ] = "किनारे का व्यासाध";
+        Text[ slovak ] = "Polomer rohu";
     };
     FixedText FT_RADIUS
     {
@@ -1877,6 +1930,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ czech ] = "Poloměr";
         Text[ hebrew ] = "~Radius";
         Text[ hindi ] = "व्यासा~ध";
+        Text[ slovak ] = "Polome~r";
     };
     MetricField MTR_FLD_RADIUS
     {
@@ -1924,6 +1978,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ czech ] = "Skosení";
         Text[ hebrew ] = "Schräg stellen";
         Text[ hindi ] = "तिरछा";
+        Text[ slovak ] = "Skosenie";
     };
     FixedText FT_ANGLE
     {
@@ -1956,6 +2011,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ czech ] = "Úhel";
         Text[ hebrew ] = "~Winkel";
         Text[ hindi ] = "~कोण";
+        Text[ slovak ] = "~Uhol";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -2000,6 +2056,7 @@ TabPage RID_SVXPAGE_SLANT
         CustomUnitText[ czech ] = " stupňů";
         CustomUnitText[ hebrew ] = " ‮מעלות‬";
         CustomUnitText[ hindi ] = " डिग्रियाँ";
+        CustomUnitText[ slovak ] = " stupňov";
     };
     Text[ chinese_simplified ] = "倾斜和角半径";
     Text[ russian ] = "������ � ������ ������������ ����";
@@ -2017,6 +2074,7 @@ TabPage RID_SVXPAGE_SLANT
     Text[ czech ] = "Skosení a poloměr rohu";
     Text[ hebrew ] = "Schräg stellen / Eckenradius";
     Text[ hindi ] = "तिरछा और किनारे का व्यासाध";
+    Text[ slovak ] = "Skosenie a polomer rohu";
 };
  // RID_SVXDLG_TRANSFORM -----------------------------------------------------
 TabDialog RID_SVXDLG_TRANSFORM
@@ -2077,6 +2135,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ czech ] = "Umístění a velikost";
                 Text[ hebrew ] = "Position und Größe";
                 Text[ hindi ] = "Position and Size";
+                Text[ slovak ] = "Umiestnenie a veľkosť";
             };
             PageItem
             {
@@ -2110,6 +2169,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ czech ] = "Rotace";
                 Text[ hebrew ] = "‮סיבוב‬";
                 Text[ hindi ] = "घुमाव";
+                Text[ slovak ] = "Rotácia";
             };
             PageItem
             {
@@ -2142,6 +2202,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ czech ] = "Skosení a poloměr rohu";
                 Text[ hebrew ] = "Schräg stellen / Eckenradius";
                 Text[ hindi ] = "तिरछा और किनारे का व्यासाध";
+                Text[ slovak ] = "Skosenie a polomer rohu";
             };
         };
     };
@@ -2160,8 +2221,11 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ czech ] = "Umístění a velikost";
     Text[ hebrew ] = "Position und Größe";
     Text[ hindi ] = "स्थान और परिमाण";
+    Text[ slovak ] = "Umiestnenie a veľkosť";
 };
  // ********************************************************************** EOF
+
+
 
 
 
