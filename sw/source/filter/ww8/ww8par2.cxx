@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:55 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 16:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,17 @@
 #ifndef _FMTPDSC_HXX
 #include <fmtpdsc.hxx>
 #endif
+#ifndef _TXTFTN_HXX //autogen
+#include <txtftn.hxx>
+#endif
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
+#endif
+#ifndef _FTNIDX_HXX
+#include <ftnidx.hxx>
+#endif
+#ifndef _FMTFTN_HXX //autogen
+#include <fmtftn.hxx>
 #endif
 #ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
@@ -306,6 +315,7 @@ public:
     void MergeCells();
     short GetMinLeft() const { return nConvertedLeft; }
     ~WW8TabDesc();
+    SwPosition *GetPos() { return pTmpPos; }
 
     const WW8_TCell* GetAktWWCell() const { return pAktWWCell; }
     const short GetAktCol() const { return nAktCol; }
@@ -313,6 +323,125 @@ public:
     const String& GetNumRuleName() const;
     void SetNumRuleName( const String& rName );
 };
+
+long SwWW8ImplReader::Read_Ftn( WW8PLCFManResult* pRes, BOOL )
+{
+    BOOL bFtEdOk = FALSE;
+
+    if( nIniFlags & WW8FL_NO_FTN )
+        return 0;
+
+    /*
+    #84095#
+    Ignoring Footnote outside of the normal Text. People will put footnotes
+    into field results and field commands.
+    */
+    if (bIgnoreText ||
+        pPaM->GetPoint()->nNode < rDoc.GetNodes().GetEndOfExtras().GetIndex())
+    {
+        return 0;
+    }
+
+    USHORT nType;
+    BOOL bAutoNum = TRUE;
+    if( 257 == pRes->nSprmId )
+    {
+        nType = MAN_EDN;
+        if( pPlcxMan->GetEdn() )
+            bAutoNum = 0 != *(short*)pPlcxMan->GetEdn()->GetData();
+    }
+    else
+    {
+        nType = MAN_FTN;
+        if( pPlcxMan->GetFtn() )
+            bAutoNum = 0 != *(short*)pPlcxMan->GetFtn()->GetData();
+    }
+
+    WW8PLCFxSaveAll aSave;
+    pPlcxMan->SaveAllPLCFx( aSave );
+    WW8PLCFMan* pOldPlcxMan = pPlcxMan;
+
+    SwFmtFtn aFtn( 257 == pRes->nSprmId ) ;         // erzeuge Fussnote
+    //rDoc.Insert( *pPaM, aFtn );
+
+    SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
+    xub_StrLen nPos = pPaM->GetPoint()->nContent.GetIndex();
+
+    SwTxtAttr* pFN = pTxt->Insert(aFtn, nPos, nPos);
+
+    SwPosition aTmpPos( *pPaM->GetPoint() );    // merke alte Cursorposition
+
+    ASSERT(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
+    if( pFN )
+    {
+        const SwNodeIndex* pSttIdx = ((SwTxtFtn*)pFN)->GetStartNode();
+        ASSERT(pSttIdx, "Probleme beim Anlegen des Fussnoten-Textes");
+
+        ((SwTxtFtn*)pFN)->SetSeqNo( rDoc.GetFtnIdxs().Count() );
+
+        BOOL bOld = bFtnEdn;
+        bFtnEdn = TRUE;
+
+        // read content of Ft-/End-Note
+        Read_HdFtFtnText( pSttIdx, pRes->nCp2OrIdx, pRes->nMemLen, nType );
+        bFtEdOk = TRUE;
+        bFtnEdn = bOld;
+
+        // falls keine automatische Numerierung eingestellt ist, so hole
+        // das 1. Zeichen aus der Fuss-/End-Note und setze das als Zeichen
+        if( !bAutoNum )
+        {
+            SwNodeIndex& rNIdx = pPaM->GetPoint()->nNode;
+            rNIdx = pSttIdx->GetIndex() + 1;
+            SwTxtNode* pTNd = rNIdx.GetNode().GetTxtNode();
+            if( pTNd )
+            {
+                String sNo( pTNd->GetTxt().GetChar( 0 ));
+                ((SwTxtFtn*)pFN)->SetNumber( 0, &sNo );
+                pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
+                pPaM->SetMark();
+                pPaM->GetMark()->nContent++;
+                rDoc.Delete( *pPaM );
+                pPaM->DeleteMark();
+            }
+        }
+    }
+    *pPaM->GetPoint() = aTmpPos;                // restore Cursor
+
+    pPlcxMan = pOldPlcxMan;             // Attributverwaltung restoren
+    pPlcxMan->RestoreAllPLCFx( aSave );
+
+    if( bSymbol )
+    {
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
+        bSymbol = FALSE;
+    }
+
+    // insert Section to get this Ft-/End-Note at the end of the section,
+    // when there is no open section at the moment
+       if( bFtEdOk && pLastPgDeskIdx && !pAfterSection)
+    {
+        const SwNodeIndex aOrgLastPgDeskIdx( *pLastPgDeskIdx );
+
+        (*pLastPgDeskIdx)++;
+        SwPosition aSectStart( *pLastPgDeskIdx );
+        aSectStart.nContent.Assign( pLastPgDeskIdx->GetNode().GetCntntNode(), 0 );
+
+        SwPosition *pTemp = pPaM->GetPoint();
+        if (pTableDesc)
+            pTemp = pTableDesc->GetPos();
+
+        SwPaM aSectPaM(aSectStart, *pTemp);
+
+        InsertSectionWithWithoutCols( aSectPaM, 0 );
+        pPaM->Move( fnMoveBackward );
+        DELETEZ( pLastPgDeskIdx );
+        // set attributes to correct position
+        pCtrlStck->MoveAttrsToNextNode( aOrgLastPgDeskIdx );
+    }
+
+    return 1;       // das Fussnotenzeichen ueberlesen!
+}
 
 BOOL SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
     int nLevel) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:55 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 16:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,23 +132,14 @@
 #include <svx/msdffimp.hxx>
 #endif
 
-#ifndef _FMTFTN_HXX //autogen
-#include <fmtftn.hxx>
-#endif
 #ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
 #endif
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
 #endif
-#ifndef _FTNIDX_HXX
-#include <ftnidx.hxx>
-#endif
 #ifndef _REFFLD_HXX
 #include <reffld.hxx>
-#endif
-#ifndef _TXTFTN_HXX //autogen
-#include <txtftn.hxx>
 #endif
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
@@ -167,6 +158,12 @@
 #endif
 #ifndef _FTNINFO_HXX //autogen
 #include <ftninfo.hxx>
+#endif
+#ifndef _FMTFTN_HXX //autogen
+#include <fmtftn.hxx>
+#endif
+#ifndef _TXTFTN_HXX //autogen
+#include <txtftn.hxx>
 #endif
 #ifndef _PAM_HXX
 #include <pam.hxx>              // fuer SwPam
@@ -951,121 +948,6 @@ void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
 
     ReadText( nStartCp, nLen, nType );              // Sepx dabei ignorieren
     aSave.Restore( this );
-}
-
-long SwWW8ImplReader::Read_Ftn( WW8PLCFManResult* pRes, BOOL )
-{
-    BOOL bFtEdOk = FALSE;
-
-    if( nIniFlags & WW8FL_NO_FTN )
-        return 0;
-
-#if 0
-    if ( pPaM->GetPoint()->nNode < rDoc.GetNodes().GetEndOfExtras().GetIndex() )
-#else
-    /*
-    #84095#
-    Ignoring Footnote outside of the normal Text. People will put footnotes
-    into field results and field commands.
-    */
-    if (bIgnoreText ||
-        pPaM->GetPoint()->nNode < rDoc.GetNodes().GetEndOfExtras().GetIndex())
-#endif
-        return 0;
-
-    USHORT nType;
-    BOOL bAutoNum = TRUE;
-    if( 257 == pRes->nSprmId )
-    {
-        nType = MAN_EDN;
-        if( pPlcxMan->GetEdn() )
-            bAutoNum = 0 != *(short*)pPlcxMan->GetEdn()->GetData();
-    }
-    else
-    {
-        nType = MAN_FTN;
-        if( pPlcxMan->GetFtn() )
-            bAutoNum = 0 != *(short*)pPlcxMan->GetFtn()->GetData();
-    }
-
-    WW8PLCFxSaveAll aSave;
-    pPlcxMan->SaveAllPLCFx( aSave );
-    WW8PLCFMan* pOldPlcxMan = pPlcxMan;
-
-    SwFmtFtn aFtn( 257 == pRes->nSprmId ) ;         // erzeuge Fussnote
-    rDoc.Insert( *pPaM, aFtn );
-
-    SwPosition aTmpPos( *pPaM->GetPoint() );    // merke alte Cursorposition
-
-    pPaM->Move( fnMoveBackward, fnGoCntnt );    // hole Index auf Fussnoteninhalt
-    SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
-    SwTxtAttr* pFN = pTxt->GetTxtAttr( pPaM->GetPoint()->nContent.GetIndex(),
-                                        RES_TXTATR_FTN );
-    ASSERT(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
-    if( pFN )
-    {
-        const SwNodeIndex* pSttIdx = ((SwTxtFtn*)pFN)->GetStartNode();
-        ASSERT(pSttIdx, "Probleme beim Anlegen des Fussnoten-Textes");
-
-        ((SwTxtFtn*)pFN)->SetSeqNo( rDoc.GetFtnIdxs().Count() );
-
-        BOOL bOld = bFtnEdn;
-        bFtnEdn = TRUE;
-
-        // read content of Ft-/End-Note
-        Read_HdFtFtnText( pSttIdx, pRes->nCp2OrIdx, pRes->nMemLen, nType );
-        bFtEdOk = TRUE;
-        bFtnEdn = bOld;
-
-        // falls keine automatische Numerierung eingestellt ist, so hole
-        // das 1. Zeichen aus der Fuss-/End-Note und setze das als Zeichen
-        if( !bAutoNum )
-        {
-            SwNodeIndex& rNIdx = pPaM->GetPoint()->nNode;
-            rNIdx = pSttIdx->GetIndex() + 1;
-            SwTxtNode* pTNd = rNIdx.GetNode().GetTxtNode();
-            if( pTNd )
-            {
-                String sNo( pTNd->GetTxt().GetChar( 0 ));
-                ((SwTxtFtn*)pFN)->SetNumber( 0, &sNo );
-                pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
-                pPaM->SetMark();
-                pPaM->GetMark()->nContent++;
-                rDoc.Delete( *pPaM );
-                pPaM->DeleteMark();
-            }
-        }
-    }
-    *pPaM->GetPoint() = aTmpPos;                // restore Cursor
-
-    pPlcxMan = pOldPlcxMan;             // Attributverwaltung restoren
-    pPlcxMan->RestoreAllPLCFx( aSave );
-
-    if( bSymbol )
-    {
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
-        bSymbol = FALSE;
-    }
-
-    // insert Section to get this Ft-/End-Note at the end of the section,
-    // when there is no open section at the moment
-       if( bFtEdOk && pLastPgDeskIdx && !pAfterSection)
-    {
-        const SwNodeIndex aOrgLastPgDeskIdx( *pLastPgDeskIdx );
-
-        (*pLastPgDeskIdx)++;
-        SwPosition aSectStart( *pLastPgDeskIdx );
-        aSectStart.nContent.Assign( pLastPgDeskIdx->GetNode().GetCntntNode(), 0 );
-
-        SwPaM aSectPaM( aSectStart, *pPaM->GetPoint() );
-        InsertSectionWithWithoutCols( aSectPaM, 0 );
-        pPaM->Move( fnMoveBackward );
-        DELETEZ( pLastPgDeskIdx );
-        // set attributes to correct position
-        pCtrlStck->MoveAttrsToNextNode( aOrgLastPgDeskIdx );
-    }
-
-    return 1;       // das Fussnotenzeichen ueberlesen!
 }
 
 // JP 03.12.98 - Anmerkungen einlesen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:56 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 16:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1607,8 +1607,11 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
     }
 
     // Vorsicht: gibt es ueberhaupt einen vorigen Page Descriptor?
-    if( !pOldPageDesc )
+    if (!pOldPageDesc)
+    {
         nSameHdFt = 0;
+        SetLastPgDeskIdx();
+    }
 
     SwFrmFmt &rFmt0 = pPageDesc->GetMaster();
 
