@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlscan.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 10:27:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 13:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ namespace connectivity
         // setting the new information before scanning
         void prepareScan(const ::rtl::OUString & rNewStatement, const OParseContext* pContext, sal_Bool bInternational);
         const ::rtl::OUString& getErrorMessage() const {return m_sErrorMessage;}
+        ::rtl::OString getStatement() const { return m_sStatement; }
 
         sal_Int32 SQLlex();
         // set this as scanner for flex

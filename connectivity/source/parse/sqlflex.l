@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.10 2001-05-25 13:09:27 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.11 2001-05-30 13:37:50 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-05-25 13:09:27 $ $Revision: 1.10 $
+//	$Author: oj $ $Date: 2001-05-30 13:37:50 $ $Revision: 1.11 $
 //
 // Description:
 //
@@ -477,20 +477,26 @@ sal_Int32 gatherNamePre(const sal_Char* text)
 		case SQL_TOKEN_MIN:
 		case SQL_TOKEN_SUM:
 			SQL_NEW_KEYWORD(nToken); 
-			return nToken;
+			break;
 		default:
-			// we need a special handling for parameter
-			if (yy_hold_char == ':')
+		// we need a special handling for parameter
+		{
+			::rtl::OString sStmt = xxx_pGLOBAL_SQLSCAN->getStatement();
+			sal_Int32 nLength = strlen(text);
+			sal_Int32 nPos = sStmt.getLength() - nLength - 1;
+			if (sStmt.getStr()[nPos] == ':')
 			{
-				SQL_NEW_NODE(::rtl::OUString(text,strlen(text),RTL_TEXTENCODING_UTF8), SQL_NODE_NAME); 
-				return SQL_TOKEN_NAME; 				
+				SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME); 
+				nToken = SQL_TOKEN_NAME; 				
 			}
 			else
 			{
-				SQL_NEW_NODE(::rtl::OUString(text,strlen(text),RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
-				return SQL_TOKEN_STRING;			
+				SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
+				nToken = SQL_TOKEN_STRING;			
 			}
-	}															   	
+		}
+	}
+	return nToken;
 }
 
 using namespace connectivity;
@@ -585,8 +591,6 @@ void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const OPars
 	m_nCurrentPos	= 0;
 	m_bInternational = bInternational;
 	m_pContext		= pContext;
-	if(yy_hold_char != 32)
-		yy_hold_char	= 0;
 }
 
 //------------------------------------------------------------------------------
