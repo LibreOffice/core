@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:50:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,7 +879,8 @@ SwPageDesc *SwPageFrm::FindPageDesc()
 
     //4.
     if ( !pRet )
-        pRet = (SwPageDesc*)&GetFmt()->GetDoc()->GetPageDesc( 0 );
+        pRet = (SwPageDesc*)&(const_cast<const SwDoc *>(GetFmt()->GetDoc())
+                              ->GetPageDesc( 0 ));
 
 
     ASSERT( pRet, "Kein Descriptor gefunden." );
