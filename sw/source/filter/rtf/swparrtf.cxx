@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:18:32 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1291,6 +1291,9 @@ void SwRTFParser::NextToken( int nToken )
     case RTF_SWG_PRTDATA:
         ReadPrtData();
         break;
+    case RTF_XE:
+        ReadXEField();
+        break;
     case RTF_FIELD:
         ReadField();
         break;
@@ -1623,6 +1626,10 @@ SETCHDATEFIELD:
         }
         break;
 
+    case RTF_USERPROPS:
+        ReadUserProperties();       // #i28758 For now we don't support user properties
+        break;
+
 // RTF_SUBENTRYINDEX
 
     default:
@@ -1637,11 +1644,15 @@ SETCHDATEFIELD:
         case RTF_APOCTL:
             ReadFly( nToken );
             break;
+
+        /* #i28983# table handling in rtf is simply wrong this catch all case here
+           creates more problems than it solves
         case RTF_BRDRDEF | RTF_TABLEDEF:
         case RTF_SHADINGDEF | RTF_TABLEDEF:
         case RTF_TABLEDEF:
             ReadTable( nToken );
             break;
+        */
 
         case RTF_INFO:
             ReadInfo();
@@ -3166,6 +3177,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             RTF_FLY_INPARA == nToken ||
             pPageDesc, "PageDesc fehlt" );
 
+    bool bContainsParaCache = bContainsPara;
     // alle wichtigen Sachen sichern
     SwPosition aSavePos( *pPam->GetPoint() );
     SvxRTFItemStack aSaveStack;
@@ -3382,6 +3394,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
     aFlyArr.Insert( &aSaveArray, 0 );
     aSaveArray.Remove( 0, aSaveArray.Count() );
+    bContainsPara = bContainsParaCache;
 }
 
 void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
@@ -3860,6 +3873,69 @@ sal_Char __READONLY_DATA aChkForVerNo[] = "StarWriter";
 
     SvxRTFParser::ReadInfo( pChkForVerNo );
 }
+
+void SwRTFParser::ReadUserProperties()
+{
+    // For now we don't support user properties but at least the parser is here.
+    // At the moment it just swallows the tokens to prevent them being displayed
+    int nOpenBrakets = 1, nToken;
+
+    while( nOpenBrakets && IsParserWorking() )
+    {
+        switch( nToken = GetNextToken() )
+        {
+        case '}':
+             --nOpenBrakets;
+             break;
+        case '{':
+            {
+                if( RTF_IGNOREFLAG != GetNextToken() )
+                    nToken = SkipToken( -1 );
+                else if( RTF_UNKNOWNCONTROL != GetNextToken() )
+                    nToken = SkipToken( -2 );
+                else
+                {
+                    // gleich herausfiltern
+                    ReadUnknownData();
+                    nToken = GetNextToken();
+                    if( '}' != nToken )
+                        eState = SVPAR_ERROR;
+                    break;
+                }
+                ++nOpenBrakets;
+            }
+            break;
+
+        case RTF_PROPNAME:
+            SkipGroup();
+            break;
+
+        case RTF_PROPTYPE:
+            break;
+
+        case RTF_STATICVAL:
+            SkipGroup();
+             break;
+
+//      default:
+        }
+    }
+
+    SkipToken( -1 );
+}
+
+
+#ifdef USED
+void SwRTFParser::SaveState( int nToken )
+{
+    SvxRTFParser::SaveState( nToken );
+}
+
+void SwRTFParser::RestoreState()
+{
+    SvxRTFParser::RestoreState();
+}
+#endif
 
 /**/
 
