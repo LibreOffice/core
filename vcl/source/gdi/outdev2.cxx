@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:06:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,9 +819,20 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
             aColorBmp.Erase( Color( cCmpVal, cCmpVal, cCmpVal ) );
 
             if( aBmpEx.IsAlpha() )
-                aBmpEx = BitmapEx( aColorBmp, aBmpEx.GetAlpha() );
+            {
+                // Create one-bit mask out of alpha channel, by
+                // thresholding it at alpha=0.5. As
+                // DRAWMODE_BLACK/WHITEBITMAP requires monochrome
+                // output, having alpha-induced grey levels is not
+                // acceptable.
+                Bitmap aMask( aBmpEx.GetAlpha().GetBitmap() );
+                aMask.MakeMono( 128 );
+                aBmpEx = BitmapEx( aColorBmp, aMask );
+            }
             else
+            {
                 aBmpEx = BitmapEx( aColorBmp, aBmpEx.GetMask() );
+            }
         }
         else if( !!aBmpEx )
         {
@@ -856,7 +867,7 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 
     if( OUTDEV_PRINTER == meOutDevType )
     {
-        if( rBitmapEx.IsAlpha() )
+        if( aBmpEx.IsAlpha() )
         {
             // #107169# For true alpha bitmaps, no longer masking the
             // bitmap, but perform a full alpha blend against a white
@@ -873,7 +884,7 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
         }
         return;
     }
-    else if( rBitmapEx.IsAlpha() )
+    else if( aBmpEx.IsAlpha() )
     {
         ImplDrawAlpha( aBmpEx.GetBitmap(), aBmpEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
         return;
@@ -977,8 +988,8 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
                 if( mpAlphaVDev )
                     mpAlphaVDev->DrawBitmapEx( rDestPt,
                                                rDestSize,
-                                               BitmapEx( rBitmapEx.GetMask(),
-                                                         rBitmapEx.GetMask() ) );
+                                               BitmapEx( aBmpEx.GetMask(),
+                                                         aBmpEx.GetMask() ) );
             }
             else
             {
