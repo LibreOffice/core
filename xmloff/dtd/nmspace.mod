@@ -1,5 +1,5 @@
 <!--
-	$Id: nmspace.mod,v 1.5 2002-05-06 09:34:55 bm Exp $
+	$Id: nmspace.mod,v 1.6 2005-01-27 11:06:50 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -75,6 +75,7 @@
 <!ENTITY nDr3D "&nOpenOffice;/dr3d">
 <!ENTITY nForm "&nOpenOffice;/form">
 <!ENTITY nConfig "&nOpenOffice2001;/config">
+<!ENTITY nPresentation "&nOpenOffice2001;/presentation">
 
 <!-- dublin core namespace name and prefic -->
 <!ENTITY nDC "http://purl.org/dc/elements/1.1/">
