@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-02 12:33:51 $
+ *  last change: $Author: tbe $ $Date: 2001-03-07 14:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,10 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         sal_Int32       m_nPosY;
         sal_Int32       m_nWidth;
         sal_Int32       m_nHeight;
-        ::rtl::OUString m_nName;
+        ::rtl::OUString m_aName;
         sal_Int16       m_nTabIndex;
+        sal_Int32       m_nStep;
+        ::rtl::OUString m_aTag;
         // </properties>
 
         sal_Bool        m_bCloneable;
@@ -237,6 +239,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/02 12:33:51  tbe
+ *  clone geometry control model
+ *
  *  Revision 1.4  2001/03/01 14:27:14  tbe
  *  removed ClassId from geometry control model
  *

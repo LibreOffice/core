@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-02 12:33:21 $
+ *  last change: $Author: tbe $ $Date: 2001-03-07 14:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #define GCM_PROPERTY_ID_HEIGHT      4
 #define GCM_PROPERTY_ID_NAME        5
 #define GCM_PROPERTY_ID_TABINDEX    6
+#define GCM_PROPERTY_ID_STEP        7
+#define GCM_PROPERTY_ID_TAG         8
 
 #define GCM_PROPERTY_POS_X      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"))
 #define GCM_PROPERTY_POS_Y      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"))
@@ -91,6 +93,8 @@
 #define GCM_PROPERTY_HEIGHT     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))
 #define GCM_PROPERTY_NAME       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))
 #define GCM_PROPERTY_TABINDEX   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex"))
+#define GCM_PROPERTY_STEP       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Step"))
+#define GCM_PROPERTY_TAG        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tag"))
 
 #define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
@@ -118,8 +122,10 @@
         ,m_nWidth(0)
         ,m_nHeight(0)
         ,m_bCloneable(sal_False)
-        ,m_nName(::rtl::OUString())
+        ,m_aName(::rtl::OUString())
         ,m_nTabIndex(0)
+        ,m_nStep(0)
+        ,m_aTag(::rtl::OUString())
     {
         OSL_ENSURE(NULL != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
 
@@ -175,8 +181,10 @@
         registerProperty(GCM_PROPERTY_POS_Y,    GCM_PROPERTY_ID_POS_Y,      DEFAULT_ATTRIBS(), &m_nPosY, ::getCppuType(&m_nPosY));
         registerProperty(GCM_PROPERTY_WIDTH,    GCM_PROPERTY_ID_WIDTH,      DEFAULT_ATTRIBS(), &m_nWidth, ::getCppuType(&m_nWidth));
         registerProperty(GCM_PROPERTY_HEIGHT,   GCM_PROPERTY_ID_HEIGHT,     DEFAULT_ATTRIBS(), &m_nHeight, ::getCppuType(&m_nHeight));
-        registerProperty(GCM_PROPERTY_NAME,     GCM_PROPERTY_ID_NAME,       DEFAULT_ATTRIBS(), &m_nName, ::getCppuType(&m_nName));
+        registerProperty(GCM_PROPERTY_NAME,     GCM_PROPERTY_ID_NAME,       DEFAULT_ATTRIBS(), &m_aName, ::getCppuType(&m_aName));
         registerProperty(GCM_PROPERTY_TABINDEX, GCM_PROPERTY_ID_TABINDEX,   DEFAULT_ATTRIBS(), &m_nTabIndex, ::getCppuType(&m_nTabIndex));
+        registerProperty(GCM_PROPERTY_STEP,     GCM_PROPERTY_ID_STEP,       DEFAULT_ATTRIBS(), &m_nStep, ::getCppuType(&m_nStep));
+        registerProperty(GCM_PROPERTY_TAG,      GCM_PROPERTY_ID_TAG,        DEFAULT_ATTRIBS(), &m_aTag, ::getCppuType(&m_aTag));
     }
 
     //--------------------------------------------------------------------
@@ -298,8 +306,10 @@
         pOwnClone->m_nPosY      = m_nPosY;
         pOwnClone->m_nWidth     = m_nWidth;
         pOwnClone->m_nHeight    = m_nHeight;
-        pOwnClone->m_nName      = m_nName;
+        pOwnClone->m_aName      = m_aName;
         pOwnClone->m_nTabIndex  = m_nTabIndex;
+        pOwnClone->m_nStep      = m_nStep;
+        pOwnClone->m_aTag       = m_aTag;
 
         return pOwnClone;
     }
@@ -319,6 +329,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/02 12:33:21  tbe
+ *  clone geometry control model
+ *
  *  Revision 1.4  2001/03/01 14:26:33  tbe
  *  removed ClassId from geometry control model
  *
