@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 13:44:54 $
+ *  last change: $Author: mib $ $Date: 2001-03-22 15:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,15 +430,15 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                 sal_False );
 
         ReadThroughComponent(
-            pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
-            "com.sun.star.comp.Writer.XMLStylesImporter",
+            pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
+            "com.sun.star.comp.Writer.XMLSettingsImporter",
             aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
             IsOrganizerMode() );
 
         ReadThroughComponent(
-            pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
-            "com.sun.star.comp.Writer.XMLSettingsImporter",
+            pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
+            "com.sun.star.comp.Writer.XMLStylesImporter",
             aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
             aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
             IsOrganizerMode() );

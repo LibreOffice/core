@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 12:36:48 $
+ *  last change: $Author: mib $ $Date: 2001-03-22 15:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,47 +717,6 @@ SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(
 }
 void SwXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewProps)
 {
-    sal_Int32 nCount = aViewProps.getLength();
-    const beans::PropertyValue *pValue = aViewProps.getConstArray();
-
-    long nTop = 0, nLeft = 0, nWidth = 0, nHeight = 0;
-    sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
-
-    for (sal_Int32 i = 0; i < nCount ; i++)
-    {
-        if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaTop" ) ) )
-        {
-            pValue[i].Value >>= nTop;
-        }
-        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaLeft" ) ) )
-        {
-            pValue[i].Value >>= nLeft;
-        }
-        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaWidth" ) ) )
-        {
-            pValue[i].Value >>= nWidth;
-        }
-        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaHeight" ) ) )
-        {
-            pValue[i].Value >>= nHeight;
-        }
-        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineInsertions" ) ) )
-        {
-            pValue[i].Value >>= bShowInserts;
-        }
-        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineDeletions" ) ) )
-        {
-            pValue[i].Value >>= bShowDeletes;
-        }
-        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowHeaderWhileBrowsing" ) ) )
-        {
-            pValue[i].Value >>= bShowHeader;
-        }
-        else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowFooterWhileBrowsing" ) ) )
-        {
-            pValue[i].Value >>= bShowFooter;
-        }
-    }
     if( !GetModel().is() )
         return;
 
@@ -775,24 +734,75 @@ void SwXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewPro
         return;
 
     SwDoc *pDoc = pText->GetDoc();
-    Rectangle aRect ( nLeft, nTop, nLeft + nWidth, nTop + nHeight );
-    pDoc->GetDocShell()->SetVisArea ( aRect );
+    Rectangle aRect;
+    if( pDoc->GetDocShell() )
+        aRect = ((SfxInPlaceObject *)pDoc->GetDocShell())->GetVisArea();
+
+    sal_Int32 nCount = aViewProps.getLength();
+    const beans::PropertyValue *pValue = aViewProps.getConstArray();
+
+    long nTmp;
+    sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
+
+    for (sal_Int32 i = 0; i < nCount ; i++)
+    {
+        if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaTop" ) ) )
+        {
+            pValue->Value >>= nTmp;
+            aRect.setY( nTmp );
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaLeft" ) ) )
+        {
+            pValue->Value >>= nTmp;
+            aRect.setX( nTmp );
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaWidth" ) ) )
+        {
+            pValue->Value >>= nTmp;
+            aRect.setWidth( nTmp );
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaHeight" ) ) )
+        {
+            pValue->Value >>= nTmp;
+            aRect.setHeight( nTmp );
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineInsertions" ) ) )
+        {
+            bShowInserts = *(sal_Bool *)(pValue->Value.getValue());
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineDeletions" ) ) )
+        {
+            bShowDeletes = *(sal_Bool *)(pValue->Value.getValue());
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowHeaderWhileBrowsing" ) ) )
+        {
+            bShowHeader = *(sal_Bool *)(pValue->Value.getValue());
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowFooterWhileBrowsing" ) ) )
+        {
+            bShowFooter = *(sal_Bool *)(pValue->Value.getValue());
+        }
+        pValue++;
+    }
+    if( pDoc->GetDocShell() )
+        pDoc->GetDocShell()->SetVisArea ( aRect );
 
     pDoc->SetHeadInBrowse ( bShowHeader );
     pDoc->SetFootInBrowse ( bShowFooter );
 
-    SwRedlineMode eOld = pDoc->GetRedlineMode();
-
+    sal_uInt16 eOld = pDoc->GetRedlineMode();
     if ( bShowInserts )
-    {
-        if ( bShowDeletes )
-            pDoc->SetRedlineMode ( eOld | REDLINE_SHOW_DELETE | REDLINE_SHOW_INSERT );
-        else
-            pDoc->SetRedlineMode ( eOld | REDLINE_SHOW_INSERT );
-    }
-    else if ( bShowDeletes )
-        pDoc->SetRedlineMode ( eOld | REDLINE_SHOW_DELETE );
+        eOld |= REDLINE_SHOW_INSERT;
+    else
+        eOld &= ~REDLINE_SHOW_INSERT;
+    if ( bShowDeletes )
+        eOld |= REDLINE_SHOW_DELETE;
+    else
+        eOld &= ~REDLINE_SHOW_DELETE;
+    pDoc->SetRedlineMode( eOld );
+
 }
+
 void SwXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyValue>& aConfigProps)
 {
 }

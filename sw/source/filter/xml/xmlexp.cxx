@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-21 16:20:47 $
+ *  last change: $Author: mib $ $Date: 2001-03-22 15:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,53 +458,51 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
             "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
         return;
+
+    aProps.realloc( NUM_EXPORTED_PROPERTIES );
+     // Currently exporting 9 properties
+    PropertyValue *pValue = aProps.getArray();
+    sal_Int32 nIndex = 0;
+
     Reference < XIndexContainer > xBox (xServiceFactory->createInstance
             (OUString( RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.document.IndexedPropertyValues") ) ), UNO_QUERY);
-    if (!xBox.is() )
-        return;
+    if (xBox.is() )
+    {
 
-    sal_Int32 i=0;
-    Any aAny;
 #if 0
-    for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
-            pFrame;
-            i++, pFrame = SfxViewFrame::GetNext(*pFrame ) )
-    {
-        Sequence < PropertyValue > aSequence;
-        pFrame->GetViewShell()->ReadUserDataSequence( aSequence, sal_False );
-        aAny <<= aSequence;
-        xBox->insertByIndex(i, aAny);
-    }
+        Any aAny;
+        sal_Int32 i=0;
+        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
+                pFrame;
+                i++, pFrame = SfxViewFrame::GetNext(*pFrame ) )
+        {
+            Sequence < PropertyValue > aSequence;
+            pFrame->GetViewShell()->ReadUserDataSequence( aSequence, sal_False );
+            aAny <<= aSequence;
+            xBox->insertByIndex(i, aAny);
+        }
 #endif
-    aAny <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
-
-    aProps.realloc( NUM_EXPORTED_PROPERTIES ); // Currently exporting 9 properties
-
-    PropertyValue *pValue = aProps.getArray();
-    sal_Int16 nIndex = 0;
-
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "Views") );
-    pValue[nIndex++].Value = aAny;
-
-    if( !GetModel().is() )
-    {
-        aProps.realloc(nIndex);
-        return;
+        pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "Views") );
+        pValue[nIndex++].Value <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
     }
 
-    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-    Reference < XText > xText = xTextDoc->getText();
-    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-    if( !xTextTunnel.is() )
+    Reference < XText > xText;
+    SwXText *pText = 0;
+
+    if( GetModel().is() )
     {
-        aProps.realloc(nIndex);
-        return;
+        Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+        xText = xTextDoc->getText();
+        Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+        ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+        if( xTextTunnel.is() )
+        {
+            pText = (SwXText *)xTextTunnel->getSomething(
+                                                SwXText::getUnoTunnelId() );
+            ASSERT( pText, "SwXText missing" );
+        }
     }
 
-    SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                        SwXText::getUnoTunnelId() );
-    ASSERT( pText, "SwXText missing" );
     if( !pText )
     {
         aProps.realloc(nIndex);
@@ -512,46 +510,43 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
     }
 
     SwDoc *pDoc = pText->GetDoc();
-    const Rectangle &rRect = pDoc->GetDocShell()->SfxInPlaceObject::GetVisArea();
+    const Rectangle &rRect =
+        pDoc->GetDocShell()->SfxInPlaceObject::GetVisArea();
 
-    aAny <<= rRect.Top();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaTop") );
-    pValue[nIndex++].Value = aAny;
+    pValue[nIndex++].Value <<= rRect.Top();
 
-    aAny <<= rRect.Left();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaLeft") );
-    pValue[nIndex++].Value = aAny;
+    pValue[nIndex++].Value <<= rRect.Left();
 
-    aAny <<= rRect.GetWidth();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaWidth") );
-    pValue[nIndex++].Value = aAny;
+    pValue[nIndex++].Value <<= rRect.GetWidth();
 
-    aAny <<= rRect.GetHeight();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaHeight") );
-    pValue[nIndex++].Value = aAny;
+    pValue[nIndex++].Value <<= rRect.GetHeight();
+
 
     sal_Bool bShowInsert = sal_False, bShowDelete = sal_False;
 
-    if (( REDLINE_SHOW_MASK & pDoc->GetRedlineMode()) | REDLINE_SHOW_INSERT )
+    if( (pDoc->GetRedlineMode() & REDLINE_SHOW_INSERT) != 0 )
         bShowInsert = sal_True;
-    if (( REDLINE_SHOW_MASK & pDoc->GetRedlineMode()) | REDLINE_SHOW_DELETE )
+    if( (pDoc->GetRedlineMode() & REDLINE_SHOW_DELETE) != 0 )
         bShowDelete = sal_True;
 
-    aAny <<= bShowInsert;
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineInsertions") );
-    pValue[nIndex++].Value = aAny;
+    pValue[nIndex++].Value.setValue( &bShowInsert, ::getBooleanCppuType() );
 
-    aAny <<= bShowDelete;
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineDeletions") );
-    pValue[nIndex++].Value = aAny;
+    pValue[nIndex++].Value.setValue( &bShowDelete, ::getBooleanCppuType() );
 
-    aAny <<= pDoc->IsHeadInBrowse();
+    sal_Bool bShowHead = pDoc->IsHeadInBrowse();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowHeaderWhileBrowsing") );
-    pValue[nIndex++].Value = aAny;
+    pValue[nIndex++].Value.setValue( &bShowHead, ::getBooleanCppuType() );
 
-    aAny <<= pDoc->IsFootInBrowse();
+
+    sal_Bool bShowFoot =  pDoc->IsFootInBrowse();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowFooterWhileBrowsing") );
-    pValue[nIndex++].Value = aAny;
+    pValue[nIndex++].Value.setValue( &bShowFoot, ::getBooleanCppuType() );
 
     if ( nIndex < NUM_EXPORTED_PROPERTIES )
         aProps.realloc(nIndex);
