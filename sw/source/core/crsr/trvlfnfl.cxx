@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfnfl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:00:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,12 +246,12 @@ FASTBOOL SwCrsrShell::GotoFtnAnchor()
     return bRet;
 }
 
-inline CmpLE( const SwTxtFtn& rFtn, ULONG nNd, xub_StrLen nCnt )
+inline sal_Bool CmpLE( const SwTxtFtn& rFtn, ULONG nNd, xub_StrLen nCnt )
 {
     ULONG nTNd = rFtn.GetTxtNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && *rFtn.GetStart() <= nCnt );
 }
-inline CmpL( const SwTxtFtn& rFtn, ULONG nNd, xub_StrLen nCnt )
+inline sal_Bool CmpL( const SwTxtFtn& rFtn, ULONG nNd, xub_StrLen nCnt )
 {
     ULONG nTNd = rFtn.GetTxtNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && *rFtn.GetStart() < nCnt );
