@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:40:46 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ class XclExpPalette;
 class XclExpFontBuffer;
 class XclExpNumFmtBuffer;
 class XclExpXFBuffer;
-class XclExpTabIdBuffer;
+class XclExpTabInfo;
 class XclExpLinkManager;
 
 /** Stores global buffers and data needed for Excel export filter. */
@@ -87,7 +87,7 @@ struct XclExpRootData : public XclRootData
     typedef ::std::auto_ptr< XclExpFontBuffer >     XclExpFontBufferPtr;
     typedef ::std::auto_ptr< XclExpNumFmtBuffer >   XclExpNumFmtBufferPtr;
     typedef ::std::auto_ptr< XclExpXFBuffer >       XclExpXFBufferPtr;
-    typedef ::std::auto_ptr< XclExpTabIdBuffer >    XclExpTabIdBufferPtr;
+    typedef ::std::auto_ptr< XclExpTabInfo >        XclExpTabInfoPtr;
     typedef ::std::auto_ptr< XclExpLinkManager >    XclExpLinkManagerPtr;
 
     XclExpSstPtr                mpSst;              /// The shared string table.
@@ -97,7 +97,7 @@ struct XclExpRootData : public XclRootData
     XclExpNumFmtBufferPtr       mpNumFmtBuffer;     /// All number formats in the file.
     XclExpXFBufferPtr           mpXFBuffer;         /// All XF records in the file.
 
-    XclExpTabIdBufferPtr        mpTabIdBuffer;      /// Calc->Excel sheet index conversion.
+    XclExpTabInfoPtr            mpTabInfo;          /// Calc->Excel sheet index conversion.
     XclExpLinkManagerPtr        mpLinkManager;      /// Manager for internal/external links.
 
     bool                        mbRelUrl;           /// true = Store URLs relative.
@@ -138,7 +138,7 @@ public:
     XclExpXFBuffer&             GetXFBuffer() const;
 
     /** Returns the buffer for Calc->Excel sheet index conversion. */
-    XclExpTabIdBuffer&          GetTabIdBuffer() const;
+    XclExpTabInfo&              GetTabInfo() const;
     /** Returns the link manager. */
     XclExpLinkManager&          GetLinkManager() const;
 
