@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ka $ $Date: 2001-05-07 10:31:47 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:40:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,18 +62,15 @@
 
 PRJ=..$/..
 
-PRJNAME=SVX
+PRJNAME=svx
 PROJECTPCH=xout
 PROJECTPCHSOURCE=xoutpch
 TARGET=xout
-AUTOSEG=true
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
@@ -107,32 +104,6 @@ HXX6TARGET	=	xpool
 HXX6EXT		=	hxx
 HXX6FILES	=	$(INC)$/xpool.hxx
 HXX6EXCL	= 	-K:*compat.hxx
-
-.IF "$(header)" == ""
-
-CXXFILES= \
-        xcpoly.cxx		\
-        xoutpch.cxx 	\
-        xout.cxx		\
-        xout1.cxx		\
-        xattr.cxx		\
-        xattr2.cxx		\
-        xattrbmp.cxx	\
-        xline.cxx		\
-        xpool.cxx		\
-        xtable.cxx		\
-        xtabcolr.cxx	\
-        xtablend.cxx	\
-        xtabdash.cxx	\
-        xtabhtch.cxx	\
-        xtabgrdt.cxx	\
-        xtabbtmp.cxx	\
-        xexch.cxx       \
-        xiocomp.cxx		\
-        _xpoly.cxx		\
-        _ximp.cxx		\
-        _xoutbmp.cxx	\
-        _xfont.cxx
 
 SLOFILES= \
         $(SLO)$/xcpoly.obj 		\
@@ -179,8 +150,6 @@ SVXLIGHTOBJFILES= \
         $(OBJ)$/_ximp.obj   	\
         $(OBJ)$/_xoutbmp.obj	\
         $(OBJ)$/_xfont.obj
-
-.ENDIF
 
 HXXCOPYFILES=\
      $(PRJ)$/inc$/xenum.hxx
