@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-23 11:47:02 $
+ *  last change: $Author: os $ $Date: 2002-10-18 09:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -864,7 +864,18 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_START_TABLE:
             rSh.MoveTable( fnTableCurr, fnTableStart );
         break;
-
+        case FN_GOTO_NEXT_CELL:
+        {
+            BOOL bAppendLine = TRUE;
+            if( pItem )
+                bAppendLine = ((SfxBoolItem*)pItem)->GetValue();
+            rReq.SetReturnValue( SfxBoolItem( nSlot,
+                                    rSh.GoNextCell( bAppendLine ) ) );
+        }
+        break;
+        case FN_GOTO_PREV_CELL:
+            rReq.SetReturnValue( SfxBoolItem( nSlot, rSh.GoPrevCell() ) );
+        break;
         case FN_TABLE_DELETE_ROW:
             if ( rSh.DeleteRow() && rSh.HasSelection() )
                 rSh.EnterStdMode();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2002-09-18 07:52:42 $
+ *  last change: $Author: os $ $Date: 2002-10-18 09:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,6 +612,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_TABLE_INSERT_COL_DLG     (FN_FORMAT + 142)  /* Tabelle: Dlg. Spalte einfuegen */
 #define FN_TABLE_INSERT_ROW_DLG     (FN_FORMAT + 143)  /* Tabelle: Dlg. Zeile einfuegen */
 
+#define FN_GOTO_NEXT_CELL           (FN_FORMAT + 145)  /* Table: go to next cell */
+#define FN_GOTO_PREV_CELL           (FN_FORMAT + 146)  /* Table: go to previous cell */
 
 
 //hier geht's weiter !

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: os $ $Date: 2002-10-11 11:15:45 $
+ *  last change: $Author: os $ $Date: 2002-10-18 09:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1972,6 +1972,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
         default:
         {
+            USHORT nSlotId = 0;
             FlushInBuffer( &rSh );
 //???           if( bFlushCharBuffer )
 //???               FlushInBuffer( &rSh );
@@ -2007,9 +2008,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_NextCell:
                 //In Tabelle immer 'flushen'
                 rSh.GoNextCell();
+                nSlotId = FN_GOTO_NEXT_CELL;
                 break;
             case KS_PrevCell:
                 rSh.GoPrevCell();
+                nSlotId = FN_GOTO_PREV_CELL;
                 break;
             case KS_AutoFmtByInput:
                 rSh.SplitNode( TRUE );
@@ -2134,6 +2137,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_Draw_Change :
                 ChangeDrawing( nDir );
                 break;
+            }
+            if( nSlotId && rView.GetViewFrame()->GetBindings().GetRecorder().is() )
+            {
+                SfxRequest aReq(rView.GetViewFrame(), nSlotId );
+                aReq.Done();
             }
             eKeyState = KS_Ende;
         }

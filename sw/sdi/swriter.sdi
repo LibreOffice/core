@@ -9509,4 +9509,53 @@ SfxBoolItem InsertDBField FN_INSERT_DBFIELD
     ToolBoxConfig = FALSE,
     GroupId = GID_INSERT;
 ]
+//--------------------------------------------------------------------------
+SfxBoolItem JumpToNextCell FN_GOTO_NEXT_CELL
+(SfxBoolItem AppendLineInReadonlyFlag FN_GOTO_NEXT_CELL)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_NAVIGATOR;
+]
+//--------------------------------------------------------------------------
+SfxBoolItem JumpToPrevCell FN_GOTO_PREV_CELL
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_NAVIGATOR;
+]
+
 
