@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-08 08:41:30 $
+ *  last change: $Author: cl $ $Date: 2002-07-18 14:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef SVX_LIGHT
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
@@ -72,12 +71,17 @@
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
-#endif // !SVX_LIGHT
 
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
 
+#ifndef _SVDOPATH_HXX
+#include <svx/svdopath.hxx>
+#endif
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
 #include <svtools/style.hxx>
 #include <svx/linkmgr.hxx>
 #ifndef _SVDPAGV_HXX //autogen
@@ -108,8 +112,8 @@
 #include "sdresid.hxx"
 #include "sdiocmpt.hxx"
 #include "strmname.h"
+#include "anminfo.hxx"
 
-#ifndef SVX_LIGHT
 #ifdef MAC
 #include "::ui:inc:unmovss.hxx"
 #include "::ui:inc:unchss.hxx"
@@ -143,12 +147,8 @@
 #include "..\ui\inc\strings.hrc"
 #endif
 #endif
-#endif // !SVX_LIGHT
 
-#ifdef SVX_LIGHT
-#include "glob.hxx"
-#endif
-
+using namespace ::com::sun::star;
 
 #define POOL_BUFFER_SIZE        (USHORT)32768
 #define BASIC_BUFFER_SIZE       (USHORT)8192
@@ -160,7 +160,6 @@
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 {
     BOOL bOK = TRUE;
@@ -226,7 +225,6 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 
     return(pBookmarkDoc);
 }
-#endif // !SVX_LIGHT
 
 /*************************************************************************
 |*
@@ -234,7 +232,6 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
 {
     SdDrawDocument* pBookmarkDoc = NULL;
@@ -280,7 +277,6 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
 
     return(pBookmarkDoc);
 }
-#endif // !SVX_LIGHT
 
 /*************************************************************************
 |*
@@ -288,7 +284,6 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 BOOL SdDrawDocument::InsertBookmark(
     List* pBookmarkList,            // Liste der Namen der einzufuegenden Bookmarks
     List* pExchangeList,            // Liste der zu verwendenen Namen
@@ -360,8 +355,6 @@ BOOL SdDrawDocument::InsertBookmark(
 
     return bOK;
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -369,7 +362,6 @@ BOOL SdDrawDocument::InsertBookmark(
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 BOOL SdDrawDocument::InsertBookmarkAsPage(
     List* pBookmarkList,
     List* pExchangeList,            // Liste der zu verwendenen Namen
@@ -956,8 +948,6 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
     return bContinue;
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -965,7 +955,6 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 BOOL SdDrawDocument::InsertBookmarkAsObject(
     List* pBookmarkList,
     List* pExchangeList,            // Liste der zu verwendenen Namen
@@ -1172,8 +1161,6 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
 
     return bOK;
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -1181,7 +1168,6 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::CloseBookmarkDoc()
 {
     if (xBookmarkDocShRef.Is())
@@ -1192,8 +1178,6 @@ void SdDrawDocument::CloseBookmarkDoc()
     xBookmarkDocShRef.Clear();
     aBookmarkFile = String();
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -1201,13 +1185,10 @@ void SdDrawDocument::CloseBookmarkDoc()
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 const SdrModel* SdDrawDocument::LoadModel(const String& rFileName)
 {
     return ( OpenBookmarkDoc(rFileName) );
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -1215,13 +1196,10 @@ const SdrModel* SdDrawDocument::LoadModel(const String& rFileName)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::DisposeLoadedModels()
 {
     CloseBookmarkDoc();
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -1252,7 +1230,6 @@ FASTBOOL SdDrawDocument::IsReadOnly() const
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::SetAllocDocSh(BOOL bAlloc)
 {
     bAllocDocSh = bAlloc;
@@ -1264,8 +1241,6 @@ void SdDrawDocument::SetAllocDocSh(BOOL bAlloc)
 
     xAllocedDocShRef.Clear();
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -1292,11 +1267,7 @@ List* SdDrawDocument::GetCustomShowList(BOOL bCreate)
 
 SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 {
-#ifdef SVX_LIGHT
-    SotStorage* pStor = pDocSh ? pDocSh->GetStorage() : NULL;
-#else
     SotStorage* pStor = pDocSh ? pDocSh->GetMedium()->GetStorage() : NULL;
-#endif
     SvStream*   pRet = NULL;
 
     if( pStor )
@@ -1405,7 +1376,6 @@ void SdDrawDocument::HandsOff()
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnlyDuplicatePages, BOOL bUndo)
 {
     SdView* pView = NULL;
@@ -1540,8 +1510,6 @@ void SdDrawDocument::RemoveUnnessesaryMasterPages(SdPage* pMasterPage, BOOL bOnl
             break;                      // Nur diese eine MasterPage!
     }
 }
-#endif // !SVX_LIGHT
-
 
 
 /*************************************************************************
@@ -1567,13 +1535,11 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                                    BOOL bMaster,
                                    BOOL bCheckMasters)
 {
-#ifndef SVX_LIGHT
     if( pDocSh )
         pDocSh->SetWaitCursor( TRUE );
 
     SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_SET_PRESLAYOUT)), String());
-#endif
 
     SdPage* pSelectedPage   = GetSdPage(nSdPageNum, PK_STANDARD);
     SdPage* pNotes          = (SdPage*) GetPage(pSelectedPage->GetPageNum()+1);
@@ -1670,13 +1636,11 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                         DBG_ASSERT(bTest, "StyleSheet-Umbenennung fehlgeschlagen");
                         pMySheet->GetItemSet().ClearItem(0);  // alle loeschen
 
-#ifndef SVX_LIGHT
                         StyleSheetUndoAction* pUndoChStyle = new StyleSheetUndoAction(this,
                                                                  pMySheet, &pHisSheet->GetItemSet());
                         pUndoMgr->AddUndoAction(pUndoChStyle);
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
                         pMySheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-#endif
                     }
                     else
                     {
@@ -1747,13 +1711,11 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
 
             if (pCreatedStyles->Count() > 0)
             {
-#ifndef SVX_LIGHT
                 // UndoAction fuer das Erzeugen und Einfuegen vorn StyleSheets
                 // auf den UndoManager legen
                 SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(
                                                               this, pCreatedStyles, TRUE);
                 pUndoMgr->AddUndoAction(pMovStyles);
-#endif
             }
             else
             {
@@ -1834,13 +1796,11 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         {
             AutoLayout eAutoLayout = pPage->GetAutoLayout();
 
-        #ifndef SVX_LIGHT
             SdPresentationLayoutUndoAction * pPLUndoAction =
                 new SdPresentationLayoutUndoAction
                     (this, aOldLayoutName, aLayoutName,
                      eAutoLayout, eAutoLayout, FALSE, pPage);
             pUndoMgr->AddUndoAction(pPLUndoAction);
-        #endif
             pPage->SetPresentationLayout(aLayoutName);
             pPage->SetAutoLayout(eAutoLayout);
 
@@ -1859,9 +1819,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                                   pOldMaster->GetUppBorder(),
                                   pOldMaster->GetRgtBorder(),
                                   pOldMaster->GetLwrBorder());
-#ifndef SVX_LIGHT
             pMaster->ScaleObjects(aSize, aBorderRect, TRUE);
-#endif
             pMaster->SetSize(aSize);
             pMaster->SetBorder(pOldMaster->GetLftBorder(),
                                pOldMaster->GetUppBorder(),
@@ -1875,9 +1833,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                                        pOldNotesMaster->GetUppBorder(),
                                        pOldNotesMaster->GetRgtBorder(),
                                        pOldNotesMaster->GetLwrBorder());
-#ifndef SVX_LIGHT
             pNotesMaster->ScaleObjects(aSize, aNotesBorderRect, TRUE);
-#endif
             pNotesMaster->SetSize(aSize);
             pNotesMaster->SetBorder(pOldNotesMaster->GetLftBorder(),
                                     pOldNotesMaster->GetUppBorder(),
@@ -1936,11 +1892,9 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         \********************************************************************/
         ((SdStyleSheetPool*) pStyleSheetPool)->CreateLayoutStyleSheets(aName);
         List* pCreatedStyles = ((SdStyleSheetPool*) pStyleSheetPool)->CreateLayoutSheetList(aName);
-#ifndef SVX_LIGHT
         SdMoveStyleSheetsUndoAction* pMovStyles =
             new SdMoveStyleSheetsUndoAction(this, pCreatedStyles, TRUE);
         pUndoMgr->AddUndoAction(pMovStyles);
-#endif
 
         /*********************************************************************
         |* Neue MasterPages erzeugen und ins Dokument eintragen
@@ -2004,14 +1958,12 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             AutoLayout eNewAutoLayout =
                 pPage->GetPageKind() == PK_STANDARD ? AUTOLAYOUT_NONE : AUTOLAYOUT_NOTES;
 
-#ifndef SVX_LIGHT
             SdPresentationLayoutUndoAction * pPLUndoAction =
                 new SdPresentationLayoutUndoAction
                         (this, aOldLayoutName, aName,
                          eOldAutoLayout, eNewAutoLayout, TRUE,
                          pPage);
             pUndoMgr->AddUndoAction(pPLUndoAction);
-#endif
 
             pPage->SetPresentationLayout(aName);
             pPage->SetAutoLayout(eNewAutoLayout);
@@ -2023,7 +1975,6 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         delete pPageList;
     }
 
-#ifndef SVX_LIGHT
     /*********************************************************************
     |* falls die alten Masterpages nicht mehr benoetigt werden,
     |* muessen sie und die entsprechenden Praesentationsvorlagen
@@ -2044,8 +1995,73 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
 
     if( pDocSh )
         pDocSh->SetWaitCursor( FALSE );
-#endif // !SVX_LIGHT
 }
 
 
 
+void SdDrawDocument::Merge(SdrModel& rSourceModel,
+               USHORT nFirstPageNum, USHORT nLastPageNum,
+               USHORT nDestPos,
+               FASTBOOL bMergeMasterPages, FASTBOOL bAllMasterPages,
+               FASTBOOL bUndo, FASTBOOL bTreadSourceAsConst)
+{
+    SdrModel::Merge( rSourceModel, nFirstPageNum, nLastPageNum, nDestPos, bMergeMasterPages, bAllMasterPages, bUndo, bTreadSourceAsConst );
+
+    if( &rSourceModel == this )
+        return;
+
+    // #55912# fix animation at path
+    if( nLastPageNum >= rSourceModel.GetPageCount() )
+        nLastPageNum = rSourceModel.GetPageCount()-1;
+
+    USHORT nSrcPage;
+    USHORT nDstPage;
+    for( nSrcPage = nFirstPageNum, nDstPage = nDestPos; (nSrcPage < nLastPageNum) && (nDstPage < GetPageCount()); nSrcPage++, nDstPage++ )
+    {
+        const SdrPage* pSrcPage = rSourceModel.GetPage( nSrcPage );
+        const SdrPage* pDstPage = GetPage( nDstPage );
+
+        if( pSrcPage && pDstPage )
+        {
+            SdrObjListIter  aSrcIter( *pSrcPage, IM_DEEPWITHGROUPS );
+            SdrObjListIter  aDstIter( *pDstPage, IM_DEEPWITHGROUPS );
+
+            SdrObject* pSrcObj;
+            SdrObject* pDstObj;
+            for( pSrcObj = aSrcIter.Next(), pDstObj = aDstIter.Next();
+                 pSrcObj && pDstObj;
+                 pSrcObj = aSrcIter.Next(), pDstObj = aDstIter.Next() )
+            {
+                SdAnimationInfo* pInfo = static_cast< SdDrawDocument* >(&rSourceModel)->GetAnimationInfo(const_cast<SdrObject*>(pSrcObj));
+                if( pInfo && pInfo->eEffect == presentation::AnimationEffect_PATH && pInfo->pPathObj)
+                {
+                    SdrObjListIter  aSrcPathIter( *pSrcPage, IM_DEEPWITHGROUPS );
+                    SdrObjListIter  aDstPathIter( *pDstPage, IM_DEEPWITHGROUPS );
+                    SdrObject* pSrcPathObj;
+                    SdrObject* pDstPathObj;
+                    for( pSrcPathObj = aSrcPathIter.Next(), pDstPathObj = aDstPathIter.Next();
+                         pSrcPathObj && pDstPathObj;
+                         pSrcPathObj = aSrcPathIter.Next(), pDstPathObj = aDstPathIter.Next() )
+                    {
+                        if( pSrcPathObj == pInfo->pPathObj )
+                        {
+                            if( PTR_CAST( SdrPathObj, pDstPathObj ) )
+                            {
+                                SdAnimationInfo* pInfo = GetAnimationInfo(pDstObj);
+                                if( pInfo == NULL )
+                                {
+                                    pInfo = new SdAnimationInfo(this);
+                                    pDstObj->InsertUserData( pInfo );
+                                }
+
+                                pInfo->eEffect = presentation::AnimationEffect_PATH;
+                                pInfo->pPathObj = PTR_CAST(SdrPathObj, pDstPathObj );
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

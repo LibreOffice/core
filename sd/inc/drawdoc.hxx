@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-18 15:29:43 $
+ *  last change: $Author: cl $ $Date: 2002-07-18 14:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,6 @@
 #include <sot/storage.hxx>
 #endif
 
-#ifdef SVX_LIGHT
-#define SdOutliner Outliner
-#endif
 #ifndef _RSCSFX_HXX
 #include <rsc/rscsfx.hxx>
 #endif
@@ -119,11 +116,9 @@ class SdTransferable;
 struct SpellCallbackInfo;
 struct StyleRequestData;
 
-#ifndef SVX_LIGHT
 #ifndef SV_DECL_SDDRAWDOCSHELL_DEFINED
 #define SV_DECL_SDDRAWDOCSHELL_DEFINED
 SV_DECL_REF(SdDrawDocShell)
-#endif
 #endif
 
 struct StyleReplaceData
@@ -139,38 +134,6 @@ enum DocCreationMode
     NEW_DOC,
     DOC_LOADED
 };
-
-#ifdef SVX_LIGHT
-class SvStream;
-class SdDrawDocument;
-
-/** this is a dummy SdDrawDocShell that is used by the Player */
-class SdDrawDocShell
-{
-private:
-    SotStorage* pStorage;
-    Printer* pPrinter;
-    SdDrawDocument* mpDoc;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
-
-public:
-    SdDrawDocShell( SotStorage* pS ) : pPrinter(NULL), pStorage( pS ) {}
-    ~SdDrawDocShell() { delete pPrinter; }
-
-    virtual void SetPrinter( Printer* pPrntr ) { pPrinter = pPrntr; }
-    virtual Printer* GetPrinter( BOOL bCreate ) { if( pPrinter == NULL && bCreate ) pPrinter = new Printer(); return pPrinter; }
-
-    virtual SotStorage* GetStorage() const { return pStorage; }
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModel();
-
-    void SetDoc( SdDrawDocument* pDoc ) { mpDoc = pDoc; }
-    SdDrawDocument* GetDoc() const { return mpDoc; }
-};
-
-#endif
-
 
 //==================================================================
 
@@ -197,9 +160,7 @@ private:
     BOOL              bHasOnlineSpellErrors;
     BOOL              bInitialOnlineSpellingEnabled;
     String            aBookmarkFile;      // Zum Laden von Bookmarks
-#ifndef SVX_LIGHT
     SdDrawDocShellRef xBookmarkDocShRef;  // Zum Laden von Bookmarks
-#endif
     String            aPresPage;
     BOOL              bNewOrLoadCompleted;
     BOOL              bPresAll;
@@ -225,10 +186,8 @@ private:
     LanguageType      eLanguageCTL;
     SvxNumType        ePageNumType;
     Link              aOldNotifyUndoActionHdl;
-#ifndef SVX_LIGHT
     SdDrawDocShellRef xAllocedDocShRef;   // Fuer AllocModel()
     BOOL              bAllocDocSh;        // Fuer AllocModel()
-#endif
     DocumentType      eDocType;
     UINT16            nFileFormatVersion;
 
@@ -256,10 +215,8 @@ public:
 
     virtual SdrModel* AllocModel() const;
     virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
-#ifndef SVX_LIGHT
     virtual const SdrModel* LoadModel(const String& rFileName);
     virtual void DisposeLoadedModels();
-#endif
     virtual FASTBOOL IsReadOnly() const;
 
     SfxItemPool&    GetPool() { return( *pItemPool ); }
@@ -278,9 +235,7 @@ public:
 
     DocumentType    GetDocumentType() const { return eDocType; }
 
-#ifndef SVX_LIGHT
     void            SetAllocDocSh(BOOL bAlloc);
-#endif
 
     void     CreatingDataObj( SdTransferable* pTransferable ) { pCreatingTransferable = pTransferable; }
 
@@ -291,9 +246,7 @@ public:
     void     InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
     void     DeletePage(USHORT nPgNum);
     SdrPage* RemovePage(USHORT nPgNum);
-#ifndef SVX_LIGHT
     void     RemoveUnnessesaryMasterPages( SdPage* pMaster=NULL, BOOL bOnlyDuplicatePages=FALSE, BOOL bUndo=TRUE );
-#endif
     void     SetMasterPage(USHORT nSdPageNum, const String& rLayoutName,
                            SdDrawDocument* pSourceDoc, BOOL bMaster, BOOL bCheckMasters);
 
@@ -371,7 +324,6 @@ public:
     const BOOL  IsSummationOfParagraphs() const { return bSummationOfParagraphs; }
 
 
-#ifndef SVX_LIGHT
     void SetOnlineSpell( BOOL bIn );
     BOOL GetOnlineSpell() const { return bOnlineSpell; }
     void StopOnlineSpelling();
@@ -386,7 +338,6 @@ public:
 
     void SetHideSpell( BOOL bIn );
     BOOL GetHideSpell() const { return bHideSpell; }
-#endif
 
     ULONG GetLinkCount();
 
@@ -429,14 +380,18 @@ public:
     CharClass*  GetCharClass() const { return mpCharClass; }
     International* GetInternational() const { return mpInternational; }
 
-#ifndef SVX_LIGHT
     void        RestoreLayerNames();
-#endif
     void        MakeUniqueLayerNames();
 
     void    UpdateAllLinks();
 
     void CheckMasterPages();
+
+    void Merge(SdrModel& rSourceModel,
+               USHORT nFirstPageNum=0, USHORT nLastPageNum=0xFFFF,
+               USHORT nDestPos=0xFFFF,
+               FASTBOOL bMergeMasterPages=FALSE, FASTBOOL bAllMasterPages=FALSE,
+               FASTBOOL bUndo=TRUE, FASTBOOL bTreadSourceAsConst=FALSE);
 };
 
 
