@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 15:59:59 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ using namespace ::com::sun::star;
 #define WID_PAGE_BACK 15
 #define WID_PAGE_PREVIEW 16
 #define WID_PAGE_VISIBLE 17
+#define WID_PAGE_SOUNDFILE 18
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -215,6 +216,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_VISIBLE),          WID_PAGE_VISIBLE,   &::getBooleanCppuType(),                        0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDFILE),         WID_PAGE_SOUNDFILE, &::getCppuType((const OUString*)0),             0, 0},
         {0,0,0,0,0}
     };
 
@@ -505,8 +507,18 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if( ! ( aValue >>= bVisible ) )
                 throw lang::IllegalArgumentException();
             mpPage->SetExcluded( bVisible == FALSE );
+            break;
         }
-        break;
+        case WID_PAGE_SOUNDFILE :
+        {
+            OUString aURL;
+            if( ! ( aValue >>= aURL ) )
+                throw lang::IllegalArgumentException();
+
+            mpPage->SetSoundFile( aURL );
+            mpPage->SetSound( sal_True );
+            break;
+        }
         default:
             throw beans::UnknownPropertyException();
             break;
@@ -626,8 +638,17 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
     {
         sal_Bool bVisible = mpPage->IsExcluded() == FALSE;
         aAny <<= bVisible;
+        break;
     }
-    break;
+
+    case WID_PAGE_SOUNDFILE :
+    {
+        OUString aURL;
+        if( mpPage->IsSoundOn() )
+            aURL = mpPage->GetSoundFile();
+        aAny <<= aURL;
+        break;
+    }
 
     default:
         throw beans::UnknownPropertyException();
