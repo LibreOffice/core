@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:41:07 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,14 +244,11 @@ namespace dbaui
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        m_eType = m_pAdminDialog->getDatasourceType(_rSet);
-
         BOOL bEnableBrowseButton = m_pCollection->supportsBrowsing(m_eType);
         m_aFT_Connection.Show();
         m_aET_Connection.Show();
-        m_aET_Connection.ShowPrefix(FALSE);
+        m_aET_Connection.ShowPrefix(DST_JDBC == m_eType );
         m_aPB_Connection.Show(sal_True);
-        m_aET_Connection.ShowPrefix(FALSE);
 
         OLocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
 
@@ -688,7 +685,7 @@ namespace dbaui
                 break;
 
                 case RET_NO:
-                    SetRoadmapStateValue(sal_False);
+                     // SetRoadmapStateValue(sal_False);
                     callModifiedHdl();
                     return RET_OK;
 
@@ -840,11 +837,11 @@ namespace dbaui
                     break;
 
                 case EVENT_LOSEFOCUS:
-                    //if (m_aET_Connection.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
-                    //{ // a descendant of the URL edit field lost the focus
-                    //  if (!commitURL())
-                    //      return 1L;  // handled
-                    //}
+                    if (m_aET_Connection.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
+                    {   // a descendant of the URL edit field lost the focus
+                        if (!commitURL())
+                            return 1L;  // handled
+                    }
                     break;
             }
 
