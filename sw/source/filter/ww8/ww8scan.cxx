@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:16 $
+ *  last change: $Author: cmc $ $Date: 2002-07-26 08:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ public:
 
 template<class C> const C *wwSortedArray<C>::search(C aSrch) const
 {
-    std::pair<const C *, const C *> aPair =
+    std::pair<C *, C *> aPair =
         std::equal_range(mpWwSprmTab, mpWwSprmTab + mnNoElems, aSrch);
     if (aPair.first != aPair.second)
         return aPair.first;
