@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:55 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,11 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
     {
         xUpd->moveToInsertRow();
         sal_Int32 i = 1;
-        for(connectivity::ORowVector< ORowSetValue > ::const_iterator aIter = _rInsertRow->begin()+1;aIter != _rInsertRow->end();++aIter,++i)
+        for(connectivity::ORowVector< ORowSetValue > ::iterator aIter = _rInsertRow->begin()+1;aIter != _rInsertRow->end();++aIter,++i)
+        {
+            aIter->setSigned(m_aSignedFlags[i-1]);
             updateColumn(i,xUpdRow,*aIter);
+        }
         xUpd->insertRow();
         (*_rInsertRow->begin()) = m_xRowLocate->getBookmark();
     }
@@ -153,8 +156,9 @@ void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowS
 
     sal_Int32 i = 1;
     connectivity::ORowVector< ORowSetValue > ::const_iterator aOrgIter = _rOrginalRow->begin()+1;
-    for(connectivity::ORowVector< ORowSetValue > ::const_iterator aIter = _rInsertRow->begin()+1;aIter != _rInsertRow->end();++aIter,++i)
+    for(connectivity::ORowVector< ORowSetValue > ::iterator aIter = _rInsertRow->begin()+1;aIter != _rInsertRow->end();++aIter,++i,++aOrgIter)
     {
+        aIter->setSigned(aOrgIter->isSigned());
         updateColumn(i,xUpdRow,*aIter);
     }
 
@@ -211,19 +215,31 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
                     _xParameter->updateString(nPos,_rValue);
                     break;
                 case DataType::BIGINT:
-                    _xParameter->updateLong(nPos,_rValue);
+                    if ( _rValue.isSigned() )
+                        _xParameter->updateLong(nPos,_rValue);
+                    else
+                        _xParameter->updateString(nPos,_rValue);
                     break;
                 case DataType::BIT:
                     _xParameter->updateBoolean(nPos,_rValue);
                     break;
                 case DataType::TINYINT:
-                    _xParameter->updateByte(nPos,_rValue);
+                    if ( _rValue.isSigned() )
+                        _xParameter->updateByte(nPos,_rValue);
+                    else
+                        _xParameter->updateShort(nPos,_rValue);
                     break;
                 case DataType::SMALLINT:
-                    _xParameter->updateShort(nPos,_rValue);
+                    if ( _rValue.isSigned() )
+                        _xParameter->updateShort(nPos,_rValue);
+                    else
+                        _xParameter->updateInt(nPos,_rValue);
                     break;
                 case DataType::INTEGER:
-                    _xParameter->updateInt(nPos,_rValue);
+                    if ( _rValue.isSigned() )
+                        _xParameter->updateInt(nPos,_rValue);
+                    else
+                        _xParameter->updateLong(nPos,_rValue);
                     break;
                 case DataType::FLOAT:
                     _xParameter->updateFloat(nPos,_rValue);
