@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcli.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 08:41:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,14 @@
 #ifndef _SWCLI_HXX
 #define _SWCLI_HXX
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
+#include <svtools/embedhlp.hxx>
+
 #ifndef _SFX_CLIENTSH_HXX //autogen
-#include <sfx2/clientsh.hxx>
+#include <sfx2/ipclient.hxx>
 #endif
 
 class SwView;
@@ -72,15 +78,14 @@ class SwOleClient : public SfxInPlaceClient
 {
     BOOL bInDoVerb;
     BOOL bOldCheckForOLEInCaption;
-protected:
-    virtual void RequestObjAreaPixel( const Rectangle & rObjRect );
-    virtual void  ViewChanged( USHORT nAspect );
+
+    virtual void ObjectAreaChanged();
+    virtual void RequestNewObjectArea( Rectangle& );
+    virtual void ViewChanged();
+    virtual void MakeVisible();
 
 public:
-    SwOleClient( SwView *pView, SwEditWin *pWin );
-
-    virtual void MakeVisible();
-    virtual void MakeViewData();
+    SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& );
 
     void SetInDoVerb( BOOL bFlag )              { bInDoVerb = bFlag; }
     BOOL IsInDoVerb() const                     { return bInDoVerb; }
