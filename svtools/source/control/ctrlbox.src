@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 05:41:18 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,15 +126,15 @@ String STR_SVT_COLLATE_NORMAL
     Text[ french ] = "Normal";
     Text[ spanish ] = "Normal";
     Text[ italian ] = "Normale";
-    Text[ danish ] = "Normal";
+    Text[ danish ] = ", Normal";
     Text[ swedish ] = "Normal";
-    Text[ polish ] = "Normalny";
+    Text[ polish ] = "Standard";
     Text[ portuguese_brazilian ] = "Normal";
     Text[ japanese ] = "’ÊíÌ«İÄ";
     Text[ korean ] = "Á¤»ó";
     Text[ chinese_simplified ] = "Ò»°ã";
     Text[ chinese_traditional ] = "¤@¯ë";
-    Text[ turkish ] = "Normal";
+    Text[ turkish ] = ", standart";
     Text[ arabic ] = "ÚÇÏí";
     Text[ catalan ] = "Normal";
     Text[ finnish ] = "tavallinen";
@@ -181,7 +181,7 @@ String STR_SVT_COLLATE_DICTIONARY
     Text[ spanish ] = "Diccionario";
     Text[ italian ] = "Dizionario";
     Text[ danish ] = "Dictionary";
-    Text[ swedish ] = "Ordbok";
+    Text[ swedish ] = "Lexikon";
     Text[ polish ] = "S³ownik";
     Text[ portuguese_brazilian ] = "Dictionary";
     Text[ japanese ] = "«‘";
@@ -211,7 +211,7 @@ String STR_SVT_COLLATE_PINYIN
     Text[ swedish ] = "Pinyin";
     Text[ polish ] = "Pinyin";
     Text[ portuguese_brazilian ] = "Pinyin";
-    Text[ japanese ] = "&#25340;‰¹i’†‘Œê‚ÌÛ°Ïš•\\‹L–@j";
+    Text[ japanese ] = "Ëßİ²İ(’†‘Œê‚ÌÛ°Ïš•\\‹L–@)";
     Text[ korean ] = "Pinyin";
     Text[ chinese_simplified ] = "Æ´Òô";
     Text[ chinese_traditional ] = "«÷­µ";
@@ -235,8 +235,8 @@ String STR_SVT_COLLATE_STROKE
     Text[ spanish ] = "Stroke";
     Text[ italian ] = "Stroke";
     Text[ danish ] = "Stroke";
-    Text[ swedish ] = "Stroke";
-    Text[ polish ] = "Stroke";
+    Text[ swedish ] = "Streck";
+    Text[ polish ] = "Kreski (stroke)";
     Text[ portuguese_brazilian ] = "Stroke";
     Text[ japanese ] = "‘‰æ”";
     Text[ korean ] = "½ºÆ®·ÎÅ©";
@@ -263,7 +263,7 @@ String STR_SVT_COLLATE_RADICAL
     Text[ italian ] = "Radicale";
     Text[ danish ] = "Radical";
     Text[ swedish ] = "Radical";
-    Text[ polish ] = "Radical";
+    Text[ polish ] = "Korzeñ-rdzeñ";
     Text[ portuguese_brazilian ] = "Radical";
     Text[ japanese ] = "Š¿š‚Ì•”ñ";
     Text[ korean ] = "±Ø´Ü";
