@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-07-25 12:43:09 $
+ *  last change: $Author: pb $ $Date: 2001-08-22 13:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 
 #include <vcl/config.hxx>
 #include <svtools/pathoptions.hxx>
+#include <svtools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -509,28 +510,22 @@ void SfxObjectFactory::SetStandardTemplate( const String& rFactoryURL, const Str
     if ( pFactory )
     {
         ((SfxObjectFactory*)pFactory)->pImpl->aStandardTemplate = rTemplate;
-#if SUPD<613//MUSTINI
-        SfxIniManager* pIni = SFX_INIMANAGER();
-        if ( !rTemplate.Len() )
-            pIni->DeleteKey( DEFINE_CONST_UNICODE( "StandardTemplates"),
-                             String::CreateFromAscii( pFactory->pShortName ) );
-        else
-            pIni->WriteKey( DEFINE_CONST_UNICODE( "StandardTemplates"),
-                            String::CreateFromAscii( pFactory->pShortName ), rTemplate );
-#endif
+        SvtModuleOptions aModOpt;
+        SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
+        if ( SvtModuleOptions::ClassifyFactoryByName( pFactory->GetDocumentServiceName(), eFac ) )
+            aModOpt.SetFactoryStandardTemplate( eFac, rTemplate );
     }
 }
 
 const String& SfxObjectFactory::GetStandardTemplate() const
 {
-    if (!pImpl->bTemplateInitialized )
+    if ( !pImpl->bTemplateInitialized )
     {
         pImpl->bTemplateInitialized = sal_True;
-#if SUPD<613//MUSTINI
-        SfxIniManager *pIni = SFX_INIMANAGER();
-        pImpl->aStandardTemplate = pIni->SubstPathVars( pIni->ReadKey( DEFINE_CONST_UNICODE( "StandardTemplates"),
-                                                                String::CreateFromAscii( pShortName ) ) );
-#endif
+        SvtModuleOptions aModOpt;
+        SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
+        if ( SvtModuleOptions::ClassifyFactoryByName( GetDocumentServiceName(), eFac ) )
+            pImpl->aStandardTemplate = aModOpt.GetFactoryStandardTemplate( eFac );
     }
 
     return pImpl->aStandardTemplate;
