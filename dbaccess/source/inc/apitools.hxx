@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:24:44 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ class OSubComponent : public ::cppu::OComponentHelper
 protected:
     // the parent must support the tunnel implementation
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
+    virtual ~OSubComponent();
 
 public:
     OSubComponent(::osl::Mutex& _rMutex,
@@ -115,8 +116,6 @@ public:
     inline operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () const
         { return (::com::sun::star::uno::XWeak *)this; }
 
-protected:
-    virtual void SAL_CALL disposing();
 };
 
 //==================================================================================
@@ -450,6 +449,29 @@ protected:
             {                                                                     \
                 --pxInt;                                                          \
                 static_cast< T* >( pxInt->get() )->method(aEvt);                  \
+            }                                                                     \
+        }                                                                         \
+        catch( RuntimeException& )                                                \
+        {                                                                         \
+        }                                                                         \
+    }                                                                             \
+    _rGuard.reset();
+
+#define NOTIFY_LISTERNERS1(_rListeners,T,method,arg1)                             \
+    Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
+                                                                                  \
+    const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();     \
+    const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength(); \
+                                                                                  \
+    _rGuard.clear();                                                              \
+    while( pxInt > pxIntBegin )                                                   \
+    {                                                                             \
+        try                                                                       \
+        {                                                                         \
+            while( pxInt > pxIntBegin )                                           \
+            {                                                                     \
+                --pxInt;                                                          \
+                static_cast< T* >( pxInt->get() )->method(aEvt,arg1);             \
             }                                                                     \
         }                                                                         \
         catch( RuntimeException& )                                                \
