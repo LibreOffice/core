@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-05-28 13:34:59 $
+ *  last change: $Author: ghiggins $ $Date: 2002-08-12 09:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,6 +497,7 @@
 #define HID_OPTIONS_COLORCONFIG                 (HID_SVX_START + 429)
 #define HID_OPTIONS_COLORCONFIG_SAVE_SCHEME     (HID_SVX_START + 430)
 #define HID_OPTIONS_ACCESSIBILITYCONFIG         (HID_SVX_START + 431)
+#define HID_OPTIONS_SSO                         (HID_SVX_START + 432)
 
 #define HID_FILL_ATTR_LISTBOX                   (HID_SVX_EXT0_START + 1)
 #define HID_FILL_TYPE_LISTBOX                   (HID_SVX_EXT0_START + 2)

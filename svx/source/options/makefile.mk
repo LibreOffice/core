@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: iha $ $Date: 2002-04-15 19:34:20 $
+#   last change: $Author: ghiggins $ $Date: 2002-08-12 09:13:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,8 @@ CXXFILES = \
         multipat.cxx	\
         multifil.cxx	\
         optextbr.cxx    \
-        srchcfg.cxx
+        srchcfg.cxx		\
+        optsso.cxx
 
 SRCFILES =  \
         optasian.src	\
@@ -123,7 +124,8 @@ SRCFILES =  \
         optgrid.src		\
         optinet2.src	\
         multipat.src    \
-        optextbr.src
+        optextbr.src	\
+        optsso.src
 
 SLOFILES=	\
         $(SLO)$/asiancfg.obj	\
@@ -144,7 +146,8 @@ SLOFILES=	\
         $(SLO)$/multipat.obj    \
         $(SLO)$/multifil.obj    \
         $(SLO)$/optextbr.obj    \
-        $(SLO)$/srchcfg.obj
+        $(SLO)$/srchcfg.obj		\
+        $(SLO)$/optsso.obj
 
 SVXLIGHTOBJFILES= \
         $(OBJ)$/adritem.obj
@@ -161,7 +164,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/optlingu.obj \
         $(SLO)$/optaccessibility.obj \
         $(SLO)$/optsave.obj \
-        $(SLO)$/optpath.obj
+        $(SLO)$/optpath.obj	\
+        $(SLO)$/optsso.obj
 
 # --- Targets -------------------------------------------------------
 
