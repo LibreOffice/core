@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: sab $ $Date: 2002-10-18 12:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,6 +1273,10 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
     if( bInPlace )
     {
         bUsed = pScMod->InputKeyEvent( rKEvt );         // Eingabe
+
+        // #103934#; update because the cell content could be changed by API
+        if (bUsed && nCode == KEY_ESCAPE)
+            UpdateInputHandler();
         if( !bUsed )
             bUsed = SfxViewShell::KeyInput( rKEvt );    // Acceleratoren
     }
@@ -1313,6 +1317,10 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         if( bIsType )
             bUsed = pScMod->InputKeyEvent( rKEvt );     // Eingabe
 
+        // #103934#; update because the cell content could be changed by API
+        if (bUsed && nCode == KEY_ESCAPE)
+            UpdateInputHandler();
+
         if( !bUsed )
             bUsed = SfxViewShell::KeyInput( rKEvt );    // Acceleratoren
 
@@ -1344,6 +1352,10 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
 
         if( !bUsed && !bDraw && nCode != KEY_RETURN && !bParent )
             bUsed = pScMod->InputKeyEvent( rKEvt, TRUE );       // Eingabe
+
+        // #103934#; update because the cell content could be changed by API
+        if (bUsed && nCode == KEY_ESCAPE)
+            UpdateInputHandler();
     }
 
     if (!bInPlace && !bUsed && !bDraw)
