@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-26 09:15:45 $
+ *  last change: $Author: af $ $Date: 2002-10-18 07:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,3 +655,12 @@ void SvxColorDockingWindow::Resize()
     SfxDockingWindow::Resize();
 }
 
+
+
+void SvxColorDockingWindow::GetFocus (void)
+{
+    SfxDockingWindow::GetFocus();
+    // Grab the focus to the color value set so that it can be controlled
+    // with the keyboard.
+    aColorSet.GrabFocus();
+}
