@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:14:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #endif
 #include <vcl/svapp.hxx>
 
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 
 #ifndef GCC
 #pragma hdrstop
