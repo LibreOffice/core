@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-16 10:29:41 $
+ *  last change: $Author: dv $ $Date: 2001-03-01 13:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 
 #include <vector>
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
@@ -100,6 +103,7 @@
 #include "hierarchyprovider.hxx"
 #endif
 
+using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
@@ -133,6 +137,12 @@ struct HierarchyEntry::iterator_Impl
 
 #define HIERARCHY_ROOT_DB_KEY           "/org.openoffice.ucb.Hierarchy/Root"
 #define HIERARCHY_ROOT_DB_KEY_LENGTH    34
+
+#define DECLARE_ASCII( SASCIIVALUE )                                                                            \
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ))
+
+#define CFGPROPERTY_NODEPATH            DECLARE_ASCII("nodepath"    )   // describe path of cfg entry
+#define CFGPROPERTY_LAZYWRITE           DECLARE_ASCII("lazywrite"   )   // true->async. update; false->sync. update
 
 //=========================================================================
 HierarchyEntry::HierarchyEntry(
@@ -279,8 +289,17 @@ sal_Bool HierarchyEntry::setData(
                 bRoot = sal_False;
             }
 
-            Sequence< Any > aArguments( 1 );
-            aArguments[ 0 ] <<= aParentPath;
+            Sequence< Any > aArguments( 2 ) ;
+            PropertyValue   aProperty       ;
+            OUString        sPath           ;
+
+            aProperty.Name    = CFGPROPERTY_NODEPATH    ;
+            aProperty.Value <<= aParentPath             ;
+            aArguments[0]   <<= aProperty               ;
+
+            aProperty.Name    = CFGPROPERTY_LAZYWRITE   ;
+            aProperty.Value <<= sal_True                ;
+            aArguments[1]   <<= aProperty               ;
 
             Reference< XChangesBatch > xBatch(
                     m_xConfigProvider->createInstanceWithArguments(
@@ -531,8 +550,17 @@ sal_Bool HierarchyEntry::move(
             bNewRoot = sal_False;
         }
 
-        Sequence< Any > aArguments( 1 );
-        aArguments[ 0 ] <<= aOldParentPath;
+        Sequence< Any > aArguments( 2 ) ;
+        PropertyValue   aProperty       ;
+        OUString        sPath           ;
+
+        aProperty.Name    = CFGPROPERTY_NODEPATH    ;
+        aProperty.Value <<= aOldParentPath          ;
+        aArguments[0]   <<= aProperty               ;
+
+        aProperty.Name    = CFGPROPERTY_LAZYWRITE   ;
+        aProperty.Value <<= sal_True                ;
+        aArguments[1]   <<= aProperty               ;
 
         xOldParentBatch = Reference< XChangesBatch >(
             m_xConfigProvider->createInstanceWithArguments(
@@ -555,7 +583,9 @@ sal_Bool HierarchyEntry::move(
         {
             bDifferentParents = sal_True;
 
-            aArguments[ 0 ] <<= aNewParentPath;
+            aProperty.Name    = CFGPROPERTY_NODEPATH    ;
+            aProperty.Value <<= aNewParentPath          ;
+            aArguments[0]   <<= aProperty               ;
 
             xNewParentBatch = Reference< XChangesBatch >(
                 m_xConfigProvider->createInstanceWithArguments(
@@ -807,8 +837,18 @@ sal_Bool HierarchyEntry::remove()
                 bRoot = sal_False;
             }
 
-            Sequence< Any > aArguments( 1 );
-            aArguments[ 0 ] <<= aParentPath;
+            Sequence< Any > aArguments( 2 ) ;
+            PropertyValue   aProperty       ;
+            OUString        sPath           ;
+
+            aProperty.Name    = CFGPROPERTY_NODEPATH    ;
+            aProperty.Value <<= aParentPath         ;
+            aArguments[0]   <<= aProperty               ;
+
+            aProperty.Name    = CFGPROPERTY_LAZYWRITE   ;
+            aProperty.Value <<= sal_True                ;
+            aArguments[1]   <<= aProperty               ;
+
 
             Reference< XChangesBatch > xBatch(
                 m_xConfigProvider->createInstanceWithArguments(
