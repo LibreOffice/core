@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:19:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,17 +569,23 @@ void ViewShellBase::ResizePixel (
         aBorder += GetBorder(bOuterResize);
         SetBorderPixel (aBorder);
 
+
         SvBorder aBaseBorder (ArrangeGUIElements(rOrigin, rSize));
-        pMainViewShell->Resize (
+        maClientArea = Rectangle(
             Point (rOrigin.X()+aBaseBorder.Left(),
                 rOrigin.Y()+aBaseBorder.Top()),
             Size (rSize.Width() - aBaseBorder.Left() - aBaseBorder.Right(),
                 rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom()));
+
+        pMainViewShell->Resize( maClientArea.TopLeft(), maClientArea.GetSize() );
     }
     else
+    {
         // We have to set a border at all times so when the main view shell
         // is not yet ready we simply set an empty border.
         SetBorderPixel (SvBorder());
+        maClientArea = Rectangle( rOrigin, rSize );;
+    }
 }
 
 
@@ -999,7 +1005,7 @@ void ViewShellBase::SetBusyState (bool bBusy)
 
 
 
-void ViewShellBase::UpdateBorder (void)
+void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
 {
     ViewShell* pMainViewShell = GetMainViewShell();
     if (pMainViewShell != NULL)
@@ -1010,7 +1016,7 @@ void ViewShellBase::UpdateBorder (void)
         SvBorder aBorder (pMainViewShell->GetBorder(bOuterResize));
         aBorder += GetBorder(bOuterResize);
 
-        if (aBorder != aCurrentBorder)
+        if (bForce || (aBorder != aCurrentBorder))
         {
             SetBorderPixel (aBorder);
             InvalidateBorder();
