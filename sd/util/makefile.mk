@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 15:04:18 $
+#   last change: $Author: rt $ $Date: 2004-08-04 09:01:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -172,6 +172,7 @@ LIB3FILES=      \
             $(SLB)$/unoidl.lib		\
             $(SLB)$/accessibility.lib	\
             $(SLB)$/toolpanel.lib		\
+            $(SLB)$/uitools.lib			\
             $(SLB)$/tpcontrols.lib		\
             $(SLB)$/slsshell.lib		\
             $(SLB)$/slsmodel.lib		\
@@ -238,7 +239,7 @@ SHL4STDLIBS= \
     $(VOSLIB) \
     $(CANVASLIB) \
     $(SALLIB)
-            
+
 
 
 
@@ -247,7 +248,7 @@ SHL4STDLIBS= \
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
-    
+
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
