@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:22:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef SC_SORTPARAM_HXX
 #include "sortparam.hxx"
 #endif
+#ifndef SC_PARAMISC_HXX
+#include "paramisc.hxx"
+#endif
 
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
@@ -93,10 +96,10 @@ class ScInputStatusItem : public SfxPoolItem
 public:
                             TYPEINFO();
                             ScInputStatusItem( USHORT nWhich,
-                                               USHORT nTab,
-                                               USHORT nCol, USHORT nRow,
-                                               USHORT nStartCol, USHORT nStartRow,
-                                               USHORT nEndCol,   USHORT nSEndRow,
+                                               SCTAB nTab,
+                                               SCCOL nCol, SCROW nRow,
+                                               SCCOL nStartCol, SCROW nStartRow,
+                                               SCCOL nEndCol,   SCROW nSEndRow,
                                                const String& rString,
                                                const EditTextObject* pData );
                             ScInputStatusItem( USHORT nWhich,
@@ -116,13 +119,13 @@ public:
     const ScAddress&        GetPos() const      { return aCursorPos; }
     const ScAddress&        GetStartPos() const { return aStartPos; }
     const ScAddress&        GetEndPos() const   { return aEndPos; }
-    USHORT                  GetTab() const      { return aCursorPos.Tab(); }
-    USHORT                  GetCol() const      { return aCursorPos.Col(); }
-    USHORT                  GetRow() const      { return aCursorPos.Row(); }
-    USHORT                  GetStartCol() const { return aStartPos.Col(); }
-    USHORT                  GetStartRow() const { return aStartPos.Row(); }
-    USHORT                  GetEndCol() const   { return aEndPos.Col(); }
-    USHORT                  GetEndRow() const   { return aEndPos.Row(); }
+    SCTAB                   GetTab() const      { return aCursorPos.Tab(); }
+    SCCOL                   GetCol() const      { return aCursorPos.Col(); }
+    SCROW                   GetRow() const      { return aCursorPos.Row(); }
+    SCCOL                   GetStartCol() const { return aStartPos.Col(); }
+    SCROW                   GetStartRow() const { return aStartPos.Row(); }
+    SCCOL                   GetEndCol() const   { return aEndPos.Col(); }
+    SCROW                   GetEndRow() const   { return aEndPos.Row(); }
 
     const String&           GetString() const   { return aString; }
     const EditTextObject*   GetEditData() const { return pEditData; }
@@ -138,17 +141,17 @@ public:
 class ScTablesHint : public SfxHint
 {
     USHORT nId;
-    USHORT nTab1;
-    USHORT nTab2;
+    SCTAB nTab1;
+    SCTAB nTab2;
 
 public:
                     TYPEINFO();
-                    ScTablesHint(USHORT nNewId, USHORT nTable1, USHORT nTable2=0);
+                    ScTablesHint(USHORT nNewId, SCTAB nTable1, SCTAB nTable2=0);
                     ~ScTablesHint();
 
     USHORT          GetId() const           { return nId; }
-    USHORT          GetTab1() const         { return nTab1; }
-    USHORT          GetTab2() const         { return nTab2; }
+    SCTAB           GetTab1() const         { return nTab1; }
+    SCTAB           GetTab2() const         { return nTab2; }
 };
 
 class ScEditViewHint : public SfxHint
@@ -162,9 +165,9 @@ public:
                     ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos );
                     ~ScEditViewHint();
 
-    USHORT          GetCol() const      { return aCursorPos.Col(); }
-    USHORT          GetRow() const      { return aCursorPos.Row(); }
-    USHORT          GetTab() const      { return aCursorPos.Tab(); }
+    SCCOL           GetCol() const      { return aCursorPos.Col(); }
+    SCROW           GetRow() const      { return aCursorPos.Row(); }
+    SCTAB           GetTab() const      { return aCursorPos.Tab(); }
     ScEditEngineDefaulter*  GetEngine() const   { return pEditEngine; }
 };
 
