@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 17:54:34 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 #include "appbased.hxx"
 #include "basmsg.hrc"
 
+USHORT MsgEdit::nMaxLogLen = 0;
+BOOL MsgEdit::bLimitLogLen = FALSE;
+
 #define WARNING_PREFIX String( ResId( S_WARNING_PREFIX ) )
 #define VERSION_STRING CUniString("File Format Version: ")
 #define THIS_VERSION 2
@@ -127,12 +130,11 @@ MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
 MsgEdit::~MsgEdit()
 {}
 
-#define ADD_TTDEBUGDATA( aLBoxEntry )                   \
-    {                                                   \
-        TTDebugData *pData = new TTDebugData;           \
-        *pData = aDebugData;                            \
-        aLBoxEntry->SetUserData( pData );               \
-    }                                                   \
+// set the LogType since calling the add method can be from other add methods
+#define COPY_TTDEBUGDATA( LOGTYPE )                     \
+    TTDebugData *pTTDebugData = new TTDebugData;        \
+    *pTTDebugData = aDebugData;                         \
+    pTTDebugData->aLogType = LOGTYPE;                   \
 
 
 void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
@@ -231,17 +233,36 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
 
 void MsgEdit::AddRun( String aMsg, TTDebugData aDebugData )
 {
+    if ( !bFileLoading && bLimitLogLen )
+    {
+        USHORT nSkip = nMaxLogLen;
+        SvLBoxEntry *pRun = aEditTree.First();
+        while ( nSkip-- && pRun )
+            pRun = aEditTree.NextSibling( pRun );
+        // Remove all Entries thereafter
+        if ( pRun )
+        {
+            while ( pRun && aEditTree.NextSibling( pRun ) )
+                aEditTree.GetModel()->Remove( aEditTree.NextSibling( pRun ) );
+
+            aEditTree.GetModel()->Remove( pRun );
+            bModified = TRUE;
+            lModify.Call( NULL );
+            Save( aLogFileName );
+            pAppError->UpdateFileInfo( HAS_BEEN_LOADED );
+        }
+    }
+
+    COPY_TTDEBUGDATA( LOG_RUN );
     if ( !bFileLoading || ( bFileLoading && nVersion >= 2 ) )
-        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, 0 );
+        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, 0, pTTDebugData );
     else        // Erstes Dateiformat
-        pCurrentRun = aEditTree.InsertEntry( aMsg );    // und damit an Ende!
+        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, LIST_APPEND, pTTDebugData );    // und damit an Ende!
 
     aEditTree.ShowEntry( pCurrentRun );
     pCurrentTestCase = NULL;
     pCurrentAssertion = NULL;
     pCurrentError = NULL;
-    aDebugData.aLogType = LOG_RUN;      // Da auch von anderswo aufgerufen
-    ADD_TTDEBUGDATA( pCurrentRun );
 }
 
 void MsgEdit::AddTestCase( String aMsg, TTDebugData aDebugData )
@@ -254,10 +275,9 @@ void MsgEdit::AddTestCase( String aMsg, TTDebugData aDebugData )
         }
         else
         {
-            pCurrentTestCase = aEditTree.InsertEntry( aMsg, pCurrentRun );
+            COPY_TTDEBUGDATA( LOG_TEST_CASE );
+            pCurrentTestCase = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
             aEditTree.ShowEntry( pCurrentTestCase );
-            aDebugData.aLogType = LOG_TEST_CASE;        // Da auch von anderswo aufgerufen
-            ADD_TTDEBUGDATA( pCurrentTestCase );
         }
     }
     pCurrentAssertion = NULL;
@@ -277,10 +297,9 @@ void MsgEdit::AddError( String aMsg, TTDebugData aDebugData )
     }
     if ( pCurrentTestCase )
     {
-        pCurrentError = aEditTree.InsertEntry( aMsg, pCurrentTestCase );
+        COPY_TTDEBUGDATA( LOG_ERROR );
+        pCurrentError = aEditTree.InsertEntry( aMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pCurrentError );
-        aDebugData.aLogType = LOG_ERROR;        // Da auch von anderswo aufgerufen
-        ADD_TTDEBUGDATA( pCurrentError );
     }
 }
 
@@ -289,30 +308,28 @@ void MsgEdit::AddCallStack( String aMsg, TTDebugData aDebugData )
     DBG_ASSERT( pCurrentError, "Callstack ohne CurrentError im Journal" );
     if ( pCurrentError )
     {
-        SvLBoxEntry *pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentError ,0 );
-        aDebugData.aLogType = LOG_CALL_STACK;       // Da auch von anderswo aufgerufen
-        ADD_TTDEBUGDATA( pThisEntry );
+        COPY_TTDEBUGDATA( LOG_CALL_STACK );
+        SvLBoxEntry *pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentError, FALSE, LIST_APPEND, pTTDebugData );
     }
 }
 
 void MsgEdit::AddMessage( String aMsg, TTDebugData aDebugData )
 {
     SvLBoxEntry *pThisEntry = NULL;
+    COPY_TTDEBUGDATA( LOG_MESSAGE );
     if ( pCurrentTestCase )
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
     else if ( pCurrentRun )
     {
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
     else
     {
         AddRun( aMsg, aDebugData );
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
-    aDebugData.aLogType = LOG_MESSAGE;      // Da auch von anderswo aufgerufen
-    ADD_TTDEBUGDATA( pThisEntry );
 }
 
 void MsgEdit::AddWarning( String aMsg, TTDebugData aDebugData )
@@ -320,22 +337,21 @@ void MsgEdit::AddWarning( String aMsg, TTDebugData aDebugData )
     SvLBoxEntry *pThisEntry = NULL;
     String aCompleteMsg;
     aCompleteMsg = WARNING_PREFIX.Append( aMsg );
+    COPY_TTDEBUGDATA( LOG_WARNING );
 
     if ( pCurrentTestCase )
-        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentTestCase );
+        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
     else if ( pCurrentRun )
     {
-        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentRun );
+        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
     else
     {
         AddRun( aMsg, aDebugData );
-        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentRun );
+        pThisEntry = aEditTree.InsertEntry( aCompleteMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
-    aDebugData.aLogType = LOG_WARNING;      // Da auch von anderswo aufgerufen
-    ADD_TTDEBUGDATA( pThisEntry );
 
     while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) )
         aEditTree.InvalidateEntry( pThisEntry );
@@ -350,21 +366,20 @@ void MsgEdit::AddAssertion( String aMsg, TTDebugData aDebugData )
         return;
     }
     SvLBoxEntry *pThisEntry = NULL;
+    COPY_TTDEBUGDATA( LOG_ASSERTION );
     if ( pCurrentTestCase )
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
     else if ( pCurrentRun )
     {
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
     else
     {
         AddRun( aMsg, aDebugData );
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
-    aDebugData.aLogType = LOG_ASSERTION;        // Da auch von anderswo aufgerufen
-    ADD_TTDEBUGDATA( pThisEntry );
 
     pCurrentAssertion = pThisEntry;
 
@@ -375,23 +390,22 @@ void MsgEdit::AddAssertion( String aMsg, TTDebugData aDebugData )
 void MsgEdit::AddAssertionStack( String aMsg, TTDebugData aDebugData )
 {
     SvLBoxEntry *pThisEntry = NULL;
+    COPY_TTDEBUGDATA( LOG_ASSERTION_STACK );
     if ( pCurrentAssertion )
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentAssertion );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentAssertion, FALSE, LIST_APPEND, pTTDebugData );
     else if ( pCurrentTestCase )
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
     else if ( pCurrentRun )
     {
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
     else
     {
         AddRun( aMsg, aDebugData );
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
-    aDebugData.aLogType = LOG_ASSERTION_STACK;      // Da auch von anderswo aufgerufen
-    ADD_TTDEBUGDATA( pThisEntry );
 
     while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) )
         aEditTree.InvalidateEntry( pThisEntry );
@@ -400,21 +414,20 @@ void MsgEdit::AddAssertionStack( String aMsg, TTDebugData aDebugData )
 void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
 {
     SvLBoxEntry *pThisEntry = NULL;
+    COPY_TTDEBUGDATA( LOG_QA_ERROR );
     if ( pCurrentTestCase )
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase, FALSE, LIST_APPEND, pTTDebugData );
     else if ( pCurrentRun )
     {
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
     else
     {
         AddRun( aMsg, aDebugData );
-        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun, FALSE, LIST_APPEND, pTTDebugData );
         aEditTree.ShowEntry( pThisEntry );
     }
-    aDebugData.aLogType = LOG_QA_ERROR;     // Da auch von anderswo aufgerufen
-    ADD_TTDEBUGDATA( pThisEntry );
 
     while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) )
         aEditTree.InvalidateEntry( pThisEntry );
@@ -566,7 +579,7 @@ void MsgEdit::SetSelection( const TextSelection& rSelection )
         nStart = rSelection.GetStart().GetPara();
         nEnd = rSelection.GetEnd().GetPara();
 
-        for ( int i = nStart ; i <= nEnd ; i++ )
+        for ( ULONG i = nStart ; i <= nEnd ; i++ )
             aEditTree.Select( aEditTree.GetModel()->GetEntryAtAbsPos( i ), TRUE );
     }
 }
@@ -660,9 +673,9 @@ BOOL MsgEdit::Load( const String& aName )
                 TTDebugData aDebugData;
                 aDebugData.aLogType = TTLogType( TOKEN(0).ToInt32() );
                 aDebugData.aFilename = TOKEN(1);
-                aDebugData.nLine = TOKEN(2).ToInt32();
-                aDebugData.nCol1 = TOKEN(3).ToInt32();
-                aDebugData.nCol2 = TOKEN(4).ToInt32();
+                aDebugData.nLine = USHORT( TOKEN(2).ToInt32() );
+                aDebugData.nCol1 = USHORT( TOKEN(3).ToInt32() );
+                aDebugData.nCol2 = USHORT( TOKEN(4).ToInt32() );
                 aDebugData.aMsg = aLine.GetQuotedToken( 5, CUniString("\"\"") );
                 aDebugData.aMsg.Erase(0,1);                         // Anführungszeichen entfernen
                 aDebugData.aMsg.Erase(aDebugData.aMsg.Len()-1,1);
@@ -673,7 +686,7 @@ BOOL MsgEdit::Load( const String& aName )
                 AddAnyMsg( pLogMsg );
             }
             else if ( bFirstLine && (aLine.Search( VERSION_STRING ) == 0) )
-                nVersion = aLine.Copy( VERSION_STRING.Len() ).ToInt32();
+                nVersion = USHORT( aLine.Copy( VERSION_STRING.Len() ).ToInt32() );
             else if ( aLine.Len() )
                 bLoadError = TRUE;
 
@@ -923,10 +936,10 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
             Color aCol;
             if ( ( aFeatures & HasError ) == HasError )
                 aCol = Color( 255, 120, 120 );  // Rot
-            else if ( ( aFeatures & HasQAError ) == HasQAError )
-                aCol = Color( 255, 102, 51 );   // Orange oder so
-            else
+            else if ( ( aFeatures & HasWarning ) == HasWarning )
                 aCol = Color( 255, 200, 120 );  // Ocker oder so
+            else
+                aCol = Color( 255, 102, 51 );   // Orange oder so
 
             if( rDev.IsSelected(pEntry) )
                 aFont.SetColor( aCol );
