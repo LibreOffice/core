@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:24 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include "connectivity/dbconversion.hxx"
 #endif
+#include "file/FStringFunctions.hxx"
+#include "file/FDateFunctions.hxx"
+#include "file/FNumericFunctions.hxx"
 
 using namespace connectivity;
 using namespace connectivity::file;
@@ -155,7 +158,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
             for (sal_uInt32 i = 0; i < pSelection->count(); i++)
             {
                 OSQLParseNode *pColumnRef = pSelection->getChild(i)->getChild(0);
-                if ( SQL_ISRULE(pColumnRef,set_fct_spec) || ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 ) )
+                if ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 )
                 {
                     ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Statement to complex. Only \"COUNT(*)\" is supported.")),NULL);
                 }
@@ -188,7 +191,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
         DBG_ASSERT(pComparisonPredicate != NULL,"OFILECursor: Fehler im Parse Tree");
 
-        execute(pComparisonPredicate );
+        execute( pComparisonPredicate );
     }
     else
     {
@@ -280,15 +283,19 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
 {
     DBG_ASSERT(pPredicateNode->count() == 3,"OFILECursor: Fehler im Parse Tree");
 
-    if (!(SQL_ISRULE(pPredicateNode->getChild(0),column_ref) ||
-          pPredicateNode->getChild(2)->getNodeType() == SQL_NODE_STRING ||
-          pPredicateNode->getChild(2)->getNodeType() == SQL_NODE_INTNUM ||
-          pPredicateNode->getChild(2)->getNodeType() == SQL_NODE_APPROXNUM ||
-          SQL_ISTOKEN(pPredicateNode->getChild(2),TRUE) ||
-          SQL_ISTOKEN(pPredicateNode->getChild(2),FALSE) ||
-          SQL_ISRULE(pPredicateNode->getChild(2),parameter) ||
+    if ( !(SQL_ISRULE(pPredicateNode->getChild(0),column_ref)               ||
+          pPredicateNode->getChild(2)->getNodeType() == SQL_NODE_STRING     ||
+          pPredicateNode->getChild(2)->getNodeType() == SQL_NODE_INTNUM     ||
+          pPredicateNode->getChild(2)->getNodeType() == SQL_NODE_APPROXNUM  ||
+          SQL_ISTOKEN(pPredicateNode->getChild(2),TRUE)                     ||
+          SQL_ISTOKEN(pPredicateNode->getChild(2),FALSE)                    ||
+          SQL_ISRULE(pPredicateNode->getChild(2),parameter)                 ||
           // odbc date
-          (SQL_ISRULE(pPredicateNode->getChild(2),set_fct_spec) && SQL_ISPUNCTUATION(pPredicateNode->getChild(2)->getChild(0),"{"))))
+          SQL_ISRULE(pPredicateNode->getChild(2),set_fct_spec)              ||
+          SQL_ISRULE(pPredicateNode->getChild(2),position_exp)              ||
+          SQL_ISRULE(pPredicateNode->getChild(2),char_substring_fct)        ||
+          // upper, lower etc.
+          SQL_ISRULE(pPredicateNode->getChild(2),fold)) )
     {
         ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement to complex"),NULL);
         return NULL;
@@ -508,7 +515,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         aValue += pPredicateNode->getChild(1)->getTokenValue();
         pOperand = new OOperandConst(*pPredicateNode->getChild(1), aValue);
     }
-    else if(SQL_ISRULE(pPredicateNode,set_fct_spec) && SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"{"))
+    else if( SQL_ISRULE(pPredicateNode,set_fct_spec) && SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"{") )
     {
         const OSQLParseNode* pODBCNode = pPredicateNode->getChild(1);
         const OSQLParseNode* pODBCNodeChild = pODBCNode->getChild(0);
@@ -533,22 +540,25 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             {
                 pOperand->setValue(::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(sDateTime)));
             }
-
-
-
-//          // setting the Date
-//          try
-//          {
-//              pOperand->setValue(makeAny(pOperand->getValue().getDouble()));
-//          }
-//          catch( Exception & )
-//          {
-//              OSL_ENSURE(0,"OPredicateCompiler::execute_Operand Exception");
-//              ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
-//          }
         }
         else
             ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement to complex"),NULL);
+
+    }
+    else if( SQL_ISRULE(pPredicateNode,fold) )
+    {
+        execute_Fold(pPredicateNode);
+    }
+    else if(    SQL_ISRULE(pPredicateNode,set_fct_spec)
+            ||  SQL_ISRULE(pPredicateNode,position_exp)
+            ||  SQL_ISRULE(pPredicateNode,char_substring_fct)
+            )
+    {
+        executeFunction(pPredicateNode);
+    }
+    else if( SQL_ISRULE(pPredicateNode,length_exp) )
+    {
+        executeFunction(pPredicateNode->getChild(0));
     }
     else
     {
@@ -589,6 +599,341 @@ sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
     return bResult;
 }
 // -----------------------------------------------------------------------------
+void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal)
+{
+    OCodeList::iterator aIter = rCodeList.begin();
+    if (!(*aIter))
+        return ;        // kein Prädikat
 
+    for(;aIter != rCodeList.end();++aIter)
+    {
+        OOperand* pOperand = PTR_CAST(OOperand,(*aIter));
+        if (pOperand)
+            m_aStack.push(pOperand);
+        else
+            ((OOperator *)(*aIter))->Exec(m_aStack);
+    }
+
+    OOperand* pOperand = m_aStack.top();
+    m_aStack.pop();
+
+    DBG_ASSERT(m_aStack.size() == 0, "StackFehler");
+    DBG_ASSERT(pOperand, "StackFehler");
+
+    (*_rVal) = pOperand->getValue();
+    if (IS_TYPE(OOperandResult,pOperand))
+        delete pOperand;
+}
+// -----------------------------------------------------------------------------
+OOperand* OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   throw(SQLException, RuntimeException)
+{
+    /*if (!SQL_ISRULE(pPredicateNode->getChild(0),column_ref))
+    {
+        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
+        return NULL;
+    }*/
+
+    DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
+
+    sal_Bool bUpper = SQL_ISTOKEN(pPredicateNode->getChild(0),UPPER);
+
+    OOperand* pOb = execute(pPredicateNode->getChild(2));
+    OOperator* pOperator = NULL;
+    if ( bUpper )
+        pOperator = new OOp_Upper();
+    else
+        pOperator = new OOp_Lower();
+
+    //pOb->PreProcess(pOperator);
+
+
+    m_aCodeList.push_back(pOperator);
+    return NULL;
+}
+// -----------------------------------------------------------------------------
+OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    throw(SQLException, RuntimeException)
+{
+    OOperator* pOperator = NULL;
+
+    OSL_ENSURE(pPredicateNode->getChild(0)->isToken(),"The first one must be the name of the function!");
+    sal_Int32 nTokenId = pPredicateNode->getChild(0)->getTokenID();
+    switch ( nTokenId )
+    {
+        case SQL_TOKEN_CHAR_LENGTH:
+        case SQL_TOKEN_CHARACTER_LENGTH:
+        case SQL_TOKEN_LENGTH:
+        case SQL_TOKEN_OCTET_LENGTH:
+        case SQL_TOKEN_ASCII:
+        case SQL_TOKEN_LCASE:
+        case SQL_TOKEN_LTRIM:
+        case SQL_TOKEN_RTRIM:
+        case SQL_TOKEN_SPACE:
+        case SQL_TOKEN_UCASE:
+        case SQL_TOKEN_ABS:
+        case SQL_TOKEN_ACOS:
+        case SQL_TOKEN_ASIN:
+        case SQL_TOKEN_ATAN:
+        case SQL_TOKEN_CEILING:
+        case SQL_TOKEN_COS:
+        case SQL_TOKEN_DEGREES:
+        case SQL_TOKEN_EXP:
+        case SQL_TOKEN_FLOOR:
+        case SQL_TOKEN_LOG10:
+        case SQL_TOKEN_RADIANS:
+        case SQL_TOKEN_SIGN:
+        case SQL_TOKEN_SIN:
+        case SQL_TOKEN_SQRT:
+        case SQL_TOKEN_TAN:
+        case SQL_TOKEN_DAYNAME:
+        case SQL_TOKEN_DAYOFMONTH:
+        case SQL_TOKEN_DAYOFWEEK:
+        case SQL_TOKEN_DAYOFYEAR:
+        case SQL_TOKEN_HOUR:
+        case SQL_TOKEN_MINUTE:
+        case SQL_TOKEN_MONTH:
+        case SQL_TOKEN_MONTHNAME:
+        case SQL_TOKEN_QUARTER:
+        case SQL_TOKEN_SECOND:
+        case SQL_TOKEN_YEAR:
+
+            execute(pPredicateNode->getChild(2));
+
+            switch( nTokenId )
+            {
+                case SQL_TOKEN_CHAR_LENGTH:
+                case SQL_TOKEN_CHARACTER_LENGTH:
+                case SQL_TOKEN_LENGTH:
+                case SQL_TOKEN_OCTET_LENGTH:
+                    pOperator = new OOp_CharLength();
+                    break;
+                case SQL_TOKEN_ASCII:
+                    pOperator = new OOp_Ascii();
+                    break;
+                case SQL_TOKEN_LCASE:
+                    pOperator = new OOp_Lower();
+                    break;
+
+                case SQL_TOKEN_LTRIM:
+                    pOperator = new OOp_LTrim();
+                    break;
+                case SQL_TOKEN_RTRIM:
+                    pOperator = new OOp_RTrim();
+                    break;
+                case SQL_TOKEN_SPACE:
+                    pOperator = new OOp_Space();
+                    break;
+                case SQL_TOKEN_UCASE:
+                    pOperator = new OOp_Upper();
+                    break;
+                case SQL_TOKEN_ABS:
+                    pOperator = new OOp_Abs();
+                    break;
+                case SQL_TOKEN_ACOS:
+                    pOperator = new OOp_ACos();
+                    break;
+                case SQL_TOKEN_ASIN:
+                    pOperator = new OOp_ASin();
+                    break;
+                case SQL_TOKEN_ATAN:
+                    pOperator = new OOp_ATan();
+                    break;
+                case SQL_TOKEN_CEILING:
+                    pOperator = new OOp_Ceiling();
+                    break;
+                case SQL_TOKEN_COS:
+                    pOperator = new OOp_Cos();
+                    break;
+                case SQL_TOKEN_DEGREES:
+                    pOperator = new OOp_Degrees();
+                    break;
+                case SQL_TOKEN_EXP:
+                    pOperator = new OOp_Exp();
+                    break;
+                case SQL_TOKEN_FLOOR:
+                    pOperator = new OOp_Floor();
+                    break;
+                case SQL_TOKEN_LOG10:
+                    pOperator = new OOp_Log10();
+                    break;
+                case SQL_TOKEN_RADIANS:
+                    pOperator = new OOp_Radians();
+                    break;
+                case SQL_TOKEN_SIGN:
+                    pOperator = new OOp_Sign();
+                    break;
+                case SQL_TOKEN_SIN:
+                    pOperator = new OOp_Sin();
+                    break;
+                case SQL_TOKEN_SQRT:
+                    pOperator = new OOp_Sqrt();
+                    break;
+                case SQL_TOKEN_TAN:
+                    pOperator = new OOp_Tan();
+                    break;
+                case SQL_TOKEN_DAYOFWEEK:
+                    pOperator = new OOp_DayOfWeek();
+                    break;
+                case SQL_TOKEN_DAYOFMONTH:
+                    pOperator = new OOp_DayOfMonth();
+                    break;
+                case SQL_TOKEN_DAYOFYEAR:
+                    pOperator = new OOp_DayOfYear();
+                    break;
+                case SQL_TOKEN_MONTH:
+                    pOperator = new OOp_Month();
+                    break;
+                case SQL_TOKEN_DAYNAME:
+                    pOperator = new OOp_DayName();
+                    break;
+                case SQL_TOKEN_MONTHNAME:
+                    pOperator = new OOp_MonthName();
+                    break;
+                case SQL_TOKEN_QUARTER:
+                    pOperator = new OOp_Quarter();
+                    break;
+                case SQL_TOKEN_YEAR:
+                    pOperator = new OOp_Year();
+                    break;
+                case SQL_TOKEN_HOUR:
+                    pOperator = new OOp_Hour();
+                    break;
+                case SQL_TOKEN_MINUTE:
+                    pOperator = new OOp_Minute();
+                    break;
+                case SQL_TOKEN_SECOND:
+                    pOperator = new OOp_Second();
+                    break;
+                default:
+                    OSL_ENSURE(0,"Error in switch!");
+            }
+            break;
+        case SQL_TOKEN_CHAR:
+        case SQL_TOKEN_CONCAT:
+        case SQL_TOKEN_INSERT:
+        case SQL_TOKEN_LEFT:
+        case SQL_TOKEN_LOCATE:
+        case SQL_TOKEN_LOCATE_2:
+        case SQL_TOKEN_REPEAT:
+        case SQL_TOKEN_REPLACE:
+        case SQL_TOKEN_RIGHT:
+        case SQL_TOKEN_MOD:
+        case SQL_TOKEN_ROUND:
+        case SQL_TOKEN_LOGF:
+        case SQL_TOKEN_POWER:
+        case SQL_TOKEN_ATAN2:
+        case SQL_TOKEN_PI:
+        case SQL_TOKEN_CURDATE:
+        case SQL_TOKEN_CURTIME:
+        case SQL_TOKEN_NOW:
+        case SQL_TOKEN_WEEK:
+            {
+                m_aCodeList.push_back(new OStopOperand);
+                OSQLParseNode* pList = pPredicateNode->getChild(2);
+                for (sal_Int32 i=0; i < pList->count(); ++i)
+                    execute(pList->getChild(i));
+
+                switch( nTokenId )
+                {
+                    case SQL_TOKEN_CHAR:
+                        pOperator = new OOp_Char();
+                        break;
+                    case SQL_TOKEN_CONCAT:
+                        pOperator = new OOp_Concat();
+                        break;
+                    case SQL_TOKEN_INSERT:
+                        pOperator = new OOp_Insert();
+                        break;
+                    case SQL_TOKEN_LEFT:
+                        pOperator = new OOp_Left();
+                        break;
+                    case SQL_TOKEN_LOCATE:
+                    case SQL_TOKEN_LOCATE_2:
+                        pOperator = new OOp_Locate();
+                        break;
+                    case SQL_TOKEN_REPEAT:
+                        pOperator = new OOp_Repeat();
+                        break;
+                    case SQL_TOKEN_REPLACE:
+                        pOperator = new OOp_Replace();
+                        break;
+                    case SQL_TOKEN_RIGHT:
+                        pOperator = new OOp_Right();
+                        break;
+                    case SQL_TOKEN_MOD:
+                        pOperator = new OOp_Mod();
+                        break;
+                    case SQL_TOKEN_ROUND:
+                        pOperator = new OOp_Round();
+                        break;
+                    case SQL_TOKEN_LOGF:
+                        pOperator = new OOp_Log();
+                        break;
+                    case SQL_TOKEN_POWER:
+                        pOperator = new OOp_Pow();
+                        break;
+                    case SQL_TOKEN_ATAN2:
+                        pOperator = new OOp_ATan2();
+                        break;
+                    case SQL_TOKEN_PI:
+                        pOperator = new OOp_Pi();
+                        break;
+                    case SQL_TOKEN_CURDATE:
+                        pOperator = new OOp_CurDate();
+                        break;
+                    case SQL_TOKEN_CURTIME:
+                        pOperator = new OOp_CurTime();
+                        break;
+                    case SQL_TOKEN_NOW:
+                        pOperator = new OOp_Now();
+                        break;
+                    case SQL_TOKEN_WEEK:
+                        pOperator = new OOp_Week();
+                        break;
+                    default:
+                        OSL_ENSURE(0,"Error in switch!");
+                }
+            }
+            break;
+
+        case SQL_TOKEN_SUBSTRING:
+            m_aCodeList.push_back(new OStopOperand);
+            if ( pPredicateNode->count() == 4 ) //char_substring_fct
+            {
+                OSQLParseNode* pList = pPredicateNode->getChild(2);
+                for (sal_Int32 i=0; i < pList->count(); ++i)
+                    execute(pList->getChild(i));
+            }
+            else
+            {
+                execute(pPredicateNode->getChild(2));
+                execute(pPredicateNode->getChild(4));
+                execute(pPredicateNode->getChild(5)->getChild(1));
+            }
+            pOperator = new OOp_SubString();
+            break;
+
+        case SQL_TOKEN_POSITION:
+            m_aCodeList.push_back(new OStopOperand);
+            if ( pPredicateNode->count() == 4 ) //position_exp
+            {
+                OSQLParseNode* pList = pPredicateNode->getChild(2);
+                for (sal_Int32 i=0; i < pList->count(); ++i)
+                    execute(pList->getChild(i));
+            }
+            else
+            {
+                execute(pPredicateNode->getChild(2));
+                execute(pPredicateNode->getChild(4));
+            }
+            pOperator = new OOp_Locate();
+            break;
+        default:
+            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Function not supported, yet."),NULL);
+    }
+
+    m_aCodeList.push_back(pOperator);
+    return NULL;
+}
+// -----------------------------------------------------------------------------
 
 
