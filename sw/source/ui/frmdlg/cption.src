@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-06-27 09:49:19 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,14 +159,14 @@ ModalDialog DLG_CAPTION
         Text [ spanish ] = "~Categoría" ;
         Text [ english_us ] = "Ca~tegory" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "·ÖÀà(~A)";
+        Text[ chinese_simplified ] = "·ÖÀà(~T)";
         Text[ russian ] = "Êàòåãîğèÿ";
         Text[ polish ] = "Kategoria";
-        Text[ japanese ] = "¶ÃºŞØ°(~A)";
-        Text[ chinese_traditional ] = "¤ÀÃş(~A)";
+        Text[ japanese ] = "¶ÃºŞØ°(~T)";
+        Text[ chinese_traditional ] = "¤ÀÃş(~T)";
         Text[ arabic ] = "ÇáİÆÉ";
         Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "¹üÁÖ(~A)";
+        Text[ korean ] = "¹üÁÖ(~T)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Categoría";
@@ -341,10 +341,10 @@ ModalDialog DLG_CAPTION
         Text[ swedish ] = "~Objektnamn";
         Text[ polish ] = "Nazwa obiektu";
         Text[ portuguese_brazilian ] = "~Object name";
-        Text[ japanese ] = "µÌŞ¼Şª¸Ä–¼(~O)";
-        Text[ korean ] = "°³Ã¼ÀÌ¸§(~O)";
-        Text[ chinese_simplified ] = "¶ÔÏóÃû³Æ(~O)";
-        Text[ chinese_traditional ] = "ª«¥ó¦WºÙ(~O)";
+        Text[ japanese ] = "µÌŞ¼Şª¸Ä–¼(~B)";
+        Text[ korean ] = "°³Ã¼ÀÌ¸§(~B)";
+        Text[ chinese_simplified ] = "¶ÔÏóÃû³Æ(~B)";
+        Text[ chinese_traditional ] = "ª«¥ó¦WºÙ(~B)";
         Text[ arabic ] = "ÇÓã ÇáßÇÆä";
         Text[ turkish ] = "N~esne adı";
         Text[ language_user1 ] = " ";
@@ -366,7 +366,7 @@ ModalDialog DLG_CAPTION
         Text = "Eigenschaften" ;
         Text [ English ] = "Settings" ;
         Text[ english_us ] = "Properties";
-        Text[ portuguese ] = "Settings";
+        Text[ portuguese ] = "Propriedades";
         Text[ russian ] = "Ñâîéñòâà";
         Text[ greek ] = "Éäéüôçôåò";
         Text[ dutch ] = "Settings";
@@ -379,7 +379,7 @@ ModalDialog DLG_CAPTION
         Text[ polish ] = "W³aœciwoœci";
         Text[ portuguese_brazilian ] = "Settings";
         Text[ japanese ] = "‘®«";
-        Text[ korean ] = "Settings";
+        Text[ korean ] = "¼³Á¤";
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ turkish ] = "Settings";
@@ -749,6 +749,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ finnish ] = "Numeroalueen asetukset";
 };
  // ********************************************************************** EOF
+
 
 
 
