@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implcanvas.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #endif
 
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#include <external/boost/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #endif
 
 #include <cppcanvas/canvas.hxx>
