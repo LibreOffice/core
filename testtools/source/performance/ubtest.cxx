@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: kr $ $Date: 2001-05-04 07:05:18 $
-#*    $Revision: 1.1 $
+#*    last change   $Author: dbo $ $Date: 2001-06-29 14:01:57 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile: $
 #*
@@ -1119,7 +1119,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             osl_executeProcess(
                 aUnoExe.pData, pArgs, sizeof(aArgs) / sizeof(OUString),
                 osl_Process_SEARCHPATH | osl_Process_DETACHED | osl_Process_NORMAL,
-                hSecurity, aWorkingDir.pData, 0, 0, 0, &hProcess );
+                hSecurity, aWorkingDir.pData, 0, 0, &hProcess );
 
             osl_freeSecurityHandle( hSecurity );
             if (! hProcess)
@@ -1322,6 +1322,9 @@ void * SAL_CALL component_getFactory(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/05/04 07:05:18  kr
+    moved from grande to openoffice
+
     Revision 1.16  2001/04/19 12:53:47  kr
     java in process test now works
 
