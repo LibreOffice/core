@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-08 14:00:09 $
+ *  last change: $Author: mba $ $Date: 2001-06-12 15:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1121,8 +1121,6 @@ TransferableDataHelper::~TransferableDataHelper()
 
 void TransferableDataHelper::InitFormats()
 {
-    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-
     mpFormats->clear();
 
     try
@@ -1157,8 +1155,6 @@ void TransferableDataHelper::InitFormats()
     catch( const ::com::sun::star::uno::Exception& )
     {
     }
-
-    Application::AcquireSolarMutex( nRef );
 }
 
 // -----------------------------------------------------------------------------
@@ -1776,8 +1772,6 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
 
     if( xClipboard.is() )
        {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-
            try
         {
             Reference< XTransferable > xTransferable( xClipboard->getContents() );
@@ -1790,8 +1784,6 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
         catch( const ::com::sun::star::uno::Exception& )
         {
            }
-
-        Application::AcquireSolarMutex( nRef );
     }
 
     return aRet;
