@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-01 10:09:54 $
+ *  last change: $Author: sab $ $Date: 2001-06-27 08:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,7 @@ void ScMyShapeResizer::ResizeShapes()
                         {
                             uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet, uno::UNO_QUERY);
                             if (xColumnRowRange.is())
-                            {
                                 xTableRows = xColumnRowRange->getRows();
-                            }
                         }
                     }
                     if (xTableRows.is())
@@ -162,29 +160,47 @@ void ScMyShapeResizer::ResizeShapes()
                                 sal_Int32 nHeight;
                                 if (aAny >>= nHeight)
                                 {
-                                    Rectangle aRec = rImport.GetDocument()->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
-                                        static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
-                                    awt::Point aRefPoint;
-                                    aRefPoint.X = aRec.Left();
-                                    aRefPoint.Y = aRec.Top();
-                                    pRect = new Rectangle(rImport.GetDocument()->GetMMRect(
-                                        static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row),
-                                        static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row), aItr->aEndCell.Sheet ));
-                                    sal_Int32 Y (nHeight - aItr->nEndY);
-                                    aItr->nEndX += pRect->Left();
-                                    Y = pRect->Bottom() - Y;
-                                    awt::Point aPoint = aItr->xShape->getPosition();
-                                    awt::Size aOldSize = aItr->xShape->getSize();
-                                    awt::Size aSize(aOldSize);
-                                    aPoint.X += aRefPoint.X;
-                                    aPoint.Y += aRefPoint.Y;
-                                    aSize.Width = aItr->nEndX - aPoint.X;
-                                    aSize.Height = Y - aPoint.Y;
-                                    aItr->xShape->setPosition(aPoint);
-                                    if( (aSize.Width != aOldSize.Width) ||
-                                        (aSize.Height != aOldSize.Height) )
-                                        aItr->xShape->setSize(aSize);
-                                    delete pRect;
+                                    if (aItr->nEndY >= 0 && aItr->nEndX >= 0)
+                                    {
+                                        Rectangle aRec = rImport.GetDocument()->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
+                                            static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
+                                        awt::Point aRefPoint;
+                                        aRefPoint.X = aRec.Left();
+                                        aRefPoint.Y = aRec.Top();
+                                        pRect = new Rectangle(rImport.GetDocument()->GetMMRect(
+                                            static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row),
+                                            static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row), aItr->aEndCell.Sheet ));
+                                        sal_Int32 Y (nHeight - aItr->nEndY);
+                                        aItr->nEndX += pRect->Left();
+                                        Y = pRect->Bottom() - Y;
+                                        awt::Point aPoint = aItr->xShape->getPosition();
+                                        awt::Size aOldSize = aItr->xShape->getSize();
+                                        awt::Size aSize(aOldSize);
+                                        aPoint.X += aRefPoint.X;
+                                        aPoint.Y += aRefPoint.Y;
+                                        aSize.Width = aItr->nEndX - aPoint.X;
+                                        aSize.Height = Y - aPoint.Y;
+                                        aItr->xShape->setPosition(aPoint);
+                                        if( (aSize.Width != aOldSize.Width) ||
+                                            (aSize.Height != aOldSize.Height) )
+                                            aItr->xShape->setSize(aSize);
+                                        delete pRect;
+                                    }
+                                    else
+                                    {
+                                        DBG_ASSERT(aItr->xShape->getShapeType().equals(
+                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))),
+                                            "no end address of this shape");
+                                        Rectangle aRec = rImport.GetDocument()->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
+                                            static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
+                                        awt::Point aRefPoint;
+                                        aRefPoint.X = aRec.Left();
+                                        aRefPoint.Y = aRec.Top();
+                                        awt::Point aPoint = aItr->xShape->getPosition();
+                                        aPoint.X += aRefPoint.X;
+                                        aPoint.Y += aRefPoint.Y;
+                                        aItr->xShape->setPosition(aPoint);
+                                    }
                                 }
                             }
                         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-21 09:45:19 $
+ *  last change: $Author: sab $ $Date: 2001-06-27 08:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,6 +589,8 @@ void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& x
                     pSharedData->AddDrawPage(aDrawPage, nTable);
                 }
             }
+            rtl::OUString sCaptionShape(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"));
+            rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
             sal_Int32 nShapes = xShapesIndex->getCount();
             for (sal_Int32 nShape = 0; nShape < nShapes; nShape++)
             {
@@ -618,8 +620,16 @@ void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& x
                                         {
                                             if (pDoc)
                                             {
-                                                awt::Point aPoint = xShape->getPosition();
-                                                awt::Size aSize = xShape->getSize();
+                                                awt::Point aPoint;
+                                                awt::Size aSize;
+                                                rtl::OUString sType(xShape->getShapeType());
+                                                if ( !sType.equals(sCaptionShape) )
+                                                {
+                                                    aPoint = xShape->getPosition();
+                                                    aSize = xShape->getSize();
+                                                }
+                                                else
+                                                    xShapeProp->getPropertyValue( sCaptionPoint ) >>= aPoint;
                                                 Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
                                                 ScRange aRange = pDoc->GetRange(static_cast<USHORT>(nTable), aRectangle);
                                                 ScMyShape aMyShape;
@@ -2326,29 +2336,33 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
         aPoint.Y = aRec.Top();
         awt::Point* pPoint = &aPoint;
         ScMyShapeVec::const_iterator aItr = rMyCell.aShapeVec.begin();
+        rtl::OUString sCaptionShape(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"));
         while (aItr != rMyCell.aShapeVec.end())
         {
             uno::Any aAny = xCurrentShapes->getByIndex(aItr->nIndex);
             uno::Reference<drawing::XShape> xShape;
             if (aAny >>= xShape)
             {
-                awt::Point aEndPoint;
-                Rectangle aEndRec = pDoc->GetMMRect(aItr->aEndAddress.Col(), aItr->aEndAddress.Row(),
-                    aItr->aEndAddress.Col(), aItr->aEndAddress.Row(), aItr->aEndAddress.Tab());
-                rtl::OUString sEndAddress;
-                ScXMLConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc);
-                AddAttribute(XML_NAMESPACE_TABLE, XML_END_CELL_ADDRESS, sEndAddress);
-                aEndPoint.X = aEndRec.Left();
-                aEndPoint.Y = aEndRec.Top();
-                awt::Point aStartPoint = xShape->getPosition();
-                awt::Size aSize = xShape->getSize();
-                sal_Int32 nEndX = aStartPoint.X + aSize.Width - aEndPoint.X;
-                sal_Int32 nEndY = aStartPoint.Y + aSize.Height - aEndPoint.Y;
-                rtl::OUStringBuffer sBuffer;
-                GetMM100UnitConverter().convertMeasure(sBuffer, nEndX);
-                AddAttribute(XML_NAMESPACE_TABLE, XML_END_X, sBuffer.makeStringAndClear());
-                GetMM100UnitConverter().convertMeasure(sBuffer, nEndY);
-                AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
+                if ( !xShape->getShapeType().equals(sCaptionShape) )
+                {
+                    awt::Point aEndPoint;
+                    Rectangle aEndRec = pDoc->GetMMRect(aItr->aEndAddress.Col(), aItr->aEndAddress.Row(),
+                        aItr->aEndAddress.Col(), aItr->aEndAddress.Row(), aItr->aEndAddress.Tab());
+                    rtl::OUString sEndAddress;
+                    ScXMLConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc);
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_END_CELL_ADDRESS, sEndAddress);
+                    aEndPoint.X = aEndRec.Left();
+                    aEndPoint.Y = aEndRec.Top();
+                    awt::Point aStartPoint = xShape->getPosition();
+                    awt::Size aSize = xShape->getSize();
+                    sal_Int32 nEndX = aStartPoint.X + aSize.Width - aEndPoint.X;
+                    sal_Int32 nEndY = aStartPoint.Y + aSize.Height - aEndPoint.Y;
+                    rtl::OUStringBuffer sBuffer;
+                    GetMM100UnitConverter().convertMeasure(sBuffer, nEndX);
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_END_X, sBuffer.makeStringAndClear());
+                    GetMM100UnitConverter().convertMeasure(sBuffer, nEndY);
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
+                }
                 uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
                 if( xShapeProp.is() )
                 {

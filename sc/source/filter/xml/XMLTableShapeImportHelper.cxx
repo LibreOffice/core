@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-08 12:42:28 $
+ *  last change: $Author: sab $ $Date: 2001-06-27 08:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,11 +167,8 @@ void XMLTableShapeImportHelper::finishShape(
 
         if (!bOnTable)
         {
-            if (nEndX >= 0 && nEndY >= 0)
-                static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape, aStartCell, aEndCell,
-                    nEndX, nEndY);
-            else
-                DBG_ERROR("no or wrong position given");
+            static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape, aStartCell, aEndCell,
+                nEndX, nEndY);
             SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
             if (pShapeImp)
             {
