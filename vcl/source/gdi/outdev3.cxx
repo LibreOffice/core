@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-25 17:13:56 $
+ *  last change: $Author: ssa $ $Date: 2002-09-27 14:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4143,12 +4143,19 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, xub_Unicode c )
+void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, long nWidth )
 {
-    // TODO: use CTL infrastructure for width and position
-    String aStr( &c, 1 );
-    long nWidth = GetTextWidth( aStr, 0, 1 );
-    ImplDrawTextLine( nX, nX, nY, nWidth, STRIKEOUT_NONE, UNDERLINE_SINGLE, FALSE );
+    long nBaseX = nX;
+    if( ImplHasMirroredGraphics() && IsRTLEnabled() )
+    {
+        // --- RTL ---
+        // add some strange offset
+        nX += 2;
+        // revert the hack that will be done later in ImplDrawTextLine
+        nX = nBaseX - nWidth - (nX - nBaseX - 1);
+    }
+
+    ImplDrawTextLine( nBaseX, nX, nY, nWidth, STRIKEOUT_NONE, UNDERLINE_SINGLE, FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -5613,7 +5620,9 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         const xub_Unicode* pStr = aStr.GetBuffer() + nMinIndex;
         const xub_Unicode* pEnd = pStr + (nEndIndex-nMinIndex);
         for( ; pStr < pEnd; ++pStr )
-            if( (*pStr >= 0x0590) && (*pStr < 0x1900) )
+            if( (*pStr >= 0x0590) && (*pStr < 0x1900)
+           ||  (*pStr >= 0xFB1D) && (*pStr < 0xFE00)   // middle east presentation
+           ||  (*pStr >= 0xFE70) && (*pStr < 0xFF00) ) // arabic presentation B                )
                 break;
         if( pStr >= pEnd )
             nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
@@ -5949,14 +5958,19 @@ void OutputDevice::DrawText( const Rectangle& rRect,
                     {
                         long        nMnemonicX;
                         long        nMnemonicY;
-                        xub_Unicode cMnemonic;
+                        long        nMnemonicWidth;
+
+                        long *pCaretXArray = (long*) alloca( 2 * sizeof(long) * nLineLen );
+                        BOOL bRet = GetCaretPositions( aStr, pCaretXArray,
+                                                nIndex, nLineLen);
+                        long lc_x1 = pCaretXArray[2*(nIndex + nMnemonicPos)];
+                        long lc_x2 = pCaretXArray[2*(nIndex + nMnemonicPos)+1];
+                        nMnemonicWidth = abs(lc_x1 - lc_x2);
+
                         Point       aTempPos = LogicToPixel( aPos );
-                        cMnemonic  = aStr.GetChar( nMnemonicPos );
-                        if( mpFontEntry->mpConversion )
-                            cMnemonic = ImplRecodeChar( mpFontEntry->mpConversion, cMnemonic );
-                        nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( GetTextWidth( aStr, nIndex, nMnemonicPos-nIndex ) );
+                        nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
                         nMnemonicY = mnOutOffY + aTempPos.Y() + ImplLogicWidthToDevicePixel( GetFontMetric().GetAscent() );
-                        ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, cMnemonic );
+                        ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
                     }
                 }
                 aPos.Y() += nTextHeight;
@@ -6014,15 +6028,18 @@ void OutputDevice::DrawText( const Rectangle& rRect,
 
         long        nMnemonicX;
         long        nMnemonicY;
-        xub_Unicode cMnemonic;
+        long        nMnemonicWidth;
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
+            long *pCaretXArray = (long*) alloca( 2 * sizeof(long) * aStr.Len() );
+            BOOL bRet = GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
+            long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
+            long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
+            nMnemonicWidth = abs(lc_x1 - lc_x2);
+
             Point aTempPos = LogicToPixel( aPos );
-            nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( GetTextWidth( aStr, 0, nMnemonicPos ) );
+            nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
             nMnemonicY = mnOutOffY + aTempPos.Y() + ImplLogicWidthToDevicePixel( GetFontMetric().GetAscent() );
-            cMnemonic  = aStr.GetChar( nMnemonicPos );
-            if( mpFontEntry->mpConversion )
-                cMnemonic = ImplRecodeChar( mpFontEntry->mpConversion, cMnemonic );
         }
 
         if ( nStyle & TEXT_DRAW_CLIP )
@@ -6033,7 +6050,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
             if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
             {
                 if ( nMnemonicPos != STRING_NOTFOUND )
-                    ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, cMnemonic );
+                    ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             }
             Pop();
         }
@@ -6043,7 +6060,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
             if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
             {
                 if ( nMnemonicPos != STRING_NOTFOUND )
-                    ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, cMnemonic );
+                    ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             }
         }
     }
@@ -6336,7 +6353,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
 
     long        nMnemonicX;
     long        nMnemonicY;
-    xub_Unicode cMnemonic;
+    long        nMnemonicWidth;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
     {
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
@@ -6348,9 +6365,15 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                       (nMnemonicPos >= nIndex) && (nMnemonicPos < (ULONG)(nIndex+nLen)) )
                 nLen--;
 
+            long *pCaretXArray = (long*) alloca( 2 * sizeof(long) * nLen );
+            BOOL bRet = GetCaretPositions( aStr, pCaretXArray,
+                                      nIndex, nLen);
+            long lc_x1 = pCaretXArray[2*(nIndex + nMnemonicPos)];
+            long lc_x2 = pCaretXArray[2*(nIndex + nMnemonicPos)+1];
+            nMnemonicWidth = abs(lc_x1 - lc_x2);
+
             Point aTempPos = LogicToPixel( rPos );
-            cMnemonic  = aStr.GetChar( nMnemonicPos );
-            nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( GetTextWidth( aStr, 0, nMnemonicPos ) );
+            nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min(lc_x1,lc_x2) );
             nMnemonicY = mnOutOffY + aTempPos.Y() + ImplLogicWidthToDevicePixel( GetFontMetric().GetAscent() );
         }
     }
@@ -6389,7 +6412,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
             if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) )
             {
                 if ( nMnemonicPos != STRING_NOTFOUND )
-                    ImplDrawMnemonicLine( nMnemonicX+1, nMnemonicY+1, cMnemonic );
+                    ImplDrawMnemonicLine( nMnemonicX+1, nMnemonicY+1, nMnemonicWidth );
             }
             SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
         }
@@ -6398,7 +6421,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
         {
             if ( nMnemonicPos != STRING_NOTFOUND )
-                ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, cMnemonic );
+                ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
         SetTextColor( aOldTextColor );
         if ( bRestoreFillColor )
@@ -6410,7 +6433,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
         {
             if ( nMnemonicPos != STRING_NOTFOUND )
-                ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, cMnemonic );
+                ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
     }
 }
