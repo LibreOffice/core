@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-08-22 14:06:28 $
+ *  last change: $Author: os $ $Date: 2002-09-18 14:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -312,6 +315,16 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     FreeResource();
     //task #97066# mailing of form letters is currently not supported
     aMailingRB.Show(FALSE);
+    aSubjectFT.Show(FALSE);
+    aSubjectED.Show(FALSE);
+    aFormatFT.Show(FALSE);
+    aFormatSwCB.Show(FALSE);
+    aFormatHtmlCB.Show(FALSE);
+    aFormatRtfCB.Show(FALSE);
+    aAttachFT.Show(FALSE);
+    aAttachED.Show(FALSE);
+    aAttachPB.Show(FALSE);
+
     Point aMailPos = aMailingRB.GetPosPixel();
     Point aFilePos = aFileRB.GetPosPixel();
     aFilePos.X() -= (aFilePos.X() - aMailPos.X()) /2;
@@ -442,6 +455,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aPrinterRB.SetClickHdl(aLk);
     aMailingRB.SetClickHdl(aLk);
     aFileRB.SetClickHdl(aLk);
+    RadioButtonHdl(&aPrinterRB);
 
     aLk = LINK(this, SwMailMergeDlg, FilenameHdl);
     aColumnRB.SetClickHdl(aLk);
@@ -468,12 +482,18 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     aAddressFldLB.SelectEntry(C2S("EMAIL"));
 
-    aPathED.SetText(pModOpt->GetMailingPath());
-    if (!aPathED.GetText().Len())
+    String sPath(pModOpt->GetMailingPath());
+    if(!sPath.Len())
     {
         SvtPathOptions aPathOpt;
-        aPathED.SetText( aPathOpt.GetWorkPath() );
+        sPath = aPathOpt.GetWorkPath();
     }
+    INetURLObject aURL(sPath);
+    if(aURL.GetProtocol() == INET_PROT_FILE)
+        aPathED.SetText(aURL.PathToFileName());
+    else
+        aPathED.SetText(aURL.GetFull());
+
     String sMailName = pModOpt->GetMailName();
 
     if (!bColumn || !sMailName.Len())
@@ -544,71 +564,17 @@ IMPL_LINK( SwMailMergeDlg, ButtonHdl, Button *, pBtn )
 
 IMPL_LINK( SwMailMergeDlg, RadioButtonHdl, RadioButton *, pBtn )
 {
-    if (pBtn == &aFileRB)
-    {
-        aAddressFT.Hide();
-        aAddressFldLB.Hide();
-        aSubjectFT.Hide();
-        aSubjectED.Hide();
-        aFormatFT.Hide();
-        aFormatSwCB.Hide();
-        aFormatHtmlCB.Hide();
-        aFormatRtfCB.Hide();
-        aSingleJobsCB.Hide();
-        aAttachFT.Hide();
-        aAttachED.Hide();
-        aAttachPB.Hide();
+    sal_Bool bPrint = pBtn == &aPrinterRB;
+    aSingleJobsCB.Enable(bPrint);
 
-        aPathFT.Show();
-        aPathED.Show();
-        aPathPB.Show();
-        aFilenameFT.Show();
-        aColumnRB.Show();
-        aFilenameRB.Show();
-        aColumnLB.Show();
-        aFilenameED.Show();
-    }
-    else
-    {
-        aAddressFT.Show();
-        aAddressFldLB.Show();
-        aSubjectFT.Show();
-        aSubjectED.Show();
-        aFormatFT.Show();
-        aFormatSwCB.Show();
-        aFormatHtmlCB.Show();
-        aFormatRtfCB.Show();
-        aAttachFT.Show();
-        aAttachED.Show();
-        aAttachPB.Show();
-
-        aPathFT.Hide();
-        aPathED.Hide();
-        aPathPB.Hide();
-        aFilenameFT.Hide();
-        aColumnRB.Hide();
-        aFilenameRB.Hide();
-        aColumnLB.Hide();
-        aFilenameED.Hide();
-
-        const BOOL bEnable = pBtn != &aPrinterRB;
-        aAddressFT.Enable(bEnable);
-        aAddressFldLB.Enable(bEnable);
-        aSubjectFT.Enable(bEnable);
-        aSubjectED.Enable(bEnable);
-        aFormatFT.Enable(bEnable);
-        aFormatSwCB.Enable(bEnable);
-        aFormatHtmlCB.Enable(bEnable);
-        aFormatRtfCB.Enable(bEnable);
-        aAttachFT.Enable(bEnable);
-        aAttachED.Enable(bEnable);
-        aAttachPB.Enable(bEnable);
-
-        aAddressFT.Show(bEnable);
-        aAddressFldLB.Show(bEnable);
-        aSingleJobsCB.Show(!bEnable);
-        aSingleJobsCB.Enable(!bEnable);
-    }
+    aPathFT.Enable(!bPrint);
+    aPathED.Enable(!bPrint);
+    aPathPB.Enable(!bPrint);
+    aFilenameFT.Enable(!bPrint);
+    aColumnRB.Enable(!bPrint);
+    aFilenameRB.Enable(!bPrint);
+    aColumnLB.Enable(!bPrint);
+    aFilenameED.Enable(!bPrint);
     return 0;
 }
 
@@ -657,7 +623,7 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
     {
         nMergeType = DBMGR_MERGE_MAILFILES;
         String sPath(aPathED.GetText());
-        pModOpt->SetMailingPath(sPath);
+        pModOpt->SetMailingPath(URIHelper::SmartRelToAbs(sPath));
         String sDelim(INET_PATH_TOKEN);
 
         if (sPath.Len() >= sDelim.Len() &&
@@ -773,7 +739,11 @@ IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, pBtn )
     xFP->setDisplayDirectory(sPath);
     if( xFP->execute() == RET_OK )
     {
-        aPathED.SetText(xFP->getDirectory());
+        INetURLObject aURL(xFP->getDirectory());
+        if(aURL.GetProtocol() == INET_PROT_FILE)
+            aPathED.SetText(aURL.PathToFileName());
+        else
+            aPathED.SetText(aURL.GetFull());
     }
     return 0;
 }

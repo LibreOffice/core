@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2001-12-17 14:42:45 $
+ *  last change: $Author: os $ $Date: 2002-09-18 14:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ ModalDialog DLG_MAILMERGE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 374 , 201 ) ;
+    Size = MAP_APPFONT ( 374 , 185 ) ;
     Text = "Serienbrief" ;
     Text [ ENGLISH ] = "Print merge" ;
     Text [ norwegian ] = "Print merge" ;
@@ -116,7 +116,8 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "전체(~A)";
         Text[ turkish ] = "T�m�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "T~odos";
+        Text[ catalan ] = "~Tot";
+        Text[ thai ] = "~ทั้งหมด";
     };
     RadioButton RB_MARKED
     {
@@ -146,7 +147,8 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "선택 표시된 데이터 레코드(~S)";
         Text[ turkish ] = "Se�ili veri k�meleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Registros seleccionados";
+        Text[ catalan ] = "~Registres seleccionats";
+        Text[ thai ] = "ระเบียนที่เ~ลือก";
     };
     RadioButton RB_FROM
     {
@@ -155,7 +157,7 @@ ModalDialog DLG_MAILMERGE
         Text = "~Von:" ;
         Text [ ENGLISH ] = "~From:" ;
         Text [ norwegian ] = "~From:" ;
-        Text [ italian ] = "~Da:" ;
+        Text [ italian ] = "Da:" ;
         Text [ portuguese_brazilian ] = "~De:" ;
         Text [ portuguese ] = "~De:" ;
         Text [ finnish ] = "~Kohde:" ;
@@ -176,7 +178,8 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "로 부터(~F):";
         Text[ turkish ] = "�lk:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Del:";
+        Text[ catalan ] = "~De:";
+        Text[ thai ] = "~จาก:";
     };
     NumericField NF_FROM
     {
@@ -213,10 +216,11 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "至(~T)：";
         Text[ arabic ] = "���:";
         Text[ greek ] = "����:";
-        Text[ korean ] = "까지(~T):";
+        Text[ korean ] = "끝(~T):";
         Text[ turkish ] = "Son:";
         Text[ language_user1 ] = "RB: SW Datei - Serienbrief";
-        Text[ catalan ] = "~al:";
+        Text[ catalan ] = "~A:";
+        Text[ thai ] = "~ถึง:";
     };
     NumericField NF_TO
     {
@@ -255,7 +259,8 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "데이터 레코드";
         Text[ turkish ] = "Veri k�meleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Registros";
+        Text[ catalan ] = "Registres";
+        Text[ thai ] = "ระเบียน";
     };
     RadioButton RB_PRINTER
     {
@@ -266,9 +271,9 @@ ModalDialog DLG_MAILMERGE
         Check = TRUE ;
         TabStop = TRUE ;
         Text [ dutch ] = "~Printer" ;
-        Text [ english_us ] = "~Printer" ;
+        Text [ english_us ] = "P~rinter" ;
         Text [ italian ] = "Stampante" ;
-        Text [ spanish ] = "~Impresora" ;
+        Text [ spanish ] = "Impresora" ;
         Text [ french ] = "Imprimante" ;
         Text [ swedish ] = "S~krivare" ;
         Text [ danish ] = "Printer" ;
@@ -284,8 +289,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "프린터(~P)";
         Text[ turkish ] = "~Yaz�c�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Impresora";
+        Text[ catalan ] = "~Impressora";
         Text[ finnish ] = "~Tulostin";
+        Text[ thai ] = "เ~ครื่องพิมพ์";
     };
     RadioButton RB_MAILING
     {
@@ -313,8 +319,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "메일(~E)";
         Text[ turkish ] = "E-posta";
         Text[ language_user1 ] = "ENG:the anglicism \"Mailing\" as used in German cannot be used in Eng. because the real meaning has nothing to do with e-mail.EM17.5.00";
-        Text[ catalan ] = "~Enviar correo";
+        Text[ catalan ] = "~Envia correu";
         Text[ finnish ] = "~S�hk�inen";
+        Text[ thai ] = "~อิเล็คโทรนิก";
     };
     RadioButton RB_FILE
     {
@@ -342,14 +349,14 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "파일";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Archivo";
+        Text[ catalan ] = "Fitxer";
         Text[ finnish ] = "Tiedosto";
+        Text[ thai ] = "แฟ้ม";
     };
     FixedText FT_PATH
     {
         Pos = MAP_APPFONT ( 144 , 124 ) ;
         Size = MAP_APPFONT ( 41 , 10 ) ;
-        Hide = TRUE ;
         Text = "Pfad" ;
         Text [ ENGLISH ] = "Path" ;
         Text [ english_us ] = "Path" ;
@@ -371,14 +378,14 @@ ModalDialog DLG_MAILMERGE
         Text[ greek ] = "��������";
         Text[ korean ] = "경로";
         Text[ turkish ] = "Veri yolu";
-        Text[ catalan ] = "Ruta";
+        Text[ catalan ] = "Cam�";
         Text[ finnish ] = "Polku";
+        Text[ thai ] = "เส้นทาง";
     };
     Edit ED_PATH
     {
-        Pos = MAP_APPFONT ( 220 , 123 ) ;
-        Size = MAP_APPFONT ( 72 , 12 ) ;
-        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 190 , 123 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
@@ -389,13 +396,11 @@ ModalDialog DLG_MAILMERGE
          // Soll Groesse des Edits haben (12)!
         Text = "~..." ;
         TabStop = TRUE ;
-        Hide = TRUE ;
     };
     FixedText FT_FILENAME
     {
         Pos = MAP_APPFONT ( 144 , 142 ) ;
-        Size = MAP_APPFONT ( 102 , 10 ) ;
-        Hide = TRUE ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "Dateiname generiert aus" ;
         Text [ ENGLISH ] = "Generate filename from" ;
         Text [ english_us ] = "Generate file name from" ;
@@ -417,8 +422,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "로부터 파일 이름 생성";
         Text[ turkish ] = "Dosya ad� kayna��";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre de archivo a partir de";
+        Text[ catalan ] = "Genera el nom del arxiu des de";
         Text[ finnish ] = "Luo tiedoston nimi kohteesta";
+        Text[ thai ] = "สร้างชื่อแฟ้มจาก";
     };
     RadioButton RB_COLUMN
     {
@@ -427,7 +433,6 @@ ModalDialog DLG_MAILMERGE
         Text = "Datenbankfeld" ;
         Text [ ENGLISH ] = "Database field" ;
         TabStop = TRUE ;
-        Hide = TRUE ;
         Text [ portuguese ] = "Campo da base de dados" ;
         Text [ english_us ] = "Database field" ;
         Text [ portuguese_brazilian ] = "Datenbankfeld" ;
@@ -447,8 +452,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "테이터베이스 필드";
         Text[ turkish ] = "Veritaban� alan�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Campo de base de datos";
+        Text[ catalan ] = "Camp de la base de dades";
         Text[ finnish ] = "Tietokannan kentt�";
+        Text[ thai ] = "เขตข้อมูลของฐานข้อมูล";
     };
     RadioButton RB_FILENAME
     {
@@ -458,7 +464,6 @@ ModalDialog DLG_MAILMERGE
         Text [ ENGLISH ] = "Custom" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Hide = TRUE ;
         Text [ portuguese ] = "Predefini��o manual" ;
         Text [ english_us ] = "Manual setting" ;
         Text [ portuguese_brazilian ] = "Manueller Vorgabe" ;
@@ -478,8 +483,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "수동 설정";
         Text[ turkish ] = "Man�el giri�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Manualmente";
+        Text[ catalan ] = "Manualment";
         Text[ finnish ] = "Manuaaliset asetukset";
+        Text[ thai ] = "กำหนดด้วยตนเอง";
     };
     ListBox LB_COLUMN
     {
@@ -488,7 +494,6 @@ ModalDialog DLG_MAILMERGE
         Size = MAP_APPFONT ( 65 , 84 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        Hide = TRUE ;
     };
     Edit ED_FILENAME
     {
@@ -496,7 +501,6 @@ ModalDialog DLG_MAILMERGE
         Pos = MAP_APPFONT ( 243 , 168 ) ;
         Size = MAP_APPFONT ( 65 , 12 ) ;
         TabStop = TRUE ;
-        Hide = TRUE ;
     };
     CheckBox CB_SINGLE_JOBS
     {
@@ -505,27 +509,28 @@ ModalDialog DLG_MAILMERGE
         Text = "~Einzelne Druckjobs erzeugen" ;
         Text [ ENGLISH ] = "Si~ngle print jobs" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Single print jobs" ;
+        Text [ english_us ] = "Single print ~jobs" ;
         Text [ portuguese_brazilian ] = "Einzelne Druckjobs erzeugen" ;
         Text [ swedish ] = "Skapa ~enstaka utskriftsjobb" ;
         Text [ danish ] = "Opret enkelte printerjob" ;
         Text [ italian ] = "Crea singoli ordini di stampa" ;
-        Text [ spanish ] = "~Crear tareas individuales de impresi�n" ;
-        Text [ french ] = "~Travaux d'impression individuels" ;
+        Text [ spanish ] = "Crear tareas individuales de impresi�n" ;
+        Text [ french ] = "Travaux d'impression individuels" ;
         Text [ dutch ] = "Af~zonderlijke afdrukjobs" ;
         Text [ portuguese ] = "C~riar tarefas de impress�o individuais" ;
         Text[ chinese_simplified ] = "生成单个打印任务(~S)";
         Text[ russian ] = "������� ��������� ������� ������";
         Text[ polish ] = "Utw�rz pojedyncze zadania wydruku";
         Text[ japanese ] = "個別印刷ジョブの作成(~S)";
-        Text[ chinese_traditional ] = "產生單個列印任務(~S)";
+        Text[ chinese_traditional ] = "產生單項列印作業(~S)";
         Text[ arabic ] = "����� ����� ����� �����";
         Text[ greek ] = "���������� ����������� �������� ���������";
         Text[ korean ] = "각 인쇄 작업　만들기(~S)";
         Text[ turkish ] = "Bireysel yazd�rma i�leri olu�tur";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Crear tareas individuales de impresi�n";
+        Text[ catalan ] = "~Crea tasques individuals d'impressi�";
         Text[ finnish ] = "~Yksitt�iset tulostusty�t";
+        Text[ thai ] = "งานพิมพ์เ~ดียว";
     };
     FixedText FT_ADDRESS
     {
@@ -554,8 +559,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "주소 필드(~F)";
         Text[ turkish ] = "Adres alan�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Campo direcci�n";
+        Text[ catalan ] = "~Camp direcci�";
         Text[ finnish ] = "~Osoitekentt�";
+        Text[ thai ] = "เ~ขตข้อมูลที่อยู่";
     };
     ListBox LB_ADDRESSFLD
     {
@@ -577,7 +583,7 @@ ModalDialog DLG_MAILMERGE
         Text [ english_us ] = "~Subject" ;
         Text [ italian ] = "~Oggetto" ;
         Text [ spanish ] = "A~sunto" ;
-        Text [ french ] = "~Objet" ;
+        Text [ french ] = "Objet" ;
         Text [ dutch ] = "~Betreft" ;
         Text [ swedish ] = "A~ng�ende" ;
         Text [ danish ] = "Emne" ;
@@ -593,8 +599,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "제목(~S)";
         Text[ turkish ] = "Konu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~sunto";
+        Text[ catalan ] = "~Assumpte";
         Text[ finnish ] = "~Aihe";
+        Text[ thai ] = "~ชื่อเรื่อง";
     };
     Edit ED_SUBJECT
     {
@@ -630,8 +637,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "첨부";
         Text[ turkish ] = "Ekler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Anexos";
+        Text[ catalan ] = "Adjuncions";
         Text[ finnish ] = "Liitteet";
+        Text[ thai ] = "สิ่งที่แนบ";
     };
     Edit ED_ATTACH
     {
@@ -677,8 +685,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "우편 서식";
         Text[ turkish ] = "E-posta format�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Formato de correo";
+        Text[ catalan ] = "Format de correu";
         Text[ finnish ] = "S�hk�postin muoto";
+        Text[ thai ] = "รูปแบบเมล์";
     };
     CheckBox CB_FORMAT_HTML
     {
@@ -709,6 +718,7 @@ ModalDialog DLG_MAILMERGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "HTM~L";
         Text[ finnish ] = "~HTML";
+        Text[ thai ] = "HTM~L";
     };
     CheckBox CB_FORMAT_RTF
     {
@@ -736,8 +746,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "RT~F";
         Text[ turkish ] = "~RTF";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "R~TF";
+        Text[ catalan ] = "RT~F";
         Text[ finnish ] = "~RTF";
+        Text[ thai ] = "RT~F";
     };
     CheckBox CB_FORMAT_SW
     {
@@ -767,6 +778,7 @@ ModalDialog DLG_MAILMERGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "%PRODUCTNAME Writer";
         Text[ finnish ] = "%PRODUCTNAME Writer";
+        Text[ thai ] = "%PRODUCTNAME Writer";
     };
     FixedLine FL_SEPARATOR
     {
@@ -799,8 +811,9 @@ ModalDialog DLG_MAILMERGE
         Text[ korean ] = "출력";
         Text[ turkish ] = "��kt�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Destino";
+        Text[ catalan ] = "Dest�";
         Text[ finnish ] = "Tuloste";
+        Text[ thai ] = "ผลลัพธ์";
     };
     OKButton BTN_OK
     {
@@ -828,9 +841,9 @@ ModalDialog DLG_MAILMERGE
     Text[ korean ] = "편지지 양식";
     Text[ turkish ] = "Standart mektup";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Carta en serie";
+    Text[ catalan ] = "Carta formulari";
+    Text[ thai ] = "แบบจดหมาย";
 };
-
 
 
 
