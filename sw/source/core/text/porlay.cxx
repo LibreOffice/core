@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:42:37 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,6 +1279,30 @@ USHORT SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
 
     return nNumOfHiddenChars;
 }
+
+/*************************************************************************
+ *                        SwScriptInfo::DeleteHiddenRanges(..)
+ * Takes a SwTxtNode and deletes the hidden ranges from the node.
+ **************************************************************************/
+
+void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
+{
+    PositionList aList;
+    xub_StrLen nHiddenStart;
+    xub_StrLen nHiddenEnd;
+    GetBoundsOfHiddenRange( rNode, 0, nHiddenStart, nHiddenEnd, &aList );
+    PositionList::const_reverse_iterator rFirst( aList.end() );
+    PositionList::const_reverse_iterator rLast( aList.begin() );
+    while ( rFirst != rLast )
+    {
+        nHiddenEnd = *(rFirst++);
+        nHiddenStart = *(rFirst++);
+
+        SwPaM aPam( rNode, nHiddenStart, rNode, nHiddenEnd );
+        rNode.GetDoc()->Delete( aPam );
+    }
+}
+
 
 /*************************************************************************
  *                        SwScriptInfo::GetBoundsOfHiddenRange(..)
