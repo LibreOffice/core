@@ -1,14 +1,19 @@
 ..\%__SRC%\lib\libpyuno.so %_DEST%\lib%_EXT%\libpyuno.so
 ..\%__SRC%\lib\pyuno.so %_DEST%\lib%_EXT%\pyuno.so
-..\%__SRC%\lib\libpycpld.so %_DEST%\lib%_EXT%\libpycpld.so
+..\%__SRC%\lib\libpythonloader.uno.so %_DEST%\lib%_EXT%\libpythonloader.uno.so
 ..\%__SRC%\lib\unohelper.py %_DEST%\lib%_EXT%\unohelper.py
 ..\%__SRC%\lib\pythonloader.py %_DEST%\lib%_EXT%\pythonloader.py
 ..\%__SRC%\lib\uno.py %_DEST%\lib%_EXT%\uno.py
 ..\%__SRC%\lib\pyuno_services.rdb %_DEST%\bin%_EXT%\pyuno_services.rdb
-..\%__SRC%\bin\pyuno_services.rdb %_DEST%\bin%_EXT%\pyuno_services.rdb
 
+..\%__SRC%\bin\unohelper.py %_DEST%\bin%_EXT%\unohelper.py
+..\%__SRC%\bin\pythonloader.py %_DEST%\bin%_EXT%\pythonloader.py
+..\%__SRC%\bin\uno.py %_DEST%\bin%_EXT%\uno.py
+..\%__SRC%\bin\pyuno_services.rdb %_DEST%\bin%_EXT%\pyuno_services.rdb
 ..\%__SRC%\bin\pyuno.dll %_DEST%\bin%_EXT%\pyuno.dll
-..\%__SRC%\bin\pycpld.dll %_DEST%\bin%_EXT%\pycpld.dll
+..\%__SRC%\bin\pythonloader.uno.dll %_DEST%\bin%_EXT%\pythonloader.uno.dll
 
 ..\%__SRC%\misc\pyunorc %_DEST%\lib%_EXT%\pyunorc
 ..\%__SRC%\misc\pyuno.ini %_DEST%\bin%_EXT%\pyuno.ini
+..\%__SRC%\bin\python-core-2.2.2.zip %_DEST%\bin%_EXT%\python-core-2.2.2.zip
+..\%__SRC%\bin\python.sh %_DEST%\bin%_EXT%\python.sh
