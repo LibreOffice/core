@@ -23637,3 +23637,9 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx84012683@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?setCheckBoxState@?%O:\SRX643\src\svx\source\fmcomp\gridcell.cxx146187608@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx484210471@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+??1?$Reference@VXToolkit@awt@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXFrames@frame@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXFramesSupplier@frame@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?__query@?$Reference@VXFramesSupplier@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXFramesSupplier@frame@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_frame_XFramesSupplier@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXFramesSupplier@frame@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx61105372@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
