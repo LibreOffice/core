@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-08 17:20:16 $
+ *  last change: $Author: cmc $ $Date: 2002-11-15 17:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1619,6 +1619,48 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
     return eSrcCharSet;
 }
 
+/*
+ #i9241#
+ It appears that some documents that are in a baltic 8 bit encoding which has
+ some undefined characters can have use made of those characters, in which
+ case they default to CP1252. If not then its perhaps that the font encoding
+ is only in use for 6/7 and for 8+ if we are in 8bit mode then the encoding
+ is always 1252.
+*/
+sal_Unicode Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
+    sal_Char cChar)
+{
+    const sal_uInt32 nFlags =
+        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
+        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
+        RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT |
+        RTL_TEXTTOUNICODE_FLAGS_FLUSH;
+
+    sal_Unicode nConvChar;
+    sal_uInt32 nInfo=0;
+    sal_Size nSrcBytes=0;
+    sal_Size nDestChars = rtl_convertTextToUnicode(hConverter, 0,
+        &cChar, 1, &nConvChar, 1, nFlags, &nInfo, &nSrcBytes );
+
+    if (nInfo | RTL_TEXTTOUNICODE_INFO_UNDEFINED)
+    {
+        rtl_TextToUnicodeConverter hCP1252Converter =
+            rtl_createTextToUnicodeConverter(RTL_TEXTENCODING_MS_1252);
+        nDestChars = rtl_convertTextToUnicode(hCP1252Converter, 0,
+            &cChar, 1, &nConvChar, 1, nFlags, &nInfo, &nSrcBytes );
+        rtl_destroyTextToUnicodeConverter(hCP1252Converter);
+    }
+
+    ASSERT(nDestChars == 1, "impossible to get more than 1 char");
+
+    ASSERT(nInfo == 0, "A character conversion failed, gulp!");
+
+    if (nDestChars == 1)
+        return nConvChar;
+    else
+        return 0;
+}
+
 // Returnwert: true for no Sonderzeichen
 bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
 {
@@ -1641,6 +1683,10 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
     String sPlainCharsBuf;
 
     sal_Unicode* pWork = sPlainCharsBuf.AllocBuffer( nLen );
+
+    rtl_TextToUnicodeConverter hConverter = 0;
+    if (!bIsUnicode)
+        hConverter = rtl_createTextToUnicodeConverter(eSrcCharSet);
 
     // read the stream data
     BYTE   nBCode;
@@ -1684,13 +1730,16 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
                 *pWork = nUCode;
         }
         else
-            *pWork = ByteString::ConvertToUnicode(nBCode, eSrcCharSet);
+            *pWork = Custom8BitToUnicode(hConverter, nBCode);
     }
 
     if (sPlainCharsBuf.Len())
         rDoc.Insert (*pPaM, sPlainCharsBuf);
 
     rPos += nL2;
+
+    if (hConverter)
+        rtl_destroyTextToUnicodeConverter(hConverter);
     return nL2 >= nLen;
 }
 
