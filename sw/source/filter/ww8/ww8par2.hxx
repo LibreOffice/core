@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-28 15:24:29 $
+ *  last change: $Author: cmc $ $Date: 2001-09-21 15:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,18 @@ private:
     SfxItemSet aChrSet,aParSet;
 };
 
+class WW8AnchoringProperties
+{
+public:
+    WW8AnchoringProperties() : pStack(0) {}
+    ~WW8AnchoringProperties() { delete pStack; }
+    void Remove(const SwPosition &rPos, SwWW8ImplReader &rRdr,
+        SwFltControlStack* pCtrlStck);
+    void Insert(SwFltControlStack* pCtrlStck);
+private:
+    SwFltControlStack *pStack;
+};
+
 struct WW8FlyPara
 {                       // WinWord-Attribute
                         // Achtung: *Nicht* umsortieren, da Teile mit
@@ -153,15 +165,14 @@ struct WW8SwFlyPara
     BOOL bAutoWidth;
     BOOL bToggelPos;
 
-
     WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
-                  short nPgTop,
-                  short nPgLeft,
-                  short nPgWidth, INT32 nIniFlyDx, INT32 nIniFlyDy );
+        short nPgTop, short nPgLeft, short nPgWidth, INT32 nIniFlyDx,
+        INT32 nIniFlyDy );
 
     void BoxUpWidth( long nWidth );
     const SwPosition* GetMainTextPos() const    // Fuer PageDesc aus Apo
                 { return pMainTextPos; };
+    WW8AnchoringProperties aAnchoring;
 };
 
 
@@ -302,11 +313,14 @@ inline WW8LvlType GetNumType( BYTE nWwLevelNo )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.6 2001-08-28 15:24:29 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.7 2001-09-21 15:40:50 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/08/28 15:24:29  cmc
+      #91622 Properties open at begin and end of tables and frames need to be cunningly duplicated outside and inside element
+
       Revision 1.5  2001/07/10 09:31:26  cmc
       #89439# calculate style's even-byte offset relative to style start, not absolute
 

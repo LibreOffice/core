@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
+ *  last change: $Author: cmc $ $Date: 2001-09-21 15:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1967,13 +1967,11 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
 
     pStrm->Seek( pSBase->WW8Cp2Fc( nStartCp + nCpOfs, &bIsUnicode ) );
 
-    if(    (0 == nStartCp+nCpOfs)
-        && SetCols( 0, pPlcxMan->GetSepPLCF(), 0, TRUE   ) )
+    if ( (0 == nStartCp+nCpOfs) && SetCols(0, pPlcxMan->GetSepPLCF(), 0, TRUE) )
     {
         // Start of text:
         //
         // look for cols and insert a section at the very beginning...
-        //
         if( !pPageDesc )
             pPageDesc = &rDoc._GetPageDesc( 0 );
         SwFrmFmt &rFmt = pPageDesc->GetMaster();
@@ -3076,11 +3074,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.30 2001-09-10 15:51:44 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.31 2001-09-21 15:40:50 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.30  2001/09/10 15:51:44  cmc
+      #92059# Consider border widths in {im|ex}port of floating elements
+
       Revision 1.29  2001/08/28 10:23:48  cmc
       #91214# Illustration index has less pattern possibilities than toc
 

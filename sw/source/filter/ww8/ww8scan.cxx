@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:20 $
+ *  last change: $Author: cmc $ $Date: 2001-09-21 15:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6546,10 +6546,8 @@ USHORT WW8CountSprms( BYTE nVersion, const BYTE* pSp, long nSprmSiz,
         i += nSpLen;
         pSp += nSpLen;
 
-        if( !pIgnoreSprms || USHRT_MAX == pIgnoreSprms->Seek_Entry( nSpId ) )
-        {
+        if( !pIgnoreSprms || !pIgnoreSprms->Seek_Entry( nSpId ) )
             ++nMySprms;
-        }
     }
     return nMySprms;
 }
@@ -6576,7 +6574,7 @@ BOOL WW8PLCFx_SEPX::CompareSprms( const BYTE*  pOtherSprms,
 
             short nSpLen = WW8GetSprmSizeBrutto( GetVersion(), pSp, &nSpId  );
 
-            if( !pIgnoreSprms || !pIgnoreSprms->Seek_Entry( nSpId ) )
+            if( !pIgnoreSprms || !pIgnoreSprms->Seek_Entry(nSpId) )
             {
                 const BYTE* pOtherSp =
                     HasSprm( nSpId, pOtherSprms, nOtherSprmSiz );

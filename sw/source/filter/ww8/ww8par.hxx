@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
+ *  last change: $Author: cmc $ $Date: 2001-09-21 15:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,7 +725,7 @@ friend class WW8FormulaControl;
     SwPageDesc* CreatePageDesc( SwPageDesc* pFirstPageDesc,
                                 SwPaM** ppPaMWanted = 0 );
     void RemoveCols( SwPageDesc& rPageDesc, SwFmtCol*& rpCol );
-    BOOL SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep, long nNettoWidth,
+    BOOL SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep, USHORT nNettoWidth,
         BOOL bTestOnly = FALSE );
     void SetPage1( SwPageDesc* pPageDesc, SwFrmFmt &rFmt,
                    const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
@@ -1171,11 +1171,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.33 2001-09-10 15:51:44 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.34 2001-09-21 15:40:50 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.33  2001/09/10 15:51:44  cmc
+      #92059# Consider border widths in {im|ex}port of floating elements
+
       Revision 1.32  2001/09/05 10:16:19  cmc
       #91916# Improve size calculation of inline graphics to consider borders,shadows and spacing as word does
 

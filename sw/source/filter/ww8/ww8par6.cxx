@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
+ *  last change: $Author: cmc $ $Date: 2001-09-21 15:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ void SwWW8ImplReader::RemoveCols( SwPageDesc& rPageDesc, SwFmtCol*& rpCol )
 
 
 BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
-    long nNettoWidth, BOOL bTestOnly )
+    USHORT nNettoWidth, BOOL bTestOnly )
 {
     if( nIniFlags & WW8FL_NO_COLS )         // ausgeschaltet
         return FALSE;
@@ -581,7 +581,7 @@ void SwWW8ImplReader::SetPage1( SwPageDesc* pPageDesc, SwFrmFmt &rFmt,
     if( !bIgnoreCols )
     {
         // 4. Spalten
-        SetCols( &rFmt, pSep, aSz.GetWidth() - nWWLe - nWWRi );
+        SetCols( &rFmt, pSep, (USHORT)(aSz.GetWidth() - nWWLe - nWWRi) );
     }
 }
 
@@ -820,7 +820,8 @@ void SwWW8ImplReader::SetPageBorder( SwPageDesc*    pPageDesc0,
                         }
                         else
                         {
-                            aBox.SetDistance( aLR.GetLeft(), BOX_LINE_LEFT );
+                            aBox.SetDistance( (USHORT)aLR.GetLeft(),
+                                BOX_LINE_LEFT );
                             aLR.SetLeft( 0 );
                         }
                         // Right
@@ -833,7 +834,8 @@ void SwWW8ImplReader::SetPageBorder( SwPageDesc*    pPageDesc0,
                         }
                         else
                         {
-                            aBox.SetDistance( aLR.GetRight(), BOX_LINE_RIGHT );
+                            aBox.SetDistance( (USHORT)aLR.GetRight(),
+                                BOX_LINE_RIGHT );
                             aLR.SetRight( 0 );
                         }
                         // Top
@@ -1284,13 +1286,14 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
             }
 
             // nachschauen, ob die nicht zu ignor. Attr. gleich sind
-            BOOL bEqual =    (bSectionHasATitlePage ==bLastSectionHadATitlePage)
+            BOOL bEqual = (bSectionHasATitlePage == bLastSectionHadATitlePage)
                           && (nCorrIhdt == nLastSectionCorrIhdt)
                           && (nCorrIhdt == (nCorrIhdt & nJustCopyHdFt))
-                          && (nNfcPgn   == nLastNfcPgn)
-                          && pSep->CompareSprms(pOtherMem,
-                                                nOtherSprmsLen,
-                                                &aIgnore);
+                          && (nNfcPgn   == nLastNfcPgn);
+
+            if (bEqual && nBreakCode) //Give continious breaks leniency.
+                bEqual = pSep->CompareSprms(pOtherMem,nOtherSprmsLen,&aIgnore);
+
             // Kopie der vorigen Attr. wieder freigeben
             delete pOtherMem;
 
@@ -1309,7 +1312,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                         long nLeft  = rLR.GetTxtLeft();
                         long nRight = rLR.GetRight();
                         SetCols( pNewSection->GetFmt(), pSep,
-                            nWidth - nLeft - nRight );
+                            (USHORT)(nWidth - nLeft - nRight) );
                     }
                     break;
                 case 1:
@@ -1816,7 +1819,10 @@ void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
         }
     }
 
-    // Map to our border types.
+    // Map to our border types, we should use of one equal line
+    // thickness, or one of smaller thickness. If too small we
+    // can make the defecit up in additional white space or
+    // object size
     switch( nIdx )
     {
         // First the single lines
@@ -1832,19 +1838,19 @@ void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
         // or if in necessary by a double line
         case 24:
         case 25:
-            if( nLineThickness < 11)
+            if( nLineThickness < 20)
                 nIdx = 0;//   1 Twip for us
-            else if( nLineThickness < 46)
+            else if( nLineThickness < 50)
                 nIdx = 1;//  20 Twips
-            else if( nLineThickness < 66)
+            else if( nLineThickness < 80)
                 nIdx = 2;//  50
-            else if( nLineThickness < 91)
+            else if( nLineThickness < 100)
                 nIdx = 3;//  80
-            else if( nLineThickness < 126)
+            else if( nLineThickness < 150)
                 nIdx = 4;// 100
             // Hack: for the quite thick lines we must paint double lines,
             // because our singles lines don't come thicker than 5 points.
-            else if( nLineThickness < 166)
+            else if( nLineThickness < 180)
                 nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+2;// 150
             else
                 nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+5;// 180
@@ -2372,13 +2378,9 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8RStyle* pStyle )
 
 
 
-WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
-                            SwWW8ImplReader& rIo,
-                            WW8FlyPara& rWW,
-                            short nPgTop,
-                            short nPgLeft,
-                            short nPgWidth,
-                            INT32 nIniFlyDx, INT32 nIniFlyDy )
+WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
+    short nPgTop, short nPgLeft, short nPgWidth, INT32 nIniFlyDx,
+    INT32 nIniFlyDy )
 {
     memset( this, 0, sizeof( WW8SwFlyPara ) );  // Initialisieren
     nNewNettoWidth = MINFLY;                    // Minimum
@@ -2570,6 +2572,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     FlySecur1( nWidth, nLeMgn, nRiMgn, rWW.bBorderLines );          // passen Raender ?
     FlySecur1( nHeight, nUpMgn, nLoMgn, rWW.bBorderLines );
 
+#if 0
             // Seitenrand-Bindung: Wenn die Position mit der jetzigen
             // SW-Bindung nicht zu erreichen ist, dann waehle andere Bindung
             // Absatz-Bindung: Nicht anfassen
@@ -2583,6 +2586,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
         if( nXPos < nPgLeft )           // echter neg. X-Wert
             eHRel = eVRel = REL_PG_FRAME;
     }
+#endif
 
     /*
         // eine Writer-Kuriositaet: auch wenn Abstaende vom Seitenrand
@@ -2657,9 +2661,9 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, /*const*/ WW8FlyPara* pFW,
             // der 5. Parameter ist immer 0, daher geht beim Cast nix verloren
 
     if( !bGraf )
-    {           // Textrahmen->Anker und Groesse einstellen
-        Put( SwFmtAnchor( pFS->eAnchor, 1 ) );
-                                            // Groesse einstellen
+    {
+        Put( SwFmtAnchor(pFS->eAnchor) );
+        // Groesse einstellen
         Put( SwFmtFrmSize( pFS->eHeightFix,
             pFS->nWidth+aSizeArray[WW8_LEFT]+aSizeArray[WW8_RIGHT],
             pFS->nHeight+aSizeArray[WW8_TOP]+aSizeArray[WW8_BOT] ));
@@ -2753,9 +2757,43 @@ void WW8DupProperties::Insert(const SwPosition &rPos)
     }
 }
 
+void WW8AnchoringProperties::Remove(const SwPosition &rPos,SwWW8ImplReader &rR,
+    SwFltControlStack *pCtrlStck)
+{
+    //Remove anchors from stack so they will not be closed inside textboxes
+    //will be reinserted after textbox has ended.
+    if (!pStack)
+    {
+        pStack = new SwFltControlStack(&rR.GetDoc(),rR.GetFieldFlags());
+        if (!pStack)
+            return;
+    }
+    for (USHORT nI = pCtrlStck->Count(); nI > 0; nI--)
+    {
+        SwFltStackEntry* pEntry = new SwFltStackEntry(*(*pCtrlStck)[ nI-1 ]);
+        if (pEntry->pAttr->Which() == RES_FLTR_ANCHOR)
+        {
+            pStack->Insert(pEntry,pStack->Count());
+            pCtrlStck->DeleteAndDestroy( nI-1 );
+        }
+    }
+}
+
+void WW8AnchoringProperties::Insert(SwFltControlStack *pCtrlStck)
+{
+    //reinsert anchors at their original position
+    for (USHORT nI = pStack ? pStack->Count() : 0; nI > 0; nI--)
+    {
+        SwFltStackEntry* pEntry = new SwFltStackEntry(*(*pStack)[ nI-1 ]);
+        pCtrlStck->Insert(pEntry,pCtrlStck->Count());
+        pStack->DeleteAndDestroy( nI-1 );
+    }
+}
+
 BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo )
 {
-    pWFlyPara = new WW8FlyPara ( bVer67, bNowStyleApo  ?  pCollA[nAktColl].pWWFly : 0 );
+    pWFlyPara = new WW8FlyPara ( bVer67, bNowStyleApo  ?
+        pCollA[nAktColl].pWWFly : 0 );
 
     // APO-Parameter ermitteln und Test auf bGrafApo
     if( !pWFlyPara->ReadFull( pSprm29, this ) )
@@ -2765,53 +2803,44 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo )
     }
 
 
-    pSFlyPara = new WW8SwFlyPara( *pPaM,
-                                  *this,
-                                  *pWFlyPara,
-                                  nPgTop,
-                                  nPgLeft,
-                                  (nPgWidth - nPgRight - nPgLeft),
-                                  nIniFlyDx,
-                                  nIniFlyDy );
-        // nPg... nicht aus PageDesc, da bei Defaultraendern noch nicht gesetzt
+    pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara, nPgTop, nPgLeft,
+        (nPgWidth - nPgRight - nPgLeft), nIniFlyDx, nIniFlyDy );
 
     if( !pWFlyPara->bGrafApo )
     {
 
-        // Innerhalb des GrafApo muessen Textattribute
-        // ignoriert werden, da sie sonst auf den
-        // folgenden Zeilen landen.
-        // Der Rahmen wird nur eingefuegt, wenn er
-        // *nicht* nur zum Positionieren einer einzelnen
-        // Grafik dient.
-        // Ist es ein Grafik-Rahmen, dann werden
-        // pWFlyPara und pSFlyPara behalten und die
-        // daraus resultierenden Attribute beim
-        // Einfuegen der Grafik auf die Grafik angewendet.
+        // Innerhalb des GrafApo muessen Textattribute ignoriert werden, da
+        // sie sonst auf den folgenden Zeilen landen.  Der Rahmen wird nur
+        // eingefuegt, wenn er *nicht* nur zum Positionieren einer einzelnen
+        // Grafik dient.  Ist es ein Grafik-Rahmen, dann werden pWFlyPara und
+        // pSFlyPara behalten und die
+        // daraus resultierenden Attribute beim Einfuegen der Grafik auf die
+        // Grafik angewendet.
 
-//      SwAttrSet aFlySet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
-//      SetApoCharacteristics( aFlySet, pWFlyPara, pSFlyPara );
         WW8FlySet aFlySet( *this, pWFlyPara, pSFlyPara, FALSE );
-
         pSFlyPara->pFlyFmt = rDoc.MakeFlySection( pSFlyPara->eAnchor,
-                                              pPaM->GetPoint(), &aFlySet );
-        if( FLY_IN_CNTNT != pSFlyPara->eAnchor )
-            pCtrlStck->NewAttr( *pPaM->GetPoint(), SwFltAnchor( pSFlyPara->pFlyFmt ) );
+            pPaM->GetPoint(), &aFlySet );
 
-                                // merke Pos im Haupttext
+        if( FLY_IN_CNTNT != pSFlyPara->eAnchor )
+        {
+            pCtrlStck->NewAttr( *pPaM->GetPoint(),
+                SwFltAnchor( pSFlyPara->pFlyFmt ) );
+        }
+
+        // merke Pos im Haupttext
         pSFlyPara->pMainTextPos = new SwPosition( *pPaM->GetPoint() );
         nLastFlyNode = pSFlyPara->pMainTextPos->nNode.GetIndex();
 
-                                // Alle Attribute schliessen, da sonst
-                                // Attribute entstehen koennen, die
-                                // in Flys reinragen
-
+        //remove fltanchors, otherwise they will be closed inside the
+        //frame, which makes no sense, restore them after the frame is
+        //closed
+        pSFlyPara->aAnchoring.Remove(*pPaM->GetPoint(),*this,pCtrlStck);
         WW8DupProperties aDup(rDoc,pCtrlStck);
 
         pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
         pEndStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
 
-                                // Setze Pam in den FlyFrame
+        // Setze Pam in den FlyFrame
         const SwFmtCntnt& rCntnt = pSFlyPara->pFlyFmt->GetCntnt();
         ASSERT( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
         pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
@@ -2870,12 +2899,11 @@ void SwWW8ImplReader::StopApo()
             ASSERT( pWFlyPara, "StopApo: pWFlyPara ist 0" );
             return;
         }
-                                // Alle Attribute schliessen, da sonst
-                                // Attribute entstehen koennen, die
-                                // aus Flys rausragen
+
+        // Alle Attribute schliessen, da sonst Attribute entstehen koennen,
+        // die aus Flys rausragen
         WW8DupProperties aDup(rDoc,pCtrlStck);
         pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
-
         pEndStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
 
         /*
@@ -2947,6 +2975,7 @@ void SwWW8ImplReader::StopApo()
         *pPaM->GetPoint() = *pSFlyPara->pMainTextPos;
 
         aDup.Insert(*pPaM->GetPoint());
+        pSFlyPara->aAnchoring.Insert(pCtrlStck);
 
         DELETEZ( pSFlyPara->pMainTextPos );
 
@@ -5237,12 +5266,15 @@ short SwWW8ImplReader::ImportSprm( const BYTE* pPos, short nSprmsLen, USHORT nId
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.36 2001-09-10 15:51:44 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.37 2001-09-21 15:40:50 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.36  2001/09/10 15:51:44  cmc
+      #92059# Consider border widths in {im|ex}port of floating elements
+
       Revision 1.35  2001/09/05 10:16:19  cmc
       #91916# Improve size calculation of inline graphics to consider borders,shadows and spacing as word does
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-18 09:51:53 $
+ *  last change: $Author: cmc $ $Date: 2001-09-21 15:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ BOOL SwWW8ImplReader::ReadGrafStart( void* pData, short nDataSiz, WW8_DPHEAD* pH
         pNode_FLY_AT_CNTNT = &pPaM->GetPoint()->nNode.GetNode();
     }
 
-    pDrawFmt->SetAttr( SwFmtAnchor( eAnchor, 1 ) );
+    pDrawFmt->SetAttr( SwFmtAnchor(eAnchor) );
     pCtrlStck->NewAttr( *pPaM->GetPoint(), SwFltAnchor( pDrawFmt ) );
     pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_ANCHOR );
 
@@ -2673,6 +2673,8 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         // Box-0 erhaelt den Text fuer die ganze Kette!
         if( !pRecord->aTextId.nSequence )
         {
+            WW8AnchoringProperties aAnchoring;
+            aAnchoring.Remove(*pPaM->GetPoint(),*this,pCtrlStck);
             // rette Flags u.ae. und setze sie zurueck
             WW8ReaderSave aSave( this );
             // setze Pam in den FlyFrame
@@ -2699,6 +2701,7 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
                 EmbeddedFlyFrameSizeLock(aStart,pRetFrmFmt);
 
             aSave.Restore( this );
+            aAnchoring.Insert(pCtrlStck);
         }
     }
     return pRetFrmFmt;
@@ -2888,11 +2891,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.35 2001-09-18 09:51:53 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.36 2001-09-21 15:40:50 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.35  2001/09/18 09:51:53  cmc
+      #92104# displaced escher groups fixes
+
       Revision 1.34  2001/09/10 15:51:44  cmc
       #92059# Consider border widths in {im|ex}port of floating elements
 
