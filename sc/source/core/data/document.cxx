@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:34:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4602,7 +4602,7 @@ void ScDocument::RestorePrintRanges( const ScPrintRangeSaver& rSaver )
 
 BOOL ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
 {
-    //  Die Seitennummern-Zaehlung fängt bei einer Tabelle neu an, wenn eine
+    //  Die Seitennummern-Zaehlung faengt bei einer Tabelle neu an, wenn eine
     //  andere Vorlage als bei der vorherigen gesetzt ist (nur Namen vergleichen)
     //  und eine Seitennummer angegeben ist (nicht 0)
 
