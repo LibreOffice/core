@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:48 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,6 @@
 #include <services/urltransformer.hxx>
 #endif
 
-#ifndef __FRAMEWORK_SERVICES_PLUGINFRAME_HXX_
-#include <services/pluginframe.hxx>
-#endif
-
 #ifndef __FRAMEWORK_SERVICES_DESKTOP_HXX_
 #include <services/desktop.hxx>
 #endif
@@ -150,7 +146,6 @@
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
-                        COMPONENTINFO( ::framework::PlugInFrame                 )
                         COMPONENTINFO( ::framework::Desktop                     )
                         COMPONENTINFO( ::framework::Frame                       )
                         COMPONENTINFO( ::framework::DocumentProperties          )
@@ -166,7 +161,6 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
-                        IFFACTORY( ::framework::PlugInFrame                     )   else
                         IFFACTORY( ::framework::Desktop                         )   else
                         IFFACTORY( ::framework::Frame                           )   else
                         IFFACTORY( ::framework::DocumentProperties              )   else
