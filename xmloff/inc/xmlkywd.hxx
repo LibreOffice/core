@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-11 13:43:07 $
+ *  last change: $Author: mib $ $Date: 2001-01-15 11:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1192,6 +1192,7 @@ XML_CONSTASCII_ACTION( sXML_register_true, "register-true" );
 XML_CONSTASCII_ACTION( sXML_register_truth_ref_style_name, "register-truth-ref-style-name" );
 XML_CONSTASCII_ACTION( sXML_regression_type, "regression-type" );
 XML_CONSTASCII_ACTION( sXML_rel_column_width, "rel-column-width" );
+XML_CONSTASCII_ACTION( sXML_rel_height, "rel-height" );
 XML_CONSTASCII_ACTION( sXML_rel_width, "rel-width" );
 XML_CONSTASCII_ACTION( sXML_relative, "relative" ) ;
 XML_CONSTASCII_ACTION( sXML_relative_tab_stop_position, "relative-tab-stop-position" );
@@ -1233,6 +1234,8 @@ XML_CONSTASCII_ACTION( sXML_run_through, "run-through" );
 XML_CONSTASCII_ACTION( sXML_rx, "rx" );
 XML_CONSTASCII_ACTION( sXML_ry, "ry" );
 XML_CONSTASCII_ACTION( sXML_s, "s" );
+XML_CONSTASCII_ACTION( sXML_scale, "scale" );
+XML_CONSTASCII_ACTION( sXML_scale_min, "scale-min" );
 XML_CONSTASCII_ACTION( sXML_scale_text, "scale-text" );
 XML_CONSTASCII_ACTION( sXML_scale_to, "scale-to" );
 XML_CONSTASCII_ACTION( sXML_scale_to_pages, "scale-to-pages" );
