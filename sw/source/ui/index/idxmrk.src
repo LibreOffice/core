@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:45:16 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@
             Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~T)";\
             Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~T)";\
             Text[ chinese_simplified ] = "¾«È·ËÑÑ°";\
-            Text[ chinese_traditional ] = "ºëÚÌ´M§ä";\
+            Text[ chinese_traditional ] = "ºëÚÌ·j´M";\
             Text[ arabic ] = "ÈÍË ÏŞíŞ";\
             Text[ turkish ] = "BÜYÜK/küçük ~harf duyarlı";\
         };                                                                      \
@@ -1133,7 +1133,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Text[ japanese ] = "“ü—Í“ú";
         Text[ korean ] = "Ç×¸ñ µ¥ÀÌÅÍ";
         Text[ chinese_simplified ] = "ÌõÄ¿Êı¾İ";
-        Text[ chinese_traditional ] = "±ø¥Ø¼ÆÕu";
+        Text[ chinese_traditional ] = "±ø¥Ø¸ê®Æ";
         Text[ arabic ] = "ÈíÇäÇÊ ÇáÅÏÎÇá";
         Text[ turkish ] = "Giriş verileri";
         Text[ language_user1 ] = " ";
@@ -1230,7 +1230,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ japanese ] = "‚±‚ÌQl•¶Œ£‚Í‚±‚Ì•¶‘‚Ì•Ê‚ÌŒÂŠ‚É‚·‚Å‚Éo‚Ä‚«‚Ä‚¢‚Ü‚·B ";
     MESSAGE[ korean ] = "Âü°í¹®Çå Ç×¸ñÀº ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ¿Í ÇÔ²² ¹®¼­¿¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù. ";
     MESSAGE[ chinese_simplified ] = "ÎÄµµÄÚÒÑ¾­º¬ÓĞ¸½´ø²»Í¬Êı¾İµÄÄ¿Â¼ÌõÄ¿¡£ ";
-    MESSAGE[ chinese_traditional ] = "¦b¤å¥ó¤º¤w¸g§t¦³¤£¦P¼ÆÕuªº¥Ø¿ı¶µ¥Ø¡C ";
+    MESSAGE[ chinese_traditional ] = "¦b¤å¥ó¤º¤w¸g§t¦³¤£¦P¼Æ¾Úªº¥Ø¿ı¶µ¥Ø¡C ";
     MESSAGE[ arabic ] = "ÅÏÎÇá ÇáãÑÌÚ ãæÌæÏ ÈÇáİÚá İí ÇáãÓÊäÏ ÈÈíÇäÇÊ ãÎÊáİÉ. ";
     MESSAGE[ turkish ] = "Kaynakça girişi, farklı veriler ile belgede mevcut.";
 };
