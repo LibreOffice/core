@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 11:21:55 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 22:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #include <svx/svdobj.hxx>
 #endif
 #include <svx/unoprov.hxx>
+#ifndef _SVX_UNOSHAPE_HXX
+#include <svx/unoshape.hxx>
+#endif
 
 #include "unopback.hxx"
 #include "unohelp.hxx"
@@ -111,6 +114,19 @@ SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc /* = NULL */, Sdr
 
         if( pObj )
             mpSet->Put(pObj->GetItemSet());
+    }
+}
+
+SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc, const SfxItemSet* pSet ) throw()
+: maPropSet( ImplGetPageBackgroundPropertyMap() ), mpSet( NULL ), mpDoc( pDoc )
+{
+    if( pDoc )
+    {
+        StartListening( *pDoc );
+        mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILLRESERVED_LAST );
+
+        if( pSet )
+            mpSet->Put(*pSet);
     }
 }
 
@@ -226,7 +242,19 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
             if( !aSet.Count() )
                 aSet.Put( rPool.GetDefaultItem( pMap->nWID ) );
 
-            maPropSet.setPropertyValue( pMap, aValue, aSet );
+            if( pMap->nMemberId == MID_NAME && ( pMap->nWID == XATTR_FILLBITMAP || pMap->nWID == XATTR_FILLGRADIENT || pMap->nWID == XATTR_FILLHATCH || pMap->nWID == XATTR_FILLFLOATTRANSPARENCE ) )
+            {
+                OUString aName;
+                if(!(aValue >>= aName ))
+                    throw lang::IllegalArgumentException();
+
+                SvxShape::SetFillAttribute( pMap->nWID, aName, aSet );
+            }
+            else
+            {
+                maPropSet.setPropertyValue( pMap, aValue, aSet );
+            }
+
             mpSet->Put( aSet );
         }
         else

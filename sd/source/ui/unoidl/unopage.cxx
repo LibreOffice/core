@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 18:42:18 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 22:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
+#endif
+#ifndef _SFXSTYLE_HXX
+#include <svtools/style.hxx>
 #endif
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
@@ -1697,6 +1700,27 @@ void SdMasterPage::getBackground( uno::Any& rValue ) throw()
     }
     else
     {
+        SdDrawDocument* pDoc = (SdDrawDocument*)mpPage->GetModel();
+        SfxStyleSheetBasePool* pSSPool = pDoc->GetDocSh()->GetStyleSheetPool();
+        SfxStyleSheetBase* pStyleSheet = NULL;
+        if(pSSPool)
+        {
+            String aStr(SdResId(STR_PSEUDOSHEET_BACKGROUND));
+            pStyleSheet = pSSPool->Find( aStr, SFX_STYLE_FAMILY_PSEUDO);
+
+            if( pStyleSheet )
+            {
+                SfxItemSet aStyleSet( pStyleSheet->GetItemSet());
+                if( aStyleSet.Count() )
+                {
+                    uno::Reference< beans::XPropertySet >  xSet( new SdUnoPageBackground( pDoc, &aStyleSet ) );
+                    rValue <<= xSet;
+                    return;
+                }
+            }
+        }
+
+        // no stylesheet? try old fashion background rectangle
         SdrObject* pObj = NULL;
         if( mpPage->GetObjCount() >= 1 )
         {
@@ -1705,15 +1729,15 @@ void SdMasterPage::getBackground( uno::Any& rValue ) throw()
                 pObj = NULL;
         }
 
-        if( NULL == pObj )
-        {
-            rValue.clear();
-        }
-        else
+        if( pObj )
         {
             uno::Reference< beans::XPropertySet >  xSet( new SdUnoPageBackground( GetModel()->GetDoc(), pObj ) );
             rValue <<= xSet;
+            return;
         }
+
+
+        rValue.clear();
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-29 12:52:40 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 22:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ protected:
     const SfxItemPropertyMap* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
 public:
     SdUnoPageBackground( SdDrawDocument* pDoc = NULL, SdrObject* pObj = NULL ) throw();
+    SdUnoPageBackground( SdDrawDocument* pDoc, const SfxItemSet* pSet ) throw();
     ~SdUnoPageBackground() throw();
 
     // internal
