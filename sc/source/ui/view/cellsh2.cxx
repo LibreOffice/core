@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 10:54:16 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,92 +66,6 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------
-
-#define _BIGINT_HXX
-//#define _BASEDLGS_HXX ***
-#define _CACHESTR_HXX
-//#define _CLIP_HXX
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _DLGCFG_HXX
-#define _DYNARR_HXX
-#define _EXTATTR_HXX
-//#define _FILTER_HXX
-#define _FONTDLG_HXX
-#define _MACRODLG_HXX
-#define _MODALDLG_HXX
-#define _MOREBUTTON_HXX
-#define _OUTLINER_HXX
-#define _PASSWD_HXX
-//#define _PRNDLG_HXX
-#define _POLY_HXX
-#define _PRVWIN_HXX
-#define _QUEUE_HXX
-//#define _RULER_HXX
-#define _SCRWIN_HXX
-#define _SOUND_HXX
-#define _STACK_HXX
-//#define _STATUS_HXX ***
-#define _STDMENU_HXX
-#define _TABBAR_HXX
-//#define _TREELIST_HXX
-#define _SFXBASIC_HXX
-#define _SFX_DOCFILE_HXX
-//#define _SFX_DOCFILT_HXX
-#define _SFX_DOCINF_HXX
-#define _SFX_DOCSH_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXSTBMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXFILEDLG_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXIPFRM_HXX
-#define _SFX_MACRO_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXMULTISEL_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXTBXCTRL_HXX
-
-#define _SI_DLL_HXX
-#define _SIDLL_HXX
-#define _SI_NOITEMS
-#define _SI_NOOTHERFORMS
-#define _SI_NOSBXCONTROLS
-#define _SINOSBXCONTROLS
-#define _SI_NODRW         //
-#define _SI_NOCONTROL
-
-#define _SVBOXITM_HXX
-//#define _SVCONTNR_HXX
-#define _SVDATTR_HXX
-#define _SVDXOUT_HXX
-#define _SVDEC_HXX
-#define _SVDIO_HXX
-#define _SVDLAYER_HXX
-#define _SVDRAG_HXX
-#define _SVINCVW_HXX
-#define _SV_MULTISEL_HXX
-#define _SVRTV_HXX
-#define _SVTABBX_HXX
-
-
-#define _SVX_DAILDLL_HXX
-#define _SVX_HYPHEN_HXX
-#define _SVX_IMPGRF_HXX
-#define _SVX_OPTITEMS_HXX
-#define _SVX_OPTGERL_HXX
-#define _SVX_OPTSAVE_HXX
-#define _SVX_OPTSPELL_HXX
-#define _SVX_OPTPATH_HXX
-#define _SVX_OPTLINGU_HXX
-#define _SVX_RULER_HXX
-#define _SVX_RULRITEM_HXX
-#define _SVX_SPLWRAP_HXX
-#define _SVX_SPLDLG_HXX
-#define _SVX_THESDLG_HXX
-
 
 // INCLUDE ---------------------------------------------------------------
 
