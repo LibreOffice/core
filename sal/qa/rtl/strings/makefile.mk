@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 16:43:18 $
+#   last change: $Author: kz $ $Date: 2004-02-26 13:37:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ ENABLE_EXCEPTIONS := TRUE
 
 SHL1TARGET := $(TARGET)
 SHL1OBJS := \
+    $(SLO)$/test_oustringbuffer_utf32.obj \
     $(SLO)$/test_oustring_compare.obj \
     $(SLO)$/test_oustring_convert.obj \
     $(SLO)$/test_oustring_noadditional.obj
