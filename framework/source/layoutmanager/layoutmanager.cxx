@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:57:21 $
+ *  last change: $Author: rt $ $Date: 2005-02-09 10:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3451,7 +3451,18 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
         {
             /* SAFE AREA ----------------------------------------------------------------------------------------------- */
             ReadGuard aReadLock( m_aLock );
-            m_aAsyncLayoutTimer.Start();
+
+            Window*         pWindow( ((VclWindowEvent*)pEvent)->GetWindow() );
+            ToolBox*        pToolBox( 0 );
+            rtl::OUString   aToolbarName;
+
+            if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+            {
+                pToolBox = (ToolBox *)pWindow;
+                aToolbarName = pToolBox->GetSmartHelpId().GetStr();
+                if ( aToolbarName.getLength() > 0 )
+                    m_aAsyncLayoutTimer.Start();
+            }
             /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         }
     }
