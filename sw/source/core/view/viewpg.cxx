@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-08 14:32:45 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -938,7 +938,7 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
             pFldType->Modify( &aHnt, 0);
             CalcPagesForPrint( (USHORT)aPages.Max() );
         }
-        delete aPageArr;
+        delete[] aPageArr;
 
         if( bStartJob )
             rOptions.bJobStartet = TRUE;
@@ -1317,6 +1317,9 @@ Size ViewShell::GetPagePreViewPrtMaxSize() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2002/04/08 14:32:45  ama
+      Fix #98404#: Border and shadow for pages
+
       Revision 1.4  2002/03/15 07:33:34  os
       #97978# page preview accessiblity implemented
 

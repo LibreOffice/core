@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 13:41:38 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,8 +291,8 @@ CompareData::CompareData()
 
 CompareData::~CompareData()
 {
-    delete pIndex;
-    delete pChangedFlag;
+    delete[] pIndex;
+    delete[] pChangedFlag;
 }
 
 void CompareData::SetIndex( ULONG nLine, ULONG nIndex )
@@ -454,8 +454,8 @@ static const ULONG primes[] =
 
 Hash::~Hash()
 {
-    delete pHashArr;
-    delete pDataArr;
+    delete[] pHashArr;
+    delete[] pDataArr;
 }
 
 void Hash::CalcHashValue( CompareData& rData )

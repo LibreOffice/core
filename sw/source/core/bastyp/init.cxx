@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-08 08:43:03 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,10 +1033,10 @@ void _FinitCore()
     ::ClearFEShellTabCols();
 
     delete SwIndexReg::pEmptyIndexArray;
-    delete SwAttrPool::pVersionMap1;
-    delete SwAttrPool::pVersionMap2;
-    delete SwAttrPool::pVersionMap3;
-    delete SwAttrPool::pVersionMap4;
+    delete[] SwAttrPool::pVersionMap1;
+    delete[] SwAttrPool::pVersionMap2;
+    delete[] SwAttrPool::pVersionMap3;
+    delete[] SwAttrPool::pVersionMap4;
 
     for ( USHORT i = 0; i < pGlobalOLEExcludeList->Count(); ++i )
         delete (SvGlobalName*)(*pGlobalOLEExcludeList)[i];

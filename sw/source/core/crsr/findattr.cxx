@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:37:59 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,8 +314,8 @@ SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, int bFwd,
 
 SwAttrCheckArr::~SwAttrCheckArr()
 {
-    delete (void*) pFndArr;
-    delete (void*) pStackArr;
+    delete[] (void*) pFndArr;
+    delete[] (void*) pStackArr;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:36:01 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,7 +1202,7 @@ SwStyleProperties_Impl::~SwStyleProperties_Impl()
 {
     for ( sal_uInt16 i =0 ; i < nArrLen; i++ )
         delete pAnyArr[i];
-    delete pAnyArr;
+    delete[] pAnyArr;
 }
 
 //--------------------------------------------------------------------

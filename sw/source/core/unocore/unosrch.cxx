@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:25:04 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ SwSearchProperties_Impl::~SwSearchProperties_Impl()
 {
     for(sal_uInt16 i = 0; i < nArrLen; i++)
         delete pValueArr[i];
-    delete pValueArr;
+    delete[] pValueArr;
 }
 /* -----------------23.06.99 13:09-------------------
 
@@ -824,6 +824,9 @@ void SwXTextSearch::FillSearchOptions( SearchOptions& rSearchOpt ) const
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/11/28 20:25:04  mtg
+    #95176# throw correct exceptions at the correct times
+
     Revision 1.3  2001/09/03 15:27:55  mtg
     #88673# fix complete word searching
 

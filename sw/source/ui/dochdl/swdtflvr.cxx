@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-14 11:07:33 $
+ *  last change: $Author: os $ $Date: 2002-05-13 12:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3457,7 +3457,7 @@ BOOL SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     pMem[ nLen++ ] = 0;
 
     rStrm.Write( pMem, nLen );
-    delete pMem;
+    delete[] pMem;
 
     if( bDelBookmrk )
     {
