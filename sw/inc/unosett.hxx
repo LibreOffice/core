@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-10-18 08:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,14 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx> // helper for implementations
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -203,11 +206,12 @@ public:
 /* -----------------25.05.98 08:21-------------------
  *
  * --------------------------------------------------*/
-class SwXNumberingRules : public cppu::WeakAggImplHelper4
+class SwXNumberingRules : public cppu::WeakAggImplHelper5
 <
     ::com::sun::star::container::XIndexReplace,
     ::com::sun::star::lang::XUnoTunnel,
     ::com::sun::star::beans::XPropertySet,
+    ::com::sun::star::container::XNamed,
     ::com::sun::star::lang::XServiceInfo
 >,
     public SwClient
@@ -219,7 +223,7 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper4
     SwDocShell*                 pDocShell; //nur, wenn als ChapterNumbering verwendet
     SwNumRule*                  pNumRule;
     const SfxItemPropertyMap*   _pMap;
-
+    sal_Bool                    bOwnNumRuleCreated;
     static String               sInvalidStyle;
 
 public:
@@ -227,7 +231,6 @@ public:
     SwXNumberingRules(SwDocShell& rDocSh);  // chapter numbering
     SwXNumberingRules(const SwNumRule& rRule); // NumRule for paragraphs, numbering styles
     SwXNumberingRules(SwDoc& rDoc); //create a new instance
-    SwXNumberingRules(SwDoc& rDoc, const String& rName); //XML import
     virtual ~SwXNumberingRules();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & SwXNumberingRules::getUnoTunnelId();
@@ -255,6 +258,10 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
+    //XNamed
+    virtual rtl::OUString SAL_CALL getName(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setName(const rtl::OUString& Name_) throw( ::com::sun::star::uno::RuntimeException );
+
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
@@ -274,6 +281,7 @@ public:
 
     static const String&    GetInvalidStyle();
     void    Invalidate()    {pDocShell = 0;}
+    const String&           GetCreatedNumRuleName() const{return sCreatedNumRuleName; }
 };
 /*-----------------12.02.98 08:27-------------------
 
