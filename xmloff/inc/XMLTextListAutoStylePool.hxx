@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextListAutoStylePool.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 18:49:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,18 @@
 #ifndef _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
 #define _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_XMLOFF_DLLAPI_H
+#include "xmloff/dllapi.h"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -80,7 +92,7 @@ class XMLTextListAutoStylePoolNames_Impl;
 class XMLTextListAutoStylePoolEntry_Impl;
 class SvXMLExport;
 
-class XMLTextListAutoStylePool
+class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
 {
     SvXMLExport& rExport;
 
@@ -94,7 +106,8 @@ class XMLTextListAutoStylePool
         the NumRules don't have names */
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > mxNumRuleCompare;
 
-    sal_uInt32 Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const;
+    SAL_DLLPRIVATE sal_uInt32 Find( XMLTextListAutoStylePoolEntry_Impl* pEntry )
+        const;
 public:
 
     XMLTextListAutoStylePool( SvXMLExport& rExport );
