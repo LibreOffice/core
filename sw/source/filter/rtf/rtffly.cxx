@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-25 16:42:13 $
+ *  last change: $Author: cmc $ $Date: 2002-07-16 11:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         InsertPara();
 
     // RTF-Defaults setzen:
-    SwFmtAnchor aAnchor( FLY_PAGE, 1 );
+    SwFmtAnchor aAnchor(FLY_PAGE);
     SwFmtHoriOrient aHori( 0, HORI_LEFT, /*FRAME*/REL_PG_PRTAREA );
     SwFmtVertOrient aVert( 0, VERT_TOP, REL_PG_PRTAREA );
     SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP );
