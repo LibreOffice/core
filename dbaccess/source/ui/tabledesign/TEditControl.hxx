@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:56:01 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,21 @@ namespace dbaui
         void SetEditMode( EEditMode eMode ){ eEditMode = eMode; }
         EEditMode GetEditMode(){ return eEditMode; }
         BOOL SaveData(long nRow, USHORT nColumnId);
+        /** AdjustFieldDescription set the needed values for the description
+            @param  _pFieldDesc     the field description where to set the values
+            @param  _rMultiSel      contains the postions which changed for undo/redo
+            @param  _nPos           the current position
+            @param  _bSet           should a key be set
+            @param  _bPrimaryKey    which value should the pkey have
+        */
+        void AdjustFieldDescription( OFieldDescription* _pFieldDesc,
+                                     MultiSelection& _rMultiSel,
+                                     sal_Int32 _nPos,
+                                     sal_Bool _bSet,
+                                     sal_Bool _bPrimaryKey);
+        /** InvalidateFeatures invalidates the slots SID_UNDO | SID_REDO | SID_SAVEDOC
+        */
+        void InvalidateFeatures();
     };
 }
 #endif // DBAUI_TABLEEDITORCONTROL_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-22 07:21:12 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,23 +280,9 @@ void OWizTypeSelect::Reset()
 void OWizTypeSelect::ActivatePage( )
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
-
-    while(m_lbColumnNames.GetEntryCount())
-        m_lbColumnNames.RemoveEntry(0);
-    m_lbColumnNames.Clear();
-
-    const ODatabaseExport::TColumnVector* pDestColumns = m_pParent->getDestVector();
-    ODatabaseExport::TColumnVector::const_iterator aIter = pDestColumns->begin();
-    for(;aIter != pDestColumns->end();++aIter)
-    {
-        sal_uInt16 nPos;
-        if((*aIter)->second->IsPrimaryKey())
-            nPos = m_lbColumnNames.InsertEntry((*aIter)->first, m_imgPKey );
-        else
-            nPos = m_lbColumnNames.InsertEntry((*aIter)->first);
-
-        m_lbColumnNames.SetEntryData(nPos,(*aIter)->second);
-    }
+    sal_Bool bOldFirstTime = m_bFirstTime;
+    Reset();
+    m_bFirstTime = bOldFirstTime;
 
     m_lbColumnNames.SelectEntryPos(0);
     m_lbColumnNames.GetSelectHdl().Call(&m_lbColumnNames);
@@ -310,20 +296,10 @@ sal_Bool OWizTypeSelect::LeavePage()
 //------------------------------------------------------------------------------
 void OWizTypeSelect::EnableAuto(sal_Bool bEnable)
 {
-    if(bEnable)
-    {
-        m_ftAuto.Show();
-        m_etAuto.Show();
-        m_pbAuto.Show();
-        m_flAutoType.Show();
-    }
-    else
-    {
-        m_ftAuto.Hide();
-        m_etAuto.Hide();
-        m_pbAuto.Hide();
-        m_flAutoType.Hide();
-    }
+    m_ftAuto.Show(bEnable);
+    m_etAuto.Show(bEnable);
+    m_pbAuto.Show(bEnable);
+    m_flAutoType.Show(bEnable);
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, pButton )
@@ -338,13 +314,30 @@ IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, pButton )
 //------------------------------------------------------------------------
 sal_Bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 {
-    for(sal_uInt16 j=0;m_bPKey && j<GetSelectEntryCount();++j)
+    sal_uInt16 nCount = GetSelectEntryCount();
+    for(sal_uInt16 j=0;m_bPKey && j < nCount;++j)
     {
         OFieldDescription* pField = static_cast<OFieldDescription*>(GetEntryData(GetSelectEntryPos(j)));
-        if(!pField || pField->IsPrimaryKey())
+        if(!pField || pField->getTypeInfo()->nSearchType == ColumnSearch::NONE)
             break;
     }
-    return j == GetSelectEntryCount();
+    return j == nCount;
+}
+// -----------------------------------------------------------------------------
+void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr,sal_uInt16 _nPos,sal_Bool _bSet)
+{
+    String sColumnName = GetEntry(_nPos);
+    RemoveEntry(_nPos);
+    _pFieldDescr->SetPrimaryKey(_bSet);
+    _pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
+    if( _bSet )
+        InsertEntry(sColumnName,((OWizTypeSelect*)GetParent())->m_imgPKey,_nPos);
+    else if( _pFieldDescr->getTypeInfo()->bNullable )
+    {
+        _pFieldDescr->SetDefaultValue(String());
+        InsertEntry(sColumnName,_nPos);
+    }
+    SetEntryData(_nPos,_pFieldDescr);
 }
 //------------------------------------------------------------------------
 long OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
@@ -377,37 +370,20 @@ long OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             {
                 case SID_TABLEDESIGN_TABED_PRIMARYKEY:
                 {
-                    OFieldDescription* pField = static_cast<OFieldDescription*>(GetEntryData(GetSelectEntryPos()));
-                    if(!pField)
-                        break;
-
-                    String aColumnName;
-                    for(sal_uInt16 j=0;j<GetEntryCount();++j)
+                    String sColumnName;
+                    sal_uInt16 nCount = GetEntryCount();
+                    for(sal_uInt16 j = 0 ; j < nCount ; ++j)
                     {
-                        if(!IsEntryPosSelected(j))
+                        OFieldDescription* pFieldDescr = static_cast<OFieldDescription*>(GetEntryData(j));
+                        if( pFieldDescr )
                         {
-                            OFieldDescription* pOld = static_cast<OFieldDescription*>(GetEntryData(j));
-                            pOld->SetPrimaryKey(sal_False);
-                            aColumnName = GetEntry(j);
-                            RemoveEntry(j);
-                            InsertEntry(aColumnName,j);
-                            SetEntryData(j,pOld);
-                        }
-                        else
-                        {
-                            aColumnName = GetEntry(j);
-                            OFieldDescription* pNewHold = static_cast<OFieldDescription*>(GetEntryData(j));
-                            RemoveEntry(j);
-                            pNewHold->SetPrimaryKey(!m_bPKey);
-                            if(m_bPKey)
-                                InsertEntry(aColumnName,j);
-                            else
+                            if(pFieldDescr->IsPrimaryKey() && !IsEntryPosSelected(j))
+                                setPrimaryKey(pFieldDescr,j);
+                            else if(IsEntryPosSelected(j))
                             {
-                                pNewHold->SetIsNullable(ColumnValue::NO_NULLS);
-                                InsertEntry(aColumnName,((OWizTypeSelect*)GetParent())->m_imgPKey,j);
+                                setPrimaryKey(pFieldDescr,j,!pFieldDescr->IsPrimaryKey());
+                                SelectEntryPos(j);
                             }
-                            SetEntryData(j,pNewHold);
-                            SelectEntryPos(j);
                         }
                     }
                     GetSelectHdl().Call(this);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:42:19 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,6 +406,13 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         aMsg.Execute();
         return sal_False;
     }
+
+    // check if a column exists
+    // TODO
+//  ::std::find_if(m_vRowList.begin(),m_vRowList.end(),
+//                      ::std::bind2nd(::std::not(::std::equal<OTableRow*>()),NULL));
+
+    ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
 
     Reference<XNameAccess> xTables;
     ::rtl::OUString sCatalog, sSchema;

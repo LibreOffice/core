@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:06:52 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef DBAUI_CONNECTIONLINE_HXX
+#include "ConnectionLine.hxx"
 #endif
 
 using namespace dbaui;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-21 15:24:35 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,7 @@ void OTableEditorCtrl::UpdateAll()
     RowRemoved(0, GetRowCount(), sal_False);
     m_nDataPos = 0;
 
-    GetView()->getController()->InvalidateFeature(SID_UNDO);
-    GetView()->getController()->InvalidateFeature(SID_REDO);
-    GetView()->getController()->InvalidateFeature(SID_SAVEDOC);
+    InvalidateFeatures();
     Invalidate();
 }
 //==================================================================
@@ -833,9 +831,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     //////////////////////////////////////////////////////////////////////
     // Das ModifyFlag setzen
     GetView()->getController()->setModified( sal_True );
-    GetView()->getController()->InvalidateFeature(SID_SAVEDOC);
-    GetView()->getController()->InvalidateFeature(SID_UNDO);
-    GetView()->getController()->InvalidateFeature(SID_REDO);
+    InvalidateFeatures();
 }
 
 //------------------------------------------------------------------------------
@@ -844,26 +840,25 @@ void OTableEditorCtrl::CellModified()
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     CellModified( GetCurRow(), GetCurColumnId() );
 }
-
+// -----------------------------------------------------------------------------
+void OTableEditorCtrl::InvalidateFeatures()
+{
+    GetView()->getController()->InvalidateFeature(SID_UNDO);
+    GetView()->getController()->InvalidateFeature(SID_REDO);
+    GetView()->getController()->InvalidateFeature(SID_SAVEDOC);
+}
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::Undo()
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
-    GetView()->getController()->InvalidateFeature(SID_UNDO);
-    GetView()->getController()->InvalidateFeature(SID_REDO);
-    GetView()->getController()->InvalidateFeature(SID_SAVEDOC);
+    InvalidateFeatures();
 }
-
-
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::Redo()
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-
-    GetView()->getController()->InvalidateFeature(SID_UNDO);
-    GetView()->getController()->InvalidateFeature(SID_REDO);
-    GetView()->getController()->InvalidateFeature(SID_SAVEDOC);
+    InvalidateFeatures();
 }
 
 //------------------------------------------------------------------------------
@@ -880,6 +875,7 @@ void OTableEditorCtrl::CopyRows()
     OTableRow* pClipboardRow;
     OTableRow* pRow;
     ::std::vector<OTableRow*> vClipboardList;
+    vClipboardList.reserve(GetSelectRowCount());
 
     for( long nIndex=FirstSelectedRow(); nIndex>=0; nIndex=NextSelectedRow() )
     {
@@ -887,15 +883,11 @@ void OTableEditorCtrl::CopyRows()
         pClipboardRow = new OTableRow( *pRow );
         vClipboardList.push_back( pClipboardRow);
     }
-    if(vClipboardList.size())
+    if(!vClipboardList.empty())
     {
         OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
         Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
-#if SUPD<631
-        pData->CopyToClipboard();
-#else
         pData->CopyToClipboard(GetParent());
-#endif
     }
 }
 
@@ -938,11 +930,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
     ::std::vector< OTableRow*> vInsertedUndoRedoRows; // need for undo/redo handling
     //////////////////////////////////////////////////////////////////////
     // get rows from clipboard
-#if SUPD<631
-    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
-#else
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
-#endif
     if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED))
     {
         SotStorageStreamRef aStreamRef;
@@ -956,6 +944,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
             OTableRow* pRow;
             sal_Int32 nSize = 0;
             (*aStreamRef) >> nSize;
+            vInsertedUndoRedoRows.reserve(nSize);
             for(sal_Int32 i=0;i < nSize;++i)
             {
                 pRow = new OTableRow();
@@ -985,8 +974,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
     // Undo-Action erzeugen
     GetUndoManager()->AddUndoAction( new OTableEditorInsUndoAct(this, nRow,vInsertedUndoRedoRows) );
     GetView()->getController()->setModified( sal_True );
-    GetView()->getController()->InvalidateFeature(SID_UNDO);
-    GetView()->getController()->InvalidateFeature(SID_REDO);
+    InvalidateFeatures();
 }
 
 //------------------------------------------------------------------------------
@@ -1032,8 +1020,7 @@ void OTableEditorCtrl::DeleteRows()
     ActivateCell();
     pDescrWin->DisplayData( pActRow->GetActFieldDescr() );
     GetView()->getController()->setModified( sal_True );
-    GetView()->getController()->InvalidateFeature(SID_UNDO);
-    GetView()->getController()->InvalidateFeature(SID_REDO);
+    InvalidateFeatures();
 }
 
 //------------------------------------------------------------------------------
@@ -1054,8 +1041,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     RowInserted( nRow, nInsertRows, sal_True );
 
     GetView()->getController()->setModified( sal_True );
-    GetView()->getController()->InvalidateFeature(SID_UNDO);
-    GetView()->getController()->InvalidateFeature(SID_REDO);
+    InvalidateFeatures();
 }
 
 //------------------------------------------------------------------------------
@@ -1188,7 +1174,7 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const String& _rNe
         case FIELD_PROPERTY_AUTOINC:
             {
                 String strYes(ModuleRes(STR_VALUE_YES));
-                String strNo(ModuleRes(STR_VALUE_NO));
+                //  String strNo(ModuleRes(STR_VALUE_NO));
                 pFieldDescr->SetAutoIncrement(_rNewData.Equals(strYes));
             }
             break;
@@ -1664,7 +1650,26 @@ IMPL_LINK( OTableEditorCtrl, DelayedInsNewRows, void*, EMPTYTAG )
 
     return 0;
 }
+// -----------------------------------------------------------------------------
+void OTableEditorCtrl::AdjustFieldDescription(OFieldDescription* _pFieldDesc,
+                                         MultiSelection& _rMultiSel,
+                                         sal_Int32 _nPos,
+                                         sal_Bool _bSet,
+                                         sal_Bool _bPrimaryKey)
+{
+    _pFieldDesc->SetPrimaryKey( _bPrimaryKey );
+    if(!_bSet && _pFieldDesc->getTypeInfo()->bNullable)
+    {
+        _pFieldDesc->SetIsNullable(ColumnValue::NO_NULLS);
+        _pFieldDesc->SetDefaultValue(String());
+    }
+    //////////////////////////////////////////////////////////////////////
+    // update field description
+    pDescrWin->DisplayData(_pFieldDesc);
 
+    _rMultiSel.Insert( _nPos );
+    _rMultiSel.Select( _nPos );
+}
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
 {
@@ -1681,19 +1686,8 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
         OFieldDescription *pFieldDescr = (*aIter)->GetActFieldDescr();
         if( pFieldDescr && (*aIter)->IsPrimaryKey() )
         {
-            (*aIter)->SetPrimaryKey( sal_False );
-            if(!bSet && pFieldDescr->getTypeInfo()->bNullable)
-            {
-                pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
-                pFieldDescr->SetDefaultValue(String());
-            }
-            //////////////////////////////////////////////////////////////////////
-            // update field description
-            pDescrWin->DisplayData(pFieldDescr);
-
             nIndex = m_pRowList->end() - aIter;
-            aDeletedPrimKeys.Insert( nIndex );
-            aDeletedPrimKeys.Select( nIndex );
+            AdjustFieldDescription(pFieldDescr,aDeletedPrimKeys,nIndex,bSet,sal_False);
         }
     }
 
@@ -1711,21 +1705,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
             OTableRow* pRow = (*m_pRowList)[nIndex];
             OFieldDescription *pFieldDescr = pRow->GetActFieldDescr();
             if(pFieldDescr)
-            {
-                pRow->SetPrimaryKey( sal_True );
-
-                if(pFieldDescr->getTypeInfo()->bNullable)
-                {
-                    pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
-                    pFieldDescr->SetDefaultValue(String());
-                    //////////////////////////////////////////////////////////////////////
-                    // Die Fielddesription updateten
-                    pDescrWin->DisplayData(pFieldDescr);
-                }
-
-                aInsertedPrimKeys.Insert( nIndex );
-                aInsertedPrimKeys.Select( nIndex );
-            }
+                AdjustFieldDescription(pFieldDescr,aInsertedPrimKeys,nIndex,sal_False,sal_True);
 
             nIndex = NextSelectedRow();
         }
@@ -1741,9 +1721,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     //////////////////////////////////////////////////////////////////////
     // Das ModifyFlag der TableDocSh setzen
     GetView()->getController()->setModified( sal_True );
-    GetView()->getController()->InvalidateFeature(SID_SAVEDOC);
-    GetView()->getController()->InvalidateFeature(SID_UNDO);
-    GetView()->getController()->InvalidateFeature(SID_REDO);
+    InvalidateFeatures();
 }
 
 //------------------------------------------------------------------------------
@@ -1759,7 +1737,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKey()
         if( IsRowSelected(nRow) && !(*aIter)->IsPrimaryKey() )
             return sal_False;
         if( (*aIter)->IsPrimaryKey() )
-            nPrimaryKeys++;
+            ++nPrimaryKeys;
     }
 
     //////////////////////////////////////////////////////////////////////

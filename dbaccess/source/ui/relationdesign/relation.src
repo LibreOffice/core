@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 16:40:35 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 08:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #define MN_VIEW     21
 #define MN_EXTRA    22
 #define MN_INDEX    23
+#define MN_INSERT   24
 #define MN_WIN      30
 #define MN_HELP     31
 
@@ -249,30 +250,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
         };
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_ADDTABLE;
-            HelpId = SID_FM_ADDTABLE ;
-            Text = "Tabellen hinzuf¸gen ..." ;
-            Text [ ENGLISH ] = "Add tables ..." ;
-            Text[ english_us ] = "Add Tables...";
-            Text[ portuguese ] = "Adicionar tabelas...";
-            Text[ russian ] = "ƒÓ·‡‚ËÚ¸ Ú‡·ÎËˆ˚...";
-            Text[ greek ] = "–ÒÔÛËﬁÍÁ ÈÌ‹Í˘Ì...";
-            Text[ dutch ] = "Tabellen toevoegen...";
-            Text[ french ] = "Ajouter des tables ...";
-            Text[ spanish ] = "AÒadir tablas ...";
-            Text[ italian ] = "Inserisci tabelle";
-            Text[ danish ] = "Add tables ...";
-            Text[ swedish ] = "L‰gg till tabeller ...";
-            Text[ polish ] = "Dodaj tabele ...";
-            Text[ portuguese_brazilian ] = "Add tables ...";
-            Text[ japanese ] = "„ÉÜ„Éº„Éñ„É´„ÅÆËøΩÂä†...";
-            Text[ korean ] = "ÏãúÌä∏ Ï∂îÍ∞Ä ...";
-            Text[ chinese_simplified ] = "Êñ∞Â¢ûË°®Ê†º...";
-            Text[ chinese_traditional ] = "Êñ∞Â¢ûË°®Ê†º...";
-            Text[ turkish ] = "Add tables ...";
-            Text[ arabic ] = "≈÷«›… Ãœ«Ê·...";
-            Text[ catalan ] = "Afegeix les taules...";
-            Text[ finnish ] = "Lis‰‰ taulukoita";
+            MID_DBUI_JOIN_ADD_TABLE
         };
         ToolboxItem
         {
@@ -548,6 +526,31 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
 
     MenuItem
     {
+        Identifier = MN_INSERT ;
+        HelpID = MN_INSERT ;
+        Text = "~Einf¸gen" ;
+        Text [ English ] = "~Insert" ;
+
+        SubMenu = Menu
+        {
+            ItemList =
+            {
+                MenuItem
+                {
+                    MID_DBUI_REALTION_ADD_RELATION
+                    Command = ".uno:DB/AddRelation";
+                };
+                MenuItem
+                {
+                    MID_DBUI_JOIN_ADD_TABLE
+                    Command = ".uno:DB/AddTable";
+                };
+            };
+        };
+    };
+
+    MenuItem
+    {
         Identifier = MN_EXTRA ;
         HelpID = MN_EXTRA ;
         Text = "E~xtras" ;
@@ -577,15 +580,6 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     ITEM_TOOLS_BASICCHOOSER
                 };
                 ITEM_MN_OPTIONS
-                MenuItem
-                {
-                    Separator = TRUE ;
-                };
-                MenuItem
-                {
-                    MID_DBUI_REALTION_ADD_RELATION
-                    Command = ".uno:DB/AddRelation";
-                };
             };
         };
             Text[ russian ] = "~—Â‚ËÒ";
