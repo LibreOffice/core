@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:34:21 $
+#   last change: $Author: vg $ $Date: 2003-05-26 08:40:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ JAVACLASSFILES= 									\
     $(CLASSDIR)$/$(PACKAGE)$/NativeLibraryLoader.class \
     $(CLASSDIR)$/$(PACKAGE)$/RefObject.class		\
     $(CLASSDIR)$/$(PACKAGE)$/RefererObject.class	\
+    $(CLASSDIR)$/$(PACKAGE)$/StringHelper.class \
     $(CLASSDIR)$/$(PACKAGE)$/WeakTable.class
 
 # --- Targets ------------------------------------------------------
