@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-14 15:25:40 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 10:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,10 +780,10 @@ void GalleryTransferable::ObjectReleased()
 
 // ------------------------------------------------------------------------
 
-void GalleryTransferable::CopyToClipboard()
+void GalleryTransferable::CopyToClipboard( Window* pWindow )
 {
     InitData();
-    TransferableHelper::CopyToClipboard();
+    TransferableHelper::CopyToClipboard( pWindow );
 }
 
 

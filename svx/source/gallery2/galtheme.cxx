@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-24 12:50:50 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 10:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,32 +1123,10 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
 
 // -----------------------------------------------------------------------------
 
-void GalleryTheme::CopyToClipboard( ULONG nPos )
+void GalleryTheme::CopyToClipboard( Window* pWindow, ULONG nPos )
 {
     GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos );
-    pTransferable->CopyToClipboard();
-}
-
-// -----------------------------------------------------------------------------
-
-BOOL GalleryTheme::IsCurrentClipboardSupported() const
-{
-    TransferableDataHelper  aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
-    BOOL                    bRet = FALSE;
-
-    if( aDataHelper.GetFormatCount() )
-    {
-        if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) ||
-            aDataHelper.HasFormat( FORMAT_FILE ) ||
-            aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) ||
-            aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) ||
-            aDataHelper.HasFormat( FORMAT_BITMAP ) )
-        {
-            bRet = TRUE;
-        }
-    }
-
-    return bRet;
+    pTransferable->CopyToClipboard( pWindow );
 }
 
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-02 14:55:28 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 10:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,8 +406,26 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
     }
 
 #ifdef GALLERY_USE_CLIPBOARD
-    if( IsItemEnabled( MN_PASTECLIPBOARD ) && !mpTheme->IsCurrentClipboardSupported() )
-        EnableItem( MN_PASTECLIPBOARD, FALSE );
+    if( IsItemEnabled( MN_PASTECLIPBOARD ) )
+    {
+        TransferableDataHelper  aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( this ) );
+        BOOL                    bEnable = FALSE;
+
+        if( aDataHelper.GetFormatCount() )
+        {
+            if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) ||
+                aDataHelper.HasFormat( FORMAT_FILE ) ||
+                aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) ||
+                aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) ||
+                aDataHelper.HasFormat( FORMAT_BITMAP ) )
+            {
+                bEnable = TRUE;
+            }
+        }
+
+        if( !bEnable )
+            EnableItem( MN_PASTECLIPBOARD, FALSE );
+    }
 #else
     EnableItem( MN_COPYCLIPBOARD, FALSE );
     EnableItem( MN_PASTECLIPBOARD, FALSE );
@@ -945,7 +963,7 @@ IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
 
             case( MN_COPYCLIPBOARD ):
             {
-                mpCurTheme->CopyToClipboard( mnCurActionPos );
+                mpCurTheme->CopyToClipboard( mbIsPreview ? (Window*) mpPreview : (Window*) mpValueSet, mnCurActionPos );
             }
             break;
 
@@ -953,7 +971,7 @@ IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
             {
                 if( !mpCurTheme->IsReadOnly() )
                 {
-                    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+                    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( this ) );
                     mpCurTheme->InsertTransferable( aDataHelper.GetTransferable(), mnCurActionPos );
                 }
             }
