@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hro $ $Date: 2004-09-16 10:34:35 $
+#   last change: $Author: obo $ $Date: 2004-11-18 09:05:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,13 +114,13 @@ APP5OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/smath.obj
 
-#APP6TARGET=sbase
-#APP6NOSAL=TRUE
-#APP6LINKRES=$(MISC)$/$(TARGET).res
-#APP6ICON=$(SOLARRESDIR)$/icons/ooo_base.ico
-#APP6OBJS = \
-#		$(OBJ)$/launcher.obj\
-#       $(OBJ)$/sbase.obj
+APP6TARGET=sbase
+APP6NOSAL=TRUE
+APP6LINKRES=$(MISC)$/$(TARGET).res
+APP6ICON=$(SOLARRESDIR)$/icons/ooo_base.ico
+APP6OBJS = \
+        $(OBJ)$/launcher.obj\
+       $(OBJ)$/sbase.obj
 
 # --- Targets ------------------------------------------------------
 
