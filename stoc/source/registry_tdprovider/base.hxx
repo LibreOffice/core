@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-13 16:01:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
+#include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
@@ -247,7 +248,7 @@ public:
 };
 
 //==================================================================================================
-class InterfaceTypeDescriptionImpl : public WeakImplHelper1< XInterfaceTypeDescription >
+class InterfaceTypeDescriptionImpl : public WeakImplHelper1< XInterfaceTypeDescription2 >
 {
     Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
@@ -256,8 +257,8 @@ class InterfaceTypeDescriptionImpl : public WeakImplHelper1< XInterfaceTypeDescr
     OUString                              _aName;
     Uik                                   _aUik;
 
-    OUString                              _aBaseType;
-    Reference< XTypeDescription >         _xBaseTD;
+    Sequence< OUString >                  _aBaseTypes;
+    Sequence< Reference< XInterfaceTypeDescription2 > > _xBaseTDs;
 
     sal_Int32                             _nBaseOffset;
     vector< AttributeInit > *             _pAttributes;
@@ -265,7 +266,7 @@ class InterfaceTypeDescriptionImpl : public WeakImplHelper1< XInterfaceTypeDescr
 
 public:
     InterfaceTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
-                                  const OUString & rName, const OUString & rBaseType,
+                                  const OUString & rName, const Sequence< OUString > & rBaseTypes,
                                   const RTUik & rUik, const Sequence< sal_Int8 > & rBytes );
     virtual ~InterfaceTypeDescriptionImpl();
 
@@ -273,10 +274,11 @@ public:
     virtual TypeClass SAL_CALL getTypeClass() throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
 
-    // XInterfaceTypeDescription
+    // XInterfaceTypeDescription2
     virtual Uik SAL_CALL getUik() throw(::com::sun::star::uno::RuntimeException);
     virtual Reference< XTypeDescription > SAL_CALL getBaseType() throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< Reference< XInterfaceMemberTypeDescription > > SAL_CALL getMembers() throw(::com::sun::star::uno::RuntimeException);
+    virtual Sequence< Reference< XInterfaceTypeDescription2 > > SAL_CALL getBaseTypes() throw(::com::sun::star::uno::RuntimeException);
 };
 
 //==================================================================================================
