@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:01:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text [ english_us ] = "Accept or Reject Changes" ;
     Text [ portuguese_brazilian ] = "Aceitar ou Rejeitar Modifica��es" ;
     Text [ swedish ] = "Acceptera eller ignorera �ndringar" ;
-    Text [ danish ] = "Accepter eller forkast �ndringer" ;
+    Text [ danish ] = "Accepter eller afvis �ndringer" ;
     Text [ italian ] = "Accetta o annulla le modifiche" ;
     Text [ spanish ] = "Aceptar o rechazar modificaciones" ;
     Text [ french ] = "Accepter ou rejeter les modifications" ;
@@ -116,6 +116,8 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text[ hebrew ] = "Änderungen akzeptieren oder verwerfen";
     Text[ hindi ] = "परिवर्तनों को स्वीकार अथवा अस्वीकार करो";
     Text[ slovak ] = "Prijať alebo odmietnuť zmeny";
+    Text[ hungarian ] = "Változtatások elfogadása vagy elvetése";
+    Text[ slovenian ] = "Sprejmi ali zavrni spremembe";
 };
 
 ModalDialog DLG_MOD_REDLINE_ACCEPT
@@ -127,7 +129,7 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ italian ] = "Formattazione automatica: accetta o annulla cambiamenti";
     Text[ portuguese_brazilian ] = "Aceitar ou Rejeitar Modifica��es da AutoFormata��o";
     Text[ portuguese ] = "AutoFormato: aceitar ou rejeitar modifica��es";
-    Text[ danish ] = "Accepter eller forkast AutoFormat �ndringer";
+    Text[ danish ] = "Accepter eller afvis AutoFormat-�ndringer";
     Text[ french ] = "AutoFormat : Accepter ou rejeter les modifications";
     Text[ swedish ] = "Acceptera eller ignorera AutoFormat-�ndringar";
     Text[ dutch ] = "AutoOpmaak: Wijzigingen accepteren of verwerpen";
@@ -150,6 +152,8 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ hebrew ] = "AutoFormat: Änderungen akzeptieren oder verwerfen";
     Text[ hindi ] = "स्वचालित रचना के परिवर्तनों को स्वीकार अथवा अस्वीकार करो";
     Text[ slovak ] = "Prijať alebo odmietnuť zmeny vykonané automatickým formátovaním";
+    Text[ hungarian ] = "Az automatikus formázás változtatásainak elfogadása vagy elutasítása";
+    Text[ slovenian ] = "Sprejmi ali zavrni spremembe samooblikovanja";
 };
 
 Menu MN_REDLINE_POPUP
@@ -188,6 +192,8 @@ Menu MN_REDLINE_POPUP
             Text[ hebrew ] = "Kommentar bearbeiten...";
             Text[ hindi ] = "अपवाद का संपादन...";
             Text[ slovak ] = "Upraviť komentár...";
+            Text[ hungarian ] = "Megjegyzés szerkesztése...";
+            Text[ slovenian ] = "Uredi komentar...";
         };
         MenuItem
         {
@@ -232,6 +238,8 @@ Menu MN_REDLINE_POPUP
                         Text[ hebrew ] = "‮פעולה‬";
                         Text[ hindi ] = "कार्य";
                         Text[ slovak ] = "Činnosť";
+                        Text[ hungarian ] = "Művelet";
+                        Text[ slovenian ] = "Dejanje";
                     };
                     MenuItem
                     {
@@ -266,6 +274,8 @@ Menu MN_REDLINE_POPUP
                         Text[ hebrew ] = "‮מחבר‬";
                         Text[ hindi ] = "लेखक";
                         Text[ slovak ] = "Autor";
+                        Text[ hungarian ] = "Szerző";
+                        Text[ slovenian ] = "Avtor";
                     };
                     MenuItem
                     {
@@ -300,6 +310,8 @@ Menu MN_REDLINE_POPUP
                         Text[ hebrew ] = "‮תאריך‬";
                         Text[ hindi ] = "दिनांक";
                         Text[ slovak ] = "Dátum";
+                        Text[ hungarian ] = "Dátum";
+                        Text[ slovenian ] = "Datum";
                     };
                     MenuItem
                     {
@@ -311,7 +323,7 @@ Menu MN_REDLINE_POPUP
                         Text [ english_us ] = "Comment" ;
                         Text [ portuguese_brazilian ] = "Coment�rio" ;
                         Text [ swedish ] = "Beskrivning" ;
-                        Text [ danish ] = "Beskrivelse" ;
+                        Text [ danish ] = "Kommentar" ;
                         Text [ italian ] = "Descrizione" ;
                         Text [ spanish ] = "Descripci�n" ;
                         Text [ french ] = "Description" ;
@@ -334,6 +346,8 @@ Menu MN_REDLINE_POPUP
                         Text[ hebrew ] = "‮הערות‬";
                         Text[ hindi ] = "अपवाद";
                         Text[ slovak ] = "Komentár";
+                        Text[ hungarian ] = "Megjegyzés";
+                        Text[ slovenian ] = "Komentar";
                     };
                     MenuItem
                     {
@@ -368,13 +382,15 @@ Menu MN_REDLINE_POPUP
                         Text[ hebrew ] = "Dokumentposition";
                         Text[ hindi ] = "लेखपत्र स्थान";
                         Text[ slovak ] = "Pozícia dokumentu";
+                        Text[ hungarian ] = "Dokumentumpozíció";
+                        Text[ slovenian ] = "Položaj dokumenta";
                     };
                 };
             };
             Text [ english_us ] = "Sort By" ;
             Text [ portuguese_brazilian ] = "Ordenar por" ;
             Text [ swedish ] = "Sortera efter" ;
-            Text [ danish ] = "Sorter" ;
+            Text [ danish ] = "Sorter efter" ;
             Text [ italian ] = "Ordina" ;
             Text [ spanish ] = "Ordenar" ;
             Text [ french ] = "Trier" ;
@@ -397,9 +413,12 @@ Menu MN_REDLINE_POPUP
             Text[ hebrew ] = "Sortiere";
             Text[ hindi ] = "से सोर्ट करो";
             Text[ slovak ] = "Triediť podľa";
+            Text[ hungarian ] = "Rendezve";
+            Text[ slovenian ] = "Razvrsti po";
         };
     };
 };
+
 
 
 
