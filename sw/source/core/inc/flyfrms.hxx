@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 13:22:10 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,20 @@ class SwFlyFreeFrm : public SwFlyFrm
 
     void CheckClip( const SwFmtFrmSize &rSz );  //'Emergency' Clipping.
 
+    /** determines, if direct environment of fly frame has 'auto' size
+
+        OD 07.08.2003 #i17297#, #111066#, #111070#
+        start with anchor frame and search for a header, footer, row or fly frame
+        stopping at page frame.
+        return <true>, if such a frame is found and it has 'auto' size.
+        otherwise <false> is returned.
+
+        @author OD
+
+        @return boolean indicating, that direct environment has 'auto' size
+    */
+    bool HasEnvironmentAutoSize() const;
+
 protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
                                    const SwRect& rRect, PrepareHint eHint);
@@ -86,6 +100,7 @@ public:
           SwPageFrm *GetPage()       { return pPage; }
     const SwPageFrm *GetPage() const { return pPage; }
     void  SetPage( SwPageFrm *pNew ) { pPage = pNew; }
+
 };
 
 
