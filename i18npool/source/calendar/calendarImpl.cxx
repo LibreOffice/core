@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:05:47 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ CalendarImpl::~CalendarImpl()
 {
     // Clear lookuptable
     for (lookupTableItem *listItem = (lookupTableItem*)lookupTable.First();
-                listItem; listItem = (lookupTableItem*)lookupTable.Next())
+            listItem; listItem = (lookupTableItem*)lookupTable.Next())
         delete listItem;
     lookupTable.Clear();
 }
@@ -90,8 +90,8 @@ CalendarImpl::loadDefaultCalendar( const Locale& rLocale ) throw(RuntimeExceptio
     Sequence< Calendar> xC = LocaleData().getAllCalendars(rLocale);
     for (sal_Int32 i = 0; i < xC.getLength(); i++) {
         if (xC[i].Default) {
-        loadCalendar(xC[i].Name, rLocale);
-        return;
+            loadCalendar(xC[i].Name, rLocale);
+            return;
         }
     }
     throw ERROR;
@@ -100,28 +100,42 @@ CalendarImpl::loadDefaultCalendar( const Locale& rLocale ) throw(RuntimeExceptio
 void SAL_CALL
 CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) throw (RuntimeException)
 {
+    Reference < XExtendedCalendar > xOldCalendar( xCalendar );  // backup
+
     lookupTableItem *listItem = (lookupTableItem*)lookupTable.First();
     for ( ; listItem; listItem = (lookupTableItem*)lookupTable.Next()) {
         if (uniqueID == listItem->uniqueID) {
-        xCalendar = listItem->xCalendar;
-        break;
+            xCalendar = listItem->xCalendar;
+            break;
         }
     }
 
     if (! listItem) {
         Reference < XInterface > xI = xMSF->createInstance(
-        OUString::createFromAscii("com.sun.star.i18n.Calendar_") + uniqueID);
+                OUString::createFromAscii("com.sun.star.i18n.Calendar_") + uniqueID);
         if ( xI.is() )
-        xI->queryInterface(::getCppuType((const Reference< XExtendedCalendar>*)0)) >>= xCalendar;
+            xI->queryInterface(::getCppuType((const Reference< XExtendedCalendar>*)0)) >>= xCalendar;
         else
-        throw ERROR;
+            throw ERROR;
 
         lookupTable.Insert( new lookupTableItem(uniqueID, xCalendar) );
     }
 
-    if (xCalendar.is())
-        xCalendar->loadCalendar(uniqueID, rLocale);
+    if ( !xCalendar.is() )
+    {
+        xCalendar = xOldCalendar;
+        throw ERROR;
+    }
 
+    try
+    {
+        xCalendar->loadCalendar(uniqueID, rLocale);
+    }
+    catch ( Exception& e )
+    {   // restore previous calendar and re-throw
+        xCalendar = xOldCalendar;
+        throw;
+    }
 }
 
 Calendar SAL_CALL
