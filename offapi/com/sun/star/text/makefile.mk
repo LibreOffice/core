@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: os $ $Date: 2001-02-14 12:53:20 $
+#   last change: $Author: os $ $Date: 2001-02-15 14:53:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -204,6 +204,7 @@ IDLFILES=\
     XModule.idl\
     XNumberingFormatter.idl\
     XNumberingRulesSupplier.idl\
+    XNumberingTypeInfo.idl\
     XPageCursor.idl\
     XPagePrintable.idl\
     XParagraphCursor.idl\
