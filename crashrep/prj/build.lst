@@ -4,4 +4,4 @@ cr	crashrep\scripts		nmake	-	all	cr_suscript NULL
 cr	crashrep\source\all		nmake	-	all	cr_sresource NULL
 cr	crashrep\source\unx\res	nmake	-	u	cr_sures cr_sresource NULL
 cr	crashrep\source\unx		nmake	-	u	cr_sunx cr_sures.u cr_sresource NULL
-cr	crashrep\source\win32	nmake	-	n	cr_swin32 NULL
+cr	crashrep\source\win32	nmake	-	n	cr_swin32 cr_sresource NULL
