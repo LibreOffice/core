@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 09:15:30 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,20 +1105,10 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 
         if (aName.getLength() > nMaxFieldLength)
         {
-<<<<<<< DTable.cxx
-            String sError;
-            sError.AppendAscii("Invalid length (>");
-            sError += String::CreateFromInt32(nMaxFieldLength);
-            sError.AppendAscii(") for field name ");
-            sError += aName.getStr();
-            throwGenericSQLException(sError, static_cast<XNamed*>(this));
-            break;
-=======
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
             sMsg += aName;
             sMsg += ::rtl::OUString::createFromAscii("!");
             throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
->>>>>>> 1.27
         }
 
         ByteString aCol(aName.getStr(), getConnection()->getTextEncoding());
