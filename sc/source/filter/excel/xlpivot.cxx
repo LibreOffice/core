@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpivot.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:02:56 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,6 +664,44 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTInfo& rInfo )
     aXclDataName.WriteFlagField( rStrm );
     aXclDataName.WriteBuffer( rStrm );
     return rStrm;
+}
+
+// Extended pivot table settings ==============================================
+
+XclPTExtInfo::XclPTExtInfo() :
+    mnSxformulaRecs( 0 ),
+    mnSxselectRecs( 0 ),
+    mnPagePerRow( 0 ),
+    mnPagePerCol( 0 ),
+    mnFlags( EXC_SXEX_DEFAULTFLAGS )
+{
+}
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPTExtInfo& rInfo )
+{
+    rStrm >> rInfo.mnSxformulaRecs;
+    rStrm.Ignore( 6 );
+    return rStrm
+        >> rInfo.mnSxselectRecs
+        >> rInfo.mnPagePerRow
+        >> rInfo.mnPagePerCol
+        >> rInfo.mnFlags;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo )
+{
+    return rStrm
+        << rInfo.mnSxformulaRecs
+        << EXC_PT_NOSTRING              // length of alt. error text
+        << EXC_PT_NOSTRING              // length of alt. empty text
+        << EXC_PT_NOSTRING              // length of tag
+        << rInfo.mnSxselectRecs
+        << rInfo.mnPagePerRow
+        << rInfo.mnPagePerCol
+        << rInfo.mnFlags
+        << EXC_PT_NOSTRING              // length of page field style name
+        << EXC_PT_NOSTRING              // length of table style name
+        << EXC_PT_NOSTRING;             // length of vacate style name
 }
 
 // ============================================================================
