@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-13 14:51:42 $
+ *  last change: $Author: cmc $ $Date: 2002-09-23 15:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,8 +776,8 @@ ULONG SwASCIIParser::ReadChars()
         pUseMe=&aEmpty;
     }
 
-    rtl_TextToUnicodeConverter hConverter;
-    rtl_TextToUnicodeContext hContext;
+    rtl_TextToUnicodeConverter hConverter=0;
+    rtl_TextToUnicodeContext hContext=0;
     if (RTL_TEXTENCODING_UCS2 != pUseMe->GetCharSet())
     {
         hConverter = rtl_createTextToUnicodeConverter( pUseMe->GetCharSet() );
@@ -789,7 +789,6 @@ ULONG SwASCIIParser::ReadChars()
     }
     else if (pUseMe != &aEmpty)  //Already successfully figured out type
     {
-        hConverter = 0;
         rInput.StartReadingUnicodeText();
         bSwapUnicode = rInput.IsEndianSwap();
     }
