@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-17 19:27:21 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/colritem.hxx>

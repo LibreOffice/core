@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-01-30 08:55:49 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #define _SVSTDARR_STRINGSSORTDTOR
 
 #ifndef _RTL_TENCINFO_H //autogen wg. rtl_getBestMimeCharsetFromTextEncoding, rtl_getTextEncodingFromMimeCharset
@@ -86,9 +89,6 @@
 #include <svx/xoutbmp.hxx>
 #ifndef _MyEDITENG_HXX //autogen wg. EditEngine
 #include <svx/editeng.hxx>
-#endif
-#ifndef _EEITEM_HXX //autogen wg. EE_FEATURE_FIELD
-#include <svx/eeitem.hxx>
 #endif
 #include <offmgr/app.hxx>
 #include <offmgr/htmlcfg.hxx>

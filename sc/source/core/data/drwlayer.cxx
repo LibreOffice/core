@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-05 22:10:04 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/objfac3d.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svditer.hxx>
@@ -82,9 +85,6 @@
 #include <svx/drawitem.hxx>
 #ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _EEITEM_HXX
-#include <svx/eeitem.hxx>
 #endif
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docinf.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:03:17 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 //------------------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/lrspitem.hxx>
 #include <svx/paperinf.hxx>
 #include <svx/sizeitem.hxx>

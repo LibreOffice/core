@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undocell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-02 18:22:48 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/editobj.hxx>
 #include <svtools/zforlist.hxx>
 #include <sfx2/app.hxx>

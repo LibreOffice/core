@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-26 20:45:09 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/editview.hxx>
 #include <svx/editstat.hxx>
 #include <sfx2/bindings.hxx>
@@ -77,7 +80,6 @@
 #include <offmgr/app.hxx>
 #include <vcl/system.hxx>
 #include <stdlib.h>     // qsort
-#include <svx/eeitem.hxx>
 #include <svx/scriptspaceitem.hxx>
 
 #ifndef _SFXSTRITEM_HXX //autogen

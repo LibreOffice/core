@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:54:20 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
 #include <sfx2/topfrm.hxx>
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/boxitem.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/sizeitem.hxx>

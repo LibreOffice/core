@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfonte.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
 #endif
+
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #ifndef _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #endif

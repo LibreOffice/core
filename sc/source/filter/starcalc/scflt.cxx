@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:08:25 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
@@ -76,7 +79,6 @@
 #include <svx/editdata.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
-#include <svx/eeitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/lrspitem.hxx>

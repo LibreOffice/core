@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-12 20:04:36 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,11 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/colritem.hxx>
 #include <svx/editview.hxx>
-#include <svx/eeitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <so3/ipenv.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-14 18:06:37 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
+
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #ifndef SC_XMLEXPRT_HXX
 #include "xmlexprt.hxx"
 #endif

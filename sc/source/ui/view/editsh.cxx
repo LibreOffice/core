@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-14 15:44:41 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/clipfmtitem.hxx>
@@ -76,7 +77,6 @@
 #include <svx/crsditem.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editview.hxx>
-#include <svx/eeitem.hxx>
 #include <svx/escpitem.hxx>
 #include <svx/flditem.hxx>
 #include <svx/fontitem.hxx>

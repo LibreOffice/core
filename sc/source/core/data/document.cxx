@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-26 16:44:01 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/boxitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/editeng.hxx>

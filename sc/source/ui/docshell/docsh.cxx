@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-20 19:48:26 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #pragma hdrstop
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svtools/securityoptions.hxx>
 #include <tools/stream.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfparse.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/editeng.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/svxrtf.hxx>

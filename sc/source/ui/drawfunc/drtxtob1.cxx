@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-16 12:16:42 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,11 @@
 //------------------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include "eetext.hxx"
 #include <svx/brkitem.hxx>
-#include <svx/eeitem.hxx>
 #include <svx/hyznitem.hxx>
 #include <svx/orphitem.hxx>
 #include <svx/outliner.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-14 20:29:19 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 #pragma hdrstop
 
+#include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <sot/storage.hxx>
@@ -87,7 +91,6 @@
 #include "scmod.hxx"
 
 // for InitDocShell
-#include "scitems.hxx"
 #include <svx/paperinf.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/algitem.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-21 08:42:43 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,10 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/editobj.hxx>
 #include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
+#include <svx/editobj.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/bindings.hxx>

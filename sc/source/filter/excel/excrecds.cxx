@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dr $ $Date: 2002-01-29 08:00:03 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,14 +68,15 @@
 //------------------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #include <svx/editdata.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
 
-#define ITEMID_FIELD EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
-#undef ITEMID_FIELD
 
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>

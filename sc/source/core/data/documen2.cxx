@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: er $ $Date: 2002-01-16 15:03:25 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,8 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/editeng.hxx>
 #include <svx/forbiddencharacterstable.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfexp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:14 $
+ *  last change: $Author: nn $ $Date: 2002-03-04 19:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #ifndef _SVX_ALGITEM_HXX //autogen
 #include <svx/algitem.hxx>
 #endif
