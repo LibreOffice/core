@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:16:55 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@
 #endif
 
 using namespace ::com::sun::star;
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -555,8 +556,8 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         switch(nWhich)
         {
         case SID_INSERT_DRAW:
-            if(bWeb)
-                rSet.DisableItem(nWhich);
+            if ( bWeb )
+                rSet.DisableItem( nWhich );
             else
             {
                 SfxAllEnumItem aEnum(SID_INSERT_DRAW, nDrawSfxId);
