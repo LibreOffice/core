@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.123 $
+#   $Revision: 1.124 $
 #
-#   last change: $Author: vg $ $Date: 2004-10-26 10:35:40 $
+#   last change: $Author: vg $ $Date: 2004-11-01 15:32:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.123 $ ';
+    $id_str = ' $Revision: 1.124 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -197,7 +197,7 @@
     };
 
     $StandDir = &get_stand_dir();
-    &provide_consistency if (defined $ENV{CWS_WORK_STAMP} && defined($log));
+#    &provide_consistency if (defined $ENV{CWS_WORK_STAMP} && defined($log));
 
     $deliver_commando = $ENV{DELIVER};
     $deliver_commando .= ' '. $dlv_switch if ($dlv_switch);
@@ -333,18 +333,14 @@ sub BuildAll {
             if (!defined $dead_parents{$Prj}) {
                 if (!defined $module_announced{$Prj}) {
                     print $new_line;
-                    my $module_type = $modules_types{$Prj};
+                    if (scalar keys %broken_build) {
+                        print $echo . "Skipping project $Prj because of error(s)\n";
+                        &RemoveFromDependencies($Prj, \%global_deps_hash);
+                        next;
+                    };
 
-
-                    &print_announce($Prj) if ($module_type eq 'lnk');
-                    &print_announce($Prj . '.incomp') if ($module_type eq 'img');
-                    if ($module_type eq 'mod') {
-                        if (scalar keys %broken_build) {
-                            print $echo . "Skipping project $Prj because of error(s)\n";
-                            &RemoveFromDependencies($Prj, \%global_deps_hash);
-                            next;
-                        };
-                        &print_announce($Prj);
+                    &print_announce($Prj);
+                    if ($modules_types{$Prj} eq 'mod') {
                         $PrjDir = &CorrectPath($StandDir.$Prj);
                         &mark_force_deliver($Prj, $PrjDir) if (defined $ENV{CWS_WORK_STAMP} && defined($log));
                         &get_deps_hash($Prj, \%LocalDepsHash);
@@ -1224,17 +1220,12 @@ sub build_multiprocessing {
         while ($Prj = &PickPrjToBuild(\%global_deps_hash)) {
             my $module_type = $modules_types{$Prj};
 
-            if ($module_type eq 'lnk') {
+            if (($module_type eq 'lnk') || ($module_type eq 'img')) {
                 &print_announce($Prj);
                 &RemoveFromDependencies($Prj, \%global_deps_hash);
                 next;
             };
 
-            if ($module_type eq 'img') {
-                &print_announce($Prj . '.incomp');
-                &RemoveFromDependencies($Prj, \%global_deps_hash);
-                next;
-            }
             &mark_force_deliver($Prj, &CorrectPath($StandDir.$Prj)) if (defined $ENV{CWS_WORK_STAMP} && defined($log));
             push @build_queue, $Prj;
             $projects_deps_hash{$Prj} = {};
@@ -1308,12 +1299,13 @@ sub announce_module {
 
 sub print_announce {
     my $Prj = shift;
+    my $prj_type = $modules_types{$Prj};
     my $text;
-    if ($Prj =~ /\.lnk$/o) {
-        $text = "Skipping link to $`\n";
-    } elsif ($Prj =~ /(\.incomp)$/o) {
+    if ($prj_type eq 'lnk') {
+        $text = "Skipping link to $Prj\n";
+    } elsif ($prj_type eq 'img') {
         return if (defined $module_announced{$`});
-        $text = "Skipping incomplete $`\n";
+        $text = "Skipping incomplete $Prj\n";
     } else {
         $text = "Building project $Prj\n";
     };
