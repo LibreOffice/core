@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 17:59:52 $
+ *  last change: $Author: ka $ $Date: 2000-10-12 08:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,9 +496,9 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
         nMetric = pOptions->GetMetric();
 
     if( nMetric == 0xffff )
-        SFX_APP()->GetOptions( *pRet ); // Metric der Applikation
-    else
-        pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, nMetric ) );
+        nMetric = GetModuleFieldUnit();
+
+    pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, nMetric ) );
 
     // TP_OPTIONS_CONTENTS:
     pRet->Put( SdOptionsContentsItem( ATTR_OPTIONS_CONTENTS, pOptions, pFrameView ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-09 09:26:51 $
+ *  last change: $Author: ka $ $Date: 2000-10-12 08:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #endif
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
+#include <svtools/saveopt.hxx>
 #endif
 #include <cppuhelper/extract.hxx>
 
@@ -955,11 +958,11 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
         rDoc.pFrameViewList->Clear();
 
         // Anzahl FrameViews lesen
-        BOOL bIsSaveDocView =
 #ifndef SVX_LIGHT
-        SFX_APP()->GetOptions().IsSaveDocView();
+        const SvtSaveOptions aOptions;
+        BOOL bIsSaveDocView = aOptions.IsSaveDocView();
 #else
-        FALSE;
+        BOOL bIsSaveDocView = FALSE;
 #endif // !SVX_LIGHT
 
         ULONG nFrameViewCount = 0;
