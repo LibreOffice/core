@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-23 12:33:48 $
+ *  last change: $Author: pl $ $Date: 2002-03-15 17:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _SV_WRKWIN_HXX
 #include <wrkwin.hxx>
 #endif
+#ifndef _SV_OPENGL_HXX
+#include <opengl.hxx>
+#endif
 
 #include <rvp.hxx>
 
@@ -126,9 +129,19 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pS
     DBG_ASSERT( ! pSystemParentData, "SystemParentData not implemented in remote vcl" );
     ImplInit( pParent, nStyle, aVoid );
 #else
+#if defined WNT
+    /*
+     * #98153# since SystemParentData typically contains a HWND from
+     * another process and the OpenGL implementation does not like
+     * our child window of another processes frame we disable it here.
+     */
+    if( pSystemParentData )
+        OpenGL::Invalidate();
+#endif
     USHORT nFrameStyle = BORDERWINDOW_STYLE_FRAME;
     if ( nStyle & WB_APP )
         nFrameStyle |= BORDERWINDOW_STYLE_APP;
+
     ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, pSystemParentData, nStyle, nFrameStyle );
     Window::ImplInit( pBorderWin, nStyle & (WB_3DLOOK | WB_CLIPCHILDREN | WB_DIALOGCONTROL | WB_SYSTEMFLOATWIN), NULL );
     pBorderWin->mpClientWindow = this;

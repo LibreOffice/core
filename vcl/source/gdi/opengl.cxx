@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-15 11:21:38 $
+ *  last change: $Author: pl $ $Date: 2002-03-15 17:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,8 @@ BOOL OpenGL::ImplInitFncPointers()
 #endif
 }
 
+BOOL OpenGL::mbNoOGL = FALSE;
+
 // ------------------------------------------------------------------------
 
 OpenGL::OpenGL( OutputDevice* pOutDev ) :
@@ -411,7 +413,7 @@ OpenGL::~OpenGL()
 void OpenGL::ImplInit()
 {
 #ifndef REMOTE_APPSERVER
-    if( PGRAPHICS || mpOutDev->ImplGetGraphics() )
+    if( ( PGRAPHICS || mpOutDev->ImplGetGraphics() ) && ! mbNoOGL )
     {
         mpOGL = new SalOpenGL( PGRAPHICS );
 
