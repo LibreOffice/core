@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: bc $ $Date: 2002-08-21 15:39:53 $
+ *  last change: $Author: bc $ $Date: 2002-08-29 15:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,19 +761,19 @@ public class ReportWizard {
     try{
         short iNextItemPos;
         boolean bDoEnable = (xSortListBox[CurIndex].getSelectedItemPos() > 0);      // the first Item is for "undefined"
-    if (bDoEnable == true){
-        if (CurIndex > MaxSortIndex)
-        MaxSortIndex = CurIndex;
-    }
-    if (bDoEnable == false){
-        if (CurIndex < MaxSortIndex - 1){
-        for (int i = CurIndex + 1; i <= MaxSortIndex; i++){
-            toggleSortListBox(i, false);
-            if (i < MaxSortIndex)
-            xSortListBox[i+1].selectItemPos((short)0,true);
+        if (bDoEnable == true){
+            if (CurIndex > MaxSortIndex)
+                MaxSortIndex = CurIndex;
         }
+        if (bDoEnable == false){
+            if (CurIndex < MaxSortIndex){
+                for (int i = CurIndex + 1; i <= MAXSORTCRITERIA; i++){
+                    toggleSortListBox(i, false);
+                    if (i < MaxSortIndex)
+                        xSortListBox[i+1].selectItemPos((short)0,true);
+                }
+            }
         }
-    }
         else
             toggleSortListBox(CurIndex+1, bDoEnable);
 /*  if ((bDoEnable == false) && (MaxSortIndex > CurIndex)){
