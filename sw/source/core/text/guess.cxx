@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-18 12:26:13 $
+ *  last change: $Author: fme $ $Date: 2001-04-23 08:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         {
             rInf.GetTxtSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),
                              nMaxComp, nMinSize, nMaxSizeDiff );
-            ASSERT( nMinSize < nLineWidth, "What a Guess!!!" );
+            ASSERT( nMinSize <= nLineWidth, "What a Guess!!!" );
         }
 #endif
     }
@@ -317,7 +317,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                             GetForbiddenCharacters( aLang, TRUE ));
         LineBreakUserOptions aUserOpt(
                 aForbidden.beginLine, aForbidden.endLine,
-                rInf.HasForbiddenChars(), rInf.IsHanging(), sal_False );
+                rInf.HasForbiddenChars(), rInf.IsHanging() && !rInf.IsMulti(),
+                sal_False );
         // determines first possible line break from nRightPos to
         // start index of current line
         LineBreakResults aResult = pBreakIt->xBreak->getLineBreak(
