@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:51:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ String STR_TBL_COLUMN_IS_KEYCOLUMN
 String STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE
 {
     Text [ de ] = "Primärschlüssel betroffen";
-    Text [ en-US ] = "Primary Key Effected";
+    Text [ en-US ] = "Primary Key Affected";
 };
 String STR_COLUMN_NAME
 {
