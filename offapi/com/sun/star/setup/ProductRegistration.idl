@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProductRegistration.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:09:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module com {  module sun {  module star {  module setup {
 
     @since #107627#
 */
-service ProductRegistration
+published service ProductRegistration
 {
     /** allows to trigger certain events.
 
