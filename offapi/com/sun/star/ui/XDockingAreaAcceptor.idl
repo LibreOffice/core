@@ -1,0 +1,91 @@
+#ifndef __com_sun_star_ui_XDockingAreaAcceptor_idl__
+#define __com_sun_star_ui_XDockingAreaAcceptor_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+/** this interface enables developer to implement different docking area
+    acceptors which are used by the frame based layout manager.
+
+    <p>
+    A docking area acceptor is responsible to control the docking area of a
+    container window. As OLE for example supports inplace and outplace editing,
+    there are different parts of code responsible for the container window.
+    This interface enables developer to make support implementations for these
+    scenarios.
+
+    @see com::sun::star::frame::XFrame
+    </p>
+
+    @since OOo 2.0.0
+*/
+
+//=============================================================================
+
+interface XDockingAreaAcceptor : com::sun::star::uno::XInterface
+{
+    /** provide the container window where the layout manager can request border
+        space for docking windows.
+
+        <p>
+        Additionally the layout manager uses this window to create its own child
+        windows for docking purposes.
+        </p>
+    */
+    com::sun::star::awt::XWindow getContainerWindow();
+
+    /** method to ask an implementation if the provided space for docking windows
+        is available or not.
+
+        <p>
+        The <type scope="com::sun::star::awt">Rectangle</type> parameter is
+        filled by the caller with pixel data. The members of
+        <type scope="com::sun::star::awt">Rectangle</type> must be filled
+        as following:
+        <ul>
+            <li>X      = requested area on left side (in pixel)</li>
+            <li>Y      = requested area on top side (in pixel)</li>
+            <li>Width  = requested area on right side (in pixel)</li>
+            <li>Height = requested area on bottom side (in pixel)</li>
+        </ul>
+        </p>
+    */
+    boolean requestDockingAreaSpace( [in] com::sun::star::awt::Rectangle RequestedSpace );
+
+    /** method to brief an implementation that we need new border space.
+
+        <p>
+        The callee must size its document window so that we have the amount
+        of space we have provided. The <type scope="com::sun::star::awt">Rectangle</type>
+        parameter is filled by the caller with pixel data. The members of
+        <type scope="com::sun::star::awt">Rectangle</type> must be filled as
+        following:
+        <ul>
+            <li>X      = new area on left side (in pixel)</li>
+            <li>Y      = new area on top side (in pixel)</li>
+            <li>Width  = new area on right side (in pixel)</li>
+            <li>Height = new area on bottom side (in pixel)</li>
+        </ul>
+        </p>
+    */
+    void setDockingAreaSpace( [in] com::sun::star::awt::Rectangle BorderSpace );
+};
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
