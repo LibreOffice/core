@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newppdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:36:18 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
+#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -121,8 +124,7 @@ PPDImportDialog::PPDImportDialog( Window* pParent ) :
 
     String aText( m_aDriverTxt.GetText() );
     aText.SearchAndReplaceAscii( "%s", Button::GetStandardText( BUTTON_OK ) );
-    aText.EraseAllChars( '~' );
-    m_aDriverTxt.SetText( aText );
+    m_aDriverTxt.SetText( MnemonicGenerator::EraseAllMnemonicChars( aText ) );
 
     Config& rConfig = getPadminRC();
     rConfig.SetGroup( PPDIMPORT_GROUP );
