@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-20 16:58:02 $
+ *  last change: $Author: sab $ $Date: 2001-12-04 18:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 
 class ScXMLImport;
 
-struct ScMyAnnotation
+struct ScMyImportAnnotation
 {
     rtl::OUString sAuthor;
     rtl::OUString sCreateDate;
@@ -117,7 +117,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     rtl::OUString* pOUTextContent;
     rtl::OUString* pOUFormula;
     rtl::OUString* pContentValidationName;
-    ScMyAnnotation*         pMyAnnotation;
+    ScMyImportAnnotation*   pMyAnnotation;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
     ScMyImpCellRangeSource* pCellRangeSource;
     double      fValue;
@@ -183,7 +183,7 @@ public:
 
     virtual void EndElement();
 
-    void AddAnnotation(ScMyAnnotation* pValue) { pMyAnnotation = pValue; }
+    void AddAnnotation(ScMyImportAnnotation* pValue) { pMyAnnotation = pValue; }
 };
 
 #endif
