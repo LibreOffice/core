@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2000-12-05 19:23:20 $
+ *  last change: $Author: os $ $Date: 2000-12-15 10:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1389,12 +1389,15 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
 
 SimpleResMgr::~SimpleResMgr()
 {
+    if(m_pResImpl)
+    {
 #ifdef DBG_UTIL
-    sal_Int32 nRefCount =
+        sal_Int32 nRefCount =
 #endif
-        m_pResImpl->ReleaseRef();
-    DBG_ASSERT(0 == nRefCount, "SimpleResMgr::~SimpleResMgr: invalid impl ref count!");
-        // our impl class is not expected to be shared, and only we ourself should have added a ref
+            m_pResImpl->ReleaseRef();
+        DBG_ASSERT(0 == nRefCount, "SimpleResMgr::~SimpleResMgr: invalid impl ref count!");
+            // our impl class is not expected to be shared, and only we ourself should have added a ref
+    }
 }
 
 // -----------------------------------------------------------------------
