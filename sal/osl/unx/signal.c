@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 15:56:05 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 10:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,28 @@
 /* system headers */
 #include "system.h"
 
+#define MAX_STACK_FRAMES 64
+
 #ifdef LINUX
 #include <execinfo.h>
 #define INCLUDE_BACKTRACE
 #define STACKTYPE "Linux"
 #endif
 
-#if defined( SOLARIS ) && defined( SPARC )
+#ifdef SOLARIS
+
 #include "backtrace.h"
 #define INCLUDE_BACKTRACE
+
+#if defined( SPARC )
 #define STACKTYPE "Solaris_Sparc"
+#elif defined( INTEL )
+#define STACKTYPE "Solaris_X86"
+#else
+#define STACKTYPE "Solaris_Unknown"
 #endif
+
+#endif /* defined SOLARIS */
 
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
@@ -88,6 +99,7 @@
 #define ACT_HIDE    5
 
 #define MAX_PATH_LEN    2048
+#define MAX_FRAME_COUNT 64
 
 typedef struct _oslSignalHandlerImpl
 {
@@ -270,7 +282,7 @@ static sal_Bool DeInitSignal()
 /* Call crash reporter  */
 /*****************************************************************************/
 
-int ReportCrash( int Signal )
+static int ReportCrash( int Signal )
 {
     static sal_Bool bCrashReporterExecuted = sal_False;
 
@@ -432,6 +444,21 @@ int ReportCrash( int Signal )
     return 1;
 }
 
+static void PrintStack( int sig )
+{
+    void *buffer[MAX_FRAME_COUNT];
+
+    fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );
+
+    int size = backtrace( buffer, sizeof(buffer) / sizeof(buffer[0]) );
+
+    if ( size > 0 )
+    {
+        fputs( "Stack:\n", stderr );
+        backtrace_symbols_fd( buffer, size, fileno(stderr) );
+    }
+}
+
 static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
 {
     oslSignalHandlerImpl* pHandler = SignalList;
@@ -480,6 +507,7 @@ void CallSystemHandler(int Signal)
                     act.sa_flags   = 0;
                     sigemptyset(&(act.sa_mask));
                     sigaction(SIGABRT, &act, NULL);
+                    PrintStack( Signal );
                     abort();
                     break;
 
@@ -559,6 +587,7 @@ void SignalHandlerFunction(int Signal)
         act.sa_flags   = 0;
         sigemptyset(&(act.sa_mask));
         sigaction(SIGABRT, &act, NULL);
+        PrintStack( Signal );
         abort();
         break;
 
