@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderSupport.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 18:00:18 $
+ *  last change: $Author: npower $ $Date: 2003-01-16 18:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,22 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         Vector result = new Vector();
 
         String classpath = NbClassPath.createRepositoryPath().getClassPath();
+        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
+        {
+            // under windows path is enclosed by quotes
+            // e.g. C:\path1;d:\path2 would appear as
+            // "C:\path1;d:\path2" therefore for us
+            // we need to remove 1 character at either end of the
+            // classpath returned from "createRepositoryPath().getClassPath()"
+
+            if ( classpath.startsWith("\"") && classpath.endsWith("\"") )
+            {
+               StringBuffer buff = new StringBuffer(classpath);
+               buff.delete(0,1);
+               buff.delete( buff.length() - 1, buff.length() );
+               classpath = buff.toString();
+            }
+        }
         StringTokenizer tokens = new StringTokenizer(classpath, File.pathSeparator);
 
         while(tokens.hasMoreTokens())
