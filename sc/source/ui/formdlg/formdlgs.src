@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:49:42 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 15:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ TabPage RID_SCTAB_FUNCTION
          //@new
         QuickHelpText = "Funktion ¸bernehmen" ;
         QuickHelpText [ ENGLISH ] = "set function" ;
-        Pos = MAP_APPFONT ( 81 , 33 ) ;
+        Pos = MAP_APPFONT ( 81 , 29 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
         ButtonImage = Image
@@ -92,7 +92,7 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText [ french ] = "Adopter la fonction" ;
         QuickHelpText [ dutch ] = "Functie overnemen" ;
         QuickHelpText [ portuguese ] = "Aplicar funÁ„o" ;
-    QuickHelpText[ russian ] = "œËÏÂÌËÚ¸ ÙÛÌÍˆË˛";
+        QuickHelpText[ russian ] = "œËÏÂÌËÚ¸ ÙÛÌÍˆË˛";
         QuickHelpText[ polish ] = "Zastosuj funkcjÍ";
         QuickHelpText[ japanese ] = "ä÷êîÇÃìKóp!";
         QuickHelpText[ chinese_simplified ] = "Ω” ‹∫Ø ˝";
@@ -107,8 +107,8 @@ TabPage RID_SCTAB_FUNCTION
     ListBox LB_CATEGORY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 18 ) ;
-        Size = MAP_APPFONT ( 90 , 112 ) ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 112 ) ;
         DropDown = TRUE ;
         StringList =
         {
@@ -508,14 +508,14 @@ TabPage RID_SCTAB_FUNCTION
     ListBox LB_FUNCTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 48 ) ;
-        Size = MAP_APPFONT ( 90 , 127 ) ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 86 , 133 ) ;
          //         Sort = TRUE;
     };
     FixedText FT_CATEGORY
     {
-        Pos = MAP_APPFONT ( 3 , 6 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
         Text = "~Kategorie" ;
         Text [ ENGLISH ] = "~Category" ;
         Text [ norwegian ] = "~Category" ;
@@ -542,8 +542,8 @@ TabPage RID_SCTAB_FUNCTION
     };
     FixedText FT_FUNCTION
     {
-        Pos = MAP_APPFONT ( 3 , 38 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 72 , 8 ) ;
         Text = "~Funktion" ;
         Text [ ENGLISH ] = "~Function" ;
         Text [ norwegian ] = "~Function" ;
@@ -579,14 +579,14 @@ TabPage RID_SCTAB_STRUCT
     {
         Border = TRUE ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 18 ) ;
-        Size = MAP_APPFONT ( 90 , 157 ) ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 162 ) ;
         HelpId = HID_SC_FAP_STRUCT ;
     };
     FixedText FT_STRUCT
     {
-        Pos = MAP_APPFONT ( 3 , 6 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 86 , 8 ) ;
         Text = "~Struktur" ;
         Text [ ENGLISH ] = "Structure" ;
         Text [ portuguese ] = "~Estrutura" ;
@@ -811,49 +811,6 @@ ModelessDialog RID_SCDLG_FORMULA
          //TabStop = TRUE ;
         HelpId = HID_SC_FAP_FORMULA ;
     };
-    /*
-    PushButton BTN_BACKWARD
-    {
-         //     Disable = FALSE ;
-        Pos = MAP_APPFONT ( 283 , 147 ) ;
-        Size = MAP_APPFONT ( 15 , 12 ) ;
-        TabStop = TRUE ;
-        // ### ACHTUNG: Neuer Text in Resource? << ~Zur¸ck : << ~Zur≥ck
-        Text = "<<" ;
-        Text [ ENGLISH ] = "<<" ;
-        Text [ norwegian ] = "<< ~Backward" ;
-        Text [ italian ] = "<< ~Indietro" ;
-        Text [ portuguese_brazilian ] = "<< ~Para Tr·s" ;
-        Text [ portuguese ] = "<< ~Anterior" ;
-        Text [ finnish ] = "<< ~Taakse" ;
-        Text [ danish ] = "<< ~Tilbage" ;
-        Text [ french ] = "<< ~PrÈcÈdent" ;
-        Text [ swedish ] = "<< ~Tillbaka" ;
-        Text [ dutch ] = "<< Vor~ige" ;
-        Text [ spanish ] = "<< ~Regresar" ;
-        Text [ english_us ] = "<< ~Back" ;
-    };
-    PushButton BTN_FORWARD
-    {
-        Pos = MAP_APPFONT ( 300, 147 ) ;
-        Size = MAP_APPFONT ( 15 , 12 ) ;
-        TabStop = TRUE ;
-        Text = ">>" ;
-        Text [ ENGLISH ] = ">>" ;
-        Text [ norwegian ] = "For~ward >>" ;
-        Text [ italian ] = "Avanti >>" ;
-        Text [ portuguese_brazilian ] = "Para~ Frente >>" ;
-        Text [ portuguese ] = "~Seguinte >>" ;
-        Text [ finnish ] = "~Eteen >>" ;
-        Text [ danish ] = "~NÊste>>" ;
-        Text [ french ] = "~Suivant >>" ;
-        Text [ swedish ] = "~FramÂt >>" ;
-        Text [ dutch ] = "~Volgende >>" ;
-        Text [ spanish ] = "~Continuar >>" ;
-        Text [ english_us ] = "~Next >>" ;
-    };
-
-*/
     FixedText FT_RESULT
     {
         Pos = MAP_APPFONT ( 198 , 6 ) ;
@@ -987,28 +944,6 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText[ catalan ] = "Aumentar";
         QuickHelpText[ finnish ] = "Maximize";
     };
-    /*
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 170, 208) ;
-        Size = MAP_APPFONT ( 45 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 219 , 208 ) ;
-        Size = MAP_APPFONT ( 45 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    OKButton BTN_END
-    {
-        Pos = MAP_APPFONT ( 270 , 208 ) ;
-        Size = MAP_APPFONT ( 45 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-
-*/
      //
     HelpButton BTN_HELP
     {
