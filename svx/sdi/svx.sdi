@@ -950,9 +950,9 @@ SfxBoolItem ConvertToEdit SID_FM_CONVERTTO_EDIT
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -1024,9 +1024,9 @@ SfxBoolItem ConvertToCheckBox SID_FM_CONVERTTO_CHECKBOX
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -1119,9 +1119,9 @@ SfxBoolItem ConvertToGrid SID_FM_CONVERTTO_GRID
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6033,9 +6033,9 @@ SfxBoolItem ConvertToCurrency SID_FM_CONVERTTO_CURRENCY
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6103,9 +6103,9 @@ SfxBoolItem ConvertToPattern SID_FM_CONVERTTO_PATTERN
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6127,9 +6127,9 @@ SfxBoolItem ConvertToFormatted SID_FM_CONVERTTO_FORMATTED
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6270,9 +6270,9 @@ SfxBoolItem ConvertToList SID_FM_CONVERTTO_LISTBOX
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6318,9 +6318,9 @@ SfxBoolItem ConvertToCombo SID_FM_CONVERTTO_COMBOBOX
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6368,9 +6368,9 @@ SfxBoolItem ConvertToRadio SID_FM_CONVERTTO_RADIOBUTTON
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6392,9 +6392,9 @@ SfxBoolItem ConvertToImageBtn SID_FM_CONVERTTO_IMAGEBUTTON
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6416,9 +6416,9 @@ SfxBoolItem ConvertToNumeric SID_FM_CONVERTTO_NUMERIC
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6464,9 +6464,9 @@ SfxBoolItem ConvertToFileControl SID_FM_CONVERTTO_FILECONTROL
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6488,9 +6488,9 @@ SfxBoolItem ConvertToDate SID_FM_CONVERTTO_DATE
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -6778,9 +6778,9 @@ SfxBoolItem ConvertToTime SID_FM_CONVERTTO_TIME
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -7257,9 +7257,9 @@ SfxBoolItem ConvertToImageControl SID_FM_CONVERTTO_IMAGECONTROL
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -7568,9 +7568,9 @@ SfxBoolItem ConvertToButton SID_FM_CONVERTTO_BUTTON
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -7592,9 +7592,9 @@ SfxBoolItem ConvertToFixed SID_FM_CONVERTTO_FIXEDTEXT
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
@@ -7953,9 +7953,9 @@ SfxBoolItem ConvertToGroup SID_FM_CONVERTTO_GROUPBOX
     Readonly = FALSE,
     /* config: */
     AccelConfig = TRUE,
-    MenuConfig = FALSE,
+    MenuConfig = TRUE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
 
