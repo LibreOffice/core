@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-10 18:14:07 $
+ *  last change: $Author: jp $ $Date: 2001-10-11 09:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,10 @@
 #include <docvw.hrc>
 #endif
 
+//JP 11.10.2001: enable test code for bug fix 91313
+#if !defined( PRODUCT ) && defined( DEBUG )
+//#define TEST_FOR_BUG91313
+#endif
 
 /*--------------------------------------------------------------------
     Beschreibung:   Globals
@@ -689,14 +693,18 @@ void SwEditWin::JustifyAreaTimer()
          nDiff = Max(
          Max( aMovePos.Y() - rVisArea.Bottom(), rVisArea.Top() - aMovePos.Y() ),
          Max( aMovePos.X() - rVisArea.Right(),  rVisArea.Left() - aMovePos.X()));
+#ifdef TEST_FOR_BUG91313
+    aTimer.SetTimeout( Max( 50L, nTimeout - nDiff) );
+#else
     aTimer.SetTimeout( Max( 0L, nTimeout - nDiff*2L) );
+#endif
 }
 
 void SwEditWin::LeaveArea(const Point &rPos)
 {
     aMovePos = rPos;
     JustifyAreaTimer();
-    if ( !aTimer.IsActive() )
+    if( !aTimer.IsActive() )
         aTimer.Start();
     if( pShadCrsr )
         delete pShadCrsr, pShadCrsr = 0;
@@ -2466,7 +2474,20 @@ void SwEditWin::MouseMove(const MouseEvent& rMEvt)
     }
 
     const Point aOldPt( rSh.VisArea().Pos() );
+#ifdef TEST_FOR_BUG91313
+    // n Pixel as FUZZY border
+    SwRect aVis( rSh.VisArea() );
+    Size aFuzzySz( 2, 2 );
+    aFuzzySz = PixelToLogic( aFuzzySz );
+
+    aVis.Top(    aVis.Top()    + aFuzzySz.Height() );
+    aVis.Bottom( aVis.Bottom() - aFuzzySz.Height() );
+    aVis.Left(   aVis.Left()   + aFuzzySz.Width() );
+    aVis.Right(  aVis.Right()  - aFuzzySz.Width() );
+    const BOOL bInsWin = aVis.IsInside( aDocPt );
+#else
     const BOOL bInsWin = rSh.VisArea().IsInside( aDocPt );
+#endif
 
     if( pShadCrsr && !bInsWin )
         delete pShadCrsr, pShadCrsr = 0;
