@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-11 09:12:52 $
+ *  last change: $Author: obo $ $Date: 2000-12-11 10:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ void SearchTabPage_Impl::ClearSearchResults()
 IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
 {
     ClearSearchResults();
-    String aSearchURL( HELP_URL );
+    String aSearchURL = HELP_URL;
     aSearchURL += aFactory;
     aSearchURL += String( HELP_SEARCH_TAG );
     aSearchURL += aSearchED.GetText();
