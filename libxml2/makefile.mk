@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 13:27:52 $
+#   last change: $Author: rt $ $Date: 2005-01-28 16:07:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no
 BUILD_ACTION=$(GNUMAKE)
+BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
