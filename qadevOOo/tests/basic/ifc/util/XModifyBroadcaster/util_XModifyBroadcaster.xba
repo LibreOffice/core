@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: util_XModifyBroadcaster.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:55:41 $ 
+'*  last change:$Date: 2003-03-05 13:47:16 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -109,4 +109,8 @@ ErrHndl:
     bOK = false
     resume next
 End Sub
+
+Sub TestListener_modified()
+' dummy
+end sub
 </script:module>
