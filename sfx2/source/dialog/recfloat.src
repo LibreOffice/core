@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:14:44 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ String STR_CANCEL_RECORDING
     Text[ hindi ] = "Cancel Recording";
     Text[ slovak ] = "Zrušiť nahrávanie";
 };
+
+
 
 
 
