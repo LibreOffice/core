@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 20:09:56 $
+#   last change: $Author: rt $ $Date: 2004-02-11 09:57:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,6 @@ AUTOSEG=true
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
 SLO1FILES =  \
         $(SLO)$/docuno.obj \
         $(SLO)$/servuno.obj \
@@ -104,6 +103,7 @@ SLO1FILES =  \
         $(SLO)$/datauno.obj \
         $(SLO)$/dapiuno.obj \
         $(SLO)$/chartuno.obj \
+        $(SLO)$/chart2uno.obj \
         $(SLO)$/shapeuno.obj \
         $(SLO)$/pageuno.obj \
         $(SLO)$/forbiuno.obj \
