@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteSeparatorExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@ void XMLFootnoteSeparatorExport::exportXML(
     for(sal_uInt32 i = 0; i < nCount; i++)
     {
         const XMLPropertyState& rState = (*pProperties)[i];
+
+        if( rState.mnIndex == -1 )
+            continue;
 
         switch (rMapper->GetEntryContextId(rState.mnIndex))
         {
