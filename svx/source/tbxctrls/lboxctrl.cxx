@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-26 08:28:48 $
+ *  last change: $Author: jp $ $Date: 2001-10-12 15:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,15 +232,12 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxListBoxControl, SfxStringItem );
 
 
 SvxListBoxControl::SvxListBoxControl(
-        USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
-
-    SfxToolBoxControl( nId, rTbx, rBind ),
-    nItemId     ( nId ),
+                            USHORT nId, ToolBox& rTbx, SfxBindings& rBind )
+    :SfxToolBoxControl( nId, rTbx, rBind ),
     pPopupWin   ( 0 )
 {
-    ToolBox& rBox = GetToolBox();
-    rBox.SetItemBits( nId, TIB_DROPDOWN | rBox.GetItemBits( nId ) );
-    rBox.Invalidate();
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.Invalidate();
 }
 
 
@@ -265,19 +262,20 @@ SfxPopupWindowType SvxListBoxControl::GetPopupWindowType() const
 void SvxListBoxControl::StateChanged(
         USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
+    GetToolBox().EnableItem( GetId(),
+                            SFX_ITEM_DISABLED != GetItemState(pState) );
 }
 
 
 IMPL_LINK( SvxListBoxControl, PopupModeEndHdl, void *, EMPTYARG )
 {
-    if (pPopupWin  &&  0 == pPopupWin->GetPopupModeFlags()  &&
+    if( pPopupWin && 0 == pPopupWin->GetPopupModeFlags()  &&
         pPopupWin->IsUserSelected() )
     {
         USHORT nCount = pPopupWin->GetListBox().GetSelectEntryCount();
         SfxUInt16Item aItem( GetId(), nCount );
         GetBindings().GetDispatcher()->Execute( GetId(),
-                SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+                                        SFX_CALLMODE_SYNCHRON, &aItem, 0L );
     }
     return 0;
 }
@@ -312,41 +310,34 @@ IMPL_LINK( SvxListBoxControl, SelectHdl, void *, EMPTYARG )
 
 /////////////////////////////////////////////////////////////////
 
-SFX_IMPL_TOOLBOX_CONTROL( SvxUndoControl, SfxStringItem );
+SFX_IMPL_TOOLBOX_CONTROL( SvxUndoRedoControl, SfxStringItem );
 
-
-SvxUndoControl::SvxUndoControl(
-        USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
-
-    SvxListBoxControl( nId, rTbx, rBind )
-{
-    aActionStr = String( SVX_RES( RID_SVXSTR_NUM_UNDO_ACTIONS ) );
-}
-
-
-SvxUndoControl::~SvxUndoControl()
+SvxUndoRedoControl::~SvxUndoRedoControl()
 {
 }
 
 
-SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
+SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
 {
-    DBG_ASSERT( SID_UNDO == GetId(), "mismatching ids" );
-    DBG_ASSERT( SID_UNDO == nItemId, "mismatching ids" );
+    const USHORT nId = GetId();
+    DBG_ASSERT( SID_UNDO == nId || SID_REDO == nId, "mismatching ids" );
 
     const SfxPoolItem* pState = 0;
     SfxBindings &rBindings = GetBindings();
-    SfxDispatcher &rDispatch = *GetBindings().GetDispatcher();
-    SfxItemState eState = rDispatch.QueryState( SID_GETUNDOSTRINGS, pState );
+    SfxDispatcher &rDispatch = *rBindings.GetDispatcher();
+    SfxItemState eState = rDispatch.QueryState( SID_UNDO == nId
+                                                ? SID_GETUNDOSTRINGS
+                                                : SID_GETREDOSTRINGS, pState );
 
-    if (eState >= SFX_ITEM_AVAILABLE  &&  pState)
+    if( eState >= SFX_ITEM_AVAILABLE  &&  pState)
     {
         ToolBox& rBox = GetToolBox();
 
-        pPopupWin = new SvxPopupWindowListBox( GetId(), rBox, rBindings );
-        pPopupWin->SetPopupModeEndHdl( LINK( this, SvxUndoControl, PopupModeEndHdl ) );
+        pPopupWin = new SvxPopupWindowListBox( nId, rBox, rBindings );
+        pPopupWin->SetPopupModeEndHdl( LINK( this, SvxUndoRedoControl,
+                                                PopupModeEndHdl ) );
         ListBox &rListBox = pPopupWin->GetListBox();
-        rListBox.SetSelectHdl( LINK( this, SvxUndoControl, SelectHdl ) );
+        rListBox.SetSelectHdl( LINK( this, SvxUndoRedoControl, SelectHdl ) );
 
         SfxStringListItem &rItem = *(SfxStringListItem *) pState;
         const List* pLst = rItem.GetList();
@@ -355,110 +346,25 @@ SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
             for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
                 rListBox.InsertEntry( *((String*)pLst->GetObject( nI )) );
         rListBox.SelectEntryPos( 0 );
+
+        aActionStr = String( SVX_RES( SID_UNDO == nId
+                                        ? RID_SVXSTR_NUM_UNDO_ACTIONS
+                                           : RID_SVXSTR_NUM_REDO_ACTIONS ) );
         Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
         // position window at the bottom-left of the toolbox icon.
         // The -2 offset takes the distance from the item-rect to
         // the toolbox border into account (can't be obtained from
         // the toolbox).
-        Rectangle aItemRect( rBox.GetItemRect( GetId() ) );
+        Rectangle aItemRect( rBox.GetItemRect( nId ) );
         aItemRect.Bottom() += aItemRect.GetHeight() - 2;
 
-        ReleaseTbxBtn_Impl( rBox, rBox.GetItemRect( GetId() ).TopLeft() );
+        ReleaseTbxBtn_Impl( rBox, rBox.GetItemRect( nId ).TopLeft() );
         pPopupWin->StartPopupMode( aItemRect );
         pPopupWin->StartSelection();
     }
     return pPopupWin;
 }
 
-
-SfxPopupWindowType SvxUndoControl::GetPopupWindowType() const
-{
-    return SvxListBoxControl::GetPopupWindowType();
-}
-
-
-void SvxUndoControl::StateChanged(
-        USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    SvxListBoxControl::StateChanged( nSID, eState, pState );
-}
-
-
-/////////////////////////////////////////////////////////////////
-
-SFX_IMPL_TOOLBOX_CONTROL( SvxRedoControl, SfxStringItem );
-
-
-SvxRedoControl::SvxRedoControl(
-        USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
-
-    SvxListBoxControl( nId, rTbx, rBind )
-{
-    aActionStr = String( SVX_RES( RID_SVXSTR_NUM_REDO_ACTIONS ) );
-}
-
-
-SvxRedoControl::~SvxRedoControl()
-{
-}
-
-
-SfxPopupWindow* SvxRedoControl::CreatePopupWindow()
-{
-    DBG_ASSERT( SID_REDO == GetId(), "mismatching ids" );
-    DBG_ASSERT( SID_REDO == nItemId, "mismatching ids" );
-
-    const SfxPoolItem* pState = 0;
-    SfxBindings &rBindings = GetBindings();
-    SfxDispatcher &rDispatch = *GetBindings().GetDispatcher();
-    SfxItemState eState = rDispatch.QueryState( SID_GETREDOSTRINGS, pState );
-
-    if (eState >= SFX_ITEM_AVAILABLE  &&  pState)
-    {
-        ToolBox& rBox = GetToolBox();
-
-        pPopupWin = new SvxPopupWindowListBox( GetId(), rBox, rBindings );
-        pPopupWin->SetPopupModeEndHdl( LINK( this, SvxRedoControl, PopupModeEndHdl ) );
-        ListBox &rListBox = pPopupWin->GetListBox();
-        rListBox.SetSelectHdl( LINK( this, SvxRedoControl, SelectHdl ) );
-
-        SfxStringListItem &rItem = *(SfxStringListItem *) pState;
-        const List* pLst = rItem.GetList();
-        DBG_ASSERT( pLst, "no redo actions available" );
-        if( pLst )
-            for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
-                rListBox.InsertEntry( *((String*)pLst->GetObject( nI )) );
-        rListBox.SelectEntryPos( 0 );
-        Impl_SetInfo( rListBox.GetSelectEntryCount() );
-
-        // position window at the bottom-left of the toolbox icon.
-        // The -2 offset takes the distance from the item-rect to
-        // the toolbox border into account (can't be obtained from
-        // the toolbox).
-        Rectangle aItemRect( rBox.GetItemRect( GetId() ) );
-        aItemRect.Bottom() += aItemRect.GetHeight() - 2;
-
-        ReleaseTbxBtn_Impl( rBox, rBox.GetItemRect( GetId() ).TopLeft() );
-        pPopupWin->StartPopupMode( aItemRect );
-        pPopupWin->StartSelection();
-    }
-    return pPopupWin;
-}
-
-
-SfxPopupWindowType SvxRedoControl::GetPopupWindowType() const
-{
-    return SvxListBoxControl::GetPopupWindowType();
-}
-
-
-void SvxRedoControl::StateChanged(
-        USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    SvxListBoxControl::StateChanged( nSID, eState, pState );
-}
-
-/////////////////////////////////////////////////////////////////
 
 

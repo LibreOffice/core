@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-25 13:41:45 $
+ *  last change: $Author: jp $ $Date: 2001-10-12 15:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ class SvxListBoxControl : public SfxToolBoxControl
 protected:
     String                  aActionStr;
     SvxPopupWindowListBox * pPopupWin;
-    USHORT                  nItemId;
 
     void    Impl_SetInfo( USHORT nCount );
 
@@ -98,39 +97,19 @@ public:
 
 /////////////////////////////////////////////////////////////////
 
-class SvxUndoControl : public SvxListBoxControl
+class SvxUndoRedoControl : public SvxListBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxUndoControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
-    virtual ~SvxUndoControl();
+    SvxUndoRedoControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind )
+        : SvxListBoxControl( nId, rTbx, rBind )
+    {}
 
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual void                StateChanged( USHORT nSID,
-                                              SfxItemState eState,
-                                              const SfxPoolItem* pState );
+    virtual ~SvxUndoRedoControl();
+
+    virtual SfxPopupWindow*  CreatePopupWindow();
 };
-
-/////////////////////////////////////////////////////////////////
-
-class SvxRedoControl : public SvxListBoxControl
-{
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    SvxRedoControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
-    virtual ~SvxRedoControl();
-
-    virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual void                StateChanged( USHORT nSID,
-                                              SfxItemState eState,
-                                              const SfxPoolItem* pState );
-};
-
-/////////////////////////////////////////////////////////////////
 
 #endif
 
