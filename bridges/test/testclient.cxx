@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testclient.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:51 $
+ *  last change: $Author: jbu $ $Date: 2000-10-19 15:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ void main( int argc, char *argv[] )
                 {
                     // just ensure that it is registered
                     createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
-                                     OUString( RTL_CONSTASCII_USTRINGPARAM("iiopbrdg")),
+                                     OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge")),
                                      rSMgr );
 
                     Reference < XBridgeFactory > rFactory(
