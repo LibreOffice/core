@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:06:22 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,10 +390,6 @@ void SAL_CALL Listener::propertyChange (
     static const ::rtl::OUString sEditModePropertyName (
         RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"));
 
-    OSL_TRACE ("slidesorter::Listener: property changed: %s",
-        ::rtl::OUStringToOString(rEvent.PropertyName,
-            RTL_TEXTENCODING_UTF8).getStr());
-
     if (rEvent.PropertyName.equals (sCurrentPagePropertyName))
     {
         Any aCurrentPage = rEvent.NewValue;
@@ -407,12 +403,11 @@ void SAL_CALL Listener::propertyChange (
                 sal_Int32 nCurrentPage;
                 aPageNumber >>= nCurrentPage;
                 mrController.GetPageSelector().UpdateAllPages ();
-                // As the selection is already set this call is used just to
-                // remember the new current page as the most recently
-                // selected page that will be handled with greater priority
-                // when making the selection visible.
-                mrController.GetPageSelector().SelectPage (nCurrentPage-1);
-                mrController.MakeSelectionVisible();
+                // The selection is already set but we call SelectPage()
+                // nevertheless in order to make the new current page the
+                // last recently selected page of the PageSelector.  This is
+                // used when making the selection visible.
+                mrController.GetPageSelector().SelectPage(nCurrentPage-1);
             }
             catch (beans::UnknownPropertyException aEvent)
             {
