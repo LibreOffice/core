@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-09 15:51:47 $
+ *  last change: $Author: mba $ $Date: 2002-07-24 10:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,10 +406,11 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
             INET_PROT_HTTP != aURL.GetProtocol() )
         {
             SfxStringItem aName( SID_FILE_NAME, sTopic );
-            SfxBoolItem aHidden(SID_HIDDEN, TRUE);
+            SfxBoolItem aMinimized(SID_MINIMIZEWINS, TRUE);
+            SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
             const SfxPoolItem* pRet = SfxViewFrame::Current()->GetDispatcher()->
-                Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aHidden, &aReferer, 0L );
+                Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aMinimized, &aReferer, &aTarget, 0L );
 
             if( pRet && pRet->ISA( SfxViewFrameItem ) &&
                 ((SfxViewFrameItem*)pRet)->GetFrame() )
@@ -434,8 +435,6 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
                                     ? ADVISEMODE_ONLYONCE
                                     : 0 );
         }
-
-        pFndShell->DoClose();
     }
     return bRet;
 }
