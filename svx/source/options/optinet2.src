@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-05 06:59:36 $
+ *  last change: $Author: pb $ $Date: 2001-06-07 07:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,18 @@ TabPage RID_SVXPAGE_INET_PROXY
     Text [ danish ] = "Proxy" ;
     Text [ portuguese ] = "Servidor Proxy" ;
     Text [ portuguese_brazilian ] = "Proxy Server" ;
+    Text[ chinese_simplified ] = "´úÀí·þÎñÆ÷";
+    Text[ russian ] = "Ïðîêñè";
+    Text[ polish ] = "Proxy";
+    Text[ japanese ] = "ÌßÛ·¼";
+    Text[ chinese_traditional ] = "¥N²z¦øªA¾¹";
+    Text[ arabic ] = "Proxy";
+    Text[ greek ] = "Proxy";
+    Text[ korean ] = "ÇÁ·Ï½Ã";
+    Text[ turkish ] = "Proxy";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Proxy";
+    Text[ finnish ] = "Välityspalvelin";
                                     #define GB_TYPES_TOP 3
                                     #define GB_TYPES_LEFT 6
     FixedLine GB_SETTINGS
@@ -650,6 +662,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     FixedLine GB_SERVER
     {
+        Hide = TRUE;
         Pos = MAP_APPFONT ( 6 , 134 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Mail-Server" ;
@@ -678,6 +691,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     FixedText FT_SEND
     {
+        Hide = TRUE;
         Pos = MAP_APPFONT ( 12 , 147 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "~Nachrichtenversand" ;
@@ -706,6 +720,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     Edit ED_SEND
     {
+        Hide = TRUE;
         Pos = MAP_APPFONT ( 90 , 145) ;
         Size = MAP_APPFONT ( 96 , 12 ) ;
         Border = TRUE ;
@@ -762,18 +777,6 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ catalan ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 1 y 255.";
         Text[ finnish ] = "ei ole kelvollinen merkintä tässä kentässä. Määritä arvo 1 - 255.";
     };
-    Text[ chinese_simplified ] = "´úÀí·þÎñÆ÷";
-    Text[ russian ] = "Ïðîêñè";
-    Text[ polish ] = "Proxy";
-    Text[ japanese ] = "ÌßÛ·¼";
-    Text[ chinese_traditional ] = "¥N²z¦øªA¾¹";
-    Text[ arabic ] = "Proxy";
-    Text[ greek ] = "Proxy";
-    Text[ korean ] = "ÇÁ·Ï½Ã";
-    Text[ turkish ] = "Proxy";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Proxy";
-    Text[ finnish ] = "Välityspalvelin";
 };
 /************************************************************************/
 /*                                                                      */
