@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-27 13:24:27 $
+#   last change: $Author: hjs $ $Date: 2001-07-17 09:58:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,14 @@ INCLUDE!:=$(shell echo $(INCLUDE:s/\stl//) | sed "s/[ \t]*-I/;/g" )
 PACKAGE_DIR=build$/$(ROUT)
 P_CONFIGURE_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(CONFIGURE_DIR)
 P_BUILD_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
+P_INSTALL_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
+P_INSTALL_TARGET_DIR=$(MISC)$/install
+
+#clean PWD to let a build_action=dmake set it with new value
+.IF "$(GUI)"=="WNT"
+PWD:=
+.EXPORT : PWD
+.ENDIF          # "$(GUI)"=="WNT"
 
 .IF "$(ADDITIONAL_FILES)"!=""
 P_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(MISC)$/$(TARFILE_ROOTDIR)$/$i)
@@ -87,7 +95,9 @@ T_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(TARFILE_ROO
 ALLTAR : \
     $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) \
     $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) \
+    $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE) \
     $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) \
+    $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) \
     $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) \
     $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 
@@ -116,13 +126,21 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/$(TARFILE_NAME).tar
 .ELSE			# "$(GUI)"=="WNT"
     @+cd $(PACKAGE_DIR) && chmod -R +w * && $(TOUCH) $(UNTAR_FLAG_FILE)
 .ENDIF			# "$(GUI)"=="WNT"
-    
+
+#add new files to patch
+$(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(T_ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+.IF "$(GUI)"=="WNT"
+    @+if not exist $@ $(TOUCH) $@
+.ELSE			# "$(GUI)"=="WNT"
+    @+-test ! -e $@ && $(TOUCH) $@
+.ENDIF			# "$(GUI)"=="WNT"
+
 #patch
-$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES)
+$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 .IF "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
     +cd $(PACKAGE_DIR) && echo no patch needed...
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
-    +cd $(PACKAGE_DIR) && ($(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -b -p2) && $(TOUCH) $(PATCH_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && $(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
@@ -140,11 +158,22 @@ $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
     +$(TOUCH) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ELSE			# "$(BUILD_ACTION)"=="none" ||	"$(BUILD_ACTION)"==""
     +-$(MKDIR) $(P_BUILD_DIR)
+    @+-$(RM) $@
     +cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) && $(TOUCH) $(BUILD_FLAG_FILE)
     +mv $(P_BUILD_DIR)$/$(BUILD_FLAG_FILE) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ENDIF			# "$(BUILD_ACTION)"=="none" ||	"$(BUILD_ACTION)"==""
 
-$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
+$(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
+.IF "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
+    +$(TOUCH) $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+.ELSE			# "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
+    +-$(MKDIR) $(P_INSTALL_DIR)
+    +-$(MKDIR) $(P_INSTALL_TARGET_DIR)
+    +cd $(P_INSTALL_DIR) && $(INSTALL_ACTION) $(INSTALL_FLAGS) && $(TOUCH) $(INSTALL_FLAG_FILE)
+    +mv $(P_INSTALL_DIR)$/$(INSTALL_FLAG_FILE) $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+.ENDIF			# "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
+
+$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .IF "$(OUT2LIB)"!=""
     +$(COPY) $(foreach,i,$(OUT2LIB) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(LB)
 .ENDIF			# "$(OUT2LIB)"!=""
@@ -177,13 +206,15 @@ $(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).tar
 
 
 .IF "$(P_ADDITIONAL_FILES)"!=""
-$(P_ADDITIONAL_FILES) : $(MISC)$/$(TARFILE_ROOTDIR)
+$(P_ADDITIONAL_FILES) :
+# $(MISC)$/$(TARFILE_ROOTDIR)
 #	+-touch $@
     +-echo dummy > $@
 .ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
-$(T_ADDITIONAL_FILES) : $(PACKAGE_DIR)
+$(T_ADDITIONAL_FILES) :
+#$(PACKAGE_DIR)
 #	+-touch $@
     +-echo dummy > $@
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
