@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtsecte.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-13 16:55:00 $
+ *  last change: $Author: dvo $ $Date: 2001-05-14 13:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,113 +223,104 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     const XMLTextNumRuleInfo& rNextRule,
     sal_Bool bAutoStyles)
 {
-    if ( bAutoStyles )
+    // old != new? -> maybe we have to start or end a new section
+    if (rPrevSection != rNextSection)
     {
-        if ( rNextSection.is() )
+        // a new section started, or an old one gets closed!
+
+        // close old list
+        XMLTextNumRuleInfo aEmptyNumRule;
+        if ( !bAutoStyles )
+            exportListChange(rPrevRule, aEmptyNumRule);
+
+        // Build stacks of old and new sections
+        // Sections on top of mute sections should not be on the stack
+        vector<Reference<XTextSection> > aOldStack;
+        Reference<XTextSection> aCurrent = rPrevSection;
+        while(aCurrent.is())
         {
-            pSectionExport->ExportSectionStart( rNextSection, bAutoStyles );
+            // if we have a mute section, ignore all its children
+            // (all previous ones)
+            if (pSectionExport->IsMuteSection(aCurrent))
+                aOldStack.clear();
+
+            aOldStack.push_back(aCurrent);
+            aCurrent = aCurrent->getParentSection();
         }
+
+        vector<Reference<XTextSection> > aNewStack;
+        aCurrent = rNextSection;
+        while(aCurrent.is())
+        {
+            // if we have a mute section, ignore all its children
+            // (all previous ones)
+            if (pSectionExport->IsMuteSection(aCurrent))
+                aNewStack.clear();
+
+            aNewStack.push_back(aCurrent);
+            aCurrent = aCurrent->getParentSection();
+        }
+
+        // compare the two stacks
+        vector<Reference<XTextSection> > ::reverse_iterator aOld =
+            aOldStack.rbegin();
+        vector<Reference<XTextSection> > ::reverse_iterator aNew =
+            aNewStack.rbegin();
+        // compare bottom sections and skip equal section
+        while ( (aOld != aOldStack.rend()) &&
+                (aNew != aNewStack.rend()) &&
+                (*aOld) == (*aNew) )
+        {
+            aOld++;
+            aNew++;
+        }
+
+        // close all elements of aOld ...
+        // (order: newest to oldest)
+        if (aOld != aOldStack.rend())
+        {
+            vector<Reference<XTextSection> > ::iterator aOldForward =
+                aOldStack.begin();
+            while ((aOldForward != aOldStack.end()) &&
+                   (*aOldForward != *aOld))
+            {
+                if (NULL != pRedlineExport)
+                    pRedlineExport->ExportStartOrEndRedline(*aOldForward,
+                                                                sal_False);
+                pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
+                aOldForward++;
+            }
+            if (aOldForward != aOldStack.end())
+            {
+                if (NULL != pRedlineExport)
+                    pRedlineExport->ExportStartOrEndRedline(*aOldForward,
+                                                            sal_False);
+                pSectionExport->ExportSectionEnd(*aOldForward, bAutoStyles);
+            }
+        }
+
+        // ...then open all of aNew
+        // (order: oldest to newest)
+        while (aNew != aNewStack.rend())
+        {
+            if (NULL != pRedlineExport)
+                pRedlineExport->ExportStartOrEndRedline(*aNew, sal_True);
+            pSectionExport->ExportSectionStart(*aNew, bAutoStyles);
+            aNew++;
+        }
+
+        // start new list
+        if ( !bAutoStyles )
+            exportListChange(aEmptyNumRule, rNextRule);
     }
     else
     {
-        // old != new? -> start/equal?
-        if (rPrevSection != rNextSection)
-        {
-            // a new section started, or an old one gets closed!
-
-            // close old list
-            XMLTextNumRuleInfo aEmptyNumRule;
-            exportListChange(rPrevRule, aEmptyNumRule);
-
-            // Build stacks of old and new sections
-            // Sections on top of mute sections should not be on the stack
-            vector<Reference<XTextSection> > aOldStack;
-            Reference<XTextSection> aCurrent = rPrevSection;
-            while(aCurrent.is())
-            {
-                // if we have a mute section, ignore all its children
-                // (all previous ones)
-                if (pSectionExport->IsMuteSection(aCurrent))
-                    aOldStack.clear();
-
-                aOldStack.push_back(aCurrent);
-                aCurrent = aCurrent->getParentSection();
-            }
-
-            vector<Reference<XTextSection> > aNewStack;
-            aCurrent = rNextSection;
-            while(aCurrent.is())
-            {
-                // if we have a mute section, ignore all its children
-                // (all previous ones)
-                if (pSectionExport->IsMuteSection(aCurrent))
-                    aNewStack.clear();
-
-                aNewStack.push_back(aCurrent);
-                aCurrent = aCurrent->getParentSection();
-            }
-
-            // compare the two stacks
-            vector<Reference<XTextSection> > ::reverse_iterator aOld =
-                aOldStack.rbegin();
-            vector<Reference<XTextSection> > ::reverse_iterator aNew =
-                aNewStack.rbegin();
-            // compare bottom sections and skip equal section
-            while ( (aOld != aOldStack.rend()) &&
-                    (aNew != aNewStack.rend()) &&
-                    (*aOld) == (*aNew) )
-            {
-                aOld++;
-                aNew++;
-            }
-
-            // close all elements of aOld ...
-            // (order: newest to oldest)
-            if (aOld != aOldStack.rend())
-            {
-                vector<Reference<XTextSection> > ::iterator aOldForward =
-                    aOldStack.begin();
-                while ((aOldForward != aOldStack.end()) &&
-                       (*aOldForward != *aOld))
-                {
-                    if (NULL != pRedlineExport)
-                        pRedlineExport->ExportStartOrEndRedline(*aOldForward,
-                                                                sal_False);
-                    pSectionExport->ExportSectionEnd(*aOldForward,
-                                                     bAutoStyles);
-                    aOldForward++;
-                }
-                if (aOldForward != aOldStack.end())
-                {
-                    if (NULL != pRedlineExport)
-                        pRedlineExport->ExportStartOrEndRedline(*aOldForward,
-                                                                sal_False);
-                    pSectionExport->ExportSectionEnd(*aOldForward,
-                                                     bAutoStyles);
-                }
-            }
-
-            // ...then open all of aNew
-            // (order: oldest to newest)
-            while (aNew != aNewStack.rend())
-            {
-                if (NULL != pRedlineExport)
-                    pRedlineExport->ExportStartOrEndRedline(*aNew, sal_True);
-                pSectionExport->ExportSectionStart(*aNew, bAutoStyles);
-                aNew++;
-            }
-
-            // start new list
-            exportListChange(aEmptyNumRule, rNextRule);
-        }
-        else
-        {
-            // list change, if sections have not changed
+        // list change, if sections have not changed
+        if ( !bAutoStyles )
             exportListChange(rPrevRule, rNextRule);
-        }
     }
 
-    // save old section (old numRule gets saved in calling method
+    // save old section (old numRule gets saved in calling method)
     rPrevSection = rNextSection;
 }
 
