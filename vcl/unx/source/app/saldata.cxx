@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:57:54 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ void SalXLib::Init()
                  */
                 const char envpre[] = "DISPLAY=";
                 char *envstr = new char[sizeof(envpre)+aDisplay.getLength()];
-                sprintf(envstr, "DISPLAY=%s", aDisplay.getStr());
+                snprintf(envstr, sizeof(envpre)+aDisplay.getLength(), "DISPLAY=%s", aDisplay.getStr());
                 putenv(envstr);
             }
             break;
