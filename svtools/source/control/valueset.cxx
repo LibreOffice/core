@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:13:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,9 @@ void ValueSet::ImplInitSettings( BOOL bFont,
         Color aColor;
         if ( IsControlBackground() )
             aColor = GetControlBackground();
-        else if ( GetStyle() & WB_FLATVALUESET )
+        else if ( GetStyle() & WB_MENUSTYLEVALUESET )
+            aColor = rStyleSettings.GetMenuColor();
+        else if ( IsEnabled() && (GetStyle() & WB_FLATVALUESET) )
             aColor = rStyleSettings.GetWindowColor();
         else
             aColor = rStyleSettings.GetFaceColor();
@@ -339,8 +341,12 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             if ( IsColor() )
                 maVirDev.SetFillColor( maColor );
+            else if ( nStyle & WB_MENUSTYLEVALUESET )
+                maVirDev.SetFillColor( rStyleSettings.GetMenuColor() );
+            else if ( IsEnabled() )
+                maVirDev.SetFillColor( rStyleSettings.GetWindowColor() );
             else
-                maVirDev.SetFillColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor() );
+                maVirDev.SetFillColor( rStyleSettings.GetFaceColor() );
             maVirDev.DrawRect( aRect );
 
             if ( pItem->meType == VALUESETITEM_USERDRAW )
@@ -357,7 +363,7 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
                 aPos.Y() += (aRectSize.Height()-aImageSize.Height())/2;
 
                 USHORT  nImageStyle  = 0;
-                if( (nStyle & WB_MENUSTYLEVALUESET) && !IsEnabled() )
+                if( !IsEnabled() )
                     nImageStyle  |= IMAGE_DRAW_DISABLE;
 
                 if ( (aImageSize.Width()  > aRectSize.Width()) ||
@@ -1823,7 +1829,7 @@ void ValueSet::StateChanged( StateChangedType nType )
         ImplInitSettings( FALSE, FALSE, TRUE );
         Invalidate();
     }
-    else if ( nType == STATE_CHANGE_STYLE )
+    else if ( (nType == STATE_CHANGE_STYLE) || (nType == STATE_CHANGE_ENABLE) )
     {
         mbFormat = TRUE;
         ImplInitSettings( FALSE, FALSE, TRUE );
