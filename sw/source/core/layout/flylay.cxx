@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-08 13:30:16 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,9 @@
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
 #endif
-#ifndef _ANCHOREDOBJECTPOSITION_HXX
-#include <anchoredobjectposition.hxx>
+// OD 29.10.2003 #113049#
+#ifndef _ENVIRONMENTOFANCHOREDOBJECT_HXX
+#include <environmentofanchoredobject.hxx>
 #endif
 
 #ifdef ACCESSIBLE_LAYOUT
@@ -1016,6 +1017,8 @@ SwFrm *SwPageFrm::PlaceFly( SwFlyFrm *pFly, SwFrmFmt *pFmt,
 |*************************************************************************/
 // OD 22.09.2003 #i18732# - adjustments for following text flow or not
 // AND alignment at 'page areas' for to paragraph/to character anchored objects
+// OD 06.11.2003 #i22305# - adjustment for following text flow
+// or not for to frame anchored objects
 BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
 {
     BOOL bRet = TRUE;
@@ -1026,8 +1029,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         const SwFmtVertOrient &rV = pFly->GetFmt()->GetVertOrient();
         if( pFly->IsFlyLayFrm() )
         {
-            // OD 22.09.2003 #i18732#
             const SwFrm* pClip;
+            // OD 06.11.2003 #i22305#
             if ( !bFollowTextFlow )
             {
                 pClip = pFly->GetAnchor()->FindPageFrm();
@@ -1042,7 +1045,6 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             SWRECTFN( pClip )
 
             //Vertikales clipping: Top und Bottom, ggf. an PrtArea
-//          const SwFmtVertOrient &rV = pFly->GetFmt()->GetVertOrient();
             if( rV.GetVertOrient() != VERT_NONE &&
                 rV.GetRelationOrient() == PRTAREA )
             {
@@ -1080,10 +1082,11 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             else if ( rV.GetRelationOrient() == REL_PG_FRAME ||
                       rV.GetRelationOrient() == REL_PG_PRTAREA )
             {
+                // OD 29.10.2003 #113049# - new class <SwEnvironmentOfAnchoredObject>
+                objectpositioning::SwEnvironmentOfAnchoredObject
+                                                aEnvOfObj( bFollowTextFlow );
                 const SwLayoutFrm& rVertClipFrm =
-                    objectpositioning::SwAnchoredObjectPosition::
-                        GetVertEnvironmentLayoutFrm( *pVertPosOrientFrm,
-                                                     bFollowTextFlow, true );
+                    aEnvOfObj.GetVertEnvironmentLayoutFrm( *pVertPosOrientFrm, !bMove );
                 if ( rV.GetRelationOrient() == REL_PG_FRAME )
                 {
                     rRect = rVertClipFrm.Frm();
