@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:56:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,19 @@
 #include <tools/svwin.h>
 #endif
 
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
+#include <osl/module.h>
+
 #ifndef _SV_SALOGL_H
 #include <salogl.h>
 #endif
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
 #endif
+
+using namespace rtl;
 
 #ifdef WNT
 #define __OPENGL_CALL __stdcall
@@ -96,8 +103,9 @@ typedef void    ( __OPENGL_CALL *OGLFncMakeCurrent )( HDC hDC, HGLRC hContext  )
 // ----------
 
 #define INIT_OGLFNC_WGL( FncName ) static OGLFnc##FncName pImplOpenWGLFnc##FncName = NULL;
-#define GET_OGLFNC_WGL( FncName )                                                               \
-pImplOpenWGLFnc##FncName = (OGLFnc##FncName##) GetProcAddress( hImplOGLLib, "wgl" #FncName );   \
+#define GET_OGLFNC_WGL( FncName )                                                                 \
+OUString queryFuncName##FncName( RTL_CONSTASCII_USTRINGPARAM( "wgl" #FncName ) );                 \
+pImplOpenWGLFnc##FncName = (OGLFnc##FncName##) osl_getSymbol( hImplOGLLib, queryFuncName##FncName.pData ); \
 if( !pImplOpenWGLFnc##FncName ) bRet = FALSE;
 
 // -----------------
@@ -105,7 +113,7 @@ if( !pImplOpenWGLFnc##FncName ) bRet = FALSE;
 // -----------------
 
 // Members
-static HINSTANCE    hImplOGLLib;
+static oslModule    hImplOGLLib = NULL;
 HGLRC               WinSalOpenGL::mhOGLContext = 0;
 HDC                 WinSalOpenGL::mhOGLLastDC = 0;
 ULONG               WinSalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
@@ -231,7 +239,10 @@ void WinSalOpenGL::Release()
 void* WinSalOpenGL::GetOGLFnc( const char* pFncName )
 {
     if ( hImplOGLLib )
-        return (void*)GetProcAddress( hImplOGLLib, pFncName );
+    {
+        OUString queryFuncName = OUString::createFromAscii( pFncName );
+        return (void*)osl_getSymbol( hImplOGLLib, queryFuncName.pData );
+    }
     else
         return NULL;
 }
@@ -316,7 +327,9 @@ void WinSalOpenGL::StopScene()
 
 BOOL WinSalOpenGL::ImplInitLib()
 {
-    return ((hImplOGLLib = LoadLibrary( OGL_LIBNAME )) != NULL);
+    OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( OGL_LIBNAME ) );
+    hImplOGLLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+    return ( hImplOGLLib != NULL );
 }
 
 // ------------------------------------------------------------------------
@@ -325,7 +338,7 @@ void WinSalOpenGL::ImplFreeLib()
 {
     if ( hImplOGLLib )
     {
-        FreeLibrary( hImplOGLLib );
+        osl_unloadModule( hImplOGLLib );
         hImplOGLLib = NULL;
         mnOGLState = OGL_STATE_UNLOADED;
     }
@@ -338,10 +351,13 @@ BOOL WinSalOpenGL::ImplInit()
     BOOL bRet = TRUE;
 
     // Internal use
-    GET_OGLFNC_WGL( CreateContext );
-    GET_OGLFNC_WGL( DeleteContext );
-    GET_OGLFNC_WGL( GetCurrentContext );
-    GET_OGLFNC_WGL( MakeCurrent );
+    if ( hImplOGLLib )
+    {
+        GET_OGLFNC_WGL( CreateContext );
+        GET_OGLFNC_WGL( DeleteContext );
+        GET_OGLFNC_WGL( GetCurrentContext );
+        GET_OGLFNC_WGL( MakeCurrent );
+    }
 
     return bRet;
 }
