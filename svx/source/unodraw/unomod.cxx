@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-17 10:12:08 $
+ *  last change: $Author: cl $ $Date: 2002-01-30 09:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,63 @@ const SvEventDescription* ImplGetSupportedMacroItems()
 #endif
 
 //-////////////////////////////////////////////////////////////////////
+
+/** fills the given EventObject from the given SdrHint.
+    @returns
+        true    if the SdrHint could be translated to an EventObject<br>
+        false   if not
+*/
+sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent )
+{
+    const SdrObject* pObj = NULL;
+    const SdrPage* pPage = NULL;
+
+    switch( pSdrHint->GetKind() )
+    {
+//              case HINT_LAYERCHG:             // Layerdefinition geaendert
+//              case HINT_LAYERORDERCHG:        // Layerreihenfolge geaendert (Insert/Remove/ChangePos)
+//              case HINT_LAYERSETCHG:          // Layerset geaendert
+//              case HINT_LAYERSETORDERCHG:     // Layersetreihenfolge geaendert (Insert/Remove/ChangePos)
+
+        case HINT_PAGECHG:              // Page geaendert
+            aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageModified" ) );
+            pPage = pSdrHint->GetPage();
+            break;
+        case HINT_PAGEORDERCHG:         // Reihenfolge der Seiten (Zeichenseiten oder Masterpages) geaendert (Insert/Remove/ChangePos)
+            aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOrderModified" ) );
+            pPage = pSdrHint->GetPage();
+            break;
+        case HINT_OBJCHG:               // Objekt geaendert
+            aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ShapeModified" ) );
+            pObj = pSdrHint->GetObject();
+            break;
+        case HINT_OBJINSERTED:          // Neues Zeichenobjekt eingefuegt
+            aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ShapeInserted" ) );
+            pObj = pSdrHint->GetObject();
+            break;
+        case HINT_OBJREMOVED:           // Zeichenobjekt aus Liste entfernt
+            aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ShapeRemoved" ) );
+            pObj = pSdrHint->GetObject();
+            break;
+//                HINT_DEFAULTTABCHG,   // Default Tabulatorweite geaendert
+//                HINT_DEFFONTHGTCHG,   // Default FontHeight geaendert
+//                HINT_CONTROLINSERTED, // UnoControl wurde eingefuegt
+//                HINT_CONTROLREMOVED,  // UnoControl wurde entfernt
+//                HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
+//                HINT_OBJLISTCLEAR     // Is called before an SdrObjList will be cleared
+        default:
+            return sal_False;
+    }
+
+    if( pObj )
+        aEvent.Source = const_cast<SdrObject*>(pObj)->getUnoShape();
+    else if( pPage )
+        aEvent.Source = const_cast<SdrPage*>(pPage)->getUnoPage();
+    else
+        aEvent.Source = (const_cast<SdrModel*>(pDoc))->getUnoModel();
+
+    return sal_True;
+}
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& ServiceSpecifier )
     throw( uno::Exception, uno::RuntimeException )
