@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polygontemplate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-04-28 12:10:38 $
+ *  last change: $Author: thb $ $Date: 2003-08-20 16:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ template < class Point > class ImplSimplePointEntry
 
 public:
     ImplSimplePointEntry()
-    :   maPoint(Point::GetEmptyPoint())
+    :   maPoint(Point::getEmptyPoint())
     {
     }
 
@@ -81,17 +81,17 @@ public:
     {
     }
 
-    const Point& GetPoint() const
+    const Point& getPoint() const
     {
         return maPoint;
     }
 
-    void SetPoint(const Point& rValue)
+    void setPoint(const Point& rValue)
     {
         maPoint = rValue;
     }
 
-    sal_Bool operator==(const ImplSimplePointEntry& rEntry) const
+    bool operator==(const ImplSimplePointEntry& rEntry) const
     {
         return (maPoint == rEntry.maPoint);
     }
@@ -106,8 +106,8 @@ template < class Vector > class ImplSimpleBezierEntry
 
 public:
     ImplSimpleBezierEntry()
-    :   maBackward(Vector::GetEmptyVector()),
-        maForward(Vector::GetEmptyVector())
+    :   maBackward(Vector::getEmptyVector()),
+        maForward(Vector::getEmptyVector())
     {
     }
 
@@ -117,39 +117,39 @@ public:
     {
     }
 
-    const Vector& GetBackwardVector() const
+    const Vector& getBackwardVector() const
     {
         return maBackward;
     }
 
-    void SetBackwardVector(const Vector& rValue)
+    void setBackwardVector(const Vector& rValue)
     {
         maBackward = rValue;
     }
 
-    const Vector& GetForwardVector() const
+    const Vector& getForwardVector() const
     {
         return maForward;
     }
 
-    void SetForwardVector(const Vector& rValue)
+    void setForwardVector(const Vector& rValue)
     {
         maForward = rValue;
     }
 
-    sal_Bool IsBezierNeeded()
+    bool isBezierNeeded()
     {
-        if(!maBackward.EqualZero() || !maForward.EqualZero())
-            return sal_True;
-        return sal_False;
+        if(!maBackward.equalZero() || !maForward.equalZero())
+            return true;
+        return false;
     }
 
-    sal_Bool operator==(const ImplSimpleBezierEntry& rEntry) const
+    bool operator==(const ImplSimpleBezierEntry& rEntry) const
     {
         return ((maBackward == rEntry.maBackward) && (maForward == rEntry.maForward));
     }
 
-    void DoInvertForFlip()
+    void doInvertForFlip()
     {
         maBackward = -maBackward;
         maForward = -maForward;
@@ -171,7 +171,7 @@ template < class Point, class Vector > class ImplPolygonTemplate
 
     unsigned                                        mbIsClosed : 1;
 
-    void ImplTryToReduceToPointVector()
+    void implTryToReduceToPointVector()
     {
         if(!mnBezierCount && mpVectors)
         {
@@ -181,22 +181,22 @@ template < class Point, class Vector > class ImplPolygonTemplate
     }
 
 public:
-    sal_Bool IsBezier() const
+    bool isBezier() const
     {
-        return sal_Bool(mnBezierCount);
+        return bool(mnBezierCount);
     }
 
-    sal_Bool IsClosed() const
+    bool isClosed() const
     {
-        return sal_Bool(mbIsClosed);
+        return bool(mbIsClosed);
     }
 
-    void SetClosed(sal_Bool bNew)
+    void setClosed(bool bNew)
     {
         mbIsClosed = bNew;
     }
 
-    sal_uInt32 Count() const
+    sal_uInt32 count() const
     {
         return maPoints.size();
     }
@@ -204,7 +204,7 @@ public:
     ImplPolygonTemplate()
     :   mnBezierCount(0L),
         mpVectors(0L),
-        mbIsClosed(sal_False)
+        mbIsClosed(false)
     {
         // complete initialization with defaults
     }
@@ -254,7 +254,7 @@ public:
 
                 for( ; aStart != aEnd; ++aStart )
                 {
-                    if(aStart->IsBezierNeeded())
+                    if(aStart->isBezierNeeded())
                     {
                         mnBezierCount++;
                     }
@@ -263,7 +263,7 @@ public:
                 }
 
                 // maybe vectors are not needed anymore, try to reduce memory footprint
-                ImplTryToReduceToPointVector();
+                implTryToReduceToPointVector();
             }
         }
     }
@@ -276,27 +276,27 @@ public:
         }
     }
 
-    sal_Bool IsEqual(const ImplPolygonTemplate& rPointList) const
+    bool isEqual(const ImplPolygonTemplate& rPointList) const
     {
         // same point count?
         if(maPoints.size() != rPointList.maPoints.size())
-            return sal_False;
+            return false;
 
         // if zero points the polys are equal
         if(!maPoints.size())
-            return sal_True;
+            return true;
 
         // if bezier count used it needs to be equal
         if(mnBezierCount != rPointList.mnBezierCount)
-            return sal_False;
+            return false;
 
         // compare point content
         if(maPoints != rPointList.maPoints)
-            return sal_False;
+            return false;
 
         // beziercounts are equal: if it's zero, we are done
         if(!mnBezierCount)
-            return sal_True;
+            return true;
 
         // beziercounts are equal and not zero; compare them
         DBG_ASSERT(0L != mpVectors, "Error: Bezier list needs to exist here(!)");
@@ -305,32 +305,32 @@ public:
         return (*mpVectors == *rPointList.mpVectors);
     }
 
-    const Point& GetPoint(sal_uInt32 nIndex) const
+    const Point& getPoint(sal_uInt32 nIndex) const
     {
-        return maPoints[nIndex].GetPoint();
+        return maPoints[nIndex].getPoint();
     }
 
-    void SetPoint(sal_uInt32 nIndex, const Point& rValue)
+    void setPoint(sal_uInt32 nIndex, const Point& rValue)
     {
-        maPoints[nIndex].SetPoint(rValue);
+        maPoints[nIndex].setPoint(rValue);
     }
 
-    const Vector& GetBackwardVector(sal_uInt32 nIndex) const
+    const Vector& getBackwardVector(sal_uInt32 nIndex) const
     {
         if(mpVectors)
-            return ((*mpVectors)[nIndex]).GetBackwardVector();
+            return ((*mpVectors)[nIndex]).getBackwardVector();
         else
-            return Vector::GetEmptyVector();
+            return Vector::getEmptyVector();
     }
 
-    void SetBackwardVector(sal_uInt32 nIndex, const Vector& rValue)
+    void setBackwardVector(sal_uInt32 nIndex, const Vector& rValue)
     {
         if(mpVectors)
         {
             LocalImplSimpleBezierEntry& rDest = (*mpVectors)[nIndex];
-            sal_Bool bBezierNeededBefore(rDest.IsBezierNeeded());
-            ((*mpVectors)[nIndex]).SetBackwardVector(rValue);
-            sal_Bool bBezierNeededAfter(rDest.IsBezierNeeded());
+            bool bBezierNeededBefore(rDest.isBezierNeeded());
+            ((*mpVectors)[nIndex]).setBackwardVector(rValue);
+            bool bBezierNeededAfter(rDest.isBezierNeeded());
 
             if(bBezierNeededBefore != bBezierNeededAfter)
             {
@@ -342,33 +342,33 @@ public:
         }
         else
         {
-            sal_Bool bEmptyVector(rValue.EqualZero());
+            bool bEmptyVector(rValue.equalZero());
 
             if(bEmptyVector)
                 return;
 
             mpVectors = new SimpleBezierVector(maPoints.size());
-            ((*mpVectors)[nIndex]).SetBackwardVector(rValue);
+            ((*mpVectors)[nIndex]).setBackwardVector(rValue);
             mnBezierCount++;
         }
     }
 
-    const Vector& GetForwardVector(sal_uInt32 nIndex) const
+    const Vector& getForwardVector(sal_uInt32 nIndex) const
     {
         if(mpVectors)
-            return ((*mpVectors)[nIndex]).GetForwardVector();
+            return ((*mpVectors)[nIndex]).getForwardVector();
         else
-            return Vector::GetEmptyVector();
+            return Vector::getEmptyVector();
     }
 
-    void SetForwardVector(sal_uInt32 nIndex, const Vector& rValue)
+    void setForwardVector(sal_uInt32 nIndex, const Vector& rValue)
     {
         if(mpVectors)
         {
             LocalImplSimpleBezierEntry& rDest = (*mpVectors)[nIndex];
-            sal_Bool bBezierNeededBefore(rDest.IsBezierNeeded());
-            ((*mpVectors)[nIndex]).SetForwardVector(rValue);
-            sal_Bool bBezierNeededAfter(rDest.IsBezierNeeded());
+            bool bBezierNeededBefore(rDest.isBezierNeeded());
+            ((*mpVectors)[nIndex]).setForwardVector(rValue);
+            bool bBezierNeededAfter(rDest.isBezierNeeded());
 
             if(bBezierNeededBefore != bBezierNeededAfter)
             {
@@ -380,23 +380,23 @@ public:
         }
         else
         {
-            sal_Bool bEmptyVector(rValue.EqualZero());
+            bool bEmptyVector(rValue.equalZero());
 
             if(bEmptyVector)
                 return;
 
             mpVectors = new SimpleBezierVector(maPoints.size());
-            ((*mpVectors)[nIndex]).SetForwardVector(rValue);
+            ((*mpVectors)[nIndex]).setForwardVector(rValue);
             mnBezierCount++;
         }
     }
 
-    void Insert(sal_uInt32 nIndex, const Point& rPoint, sal_uInt32 nCount)
+    void insert(sal_uInt32 nIndex, const Point& rPoint, sal_uInt32 nCount)
     {
         if(nCount)
         {
             // maybe vectors are not needed anymore, try to reduce memory footprint
-            ImplTryToReduceToPointVector();
+            implTryToReduceToPointVector();
 
             // add nCount copies of rPoint
             {
@@ -417,7 +417,7 @@ public:
         }
     }
 
-    void Insert(sal_uInt32 nIndex, const ImplPolygonTemplate& rSource)
+    void insert(sal_uInt32 nIndex, const ImplPolygonTemplate& rSource)
     {
         const sal_uInt32 nCount(rSource.maPoints.size());
 
@@ -455,7 +455,7 @@ public:
             else
             {
                 // maybe vectors are not needed anymore, try to reduce memory footprint
-                ImplTryToReduceToPointVector();
+                implTryToReduceToPointVector();
 
                 // add nCount empty entries to keep indices synchronized
                 if(mpVectors)
@@ -469,12 +469,12 @@ public:
         }
     }
 
-    void Remove(sal_uInt32 nIndex, sal_uInt32 nCount)
+    void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
         if(nCount)
         {
             // maybe vectors are not needed anymore, try to reduce memory footprint
-            ImplTryToReduceToPointVector();
+            implTryToReduceToPointVector();
 
             // remove point data
             {
@@ -499,7 +499,7 @@ public:
 
                     for( ; mnBezierCount && aTestIter != aEnd; ++aTestIter)
                     {
-                        if(aTestIter->IsBezierNeeded())
+                        if(aTestIter->isBezierNeeded())
                             mnBezierCount--;
                     }
                 }
@@ -512,18 +512,18 @@ public:
                 else
                 {
                     // try to reduce, maybe 0L == mnBezierCount
-                    ImplTryToReduceToPointVector();
+                    implTryToReduceToPointVector();
                 }
             }
         }
     }
 
-    void Flip()
+    void flip()
     {
         if(maPoints.size() > 1)
         {
             // maybe vectors are not needed anymore, try to reduce memory footprint
-            ImplTryToReduceToPointVector();
+            implTryToReduceToPointVector();
 
             // calculate half size
             const sal_uInt32 nHalfSize(maPoints.size() >> 1L);
@@ -550,9 +550,9 @@ public:
                 for(sal_uInt32 a(0); a < nHalfSize; a++)
                 {
                     LocalImplSimpleBezierEntry aTemp = *aStart;
-                    aTemp.DoInvertForFlip();
+                    aTemp.doInvertForFlip();
                     *aStart = *aEnd;
-                    aStart->DoInvertForFlip();
+                    aStart->doInvertForFlip();
                     aStart++;
                     *aEnd-- = aTemp;
                 }
@@ -560,7 +560,7 @@ public:
                 // also flip vectors of middle point (if existing)
                 if(maPoints.size() % 2)
                 {
-                    (*mpVectors)[nHalfSize].DoInvertForFlip();
+                    (*mpVectors)[nHalfSize].doInvertForFlip();
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2003-08-20 13:54:18 $
+ *  last change: $Author: thb $ $Date: 2003-08-20 16:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <math.h>
 #include <string.h>
 
-inline double ImplGetDefaultValue(sal_uInt16 nRow, sal_uInt16 nColumn)
+inline double implGetDefaultValue(sal_uInt16 nRow, sal_uInt16 nColumn)
 {
     if(nRow == nColumn)
         return 1.0;
@@ -97,17 +97,17 @@ public:
         {
             for(sal_uInt16 a(0); a < RowSize; a++)
             {
-                mfValue[a] = ImplGetDefaultValue(nRow, a);
+                mfValue[a] = implGetDefaultValue(nRow, a);
             }
         }
     }
 
-    double Get(sal_uInt16 nColumn) const
+    double get(sal_uInt16 nColumn) const
     {
         return mfValue[nColumn];
     }
 
-    void Set(sal_uInt16 nColumn, const double& rValue)
+    void set(sal_uInt16 nColumn, const double& rValue)
     {
         mfValue[nColumn] = rValue;
     }
@@ -124,19 +124,19 @@ template < int _RowSize > class ImplHomMatrixTemplate
 
 public:
     // Is last line used?
-    sal_Bool IsLastLineDefault() const
+    bool isLastLineDefault() const
     {
         if(!mpLine)
-            return sal_True;
+            return true;
 
         for(sal_uInt16 a(0); a < RowSize; a++)
         {
-            const double fDefault(ImplGetDefaultValue((RowSize - 1), a));
-            const double fLineValue(mpLine->Get(a));
+            const double fDefault(implGetDefaultValue((RowSize - 1), a));
+            const double fLineValue(mpLine->get(a));
 
-            if(!fTools::Equal(fDefault, fLineValue))
+            if(!fTools::equal(fDefault, fLineValue))
             {
-                return sal_False;
+                return false;
             }
         }
 
@@ -144,7 +144,7 @@ public:
         delete ((ImplHomMatrixTemplate< RowSize >*)this)->mpLine;
         ((ImplHomMatrixTemplate< RowSize >*)this)->mpLine = 0L;
 
-        return sal_True;
+        return true;
     }
 
     // This constructor is only used form the static identity matrix, thus
@@ -157,8 +157,8 @@ public:
         // were initialized with a trailing 1 followed by 0's.
         for(sal_uInt16 a(1); a < (RowSize - 1); a++)
         {
-            maLine[a].Set(0, 0.0);
-            maLine[a].Set(a, 1.0);
+            maLine[a].set(0, 0.0);
+            maLine[a].set(a, 1.0);
         }
     }
 
@@ -186,63 +186,63 @@ public:
         }
     }
 
-    const sal_uInt32 GetRefCount() const { return mnRefCount; }
-    void IncRefCount() { mnRefCount++; }
-    void DecRefCount() { mnRefCount--; }
+    const sal_uInt32 getRefCount() const { return mnRefCount; }
+    void incRefCount() { mnRefCount++; }
+    void decRefCount() { mnRefCount--; }
 
-    sal_uInt16 GetEdgeLength() const { return RowSize; }
+    sal_uInt16 getEdgeLength() const { return RowSize; }
 
-    double Get(sal_uInt16 nRow, sal_uInt16 nColumn) const
+    double get(sal_uInt16 nRow, sal_uInt16 nColumn) const
     {
         if(nRow < (RowSize - 1))
         {
-            return maLine[nRow].Get(nColumn);
+            return maLine[nRow].get(nColumn);
         }
 
         if(mpLine)
         {
-            return mpLine->Get(nColumn);
+            return mpLine->get(nColumn);
         }
 
-        return ImplGetDefaultValue((RowSize - 1), nColumn);
+        return implGetDefaultValue((RowSize - 1), nColumn);
     }
 
-    void Set(sal_uInt16 nRow, sal_uInt16 nColumn, const double& rValue)
+    void set(sal_uInt16 nRow, sal_uInt16 nColumn, const double& rValue)
     {
         if(nRow < (RowSize - 1))
         {
-            maLine[nRow].Set(nColumn, rValue);
+            maLine[nRow].set(nColumn, rValue);
         }
         else if(mpLine)
         {
-            mpLine->Set(nColumn, rValue);
+            mpLine->set(nColumn, rValue);
         }
         else
         {
-            const double fDefault(ImplGetDefaultValue((RowSize - 1), nColumn));
+            const double fDefault(implGetDefaultValue((RowSize - 1), nColumn));
 
-            if(!fTools::Equal(fDefault, rValue))
+            if(!fTools::equal(fDefault, rValue))
             {
                 mpLine = new ImplMatLine< RowSize >((RowSize - 1), 0L);
-                mpLine->Set(nColumn, rValue);
+                mpLine->set(nColumn, rValue);
             }
         }
     }
 
-    void TestLastLine()
+    void testLastLine()
     {
         if(mpLine)
         {
-            sal_Bool bNecessary(sal_False);
+            bool bNecessary(false);
 
             for(sal_uInt16 a(0);!bNecessary && a < RowSize; a++)
             {
-                const double fDefault(ImplGetDefaultValue((RowSize - 1), a));
-                const double fLineValue(mpLine->Get(a));
+                const double fDefault(implGetDefaultValue((RowSize - 1), a));
+                const double fLineValue(mpLine->get(a));
 
-                if(!fTools::Equal(fDefault, fLineValue))
+                if(!fTools::equal(fDefault, fLineValue))
                 {
-                    bNecessary = sal_True;
+                    bNecessary = true;
                 }
             }
 
@@ -255,7 +255,7 @@ public:
     }
 
     // Left-upper decompositon
-    sal_Bool Ludcmp(sal_uInt16 nIndex[], sal_Int16& nParity)
+    bool ludcmp(sal_uInt16 nIndex[], sal_Int16& nParity)
     {
         double fBig, fSum, fDum;
         double fStorage[RowSize];
@@ -271,17 +271,17 @@ public:
 
             for(b = 0; b < RowSize; b++)
             {
-                double fTemp(fabs(Get(a, b)));
+                double fTemp(fabs(get(a, b)));
 
-                if(fTools::More(fTemp, fBig))
+                if(fTools::more(fTemp, fBig))
                 {
                     fBig = fTemp;
                 }
             }
 
-            if(fTools::EqualZero(fBig))
+            if(fTools::equalZero(fBig))
             {
-                return sal_False;
+                return false;
             }
 
             fStorage[a] = 1.0 / fBig;
@@ -292,31 +292,31 @@ public:
         {
             for(a = 0; a < b; a++)
             {
-                fSum = Get(a, b);
+                fSum = get(a, b);
 
                 for(c = 0; c < a; c++)
                 {
-                    fSum -= Get(a, c) * Get(c, b);
+                    fSum -= get(a, c) * get(c, b);
                 }
 
-                Set(a, b, fSum);
+                set(a, b, fSum);
             }
 
             fBig = 0.0;
 
             for(a = b; a < RowSize; a++)
             {
-                fSum = Get(a, b);
+                fSum = get(a, b);
 
                 for(c = 0; c < b; c++)
                 {
-                    fSum -= Get(a, c) * Get(c, b);
+                    fSum -= get(a, c) * get(c, b);
                 }
 
-                Set(a, b, fSum);
+                set(a, b, fSum);
                 fDum = fStorage[a] * fabs(fSum);
 
-                if(fTools::MoreOrEqual(fDum, fBig))
+                if(fTools::moreOrEqual(fDum, fBig))
                 {
                     fBig = fDum;
                     nAMax = a;
@@ -327,9 +327,9 @@ public:
             {
                 for(c = 0; c < RowSize; c++)
                 {
-                    fDum = Get(nAMax, c);
-                    Set(nAMax, c, Get(b, c));
-                    Set(b, c, fDum);
+                    fDum = get(nAMax, c);
+                    set(nAMax, c, get(b, c));
+                    set(b, c, fDum);
                 }
 
                 nParity = -nParity;
@@ -339,28 +339,28 @@ public:
             nIndex[b] = nAMax;
 
             // here the failure of precision occurs
-            const double fValBB(fabs(Get(b, b)));
+            const double fValBB(fabs(get(b, b)));
 
-            if(fTools::EqualZero(fValBB))
+            if(fTools::equalZero(fValBB))
             {
-                return sal_False;
+                return false;
             }
 
             if(b != (RowSize - 1))
             {
-                fDum = 1.0 / Get(b, b);
+                fDum = 1.0 / get(b, b);
 
                 for(a = b + 1; a < RowSize; a++)
                 {
-                    Set(a, b, Get(a, b) * fDum);
+                    set(a, b, get(a, b) * fDum);
                 }
             }
         }
 
-        return sal_True;
+        return true;
     }
 
-    void Lubksb(const sal_uInt16 nIndex[], double fRow[]) const
+    void lubksb(const sal_uInt16 nIndex[], double fRow[]) const
     {
         sal_uInt16 b, ip;
         sal_Int16 a, a2 = -1;
@@ -376,10 +376,10 @@ public:
             {
                 for(b = a2; b < a; b++)
                 {
-                    fSum -= Get(a, b) * fRow[b];
+                    fSum -= get(a, b) * fRow[b];
                 }
             }
-            else if(!fTools::EqualZero(fSum))
+            else if(!fTools::equalZero(fSum))
             {
                 a2 = a;
             }
@@ -393,19 +393,19 @@ public:
 
             for(b = a + 1; b < RowSize; b++)
             {
-                fSum -= Get(a, b) * fRow[b];
+                fSum -= get(a, b) * fRow[b];
             }
 
-            const double fValueAA(Get(a, a));
+            const double fValueAA(get(a, a));
 
-            if(!fTools::EqualZero(fValueAA))
+            if(!fTools::equalZero(fValueAA))
             {
-                fRow[a] = fSum / Get(a, a);
+                fRow[a] = fSum / get(a, a);
             }
         }
     }
 
-    sal_Bool IsIdentity() const
+    bool isIdentity() const
     {
         // last line needs no testing if not existing
         const sal_uInt16 nMaxLine = (mpLine) ? RowSize : (RowSize - 1);
@@ -414,51 +414,51 @@ public:
         {
             for(sal_uInt16 b(0); b < RowSize; b++)
             {
-                const double fDefault(ImplGetDefaultValue(a, b));
-                const double fValueAB(Get(a, b));
+                const double fDefault(implGetDefaultValue(a, b));
+                const double fValueAB(get(a, b));
 
-                if(!fTools::Equal(fDefault, fValueAB))
+                if(!fTools::equal(fDefault, fValueAB))
                 {
-                    return sal_False;
+                    return false;
                 }
             }
         }
 
-        return sal_True;
+        return true;
     }
 
-    sal_Bool IsInvertible() const
+    bool isInvertible() const
     {
         ImplHomMatrixTemplate aWork(*this);
         sal_uInt16 nIndex[RowSize];
         sal_Int16 nParity;
 
-        return aWork.Ludcmp(nIndex, nParity);
+        return aWork.ludcmp(nIndex, nParity);
     }
 
-    sal_Bool IsNormalized() const
+    bool isNormalized() const
     {
         if(!mpLine)
-            return sal_True;
+            return true;
 
-        const double fHomValue(Get((RowSize - 1), (RowSize - 1)));
+        const double fHomValue(get((RowSize - 1), (RowSize - 1)));
 
-        if(fTools::EqualZero(fHomValue))
+        if(fTools::equalZero(fHomValue))
         {
-            return sal_True;
+            return true;
         }
 
         const double fOne(1.0);
 
-        if(fTools::Equal(fOne, fHomValue))
+        if(fTools::equal(fOne, fHomValue))
         {
-            return sal_True;
+            return true;
         }
 
-        return sal_False;
+        return false;
     }
 
-    void DoInvert(const ImplHomMatrixTemplate& rWork, const sal_uInt16 nIndex[])
+    void doInvert(const ImplHomMatrixTemplate& rWork, const sal_uInt16 nIndex[])
     {
         double fArray[RowSize];
 
@@ -467,50 +467,50 @@ public:
             // prepare line
             for(sal_uInt16 b(0); b < RowSize; b++)
             {
-                fArray[b] = ImplGetDefaultValue(a, b);
+                fArray[b] = implGetDefaultValue(a, b);
             }
 
             // expand line
-            rWork.Lubksb(nIndex, fArray);
+            rWork.lubksb(nIndex, fArray);
 
             // copy line transposed to this matrix
             for(b = 0; b < RowSize; b++)
             {
-                Set(b, a, fArray[b]);
+                set(b, a, fArray[b]);
             }
         }
 
         // evtl. get rid of last matrix line
-        TestLastLine();
+        testLastLine();
     }
 
-    void DoNormalize()
+    void doNormalize()
     {
         if(mpLine)
         {
-            const double fHomValue(Get((RowSize - 1), (RowSize - 1)));
+            const double fHomValue(get((RowSize - 1), (RowSize - 1)));
 
             for(sal_uInt16 a(0); a < RowSize; a++)
             {
                 for(sal_uInt16 b(0); b < RowSize; b++)
                 {
-                    Set(a, b, Get(a, b) / fHomValue);
+                    set(a, b, get(a, b) / fHomValue);
                 }
             }
 
             // evtl. get rid of last matrix line
-            TestLastLine();
+            testLastLine();
         }
     }
 
-    double DoDeterminant() const
+    double doDeterminant() const
     {
         ImplHomMatrixTemplate aWork(*this);
         sal_uInt16 nIndex[RowSize];
         sal_Int16 nParity;
         double fRetval(0.0);
 
-        if(aWork.Ludcmp(nIndex, nParity))
+        if(aWork.ludcmp(nIndex, nParity))
         {
             fRetval = (double)nParity;
 
@@ -519,81 +519,81 @@ public:
 
             for(sal_uInt16 a(0); a < nMaxLine; a++)
             {
-                fRetval *= aWork.Get(a, a);
+                fRetval *= aWork.get(a, a);
             }
         }
 
         return fRetval;
     }
 
-    double DoTrace() const
+    double doTrace() const
     {
         double fTrace = (mpLine) ? 0.0 : 1.0;
         const sal_uInt16 nMaxLine = (mpLine) ? RowSize : (RowSize - 1);
 
         for(sal_uInt16 a(0); a < nMaxLine; a++)
         {
-            fTrace += Get(a, a);
+            fTrace += get(a, a);
         }
 
         return fTrace;
     }
 
-    void DoTranspose()
+    void doTranspose()
     {
         for(sal_uInt16 a(0); a < (RowSize - 1); a++)
         {
             for(sal_uInt16 b(a + 1); b < RowSize; b++)
             {
-                const double fTemp(Get(a, b));
-                Set(a, b, Get(b, a));
-                Set(b, a, fTemp);
+                const double fTemp(get(a, b));
+                set(a, b, get(b, a));
+                set(b, a, fTemp);
             }
         }
 
-        TestLastLine();
+        testLastLine();
     }
 
-    void DoAddMatrix(const ImplHomMatrixTemplate& rMat)
+    void doAddMatrix(const ImplHomMatrixTemplate& rMat)
     {
         for(sal_uInt16 a(0); a < RowSize; a++)
         {
             for(sal_uInt16 b(0); b < RowSize; b++)
             {
-                Set(a, b, Get(a, b) + rMat.Get(a, b));
+                set(a, b, get(a, b) + rMat.get(a, b));
             }
         }
 
-        TestLastLine();
+        testLastLine();
     }
 
-    void DoSubMatrix(const ImplHomMatrixTemplate& rMat)
+    void doSubMatrix(const ImplHomMatrixTemplate& rMat)
     {
         for(sal_uInt16 a(0); a < RowSize; a++)
         {
             for(sal_uInt16 b(0); b < RowSize; b++)
             {
-                Set(a, b, Get(a, b) - rMat.Get(a, b));
+                set(a, b, get(a, b) - rMat.get(a, b));
             }
         }
 
-        TestLastLine();
+        testLastLine();
     }
 
-    void DoMulMatrix(const double& rfValue)
+    void doMulMatrix(const double& rfValue)
     {
         for(sal_uInt16 a(0); a < RowSize; a++)
         {
             for(sal_uInt16 b(0); b < RowSize; b++)
             {
-                Set(a, b, Get(a, b) * rfValue);
+                set(a, b, get(a, b) * rfValue);
             }
         }
 
-        TestLastLine();
+        testLastLine();
     }
 
-    void DoMulMatrix(const ImplHomMatrixTemplate& rMat)
+    void doMulMatrix(const ImplHomMatrixTemplate& rMat)
     {
         // create a copy as source for the original values
         const ImplHomMatrixTemplate aCopy(*this);
@@ -609,10 +609,10 @@ public:
 
                     for(sal_uInt16 c(0); c < RowSize; c++)
                     {
-                        fValue += aCopy.Get(c, b) * rMat.Get(a, c);
+                        fValue += aCopy.get(c, b) * rMat.get(a, c);
                     }
 
-                    Set(a, b, fValue);
+                    set(a, b, fValue);
                 }
             }
 
@@ -625,13 +625,13 @@ public:
 
                     for(sal_uInt16 c(0); c < RowSize; c++)
                     {
-                        fValue += aCopy.Get(c, b) * rMat.Get((RowSize - 1), c);
+                        fValue += aCopy.get(c, b) * rMat.get((RowSize - 1), c);
                     }
 
-                    Set((RowSize - 1), b, fValue);
+                    set((RowSize - 1), b, fValue);
                 }
 
-                TestLastLine();
+                testLastLine();
             }
             else
             {
@@ -650,15 +650,15 @@ public:
 
                     for(sal_uInt16 c(0); c < (RowSize - 1); c++)
                     {
-                        fValue += aCopy.Get(c, b) * rMat.Get(a, c);
+                        fValue += aCopy.get(c, b) * rMat.get(a, c);
                     }
 
                     if(b == (RowSize -1))
                     {
-                        fValue += aCopy.Get(a, (RowSize - 1));
+                        fValue += aCopy.get(a, (RowSize - 1));
                     }
 
-                    Set(a, b, fValue);
+                    set(a, b, fValue);
                 }
             }
 
@@ -671,18 +671,18 @@ public:
 
                     for(sal_uInt16 c(0); c < (RowSize - 1); c++)
                     {
-                        fValue += aCopy.Get(c, b) * rMat.Get((RowSize - 1), c);
+                        fValue += aCopy.get(c, b) * rMat.get((RowSize - 1), c);
                     }
 
                     if(b == (RowSize -1))
                     {
-                        fValue += aCopy.Get((RowSize - 1), (RowSize - 1));
+                        fValue += aCopy.get((RowSize - 1), (RowSize - 1));
                     }
 
-                    Set((RowSize - 1), b, fValue);
+                    set((RowSize - 1), b, fValue);
                 }
 
-                TestLastLine();
+                testLastLine();
             }
             else
             {
@@ -691,7 +691,7 @@ public:
         }
     }
 
-    sal_Bool IsEqual(const ImplHomMatrixTemplate& rMat)
+    bool isEqual(const ImplHomMatrixTemplate& rMat)
     {
         const sal_uInt16 nMaxLine = (mpLine || rMat.mpLine) ? RowSize : (RowSize - 1);
 
@@ -699,17 +699,17 @@ public:
         {
             for(sal_uInt16 b(0); b < RowSize; b++)
             {
-                const double fValueA(Get(a, b));
-                const double fValueB(rMat.Get(a, b));
+                const double fValueA(get(a, b));
+                const double fValueB(rMat.get(a, b));
 
-                if(!fTools::Equal(fValueA, fValueB))
+                if(!fTools::equal(fValueA, fValueB))
                 {
-                    return sal_False;
+                    return false;
                 }
             }
         }
 
-        return sal_True;
+        return true;
     }
 };
 
