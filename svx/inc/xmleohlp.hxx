@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmleohlp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
  *  last change: $Author: cl $
  *
@@ -105,7 +105,7 @@ class SvXMLEmbeddedObjectHelper : public ::cppu::WeakComponentImplHelper2<
     ::com::sun::star::document::XEmbeddedObjectResolver,
     ::com::sun::star::container::XNameAccess >
 {
-    typedef ::_STL::map< ::rtl::OUString, OutputStorageWrapper_Impl*,
+    typedef ::std::map< ::rtl::OUString, OutputStorageWrapper_Impl*,
                          OUStringLess > SvXMLEmbeddedObjectHelper_Impl;
 private:
 
