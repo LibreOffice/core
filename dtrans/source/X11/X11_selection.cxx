@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: pl $ $Date: 2002-12-10 14:48:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 14:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,13 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/time.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
+#include <X11/X.h>
 #include <X11/Xutil.h>
-#ifdef LINUX
+#if defined(LINUX) || defined(NETBSD) || defined (FREEBSD)
 #include <sys/poll.h>
 #else
 #include <poll.h>
@@ -79,6 +81,7 @@
 #include <X11_clipboard.hxx>
 #include <X11_transferable.hxx>
 #include <X11_dndcontext.hxx>
+#include <bmp.hxx>
 
 // pointer bitmaps
 #include <copydata_curs.h>
@@ -178,10 +181,14 @@ static NativeTypeEntry aNativeConversionTab[] =
     { 0, "text/plain;charset=ksc5601.1992-0", "KSC5601.1992-0", 8 },
     // eastern european encodings
     { 0, "text/plain;charset=koi8-r", "KOI8-R", 8 },
+    { 0, "text/plain;charset=koi8-u", "KOI8-U", 8 },
     // String (== iso8859-1)
     { XA_STRING, "text/plain;charset=iso8859-1", "STRING", 8 },
     // special for compound text
-    { 0, "text/plain;charset=compound_text", "COMPOUND_TEXT", 8 }
+    { 0, "text/plain;charset=compound_text", "COMPOUND_TEXT", 8 },
+
+    // PIXMAP
+    { XA_PIXMAP, "image/bmp", "PIXMAP", 32 }
 };
 
 rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
@@ -365,6 +372,12 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             m_xDisplayConnection->addEventHandler( Any(), this, ~0 );
     }
 
+    if( !m_xBitmapConverter.is() )
+    {
+        if( arguments.getLength() > 2 )
+            arguments.getConstArray()[2] >>= m_xBitmapConverter;
+    }
+
     if( ! m_pDisplay )
     {
         OUString aUDisplay;
@@ -392,6 +405,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             m_nTEXTAtom         = getAtom( OUString::createFromAscii( "TEXT" ) );
             m_nINCRAtom         = getAtom( OUString::createFromAscii( "INCR" ) );
             m_nCOMPOUNDAtom     = getAtom( OUString::createFromAscii( "COMPOUND_TEXT" ) );
+            m_nMULTIPLEAtom     = getAtom( OUString::createFromAscii( "MULTIPLE" ) );
             m_nUTF16Atom        = getAtom( OUString::createFromAscii( "ISO10646-1" ) );
 //            m_nUTF16Atom      = getAtom( OUString::createFromAscii( "text/plain;charset=ISO-10646-UCS-2" ) );
 
@@ -757,12 +771,24 @@ bool SelectionManager::requestOwnership( Atom selection )
                      bSuccess ? "acquired" : "failed to acquire",
                      OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
-            m_aSelections[ selection ]->m_bOwner = bSuccess;
+            Selection* pSel = m_aSelections[ selection ];
+            pSel->m_bOwner = bSuccess;
+            delete pSel->m_pPixmap;
+            pSel->m_pPixmap = NULL;
         }
 #ifdef DEBUG
         else
             fprintf( stderr, "no adaptor for selection %s\n",
                      OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+
+        if( pAdaptor->getTransferable().is() )
+        {
+            Sequence< DataFlavor > aTypes = pAdaptor->getTransferable()->getTransferDataFlavors();
+            for( int i = 0; i < aTypes.getLength(); i++ )
+            {
+                fprintf( stderr, "   %s\n", OUStringToOString( aTypes.getConstArray()[i].MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+            }
+        }
 #endif
     }
     return bSuccess;
@@ -790,6 +816,19 @@ void SelectionManager::convertTypeToNative( const OUString& rType, Atom selectio
                 rConversions.push_front( pTab[i].nAtom );
             else
                 rConversions.push_back( pTab[i].nAtom );
+            if( pTab[i].nFormat == XA_PIXMAP )
+            {
+                if( bPushFront )
+                {
+                    rConversions.push_front( XA_VISUALID );
+                    rConversions.push_front( XA_COLORMAP );
+                }
+                else
+                {
+                    rConversions.push_back( XA_VISUALID );
+                    rConversions.push_back( XA_COLORMAP );
+                }
+            }
         }
     }
     if( ! rFormat )
@@ -827,6 +866,8 @@ void SelectionManager::getNativeTypeList( const Sequence< DataFlavor >& rTypes, 
         }
         convertTypeToNative( OUString::createFromAscii( "text/plain;charset=utf-8" ), targetselection, nFormat, rOutTypeList, true );
     }
+    if( targetselection != m_nXdndSelection )
+        rOutTypeList.push_back( m_nMULTIPLEAtom );
 }
 
 // ------------------------------------------------------------------------
@@ -887,9 +928,16 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
             return false;
         }
 
+        // ICCCM recommends to destroy property before convert request unless
+        // parameters are transported; we do only in case of MULTIPLE,
+        // so destroy property unless target is MULTIPLE
+        if( type != m_nMULTIPLEAtom )
+            XDeleteProperty( m_pDisplay, m_aWindow, selection );
+
         XConvertSelection( m_pDisplay, selection, type, selection, m_aWindow, selection == m_nXdndSelection ? m_nDropTime : CurrentTime );
-        it->second->m_eState    = Selection::WaitingForResponse;
-        it->second->m_aData     = Sequence< sal_Int8 >();
+        it->second->m_eState            = Selection::WaitingForResponse;
+        it->second->m_aRequestedType    = type;
+        it->second->m_aData             = Sequence< sal_Int8 >();
         it->second->m_aDataArrived.reset();
         // really start the request; if we don't flush the
         // queue the request won't leave it because there are no more
@@ -1038,6 +1086,96 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
             }
         }
     }
+    else if( rType.equalsAsciiL( "image/bmp", 9 ) )
+    {
+        Pixmap aPixmap = None;
+        Colormap aColormap = None;
+
+        // prepare property for MULTIPLE request
+        Sequence< sal_Int8 > aData;
+        Atom pTypes[4] = { XA_PIXMAP, XA_PIXMAP,
+                           XA_COLORMAP, XA_COLORMAP };
+        {
+            MutexGuard aGuard(m_aMutex);
+
+            XChangeProperty( m_pDisplay,
+                             m_aWindow,
+                             selection,
+                             XA_ATOM,
+                             32,
+                             PropModeReplace,
+                             (unsigned char*)pTypes,
+                             4 );
+        }
+
+        // try MULTIPLE request
+        if( getPasteData( selection, m_nMULTIPLEAtom, aData ) )
+        {
+            Atom* pReturnedTypes = (Atom*)aData.getArray();
+            if( pReturnedTypes[0] == XA_PIXMAP && pReturnedTypes[1] == XA_PIXMAP )
+            {
+                MutexGuard aGuard(m_aMutex);
+
+                Atom type = None;
+                int format = 0;
+                unsigned long nItems = 0;
+                unsigned long nBytes = 0;
+                unsigned char* pReturn = NULL;
+                XGetWindowProperty( m_pDisplay, m_aWindow, XA_PIXMAP, 0, 1, True, XA_PIXMAP, &type, &format, &nItems, &nBytes, &pReturn );
+                if( pReturn )
+                {
+                    if( type == XA_PIXMAP )
+                        aPixmap = *(Pixmap*)pReturn;
+                    XFree( pReturn );
+                    pReturn = NULL;
+                    if( pReturnedTypes[2] == XA_COLORMAP && pReturnedTypes[3] == XA_COLORMAP )
+                    {
+                        XGetWindowProperty( m_pDisplay, m_aWindow, XA_COLORMAP, 0, 1, True, XA_COLORMAP, &type, &format, &nItems, &nBytes, &pReturn );
+                        if( pReturn )
+                        {
+                            if( type == XA_COLORMAP )
+                                aColormap = *(Colormap*)pReturn;
+                            XFree( pReturn );
+                        }
+                    }
+                }
+#ifdef DEBUG
+                else
+                {
+                    fprintf( stderr, "could not get PIXMAP property: type=%s, format=%d, items=%d, bytes=%d, ret=0x%p\n", OUStringToOString( getString( type ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), format, nItems, nBytes, pReturn );
+                }
+#endif
+            }
+        }
+
+        if( aPixmap == None )
+        {
+            // perhaps two normal requests will work
+            if( getPasteData( selection, XA_PIXMAP, aData ) )
+            {
+                aPixmap = *(Pixmap*)aData.getArray();
+                if( aColormap == None && getPasteData( selection, XA_COLORMAP, aData ) )
+                    aColormap = *(Colormap*)aData.getArray();
+            }
+        }
+
+        // convert data if possible
+        if( aPixmap != None )
+        {
+            MutexGuard aGuard(m_aMutex);
+
+            sal_Int32 nOutSize = 0;
+            sal_uInt8* pBytes = X11_getBmpFromPixmap( m_pDisplay, aPixmap, aColormap, nOutSize );
+            if( pBytes && nOutSize )
+            {
+                rData = Sequence< sal_Int8 >( nOutSize );
+                memcpy( rData.getArray(), pBytes, nOutSize );
+                X11_freeBmp( pBytes );
+                bSuccess = true;
+            }
+        }
+    }
+
     if( ! bSuccess )
     {
         ::std::list< Atom > aTypes;
@@ -1261,6 +1399,153 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
 
 // ------------------------------------------------------------------------
 
+PixmapHolder* SelectionManager::getPixmapHolder( Atom selection )
+{
+    std::hash_map< Atom, Selection* >::const_iterator it = m_aSelections.find( selection );
+    if( it == m_aSelections.end() )
+        return NULL;
+    if( ! it->second->m_pPixmap )
+        it->second->m_pPixmap = new PixmapHolder( m_pDisplay );
+    return it->second->m_pPixmap;
+}
+
+bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
+                                 Window requestor,
+                                 Atom target,
+                                 Atom property,
+                                 Atom selection )
+{
+    ResettableMutexGuard aGuard( m_aMutex );
+
+    // handle targets related to image/bmp
+    if( target == XA_COLORMAP || target == XA_PIXMAP || target == XA_BITMAP || target == XA_VISUALID )
+    {
+        PixmapHolder* pPixmap = getPixmapHolder( selection );
+        if( ! pPixmap ) return false;
+        XID nValue = None;
+
+        // handle colormap request
+        if( target == XA_COLORMAP )
+            nValue = (XID)pPixmap->getColormap();
+        else if( target == XA_VISUALID )
+            nValue = (XID)pPixmap->getVisualID();
+        else if( target == XA_PIXMAP || target == XA_BITMAP )
+        {
+            nValue = (XID)pPixmap->getPixmap();
+            if( nValue == None )
+            {
+                // first conversion
+                Sequence< sal_Int8 > aData;
+                int nFormat;
+                aGuard.clear();
+                bool bConverted = convertData( pAdaptor->getTransferable(), target, selection, nFormat, aData );
+                aGuard.reset();
+                if( bConverted )
+                {
+                    // conversion succeeded, so aData contains image/bmp now
+                    if( pPixmap->needsConversion( (const sal_uInt8*)aData.getConstArray() )
+                        && m_xBitmapConverter.is() )
+                    {
+#ifdef DEBUG
+                        fprintf( stderr, "trying bitmap conversion\n" );
+#endif
+                        Reference<XBitmap> xBM( new BmpTransporter( aData ) );
+                        Sequence<Any> aArgs(2), aOutArgs;
+                        Sequence<sal_Int16> aOutIndex;
+                        aArgs.getArray()[0] = makeAny( xBM );
+                        aArgs.getArray()[1] = makeAny( (sal_uInt16)pPixmap->getDepth() );
+                        try
+                        {
+                            aGuard.clear();
+                            Any aResult =
+                                m_xBitmapConverter->invoke( OUString::createFromAscii( "convert-bitmap-depth" ),
+                                                            aArgs, aOutIndex, aOutArgs );
+                            aGuard.reset();
+                            if( aResult >>= xBM )
+                                aData = xBM->getDIB();
+                        }
+                        catch(...)
+                        {
+#ifdef DEBUG
+                            fprintf( stderr, "exception in bitmap converter\n" );
+#endif
+                        }
+                    }
+                    nValue = (XID)pPixmap->setBitmapData( (const sal_uInt8*)aData.getConstArray() );
+                }
+                if( nValue == None )
+                    return false;
+            }
+            if( target == XA_BITMAP )
+                nValue = (XID)pPixmap->getBitmap();
+        }
+
+        XChangeProperty( m_pDisplay,
+                         requestor,
+                         property,
+                         target,
+                         32,
+                         PropModeReplace,
+                         (const unsigned char*)&nValue,
+                         1);
+        return true;
+    }
+
+    /*
+     *  special target TEXT allows us to transfer
+     *  the data in an encoding of our choice
+     *  COMPOUND_TEXT will work with most applications
+     */
+    if( target == m_nTEXTAtom )
+        target = m_nCOMPOUNDAtom;
+
+    Sequence< sal_Int8 > aData;
+    int nFormat;
+    aGuard.clear();
+    bool bConverted = convertData( pAdaptor->getTransferable(), target, selection, nFormat, aData );
+    aGuard.reset();
+    if( bConverted )
+    {
+        // conversion succeeded
+        if( aData.getLength() > INCR_MIN_SIZE )
+        {
+#ifdef DEBUG
+            fprintf( stderr, "using INCR protocol\n" );
+#endif
+            // use incr protocol
+            int nBufferPos = 0;
+            int nMinSize = INCR_MIN_SIZE;
+            XChangeProperty( m_pDisplay, requestor, property,
+                             m_nINCRAtom, 32,  PropModeReplace, (unsigned char*)&nMinSize, 1 );
+            XSelectInput( m_pDisplay, requestor, PropertyChangeMask );
+            IncrementalTransfer aTransfer( aData,
+                                           requestor,
+                                           property,
+                                           target,
+                                           nFormat
+                                           );
+            m_aIncrementals[ requestor ].push_back( aTransfer );
+        }
+        else
+            XChangeProperty( m_pDisplay,
+                             requestor,
+                             property,
+                             target,
+                             nFormat,
+                             PropModeReplace,
+                             (const unsigned char*)aData.getConstArray(),
+                             aData.getLength()/(nFormat/8) );
+    }
+#ifdef DEBUG
+    else
+        fprintf( stderr, "convertData failed for type: %s \n",
+                 OUStringToOString( convertTypeFromNative( target, selection, nFormat ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
+    return bConverted;
+}
+
+// ------------------------------------------------------------------------
+
 void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest )
 {
     ResettableMutexGuard aGuard( m_aMutex );
@@ -1317,58 +1602,110 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
         }
         else
         {
-            /*
-             *  special target TEXT allows us to transfer
-             *  the data in an encoding of our choice
-             *  COMPOUND_TEXT will work with most applications
-             */
-            if( rRequest.target == m_nTEXTAtom )
-                rRequest.target = m_nCOMPOUNDAtom;
-
-            Sequence< sal_Int8 > aData;
-            int nFormat;
-            aGuard.clear();
-            bool bConverted = convertData( pAdaptor->getTransferable(), rRequest.target, rRequest.selection, nFormat, aData );
-            aGuard.reset();
-            if( bConverted )
+            bool bEventSuccess = false;
+            if( rRequest.target == m_nMULTIPLEAtom )
             {
-                // conversion succeeded
+                // get all targets
+                Atom nType = None;
+                int nFormat = 0;
+                unsigned long nItems = 0, nBytes = 0;
+                unsigned char* pData = NULL;
+
+                // get number of atoms
+                XGetWindowProperty( m_pDisplay,
+                                    rRequest.requestor,
+                                    rRequest.property,
+                                    0, 0,
+                                    False,
+                                    AnyPropertyType,
+                                    &nType, &nFormat,
+                                    &nItems, &nBytes,
+                                    &pData );
+                if( nFormat == 32 && nBytes/4 )
+                {
+                    if( pData ) // ?? should not happen
+                    {
+                        XFree( pData );
+                        pData = NULL;
+                    }
+                    XGetWindowProperty( m_pDisplay,
+                                        rRequest.requestor,
+                                        rRequest.property,
+                                        0, nBytes/4,
+                                        False,
+                                        nType,
+                                        &nType, &nFormat,
+                                        &nItems, &nBytes,
+                                        &pData );
+                    if( pData && nItems )
+                    {
+#ifdef DEBUG
+                        fprintf( stderr, "found %d atoms in MULTIPLE request\n", nItems );
+#endif
+                        bEventSuccess = true;
+                        bool bResetAtoms = false;
+                        Atom* pAtoms = (Atom*)pData;
+                        aGuard.clear();
+                        for( int i = 0; i < nItems; i += 2 )
+                        {
+#ifdef DEBUG
+                            fprintf( stderr, "   %s => %s: ",
+                                     OUStringToOString( getString( pAtoms[i] ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                                     OUStringToOString( getString( pAtoms[i+1] ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
+                            bool bSuccess = sendData( pAdaptor, rRequest.requestor, pAtoms[i], pAtoms[i+1], rRequest.selection );
+#ifdef DEBUG
+                            fprintf( stderr, "%s\n", bSuccess ? "succeeded" : "failed" );
+#endif
+                            if( ! bSuccess )
+                            {
+                                pAtoms[i] = None;
+                                bResetAtoms = true;
+                            }
+                        }
+                        aGuard.reset();
+                        if( bResetAtoms )
+                            XChangeProperty( m_pDisplay,
+                                             rRequest.requestor,
+                                             rRequest.property,
+                                             XA_ATOM,
+                                             32,
+                                             PropModeReplace,
+                                             pData,
+                                             nBytes/4 );
+                    }
+                    if( pData )
+                        XFree( pData );
+                }
+#ifdef DEBUG
+                else
+                {
+                    fprintf( stderr, "could not get type list from \"%s\" of type \"%s\" on requestor 0x%x, requestor has properties:",
+                             OUStringToOString( getString( rRequest.property ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                             OUStringToOString( getString( nType ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                             rRequest.requestor );
+                    int nProps = 0;
+                    Atom* pProps = XListProperties( m_pDisplay, rRequest.requestor, &nProps );
+                    if( pProps )
+                    {
+                        for( int i = 0; i < nProps; i++ )
+                            fprintf( stderr, " \"%s\"", OUStringToOString( getString( pProps[i]), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                        XFree( pProps );
+                    }
+                }
+#endif
+            }
+            else
+            {
+                aGuard.clear();
+                bEventSuccess = sendData( pAdaptor, rRequest.requestor, rRequest.target, rRequest.property, rRequest.selection );
+                aGuard.reset();
+            }
+            if( bEventSuccess )
+            {
                 aNotify.xselection.target = rRequest.target;
                 aNotify.xselection.property = rRequest.property;
-                if( aData.getLength() > INCR_MIN_SIZE )
-                {
-#ifdef DEBUG
-                    fprintf( stderr, "using INCR protocol\n" );
-#endif
-                    // use incr protocol
-                    int nBufferPos = 0;
-                    int nMinSize = INCR_MIN_SIZE;
-                    XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,
-                                     m_nINCRAtom, 32,  PropModeReplace, (unsigned char*)&nMinSize, 1 );
-                    XSelectInput( m_pDisplay, rRequest.requestor, PropertyChangeMask );
-                    IncrementalTransfer aTransfer( aData,
-                                                   rRequest.requestor,
-                                                   rRequest.property,
-                                                   rRequest.target,
-                                                   nFormat
-                                                   );
-                    m_aIncrementals[ rRequest.requestor ].push_back( aTransfer );
-                }
-                else
-                    XChangeProperty( m_pDisplay,
-                                     rRequest.requestor,
-                                     rRequest.property,
-                                     rRequest.target,
-                                     nFormat,
-                                     PropModeReplace,
-                                     (const unsigned char*)aData.getConstArray(),
-                                     aData.getLength()/(nFormat/8) );
             }
-#ifdef DEBUG
-            else
-                fprintf( stderr, "convertData failed for type: %s \n",
-                         OUStringToOString( convertTypeFromNative( rRequest.target, rRequest.selection, nFormat ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
         }
     }
     XSendEvent( m_pDisplay, rRequest.requestor, False, 0, &aNotify );
@@ -1420,6 +1757,12 @@ void SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
           )
         )
     {
+        // MULTIPLE requests are only complete after selection notify
+        if( it->second->m_aRequestedType == m_nMULTIPLEAtom &&
+            ( it->second->m_eState == Selection::WaitingForResponse ||
+              it->second->m_eState == Selection::WaitingForData ) )
+            return;
+
         Atom nType = None;
         int nFormat = 0;
         unsigned long nItems = 0, nBytes = 0;
@@ -1533,25 +1876,20 @@ void SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
                 bool bDone = false;
                 if( inc_it->m_aProperty == rNotify.atom )
                 {
-                    if( rNotify.state != PropertyDelete )
+                    int nBytes = inc_it->m_aData.getLength() - inc_it->m_nBufferPos;
+                    nBytes = nBytes > INCR_MIN_SIZE ? INCR_MIN_SIZE : nBytes;
+                    XChangeProperty(
+                                    m_pDisplay,
+                                    inc_it->m_aRequestor,
+                                    inc_it->m_aProperty,
+                                    inc_it->m_aTarget,
+                                    inc_it->m_nFormat,
+                                    PropModeReplace,
+                                    (const unsigned char*)inc_it->m_aData.getConstArray()+inc_it->m_nBufferPos,
+                                    nBytes/(inc_it->m_nFormat/8) );
+                    inc_it->m_nBufferPos += nBytes;
+                    if( nBytes == 0 )
                         bDone = true;
-                    else
-                    {
-                        int nBytes = inc_it->m_aData.getLength() - inc_it->m_nBufferPos;
-                        nBytes = nBytes > INCR_MIN_SIZE ? INCR_MIN_SIZE : nBytes;
-                        XChangeProperty(
-                                        m_pDisplay,
-                                        inc_it->m_aRequestor,
-                                        inc_it->m_aProperty,
-                                        inc_it->m_aTarget,
-                                        inc_it->m_nFormat,
-                                        PropModeReplace,
-                                        (const unsigned char*)inc_it->m_aData.getConstArray()+inc_it->m_nBufferPos,
-                                        nBytes/(inc_it->m_nFormat/8) );
-                        inc_it->m_nBufferPos += nBytes;
-                        if( nBytes == 0 )
-                            bDone = true;
-                    }
                 }
                 else if( nCurrentTime - inc_it->m_nTransferStartTime > INCR_TIMEOUT )
                     bDone = true;
@@ -1595,10 +1933,47 @@ void SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
         ( it->second->m_eState == Selection::WaitingForResponse ) ||
         ( it->second->m_eState == Selection::WaitingForData ) )
     {
+        if( it->second->m_aRequestedType == m_nMULTIPLEAtom )
+        {
+            Atom nType = None;
+            int nFormat = 0;
+            unsigned long nItems = 0, nBytes = 0;
+            unsigned char* pData = NULL;
+
+            // get type and length
+            XGetWindowProperty( m_pDisplay,
+                                rNotify.requestor,
+                                rNotify.property,
+                                0, 256,
+                                False,
+                                AnyPropertyType,
+                                &nType, &nFormat,
+                                &nItems, &nBytes,
+                                &pData );
+            if( nBytes ) // HUGE request !!!
+            {
+                if( pData )
+                    XFree( pData );
+                XGetWindowProperty( m_pDisplay,
+                                    rNotify.requestor,
+                                    rNotify.property,
+                                    0, 256+(nBytes+3)/4,
+                                    False,
+                                    AnyPropertyType,
+                                    &nType, &nFormat,
+                                    &nItems, &nBytes,
+                                    &pData );
+            }
+            it->second->m_eState        = Selection::Inactive;
+            it->second->m_aData         = Sequence< sal_Int8 >((sal_Int8*)pData, nFormat/8 * nItems );
+            it->second->m_aDataArrived.set();
+            if( pData )
+                XFree( pData );
+        }
         // WaitingForData can actually happen; some
         // applications (e.g. cmdtool on Solaris) first send
         // a success and then cancel it. Weird !
-        if( rNotify.property == None )
+        else if( rNotify.property == None )
         {
             // conversion failed, stop transfer
             it->second->m_eState        = Selection::Inactive;
@@ -1944,6 +2319,9 @@ bool SelectionManager::updateDragAction( int modifierState )
 void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
 {
     ClearableMutexGuard aGuard(m_aMutex);
+
+    if( m_bDropSent )
+        return;
 
     ::std::hash_map< Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( m_aDropWindow );
@@ -3073,11 +3451,6 @@ void SelectionManager::dispatchEvent( int millisec )
             }
         }
     }
-    else
-    {
-        MutexGuard aGuard(m_aMutex);
-        XFlush( m_pDisplay );
-    }
 }
 
 // ------------------------------------------------------------------------
@@ -3091,18 +3464,21 @@ void SelectionManager::run( void* pThis )
 
     SelectionManager* This = (SelectionManager*)pThis;
 
-    time_t nLast = time( NULL );
-    osl_yieldThread();
+    timeval aLast;
+    gettimeofday( &aLast, 0 );
+
     while( osl_scheduleThread(This->m_aThread) )
     {
-        osl_yieldThread();
-        This->dispatchEvent( 200 );
-        time_t nNow = time( NULL );
-        if( nNow - nLast > 0 )
+        This->dispatchEvent( 1000 );
+
+        timeval aNow;
+        gettimeofday( &aNow, 0 );
+
+        if( (aNow.tv_sec - aLast.tv_sec) > 0 )
         {
             ClearableMutexGuard aGuard(This->m_aMutex);
             ::std::list< SelectionAdaptor* > aChangeList;
-            nLast = nNow;
+
             for( ::std::hash_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
             {
                 if( it->first != This->m_nXdndSelection && ! it->second->m_bOwner )
@@ -3121,6 +3497,7 @@ void SelectionManager::run( void* pThis )
                 aChangeList.front()->fireContentsChanged();
                 aChangeList.pop_front();
             }
+            aLast = aNow;
         }
     }
 #ifdef DEBUG
@@ -3163,6 +3540,7 @@ void SelectionManager::deregisterHandler( Atom selection )
           m_aSelections.find( selection );
     if( it != m_aSelections.end() )
     {
+        delete it->second->m_pPixmap;
         delete it->second;
         m_aSelections.erase( it );
     }

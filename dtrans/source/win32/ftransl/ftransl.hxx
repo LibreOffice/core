@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:38:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 14:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,15 +99,51 @@
 #include <windows.h>
 
 //------------------------------------------------------------------------
-// deklarations
+// declarations
 //------------------------------------------------------------------------
 
 struct FormatEntry
 {
+   FormatEntry(){};
+
+#if (defined(_MSC_VER) && (_MSC_VER < 1300))
+    FormatEntry(
+        const char* mime_content_type,
+        const char* human_presentable_name,
+        const char* native_format_name = NULL,
+        CLIPFORMAT std_clipboard_format_id = CF_INVALID,
+        com::sun::star::uno::Type const & cppu_type = getCppuType((const com::sun::star::uno::Sequence<sal_Int8> *) 0 )
+    )
+#else
+    FormatEntry(
+        const char* mime_content_type,
+        const char* human_presentable_name,
+        const char* native_format_name = NULL,
+        CLIPFORMAT std_clipboard_format_id = CF_INVALID,
+        ::com::sun::star::uno::Type const & cppu_type = ::getCppuType((const ::com::sun::star::uno::Sequence<sal_Int8> *) 0 )
+    )
+#endif
+    {
+        aDataFlavor.MimeType             = rtl::OUString::createFromAscii(mime_content_type);
+        aDataFlavor.HumanPresentableName = rtl::OUString::createFromAscii(human_presentable_name);
+        aDataFlavor.DataType             = cppu_type;
+
+        if (native_format_name)
+            aNativeFormatName = rtl::OUString::createFromAscii(native_format_name);
+        else
+            aNativeFormatName = rtl::OUString::createFromAscii(human_presentable_name);
+
+        aStandardFormatId = std_clipboard_format_id;
+    }
+
     com::sun::star::datatransfer::DataFlavor aDataFlavor;
     rtl::OUString                            aNativeFormatName;
     sal_Int32                                aStandardFormatId;
 };
+
+//------------------------------------------------
+// CDataFormatTranslator
+//------------------------------------------------
 
 class CDataFormatTranslator : public
     cppu::WeakImplHelper2< com::sun::star::datatransfer::XDataFormatTranslator, \
@@ -151,24 +187,9 @@ private:
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentTypeFactory >& aRefXMimeFactory,
         const rtl::OUString& aFullMediaType, com::sun::star::uno::Any& aAny ) const;
 
-    com::sun::star::datatransfer::DataFlavor SAL_CALL mkDataFlv( const rtl::OUString& cnttype, const rtl::OUString& hpname, ::com::sun::star::uno::Type dtype );
-
     sal_Bool isTextPlainMediaType( const rtl::OUString& fullMediaType ) const;
 
-    FormatEntry SAL_CALL mkFormatEntry( const com::sun::star::datatransfer::DataFlavor& aDataFlavor,
-                                        const rtl::OUString& aNativeFormatName,
-                                        sal_Int32 aStandardFormatId );
-
-    FormatEntry mkPrivateFormatEntry( const rtl::OUString& aNativeFormatName,
-                                      CLIPFORMAT aClipformat = CF_INVALID,
-                                      const rtl::OUString& aHpName = rtl::OUString::createFromAscii( "" ),
-                                      com::sun::star::uno::Type aCppuType = ::getCppuType( (const com::sun::star::uno::Sequence< sal_Int8 >*) 0 ));
-
-    FormatEntry mkPublicFormatEntry( const rtl::OUString& aContentType,
-                                     const rtl::OUString& aNativeFormatName = rtl::OUString::createFromAscii( "" ),
-                                     CLIPFORMAT aClipformat = CF_INVALID,
-                                     const rtl::OUString& aHpName = rtl::OUString::createFromAscii( "" ),
-                                     com::sun::star::uno::Type aCppuType = ::getCppuType( (const com::sun::star::uno::Sequence< sal_Int8 >*) 0 ));
+    com::sun::star::datatransfer::DataFlavor SAL_CALL mkDataFlv( const rtl::OUString& cnttype, const rtl::OUString& hpname, ::com::sun::star::uno::Type dtype );
 
 private:
     std::vector< FormatEntry >  m_TranslTable;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atlwindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-19 11:14:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 14:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #include "targetlistener.hxx"
 #include "sourcelistener.hxx"
 //#include "transferable.hxx"
-#include "dataobject.hxx"
 #include <map>
 
 #include <winbase.h>
@@ -147,8 +146,7 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 
 
     // create the DragSource
-    OUString sServiceSource( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource"));
-    Reference< XInterface> xint= MultiServiceFactory->createInstance(sServiceSource);
+    Reference< XInterface> xint= MultiServiceFactory->createInstance(OUString(L"com.sun.star.datatransfer.dnd.OleDragSource"));
     m_xDragSource= Reference<XDragSource>( xint, UNO_QUERY);
     Reference<XInitialization> xInit( xint, UNO_QUERY);
 
@@ -157,33 +155,18 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     xInit->initialize( Sequence<Any>( ar, 2) );
 
     //create the DropTarget
-    //  the initialization func of the drop target can be called from an STA or
-    // MTA
     Reference< XInterface> xintTarget= MultiServiceFactory->createInstance(OUString(L"com.sun.star.datatransfer.dnd.OleDropTarget"));
     m_xDropTarget= Reference<XDropTarget>( xintTarget, UNO_QUERY);
     Reference<XInitialization> xInitTarget( xintTarget, UNO_QUERY);
 
-    // call Initialize from the mta thread
-    if( m_bInitInMTA)
-    {
-        InitializationData* pData= (InitializationData*) CoTaskMemAlloc(sizeof( InitializationData));
-        ZeroMemory( pData, sizeof( InitializationData));
-        pData->xInit= xInitTarget;
-        pData->hWnd= m_hWnd;
+    Any any;
+    any <<= (sal_uInt32)m_hWnd;
+    xInitTarget->initialize( Sequence<Any>( &any, 1) );
 
-        PostThreadMessage(  m_idMTAThread, WM_SOURCE_INIT,(WPARAM) pData, 0);
-    }
-    else
-    {
-        // call initialize from the current thread
-        Any any;
-        any <<= (sal_uInt32)m_hWnd;
-        xInitTarget->initialize( Sequence<Any>( &any, 1) );
-    }
 
     m_xDropTarget->addDropTargetListener( static_cast<XDropTargetListener*>
         ( new DropTargetListener( m_hwndEdit)) );
-//  // make this window a drop target
+//  // make this window tho a drop target
     m_xDropTarget->setActive(sal_True);
 
     return 0;
@@ -210,36 +193,51 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
     HRESULT hr;
     USES_CONVERSION;
     KillTimer( 1);
-    // only if the dragsource exists and it is our own timer
-    if(m_xDragSource.is() && (UINT) wParam == 1)
+    if(m_xDragSource.is())
     {
 
         //Get the Text out of the Edit window
         int length= (int)::SendMessageA( m_hwndEdit, WM_GETTEXTLENGTH, 0, 0);
         char * pBuffer= new char[length + 1];
         ZeroMemory( pBuffer, length + 1);
-        ::SendMessageA( m_hwndEdit, WM_GETTEXT, length+1, (LPARAM) pBuffer);
+        ::SendMessageA( m_hwndEdit, WM_GETTEXT, length, (LPARAM) pBuffer);
 
-        IDataObject* pData= (IDataObject*)new DataObject(pBuffer);
-        pData->AddRef();
-
+        IDataObject* pData= NULL;
+        HRESULT hr= CreateDataCache( NULL, CLSID_NULL, __uuidof(IDataObject),(void**) &pData);
         if( pData)
         {
-//          CDTransObjFactory fac;
-//          Reference<XTransferable> xTrans= fac.createTransferableFromDataObj(
-//              MultiServiceFactory, pData);
+            FORMATETC format={ CF_TEXT, NULL, DVASPECT_CONTENT, -1, };
 
-              Reference<XTransferable> xTrans= m_aDataConverter.createTransferableFromDataObj(
-                                                  MultiServiceFactory, pData);
+            HGLOBAL mem= GlobalAlloc(GHND, length + 1 );
+            void* pMem= GlobalLock( mem);
+            memcpy( pMem, pBuffer, length+1);
+            GlobalUnlock( mem);
+
+            STGMEDIUM medium;
+            medium.tymed= TYMED_HGLOBAL;
+            medium.hGlobal= mem;
+            medium.pUnkForRelease= NULL;
+
+            pData->SetData( &format,  &medium, TRUE); // releases HGLOBAL eventually
+
+            Reference<XTransferable> xTrans= m_aDataConverter.createTransferableFromDataObj(
+                                                MultiServiceFactory, pData);
 
             // call XDragSource::executeDrag from an MTA
             if( m_isMTA )
             {
-                StartDragData* pData= (StartDragData*) CoTaskMemAlloc(sizeof( StartDragData));
-                ZeroMemory( pData, sizeof( StartDragData));
-                pData->source= m_xDragSource;
-                pData->transferable= xTrans;
-                PostThreadMessage( m_idMTAThread, WM_SOURCE_STARTDRAG,(WPARAM) pData, 0);
+                DWORD mtaThreadId;
+                ThreadData data;
+                data.source= m_xDragSource;
+                data.transferable= xTrans;
+
+                data.evtThreadReady= CreateEvent( NULL, FALSE, FALSE, NULL);
+
+                HANDLE hThread= CreateThread( NULL, 0, MTAFunc, &data, 0, &mtaThreadId);
+                // We must wait until the thread copied the ThreadData structure
+                WaitForSingleObject( data.evtThreadReady, INFINITE);
+                CloseHandle( data.evtThreadReady);
+
 
             }
             else
@@ -252,8 +250,6 @@ LRESULT AWindow::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
                     Reference<XDragSourceListener>( static_cast<XDragSourceListener*>(new DragSourceListener() ) ) );
             }
         }
-        if( pData)
-            pData->Release();
 
         delete[] pBuffer;
     }
@@ -294,4 +290,4 @@ LRESULT APIENTRY EditSubclassProc( HWND hwnd, UINT uMsg,WPARAM wParam, LPARAM lP
     return CallWindowProc( wpOrigEditProc, hwnd, uMsg,
         wParam, lParam);
 }
-
+ 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-20 10:35:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 14:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,15 +455,15 @@ OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
     // convert the text
     sal_Int32 lStr = MultiByteToWideCharEx(
                         cpForTxtCnvt,
-                        reinterpret_cast< char* >( aTextSequence.getArray( ) ),
-                        aTextSequence.getLength(),
+                        reinterpret_cast<char*>( aTextSequence.getArray( ) ),
+                        -1,
                         stgTransferHelper,
                         sal_False);
 
     CRawHGlobalPtr  ptrHGlob(stgTransferHelper);
     sal_Unicode*    pWChar = reinterpret_cast<sal_Unicode*>(ptrHGlob.GetMemPtr());
 
-    return OUString(pWChar, lStr);
+    return OUString(pWChar);
 }
 
 //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-22 16:13:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 14:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XINVOCATION_HPP_
+#include <com/sun/star/script/XInvocation.hpp>
+#endif
+
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
@@ -114,6 +118,8 @@
 using namespace ::com::sun::star::uno;
 
 namespace x11 {
+
+    class PixmapHolder; // in bmp.hxx
 
 // ------------------------------------------------------------------------
     rtl_TextEncoding getTextPlainEncoding( const ::rtl::OUString& rMimeType );
@@ -251,27 +257,31 @@ namespace x11 {
             SelectionAdaptor*           m_pAdaptor;
             Atom                        m_aAtom;
             ::osl::Condition            m_aDataArrived;
-            Sequence< sal_Int8 >
-                                        m_aData;
+            Sequence< sal_Int8 >        m_aData;
             Sequence< ::com::sun::star::datatransfer::DataFlavor >
-            m_aTypes;
+                                        m_aTypes;
             Sequence< Atom >            m_aNativeTypes;
             // this is used for caching
             // m_aTypes is invalid after 2 seconds
             // m_aNativeTypes contains the corresponding original atom
+            Atom                        m_aRequestedType;
+            // m_aRequestedType is only valid while WaitingForResponse and WaitingFotData
             int                         m_nLastTimestamp;
             bool                        m_bHaveUTF16;
             bool                        m_bHaveCompound;
             bool                        m_bOwner;
             Window                      m_aLastOwner;
+            PixmapHolder*               m_pPixmap;
 
             Selection() : m_eState( Inactive ),
                           m_pAdaptor( NULL ),
                           m_aAtom( None ),
+                          m_aRequestedType( None ),
                           m_nLastTimestamp( 0 ),
                           m_bHaveUTF16( false ),
                           m_bOwner( false ),
-                          m_aLastOwner( None )
+                          m_aLastOwner( None ),
+                          m_pPixmap( NULL )
                 {}
         };
 
@@ -305,6 +315,8 @@ namespace x11 {
         Window                      m_aWindow;
         Reference< ::com::sun::star::awt::XDisplayConnection >
                                     m_xDisplayConnection;
+        Reference< com::sun::star::script::XInvocation >
+                                    m_xBitmapConverter;
 
 
         // members used for Xdnd
@@ -379,6 +391,7 @@ namespace x11 {
         Atom                        m_nTEXTAtom;
         Atom                        m_nINCRAtom;
         Atom                        m_nCOMPOUNDAtom;
+        Atom                        m_nMULTIPLEAtom;
         Atom                        m_nUTF16Atom;
         Atom                        m_nXdndAware;
         Atom                        m_nXdndEnter;
@@ -418,6 +431,7 @@ namespace x11 {
         ~SelectionManager();
 
         SelectionAdaptor* getAdaptor( Atom selection );
+        PixmapHolder* getPixmapHolder( Atom selection );
 
         // handle various events
         void handleSelectionRequest( XSelectionRequestEvent& rRequest );
@@ -443,6 +457,7 @@ namespace x11 {
                           Atom nSelection,
                           int & rFormat,
                           Sequence< sal_Int8 >& rData );
+        bool sendData( SelectionAdaptor* pAdaptor, Window requestor, Atom target, Atom property, Atom selection );
 
         // thread dispatch loop
         static void run( void* );

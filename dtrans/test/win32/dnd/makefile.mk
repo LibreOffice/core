@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 07:33:40 $
+#   last change: $Author: hr $ $Date: 2003-03-25 14:05:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,7 @@ BOOTSTRAP_SERVICE=FALSE
 
 # --- Files ---
 
-# CFLAGS+=/GR -DUNICODE -D_UNICODE
+# CFLAGS+=-GR -DUNICODE -D_UNICODE
 CFLAGS+= -D_WIN32_DCOM
 
 .IF "$(BOOTSTRAP_SERVICE)" == "TRUE"

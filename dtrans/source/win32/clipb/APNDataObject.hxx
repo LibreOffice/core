@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: mcnttype.hxx,v $
+ *  $RCSfile: APNDataObject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.3 $
  *
  *  last change: $Author: hr $ $Date: 2003-03-25 14:05:33 $
  *
@@ -60,86 +60,68 @@
  ************************************************************************/
 
 
-#ifndef _MCNTTYPE_HXX_
-#define _MCNTTYPE_HXX_
+#ifndef _APNDATAOBJECT_HXX_
+#define _APNDATAOBJECT_HXX_
 
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
 
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
-#include <cppuhelper/compbase1.hxx>
-#endif
-
-#ifndef _RTL_USTRING_
-#include <rtl/ustring>
-#endif
-
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DATATRANSFER_XMIMECONTENTTYPE_HPP_
-#include <com/sun/star/datatransfer/XMimeContentType.hpp>
-#endif
-
-#include <map>
+#include <comdef.h>
 
 //------------------------------------------------------------------------
 // deklarations
 //------------------------------------------------------------------------
 
-class CMimeContentType : public
-    cppu::WeakImplHelper1< com::sun::star::datatransfer::XMimeContentType >
+/*
+    an APartment Neutral dataobject wrapper; this wrapper of a IDataObject
+    pointer can be used from any apartment without RPC_E_WRONG_THREAD
+    which normally occurs if an apartment tries to use an interface
+    pointer of another apartment; we use containment to hold the original
+    DataObject
+*/
+class CAPNDataObject : public IDataObject
 {
 public:
-    CMimeContentType( const rtl::OUString& aCntType );
+    CAPNDataObject( IDataObjectPtr rIDataObject );
+    ~CAPNDataObject( );
 
-    //-------------------------------------------
-    // XMimeContentType
-    //-------------------------------------------
+    //-----------------------------------------------------------------
+    //IUnknown interface methods
+    //-----------------------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getMediaSubtype(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getFullMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
+    STDMETHODIMP           QueryInterface(REFIID iid, LPVOID* ppvObject);
+    STDMETHODIMP_( ULONG ) AddRef( );
+    STDMETHODIMP_( ULONG ) Release( );
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getParameters(  )
-        throw(::com::sun::star::uno::RuntimeException);
+    //-----------------------------------------------------------------
+    // IDataObject interface methods
+    //-----------------------------------------------------------------
 
-    virtual sal_Bool SAL_CALL hasParameter( const ::rtl::OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException);
+    STDMETHODIMP GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium );
+    STDMETHODIMP GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium );
+    STDMETHODIMP QueryGetData( LPFORMATETC pFormatetc );
+    STDMETHODIMP GetCanonicalFormatEtc( LPFORMATETC pFormatectIn, LPFORMATETC pFormatetcOut );
+    STDMETHODIMP SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium, BOOL fRelease );
+    STDMETHODIMP EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc );
+    STDMETHODIMP DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD* pdwConnection );
+    STDMETHODIMP DUnadvise( DWORD dwConnection );
+    STDMETHODIMP EnumDAdvise( LPENUMSTATDATA* ppenumAdvise );
 
-    virtual ::rtl::OUString SAL_CALL getParameterValue( const ::rtl::OUString& aName )
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
-
-private:
-    void SAL_CALL init( const rtl::OUString& aCntType ) throw( com::sun::star::lang::IllegalArgumentException );
-    void SAL_CALL getSym( void );
-    void SAL_CALL acceptSym( const rtl::OUString& pSymTlb );
-    void SAL_CALL skipSpaces( void );
-    void SAL_CALL type( void );
-    void SAL_CALL subtype( void );
-    void SAL_CALL trailer( void );
-    rtl::OUString SAL_CALL pName( );
-    rtl::OUString SAL_CALL pValue( );
-    rtl::OUString SAL_CALL quotedPValue( );
-    rtl::OUString SAL_CALL nonquotedPValue( );
-    void SAL_CALL comment( void );
-    sal_Bool SAL_CALL isInRange( const rtl::OUString& aChr, const rtl::OUString& aRange );
+    operator IDataObject*( );
 
 private:
-    ::osl::Mutex                             m_aMutex;
-    rtl::OUString                            m_MediaType;
-    rtl::OUString                            m_MediaSubtype;
-    rtl::OUString                            m_ContentType;
-    std::map< rtl::OUString, rtl::OUString > m_ParameterMap;
-    sal_Int32                                m_nPos;
-    rtl::OUString                            m_nxtSym;
+    HRESULT MarshalIDataObjectIntoCurrentApartment( IDataObject** ppIDataObj );
+
+private:
+    IDataObjectPtr  m_rIDataObjectOrg;
+    HGLOBAL         m_hGlobal;
+    LONG            m_nRefCnt;
+
+// prevent copy and assignment
+private:
+    CAPNDataObject( const CAPNDataObject& theOther );
+    CAPNDataObject& operator=( const CAPNDataObject& theOther );
 };
 
 #endif
-

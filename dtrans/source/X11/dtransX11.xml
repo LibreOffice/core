@@ -27,8 +27,6 @@
         <type>   com.sun.star.datatransfer.dnd.DNDConstants                </type>
         <type>   com.sun.star.datatransfer.dnd.XDragSource                 </type>
         <type>   com.sun.star.datatransfer.dnd.XDragSourceContext          </type>
-        <type>   com.sun.star.awt.MouseButton                       </type>
-        <type>   com.sun.star.awt.MouseEvent                       </type>
         <type>   com.sun.star.awt.XDisplayConnection                       </type>
         <type>   com.sun.star.lang.DisposedException          </type>
         <type>   com.sun.star.lang.IllegalArgumentException   </type>

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 07:33:38 $
+#   last change: $Author: hr $ $Date: 2003-03-25 14:05:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ stoponerror=tr
 
 .INCLUDE : ..$/..$/cppumaker.mk
 
-CFLAGS+=/GR -DUNICODE -D_UNICODE
+CFLAGS+=-GR -DUNICODE -D_UNICODE
 
 SLOFILES=$(SLO)$/WinClipboard.obj \
          $(SLO)$/WinClipbImpl.obj \

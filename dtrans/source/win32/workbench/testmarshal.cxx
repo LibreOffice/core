@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testmarshal.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-26 11:20:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 14:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,22 +59,14 @@
  *
  ************************************************************************/
 
-/*
-    Marshalling raw: we use CoMarshalInterface and CoUnmarshalInterface
-    directly
 
-    Marshalling non-raw: wee use CoMarshalInterThreadInterfaceInStream and
-    CoGetInteraface and ReleaseStream
+//_________________________________________________________________________________________________________________________
+//  interface includes
+//_________________________________________________________________________________________________________________________
 
-    We test the following cases:
-
-    Marshalling         Target Thread Apartment
-    -------------------------------------------
-    Raw                 Sta
-    Raw                 Mta
-    Non-Raw             Sta
-    Non-Raw             Mta
-*/
+//_________________________________________________________________________________________________________________________
+//  other includes
+//_________________________________________________________________________________________________________________________
 
 #ifndef _RTL_USTRING_
 #include <rtl/ustring>
@@ -92,19 +84,21 @@
 #include <windows.h>
 #include <objbase.h>
 
+#include <memory>
+
 #include <process.h>
-#include <comdef.h>
+#include "XTDo.hxx"
 
 //-------------------------------------------------------------
 // my defines
 //-------------------------------------------------------------
 
-const bool EVT_MANUAL_RESET     = true;
-const bool EVT_AUTO_RESET       = false;
-const bool EVT_INIT_NONSIGNALED = false;
-const bool EVT_INIT_SIGNALED    = true;
-const char EVT_NONAME[]         = "";
-const int  MAX_LOOP             = 1000;
+#define WRITE_CB
+#define EVT_MANUAL_RESET     TRUE
+#define EVT_INIT_NONSIGNALED FALSE
+#define EVT_NONAME           ""
+#define WAIT_MSGLOOP
+#define RAW_MARSHALING
 
 //------------------------------------------------------------
 //  namesapces
@@ -117,128 +111,58 @@ using namespace ::std;
 //  globales
 //------------------------------------------------------------
 
-HANDLE     g_HandleArray[2];
-HANDLE&    g_hEvtMarshalClipDataObj = g_HandleArray[0];
-HANDLE&    g_hThread                = g_HandleArray[1];
-HANDLE     g_hEvtThreadWakeup;
-BOOL       g_bRawMarshalling = false;
-HGLOBAL    g_hGlob = NULL;
-IStreamPtr g_pStm;
+HANDLE  g_hEvtThreadWakeup;
 
-
-enum APARTMENT_MODEL
-{
-    STA = 0,
-    MTA,
-    OLE
-};
-
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
-
-void SetupApartment( APARTMENT_MODEL apm )
-{
-    // setup another apartment
-    HRESULT hr;
-
-    switch ( apm )
-    {
-        case STA:
-            hr = CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
-            OSL_ENSURE( SUCCEEDED( hr ), "CoInitialize STA failed" );
-            break;
-
-        case MTA:
-            hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
-            OSL_ENSURE( SUCCEEDED( hr ), "CoInitialize MTA failed" );
-            break;
-
-        case OLE:
-            hr = OleInitialize( NULL );
-            OSL_ENSURE( SUCCEEDED( hr ), "OleInitialize failed" );
-            break;
-
-        default:
-            OSL_ENSURE( false, "invalid apartment model" );
-    }
-}
-
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
-
-void ShutdownApartment( APARTMENT_MODEL apm )
-{
-    switch ( apm )
-    {
-    case STA:
-    case MTA:
-        CoUninitialize( );
-        break;
-    case OLE:
-        OleUninitialize( );
-        break;
-    }
-}
+#ifdef RAW_MARSHALING
+    HGLOBAL g_hGlob;
+#else
+    IStream* g_pStm;
+#endif
 
 //################################################################
 // a thread in another apartment to test apartment transparency
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
 {
-    APARTMENT_MODEL* apm = reinterpret_cast< APARTMENT_MODEL* >( pParam );
+    // setup another apartment
+    HRESULT hr = OleInitialize( NULL );
 
-    SetupApartment( *apm );
+    WaitForSingleObject( g_hEvtThreadWakeup, INFINITE );
 
-    for ( int i = 0; i < MAX_LOOP; i++ )
+    IDataObject* pIDo;
+
+#ifdef RAW_MARSHALING
+
+    IStream* pStm = NULL;
+    hr = CreateStreamOnHGlobal( g_hGlob, FALSE, &pStm );
+    if ( SUCCEEDED( hr ) )
     {
-        WaitForSingleObject( g_hEvtThreadWakeup, INFINITE );
+        hr = CoUnmarshalInterface(
+                pStm,
+                __uuidof( IDataObject ),
+                (void**)&pIDo );
 
-        try
-        {
-            HRESULT hr;
-            IDataObjectPtr pIDo;
+        hr = pStm->Release( );
+    }
 
-            if ( g_bRawMarshalling )
-            {
-                IStreamPtr pStm = NULL;
-                hr = CreateStreamOnHGlobal( g_hGlob, FALSE, &pStm );
-                OSL_ENSURE( SUCCEEDED( hr ), "CreateStreamOnHGlobal failed" );
+#else
 
-                hr = CoUnmarshalInterface(
-                    pStm, __uuidof( IDataObject ), (void**)&pIDo );
-                OSL_ENSURE( SUCCEEDED( hr ), "CoUnmarshalInterface failed" );
-            }
-            else
-            {
-                IStream* pIStm = g_pStm.Detach( );
+    hr = CoGetInterfaceAndReleaseStream(
+        g_pStm,
+        __uuidof( IDataObject ),
+        (void**)&pIDo
+        );
 
-                hr = CoGetInterfaceAndReleaseStream(
-                    pIStm, __uuidof( IDataObject ), (void**)&pIDo );
+#endif
 
-                OSL_ENSURE( SUCCEEDED( hr ), "CoGetInterfaceAndReleaseStream failed" );
-            }
+    IEnumFORMATETC* pIEEtc;
+    hr = pIDo->EnumFormatEtc( DATADIR_GET, &pIEEtc );
 
-            // only to call some interface functions
-            IEnumFORMATETCPtr pIEnumFetc;
-            hr = pIDo->EnumFormatEtc( DATADIR_GET, &pIEnumFetc );
-            OSL_ENSURE( SUCCEEDED( hr ), "EnumFormatEtc failed" );
+    hr = OleIsCurrentClipboard( pIDo );
 
-            // release the object before calling
-            // CoUninitialize
-            pIDo.Detach( );
-        }
-        catch( _com_error& ex )
-        {
-            HRESULT hr = ex.Error( );
-            OSL_ENSURE( false, "com exception caught" );
-        }
+    hr = OleFlushClipboard( );
 
-        SetEvent( g_HandleArray[0] );
-    } // end for
-
-    ShutdownApartment( *apm );
+    OleUninitialize( );
 
     return 0;
 }
@@ -246,127 +170,108 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
 //################################################################
 
 //----------------------------------------------------------------
-//
-//----------------------------------------------------------------
-
-void MarshalClipboardDataObject( IDataObjectPtr pIDo )
-{
-    HRESULT hr;
-
-    if ( g_bRawMarshalling )
-    {
-        IStreamPtr pStm = NULL;
-
-        hr = CreateStreamOnHGlobal( 0, false, &pStm );
-        OSL_ENSURE( SUCCEEDED( hr ), "CreateStreamOnHGlobal failed" );
-
-        hr = CoMarshalInterface(
-            pStm,
-            __uuidof( IDataObject ),
-            pIDo,
-            MSHCTX_INPROC,
-            0,
-            MSHLFLAGS_NORMAL );
-
-        OSL_ENSURE( SUCCEEDED( hr ), "CoMarshalInterface failed" );
-
-        hr = GetHGlobalFromStream( pStm, &g_hGlob );
-
-        OSL_ENSURE( SUCCEEDED( hr ), "GetHGlobalFromStream failed" );
-    }
-    else
-    {
-        hr = CoMarshalInterThreadInterfaceInStream(
-                __uuidof( IDataObject ),
-                pIDo,
-                &g_pStm );
-
-        OSL_ENSURE( SUCCEEDED( hr ), "CoMarshalInterThreadInterfaceInStream failed" );
-    }
-}
-
-//----------------------------------------------------------------
 //  main
 //----------------------------------------------------------------
 
 int SAL_CALL main( int nArgc, char* Argv[] )
 {
-    if ( nArgc < 4 )
-    {
-        printf( "Use 0|1|2 [sta,mta,ole] 0|1|2 [sta,mta,ole] 0|1 [raw, non-raw]\n" );
-        return 0;
-    }
+    HRESULT hr = OleInitialize( NULL );
 
-    SetupApartment( (APARTMENT_MODEL)atoi( Argv[1] ) );
-
-    // read parameter
-
-    APARTMENT_MODEL apm = (APARTMENT_MODEL)atoi( Argv[2] );
-    g_bRawMarshalling   = (bool)atoi( Argv[3] );
-
-    g_hEvtThreadWakeup = CreateEventA(
-        0, EVT_AUTO_RESET, EVT_INIT_NONSIGNALED, EVT_NONAME );
-
-    OSL_ENSURE( g_hEvtThreadWakeup, "CreateEvent failed" );
-
-    g_HandleArray[0] = CreateEventA(
-        0, EVT_AUTO_RESET, EVT_INIT_SIGNALED, EVT_NONAME );
-
-    OSL_ENSURE( g_hEvtMarshalClipDataObj, "CreateEvent failed" );
+    g_hEvtThreadWakeup = CreateEvent( 0,
+                                      EVT_MANUAL_RESET,
+                                      EVT_INIT_NONSIGNALED,
+                                      EVT_NONAME );
 
     unsigned uThreadId;
+    HANDLE   hThread;
 
     // create a thread in another apartment
-    g_HandleArray[1] = (HANDLE)_beginthreadex(
-        NULL, 0, ThreadProc, &apm, 0, &uThreadId );
+    hThread = (void*)_beginthreadex( NULL, 0, ThreadProc, NULL, 0, &uThreadId );
 
-    OSL_ENSURE( g_hThread, "create thread failed" );
+    IDataObject* pIDo = new CXTDataObject( );
 
-    bool bContinue = true;
-    HRESULT hr;
+    hr = OleSetClipboard( pIDo );
+    hr = E_FAIL;
 
-    while( bContinue )
+    hr = OleIsCurrentClipboard( pIDo );
+
+    //hr = OleGetClipboard( &pIDo );
+    if ( SUCCEEDED( hr ) )
     {
-        IDataObjectPtr pIDo;
+#ifdef RAW_MARSHALING
 
-        DWORD dwResult = MsgWaitForMultipleObjects(
-            2, g_HandleArray, false, INFINITE, QS_ALLEVENTS );
+        IStream* pStm = NULL;
 
-        switch( dwResult )
+        hr = CreateStreamOnHGlobal( 0, FALSE, &pStm );
+        if ( SUCCEEDED( hr ) )
         {
-            case WAIT_OBJECT_0:
-                pIDo.Detach( );
-                hr = OleGetClipboard( &pIDo );
-                OSL_ENSURE( SUCCEEDED( hr ), "OleGetClipboard failed" );
+            hr = CoMarshalInterface(
+                pStm,
+                __uuidof( IDataObject ),
+                pIDo,
+                MSHCTX_INPROC,
+                0,
+                MSHLFLAGS_NORMAL );
+            if ( SUCCEEDED( hr ) )
+                hr = GetHGlobalFromStream( pStm, &g_hGlob );
 
-                MarshalClipboardDataObject( pIDo );
-
-                // wakeup the thread
-                SetEvent( g_hEvtThreadWakeup );
-                break;
-
-            case WAIT_OBJECT_0 + 1:
-                bContinue = false;
-                break;
-
-            case WAIT_OBJECT_0 + 2:
-            {
-                // sta threads need to have a message loop
-                // else the deadlock
-                MSG msg;
-                while( PeekMessageA( &msg, NULL, 0, 0, PM_REMOVE ) )
-                    DispatchMessageA(&msg);
-            }
-            break;
+            hr = pStm->Release( );
         }
-    } // while
 
-    // cleanup
-    CloseHandle( g_hEvtThreadWakeup );
-    CloseHandle( g_hEvtMarshalClipDataObj );
-    CloseHandle( g_hThread );
+#else
 
-    ShutdownApartment( (APARTMENT_MODEL)atoi( Argv[1] ) );
+        hr = CoMarshalInterThreadInterfaceInStream(
+                __uuidof( IDataObject ),
+                pIDo,
+                &g_pStm );
+
+#endif
+
+        if ( SUCCEEDED( hr ) )
+        {
+            // wakeup the thread and waiting util it ends
+            SetEvent( g_hEvtThreadWakeup );
+
+#ifdef WAIT_MSGLOOP
+
+            BOOL bContinue = TRUE;
+
+            while( bContinue )
+            {
+                DWORD dwResult = WaitForMultipleObjects(
+                    1,
+                    &hThread,
+                    TRUE,
+                    0 );
+
+                if ( WAIT_OBJECT_0 == dwResult )
+                {
+                    bContinue = FALSE;
+                }
+                else
+                {
+                    MSG msg;
+                    while( PeekMessage(
+                            &msg,
+                            NULL,
+                            0,
+                            0,
+                            PM_REMOVE ) )
+                    {
+                        TranslateMessage(&msg);
+                        DispatchMessage(&msg);
+                    }
+                }
+            } // while
+
+#endif
+
+        } // if
+    } // if
+
+    OleFlushClipboard( );
+
+    OleUninitialize( );
 
     return 0;
 }

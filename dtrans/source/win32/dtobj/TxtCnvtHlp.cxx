@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TxtCnvtHlp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 14:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,9 @@ using namespace ::com::sun::star::uno;
 // assuming a '\0' terminated string if no length specified
 //------------------------------------------------------------------
 
-int CalcBuffSizeForTextConversion( LPCSTR lpMultiByteString, int nLen = -1 )
+int CalcBuffSizeForTextConversion( UINT code_page, LPCSTR lpMultiByteString, int nLen = -1 )
 {
-    return ( MultiByteToWideChar( CP_ACP,
+    return ( MultiByteToWideChar( code_page,
                                 0,
                                 lpMultiByteString,
                                 nLen,
@@ -100,9 +100,9 @@ int CalcBuffSizeForTextConversion( LPCSTR lpMultiByteString, int nLen = -1 )
 // assuming a '\0' terminated string if no length specified
 //------------------------------------------------------------------
 
-int CalcBuffSizeForTextConversion( LPCWSTR lpWideCharString, int nLen = -1 )
+int CalcBuffSizeForTextConversion( UINT code_page, LPCWSTR lpWideCharString, int nLen = -1 )
 {
-    return WideCharToMultiByte( CP_ACP,
+    return WideCharToMultiByte( code_page,
                                 0,
                                 lpWideCharString,
                                 nLen,
@@ -128,7 +128,7 @@ int MultiByteToWideCharEx( UINT cp_src,
     OSL_ASSERT( NULL != lpMultiByteString );
 
     // calculate the required buff size
-    int reqSize = CalcBuffSizeForTextConversion( lpMultiByteString, lenStr );
+    int reqSize = CalcBuffSizeForTextConversion( cp_src, lpMultiByteString, lenStr );
 
     if ( bEnsureTrailingZero )
         reqSize += sizeof( sal_Unicode );
@@ -164,7 +164,7 @@ int WideCharToMultiByteEx( UINT cp_dest,
     OSL_ASSERT( NULL != lpWideCharString );
 
     // calculate the required buff size
-    int reqSize = CalcBuffSizeForTextConversion( lpWideCharString, lenStr );
+    int reqSize = CalcBuffSizeForTextConversion( cp_dest, lpWideCharString, lenStr );
 
     if ( bEnsureTrailingZero )
         reqSize += sizeof( sal_Int8 );

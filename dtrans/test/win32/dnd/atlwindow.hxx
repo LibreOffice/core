@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atlwindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-19 11:14:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 14:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 extern CComModule _Module;
 #include<atlcom.h>
 #include<atlctl.h>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -75,21 +74,12 @@ extern CComModule _Module;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer;
-using namespace com::sun::star::lang;
-#define WM_SOURCE_INIT WM_APP+100
-#define WM_SOURCE_STARTDRAG WM_APP+101
 
-
-struct StartDragData
+struct ThreadData
 {
     Reference<XDragSource> source;
     Reference<XTransferable> transferable;
-};
-
-struct InitializationData
-{
-    Reference<XInitialization> xInit;
-    HWND hWnd;
+    HANDLE evtThreadReady;
 };
 
 class AWindow: public CWindowImpl<AWindow, CWindow,
@@ -99,21 +89,18 @@ class AWindow: public CWindowImpl<AWindow, CWindow,
     Reference<XDropTarget> m_xDropTarget;
     Reference<XDragSource> m_xDragSource;
     BOOL m_isMTA;
-    BOOL m_bInitInMTA;
+
     HWND m_hwndEdit;
-    // Id of the MTA thread to which we post messages.
-    DWORD m_idMTAThread;
+
     CDTransObjFactory m_aDataConverter;
 
 public:
-    AWindow(LPCTSTR strName, DWORD idMTAThread): m_idMTAThread( idMTAThread)
+    AWindow(LPCTSTR strName)
     {
         RECT rcPos= {0,0,200,200};
         Create(0, rcPos, strName);
     }
-    AWindow(LPCTSTR strName, DWORD idMTAThread, RECT pos, BOOL mta=FALSE,
-            BOOL initInMTA=FALSE):
-        m_isMTA( mta), m_idMTAThread( idMTAThread), m_bInitInMTA( initInMTA)
+    AWindow(LPCTSTR strName, RECT pos, BOOL mta=FALSE): m_isMTA( mta)
     {
         Create(0, pos, strName);
     }

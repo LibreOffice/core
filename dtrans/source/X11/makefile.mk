@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pl $ $Date: 2001-12-11 17:48:36 $
+#   last change: $Author: hr $ $Date: 2003-03-25 14:05:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,8 @@ SLOFILES=\
     $(SLO)$/X11_clipboard.obj		\
     $(SLO)$/X11_selection.obj		\
     $(SLO)$/X11_droptarget.obj		\
-    $(SLO)$/X11_service.obj
+    $(SLO)$/X11_service.obj			\
+    $(SLO)$/bmp.obj
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 
