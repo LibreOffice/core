@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:42:46 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ String STR_ADABAS_HELP_SYSDEVSPACE
     Text[ polish ] = "Zawiera tabele systemu";
     Text[ portuguese_brazilian ] = "Contains the system tables";
     Text[ japanese ] = "¼½ÃÑÃ°ÌŞÙ‚ğŠÜ‚Ş";
-    Text[ korean ] = "Contains the system tables";
+    Text[ korean ] = "½Ã½ºÅÛ ½ºÇÁ·¹µå½ÃÆ® Æ÷ÇÔ";
     Text[ chinese_simplified ] = "º¬ÓĞÏµÍ³±í¸ñ";
     Text[ chinese_traditional ] = "§t¦³¨t²Îªí®æ";
     Text[ turkish ] = "Contains the system tables";
@@ -431,7 +431,7 @@ String STR_ADABAS_HELP_TRANSACT
     Text[ polish ] = "Zawiera informacje o transakcji";
     Text[ portuguese_brazilian ] = "Contains information about transactions";
     Text[ japanese ] = "Ä×İ»Ş¸¼®İ‚Ìî•ñ‚ğŠÜ‚Ş";
-    Text[ korean ] = "Contains information about transactions";
+    Text[ korean ] = "Æ®·£Àè¼Ç¿¡ ´ëÇÑ Á¤º¸ Æ÷ÇÔ";
     Text[ chinese_simplified ] = "º¬ÓĞÓĞ¹Ø´«µİµÄĞÅÏ¢";
     Text[ chinese_traditional ] = "§t¦³¶Ç»¼ªº¸ê°T";
     Text[ turkish ] = "Contains information about transactions";
@@ -457,7 +457,7 @@ String STR_ADABAS_HELP_DATADEVSPACES
     Text[ polish ] = "Zawiera wszystkie pliki danych";
     Text[ portuguese_brazilian ] = "Contains all data files";
     Text[ japanese ] = "ÃŞ°ÀÌ§²Ù‚ğŠÜ‚Ş";
-    Text[ korean ] = "Contains all data files";
+    Text[ korean ] = "¸ğµç µ¥ÀÌÅÍ ÆÄÀÏ Æ÷ÇÔ";
     Text[ chinese_simplified ] = "º¬ÓĞÈ«²¿µÄÊı¾İÎÄ¼ş";
     Text[ chinese_traditional ] = "§t¦³¥ş³¡ªº¸ê®ÆÀÉ®×";
     Text[ turkish ] = "Contains all data files";
@@ -483,7 +483,7 @@ String STR_ADABAS_HELP_SIZE
     Text[ polish ] = "£¹czna wielkoœæ plików bazy danych";
     Text[ portuguese_brazilian ] = "Overall Size of the database files";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½Ì§²Ù‘S‘Ì‚Ì»²½Ş";
-    Text[ korean ] = "Overall Size of the database files";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÆÄÀÏÀÇ ÀüÃ¼ Å©±â";
     Text[ chinese_simplified ] = "Êı¾İ¿âÎÄ¼şµÄ×Ü¼Æ´óĞ¡";
     Text[ chinese_traditional ] = "¸ê®Æ®wÀÉ®×ªºÁ`¤j¤p";
     Text[ turkish ] = "Overall Size of the database files";
@@ -535,7 +535,7 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text[ polish ] = "Aktualnie zajêta pamiêæ";
     Text[ portuguese_brazilian ] = "Currently used memory";
     Text[ japanese ] = "Œ»İ‚ÌÒÓØg—p—Ê";
-    Text[ korean ] = "Currently used memory";
+    Text[ korean ] = "ÇöÀç »ç¿ëµÈ ¸Ş¸ğ¸®";
     Text[ chinese_simplified ] = "µ±Ç°Õ¼ÓÃµÄÄÚ´æ";
     Text[ chinese_traditional ] = "·í«e¥e¥Î°O¾ĞÅé";
     Text[ turkish ] = "Currently used memory";
