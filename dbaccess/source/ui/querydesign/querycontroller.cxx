@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 10:35:11 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 12:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
     {
         case ID_BROWSER_ESACPEPROCESSING:
             aReturn.aState = ::cppu::bool2any(!m_bEsacpeProcessing);
+            aReturn.bEnabled = m_pSqlIterator != NULL;
             break;
         case ID_BROWSER_EDITDOC:
             aReturn.aState = ::cppu::bool2any(m_bEditable);
@@ -319,7 +320,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bDesign);
             break;
         case ID_BROWSER_CLEAR_QUERY:
-            aReturn.bEnabled = m_bEditable;
+            aReturn.bEnabled = m_bEditable && m_sStatement.getLength();
             break;
         case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
         case ID_BROWSER_QUERY_VIEW_TABLES:
@@ -856,7 +857,6 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
 // -----------------------------------------------------------------------------
 void OQueryController::setQueryComposer()
 {
-    OSL_ENSURE(m_xConnection.is(),"Need a connection!");
     if(m_xConnection.is())
     {
         Reference< XSQLQueryComposerFactory >  xFactory(m_xConnection, UNO_QUERY);
