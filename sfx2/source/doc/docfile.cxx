@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-30 11:23:27 $
+ *  last change: $Author: mav $ $Date: 2002-07-30 14:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,6 +1001,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                 }
                 else
                 {
+                    /*
                     if ( ::utl::LocalFileHelper::IsLocalFile( aLogicName ) &&
                         ( bUCBStorage || UCBStorage::IsStorageFile( pInStream ) ) )
                     {
@@ -1011,6 +1012,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                         aStorage = new SvStorage( TRUE, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
                     }
                     else
+                    */
                     {
                         // create a storage on the stream
                         aStorage = new SvStorage( pInStream, FALSE );
