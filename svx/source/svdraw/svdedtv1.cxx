@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-07 15:40:24 $
+ *  last change: $Author: aw $ $Date: 2002-10-09 15:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,8 +1379,17 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, BOOL 
                 case SDRHALIGN_RIGHT : nXMov=aBound.Right() -aObjRect.Right()     -aOfs.X(); break;
                 case SDRHALIGN_CENTER: nXMov=aCenter.X()    -aObjRect.Center().X()-aOfs.X(); break;
             }
-            if (nXMov!=0 || nYMov!=0) {
+            if (nXMov!=0 || nYMov!=0)
+            {
+                // #104104# SdrEdgeObj needs an extra SdrUndoGeoObj since the
+                // connections may need to be saved
+                if(pObj && pObj->ISA(SdrEdgeObj))
+                {
+                    AddUndo(new SdrUndoGeoObj(*pObj));
+                }
+
                 AddUndo(new SdrUndoMoveObj(*pObj,Size(nXMov,nYMov)));
+
                 pObj->Move(Size(nXMov,nYMov));
             }
         }
