@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:39:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,6 @@ public:
 #else
         void PaintLineBreak( OutputDevice *pOut, const SwRect &rRect ) const;
 #endif
-    USHORT GetLineBreakWidth( const OutputDevice *pOut = 0 ) const;
 
     inline BOOL IsPageBreak() const     { return !bReadonly && (nCoreOptions & VIEWOPT_1_PAGEBREAK) ? TRUE : FALSE; }
     inline void SetPageBreak( BOOL b )
@@ -603,8 +602,6 @@ public:
     static Color&   GetFieldShadingsColor();
     static Color&   GetSectionBoundColor();
     static Color&   GetPageBreakColor();
-    static Color&   GetNotesIndicatorColor();
-    static Color&   GetScriptIndicatorColor();
 
     static BOOL     IsAppearanceFlag(sal_Int32 nFlag);
 
