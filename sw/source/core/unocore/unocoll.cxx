@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 15:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.text.TextField.DocInfo.Title",            //SW_SERVICE_FIELDTYPE_DOCINFO_TITLE
         "com.sun.star.text.TextField.DocInfo.Revision",     //SW_SERVICE_FIELDTYPE_DOCINFO_REVISION
         "com.sun.star.text.TextField.Bibliography",//SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY
-        "",//SW_SERVICE_FIELDTYPE_DUMMY_2
+        "com.sun.star.text.TextField.CombinedCharacters",//SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS
         "",//SW_SERVICE_FIELDTYPE_DUMMY_3
         "",//SW_SERVICE_FIELDTYPE_DUMMY_4
         "",//SW_SERVICE_FIELDTYPE_DUMMY_5
@@ -512,6 +512,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY:
         case SW_SERVICE_FIELDTYPE_INPUT_USER                :
         case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT               :
+        case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS       :
             xRet =  (cppu::OWeakObject*)new SwXTextField(nObjectType);
         break;
         case SW_SERVICE_FIELDMASTER_USER:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-01-15 15:57:11 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 15:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,7 +719,16 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
         }
         break;
         case SW_SERVICE_FIELDTYPE_DUMMY_0 :
-        case SW_SERVICE_FIELDTYPE_DUMMY_2:
+        case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS:
+        {
+            static SfxItemPropertyMap aCombinedCharactersPropMap[] =
+            {
+                {SW_PROP_NAME(UNO_NAME_CONTENT), FIELD_PROP_PAR1, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
+                {0,0,0,0}
+            };
+            pRet = aCombinedCharactersPropMap;
+        }
+        break;
         case SW_SERVICE_FIELDTYPE_DUMMY_3:
         case SW_SERVICE_FIELDTYPE_DUMMY_4:
         case SW_SERVICE_FIELDTYPE_DUMMY_5:
@@ -935,6 +944,7 @@ const ServiceIdResId aServiceToRes[] =
     {RES_INPUTFLD,      SW_SERVICE_FIELDTYPE_INPUT_USER                  },
     {RES_HIDDENTXTFLD,  SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                 },
     {RES_AUTHORITY,     SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY                },
+    {RES_COMBINED_CHARS,    SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS     },
     {USHRT_MAX,         USHRT_MAX                                        }
 };
 //-----------------------------------------------------------------
@@ -2151,6 +2161,19 @@ void SwXTextField::attachToRange(
                     Any aVal; aVal <<= m_pProps->aPropSeq;
                     pFld->PutValue(aVal, C2U(UNO_NAME_FIELDS));
                 }
+            }
+            break;
+            case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS:
+            {
+                // get or create field type
+                SwFieldType* pFldType = pDoc->GetFldType(RES_COMBINED_CHARS,
+                                                         aEmptyStr);
+                if(NULL == pFldType)
+                    pFldType = pDoc->InsertFldType(SwCombinedCharFieldType());
+
+                // create field
+                pFld = new SwCombinedCharField(
+                    (SwCombinedCharFieldType*)pFldType, m_pProps->sPar1);
             }
             break;
             default: DBG_ERROR("was ist das fuer ein Typ?");
