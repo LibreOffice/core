@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 03:24:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,283 +124,59 @@
 
 String SCSTR_QHELP_POSWND
 {
-    Text = "Tabellenbereich" ;
-    Text [ english ] = "Table Area" ;
-    Text [ norwegian ] = "Table Area" ;
-    Text [ italian ] = "Area tabella" ;
-    Text [ portuguese_brazilian ] = "Área da Planilha" ;
-    Text [ portuguese ] = "Área da folha" ;
-    Text [ finnish ] = "Taulukkoalue" ;
-    Text [ danish ] = "Arkområde" ;
-    Text [ french ] = "Plage de la feuille" ;
-    Text [ swedish ] = "Tabellområde" ;
-    Text [ dutch ] = "Werkbladbereik" ;
-    Text [ spanish ] = "Área de hoja" ;
-    Text [ english_us ] = "Sheet Area" ;
-    Text[ chinese_simplified ] = "å·¥ä½œè¡¨åŒºåŸŸ";
-    Text[ russian ] = "Îáëàñòü ëèñòà";
-    Text[ polish ] = "Obszar arkusza";
-    Text[ japanese ] = "è¡¨ç¯„å›²";
-    Text[ chinese_traditional ] = "å·¥ä½œè¡¨å€åŸŸ";
-    Text[ arabic ] = "äØÇŞ ÇáÌÏæá";
-    Text[ greek ] = "Ğåñéï÷Ş öıëëïõ";
-    Text[ korean ] = "ì‹œíŠ¸ ì˜ì—­";
-    Text[ turkish ] = "Tablo bölümü";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Àrea del full";
-    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
-    Text[ czech ] = "Oblast listu";
-    Text[ hebrew ] = "Tabellenbereich";
-    Text[ hindi ] = "à¤¶à¥€à¤Ÿà¥ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
-    Text[ slovak ] = "OblasÅ¥ listu";
-    Text[ hungarian ] = "MunkalapterÃ¼let";
-    Text[ slovenian ] = "ObmoÄje lista";
+    Text [ de ] = "Tabellenbereich" ;
+    Text [ en-US ] = "Sheet Area" ;
+    Text [ x-comment ] = " ";
 };
 
 String SCSTR_QHELP_INPUTWND
 {
-    Text = "Eingabezeile" ;
-    Text [ english ] = "Inputline" ;
-    Text [ norwegian ] = "Inputline" ;
-    Text [ italian ] = "Riga di digitazione" ;
-    Text [ portuguese_brazilian ] = "Linha de entrada" ;
-    Text [ portuguese ] = "Linha de entrada" ;
-    Text [ finnish ] = "Syöttörivi" ;
-    Text [ danish ] = "Inputlinje" ;
-    Text [ french ] = "Ligne de saisie" ;
-    Text [ swedish ] = "Inmatningsrad" ;
-    Text [ dutch ] = "Invoerregel" ;
-    Text [ spanish ] = "Línea de entrada" ;
-    Text [ english_us ] = "Input line" ;
-    Text[ chinese_simplified ] = "è¾“å…¥è¡Œ";
-    Text[ russian ] = "Ñòğîêà ââîäà";
-    Text[ polish ] = "Wiersz wprowadzania";
-    Text[ japanese ] = "æ•°å¼å…¥åŠ›ãƒœãƒƒã‚¯ã‚¹";
-    Text[ chinese_traditional ] = "è¼¸å…¥æ¬„";
-    Text[ arabic ] = "ÓØÑ ÇáÅÏÎÇá";
-    Text[ greek ] = "ÃñáììŞ åéóáãùãŞò";
-    Text[ korean ] = "ì…ë ¥ì¤„";
-    Text[ turkish ] = "Giriş satırı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Línia d'entrada";
-    Text[ thai ] = "à¸›à¹‰à¸­à¸™à¸šà¸£à¸£à¸—à¸±à¸”";
-    Text[ czech ] = "VstupnÃ­ Å™Ã¡dka";
-    Text[ hebrew ] = "Eingabezeile";
-    Text[ hindi ] = "à¤‡à¤¨à¤ªà¥à¤Ÿà¥ à¤°à¥‡à¤–à¤¾";
-    Text[ slovak ] = "VstupnÃ½ riadok";
-    Text[ hungarian ] = "Beviteli sor";
-    Text[ slovenian ] = "Vhodna vrstica";
+    Text [ de ] = "Eingabezeile" ;
+    Text [ en-US ] = "Input line" ;
+    Text [ x-comment ] = " ";
 };
 
 String SCSTR_QHELP_BTNCALC
 {
-    Text = "Funktionsautopilot" ;
-    Text [ english ] = "Function Autopilot" ;
-    Text [ norwegian ] = "Function Autopilot" ;
-    Text [ italian ] = "Pilota automatico di funzione" ;
-    Text [ portuguese_brazilian ] = "Assistente: Funções" ;
-    Text [ portuguese ] = "Função AutoPiloto" ;
-    Text [ finnish ] = "Ohjattu toiminto: Funktiot" ;
-    Text [ danish ] = "AutoPilot: Funktioner" ;
-    Text [ french ] = "AutoPilote de fonctions" ;
-    Text [ swedish ] = "Funktionsautopilot" ;
-    Text [ dutch ] = "Functie-AutoPiloot" ;
-    Text [ spanish ] = "Piloto automático de funciones" ;
-    Text [ english_us ] = "AutoPilot: Functions" ;
-    Text[ chinese_simplified ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç†ï¼šå‡½æ•°";
-    Text[ russian ] = "Ìàñòåğ: Ôóíêöèè";
-    Text[ polish ] = "AutoPilot: Funkcje";
-    Text[ japanese ] = "é–¢æ•°ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆ";
-    Text[ chinese_traditional ] = "å‡½æ•¸è‡ªå‹•åŠ©ç†";
-    Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí ááÏÇáÇÊ";
-    Text[ greek ] = "Áõôüìáôïò ğéëüôïò óõíÜñôçóçò";
-    Text[ korean ] = "ìë™ íŒŒì¼ëŸ¿: í•¨ìˆ˜";
-    Text[ turkish ] = "OtoPilot: Fonksiyonlar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoPilot: funcions";
-    Text[ thai ] = "à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´: à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
-    Text[ czech ] = "PrÅ¯vodce: funkce";
-    Text[ hebrew ] = "Funktionsautopilot";
-    Text[ hindi ] = "à¤“à¤Ÿà¥‹à¤ªà¥ˆà¤²à¤Ÿà¥: à¤«à¤¼à¤‚à¤•à¥à¤¶à¤¨à¥à¤¸";
-    Text[ slovak ] = "Sprievodca: Funkcie";
-    Text[ hungarian ] = "FÃ¼ggvÃ©nytÃ¼ndÃ©r";
-    Text[ slovenian ] = "Avtopilot: funkcije";
+    Text [ de ] = "Funktionsautopilot" ;
+    Text [ en-US ] = "AutoPilot: Functions" ;
+    Text [ x-comment ] = " ";
 };
 
 String SCSTR_QHELP_BTNOK
 {
     /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */
-    Text = "Übernehmen" ;
-    Text [ english ] = "Accept" ;
-    Text [ norwegian ] = "Accept" ;
-    Text [ italian ] = "Accetta" ;
-    Text [ portuguese_brazilian ] = "Aceitar" ;
-    Text [ portuguese ] = "Aceitar" ;
-    Text [ finnish ] = "Hyväksy" ;
-    Text [ danish ] = "Accepter" ;
-    Text [ french ] = "Accepter" ;
-    Text [ swedish ] = "Överta" ;
-    Text [ dutch ] = "Accepteren" ;
-    Text [ spanish ] = "Aplicar" ;
-    Text [ english_us ] = "Accept" ;
-    Text[ chinese_simplified ] = "é‡‡ç”¨";
-    Text[ russian ] = "Ïğèíÿòü";
-    Text[ polish ] = "Akceptuj";
-    Text[ japanese ] = "OK";
-    Text[ chinese_traditional ] = "æ¡ç”¨";
-    Text[ arabic ] = "ÅÏÎÇá";
-    Text[ greek ] = "Áğïäï÷Ş";
-    Text[ korean ] = "ì ìš©";
-    Text[ turkish ] = "Onayla";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Accepta";
-    Text[ thai ] = "à¸¢à¸­à¸¡à¸£à¸±à¸š";
-    Text[ czech ] = "PÅ™ijmout";
-    Text[ hebrew ] = "â€®×§×‘×œ×ª ×©×™× ×•×™×â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤µà¥€à¤•à¤¾à¤°";
-    Text[ slovak ] = "PrijaÅ¥";
-    Text[ hungarian ] = "ElfogadÃ¡s";
-    Text[ slovenian ] = "Sprejmi";
+    Text [ de ] = "Übernehmen" ;
+    Text [ en-US ] = "Accept" ;
+    Text [ x-comment ] = " ";
 };
 
 String SCSTR_QHELP_BTNCANCEL
 {
-    Text = "Verwerfen" ;
-    Text [ english ] = "Cancel" ;
-    Text [ norwegian ] = "Avbryt" ;
-    Text [ italian ] = "Non salvare" ;
-    Text [ portuguese_brazilian ] = "Cancelar" ;
-    Text [ portuguese ] = "Cancelar" ;
-    Text [ finnish ] = "Peruuta" ;
-    Text [ danish ] = "Annuller" ;
-    Text [ french ] = "Annuler" ;
-    Text [ swedish ] = "Ignorera" ;
-    Text [ dutch ] = "Verwerpen" ;
-    Text [ spanish ] = "Rechazar" ;
-    Text [ english_us ] = "Cancel" ;
-    Text[ chinese_simplified ] = "èˆå¼ƒ";
-    Text[ russian ] = "Îòìåíèòü";
-    Text[ polish ] = "Anuluj";
-    Text[ japanese ] = "ã‚­ãƒ£ãƒ³ã‚»ãƒ«";
-    Text[ chinese_traditional ] = "æ¨æ£„";
-    Text[ arabic ] = "ÑİÖ";
-    Text[ greek ] = "¢êõñï";
-    Text[ korean ] = "ì•„ë‹ˆì˜¤";
-    Text[ turkish ] = "İptal";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cancel.la";
-    Text[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸";
-    Text[ czech ] = "ZruÅ¡it";
-    Text[ hebrew ] = "â€®×‘×™×˜×•×œâ€¬";
-    Text[ hindi ] = "à¤°à¤¦à¥à¤¦ à¤•à¤°à¥‹";
-    Text[ slovak ] = "ZruÅ¡iÅ¥";
-    Text[ hungarian ] = "MÃ©gsem";
-    Text[ slovenian ] = "PrekliÄi";
+    Text [ de ] = "Verwerfen" ;
+    Text [ en-US ] = "Cancel" ;
+    Text [ x-comment ] = " ";
 };
 
 String SCSTR_QHELP_BTNSUM
 {
-    Text = "Summe" ;
-    Text [ english ] = "Sum" ;
-    Text [ norwegian ] = "Sum" ;
-    Text [ italian ] = "Somma" ;
-    Text [ portuguese_brazilian ] = "Soma" ;
-    Text [ portuguese ] = "Soma" ;
-    Text [ finnish ] = "Summa" ;
-    Text [ danish ] = "Sum" ;
-    Text [ french ] = "Somme" ;
-    Text [ swedish ] = "Summa" ;
-    Text [ dutch ] = "Som" ;
-    Text [ spanish ] = "Suma" ;
-    Text [ english_us ] = "Sum" ;
-    Text[ chinese_simplified ] = "æ€»è®¡";
-    Text[ russian ] = "Ñóììà";
-    Text[ polish ] = "Suma";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆ Sum";
-    Text[ chinese_traditional ] = "å°è¨ˆ";
-    Text[ arabic ] = "ÇáãÌãæÚ";
-    Text[ greek ] = "¢èñïéóìá";
-    Text[ korean ] = "í•©ê³„";
-    Text[ turkish ] = "Toplam";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Suma";
-    Text[ thai ] = "à¸œà¸¥à¸£à¸§à¸¡";
-    Text[ czech ] = "SouÄet";
-    Text[ hebrew ] = "â€®×¡×›×•×â€¬";
-    Text[ hindi ] = "à¤•à¥à¤²à¤œà¥‹à¤¡à¤¼";
-    Text[ slovak ] = "Celkom";
-    Text[ hungarian ] = "Ã–sszegzÃ©s";
-    Text[ slovenian ] = "Vsota";
+    Text [ de ] = "Summe" ;
+    Text [ en-US ] = "Sum" ;
+    Text [ x-comment ] = " ";
 };
 
 String SCSTR_QHELP_BTNEQUAL
 {
-    Text = "Funktion" ;
-    Text [ english ] = "Funktion" ;
-    Text [ norwegian ] = "Funktion" ;
-    Text [ italian ] = "Funzione" ;
-    Text [ portuguese_brazilian ] = "Função" ;
-    Text [ portuguese ] = "Função" ;
-    Text [ finnish ] = "Funktio" ;
-    Text [ danish ] = "Funktion" ;
-    Text [ french ] = "Fonction" ;
-    Text [ swedish ] = "Funktion" ;
-    Text [ dutch ] = "Functie" ;
-    Text [ spanish ] = "Función" ;
-    Text [ english_us ] = "Function" ;
-    Text[ chinese_simplified ] = "å‡½æ•°";
-    Text[ russian ] = "Ôóíêöèÿ";
-    Text[ polish ] = "Funkcja";
-    Text[ japanese ] = "æ•°å¼ã®ç·¨é›†";
-    Text[ chinese_traditional ] = "å‡½æ•¸";
-    Text[ arabic ] = "ÇáÏÇáÉ";
-    Text[ greek ] = "ÓõíÜñôçóç";
-    Text[ korean ] = "ìˆ˜ì‹ ëª¨ìŒ";
-    Text[ turkish ] = "Fonksiyon";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Funció";
-    Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
-    Text[ czech ] = "Funkce";
-    Text[ hebrew ] = "â€®×¤×¢×•×œ×”â€¬";
-    Text[ hindi ] = "à¤«à¤¼à¤‚à¤•à¥à¤¶à¤¨à¥";
-    Text[ slovak ] = "Funkcia";
-    Text[ hungarian ] = "FÃ¼ggvÃ©ny";
-    Text[ slovenian ] = "Funkcija";
+    Text [ de ] = "Funktion" ;
+    Text [ en-US ] = "Function" ;
+    Text [ x-comment ] = " ";
 };
 
 String RID_OBJECTBAR_FORMAT
 {
-    Text = "Tabellenobjektleiste" ;
-    Text [ english ] = "Table Object Bar" ;
-    Text [ norwegian ] = "Object Bar" ;
-    Text [ italian ] = "Barra degli oggetti per tabelle" ;
-    Text [ portuguese_brazilian ] = "Barra de Objetos de Planilha" ;
-    Text [ portuguese ] = "Barra de objectos da folha de cálculo" ;
-    Text [ french ] = "Barre d'objets de classeur" ;
-    Text [ dutch ] = "Werkbladobjectbalk" ;
-    Text [ spanish ] = "Barra de objetos para tablas" ;
-    Text [ danish ] = "Regnearksobjektlinje" ;
-    Text [ swedish ] = "Tabellobjektlist" ;
-    Text [ finnish ] = "Laskentataulukon muotoilurivi" ;
-    Text [ english_us ] = "Spreadsheet Object Bar" ;
-    Text[ chinese_simplified ] = "å·¥ä½œè¡¨å¯¹è±¡æ ";
-    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü ıëåêòğîííîé òàáëèöû";
-    Text[ polish ] = "Pasek obiektów arkusza kalkulacyjnego";
-    Text[ japanese ] = "è¡¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
-    Text[ chinese_traditional ] = "å·¥ä½œè¡¨ç‰©ä»¶åˆ—";
-    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáÌÏÇæá";
-    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí õğïëïãéóôéêşí öıëëùí";
-    Text[ korean ] = "ìŠ¤í”„ë ˆë“œì‹œíŠ¸ ê°œì²´ ëª¨ìŒ";
-    Text[ turkish ] = "Tablo nesne çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra d'objectes del full de càlcul";
-    Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“";
-    Text[ czech ] = "Panel nÃ¡strojÅ¯ SeÅ¡it";
-    Text[ hebrew ] = "Tabellenobjektleiste";
-    Text[ hindi ] = "à¤¸à¥à¤ªà¥à¤°à¥‡à¤¡à¤¶à¥€à¤Ÿà¥ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "Panel nÃ¡strojov zoÅ¡ita";
-    Text[ hungarian ] = "MunkafÃ¼zet-objektum eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Predmetna vrstica za preglednico";
+    Text [ de ] = "Tabellenobjektleiste" ;
+    Text [ en-US ] = "Spreadsheet Object Bar" ;
+    Text [ x-comment ] = " ";
 };
 
 ToolBox RID_OBJECTBAR_FORMAT
@@ -666,7 +442,7 @@ ToolBox RID_OBJECTBAR_FORMAT
             Hide=TRUE;
         };
     };
-    ItemList[arabic] =
+    ItemList[ ar ] =
     {
         ToolBoxItem
         {
@@ -914,7 +690,7 @@ ToolBox RID_OBJECTBAR_FORMAT
             Hide=TRUE;
         };
     };
-    ItemList[hebrew] =
+    ItemList[ he ] =
     {
         ToolBoxItem
         {
@@ -1167,37 +943,9 @@ ToolBox RID_OBJECTBAR_FORMAT
 
 String RID_OBJECTBAR_PREVIEW
 {
-    Text = "Seitenansichtobjektleiste" ;
-    Text [ english ] = "Page Preview Object Bar" ;
-    Text [ norwegian ] = "Forhåndsvisning av side" ;
-    Text [ italian ] = "Barra degli oggetti dell'anteprima stampa" ;
-    Text [ portuguese_brazilian ] = "Barra de Objetos de Visualização de Página" ;
-    Text [ portuguese ] = "Previsualização" ;
-    Text [ finnish ] = "Sivunäkymän muotoilurivi" ;
-    Text [ danish ] = "Sidevisningsobjektlinje" ;
-    Text [ french ] = "Barre d'objets d'aperçu" ;
-    Text [ swedish ] = "Förhandsgranskningobjektlist" ;
-    Text [ dutch ] = "Afdrukvoorbeeld" ;
-    Text [ spanish ] = "Barra de vista preliminar" ;
-    Text [ english_us ] = "Page View Object Bar" ;
-    Text[ chinese_simplified ] = "é¡µé¢å¯¹è±¡æ ";
-    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü âèäà ñòğàíèöû";
-    Text[ polish ] = "Pasek obiektów widoku strony";
-    Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
-    Text[ chinese_traditional ] = "é é¢æª¢è¦–ç‰©ä»¶åˆ—";
-    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ãÚÇíäÉ ÇáÕİÍÉ";
-    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ğñïåğéóêüğçóçò óåëßäáò";
-    Text[ korean ] = "í˜ì´ì§€ ë³´ê¸° ê°œì²´ ëª¨ìŒ";
-    Text[ turkish ] = "Sayfa önizleme nesne çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra d'objectes de la visualització de pàgina";
-    Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸«à¸™à¹‰à¸²";
-    Text[ czech ] = "Panel nÃ¡strojÅ¯ ZobrazenÃ­ strÃ¡nky";
-    Text[ hebrew ] = "Seitenansichtobjektleiste";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤¦à¥ƒà¤¶à¥à¤¯ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "Panel objektovÃ©ho zobrazenia strÃ¡nky";
-    Text[ hungarian ] = "OldalnÃ©zet eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Vrstica za pogled strani";
+    Text [ de ] = "Seitenansichtobjektleiste" ;
+    Text [ en-US ] = "Page View Object Bar" ;
+    Text [ x-comment ] = " ";
 };
 
 ToolBox RID_OBJECTBAR_PREVIEW
@@ -1291,36 +1039,9 @@ ToolBox RID_OBJECTBAR_PREVIEW
 
 String RID_OBJECTBAR_TOOLS
 {
-    Text = "Werkzeugleiste" ;
-    Text [ english ] = "Toolbar" ;
-    Text [ dutch ] = "Werktuigbalk" ;
-    Text [ english_us ] = "Main Toolbar" ;
-    Text [ italian ] = "Barra degli strumenti" ;
-    Text [ spanish ] = "Barra de herramientas" ;
-    Text [ french ] = "Barre d'instruments" ;
-    Text [ swedish ] = "Verktygslist" ;
-    Text [ danish ] = "Hovedværktøjslinje" ;
-    Text [ portuguese ] = "Barra de ferramentas" ;
-    Text [ portuguese_brazilian ] = "Barra de Ferramentas Principal" ;
-    Text[ chinese_simplified ] = "ä¸»å·¥å…·æ ";
-    Text[ russian ] = "Ãëàâíàÿ ïàíåëü èíñòğóìåíòîâ";
-    Text[ polish ] = "G³ówny pasek narzêdzi";
-    Text[ japanese ] = "æ¨™æº–ãƒ„ãƒ¼ãƒ«ãƒãƒ¼";
-    Text[ chinese_traditional ] = "ä¸»å·¥å…·åˆ—";
-    Text[ arabic ] = "ÔÑíØ ÇáÃÏæÇÊ";
-    Text[ greek ] = "Êıñéá ãñáììŞ åñãáëåßùí";
-    Text[ korean ] = "ì£¼ ë„êµ¬ ëª¨ìŒ";
-    Text[ turkish ] = "Ana araç çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Päätyökalurivi";
-    Text[ catalan ] = "Barra d'eines principal";
-    Text[ thai ] = "à¹à¸–à¸šà¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­à¸«à¸¥à¸±à¸";
-    Text[ czech ] = "HlavnÃ­ panel nÃ¡strojÅ¯";
-    Text[ hebrew ] = "â€®×¡×¨×’×œ ×¨××©×™â€¬";
-    Text[ hindi ] = "à¤®à¥à¤–à¥à¤¯ à¤”à¤œà¤¼à¤¾à¤° à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "HlavnÃ½ panel nÃ¡strojov";
-    Text[ hungarian ] = "FÅ‘ eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Glavna orodna vrstica";
+    Text [ de ] = "Werkzeugleiste" ;
+    Text [ en-US ] = "Main Toolbar" ;
+    Text [ x-comment ] = " ";
 };
 
 ToolBox RID_OBJECTBAR_TOOLS
@@ -1481,21 +1202,8 @@ FloatingWindow RID_TBXCTL_INSERT
     SVLook = TRUE ;
     HelpID = RID_TBXCTL_INSERT ;
     /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-    Text = "Einfügen" ;
-    Text [ english ] = "Insert" ;
-    Text [ dutch ] = "Invoegen" ;
-    Text [ english_us ] = "Insert" ;
-    Text [ italian ] = "Inserisci" ;
-    Text [ spanish ] = "Insertar" ;
-    Text [ french ] = "Insérer" ;
-    Text [ swedish ] = "Infoga" ;
-    Text [ danish ] = "Indsæt" ;
-    Text [ portuguese ] = "Inserir" ;
-    Text [ portuguese_brazilian ] = "Inserir" ;
-    Text[ chinese_simplified ] = "æ’å…¥";
-    Text[ russian ] = "Âñòàâèòü";
-    Text[ polish ] = "Wstaw";
-    Text[ japanese ] = "æŒ¿å…¥";
+    Text [ de ] = "Einfügen" ;
+    Text [ en-US ] = "Insert" ;
 
     ToolBox RID_TOOLBOX_INSERT
     {
@@ -1516,21 +1224,7 @@ FloatingWindow RID_TBXCTL_INSERT
             };
         };
     };
-    Text[ chinese_traditional ] = "æ’å…¥";
-    Text[ arabic ] = "ÅÏÑÇÌ";
-    Text[ greek ] = "ÅéóáãùãŞ";
-    Text[ korean ] = "ì‚½ì…";
-    Text[ turkish ] = "Ekle";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Lisää";
-    Text[ catalan ] = "Insereix";
-    Text[ thai ] = "à¹à¸—à¸£à¸";
-    Text[ czech ] = "VloÅ¾it";
-    Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-    Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥";
-    Text[ hungarian ] = "BeszÃºrÃ¡s";
-    Text[ slovenian ] = "Vstavi";
+    Text [ x-comment ] = " ";
 };
 
 FloatingWindow RID_TBXCTL_INSCELLS
@@ -1541,21 +1235,8 @@ FloatingWindow RID_TBXCTL_INSCELLS
     SVLook = TRUE ;
     HelpID = RID_TBXCTL_INSCELLS ;
     /* ### ACHTUNG: Neuer Text in Resource? Zellen einfügen : Zellen einf³gen */
-    Text = "Zellen einfügen" ;
-    Text [ english ] = "Insert cells" ;
-    Text [ english_us ] = "Insert Cells" ;
-    Text [ italian ] = "Inserisci celle" ;
-    Text [ spanish ] = "Insertar celdas" ;
-    Text [ french ] = "Insérer des cellules" ;
-    Text [ dutch ] = "Cellen invoegen" ;
-    Text [ swedish ] = "Infoga celler" ;
-    Text [ danish ] = "Indsæt celler" ;
-    Text [ portuguese_brazilian ] = "Inserir Células" ;
-    Text [ portuguese ] = "Inserir células" ;
-    Text[ chinese_simplified ] = "æ’å…¥å•å…ƒæ ¼";
-    Text[ russian ] = "Âñòàâèòü ÿ÷åéêè";
-    Text[ polish ] = "Wstaw komórki";
-    Text[ japanese ] = "ã‚»ãƒ«ã®æŒ¿å…¥";
+    Text [ de ] = "Zellen einfügen" ;
+    Text [ en-US ] = "Insert Cells" ;
 
     ToolBox RID_TOOLBOX_INSCELLS
     {
@@ -1586,21 +1267,7 @@ FloatingWindow RID_TBXCTL_INSCELLS
             };
         };
     };
-    Text[ chinese_traditional ] = "æ’å…¥å„²å­˜æ ¼";
-    Text[ arabic ] = "ÅÏÑÇÌ ÎáÇíÇ";
-    Text[ greek ] = "ÅéóáãùãŞ êåëéşí";
-    Text[ korean ] = "ì…€ ì‚½ì…";
-    Text[ turkish ] = "Hücre ekle";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Lisää solut";
-    Text[ catalan ] = "Insereix cel.les";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸‹à¸¥à¸¥à¹Œ";
-    Text[ czech ] = "VloÅ¾it buÅˆky";
-    Text[ hebrew ] = "Zellen einfÃ¼gen";
-    Text[ hindi ] = "à¤•à¥‹à¤·à¥à¤ à¥‹à¤‚ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ bunky";
-    Text[ hungarian ] = "CellÃ¡k beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavi celice";
+    Text [ x-comment ] = " ";
 };
 
 FloatingWindow RID_TBXCTL_INSOBJ
@@ -1611,15 +1278,8 @@ FloatingWindow RID_TBXCTL_INSOBJ
     SVLook = TRUE;
     HelpID = RID_TBXCTL_INSOBJ ;
     /* ### ACHTUNG: Neuer Text in Resource? Objekt einfügen : Objekt einf³gen */
-    Text = "Objekt einfügen" ;
-    Text [ english ] = "Insert object" ;
-    Text [ dutch ] = "Object invoegen" ;
-    Text [ english_us ] = "Insert Object" ;
-    Text [ italian ] = "Inserisci oggetto" ;
-    Text [ spanish ] = "Insertar objeto" ;
-    Text [ french ] = "Insérer un objet" ;
-    Text [ swedish ] = "Infoga objekt" ;
-    Text [ danish ] = "Indsæt objekt" ;
+    Text [ de ] = "Objekt einfügen" ;
+    Text [ en-US ] = "Insert Object" ;
     ToolBox RID_TOOLBOX_INSOBJ
     {
         MenuStrings = TRUE ;
@@ -1663,27 +1323,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
 #endif
         };
     };
-    Text [ portuguese ] = "Inserir objecto" ;
-    Text [ portuguese_brazilian ] = "Inserir Objeto" ;
-    Text[ chinese_simplified ] = "æ’å…¥å¯¹è±¡";
-    Text[ russian ] = "Âñòàâèòü îáúåêò";
-    Text[ polish ] = "Wstaw obiekt";
-    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥ç‰©ä»¶";
-    Text[ arabic ] = "ÅÏÑÇÌ ßÇÆä";
-    Text[ greek ] = "ÅéóáãùãŞ áíôéêåéìİíïõ";
-    Text[ korean ] = "ê°œì²´ ì‚½ì…";
-    Text[ turkish ] = "Nesne ekle";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Lisää objekti";
-    Text[ catalan ] = "Insereix un objecte";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¸§à¸±à¸•à¸–à¸¸";
-    Text[ czech ] = "VloÅ¾it objekt";
-    Text[ hebrew ] = "â€®×”×•×¡×¤×ª ××•×‘×™×§×˜â€¬";
-    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ objekt";
-    Text[ hungarian ] = "Objektum beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavi predmet";
+    Text [ x-comment ] = " ";
 };
 
  // Image-Liste fuer ToolBoxen -----------------------------------------------
@@ -2001,38 +1641,9 @@ ImageList RID_OFFICEIMAGELIST_LCH
 
 String RID_OBJECTBAR_APP
 {
-    TEXT = "Funktionsleiste (Lesemodus)" ;
-    TEXT [ english ] = "Function Bar (viewing mode)" ;
-    Text [ dutch ] = "Werkbalk" ;
-    Text [ english_us ] = "Function Bar (viewing mode)" ;
-    Text [ italian ] = "Barra delle funzioni (modo visualizzazione)" ;
-    Text [ spanish ] = "Barra de funciones (modo vista)" ;
-    Text [ french ] = "Barre de fonctions (mode visualisation)" ;
-    Text [ swedish ] = "Funktionslist (visningsläge)" ;
-    Text [ danish ] = "Funktionslinje (visningstilstand)" ;
-    Text [ portuguese_brazilian ] = "Barra de Funções" ;
-    Text [ portuguese ] = "Barra de funções" ;
-    Text[ chinese_simplified ] = "åŠŸèƒ½æ (è§†å›¾æ¨¡å¼)";
-    Text[ russian ] = "Ïàíåëü ôóíêöèé";
-    Text[ polish ] = "Pasek funkcji";
-    Text[ japanese ] = "ãƒ•ã‚¡ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ãƒãƒ¼ï¼ˆè¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰ï¼‰";
-    Text[ chinese_traditional ] = "åŠŸèƒ½åˆ—(æª¢è¦–æ¨¡å¼)";
-    Text[ arabic ] = "ÔÑíØ ÇáãåÇã";
-    Text[ dutch ] = "Werkbalk";
-    Text[ chinese_simplified ] = "åŠŸèƒ½æ (è§†å›¾æ¨¡å¼)";
-    Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí";
-    Text[ korean ] = "ê¸°ëŠ¥ ëª¨ìŒ (ë³´ê¸° ëª¨ë“œ)";
-    Text[ turkish ] = "Fonksiyon çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de funcions";
-    Text[ finnish ] = "Toimintorivi";
-    Text[ thai ] = "à¹à¸–à¸šà¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
-    Text[ czech ] = "Panel funkcÃ­";
-    Text[ hebrew ] = "â€®×¡×¨×’×œ ×¤×¢×•×œ×•×ª × ×¤×•×¦×•×ªâ€¬";
-    Text[ hindi ] = "à¤«à¤¼à¤‚à¤•à¥à¤¶à¤¨à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "Panel funkciÃ­ (mÃ³d nÃ¡hÄ¾adu)";
-    Text[ hungarian ] = "FÃ¼ggvÃ©ny eszkÃ¶ztÃ¡r (nÃ©zeti mÃ³d)";
-    Text[ slovenian ] = "Funkcijska vrstica (ogledovalni naÄin)";
+    Text [ de ] = "Funktionsleiste (Lesemodus)" ;
+    Text [ en-US ] = "Function Bar (viewing mode)" ;
+    Text [ x-comment ] = " ";
 };
 
 ToolBox RID_OBJECTBAR_APP
