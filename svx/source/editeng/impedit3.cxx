@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 12:19:03 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 13:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1528,7 +1528,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     if ( bLineBreak == sal_True )
         CreateAndInsertEmptyLine( pParaPortion, nStartPosY );
 
-    delete pBuf;
+    delete[] pBuf;
 
     sal_Bool bHeightChanged = FinishCreateLines( pParaPortion );
 
@@ -2807,7 +2807,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 pOutDev->SetLayoutMode( nOldLayoutMode );
 
                                 if ( pTmpDXArray )
-                                    delete pTmpDXArray;
+                                    delete[] pTmpDXArray;
 
                                 if ( !pTextPortion->GetRightToLeft() )
                                 {

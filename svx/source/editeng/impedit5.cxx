@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 10:31:21 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 13:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,7 +965,7 @@ ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, const String& rOldTextAfterStar
 
 ImplIMEInfos::~ImplIMEInfos()
 {
-    delete pAttribs;
+    delete[] pAttribs;
 }
 
 void ImplIMEInfos::CopyAttribs( const USHORT* pA, USHORT nL )
@@ -978,7 +978,7 @@ void ImplIMEInfos::CopyAttribs( const USHORT* pA, USHORT nL )
 
 void ImplIMEInfos::DestroyAttribs()
 {
-    delete pAttribs;
+    delete[] pAttribs;
     pAttribs = NULL;
     nLen = 0;
 }

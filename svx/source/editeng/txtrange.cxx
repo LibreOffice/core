@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtrange.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-17 09:45:51 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 13:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,8 @@ TextRanger::~TextRanger()
 {
     for( USHORT i = 0; i < nCacheSize; ++i )
         delete pCache[i];
-    delete pCache;
-    delete pRangeArr;
+    delete[] pCache;
+    delete[] pRangeArr;
     delete pPoly;
     delete pLine;
 }

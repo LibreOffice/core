@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 13:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ private:
     BYTE                    nInTable;
     BYTE                    nInCell;
 
-    USHORT*                 pNumbers;
     BYTE                    nDefListLevel;
     BYTE                    nBulletLevel;
     BYTE                    nNumberingLevel;
@@ -114,7 +113,6 @@ private:
     BOOL                    ThrowAwayBlank();
     BOOL                    HasTextInCurrentPara();
     void                    ProcessUnknownControl( BOOL bOn );
-    inline USHORT*          GetNumbers();
 
     void                    ImpInsertParaBreak();
     void                    ImpInsertText( const String& rText );
@@ -132,18 +130,6 @@ public:
 
     const EditSelection&    GetCurSelection() const { return aCurSel; }
 };
-
-inline USHORT* EditHTMLParser::GetNumbers()
-{
-    if ( !pNumbers )
-    {
-        pNumbers = new USHORT[MAX_NUMBERLEVEL];
-        for ( USHORT n = 0; n < MAX_NUMBERLEVEL; n++ )
-            pNumbers[n] = 0;
-    }
-    return pNumbers;
-}
-
 
 SV_DECL_REF( EditHTMLParser );
 SV_IMPL_REF( EditHTMLParser );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 10:31:16 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 13:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1363,7 +1363,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
     }
     *pCur = '\0';
     XubString aASCIIText( pStr );
-    delete pStr;
+    delete[] pStr;
     return aASCIIText;
 }
 

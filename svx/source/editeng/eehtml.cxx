@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-01 14:55:43 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 13:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, SvKeyValueIterator* pHTTPHeaderAt
     nDefListLevel = 0;
     nBulletLevel = 0;
     nNumberingLevel = 0;
-    pNumbers = 0;
     bFieldsInserted = FALSE;
 
     if ( pHTTPHeaderAttrs )
