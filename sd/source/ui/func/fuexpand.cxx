@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuexpand.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-26 08:32:42 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,9 +281,7 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                         SfxItemSet aAttr(pDoc->GetPool());
                         aAttr.Put(XLineStyleItem(XLINE_NONE));
                         aAttr.Put(XFillStyleItem(XFILL_NONE));
-
-//-/                        pTextObj->NbcSetAttributes(aAttr, TRUE);
-                        pTextObj->SetItemSet(aAttr);
+                        pTextObj->SetMergedItemSet(aAttr);
                     }
                 }
 
