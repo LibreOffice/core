@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:17:34 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,9 +473,9 @@ NumericFormatter::NumericFormatter()
 void NumericFormatter::ImplLoadRes( const ResId& rResId )
 {
     ResMgr*     pMgr = Resource::GetResManager();
-    USHORT      nMask;
+    ULONG       nMask;
 
-    nMask = pMgr->ReadShort();
+    nMask = pMgr->ReadLong();
 
     if ( NUMERICFORMATTER_MIN & nMask )
         mnMin = pMgr->ReadLong();
@@ -801,7 +801,7 @@ void NumericField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     NumericFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
 
-    USHORT      nMask = ReadShortRes();
+    ULONG      nMask = ReadLongRes();
 
     if ( NUMERICFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
@@ -1461,10 +1461,10 @@ void MetricFormatter::ImplLoadRes( const ResId& rResId )
     NumericFormatter::ImplLoadRes( rResId );
 
     ResMgr*     pMgr = Resource::GetResManager();
-    USHORT      nMask = pMgr->ReadShort();
+    ULONG       nMask = pMgr->ReadLong();
 
     if ( METRICFORMATTER_UNIT & nMask )
-        meUnit = (FieldUnit)pMgr->ReadShort();
+        meUnit = (FieldUnit)pMgr->ReadLong();
 
     if ( METRICFORMATTER_CUSTOMUNITTEXT & nMask )
         maCustomUnitText = pMgr->ReadString();
@@ -1688,7 +1688,7 @@ void MetricField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     MetricFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
 
-    USHORT      nMask = ReadShortRes();
+    ULONG      nMask = ReadLongRes();
 
     if ( METRICFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
@@ -2182,7 +2182,7 @@ void CurrencyField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     CurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
 
-    USHORT      nMask = ReadShortRes();
+    ULONG      nMask = ReadLongRes();
 
     if ( CURRENCYFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
