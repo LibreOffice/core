@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zcodec.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:08:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize )
             if ( ( nMaxPos - nStreamPos ) < nInToRead )
             {
                 rIStm.SetError( ERRCODE_IO_PENDING );
+                err= ! Z_STREAM_END; // TODO What is appropriate code for this?
                 break;
             }
 
