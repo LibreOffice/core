@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-19 15:16:17 $
+ *  last change: $Author: fs $ $Date: 2002-04-16 07:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,7 @@ ORowSetCache::~ORowSetCache()
     m_xMetaData     = NULL;
     m_aUpdateTable  = NULL;
 }
+
 // -------------------------------------------------------------------------
 void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
 {
@@ -1514,9 +1515,6 @@ void SAL_CALL ORowSetCache::cancelRowUpdates(  ) throw(SQLException, RuntimeExce
 void SAL_CALL ORowSetCache::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
-
-    if(m_bInserted)
-        throw SQLException();
 
     m_bNew      = sal_True;
     m_bInserted = sal_True;
