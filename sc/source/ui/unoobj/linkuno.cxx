@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: dr $ $Date: 2000-11-09 09:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ void ScAreaLinkObj::Modify_Impl( const rtl::OUString* pNewFile, const rtl::OUStr
             aSource = String( *pNewSource );
         if (pNewDest)
         {
-            ScUnoConversion::FillRange( aDest, *pNewDest );
+            ScUnoConversion::FillScRange( aDest, *pNewDest );
             bFitBlock = FALSE;  // neuer Bereich angegeben -> keine Inhalte verschieben
         }
 
@@ -863,7 +863,7 @@ table::CellRangeAddress SAL_CALL ScAreaLinkObj::getDestArea() throw(uno::Runtime
     table::CellRangeAddress aRet;
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
     if (pLink)
-        ScUnoConversion::FillAddress( aRet, pLink->GetDestArea() );
+        ScUnoConversion::FillApiRange( aRet, pLink->GetDestArea() );
     return aRet;
 }
 

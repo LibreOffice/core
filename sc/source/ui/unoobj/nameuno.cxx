@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: dr $ $Date: 2000-11-09 09:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,7 @@ void SAL_CALL ScNamedRangesObj::addNewFromTitles( const table::CellRangeAddress&
     sal_Bool bRight  = ( aBorder == sheet::Border_RIGHT );
 
     ScRange aRange;
-    ScUnoConversion::FillRange( aRange, aSource );
+    ScUnoConversion::FillScRange( aRange, aSource );
 
     sal_uInt16 nFlags = 0;
     if (bTop)    nFlags |= NAME_TOP;
@@ -752,7 +752,7 @@ table::CellRangeAddress SAL_CALL ScLabelRangeObj::getLabelArea()
     table::CellRangeAddress aRet;
     ScRangePair* pData = GetData_Impl();
     if (pData)
-        ScUnoConversion::FillAddress( aRet, pData->GetRange(0) );
+        ScUnoConversion::FillApiRange( aRet, pData->GetRange(0) );
     return aRet;
 }
 
@@ -761,7 +761,7 @@ void SAL_CALL ScLabelRangeObj::setLabelArea( const table::CellRangeAddress& aLab
 {
     ScUnoGuard aGuard;
     ScRange aLabelRange;
-    ScUnoConversion::FillRange( aLabelRange, aLabelArea );
+    ScUnoConversion::FillScRange( aLabelRange, aLabelArea );
     Modify_Impl( &aLabelRange, NULL );
 }
 
@@ -772,7 +772,7 @@ table::CellRangeAddress SAL_CALL ScLabelRangeObj::getDataArea()
     table::CellRangeAddress aRet;
     ScRangePair* pData = GetData_Impl();
     if (pData)
-        ScUnoConversion::FillAddress( aRet, pData->GetRange(1) );
+        ScUnoConversion::FillApiRange( aRet, pData->GetRange(1) );
     return aRet;
 }
 
@@ -781,7 +781,7 @@ void SAL_CALL ScLabelRangeObj::setDataArea( const table::CellRangeAddress& aData
 {
     ScUnoGuard aGuard;
     ScRange aDataRange;
-    ScUnoConversion::FillRange( aDataRange, aDataArea );
+    ScUnoConversion::FillScRange( aDataRange, aDataArea );
     Modify_Impl( NULL, &aDataRange );
 }
 
@@ -844,8 +844,8 @@ void SAL_CALL ScLabelRangesObj::addNew( const table::CellRangeAddress& aLabelAre
 
             ScRange aLabelRange;
             ScRange aDataRange;
-            ScUnoConversion::FillRange( aLabelRange, aLabelArea );
-            ScUnoConversion::FillRange( aDataRange,  aDataArea );
+            ScUnoConversion::FillScRange( aLabelRange, aLabelArea );
+            ScUnoConversion::FillScRange( aDataRange,  aDataArea );
             xNewList->Join( ScRangePair( aLabelRange, aDataRange ) );
 
             if (bColumn)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-01 17:48:52 $
+ *  last change: $Author: dr $ $Date: 2000-11-09 09:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3043,7 +3043,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddress
         table::CellRangeAddress* pAry = aSeq.getArray();
         for (USHORT i=0; i<nCount; i++)
         {
-            ScUnoConversion::FillAddress( aRangeAddress, *rRanges.GetObject(i) );
+            ScUnoConversion::FillApiRange( aRangeAddress, *rRanges.GetObject(i) );
             pAry[i] = aRangeAddress;
         }
         return aSeq;
@@ -3674,7 +3674,7 @@ table::CellRangeAddress SAL_CALL ScCellRangeObj::getRangeAddress() throw(uno::Ru
 {
     ScUnoGuard aGuard;
     table::CellRangeAddress aRet;
-    ScUnoConversion::FillAddress( aRet, aRange );
+    ScUnoConversion::FillApiRange( aRet, aRange );
     return aRet;
 }
 
@@ -5634,7 +5634,7 @@ void SAL_CALL ScTableSheetObj::insertCells( const table::CellRangeAddress& aRang
         {
             DBG_ASSERT( aRange.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
             ScRange aScRange;
-            ScUnoConversion::FillRange( aScRange, aRange );
+            ScUnoConversion::FillScRange( aScRange, aRange );
             ScDocFunc aFunc(*pDocSh);
             aFunc.InsertCells( aScRange, eCmd, TRUE, TRUE );
         }
@@ -5666,7 +5666,7 @@ void SAL_CALL ScTableSheetObj::removeRange( const table::CellRangeAddress& aRang
         {
             DBG_ASSERT( aRange.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
             ScRange aScRange;
-            ScUnoConversion::FillRange( aScRange, aRange );
+            ScUnoConversion::FillScRange( aScRange, aRange );
             ScDocFunc aFunc(*pDocSh);
             aFunc.DeleteCells( aScRange, eCmd, TRUE, TRUE );
         }
@@ -5683,7 +5683,7 @@ void SAL_CALL ScTableSheetObj::moveRange( const table::CellAddress& aDestination
     {
         DBG_ASSERT( aSource.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
         ScRange aRange;
-        ScUnoConversion::FillRange( aRange, aSource );
+        ScUnoConversion::FillScRange( aRange, aSource );
         ScAddress aDestPos( aDestination.Column, aDestination.Row, aDestination.Sheet );
         ScDocFunc aFunc(*pDocSh);
         aFunc.MoveBlock( aRange, aDestPos, TRUE, TRUE, TRUE, TRUE );
@@ -5700,7 +5700,7 @@ void SAL_CALL ScTableSheetObj::copyRange( const table::CellAddress& aDestination
     {
         DBG_ASSERT( aSource.Sheet == GetTab_Impl(), "falsche Tabelle in CellRangeAddress" );
         ScRange aRange;
-        ScUnoConversion::FillRange( aRange, aSource );
+        ScUnoConversion::FillScRange( aRange, aSource );
         ScAddress aDestPos( aDestination.Column, aDestination.Row, aDestination.Sheet );
         ScDocFunc aFunc(*pDocSh);
         aFunc.MoveBlock( aRange, aDestPos, FALSE, TRUE, TRUE, TRUE );
@@ -5755,7 +5755,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
             DBG_ASSERT(pRange,"wo ist der Druckbereich");
             if (pRange)
             {
-                ScUnoConversion::FillAddress( aRangeAddress, *pRange );
+                ScUnoConversion::FillApiRange( aRangeAddress, *pRange );
                 pAry[i] = aRangeAddress;
             }
         }
@@ -5785,7 +5785,7 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
             const table::CellRangeAddress* pAry = aPrintAreas.getConstArray();
             for (USHORT i=0; i<nCount; i++)
             {
-                ScUnoConversion::FillRange( aRange, pAry[i] );
+                ScUnoConversion::FillScRange( aRange, pAry[i] );
                 pDoc->SetPrintRange( nTab, i, aRange );
             }
         }
@@ -5847,7 +5847,7 @@ table::CellRangeAddress SAL_CALL ScTableSheetObj::getTitleColumns() throw(uno::R
         USHORT nTab = GetTab_Impl();
         const ScRange* pRange = pDoc->GetRepeatColRange(nTab);
         if (pRange)
-            ScUnoConversion::FillAddress( aRet, *pRange );
+            ScUnoConversion::FillApiRange( aRet, *pRange );
     }
     return aRet;
 }
@@ -5865,7 +5865,7 @@ void SAL_CALL ScTableSheetObj::setTitleColumns( const table::CellRangeAddress& a
         ScPrintRangeSaver* pOldRanges = pDoc->CreatePrintRangeSaver();
 
         ScRange aNew;
-        ScUnoConversion::FillRange( aNew, aTitleColumns );
+        ScUnoConversion::FillScRange( aNew, aTitleColumns );
         pDoc->SetRepeatColRange( nTab, &aNew );     // immer auch einschalten
 
         PrintAreaUndo_Impl( pOldRanges );           // Undo, Umbrueche, Modified etc.
@@ -5925,7 +5925,7 @@ table::CellRangeAddress SAL_CALL ScTableSheetObj::getTitleRows() throw(uno::Runt
         USHORT nTab = GetTab_Impl();
         const ScRange* pRange = pDoc->GetRepeatRowRange(nTab);
         if (pRange)
-            ScUnoConversion::FillAddress( aRet, *pRange );
+            ScUnoConversion::FillApiRange( aRet, *pRange );
     }
     return aRet;
 }
@@ -5943,7 +5943,7 @@ void SAL_CALL ScTableSheetObj::setTitleRows( const table::CellRangeAddress& aTit
         ScPrintRangeSaver* pOldRanges = pDoc->CreatePrintRangeSaver();
 
         ScRange aNew;
-        ScUnoConversion::FillRange( aNew, aTitleRows );
+        ScUnoConversion::FillScRange( aNew, aTitleRows );
         pDoc->SetRepeatRowRange( nTab, &aNew );     // immer auch einschalten
 
         PrintAreaUndo_Impl( pOldRanges );           // Undo, Umbrueche, Modified etc.
@@ -6207,7 +6207,7 @@ void SAL_CALL ScTableSheetObj::group( const table::CellRangeAddress& aRange,
     {
         BOOL bColumns = ( nOrientation == table::TableOrientation_COLUMNS );
         ScRange aGroupRange;
-        ScUnoConversion::FillRange( aGroupRange, aRange );
+        ScUnoConversion::FillScRange( aGroupRange, aRange );
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.MakeOutline( aGroupRange, bColumns, TRUE, TRUE );
     }
@@ -6223,7 +6223,7 @@ void SAL_CALL ScTableSheetObj::ungroup( const table::CellRangeAddress& aRange,
     {
         BOOL bColumns = ( nOrientation == table::TableOrientation_COLUMNS );
         ScRange aGroupRange;
-        ScUnoConversion::FillRange( aGroupRange, aRange );
+        ScUnoConversion::FillScRange( aGroupRange, aRange );
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.RemoveOutline( aGroupRange, bColumns, TRUE, TRUE );
     }
@@ -6237,7 +6237,7 @@ void SAL_CALL ScTableSheetObj::autoOutline( const table::CellRangeAddress& aRang
     if ( pDocSh )
     {
         ScRange aFormulaRange;
-        ScUnoConversion::FillRange( aFormulaRange, aRange );
+        ScUnoConversion::FillScRange( aFormulaRange, aRange );
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.AutoOutline( aFormulaRange, TRUE, TRUE );
     }
@@ -6263,7 +6263,7 @@ void SAL_CALL ScTableSheetObj::hideDetail( const table::CellRangeAddress& aRange
     if ( pDocSh )
     {
         ScRange aMarkRange;
-        ScUnoConversion::FillRange( aMarkRange, aRange );
+        ScUnoConversion::FillScRange( aMarkRange, aRange );
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.HideMarkedOutlines( aMarkRange, TRUE, TRUE );
     }
@@ -6277,7 +6277,7 @@ void SAL_CALL ScTableSheetObj::showDetail( const table::CellRangeAddress& aRange
     if ( pDocSh )
     {
         ScRange aMarkRange;
-        ScUnoConversion::FillRange( aMarkRange, aRange );
+        ScUnoConversion::FillScRange( aMarkRange, aRange );
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.ShowMarkedOutlines( aMarkRange, TRUE, TRUE );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: dr $ $Date: 2000-11-09 09:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,24 +76,6 @@ using namespace com::sun::star;
 //------------------------------------------------------------------------
 
 //  everything is static...
-
-void ScUnoConversion::FillRange( ScRange& rDest, const table::CellRangeAddress& rSource )
-{
-    rDest.aStart.Set( rSource.StartColumn, rSource.StartRow, rSource.Sheet );
-    rDest.aEnd.Set( rSource.EndColumn, rSource.EndRow, rSource.Sheet );
-}
-
-void ScUnoConversion::FillAddress( table::CellRangeAddress& rDest, const ScRange& rSource )
-{
-    DBG_ASSERT( rSource.aStart.Tab() == rSource.aEnd.Tab(),
-                "FillAddress: unterschiedliche Tabellen" );
-
-    rDest.Sheet       = rSource.aStart.Tab();
-    rDest.StartColumn = rSource.aStart.Col();
-    rDest.StartRow    = rSource.aStart.Row();
-    rDest.EndColumn   = rSource.aEnd.Col();
-    rDest.EndRow      = rSource.aEnd.Row();
-}
 
 LanguageType ScUnoConversion::GetLanguage( const lang::Locale& rLocale )
 {
