@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soldlg.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-26 14:51:54 $
+ *  last change: $Author: obo $ $Date: 2004-07-27 15:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,8 @@
 ModalDialog RID_SD_DIALOG_NEWPROJECT
 {
     OutputSize = TRUE;
-    Text = "New Project";
+    Text [ de ] = "New Project";
+    Text [ en-US ] = "New Project";
     PosSize = MAP_SYSFONT(18,18,142,142);
     SVLook = TRUE;
     MOVEABLE = TRUE;
@@ -85,7 +86,8 @@ ModalDialog RID_SD_DIALOG_NEWPROJECT
     };
     FixedText FT_PRJNAME {
         PosSize = MAP_SYSFONT( 5, 10, 100, 10 );
-        Text = "Project Name";
+        Text [ de ]  = "Project Name";
+        Text [ en-US ]  = "Project Name";
     };
     Edit EDIT_PRJNAME {
         Border = TRUE;
@@ -93,7 +95,8 @@ ModalDialog RID_SD_DIALOG_NEWPROJECT
     };
     FixedText FT_PRJSHORT {
         PosSize = MAP_SYSFONT( 5, 30, 100, 10 );
-        Text = "Project Short Name";
+        Text [ de ]  = "Project Short Name";
+        Text [ en-US ]  = "Project Short Name";
     };
     Edit EDIT_PRJSHORT {
         Border = TRUE;
@@ -101,7 +104,8 @@ ModalDialog RID_SD_DIALOG_NEWPROJECT
     };
     FixedText FT_PRJDEPS {
         PosSize = MAP_SYSFONT( 5, 50, 100, 10 );
-        Text = "Project Depends on";
+        Text [ de ]  = "Project Depends on";
+        Text [ en-US ]  = "Project Depends on";
     };
     Edit EDIT_PRJDEPS {
         Border = TRUE;
@@ -112,7 +116,8 @@ ModalDialog RID_SD_DIALOG_NEWPROJECT
 ModalDialog RID_SD_DIALOG_NEWDIRECTORY
 {
     OutputSize = TRUE;
-    Text = "New Directory";
+    Text [ de ]  = "New Directory";
+    Text [ en-US ]  = "New Directory";
     PosSize = MAP_SYSFONT(18,18,142,142);
     SVLook = TRUE;
     MOVEABLE = TRUE;
@@ -130,7 +135,8 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
     };
     FixedText FT_DIRNAME {
         PosSize = MAP_SYSFONT( 5, 10, 132, 10 );
-        Text = "Directory Name ( with projectname )";
+        Text [ de ]  = "Directory Name ( with projectname )";
+        Text [ en-US ]  = "Directory Name ( with projectname )";
     };
     Edit EDIT_DIRNAME {
         Border = TRUE;
@@ -138,7 +144,8 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
     };
     FixedText FT_DIRFLAG {
         PosSize = MAP_SYSFONT( 5, 30, 100, 10 );
-        Text = "Directory Flag";
+        Text [ de ]  = "Directory Flag";
+        Text [ en-US ]  = "Directory Flag";
     };
     Edit EDIT_DIRFLAG {
         Border = TRUE;
@@ -146,7 +153,8 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
     };
     FixedText FT_DIRDEPS {
         PosSize = MAP_SYSFONT( 5, 50, 100, 10 );
-        Text = "Directory Depends on";
+        Text [ de ]  = "Directory Depends on";
+        Text [ en-US ]  = "Directory Depends on";
     };
     Edit EDIT_DIRDEPS {
         Border = TRUE;
@@ -154,7 +162,8 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
     };
     FixedText FT_DIRACTION {
         PosSize = MAP_SYSFONT( 5, 70, 100, 10 );
-        Text = "What To Do";
+        Text [ de ]  = "What To Do";
+        Text [ en-US ]  = "What To Do";
     };
     Edit EDIT_DIRACTION {
         Border = TRUE;
@@ -162,7 +171,8 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
     };
     FixedText FT_DIRENV {
         PosSize = MAP_SYSFONT( 5, 90, 100, 10 );
-        Text = "Which Environments";
+        Text [ de ]  = "Which Environments";
+        Text [ en-US ]  = "Which Environments";
     };
     Edit EDIT_DIRENV {
         Border = TRUE;
@@ -174,7 +184,8 @@ ModalDialog RID_SD_DIALOG_NEWDIRECTORY
 ModalDialog RID_SD_DIALOG_HELP
 {
     OutputSize = TRUE;
-    Text = "Help";
+    Text [ de ]  = "Help";
+    Text [ en-US ]  = "Help";
     PosSize = MAP_SYSFONT(18,18,242,242);
     SVLook = TRUE;
     MOVEABLE = TRUE;
@@ -196,7 +207,8 @@ ModalDialog DLG_VERSIONSELECT {
     OutputSize = TRUE;
     Pos = MAP_APPFONT( 92, 40 );
     Size = MAP_APPFONT( 161, 98 );
-    Text = "Open workspace";
+    Text [ de ]  = "Open workspace";
+    Text [ en-US ]  = "Open workspace";
     Moveable = TRUE;
     Closeable = TRUE;
     ListBox DLG_VERSIONSELECT_LISTBOX {
@@ -208,7 +220,8 @@ ModalDialog DLG_VERSIONSELECT {
     GroupBox DLG_VERSIONSELECT_GROUP {
             Pos = MAP_APPFONT( 4, 4 );
             Size = MAP_APPFONT( 104, 88 );
-            Text = "Workspaces";
+            Text [ de ]  = "Workspaces";
+            Text [ en-US ]  = "Workspaces";
         };
     OKButton DLG_VERSIONSELECT_OK {
             Pos = MAP_APPFONT( 116, 64 );
@@ -226,22 +239,26 @@ ModelessDialog DLG_AUTOARRANGE {
     OutputSize = TRUE;
     Pos = MAP_APPFONT( 40, 12 );
     Size = MAP_APPFONT( 225, 82 );
-    Text = "Autoarrange";
+    Text [ de ]  = "Autoarrange";
+    Text [ en-US ]  = "Autoarrange";
     Moveable = TRUE;
     GroupBox DLG_AUTOARRANGE_GROUP {
             Pos = MAP_APPFONT( 4, 4 );
             Size = MAP_APPFONT( 216, 72 );
-            Text = "Progress";
+            Text [ de ]  = "Progress";
+            Text [ en-US ]  = "Progress";
         };
     FixedText DLG_AUTOARRANGE_TEXT_MODULE {
             Pos = MAP_APPFONT( 8, 16 );
             Size = MAP_APPFONT( 208, 10 );
-            Text = "";
+            Text [ de ]  = "";
+            Text [ en-US ]  = "";
         };
     FixedText DLG_AUTOARRANGE_TEXT_OVERALL {
             Pos = MAP_APPFONT( 8, 48 );
             Size = MAP_APPFONT( 208, 10 );
-            Text = "";
+            Text [ de ]  = "";
+            Text [ en-US ]  = "";
         };
 };
 
