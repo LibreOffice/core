@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strucvt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:53 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,3 +182,51 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
     ImplIncRefCount( mpData );
     return *this;
 }
+
+// =======================================================================
+
+#ifndef _TOOLS_RC_HXX
+#include <rc.hxx>
+#endif
+#ifndef _TOOLS_RCID_H
+#include <rcid.h>
+#endif
+
+UniString::UniString( const ResId& rResId )
+{
+    rResId.SetRT( RSC_STRING );
+    ResMgr* pResMgr = rResId.GetResMgr();
+    if ( !pResMgr )
+        pResMgr = Resource::GetResManager();
+
+    mpData = NULL;
+    if ( pResMgr->GetResource( rResId ) )
+    {
+        // String laden
+        RSHEADER_TYPE * pResHdr = (RSHEADER_TYPE*)pResMgr->GetClass();
+        //sal_uInt32 nLen = pResHdr->GetLocalOff() - sizeof( RSHEADER_TYPE );
+
+        sal_uInt32 nStringLen = strlen( (char*)(pResHdr+1) );
+        InitStringRes( (const char*)(pResHdr+1), nStringLen );
+
+        sal_uInt32 nSize = sizeof( RSHEADER_TYPE ) + nStringLen + 1;
+        nSize += nSize % 2;
+        pResMgr->Increment( nSize );
+    }
+    else
+    {
+        mpData = &aImplEmptyStrData;
+        ImplIncRefCount( mpData );
+        #if OSL_DEBUG_LEVEL > 0
+        *this = UniString::CreateFromAscii( "<resource id " );
+        Append( UniString::CreateFromInt32( rResId.GetId() ) );
+        AppendAscii( " not found>" );
+        #endif
+    }
+
+
+    ResHookProc pImplResHookProc = ResMgr::GetReadStringHook();
+    if ( pImplResHookProc )
+        pImplResHookProc( *this );
+}
+
