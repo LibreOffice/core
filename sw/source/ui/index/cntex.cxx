@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cntex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:50 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         //
         pxIndexSectionsArr[nTOXIndex]->xDocumentIndex->update();
 
-//#ifdef DEBUG
+//#if OSL_DEBUG_LEVEL > 1
 //      uno::Reference< frame::XStorable >  xStor(xModel, uno::UNO_QUERY);
 //      String sURL("file:///e|/temp/sw/idxexample.sdw");
 //   uno::Sequence< beans::PropertyValue > aArgs(0);
