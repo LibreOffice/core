@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-15 08:33:05 $
+ *  last change: $Author: aw $ $Date: 2002-10-08 15:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2148,3 +2148,14 @@ Color SdrPaintView::GetGridColor() const
     return maGridColor;
 }
 
+// #103834# Set background color for svx at SdrPageViews
+void SdrPaintView::SetApplicationBackgroundColor(Color aBackgroundColor)
+{
+    for(sal_uInt16 a(0); a < GetPageViewCount(); a++)
+    {
+        SdrPageView* pPageView = GetPageViewPvNum(a);
+        pPageView->SetApplicationBackgroundColor(aBackgroundColor);
+    }
+}
+
+// eof
