@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-09 08:12:30 $
+ *  last change: $Author: ab $ $Date: 2002-07-30 10:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,6 +725,15 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         StoreMacroDescription();
         if ( nMode == MACROCHOOSER_RECORDING )
         {
+            BOOL bValid = BasicIDE::IsValidSbxName( aMacroNameEdit.GetText() );
+            if ( !bValid )
+            {
+                ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
+                aMacroNameEdit.SetSelection( Selection( 0, aMacroNameEdit.GetText().Len() ) );
+                aMacroNameEdit.GrabFocus();
+                return 0;
+            }
+
             SbMethod* pMethod = GetMacro();
             if ( pMethod && !QueryReplaceMacro( pMethod->GetName(), this ) )
                 return 0;
