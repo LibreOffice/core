@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvteas1.tab,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2002-03-18 14:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,58 @@ static ImplTextEncodingData const aImplMS874TextEncodingData
         "windows-874",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
     /* WIN/DOS/OS2, SCRIPT_THAI, pc code page 874, mac encoding 21 */
+
+/* ======================================================================= */
+
+/* TIS 620-2533
+ *
+ * A good source of information is <http://www.inet.co.th/cyberclub/trin/
+ * thairef/index.html> as of 18 Mar 2002.
+ *
+ * Single byte encoding, from which MS874 is derived (although it is the other
+ * way around in this implementation):
+ *
+ * 0x00--9F map to U+0000--009F
+ * 0xA0 is questionable (unassigned or U+00A0 NO BREAK SPACE), to ease
+ *      implementation, it maps to U+00A0
+ * 0xA1--DA map to U+0E01--0E3A (TIS 620, same for MS874)
+ * 0xDB--DE are unassigned (TIS 620, same for MS874)
+ * 0xDF--FB map to U+0E3F--0E5B (TIS 620, same for MS874)
+ * 0xFC--FF are unassigned (TIS 620, same for MS874)
+ */
+
+static ImplByteConvertData const aImplTis620ByteCvtData =
+{
+    aImplMS874ToUniTab + (0xA0 - MS874UNI_START),
+    aImpl8090SameToUniTab,
+    0xA0, MS874UNI_END,
+    SAME8090UNI_START, SAME8090UNI_END,
+    aImplMS874ToCharTab,
+    aImpl8090SameToCharTab,
+    aImplMS874ToCharTabEx,
+    MS874CHAR_START, MS874CHAR_END,
+    SAME8090CHAR_START, SAME8090CHAR_END,
+    1
+};
+
+static ImplTextEncodingData const aImplTis620TextEncodingData
+    = { { &aImplTis620ByteCvtData,
+          ImplCharToUnicode,
+          ImplUnicodeToChar,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL,
+          NULL },
+        RTL_TEXTENCODING_TIS_620,
+        1,
+        1,
+        1,
+        222,
+        "iso8859-1", /* TODO! correct? */
+        "TIS-620",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MIME };
 
 /* ======================================================================= */
 

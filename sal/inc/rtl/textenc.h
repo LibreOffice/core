@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2002-01-15 16:59:22 $
+ *  last change: $Author: sb $ $Date: 2002-03-18 14:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,8 +173,9 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_MS_1361                (RTL_TEXTENC_CAST( 84 ))
 #define RTL_TEXTENCODING_GB_18030               (RTL_TEXTENC_CAST( 85 ))
 #define RTL_TEXTENCODING_BIG5_HKSCS             (RTL_TEXTENC_CAST( 86 ))
+#define RTL_TEXTENCODING_TIS_620                (RTL_TEXTENC_CAST( 87 ))
 
-#define RTL_TEXTENCODING_STD_COUNT              (RTL_TEXTENC_CAST( 87 ))
+#define RTL_TEXTENCODING_STD_COUNT              (RTL_TEXTENC_CAST( 88 ))
 
 #define RTL_TEXTENCODING_USER_START             (RTL_TEXTENC_CAST( 0x8000 ))
 #define RTL_TEXTENCODING_USER_END               (RTL_TEXTENC_CAST( 0xEFFF ))
@@ -254,6 +255,7 @@ Symbol                                          RTL_TEXTENCODING_SYMBOL
 
 # Thai (Apple Macintosh)                          RTL_TEXTENCODING_APPLE_THAI
 Thai (Dos/Windows-874)                          RTL_TEXTENCODING_MS_874
+Thai (TIS 620)                                  RTL_TEXTENCODING_TIS_620
 
 Turkish (Apple Macintosh)                       RTL_TEXTENCODING_APPLE_TURKISH
 Turkish (DOS/OS2-857)                           RTL_TEXTENCODING_IBM_857

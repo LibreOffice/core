@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sb $ $Date: 2002-01-15 17:00:15 $
+ *  last change: $Author: sb $ $Date: 2002-03-18 14:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,10 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMacTextEncoding( sal_uInt32 nMa
 
 rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pUnixCharset )
 {
+    /* See <ftp://ftp.x.org/pub/DOCS/registry>, section 14 ("Font Charset
+     * (Registry and Encoding) Names").
+     */
+
     /* All Identifiers in the tables are lower case The function search */
     /* for the first matching string in the tables. */
     /* Sort order: unique (first 14, than 1), important */
@@ -912,6 +916,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "gb18030", RTL_TEXTENCODING_GB_18030 },
             /* This is no actual MIME character set name, it's only a guess */
         { "big5hkscs", RTL_TEXTENCODING_BIG5_HKSCS },
+        { "tis620", RTL_TEXTENCODING_TIS_620 },
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
