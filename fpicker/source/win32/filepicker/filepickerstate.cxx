@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepickerstate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-05 07:52:26 $
+ *  last change: $Author: tra $ $Date: 2001-11-14 16:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,8 +645,19 @@ void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFil
     else if ( LISTBOX == aCtrlClass )
     {
         // for listboxes we save only the
-        // last selected item
+        // last selected item and the last
+        // selected item index
+
         aControlAction = GET_SELECTED_ITEM;
+
+        lpfnGetValue = GetCtrlGetValueFunction( aCtrlClass, aControlAction );
+
+        aNonExecFilePickerState->setValue(
+            GetDlgCtrlID( hwndControl ),
+            aControlAction,
+            lpfnGetValue( hwndControl ) );
+
+        aControlAction = ::com::sun::star::ui::dialogs::ControlActions::GET_SELECTED_ITEM_INDEX;
 
         lpfnGetValue = GetCtrlGetValueFunction( aCtrlClass, aControlAction );
 
