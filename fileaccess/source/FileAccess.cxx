@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:15:47 $
+ *  last change: $Author: ab $ $Date: 2000-11-16 13:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
 
     Content aCnt( aURL.GetMainURL(), aCmdEnv );
     Content aNewFolder( aNewFolderURLObj, aCmdEnv );
-    OUString aType( RTL_CONSTASCII_USTRINGPARAM( "FSysFolder" ) );
+    OUString aType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.staroffice.fsys-folder" ) );
     aCnt.insertNewContent( aType, aNames, aValues, aNewFolder );
 }
 
@@ -434,9 +434,10 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
 
     Content aCnt( aFolderObj.GetMainURL(), mxEnvironment );
     Reference< XResultSet > xResultSet;
-    Sequence< OUString > aProps(1);
-    OUString* pProps = aProps.getArray();
-    pProps[0] == OUString::createFromAscii( "Url" );
+    Sequence< OUString > aProps(0);
+    //Sequence< OUString > aProps(1);
+    //OUString* pProps = aProps.getArray();
+    //pProps[0] == OUString::createFromAscii( "Url" );
 
     ResultSetInclude eInclude = bIncludeFolders ? INCLUDE_FOLDERS_AND_DOCUMENTS : INCLUDE_DOCUMENTS_ONLY;
     xResultSet = aCnt.createCursor( aProps, eInclude );
