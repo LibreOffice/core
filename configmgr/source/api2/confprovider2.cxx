@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:45:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,10 @@ namespace configmgr
     static const int ID_PREFETCH=1;
     static const int ID_ENABLEASYNC=2;
 
+    static inline
+    OUString getPrefetchPropName() { return OUString( RTL_CONSTASCII_USTRINGPARAM("PrefetchNodes") ); }
+    static inline
+    OUString getEnableAsyncPropName() { return OUString( RTL_CONSTASCII_USTRINGPARAM("EnableAsync") ); }
     //=============================================================================
     //= OConfigurationProvider
     //=============================================================================
@@ -318,15 +322,17 @@ namespace configmgr
 
     //-----------------------------------------------------------------------------
     //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
     OConfigurationProvider::OConfigurationProvider(
         CreationContext const & xContext,
         const ServiceImplementationInfo* pServices
         )
-                           :OProvider(xContext,pServices)
-                           ,m_pImpl(NULL)
-
+       :OProvider(xContext,pServices)
+       ,m_pImpl(NULL)
+       ,m_bEnableAsync(false)
     {
-        registerProperty(rtl::OUString::createFromAscii("PrefetchNodes"),   ID_PREFETCH, 0,&m_aPrefetchNodes, ::getCppuType(&m_aPrefetchNodes));
+        registerProperty(getPrefetchPropName(), ID_PREFETCH, 0,&m_aPrefetchNodes, ::getCppuType(&m_aPrefetchNodes));
+        registerProperty(getEnableAsyncPropName(),  ID_ENABLEASYNC, 0, &m_bEnableAsync, ::getBooleanCppuType());
     }
 
     //-----------------------------------------------------------------------------
@@ -347,8 +353,8 @@ namespace configmgr
         m_pImpl = pNewImpl.release();
         if (m_pImpl)
         {
-            registerProperty(rtl::OUString::createFromAscii("enableAsync"), ID_ENABLEASYNC, 0,
-                &m_pImpl->m_bEnableAsync, ::getCppuType(&m_pImpl->m_bEnableAsync));
+            sal_Bool isEnabled = m_pImpl->getDefaultOptions().isAsyncEnabled();
+            this->setPropertyValue( getEnableAsyncPropName(), uno::makeAny(isEnabled) );
         }
     }
 
@@ -459,25 +465,25 @@ namespace configmgr
         catch (uno::RuntimeException& ) { throw; }
         catch (uno::Exception& e)
         {
+            // FIXME: use getCaughtException()
             throw lang::WrappedTargetRuntimeException(e.Message, *this, uno::makeAny(e));
         }
         //Broadcast the changes
         uno::Reference< css::util::XRefreshListener > const * const pRefresh = 0;
-        cppu::OInterfaceContainerHelper * aInterfaceContainerHelper =
-            cppu::WeakComponentImplHelperBase::rBHelper.getContainer
-                (::getCppuType(pRefresh));
+        cppu::OInterfaceContainerHelper * aInterfaceContainer=
+            getBroadcastHelper().getContainer (::getCppuType(pRefresh));
 
-        if(aInterfaceContainerHelper)
+        if(aInterfaceContainer)
         {
-            cppu::OInterfaceIteratorHelper aIteratorHelper
-                (*aInterfaceContainerHelper);
-            while(aIteratorHelper.hasMoreElements())
+            lang::EventObject aEventObject(*this);
+
+            cppu::OInterfaceIteratorHelper aIterator(*aInterfaceContainer);
+            while(aIterator.hasMoreElements())
             {
-                uno::Reference< uno::XInterface > xIface = aIteratorHelper.next();
+                uno::Reference< uno::XInterface > xIface = aIterator.next();
                 uno::Reference< util::XRefreshListener > xRefresh (xIface, uno::UNO_QUERY);
                 if (xRefresh.is())
                 {
-                    lang::EventObject aEventObject(*this);
                     xRefresh->refreshed(aEventObject);
                 }
             }
@@ -488,16 +494,14 @@ namespace configmgr
          const uno::Reference< util::XRefreshListener >& aListener )
             throw (uno::RuntimeException)
      {
-         uno::Reference< css::util::XRefreshListener > const * const pRefresh = 0;
-         cppu::WeakComponentImplHelperBase::rBHelper.addListener(::getCppuType(pRefresh), *this);
+         getBroadcastHelper().addListener(::getCppuType(&aListener), aListener);
      }
      //-----------------------------------------------------------------------------
      void SAL_CALL OConfigurationProvider::removeRefreshListener(
          const uno::Reference< util::XRefreshListener >& aListener )
             throw (uno::RuntimeException)
      {
-         uno::Reference< css::util::XRefreshListener > const * const pRefresh = 0;
-         cppu::WeakComponentImplHelperBase::rBHelper.removeListener(::getCppuType(pRefresh), *this);
+         getBroadcastHelper().removeListener(::getCppuType(&aListener), aListener);
      }
      //XFlushable
      //-----------------------------------------------------------------------------
@@ -506,23 +510,23 @@ namespace configmgr
      {
          OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
          m_pImpl->flushAll();
-         //Broadcast the changes
-         uno::Reference< css::util::XRefreshListener > const * const pFlush = 0;
-         cppu::OInterfaceContainerHelper * aInterfaceContainerHelper =
-            cppu::WeakComponentImplHelperBase::rBHelper.getContainer
-                (::getCppuType(pFlush));
 
-         if(aInterfaceContainerHelper)
+         //Broadcast the changes
+         uno::Reference< css::util::XFlushListener > const * const pFlush = 0;
+         cppu::OInterfaceContainerHelper * aInterfaceContainer=
+            getBroadcastHelper().getContainer(::getCppuType(pFlush));
+
+         if(aInterfaceContainer)
          {
-             cppu::OInterfaceIteratorHelper aIteratorHelper
-                (*aInterfaceContainerHelper);
-             while(aIteratorHelper.hasMoreElements())
+             lang::EventObject aEventObject(*this);
+
+             cppu::OInterfaceIteratorHelper aIterator(*aInterfaceContainer);
+             while(aIterator.hasMoreElements())
              {
-                 uno::Reference< uno::XInterface > xIface = aIteratorHelper.next();
+                 uno::Reference< uno::XInterface > xIface = aIterator.next();
                  uno::Reference< util::XFlushListener > xFlush (xIface, uno::UNO_QUERY);
                  if (xFlush.is())
                  {
-                     lang::EventObject aEventObject(*this);
                      xFlush->flushed(aEventObject);
                  }
              }
@@ -533,16 +537,14 @@ namespace configmgr
          const uno::Reference< util::XFlushListener >& aListener )
             throw (uno::RuntimeException)
      {
-          uno::Reference< css::util::XFlushListener > const * const pFlush = 0;
-          cppu::WeakComponentImplHelperBase::rBHelper.addListener(::getCppuType(pFlush), *this);
+          getBroadcastHelper().addListener(::getCppuType(&aListener), aListener);
      }
      //-----------------------------------------------------------------------------
      void SAL_CALL OConfigurationProvider::removeFlushListener(
          const uno::Reference< util::XFlushListener >& aListener )
             throw (uno::RuntimeException)
      {
-         uno::Reference< css::util::XFlushListener > const * const pFlush = 0;
-         cppu::WeakComponentImplHelperBase::rBHelper.removeListener(::getCppuType(pFlush), *this);
+         getBroadcastHelper().removeListener(::getCppuType(&aListener), aListener);
      }
     // XInterface
     //-----------------------------------------------------------------------------
@@ -608,15 +610,16 @@ namespace configmgr
 
             case ID_ENABLEASYNC:
             {
-                if(!m_pImpl->m_bEnableAsync)
+                //Forward to TreeManager
+                sal_Bool bAsync;
+                if (rValue >>= bAsync)
                 {
-                    //Forward to TreeManager
-                    m_pImpl->enableAsync(false);
+                    m_pImpl->enableAsync(bAsync);
+                    if (!bAsync)
+                        this->flush();
                 }
                 else
-                {
-                     m_pImpl->enableAsync(true);
-                }
+                    OSL_ENSURE(false, "Unexpected type of new property value");
             }
             break;
             default:
