@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-20 14:53:32 $
+ *  last change: $Author: mib $ $Date: 2000-10-25 11:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,17 +102,32 @@ SvXMLImportPropertyMapper::~SvXMLImportPropertyMapper()
 {
 }
 
-/** fills the given itemset with the attributes in the given list */
 void SvXMLImportPropertyMapper::importXML(
         vector< XMLPropertyState >& rProperties,
            Reference< XAttributeList > xAttrList,
            const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
+    importXML( rProperties, xAttrList, rUnitConverter, rNamespaceMap, -1, -1 );
+}
+
+/** fills the given itemset with the attributes in the given list */
+void SvXMLImportPropertyMapper::importXML(
+        vector< XMLPropertyState >& rProperties,
+           Reference< XAttributeList > xAttrList,
+           const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_Int32 nStartIdx,
+        sal_Int32 nEndIdx ) const
+{
     INT16 nAttr = xAttrList->getLength();
 
     Reference< XNameContainer > xAttrContainer;
 
+    if( -1 == nStartIdx )
+        nStartIdx = 0;
+    if( -1 == nEndIdx )
+        nEndIdx = maPropMapper->GetEntryCount();
     for( INT16 i=0; i < nAttr; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
@@ -125,14 +140,14 @@ void SvXMLImportPropertyMapper::importXML(
 
         const OUString& rValue = xAttrList->getValueByIndex( i );
 
-        sal_Int32 nIndex = -1;  // index of actual property map entry
+        sal_Int32 nIndex = nStartIdx;   // index of actual property map entry
         sal_uInt32 nFlags = 0;  // flags of actual property map entry
         do
         {
             // find an entry for this attribute
             nIndex = maPropMapper->GetEntryIndex( nPrefix, aLocalName, nIndex );
 
-            if( nIndex > -1 )
+            if( nIndex > -1 && nIndex < nEndIdx  )
             {
                 // create a XMLPropertyState with an empty value
 
