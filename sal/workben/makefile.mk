@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: tra $ $Date: 2002-11-14 12:32:32 $
+#   last change: $Author: tra $ $Date: 2002-12-06 10:19:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,9 @@ TARGET=workben
 LIBTARGET=NO
 TARGETTYPE=CUI
 
-TESTAPP=testftmp
+TESTAPP=t_searchfurl
+#TESTAPP=getlocaleinfotest
+#TESTAPP=testftmp
 #TESTAPP=abbreviatetest
 #TESTAPP=getlocaleinfotest
 #TESTAPP=salstattest
@@ -91,13 +93,26 @@ TESTAPP=testftmp
 
 # --- Files --------------------------------------------------------
 
+#
+# t_searchfulr
+#
+.IF "$(TESTAPP)" == "t_searchfurl"
+
+OBJFILES=	$(OBJ)$/t_searchfurl.obj
+
+APP1TARGET=	t_searchfulr
+APP1OBJS=	$(OBJFILES)
+APP1STDLIBS=$(SALLIB)
+APP1DEPN=	$(SLB)$/sal.lib
+
+.ENDIF # t_searchfurl
+
 .IF "$(TESTAPP)" == "testftmp"
     
     OBJFILES=$(OBJ)$/testftmp.obj
-
     APP1TARGET=testftmp
     APP1OBJS=$(OBJFILES)
-
+    
     .IF "$(GUI)"=="WNT"
         CFLAGS+=/Ob1
         APP1STDLIBS=kernel32.lib
@@ -107,9 +122,8 @@ TESTAPP=testftmp
         APP1STDLIBS=$(SALLIB)
         APP1DEPN=$(SLB)$/sal.lib
     .ENDIF
-
+    
 .ENDIF
-
 
 .IF "$(TESTAPP)" == "getlocaleinfotest"
 
