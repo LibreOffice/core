@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestEquals.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:50:40 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,11 @@ public final class TestEquals {
     // args[1] must be a file system path to a services.rdb
     public static void main(String[] args) throws Exception {
         TestBed t = new TestBed();
-        System.out.println(
-            "success? "
-            + t.execute(new Provider(t, toFileUrl(args[0]), toFileUrl(args[1])),
-                        true, Client.class, 0));
+        boolean success = t.execute(
+            new Provider(t, toFileUrl(args[0]), toFileUrl(args[1])), true,
+            Client.class, 0);
+        System.out.println("success? " + success);
+        System.exit(success ? 0 : 1);
     }
 
     private static String toFileUrl(String path) throws MalformedURLException {
@@ -967,8 +968,9 @@ public final class TestEquals {
             new MethodTypeInfo("notifyAccepting", 0, TypeInfo.ONEWAY) };
     }
 
+    // Use "127.0.0.1" instead of "localhost", see #i32281#:
     private static final String CONNECTION_DESCRIPTION
-    = "socket,host=localhost,port=12346";
+    = "socket,host=127.0.0.1,port=12346";
     private static final String PROTOCOL_DESCRIPTION = "urp";
 
     private static final String INSTANCE1 = "instance1";
