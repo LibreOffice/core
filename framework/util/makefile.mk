@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: cd $ $Date: 2002-10-11 14:39:54 $
+#   last change: $Author: cd $ $Date: 2002-10-14 11:44:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -255,9 +255,8 @@ SHL4OBJS=       $(SLO)$/asyncquit.obj               \
                 $(SLO)$/xmldocproperties.obj        \
                 $(SLO)$/jobexecutor.obj				\
                 $(SLO)$/jobhandler.obj              \
-                $(SLO)$/job.obj                     \
+                $(SLO)$/jobdispatch.obj                     \
                 $(SLO)$/joburl.obj                  \
-                $(SLO)$/job.obj                     \
                 $(SLO)$/dispatchrecordersupplier.obj\
                 $(SLO)$/dispatchrecorder.obj		\
                 $(SLO)$/servicehandler.obj          \
