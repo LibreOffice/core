@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: mba $ $Date: 2002-07-08 07:52:40 $ $Revision: 1.5 $
+ // $Author: nn $ $Date: 2002-09-12 18:03:39 $ $Revision: 1.6 $
  // $Logfile:   T:/sc/sdi/formatsh.sdv  $ $Workfile:   formatsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -78,8 +78,10 @@ interface FormatForSelection : Selection
     SID_V_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_H_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
 
-        SID_TEXTDIRECTION_LEFT_TO_RIGHT [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
-        SID_TEXTDIRECTION_TOP_TO_BOTTOM [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
+    SID_TEXTDIRECTION_LEFT_TO_RIGHT [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
+    SID_TEXTDIRECTION_TOP_TO_BOTTOM [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
+    SID_ATTR_PARA_LEFT_TO_RIGHT     [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
+    SID_ATTR_PARA_RIGHT_TO_LEFT     [ ExecMethod = ExecuteTextDirection; StateMethod = GetTextDirectionState; ]
 
     SID_ATTR_NUMBERFORMAT_VALUE       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
     SID_NUMBER_FORMAT       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
@@ -113,6 +115,9 @@ shell ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/07/08 07:52:40  mba
+    #100952#: new slots for recording
+
     Revision 1.4  2002/07/03 17:01:01  mba
     #100962#: some attributes added for recording
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:02:27 $
+ *  last change: $Author: nn $ $Date: 2002-09-12 18:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #include <svx/bolnitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/brshitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/colorcfg.hxx>
 #include <svx/shaditem.hxx>
@@ -1900,6 +1901,15 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
             pTabViewShell->AdjustBlockHeight();
         }
         break;
+
+        case SID_ATTR_PARA_LEFT_TO_RIGHT:
+        case SID_ATTR_PARA_RIGHT_TO_LEFT:
+        {
+            SvxFrameDirection eDirection = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ) ?
+                                                FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP;
+            pTabViewShell->ApplyAttr( SvxFrameDirectionItem( eDirection, ATTR_WRITINGDIR ) );
+        }
+        break;
     }
 }
 
@@ -1915,6 +1925,21 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
         (((const SvxOrientationItem&) rAttrSet.Get( ATTR_ORIENTATION )).GetValue() != SVX_ORIENTATION_STACKED);
     BOOL bTopBottom = !bVertDontCare && !bLeftRight &&
         ((const SfxBoolItem&) rAttrSet.Get( ATTR_VERTICAL_ASIAN )).GetValue();
+
+    BOOL bBidiDontCare = (rAttrSet.GetItemState( ATTR_WRITINGDIR ) == SFX_ITEM_DONTCARE);
+    EEHorizontalTextDirection eBidiDir = EE_HTEXTDIR_DEFAULT;
+    if ( !bBidiDontCare )
+    {
+        SvxFrameDirection eCellDir = (SvxFrameDirection)((const SvxFrameDirectionItem&)
+                                        rAttrSet.Get( ATTR_WRITINGDIR )).GetValue();
+        if ( eCellDir == FRMDIR_ENVIRONMENT )
+            eBidiDir = (EEHorizontalTextDirection)GetViewData()->GetDocument()->
+                                GetEditTextDirection( GetViewData()->GetTabNo() );
+        else if ( eCellDir == FRMDIR_HORI_RIGHT_TOP )
+            eBidiDir = EE_HTEXTDIR_R2L;
+        else
+            eBidiDir = EE_HTEXTDIR_L2R;
+    }
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
@@ -1934,6 +1959,17 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
                 else
                     rSet.Put( SfxBoolItem( nWhich, bTopBottom ) );
             break;
+
+            case SID_ATTR_PARA_LEFT_TO_RIGHT:
+            case SID_ATTR_PARA_RIGHT_TO_LEFT:
+                if ( bTopBottom )
+                    rSet.DisableItem( nWhich );
+                else if ( bBidiDontCare )
+                    rSet.InvalidateItem( nWhich );
+                else if ( nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT )
+                    rSet.Put( SfxBoolItem( nWhich, eBidiDir == EE_HTEXTDIR_L2R ) );
+                else
+                    rSet.Put( SfxBoolItem( nWhich, eBidiDir == EE_HTEXTDIR_R2L ) );
         }
         nWhich = aIter.NextWhich();
     }

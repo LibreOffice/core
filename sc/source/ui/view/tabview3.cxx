@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-30 15:09:18 $
+ *  last change: $Author: nn $ $Date: 2002-09-12 18:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,8 @@ void ScTabView::InvalidateAttribs()
 
     rBindings.Invalidate( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
     rBindings.Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
+    rBindings.Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
+    rBindings.Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
 
 //  rBindings.Invalidate( SID_RANGE_VALUE );
 //  rBindings.Invalidate( SID_RANGE_FORMULA );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:52:10 $
+ *  last change: $Author: nn $ $Date: 2002-09-12 18:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7468,6 +7468,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const
                     pBindings->Invalidate( SID_STYLE_FAMILY4 );
                     pBindings->Invalidate( SID_STATUS_PAGESTYLE );
                     pBindings->Invalidate( FID_RESET_PRINTZOOM );
+                    pBindings->Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
+                    pBindings->Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
                 }
             }
         }

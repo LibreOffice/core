@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-25 10:49:01 $
+ *  last change: $Author: nn $ $Date: 2002-09-12 18:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,10 @@
 //-------------------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/adjitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fontwork.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xtextit.hxx>
@@ -148,8 +150,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
                 SfxItemSet aAttr( pView->GetModel()->GetItemPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
                 aAttr.Put( SvxWritingModeItem( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ? com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL ) );
                 pView->SetAttributes( aAttr );
-                Invalidate( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
-                Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
+                pViewData->GetScDrawView()->InvalidateDrawTextAttrs();  // Bidi slots may be disabled
                 rReq.Done( aAttr );
             }
             break;
@@ -190,7 +191,8 @@ void __EXPORT ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
     ScTabView*   pTabView  = pViewData->GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
 
-    switch ( rReq.GetSlot() )
+    USHORT nSlot = rReq.GetSlot();
+    switch ( nSlot )
     {
         case SID_FONTWORK:
             {
@@ -207,6 +209,27 @@ void __EXPORT ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
 
                 pViewFrm->GetBindings().Invalidate( SID_FONTWORK );
                 rReq.Done();
+            }
+            break;
+
+        case SID_ATTR_PARA_LEFT_TO_RIGHT:
+        case SID_ATTR_PARA_RIGHT_TO_LEFT:
+            {
+                SfxItemSet aAttr( pView->GetModel()->GetItemPool(),
+                                    EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+                                    EE_PARA_JUST, EE_PARA_JUST,
+                                    0 );
+                BOOL bLeft = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT );
+                aAttr.Put( SvxFrameDirectionItem(
+                                bLeft ? FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP,
+                                EE_PARA_WRITINGDIR ) );
+                aAttr.Put( SvxAdjustItem(
+                                bLeft ? SVX_ADJUST_LEFT : SVX_ADJUST_RIGHT,
+                                EE_PARA_JUST ) );
+                pView->SetAttributes( aAttr );
+                pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
+                rReq.Done();        //! Done(aAttr) ?
+
             }
             break;
     }

@@ -87,6 +87,8 @@ interface TableDrawText : Selection
 
     SID_TEXTDIRECTION_LEFT_TO_RIGHT     [ ExecMethod = Execute; StateMethod = GetAttrState; Export = FALSE; ]
     SID_TEXTDIRECTION_TOP_TO_BOTTOM     [ ExecMethod = Execute; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_LEFT_TO_RIGHT         [ ExecMethod = ExecuteExtra; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_RIGHT_TO_LEFT         [ ExecMethod = ExecuteExtra; StateMethod = GetAttrState; Export = FALSE; ]
 
     SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_LOWER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:39:58 $
+ *  last change: $Author: nn $ $Date: 2002-09-12 18:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2002-08-05 20:39:58 $ $Revision: 1.44 $
+ // $Author: nn $ $Date: 2002-09-12 18:08:03 $ $Revision: 1.45 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -828,6 +828,23 @@ ToolBox RID_OBJECTBAR_FORMAT
             HelpId = SID_ALIGNBLOCK ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
+        };
+         //--------------------------------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //--------------------------------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
         };
          //--------------------------------------------------------------------
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };

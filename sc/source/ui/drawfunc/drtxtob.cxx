@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-19 14:39:02 $
+ *  last change: $Author: nn $ $Date: 2002-09-12 18:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <svx/escpitem.hxx>
 #include <svx/flditem.hxx>
 #include <svx/fontitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/lspcitem.hxx>
 #include <svx/svdoutl.hxx>
@@ -926,6 +927,35 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
     rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
+
+    //  left-to-right or right-to-left
+
+    if ( !bLeftToRight )
+    {
+        //  disabled if vertical
+        rDestSet.DisableItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
+        rDestSet.DisableItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
+    }
+    else if ( aAttrSet.GetItemState( EE_PARA_WRITINGDIR ) == SFX_ITEM_DONTCARE )
+    {
+        rDestSet.InvalidateItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
+        rDestSet.InvalidateItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
+    }
+    else
+    {
+        SvxFrameDirection eAttrDir = (SvxFrameDirection)((const SvxFrameDirectionItem&)
+                                        aAttrSet.Get( EE_PARA_WRITINGDIR )).GetValue();
+        if ( eAttrDir == FRMDIR_ENVIRONMENT )
+        {
+            //  get "environment" direction from page style
+            if ( pViewData->GetDocument()->GetEditTextDirection( pViewData->GetTabNo() ) == EE_HTEXTDIR_R2L )
+                eAttrDir = FRMDIR_HORI_RIGHT_TOP;
+            else
+                eAttrDir = FRMDIR_HORI_LEFT_TOP;
+        }
+        rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, ( eAttrDir == FRMDIR_HORI_LEFT_TOP ) ) );
+        rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, ( eAttrDir == FRMDIR_HORI_RIGHT_TOP ) ) );
+    }
 }
 
 void ScDrawTextObjectBar::ExecuteTrans( SfxRequest& rReq )

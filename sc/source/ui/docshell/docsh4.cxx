@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2002-08-08 13:02:40 $
+ *  last change: $Author: nn $ $Date: 2002-09-12 18:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,6 +1164,8 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
                     pBindings->Invalidate( SID_STATUS_PAGESTYLE );
                     pBindings->Invalidate( SID_STYLE_FAMILY4 );
                     pBindings->Invalidate( FID_RESET_PRINTZOOM );
+                    pBindings->Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
+                    pBindings->Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
                 }
             }
         }
@@ -1319,7 +1321,11 @@ void ScDocShell::PageStyleModified( const String& rStyleName, BOOL bApi )
 
     SfxBindings* pBindings = GetViewBindings();
     if (pBindings)
+    {
         pBindings->Invalidate( FID_RESET_PRINTZOOM );
+        pBindings->Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
+        pBindings->Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
+    }
 }
 
 void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
