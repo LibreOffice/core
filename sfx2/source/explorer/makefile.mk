@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:29:02 $
+#   last change: $Author: rt $ $Date: 2005-01-11 14:58:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,11 +65,11 @@ PRJ=..$/..
 PRJNAME=sfx2
 TARGET=explorer
 ENABLE_EXCEPTIONS=TRUE
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
