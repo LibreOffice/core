@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:05:05 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2305,7 +2305,8 @@ BOOL SdOutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         pTO->SetEmptyPresObj( FALSE );
 
         // Nur Objekt painten
-        pTO->SendRepaintBroadcast();
+        pTO->ActionChanged();
+        // pTO->SendRepaintBroadcast();
     }
 
     return( bNewObject );
@@ -2376,7 +2377,7 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
         SfxItemSet aTempAttr( pDoc->GetPool() );
         aTempAttr.Put( XLineStyleItem( XLINE_NONE ) );
         aTempAttr.Put( XFillStyleItem( XFILL_NONE ) );
-        pTO->SetItemSetAndBroadcast(aTempAttr);
+        pTO->SetMergedItemSetAndBroadcast(aTempAttr);
 
         // Liste der Gliederungsvorlagen fuer Anmeldung als Listener
         String aName = pPage->GetLayoutName();
@@ -2407,7 +2408,8 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
         pTO->SetEmptyPresObj( FALSE );
 
         // Nur Objekt painten
-        pTO->SendRepaintBroadcast();
+        pTO->ActionChanged();
+        // pTO->SendRepaintBroadcast();
     }
     return( bNewObject );
 }
