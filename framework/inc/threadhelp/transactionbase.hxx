@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transactionbase.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,48 +106,6 @@ namespace framework{
 *//*-*************************************************************************************************************/
 struct TransactionBase
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public Methods
-    //-------------------------------------------------------------------------------------------------------------
-    public:
-
-        /*-****************************************************************************************************//**
-            @short      return a reference to a static manager
-            @descr      Sometimes we need the global member! (e.g. in our own static methods)
-                        We create our own "class global static" member threadsafe.
-                        It will be created at first call only!
-                        All other requests use these created one then directly.
-
-            @seealso    -
-
-            @param      -
-            @return     A reference to a static member.
-
-            @onerror    No error should occure.
-        *//*-*****************************************************************************************************/
-
-        static TransactionManager& getGlobalTransactionManager()
-        {
-            // Initialize static member only for one time!
-            static TransactionManager* pManager = NULL;
-            // If these method first called (member not already exist!) ...
-            if( pManager == NULL )
-            {
-                // ... we must create a new one. Protect follow code with the global mutex -
-                // It must be - we create a static variable!
-                ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-                // We must check our pointer again - because ... another instance of ouer class could be faster then these one!
-                if( pManager == NULL )
-                {
-                    // Create the new manager and set it for return on static variable.
-                    static TransactionManager aManager;
-                    pManager = &aManager;
-                }
-            }
-            // Return new created or already existing object.
-            return *pManager;
-        }
-
     //-------------------------------------------------------------------------------------------------------------
     //  public member
     //-------------------------------------------------------------------------------------------------------------
