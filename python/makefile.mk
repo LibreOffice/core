@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 11:43:12 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:13:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,7 +121,7 @@ BUILD_DIR=$(DSP_DIR)
 CONFIGURE_DIR=$(DSP_DIR)
 
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-CONFIGURE_ACTION=wdevenv pcbuild Release
+CONFIGURE_ACTION=wdevenv pcbuild Release $(BUILD_ACTION_SEP) $(PERL) $(BACK_PATH)..$/..$/vc70_patch.pl .
 BUILD_ACTION=devenv /build Release /project winsound pcbuild.sln /useenv \
     $(BUILD_ACTION_SEP) devenv /build Release /project winreg pcbuild.sln /useenv \
     $(BUILD_ACTION_SEP) devenv /build Release /project unicodedata pcbuild.sln /useenv 	\
@@ -189,7 +189,7 @@ $(PYTHONCORESHL) : makefile.mk $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     ld -G -o $@ -u Py_Main -u Py_FrozenMain -u PyFPE_dummy $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -h libpython.so.$(PYMAJOR) -lm -ldl -lc -lpthread
 .ELSE
 .IF "$(OS)" == "FREEBSD"
-    ld -shared -o $@ --whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a --no-whole-archive -soname libpython.so.$(PYMAJOR)  -lm -lutil ${PTHREAD_LIBS}
+    $(LINK) -shared -o $@ -Wl,-whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -Wl,-no-whole-archive -soname libpython.so.$(PYMAJOR)  -lm -lutil ${PTHREAD_LIBS}
 .ELSE
 .IF "$(OS)" == "IRIX"
     ld -shared -o $@ -all $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -notall -soname libpython.so.$(PYMAJOR)  -lm -ldl -lc -lpthread
