@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 11:48:29 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 08:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ BOOL ScDocShell::IsDocument( const INetURLObject& rURL )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ::ucb::ContentCreationException& )
+    catch( ::com::sun::star::ucb::ContentCreationException& )
     {
         DBG_WARNING( "ContentCreationException" );
     }
