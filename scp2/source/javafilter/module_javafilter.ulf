@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_javafilter.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:21:22 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 08:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@ de = "Filter für mobile Geräte"
 en-US = "Mobile Device Filters"
 
 [STR_DESC_MODULE_OPTIONAL_JAVAFILTER]
-de = "Installieren Sie diese Text- und Tabellenfilter wenn Sie Import-/Export-Unterstützung für Ihren Palm handheld oder Pocket PC möchten.  (Java erfordlich)"
-en-US = "Install these text and spreadsheet filters if you want import/export support for your Palm handheld or Pocket PC . (Java required)"
+de = "Text- und Tabellenfilter für Import-/Export-Unterstützung für Palm Handheld oder Pocket PC (benötigt Java)."
+en-US = "Text and spreadsheet filters to support import/export for Palm handheld or Pocket PC (Java required)."
 
 [STR_NAME_MODULE_OPTIONAL_JAVAFILTER_PALM]
 de = "Palm"
