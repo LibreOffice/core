@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OleBridgeSupplier.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:34:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
     requirements on registering OLE objects and class factories.  </p>
     @deprecated
  */
-service OleBridgeSupplier
+published service OleBridgeSupplier
 {
     interface com::sun::star::bridge::XBridgeSupplier;
 
