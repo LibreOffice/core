@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:56:50 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HDL_
 #include <com/sun/star/i18n/ForbiddenCharacters.hdl>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -97,6 +101,9 @@
 #endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_COMPATIBILITY_HXX
+#include <svtools/compatibility.hxx>
 #endif
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
@@ -237,6 +244,8 @@
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
 #endif
 
+using namespace ::com::sun::star::document;
+
 const sal_Char __FAR_DATA sFrmFmtStr[] = "Frameformat";
 const sal_Char __FAR_DATA sEmptyPageStr[] = "Empty Page";
 const sal_Char __FAR_DATA sColumnCntStr[] = "Columncontainer";
@@ -331,7 +340,7 @@ SwDoc::SwDoc() :
     pUnoCallBack(new SwUnoCallBack(0)),
     nAutoFmtRedlnCommentNo( 0 ),
     eChrCmprType( CHARCOMPRESS_NONE ),
-    n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0x80 ), n8Dummy2( 0 ),
+    n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0x80 ), n8Dummy2( 0x06 ),
     nLinkUpdMode( GLOBALSETTING ),
     nFldUpdMode( AUTOUPD_GLOBALSETTING ),
     bReadlineChecked(sal_False)
@@ -384,7 +393,7 @@ SwDoc::SwDoc() :
      * Builds and sets the virtual device
      */
     pVirDev = new VirtualDevice( 1 );
-    pVirDev->SetReferenceDevice();
+    pVirDev->SetReferenceDevice(VirtualDevice::REFDEV_MODE96);
     MapMode aMapMode( pVirDev->GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
     pVirDev->SetMapMode( aMapMode );
@@ -458,6 +467,16 @@ SwDoc::SwDoc() :
     pTOXTypes->Insert( pNew, pTOXTypes->Count() );
     pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
     pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+
+
+    SvtCompatibilityOptions aOptions;
+    SetTabCompat( aOptions.IsTabCompat() );
+    SetAddExtLeading( aOptions.IsAddExtLeading() );
+    short nUseVirtualDev = !aOptions.IsUseVirtualDevice()
+        ? PrinterIndependentLayout::DISABLED
+        : PrinterIndependentLayout::HIGH_RESOLUTION;
+    SetUseVirtualDevice( nUseVirtualDev );
+    SetParaSpaceMax( aOptions.IsParaSpaceMax(), aOptions.IsParaSpaceMaxAtPages() );
 
     ResetModified();
 }
@@ -704,7 +723,8 @@ void SwDoc::SetJobsetup( const JobSetup &rJobSetup )
             bDataChanged = TRUE;
         }
     }
-    if ( !IsUseVirtualDevice() && bDataChanged )
+    if ( com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() &&
+         bDataChanged )
         PrtDataChanged();
 }
 
@@ -721,7 +741,7 @@ const JobSetup* SwDoc::GetJobsetup() const
 
 OutputDevice& SwDoc::GetRefDev() const
 {
-    if ( ! IsUseVirtualDevice() )
+    if ( com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() )
     {
         SfxPrinter& rPrt = *GetPrt( sal_True );
         if ( rPrt.IsValid() )
@@ -735,7 +755,7 @@ OutputDevice& SwDoc::GetRefDev() const
 
 OutputDevice* SwDoc::_GetRefDev() const
 {
-    if ( IsUseVirtualDevice() )
+    if ( com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() )
         return pVirDev;
     return pPrt;
 }
@@ -745,7 +765,7 @@ OutputDevice* SwDoc::_GetRefDev() const
 VirtualDevice& SwDoc::_GetVirDev() const
 {
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
-    pNewVir->SetReferenceDevice();
+    pNewVir->SetReferenceDevice(VirtualDevice::REFDEV_MODE96);
     MapMode aMapMode( pNewVir->GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
     pNewVir->SetMapMode( aMapMode );
