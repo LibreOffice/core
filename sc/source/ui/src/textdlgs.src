@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdlgs.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:56:27 $
+ *  last change: $Author: kz $ $Date: 2001-02-12 09:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
-                Text[ korean ] = "Asian typography";
+                Text[ korean ] = "¾Æ½Ã¾Æ¡¡Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
