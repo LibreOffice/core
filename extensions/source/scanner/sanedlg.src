@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:29:20 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,6 +831,8 @@ String RID_SANE_NOSANELIB_TXT
     Text[ hindi ] = "SANE इन्टरफेस को इनिश्यलैज़ नहीं कर सकते है । स्कॉनिंग संभव नहीं है ।";
     Text[ slovak ] = "Nedá sa inicializovať rozhranie SANE. Skenovanie nie je dostupné.";
 };
+
+
 
 
 
