@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-13 16:40:33 $
+ *  last change: $Author: jp $ $Date: 2001-06-08 13:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _HINTS_HXX
 #include <hints.hxx>
 #endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
+#endif
 
 
 SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
@@ -107,8 +110,9 @@ SwExtTextInput::~SwExtTextInput()
     SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
     if( pTNd )
     {
-        xub_StrLen nEndCnt = GetPoint()->nContent.GetIndex(),
-                    nSttCnt = GetMark()->nContent.GetIndex();
+        SwIndex& rIdx = GetPoint()->nContent;
+        xub_StrLen nSttCnt = rIdx.GetIndex(),
+                   nEndCnt = GetMark()->nContent.GetIndex();
         if( nEndCnt != nSttCnt )
         {
             if( nEndCnt < nSttCnt )
@@ -118,12 +122,43 @@ SwExtTextInput::~SwExtTextInput()
 
             // damit Undo / Redlining usw. richtig funktioniert,
             // muss ueber die Doc-Schnittstellen gegangen werden !!!
-            SwIndex aIdx( pTNd, nSttCnt );
+            SwDoc* pDoc = GetDoc();
+            rIdx = nSttCnt;
             String sTxt( pTNd->GetTxt().Copy( nSttCnt, nEndCnt - nSttCnt ));
-            pTNd->Erase( aIdx, nEndCnt - nSttCnt );
+            if( bIsOverwriteCursor && sOverwriteText.Len() )
+            {
+                xub_StrLen nLen = sTxt.Len();
+                if( nLen > sOverwriteText.Len() )
+                {
+                    rIdx += sOverwriteText.Len();
+                    pTNd->Erase( rIdx, nLen - sOverwriteText.Len() );
+                    rIdx = nSttCnt;
+                    pTNd->Replace( rIdx, sOverwriteText.Len(),
+                                            sOverwriteText );
+                    if( bInsText )
+                    {
+                        rIdx = nSttCnt;
+                        pDoc->StartUndo( UNDO_OVERWRITE );
+                        pDoc->Overwrite( *this, sTxt.Copy( 0,
+                                                    sOverwriteText.Len() ));
+                        pDoc->Insert( *this, sTxt.Copy( sOverwriteText.Len() ));
+                        pDoc->EndUndo( UNDO_OVERWRITE );
+                    }
+                }
+                else
+                {
+                    pTNd->Replace( rIdx, nLen, sOverwriteText.Copy( 0, nLen ));
+                    if( bInsText )
+                        pDoc->Overwrite( *this, sTxt );
+                }
+            }
+            else
+            {
+                pTNd->Erase( rIdx, nEndCnt - nSttCnt );
 
-            if( bInsText )
-                GetDoc()->Insert( *this, sTxt );
+                if( bInsText )
+                    pDoc->Insert( *this, sTxt );
+            }
         }
     }
 }
@@ -133,20 +168,56 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
     SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
     if( pTNd )
     {
-        xub_StrLen nEndCnt = GetPoint()->nContent.GetIndex(),
-                    nSttCnt = GetMark()->nContent.GetIndex();
+        xub_StrLen nSttCnt = GetPoint()->nContent.GetIndex(),
+                    nEndCnt = GetMark()->nContent.GetIndex();
         if( nEndCnt < nSttCnt )
         {
             xub_StrLen n = nEndCnt; nEndCnt = nSttCnt; nSttCnt = n;
         }
+
         SwIndex aIdx( pTNd, nSttCnt );
+        const String& rNewStr = rData.GetText();
 
-        if( nSttCnt < nEndCnt )
-            pTNd->Erase( aIdx, nEndCnt - nSttCnt );
+        if( bIsOverwriteCursor && sOverwriteText.Len() )
+        {
+            xub_StrLen nReplace = nEndCnt - nSttCnt;
+            if( rNewStr.Len() < nReplace )
+            {
+                // then we must insert from the saved original text
+                // some characters
+                nReplace -= rNewStr.Len();
+                aIdx += rNewStr.Len();
+                pTNd->Replace( aIdx, nReplace,
+                            sOverwriteText.Copy( rNewStr.Len(), nReplace ));
+                aIdx = nSttCnt;
+                nReplace = rNewStr.Len();
+            }
+            else if( sOverwriteText.Len() < nReplace )
+            {
+                nReplace -= sOverwriteText.Len();
+                aIdx += sOverwriteText.Len();
+                pTNd->Erase( aIdx, nReplace );
+                aIdx = nSttCnt;
+                nReplace = sOverwriteText.Len();
+            }
+            else if( (nReplace = sOverwriteText.Len()) > rNewStr.Len() )
+                nReplace = rNewStr.Len();
 
-        pTNd->Insert( rData.GetText(), aIdx, INS_EMPTYEXPAND );
+            pTNd->Replace( aIdx, nReplace, rNewStr );
+            if( !HasMark() )
+                SetMark();
+            GetMark()->nContent = aIdx;
+        }
+        else
+        {
+            if( nSttCnt < nEndCnt )
+                pTNd->Erase( aIdx, nEndCnt - nSttCnt );
 
-        SetMark();
+            pTNd->Insert( rNewStr, aIdx, INS_EMPTYEXPAND );
+            if( !HasMark() )
+                SetMark();
+        }
+
         GetPoint()->nContent = nSttCnt;
 
         if( aAttrs.Count() )
@@ -162,10 +233,10 @@ void SwExtTextInput::SetFontForPos( USHORT nPos, Font& rFont )
 
 void SwExtTextInput::InvalidateRange()      // das Layout anstossen
 {
-    ULONG nSttNd = GetMark()->nNode.GetIndex(),
-            nEndNd = GetPoint()->nNode.GetIndex();
-    xub_StrLen nSttCnt = GetMark()->nContent.GetIndex(),
-                nEndCnt = GetPoint()->nContent.GetIndex();
+    ULONG nEndNd = GetMark()->nNode.GetIndex(),
+            nSttNd = GetPoint()->nNode.GetIndex();
+    xub_StrLen nEndCnt = GetMark()->nContent.GetIndex(),
+                nSttCnt = GetPoint()->nContent.GetIndex();
 
     if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
     {
@@ -185,6 +256,29 @@ void SwExtTextInput::InvalidateRange()      // das Layout anstossen
         }
 }
 
+void SwExtTextInput::SetOverwriteCursor( BOOL bFlag )
+{
+    bIsOverwriteCursor = bFlag;
+
+    SwTxtNode* pTNd;
+    if( bIsOverwriteCursor &&
+        0 != (pTNd = GetPoint()->nNode.GetNode().GetTxtNode()) )
+    {
+        xub_StrLen nSttCnt = GetPoint()->nContent.GetIndex(),
+                    nEndCnt = GetMark()->nContent.GetIndex();
+        sOverwriteText = pTNd->GetTxt().Copy( nEndCnt < nSttCnt ? nEndCnt
+                                                                : nSttCnt );
+        if( sOverwriteText.Len() )
+        {
+            xub_StrLen nInWrdAttrPos = sOverwriteText.Search( CH_TXTATR_INWORD ),
+                    nWrdAttrPos = sOverwriteText.Search( CH_TXTATR_BREAKWORD );
+            if( nWrdAttrPos < nInWrdAttrPos )
+                nInWrdAttrPos = nWrdAttrPos;
+            if( STRING_NOTFOUND != nInWrdAttrPos )
+                sOverwriteText.Erase( nInWrdAttrPos );
+        }
+    }
+}
 
 // die Doc Schnittstellen:
 
