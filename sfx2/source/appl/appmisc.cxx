@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:41:29 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ void SfxApplication::InitializeDisplayName_Impl()
 
         String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
         aTitle += aVerId;
-        aTitle += 0x005D ; // 5Dh ^= ']'
+        aTitle += ']';
 #endif
         if ( GetDemoKind() == SFX_DEMOKIND_DEMO )
             aTitle += DEFINE_CONST_UNICODE(" (Demo Version)");
