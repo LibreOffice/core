@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-14 17:41:56 $
+ *  last change: $Author: aw $ $Date: 2002-03-18 15:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,8 +296,13 @@ void FuText::DoExecute ()
 
     const SfxItemSet* pArgs = rRequest.GetArgs();
 
-    if (pArgs &&
-        (UINT16) ((SfxUInt16Item&) pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
+    if (pArgs
+
+        // #98198# test for type before using
+        && SID_TEXTEDIT == nSlotId
+        && SFX_ITEM_SET == pArgs->GetItemState(SID_TEXTEDIT)
+
+        && (UINT16)((SfxUInt16Item&)pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
     {
         // Selection by doubleclick -> don't allow QuickDrag
         bQuickDrag = FALSE;
@@ -1155,6 +1160,12 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
                             pOLV->MouseButtonDown(rMEvt);
                         }
                     }
+                    else
+                    {
+                        // #98198# Move cursor to end of text
+                        ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+                        pOLV->SetSelection(aNewSelection);
+                    }
                 }
                 else
                 {
@@ -1427,8 +1438,13 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
 
         const SfxItemSet* pArgs = rReq.GetArgs();
 
-        if (pArgs &&
-            (UINT16) ((SfxUInt16Item&) pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
+        if (pArgs
+
+            // #98198# test for type before using
+            && SID_TEXTEDIT == nSlotId
+            && SFX_ITEM_SET == pArgs->GetItemState(SID_TEXTEDIT)
+
+            && (UINT16) ((SfxUInt16Item&) pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
         {
             // Anwahl per Doppelklick -> kein QuickDrag zulassen
             bQuickDrag = FALSE;
