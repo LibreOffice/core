@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writersvc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 13:55:02 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 16:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ struct WriterServiceTraits< backenduno::XLayerHandler >
     typedef backenduno::XLayerHandler Handler;
 
     static ServiceInfo const * getServiceInfo()
-    { return & aLayerWriterSI; }
+    { return getLayerWriterServiceInfo(); }
 };
 // -----------------------------------------------------------------------------
 
