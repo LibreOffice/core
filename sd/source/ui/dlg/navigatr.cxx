@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 16:00:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,8 @@
 #ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
 #endif
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "helpids.h"
 
@@ -285,18 +285,11 @@ IMPL_LINK( SdNavigatorWin, SelectToolboxHdl, void *, EMPTYARG )
 
     switch( nId )
     {
-        case TBI_LIVE:
         case TBI_PEN:
         {
-            if( nId == TBI_LIVE )
-            {
-                nSId = SID_LIVE_PRESENTATION;
-                aToolbox.EnableItem( TBI_PEN, FALSE );
-            }
-            else if( nId == TBI_PEN )
+            if( nId == TBI_PEN )
             {
                 nSId = SID_NAVIGATOR_PEN;
-                aToolbox.EnableItem( TBI_LIVE, FALSE );
             }
 
             if( nSId > 0 )
@@ -776,12 +769,11 @@ long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
 
                 if (pViewShell != NULL)
                 {
-                    ::sd::FuSlideShow* pFuSlideShow =
-                          pViewShell->GetSlideShow();
-                    if (pFuSlideShow != NULL)
+                    ::sd::Slideshow* pSlideShow = pViewShell->GetSlideShow();
+                    if (pSlideShow != NULL)
                     {
                         nOK = TRUE;
-                        pFuSlideShow->Terminate();
+                        pSlideShow->stopShow();
                     }
                 }
             }
@@ -820,13 +812,12 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
             ::sd::ViewShell* pViewShell = pBase->GetMainViewShell();
             if (pViewShell != NULL)
             {
-                ::sd::FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
+                ::sd::Slideshow* pSlideShow = pViewShell->GetSlideShow();
 
-                if (pFuSlideShow && !pFuSlideShow->IsLivePresentation())
+                if(pSlideShow)
                 {
-                    // Im Native-Mode soll ESC die Pr„sentation beenden
                     nOK = TRUE;
-                    pFuSlideShow->Terminate();
+                    pSlideShow->stopShow();
                 }
             }
         }
@@ -886,20 +877,6 @@ void SdNavigatorControllerItem::StateChanged( USHORT nSId,
         const SfxUInt32Item* pStateItem = PTR_CAST( SfxUInt32Item, pItem );
         DBG_ASSERT( pStateItem, "SfxUInt16Item erwartet");
         UINT32 nState = pStateItem->GetValue();
-
-        // Live
-        if( nState & NAVBTN_LIVE_ENABLED &&
-            !pNavigatorWin->aToolbox.IsItemEnabled( TBI_LIVE ) )
-            pNavigatorWin->aToolbox.EnableItem( TBI_LIVE );
-        if( nState & NAVBTN_LIVE_DISABLED &&
-            pNavigatorWin->aToolbox.IsItemEnabled( TBI_LIVE ) )
-            pNavigatorWin->aToolbox.EnableItem( TBI_LIVE, FALSE );
-        if( nState & NAVBTN_LIVE_CHECKED &&
-            !pNavigatorWin->aToolbox.IsItemChecked( TBI_LIVE ) )
-            pNavigatorWin->aToolbox.CheckItem( TBI_LIVE );
-        if( nState & NAVBTN_LIVE_UNCHECKED &&
-            pNavigatorWin->aToolbox.IsItemChecked( TBI_LIVE ) )
-            pNavigatorWin->aToolbox.CheckItem( TBI_LIVE, FALSE );
 
         // Stift
         if( nState & NAVBTN_PEN_ENABLED &&
