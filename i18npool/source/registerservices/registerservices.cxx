@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-19 20:41:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -45,7 +45,7 @@
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
-eak *  See the License for the specific provisions governing your rights and
+ *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
@@ -131,6 +131,8 @@ eak *  See the License for the specific provisions governing your rights and
 #include <inputsequencechecker.hxx>
 #include <inputsequencechecker_th.hxx>
 #include <inputsequencechecker_hi.hxx>
+
+#include <textsearch.hxx>
 
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
@@ -285,7 +287,6 @@ IMPL_CREATEINSTANCE( NumToCharEastIndic_ar )
 IMPL_CREATEINSTANCE( NumToCharIndic_hi )
 IMPL_CREATEINSTANCE( NumToChar_th )
 
-IMPL_CREATEINSTANCE( CharToNum )
 IMPL_CREATEINSTANCE( CharToNumLower_zh_CN )
 IMPL_CREATEINSTANCE( CharToNumUpper_zh_CN )
 IMPL_CREATEINSTANCE( CharToNumLower_zh_TW )
@@ -320,7 +321,6 @@ IMPL_CREATEINSTANCE( NumToTextInformalHangul_ko )
 IMPL_CREATEINSTANCE( NumToTextInformalUpper_ko )
 IMPL_CREATEINSTANCE( NumToTextInformalLower_ko )
 
-IMPL_CREATEINSTANCE( TextToNum )
 IMPL_CREATEINSTANCE( TextToNumLower_zh_CN )
 IMPL_CREATEINSTANCE( TextToNumUpper_zh_CN )
 IMPL_CREATEINSTANCE( TextToNumLower_zh_TW )
@@ -346,6 +346,8 @@ IMPL_CREATEINSTANCE( NumToTextHangulCircledJamo_ko )
 IMPL_CREATEINSTANCE( NumToTextHangulCircledSyllable_ko )
 IMPL_CREATEINSTANCE( NumToTextTianGan_zh )
 IMPL_CREATEINSTANCE( NumToTextDiZi_zh )
+
+IMPL_CREATEINSTANCE_MSF( TextSearch )
 
 static const struct InstancesArray {
         const sal_Char* pServiceNm;
@@ -626,7 +628,6 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToCharIndic_hi),
     IMPL_TRANSLITERATION_ITEM (NumToChar_th),
 
-    IMPL_TRANSLITERATION_ITEM (CharToNum),
     IMPL_TRANSLITERATION_ITEM (CharToNumUpper_zh_CN),
     IMPL_TRANSLITERATION_ITEM (CharToNumLower_zh_CN),
     IMPL_TRANSLITERATION_ITEM (CharToNumUpper_zh_TW),
@@ -661,7 +662,6 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextFormalLower_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextFormalUpper_ko),
 
-    IMPL_TRANSLITERATION_ITEM (TextToNum),
     IMPL_TRANSLITERATION_ITEM (TextToNumUpper_zh_CN),
     IMPL_TRANSLITERATION_ITEM (TextToNumLower_zh_CN),
     IMPL_TRANSLITERATION_ITEM (TextToNumUpper_zh_TW),
@@ -687,6 +687,10 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledSyllable_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextTianGan_zh),
     IMPL_TRANSLITERATION_ITEM (NumToTextDiZi_zh),
+
+    {   "com.sun.star.util.TextSearch",
+        "com.sun.star.util.TextSearch",
+        &TextSearch_CreateInstance },
 
 // add here new services !!
     { 0, 0, 0 }
