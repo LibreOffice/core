@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.107 $
+#   $Revision: 1.108 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-10 11:34:35 $
+#   last change: $Author: hjs $ $Date: 2002-04-15 11:45:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1122,6 +1122,9 @@ LANGDIR=LANGDIR
 
 #scplinker flags
 SCPLINKFLAGS=-i $(PAR),$(SOLARPARDIR)
+.IF "$(SCPLINKVERSION)"!=""
+SCPLINKFLAGS=-v $(SCPLINKVERSION)
+.ENDIF			# "$(SCPLINKVERSION)"!=""
 
 .IF "$(make_srs_deps)"!=""
 RSC=rscdep

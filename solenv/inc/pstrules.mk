@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-28 16:50:41 $
+#   last change: $Author: hjs $ $Date: 2002-04-15 11:45:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -245,9 +245,7 @@ $(PAR)$/%.par :
     @echo ------------------------------
     @echo Making: $@
     @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
-.IF "$(GUI)"=="OS2"
-    $(CC) /P+ /Pe+ /Pd+ $(INCLUDE) -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) $(SCPDEFS) -DDLLSUFFIX=$(DLLSUFFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
-.ENDIF
+    +$(PERL) $(SOLARENV)$/bin$/scp_control.pl $(*:b).scp
 .IF "$(GUI)"=="WNT"
     cpplcc -+ -P $(INCLUDE) -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) $(SCPDEFS) -DDLLSUFFIX=$(DLLSUFFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
@@ -258,7 +256,10 @@ $(PAR)$/%.par :
     cpp.lcc -+ -P -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) $(SCPDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
 .ENDIF
-    +scpcomp -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
+    +$(PERL) $(SOLARENV)$/bin$/scp_setcomma.pl $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre2
+    +scpcomp -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre2 -o $@
+    @+$(RM) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre2
+    @+$(RM) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 
 .ENDIF			# "$(PARFILES)"!=""
 
