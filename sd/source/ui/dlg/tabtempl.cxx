@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:19:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ SdTabTemplateDlg::~SdTabTemplateDlg()
 
 void SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
-    SfxAllItemSet aSet(*(GetRefreshedSet()->GetPool()));
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch( nId )
     {
         case RID_SVXPAGE_LINE:
