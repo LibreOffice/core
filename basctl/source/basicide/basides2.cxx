@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:12:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,12 +209,12 @@ void BasicIDEShell::DestroyModulWindowLayout()
 }
 
 
-void BasicIDEShell::UpdateModulWindowLayout()
+void BasicIDEShell::UpdateModulWindowLayout( bool bBasicStopped )
 {
     if ( pModulLayout )
     {
         pModulLayout->GetStackWindow().UpdateCalls();
-        pModulLayout->GetWatchWindow().UpdateWatches();
+        pModulLayout->GetWatchWindow().UpdateWatches( bBasicStopped );
     }
 }
 
