@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-23 09:10:30 $
+#   last change: $Author: hr $ $Date: 2001-05-29 10:14:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,6 +97,7 @@ SLOFILES=\
     $(SLO)$/fcomp.obj
 
 EXCEPTIONSFILES=\
+    $(SLO)$/FNoException.obj		\
     $(SLO)$/FConnection.obj			\
     $(SLO)$/FResultSetMetaData.obj	\
     $(SLO)$/FColumns.obj			\
