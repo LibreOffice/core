@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Date: 2004-11-02 11:06:44 $
+#   last change: $Date: 2005-01-25 15:39:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ = ..
 PRJNAME = OOoRunner
 TARGET  = $(PRJNAME)
@@ -69,8 +68,12 @@ TARGET  = $(PRJNAME)
 .INCLUDE: settings.mk
 
 SUBDIRS_TESTS = mod ifc
-SUBDIRS_RUNNER = util share stats lib complexlib helper basicrunner convwatch \
+SUBDIRS_RUNNER = util share stats lib complexlib helper basicrunner \
             base org$/openoffice
+
+.IF "$(JDK)" != "gcj"
+SUBDIRS_RUNNER += convwatch
+.ENDIF
 
 JARCOMMANDS_TESTS = $(foreach,i,$(SUBDIRS_TESTS) -C $(CLASSDIR) $i)
 JARCOMMANDS_RUNNER = $(foreach,i,$(SUBDIRS_RUNNER) -C $(CLASSDIR) $i)
