@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 11:39:17 $
+ *  last change: $Author: os $ $Date: 2002-10-17 13:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,18 +368,23 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (IsCreateObj() && pSh->IsDrawCreate() && !pWin->IsDrawSelMode())
     {
-        if (aPnt == aStartPos || rMEvt.IsRight())
+        const USHORT nDrawMode = pWin->GetDrawMode();
+        //objects with multiple point may end at the start position
+        BOOL bMultiPoint = OBJ_PLIN == nDrawMode ||
+                                OBJ_PATHLINE == nDrawMode ||
+                                OBJ_FREELINE == nDrawMode;
+        if(rMEvt.IsRight() || (aPnt == aStartPos && !bMultiPoint))
         {
             pSh->BreakCreate();
             pView->LeaveDrawCreate();
         }
         else
         {
-            if (pWin->GetDrawMode() == OBJ_NONE)
+            if (OBJ_NONE == nDrawMode)
                 pSh->StartUndo(UNDO_INSERT);
 
             pSh->EndCreate(SDRCREATE_FORCEEND);
-            if (pWin->GetDrawMode() == OBJ_NONE)    // Textrahmen eingefuegt
+            if (OBJ_NONE == nDrawMode)   // Textrahmen eingefuegt
             {
                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
                     pSh->GetView().GetViewFrame()->GetBindings().GetRecorder();
