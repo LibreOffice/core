@@ -22187,3 +22187,9 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?Reset@SvxColorOptionsTabPage@@UAEXABVSfxItemSet@@@Z
 ?SchemeChangedHdl@SvxColorOptionsTabPage@@AAEJPAVListBox@@@Z
 ?UpdateColorConfig@SvxColorOptionsTabPage@@AAEXXZ
+??0PowerPointImportParam@@QAE@AAVSvStream@@K@Z
+??0SdrEscherImport@@QAE@AAUPowerPointImportParam@@@Z
+??0SdrPowerPointImport@@QAE@AAUPowerPointImportParam@@@Z
+?setCheckBoxState@?%O:\SRC654\src\svx\source\fmcomp\gridcell.cxx2746129215@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+??1SdrPercentItem@@UAE@XZ
+??1SdrShadowTransparenceItem@@UAE@XZ
