@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:47:17 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   tabopdlg.src  $
  //   $Author: hr $
- //     $Date: 2003-06-13 13:47:17 $
- // $Revision: 1.18 $
+ //     $Date: 2003-07-03 17:24:09 $
+ // $Revision: 1.19 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -485,7 +485,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ japanese ] = "εε‰γζ‡ε®γ•γ‚γ¦γ„γªγ„γ‹γ€γΎγγ―γ‚»γƒ«ε‚η…§γζ­£γ—γγ‚γ‚γΎγ›γ‚“γ€‚";
         Text[ chinese_traditional ] = "ζ²’ζ‰ε®ηΎ©εη¨±ζ–ι―θª¤η„ε„²ε­ζ Όεƒη…§οΌ";
         Text[ arabic ] = "ΗΣγ ΫνΡ γυΪΡψέ Γζ γΡΜΪ ΞανΙ ΞΗΨΖ!";
-        Text[ greek ] = "Μη ορισμένο όνομα ή λάθος αναφορά κελιού!.";
+        Text[ greek ] = "Μη ορισμένο όνομα ή λάθος παραπομπή κελιού!.";
         Text[ korean ] = "μ΄λ¦„μ΄ μ§€μ •λμ§€ μ•μ•κ±°λ‚ μ…€μ μ°Έμ΅°κ°€ μλª»λμ—μµλ‹λ‹¤.";
         Text[ turkish ] = "Tanύmlanmamύώ ad ya da yanlύώ hόcre referansύ!";
         Text[ language_user1 ] = " ";
@@ -577,6 +577,7 @@ ModelessDialog RID_SCDLG_TABOP
     Text[ hindi ] = "ΰ¤¬ΰ¤Ήΰ¥ΰ¤®ΰ¥ΰ¤–ΰ¥€ ΰ¤•ΰ¤Ύΰ¤°ΰ¥ΰ¤―";
     Text[ slovak ] = "ViacnΓ΅sobnΓ© operΓ΅cie";
 };
+
 
 
 
