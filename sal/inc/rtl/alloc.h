@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-04 20:35:50 $
+ *  last change: $Author: mhu $ $Date: 2001-11-29 19:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@ extern "C" {
 
 
 /** Allocate memory.
-    @descr A call to this function will NULL upon the requested memory
-    size being either zero or larger than currently allocatable.
+    @descr A call to this function will return NULL upon the requested
+    memory size being either zero or larger than currently allocatable.
 
     @param  Bytes [in] memory size.
     @return pointer to allocated memory.
@@ -113,8 +113,8 @@ void SAL_CALL rtl_freeMemory (
 
 
 /** Allocate and zero memory.
-    @descr A call to this function will NULL upon the requested memory
-    size being either zero or larger than currently allocatable.
+    @descr A call to this function will return NULL upon the requested
+    memory size being either zero or larger than currently allocatable.
 
     @param  Bytes [in] memory size.
     @return pointer to allocated and zero'ed memory.
