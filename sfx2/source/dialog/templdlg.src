@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 05:52:39 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 22:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ ModalDialog RID_STYLECATALOG
     Text[ chinese_traditional ] = "ΌΛ¦΅¥ΨΏύ";
     Text[ arabic ] = "ίΚΗαζΜ ΗαΓδγΗΨ";
     Text[ greek ] = "Κατάλογος προτύπων";
-    Text[ korean ] = "Ό­½ΔΖΔΐΟ Δ«Ε»·Ξ±Χ";
+    Text[ korean ] = "Ό­½Δ ΖΔΐΟ Δ«Ε»·Ξ±Χ";
     Text[ turkish ] = "Biηim kataloπu";
     Text[ catalan ] = "Catαlogo de estilos";
 };
@@ -317,7 +317,7 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT [ english_us ] = "Hierarchical" ;
     TEXT[ chinese_simplified ] = "µΘΌ¶Κ½";
     TEXT[ russian ] = "Οξ θεπΰπυθθ";
-    TEXT[ polish ] = "Hierarchiczny";
+    TEXT[ polish ] = "Hierarchicznie";
     TEXT[ japanese ] = "K‘w";
     TEXT[ chinese_traditional ] = "µ¥―Ε¦΅";
     TEXT[ arabic ] = "ενίαν";
@@ -444,3 +444,4 @@ DockingWindow DLG_STYLE_DESIGNER
     };
 };
  // ********************************************************************** EOF
+
