@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFunctionParser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:26:43 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ public:
     {
         return FUNC_CONST;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* mpOptionalArg = NULL )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
     {
         EnhancedCustomShapeParameter aRet;
         Fraction aFract( maValue );
@@ -202,7 +202,7 @@ public:
     {
         return ENUM_FUNC_ADJUSTMENT;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* mpOptionalArg = NULL )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
     {
         EnhancedCustomShapeParameter aRet;
         aRet.Type = EnhancedCustomShapeParameterType::ADJUSTMENT;
@@ -235,7 +235,7 @@ public:
     {
         return ENUM_FUNC_EQUATION;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* mpOptionalArg = NULL )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
     {
         EnhancedCustomShapeParameter aRet;
         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -292,7 +292,7 @@ public:
     {
         return meFunct;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* mpOptionalArg = NULL )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
     {
         EnhancedCustomShapeParameter aRet;
 
@@ -308,7 +308,7 @@ public:
             case ENUM_FUNC_PI :
             {
                 ConstantValueExpression aConstantValue( getValue( mrCustoShape, meFunct ) );
-                aRet = aConstantValue.fillNode( rEquations );
+                aRet = aConstantValue.fillNode( rEquations, NULL, nFlags );
             }
             break;
             case ENUM_FUNC_LEFT :   aRet.Type = EnhancedCustomShapeParameterType::LEFT; break;
@@ -367,7 +367,7 @@ public:
     {
         return meFunct;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* mpOptionalArg = NULL )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
     {
         EnhancedCustomShapeParameter aRet;
         switch( meFunct )
@@ -376,7 +376,7 @@ public:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 3;
-                FillEquationParameter( mpArg->fillNode( rEquations ), 0, aEquation );
+                FillEquationParameter( mpArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aRet.Value <<= (sal_Int32)rEquations.size();
                 rEquations.push_back( aEquation );
@@ -386,7 +386,7 @@ public:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 13;
-                FillEquationParameter( mpArg->fillNode( rEquations ), 0, aEquation );
+                FillEquationParameter( mpArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aRet.Value <<= (sal_Int32)rEquations.size();
                 rEquations.push_back( aEquation );
@@ -396,11 +396,22 @@ public:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 9;
-                if ( mpOptionalArg )
-                    FillEquationParameter( mpOptionalArg->fillNode( rEquations ), 0, aEquation );
+                if ( pOptionalArg )
+                    FillEquationParameter( pOptionalArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
                 else
                     aEquation.nPara[ 0 ] = 1;
-                FillEquationParameter( mpArg->fillNode( rEquations ), 1, aEquation );
+
+                EnhancedCustomShapeParameter aSource( mpArg->fillNode( rEquations, NULL, nFlags | EXPRESSION_FLAG_SUMANGLE_MODE ) );
+                if ( aSource.Type == EnhancedCustomShapeParameterType::NORMAL )
+                {   // sumangle needed :-(
+                    EnhancedCustomShapeEquation aEquation;
+                    aEquation.nOperation |= 0xe;    // sumangle
+                    FillEquationParameter( aSource, 1, aEquation );
+                    aSource.Type = EnhancedCustomShapeParameterType::EQUATION;
+                    aSource.Value <<= (sal_Int32)rEquations.size();
+                    rEquations.push_back( aEquation );
+                }
+                FillEquationParameter( aSource, 1, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aRet.Value <<= (sal_Int32)rEquations.size();
                 rEquations.push_back( aEquation );
@@ -410,11 +421,22 @@ public:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 10;
-                if ( mpOptionalArg )
-                    FillEquationParameter( mpOptionalArg->fillNode( rEquations ), 0, aEquation );
+                if ( pOptionalArg )
+                    FillEquationParameter( pOptionalArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
                 else
                     aEquation.nPara[ 0 ] = 1;
-                FillEquationParameter( mpArg->fillNode( rEquations ), 1, aEquation );
+
+                EnhancedCustomShapeParameter aSource( mpArg->fillNode( rEquations, NULL, nFlags | EXPRESSION_FLAG_SUMANGLE_MODE ) );
+                if ( aSource.Type == EnhancedCustomShapeParameterType::NORMAL )
+                {   // sumangle needed :-(
+                    EnhancedCustomShapeEquation aEquation;
+                    aEquation.nOperation |= 0xe;    // sumangle
+                    FillEquationParameter( aSource, 1, aEquation );
+                    aSource.Type = EnhancedCustomShapeParameterType::EQUATION;
+                    aSource.Value <<= (sal_Int32)rEquations.size();
+                    rEquations.push_back( aEquation );
+                }
+                FillEquationParameter( aSource, 1, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aRet.Value <<= (sal_Int32)rEquations.size();
                 rEquations.push_back( aEquation );
@@ -424,11 +446,22 @@ public:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 16;
-                if ( mpOptionalArg )
-                    FillEquationParameter( mpOptionalArg->fillNode( rEquations ), 0, aEquation );
+                if ( pOptionalArg )
+                    FillEquationParameter( pOptionalArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
                 else
                     aEquation.nPara[ 0 ] = 1;
-                FillEquationParameter( mpArg->fillNode( rEquations ), 1, aEquation );
+
+                EnhancedCustomShapeParameter aSource( mpArg->fillNode( rEquations, NULL, nFlags | EXPRESSION_FLAG_SUMANGLE_MODE ) );
+                if ( aSource.Type == EnhancedCustomShapeParameterType::NORMAL )
+                {   // sumangle needed :-(
+                    EnhancedCustomShapeEquation aEquation;
+                    aEquation.nOperation |= 0xe;    // sumangle
+                    FillEquationParameter( aSource, 1, aEquation );
+                    aSource.Type = EnhancedCustomShapeParameterType::EQUATION;
+                    aSource.Value <<= (sal_Int32)rEquations.size();
+                    rEquations.push_back( aEquation );
+                }
+                FillEquationParameter( aSource, 1, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aRet.Value <<= (sal_Int32)rEquations.size();
                 rEquations.push_back( aEquation );
@@ -446,7 +479,7 @@ public:
                 aEquation.nOperation |= 1;
                 aEquation.nPara[ 1 ] = -1;
                 aEquation.nPara[ 2 ] = 1;
-                FillEquationParameter( mpArg->fillNode( rEquations ), 0, aEquation );
+                FillEquationParameter( mpArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aRet.Value <<= (sal_Int32)rEquations.size();
                 rEquations.push_back( aEquation );
@@ -501,29 +534,79 @@ public:
     {
         return meFunct;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* mpOptionalArg = NULL )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
     {
         EnhancedCustomShapeParameter aRet;
         switch( meFunct )
         {
             case BINARY_FUNC_PLUS :
             {
-                sal_Bool bFirstIsEmpty = mpFirstArg->isConstant() && ( (*mpFirstArg)() == 0 );
-                sal_Bool bSecondIsEmpty = mpSecondArg->isConstant() && ( (*mpSecondArg)() == 0 );
+                if ( nFlags & EXPRESSION_FLAG_SUMANGLE_MODE )
+                {
+                    if ( mpFirstArg->getType() == ENUM_FUNC_ADJUSTMENT )
+                    {
+                        EnhancedCustomShapeEquation aEquation;
+                        aEquation.nOperation |= 0xe;    // sumangle
+                        FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
+                        FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 1, aEquation );
+                        aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aRet.Value <<= (sal_Int32)rEquations.size();
+                        rEquations.push_back( aEquation );
+                    }
+                    else if ( mpSecondArg->getType() == ENUM_FUNC_ADJUSTMENT )
+                    {
+                        EnhancedCustomShapeEquation aEquation;
+                        aEquation.nOperation |= 0xe;    // sumangle
+                        FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
+                        FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 1, aEquation );
+                        aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aRet.Value <<= (sal_Int32)rEquations.size();
+                        rEquations.push_back( aEquation );
+                    }
+                    else
+                    {
+                        EnhancedCustomShapeEquation aSumangle1;
+                        aSumangle1.nOperation |= 0xe;   // sumangle
+                        FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags &~EXPRESSION_FLAG_SUMANGLE_MODE ), 1, aSumangle1 );
+                        aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aRet.Value <<= (sal_Int32)rEquations.size();
+                        rEquations.push_back( aSumangle1 );
 
-                if ( bFirstIsEmpty )
-                    aRet = mpSecondArg->fillNode( rEquations );
-                else if ( bSecondIsEmpty )
-                    aRet = mpFirstArg->fillNode( rEquations );
+                        EnhancedCustomShapeEquation aSumangle2;
+                        aSumangle2.nOperation |= 0xe;   // sumangle
+                        FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags &~EXPRESSION_FLAG_SUMANGLE_MODE ), 1, aSumangle2 );
+                        aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aRet.Value <<= (sal_Int32)rEquations.size();
+                        rEquations.push_back( aSumangle2 );
+
+                        EnhancedCustomShapeEquation aEquation;
+                        aEquation.nOperation |= 0;
+                        aEquation.nPara[ 0 ] = ( rEquations.size() - 2 ) | 0x400;
+                        aEquation.nPara[ 1 ] = ( rEquations.size() - 1 ) | 0x400;
+                        aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aRet.Value <<= (sal_Int32)rEquations.size();
+                        rEquations.push_back( aEquation );
+                    }
+                }
                 else
                 {
-                    EnhancedCustomShapeEquation aEquation;
-                    aEquation.nOperation |= 0;
-                    FillEquationParameter( mpFirstArg->fillNode( rEquations ), 0, aEquation );
-                    FillEquationParameter( mpSecondArg->fillNode( rEquations ), 1, aEquation );
-                    aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
-                    aRet.Value <<= (sal_Int32)rEquations.size();
-                    rEquations.push_back( aEquation );
+                    sal_Bool bFirstIsEmpty = mpFirstArg->isConstant() && ( (*mpFirstArg)() == 0 );
+                    sal_Bool bSecondIsEmpty = mpSecondArg->isConstant() && ( (*mpSecondArg)() == 0 );
+
+                    if ( bFirstIsEmpty )
+                        aRet = mpSecondArg->fillNode( rEquations, NULL, nFlags );
+                    else if ( bSecondIsEmpty )
+                        aRet = mpFirstArg->fillNode( rEquations, NULL, nFlags );
+                    else
+                    {
+                        EnhancedCustomShapeEquation aEquation;
+                        aEquation.nOperation |= 0;
+                        FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
+                        FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 1, aEquation );
+                        aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aRet.Value <<= (sal_Int32)rEquations.size();
+                        rEquations.push_back( aEquation );
+                    }
                 }
             }
             break;
@@ -531,8 +614,8 @@ public:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 0;
-                FillEquationParameter( mpFirstArg->fillNode( rEquations ), 0, aEquation );
-                FillEquationParameter( mpSecondArg->fillNode( rEquations ), 2, aEquation );
+                FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
+                FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 2, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aRet.Value <<= (sal_Int32)rEquations.size();
                 rEquations.push_back( aEquation );
@@ -540,53 +623,62 @@ public:
             break;
             case BINARY_FUNC_MUL :
             {
-
                 // in the dest. format the cos function is using integer as result :-(
                 // so we can't use the generic algorithm
                 if ( ( mpFirstArg->getType() == UNARY_FUNC_SIN ) || ( mpFirstArg->getType() == UNARY_FUNC_COS ) || ( mpFirstArg->getType() == UNARY_FUNC_TAN ) )
-                    aRet = mpFirstArg->fillNode( rEquations, mpSecondArg.get() );
+                    aRet = mpFirstArg->fillNode( rEquations, mpSecondArg.get(), nFlags );
                 else if ( ( mpSecondArg->getType() == UNARY_FUNC_SIN ) || ( mpSecondArg->getType() == UNARY_FUNC_COS ) || ( mpSecondArg->getType() == UNARY_FUNC_TAN ) )
-                    aRet = mpSecondArg->fillNode( rEquations, mpFirstArg.get() );
+                    aRet = mpSecondArg->fillNode( rEquations, mpFirstArg.get(), nFlags );
                 else
                 {
-                    EnhancedCustomShapeEquation aEquation;
-                    aEquation.nOperation |= 1;
-                    FillEquationParameter( mpFirstArg->fillNode( rEquations ), 0, aEquation );
-                    FillEquationParameter( mpSecondArg->fillNode( rEquations ), 1, aEquation );
-                    aEquation.nPara[ 2 ] = 1;
-                    aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
-                    aRet.Value <<= (sal_Int32)rEquations.size();
-                    rEquations.push_back( aEquation );
+                    if ( mpFirstArg->isConstant() && (*mpFirstArg)() == 1 )
+                        aRet = mpSecondArg->fillNode( rEquations, NULL, nFlags );
+                    else if ( mpSecondArg->isConstant() && (*mpSecondArg)() == 1 )
+                        aRet = mpFirstArg->fillNode( rEquations, NULL, nFlags );
+                    else if ( ( mpFirstArg->getType() == BINARY_FUNC_DIV )      // don't care of (pi/180)
+                        && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpFirstArg.get())->mpFirstArg.get())->getType() == ENUM_FUNC_PI )
+                        && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpFirstArg.get())->mpSecondArg.get())->getType() == FUNC_CONST ) )
+                    {
+                        aRet = mpSecondArg->fillNode( rEquations, NULL, nFlags );
+                    }
+                    else if ( ( mpSecondArg->getType() == BINARY_FUNC_DIV )     // don't care of (pi/180)
+                        && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpSecondArg.get())->mpFirstArg.get())->getType() == ENUM_FUNC_PI )
+                        && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpSecondArg.get())->mpSecondArg.get())->getType() == FUNC_CONST ) )
+                    {
+                        aRet = mpFirstArg->fillNode( rEquations, NULL, nFlags );
+                    }
+                    else
+                    {
+                        EnhancedCustomShapeEquation aEquation;
+                        aEquation.nOperation |= 1;
+                        FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
+                        FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 1, aEquation );
+                        aEquation.nPara[ 2 ] = 1;
+                        aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                        aRet.Value <<= (sal_Int32)rEquations.size();
+                        rEquations.push_back( aEquation );
+                    }
                 }
             }
             break;
             case BINARY_FUNC_DIV :
             {
                 EnhancedCustomShapeEquation aEquation;
-                if ( ( mpFirstArg->getType() == ENUM_FUNC_PI ) && ( mpSecondArg->getType() == FUNC_CONST ) )
-                {
-                    sal_Int32 nVal = 1; // a quick DEG<->RAD conversion->has to be improved
-                    aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
-                    aRet.Value <<= nVal;
-                }
-                else
-                {
-                    aEquation.nOperation |= 1;
-                    FillEquationParameter( mpFirstArg->fillNode( rEquations ), 0, aEquation );
-                    aEquation.nPara[ 1 ] = 1;
-                    FillEquationParameter( mpSecondArg->fillNode( rEquations ), 2, aEquation );
-                    aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
-                    aRet.Value <<= (sal_Int32)rEquations.size();
-                    rEquations.push_back( aEquation );
-                }
+                aEquation.nOperation |= 1;
+                FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
+                aEquation.nPara[ 1 ] = 1;
+                FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 2, aEquation );
+                aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
+                aRet.Value <<= (sal_Int32)rEquations.size();
+                rEquations.push_back( aEquation );
             }
             break;
             case BINARY_FUNC_MIN :
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 4;
-                FillEquationParameter( mpFirstArg->fillNode( rEquations ), 0, aEquation );
-                FillEquationParameter( mpSecondArg->fillNode( rEquations ), 1, aEquation );
+                FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
+                FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 1, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aRet.Value <<= (sal_Int32)rEquations.size();
                 rEquations.push_back( aEquation );
@@ -596,8 +688,8 @@ public:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 5;
-                FillEquationParameter( mpFirstArg->fillNode( rEquations ), 0, aEquation );
-                FillEquationParameter( mpSecondArg->fillNode( rEquations ), 1, aEquation );
+                FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
+                FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 1, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aRet.Value <<= (sal_Int32)rEquations.size();
                 rEquations.push_back( aEquation );
@@ -607,8 +699,8 @@ public:
             {
                 EnhancedCustomShapeEquation aEquation;
                 aEquation.nOperation |= 8;
-                FillEquationParameter( mpSecondArg->fillNode( rEquations ), 0, aEquation );
-                FillEquationParameter( mpFirstArg->fillNode( rEquations ), 1, aEquation );
+                FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
+                FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 1, aEquation );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 aRet.Value <<= (sal_Int32)rEquations.size();
                 rEquations.push_back( aEquation );
@@ -650,7 +742,7 @@ public:
     {
         return TERNARY_FUNC_IF;
     }
-    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* mpOptionalArg = NULL )
+    virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags )
     {
         EnhancedCustomShapeParameter aRet;
         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -658,9 +750,9 @@ public:
         {
             EnhancedCustomShapeEquation aEquation;
             aEquation.nOperation |= 6;
-            FillEquationParameter( mpFirstArg->fillNode( rEquations ), 0, aEquation );
-            FillEquationParameter( mpSecondArg->fillNode( rEquations ), 1, aEquation );
-            FillEquationParameter( mpThirdArg->fillNode( rEquations ), 2, aEquation );
+            FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
+            FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags  ), 1, aEquation );
+            FillEquationParameter( mpThirdArg->fillNode( rEquations, NULL, nFlags ), 2, aEquation );
             rEquations.push_back( aEquation );
         }
         return aRet;
