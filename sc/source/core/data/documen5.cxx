@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:21:16 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ BOOL ScDocument::HasChartAtPoint( USHORT nTab, const Point& rPos, String* pName 
         while (pObject)
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                 pObject->GetBoundRect().IsInside(rPos) )
+                 pObject->GetCurrentBoundRect().IsInside(rPos) )
             {
                         // auch Chart-Objekte die nicht in der Collection sind
 
@@ -260,7 +260,10 @@ void ScDocument::UpdateChartArea( const String& rChartName,
                         //SvData aEmpty;
                         //aIPObj->SendDataChanged( aEmpty );
                         aIPObj->SendViewChanged();
-                        pObject->SendRepaintBroadcast();
+
+                        // repaint only
+                        pObject->ActionChanged();
+                        // pObject->SendRepaintBroadcast();
 
                         return;         // nicht weitersuchen
                     }
@@ -318,7 +321,10 @@ void ScDocument::UpdateChart( const String& rChartName, Window* pWindow )
                         //SvData aEmpty;
                         //aIPObj->SendDataChanged( aEmpty );
                         aIPObj->SendViewChanged();
-                        pObject->SendRepaintBroadcast();
+
+                        // redraw only
+                        pObject->ActionChanged();
+                        // pObject->SendRepaintBroadcast();
 
                         if (bEnabled)
                             aIPObj->EnableSetModified(TRUE);
