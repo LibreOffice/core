@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:24:44 $
+ *  last change: $Author: nn $ $Date: 2001-01-05 19:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2000-12-06 15:24:44 $ $Revision: 1.10 $
+ // $Author: nn $ $Date: 2001-01-05 19:10:12 $ $Revision: 1.11 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1349,11 +1349,6 @@ FloatingWindow RID_TBXCTL_INSOBJ
             };
             ToolBoxItem
             {
-                Identifier = SID_INSERT_SIMAGE ;
-                HelpId = SID_INSERT_SIMAGE ;
-            };
-            ToolBoxItem
-            {
                 Identifier = SID_INSERT_SMATH ;
                 HelpId = SID_INSERT_SMATH ;
             };
@@ -1612,7 +1607,6 @@ FloatingWindow RID_TBXCTL_INSOBJ
         FID_INS_ROW;                    /* 26267    */  \
         FID_INS_COLUMN;                 /* 26268    */  \
         SID_CHARMAP;                    /* 10503 (20328 vom Writer) */  \
-        SID_INSERT_SIMAGE;              /* 26061    */  \
         SID_INSERT_SMATH;               /* 26063    */  \
         SID_INSERT_FLOATINGFRAME;       /* 5563     */  \
         SID_INSERT_OBJECT;              /* 5561     */  \
@@ -1647,7 +1641,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_ATTR_GRAF_CROP;\
     };                                                  \
     IdCount = {                                         \
-        182;                                            \
+        181;                                            \
     };
 
 ImageList RID_DEFAULTIMAGELIST_SC

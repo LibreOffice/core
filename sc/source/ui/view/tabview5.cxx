@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:32:17 $
+ *  last change: $Author: nn $ $Date: 2001-01-05 19:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,6 @@ void ScTabView::TabChanged()
     rBindings.Invalidate( SID_OPENDLG_CHART );
     rBindings.Invalidate( SID_INSERT_OBJECT );
     rBindings.Invalidate( SID_INSERT_DIAGRAM );
-    rBindings.Invalidate( SID_INSERT_SIMAGE );
     rBindings.Invalidate( SID_INSERT_SMATH );
     rBindings.Invalidate( SID_INSERT_GRAPHIC );
 #endif

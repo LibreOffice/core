@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 15:06:38 $
+ *  last change: $Author: nn $ $Date: 2001-01-05 19:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
         case SID_INSERT_APPLET:
-        case SID_INSERT_SIMAGE:
         case SID_INSERT_SMATH:
         case SID_INSERT_FLOATINGFRAME:
             FuInsertOLE(this, pWin, pView, pDrModel, rReq);
