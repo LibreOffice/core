@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -996,10 +996,12 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
     {
         OSQLPredicateType ePredicateType;
 
-        DBG_ASSERT(pSearchCondition->count() >= 5,"OSQLParseTreeIterator: Fehler im Parse Tree");
+        DBG_ASSERT(pSearchCondition->count() >= 4,"OSQLParseTreeIterator: Fehler im Parse Tree");
 
-        OSQLParseNode * pNum_value_exp  = pSearchCondition->getChild(3);
-        OSQLParseNode * pOptEscape      = pSearchCondition->getChild(4);
+        sal_Int32 nCurentPos = pSearchCondition->count()-2;
+
+        OSQLParseNode * pNum_value_exp  = pSearchCondition->getChild(nCurentPos);
+        OSQLParseNode * pOptEscape      = pSearchCondition->getChild(nCurentPos+1);
 
         if (pSearchCondition->getChild(1)->getTokenID() == SQL_TOKEN_NOT)
             ePredicateType = SQL_PRED_NOTLIKE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: patrick.luby $ $Date: 2000-09-25 04:28:50 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,7 +732,7 @@ void OSQLParseNode::tableRangeNodeToStr(String& rString, const SQLParseNodeParam
 //-----------------------------------------------------------------------------
 void OSQLParseNode::likeNodeToStr(String& rString, const SQLParseNodeParameter& rParam) const
 {
-    DBG_ASSERT(count() == 5,"count != 5: Prepare for GPF");
+    DBG_ASSERT(count() >= 4,"count != 5: Prepare for GPF");
 
     const OSQLParseNode* pEscNode = NULL;
     const OSQLParseNode* pParaNode = NULL;
@@ -769,8 +769,9 @@ void OSQLParseNode::likeNodeToStr(String& rString, const SQLParseNodeParameter& 
     m_aChilds[1]->parseNodeToStr(rString, aNewParam);
     m_aChilds[2]->parseNodeToStr(rString, aNewParam);
 
-    pParaNode = m_aChilds[3];
-    pEscNode = m_aChilds[4];
+    sal_Int32 nCurentPos = m_aChilds.size()-2;
+    pParaNode = m_aChilds[nCurentPos];
+    pEscNode = m_aChilds[nCurentPos+1];
 
     if (pParaNode->isToken() && rParam.bInternational)
     {
