@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-06 15:54:54 $
+ *  last change: $Author: sj $ $Date: 2001-06-13 15:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,9 +795,9 @@ BOOL SdPPTImport::Import()
                 {   // StyleSheet fuellen und dem Objekt zuweisen
                     pSheet->GetItemSet().ClearItem();
                     pSheet->GetItemSet().Put( pObj->GetItemSet() );
-                    pObj->SetStyleSheet( pSheet, TRUE );
-                    SfxItemSet aSet( pDoc->GetPool() );
-                    pObj->SetItemSet( aSet );
+                    aTempAttr.ClearItem();
+                    pObj->SetItemSet( aTempAttr );
+                    pObj->SetStyleSheet( pSheet, FALSE );
                 }
                 pMPage->GetPresObjList()->Insert( pObj, LIST_APPEND );
             }
