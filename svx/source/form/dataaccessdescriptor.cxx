@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-06 10:35:21 $
+ *  last change: $Author: oj $ $Date: 2002-07-18 08:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,6 +589,21 @@ namespace svx
         return Sequence< PropertyValue >();
 #endif
     }
+    //--------------------------------------------------------------------
+    Sequence< Any > ODataAccessDescriptor::createAnySequence()
+    {
+#ifndef SVX_LIGHT
+        m_pImpl->updateSequence();
+        Sequence< Any > aRet(m_pImpl->m_aAsSequence.getLength());
+        const PropertyValue* pBegin = m_pImpl->m_aAsSequence.getConstArray();
+        const PropertyValue* pEnd     = pBegin + m_pImpl->m_aAsSequence.getLength();
+        for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
+            aRet[i] <<= *pBegin;
+        return aRet;
+#else
+        return Sequence< createAnySequence >();
+#endif
+    }
 
     //--------------------------------------------------------------------
     Reference< XPropertySet > ODataAccessDescriptor::createPropertySet()
@@ -608,6 +623,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2002/05/06 10:35:21  fs
+ *  #98721# new CTor( Any ) for creating with either a sequence or a property set
+ *
  *  Revision 1.5  2001/06/25 08:45:37  fs
  *  #82371# +initializeFrom
  *
