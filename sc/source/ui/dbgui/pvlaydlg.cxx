@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:59:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,6 @@ void ScDPLayoutDlg::InitWndSelect( LabelData** ppLabelArr, long nLabels )
 
         aLabelDataArr.clear();
         aLabelDataArr.reserve( nLabelCount );
-
         for ( size_t i=0; i < nLabelCount; i++ )
         {
             aLabelDataArr.push_back( *ppLabelArr[i] );
@@ -1374,8 +1373,6 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
                             sheet::DataPilotFieldOrientation_DATA,   NULL, 0, 0, xSource, FALSE,
                             aColArr, nColCount, aRowArr, nRowCount, aPageArr, nPageCount );
 
-            //  "show all" property
-            //! init from xDlgDPObject, set only changed values
             for( ScDPLabelDataVec::const_iterator aIt = aLabelDataArr.begin(), aEnd = aLabelDataArr.end(); aIt != aEnd; ++aIt )
             {
                 if( ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName( aIt->maName ) )
@@ -1389,11 +1386,20 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
                     // visibility of members
                     if( const rtl::OUString* pItem = aIt->maMembers.getConstArray() )
                     {
-                        sal_Int32 nVisIdx = 0, nVisSize = aIt->maVisible.getLength();
-                        for( const rtl::OUString* pEnd = pItem + aIt->maMembers.getLength(); pItem != pEnd; ++pItem, ++nVisIdx )
+                        sal_Int32 nIdx = 0;
+                        sal_Int32 nVisSize = aIt->maVisible.getLength();
+                        sal_Int32 nShowSize = aIt->maShowDet.getLength();
+                        for( const rtl::OUString* pEnd = pItem + aIt->maMembers.getLength(); pItem != pEnd; ++pItem, ++nIdx )
                         {
-                            bool bVis = (nVisIdx >= nVisSize) || aIt->maVisible[ nVisIdx ];
-                            pDim->GetMemberByName( *pItem )->SetIsVisible( bVis );
+                            // #i40054# create/access members only if flags are not default
+                            bool bIsVisible = (nIdx >= nVisSize) || aIt->maVisible[ nIdx ];
+                            bool bShowDetails = (nIdx >= nShowSize) || aIt->maShowDet[ nIdx ];
+                            if( !bIsVisible || !bShowDetails )
+                            {
+                                ScDPSaveMember* pMember = pDim->GetMemberByName( *pItem );
+                                pMember->SetIsVisible( bIsVisible );
+                                pMember->SetShowDetails( bShowDetails );
+                            }
                         }
                     }
                 }
