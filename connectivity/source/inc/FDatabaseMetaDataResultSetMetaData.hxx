@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:55 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 14:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,38 +90,16 @@ namespace connectivity
 
     class ODatabaseMetaDataResultSetMetaData :  public  ODatabaseMetaResultSetMetaData_BASE
     {
-        friend class ODatabaseMetaDataResultSet;
-
         TIntVector                                  m_vMapping; // when not every column is needed
         ::std::map<sal_Int32,connectivity::OColumn> m_mColumns;
         ::std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
 
         sal_Int32                                   m_nColCount;
-
-    protected:
-        void setColumnPrivilegesMap();
-        void setColumnsMap();
-        void setTablesMap();
-        void setProcedureColumnsMap();
-        void setPrimaryKeysMap();
-        void setIndexInfoMap();
-        void setTablePrivilegesMap();
-        void setCrossReferenceMap();
-        void setTypeInfoMap();
-        void setProceduresMap();
-        void setTableTypes();
-        void setBestRowIdentifierMap() { setVersionColumnsMap();}
-        void setVersionColumnsMap();
-        void setExportedKeysMap() { setCrossReferenceMap(); }
-        void setImportedKeysMap() { setCrossReferenceMap(); }
-        void setCatalogsMap();
-        void setSchemasMap();
-
     protected:
         ~ODatabaseMetaDataResultSetMetaData();
     public:
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        ODatabaseMetaDataResultSetMetaData( ODatabaseMetaDataResultSet* _pRes)
+        ODatabaseMetaDataResultSetMetaData( )
                 :   m_nColCount(0)
         {
         }
@@ -152,6 +130,25 @@ namespace connectivity
         virtual sal_Bool SAL_CALL isWritable( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL isDefinitelyWritable( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getColumnServiceName( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        // methods to set the right column mapping
+        void setColumnPrivilegesMap();
+        void setColumnsMap();
+        void setTablesMap();
+        void setProcedureColumnsMap();
+        void setPrimaryKeysMap();
+        void setIndexInfoMap();
+        void setTablePrivilegesMap();
+        void setCrossReferenceMap();
+        void setTypeInfoMap();
+        void setProceduresMap();
+        void setTableTypes();
+        void setBestRowIdentifierMap() { setVersionColumnsMap();}
+        void setVersionColumnsMap();
+        void setExportedKeysMap() { setCrossReferenceMap(); }
+        void setImportedKeysMap() { setCrossReferenceMap(); }
+        void setCatalogsMap();
+        void setSchemasMap();
     };
 }
 #endif // _CONNECTIVITY_FILE_ADATABASEMETARESULTSETMETADATA_HXX_
