@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: nn $ $Date: 2001-03-08 14:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ public:
     void                InvalidateSource();
 
     void                Output();
-    ScRange             GetNewOutputRange();
+    ScRange             GetNewOutputRange( BOOL& rOverflow );
 
     void                SetSaveData(const ScDPSaveData& rData);
     ScDPSaveData*       GetSaveData() const     { return pSaveData; }

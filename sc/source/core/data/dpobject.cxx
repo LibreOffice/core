@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:12:06 $
+ *  last change: $Author: nn $ $Date: 2001-03-08 14:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,12 +404,18 @@ void ScDPObject::InvalidateSource()
     xSource = NULL;
 }
 
-ScRange ScDPObject::GetNewOutputRange()
+ScRange ScDPObject::GetNewOutputRange( BOOL& rOverflow )
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
-    //  don't store the result in aOutRange, because nothing has been output yet
-    return pOutput->GetOutputRange();
+    rOverflow = pOutput->HasError();        // range overflow or exception from source
+    if ( rOverflow )
+        return ScRange( aOutRange.aStart );
+    else
+    {
+        //  don't store the result in aOutRange, because nothing has been output yet
+        return pOutput->GetOutputRange();
+    }
 }
 
 void ScDPObject::Output()
