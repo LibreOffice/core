@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 17:12:19 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include "ole2uno.hxx"
-
+#include <stdio.h>
 #include <tools/presys.h>
 #include <olectl.h>
 #include <vector>
@@ -148,6 +148,20 @@ static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
 static HRESULT mapCannotConvertException( CannotConvertException e, unsigned int * puArgErr);
 
+
+/* Does not throw any exceptions.
+   Param pInfo can be NULL.
+ */
+static void writeExcepinfo(EXCEPINFO * pInfo, const OUString& message)
+{
+    if (pInfo != NULL)
+    {
+        pInfo->wCode = UNO_2_OLE_EXCEPTIONCODE;
+        pInfo->bstrSource = SysAllocString(L"[automation bridge] ");
+        pInfo->bstrDescription = SysAllocString(message.getStr());
+    }
+}
+
 /*****************************************************************************
 
     class implementation: InterfaceOleWrapper_Impl
@@ -167,6 +181,11 @@ InterfaceOleWrapper_Impl::~InterfaceOleWrapper_Impl()
     IT_Uno it= UnoObjToWrapperMap.find( (sal_uInt32) m_xOrigin.get());
     if(it != UnoObjToWrapperMap.end())
         UnoObjToWrapperMap.erase(it);
+#if OSL_DEBUG_LEVEL > 0
+    fprintf(stderr,"[automation bridge] UnoObjToWrapperMap  contains: %i \n",
+            UnoObjToWrapperMap.size());
+#endif
+
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::QueryInterface(REFIID riid, LPVOID FAR * ppv)
@@ -257,78 +276,93 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
                                                      LCID lcid,
                                                      DISPID * rgdispid )
 {
+    HRESULT ret = DISP_E_UNKNOWNNAME;
+    try
+    {
+        MutexGuard guard( getBridgeMutex());
+        if( ! rgdispid)
+            return E_POINTER;
 
-    MutexGuard guard( getBridgeMutex());
-    if( ! rgdispid)
-        return E_POINTER;
-    HRESULT ret = E_UNEXPECTED;
-    // ----------------------------------------
-    if( ! _wcsicmp( *rgszNames, JSCRIPT_VALUE_FUNC) ||
-        ! _wcsicmp( *rgszNames, BRIDGE_VALUE_FUNC))
-    {
-        *rgdispid= DISPID_JSCRIPT_VALUE_FUNC;
-        return S_OK;
-    }
-    else if( ! _wcsicmp( *rgszNames, GET_STRUCT_FUNC) ||
-             ! _wcsicmp( *rgszNames, BRIDGE_GET_STRUCT_FUNC))
-    {
-        *rgdispid= DISPID_GET_STRUCT_FUNC;
-        return S_OK;
-    }
-    // ----------------------------------------
-    if (m_xInvocation.is() && (cNames > 0))
-    {
-        OUString name(rgszNames[0]);
-        NameToIdMap::iterator iter = m_nameToDispIdMap.find(name);
-
-        if (iter == m_nameToDispIdMap.end())
+        // ----------------------------------------
+        if( ! _wcsicmp( *rgszNames, JSCRIPT_VALUE_FUNC) ||
+            ! _wcsicmp( *rgszNames, BRIDGE_VALUE_FUNC))
         {
-            OUString exactName;
+            *rgdispid= DISPID_JSCRIPT_VALUE_FUNC;
+            return S_OK;
+        }
+        else if( ! _wcsicmp( *rgszNames, GET_STRUCT_FUNC) ||
+                 ! _wcsicmp( *rgszNames, BRIDGE_GET_STRUCT_FUNC))
+        {
+            *rgdispid= DISPID_GET_STRUCT_FUNC;
+            return S_OK;
+        }
+        // ----------------------------------------
+        if (m_xInvocation.is() && (cNames > 0))
+        {
+            OUString name(rgszNames[0]);
+            NameToIdMap::iterator iter = m_nameToDispIdMap.find(name);
 
-            if (m_xExactName.is())
+            if (iter == m_nameToDispIdMap.end())
             {
-                exactName = m_xExactName->getExactName(name);
+                OUString exactName;
+
+                if (m_xExactName.is())
+                {
+                    exactName = m_xExactName->getExactName(name);
+                }
+                else
+                {
+                    exactName = name;
+                }
+
+                MemberInfo d(0, exactName);
+
+                if (m_xInvocation->hasProperty(exactName))
+                {
+                    d.flags |= DISPATCH_PROPERTYGET;
+                    d.flags |= DISPATCH_PROPERTYPUT;
+                    d.flags |= DISPATCH_PROPERTYPUTREF;
+                }
+
+                if (m_xInvocation->hasMethod(exactName))
+                {
+                    d.flags |= DISPATCH_METHOD;
+                }
+
+                if (d.flags != 0)
+                {
+                    m_MemberInfos.push_back(d);
+                    iter = m_nameToDispIdMap.insert(NameToIdMap::value_type(exactName, (DISPID)m_MemberInfos.size())).first;
+
+                    if (exactName != name)
+                    {
+                        iter = m_nameToDispIdMap.insert(NameToIdMap::value_type(name, (DISPID)m_MemberInfos.size())).first;
+                    }
+                }
+            }
+
+            if (iter == m_nameToDispIdMap.end())
+            {
+                ret = DISP_E_UNKNOWNNAME;
             }
             else
             {
-                exactName = name;
-            }
-
-            MemberInfo d(0, exactName);
-
-            if (m_xInvocation->hasProperty(exactName))
-            {
-                d.flags |= DISPATCH_PROPERTYGET;
-                d.flags |= DISPATCH_PROPERTYPUT;
-                d.flags |= DISPATCH_PROPERTYPUTREF;
-            }
-
-            if (m_xInvocation->hasMethod(exactName))
-            {
-                d.flags |= DISPATCH_METHOD;
-            }
-
-            if (d.flags != 0)
-            {
-                m_MemberInfos.push_back(d);
-                iter = m_nameToDispIdMap.insert(NameToIdMap::value_type(exactName, (DISPID)m_MemberInfos.size())).first;
-
-                if (exactName != name)
-                {
-                    iter = m_nameToDispIdMap.insert(NameToIdMap::value_type(name, (DISPID)m_MemberInfos.size())).first;
-                }
+                *rgdispid = (*iter).second;
+                ret = S_OK;
             }
         }
-
-        if (iter == m_nameToDispIdMap.end())
-        {
-            ret = ResultFromScode(DISP_E_UNKNOWNNAME);
-        }
-        else
-        {
-            *rgdispid = (*iter).second;
-            ret = ResultFromScode(S_OK);
-        }
+    }
+    catch(BridgeRuntimeError& )
+    {
+        OSL_ASSERT(0);
+    }
+    catch(Exception& )
+    {
+        OSL_ASSERT(0);
+    }
+    catch(...)
+    {
+        OSL_ASSERT(0);
     }
 
     return ret;
@@ -340,7 +374,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
 // cases where a VARIANT of type VT_DISPATCH is ambiguous and could represent
 // an object, array ( JavaScript Array object), out parameter and in/out ( JavaScript Array object)
 //  parameter (JavaScript Array object)
-// parameter. Because all those VT_DISPATCH objects need a different conversion
+// Because all those VT_DISPATCH objects need a different conversion
 // we have to find out what the object is supposed to be. The function does this
 // by either using type information or by help of a specialized ValueObject object.
 
@@ -371,151 +405,86 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
 // Normal JScript object parameter can be mixed with JScriptValue object. If an
 // VARIANT contains an VT_DISPATCH that is no JScriptValue than the type information
 // is used to find out about the reqired type.
-
-// out Parameter in Visual Basic have the type VT_BYREF | VT_VARIANT and if the bridge
-// is used from C++ than the type is usually VT_BYREF |VT_xxx. Those parameter are converted
-// and we don't go to the trouble of aquiring type information.
-HRESULT InterfaceOleWrapper_Impl::convertDispparamsArgs(  DISPID id, unsigned short wFlags, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
+void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
+    unsigned short wFlags, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
 {
     HRESULT hr= S_OK;
     sal_Int32 countArgs= pdispparams->cArgs;
     if( countArgs == 0)
-        return S_OK;
-    sal_Bool convOk = sal_True;
+        return;
 
-
-    // The sequence will hold information whether a param at a certain index has already been converted.
-    Sequence< sal_Bool > seqConvertedParams( countArgs);
     rSeq.realloc( countArgs);
     Any*    pParams = rSeq.getArray();
 
-    sal_Bool bTypeInfoNeeded= sal_False;
     Any anyParam;
-    sal_Bool bHandled= sal_False;
 
-    // Iterate over all parameters. The aim is to find out if we need to obtain
-    // type information for the parameter, which is the case when we receive an
-    // VT_DISPATCH or VT_ARRAY argument. Also, ValuObjects are converted in this loop.
-    // An VT_DISPATCH can be a ValueObject (class JScriptValue) objects that originated in this bridge.
-    // The index in the sequence "seqConvertedParams" matches the index in the
-    // DISPPARAMS.rgvarg array. If the value is true then the corresponding VARIANT has been converted
-    // and the any has been written to the Sequence that holds the converted values.
-    for( int i= 0; i < countArgs; i++)
+    //Get type information for the current call
+    InvocationInfo info;
+    if( ! getInvocationInfoForCall( id, info))
+        throw BridgeRuntimeError(
+            OUSTR("[automation bridge]InterfaceOleWrapper_Impl::convertDispparamsArgs \n"
+                  "Could not obtain type information for current call."));
+
+    for (int i = 0; i < countArgs; i++)
     {
-        if( sal_False == convertValueObject( &pdispparams->rgvarg[i], anyParam, bHandled) )
-            return DISP_E_BADVARTYPE;
-        if( bHandled)
-        {// a param is a ValueObject and could be converted
-            pParams[countArgs - i - 1]= anyParam;
-            seqConvertedParams[i]= sal_True;
+        if (info.eMemberType == MemberType_METHOD &&
+            info.aParamModes[ countArgs - i -1 ]  == ParamMode_OUT)
             continue;
-        }
-        else
-        {
-            // if the param is no ValueObject although it is an IDispatch then we must
-            // set a flag that indicates that we have to examine those objects further.
-            // This is also true if the argument is an array
-            CComVariant var;
-            if( SUCCEEDED( var.ChangeType(VT_DISPATCH, &pdispparams->rgvarg[i]))
-                || (pdispparams->rgvarg[i].vt & VT_ARRAY)
-                ||  ( pdispparams->rgvarg[i].vt == (VT_VARIANT | VT_BYREF) &&
-                      pdispparams->rgvarg[i].pvarVal->vt & VT_ARRAY))
-            {
-                bTypeInfoNeeded= sal_True;
-            }
-        }
-    }
-    try{
-        // If there is a VT_DISPATCH  and if it is no JScriptValue object then
-        // we need to know if it represents a Sequence, out or in/out parameter
-        // or an actual object. Therefore we obtain type information.
-        InvocationInfo info;
-        sal_Bool bTypesAvailable= sal_False;
-        if(  bTypeInfoNeeded)
-        {
-            if( ! (bTypesAvailable= getInvocationInfoForCall( id, info)))
-                return DISP_E_EXCEPTION;
-        }
-        // Used within the following "for" loop. If the param is an out, in/out parameter in
+
+         if(convertValueObject( & pdispparams->rgvarg[i], anyParam))
+         { //a param is a ValueObject and could be converted
+            pParams[countArgs - (i + 1)] = anyParam;
+             continue;
+         }
+
+        // If the param is an out, in/out parameter in
         // JScript (Array object, with value at index 0) then we
         // extract Array[0] and put the value into varParam. At the end of the loop varParam
         // is converted if it contains a value otherwise the VARIANT from
         // DISPPARAMS is converted.
         CComVariant varParam;
 
-        // In this loop all params are converted except for those which are already converted
-        // by convertValueObject ( see above ). The Sequence seqConvertedParams contains information
-        // about which params are already converted (convertValueObject). A value in seqConvertedParams
-        // at a particular index relates to the VARIANTARGS param at the same index in DISPPARAMS.
-        for (int i = 0; convOk && (i < countArgs); i++)
+        // Check for JScript out and in/out paramsobjects (VT_DISPATCH).
+        // To find them out we use typeinformation of the function being called.
+        if( pdispparams->rgvarg[i].vt == VT_DISPATCH )
         {
-            if( seqConvertedParams[i] == sal_True)
-                continue;
-            sal_Bool bDoConversion= TRUE;
-            varParam.Clear();
-            // Check for JScript out and in/out paramsobjects (VT_DISPATCH).
-            // To find them out we use typeinformation of the function being called.
-            if( pdispparams->rgvarg[i].vt == VT_DISPATCH )
+            if( info.eMemberType == MemberType_METHOD && info.aParamModes[ countArgs - i -1 ]  == ParamMode_INOUT)
             {
-                if( info.eMemberType == MemberType_METHOD && info.aParamModes[ countArgs - i -1 ]  == ParamMode_INOUT)
-                {
-                    // INOUT-param
-                    // Index ( property) "0" contains the actual IN-param. The object is a JScript
-                    // Array object.
-                    // Get the IN-param at index "0"
-                    IDispatch* pdisp= pdispparams->rgvarg[i].pdispVal;
+                // INOUT-param
+                // Index ( property) "0" contains the actual IN-param. The object is a JScript
+                // Array object.
+                // Get the IN-param at index "0"
+                IDispatch* pdisp= pdispparams->rgvarg[i].pdispVal;
 
-                    OLECHAR* sindex= L"0";
-                    DISPID id;
-                    DISPPARAMS noParams= {0,0,0,0};
-                    if(SUCCEEDED( hr= pdisp->GetIDsOfNames( IID_NULL, &sindex, 1, LOCALE_USER_DEFAULT, &id)))
-                        hr= pdisp->Invoke( id, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
-                            &noParams, &varParam, NULL, NULL);
-                    if( FAILED( hr))
-                    {
-                        varParam.Clear();
-                        convOk= sal_False; break;
-                        hr= DISP_E_EXCEPTION;
-                        break;
-                    }
-                }
-                else if( info.eMemberType == MemberType_METHOD && info.aParamModes[ countArgs - i -1 ] == ParamMode_OUT)
+                OLECHAR* sindex= L"0";
+                DISPID id;
+                DISPPARAMS noParams= {0,0,0,0};
+                if(SUCCEEDED( hr= pdisp->GetIDsOfNames( IID_NULL, &sindex, 1, LOCALE_USER_DEFAULT, &id)))
+                    hr= pdisp->Invoke( id, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
+                                       & noParams, & varParam, NULL, NULL);
+                if( FAILED( hr))
                 {
-                    // No conversion necessary. The VT_DISPATCH represents
-                    // an JScript Array in which the outparam is written on index 0
-                    // or it is VT_DISPATCH | VT_BYREF, out param in C
-                    bDoConversion= sal_False;
+                    throw BridgeRuntimeError(
+                        OUSTR("[automation bridge] Could not determine "
+                              "if the object has a member \"0\". Error: ") +
+                        OUString::valueOf(hr));
                 }
             }
-            if( bDoConversion)
-            {
-                if( varParam.vt == VT_EMPTY) // then it was no in/out parameter
-                    varParam= pdispparams->rgvarg[i];
+        }
 
-                Any theParam;
-                if( bTypesAvailable && info.eMemberType == MemberType_METHOD)
-                    convOk= variantToAny2( & varParam,theParam,
-                            info.aParamTypes[ countArgs - i - 1]);
-                else if( bTypesAvailable && info.eMemberType == MemberType_PROPERTY)
-                    convOk= variantToAny2( & varParam,theParam, info.aType);
-                else
-                    convOk = variantToAny( & varParam, theParam);
+        if( varParam.vt == VT_EMPTY) // then it was no in/out parameter
+                 varParam= pdispparams->rgvarg[i];
 
-                if( convOk)
-                    pParams[countArgs - (i + 1)]= theParam;
-            }
-        }// end for / iterating over all parameters
-    }catch( IllegalArgumentException ) // XInvocation2::getInfoForName
-    {
-        hr= DISP_E_BADVARTYPE;
-    }
-    catch(...)
-    {
-        hr= DISP_E_EXCEPTION;
-    }
-    if( SUCCEEDED( hr) && convOk == sal_False)
-        hr= DISP_E_EXCEPTION;
-    return hr;
+        if(info.eMemberType == MemberType_METHOD)
+            variantToAny( & varParam, anyParam,
+                           info.aParamTypes[ countArgs - i - 1]);
+        else if(info.eMemberType == MemberType_PROPERTY)
+            variantToAny( & varParam, anyParam, info.aType);
+        else
+            OSL_ASSERT(0);
+
+        pParams[countArgs - (i + 1)]= anyParam;
+    }// end for / iterating over all parameters
 }
 
 sal_Bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, InvocationInfo& info)
@@ -610,16 +579,6 @@ Any SAL_CALL InterfaceOleWrapper_Impl::createBridge(const Any& modelDepObject,
     return retAny;
 }
 
-// XInterface ------------------------------------------------------
-// void SAL_CALL InterfaceOleWrapper_Impl::acquire(  ) throw()
-// {
-//  AddRef();
-// }
-// void SAL_CALL InterfaceOleWrapper_Impl::release(  ) throw()
-// {
-//  Release();
-// }
-
 
 // XInitialization --------------------------------------------------
 void SAL_CALL InterfaceOleWrapper_Impl::initialize( const Sequence< Any >& aArguments )
@@ -682,18 +641,8 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
     CComVariant varDest( *pDest);
 
     if( SUCCEEDED( varDest.ChangeType(VT_DISPATCH)))
-
-//      if( (pDest->vt ==  VT_DISPATCH) ||
-//          (pDest->vt == (VT_VARIANT | VT_BYREF) &&
-//          pDest->pvarVal->vt == VT_DISPATCH) )
     {
         CComPtr<IDispatch> spDispDest(varDest.pdispVal);
-//          if( pDest->vt == VT_DISPATCH)
-//              spDispDest= pDest->pdispVal;
-//          else
-//              spDispDest= pDest->pvarVal->pdispVal;
-
-//      CComPtr <IJScriptValueObject> spValueDest;
 
         // special Handling for a JScriptValue object
         CComQIPtr<IJScriptValueObject> spValueDest(spDispDest);
@@ -878,6 +827,10 @@ static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
                         *V_UINTREF(pDest) = V_UINT(pSource);
                         ret = sal_True;
                         break;
+                    case VT_DECIMAL:
+                        memcpy(pDest->pdecVal, pSource, sizeof(DECIMAL));
+                        ret = sal_True;
+                        break;
                     default:
                         break;
                     }
@@ -898,6 +851,7 @@ static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
 
                     SysFreeString( *pDest->pbstrVal);
                     *pDest->pbstrVal= SysAllocString( buff);
+                    ret = sal_True;
                 }
             }
         }
@@ -916,63 +870,80 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
 {
     HRESULT ret = S_OK;
 
-    sal_Bool bHandled= sal_False;
-    ret= InvokeGeneral( dispidMember,  wFlags, pdispparams, pvarResult,  pexcepinfo,
-                   puArgErr, bHandled);
-    if( bHandled)
-        return ret;
-
-    if ((dispidMember > 0) && (dispidMember <= m_MemberInfos.size()) && m_xInvocation.is())
+    try
     {
-        MemberInfo d = m_MemberInfos[dispidMember - 1];
-        DWORD flags = wFlags & d.flags;
+        sal_Bool bHandled= sal_False;
+        ret= InvokeGeneral( dispidMember,  wFlags, pdispparams, pvarResult,  pexcepinfo,
+                            puArgErr, bHandled);
+        if( bHandled)
+            return ret;
 
-        if (flags != 0)
+        if ((dispidMember > 0) && (dispidMember <= m_MemberInfos.size()) && m_xInvocation.is())
         {
-            if ((flags & DISPATCH_METHOD) != 0)
-            {
-                if (pdispparams->cNamedArgs > 0)
-                    ret = DISP_E_NONAMEDARGS;
-                else
-                {
-                    Sequence<Any> params;
+            MemberInfo d = m_MemberInfos[dispidMember - 1];
+            DWORD flags = wFlags & d.flags;
 
-                    if( SUCCEEDED(ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams , params ) ))
-                    {
-                        ret= doInvoke(  pdispparams, pvarResult,
-                          pexcepinfo, puArgErr, d.name, params );
-                    }
-                    else
-                        ret = DISP_E_BADVARTYPE;
-                }
-            }
-            else if ((flags & DISPATCH_PROPERTYGET) != 0)
+            if (flags != 0)
             {
-                ret=  doGetProperty( pdispparams, pvarResult,
-                                    pexcepinfo, d.name);
-            }
-            else if ((flags & DISPATCH_PROPERTYPUT || flags & DISPATCH_PROPERTYPUTREF) != 0)
-            {
-                if (pdispparams->cArgs != 1)
-                    ret = DISP_E_BADPARAMCOUNT;
-                else
+                if ((flags & DISPATCH_METHOD) != 0)
                 {
-                    Sequence<Any> params;
-                    ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params );
-                    if( SUCCEEDED( ret) && (params.getLength() > 0))
-                    {
-                        ret= doSetProperty( pdispparams, pvarResult, pexcepinfo, puArgErr, d.name, params);
-                    }
+                    if (pdispparams->cNamedArgs > 0)
+                        ret = DISP_E_NONAMEDARGS;
                     else
-                        ret = DISP_E_BADVARTYPE;
+                    {
+                        Sequence<Any> params;
+
+                        convertDispparamsArgs(dispidMember, wFlags, pdispparams , params );
+
+                        ret= doInvoke(pdispparams, pvarResult,
+                                      pexcepinfo, puArgErr, d.name, params);
+                    }
+                }
+                else if ((flags & DISPATCH_PROPERTYGET) != 0)
+                {
+                    ret=  doGetProperty( pdispparams, pvarResult,
+                                         pexcepinfo, d.name);
+                }
+                else if ((flags & DISPATCH_PROPERTYPUT || flags & DISPATCH_PROPERTYPUTREF) != 0)
+                {
+                    if (pdispparams->cArgs != 1)
+                        ret = DISP_E_BADPARAMCOUNT;
+                    else
+                    {
+                        Sequence<Any> params;
+                        convertDispparamsArgs(dispidMember, wFlags, pdispparams, params );
+                        if(params.getLength() > 0)
+                            ret= doSetProperty( pdispparams, pvarResult, pexcepinfo, puArgErr, d.name, params);
+                        else
+                            ret = DISP_E_BADVARTYPE;
+                    }
                 }
             }
+            else
+                ret= DISP_E_MEMBERNOTFOUND;
         }
         else
-            ret= DISP_E_MEMBERNOTFOUND;
+            ret = DISP_E_MEMBERNOTFOUND;
     }
-    else
-        ret = DISP_E_MEMBERNOTFOUND;
+    catch(BridgeRuntimeError& e)
+    {
+        writeExcepinfo(pexcepinfo, e.message);
+        ret = DISP_E_EXCEPTION;
+    }
+    catch(Exception& e)
+    {
+        OUString message= OUSTR("InterfaceOleWrapper_Impl::Invoke : \n") +
+                                e.Message;
+        writeExcepinfo(pexcepinfo, message);
+        ret = DISP_E_EXCEPTION;
+    }
+    catch(...)
+    {
+        OUString message= OUSTR("InterfaceOleWrapper_Impl::Invoke : \n"
+                                "Unexpected exception");
+        writeExcepinfo(pexcepinfo, message);
+         ret = DISP_E_EXCEPTION;
+    }
 
     return ret;
 }
@@ -981,17 +952,18 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
                               EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString& name, Sequence<Any>& params)
 {
 
+
     HRESULT ret= S_OK;
-    Sequence<INT16>     outIndex;
-    Sequence<Any>   outParams;
-    Any                 returnValue;
-
-    if (pdispparams->cNamedArgs > 0)
-        return DISP_E_NONAMEDARGS;
-
-    // invoke method and take care of exceptions
     try
     {
+        Sequence<INT16>     outIndex;
+        Sequence<Any>   outParams;
+        Any                 returnValue;
+
+        if (pdispparams->cNamedArgs > 0)
+            return DISP_E_NONAMEDARGS;
+
+        // invoke method and take care of exceptions
         returnValue = m_xInvocation->invoke(name,
                                             params,
                                             outIndex,
@@ -1000,15 +972,12 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
         // try to write back out parameter
         if (outIndex.getLength() > 0)
         {
-             const INT16* pOutIndex = outIndex.getConstArray();
+            const INT16* pOutIndex = outIndex.getConstArray();
             const Any* pOutParams = outParams.getConstArray();
 
             for (UINT32 i = 0; i < outIndex.getLength(); i++)
             {
-                VARIANT variant;
-
-                VariantInit(&variant);
-
+                CComVariant variant;
                 // Currently a Sequence is converted to an SafeArray of VARIANTs.
                 anyToVariant( &variant, pOutParams[i]);
 
@@ -1016,47 +985,58 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
                 // and used in JScript
                 int outindex= pOutIndex[i];
                 writeBackOutParameter2(&(pdispparams->rgvarg[pdispparams->cArgs - 1 - outindex]),
-                                      &variant );
-
-                VariantClear(&variant);
+                                       &variant );
             }
         }
 
         // write back return value
-        if ((pvarResult != NULL) && ! anyToVariant(pvarResult, returnValue))
-        {
-            ret = DISP_E_BADVARTYPE;
-        }
+        if (pvarResult != NULL)
+            anyToVariant(pvarResult, returnValue);
     }
-    catch(IllegalArgumentException e)
+    catch(IllegalArgumentException & e) //XInvocation::invoke
     {
+        writeExcepinfo(pexcepinfo, e.Message);
         ret = DISP_E_TYPEMISMATCH;
     }
-    catch(CannotConvertException e)
+    catch(CannotConvertException & e) //XInvocation::invoke
     {
-        ret= mapCannotConvertException( e, puArgErr);
+        writeExcepinfo(pexcepinfo, e.Message);
+        ret = mapCannotConvertException( e, puArgErr);
     }
-    catch(InvocationTargetException e)
+    catch(InvocationTargetException &  e) //XInvocation::invoke
     {
-        if (pexcepinfo != NULL)
-        {
-            Any org = e.TargetException;
-
-            pexcepinfo->wCode = UNO_2_OLE_EXCEPTIONCODE;
-            pexcepinfo->bstrSource = SysAllocString(L"any ONE component");
-            pexcepinfo->bstrDescription = SysAllocString(
-                  org.getValueType().getTypeName());
-        }
-        ret = ResultFromScode(DISP_E_EXCEPTION);
+        const Any& org = e.TargetException;
+        Exception excTarget;
+        org >>= excTarget;
+        OUString message=
+            org.getValueType().getTypeName() + OUSTR(": ") + excTarget.Message;
+        writeExcepinfo(pexcepinfo, message);
+        ret = DISP_E_EXCEPTION;
     }
-    catch( NoSuchMethodException e)
+    catch(NoSuchMethodException & e) //XInvocation::invoke
     {
-        ret= DISP_E_MEMBERNOTFOUND;
+        writeExcepinfo(pexcepinfo, e.Message);
+        ret = DISP_E_MEMBERNOTFOUND;
+    }
+    catch(BridgeRuntimeError & e)
+    {
+        writeExcepinfo(pexcepinfo, e.message);
+        ret = DISP_E_EXCEPTION;
+    }
+    catch(Exception & e)
+    {
+        OUString message= OUSTR("InterfaceOleWrapper_Impl::doInvoke : \n") +
+                                e.Message;
+        writeExcepinfo(pexcepinfo, message);
+        ret = DISP_E_EXCEPTION;
     }
     catch( ... )
-    {
-        ret= DISP_E_EXCEPTION;
-    }
+     {
+        OUString message= OUSTR("InterfaceOleWrapper_Impl::doInvoke : \n"
+                                "Unexpected exception");
+        writeExcepinfo(pexcepinfo, message);
+         ret = DISP_E_EXCEPTION;
+     }
     return ret;
 }
 
@@ -1070,17 +1050,31 @@ HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * pdispparams, VARIA
     {
         Any returnValue = m_xInvocation->getValue( name);
         // write back return value
-        if (!anyToVariant(pvarResult, returnValue))     {
-            ret = DISP_E_BADVARTYPE;
-        }
+        if (pvarResult)
+            anyToVariant(pvarResult, returnValue);
     }
-    catch(UnknownPropertyException e)
+    catch(UnknownPropertyException e) //XInvocation::getValue
     {
+        writeExcepinfo(pexcepinfo, e.Message);
         ret = DISP_E_MEMBERNOTFOUND;
+    }
+    catch(BridgeRuntimeError& e)
+    {
+        writeExcepinfo(pexcepinfo, e.message);
+        ret = DISP_E_EXCEPTION;
+    }
+    catch(Exception& e)
+    {
+        OUString message= OUSTR("InterfaceOleWrapper_Impl::doGetProperty : \n") +
+                                e.Message;
+        writeExcepinfo(pexcepinfo, message);
     }
     catch( ... )
     {
-        ret= DISP_E_EXCEPTION;
+        OUString message= OUSTR("InterfaceOleWrapper_Impl::doInvoke : \n"
+                                "Unexpected exception");
+        writeExcepinfo(pexcepinfo, message);
+         ret = DISP_E_EXCEPTION;
     }
     return  ret;
 }
@@ -1127,73 +1121,93 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
                          unsigned int * puArgErr, sal_Bool& bHandled)
 {
     HRESULT ret= S_OK;
+    try
+    {
 // DISPID_VALUE | The DEFAULT Value is required in JScript when the situation
 // is that we put an object into an Array object ( out parameter). We have to return
 // IDispatch otherwise the object cannot be accessed from the Script.
-    if( dispidMember == DISPID_VALUE && wFlags == DISPATCH_PROPERTYGET
-    && m_defaultValueType != VT_EMPTY && pvarResult != NULL)
-    {
-        bHandled= sal_True;
-        if( m_defaultValueType == VT_DISPATCH)
+        if( dispidMember == DISPID_VALUE && wFlags == DISPATCH_PROPERTYGET
+            && m_defaultValueType != VT_EMPTY && pvarResult != NULL)
         {
-            pvarResult->vt= VT_DISPATCH;
-            pvarResult->pdispVal= static_cast<IDispatch*>( this);
-            AddRef();
-            ret= S_OK;
-        }
-    }
-// ---------
-    // function: _GetValueObject
-    else if( dispidMember == DISPID_JSCRIPT_VALUE_FUNC)
-    {
-        bHandled= sal_True;
-        if( !pvarResult)
-            ret= E_POINTER;
-        CComObject< JScriptValue>* pValue;
-        if( SUCCEEDED( CComObject<JScriptValue>::CreateInstance( &pValue)))
-        {
-            pValue->AddRef();
-            pvarResult->vt= VT_DISPATCH;
-            pvarResult->pdispVal= CComQIPtr<IDispatch>(pValue->GetUnknown());
-            ret= S_OK;
-        }
-        else
-            ret= DISP_E_EXCEPTION;
-    }
-    else if( dispidMember == DISPID_GET_STRUCT_FUNC)
-    {
-        bHandled= sal_True;
-        sal_Bool bStruct= sal_False;
-
-
-        Reference<XInterface> xIntCore= m_smgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection"));
-        Reference<XIdlReflection> xRefl( xIntCore, UNO_QUERY);
-        if( xRefl.is() )
-        {
-            // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
-            CComVariant arg;
-            if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )
+            bHandled= sal_True;
+            if( m_defaultValueType == VT_DISPATCH)
             {
-                Reference<XIdlClass> classStruct= xRefl->forName( arg.bstrVal);
-                if( classStruct.is())
+                pvarResult->vt= VT_DISPATCH;
+                pvarResult->pdispVal= static_cast<IDispatch*>( this);
+                AddRef();
+                ret= S_OK;
+            }
+        }
+// ---------
+        // function: _GetValueObject
+        else if( dispidMember == DISPID_JSCRIPT_VALUE_FUNC)
+        {
+            bHandled= sal_True;
+            if( !pvarResult)
+                ret= E_POINTER;
+            CComObject< JScriptValue>* pValue;
+            if( SUCCEEDED( CComObject<JScriptValue>::CreateInstance( &pValue)))
+            {
+                pValue->AddRef();
+                pvarResult->vt= VT_DISPATCH;
+                pvarResult->pdispVal= CComQIPtr<IDispatch>(pValue->GetUnknown());
+                ret= S_OK;
+            }
+            else
+                ret= DISP_E_EXCEPTION;
+        }
+        else if( dispidMember == DISPID_GET_STRUCT_FUNC)
+        {
+            bHandled= sal_True;
+            sal_Bool bStruct= sal_False;
+
+
+            Reference<XInterface> xIntCore= m_smgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection"));
+            Reference<XIdlReflection> xRefl( xIntCore, UNO_QUERY);
+            if( xRefl.is() )
+            {
+                // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
+                CComVariant arg;
+                if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )
                 {
-                    Any anyStruct;
-                    classStruct->createObject( anyStruct);
-                    CComVariant var;
-                    if( anyToVariant( &var, anyStruct ))
+                    Reference<XIdlClass> classStruct= xRefl->forName( arg.bstrVal);
+                    if( classStruct.is())
                     {
+                        Any anyStruct;
+                        classStruct->createObject( anyStruct);
+                        CComVariant var;
+                        anyToVariant( &var, anyStruct );
+
                         if( var.vt == VT_DISPATCH)
                         {
                             VariantCopy( pvarResult, & var);
                             bStruct= sal_True;
                         }
                     }
-
                 }
             }
+            ret= bStruct == sal_True ? S_OK : DISP_E_EXCEPTION;
         }
-        ret= bStruct == sal_True ? S_OK : DISP_E_EXCEPTION;
     }
+    catch(BridgeRuntimeError & e)
+    {
+        writeExcepinfo(pexcepinfo, e.message);
+        ret = DISP_E_EXCEPTION;
+    }
+    catch(Exception & e)
+    {
+        OUString message= OUSTR("InterfaceOleWrapper_Impl::InvokeGeneral : \n") +
+                                e.Message;
+        writeExcepinfo(pexcepinfo, message);
+        ret = DISP_E_EXCEPTION;
+    }
+    catch( ... )
+     {
+        OUString message= OUSTR("InterfaceOleWrapper_Impl::InvokeGeneral : \n"
+                                "Unexpected exception");
+        writeExcepinfo(pexcepinfo, message);
+         ret = DISP_E_EXCEPTION;
+     }
     return ret;
 }
 
@@ -1353,32 +1367,32 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                          unsigned int * puArgErr )
 {
     HRESULT ret = S_OK;
-
-    sal_Bool bHandled= sal_False;
-    ret= InvokeGeneral( dispidMember,  wFlags, pdispparams, pvarResult,  pexcepinfo,
-                   puArgErr, bHandled);
-    if( bHandled)
-        return ret;
-
-    if ( dispidMember > 0  && m_xInvocation.is())
+    try
     {
+        sal_Bool bHandled= sal_False;
+        ret= InvokeGeneral( dispidMember,  wFlags, pdispparams, pvarResult,  pexcepinfo,
+                            puArgErr, bHandled);
+        if( bHandled)
+            return ret;
 
-        IdToMemberInfoMap::iterator it_MemberInfo= m_idToMemberInfoMap.find( dispidMember);
-        if( it_MemberInfo != m_idToMemberInfoMap.end() )
+        if ( dispidMember > 0  && m_xInvocation.is())
         {
-            MemberInfo& info= it_MemberInfo->second;
 
-            Sequence<Any> params; // holds converted any s
-            if( ! info.flags )
-            { // DISPID called for the first time
-                if( wFlags == DISPATCH_METHOD )
-                {
+            IdToMemberInfoMap::iterator it_MemberInfo= m_idToMemberInfoMap.find( dispidMember);
+            if( it_MemberInfo != m_idToMemberInfoMap.end() )
+            {
+                MemberInfo& info= it_MemberInfo->second;
 
-                    if( SUCCEEDED(ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )))
+                Sequence<Any> params; // holds converted any s
+                if( ! info.flags )
+                { // DISPID called for the first time
+                    if( wFlags == DISPATCH_METHOD )
                     {
+                        convertDispparamsArgs(dispidMember, wFlags, pdispparams, params );
+
                         if( FAILED( ret= doInvoke( pdispparams, pvarResult,
-                                  pexcepinfo, puArgErr, info.name, params))
-                                  && ret == DISP_E_MEMBERNOTFOUND)
+                                                   pexcepinfo, puArgErr, info.name, params))
+                            && ret == DISP_E_MEMBERNOTFOUND)
                         {
                             // try to get the exact name
                             OUString exactName;
@@ -1389,26 +1403,21 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                                 if( exactName.getLength() != 0)
                                 {
                                     if( SUCCEEDED( ret= doInvoke( pdispparams, pvarResult,
-                                                        pexcepinfo, puArgErr, exactName, params)))
-                                      info.name= exactName;
+                                                                  pexcepinfo, puArgErr, exactName, params)))
+                                        info.name= exactName;
                                 }
                             }
                         }
                         if( SUCCEEDED( ret ) )
                             info.flags= DISPATCH_METHOD;
+                    } //if( wFlags == DISPATCH_METHOD )
 
-                    } // end if ( convertDispparamsArgs )
-                    else // convertDispparamsArgs failed
-                        ret= DISP_E_BADVARTYPE;
-                } //if( wFlags == DISPATCH_METHOD )
-
-                else if( wFlags == DISPATCH_PROPERTYPUT || wFlags == DISPATCH_PROPERTYPUTREF)
-                {
-                    if( SUCCEEDED( ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )))
+                    else if( wFlags == DISPATCH_PROPERTYPUT || wFlags == DISPATCH_PROPERTYPUTREF)
                     {
+                        convertDispparamsArgs(dispidMember, wFlags, pdispparams, params );
                         if( FAILED( ret= doSetProperty( pdispparams, pvarResult,
-                                  pexcepinfo, puArgErr, info.name, params))
-                                  && ret == DISP_E_MEMBERNOTFOUND)
+                                                        pexcepinfo, puArgErr, info.name, params))
+                            && ret == DISP_E_MEMBERNOTFOUND)
                         {
                             // try to get the exact name
                             OUString exactName;
@@ -1419,53 +1428,49 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                                 if( exactName.getLength() != 0)
                                 {
                                     if( SUCCEEDED( ret= doSetProperty( pdispparams, pvarResult,
-                                                        pexcepinfo, puArgErr, exactName, params)))
-                                      info.name= exactName;
+                                                                       pexcepinfo, puArgErr, exactName, params)))
+                                        info.name= exactName;
                                 }
                             }
                         }
                         if( SUCCEEDED( ret ) )
                             info.flags= DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYGET;
-                    } // end if ( convertDispparamsArgs )
-                    else
-                        ret= DISP_E_BADVARTYPE;
+                    }
 
-                }
-
-                else if( wFlags == DISPATCH_PROPERTYGET)
-                {
-                    if( FAILED( ret= doGetProperty( pdispparams, pvarResult,
-                                                    pexcepinfo, info.name))
-                              && ret == DISP_E_MEMBERNOTFOUND)
+                    else if( wFlags == DISPATCH_PROPERTYGET)
                     {
-                        // try to get the exact name
-                        OUString exactName;
-                        if (m_xExactName.is())
+                        if( FAILED( ret= doGetProperty( pdispparams, pvarResult,
+                                                        pexcepinfo, info.name))
+                            && ret == DISP_E_MEMBERNOTFOUND)
                         {
-                            exactName = m_xExactName->getExactName( info.name);
-                            // invoke again
-                            if( exactName.getLength() != 0)
+                            // try to get the exact name
+                            OUString exactName;
+                            if (m_xExactName.is())
                             {
-                                if( SUCCEEDED( ret= doGetProperty( pdispparams, pvarResult,
-                                                    pexcepinfo, exactName)))
-                                  info.name= exactName;
+                                exactName = m_xExactName->getExactName( info.name);
+                                // invoke again
+                                if( exactName.getLength() != 0)
+                                {
+                                    if( SUCCEEDED( ret= doGetProperty( pdispparams, pvarResult,
+                                                                       pexcepinfo, exactName)))
+                                        info.name= exactName;
+                                }
                             }
                         }
+                        if( SUCCEEDED( ret ) )
+                            info.flags= DISPATCH_PROPERTYGET | DISPATCH_PROPERTYPUT;
                     }
-                    if( SUCCEEDED( ret ) )
-                        info.flags= DISPATCH_PROPERTYGET | DISPATCH_PROPERTYPUT;
-                }
-                else if( wFlags & DISPATCH_METHOD &&
-                    (wFlags & DISPATCH_PROPERTYPUT || wFlags & DISPATCH_PROPERTYPUTREF))
-                {
+                    else if( wFlags & DISPATCH_METHOD &&
+                             (wFlags & DISPATCH_PROPERTYPUT || wFlags & DISPATCH_PROPERTYPUTREF))
+                    {
 
-                    OUString exactName;
-                    // convert params for DISPATCH_METHOD or DISPATCH_PROPERTYPUT
-                    if( SUCCEEDED( ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )) )
-                    {// try first as method
+                        OUString exactName;
+                        // convert params for DISPATCH_METHOD or DISPATCH_PROPERTYPUT
+                        convertDispparamsArgs(dispidMember, wFlags, pdispparams, params );
+                        // try first as method
                         if( FAILED( ret= doInvoke( pdispparams, pvarResult,
-                                  pexcepinfo, puArgErr, info.name, params))
-                                  && ret == DISP_E_MEMBERNOTFOUND)
+                                                   pexcepinfo, puArgErr, info.name, params))
+                            && ret == DISP_E_MEMBERNOTFOUND)
                         {
                             // try to get the exact name
                             if (m_xExactName.is())
@@ -1475,8 +1480,8 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                                 if( exactName.getLength() != 0)
                                 {
                                     if( SUCCEEDED( ret= doInvoke( pdispparams, pvarResult,
-                                                        pexcepinfo, puArgErr, exactName, params)))
-                                      info.name= exactName;
+                                                                  pexcepinfo, puArgErr, exactName, params)))
+                                        info.name= exactName;
                                 }
                             }
                         }
@@ -1487,32 +1492,29 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                         if( FAILED( ret) && pdispparams->cArgs == 1)
                         {
                             if( FAILED( ret= doSetProperty( pdispparams, pvarResult,
-                                      pexcepinfo, puArgErr, info.name, params))
-                                      && ret == DISP_E_MEMBERNOTFOUND)
+                                                            pexcepinfo, puArgErr, info.name, params))
+                                && ret == DISP_E_MEMBERNOTFOUND)
                             {
                                 // try to get the exact name
                                 if( exactName.getLength() != 0)
                                 {
                                     if( SUCCEEDED( ret= doSetProperty( pdispparams, pvarResult,
-                                                        pexcepinfo, puArgErr, exactName, params)))
-                                      info.name= exactName;
+                                                                       pexcepinfo, puArgErr, exactName, params)))
+                                        info.name= exactName;
                                 }
                             }
                             if( SUCCEEDED( ret ) )
                                 info.flags= DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYGET;
                         }
-                    } // end if ( convertDispparamsArgs )
-                    else
-                        ret= DISP_E_BADVARTYPE;
-                }
-                else if( wFlags & DISPATCH_METHOD && wFlags & DISPATCH_PROPERTYGET)
-                {
-                    OUString exactName;
-                    if( SUCCEEDED(ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )) )
+                    }
+                    else if( wFlags & DISPATCH_METHOD && wFlags & DISPATCH_PROPERTYGET)
                     {
+                        OUString exactName;
+                        convertDispparamsArgs(dispidMember, wFlags, pdispparams, params );
+
                         if( FAILED( ret= doInvoke( pdispparams, pvarResult,
-                                  pexcepinfo, puArgErr, info.name, params))
-                                  && ret == DISP_E_MEMBERNOTFOUND)
+                                                   pexcepinfo, puArgErr, info.name, params))
+                            && ret == DISP_E_MEMBERNOTFOUND)
                         {
                             // try to get the exact name
                             if (m_xExactName.is())
@@ -1522,83 +1524,92 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                                 if( exactName.getLength() != 0)
                                 {
                                     if( SUCCEEDED( ret= doInvoke( pdispparams, pvarResult,
-                                                        pexcepinfo, puArgErr, exactName, params)))
-                                      info.name= exactName;
+                                                                  pexcepinfo, puArgErr, exactName, params)))
+                                        info.name= exactName;
                                 }
                             }
                         }
                         if( SUCCEEDED( ret ) )
                             info.flags= DISPATCH_METHOD;
 
-                    } // end if ( convertDispparamsArgs )
-                    else
-                        ret= DISP_E_BADVARTYPE;
-
-                    // try as property
-                    if( FAILED( ret) && pdispparams->cArgs == 1)
-                    {
-                        if( FAILED( ret= doGetProperty( pdispparams, pvarResult,
-                                  pexcepinfo, info.name))
-                                  && ret == DISP_E_MEMBERNOTFOUND)
+                        // try as property
+                        if( FAILED( ret) && pdispparams->cArgs == 1)
                         {
-                            if( exactName.getLength() != 0)
+                            if( FAILED( ret= doGetProperty( pdispparams, pvarResult,
+                                                            pexcepinfo, info.name))
+                                && ret == DISP_E_MEMBERNOTFOUND)
                             {
-                                if( SUCCEEDED( ret= doSetProperty( pdispparams, pvarResult,
-                                                    pexcepinfo, puArgErr, exactName, params)))
-                                  info.name= exactName;
+                                if( exactName.getLength() != 0)
+                                {
+                                    if( SUCCEEDED( ret= doSetProperty( pdispparams, pvarResult,
+                                                                       pexcepinfo, puArgErr, exactName, params)))
+                                        info.name= exactName;
+                                }
                             }
+                            if( SUCCEEDED( ret ) )
+                                info.flags= DISPATCH_PROPERTYGET;
                         }
-                        if( SUCCEEDED( ret ) )
-                            info.flags= DISPATCH_PROPERTYGET;
                     }
-                }
 
-                // update ínformation about this member
-                if( ret == DISP_E_MEMBERNOTFOUND)
-                {
-                    // Remember the name as not existing
-                    // and remove the MemberInfo
-                    m_badNameMap[info.name]= sal_False;
-                    m_idToMemberInfoMap.erase( it_MemberInfo);
-                }
-            } // if( ! info.flags )
-            else // IdToMemberInfoMap contains a MemberInfo
-            {
-                if( wFlags & DISPATCH_METHOD && info.flags == DISPATCH_METHOD)
-                {
-                    if( SUCCEEDED(ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )) )
+                    // update ínformation about this member
+                    if( ret == DISP_E_MEMBERNOTFOUND)
                     {
+                        // Remember the name as not existing
+                        // and remove the MemberInfo
+                        m_badNameMap[info.name]= sal_False;
+                        m_idToMemberInfoMap.erase( it_MemberInfo);
+                    }
+                } // if( ! info.flags )
+                else // IdToMemberInfoMap contains a MemberInfo
+                {
+                    if( wFlags & DISPATCH_METHOD && info.flags == DISPATCH_METHOD)
+                    {
+                        convertDispparamsArgs(dispidMember, wFlags, pdispparams, params );
                         ret= doInvoke( pdispparams, pvarResult,
-                                  pexcepinfo, puArgErr, info.name, params);
+                                       pexcepinfo, puArgErr, info.name, params);
                     }
-                    else
-                        ret= DISP_E_BADVARTYPE;
-                }
-                else if( (wFlags & DISPATCH_PROPERTYPUT || wFlags & DISPATCH_PROPERTYPUTREF )  &&
-                        info.flags & DISPATCH_PROPERTYPUT)
-                {
-                    if( SUCCEEDED( ret= convertDispparamsArgs(dispidMember, wFlags, pdispparams, params )) )
+                    else if( (wFlags & DISPATCH_PROPERTYPUT || wFlags & DISPATCH_PROPERTYPUTREF )  &&
+                             info.flags & DISPATCH_PROPERTYPUT)
                     {
+                        convertDispparamsArgs(dispidMember, wFlags, pdispparams, params );
                         ret= doSetProperty( pdispparams, pvarResult,
-                                  pexcepinfo, puArgErr, info.name, params);
+                                            pexcepinfo, puArgErr, info.name, params);
+                    }
+                    else if( (wFlags & DISPATCH_PROPERTYGET) && ( info.flags & DISPATCH_PROPERTYGET))
+                    {
+                        ret= doGetProperty( pdispparams, pvarResult,
+                                            pexcepinfo, info.name);
                     }
                     else
-                        ret= DISP_E_BADVARTYPE;
+                    {
+                        ret= DISP_E_MEMBERNOTFOUND;
+                    }
                 }
-                else if( (wFlags & DISPATCH_PROPERTYGET) && ( info.flags & DISPATCH_PROPERTYGET))
-                {
-                    ret= doGetProperty( pdispparams, pvarResult,
-                              pexcepinfo, info.name);
-                }
-                else
-                {
-                    ret= DISP_E_MEMBERNOTFOUND;
-                }
-            }
-        }//     if( it_MemberInfo != m_idToMemberInfoMap.end() )
-        else
-            ret= DISP_E_MEMBERNOTFOUND;
+            }//     if( it_MemberInfo != m_idToMemberInfoMap.end() )
+            else
+                ret= DISP_E_MEMBERNOTFOUND;
+        }
     }
+    catch(BridgeRuntimeError& e)
+    {
+        writeExcepinfo(pexcepinfo, e.message);
+        ret = DISP_E_EXCEPTION;
+    }
+    catch(Exception& e)
+    {
+        OUString message= OUSTR("UnoObjectWrapperRemoteOpt::Invoke : \n") +
+            e.Message;
+            writeExcepinfo(pexcepinfo, message);
+            ret = DISP_E_EXCEPTION;
+    }
+    catch(...)
+    {
+        OUString message= OUSTR("UnoObjectWrapperRemoteOpt::Invoke : \n"
+                                "Unexpected exception");
+        writeExcepinfo(pexcepinfo, message);
+        ret = DISP_E_EXCEPTION;
+    }
+
     return ret;
 }
 
