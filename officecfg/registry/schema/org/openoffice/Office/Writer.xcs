@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-20 17:03:39 $
+ *  last change: $Author: os $ $Date: 2002-12-04 15:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,10 @@
 				<desc xml:lang="en-US">Contains settings for aligning an object or an element.</desc>
 			</info>
 			<prop oor:name="Position" oor:type="xs:int">
-				<constraints>
+                <info>
+                    <desc xml:lang="en-US">Specifies alignment enumeration values.</desc>
+                </info>
+                <constraints>
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">Zero</desc>
@@ -222,13 +225,11 @@
 				<info>
 					<desc xml:lang="en-US"/>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Content" oor:type="xs:string" oor:localized="true">
 				<info>
 					<desc xml:lang="en-US"/>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 		</group>
 		<group oor:name="IntElementType">
@@ -254,19 +255,16 @@
 				<info>
 					<desc xml:lang="en-US"/>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US"/>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="AsLink" oor:type="xs:boolean">
 				<info>
 					<desc xml:lang="en-US"/>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 		</group>
 		<group oor:name="PositionXYType">
@@ -1077,7 +1075,6 @@
 					<desc xml:lang="en-US">Specifies the font type to be used for the Standard paragraph style.</desc>
 					<label xml:lang="en-US">Standard</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Heading" oor:type="xs:string">
 				<!-- OldPath: Writer/Default_Fonts -->
@@ -1088,7 +1085,6 @@
 					<desc xml:lang="en-US">Specifies the font type to be used for the paragraph&amp;apos;s headings.</desc>
 					<label xml:lang="en-US">Heading</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="List" oor:type="xs:string">
 				<!-- OldPath: Writer/Default_Fonts -->
@@ -1099,7 +1095,6 @@
 					<desc xml:lang="en-US">Specifies the font to be used in the paragraph styles for lists and numbering.</desc>
 					<label xml:lang="en-US">List</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Caption" oor:type="xs:string">
 				<!-- OldPath: Writer/Default_Fonts -->
@@ -1110,7 +1105,6 @@
 					<desc xml:lang="en-US">Specifies the font to be used for the labels of images and tables.</desc>
 					<label xml:lang="en-US">Caption</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Index" oor:type="xs:string">
 				<!-- OldPath: Writer/Default_Fonts -->
@@ -1121,7 +1115,6 @@
 					<desc xml:lang="en-US">Specifies the fonts to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
 					<label xml:lang="en-US">Index</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Document" oor:type="xs:boolean">
 				<!-- OldPath: Writer/Default_Fonts -->
@@ -1146,7 +1139,6 @@
 					<desc xml:lang="en-US">Specifies the font type to be used for the Standard paragraph style.</desc>
 					<label xml:lang="en-US">Standard</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Heading" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
@@ -1155,7 +1147,6 @@
 					<desc xml:lang="en-US">Specifies the font type to be used for the paragraph&amp;apos;s headings.</desc>
 					<label xml:lang="en-US">Heading</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="List" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
@@ -1164,7 +1155,6 @@
 					<desc xml:lang="en-US">Specifies the font to be used in the paragraph styles for lists and numbering.</desc>
 					<label xml:lang="en-US">List</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Caption" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
@@ -1173,7 +1163,6 @@
 					<desc xml:lang="en-US">Specifies the font to be used for the labels of images and tables.</desc>
 					<label xml:lang="en-US">Caption</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Index" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
@@ -1182,7 +1171,6 @@
 					<desc xml:lang="en-US">Specifies the fonts to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
 					<label xml:lang="en-US">Index</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Document" oor:type="xs:boolean">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
@@ -1205,7 +1193,6 @@
 					<desc xml:lang="en-US">Specifies the font type to be used for the Standard paragraph style.</desc>
 					<label xml:lang="en-US">Standard</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Heading" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
@@ -1214,7 +1201,6 @@
 					<desc xml:lang="en-US">Specifies the font type to be used for the paragraph&amp;apos;s headings.</desc>
 					<label xml:lang="en-US">Heading</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="List" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
@@ -1223,7 +1209,6 @@
 					<desc xml:lang="en-US">Specifies the font to be used in the paragraph styles for lists and numbering.</desc>
 					<label xml:lang="en-US">List</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Caption" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
@@ -1232,7 +1217,6 @@
 					<desc xml:lang="en-US">Specifies the font to be used for the labels of images and tables.</desc>
 					<label xml:lang="en-US">Caption</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Index" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
@@ -1241,7 +1225,6 @@
 					<desc xml:lang="en-US">Specifies the fonts to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
 					<label xml:lang="en-US">Index</label>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Document" oor:type="xs:boolean">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
@@ -4227,7 +4210,6 @@
 						<desc xml:lang="en-US">Specifies the AutoText section name.</desc>
 						<label xml:lang="en-US">AutoText section</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Block" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Content -->
@@ -4237,7 +4219,6 @@
 						<author>OS</author>
 						<desc xml:lang="en-US">Specifies the AutoText module name.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="PrivateAddress">
@@ -4253,7 +4234,6 @@
 						<desc xml:lang="en-US">Your first name</desc>
 						<label xml:lang="en-US">First name</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Name" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4264,7 +4244,6 @@
 						<desc xml:lang="en-US">Your last name</desc>
 						<label xml:lang="en-US">Last name</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="ShortCut" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4275,7 +4254,6 @@
 						<desc xml:lang="en-US">Your initials</desc>
 						<label xml:lang="en-US">Initials</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="SecondFirstName" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4286,7 +4264,6 @@
 						<desc xml:lang="en-US">Your first name (2nd entry)</desc>
 						<label xml:lang="en-US">First name 2</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="SecondName" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4297,7 +4274,6 @@
 						<desc xml:lang="en-US">Your last name (2nd entry)</desc>
 						<label xml:lang="en-US">Last name 2</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="SecondShortCut" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4308,7 +4284,6 @@
 						<desc xml:lang="en-US">Your initials (2nd entry)</desc>
 						<label xml:lang="en-US">Initials 2</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Street" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4319,7 +4294,6 @@
 						<desc xml:lang="en-US">The name of the street where you live.</desc>
 						<label xml:lang="en-US">Street</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Zip" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4330,7 +4304,6 @@
 						<desc xml:lang="en-US">Your ZIP code</desc>
 						<label xml:lang="en-US">Zip</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="City" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4341,7 +4314,6 @@
 						<desc xml:lang="en-US">The city where you live.</desc>
 						<label xml:lang="en-US">City</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Country" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4352,7 +4324,6 @@
 						<desc xml:lang="en-US">The country where you live.</desc>
 						<label xml:lang="en-US">Country</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="State" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4363,7 +4334,6 @@
 						<desc xml:lang="en-US">The state where you live.</desc>
 						<label xml:lang="en-US">State</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Title" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4374,7 +4344,6 @@
 						<desc xml:lang="en-US">Your title.</desc>
 						<label xml:lang="en-US">Title</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Profession" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4385,7 +4354,6 @@
 						<desc xml:lang="en-US">Your profession.</desc>
 						<label xml:lang="en-US">Profession</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Phone" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4396,7 +4364,6 @@
 						<desc xml:lang="en-US">Your phone number.</desc>
 						<label xml:lang="en-US">Phone</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Mobile" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4407,7 +4374,6 @@
 						<desc xml:lang="en-US">Your mobile phone number.</desc>
 						<label xml:lang="en-US">Mobile</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Fax" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4418,7 +4384,6 @@
 						<desc xml:lang="en-US">Your fax number.</desc>
 						<label xml:lang="en-US">Fax</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="WebAddress" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4429,7 +4394,6 @@
 						<desc xml:lang="en-US">The address of your homepage.</desc>
 						<label xml:lang="en-US">Homepage</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Email" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4440,7 +4404,6 @@
 						<desc xml:lang="en-US">Your e-mail address.</desc>
 						<label xml:lang="en-US">E-mail</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<group oor:name="BusinessAddress">
@@ -4456,7 +4419,6 @@
 						<desc xml:lang="en-US">The company name, 1st line.</desc>
 						<label xml:lang="en-US">Company</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="CompanyExt" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4467,7 +4429,6 @@
 						<desc xml:lang="en-US">The company name, 2nd line.</desc>
 						<label xml:lang="en-US">CompanyExt</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Slogan" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4478,7 +4439,6 @@
 						<desc xml:lang="en-US">The company slogan.</desc>
 						<label xml:lang="en-US">Slogan</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Street" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4489,7 +4449,6 @@
 						<desc xml:lang="en-US">The name of the street.</desc>
 						<label xml:lang="en-US">Street</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Zip" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4500,7 +4459,6 @@
 						<desc xml:lang="en-US">The ZIP code.</desc>
 						<label xml:lang="en-US">Zip</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="City" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4511,7 +4469,6 @@
 						<desc xml:lang="en-US">The name of the city.</desc>
 						<label xml:lang="en-US">City</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Country" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4522,7 +4479,6 @@
 						<desc xml:lang="en-US">The country where the company is located.</desc>
 						<label xml:lang="en-US">Country</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="State" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4533,7 +4489,6 @@
 						<desc xml:lang="en-US">The state where the company is located.</desc>
 						<label xml:lang="en-US">State</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Position" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4544,7 +4499,6 @@
 						<desc xml:lang="en-US">Your position in the company.</desc>
 						<label xml:lang="en-US">Position</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Phone" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4555,7 +4509,6 @@
 						<desc xml:lang="en-US">Your phone number.</desc>
 						<label xml:lang="en-US">Phone</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Mobile" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4566,7 +4519,6 @@
 						<desc xml:lang="en-US">Your mobile phone number.</desc>
 						<label xml:lang="en-US">Mobile</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Fax" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4577,7 +4529,6 @@
 						<desc xml:lang="en-US">Your fax number.</desc>
 						<label xml:lang="en-US">Fax</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="WebAddress" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4588,7 +4539,6 @@
 						<desc xml:lang="en-US">The internet address for the company.</desc>
 						<label xml:lang="en-US">WebAddress</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Email" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4599,7 +4549,6 @@
 						<desc xml:lang="en-US">Your e-mail address.</desc>
 						<label xml:lang="en-US">Email</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 		</group>
@@ -4785,7 +4734,6 @@
 						<desc xml:lang="en-US">Specifies the sender&amp;apos;s address.</desc>
 						<label xml:lang="en-US">Sender</label>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="UseSender" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Dialog/Envelope/Envelope -->
@@ -5010,7 +4958,6 @@
 							<desc xml:lang="en-US">Specifies if a logo is included with the agenda.</desc>
 							<label xml:lang="en-US">Logo</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<node-ref oor:name="GraphicFile" oor:node-type="FileType">
 						<info>
@@ -5031,7 +4978,6 @@
 							<desc xml:lang="en-US">Title for the agenda.</desc>
 							<label xml:lang="en-US">Title of meeting</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Date" oor:type="xs:int">
 						<!-- OldLocation: wizard.ini -->
@@ -5061,7 +5007,6 @@
 							<desc xml:lang="en-US">Location of the meeting.</desc>
 							<label xml:lang="en-US">Location</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Occasion" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5071,7 +5016,6 @@
 							<desc xml:lang="en-US">Reference Occasion as a header for the agenda.</desc>
 							<label xml:lang="en-US">Occasion</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="BringAlong" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5081,7 +5025,6 @@
 							<desc xml:lang="en-US">Header _Bring along_ for the agenda.</desc>
 							<label xml:lang="en-US">Bring along</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Prepare" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5091,7 +5034,6 @@
 							<desc xml:lang="en-US">Reference _Please prepare_ for the agenda.</desc>
 							<label xml:lang="en-US">Please prepare</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Notes" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5101,7 +5043,6 @@
 							<desc xml:lang="en-US">Element Notes for the agenda.</desc>
 							<label xml:lang="en-US">Notes</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Convened" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5111,7 +5052,6 @@
 							<desc xml:lang="en-US">Header _Convened by_ for the agenda.</desc>
 							<label xml:lang="en-US">Convened by</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Presiding" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5121,7 +5061,6 @@
 							<desc xml:lang="en-US">Header _Presiding_ for the agenda.</desc>
 							<label xml:lang="en-US">Presiding</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Minutes" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5131,7 +5070,6 @@
 							<desc xml:lang="en-US">Header _Minutes_ for the agenda.</desc>
 							<label xml:lang="en-US">Minutes</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Participants" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5141,7 +5079,6 @@
 							<desc xml:lang="en-US">Header Participants for the agenda.</desc>
 							<label xml:lang="en-US">Participants</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Guests" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5151,7 +5088,6 @@
 							<desc xml:lang="en-US">Header_ Guests_ for the agenda.</desc>
 							<label xml:lang="en-US">Guests</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Experts" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5161,7 +5097,6 @@
 							<desc xml:lang="en-US">Header _Experts_ for the agenda.</desc>
 							<label xml:lang="en-US">Experts</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Postprocessing" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5171,7 +5106,6 @@
 							<desc xml:lang="en-US">Header Follow-up for the agenda.</desc>
 							<label xml:lang="en-US">Follow-up</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="UseMinutes" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5181,7 +5115,6 @@
 							<desc xml:lang="en-US">Specifies if minutes are generated for the meeting.</desc>
 							<label xml:lang="en-US">Use minutes? Yes/No</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 				</group>
 				<group oor:name="AgendaTopics">
@@ -5204,7 +5137,6 @@
 								</info>
 							</minInclusive>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<set oor:name="AgendaList" oor:node-type="AgendaType">
 						<!-- OldLocation: wizard.ini -->
@@ -5309,7 +5241,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="DocInfoSubject" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5401,7 +5332,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="TemplateName" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5412,7 +5342,6 @@
 							<desc xml:lang="en-US">Assigns a name to the document template.</desc>
 							<label xml:lang="en-US">Name</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="TemplateInfo" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5422,7 +5351,6 @@
 							<desc xml:lang="en-US">Text that appears in the description field of the properties dialog.</desc>
 							<label xml:lang="en-US">Info</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoDocName" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5432,7 +5360,6 @@
 							<desc xml:lang="en-US">Creates a document name automatically.</desc>
 							<label xml:lang="en-US">Automatic</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoPrefix" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5442,7 +5369,6 @@
 							<desc xml:lang="en-US">Prefix of the automatically created document name.</desc>
 							<label xml:lang="en-US">Prefix</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoPath" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5452,7 +5378,6 @@
 							<desc xml:lang="en-US">Location to save the document.</desc>
 							<label xml:lang="en-US">Destination</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 				</group>
 			</group>
@@ -5472,7 +5397,6 @@
 							<desc xml:lang="en-US">Specifies the template for the letter: personal (true) or business (false).</desc>
 							<label xml:lang="en-US">Which letter template do you want to use?- Business letter/Personal letter</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<node-ref oor:name="Style" oor:node-type="StyleType">
 						<!-- OldLocation: wizard.ini -->
@@ -5494,7 +5418,6 @@
 							<author>OS</author>
 							<desc xml:lang="en-US">Specifies if the logo frame is visible.</desc>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="IsGraphic" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5504,7 +5427,6 @@
 							<desc xml:lang="en-US">Specifies if the logo is a graphic.</desc>
 							<label xml:lang="en-US">Type of logo? - Graphics</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Text" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5514,7 +5436,6 @@
 							<desc xml:lang="en-US">Specifies if the logo is text.</desc>
 							<label xml:lang="en-US">Type of logo? - Text</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<node-ref oor:name="GraphicFile" oor:node-type="FileType">
 						<info>
@@ -5572,7 +5493,6 @@
 							<desc xml:lang="en-US">Specifies the content of the sender text frame.</desc>
 							<label xml:lang="en-US">Enter sender address</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Show" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5582,7 +5502,6 @@
 							<desc xml:lang="en-US">Specifies if the sender text frame is visible in a private letter.</desc>
 							<label xml:lang="en-US">Show sender? - Yes/No</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Repeat" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5592,7 +5511,6 @@
 							<desc xml:lang="en-US">Specifies if the sender is repeated in the addressee (true) or not (false). This option is only available if a business letter is used.</desc>
 							<label xml:lang="en-US">Repeat in addressee field? - Yes/No</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<node-ref oor:name="Position" oor:node-type="PositionXYType">
 						<!-- OldLocation: wizard.ini -->
@@ -5646,7 +5564,6 @@
 							<desc xml:lang="en-US">Specifies the database to be used for the addressee.</desc>
 							<label xml:lang="en-US">Database / Database fields</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="DataTable" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5656,7 +5573,6 @@
 							<desc xml:lang="en-US">Specifies the database table.</desc>
 							<label xml:lang="en-US">Database table or query name</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Content" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5666,7 +5582,6 @@
 							<desc xml:lang="en-US">Specifies the content of the addressee text frame.</desc>
 							<label xml:lang="en-US">Address</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Salutation" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5676,7 +5591,6 @@
 							<desc xml:lang="en-US">Specifies the text for the salutation.</desc>
 							<label xml:lang="en-US">Salutation</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="SalutationField" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5685,7 +5599,6 @@
 							<author>OS</author>
 							<desc xml:lang="en-US">Specifies the database field for the salutation text.</desc>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<node-ref oor:name="Position" oor:node-type="PositionXYType">
 						<!-- OldLocation: wizard.ini -->
@@ -5738,7 +5651,6 @@
 							<desc xml:lang="en-US">Copies</desc>
 							<label xml:lang="en-US">Copy to</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Enclosure" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -5747,7 +5659,6 @@
 							<author>OS</author>
 							<desc xml:lang="en-US">Specifies if there are additional enclosures.</desc>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<group oor:name="Element1">
 						<info>
@@ -5845,7 +5756,6 @@
 								<desc xml:lang="en-US">Specifies if the page number is visible.</desc>
 								<label xml:lang="en-US">Page numbers</label>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<prop oor:name="TextBefore" oor:type="xs:string" oor:localized="true">
 							<!-- OldLocation: wizard.ini -->
@@ -5854,7 +5764,6 @@
 								<author>OS</author>
 								<desc xml:lang="en-US">Specifies the text to place before the page number.</desc>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<prop oor:name="Format" oor:type="xs:int">
 							<!-- OldLocation: wizard.ini -->
@@ -5877,7 +5786,6 @@
 									<desc xml:lang="en-US">Specifies if the total number of pages is visible.</desc>
 									<label xml:lang="en-US">Total page count</label>
 								</info>
-								<value xsi:nil="true"/>
 							</prop>
 							<prop oor:name="TextBefore" oor:type="xs:string" oor:localized="true">
 								<!-- OldLocation: wizard.ini -->
@@ -5886,7 +5794,6 @@
 									<author>OS</author>
 									<desc xml:lang="en-US">Specifies the text to place before the total number of pages.</desc>
 								</info>
-								<value xsi:nil="true"/>
 							</prop>
 						</group>
 					</group>
@@ -5924,7 +5831,6 @@
 								<author>OS</author>
 								<desc xml:lang="en-US">Specifies if the sender frame is visible.</desc>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<node-ref oor:name="Size" oor:node-type="SizeType">
 							<!-- OldLocation: wizard.ini -->
@@ -5955,7 +5861,6 @@
 								<author>OS</author>
 								<desc xml:lang="en-US">Specifies that the logo frame is visible.</desc>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<node-ref oor:name="Size" oor:node-type="SizeType">
 							<!-- OldLocation: wizard.ini -->
@@ -5992,7 +5897,6 @@
 								<desc xml:lang="en-US">Specifies that the footer is visible on Page 1.</desc>
 								<label xml:lang="en-US">Footer on</label>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<prop oor:name="Separator" oor:type="xs:boolean">
 							<!-- OldLocation: wizard.ini -->
@@ -6002,7 +5906,6 @@
 								<desc xml:lang="en-US">Toggles the delimiter line of the document footer.</desc>
 								<label xml:lang="en-US">Separator line</label>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<prop oor:name="Text" oor:type="xs:string" oor:localized="true">
 							<!-- OldLocation: wizard.ini -->
@@ -6011,7 +5914,6 @@
 								<author>OS</author>
 								<desc xml:lang="en-US">Specifies the footer text.</desc>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<prop oor:name="FromBottom" oor:type="xs:int">
 							<!-- OldLocation: wizard.ini -->
@@ -6044,7 +5946,6 @@
 								<desc xml:lang="en-US">Specifies that the footer is visible on the next page.</desc>
 								<label xml:lang="en-US">Footer on</label>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<prop oor:name="FromBottom" oor:type="xs:int">
 							<!-- OldLocation: wizard.ini -->
@@ -6078,7 +5979,6 @@
 							<desc xml:lang="en-US">Specifies the left page margin  [UNIT=1/10 mm].</desc>
 							<label xml:lang="en-US">Page margins - From left</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Right" oor:type="xs:int">
 						<!-- OldLocation: wizard.ini -->
@@ -6088,7 +5988,6 @@
 							<desc xml:lang="en-US">Specifies the right page margin  [UNIT=1/10 mm].</desc>
 							<label xml:lang="en-US">Page margins - From right</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 				</group>
 				<group oor:name="Save">
@@ -6185,7 +6084,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="DocInfoSubject" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6277,7 +6175,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="TemplateName" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6287,7 +6184,6 @@
 							<desc xml:lang="en-US">Specifies the name of the template.</desc>
 							<label xml:lang="en-US">Name</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="TemplateInfo" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6297,7 +6193,6 @@
 							<desc xml:lang="en-US">Specifies the text for the description field in the properties dialog.</desc>
 							<label xml:lang="en-US">Info</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoDocName" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -6307,7 +6202,6 @@
 							<desc xml:lang="en-US">Creates a document name automatically.</desc>
 							<label xml:lang="en-US">Automatic</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoPrefix" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6317,7 +6211,6 @@
 							<desc xml:lang="en-US">Specifies the prefix of the automatically created document name.</desc>
 							<label xml:lang="en-US">Prefix</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoPath" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6327,7 +6220,6 @@
 							<desc xml:lang="en-US">Specifies the location to save the document.</desc>
 							<label xml:lang="en-US">Destination</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 				</group>
 				<group oor:name="Print">
@@ -6364,7 +6256,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Logo" oor:type="xs:int">
 						<!-- OldLocation: wizard.ini -->
@@ -6396,7 +6287,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Printer" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6405,7 +6295,6 @@
 							<author>OS</author>
 							<desc xml:lang="en-US">Specifies the current printer.</desc>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<group oor:name="Tray">
 						<info>
@@ -6420,7 +6309,6 @@
 								<desc xml:lang="en-US">Defines the printer tray to be used  for the first page.</desc>
 								<label xml:lang="en-US">First page</label>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<prop oor:name="ContinuationPage" oor:type="xs:string">
 							<!-- OldLocation: wizard.ini -->
@@ -6431,7 +6319,6 @@
 								<desc xml:lang="en-US">Specifies the paper source for the subsequent pages.</desc>
 								<label xml:lang="en-US">Continuation page</label>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 					</group>
 				</group>
@@ -6484,7 +6371,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<node-ref oor:name="Style" oor:node-type="StyleType">
 						<!-- OldLocation: wizard.ini -->
@@ -6506,7 +6392,6 @@
 								<desc xml:lang="en-US">Specifies the page width  [UNIT=1/10 mm].</desc>
 								<label xml:lang="en-US">Select fax format</label>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<prop oor:name="Height" oor:type="xs:int">
 							<!-- OldLocation: wizard.ini -->
@@ -6516,7 +6401,6 @@
 								<desc xml:lang="en-US">Specifies the page height  [UNIT=1/10 mm].</desc>
 								<label xml:lang="en-US">Select fax format</label>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 					</group>
 				</group>
@@ -6531,7 +6415,6 @@
 							<author>OS</author>
 							<desc xml:lang="en-US">Specifies if the logo frame is visible.</desc>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="IsGraphic" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -6541,7 +6424,6 @@
 							<desc xml:lang="en-US">Specifies if the logo is a graphic.</desc>
 							<label xml:lang="en-US">Type of logo? - Graphics</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Text" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6551,7 +6433,6 @@
 							<desc xml:lang="en-US">Specifies the logo text.</desc>
 							<label xml:lang="en-US">Logo text</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<node-ref oor:name="GraphicFile" oor:node-type="FileType">
 						<!-- OldLocation: wizard.ini -->
@@ -6612,7 +6493,6 @@
 							<desc xml:lang="en-US">Specifies the content of the sender text frame.</desc>
 							<label xml:lang="en-US">Enter sender address</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="TelNumber" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6622,7 +6502,6 @@
 							<desc xml:lang="en-US">Specifies the telephone number of the sender.</desc>
 							<label xml:lang="en-US">Phone</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="FaxNumber" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6632,7 +6511,6 @@
 							<desc xml:lang="en-US">Specifies the fax number of the sender.</desc>
 							<label xml:lang="en-US">Telefax</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<node-ref oor:name="Position" oor:node-type="PositionXYType">
 						<!-- OldLocation: wizard.ini -->
@@ -6685,7 +6563,6 @@
 							<desc xml:lang="en-US">Specifies the database to be used.</desc>
 							<label xml:lang="en-US">Database fields</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="DataTable" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6695,7 +6572,6 @@
 							<desc xml:lang="en-US">Specifies the database table to be used.</desc>
 							<label xml:lang="en-US">Database table or query name</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Content" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6705,7 +6581,6 @@
 							<desc xml:lang="en-US">Specifies the content of the addressee text frame.</desc>
 							<label xml:lang="en-US">Address</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="TelNumber" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6715,7 +6590,6 @@
 							<desc xml:lang="en-US">The telephone number of the addressee.</desc>
 							<label xml:lang="en-US">Phone</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="FaxNumber" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -6725,7 +6599,6 @@
 							<desc xml:lang="en-US">The fax number of the addressee.</desc>
 							<label xml:lang="en-US">Fax</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<node-ref oor:name="Position" oor:node-type="PositionXYType">
 						<!-- OldLocation: wizard.ini -->
@@ -6777,7 +6650,6 @@
 							<desc xml:lang="en-US">Copies</desc>
 							<label xml:lang="en-US">Copy to</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<group oor:name="Element1">
 						<info>
@@ -6890,7 +6762,6 @@
 							<desc xml:lang="en-US">Specifies that the footer is visible on Page 1.</desc>
 							<label xml:lang="en-US">Footer on</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Separator" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -6900,7 +6771,6 @@
 							<desc xml:lang="en-US">Toggles the delimiter line of the document footer.</desc>
 							<label xml:lang="en-US">Separator line</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Text" oor:type="xs:string" oor:localized="true">
 						<!-- OldLocation: wizard.ini -->
@@ -6909,7 +6779,6 @@
 							<author>OS</author>
 							<desc xml:lang="en-US">Specifies the text for the footer.</desc>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 				</group>
 				<group oor:name="PageMargin">
@@ -6924,7 +6793,6 @@
 							<desc xml:lang="en-US">Specifies the left page margin  [UNIT=1/10 mm].</desc>
 							<label xml:lang="en-US">Page margins - From left</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Right" oor:type="xs:int">
 						<!-- OldLocation: wizard.ini -->
@@ -6934,7 +6802,6 @@
 							<desc xml:lang="en-US">Specifies the right page margin  [UNIT=1/10 mm].</desc>
 							<label xml:lang="en-US">Page margins - From right</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 				</group>
 				<group oor:name="Save">
@@ -7031,7 +6898,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="DocInfoSubject" oor:type="xs:string" oor:localized="true">
 						<!-- OldLocation: wizard.ini -->
@@ -7123,7 +6989,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="TemplateName" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -7133,7 +6998,6 @@
 							<desc xml:lang="en-US">Specifies the name of the template.</desc>
 							<label xml:lang="en-US">Name</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="TemplateInfo" oor:type="xs:string" oor:localized="true">
 						<!-- OldLocation: wizard.ini -->
@@ -7143,7 +7007,6 @@
 							<desc xml:lang="en-US">Specifies the text for the description field in the properties dialog.</desc>
 							<label xml:lang="en-US">Info</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoDocName" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -7153,7 +7016,6 @@
 							<desc xml:lang="en-US">Create a document name automatically</desc>
 							<label xml:lang="en-US">Automatic</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoPrefix" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -7163,7 +7025,6 @@
 							<desc xml:lang="en-US">Specifies the prefix of the automatically created document name.</desc>
 							<label xml:lang="en-US">Prefix</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoPath" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -7173,7 +7034,6 @@
 							<desc xml:lang="en-US">Specifies the location to save the document.</desc>
 							<label xml:lang="en-US">Location</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 				</group>
 			</group>
@@ -7221,7 +7081,6 @@
 									</info>
 								</enumeration>
 							</constraints>
-							<value xsi:nil="true"/>
 						</prop>
 						<prop oor:name="IsGraphic" oor:type="xs:boolean">
 							<!-- OldLocation: wizard.ini -->
@@ -7231,7 +7090,6 @@
 								<desc xml:lang="en-US">Specifies if the title of the memo is text (false) or a graphic (true).</desc>
 								<label xml:lang="en-US">As text / As picture</label>
 							</info>
-							<value xsi:nil="true"/>
 						</prop>
 						<node-ref oor:name="File" oor:node-type="FileType">
 							<!-- OldLocation: wizard.ini -->
@@ -7255,7 +7113,6 @@
 							<desc xml:lang="en-US">Add Addressee</desc>
 							<label xml:lang="en-US">To</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Copy" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -7265,7 +7122,6 @@
 							<desc xml:lang="en-US">Copies</desc>
 							<label xml:lang="en-US">Copy to</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="From" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -7275,7 +7131,6 @@
 							<desc xml:lang="en-US">Add Sender address</desc>
 							<label xml:lang="en-US">From</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<group oor:name="Element1">
 						<info>
@@ -7374,7 +7229,6 @@
 							<desc xml:lang="en-US">Date in the header</desc>
 							<label xml:lang="en-US">Date</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Title" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -7384,7 +7238,6 @@
 							<desc xml:lang="en-US">Title in the header</desc>
 							<label xml:lang="en-US">Title</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="PageNumber" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -7394,7 +7247,6 @@
 							<desc xml:lang="en-US">Page number in the header</desc>
 							<label xml:lang="en-US">Page number</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Separator" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -7404,7 +7256,6 @@
 							<desc xml:lang="en-US">Toggles the delimiter line of the document header.</desc>
 							<label xml:lang="en-US">Separator line</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 				</group>
 				<group oor:name="Footer">
@@ -7419,7 +7270,6 @@
 							<desc xml:lang="en-US">Date in the footer</desc>
 							<label xml:lang="en-US">Date</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="PageNumber" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -7429,7 +7279,6 @@
 							<desc xml:lang="en-US">Page number in the footer</desc>
 							<label xml:lang="en-US">Continuation page number</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="Separator" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -7439,7 +7288,6 @@
 							<desc xml:lang="en-US">Toggles the delimiter line of the document footer.</desc>
 							<label xml:lang="en-US">Separator line</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<node-ref oor:name="ConfidentialLevel" oor:node-type="TextElementType">
 						<!-- OldLocation: wizard.ini -->
@@ -7545,7 +7393,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="DocInfoSubject" oor:type="xs:string" oor:localized="true">
 						<!-- OldLocation: wizard.ini -->
@@ -7637,7 +7484,6 @@
 								</info>
 							</enumeration>
 						</constraints>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="TemplateName" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -7647,7 +7493,6 @@
 							<desc xml:lang="en-US">Specifies the name of the template.</desc>
 							<label xml:lang="en-US">Name</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="TemplateInfo" oor:type="xs:string" oor:localized="true">
 						<!-- OldLocation: wizard.ini -->
@@ -7657,7 +7502,6 @@
 							<desc xml:lang="en-US">Specifies the text for the description field in the properties dialog.</desc>
 							<label xml:lang="en-US">Info</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoPrefix" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -7677,7 +7521,6 @@
 							<desc xml:lang="en-US">Specifies the location to save the document.</desc>
 							<label xml:lang="en-US">Location</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoPath" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -7687,7 +7530,6 @@
 							<desc xml:lang="en-US">Specifies the location to save the document.</desc>
 							<label xml:lang="en-US">Destination</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 				</group>
 			</group>
@@ -7861,19 +7703,16 @@
 						<info>
 							<desc xml:lang="en-US">Determines if the file name is generated from a database field or from user input.</desc>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="FromDatabaseField" oor:type="xs:string">
 						<info>
 							<desc xml:lang="en-US">Specifies the column name to be used as file name.</desc>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="FromManualSetting" oor:type="xs:string">
 						<info>
 							<desc xml:lang="en-US">Specifies the name entered manually.</desc>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 				</group>
 			</group>
