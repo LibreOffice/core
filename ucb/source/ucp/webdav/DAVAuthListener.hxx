@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVAuthListener.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _DAVAUTHLISTENER_HXX_
 #define _DAVAUTHLISTENER_HXX_
 
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -82,15 +79,15 @@ namespace webdav_ucp
 class DAVAuthListener
 {
     public:
-        virtual int authenticate(const ::rtl::OUString &       inRealm,
-                                 const ::rtl::OUString &       inHostName,
-                                       ::rtl::OUStringBuffer & inUserName,
-                                       ::rtl::OUStringBuffer & inPassWord,
-                                 const com::sun::star::uno::Reference<
-                                 com::sun::star::ucb::XCommandEnvironment >& inEnv)
-                                                                = 0;
-        virtual ~DAVAuthListener() {}
+        virtual int authenticate(
+            const ::rtl::OUString & inRealm,
+            const ::rtl::OUString & inHostName,
+            ::rtl::OUString & inoutUserName,
+            ::rtl::OUString & outPassWord,
+            const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment >& inEnv ) = 0;
 };
 
 }; // namespace webdav_ucp
+
 #endif // _DAVAUTHLISTENER_HXX_

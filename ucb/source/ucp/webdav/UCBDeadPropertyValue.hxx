@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 14:58:06 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _UCBDEADPROPERTYVALUE_HXX_
 #define _UCBDEADPROPERTYVALUE_HXX_
 
-#ifndef HIP_XML_H
-#include <hip_xml.h>
+#ifndef NE_XML_H
+#include <neon/ne_xml.h>
 #endif
 
 #ifndef _RTL_STRING_HXX_
@@ -83,7 +83,7 @@ namespace webdav_ucp
 class UCBDeadPropertyValue
 {
 private:
-    static const hip_xml_elm elements[];
+    static const ne_xml_elm elements[];
 
     static const rtl::OUString aTypeString;
     static const rtl::OUString aTypeLong;
@@ -107,10 +107,11 @@ public:
     static bool toXML( const com::sun::star::uno::Any & rInData,
                        rtl::OUString & rOutData );
 
-    static int  validate_callback( hip_xml_elmid parent,
-                                   hip_xml_elmid child );
+    static int  validate_callback( void * userdata,
+                                   ne_xml_elmid parent,
+                                   ne_xml_elmid child );
     static int  endelement_callback( void * userdata,
-                                      const struct hip_xml_elm * s,
+                                     const struct ne_xml_elm * s,
                                       const char * cdata );
 };
 

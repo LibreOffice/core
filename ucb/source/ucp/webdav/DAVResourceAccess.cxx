@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@ class AuthListener : public DAVAuthListener
 public:
     virtual int authenticate( const ::rtl::OUString & inRealm,
                                  const ::rtl::OUString & inHostName,
-                                 ::rtl::OUStringBuffer & inUserName,
-                                 ::rtl::OUStringBuffer & inPassWord,
+                              ::rtl::OUString & inoutUserName,
+                              ::rtl::OUString & outPassWord,
                                  const com::sun::star::uno::Reference<
                                    com::sun::star::ucb::XCommandEnvironment >&
                                     Environment );
@@ -123,8 +123,8 @@ using namespace com::sun::star;
 // virtual
 int AuthListener::authenticate( const ::rtl::OUString & inRealm,
                                    const ::rtl::OUString & inHostName,
-                                   ::rtl::OUStringBuffer & inUserName,
-                                   ::rtl::OUStringBuffer & inPassWord,
+                                ::rtl::OUString & inoutUserName,
+                                ::rtl::OUString & outPassWord,
                                    const uno::Reference<
                                        ucb::XCommandEnvironment >&  Environment )
 {
@@ -135,11 +135,10 @@ int AuthListener::authenticate( const ::rtl::OUString & inRealm,
         if ( xIH.is() )
         {
             rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
-                = new ucbhelper::SimpleAuthenticationRequest(
-                                                inHostName,
-                                                inRealm,
-                                                rtl::OUString( inUserName ),
-                                                rtl::OUString( inPassWord ) );
+                = new ucbhelper::SimpleAuthenticationRequest( inHostName,
+                                                              inRealm,
+                                                              inoutUserName,
+                                                              outPassWord );
             xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
@@ -156,8 +155,8 @@ int AuthListener::authenticate( const ::rtl::OUString & inRealm,
                         ucbhelper::InteractionSupplyAuthentication > & xSupp
                             = xRequest->getAuthenticationSupplier();
 
-                    inUserName = xSupp->getUserName();
-                    inPassWord = xSupp->getPassword();
+                    inoutUserName = xSupp->getUserName();
+                    outPassWord   = xSupp->getPassword();
 
                     // go on.
                     return 0;
@@ -188,20 +187,9 @@ DAVResourceAccess::DAVResourceAccess(
                 const rtl::OUString & rURL )
     throw( DAVException )
 : m_aURL( rURL ),
-  m_bRedirected( sal_False ),
   m_xSMgr( rSMgr ),
   m_xSessionFactory( rSessionFactory )
 {
-}
-
-//=========================================================================
-void DAVResourceAccess::setURL( const rtl::OUString & rNewURL )
-    throw( DAVException )
-{
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    m_bRedirected = sal_True;
-    m_aURL  = rNewURL;
-    m_aPath = rtl::OUString(); // Next initialize() will create new session.
 }
 
 //=========================================================================
@@ -582,12 +570,12 @@ void DAVResourceAccess::UNLOCK ( const ucb::Lock & rLock,
 }
 
 //=========================================================================
-// DAVRedirectionListener method
-// virtual
-void DAVResourceAccess::redirectNotify( const rtl::OUString & rFromURI,
-                                        const rtl::OUString & rToURI )
+void DAVResourceAccess::setURL( const rtl::OUString & rNewURL )
+    throw( DAVException )
 {
-    setURL( rToURI );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    m_aURL  = rNewURL;
+    m_aPath = rtl::OUString(); // Next initialize() will create new session.
 }
 
 //=========================================================================
@@ -605,18 +593,21 @@ void DAVResourceAccess::initialize()
             if ( !m_aPath.getLength() )
                 throw DAVException( DAVException::DAV_INVALID_ARG );
 
-            // set the webdav session
-            try
+            if ( !m_xSession.is() || !m_xSession->CanUse( m_aURL ) )
             {
-                m_xSession
-                    = m_xSessionFactory->createDAVSession( m_aURL, m_xSMgr );
-                m_xSession->setServerAuthListener( &webdavAuthListener );
-                m_xSession->setRedirectionListener( this );
-            }
-            catch ( DAVException const & )
-            {
-                m_aPath = rtl::OUString();
-                throw;
+                // create new webdav session
+                try
+                {
+                    m_xSession
+                        = m_xSessionFactory->createDAVSession( m_aURL,
+                                                               m_xSMgr );
+                    m_xSession->setServerAuthListener( &webdavAuthListener );
+                }
+                catch ( DAVException const & )
+                {
+                    m_aPath = rtl::OUString();
+                    throw;
+                }
             }
         }
     }
@@ -639,14 +630,6 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e )
             {
             }
             return sal_False;
-
-        case DAVException::DAV_HTTP_AUTH:
-        case DAVException::DAV_HTTP_AUTHPROXY:
-        case DAVException::DAV_HTTP_SERVERAUTH:
-        case DAVException::DAV_HTTP_PROXYAUTH:
-            // Retry. If user cancels the login request,
-            // we will get DAV_HTTP_ERROR and abort.
-            return sal_True;
 
         default:
             return sal_False; // Abort

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@
 #ifndef _DAVAUTHLISTENER_HXX_
 #include "DAVAuthListener.hxx"
 #endif
-#ifndef _DAVREDIRECTIONLISTENER_HXX_
-#include "DAVRedirectionListener.hxx"
-#endif
 #ifndef _DAVEXCEPTION_HXX_
 #include "DAVException.hxx"
 #endif
@@ -112,19 +109,18 @@ namespace webdav_ucp
 
 class DAVSessionFactory;
 
-class DAVResourceAccess : public DAVRedirectionListener
+class DAVResourceAccess
 {
     osl::Mutex    m_aMutex;
     rtl::OUString m_aURL;
     rtl::OUString m_aPath;
     rtl::Reference< DAVSession > m_xSession;
-    sal_Bool m_bRedirected;
     rtl::Reference< DAVSessionFactory > m_xSessionFactory;
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
 
 public:
-    DAVResourceAccess() : m_xSessionFactory( 0 ), m_bRedirected( sal_False ) {}
+    DAVResourceAccess() : m_xSessionFactory( 0 ) {}
     DAVResourceAccess( const com::sun::star::uno::Reference<
                         com::sun::star::lang::XMultiServiceFactory > & rSMgr,
                        rtl::Reference<
@@ -248,10 +244,6 @@ public:
               const com::sun::star::uno::Reference<
                    com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( DAVException );
-
-    // DAVRedirectionListener methods
-    virtual void redirectNotify( const rtl::OUString & rFromURI,
-                                 const rtl::OUString & rToURI );
 
 private:
     sal_Bool handleException( DAVException & e );

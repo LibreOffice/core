@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,41 +86,29 @@ namespace webdav_ucp
 class NeonSession : public DAVSession
 {
     private:
-        osl::Mutex                mMutex;
-        rtl::OUString             mScheme;
-        rtl::OUString             mHostName;
-        rtl::OUString             mProxyName;
-        sal_Int32                 mPort;
-        sal_Int32                 mProxyPort;
-        HttpSession *             mHttpSession;
-        DAVAuthListener *         mListener;
-        DAVRedirectionListener *  mRedirectionListener;
+        osl::Mutex        m_aMutex;
+        rtl::OUString     m_aScheme;
+        rtl::OUString     m_aHostName;
+        rtl::OUString     m_aProxyName;
+        sal_Int32         m_nPort;
+        sal_Int32         m_nProxyPort;
+        HttpSession *     m_pHttpSession;
+
+        void *            m_pRequestData;
+
+        // @@@ This should really be per-request data. A NeonSession
+        // instance can handle multiple requests at a time!!!
+        DAVAuthListener * m_pListener;
+
         // Note: Uncomment the following if locking support is required
         // NeonLockSession *      mNeonLockSession;
 
-        static sal_Bool           sSockInited;
-        static http_request_hooks mRequestHooks;
+        static sal_Bool   m_bSockInited;
 
-        // @@@ THIS DOES NOT WORK ANY LONGER IF NEON WILL GET ABLE TO
-        // PROCESS MULTIPLE REQUESTS AT A TIME!!!
+        // @@@ This should really be per-request data. A NeonSession
+        // instance can handle multiple requests at a time!!!
         com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment > mEnv;
-
-        // @@@ THIS DOES NOT WORK ANY LONGER IF NEON WILL GET ABLE TO
-        // PROCESS MULTIPLE REQUESTS AT A TIME!!!
-        // Username/password entered during last request. Cleared, if
-        // request was processed successfully. Kept as long as request
-        // returns with an error.
-        rtl::OUString mPrevUserName;
-        rtl::OUString mPrevPassWord;
-
-        // @@@ THIS DOES NOT WORK ANY LONGER IF NEON WILL GET ABLE TO
-        // PROCESS MULTIPLE REQUESTS AT A TIME!!!
-        // The contwnt type / referer to add to the current request heder.
-        // Will be reset after request was processed.
-        rtl::OUString mCurrentReferer;
-
-        rtl::OUString mContentType;
+            com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
     protected:
         virtual ~NeonSession();
@@ -136,9 +124,6 @@ class NeonSession : public DAVSession
 
         virtual void setServerAuthListener(DAVAuthListener * inDAVAuthListener);
         virtual void setProxyAuthListener(DAVAuthListener * inDAVAuthListener);
-
-        virtual void setRedirectionListener(
-            DAVRedirectionListener * inRedirectionListener );
 
         virtual void OPTIONS( const ::rtl::OUString &  inPath,
                               DAVCapabilities & outCapabilities,
@@ -257,43 +242,34 @@ class NeonSession : public DAVSession
             throw ( DAVException );
 
         // Create a Neon session for server at supplied host & port
-        HttpSession *   CreateSession( const ::rtl::OUString & inHostName,
+        HttpSession *   CreateSession( const ::rtl::OUString & inScheme,
+                                       const ::rtl::OUString & inHostName,
                                        int inPort,
                                        const ::rtl::OUString & inProxyName,
                                        int inProxyPort,
-                                       bool inFtp,
                                        const ::rtl::OUString & inUserInfo )
             throw( DAVException );
 
-        // A simple Neon http_block_reader for use with a http GET method
-        // in conjunction with an XInputStream
-        static void     GETReader( void *       inUserData,
-                                   const char * inBuf,
-                                   size_t       inLen );
+        // A simple Neon response_block_reader for use with an XInputStream
+        static void ResponseBlockReader( void * inUserData,
+                                         const char * inBuf,
+                                         size_t       inLen );
 
-        // A simple Neon http_block_reader for use with a http GET method
-        // in conjunction with an XOutputStream
-        static void     GETWriter( void *       inUserData,
-                                   const char * inBuf,
-                                   size_t       inLen );
+        // A simple Neon response_block_reader for use with an XOutputStream
+        static void ResponseBlockWriter( void *       inUserData,
+                                         const char * inBuf,
+                                         size_t       inLen );
 
         // Note: Uncomment the following if locking support is required
         // void         Lockit( const Lock & inLock, bool inLockit )
         //  throw ( DAVException );
 
         // Authentication callback.
-        static int      NeonAuth( void *        inUserData,
-                                  const char *  inRealm,
-                                  char **       inUserName,
-                                  char **       inPassWord );
-
-        // Redirection callbacks.
-        static int RedirectConfirm( void *       userdata,
-                                     const char * src,
-                                    const char * dest );
-        static void RedirectNotify( void *       userdata,
-                                     const char * src,
-                                    const char * dest );
+        static int NeonAuth( void * inUserData,
+                             const char * inRealm,
+                             int attempt,
+                             char * inoutUserName,
+                             char * inoutPassWord );
 
         // Progress / Status callbacks.
         static void NeonSession::ProgressNotify( void * userdata,
@@ -301,11 +277,42 @@ class NeonSession : public DAVSession
                                                  off_t total );
 
         static void NeonSession::StatusNotify( void * userdata,
-                                               http_conn_status status,
+                                               ne_conn_status status,
                                                const char *info );
 
         // pre-send-request callback
-        static void PreSendRequest( void * priv, sbuffer req );
+        static void PreSendRequest( ne_request * req,
+                                    void * userdata,
+                                    ne_buffer * headers );
+
+        // low level GET implementation, used by both public GET implementations
+        static int GET( ne_session * sess,
+                        const char * uri,
+                        ne_block_reader reader,
+                        void * userdata );
+
+        // Buffer-based PUT implementation. Neon only has file descriptor-
+        // based API.
+        static int PUT( ne_session * sess,
+                        const char * uri,
+                        const char * buffer,
+                        size_t size );
+
+        // Buffer-based POST implementation. Neon only has file descriptor-
+        // based API.
+        int POST( ne_session * sess,
+                  const char * uri,
+                  const char * buffer,
+                  ne_block_reader reader,
+                  void * userdata,
+                  const rtl::OUString & rContentType,
+                  const rtl::OUString & rReferer );
+
+        // Helper: XInputStream -> Sequence< sal_Int8 >
+        static bool getDataFromInputStream(
+                            const com::sun::star::uno::Reference<
+                                com::sun::star::io::XInputStream > & xStream,
+                            com::sun::star::uno::Sequence< sal_Int8 > & rData );
 };
 
 }; // namespace_ucp

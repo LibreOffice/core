@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonTypes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,14 @@
 #ifndef _NEONTYPES_HXX_
 #define _NEONTYPES_HXX_
 
-#ifndef HTTP_BASIC_H
-#include <http_basic.h>
+#ifndef NE_BASIC_H
+#include <neon/ne_basic.h>
 #endif
-#ifndef HTTP_REQUEST_H
-#include <http_request.h>
+#ifndef NE_REQUEST_H
+#include <neon/ne_request.h>
 #endif
-#ifndef DAV_PROPS_H
-#include <dav_props.h>
+#ifndef NE_PROPS_H
+#include <neon/ne_props.h>
 #endif
 
 #ifdef WIN32
@@ -77,15 +77,15 @@
 #undef ERROR
 #endif
 
-typedef http_session                HttpSession;
-typedef http_req                    HttpRequest;
-typedef http_status                 HttpStatus;
-typedef http_server_capabilities    HttpServerCapabilities;
+typedef ne_session                  HttpSession;
+typedef ne_request                  HttpRequest;
+typedef ne_status                   HttpStatus;
+typedef ne_server_capabilities      HttpServerCapabilities;
 
-typedef dav_propfind_handler        NeonPropFindHandler;
-typedef dav_propname                NeonPropName;
+typedef ne_propfind_handler         NeonPropFindHandler;
+typedef ne_propname                 NeonPropName;
 typedef struct hip_xml_elm          NeonPropFindXmlElem;
-typedef hip_xml_elmid               NeonPropFindXmlId;
-typedef dav_prop_result_set         NeonPropFindResultSet;
+typedef ne_xml_elmid                NeonPropFindXmlId;
+typedef ne_prop_result_set          NeonPropFindResultSet;
 
 #endif _NEONTYPES_HXX_

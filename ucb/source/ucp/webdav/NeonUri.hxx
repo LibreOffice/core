@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _NEONURI_HXX_
 #define _NEONURI_HXX_
 
-#ifndef URI_H
-#include <uri.h>
+#ifndef NE_URI_H
+#include <neon/ne_uri.h>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
@@ -89,9 +89,9 @@ class NeonUri
         ::rtl::OUString mHostName;
         sal_Int32       mPort;
         ::rtl::OUString mPath;
-        static uri      sUriDefaultsHTTP;
-        static uri      sUriDefaultsHTTPS;
-        static uri      sUriDefaultsFTP;
+        static ne_uri   sUriDefaultsHTTP;
+        static ne_uri   sUriDefaultsHTTPS;
+        static ne_uri   sUriDefaultsFTP;
 
         void calculateURI ();
 

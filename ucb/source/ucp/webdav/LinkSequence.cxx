@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinkSequence.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 14:58:06 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,18 +68,18 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
 
-#define DAV_ELM_LOCK_FIRST (HIP_ELM_UNUSED)
+#define DAV_ELM_LOCK_FIRST (NE_ELM_UNUSED)
 
 #define DAV_ELM_link    (DAV_ELM_LOCK_FIRST +  1)
 #define DAV_ELM_src     (DAV_ELM_LOCK_FIRST +  2)
 #define DAV_ELM_dst     (DAV_ELM_LOCK_FIRST +  3)
 
 // static
-const struct hip_xml_elm LinkSequence::elements[] =
+const struct ne_xml_elm LinkSequence::elements[] =
 {
     { "", "link", DAV_ELM_link, 0 },
-    { "", "src",  DAV_ELM_src,  HIP_XML_CDATA },
-    { "", "dst",  DAV_ELM_dst,  HIP_XML_CDATA },
+    { "", "src",  DAV_ELM_src,  NE_XML_CDATA },
+    { "", "dst",  DAV_ELM_dst,  NE_XML_CDATA },
     { 0 }
 };
 
@@ -105,7 +105,7 @@ bool LinkSequence::createFromXML( const rtl::OString & rInData,
     sal_Int32 nEnd   = rInData.indexOf( "</link>" );
     while ( nEnd > -1 )
     {
-        hip_xml_parser * parser = hip_xml_create();
+        ne_xml_parser * parser = ne_xml_create();
         if ( !parser )
         {
             success = false;
@@ -113,20 +113,20 @@ bool LinkSequence::createFromXML( const rtl::OString & rInData,
         }
 
         LinkSequenceParseContext aCtx;
-        hip_xml_push_handler( parser,
-                                  elements,
-                                  validate_callback,
-                                  0, // startelement_callback
-                                  endelement_callback,
-                                  &aCtx );
+        ne_xml_push_handler( parser,
+                             elements,
+                             validate_callback,
+                             0, // startelement_callback
+                             endelement_callback,
+                             &aCtx );
 
-        hip_xml_parse( parser,
-                       rInData.getStr() + nStart,
-                       nEnd - nStart + TOKEN_LENGTH );
+        ne_xml_parse( parser,
+                      rInData.getStr() + nStart,
+                      nEnd - nStart + TOKEN_LENGTH );
 
-        success = !!hip_xml_valid( parser );
+        success = !!ne_xml_valid( parser );
 
-        hip_xml_destroy( parser );
+        ne_xml_destroy( parser );
 
         if ( !success )
             break;
@@ -177,16 +177,17 @@ bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
 
 //////////////////////////////////////////////////////////////////////////
 // static
-int LinkSequence::validate_callback( hip_xml_elmid parent, hip_xml_elmid child )
+int LinkSequence::validate_callback(
+            void * userdata, ne_xml_elmid parent, ne_xml_elmid child )
 {
     // @@@
-    return HIP_XML_VALID;
+    return NE_XML_VALID;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // static
 int LinkSequence::endelement_callback( void * userdata,
-                                        const struct hip_xml_elm * s,
+                                       const struct ne_xml_elm * s,
                                         const char * cdata )
 {
     LinkSequenceParseContext * pCtx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UCBDeadPropertyValue.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,18 +75,18 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
 
-#define DAV_ELM_LOCK_FIRST (HIP_ELM_UNUSED)
+#define DAV_ELM_LOCK_FIRST (NE_ELM_UNUSED)
 
 #define DAV_ELM_ucbprop (DAV_ELM_LOCK_FIRST +  1)
 #define DAV_ELM_type    (DAV_ELM_LOCK_FIRST +  2)
 #define DAV_ELM_value   (DAV_ELM_LOCK_FIRST +  3)
 
 // static
-const struct hip_xml_elm UCBDeadPropertyValue::elements[] =
+const struct ne_xml_elm UCBDeadPropertyValue::elements[] =
 {
     { "", "ucbprop", DAV_ELM_ucbprop, 0 },
-    { "", "type",    DAV_ELM_type,    HIP_XML_CDATA },
-    { "", "value",   DAV_ELM_value,   HIP_XML_CDATA },
+    { "", "type",    DAV_ELM_type,    NE_XML_CDATA },
+    { "", "value",   DAV_ELM_value,   NE_XML_CDATA },
     { 0 }
 };
 
@@ -317,22 +317,22 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
 {
     bool success = false;
 
-    hip_xml_parser * parser = hip_xml_create();
+    ne_xml_parser * parser = ne_xml_create();
     if ( parser )
     {
         UCBDeadPropertyValueParseContext aCtx;
-        hip_xml_push_handler( parser,
+        ne_xml_push_handler( parser,
                                   elements,
                                   validate_callback,
                                   0, // startelement_callback
                                   endelement_callback,
                                   &aCtx );
 
-        hip_xml_parse( parser, rInData.getStr(), rInData.getLength() );
+        ne_xml_parse( parser, rInData.getStr(), rInData.getLength() );
 
-        success = !!hip_xml_valid( parser );
+        success = !!ne_xml_valid( parser );
 
-        hip_xml_destroy( parser );
+        ne_xml_destroy( parser );
 
         if ( success )
         {
@@ -501,31 +501,32 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
 
 //////////////////////////////////////////////////////////////////////////
 // static
-int UCBDeadPropertyValue::validate_callback(
-                            hip_xml_elmid parent, hip_xml_elmid child )
+int UCBDeadPropertyValue::validate_callback( void * userdata,
+                                             ne_xml_elmid parent,
+                                             ne_xml_elmid child )
 {
     switch ( parent )
     {
         case 0:
             if ( child == DAV_ELM_ucbprop )
-                return HIP_XML_VALID;
+                return NE_XML_VALID;
 
             break;
 
         case DAV_ELM_ucbprop:
-            return HIP_XML_VALID;
+            return NE_XML_VALID;
 
         default:
             break;
     }
 
-    return HIP_XML_DECLINE;
+    return NE_XML_DECLINE;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // static
 int UCBDeadPropertyValue::endelement_callback( void * userdata,
-                                                const struct hip_xml_elm * s,
+                                               const struct ne_xml_elm * s,
                                                 const char * cdata )
 {
     UCBDeadPropertyValueParseContext * pCtx

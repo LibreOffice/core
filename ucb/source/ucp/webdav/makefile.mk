@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: svesik $ $Date: 2002-03-11 15:42:24 $
+#   last change: $Author: kso $ $Date: 2002-08-15 10:05:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,8 +103,6 @@ SLOFILES=\
     $(SLO)$/NeonUri.obj		\
     $(SLO)$/NeonInputStream.obj	\
     $(SLO)$/NeonPropFindRequest.obj	\
-    $(SLO)$/NeonPUTFile.obj		\
-        $(SLO)$/NeonPOSTFile.obj        \
     $(SLO)$/NeonSession.obj 	\
     $(SLO)$/DateTimeHelper.obj	\
     $(SLO)$/proxyconfig.obj		\

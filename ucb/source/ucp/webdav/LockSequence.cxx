@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LockSequence.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
 
-#define DAV_ELM_LOCK_FIRST (HIP_ELM_UNUSED)
+#define DAV_ELM_LOCK_FIRST (NE_ELM_UNUSED)
 
 #define DAV_ELM_activelock  (DAV_ELM_LOCK_FIRST +  1)
 #define DAV_ELM_lockscope   (DAV_ELM_LOCK_FIRST +  2)
@@ -83,19 +83,19 @@ using namespace com::sun::star;
 #define DAV_ELM_href        (DAV_ELM_LOCK_FIRST + 11)
 
 // static
-const struct hip_xml_elm LockSequence::elements[] =
+const struct ne_xml_elm LockSequence::elements[] =
 {
     { "", "activelock", DAV_ELM_activelock, 0 },
     { "", "lockscope",  DAV_ELM_lockscope,  0 },
     { "", "locktype",   DAV_ELM_locktype,   0 },
-    { "", "depth",      DAV_ELM_depth,      HIP_XML_CDATA },
-    { "", "owner",      DAV_ELM_owner,      HIP_XML_COLLECT }, // ANY
-    { "", "timeout",    DAV_ELM_timeout,    HIP_XML_CDATA },
+    { "", "depth",      DAV_ELM_depth,      NE_XML_CDATA },
+    { "", "owner",      DAV_ELM_owner,      NE_XML_COLLECT }, // ANY
+    { "", "timeout",    DAV_ELM_timeout,    NE_XML_CDATA },
     { "", "locktoken",  DAV_ELM_locktoken,  0 },
     { "", "exclusive",  DAV_ELM_exclusive,  0 }, // leaf
     { "", "shared",     DAV_ELM_shared,     0 }, // leaf
     { "", "write",      DAV_ELM_write,      0 }, // leaf
-    { "", "href",       DAV_ELM_href,       HIP_XML_CDATA },
+    { "", "href",       DAV_ELM_href,       NE_XML_CDATA },
     { 0 }
 };
 
@@ -121,7 +121,7 @@ bool LockSequence::createFromXML( const rtl::OString & rInData,
     sal_Int32 nEnd   = rInData.indexOf( "</activelock>" );
     while ( nEnd > -1 )
     {
-        hip_xml_parser * parser = hip_xml_create();
+        ne_xml_parser * parser = ne_xml_create();
         if ( !parser )
         {
             success = false;
@@ -129,20 +129,20 @@ bool LockSequence::createFromXML( const rtl::OString & rInData,
         }
 
         LockSequenceParseContext aCtx;
-        hip_xml_push_handler( parser,
+        ne_xml_push_handler( parser,
                                   elements,
                                   validate_callback,
                                   0, // startelement_callback
                                   endelement_callback,
                                   &aCtx );
 
-        hip_xml_parse( parser,
+        ne_xml_parse( parser,
                        rInData.getStr() + nStart,
                        nEnd - nStart + TOKEN_LENGTH );
 
-        success = !!hip_xml_valid( parser );
+        success = !!ne_xml_valid( parser );
 
-        hip_xml_destroy( parser );
+        ne_xml_destroy( parser );
 
         if ( !success )
             break;
@@ -166,16 +166,18 @@ bool LockSequence::createFromXML( const rtl::OString & rInData,
 
 //////////////////////////////////////////////////////////////////////////
 // static
-int LockSequence::validate_callback( hip_xml_elmid parent, hip_xml_elmid child )
+int LockSequence::validate_callback( void * userdata,
+                                     ne_xml_elmid parent,
+                                     ne_xml_elmid child )
 {
     // @@@
-    return HIP_XML_VALID;
+    return NE_XML_VALID;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // static
 int LockSequence::endelement_callback( void * userdata,
-                                        const struct hip_xml_elm * s,
+                                       const struct ne_xml_elm * s,
                                         const char * cdata )
 {
     LockSequenceParseContext * pCtx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-30 15:36:30 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
         thePropNames[ theIndex ].nspace = NULL;
         thePropNames[ theIndex ].name   = NULL;
 
-           nError = dav_simple_propfind( inSession,
+        nError = ne_simple_propfind( inSession,
                                           inPath,
                                           inDepth,
                                           thePropNames,
@@ -135,7 +135,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
     else
     {
         // ALLPROP
-           nError = dav_simple_propfind( inSession,
+        nError = ne_simple_propfind( inSession,
                                           inPath,
                                           inDepth,
                                           NULL, // 0 == allprop
@@ -144,8 +144,8 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
     }
 
     // #87585# - Sometimes neon lies (because some servers lie).
-    if ( ( nError == HTTP_OK ) && ioResources.empty() )
-        nError = HTTP_ERROR;
+    if ( ( nError == NE_OK ) && ioResources.empty() )
+        nError = NE_ERROR;
 }
 
 // -------------------------------------------------------------------
@@ -160,15 +160,15 @@ NeonPropFindRequest::NeonPropFindRequest(
                             std::vector< DAVResourceInfo > & ioResInfo,
                             int & nError )
 {
-    nError = dav_propnames( inSession,
+    nError = ne_propnames( inSession,
                             inPath,
                             inDepth,
                             propnames_results,
                             &ioResInfo );
 
     // #87585# - Sometimes neon lies (because some servers lie).
-    if ( ( nError == HTTP_OK ) && ioResInfo.empty() )
-        nError = HTTP_ERROR;
+    if ( ( nError == NE_OK ) && ioResInfo.empty() )
+        nError = NE_ERROR;
 }
 
 // -------------------------------------------------------------------
@@ -189,7 +189,7 @@ void NeonPropFindRequest::propfind_results( void* userdata,
     DAVResource theResource(
                         OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
 
-    dav_propset_iterate( set, propfind_iter, &theResource );
+    ne_propset_iterate( set, propfind_iter, &theResource );
 
     // Add entry to resources list.
     vector< DAVResource > * theResources
@@ -246,21 +246,13 @@ int NeonPropFindRequest::propfind_iter( void* userdata,
 
     if ( !bHasValue )
     {
-#if SUPD>614
         if ( rtl_str_compareIgnoreAsciiCase(
                                     pname->name, "resourcetype" ) == 0 )
-#else
-        if ( rtl_str_equalsIgnoreCase( pname->name, "resourcetype" ) )
-#endif
         {
             OString aValue( value );
             if ( aValue.getLength() )
             {
-#if SUPD>614
                 aValue = aValue.toAsciiLowerCase();
-#else
-                aValue = aValue.toLowerCase();
-#endif
                 if ( aValue.compareTo(
                         RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 )
                 {
@@ -278,33 +270,21 @@ int NeonPropFindRequest::propfind_iter( void* userdata,
                 thePropertyValue.Value <<= OUString();
             }
         }
-#if SUPD>614
         else if ( rtl_str_compareIgnoreAsciiCase(
                                     pname->name, "supportedlock" ) == 0 )
-#else
-        else if ( rtl_str_equalsIgnoreCase( pname->name, "supportedlock" ) )
-#endif
         {
             Sequence< LockEntry > aEntries;
             LockEntrySequence::createFromXML( value, aEntries );
             thePropertyValue.Value <<= aEntries;
         }
-#if SUPD>614
         else if ( rtl_str_compareIgnoreAsciiCase(
                                     pname->name, "lockdiscovery" ) == 0 )
-#else
-        else if ( rtl_str_equalsIgnoreCase( pname->name, "lockdiscovery" ) )
-#endif
         {
             Sequence< Lock > aLocks;
             LockSequence::createFromXML( value, aLocks );
             thePropertyValue.Value <<= aLocks;
         }
-#if SUPD>614
         else if ( rtl_str_compareIgnoreAsciiCase( pname->name, "source" ) == 0 )
-#else
-        else if ( rtl_str_equalsIgnoreCase( pname->name, "source" ) )
-#endif
         {
             Sequence< Link > aLinks;
             LinkSequence::createFromXML( value, aLinks );
@@ -337,7 +317,7 @@ void NeonPropFindRequest::propnames_results(
     DAVResourceInfo theResource(
                         OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
     // Fill entry.
-    dav_propset_iterate( results, propnames_iter, &theResource );
+    ne_propset_iterate( results, propnames_iter, &theResource );
 
     // Add entry to resources list.
     vector< DAVResourceInfo > * theResources

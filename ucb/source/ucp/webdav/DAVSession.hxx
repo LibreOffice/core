@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-12-04 13:19:45 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@ namespace webdav_ucp
 {
 
 class DAVAuthListener;
-class DAVRedirectionListener;
 
 class DAVSession
 {
@@ -123,11 +122,6 @@ public:
     //
     virtual void setServerAuthListener(DAVAuthListener * inDAVAuthListener) = 0;
     virtual void setProxyAuthListener(DAVAuthListener * inDAVAuthListener ) = 0;
-
-    // redirection notification
-    //
-    virtual void setRedirectionListener(
-        DAVRedirectionListener * inRedirectionListener) = 0;
 
     // DAV methods
     //

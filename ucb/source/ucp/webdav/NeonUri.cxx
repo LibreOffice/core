@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-21 15:01:58 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,9 @@
 
 using namespace webdav_ucp;
 
-uri NeonUri::sUriDefaultsHTTP  = { "http",  NULL, DEFAULT_HTTP_PORT,  NULL };
-uri NeonUri::sUriDefaultsHTTPS = { "https", NULL, DEFAULT_HTTPS_PORT, NULL };
-uri NeonUri::sUriDefaultsFTP   = { "ftp",   NULL, DEFAULT_FTP_PORT,   NULL };
+ne_uri NeonUri::sUriDefaultsHTTP  = { "http",  NULL, DEFAULT_HTTP_PORT,  NULL };
+ne_uri NeonUri::sUriDefaultsHTTPS = { "https", NULL, DEFAULT_HTTPS_PORT, NULL };
+ne_uri NeonUri::sUriDefaultsFTP   = { "ftp",   NULL, DEFAULT_FTP_PORT,   NULL };
 
 // -------------------------------------------------------------------
 // Constructor
@@ -106,29 +106,38 @@ NeonUri::NeonUri( const rtl::OUString & inUri )
     rtl::OString theInputUri(
         inUri.getStr(), inUri.getLength(), RTL_TEXTENCODING_UTF8 );
 
-    uri theUri;
-    uri* pUriDefs
-        = matchIgnoreAsciiCase(theInputUri,
-                               RTL_CONSTASCII_STRINGPARAM("ftp:")) ?
-              &sUriDefaultsFTP :
-          matchIgnoreAsciiCase(theInputUri,
-                               RTL_CONSTASCII_STRINGPARAM("https:")) ?
-              &sUriDefaultsHTTPS :
-              &sUriDefaultsHTTP;
-
-    if ( uri_parse( theInputUri.getStr(), &theUri, pUriDefs ) != 0 )
+    ne_uri theUri;
+    if ( ne_uri_parse( theInputUri.getStr(), &theUri ) != 0 )
     {
-        uri_free( &theUri );
+        ne_uri_free( &theUri );
         throw DAVException( DAVException::DAV_INVALID_ARG );
     }
 
-    mScheme   = rtl::OStringToOUString( theUri.scheme, RTL_TEXTENCODING_UTF8 );
-    mUserInfo = rtl::OStringToOUString( theUri.authinfo, RTL_TEXTENCODING_UTF8 );
-    mHostName = rtl::OStringToOUString( theUri.host, RTL_TEXTENCODING_UTF8 );
-    mPort     = theUri.port;
-    mPath     = rtl::OStringToOUString( theUri.path, RTL_TEXTENCODING_UTF8 );
+    // Complete URI.
+    ne_uri* pUriDefs
+        = matchIgnoreAsciiCase( theInputUri,
+                                RTL_CONSTASCII_STRINGPARAM( "ftp:" ) ) ?
+              &sUriDefaultsFTP :
+          matchIgnoreAsciiCase( theInputUri,
+                                RTL_CONSTASCII_STRINGPARAM( "https:" ) ) ?
+              &sUriDefaultsHTTPS :
+              &sUriDefaultsHTTP;
 
-    uri_free( &theUri );
+    mScheme   = rtl::OStringToOUString(
+                    theUri.scheme ? theUri.scheme : pUriDefs->scheme,
+                    RTL_TEXTENCODING_UTF8 );
+    mUserInfo = rtl::OStringToOUString(
+                    theUri.authinfo ? theUri.authinfo : pUriDefs->authinfo,
+                    RTL_TEXTENCODING_UTF8 );
+    mHostName = rtl::OStringToOUString(
+                    theUri.host ? theUri.host : pUriDefs->host,
+                    RTL_TEXTENCODING_UTF8 );
+    mPort     = theUri.port > 0 ? theUri.port : pUriDefs->port;
+    mPath     = rtl::OStringToOUString(
+                    theUri.path ? theUri.path : pUriDefs->path,
+                    RTL_TEXTENCODING_UTF8 );
+
+    ne_uri_free( &theUri );
 
     calculateURI ();
 }

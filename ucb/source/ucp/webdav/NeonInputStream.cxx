@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonInputStream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-10-01 14:55:53 $
+ *  last change: $Author: kso $ $Date: 2002-08-15 10:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,15 +93,9 @@ NeonInputStream::~NeonInputStream( void )
 // -------------------------------------------------------------------
 void NeonInputStream::AddToStream( const char * inBuf, sal_Int32 inLen )
 {
-    sal_Int32 nOldLen = mLen;
+    mInputBuffer.realloc( mLen + inLen );
+    rtl_copyMemory( mInputBuffer.getArray() + mLen, inBuf, inLen );
     mLen += inLen;
-
-    mInputBuffer.realloc( mLen );
-    for ( sal_Int32 n = nOldLen; n < mLen; ++n )
-    {
-        mInputBuffer[ n ] = *inBuf;
-        inBuf++;
-    }
 }
 
 // -------------------------------------------------------------------
