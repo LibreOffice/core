@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 13:51:16 $
+#   last change: $Author: vg $ $Date: 2003-05-22 08:51:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,6 @@ OBJFILES = \
         $(OBJ)$/ssoinit.obj					\
         $(OBJ)$/configinit.obj				\
         $(OBJ)$/javainteractionhandler.obj	\
-        $(OBJ)$/oempreload.obj				\
         $(OBJ)$/testtool.obj				\
         $(OBJ)$/checkinstall.obj			\
         $(OBJ)$/cmdlinehelp.obj
