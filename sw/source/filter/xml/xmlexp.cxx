@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-06 12:45:03 $
+ *  last change: $Author: dvo $ $Date: 2001-04-20 15:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,13 +741,14 @@ void SwXMLExport::_ExportContent()
     // switch redline mode (and preserve old mode) before exporting content
     OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
     Reference<XPropertySet> xPropSet(GetModel(), UNO_QUERY);
-    if (xPropSet.is() && ! bRedlineModeSaved)
+    if (xPropSet.is())
     {
-        if (xPropSet.is())
+        Any aAny;
+
+        if (! bRedlineModeSaved)
         {
-            OUString sTwoDigitYear(RTL_CONSTASCII_USTRINGPARAM("TwoDigitYear"));
             // record old mode
-            Any aAny = xPropSet->getPropertyValue(sShowChanges);
+            aAny = xPropSet->getPropertyValue(sShowChanges);
             bRedlineModeValue = *(sal_Bool*)aAny.getValue();
             bRedlineModeSaved = sal_True;
 
@@ -755,17 +756,21 @@ void SwXMLExport::_ExportContent()
             sal_Bool bTmp = sal_False;
             aAny.setValue(&bTmp, ::getBooleanCppuType());
             xPropSet->setPropertyValue(sShowChanges, aAny);
+        }
 
-            aAny = xPropSet->getPropertyValue( sTwoDigitYear );
-            sal_Int16 nYear;
-            aAny >>= nYear;
-            if (nYear != 1930 )
-            {
-                rtl::OUStringBuffer sBuffer;
-                GetMM100UnitConverter().convertNumber(sBuffer, nYear);
-                AddAttribute(XML_NAMESPACE_TABLE, sXML_null_year, sBuffer.makeStringAndClear());
-                SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, sXML_calculation_settings, sal_True, sal_True);
-            }
+        OUString sTwoDigitYear(RTL_CONSTASCII_USTRINGPARAM("TwoDigitYear"));
+
+        aAny = xPropSet->getPropertyValue( sTwoDigitYear );
+        aAny <<= (sal_Int16)1930;
+
+        sal_Int16 nYear;
+        aAny >>= nYear;
+        if (nYear != 1930 )
+        {
+            rtl::OUStringBuffer sBuffer;
+            GetMM100UnitConverter().convertNumber(sBuffer, nYear);
+            AddAttribute(XML_NAMESPACE_TABLE, sXML_null_year, sBuffer.makeStringAndClear());
+            SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, sXML_calculation_settings, sal_True, sal_True);
         }
     }
 
