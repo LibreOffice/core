@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.18 $
+ #  $Revision: 1.19 $
  #
- #  last change: $Author: fs $ $Date: 2001-06-19 11:00:02 $
+ #  last change: $Author: oj $ $Date: 2001-06-20 07:10:07 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -75,6 +75,7 @@ TARGET=uidlg
 BMP_IN=$(PRJ)$/res
 
 SRCFILES =	\
+        UserAdmin.src	\
         directsql.src	\
         missingdocdlg.src	\
         doclinkdialog.src	\
@@ -97,6 +98,7 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/UserAdmin.obj	\
         $(SLO)$/directsql.obj	\
         $(SLO)$/generalpage.obj	\
         $(SLO)$/tablespage.obj	\
@@ -124,6 +126,7 @@ SLOFILES=	\
         $(SLO)$/dbfindex.obj
 
 EXCEPTIONSFILES=	\
+        $(SLO)$/UserAdmin.obj	\
         $(SLO)$/directsql.obj	\
         $(SLO)$/generalpage.obj	\
         $(SLO)$/tablespage.obj	\
@@ -152,6 +155,9 @@ EXCEPTIONSFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.18  2001/06/19 11:00:02  fs
+ #	#88393# +directsql.*
+ #	
  #	Revision 1.0 20.09.00 10:58:55  fs
  ########################################################################/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:33:12 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@
 #define STR_PAGETITLE_DOCUMENTS             20
 #define STR_PAGETITLE_LDAP                  21
 #define STR_UNSUPPORTED_DATASOURCE_TYPE     22
+#define STR_PAGETITLE_USERADMIN             23
 
 
 //========================================================================
@@ -176,6 +177,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/05/29 13:33:12  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.17  2001/05/29 10:15:33  fs
  *  #86082# STR_UNSUPPORTED_DATASOURCE_TYPE
  *

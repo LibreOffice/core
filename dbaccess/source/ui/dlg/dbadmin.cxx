@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-14 14:18:10 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
 #include <com/sun/star/sdbc/XDriver.hpp>
+#endif
+#ifndef DBAUI_USERADMIN_HXX
+#include "UserAdmin.hxx"
 #endif
 //.........................................................................
 namespace dbaui
@@ -713,6 +716,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     // register the view window
     SetViewWindow(&m_aSelector);
     SetViewAlign(WINDOWALIGN_LEFT);
+    AdjustLayout();
 
     // do some knittings
     m_aSelector.setSelectHandler(LINK(this, ODbAdminDialog, OnDatasourceSelected));
@@ -764,6 +768,43 @@ ODbAdminDialog::~ODbAdminDialog()
     DELETEZ(pExampleSet);
 }
 // -----------------------------------------------------------------------------
+String ODbAdminDialog::getConnectionURL() const
+{
+    SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+    return pUrlItem->GetValue();
+}
+// -----------------------------------------------------------------------------
+Reference< XDriver > ODbAdminDialog::getDriver()
+{
+    // get the global DriverManager
+    Reference< XDriverAccess > xDriverManager;
+    String sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
+        // in case an error occures
+    sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_CONNECTIONPOOL);
+    try
+    {
+        xDriverManager = Reference< XDriverAccess >(getORB()->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
+        DBG_ASSERT(xDriverManager.is(), "ODbAdminDialog::createConnection: could not instantiate the driver manager, or it does not provide the necessary interface!");
+    }
+    catch (Exception& e)
+    {
+        // wrap the exception into an SQLException
+        SQLException aSQLWrapper(e.Message, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
+        throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, makeAny(aSQLWrapper));
+    }
+    if (!xDriverManager.is())
+        throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
+
+
+    sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
+
+    Reference< XDriver > xDriver = xDriverManager->getDriverByURL(getConnectionURL());
+    if (!xDriver.is())
+        // will be caught and translated into an SQLContext exception
+        throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
+    return xDriver;
+}
+// -----------------------------------------------------------------------------
 Reference<XConnection> ODbAdminDialog::createConnection()
 {
     Reference<XConnection> xConnection;
@@ -774,42 +815,12 @@ Reference<XConnection> ODbAdminDialog::createConnection()
         if (getCurrentSettings(aConnectionParams))
         {
             // the current DSN
-            String sConnectionURL;
-            SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-            sConnectionURL = pUrlItem->GetValue();
-
             // fill the table list with this connection information
             SQLExceptionInfo aErrorInfo;
             try
             {
                 WaitObject aWaitCursor(this);
-                // get the global DriverManager
-                Reference< XDriverAccess > xDriverManager;
-                String sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
-                    // in case an error occures
-                sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_CONNECTIONPOOL);
-                try
-                {
-                    xDriverManager = Reference< XDriverAccess >(getORB()->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
-                    DBG_ASSERT(xDriverManager.is(), "ODbAdminDialog::createConnection: could not instantiate the driver manager, or it does not provide the necessary interface!");
-                }
-                catch (Exception& e)
-                {
-                    // wrap the exception into an SQLException
-                    SQLException aSQLWrapper(e.Message, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
-                    throw aSQLWrapper;
-                }
-                if (!xDriverManager.is())
-                    throw Exception();
-
-
-                sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
-                Reference< XDriver > xDriver = xDriverManager->getDriverByURL(sConnectionURL);
-                if (!xDriver.is())
-                    // will be caught and translated into an SQLContext exception
-                    throw Exception();
-
-                xConnection = xDriver->connect(sConnectionURL, aConnectionParams);
+                xConnection = getDriver()->connect(getConnectionURL(), aConnectionParams);
             }
             catch (::com::sun::star::sdb::SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
             catch (::com::sun::star::sdbc::SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
@@ -861,24 +872,24 @@ void ODbAdminDialog::successfullyConnected()
 
     if (hasAuthentication(*GetExampleSet()))
     {
-    }
-    SFX_ITEMSET_GET(*GetExampleSet(), pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
-    if (pPassword && (0 != pPassword->GetValue().Len()))
-    {
-        ::rtl::OUString sPassword = pPassword->GetValue();
-
-        ODatasourceMap::ODatasourceInfo aDatasourceInfo = m_aDatasources[m_sCurrentDatasource];
-        Reference< XPropertySet > xCurrentDatasource = aDatasourceInfo.getDatasource();
-        DBG_ASSERT(xCurrentDatasource.is(), "ODbAdminDialog::successfullyConnected: no data source!");
-        if (xCurrentDatasource.is())
+        SFX_ITEMSET_GET(*GetExampleSet(), pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
+        if (pPassword && (0 != pPassword->GetValue().Len()))
         {
-            try
+            ::rtl::OUString sPassword = pPassword->GetValue();
+
+            ODatasourceMap::ODatasourceInfo aDatasourceInfo = m_aDatasources[m_sCurrentDatasource];
+            Reference< XPropertySet > xCurrentDatasource = aDatasourceInfo.getDatasource();
+            DBG_ASSERT(xCurrentDatasource.is(), "ODbAdminDialog::successfullyConnected: no data source!");
+            if (xCurrentDatasource.is())
             {
-                xCurrentDatasource->setPropertyValue(m_aDirectPropTranslator[DSID_PASSWORD], makeAny(sPassword));
-            }
-            catch(const Exception&)
-            {
-                DBG_ERROR("ODbAdminDialog::successfullyConnected: caught an exception!");
+                try
+                {
+                    xCurrentDatasource->setPropertyValue(m_aDirectPropTranslator[DSID_PASSWORD], makeAny(sPassword));
+                }
+                catch(const Exception&)
+                {
+                    DBG_ERROR("ODbAdminDialog::successfullyConnected: caught an exception!");
+                }
             }
         }
     }
@@ -1029,7 +1040,13 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
         case TAB_PAG_ADABAS_SETTINGS:
             static_cast<OAdabasAdminSettings&>(_rPage).SetAdminDialog(this);
             break;
+        case TAB_PAGE_USERADMIN:
+            static_cast<OUserAdmin&>(_rPage).setServiceFactory(m_xORB);
+            static_cast<OUserAdmin&>(_rPage).SetAdminDialog(this);
+            break;
     }
+
+    AdjustLayout();
 
     SfxTabDialog::PageCreated(_nId, _rPage);
 }
@@ -1297,6 +1314,7 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             pCreateFunc = OAdabasAdminSettings::Create;
             // for adabas we have more than one page
             addDetailPage(PAGE_ADABAS, STR_PAGETITLE_ADABAS, OAdabasDetailsPage::Create);
+            addDetailPage(TAB_PAGE_USERADMIN, STR_PAGETITLE_USERADMIN, OUserAdmin::Create);
             break;
         case DST_ADDRESSBOOK:
             if(getDatasourceType(*GetExampleSet()) == DST_ADDRESSBOOK)
@@ -2642,6 +2660,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.58  2001/06/14 14:18:10  fs
+ *  #88242# corrected adding/removing detail pages
+ *
  *  Revision 1.57  2001/06/07 15:12:36  fs
  *  #87934# removed a wrong assertion
  *

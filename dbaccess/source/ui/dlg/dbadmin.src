@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:49:59 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,29 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text [ turkish ] = "Adabas D";
         Text[ finnish ] = "Adabas D Statistic";
         Text[ catalan ] = "Adabas D";
+    };
+    String STR_PAGETITLE_USERADMIN
+    {
+        Text = "Benutzereinstellungen" ;
+        Text[ENGLISH] = "User settings" ;
+        Text[ english_us ] = "User Settings";
+        Text[ portuguese ] = "Configuração personalizada";
+        Text[ russian ] = "Íàñòğîéêè ïîëüçîâàòåëÿ";
+        Text[ greek ] = "ĞáñÜìåôñïé ÷ñŞóôç";
+        Text[ dutch ] = "Gebruikersinstellingen";
+        Text[ french ] = "Paramètres d'utilisateur";
+        Text[ spanish ] = "Configuración personalizada";
+        Text[ italian ] = "Impostazioni utente";
+        Text[ danish ] = "Brugerindstillinger";
+        Text[ swedish ] = "Användarinställningar";
+        Text[ polish ] = "Ustawienia u¿ytkownika";
+        Text[ portuguese_brazilian ] = "User settings";
+        Text[ japanese ] = "Õ°»Ş°İ’è";
+        Text[ korean ] = "»ç¿ëÀÚ ¼³Á¤";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÕßÉè¶¨";
+        Text[ chinese_traditional ] = "¦Û­q³]©w";
+        Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáãÓÊÎÏã";
+        Text[ turkish ] = "Kullanıcı ayarları";
     };
     String STR_PAGETITLE_TEXT
     {
@@ -3217,6 +3240,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.57  2001/06/15 21:49:59  kz
+ *  Merge SRC633: 15.06.01 - 23:50:17
+ *
  *  Revision 1.56  2001/06/13 22:24:42  kz
  *  Merge SRC633: 14.06.01 - 00:24:55
  *
