@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com {  module sun {  module star {  module table {
 /** represents a special cell range containing all cells of a single
     specific row in a table or spreadsheet.
  */
-service TableRow
+published service TableRow
 {
     //-------------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ service TableRow
 
     //-------------------------------------------------------------------------
 
-//! service PropertySet
+//!published service PropertySet
     /** provides access to the cell properties of all cells of this row.
      */
     interface com::sun::star::beans::XPropertySet;
