@@ -20,7 +20,8 @@ ul	unoil\com\sun\star\i18n					nmake	-	all	ul_i18n ul_linguistic2 NULL
 ul	unoil\com\sun\star\installation			nmake	-	all	ul_installation ul_genall NULL
 ul	unoil\com\sun\star\linguistic2			nmake	-	all	ul_linguistic2 ul_genall NULL
 ul	unoil\com\sun\star\mozilla				nmake	-	all	ul_mozilla ul_genall NULL
-ul	unoil\com\sun\star\packages				nmake	-	all	ul_packages ul_genall NULL
+ul	unoil\com\sun\star\packages\zip			nmake	-	all	ul_pck_zip ul_genall NULL
+ul	unoil\com\sun\star\packages\manifest	nmake	-	all	ul_pck_manifest ul_genall NULL
 ul	unoil\com\sun\star\pgp					nmake	-	all	ul_pgp ul_genall NULL
 ul	unoil\com\sun\star\plugin				nmake	-	all	ul_plugin ul_awt NULL
 ul	unoil\com\sun\star\presentation			nmake	-	all	ul_presentation ul_drawing NULL
