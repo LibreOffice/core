@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:24:32 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 05:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,6 +1449,10 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
         aPosition = _pEvent->GetMousePosPixel();
         // ensure that the entry which the user clicked at is selected
         pEntry = m_pTreeView->getListBox()->GetEntry(aPosition);
+        if (!pEntry)
+            // no context menu of no entry was hit ....
+            return 0L;
+
         OSL_ENSURE(pEntry,"No current entry!");
         if (pEntry && !m_pTreeView->getListBox()->IsSelected(pEntry))
         {
