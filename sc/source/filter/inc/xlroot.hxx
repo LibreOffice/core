@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:47:23 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
 #endif
+
+// Forward declarations of objects in public use ==============================
+
+struct XclAddress;
+struct XclRange;
+class XclRangeList;
 
 // Global data ================================================================
 
