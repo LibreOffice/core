@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2000-10-20 00:36:02 $
+#   last change: $Author: svesik $ $Date: 2000-10-20 20:41:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,6 +123,7 @@ RC_SUBDIRS =  \
 	jtools \
 	jurt \
 	jut \
+	ldapber \
 	officecfg \
 	offmgr \
 	offuh \
@@ -214,7 +215,7 @@ framework : svtools
 goodies : so3
 i18n : bridges stoc svtools unotools
 idl : tools
-inet : tools
+inet : tools ldapber
 instsetoo : UnoControls chaos configmgr cpputools dbaccess desktop eventattacher extensions extras forms framework i18n io remotebridges sax scaddins scp wizards
 io : rdbmaker xml2cmp
 javaunohelper : bridges cppuhelper unoil
