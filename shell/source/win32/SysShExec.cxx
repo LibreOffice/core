@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SysShExec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-01 16:19:26 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 15:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,9 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #endif
 
-#include <systools/win32/shell9x.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <shellapi.h>
 
 //------------------------------------------------------------------------
 // namespace directives

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-09 18:58:57 $
+#   last change: $Author: hro $ $Date: 2002-08-14 15:20:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,10 +84,11 @@ SHL1TARGET=$(TARGET)
 SHL1STDLIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
             $(SALLIB)\
+            uwinapi.lib \
+            unicows.lib \
+            advapi32.lib \
             shell32.lib
 
-SHL1LIBS=$(SOLARLIBDIR)$/shell9x.lib
-        
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
 
