@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-29 13:18:42 $
+ *  last change: $Author: cmc $ $Date: 2002-10-30 16:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1744,6 +1744,15 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     bool bRet = false;
     switch (nWCharVal)
     {
+        case 0:
+            {
+                // Seitennummer
+                SwPageNumberField aFld(
+                    (SwPageNumberFieldType*)rDoc.GetSysFldType(
+                    RES_PAGENUMBERFLD ), PG_RANDOM, SVX_NUM_ARABIC);
+                rDoc.Insert(*pPaM, SwFmtFld(aFld));
+            }
+            break;
         case 0xe:
             /*
             #i2451#, similarly to i1909 column breaks appear to be ignored if
