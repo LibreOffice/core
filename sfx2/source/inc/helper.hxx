@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-08 08:57:38 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 12:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ public:
     static sal_Bool             Kill( const String& rContent );
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                                GetFolderContents( const String& rFolder, sal_Bool bFolder );
+                                GetFolderContents( const String& rFolder, sal_Bool bFolder, sal_Bool bSorted = sal_False );
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 GetFolderContentProperties( const String& rFolder, sal_Bool bFolder );
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > GetResultSet( const String& rURL );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-08 08:58:05 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 12:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ sal_Bool SfxContentHelper::Kill( const String& rContent )
 
 // -----------------------------------------------------------------------
 
-Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder, sal_Bool bFolder )
+Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder, sal_Bool bFolder, sal_Bool bSorted )
 {
     StringList_Impl* pFiles = NULL;
     INetURLObject aFolderObj( rFolder );
@@ -318,14 +318,44 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
     {
         Content aCnt( aFolderObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(1);
+        Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
-        pProps[0] == OUString::createFromAscii( "Url" );
+        pProps[0] = OUString::createFromAscii( "Title" );
+        pProps[1] = OUString::createFromAscii( "IsFolder" );
 
         try
         {
             ResultSetInclude eInclude = bFolder ? INCLUDE_FOLDERS_AND_DOCUMENTS : INCLUDE_DOCUMENTS_ONLY;
-            xResultSet = aCnt.createCursor( aProps, eInclude );
+            if ( !bSorted )
+            {
+                xResultSet = aCnt.createCursor( aProps, eInclude );
+            }
+            else
+            {
+                Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
+                xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
+
+                Reference < com::sun::star::ucb::XAnyCompareFactory > xFactory;
+                Reference < XMultiServiceFactory > xMgr = getProcessServiceFactory();
+                Reference < com::sun::star::ucb::XSortedDynamicResultSetFactory > xSRSFac(
+                    xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
+
+                Sequence< com::sun::star::ucb::NumberedSortingInfo > aSortInfo( 2 );
+                com::sun::star::ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
+                pInfo[ 0 ].ColumnIndex = 2;
+                pInfo[ 0 ].Ascending   = sal_False;
+                pInfo[ 1 ].ColumnIndex = 1;
+                pInfo[ 1 ].Ascending   = sal_True;
+
+                Reference< com::sun::star::ucb::XDynamicResultSet > xDynamicResultSet;
+                xDynamicResultSet =
+                    xSRSFac->createSortedDynamicResultSet( xDynResultSet, aSortInfo, xFactory );
+                if ( xDynamicResultSet.is() )
+                {
+                    sal_Int16 nCaps = xDynamicResultSet->getCapabilities();
+                    xResultSet = xDynamicResultSet->getStaticResultSet();
+                }
+            }
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
@@ -344,11 +374,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
             {
                 while ( xResultSet->next() )
                 {
-#if SUPD>611
                     OUString aId = xContentAccess->queryContentIdentifierString();
-#else
-                    OUString aId = xContentAccess->queryContentIdentfierString();
-#endif
                     OUString* pFile = new OUString( aId );
                     pFiles->Insert( pFile, LIST_APPEND );
                 }
@@ -397,7 +423,6 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
     {
         Content aCnt( aFolderObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
         Reference< XResultSet > xResultSet;
-        Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
         Sequence< OUString > aProps(5);
         OUString* pProps = aProps.getArray();
         pProps[0] = OUString::createFromAscii( "Title" );
@@ -408,6 +433,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
 
         try
         {
+            Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
             ResultSetInclude eInclude = bFolder ? INCLUDE_FOLDERS_AND_DOCUMENTS : INCLUDE_DOCUMENTS_ONLY;
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
@@ -469,11 +495,7 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
                     aRow += '\t';
                     AppendDateTime_Impl( aDT, aRow );
                     aRow += '\t';
-#if SUPD>611
                     aRow += String( xContentAccess->queryContentIdentifierString() );
-#else
-                    aRow += String( xContentAccess->queryContentIdentfierString() );
-#endif
                     aRow += '\t';
                     aRow += bFolder ? '1' : '0';
                     OUString* pRow = new OUString( aRow );
