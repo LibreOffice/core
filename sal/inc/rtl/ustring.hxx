@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-11 13:07:14 $
+ *  last change: $Author: sb $ $Date: 2001-10-30 13:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace rtl
   handle all the memory managament for you - and it do it
   more efficient. If you assign a string to another string, the
   data of both strings are shared (without any copy operation or
-  memory allocation) as long as you change the string. This class
+  memory allocation) as long as you do not change the string. This class
   stores also the length of the string, so that many operations are
   faster as the C-str-functions.
 
@@ -109,10 +109,14 @@ class OUString
     friend class ::String;
 
 public:
+    /** @internal */
     rtl_uString * pData;
 
 private:
+    /** @internal */
     class DO_NOT_ACQUIRE;
+
+    /** @internal */
     OUString( rtl_uString * value, DO_NOT_ACQUIRE * )
     {
         pData = value;
@@ -195,6 +199,11 @@ public:
         rtl_string2UString( &pData, value, length, encoding, convertFlags );
     }
 
+    /** Convert a String (from the tools module) into an OUString.
+
+        Since both String and OUString internally use the same data structure,
+        this is a very cheap operation.
+     */
     OUString( const String & value ) SAL_THROW(());
 
     /**
@@ -229,6 +238,7 @@ public:
 
     /**
       Returns the length of this string.
+
       The length is equal to the number of Unicode characters in this string.
 
       @return   the length of the sequence of characters represented by this
@@ -238,6 +248,7 @@ public:
 
     /**
       Returns a pointer to the Unicode character buffer from this string.
+
       It isn't necessarily NULL terminated.
 
       @return   a pointer to the Unicode characters buffer from this object.
@@ -246,6 +257,7 @@ public:
 
     /**
       Returns a pointer to the Unicode character buffer from this string.
+
       It isn't necessarily NULL terminated.
 
       @return   a pointer to the Unicode characters buffer from this object.
@@ -254,14 +266,15 @@ public:
 
     /**
       Compares two strings.
+
       The comparison is based on the numeric value of each character in
       the strings and return a value indicating their relationship.
       This function can't be used for language specific sorting.
 
       @param    str         the object to be compared.
-      @return   <code>0</code> - if both strings are equal
-                <code>< 0</code> - if this string is less than the string argument
-                <code>> 0</code> - if this string is greater than the string argument
+      @return   0 - if both strings are equal
+                < 0 - if this string is less than the string argument
+                > 0 - if this string is greater than the string argument
     */
     sal_Int32 compareTo( const OUString & str ) const SAL_THROW(())
     {
@@ -271,15 +284,16 @@ public:
 
     /**
       Compares two strings with an maximum count of characters.
+
       The comparison is based on the numeric value of each character in
       the strings and return a value indicating their relationship.
       This function can't be used for language specific sorting.
 
       @param    str         the object to be compared.
       @param    maxLength   the maximum count of characters to be compared.
-      @return   <code>0</code> - if both strings are equal
-                <code>< 0</code> - if this string is less than the string argument
-                <code>> 0</code> - if this string is greater than the string argument
+      @return   0 - if both strings are equal
+                < 0 - if this string is less than the string argument
+                > 0 - if this string is greater than the string argument
     */
     sal_Int32 compareTo( const OUString & str, sal_Int32 maxLength ) const SAL_THROW(())
     {
@@ -289,14 +303,15 @@ public:
 
     /**
       Compares two strings in reverse order.
+
       The comparison is based on the numeric value of each character in
       the strings and return a value indicating their relationship.
       This function can't be used for language specific sorting.
 
       @param    str         the object to be compared.
-      @return   <code>0</code> - if both strings are equal
-                <code>< 0</code> - if this string is less than the string argument
-                <code>> 0</code> - if this string is greater than the string argument
+      @return   0 - if both strings are equal
+                < 0 - if this string is less than the string argument
+                > 0 - if this string is greater than the string argument
     */
     sal_Int32 reverseCompareTo( const OUString & str ) const SAL_THROW(())
     {
@@ -306,6 +321,7 @@ public:
 
     /**
       Perform a comparison of two strings.
+
       The result is true if and only if second string
       represents the same sequence of characters as the first string.
       This function can't be used for language specific comparison.
@@ -326,6 +342,7 @@ public:
 
     /**
       Perform a ASCII lowercase comparison of two strings.
+
       The result is true if and only if second string
       represents the same sequence of characters as the first string,
       ignoring the case.
@@ -349,6 +366,7 @@ public:
 
     /**
       Perform a comparison of a substring in this string.
+
       The result is true if and only if second string
       represents the same sequence of characters in the first string at
       the given position.
@@ -370,6 +388,7 @@ public:
 
     /**
       Perform a ASCII lowercase comparison of a substring in this string.
+
       The result is true if and only if second string
       represents the same sequence of characters in the first string at
       the given position.
@@ -394,6 +413,7 @@ public:
 
     /**
       Compares two strings.
+
       The comparison is based on the numeric value of each character in
       the strings and return a value indicating their relationship.
       Since this method is optimized for performance, the ASCII character
@@ -403,9 +423,9 @@ public:
       This function can't be used for language specific sorting.
 
       @param  asciiStr      the 8-Bit ASCII character string to be compared.
-      @return   <code>0</code> - if both strings are equal
-                <code>< 0</code> - if this string is less than the string argument
-                <code>> 0</code> - if this string is greater than the string argument
+      @return   0 - if both strings are equal
+                < 0 - if this string is less than the string argument
+                > 0 - if this string is greater than the string argument
     */
     sal_Int32 compareToAscii( const sal_Char* asciiStr ) const SAL_THROW(())
     {
@@ -414,6 +434,7 @@ public:
 
     /**
       Compares two strings with an maximum count of characters.
+
       The comparison is based on the numeric value of each character in
       the strings and return a value indicating their relationship.
       Since this method is optimized for performance, the ASCII character
@@ -424,9 +445,9 @@ public:
 
       @param  asciiStr          the 8-Bit ASCII character string to be compared.
       @param  maxLength         the maximum count of characters to be compared.
-      @return   <code>0</code> - if both strings are equal
-                <code>< 0</code> - if this string is less than the string argument
-                <code>> 0</code> - if this string is greater than the string argument
+      @return   0 - if both strings are equal
+                < 0 - if this string is less than the string argument
+                > 0 - if this string is greater than the string argument
     */
     sal_Int32 compareToAscii( const sal_Char * asciiStr, sal_Int32 maxLength ) const SAL_THROW(())
     {
@@ -435,10 +456,11 @@ public:
     }
 
     /**
-      Compares two strings in reverse order. This could be useful,
-      if normally both strings start with the same content.
-      The comparison is based on the numeric value of each character in
-      the strings and return a value indicating their relationship.
+      Compares two strings in reverse order.
+
+      This could be useful, if normally both strings start with the same
+      content. The comparison is based on the numeric value of each character
+      in the strings and return a value indicating their relationship.
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and
@@ -448,9 +470,9 @@ public:
 
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
       @param    asciiStrLength  the length of the ascii string
-      @return   <code>0</code> - if both strings are equal
-                <code>< 0</code> - if this string is less than the string argument
-                <code>> 0</code> - if this string is greater than the string argument
+      @return   0 - if both strings are equal
+                < 0 - if this string is less than the string argument
+                > 0 - if this string is greater than the string argument
     */
     sal_Int32 reverseCompareToAsciiL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const SAL_THROW(())
     {
@@ -460,6 +482,7 @@ public:
 
     /**
       Perform a comparison of two strings.
+
       The result is true if and only if second string
       represents the same sequence of characters as the first string.
       Since this method is optimized for performance, the ASCII character
@@ -480,6 +503,7 @@ public:
 
     /**
       Perform a comparison of two strings.
+
       The result is true if and only if second string
       represents the same sequence of characters as the first string.
       Since this method is optimized for performance, the ASCII character
@@ -505,6 +529,7 @@ public:
 
     /**
       Perform a ASCII lowercase comparison of two strings.
+
       The result is true if and only if second string
       represents the same sequence of characters as the first string,
       ignoring the case.
@@ -527,6 +552,7 @@ public:
 
     /**
       Perform a ASCII lowercase comparison of two strings.
+
       The result is true if and only if second string
       represents the same sequence of characters as the first string,
       ignoring the case.
@@ -554,6 +580,7 @@ public:
 
     /**
       Perform a comparison of a substring in this string.
+
       The result is true if and only if second string
       represents the same sequence of characters in the first string at
       the given position.
@@ -580,6 +607,7 @@ public:
 
     /**
       Perform a ASCII lowercase comparison of a substring in this string.
+
       The result is true if and only if second string
       represents the same sequence of characters in the first string at
       the given position.
@@ -651,7 +679,7 @@ public:
       @return   the index of the first occurrence of the character in the
                 character sequence represented by this string that is
                 greater than or equal to fromIndex, or
-                <code>-1</code> if the character does not occur.
+                -1 if the character does not occur.
     */
     sal_Int32 indexOf( sal_Unicode ch, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
@@ -666,7 +694,7 @@ public:
       @param    ch          character to be located.
       @return   the index of the last occurrence of the character in the
                 character sequence represented by this string, or
-                <code>-1</code> if the character does not occur.
+                -1 if the character does not occur.
     */
     sal_Int32 lastIndexOf( sal_Unicode ch ) const SAL_THROW(())
     {
@@ -680,7 +708,7 @@ public:
       @param    ch          character to be located.
       @return   the index of the last occurrence of the character in the
                 character sequence represented by this string that
-                is less or than or equal to fromIndex, or <code>-1</code>
+                is less or than or equal to fromIndex, or -1
                 if the character does not occur before that point.
     */
     sal_Int32 lastIndexOf( sal_Unicode ch, sal_Int32 fromIndex ) const SAL_THROW(())
@@ -691,7 +719,8 @@ public:
     /**
       Returns the index within this string of the first occurrence of the
       specified substring, starting at the specified index.
-      If str doesn't include any character, always <code>-1</code> is
+
+      If str doesn't include any character, always -1 is
       returned. This is also the case, if both strings are empty.
 
       @param    str         the substring to search for.
@@ -700,7 +729,7 @@ public:
                 within this string at the starting index, then the index
                 of the first character of the first such substring is
                 returned. If it does not occur as a substring starting
-                at fromIndex or beyond, <code>-1</code> is returned.
+                at fromIndex or beyond, -1 is returned.
     */
     sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
@@ -712,16 +741,17 @@ public:
     /**
       Returns the index within this string of the last occurrence of
       the specified substring, searching backward starting at the end.
+
       The returned index indicates the starting index of the substring
       in this string.
-      If str doesn't include any character, always <code>-1</code> is
+      If str doesn't include any character, always -1 is
       returned. This is also the case, if both strings are empty.
 
       @param    str         the substring to search for.
       @return   If the string argument occurs one or more times as a substring
                 within this string, then the index of the first character of
                 the last such substring is returned. If it does not occur as
-                a substring, <code>-1</code> is returned.
+                a substring, -1 is returned.
     */
     sal_Int32 lastIndexOf( const OUString & str ) const SAL_THROW(())
     {
@@ -732,9 +762,10 @@ public:
     /**
       Returns the index within this string of the last occurrence of
       the specified substring, searching backward starting at the end.
+
       The returned index indicates the starting index of the substring
       in this string.
-      If str doesn't include any character, always <code>-1</code> is
+      If str doesn't include any character, always -1 is
       returned. This is also the case, if both strings are empty.
 
       @param    str         the substring to search for.
@@ -743,7 +774,7 @@ public:
                 within this string at the starting index, then the index
                 of the first character of the last such substring is
                 returned. If it does not occur as a substring starting
-                at fromIndex or earlier, <code>-1</code> is returned.
+                at fromIndex or earlier, -1 is returned.
     */
     sal_Int32 lastIndexOf( const OUString & str, sal_Int32 fromIndex ) const SAL_THROW(())
     {
@@ -752,8 +783,9 @@ public:
     }
 
     /**
-      Returns a new string that is a substring of this string. The
-      substring begins at the specified beginIndex.
+      Returns a new string that is a substring of this string.
+
+      The substring begins at the specified beginIndex.
 
       @param     beginIndex   the beginning index, inclusive.
       @return    the specified substring.
@@ -771,8 +803,9 @@ public:
     }
 
     /**
-      Returns a new string that is a substring of this string. The
-      substring begins at the specified beginIndex and
+      Returns a new string that is a substring of this string.
+
+      The substring begins at the specified beginIndex and
       extends to the character at index endIndex - 1.
 
       @param     beginIndex   the beginning index, inclusive.
@@ -834,6 +867,7 @@ public:
     /**
       Returns a new string resulting from replacing all occurrences of
       oldChar in this string with newChar.
+
       If the character oldChar does not occur in the character sequence
       represented by this object, then the string is assigned with
       str.
@@ -853,6 +887,7 @@ public:
     /**
       Converts from this string all ASCII uppercase characters (65-90)
       to ASCII lowercase characters (97-122).
+
       This function can't be used for language specific conversion.
       If the string doesn't contain characters which must be converted,
       then the new string is assigned with str.
@@ -869,6 +904,7 @@ public:
     /**
       Converts from this string all ASCII lowercase characters (97-122)
       to ASCII uppercase characters (65-90).
+
       This function can't be used for language specific conversion.
       If the string doesn't contain characters which must be converted,
       then the new string is assigned with str.
@@ -884,7 +920,9 @@ public:
 
     /**
       Returns a new string resulting from removing white space from both ends
-      of the string. All characters that have codes less than or equal to
+      of the string.
+
+      All characters that have codes less than or equal to
       32 (the space character) are considered to be white space.
       If the string doesn't contain white spaces at both ends,
       then the new string is assigned with str.
@@ -931,6 +969,7 @@ public:
 
     /**
       Returns the Boolean value from this string.
+
       This function can't be used for language specific conversion.
 
       @return   sal_True, if the string is 1 or "True" in any ASCII case.
@@ -954,6 +993,7 @@ public:
 
     /**
       Returns the int32 value from this string.
+
       This function can't be used for language specific conversion.
 
       @param    radix       the radix (between 2 and 36)
@@ -967,6 +1007,7 @@ public:
 
     /**
       Returns the int64 value from this string.
+
       This function can't be used for language specific conversion.
 
       @param    radix       the radix (between 2 and 36)
@@ -980,6 +1021,7 @@ public:
 
     /**
       Returns the float value from this string.
+
       This function can't be used for language specific conversion.
 
       @return   the float represented from this string.
@@ -992,6 +1034,7 @@ public:
 
     /**
       Returns the double value from this string.
+
       This function can't be used for language specific conversion.
 
       @return   the double represented from this string.
@@ -1004,6 +1047,7 @@ public:
 
     /**
       Returns the string representation of the sal_Bool argument.
+
       If the sal_Bool is true, the string "true" is returned.
       If the sal_Bool is false, the string "false" is returned.
       This function can't be used for language specific conversion.
@@ -1032,6 +1076,7 @@ public:
 
     /**
       Returns the string representation of the int argument.
+
       This function can't be used for language specific conversion.
 
       @param    i           a int32.
@@ -1048,6 +1093,7 @@ public:
 
     /**
       Returns the string representation of the long argument.
+
       This function can't be used for language specific conversion.
 
       @param    l           a int64.
@@ -1064,6 +1110,7 @@ public:
 
     /**
       Returns the string representation of the float argument.
+
       This function can't be used for language specific conversion.
 
       @param    f           a float.
@@ -1079,6 +1126,7 @@ public:
 
     /**
       Returns the string representation of the double argument.
+
       This function can't be used for language specific conversion.
 
       @param    d           a double.
@@ -1095,6 +1143,7 @@ public:
     /**
       Returns a OUString copied without conversion from an ASCII
       character string.
+
       Since this method is optimized for performance, the ASCII character
       values are not converted in any way. The caller has to make sure that
       all ASCII characters are in the allowed range between 0 and
@@ -1113,14 +1162,45 @@ public:
 
 /* ======================================================================= */
 
+/** A helper to use OUStrings with hash maps.
+
+    Instances of this class are unary function objects that can be used as
+    hash function arguments to STLPort's hash_map and similar constructs.
+ */
 struct OUStringHash
 {
+    /** Compute a hash code for a string.
+
+        @param rString
+        a string.
+
+        @return
+        a hash code for the string.  This hash code should not be stored
+        persistently, as its computation may change in later revisions.
+     */
     size_t operator()(const rtl::OUString& rString) const
         { return (size_t)rString.hashCode(); }
 };
 
 /* ======================================================================= */
 
+/** Convert an OString to an OUString, using a specific text encoding.
+
+    The lengths of the two strings may differ (e.g., for double-byte
+    encodings, UTF-7, UTF-8).
+
+    @param rStr
+    an OString to convert.
+
+    @param encoding
+    the text encoding to use for conversion.
+
+    @param convertFlags
+    flags which control the conversion.  Either use
+    OSTRING_TO_OUSTRING_CVTFLAGS, or see
+    <http://udk.openoffice.org/cpp/man/spec/textconversion.html> for more
+    details.
+ */
 inline OUString OStringToOUString( const OString & rStr,
                                    rtl_TextEncoding encoding,
                                    sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS )
@@ -1128,6 +1208,23 @@ inline OUString OStringToOUString( const OString & rStr,
     return OUString( rStr.getStr(), rStr.getLength(), encoding, convertFlags );
 }
 
+/** Convert an OUString to an OString, using a specific text encoding.
+
+    The lengths of the two strings may differ (e.g., for double-byte
+    encodings, UTF-7, UTF-8).
+
+    @param rStr
+    an OUString to convert.
+
+    @param encoding
+    the text encoding to use for conversion.
+
+    @param convertFlags
+    flags which control the conversion.  Either use
+    OUSTRING_TO_OSTRING_CVTFLAGS, or see
+    <http://udk.openoffice.org/cpp/man/spec/textconversion.html> for more
+    details.
+ */
 inline OString OUStringToOString( const OUString & rUnicode,
                                   rtl_TextEncoding encoding,
                                   sal_uInt32 convertFlags = OUSTRING_TO_OSTRING_CVTFLAGS )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
+ *  last change: $Author: sb $ $Date: 2001-10-30 13:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,11 @@
 extern "C" {
 #endif
 
-/**
+/** @HTML
     Allocates a new <code>String</code> that contains characters from
-    the character array argument. The <code>count</code> argument specifies
+    the character array argument.
+
+    The <code>count</code> argument specifies
     the length of the array. The initial capacity of the string buffer is
     <code>16</code> plus the length of the string argument.
 
@@ -86,7 +88,9 @@ void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
 
 /**
     Allocates a new <code>String</code> that contains the same sequence of
-    characters as the string argument. The initial capacity is the larger of:
+    characters as the string argument.
+
+    The initial capacity is the larger of:
     <ul>
     <li> The <code>bufferLen</code> argument.
     <li> The <code>length</code> of the string argument.
@@ -104,6 +108,7 @@ sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer( rtl_uString ** newStr,
 /**
     Ensures that the capacity of the buffer is at least equal to the
     specified minimum.
+
     If the current capacity of this string buffer is less than the
     argument, then a new internal buffer is allocated with greater
     capacity. The new capacity is the larger of:
@@ -124,7 +129,7 @@ void SAL_CALL rtl_uStringbuffer_ensureCapacity( /*inout*/rtl_uString ** This,
 /**
     Inserts the string representation of the <code>str</code> array
     argument into this string buffer.
-    <p>
+
     The characters of the array argument are inserted into the
     contents of this string buffer at the position indicated by
     <code>offset</code>. The length of this string buffer increases by
@@ -145,7 +150,9 @@ void SAL_CALL rtl_uStringbuffer_insert( /*inout*/rtl_uString ** This,
 
 /**
     Inserts the 8-Bit ASCII string representation of the <code>str</code>
-    array argument into this string buffer. Since this function is optimized
+    array argument into this string buffer.
+
+    Since this function is optimized
     for performance, the ASCII character values are not converted in any way.
     The caller has to make sure that all ASCII characters are in the allowed
     range between 0 and 127.
@@ -172,5 +179,3 @@ void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
 #endif
 
 #endif  /* _RTL_USTRBUF_H_ */
-
-

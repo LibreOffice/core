@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-15 07:58:51 $
+ *  last change: $Author: sb $ $Date: 2001-10-30 13:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 namespace rtl
 {
 
-/**
+/** @HTML
     A string buffer implements a mutable sequence of characters.
     <p>
     String buffers are safe for use by multiple threads. The methods
@@ -158,7 +158,9 @@ public:
 
     /**
         Constructs a string buffer so that it represents the same
-        sequence of characters as the string argument. The initial
+        sequence of characters as the string argument.
+
+        The initial
         capacity of the string buffer is <code>16</code> plus the length
         of the string argument.
 
@@ -194,7 +196,8 @@ public:
     }
 
     /**
-        Fill the string data in the new string and clear the buffer.<BR>
+        Fill the string data in the new string and clear the buffer.
+
         This method is more efficient than the contructor of the string. It does
         not copy the buffer.
 
@@ -219,7 +222,9 @@ public:
     }
 
     /**
-        Returns the current capacity of the String buffer. The capacity
+        Returns the current capacity of the String buffer.
+
+        The capacity
         is the amount of storage available for newly inserted
         characters. The real buffer size is 2 bytes longer, because
         all strings are 0 terminated.
@@ -234,6 +239,7 @@ public:
     /**
         Ensures that the capacity of the buffer is at least equal to the
         specified minimum.
+
         If the current capacity of this string buffer is less than the
         argument, then a new internal buffer is allocated with greater
         capacity. The new capacity is the larger of:
@@ -253,6 +259,7 @@ public:
 
     /**
         Sets the length of this String buffer.
+
         If the <code>newLength</code> argument is less than the current
         length of the string buffer, the string buffer is truncated to
         contain exactly the number of characters given by the
@@ -279,7 +286,7 @@ public:
 
     /**
         Returns the character at a specific index in this string buffer.
-        <p>
+
         The first character of a string buffer is at index
         <code>0</code>, the next at index <code>1</code>, and so on, for
         array indexing.
@@ -309,7 +316,7 @@ public:
     /**
         The character at the specified index of this string buffer is set
         to <code>ch</code>.
-        <p>
+
         The offset argument must be greater than or equal to
         <code>0</code>, and less than the length of this string buffer.
 
@@ -324,7 +331,7 @@ public:
 
     /**
         Appends the string to this string buffer.
-        <p>
+
         The characters of the <code>String</code> argument are appended, in
         order, to the contents of this string buffer, increasing the
         length of this string buffer by the length of the argument.
@@ -340,7 +347,7 @@ public:
     /**
         Appends the string representation of the <code>char</code> array
         argument to this string buffer.
-        <p>
+
         The characters of the array argument are appended, in order, to
         the contents of this string buffer. The length of this string
         buffer increases by the length of the argument.
@@ -356,7 +363,7 @@ public:
     /**
         Appends the string representation of the <code>char</code> array
         argument to this string buffer.
-        <p>
+
         Characters of the character array <code>str</code> are appended,
         in order, to the contents of this string buffer. The length of this
         string buffer increases by the value of <code>len</code>.
@@ -374,7 +381,8 @@ public:
 
     /**
         Appends a 8-Bit ASCII character string to this string buffer.
-        Since this method is optimized for performance. the ASCII
+
+       Since this method is optimized for performance. the ASCII
         character values are not converted in any way. The caller
         has to make sure that all ASCII characters are in the
         allowed range between 0 and 127. The ASCII string must be
@@ -394,6 +402,7 @@ public:
 
     /**
         Appends a 8-Bit ASCII character string to this string buffer.
+
         Since this method is optimized for performance. the ASCII
         character values are not converted in any way. The caller
         has to make sure that all ASCII characters are in the
@@ -418,7 +427,7 @@ public:
     /**
         Appends the string representation of the <code>sal_Bool</code>
         argument to the string buffer.
-        <p>
+
         The argument is converted to a string as if by the method
         <code>String.valueOf</code>, and the characters of that
         string are then appended to this string buffer.
@@ -435,7 +444,7 @@ public:
     /**
         Appends the string representation of the <code>char</code>
         argument to this string buffer.
-        <p>
+
         The argument is appended to the contents of this string buffer.
         The length of this string buffer increases by <code>1</code>.
 
@@ -450,7 +459,7 @@ public:
     /**
         Appends the string representation of the <code>sal_Int32</code>
         argument to this string buffer.
-        <p>
+
         The argument is converted to a string as if by the method
         <code>String.valueOf</code>, and the characters of that
         string are then appended to this string buffer.
@@ -467,7 +476,7 @@ public:
     /**
         Appends the string representation of the <code>long</code>
         argument to this string buffer.
-        <p>
+
         The argument is converted to a string as if by the method
         <code>String.valueOf</code>, and the characters of that
         string are then appended to this string buffer.
@@ -484,7 +493,7 @@ public:
     /**
         Appends the string representation of the <code>float</code>
         argument to this string buffer.
-        <p>
+
         The argument is converted to a string as if by the method
         <code>String.valueOf</code>, and the characters of that
         string are then appended to this string buffer.
@@ -501,7 +510,7 @@ public:
     /**
         Appends the string representation of the <code>double</code>
         argument to this string buffer.
-        <p>
+
         The argument is converted to a string as if by the method
         <code>String.valueOf</code>, and the characters of that
         string are then appended to this string buffer.
@@ -517,7 +526,7 @@ public:
 
     /**
         Inserts the string into this string buffer.
-        <p>
+
         The characters of the <code>String</code> argument are inserted, in
         order, into this string buffer at the indicated offset. The length
         of this string buffer is increased by the length of the argument.
@@ -538,7 +547,7 @@ public:
     /**
         Inserts the string representation of the <code>char</code> array
         argument into this string buffer.
-        <p>
+
         The characters of the array argument are inserted into the
         contents of this string buffer at the position indicated by
         <code>offset</code>. The length of this string buffer increases by
@@ -556,7 +565,7 @@ public:
     /**
         Inserts the string representation of the <code>char</code> array
         argument into this string buffer.
-        <p>
+
         The characters of the array argument are inserted into the
         contents of this string buffer at the position indicated by
         <code>offset</code>. The length of this string buffer increases by
@@ -577,7 +586,7 @@ public:
     /**
         Inserts the string representation of the <code>sal_Bool</code>
         argument into this string buffer.
-        <p>
+
         The second argument is converted to a string as if by the method
         <code>String.valueOf</code>, and the characters of that
         string are then inserted into this string buffer at the indicated
@@ -600,7 +609,7 @@ public:
     /**
         Inserts the string representation of the <code>char</code>
         argument into this string buffer.
-        <p>
+
         The second argument is inserted into the contents of this string
         buffer at the position indicated by <code>offset</code>. The length
         of this string buffer increases by one.
@@ -621,7 +630,7 @@ public:
     /**
         Inserts the string representation of the second <code>sal_Int32</code>
         argument into this string buffer.
-        <p>
+
         The second argument is converted to a string as if by the method
         <code>String.valueOf</code>, and the characters of that
         string are then inserted into this string buffer at the indicated
@@ -645,7 +654,7 @@ public:
     /**
         Inserts the string representation of the <code>long</code>
         argument into this string buffer.
-        <p>
+
         The second argument is converted to a string as if by the method
         <code>String.valueOf</code>, and the characters of that
         string are then inserted into this string buffer at the indicated
@@ -669,7 +678,7 @@ public:
     /**
         Inserts the string representation of the <code>float</code>
         argument into this string buffer.
-        <p>
+
         The second argument is converted to a string as if by the method
         <code>String.valueOf</code>, and the characters of that
         string are then inserted into this string buffer at the indicated
@@ -693,7 +702,7 @@ public:
     /**
         Inserts the string representation of the <code>double</code>
         argument into this string buffer.
-        <p>
+
         The second argument is converted to a string as if by the method
         <code>String.valueOf</code>, and the characters of that
         string are then inserted into this string buffer at the indicated
