@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-04 15:54:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,31 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ korean ] = "±¸¼º¿ä¼Ò (%s)À»£¨¸¦£©·ÎµåÇÏÁö¡¡¸øÇß½À´Ï´Ù.\n¼Â¾÷À»¡¡½ÃÀÛÇÑ´ÙÀ½¡¡¼ö¸®ÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Bir bileþen (%s) yüklenemedi.\nSetup programýný çalýþtýrýp onarýnýz.";
     Text[ language_user1 ] = " ";
+    Text[ finnish ] = "Komponenttia (%s) ei voitu ladata.\nKäynnistä asennusohjelma korjausasetuksella.";
+    Text[ catalan ] = "No se pudo cargar un componente (%s).\nInicie por favor el programa de instalación y ejecute una Reparación.";
 };
 
 String SV_STDTEXT_DONTWARNAGAIN
 {
     Text = "Diesen Hinweis nicht mehr anzeigen.";
     Text [English] = "Do not warn me again.";
+    Text[ english_us ] = "Do not warn me again.";
+    Text[ portuguese ] = "Do not warn me again.";
+    Text[ russian ] = "Do not warn me again.";
+    Text[ greek ] = "Do not warn me again.";
+    Text[ dutch ] = "Do not warn me again.";
+    Text[ french ] = "Do not warn me again.";
+    Text[ spanish ] = "Do not warn me again.";
+    Text[ italian ] = "Do not warn me again.";
+    Text[ danish ] = "Do not warn me again.";
+    Text[ swedish ] = "Varna mig inte igen";
+    Text[ polish ] = "Do not warn me again.";
+    Text[ portuguese_brazilian ] = "Do not warn me again.";
+    Text[ japanese ] = "Do not warn me again.";
+    Text[ korean ] = "Do not warn me again.";
+    Text[ chinese_simplified ] = "Do not warn me again.";
+    Text[ chinese_traditional ] = "Do not warn me again.";
+    Text[ turkish ] = "Do not warn me again.";
+    Text[ arabic ] = "Do not warn me again.";
+    Text[ catalan ] = "Do not warn me again.";
 };
