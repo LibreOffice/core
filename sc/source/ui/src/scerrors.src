@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:28:26 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 10:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,6 +584,15 @@ Resource RID_ERRHDLSC
         Text[ korean ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
         Text[ turkish ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
         Text[ thai ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ greek ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ dutch ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ french ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ finnish ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ danish ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ chinese_simplified ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ chinese_traditional ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ arabic ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ catalan ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
     };
     String SCWARN_IMPORT_COLUMN_OVERFLOW & SH_MAX
     {
@@ -601,6 +610,15 @@ Resource RID_ERRHDLSC
         Text[ korean ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
         Text[ turkish ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
         Text[ thai ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ greek ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ dutch ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ french ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ finnish ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ danish ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ chinese_simplified ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ chinese_traditional ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ arabic ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ catalan ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
     };
     String SCWARN_IMPORT_SHEET_OVERFLOW & SH_MAX
     {
@@ -618,6 +636,15 @@ Resource RID_ERRHDLSC
         Text[ korean ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
         Text[ turkish ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
         Text[ thai ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ greek ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ dutch ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ french ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ finnish ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ danish ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ chinese_simplified ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ chinese_traditional ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ arabic ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ catalan ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
     };
     String SCWARN_IMPORT_OPEN_FM3 & SH_MAX
     {
