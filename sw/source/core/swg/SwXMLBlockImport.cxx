@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-08 16:02:52 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 16:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,10 @@ SvXMLImportContext *SwXMLBlockListImport::CreateContext(
     return pContext;
 }
 
-SwXMLTextBlockImport::SwXMLTextBlockImport ( SwXMLTextBlocks &rBlocks )
-: rBlockList (rBlocks)
+SwXMLTextBlockImport::SwXMLTextBlockImport ( SwXMLTextBlocks &rBlocks, String & rNewText, sal_Bool bNewTextOnly )
+: rBlockList ( rBlocks )
+, bTextOnly ( bNewTextOnly )
+, m_rText ( rNewText )
 {
 //  GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, sXML_np__block_list,
 //                                sXML_n_block_list, XML_NAMESPACE_BLOCKLIST );
@@ -111,8 +113,8 @@ SvXMLImportContext *SwXMLTextBlockImport::CreateContext(
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
-    if( XML_NAMESPACE_OFFICE==nPrefix &&
-        rLocalName.compareToAscii( sXML_document ) == 0 )
+    if( XML_NAMESPACE_OFFICE == nPrefix &&
+        rLocalName.compareToAscii( bTextOnly ? sXML_document : sXML_document_content ) == 0 )
         pContext = new SwXMLTextBlockDocumentContext( *this, nPrefix, rLocalName, xAttrList );
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
@@ -120,8 +122,5 @@ SvXMLImportContext *SwXMLTextBlockImport::CreateContext(
 }
 void SAL_CALL SwXMLTextBlockImport::endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
-{
-}
-void SwXMLTextBlockImport::AppendText ( ::rtl::OUString &rText )
 {
 }
