@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-02-08 16:59:32 $
+ *  last change: $Author: vg $ $Date: 2002-02-08 17:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,8 +354,7 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
        AccessibleContextBase::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    const OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM (
-        "drafts.com.sun.star.accessibility.AccessibleContext"));
+    const OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
     return uno::Sequence<OUString> (&sServiceName, 1);
 }
 
@@ -402,8 +401,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     AccessibleContextBase::getServiceName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM (
-        "drafts.com.sun.star.accessibility.AccessibleContext"));
+    return OUString(RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
 }
 
 //=====  internal  ============================================================
