@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-13 12:14:15 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ configuration::Tree TreeElement::getTree() const
 }
 //-----------------------------------------------------------------------------
         // self-locked methods for dispose handling
-bool TreeElement::disposeTree(bool bForce)
+bool SetElement::disposeTree(bool bForce)
 {
     return getApiTree().disposeTree(bForce);
 }

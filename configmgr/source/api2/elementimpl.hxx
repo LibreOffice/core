@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,16 @@ namespace configmgr
 
         // XComponent and XInterface (EOL handling)
         //---------------------------------------------------------------------
-        void implDispose( TreeElement& rElement)
+        void implDispose( SetElement& rElement)
             throw(uno::RuntimeException);
 
-        void implDisposeObject( NodeAccess& aNode, TreeElement& rElement)
+        void implDispose( RootElement& rElement)
+            throw(uno::RuntimeException);
+
+        void implDisposeObject( NodeAccess& aNode, SetElement& rElement)
+            throw(uno::RuntimeException);
+
+        void implDisposeObject( NodeAccess& aNode, RootElement& rElement)
             throw(uno::RuntimeException);
 
         void implDisposeObject( NodeAccess& aNode, InnerElement& rElement)

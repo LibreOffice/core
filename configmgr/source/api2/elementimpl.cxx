@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include "confsvccomponent.hxx"
 #include "committer.hxx"
 
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/configuration/XTemplateContainer.hpp>
 
@@ -349,7 +350,7 @@ void implSetName(NodeAccess& rNode, SetElement& rElement, const OUString& aName 
 
 //-----------------------------------------------------------------------------
 
-void implDispose( TreeElement& rElement) throw(uno::RuntimeException)
+void implDispose( SetElement& rElement) throw(uno::RuntimeException)
 {
     if (!rElement.disposeTree(false))
     {
@@ -360,9 +361,26 @@ void implDispose( TreeElement& rElement) throw(uno::RuntimeException)
 }
 //-----------------------------------------------------------------------------
 
-void implDisposeObject( NodeAccess& , TreeElement& rElement) throw(uno::RuntimeException)
+void implDispose( RootElement& rElement) throw(uno::RuntimeException)
+{
+    if (!rElement.disposeTree())
+    {
+        throw lang::DisposedException(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION: Can't dispose an object that already was disposed")),
+                rElement.getUnoInstance() );
+    }
+}
+//-----------------------------------------------------------------------------
+
+void implDisposeObject( NodeAccess& ,SetElement& rElement) throw(uno::RuntimeException)
 {
     rElement.disposeTree(true);
+}
+//-----------------------------------------------------------------------------
+
+void implDisposeObject( NodeAccess& , RootElement& rElement) throw(uno::RuntimeException)
+{
+    rElement.disposeTree();
 }
 //-----------------------------------------------------------------------------
 

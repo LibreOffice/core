@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,9 +139,6 @@ namespace configmgr
         // model access
             configuration::Tree     getTree() const;
 
-        // self-locked methods for dispose handling
-            bool disposeTree(bool bForceDispose);
-
         // api object handling
             Factory&                    getFactory();
             Notifier                    getNotifier();
@@ -158,7 +155,11 @@ namespace configmgr
         class SetElement : public TreeElement
         {
         public:
+        // self-locked methods for dispose handling
+            bool disposeTree(bool bForceDispose);
+
             void haveNewParent(NodeSetInfoAccess* pNewParent);
+
             configuration::ElementTree      getElementTree() const;
             configuration::SetElementInfo   getTemplateInfo() const;
         };
