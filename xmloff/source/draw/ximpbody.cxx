@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-19 14:53:22 $
+ *  last change: $Author: cl $ $Date: 2001-06-22 11:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,45 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         }
     }
 
+    // set MasterPage?
+    if(maMasterPageName.getLength())
+    {
+        // #85906# Code for setting masterpage needs complete rework
+        // since GetSdImport().GetMasterStylesContext() gives always ZERO
+        // because of content/style file split. Now the nechanism is to
+        // compare the wanted masterpage-name with the existing masterpages
+        // which were loaded and created in the styles section loading.
+        uno::Reference< drawing::XDrawPages > xMasterPages(GetSdImport().GetLocalMasterPages(), uno::UNO_QUERY);
+        uno::Reference < drawing::XMasterPageTarget > xDrawPage(rShapes, uno::UNO_QUERY);
+        uno::Reference< drawing::XDrawPage > xMasterPage;
+
+        if(xDrawPage.is())
+        {
+            sal_Bool bDone(FALSE);
+
+            for(sal_Int32 a = 0; !bDone && a < xMasterPages->getCount(); a++)
+            {
+                uno::Any aAny(xMasterPages->getByIndex(a));
+                aAny >>= xMasterPage;
+
+                if(xMasterPage.is())
+                {
+                    uno::Reference < container::XNamed > xMasterNamed(xMasterPage, uno::UNO_QUERY);
+                    if(xMasterNamed.is())
+                    {
+                        OUString sMasterPageName = xMasterNamed->getName();
+
+                        if(sMasterPageName.getLength() && sMasterPageName.equals(maMasterPageName))
+                        {
+                            xDrawPage->setMasterPage(xMasterPage);
+                            bDone = TRUE;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // set PageProperties?
     if(maStyleName.getLength())
     {
@@ -252,45 +291,6 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                             uno::Any aAny;
                             aAny <<= xPropSet2;
                             xPropSet1->setPropertyValue( aBackground, aAny );
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // set MasterPage?
-    if(maMasterPageName.getLength())
-    {
-        // #85906# Code for setting masterpage needs complete rework
-        // since GetSdImport().GetMasterStylesContext() gives always ZERO
-        // because of content/style file split. Now the nechanism is to
-        // compare the wanted masterpage-name with the existing masterpages
-        // which were loaded and created in the styles section loading.
-        uno::Reference< drawing::XDrawPages > xMasterPages(GetSdImport().GetLocalMasterPages(), uno::UNO_QUERY);
-        uno::Reference < drawing::XMasterPageTarget > xDrawPage(rShapes, uno::UNO_QUERY);
-        uno::Reference< drawing::XDrawPage > xMasterPage;
-
-        if(xDrawPage.is())
-        {
-            sal_Bool bDone(FALSE);
-
-            for(sal_Int32 a = 0; !bDone && a < xMasterPages->getCount(); a++)
-            {
-                uno::Any aAny(xMasterPages->getByIndex(a));
-                aAny >>= xMasterPage;
-
-                if(xMasterPage.is())
-                {
-                    uno::Reference < container::XNamed > xMasterNamed(xMasterPage, uno::UNO_QUERY);
-                    if(xMasterNamed.is())
-                    {
-                        OUString sMasterPageName = xMasterNamed->getName();
-
-                        if(sMasterPageName.getLength() && sMasterPageName.equals(maMasterPageName))
-                        {
-                            xDrawPage->setMasterPage(xMasterPage);
-                            bDone = TRUE;
                         }
                     }
                 }
