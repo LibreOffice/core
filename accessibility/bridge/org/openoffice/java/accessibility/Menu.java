@@ -54,34 +54,42 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.java.accessibility;
 
+import com.sun.star.accessibility.*;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.accessibility.*;
 
-public class Menu extends AbstractButton implements javax.accessibility.Accessible {
 
+public class Menu extends AbstractButton
+    implements javax.accessibility.Accessible {
     private java.util.Vector children;
+    protected XAccessibleSelection unoAccessibleSelection = null;
 
-    protected Menu(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+    protected Menu(XAccessible xAccessible,
+        XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
+
         try {
             // Create a vector with the correct initial capacity
             int count = unoAccessibleContext.getAccessibleChildCount();
             children = new java.util.Vector(count);
+
             // Fill the vector with objects
-            for (int i=0; i < count; i++) {
+            for (int i = 0; i < count; i++) {
                 java.awt.Component c = getComponent(unoAccessibleContext.getAccessibleChild(i));
+
                 if (c != null) {
                     children.add(c);
                 }
             }
         } catch (com.sun.star.uno.RuntimeException e) {
             if (Build.DEBUG) {
-                System.err.println("RuntimeException caught during menu initialization: " + e.getMessage());
+                System.err.println(
+                    "RuntimeException caught during menu initialization: " +
+                    e.getMessage());
             }
+
             if (children == null) {
                 children = new java.util.Vector(0);
             }
@@ -93,11 +101,14 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
         // The AccessBridge for Windows expects an instance of AccessibleContext
         // as parameters
         java.awt.Component c = getComponent(unoAccessible);
+
         if (c != null) {
             try {
-                children.add(unoAccessible.getAccessibleContext().getAccessibleIndexInParent(), c);
+                children.add(unoAccessible.getAccessibleContext()
+                                          .getAccessibleIndexInParent(), c);
                 firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_CHILD_PROPERTY,
-                    null, ((javax.accessibility.Accessible) c).getAccessibleContext());
+                    null,
+                    ((javax.accessibility.Accessible) c).getAccessibleContext());
             } catch (com.sun.star.uno.RuntimeException e) {
             }
         }
@@ -107,11 +118,13 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
         // The AccessBridge for Windows expects an instance of AccessibleContext
         // as parameters
         java.awt.Component c = getComponent(unoAccessible);
+
         if (c != null) {
             try {
                 children.remove(c);
                 firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_CHILD_PROPERTY,
-                    ((javax.accessibility.Accessible) c).getAccessibleContext(), null);
+                    ((javax.accessibility.Accessible) c).getAccessibleContext(),
+                    null);
             } catch (com.sun.star.uno.RuntimeException e) {
             }
         }
@@ -119,38 +132,53 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
 
     protected void add(Object any) {
         try {
-            add((XAccessible) AnyConverter.toObject(AccessibleObjectFactory.XAccessibleType, any));
+            add((XAccessible) AnyConverter.toObject(
+                    AccessibleObjectFactory.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
 
     protected void remove(Object any) {
         try {
-            remove((XAccessible) AnyConverter.toObject(AccessibleObjectFactory.XAccessibleType, any));
+            remove((XAccessible) AnyConverter.toObject(
+                    AccessibleObjectFactory.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
 
     protected synchronized int indexOf(Object child) {
-        return  children.indexOf(child);
+        return children.indexOf(child);
     }
 
     protected java.awt.Component getComponent(XAccessible unoAccessible) {
         java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(unoAccessible);
+
         if (c == null) {
             c = AccessibleObjectFactory.createAccessibleComponent(unoAccessible);
+
             if (c instanceof javax.accessibility.Accessible) {
-                ((javax.accessibility.Accessible) c).getAccessibleContext().setAccessibleParent(this);
+                ((javax.accessibility.Accessible) c).getAccessibleContext()
+                 .setAccessibleParent(this);
             }
         }
+
         return c;
+    }
+
+    protected XAccessibleEventListener createEventListener() {
+        return new AccessibleMenuListener();
+    }
+
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleMenu();
     }
 
     /**
     * Update the proxy objects appropriatly on property change events
     */
-    protected class AccessibleMenuListener extends AccessibleUNOComponentListener {
-
+    protected class AccessibleMenuListener
+        extends AccessibleUNOComponentListener {
         protected AccessibleMenuListener() {
             super();
         }
@@ -159,51 +187,34 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
                 case AccessibleEventId.CHILD:
+
                     if (AnyConverter.isObject(event.OldValue)) {
                         remove(event.OldValue);
                     }
+
                     if (AnyConverter.isObject(event.NewValue)) {
                         add(event.NewValue);
                     }
+
                     break;
+
                 case AccessibleEventId.SELECTION_CHANGED:
-                    firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
+                    firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY,
+                        null, null);
+
                     break;
+
                 default:
                     super.notifyEvent(event);
             }
         }
-
     }
 
-    protected XAccessibleEventListener createEventListener() {
-        return new AccessibleMenuListener();
-    }
-
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            try {
-                unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(
-                    XAccessibleSelection.class, unoAccessibleContext);
-                if (unoAccessibleSelection != null) {
-                    accessibleContext = new AccessibleMenu();
-                }
-            } catch (com.sun.star.uno.RuntimeException e) {
-            }
-        }
-        return accessibleContext;
-    }
-
-    protected XAccessibleSelection unoAccessibleSelection = null;
-
-    protected class AccessibleMenu extends AccessibleAbstractButton implements javax.accessibility.AccessibleSelection {
-
-        /**
-        * Though the class is abstract, this should be called by all sub-classes
-        */
+    protected class AccessibleMenu extends AccessibleAbstractButton
+        implements javax.accessibility.AccessibleSelection {
         protected AccessibleMenu() {
-            super();
+            unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(XAccessibleSelection.class,
+                    unoAccessibleContext);
         }
 
         /** Gets the role of this object */
@@ -226,7 +237,8 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
         }
 
         /** Returns the specified Accessible child of the object */
-        public synchronized javax.accessibility.Accessible getAccessibleChild(int i) {
+        public synchronized javax.accessibility.Accessible getAccessibleChild(
+            int i) {
             try {
                 if (i < children.size()) {
                     return (javax.accessibility.Accessible) children.get(i);
@@ -252,8 +264,8 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
         /** Returns the Accessible child, if one exists, contained at the local coordinate Point */
         public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
             try {
-                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
-                    unoAccessibleComponent.getAccessibleAtPoint(new com.sun.star.awt.Point(p.x, p.y)));
+                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(unoAccessibleComponent.getAccessibleAtPoint(
+                            new com.sun.star.awt.Point(p.x, p.y)));
 
                 return (javax.accessibility.Accessible) c;
             } catch (com.sun.star.uno.RuntimeException e) {
@@ -268,8 +280,8 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
         /** Returns an Accessible representing the specified selected child of the object */
         public javax.accessibility.Accessible getAccessibleSelection(int i) {
             try {
-                return (javax.accessibility.Accessible)
-                    getComponent(unoAccessibleSelection.getSelectedAccessibleChild(i));
+                return (javax.accessibility.Accessible) getComponent(unoAccessibleSelection.getSelectedAccessibleChild(
+                        i));
             } catch (java.lang.Exception e) {
                 /*
                 * Possible exceptions are:
@@ -338,7 +350,5 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
         public void selectAllAccessibleSelection() {
             // not supported
         }
-
     }
 }
-
