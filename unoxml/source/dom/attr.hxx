@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,13 @@ namespace DOM
         virtual OUString SAL_CALL getName() throw (RuntimeException);
 
         /**
-        The Element node this attribute is attached to or null if this 
+        The Element node this attribute is attached to or null if this
         attribute is not in use.
         */
         virtual Reference< XElement > SAL_CALL getOwnerElement() throw (RuntimeException);
 
         /**
-        If this attribute was explicitly given a value in the original 
+        If this attribute was explicitly given a value in the original
         document, this is true; otherwise, it is false.
         */
         virtual sal_Bool SAL_CALL getSpecified()throw (RuntimeException);
@@ -121,7 +121,7 @@ namespace DOM
         virtual OUString SAL_CALL getNodeName()
             throw (RuntimeException);
         virtual OUString SAL_CALL getNodeValue()
-            throw (RuntimeException);    
+            throw (RuntimeException);
 
     // --- delegation for XNde base.
     virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
