@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-05 12:27:03 $
+ *  last change: $Author: pb $ $Date: 2001-09-12 07:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ static SvtDocInfoMapping_Impl __READONLY_DATA DocInfoMap_Impl[] =
 
 SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
-    Window( pParent ),
+    Window( pParent, WB_DIALOGCONTROL ),
 
     aHeaderBar( this, 0 ),
     aIconCtrl( this, WB_3DLOOK | WB_ICON | WB_NOCOLUMNHEADER |
@@ -450,12 +450,13 @@ void SvtIconWindow_Impl::SetFocus()
 
 SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( Window* pParent ) :
 
-    Window( pParent ),
+    Window( pParent, WB_DIALOGCONTROL | WB_TABSTOP ),
 
     aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_TITLE ),
     bIsTemplateFolder   ( sal_False )
 
 {
+    aFileView.SetStyle( aFileView.GetStyle() | WB_DIALOGCONTROL | WB_TABSTOP );
     aFileView.SetHelpId( HID_TEMPLATEDLG_FILEVIEW );
     aFileView.Show();
     aFileView.SetPosPixel( Point( 0, 0 ) );
@@ -892,11 +893,11 @@ void SvtFrameWindow_Impl::ToggleView( sal_Bool bDocInfo )
 
 SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
 
-    Window( pParent, WB_3DLOOK ),
+    Window( pParent, WB_3DLOOK | WB_DIALOGCONTROL ),
 
     aFileViewTB             ( this, SvtResId( TB_SVT_FILEVIEW ) ),
     aFrameWinTB             ( this, SvtResId( TB_SVT_FRAMEWIN ) ),
-    aSplitWin               ( this, WB_DOCKBORDER | WB_FLATSPLITDRAW ),
+    aSplitWin               ( this, WB_DOCKBORDER | WB_FLATSPLITDRAW | WB_DIALOGCONTROL ),
     pHistoryList            ( NULL )
 
 {
@@ -1032,35 +1033,7 @@ IMPL_LINK ( SvtTemplateWindow , TimeoutHdl_Impl, Timer *, EMPTYARG )
 
 IMPL_LINK ( SvtTemplateWindow , ClickHdl_Impl, ToolBox *, pToolBox )
 {
-    USHORT nId = pToolBox->GetCurItemId();
-    switch( nId )
-    {
-        case TI_DOCTEMPLATE_BACK :
-            OpenHistory();
-            break;
-
-        case TI_DOCTEMPLATE_PREV :
-        {
-            String aURL;
-            if ( pFileWin->HasPreviousLevel( aURL ) )
-                pFileWin->OpenFolder( aURL );
-            break;
-        }
-
-        case TI_DOCTEMPLATE_PRINT :
-        {
-            PrintFile( pFileWin->GetSelectedFile() );
-            break;
-        }
-
-        case TI_DOCTEMPLATE_DOCINFO :
-        case TI_DOCTEMPLATE_PREVIEW :
-        {
-            pFrameWin->ToggleView( TI_DOCTEMPLATE_DOCINFO == nId );
-            break;
-        }
-    }
-
+    DoAction( pToolBox->GetCurItemId() );
     return 0;
 }
 
@@ -1101,13 +1074,46 @@ void SvtTemplateWindow::AppendHistoryURL( const String& rURL )
 
 void SvtTemplateWindow::OpenHistory()
 {
-    DBG_ASSERT( pHistoryList && pHistoryList->Count() > 1, "invalid history list" );
     String* pEntry = pHistoryList->Remove( pHistoryList->Count() - 1 );
     pEntry = pHistoryList->Remove( pHistoryList->Count() - 1 );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, pHistoryList->Count() > 1 );
     String aURL( *pEntry );
     delete pEntry;
     pFileWin->OpenFolder( aURL );
+}
+
+void SvtTemplateWindow::DoAction( USHORT nAction )
+{
+    switch( nAction )
+    {
+        case TI_DOCTEMPLATE_BACK :
+        {
+            if ( pHistoryList && pHistoryList->Count() > 1 )
+                OpenHistory();
+            break;
+        }
+
+        case TI_DOCTEMPLATE_PREV :
+        {
+            String aURL;
+            if ( pFileWin->HasPreviousLevel( aURL ) )
+                pFileWin->OpenFolder( aURL );
+            break;
+        }
+
+        case TI_DOCTEMPLATE_PRINT :
+        {
+            PrintFile( pFileWin->GetSelectedFile() );
+            break;
+        }
+
+        case TI_DOCTEMPLATE_DOCINFO :
+        case TI_DOCTEMPLATE_PREVIEW :
+        {
+            pFrameWin->ToggleView( TI_DOCTEMPLATE_DOCINFO == nAction );
+            break;
+        }
+    }
 }
 
 long SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
@@ -1120,34 +1126,10 @@ long SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
         const KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         USHORT nCode = rKeyCode.GetCode();
 
-        if ( KEY_TAB == nCode )
+        if ( KEY_BACKSPACE == nCode && !rKeyCode.GetModifier() && pFileWin->HasChildPathFocus() )
         {
-            if ( pIconWin->HasChildPathFocus() )
-            {
-                if ( !rKeyCode.GetModifier() )
-                {
-                    pFileWin->SetFocus();
-                    nRet = 1;
-                }
-                else if ( rKeyCode.IsShift() )
-                {
-                    aSendFocusHdl.Call( this );
-                    nRet = 1;
-                }
-            }
-            else if ( pFileWin->HasChildPathFocus() )
-            {
-                if ( !rKeyCode.GetModifier() )
-                {
-                    aSendFocusHdl.Call( this );
-                    nRet = 1;
-                }
-                else if ( rKeyCode.IsShift() )
-                {
-                    pIconWin->SetFocus();
-                    nRet = 1;
-                }
-            }
+            DoAction( TI_DOCTEMPLATE_BACK );
+            nRet = 1;
         }
     }
 
@@ -1539,43 +1521,5 @@ void SvtDocumentTemplateDialog::UpdateDocumentTemplates_Impl()
         if ( pImpl->pWin->IsTemplateFolderOpen() )
             pImpl->pWin->OpenTemplateRoot();
     }
-}
-
-// ------------------------------------------------------------------------
-
-long SvtDocumentTemplateDialog::PreNotify( NotifyEvent& rNEvt )
-{
-    USHORT nType = rNEvt.GetType();
-    long nRet = 0;
-
-    if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
-    {
-        const KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
-        USHORT nCode = rKeyCode.GetCode();
-
-        if ( KEY_TAB == nCode )
-        {
-            if ( aHelpBtn.HasChildPathFocus() )
-            {
-                if ( !rKeyCode.GetModifier() )
-                {
-                    pImpl->pWin->SetFocus( sal_True );
-                    nRet = 1;
-                }
-            }
-            else if ( ( aEditBtn.IsEnabled() && aEditBtn.HasChildPathFocus() ) ||
-                      ( !aEditBtn.IsEnabled() && aOKBtn.IsEnabled() && aOKBtn.HasChildPathFocus() ) ||
-                      ( !aEditBtn.IsEnabled() && !aOKBtn.IsEnabled() && aCancelBtn.HasChildPathFocus() ) )
-            {
-                if ( rKeyCode.IsShift() )
-                {
-                    pImpl->pWin->SetFocus( sal_False );
-                    nRet = 1;
-                }
-            }
-        }
-    }
-
-    return nRet ? nRet : ModalDialog::PreNotify( rNEvt );
 }
 

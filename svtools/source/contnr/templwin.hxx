@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-05 12:24:51 $
+ *  last change: $Author: pb $ $Date: 2001-09-12 08:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,7 @@ private:
     void                PrintFile( const String& rURL );
     void                AppendHistoryURL( const String& rURL );
     void                OpenHistory();
+    void                DoAction( USHORT nAction );
 
 protected:
     virtual long        PreNotify( NotifyEvent& rNEvt );
