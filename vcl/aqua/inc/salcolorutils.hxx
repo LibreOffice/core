@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcolorutils.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:47 $
+ *  last change: $Author: pluby $ $Date: 2001-03-10 22:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _SV_SALCOLORUTILS_HXX
 
 #include <premac.h>
-#include <QD/QD.h>
+#include <ApplicationServices/ApplicationServices.h>
 #include <postmac.h>
 
 #ifndef _SV_SALBTYPE_HXX

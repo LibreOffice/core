@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-21 20:48:46 $
+ *  last change: $Author: pluby $ $Date: 2001-03-10 22:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _SV_SALGDI_H
 
 #include <premac.h>
-#include <QD/QD.h>
+#include <ApplicationServices/ApplicationServices.h>
 #include <postmac.h>
 
 #ifndef _SV_SV_H
