@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:17:47 $
+ *  last change: $Author: vg $ $Date: 2001-08-30 20:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,9 +278,10 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message[ turkish ] = "Konfigürasyon ve ileti dizinlerinin ayrý dizinler olarak\nbelirlenmesi gerekir.\nLütfen yeni bir veri yolu seçin.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La configuración y los directorios de correo electrónico\ndeben especificarse como directorios separados.\nPor favor elija una nueva ruta.";
-    Message[ finnish ] = "Kokoonpano- ja postihakemistot on määritettävä eri hakemistoiksi.\nValitse uusi polku.";
+    Message[ finnish ] = "Kokoonpano- ja postihakemistot on m??ritett?v? eri hakemistoiksi.\nValitse uusi polku.";
 };
  // ******************************************************************* EOF
+
 
 
 
