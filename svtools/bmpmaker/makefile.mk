@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 14:35:55 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:17:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,9 +110,9 @@ APP1BASE=0x10000000
 # APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX) 
 # .ENDIF
 
-.IF "$(OS)"=="MACOSX"
-ALL:	$(BIN)$/$(RES1TARGET).res ALLTAR
-.ENDIF
+#.IF "$(OS)"=="MACOSX"
+#ALL:	$(BIN)$/$(RES1TARGET).res ALLTAR
+#.ENDIF
 
 # --- APP2TARGET --------------------------------------------------
 
