@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:13:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,6 @@
 #endif
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
-#endif
-
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX //autogen
