@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-18 08:54:16 $
+ *  last change: $Author: tl $ $Date: 2001-04-19 11:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,6 @@ class SmParser
                   nTokenIndex;
     USHORT        Row,
                   ColOff;
-    sal_Unicode   CharLineEnd;
     BOOL          bConvert40To50;
 
     // declare copy-constructor and assignment-operator private
