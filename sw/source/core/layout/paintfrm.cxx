@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:12:27 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,12 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+
+// --> FME 2004-06-08 #i12836# enhanced pdf export
+#ifndef _ENHANCEDPDFEXPORTHELPER_HXX
+#include <EnhancedPDFExportHelper.hxx>
+#endif
+// <--
 
 #define GETOBJSHELL()       ((SfxObjectShell*)rSh.GetDoc()->GetDocShell())
 
@@ -872,6 +878,10 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
     //der Tabellen.
     if ( Count() != nLastCount )
     {
+        // --> FME 2004-06-24 #i16816# tagged pdf support
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pOut );
+        // <--
+
         // OD 2004-04-23 #116347#
         pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
         pOut->SetLineColor();
@@ -984,6 +994,10 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 {
     if ( Count() )
     {
+        // --> FME 2004-06-24 #i16816# tagged pdf support
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pOut );
+        // <--
+
         //Alle Hilfslinien, die sich fast decken entfernen (Tabellen)
         for ( USHORT i = 0; i < Count(); ++i )
         {
@@ -2215,6 +2229,10 @@ void SwTabFrmPainter::HandleFrame( const SwFrm& rFrm )
 
 void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) const
 {
+    // --> FME 2004-06-24 #i16816# tagged pdf support
+    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, rDev );
+    // <--
+
     const SwFrm* pTmpFrm = &mrTabFrm;
     SWRECTFN( pTmpFrm )
 
@@ -2757,12 +2775,12 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
             pVout->SetOrgRect( aPaintRect );
 
-            pPage->PaintBaBo( aPaintRect, pPage, TRUE );
-
             /// OD 29.08.2002 #102450#
             /// determine background color of page for <PaintLayer> method
             /// calls, paint <hell> or <heaven>
             const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
+
+            pPage->PaintBaBo( aPaintRect, pPage, TRUE );
 
             if ( pSh->Imp()->HasDrawView() )
             {
@@ -2959,6 +2977,13 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
 
 void SwLayoutFrm::Paint( const SwRect& rRect ) const
 {
+    ViewShell *pSh = GetShell();
+
+    // --> FME 2004-06-24 #i16816# tagged pdf support
+    Frm_Info aFrmInfo( *this );
+    SwTaggedPDFHelper aTaggedPDFHelper( &aFrmInfo, 0, *pSh->GetOut() );
+    // <--
+
     const SwFrm *pFrm = Lower();
     if ( !pFrm )
         return;
@@ -2997,6 +3022,7 @@ void SwLayoutFrm::Paint( const SwRect& rRect ) const
             }
             pFrm->ResetRetouche();
         }
+
         if ( rRect.IsOver( aPaintRect ) )
         {
             if ( bCnt && pFrm->IsCompletePaint() &&
@@ -3034,6 +3060,7 @@ void SwLayoutFrm::Paint( const SwRect& rRect ) const
             }
             pFrm->ResetCompletePaint();
             aPaintRect._Intersection( rRect );
+
             pFrm->Paint( aPaintRect );
 
             if ( Lower() && Lower()->IsColumnFrm() )
@@ -3048,6 +3075,7 @@ void SwLayoutFrm::Paint( const SwRect& rRect ) const
                 {
                     if ( !pPage )
                         pPage = pFrm->FindPageFrm();
+
                     PaintColLines( aPaintRect, rCol, pPage );
                 }
             }
@@ -3412,6 +3440,7 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
     }
 
     SwLayoutFrm::Paint( aRect );
+
     Validate();
 
     // OD 19.12.2002 #106318# - first paint lines added by fly frame paint
@@ -5089,6 +5118,10 @@ void SwPageFrm::GetBottomShadowRect( const SwRect& _rPageRect,
 void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
                                       ViewShell*    _pViewShell ) const
 {
+    // --> FME 2004-06-24 #i16816# tagged pdf support
+    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *_pViewShell->GetOut() );
+    // <--
+
     // get color for page border and shadow paint
     const Color& rColor = SwViewOption::GetFontColor();
 
@@ -5150,6 +5183,11 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
         pPage = FindPageFrm();
 
     OutputDevice *pOut = pGlobalShell->GetOut();
+
+    // --> FME 2004-06-24 #i16816# tagged pdf support
+    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pOut );
+    // <--
+
     // OD 2004-04-23 #116347#
     pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
     pOut->SetLineColor();
@@ -5207,6 +5245,11 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     }
 
     ViewShell *pSh = pGlobalShell;
+
+    // --> FME 2004-06-24 #i16816# tagged pdf support
+    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pSh->GetOut() );
+    // <--
+
     const FASTBOOL bWin = pSh->GetWin() ? TRUE : FALSE;
     const SvxBrushItem* pItem;
     /// OD 05.09.2002 #102912#
@@ -5886,6 +5929,11 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         SwRegionRects aRegion( aRetouche );
         aRegion -= rRect;
         ViewShell *pSh = GetShell();
+
+        // --> FME 2004-06-24 #i16816# tagged pdf support
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pSh->GetOut() );
+        // <--
+
         for ( USHORT i = 0; i < aRegion.Count(); ++i )
         {
             SwRect &rRetouche = aRegion[i];
