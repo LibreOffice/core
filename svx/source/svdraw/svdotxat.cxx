@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-25 08:33:21 $
+ *  last change: $Author: aw $ $Date: 2001-12-04 19:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,24 @@ void SdrTextObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
     {
         if( pOutlinerParaObject )
             SetVerticalWriting( !( (SfxBoolItem*) pNewItem )->GetValue() );
+    }
+
+    // #95501# reset to default
+    if(!pNewItem && !nWhich && pOutlinerParaObject)
+    {
+        SdrOutliner& rOutliner = ImpGetDrawOutliner();
+        rOutliner.SetText(*pOutlinerParaObject);
+        sal_uInt16 nParaCount(sal_uInt16(rOutliner.GetParagraphCount()));
+
+        if(nParaCount)
+        {
+            ESelection aSelection( 0, 0, EE_PARA_ALL, EE_PARA_ALL);
+            rOutliner.RemoveAttribs(aSelection, TRUE, 0);
+
+            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);
+            rOutliner.Clear();
+            NbcSetOutlinerParaObject(pTemp);
+        }
     }
 
     SdrAttrObj::ItemChange( nWhich, pNewItem );
