@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: oj $ $Date: 2000-11-15 14:48:47 $
+#   last change: $Author: oj $ $Date: 2001-01-09 15:45:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,17 +74,23 @@ IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
-            $(SLO)$/dbexchange.obj		\
-            $(SLO)$/dbloader.obj		\
-            $(SLO)$/dbtreemodel.obj		\
-            $(SLO)$/dbtreelistbox.obj	\
-            $(SLO)$/dbtreeview.obj		\
-            $(SLO)$/sbagrid.obj			\
-            $(SLO)$/formadapter.obj		\
-            $(SLO)$/brwview.obj			\
-            $(SLO)$/brwctrlr.obj		\
-            $(SLO)$/unodatbr.obj		\
-            $(SLO)$/sbamultiplex.obj	\
+            $(SLO)$/QueryTextView.obj			\
+            $(SLO)$/querycontroller.obj			\
+            $(SLO)$/queryview.obj				\
+            $(SLO)$/AsyncronousLink.obj			\
+            $(SLO)$/dataview.obj				\
+            $(SLO)$/genericcontroller.obj		\
+            $(SLO)$/dbexchange.obj				\
+            $(SLO)$/dbloader.obj				\
+            $(SLO)$/dbtreemodel.obj				\
+            $(SLO)$/dbtreelistbox.obj			\
+            $(SLO)$/dbtreeview.obj				\
+            $(SLO)$/sbagrid.obj					\
+            $(SLO)$/formadapter.obj				\
+            $(SLO)$/brwview.obj					\
+            $(SLO)$/brwctrlr.obj				\
+            $(SLO)$/unodatbr.obj				\
+            $(SLO)$/sbamultiplex.obj			\
             $(SLO)$/exsrcbrw.obj
 
 SRCFILES =  sbabrw.src	\

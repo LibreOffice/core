@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 19:09:19 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 15:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
-#include "dbaccess_helpid.hrc"
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
@@ -101,10 +100,22 @@
         ID_BROWSER_CUT;\
         ID_BROWSER_COPY;\
         ID_BROWSER_PASTE;\
+        SID_WIN_FULLSCREEN;\
+        SID_NEWDOC;\
+        SID_PRINTDOCDIRECT;\
+        ID_BROWSER_REDO;\
         ID_BROWSER_FILTERED;\
+        ID_BROWSER_QUERY_EXECUTE;\
+        ID_BROWSER_CLEAR_QUERY;\
+        ID_BROWSER_QUERY_VIEW_FUNCTIONS;\
+        ID_BROWSER_QUERY_VIEW_TABLES;\
+        ID_BROWSER_QUERY_VIEW_ALIASES;\
+        ID_BROWSER_QUERY_DISTINCT_VALUES;\
+        ID_BROWSER_CLOSE;\
+        ID_BROWSER_ESACPEPROCESSING;\
     };\
     IdCount = {\
-    23;\
+    35;\
     }
 
  // Default Image-Liste ----------------------------------------------------------------
@@ -780,6 +791,12 @@ ToolBox RID_BRW_QRY_TOOLBOX
         MID_BROWSER_FORMLETTER
         HelpId = ID_BROWSER_FORMLETTER ;
     };
+    CUR_ITEM
+    {
+        Identifier = ID_BROWSER_CLOSE ;
+        HelpId = ID_BROWSER_CLOSE ;
+        Hide = TRUE;
+    };
     };
 };
 
@@ -866,6 +883,270 @@ ToolBox RID_BRW_TAB_TOOLBOX
         MID_BROWSER_FORMLETTER
         HelpId = ID_BROWSER_FORMLETTER ;
     };
+    };
+};
+
+ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 3 , 1 ) ;
+    Size = MAP_APPFONT ( 200 , 14 ) ;
+    OutputSize = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
+    HideWhenDeactivate = TRUE ;
+    HelpId = HID_TLB_QUERYDESIGN ;
+
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_EDITDOC ;
+            HelpId = ID_BROWSER_EDITDOC ;
+            Text = "Bearbeiten" ;
+            Text [ ENGLISH ] = "Bearbeiten" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NEWDOC ;
+            HelpId = SID_NEWDOC ;
+            Hide = TRUE;
+            Text = "Bearbeiten" ;
+            Text [ ENGLISH ] = "Bearbeiten" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SAVEDOC ;
+            HelpId = ID_BROWSER_SAVEDOC ;
+            Text = "Speichern" ;
+            Text [ ENGLISH ] = "Save" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRINTDOCDIRECT ;
+            HelpId = SID_PRINTDOCDIRECT ;
+            Hide = TRUE;
+            Text = "Drucken" ;
+            Text [ ENGLISH ] = "Print" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_CUT ;
+            HelpId = ID_BROWSER_CUT ;
+            MID_SBA_QRY_CUT
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_COPY ;
+            HelpId = ID_BROWSER_COPY ;
+            MID_SBA_QRY_COPY
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_PASTE ;
+            HelpId = ID_BROWSER_PASTE ;
+            MID_SBA_QRY_PASTE
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_UNDO ;
+            HelpId = ID_BROWSER_UNDO ;
+            Text = "R¸ckg‰ngig" ;
+            Text [ ENGLISH ] = "Undo" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_REDO ;
+            HelpId = ID_BROWSER_REDO ;
+            Text = "Wiederherstellen" ;
+            Text [ ENGLISH ] = "Redo" ;
+
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_QUERY_EXECUTE;
+            HelpId = ID_BROWSER_QUERY_EXECUTE ;
+            Text = "Ausf¸hren" ;
+            Text [ ENGLISH ] = "Execute" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_ESACPEPROCESSING;
+            HelpId = ID_BROWSER_ESACPEPROCESSING ;
+            Text = "SQL-Kommando direkt ausf¸hren" ;
+            Text [ ENGLISH ] = "Native sql command" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_ADDTABLE;
+            HelpId = ID_BROWSER_ADDTABLE ;
+            Text = "Tabellen hinzuf¸gen" ;
+            Text [ ENGLISH ] = "Add tables" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_CLEAR_QUERY;
+            HelpId = ID_BROWSER_CLEAR_QUERY ;
+            Text = "Abfrage lˆschen" ;
+            Text [ ENGLISH ] = "clear query" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SQL;
+            HelpId = ID_BROWSER_SQL ;
+            Text = "Design Ansicht an-, ausschalten" ;
+            Text [ ENGLISH ] = "switch design view on/off" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_QUERY_VIEW_FUNCTIONS;
+            HelpId = ID_BROWSER_QUERY_VIEW_FUNCTIONS ;
+            Text = "Funktionen" ;
+            Text [ ENGLISH ] = "Functions" ;
+            Text[ english_us ] = "Functions";
+            Text[ portuguese ] = "FunÁıes";
+            Text[ russian ] = "‘ÛÌÍˆËË";
+            Text[ dutch ] = "Functies";
+            Text[ french ] = "Fonctions";
+            Text[ spanish ] = "Funciones";
+            Text[ italian ] = "Funzioni";
+            Text[ danish ] = "Funktioner";
+            Text[ swedish ] = "Funktioner";
+            Text[ polish ] = "Funkcje";
+            Text[ portuguese_brazilian ] = "Functions";
+            Text[ japanese ] = "ä÷êî";
+            Text[ chinese_simplified ] = "∫Ø ˝";
+            Text[ chinese_traditional ] = "®Áº∆";
+            Text[ dutch ] = "Functies";
+            Text[ chinese_simplified ] = "∫Ø ˝";
+            Text[ greek ] = "”ıÌ·ÒÙﬁÛÂÈÚ";
+            Text[ korean ] = "±‚¥…";
+            Text[ arabic ] = "œ«·« ";
+            Text[ turkish ] = "›˛levler";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_QUERY_VIEW_TABLES;
+            HelpId = ID_BROWSER_QUERY_VIEW_TABLES ;
+            Text = "Tabellenname" ;
+            Text [ ENGLISH ] = "Table name" ;
+            Text[ english_us ] = "Table Name";
+            Text[ portuguese ] = "Nome da tabela";
+            Text[ russian ] = "»Ïˇ Ú‡·ÎËˆ˚";
+            Text[ dutch ] = "Tabelnaam";
+            Text[ french ] = "Nom de la table";
+            Text[ spanish ] = "Nombre de la tabla";
+            Text[ italian ] = "Nome tabella";
+            Text[ danish ] = "Tabelnavn";
+            Text[ swedish ] = "Tabellnamn";
+            Text[ polish ] = "Nazwa tabeli";
+            Text[ portuguese_brazilian ] = "Table name";
+            Text[ japanese ] = "√∞ÃﬁŸñº";
+            Text[ chinese_simplified ] = "±Ì∏Ò√˚≥∆";
+            Text[ chinese_traditional ] = "™ÌÆÊ¶W∫Ÿ";
+            Text[ dutch ] = "Tabelnaam";
+            Text[ chinese_simplified ] = "±Ì∏Ò√˚≥∆";
+            Text[ greek ] = "ºÌÔÏ· ﬂÌ·Í·";
+            Text[ korean ] = "≈◊¿Ã∫Ì∏Ì";
+            Text[ arabic ] = "«”„ «·ÃœÊ·";
+            Text[ turkish ] = "Tablo ad˝";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_QUERY_VIEW_ALIASES;
+            HelpId = ID_BROWSER_QUERY_VIEW_ALIASES ;
+            Text = "Aliasname" ;
+            Text [ ENGLISH ] = "Alias name" ;
+            Text[ english_us ] = "Alias name";
+            Text[ portuguese ] = "Nome alias";
+            Text[ russian ] = "œÒÂ‚‰ÓÌËÏ Ú‡·ÎËˆ˚";
+            Text[ dutch ] = "Alias naam";
+            Text[ french ] = "Alias";
+            Text[ spanish ] = "Alias";
+            Text[ italian ] = "Alias";
+            Text[ danish ] = "Aliasnavn";
+            Text[ swedish ] = "Aliasnamn";
+            Text[ polish ] = "Nazwa aliasu";
+            Text[ portuguese_brazilian ] = "Alias name";
+            Text[ japanese ] = "¥≤ÿ±Ωñº";
+            Text[ chinese_simplified ] = "±√˚";
+            Text[ chinese_traditional ] = "•N•Œ¶W∫Ÿ";
+            Text[ dutch ] = "Alias naam";
+            Text[ chinese_simplified ] = "±√˚";
+            Text[ greek ] = "ÿÂı‰˛ÌıÏÔ";
+            Text[ korean ] = "æÀ∏Ææ∆Ω∫ ¿Ã∏ß";
+            Text[ arabic ] = "«”„ „” ⁄«—";
+            Text[ turkish ] = "Dier ad";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_QUERY_DISTINCT_VALUES;
+            HelpId = ID_BROWSER_QUERY_DISTINCT_VALUES ;
+            Text = "Eindeutige Werte" ;
+            Text [ ENGLISH ] = "Distinct values" ;
+            Text[ english_us ] = "Distinct Values";
+            Text[ portuguese ] = "Valores distintos";
+            Text[ russian ] = "Œ‰ÌÓÁÌ‡˜Ì˚Â ÁÌ‡˜ÂÌËˇ";
+            Text[ dutch ] = "Duidelijke waarden";
+            Text[ french ] = "Valeurs distinctes";
+            Text[ spanish ] = "Valores unÌvocos";
+            Text[ italian ] = "Valori distinti";
+            Text[ danish ] = "Entydige vÊrdier";
+            Text[ swedish ] = "Entydiga v‰rden";
+            Text[ polish ] = "Jednoznaczne wartoúci";
+            Text[ portuguese_brazilian ] = "Distinct values";
+            Text[ japanese ] = "ñæóƒíl";
+            Text[ chinese_simplified ] = "√˜»∑µƒ ˝÷µ";
+            Text[ chinese_traditional ] = "©˙ΩT™∫º∆≠»";
+            Text[ dutch ] = "Duidelijke waarden";
+            Text[ chinese_simplified ] = "√˜»∑µƒ ˝÷µ";
+            Text[ greek ] = "ƒÈ·ÍÒÈÙÈÍ›Ú ÙÈÏ›Ú";
+            Text[ korean ] = "¥‹¿œ ∞™";
+            Text[ arabic ] = "ﬁÌ„ Ê«÷Õ…";
+            Text[ turkish ] = "Benzersiz deerler";
+            Text[ language_user1 ] = " ";
+        };
+/*      ToolBoxItem
+        {
+            Identifier = SID_VIEW_ZOOM_MODE ;
+            HelpId = SID_VIEW_ZOOM_MODE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_EXPLORER_CONTENT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+*/
     };
 };
 
@@ -1098,9 +1379,61 @@ Menu MENU_BROWSERTREE_CONTEXT
         {
             Identifier = ID_TREE_REBUILD_CONN ;
             HelpId = HID_BROWSER_REFRESHCONN ;
-            Text = "Verbindung erneuern" ;
+            Text = "Verbindung e~rneuern" ;
             Text [ english ] = "~refresh connection" ;
             Text [ english_us ] = "~refresh connection" ;
         };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_QUERY_CREATE ;
+            HelpId = HID_BROWSER_QUERY_CREATE ;
+            Text = "~Abfrage erstellen" ;
+            Text [ english ] = "create ~query" ;
+            Text [ english_us ] = "create ~query" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_QUERY_EDIT ;
+            HelpId = HID_BROWSER_QUERY_EDIT ;
+            Text = "Abfrage b~earbeiten" ;
+            Text [ english ] = "~edit query" ;
+            Text [ english_us ] = "~edit query" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_QUERY_DELETE ;
+            HelpId = HID_BROWSER_QUERY_DELETE ;
+            Text = "Abfrage ~lˆschen" ;
+            Text [ english ] = "de~lete query" ;
+            Text [ english_us ] = "de~lete query" ;
+        };
     };
+};
+
+QueryBox QUERY_BRW_DELETE_QUERY
+{
+    Buttons = WB_YES_NO ;
+    Message = "Soll die Abfrage gelˆscht werden?" ;
+    Message [ English ] = "Delete selected query?" ;
+    Message [ english_us ] = "Do you want to delete the selected query?" ;
+};
+
+QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
+{
+    Buttons = WB_YES_NO ;
+    Message = "Die Abfrage existiert bereits. Soll sie gelˆscht werden?" ;
+    Message [ English ] = "The query already exists. Delete query?" ;
+    Message [ english_us ] = "The query already exists. Do you want to delete the query?" ;
+};
+
+QueryBox QUERY_CONNECTION_LOST
+{
+    Buttons = WB_YES_NO ;
+    Message = "Die Verbindung zur Datenbank wurde gelˆscht! Soll Sie wieder aufgebaut werden?" ;
+    Message [ English ] = "The connection to the database was lost! Reconnect?" ;
+    Message [ english_us ] = "The connection to the database was lost! Reconnect" ;
 };
