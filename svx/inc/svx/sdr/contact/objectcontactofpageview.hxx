@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:00:18 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,9 @@ namespace sdr
 
             // check if asynchronious graphis loading is allowed. Default is sal_False.
             virtual sal_Bool IsAsynchronGraphicsLoadingAllowed() const;
+
+            // check if buffering of MasterPages is allowed. Default is sal_False.
+            virtual sal_Bool IsMasterPageBufferingAllowed() const;
 
         public:
                     // internal access to SdrPageViewWindow
