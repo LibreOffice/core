@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:16:39 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,8 +327,8 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         {108, 0, L_VAR}, // "sprmCMajority50" chp.fBold, chp.fItalic, ...
         {109, 2, L_FIX}, // "sprmCHpsMul" chp.hps percentage to grow hps
         {110, 2, L_FIX}, // "sprmCCondHyhen" chp.ysri ysri
-        {111, 2, L_FIX}, // unknown
-        {112, 2, L_FIX}, // unknown
+        {111, 2, L_FIX}, // rtl bold
+        {112, 2, L_FIX}, // rtl italic
         {113, 0, L_VAR}, // rtl property ?
         {115, 0, L_VAR}, // rtl property ?
         {116, 0, L_VAR}, // unknown
@@ -399,7 +399,8 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         {197, 2, L_FIX}, // "sprmTMerge" tap.fFirstMerged, tap.fMerged complex
         {198, 2, L_FIX}, // "sprmTSplit" tap.fFirstMerged, tap.fMerged complex
         {199, 5, L_FIX}, // "sprmTSetBrc10" tap.rgtc[].rgbrc complex 5 bytes
-        {200, 4, L_FIX}  // "sprmTSetShd", tap.rgshd complex 4 bytes
+        {200, 4, L_FIX}, // "sprmTSetShd", tap.rgshd complex 4 bytes
+        {207, 0, L_VAR}  // rtl property ?
     };
 
     static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
