@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-20 14:48:04 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 16:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,6 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
                     pFillData->nLineWidth = aLine.GetCurr()->Width();
                 }
             }
-
         }
     }
     if( pFillData && FindPageFrm()->Frm().IsInside( rPoint ) )
@@ -641,7 +640,14 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 aLine.Top();
 
             const SwLineLayout *pPrevLine = aLine.GetPrevLine();
-            if( !pPrevLine && GetOfst() && !IsFollow() )
+            const xub_StrLen nStart = aLine.GetStart();
+            SwRect aCharBox;
+            aLine.GetCharRect( &aCharBox, nPos );
+
+            sal_Bool bSecondOfDouble = ( aInf.IsMulti() && ! aInf.IsFirstMulti() );
+            sal_Bool bPrevLine = ( pPrevLine && pPrevLine != aLine.GetCurr() );
+
+            if( !pPrevLine && !bSecondOfDouble && GetOfst() && !IsFollow() )
             {
                 nFormat = GetOfst();
                 xub_StrLen nDiff = aLine.GetLength();
@@ -653,16 +659,20 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                     nFormat = 0;
                 continue;
             }
-            if( pPrevLine && pPrevLine != aLine.GetCurr() )
+
+            // we select the target line for the cursor, in case we are in a
+            // double line portion, prev line = curr line
+            if( bPrevLine && !bSecondOfDouble )
             {
-                const xub_StrLen nStart = aLine.GetStart();
-                SwRect aCharBox;
-                aLine.GetCharRect( &aCharBox, nPos );
                 aLine.PrevLine();
                 while ( aLine.GetStart() == nStart &&
                         0 != ( pPrevLine = aLine.GetPrevLine() ) &&
                         pPrevLine != aLine.GetCurr() )
                     aLine.PrevLine();
+            }
+
+            if ( bPrevLine || bSecondOfDouble )
+            {
                 aCharBox.SSize().Width() /= 2;
 
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
@@ -676,7 +686,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                         "SwTxtFrm::UnitUp: illegal node change" )
 
                 // 7684: Wir stellen sicher, dass wir uns nach oben bewegen.
-                if( nOfst >= nStart && nStart )
+                if( nOfst >= nStart && nStart && !bSecondOfDouble )
                 {
                     // nOfst = nStart - 1;
                     nOfst = nStart;
@@ -686,6 +696,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                       SwIndex( ((SwTxtFrm*)this)->GetTxtNode(), nOfst );
                 return sal_True;
             }
+
             if ( IsFollow() )
             {
                 aLine.GetCharRect( &aCharBox, nPos );
@@ -762,24 +773,31 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             nFormat = aLine.GetEnd();
 
             aLine.CharCrsrToLine( nPos );
-            if( aLine.GetNextLine() )
+
+            const SwLineLayout* pNextLine = aLine.GetNextLine();
+            const xub_StrLen nStart = aLine.GetStart();
+            SwRect aCharBox;
+            aLine.GetCharRect( &aCharBox, nPos );
+
+            sal_Bool bFirstOfDouble = ( aInf.IsMulti() && aInf.IsFirstMulti() );
+
+            if( pNextLine || bFirstOfDouble )
             {
-                const xub_StrLen nStart = aLine.GetStart();
-                SwRect aCharBox;
-                aLine.GetCharRect( &aCharBox, nPos );
-                aLine.NextLine();
                 aCharBox.SSize().Width() /= 2;
 #ifndef PRODUCT
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
                 const xub_StrLen nOldNode = pPam->pPoint->nNode.GetIndex();
 #endif
+                if ( pNextLine && ! bFirstOfDouble )
+                    aLine.NextLine();
+
                 xub_StrLen nOfst = aLine.GetCrsrOfst( pPam->pPoint,
                                  aCharBox.Pos(), sal_False );
                 ASSERT( nOldNode == pPam->pPoint->nNode.GetIndex(),
                     "SwTxtFrm::UnitDown: illegal node change" )
 
                 // 7684: Wir stellen sicher, dass wir uns nach unten bewegen.
-                if( nOfst <= nStart )
+                if( nOfst <= nStart && ! bFirstOfDouble )
                     nOfst = nStart + 1;
                 pPam->pPoint->nContent =
                       SwIndex( ((SwTxtFrm*)this)->GetTxtNode(), nOfst );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-06 15:25:28 $
+ *  last change: $Author: ama $ $Date: 2001-03-15 16:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,6 +473,11 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 {
                     if( pPor->IsMultiPortion() )
                     {
+                        // setting this flag indicates that we are in a double line
+                        // portion, important for cursor travelling in these portions
+                        if ( ((SwMultiPortion*)pPor)->IsDouble() )
+                            GetInfo().SetMulti( sal_True );
+
                         pOrig->Pos().Y() += nTmpAscent - nPorAscent;
                         if( ( ((SwMultiPortion*)pPor)->IsDouble() ||
                               ((SwMultiPortion*)pPor)->HasRotation() )
@@ -498,7 +503,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         }
 
                         // In a multi-portion we use GetCharRect()-function
-                        // rekursively and must add the x-position
+                        // recursively and must add the x-position
                         // of the multi-portion.
                         xub_StrLen nOldStart = nStart;
                         BYTE nOldProp = GetPropFont();
@@ -511,6 +516,16 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         {
                             pOrig->Pos().Y() += GetLineHeight();
                             Next();
+                        }
+
+                        // if we are still in the first row of
+                        // our 2 line multiportion, we use the FirstMulti flag
+                        // to indicate this
+                        if ( pCurr == &((SwMultiPortion*)pPor)->GetRoot() )
+                        {
+                            GetInfo().SetFirstMulti( sal_True );
+                            if ( !pCurr->GetNext() || !pCurr->GetNext()->GetLen() )
+                            GetInfo().SetMulti( sal_False );
                         }
 
                         sal_Bool bSpaceChg = ((SwMultiPortion*)pPor)->
@@ -1013,12 +1028,21 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     if( bLastPortion && (pCurr->GetNext() || pFrm->GetFollow() ) )
         --nLength;
 
-    if( nWidth > nX )
+    if( nWidth > nX ||
+      ( nWidth == nX && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsDouble() ) )
     {
         if( pPor->IsMultiPortion() )
         {
-            // In a multi-portion we use GetCrsrOfst()-funtion rekursively
+            // In a multi-portion we use GetCrsrOfst()-function recursively
             SwTwips nTmpY = rPoint.Y() - pCurr->GetAscent() + pPor->GetAscent();
+            // if we are in the first line of a double line portion, we have
+            // to add a value to nTmpY for not staying in this line
+            // note: these flags are only set, if this function is called during
+            // up/down cursor travelling
+            if ( ((SwTxtSizeInfo*)pInf)->IsMulti() &&
+                 ((SwTxtSizeInfo*)pInf)->IsFirstMulti() )
+                nTmpY += ((SwMultiPortion*)pPor)->Height();
+
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                 nTmpY,  nCurrStart, nSpaceAdd );
             if( ((SwMultiPortion*)pPor)->HasRotation() )
