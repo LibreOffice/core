@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:35:19 $
+ *  last change: $Author: er $ $Date: 2002-11-12 18:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <svx/langitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/scripttypeitem.hxx>
 #ifndef _SFXHTML_HXX //autogen wg. SfxHTMLParser
 #include <sfx2/sfxhtml.hxx>
 #endif
@@ -283,18 +284,48 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                     rSet.Put( *pItem );
                 if ( rESet.GetItemState( ATTR_LINEBREAK, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_FONT, FALSE, &pItem) == SFX_ITEM_SET )
-                    rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_FONT_HEIGHT, FALSE, &pItem) == SFX_ITEM_SET )
-                    rSet.Put( *pItem );
                 if ( rESet.GetItemState( ATTR_FONT_COLOR, FALSE, &pItem) == SFX_ITEM_SET )
-                    rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_FONT_WEIGHT, FALSE, &pItem) == SFX_ITEM_SET )
-                    rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_FONT_POSTURE, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
                 if ( rESet.GetItemState( ATTR_FONT_UNDERLINE, FALSE, &pItem) == SFX_ITEM_SET )
                     rSet.Put( *pItem );
+                // HTML LATIN/CJK/CTL script type dependent
+                const SfxPoolItem* pFont;
+                if ( rESet.GetItemState( ATTR_FONT, FALSE, &pFont) != SFX_ITEM_SET )
+                    pFont = 0;
+                const SfxPoolItem* pHeight;
+                if ( rESet.GetItemState( ATTR_FONT_HEIGHT, FALSE, &pHeight) != SFX_ITEM_SET )
+                    pHeight = 0;
+                const SfxPoolItem* pWeight;
+                if ( rESet.GetItemState( ATTR_FONT_WEIGHT, FALSE, &pWeight) != SFX_ITEM_SET )
+                    pWeight = 0;
+                const SfxPoolItem* pPosture;
+                if ( rESet.GetItemState( ATTR_FONT_POSTURE, FALSE, &pPosture) != SFX_ITEM_SET )
+                    pPosture = 0;
+                if ( pFont || pHeight || pWeight || pPosture )
+                {
+                    String aStr( pEngine->GetText( pE->aSel ) );
+                    BYTE nScriptType = pDoc->GetStringScriptType( aStr );
+                    const BYTE nScripts[3] = { SCRIPTTYPE_LATIN,
+                        SCRIPTTYPE_ASIAN, SCRIPTTYPE_COMPLEX };
+                    for ( BYTE i=0; i<3; ++i )
+                    {
+                        if ( nScriptType & nScripts[i] )
+                        {
+                            if ( pFont )
+                                rSet.Put( *pFont, ScGlobal::GetScriptedWhichID(
+                                            nScripts[i], ATTR_FONT ));
+                            if ( pHeight )
+                                rSet.Put( *pHeight, ScGlobal::GetScriptedWhichID(
+                                            nScripts[i], ATTR_FONT_HEIGHT ));
+                            if ( pWeight )
+                                rSet.Put( *pWeight, ScGlobal::GetScriptedWhichID(
+                                            nScripts[i], ATTR_FONT_WEIGHT ));
+                            if ( pPosture )
+                                rSet.Put( *pPosture, ScGlobal::GetScriptedWhichID(
+                                            nScripts[i], ATTR_FONT_POSTURE ));
+                        }
+                    }
+                }
             }
             if ( pE->nColOverlap > 1 || pE->nRowOverlap > 1 )
             {   // merged cells, mit SfxItemSet Put schneller als mit

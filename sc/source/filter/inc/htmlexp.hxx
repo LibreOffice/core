@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-11-11 16:56:41 $
+ *  last change: $Author: er $ $Date: 2002-11-12 18:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,11 @@ struct ScHTMLStyle
     String              aFontFamilyName;
     UINT32              nFontHeight;        // Item-Value
     USHORT              nFontSizeNumber;    // HTML value 1-7
+    BYTE                nDefaultScriptType; // Font values are valid for the default script type
     BOOL                bInitialized;
 
-    ScHTMLStyle() : nFontHeight(0), nFontSizeNumber(2), bInitialized(0) {}
+    ScHTMLStyle() : nFontHeight(0), nFontSizeNumber(2), nDefaultScriptType(0),
+        bInitialized(0) {}
 
     const ScHTMLStyle& operator=( const ScHTMLStyle& r )
         {
@@ -102,6 +104,7 @@ struct ScHTMLStyle
             aFontFamilyName     = r.aFontFamilyName;
             nFontHeight         = r.nFontHeight;
             nFontSizeNumber     = r.nFontSizeNumber;
+            nDefaultScriptType  = r.nDefaultScriptType;
             bInitialized        = r.bInitialized;
             return *this;
         }

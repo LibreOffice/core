@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2002-11-11 16:55:49 $
+ *  last change: $Author: er $ $Date: 2002-11-12 18:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,10 +543,15 @@ const SfxItemSet& ScHTMLExport::PageDefaults( USHORT nTab )
             pStyleSheet = pStylePool->First();
         const SfxItemSet& rSetPara = pStyleSheet->GetItemSet();
 
-        aHTMLStyle.aFontFamilyName =
-            ((const SvxFontItem&)(rSetPara.Get( ATTR_FONT ))).GetFamilyName();
-        aHTMLStyle.nFontHeight =
-            ((const SvxFontHeightItem&)(rSetPara.Get( ATTR_FONT_HEIGHT ))).GetHeight();
+        aHTMLStyle.nDefaultScriptType = ScGlobal::GetDefaultScriptType();
+        aHTMLStyle.aFontFamilyName = ((const SvxFontItem&)(rSetPara.Get(
+                        ScGlobal::GetScriptedWhichID(
+                            aHTMLStyle.nDefaultScriptType, ATTR_FONT
+                            )))).GetFamilyName();
+        aHTMLStyle.nFontHeight = ((const SvxFontHeightItem&)(rSetPara.Get(
+                        ScGlobal::GetScriptedWhichID(
+                            aHTMLStyle.nDefaultScriptType, ATTR_FONT_HEIGHT
+                            )))).GetHeight();
         aHTMLStyle.nFontSizeNumber = GetFontSizeNumber( aHTMLStyle.nFontHeight );
     }
 
@@ -1037,10 +1042,20 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
     ScBaseCell* pCell = pDoc->GetCell( aPos );
     ULONG nFormat = pAttr->GetNumberFormat( pFormatter );
     BOOL bValueData;
+    BYTE nScriptType;
     if ( pCell )
+    {
         bValueData = pCell->HasValueData();
+        nScriptType = pDoc->GetScriptType( nCol, nRow, nTab, pCell );
+    }
     else
+    {
         bValueData = FALSE;
+        nScriptType = 0;
+    }
+    if ( nScriptType == 0 )
+        nScriptType = aHTMLStyle.nDefaultScriptType;
+
 
     ByteString aStrTD = sHTML_tabledata;
 
@@ -1096,15 +1111,37 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
     if ( bTableDataHeight )
         (((aStrTD += ' ') += sHTML_O_height) += '=') += ByteString::CreateFromInt32( nHeightPixel );
 
-    const SvxFontItem&          rFontItem       = (const SvxFontItem&)      pAttr->GetItem( ATTR_FONT, pCondItemSet );
-    const SvxFontHeightItem&    rFontHeightItem = (const SvxFontHeightItem&)pAttr->GetItem( ATTR_FONT_HEIGHT, pCondItemSet );
-    const SvxWeightItem&        rWeightItem     = (const SvxWeightItem&)    pAttr->GetItem( ATTR_FONT_WEIGHT, pCondItemSet );
-    const SvxPostureItem&       rPostureItem    = (const SvxPostureItem&)   pAttr->GetItem( ATTR_FONT_POSTURE, pCondItemSet );
-    const SvxUnderlineItem&     rUnderlineItem  = (const SvxUnderlineItem&) pAttr->GetItem( ATTR_FONT_UNDERLINE, pCondItemSet );
-    const SvxColorItem&         rColorItem      = (const SvxColorItem&)     pAttr->GetItem( ATTR_FONT_COLOR, pCondItemSet );
-    const SvxHorJustifyItem&    rHorJustifyItem = (const SvxHorJustifyItem&)pAttr->GetItem( ATTR_HOR_JUSTIFY, pCondItemSet );
-    const SvxVerJustifyItem&    rVerJustifyItem = (const SvxVerJustifyItem&)pAttr->GetItem( ATTR_VER_JUSTIFY, pCondItemSet );
-    const SvxBrushItem&         rBrushItem      = (const SvxBrushItem&)     pAttr->GetItem( ATTR_BACKGROUND, pCondItemSet );
+    const SvxFontItem& rFontItem = (const SvxFontItem&) pAttr->GetItem(
+            ScGlobal::GetScriptedWhichID( nScriptType, ATTR_FONT),
+            pCondItemSet);
+
+    const SvxFontHeightItem& rFontHeightItem = (const SvxFontHeightItem&)
+        pAttr->GetItem( ScGlobal::GetScriptedWhichID( nScriptType,
+                    ATTR_FONT_HEIGHT), pCondItemSet);
+
+    const SvxWeightItem& rWeightItem = (const SvxWeightItem&) pAttr->GetItem(
+            ScGlobal::GetScriptedWhichID( nScriptType, ATTR_FONT_WEIGHT),
+            pCondItemSet);
+
+    const SvxPostureItem& rPostureItem = (const SvxPostureItem&)
+        pAttr->GetItem( ScGlobal::GetScriptedWhichID( nScriptType,
+                    ATTR_FONT_POSTURE), pCondItemSet);
+
+    const SvxUnderlineItem& rUnderlineItem = (const SvxUnderlineItem&)
+        pAttr->GetItem( ATTR_FONT_UNDERLINE, pCondItemSet );
+
+    const SvxColorItem& rColorItem = (const SvxColorItem&) pAttr->GetItem(
+            ATTR_FONT_COLOR, pCondItemSet );
+
+    const SvxHorJustifyItem& rHorJustifyItem = (const SvxHorJustifyItem&)
+        pAttr->GetItem( ATTR_HOR_JUSTIFY, pCondItemSet );
+
+    const SvxVerJustifyItem& rVerJustifyItem = (const SvxVerJustifyItem&)
+        pAttr->GetItem( ATTR_VER_JUSTIFY, pCondItemSet );
+
+    const SvxBrushItem& rBrushItem = (const SvxBrushItem&) pAttr->GetItem(
+            ATTR_BACKGROUND, pCondItemSet );
+
     Color aBgColor;
     if ( rBrushItem.GetColor().GetTransparency() == 255 )
         aBgColor = aHTMLStyle.aBackgroundColor;     // #55121# keine ungewollte Hintergrundfarbe
