@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,7 +775,7 @@ ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
     //der Cntnts ist immer die linke obere Ecke.
     //Der Cnt soll moeglichst ueber dem Point liegen.
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     Point arPoint( rPt );
 #endif
 
