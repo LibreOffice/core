@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-08-30 09:38:29 $
+ *  last change: $Author: er $ $Date: 2002-08-05 16:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,14 @@ private:
     USHORT nAnzStrings;                         // Total count of scanned substrings
     USHORT nAnzNums;                            // Count of numeric substrings
     BOOL   bDecSepInDateSeps;                   // True <=> DecSep in {.,-,/,DateSep}
+    BYTE   nMatchedAllStrings;                  // Scan...String() matched all substrings,
+                                                // bit mask of nMatched... constants
+
+    static const BYTE nMatchedEndString;        // 0x01
+    static const BYTE nMatchedMidString;        // 0x02
+    static const BYTE nMatchedStartString;      // 0x04
+    static const BYTE nMatchedVirgin;           // 0x08
+    static const BYTE nMatchedUsedAsReturn;     // 0x10
 
     short  nSign;                               // Sign of number
     short  nMonth;                              // Month (1..x) if date
@@ -269,7 +277,8 @@ private:
             const SvNumberformat* pFormat = NULL );
     BOOL ScanMidString(                         // Analyze middle substring
             const String& rString,
-            USHORT nStringPos );
+            USHORT nStringPos,
+            const SvNumberformat* pFormat = NULL );
     BOOL ScanEndString(                         // Analyze end of string
             const String& rString,
             const SvNumberformat* pFormat = NULL );
@@ -280,14 +289,26 @@ private:
             const String& rString,
             xub_StrLen nPos,
             const SvNumberformat* pFormat,
-            USHORT nString );
+            USHORT nString,
+            BOOL bDontDetectNegation = FALSE );
 
+    // if nMatchedAllStrings set nMatchedUsedAsReturn and return TRUE,
+    // else do nothing and return FALSE
+    BOOL MatchedReturn();
+
+    //! Be sure that the string to be analyzed is already converted to upper
+    //! case and if it contained native humber digits that they are already
+    //! converted to ASCII.
     BOOL IsNumberFormatMain(                    // Main anlyzing function
             const String& rString,
             double& fOutNumber,                 // return value if string is numeric
             const SvNumberformat* pFormat = NULL    // optional number format to match against
             );
 
+    static inline BOOL MyIsdigit( sal_Unicode c );
+
+    // native number transliteration if necessary
+    void TransformInput( String& rString );
 
 #endif  // _ZFORFIND_CXX
 };
