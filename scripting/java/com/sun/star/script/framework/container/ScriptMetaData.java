@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetaData.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:59:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 15:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,33 +182,75 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     // TODO probably should be private should not be necessary
     // to be exposed at all
 
+    private static final String SHARE =
+        "vnd.sun.star.expand:${$SYSBINDIR/" +
+        PathUtils.BOOTSTRAP_NAME +
+        "::BaseInstallation}/share";
+
+    private static final String USER =
+        "vnd.sun.star.expand:${$SYSBINDIR/" +
+        PathUtils.BOOTSTRAP_NAME +
+        "::UserInstallation}/user";
+
+    private static final String UNO_USER_PACKAGES1 =
+        "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE";
+
+    private static final String UNO_USER_PACKAGES2 =
+        USER + "/uno_packages";
+
+    private static final String UNO_SHARED_PACKAGES1 =
+        "$UNO_SHARED_PACKAGES_CACHE";
+
+    private static final String UNO_SHARED_PACKAGES2 =
+        SHARE + "/uno_packages";
+
+    public static String getLocationPlaceHolder(String url, String pkgname)
+    {
+        String result = "Unknown";
+
+        if ( url.indexOf(UNO_USER_PACKAGES1) > -1 ||
+             url.indexOf(UNO_USER_PACKAGES2) > -1 )
+        {
+            result = PathUtils.make_url( "user:uno_packages", pkgname );
+        }
+        else if ( url.indexOf(UNO_SHARED_PACKAGES1) > -1 ||
+                  url.indexOf(UNO_SHARED_PACKAGES2) > -1 )
+        {
+            result = PathUtils.make_url( "share:uno_packages", pkgname );
+        }
+        else if ( url.indexOf(SHARE) == 0 )
+        {
+            result = "share";
+        }
+        else if ( url.indexOf(USER) == 0 )
+        {
+            result = "user";
+        }
+        else if ( url.indexOf("vnd.sun.star.tdoc:") == 0 )
+        {
+            result = "document";
+        }
+        return result;
+    }
+
     public String getLocationPlaceHolder()
     {
         String placeHolder = "Unknown";
-        if ( parent.getPathToParcel().indexOf("vnd.sun.star.expand:${$SYSBINDIR/" + PathUtils.BOOTSTRAP_NAME + "::BaseInstallation}/share") == 0 )
+        String pathToParcel = parent.getPathToParcel();
+
+        if ( pathToParcel.indexOf(UNO_USER_PACKAGES1) > -1 ||
+             pathToParcel.indexOf(UNO_USER_PACKAGES2) > -1 )
         {
-            placeHolder = "share";
-        }
-        else if ( parent.getPathToParcel().indexOf("vnd.sun.star.expand:${$SYSBINDIR/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user") == 0 )
-        {
-            placeHolder = "user";
-        }
-        else if ( parent.getPathToParcel().indexOf("vnd.sun.star.tdoc:") == 0 )
-        {
-            placeHolder = "document";
-        }
-        else if ( parent.getPathToParcel().indexOf("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE") > -1 )
-        {
-            //its a package
+            // its a package
             placeHolder = "user:uno_packages";
             String unoPkg = parent.parent.getName();
             if ( unoPkg != null )
             {
                 placeHolder = PathUtils.make_url( placeHolder, unoPkg );
             }
-
         }
-        else if ( parent.getPathToParcel().indexOf("$UNO_SHARED_PACKAGES_CACHE")  > -1 )
+        else if ( pathToParcel.indexOf(UNO_SHARED_PACKAGES1) > -1 ||
+                  pathToParcel.indexOf(UNO_SHARED_PACKAGES2) > -1 )
         {
             //its a package
             placeHolder = "share:uno_packages";
@@ -217,6 +259,18 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
             {
                 placeHolder = PathUtils.make_url( placeHolder, unoPkg );
             }
+        }
+        else if ( pathToParcel.indexOf(SHARE) == 0 )
+        {
+            placeHolder = "share";
+        }
+        else if ( pathToParcel.indexOf(USER) == 0 )
+        {
+            placeHolder = "user";
+        }
+        else if ( pathToParcel.indexOf("vnd.sun.star.tdoc:") == 0 )
+        {
+            placeHolder = "document";
         }
         // TODO handling document packages ??? not really sure of package url
 /*        else
