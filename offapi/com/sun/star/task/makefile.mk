@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mav $ $Date: 2002-10-31 11:04:50 $
+#   last change: $Author: mav $ $Date: 2002-11-25 16:38:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ IDLFILES=\
     NoMasterException.idl\
     PasswordRequest.idl\
     PasswordRequestMode.idl\
+    UnsupportedOverwriteRequest.idl\
     UrlRecord.idl\
     UserRecord.idl\
     XAsyncJob.idl\
