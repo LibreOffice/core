@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:51:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1122,7 +1122,7 @@ BOOL SfxInternetPage::FillItemSet( SfxItemSet& rSet )
             DBG_ASSERT( aEDForwardURL.GetText().Len(), "+SfxInternetPage::FillItemSet(): empty URL should be not possible for forward option!" );
 
             bEnableReload = TRUE;
-            aURL = ::std::auto_ptr< String >( new String( URIHelper::SmartRelToAbs( aEDForwardURL.GetText() ) ) );
+            aURL = ::std::auto_ptr< String >( new String( URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aEDForwardURL.GetText(), URIHelper::GetMaybeFileHdl(), true ) ) );
             aFrame = ::std::auto_ptr< String >( new String( aCBFrame.GetText() ) );
             nDelay = aNFAfter.GetValue();
             break;
@@ -1155,6 +1155,11 @@ SfxTabPage *SfxInternetPage::Create( Window* pParent, const SfxItemSet& rItemSet
 void SfxInternetPage::Reset( const SfxItemSet& rSet )
 {
     pInfoItem = &( SfxDocumentInfoItem& ) rSet.Get( SID_DOCINFO );
+    SFX_ITEMSET_ARG( &rSet, pURLItem, SfxStringItem, SID_BASEURL, FALSE );
+    DBG_ASSERT( pURLItem, "No BaseURL provided for InternetTabPage!" );
+    if ( pURLItem )
+        aBaseURL = pURLItem->GetValue();
+
     SfxDocumentInfo&    rInfo = pInfoItem->GetDocInfo();
     STATE               eNewState = S_NoUpdate;
 
@@ -1390,6 +1395,11 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
 
      const SfxDocumentInfoItem* pInfoItem =
         &(const SfxDocumentInfoItem &)rItemSet.Get( SID_DOCINFO );
+
+#ifdef DBG_UTIL
+    SFX_ITEMSET_ARG( &rItemSet, pURLItem, SfxStringItem, SID_BASEURL, FALSE );
+    DBG_ASSERT( pURLItem, "No BaseURL provided for InternetTabPage!" );
+#endif
 
      // Bestimmung des Titels
     const SfxPoolItem* pItem = 0;
