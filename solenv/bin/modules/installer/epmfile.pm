@@ -2,9 +2,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-29 08:50:54 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:56:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -915,7 +915,7 @@ sub create_packages_without_epm
         installer::pathanalyzer::get_path_from_fullqualifiedname(\$destinationdir);
         $destinationdir =~ s/\/\s*$//;  # removing ending slashes
 
-        my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir";
+        my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir \> /dev/null 2\>\&1";
         print "... $systemcall ...\n";
 
         my $returnvalue = system($systemcall);
@@ -1013,7 +1013,7 @@ sub create_packages_without_epm
 
         if ( $rpmversion >= 4 ) { $rpmcommand = "rpmbuild"; }
 
-        my $systemcall = "$rpmcommand -bb $specfilename --target i586";
+        my $systemcall = "$rpmcommand -bb $specfilename --target i586 \> /dev/null";
         print "... $systemcall ...\n";
 
         my $returnvalue = system($systemcall);
@@ -1242,15 +1242,19 @@ sub put_childprojects_into_installset
 
         my $destdir = "$newdir";
 
-        if ( $installer::globals::issolarisbuild ) { $sourcedirjava = $sourcedir . $installer::globals::separator . "java" . $installer::globals::separator . "solaris"; }
+        if ( $installer::globals::issolarissparcbuild ) { $sourcedirjava = $sourcedir . $installer::globals::separator . "java" . $installer::globals::separator . "solaris_sparc"; }
+        if ( $installer::globals::issolarisx86build ) { $sourcedirjava = $sourcedir . $installer::globals::separator . "java" . $installer::globals::separator . "solaris_x86"; }
         if ( $installer::globals::islinuxbuild ) { $sourcedirjava = $sourcedir . $installer::globals::separator . "java" . $installer::globals::separator . "linux"; }
 
         installer::systemactions::copy_directory($sourcedirjava, $destdir);
 
-        if ( $installer::globals::issolarisbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas" . $installer::globals::separator . "solaris"; }
+        if ( $installer::globals::issolarissparcbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas" . $installer::globals::separator . "solaris_sparc"; }
         if ( $installer::globals::islinuxbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas" . $installer::globals::separator . "linux"; }
 
-        installer::systemactions::copy_directory($sourcedirada, $destdir);
+        if (( $installer::globals::issolarissparcbuild ) || ( $installer::globals::islinuxbuild ))
+        {
+            installer::systemactions::copy_directory($sourcedirada, $destdir);
+        }
 
         # unpacking tar.gz files
     }
@@ -1273,7 +1277,8 @@ sub put_java_installer_into_installset
 
     my $destdir = ".";
 
-    if ( $installer::globals::issolarisbuild ) { $sourcedir = $sourcedir . $installer::globals::separator . "solaris"; }
+    if ( $installer::globals::issolarissparcbuild ) { $sourcedir = $sourcedir . $installer::globals::separator . "solaris_sparc"; }
+    if ( $installer::globals::issolarisx86build ) { $sourcedir = $sourcedir . $installer::globals::separator . "solaris_x86"; }
     if ( $installer::globals::islinuxbuild ) { $sourcedir = $sourcedir . $installer::globals::separator . "linux"; }
 
     installer::systemactions::copy_directory_except_fileextension($sourcedir, $destdir, "xml");
