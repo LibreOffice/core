@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 17:46:26 $
+ *  last change: $Author: sab $ $Date: 2001-03-02 17:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,10 +141,15 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( const sal_Char *pClass )
             GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OFFICE ),
             sCDATA, GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OFFICE ) );
 
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_meta,
+        SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, sXML_document_meta,
                         sal_True, sal_True );
-        SfxXMLMetaExport aMeta( GetDocHandler(), GetModel() );
-        aMeta.Export( GetNamespaceMap() );
+        {
+
+            SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_meta,
+                            sal_True, sal_True );
+            SfxXMLMetaExport aMeta( GetDocHandler(), GetModel() );
+            aMeta.Export( GetNamespaceMap() );
+        }
     }
     GetDocHandler()->endDocument();
     return 0;
@@ -160,7 +165,7 @@ uno::Sequence< rtl::OUString > SAL_CALL XMLMetaExportComponent_getSupportedServi
     throw()
 {
     const rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.MetaInformation" ) );
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLMetaExporter" ) );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
