@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORootElementValueSetUpdateAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:38:37 $
+ *  last change:$Date: 2003-12-11 11:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,11 @@ import util.utils;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XChangesBatch;
 
 
 public class ORootElementValueSetUpdateAccess extends TestCase {
@@ -134,9 +136,22 @@ public class ORootElementValueSetUpdateAccess extends TestCase {
             "String", "String", "String", "String", "String"
         };
 
-        tEnv.addObjRelation("INSTANCE1", "NewOne");
+        tEnv.addObjRelation("INSTANCE1", "NewOne1");
         tEnv.addObjRelation("NAMEREPLACE", pNames[1]);
 
+        // for XContainer
+        tEnv.addObjRelation("INSTANCE", "NewOne2");
+
+        tEnv.addObjRelation("XChangesBatch.PropertyName", pNames[1]);
+        tEnv.addObjRelation("XChangesBatch.ChangeElement", "NewOne3");
+        tEnv.addObjRelation("XChangesBatch.NameReplace", (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, oObj));
+
+        tEnv.addObjRelation("XChangesNotifier.PropertyName", pNames[1]);
+        tEnv.addObjRelation("XChangesNotifier.ChangeElement", "NewOne4");
+        tEnv.addObjRelation("XChangesNotifier.ChangesBatch" , (XChangesBatch)UnoRuntime.queryInterface(XChangesBatch.class, oObj));
+        tEnv.addObjRelation("XChangesNotifier.NameReplace", (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, oObj));
+
+        tEnv.addObjRelation("XLocalizable.ReadOnly", "Locale of ORootElementValueSetUpdateAccess is read Only");
         tEnv.addObjRelation("NoSetName", "ORootElementValueSetUpdateAccess");
 
         tEnv.addObjRelation("HierachicalName", "/org.openoffice.Office");

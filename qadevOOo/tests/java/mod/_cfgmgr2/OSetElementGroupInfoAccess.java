@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSetElementGroupInfoAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:38:49 $
+ *  last change:$Date: 2003-12-11 11:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@ import util.utils;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -104,30 +106,40 @@ public class OSetElementGroupInfoAccess extends TestCase {
         nodepath.State = PropertyState.DEFAULT_VALUE;
         nodeArgs[0] = nodepath;
 
+        XNameAccess xHierachNameAccess = null;
+        XNameReplace xChangeView = null;
         try {
             XInterface Provider = (XInterface) ((XMultiServiceFactory)tParam.getMSF())
                                                      .createInstance("com.sun.star.comp.configuration.ConfigurationProvider");
             XMultiServiceFactory pMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
                                                 XMultiServiceFactory.class,
                                                 Provider);
-            XNameAccess names = (XNameAccess) UnoRuntime.queryInterface(
-                                        XNameAccess.class,
+            xHierachNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
                                         pMSF.createInstanceWithArguments(
-                                                "com.sun.star.configuration.ConfigurationAccess",
-                                                nodeArgs));
+                                        "com.sun.star.configuration.ConfigurationAccess", nodeArgs));
 
-            oObj = (XInterface) names.getByName("Evolution 1.4 or later");
+            oObj = (XInterface) xHierachNameAccess.getByName("Evolution 1.4 or later");
 
-            names = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
+            XNameAccess names = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
                                                             oObj);
 
             String[] theNames = names.getElementNames();
 
             log.println("Contains " + theNames.length + " elements");
 
-//            for (int k = 0; k < theNames.length; k++) {
-//                System.out.println("child " + theNames[k]);
-//            }
+            names = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, pMSF.createInstanceWithArguments(
+                                                "com.sun.star.configuration.ConfigurationUpdateAccess", nodeArgs));
+
+            XInterface xInt = (XInterface) names.getByName("Evolution 1.4 or later");
+            xChangeView = (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, xInt);
+
+            Object o = xChangeView.getByName("FormatStrings");
+            xChangeView = (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, o);
+/*            o = xChangeView.getByName("subject");
+            String[] nameA  = xChangeView.getElementNames();
+            for (int k = 0; k < nameA.length; k++) {
+                System.out.println("change child " + nameA[k]);
+            } */
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
         }
@@ -143,13 +155,19 @@ public class OSetElementGroupInfoAccess extends TestCase {
         tEnv.addObjRelation("cannotSwitchParent",
                             "configmgr: BasicElement::setParent: cannot move Entry");
 
-        tEnv.addObjRelation("INSTANCE1", "NewOne");
-        tEnv.addObjRelation("NAMEREPLACE", pNames[1]);
         tEnv.addObjRelation("HierachicalName", "/org.openoffice.Office");
         tEnv.addObjRelation("ElementName", "FormatStrings");
         tEnv.addObjRelation("NoSetName", "OInnerValueSetInfoAccess");
         tEnv.addObjRelation("TemplateName", "cfg:value/cfg:any");
         tEnv.addObjRelation("expectedName", "EnumDelimiters");
+
+        tEnv.addObjRelation("XContainer.NewValue", "aValue");
+        tEnv.addObjRelation("XContainer.ElementName", "subject");
+        tEnv.addObjRelation("XContainer.Container", xChangeView);
+
+        // dispose the owner of the test object
+        tEnv.addObjRelation("XComponent.DisposeThis", (XComponent)
+                    UnoRuntime.queryInterface(XComponent.class, xHierachNameAccess));
 
         tEnv.addObjRelation("PropertyNames", pNames);
         tEnv.addObjRelation("PropertyTypes", pTypes);
