@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:27:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String STR_DATABASE_NOT_OPENED
     Text [ English ] = "Could not open database." ;
     Text [ norwegian ] = "Could not open database." ;
     Text [ italian ] = "Impossibile aprire il database." ;
-    Text [ portuguese_brazilian ] = "Não pude abrir base de dados." ;
+    Text [ portuguese_brazilian ] = "N?o pude abrir base de dados." ;
     Text [ portuguese ] = "Foi impossível abrir base de dados." ;
     Text [ finnish ] = "Tietokantaa ei voitu avata." ;
     Text [ danish ] = "Det var ikke muligt at åbne databasen." ;
