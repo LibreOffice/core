@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:57:07 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 15:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,6 @@
  *
  *
  ************************************************************************/
- //==================================================================
- // StarCalc Applikations Resource
- //
- // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2003-07-17 12:57:07 $ $Revision: 1.19 $
- // $Logfile:   T:/sc/source/ui/src/sc.srv  $ $Workfile:   sc.src  $
- //==================================================================
-
-
 #include "sc.hrc" // -> #include <sfx.hrc>
 
 
@@ -157,20 +148,5 @@ Image RID_BMP_REFBTN2_H
 String 30001 { Text = "Dummy1" ; };
 String 30002 { Text = "Dummy2" ; };
 String 30006 { Text = "Dummy3" ; };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
