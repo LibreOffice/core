@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 03:14:40 $
+#   last change: $Author: pjunck $ $Date: 2004-10-22 10:28:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,7 @@ $(MISC)$/$(TARGET).cppumaker.flag: $(BIN)$/cppumaker$(EXECPOST)
 $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
     - $(MKDIRHIER) $(MISC)$/$(TARGET)$/inc
     $(BIN)$/cppumaker$(EXECPOST) -O$(MISC)$/$(TARGET)$/inc -BUCR -C $< \
-        -X$(SOLARBINDIR)$/udkapi.rdb
+        $(SOLARBINDIR)$/udkapi.rdb
     $(TOUCH) $@
 
 $(MISC)$/$(TARGET).rdb: $(MISC)$/$(TARGET)$/types.urd
