@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-13 15:21:55 $
+ *  last change: $Author: ama $ $Date: 2001-11-14 16:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,9 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
     do
     {   pFloat->pUpper = pParent;
         pFloat->_InvalidateAll();
+#ifdef VERTICAL_LAYOUT
+        pFloat->CheckDirChange();
+#endif
 
         //Ich bin Freund des TxtFrm und darf deshalb so einiges. Das mit
         //dem CacheIdx scheint etwas riskant!
