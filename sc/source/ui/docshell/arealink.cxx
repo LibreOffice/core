@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-13 18:04:16 $
+ *  last change: $Author: nn $ $Date: 2000-10-16 08:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,8 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
             aDestMark.SelectOneTable( nDestTab );
             aDestMark.SetMarkArea( aNewRange );
             pDoc->CopyFromClip( aNewRange, aDestMark, IDF_ALL, NULL, pClipDoc, FALSE );
+
+            delete pClipDoc;
         }
         else
         {
