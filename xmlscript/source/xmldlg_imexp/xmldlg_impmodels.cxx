@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-01 11:22:45 $
+ *  last change: $Author: dbo $ $Date: 2001-03-01 11:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,7 +1509,23 @@ void WindowElement::endElement()
     OSL_ASSERT( xProps.is() );
 
     OUString aValue( _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("left") ) ) );
+        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("id") ) ) );
+    if (aValue.getLength())
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
+            makeAny( aValue ) );
+    }
+    aValue = _xAttributes->getValueByUidName(
+        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("title") ) );
+    if (aValue.getLength())
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
+            makeAny( aValue ) );
+    }
+    aValue = _xAttributes->getValueByUidName(
+        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("left") ) );
     if (aValue.getLength())
     {
         xProps->setPropertyValue(
@@ -1539,14 +1555,6 @@ void WindowElement::endElement()
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
             makeAny( aValue.toInt32() ) );
-    }
-    aValue = _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("title") ) );
-    if (aValue.getLength())
-    {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
-            makeAny( aValue ) );
     }
 }
 

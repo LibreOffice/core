@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.4 2001-03-01 11:22:45 dbo Exp $
+	$Id: dialog.dtd,v 1.5 2001-03-01 11:52:05 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -91,7 +91,8 @@
 <!ATTLIST dialog:dialogs xmlns:dialog CDATA #FIXED "http://openoffice.org/2000/dialog">
 
 <!ELEMENT dialog:window (dialog:styles*, dialog:bulletinboard*)>
-<!ATTLIST dialog:window dialog:left %numeric; #IMPLIED
+<!ATTLIST dialog:window dialog:id CDATA #REQUIRED
+			dialog:left %numeric; #IMPLIED
 			dialog:top %numeric; #IMPLIED
 			dialog:width %numeric; #IMPLIED
 			dialog:height %numeric; #IMPLIED

@@ -4,7 +4,7 @@
 <dialogs xmlns="http://openoffice.org/2000/dialog">
 
     <window xmlns:dlg="http://openoffice.org/2000/dialog"
-        title="Test-Dialog" left="50" top="50" height="660" width="400">
+        id="window1" title="Test-Dialog" left="50" top="50" height="660" width="400">
 
         <dlg:styles>
             <dlg:style style-id="bla" background-color="0xffffff" dlg:text-color="255"/>
@@ -71,7 +71,7 @@
     </window>
 
     <window xmlns:dlg2="http://openoffice.org/2000/dialog"
-        title="Test-Dialog2" left="100" top="100" height="200" width="200">
+        id="window2" title="Test-Dialog2" left="100" top="100" height="200" width="200">
 
         <dlg2:bulletinboard>
 

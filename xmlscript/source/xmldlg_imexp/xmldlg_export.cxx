@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-01 11:22:45 $
+ *  last change: $Author: dbo $ $Date: 2001-03-01 11:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1122,6 +1122,8 @@ static void exportDialogModel(
         OUString aWindowName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":window") );
         ElementDescriptor * pWindow = new ElementDescriptor( xProps, xPropState, aWindowName );
         Reference< xml::sax::XAttributeList > xWindow( pWindow );
+        pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ) );
         pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":title") ) );
         pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
