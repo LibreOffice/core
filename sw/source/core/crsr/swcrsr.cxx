@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-19 16:30:30 $
+ *  last change: $Author: os $ $Date: 2002-08-06 14:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 
 
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
 #ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
 #endif
@@ -1156,7 +1159,27 @@ FASTBOOL SwCursor::IsEndWord() const
 
 FASTBOOL SwCursor::IsInWord() const
 {
-    return !IsEndWord();
+    FASTBOOL bRet = FALSE;
+    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    if( pTxtNd && pBreakIt->xBreak.is() )
+    {
+        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+        Boundary aBoundary = pBreakIt->xBreak->getWordBoundary(
+                            pTxtNd->GetTxt(), nPtPos,
+                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                            WordType::ANY_WORD,
+                            TRUE );
+
+        bRet = aBoundary.startPos != aBoundary.endPos &&
+                aBoundary.startPos <= nPtPos &&
+                    nPtPos <= aBoundary.endPos;
+        if(bRet)
+        {
+            const CharClass& rCC = GetAppCharClass();
+            bRet = rCC.isLetterNumeric( pTxtNd->GetTxt(), aBoundary.startPos );
+        }
+    }
+    return bRet;
 }
 
 FASTBOOL SwCursor::GoStartWord()
