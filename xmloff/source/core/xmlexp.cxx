@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-07 12:09:22 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 16:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,7 @@ XMLFontAutoStylePool* SvXMLExport::CreateFontAutoStylePool()
     return new XMLFontAutoStylePool( *this );
 }
 
-xmloff::OFormLayerXMLExport* SvXMLExport::CreateFormlayerExport()
+xmloff::OFormLayerXMLExport* SvXMLExport::CreateFormExport()
 {
     return new xmloff::OFormLayerXMLExport(*this);
 }
