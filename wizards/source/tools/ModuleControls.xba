@@ -120,7 +120,7 @@ Dim i as Integer
 			exit Function
 		End If
 	Next
-	Msgbox(&quot;No Control selected!&quot;,16, GetProductName())
+	GetRefValue() = -1
 End Function
 
 
@@ -366,4 +366,5 @@ End Sub
 Sub SetOVERWRITEToNever()
 	iGeneralOverwrite = SBOVERWRITENEVER
 	DlgOverwrite.EndExecute()
-End Sub</script:module>
+End Sub
+</script:module>
