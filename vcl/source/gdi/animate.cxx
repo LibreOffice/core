@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:16:27 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_ANIMATE_CXX
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
 #ifndef _DEBUG_HXX
@@ -137,11 +136,11 @@ ULONG AnimationBitmap::GetChecksum() const
 // -------------
 
 Animation::Animation() :
-    mbIsInAnimation     ( FALSE ),
-    meCycleMode         ( CYCLE_NORMAL ),
     mnLoopCount         ( 0 ),
     mnLoops             ( 0 ),
     mnPos               ( 0 ),
+    meCycleMode         ( CYCLE_NORMAL ),
+    mbIsInAnimation     ( FALSE ),
     mbLoopTerminated    ( FALSE ),
     mbIsWaiting         ( FALSE )
 {
@@ -153,12 +152,12 @@ Animation::Animation() :
 // -----------------------------------------------------------------------
 
 Animation::Animation( const Animation& rAnimation ) :
-    maGlobalSize        ( rAnimation.maGlobalSize ),
     maBitmapEx          ( rAnimation.maBitmapEx ),
-    meCycleMode         ( rAnimation.meCycleMode ),
-    mbIsInAnimation     ( FALSE ),
+    maGlobalSize        ( rAnimation.maGlobalSize ),
     mnLoopCount         ( rAnimation.mnLoopCount ),
     mnPos               ( rAnimation.mnPos ),
+    meCycleMode         ( rAnimation.meCycleMode ),
+    mbIsInAnimation     ( FALSE ),
     mbLoopTerminated    ( rAnimation.mbLoopTerminated ),
     mbIsWaiting         ( rAnimation.mbIsWaiting )
 {
@@ -954,8 +953,6 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
         AnimationBitmap aAnimBmp;
         BitmapEx        aBmpEx;
         ByteString      aDummyStr;
-        Point           aPoint;
-        Size            aSize;
         UINT32          nTmp32;
         UINT16          nTmp16;
         BYTE            cTmp;
