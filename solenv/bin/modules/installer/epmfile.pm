@@ -1512,8 +1512,8 @@ sub put_systemintegration_into_installset
         else
         {
             my $productname = lc($variables->{'PRODUCTNAME'});
-            push(@systemfiles, "SUNW$productname-gnome-ea.tar.gz");
-            push(@systemfiles, "SUNW$productname-cde-ea.tar.gz");
+            push(@systemfiles, "SUNW$productname-gnome-beta.tar.gz");
+            push(@systemfiles, "SUNW$productname-cde-beta.tar.gz");
         }
     }
 
@@ -1529,8 +1529,8 @@ sub put_systemintegration_into_installset
         else
         {
             my $productname = lc($variables->{'PRODUCTNAME'});
-            push(@systemfiles, "$productname-redhat-menus-ea-$productversion-1.noarch.rpm");
-            push(@systemfiles, "$productname-suse-menus-ea-$productversion-1.noarch.rpm");
+            push(@systemfiles, "$productname-redhat-menus-beta-$productversion-1.noarch.rpm");
+            push(@systemfiles, "$productname-suse-menus-beta-$productversion-1.noarch.rpm");
         }
     }
 
