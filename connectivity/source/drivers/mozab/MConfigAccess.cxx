@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConfigAccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:40:43 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace connectivity
                 //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
                 // create the config provider
                 Reference< XMultiServiceFactory > xConfigProvider(
-                    _rxORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    _rxORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider" )) ),
                     UNO_QUERY
                 );
                 OSL_ENSURE( xConfigProvider.is(), "createDriverConfigNode: could not create the config provider!" );
@@ -102,14 +102,14 @@ namespace connectivity
                     Sequence< Any > aArguments(2);
                     // the path to the node to open
                     aArguments[0] <<= PropertyValue(
-                        ::rtl::OUString::createFromAscii( "nodepath"),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("nodepath")),
                         0,
                         makeAny( sCompleteNodePath ),
                         PropertyState_DIRECT_VALUE
                     );
                     // the depth: -1 means unlimited
                     aArguments[1] <<= PropertyValue(
-                        ::rtl::OUString::createFromAscii( "depth"),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("depth")),
                         0,
                         makeAny( (sal_Int32)-1 ),
                         PropertyState_DIRECT_VALUE
@@ -118,7 +118,7 @@ namespace connectivity
                     //같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
                     // create the access
                     Reference< XInterface > xAccess = xConfigProvider->createInstanceWithArguments(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess" )),
                         aArguments
                     );
                     OSL_ENSURE( xAccess.is(), "createDriverConfigNode: invalid access returned (should throw an exception instead)!" );
@@ -174,10 +174,10 @@ namespace connectivity
                     Reference< XPropertySet > xDriverNode = createDriverConfigNode( xFactory );
                     Reference< XPropertySet > xMozPrefsNode;
                     if ( xDriverNode.is() )
-                        xDriverNode->getPropertyValue( ::rtl::OUString::createFromAscii( "MozillaPreferences" ) ) >>= xMozPrefsNode;
+                        xDriverNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("MozillaPreferences" )) ) >>= xMozPrefsNode;
                     OSL_ENSURE( xMozPrefsNode.is(), "getPreferredProfileName: could not access the node for the mozilla preferences!" );
                     if ( xMozPrefsNode.is() )
-                        xMozPrefsNode->getPropertyValue( ::rtl::OUString::createFromAscii( "ProfileName" ) ) >>= sPreferredName;
+                        xMozPrefsNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ProfileName" )) ) >>= sPreferredName;
                     if ( xMozPrefsNode.is() )
                         xMozPrefsNode->getPropertyValue( ::rtl::OUString::createFromAscii(sNode) ) >>= sDescription;
                     if (sDescription.getLength() == 0)
@@ -206,10 +206,10 @@ namespace connectivity
                     Reference< XPropertySet > xDriverNode = createDriverConfigNode( xFactory );
                     Reference< XPropertySet > xMozPrefsNode;
                     if ( xDriverNode.is() )
-                        xDriverNode->getPropertyValue( ::rtl::OUString::createFromAscii( "MozillaPreferences" ) ) >>= xMozPrefsNode;
+                        xDriverNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("MozillaPreferences" )) ) >>= xMozPrefsNode;
                     OSL_ENSURE( xMozPrefsNode.is(), "getPreferredProfileName: could not access the node for the mozilla preferences!" );
                     if ( xMozPrefsNode.is() )
-                        xMozPrefsNode->getPropertyValue( ::rtl::OUString::createFromAscii( "ProfileName" ) ) >>= sPreferredName;
+                        xMozPrefsNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ProfileName" )) ) >>= sPreferredName;
                 }
                 catch( const Exception& )
                 {
@@ -247,7 +247,7 @@ extern "C" const sal_Char* SAL_CALL getPabDescription( void )
     {
         usPabDescription = ::connectivity::mozab::getDescription(
                             "PabDescription" ,
-                            ::rtl::OUString::createFromAscii( "Personal Address Book" ));
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Personal Address Book" )));
         sPabDescription = ::rtl::OUStringToOString( usPabDescription,
                                                  RTL_TEXTENCODING_ASCII_US);
         bReadConfig = sal_True;
@@ -267,7 +267,7 @@ extern "C" const sal_Char* SAL_CALL getHisDescription( void )
     {
         usHisDescription = ::connectivity::mozab::getDescription(
                             "HisDescription" ,
-                            ::rtl::OUString::createFromAscii( "Collected Addresses" ));
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Collected Addresses" )));
         sHisDescription = ::rtl::OUStringToOString( usHisDescription,
                                                  RTL_TEXTENCODING_ASCII_US);
         bReadConfig = sal_True;
