@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:47:25 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,7 +861,9 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
     //der Tabellen.
     if ( Count() != nLastCount )
     {
-        pOut->Push( PUSH_FILLCOLOR );
+        // OD 2004-04-23 #116347#
+        pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+        pOut->SetLineColor();
 
         ConnectEdges( pOut );
         const Color *pLast = 0;
@@ -1021,7 +1023,9 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 
         if ( Count() )
         {
-            pOut->Push( PUSH_FILLCOLOR );
+            // OD 2004-04-23 #116347#
+            pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+            pOut->SetLineColor();
 
             // OD 14.01.2003 #106660# - reset draw mode in high contrast
             // mode in order to get fill color set at output device.
@@ -1850,15 +1854,17 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
     bool bGrfBackgrdAlreadyDrawn = false;
     if ( bRetouche )
     {
-        pOutDev->Push( PUSH_FILLCOLOR );
+        // OD 2004-04-23 #116347#
+        pOutDev->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+        pOutDev->SetLineColor();
 
-        /// OD 07.08.2002 #99657# #GetTransChg#
-        ///     check, if a existing background graphic (not filling the complete
-        ///     background) is transparent drawn and the background color is
-        ///     "no fill" respectively "auto fill", if background transparency
-        ///     has to be considered.
-        ///     If YES, memorise transparency of background graphic.
-        ///     check also, if background graphic bitmap is transparent.
+        // OD 07.08.2002 #99657# #GetTransChg#
+        //     check, if a existing background graphic (not filling the complete
+        //     background) is transparent drawn and the background color is
+        //     "no fill" respectively "auto fill", if background transparency
+        //     has to be considered.
+        //     If YES, memorise transparency of background graphic.
+        //     check also, if background graphic bitmap is transparent.
         bool bTransparentGrfWithNoFillBackgrd = false;
         sal_Int32 nGrfTransparency = 0;
         bool bGrfIsTransparent = false;
@@ -2766,7 +2772,9 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
             //#24926# JP 01.02.96, PaintBaBo in teilen hier, damit PaintBorder
             //das orig. Rect bekommt, aber PaintBackground das begrenzte.
 
-            pOut->Push( PUSH_FILLCOLOR );
+            // OD 2004-04-23 #116347#
+            pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+            pOut->SetLineColor();
 
             pPage = FindPageFrm();
 
@@ -4572,7 +4580,9 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
         pPage = FindPageFrm();
 
     OutputDevice *pOut = pGlobalShell->GetOut();
-    pOut->Push( PUSH_FILLCOLOR );
+    // OD 2004-04-23 #116347#
+    pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
+    pOut->SetLineColor();
 
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
