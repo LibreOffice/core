@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-02 13:17:45 $
+ *  last change: $Author: ssa $ $Date: 2001-07-31 08:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,8 @@ static SOICON soicons[] = {
     {16, _016_template_l_xpm, _016_template_m_xpm, _016_template_s_xpm, _016_template_t_xpm,
         0, 0, 0, 0, 0, 0, 0, 0},
     {17, _017_macrolibrary_l_xpm, _017_macrolibrary_m_xpm, _017_macrolibrary_s_xpm, _017_macrolibrary_t_xpm,
+        0, 0, 0, 0, 0, 0, 0, 0},
+    {100, _100_player_l_xpm, _100_player_m_xpm, _100_player_s_xpm, _100_player_t_xpm,
         0, 0, 0, 0, 0, 0, 0, 0},
     {500, _500_setup_l_xpm, _500_setup_m_xpm, _500_setup_s_xpm, _500_setup_t_xpm,
         0, 0, 0, 0, 0, 0, 0, 0},
