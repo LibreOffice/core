@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:36:46 $
+ *  last change: $Author: kz $ $Date: 2004-01-29 14:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
             {
                 if( 'C' == *pFilter->GetUserData().GetBuffer() &&
                     IsValidStgFilter( *xStg, *pFilter ) &&
-                    checkResultForSDWAndTemplates(pMedium->GetURLObject().GetExtension(), *pFilter)
+                    (pMedium ? checkResultForSDWAndTemplates(pMedium->GetURLObject().GetExtension(), *pFilter) : TRUE)
                 )
                     return pFilter;
                 pFilter = aIter.Next();
