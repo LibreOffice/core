@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-17 16:24:48 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,3 +227,6 @@
 #define HID_SD_NAMEDIALOG_OBJECT            (HID_SD_START + 128)
 #define HID_SD_NAMEDIALOG_PAGE              (HID_SD_START + 129)
 #define HID_SD_NAMEDIALOG_LINEEND           (HID_SD_START + 130)
+
+#define HID_SD_DRAW_3D_TOOLBOX              (HID_SD_START + 131)
+#define HID_SD_DRAW_FONTWORK_TOOLBOX        (HID_SD_START + 132)
