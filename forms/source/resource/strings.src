@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-09-24 21:26:20 $
+ *  last change: $Author: obo $ $Date: 2001-09-27 21:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,8 +423,8 @@ String RID_STR_OPEN_GRAPHICS
     Text[ portuguese_brazilian ] = "Insert graphics from...";
     Text[ japanese ] = "図の挿入に開く...";
     Text[ korean ] = "Insert graphics from...";
-    Text[ chinese_simplified ] = "插入图形使用...";
-    Text[ chinese_traditional ] = "Insert graphics from...";
+    Text[ chinese_simplified ] = "插入图形从...";
+    Text[ chinese_traditional ] = "插入圖形從...";
     Text[ turkish ] = "Insert graphics from...";
     Text[ arabic ] = "Insert graphics from...";
     Text[ catalan ] = "Insert graphics from...";
@@ -450,10 +450,11 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ japanese ] = "図の削除";
     Text[ korean ] = "Remove graphics";
     Text[ chinese_simplified ] = "删除图形";
-    Text[ chinese_traditional ] = "Remove graphics";
+    Text[ chinese_traditional ] = "刪除圖形";
     Text[ turkish ] = "Remove graphics";
     Text[ arabic ] = "Remove graphics";
     Text[ catalan ] = "Remove graphics";
 };
+
 
 
