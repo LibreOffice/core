@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 09:30:57 $
+ *  last change: $Author: fs $ $Date: 2000-10-13 16:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_TABLEFILTER, "TableFilter");
 IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_TABLETYEFILTER, "TableTypeFilter");
 IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_LOGINTIMEOUT, "LoginTimeout");
 IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_PASSWORDREQUIRED, "PasswordRequired");
+IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_INFO, "Info");
 IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_FORMDOCUMENTS, "Documents/Forms");
 IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_REPORTDOCUMENTS, "Documents/Reports");
 IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_QUERYDOCUMENTS, "Documents/Queries");
