@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_cpy_wrt_file.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:48:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 08:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,10 @@ public:
         FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(WRITE_DEST_PATH), dest_url);
 
         File tmp_file(dest_url);
-
+        rtl::OUString suErrorMsg = rtl::OUString::createFromAscii("File creation failed: ")+ dest_url;
         FileBase::RC err = tmp_file.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
 
-        CPPUNIT_ASSERT_MESSAGE("File creation failed", err == FileBase::E_None);
+        CPPUNIT_ASSERT_MESSAGE( suErrorMsg, err == FileBase::E_None || err == FileBase::E_EXIST );
 
         char buffer[50000];
         sal_uInt64 written = 0;
