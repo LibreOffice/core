@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-18 09:02:03 $
+ *  last change: $Author: pl $ $Date: 2002-11-21 17:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,8 +732,8 @@ void SvxLineEndWindow::PopupModeEnd()
 
 void SvxLineEndWindow::SetSize()
 {
-    if( !bPopupMode )
-    //if( !IsInPopupMode() )
+    //if( !bPopupMode )
+    if( !IsInPopupMode() )
     {
         USHORT nItemCount = aLineEndSet.GetItemCount(); // -> Member
         USHORT nMaxLines  = nItemCount / nCols; // -> Member ?
