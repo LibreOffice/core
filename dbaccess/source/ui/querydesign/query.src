@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-30 07:06:43 $
+ *  last change: $Author: kz $ $Date: 2002-08-03 20:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ String STR_QUERY_UNDO_TABWINSHOW
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää taulukkoikkuna";
     Text[ catalan ] = "Afegeix la finestra de la taula";
+    Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡à¸•à¸²à¸£à¸²à¸‡";
 };
 
 String STR_QUERY_UNDO_MOVETABWIN
@@ -215,6 +216,7 @@ String STR_QUERY_UNDO_MOVETABWIN
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Siirrä taulukkoikkunaa";
     Text[ catalan ] = "Mou la finestra de la taula";
+    Text[ thai ] = "à¸¢à¹‰à¸²à¸¢à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡à¸•à¸²à¸£à¸²à¸‡";
 };
 String STR_QUERY_UNDO_INSERTCONNECTION
 {
@@ -223,7 +225,7 @@ String STR_QUERY_UNDO_INSERTCONNECTION
     Text [ english_us ] = "Insert Join" ;
     Text [ portuguese_brazilian ] = "Verbindung einf?en" ;
     Text [ swedish ] = "Infoga förbindelse" ;
-    Text [ danish ] = "Tilføj forbindelse" ;
+    Text [ danish ] = "Indsæt forbindelse" ;
     Text [ italian ] = "Inserisci collegamento" ;
     Text [ spanish ] = "Insertar conexión" ;
     Text [ french ] = "Insérer une jointure" ;
@@ -243,6 +245,7 @@ String STR_QUERY_UNDO_INSERTCONNECTION
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää liitos";
     Text[ catalan ] = "Insereix una unió";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸à¸²à¸£à¸£à¸§à¸¡";
 };
 
 String STR_QUERY_UNDO_REMOVECONNECTION
@@ -272,6 +275,7 @@ String STR_QUERY_UNDO_REMOVECONNECTION
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Poista liitos";
     Text[ catalan ] = "Suprimeix la unió";
+    Text[ thai ] = "à¸¥à¸šà¸à¸²à¸£à¸£à¸§à¸¡";
 };
 
 String STR_QUERY_UNDO_SIZETABWIN
@@ -301,6 +305,7 @@ String STR_QUERY_UNDO_SIZETABWIN
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muuta taulukkoikkunan kokoa";
     Text[ catalan ] = "Canvia la mida de la finestra de la taula";
+    Text[ thai ] = "à¸›à¸£à¸±à¸šà¸‚à¸™à¸²à¸”à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡à¸•à¸²à¸£à¸²à¸‡";
 };
 String STR_QUERY_UNDO_TABFIELDDELETE
 {
@@ -330,6 +335,7 @@ String STR_QUERY_UNDO_TABFIELDDELETE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Poista sarake";
     Text[ catalan ] = "Suprimeix la columna";
+    Text[ thai ] = "à¸¥à¸šà¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 
 String STR_QUERY_UNDO_TABFIELDCREATE
@@ -360,6 +366,7 @@ String STR_QUERY_UNDO_TABFIELDCREATE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää sarake";
     Text[ catalan ] = "Afegeix una columna";
+    Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 String RID_STR_TABLE_DOESNT_EXIST
 {
@@ -372,7 +379,7 @@ String RID_STR_TABLE_DOESNT_EXIST
     Text[ french ] = "L'expression n'est pas valide car la table '$name$' n'existe pas !";
     Text[ spanish ] = "¡La expresión no es válida porque no existe ninguna tabla '$name$'!";
     Text[ italian ] = "L'espressione non è valida in quanto la tabella '$name$' non esiste !";
-    Text[ danish ] = "Udtrykket er ugyldigt, tabel '$name$' eksisterer ikke !";
+    Text[ danish ] = "Udtrykket er ugyldigt, da der ikke findes nogen tabel med navnet '$name$'!";
     Text[ swedish ] = "Uttrycket är ogiltigt eftersom det inte finns någon tabell med namnet '$name$'!";
     Text[ polish ] = "Wyra¿enie jest nieprawid³owe, poniewa¿ brak tabeli '$name$'!";
     Text[ portuguese_brazilian ] = "The expression is invalid because table '$name$' doesn't exist !";
@@ -388,6 +395,7 @@ String RID_STR_TABLE_DOESNT_EXIST
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Virheellinen lauseke. Taulukkoa $name$ ei ole.";
     Text[ catalan ] = "L'expressió no és vàlida, la taula '$name$' no existeix.";
+    Text[ thai ] = "à¸à¸²à¸£à¸­à¸˜à¸´à¸šà¸²à¸¢à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡, à¹„à¸¡à¹ˆà¸¡à¸µà¸•à¸²à¸£à¸²à¸‡ '$name$' à¸­à¸¢à¸¹à¹ˆ!";
 };
 
 String RID_STR_FIELD_DOESNT_EXIST
@@ -401,7 +409,7 @@ String RID_STR_FIELD_DOESNT_EXIST
     Text[ french ] = "L'expression n'est pas valide car il est impossible d'attribuer le nom de champ '$name$' !";
     Text[ spanish ] = "¡La expresión no es válida porque no se puede asignar el nombre de campo '$name$'!";
     Text[ italian ] = "L'espressione non è valida in quanto non è possibile assegnare il nome di campo '$name$'!";
-    Text[ danish ] = "Udtrykket er ugyldigt, feltnavnet '$name$' kan ikke tildeles!";
+    Text[ danish ] = "Udtrykket er ugyldigt, da feltnavnet '$name$' ikke kan tildeles!";
     Text[ swedish ] = "Uttrycket är ogiltigt eftersom fältnamnet '$name$' inte kan tilldelas!";
     Text[ polish ] = "Wyra¿enie jest nieprawid³owe, poniewa¿ nie mo¿na by³o przyporz¹dkowaæ nazwy pola '$name$'!";
     Text[ portuguese_brazilian ] = "The expression is invalid because the field name '$name$' kann nicht zugeordnet werden !";
@@ -417,6 +425,7 @@ String RID_STR_FIELD_DOESNT_EXIST
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Virheellinen lauseke. Kenttää $name$ ei ole.";
     Text[ catalan ] = "L'expressió no és vàlida, el nom del camp '$name$' no existeix.";
+    Text[ thai ] = "à¸à¸²à¸£à¸­à¸˜à¸´à¸šà¸²à¸¢à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡, à¹„à¸¡à¹ˆà¸¡à¸µà¸Šà¸·à¹ˆà¸­à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ '$name$' à¸­à¸¢à¸¹à¹ˆ";
 };
 String RID_STR_TOMUCHTABLES
 {
@@ -425,7 +434,7 @@ String RID_STR_TOMUCHTABLES
     Text[ italian ] = "La ricerca contiene #num# tabelle. Il tipo attuale di dati riesce a elaborare #maxnum# tabella/e al massimo per indicazione!";
     Text[ portuguese_brazilian ] = "Die Abfrage enth?lt #num# Tabellen. Der aktuelle Datenbanktyp kann aber maximal #maxnum# Tabelle(n) pro Statement verarbeiten !";
     Text[ portuguese ] = "A consulta tem #num# tabelas. O tipo da base de dados seleccionado admite apenas um máximo de #maxnum# tabela(s) por instrução!";
-    Text[ danish ] = "Forespørgslen indeholder #num# tabeller. Denne databasetype kan dog kun behandle maksimalt #maxnum# tabel(ler) per sætning !";
+    Text[ danish ] = "Forespørgslen indeholder #num# tabeller. Den aktuelle databasetype kan dog højst behandle #maxnum# tabel(ler) pr. sætning!";
     Text[ french ] = "La requête contient #num# tables. Or, le type de base de données actif peut traiter au maximum #maxnum# table(s) par instruction !";
     Text[ swedish ] = "Sökningen innehåller #num# tabeller. Men den aktuella databastypen kan bara bearbeta max #maxnum# tabell(er) per sats!";
     Text[ dutch ] = "Query bevat #num# tabellen. Het actuele databastype kan echter maximaal #maxnum# tabel(len) per statement verwerken !";
@@ -445,6 +454,7 @@ String RID_STR_TOMUCHTABLES
     Text[ turkish ] = "Sorgu #num# tablo içeriyor. Ancak seçili veritabanı tipi her deyim için en fazla #maxnum# tablo işleyebilmektedir !";
     Text[ finnish ] = "Kysely käsittelee #num# taulukkoa. Valittu tietokantatyyppi voi kuitenkin käsitellä enintään #maxnum# taulukkoa kussakin lausekkeessa.";
     Text[ catalan ] = "La consulta inclou #num# taules. Tanmateix, el tipus de base de dades seleccionat només pot processar un màxim de #maxnum# taula(es) per expressió";
+    Text[ thai ] = "à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡à¸„à¸£à¸­à¸šà¸„à¸¥à¸¸à¸¡à¸•à¸²à¸£à¸²à¸‡ #num#  à¸­à¸¢à¹ˆà¸²à¸‡à¹„à¸£à¸à¹‡à¸•à¸²à¸¡  à¸Šà¸™à¸´à¸”à¸‚à¸­à¸‡à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸à¸ªà¸²à¸¡à¸²à¸£à¸–à¸›à¸£à¸°à¸¡à¸§à¸¥à¹„à¸”à¹‰à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸” #maxnum# à¸•à¸²à¸£à¸²à¸‡à¸•à¹ˆà¸­à¸›à¸£à¸°à¹‚à¸¢à¸„à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™!";
 };
 
 String STR_QUERY_UNDO_TABWINDELETE
@@ -475,6 +485,7 @@ String STR_QUERY_UNDO_TABWINDELETE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Poista taulukkoikkuna";
     Text[ catalan ] = "Suprimeix la finestra de la taula";
+    Text[ thai ] = "à¸¥à¸šà¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡à¸•à¸²à¸£à¸²à¸‡";
 };
 
 String STR_QUERY_UNDO_MODIFY_CELL
@@ -504,6 +515,7 @@ String STR_QUERY_UNDO_MODIFY_CELL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muokkaa sarakkeen kuvausta";
     Text[ catalan ] = "Edita la descripció de la columna";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 String STR_QUERY_UNDO_SIZE_COLUMN
 {
@@ -532,6 +544,7 @@ String STR_QUERY_UNDO_SIZE_COLUMN
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Säädä sarakkeen leveys";
     Text[ catalan ] = "Ajusta l'amplada de la columna";
+    Text[ thai ] = "à¸›à¸£à¸±à¸šà¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 String STR_QUERY_SORTTEXT
 {
@@ -560,6 +573,7 @@ String STR_QUERY_SORTTEXT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "(ei lajiteltu);nouseva;laskeva";
     Text[ catalan ] = "(sense ordenar);ascendent;descendent";
+    Text[ thai ] = "(à¹„à¸¡à¹ˆà¹€à¸£à¸µà¸¢à¸‡);à¸ˆà¸²à¸à¸™à¹‰à¸­à¸¢à¹„à¸›à¸¡à¸²à¸;à¸ˆà¸²à¸à¸¡à¸²à¸à¹„à¸›à¸™à¹‰à¸­à¸¢";
 };
 
 String STR_QUERY_FUNCTIONS
@@ -574,7 +588,7 @@ String STR_QUERY_FUNCTIONS
     Text[ french ] = "(aucune fonction);Moyenne;Nombre;Maximum;Minimum;Somme;Groupement";
     Text[ spanish ] = "(sin función);Promedio;Cantidad;Máximo;Mínimo;Suma;Agrupar";
     Text[ italian ] = "(nessuna funzione);Media;Quantità;Massimo;Minimo;Somma;Gruppo";
-    Text[ danish ] = "(ingen funktion);Middeltal;Antal;Maksimum;Minimum;Sum;Gruppering";
+    Text[ danish ] = "(ingen funktion);Gennemsnit;Antal;Maksimum;Minimum;Sum;Gruppering";
     Text[ swedish ] = "(ingen funktion);Genomsnitt;Antal;Maximum;Minimum;Summa;Gruppering";
     Text[ polish ] = "(brak funkcji);Œrednia;Liczba;Maksimum;Minimum;Suma;Grupowanie";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
@@ -590,6 +604,7 @@ String STR_QUERY_FUNCTIONS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "(ei funktiota);Keskiarvo;Määrä;Enintään;Vähintään;Summa;Ryhmittele";
     Text[ catalan ] = "(cap funció);Promig;Recompte;Màxim;Mínim;Suma;Grup";
+    Text[ thai ] = "(à¹„à¸¡à¹ˆà¸¡à¸µà¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™);à¹€à¸‰à¸¥à¸µà¹ˆà¸¢;à¸™à¸±à¸š;à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”;à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”;à¸œà¸¥à¸£à¸§à¸¡;à¸ˆà¸±à¸”à¸à¸¥à¸¸à¹ˆà¸¡";
 };
 String STR_QUERY_NOTABLE
 {
@@ -616,6 +631,7 @@ String STR_QUERY_NOTABLE
     Text[ turkish ] = "(tablo yok)";
     Text[ finnish ] = "(ei taulukkoa)";
     Text[ catalan ] = "(sense taula)";
+    Text[ thai ] = "(à¹„à¸¡à¹ˆà¸¡à¸µà¸•à¸²à¸£à¸²à¸‡)";
 };
 String STR_QRY_ORDERBY_UNRELATED
 {
@@ -628,7 +644,7 @@ String STR_QRY_ORDERBY_UNRELATED
     Text[ french ] = "La base de données ne supporte le tri que pour les champs visibles.";
     Text[ spanish ] = "La base de datos apoya la clasificación solo para campos visibles.";
     Text[ italian ] = "Il database supporta solo la classificazione dei campi visibili.";
-    Text[ danish ] = "Databasen understøtter sortering kun for synlige felter.";
+    Text[ danish ] = "Databasen understøtter kun sortering for synlige felter.";
     Text[ swedish ] = "Databasen stöder bara sorteringen för synliga fält.";
     Text[ polish ] = "Baza danych obs³uguje sortowanie tylko w przypadku widocznych pól.";
     Text[ portuguese_brazilian ] = "Die Datenbank unterst?zt die Sortierung nur f? sichtbare Felder.";
@@ -644,6 +660,7 @@ String STR_QRY_ORDERBY_UNRELATED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tietokanta tukee vain näkyvien kenttien lajittelua.";
     Text[ catalan ] = "La base de dades només permet la ordenació pels camps visibles.";
+    Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸¡à¹ˆà¸ªà¸™à¸±à¸šà¸ªà¸™à¸¸à¸™à¸à¸²à¸£à¹€à¸£à¸µà¸¢à¸‡à¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸¡à¸­à¸‡à¹€à¸«à¹‡à¸™à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
 };
 Menu RID_QUERYFUNCTION_POPUPMENU
 {
@@ -678,6 +695,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ language_user1 ] = " ";
             Text[ finnish ] = "Toiminnot";
             Text[ catalan ] = "Funcions";
+            Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
         };
         MenuItem
         {
@@ -712,6 +730,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ language_user1 ] = " ";
             Text[ finnish ] = "Taulukon nimi";
             Text[ catalan ] = "Nom de la taula";
+            Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸•à¸²à¸£à¸²à¸‡";
         };
         MenuItem
         {
@@ -742,6 +761,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ language_user1 ] = " ";
             Text[ finnish ] = "Alias";
             Text[ catalan ] = "Àlies";
+            Text[ thai ] = "à¸™à¸²à¸¡à¹à¸à¸‡";
         };
         MenuItem
         {
@@ -758,7 +778,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ russian ] = "Îäíîçíà÷íûå çíà÷åíèÿ";
             Text[ dutch ] = "Duidelijke waarden";
             Text[ french ] = "Valeurs distinctes";
-            Text[ spanish ] = "Valores unívocos";
+            Text[ spanish ] = "Valores inequívocos";
             Text[ italian ] = "Valori distinti";
             Text[ danish ] = "Entydige værdier";
             Text[ swedish ] = "Entydiga värden";
@@ -776,6 +796,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ language_user1 ] = " ";
             Text[ finnish ] = "Erityisarvot";
             Text[ catalan ] = "Valors diferents";
+            Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸‰à¸à¸²à¸°";
         };
     };
 };
@@ -790,7 +811,7 @@ String STR_QUERY_HANDLETEXT
     Text[ french ] = "Champ;Alias;Table;Tri;Visible;Fonction;Critère;Ou;Ou";
     Text[ spanish ] = "Campo;Alias;Tabla;Orden;Visible;Función;Criterio;o;o";
     Text[ italian ] = "Campo;Alias;Tabella;Ordine;Visibile;Funzione;Criteri;o;o";
-    Text[ danish ] = "Felt;Alias;Tabel;Sortering;Synlig;Funktion;Kriterium;eller;eller";
+    Text[ danish ] = "Felt;Alias;Tabel;Sortering;Synlig;Funktion;Kriterie;eller;eller";
     Text[ swedish ] = "Fält;Alias;Tabell;Sortering;Synlig;Funktion;Kriterium;eller;eller";
     Text[ polish ] = "Pole;Alias;Tabela;Sortowanie;Widoczny;Funkcja;Kryterium;lub;lub";
     Text[ portuguese_brazilian ] = "Campo;Tabela;Ordem;Vis?vel;Crit?rios;ou;ou";
@@ -806,6 +827,7 @@ String STR_QUERY_HANDLETEXT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kenttä;Alias;Taulukko;Lajittele;Näkyvissä;Toiminto;Ehto;Tai;Tai";
     Text[ catalan ] = "Camp;Àlies;Taula;Ordenació;Visible;Funció;Criteri;O;O";
+    Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥;à¸™à¸²à¸¡à¹à¸à¸‡;à¸•à¸²à¸£à¸²à¸‡;à¹€à¸£à¸µà¸¢à¸‡;à¸¡à¸­à¸‡à¹€à¸«à¹‡à¸™;à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™;à¹€à¸à¸“à¸‘à¹Œ;à¸«à¸£à¸·à¸­;à¸«à¸£à¸·à¸­";
 };
 
 String STR_QRY_TOO_MANY_COLUMNS
@@ -829,12 +851,13 @@ String STR_QRY_TOO_MANY_COLUMNS
     Text[ dutch ] = "Er zijn teveel kolommen";
     Text[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„åˆ—ã€‚";
     Text[ greek ] = "ÕğÜñ÷ïõí Şäç ğïëëİò óôŞëåò.";
-    Text[ korean ] = "ì—´ì´ ë„ˆë¬´ ë§ì´ ìˆìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "ì—´ì´ ë„ˆë¬´ ë§ìŠµë‹ˆë‹¤.";
     Text[ arabic ] = "ÊæÌÏ ÃÚãÏÉ ßËíÑÉ ÌÏÇğ.";
     Text[ turkish ] = "Mevcut sütun sayısı çok fazla.";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Sarakkeita on liikaa.";
     Text[ catalan ] = "Hi ha massa columnes.";
+    Text[ thai ] = "à¸¡à¸µà¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸¡à¸²à¸à¹€à¸à¸´à¸™à¹„à¸›";
 };
 
 ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
@@ -862,6 +885,7 @@ ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
     Message[ turkish ] = "[*] alanı için koşul belirlenemiyor";
     Message[ finnish ] = "Ehtoa ei voi käyttää kenttään [*]";
     Message[ catalan ] = "No es pot aplicar cap condició al camp [*]";
+    Message[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰à¹€à¸‡à¸·à¹ˆà¸­à¸™à¹„à¸‚à¸à¸±à¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ [*] à¹„à¸”à¹‰";
 };
 String STR_QRY_TOO_LONG_STATEMENT
 {
@@ -874,12 +898,12 @@ String STR_QRY_TOO_LONG_STATEMENT
     Text[ french ] = "L'expression SQL créée est trop longue.";
     Text[ swedish ] = "Det skapade SQL-uttrycket är för långt.";
     Text[ dutch ] = "Deze SQL-uitdrukking is te lang.";
-    Text[ spanish ] = "La expresión creada SQL es demasiado larga.";
+    Text[ spanish ] = "La expresión SQL creada es demasiado larga.";
     Text[ english_us ] = "The SQL statement created is too long.";
     Text[ chinese_simplified ] = "ç”Ÿæˆçš„ SQL è¡¨è¾¾å¼å¤ªé•¿ã€‚";
     Text[ russian ] = "Ñîçäàííîå âûğàæåíèå SQL ÿâëÿåòñÿ ñëèøêîì äëèííûì.";
     Text[ polish ] = "Utworzone wyra¿enie SQL jest za d³ugie.";
-    Text[ japanese ] = "ä½œæˆã—ãŸ SQL è¡¨ç¾ãŒé•·ã™ãã¾ã™ã€‚";
+    Text[ japanese ] = "ä½œæˆã—ãŸ SQL ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆãŒé•·ã™ãã¾ã™ã€‚";
     Text[ chinese_traditional ] = "ç”Ÿæˆçš„ SQL è¡¨é”å¼å¤ªé•·ã€‚";
     Text[ dutch ] = "Deze SQL-uitdrukking is te lang.";
     Text[ chinese_simplified ] = "ç”Ÿæˆçš„ SQL è¡¨è¾¾å¼å¤ªé•¿ã€‚";
@@ -890,6 +914,7 @@ String STR_QRY_TOO_LONG_STATEMENT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Luotu SQL-lauseke on liian pitkä.";
     Text[ catalan ] = "L'expressió SQL que s'ha creat és massa llarga.";
+    Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸›à¸£à¸°à¹‚à¸¢à¸„ SQL à¸¢à¸²à¸§à¹€à¸à¸´à¸™à¹„à¸›";
 };
 String STR_QRY_TOOCOMPLEX
 {
@@ -901,7 +926,7 @@ String STR_QRY_TOOCOMPLEX
     Text [ portuguese ] = "Consulta demasiado complexa" ;
     Text [ finnish ] = "Kysely on liian monimutkainen" ;
     Text [ danish ] = "Forespørgslen er for kompleks" ;
-    Text [ french ] = "Requête est trop complexe" ;
+    Text [ french ] = "Requête trop complexe" ;
     Text [ swedish ] = "Förfrågan är alltför komplex" ;
     Text [ dutch ] = "De query is te complex" ;
     Text [ spanish ] = "Consulta demasiado compleja" ;
@@ -914,11 +939,12 @@ String STR_QRY_TOOCOMPLEX
     Text[ dutch ] = "De query is te complex";
     Text[ chinese_simplified ] = "æŸ¥è¯¢å†…å®¹å¤ªå¤åˆ";
     Text[ greek ] = "Ôï åñşôçìá åßíáé ğïëı ğåñßğëïêï";
-    Text[ korean ] = "ì§ˆì˜ê°€ ë„ˆë¬´ ë³µì¡í•©ë‹ˆë‹¤";
+    Text[ korean ] = "ì¿¼ë¦¬ê°€ ë„ˆë¬´ ë³µì¡í•©ë‹ˆë‹¤";
     Text[ arabic ] = "ÇáÇÓÊİÓÇÑ İí ÛÇíÉ ÇáÊÚŞíÏ";
     Text[ turkish ] = "Sorgu çok karmaşık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La consulta és massa complexa";
+    Text[ thai ] = "à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡à¸‹à¸±à¸šà¸‹à¹‰à¸­à¸™à¹€à¸à¸´à¸™à¹„à¸›";
 };
 String STR_QRY_NOSELECT
 {
@@ -935,19 +961,20 @@ String STR_QRY_NOSELECT
     Text [ dutch ] = "De selectie ontbreekt!" ;
     Text [ spanish ] = "Falta una selección" ;
     Text [ english_us ] = "Nothing has been selected!" ;
-    Text[ chinese_simplified ] = "æ²¡æœ‰ä»»ä½•é€‰ä¸­ï¼";
+    Text[ chinese_simplified ] = "æ²¡æœ‰é€‰æ‹©ä»»ä½•å†…å®¹ï¼";
     Text[ russian ] = "Íåîáõîäèìî âûäåëåíèå!";
     Text[ polish ] = "Nale¿y coœ wybraæ!";
     Text[ japanese ] = "é¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
-    Text[ chinese_traditional ] = "ç¼ºå°‘ä¸€å€‹é¸æ“‡ï¼";
+    Text[ chinese_traditional ] = "æ²’æœ‰é¸æ“‡ä»»ä½•å…§å®¹ï¼";
     Text[ dutch ] = "De selectie ontbreekt!";
-    Text[ chinese_simplified ] = "æ²¡æœ‰ä»»ä½•é€‰ä¸­ï¼";
+    Text[ chinese_simplified ] = "æ²¡æœ‰é€‰æ‹©ä»»ä½•å†…å®¹ï¼";
     Text[ greek ] = "Äåí İãéíå åğéëïãŞ!";
-    Text[ korean ] = "ì„ íƒ ë¶€ì¡±";
+    Text[ korean ] = "ì„ íƒí•˜ì‹  ê²ƒì´ ì—†ìŠµë‹ˆë‹¤";
     Text[ arabic ] = "áã íÊã Úãá ÊÍÏíÏ";
     Text[ turkish ] = "Seçim yapılmadı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No s'ha seleccionat res";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¹€à¸¥à¸·à¸­à¸à¸­à¸°à¹„à¸£à¹€à¸¥à¸¢!";
 };
 String STR_QRY_TOOMANYCOND
 {
@@ -964,19 +991,20 @@ String STR_QRY_TOOMANYCOND
     Text [ dutch ] = "Teveel zoekcriteria" ;
     Text [ spanish ] = "Demasiados criterios de búsqueda" ;
     Text [ english_us ] = "Too many search criteria" ;
-    Text[ chinese_simplified ] = "æœå¯»è§„åˆ™å¤ªå¤š";
+    Text[ chinese_simplified ] = "å¤ªå¤šçš„æœå¯»è§„åˆ™";
     Text[ russian ] = "Ñëèøêîì ìíîãî êğèòåğèåâ ïîèñêà";
     Text[ polish ] = "Za du¿o kryteriów wyszukiwania";
     Text[ japanese ] = "æ¤œç´¢æ¡ä»¶ãŒå¤šã™ãã¾ã™ã€‚";
-    Text[ chinese_traditional ] = "æœå°‹è¦å‰‡å¤ªå¤š";
+    Text[ chinese_traditional ] = "å¤ªå¤šçš„æœå°‹è¦å‰‡";
     Text[ dutch ] = "Teveel zoekcriteria";
-    Text[ chinese_simplified ] = "æœå¯»è§„åˆ™å¤ªå¤š";
+    Text[ chinese_simplified ] = "å¤ªå¤šçš„æœå¯»è§„åˆ™";
     Text[ greek ] = "Ï áñéèìüò ôùí êñéôçñßùí áíáæŞôçóçò åßíáé õğåñâïëéêÜ ìåãÜëïò";
-    Text[ korean ] = "ê²€ìƒ‰ê¸°ì¤€ì´ ë„ˆë¬´ ë§ìŒ";
+    Text[ korean ] = "ê²€ìƒ‰ê¸°ì¤€ì´ ë„ˆë¬´ ë§ìŠµë‹ˆë‹¤";
     Text[ arabic ] = "ãÚÇííÑ ÇáÈÍË ßËíÑÉ ááÛÇíÉ";
     Text[ turkish ] = "Arama ölçütü sayısı çok fazla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Massa criteris de cerca";
+    Text[ thai ] = "à¹€à¸à¸“à¸‘à¹Œà¹ƒà¸™à¸à¸²à¸£à¸„à¹‰à¸™à¸«à¸²à¸¡à¸²à¸à¹€à¸à¸´à¸™à¹„à¸›";
 };
 String STR_QRY_SYNTAX
 {
@@ -1006,6 +1034,7 @@ String STR_QRY_SYNTAX
     Text[ turkish ] = "SQL sözdizimi hatası";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "S'ha produït un error de sintaxi de l'SQL";
+    Text[ thai ] = "à¹„à¸§à¸¢à¸à¸£à¸“à¹Œ SQL à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
 };
 ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
 {
@@ -1014,7 +1043,7 @@ ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
     Message[ italian ] = "Non è possibile ordinare per [*].";
     Message[ portuguese_brazilian ] = "Order by for field [*] is impossible.";
     Message[ portuguese ] = "Impossível ordenar de acordo com [*].";
-    Message[ danish ] = "Det er ikke muligt at sortere efter [*].";
+    Message[ danish ] = "Der kan ikke sorteres efter [*].";
     Message[ french ] = "Tri en fonction de [*] impossible !";
     Message[ swedish ] = "Det går inte att sortera efter [*]";
     Message[ dutch ] = "Naar [*] kan niet worden gesorteerd.";
@@ -1032,6 +1061,7 @@ ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
     Message[ language_user1 ] = " ";
     Message[ finnish ] = "Kohdetta [*] ei voi käyttää hakuehtona.";
     Message[ catalan ] = "[*] no es pot utilitzar com a criteri d'ordenació";
+    Message[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰ [*] à¹€à¸›à¹‡à¸™à¹€à¸à¸“à¸‘à¹Œà¹ƒà¸™à¸à¸²à¸£à¹€à¸£à¸µà¸¢à¸‡à¹„à¸”à¹‰";
 };
 String STR_QUERY_TRUE
 {
@@ -1055,10 +1085,11 @@ String STR_QUERY_TRUE
     Text[ dutch ] = "WAAR";
     Text[ chinese_simplified ] = "TRUE";
     Text[ greek ] = "ÁËÇÈÇÓ";
-    Text[ korean ] = "ì°¸";
+    Text[ korean ] = "TRUE";
     Text[ turkish ] = "DOĞRU";
     Text[ finnish ] = "TRUE";
     Text[ catalan ] = "TRUE";
+    Text[ thai ] = "à¸ˆà¸£à¸´à¸‡";
 };
 String STR_QUERY_FALSE
 {
@@ -1082,10 +1113,11 @@ String STR_QUERY_FALSE
     Text[ dutch ] = "ONWAAR";
     Text[ chinese_simplified ] = "FALSE";
     Text[ greek ] = "ËÁÈÏÓ";
-    Text[ korean ] = "ê±°ì§“";
+    Text[ korean ] = "FALSE";
     Text[ turkish ] = "YANLIŞ";
     Text[ finnish ] = "FALSE";
     Text[ catalan ] = "FALSE";
+    Text[ thai ] = "à¹€à¸—à¹‡à¸ˆ";
 };
 String STR_QRY_TOO_MANY_TABLES
 {
@@ -1100,20 +1132,21 @@ String STR_QRY_TOO_MANY_TABLES
     Text[ dutch ] = "Er zijn teveel tabellen";
     Text[ spanish ] = "Existen demasiadas tablas.";
     Text[ english_us ] = "There are too many tables.";
-    Text[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„è¡¨æ ¼ã€‚";
+    Text[ chinese_simplified ] = "è¡¨æ ¼æ•°ç›®å¤ªå¤šã€‚";
     Text[ russian ] = "Ñëèøêîì ìíîãî òàáëèö.";
     Text[ polish ] = "Jest za du¿o tabel.";
     Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®æ•°ãŒå¤šã™ãã¾ã™ã€‚";
     Text[ chinese_traditional ] = "è¡¨æ ¼æ•¸ç›®å¤ªå¤šã€‚";
     Text[ dutch ] = "Er zijn teveel tabellen";
-    Text[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„è¡¨æ ¼ã€‚";
+    Text[ chinese_simplified ] = "è¡¨æ ¼æ•°ç›®å¤ªå¤šã€‚";
     Text[ greek ] = "ÕğÜñ÷ïõí õğåñâïëéêÜ ğïëëïß ğßíáêåò.";
-    Text[ korean ] = "ì‹œíŠ¸ê°€ ë„ˆë¬´ ë§ìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "í…Œì´ë¸”ì˜ ìˆ˜ê°€ ë„ˆë¬´ ë§ìŠµë‹ˆë‹¤.";
     Text[ arabic ] = "ÊæÌÏ ÌÏÇæá ßËíÑÉ ÌÏÇğ.";
     Text[ turkish ] = "Mevcut tablo sayısı çok fazla.";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Taulukoita on liikaa.";
     Text[ catalan ] = "Hi ha massa taules.";
+    Text[ thai ] = "à¸¡à¸µà¸•à¸²à¸£à¸²à¸‡à¸¡à¸²à¸à¹€à¸à¸´à¸™à¹„à¸›";
 };
 
 String STR_QRY_NATIVE
@@ -1127,7 +1160,7 @@ String STR_QRY_NATIVE
     Text [ portuguese ] = "A instrução não será executada se efectuar a consulta no dialecto SQL da base de dados." ;
     Text [ french ] = "En cas de requête dans le langage SQL de la base de données, l'instruction ne sera pas appliquée." ;
     Text [ dutch ] = "Bij een query in SQL-dialect van database wordt statement niet overgenomen." ;
-    Text [ spanish ] = "Al consultar en el dialecto SQL de la base de datos no se acepta la instrucción." ;
+    Text [ spanish ] = "En caso de consultar en el dialecto SQL de la base de datos, la instrucción no se aceptará." ;
     Text [ danish ] = "Ved forespørgsel i databasens SQL-dialekt bliver sætningen ikke overtaget" ;
     Text [ swedish ] = "Vid förfrågan i databasens SQL-dialekt kommer inte satsen att övertas" ;
     Text [ finnish ] = "Kun kysely lähetetään tietokannan SQL-kielellä, lauseketta ei käytetä." ;
@@ -1140,11 +1173,12 @@ String STR_QRY_NATIVE
     Text[ dutch ] = "Bij een query in SQL-dialect van database wordt statement niet overgenomen.";
     Text[ chinese_simplified ] = "ä¸æ¥å—æ•°æ®åº“çš„ SQL æ–¹è¨€æŸ¥è¯¢æŒ‡ä»¤ã€‚";
     Text[ greek ] = "ÊáôÜ ôçí åêôİëåóç ôïõ åñùôŞìáôïò óôç äéÜëåêôï SQL ôçò âÜóçò äåäïìİíùí ç åíôïëŞ äåí èá åöáñìïóôåß";
-    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ì˜ SQL ë°©ì–¸ìœ¼ë¡œ ëœ ì§ˆì˜ì˜ ê²½ìš° ë¬¸ì¥ì´ ì ìš©ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤";
+    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ì˜ SQL ë°©ì–¸ìœ¼ë¡œ ì¡°íšŒí•˜ì‹¤ ê²½ìš°ì—ëŠ” ê·¸ ë¬¸ì¥ì´ ì ìš©ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤";
     Text[ arabic ] = "áä íÊã ÊØÈíŞ ÇáÚÈÇÑÉ¡ ÅĞÇ ßÇä ÇáÇÓÊİÓÇÑ ÈáåÌÉ SQL ÇáÎÇÕÉ ÈŞÇÚÏÉ ÇáÈíÇäÇÊ ";
     Text[ turkish ] = "Deyim, sorgunun bu veritabanının SQL dilinde yapılması halinde kullanılmayacaktır";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "L'expressió no s'aplicarà en consultar en el dialecte SQL de la base de dades.";
+    Text[ thai ] = "à¸›à¸£à¸°à¹‚à¸¢à¸„à¸ˆà¸°à¹„à¸¡à¹ˆà¸–à¸¹à¸à¹ƒà¸Šà¹‰à¸‚à¸“à¸°à¸•à¸±à¹‰à¸‡à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡à¹ƒà¸™à¸§à¸´à¸ à¸²à¸©à¸§à¸´à¸˜à¸µ SQL à¸‚à¸­à¸‡à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 ErrorBox ERR_QRY_AMB_FIELD
 {
@@ -1174,6 +1208,7 @@ ErrorBox ERR_QRY_AMB_FIELD
     Message[ arabic ] = "ÇÓã ÇáÍŞá ÛíÑ ãæÌæÏ Ãæ ÛíÑ æÇÖÍ";
     Message[ turkish ] = "Alan adı bulunamadı ya da benzersiz değil";
     Message[ catalan ] = "No s'ha trobat el nom del camp o no és únic";
+    Message[ thai ] = "à¹„à¸¡à¹ˆà¸à¸šà¸Šà¸·à¹ˆà¸­à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸«à¸£à¸·à¸­à¸Šà¸·à¹ˆà¸­à¸‹à¹‰à¸³";
 };
 String STR_QRY_ILLEGAL_JOIN
 {
@@ -1187,7 +1222,7 @@ String STR_QRY_ILLEGAL_JOIN
     Text [ finnish ] = "Yhdistämistä ei voitu käsitellä" ;
     Text [ danish ] = "Det var ikke muligt at oprette en kæde" ;
     Text [ french ] = "Jointure impossible" ;
-    Text [ swedish ] = "Länk kunde inte utföras" ;
+    Text [ swedish ] = "Länk gick inte att utföra" ;
     Text [ dutch ] = "Koppeling kon niet tot stand worden gebracht" ;
     Text [ spanish ] = "No se pudo ejecutar el vínculo." ;
     Text [ english_us ] = "Join could not be processed" ;
@@ -1204,6 +1239,7 @@ String STR_QRY_ILLEGAL_JOIN
     Text[ turkish ] = "Bağlantı oluşturulamadı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No s'ha pogut processar la unió";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸›à¸£à¸°à¸¡à¸§à¸¥à¸œà¸¥à¸à¸²à¸£à¸£à¸§à¸¡à¸à¸±à¸™à¹„à¸”à¹‰";
 };
 ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
 {
@@ -1281,7 +1317,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ french ] = "Éditer";
             Text[ spanish ] = "Editar";
             Text[ italian ] = "Edit";
-            Text[ danish ] = "Edit";
+            Text[ danish ] = "Rediger";
             Text[ swedish ] = "Redigera";
             Text[ polish ] = "Edytuj";
             Text[ portuguese_brazilian ] = "Edit";
@@ -1293,6 +1329,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ arabic ] = "ÊÍÑíÑ";
             Text[ finnish ] = "Muokkaa";
             Text[ catalan ] = "Edita";
+            Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚";
         };
         ToolBoxItem
         {
@@ -1325,6 +1362,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ arabic ] = "ÊÍÑíÑ";
             Text[ finnish ] = "Muokkaa";
             Text[ catalan ] = "Edita";
+            Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚";
         };
         ToolBoxItem
         {
@@ -1340,7 +1378,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ french ] = "Enregistrer";
             Text[ spanish ] = "Guardar";
             Text[ italian ] = "Salva";
-            Text[ danish ] = "Save";
+            Text[ danish ] = "Gem";
             Text[ swedish ] = "Spara";
             Text[ polish ] = "Zapisz";
             Text[ portuguese_brazilian ] = "Save";
@@ -1352,6 +1390,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ arabic ] = "ÍİÙ";
             Text[ finnish ] = "Tallenna";
             Text[ catalan ] = "Desa";
+            Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸";
         };
         ToolBoxItem
         {
@@ -1367,7 +1406,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ french ] = "Enregistrer comme";
             Text[ spanish ] = "Guardar como";
             Text[ italian ] = "Salva con nome";
-            Text[ danish ] = "Save as";
+            Text[ danish ] = "Gem som";
             Text[ swedish ] = "Spara som";
             Text[ polish ] = "Zapisz jako";
             Text[ portuguese_brazilian ] = "Save as";
@@ -1379,6 +1418,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ arabic ] = "ÍİÙ ßÜ";
             Text[ finnish ] = "Tallenna nimellä";
             Text[ catalan ] = "Anomena i desa";
+            Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸›à¹‡à¸™";
         };
         ToolBoxItem
         {
@@ -1395,7 +1435,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ french ] = "Imprimer";
             Text[ spanish ] = "Imprimir";
             Text[ italian ] = "Stampa";
-            Text[ danish ] = "Print";
+            Text[ danish ] = "Udskriv";
             Text[ swedish ] = "Skriv ut";
             Text[ polish ] = "Drukuj";
             Text[ portuguese_brazilian ] = "Print";
@@ -1407,6 +1447,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ arabic ] = "ØÈÇÚÉ";
             Text[ finnish ] = "Tulosta";
             Text[ catalan ] = "Imprimeix";
+            Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œ";
         };
         ToolBoxItem
         {
@@ -1448,7 +1489,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ french ] = "Annuler";
             Text[ spanish ] = "Deshacer";
             Text[ italian ] = "Annulla";
-            Text[ danish ] = "Undo";
+            Text[ danish ] = "Fortryd";
             Text[ swedish ] = "Ångra";
             Text[ polish ] = "Cofnij";
             Text[ portuguese_brazilian ] = "Undo";
@@ -1460,6 +1501,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ arabic ] = "ÊÑÇÌÚ";
             Text[ finnish ] = "Peruuta";
             Text[ catalan ] = "Desfés";
+            Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³";
         };
         ToolBoxItem
         {
@@ -1476,7 +1518,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ french ] = "Restaurer";
             Text[ spanish ] = "Restaurar";
             Text[ italian ] = "Ripristina";
-            Text[ danish ] = "Redo";
+            Text[ danish ] = "Gendan";
             Text[ swedish ] = "Återställ";
             Text[ polish ] = "Przywróæ";
             Text[ portuguese_brazilian ] = "Redo";
@@ -1488,6 +1530,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ arabic ] = "ÅÚÇÏÉ";
             Text[ finnish ] = "Toista ";
             Text[ catalan ] = "Refés";
+            Text[ thai ] = "à¸—à¸³à¸‹à¹‰à¸³";
         };
         ToolBoxItem
         {
@@ -1528,7 +1571,7 @@ QueryBox QUERY_DESIGN_SAVEMODIFIED
     Message[ french ] = "La requête a été modifiée.\nEnregistrer les modifications ?";
     Message[ spanish ] = "La consulta se ha modificado.\n¿Desea guardar las modificaciones?";
     Message[ italian ] = "La ricerca è cambiata.\nVolete salvare i cambiamenti?";
-    Message[ danish ] = "The query has been changed.\nDo you want to save the changes?";
+    Message[ danish ] = "Forespørgslen er blevet ændret.\nSkal ændringerne gemmes?";
     Message[ swedish ] = "Sökningen har ändrats.\nSka ändringarna sparas?";
     Message[ polish ] = "Zmieniono kwerendê.\nZapisaæ zmiany?";
     Message[ portuguese_brazilian ] = "The query has been changed.\nDo you want to save the changes?";
@@ -1540,6 +1583,7 @@ QueryBox QUERY_DESIGN_SAVEMODIFIED
     Message[ arabic ] = "Êã ÊÛííÑ ÇáÇÓÊİÓÇÑ.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
     Message[ finnish ] = "Kyselyä on muutettu.\nHaluatko tallentaa muutokset?";
     Message[ catalan ] = "La consulta ha canviat.\nVoleu desar els canvis?";
+    Message[ thai ] = "à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡à¹„à¸”à¹‰à¸¡à¸µà¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
 {
@@ -1556,7 +1600,7 @@ QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
     Message[ spanish ] = "Se ha modificaco la visualización de la tabla.\n¿Desea guardar las modificaciones?";
     Message[ finnish ] = "Nykyistä taulukkonäkymää on muutettu.\nHaluatko tallentaa muutokset?";
     Message[ italian ] = "La vista tabelle è stata modificata.\nVolete salvare le modifiche?";
-    Message[ danish ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ danish ] = "Tabelvisningen er blevet ændret.\nSkal ændringerne gemmes?";
     Message[ swedish ] = "Tabellvyn har ändrats.\nSka ändringarna sparas?";
     Message[ polish ] = "Zmieniono widok tabeli.\nZapisaæ zmiany?";
     Message[ portuguese_brazilian ] = "The view has been changed.\nDo you want to save the changes?";
@@ -1567,6 +1611,7 @@ QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
     Message[ turkish ] = "The view has been changed.\nDo you want to save the changes?";
     Message[ arabic ] = "The view has been changed.\nDo you want to save the changes?";
     Message[ catalan ] = "La vista ha canviat.\nVoleu desar els canvis?";
+    Message[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸•à¸²à¸£à¸²à¸‡à¸¡à¸µà¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_SVT_SQL_INTERNATIONAL
 {
@@ -1576,7 +1621,7 @@ String STR_SVT_SQL_INTERNATIONAL
     Text [ portuguese ] = "COMO;NÃO;VAZIO;VERDADEIRO;FALSO;É;ENTRE;OU;E;média;quantidade;máximo;mínimo;soma" ;
     Text [ portuguese_brazilian ] = "WIE;NICHT;LEER;WAHR;FALSCH;IST;ZWISCHEN;ODER;UND" ;
     Text [ swedish ] = "SOM;INTE;TOM;SANN;FALSK;ÄR;MELLAN;ELLER;OCH;genomsnitt;antal;maximum;minimum;summa" ;
-    Text [ danish ] = "SOM;IKKE;TOM;SAND;FALSK;ER;MELLEM;ELLER;OG;middel;antal;maksimum;minimum;sum" ;
+    Text [ danish ] = "SOM;IKKE;TOM;SAND;FALSK;ER;MELLEM;ELLER;OG;Gennemsnit;Antal;Maksimum;Minimum;Sum" ;
     Text [ italian ] = "COME;NON;VUOTO;VERO;FALSO;È;TRA;O;E;media;quantità;massimo;minimo;totale" ;
     Text [ spanish ] = "COMO;NO;VACIO;VERDADERO;FALSO;ES;ENTRE;O;Y;Promedio;Cantidad;Máximo;Mínimo;Suma" ;
     Text [ french ] = "COMME;PAS;VIDE;VRAI;FAUX;EST;ENTRE;OU;ET;moyenne;nombre;maximum;minimum;somme" ;
@@ -1594,6 +1639,7 @@ String STR_SVT_SQL_INTERNATIONAL
     Text[ turkish ] = "GİBİ;DEĞİL;BOŞ;DOĞRU;YANLIŞ;OLMA;ARADA;YA DA;VE;Ortalama;Adet sayısı;Azami;Asgari;Toplam";
     Text[ finnish ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Keskiarvo;Määrä;Enintään;Vähintään;Summa";
     Text[ catalan ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Promig;Recompte;Màxim;Mínim;Suma";
+    Text[ thai ] = "à¹€à¸«à¸¡à¸·à¸­à¸™;à¹„à¸¡à¹ˆ;à¸§à¹ˆà¸²à¸‡;à¸ˆà¸£à¸´à¸‡;à¹€à¸—à¹‡à¸ˆ;à¸­à¸¢à¸¹à¹ˆ;à¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡;à¸«à¸£à¸·à¸­;à¹à¸¥à¸°;à¹€à¸‰à¸¥à¸µà¹ˆà¸¢;à¸™à¸±à¸š;à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”;à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”;à¸œà¸¥à¸£à¸§à¸¡";
 };
 String STR_SVT_SQL_SYNTAX_ERROR
 {
@@ -1604,7 +1650,7 @@ String STR_SVT_SQL_SYNTAX_ERROR
     Text [ portuguese ] = "Erro de sintaxe na expressão SQL" ;
     Text [ portuguese_brazilian ] = "Fehlerhafte Syntax" ;
     Text [ swedish ] = "Syntaxfel i SQL-uttryck" ;
-    Text [ danish ] = "Syntaksfejl i SQL-udtryk" ;
+    Text [ danish ] = "Syntaksfejl i SQL-sætning" ;
     Text [ italian ] = "Errore di sintassi nell'espressione SQL" ;
     Text [ spanish ] = "Error de sintaxis en la expresión SQL" ;
     Text [ french ] = "Erreur de syntaxe dans l'expression SQL" ;
@@ -1622,6 +1668,7 @@ String STR_SVT_SQL_SYNTAX_ERROR
     Text[ turkish ] = "SQL terimi söz dizimi hatası";
     Text[ finnish ] = "Syntaksivirhe SQL-lausekkeessa";
     Text[ catalan ] = "S'ha produït un error de sintaxi en l'expressió SQL";
+    Text[ thai ] = "à¹„à¸§à¸¢à¸à¸£à¸“à¹Œà¸œà¸´à¸”à¸à¸¥à¸²à¸”à¹ƒà¸™à¸›à¸£à¸°à¹‚à¸¢à¸„ SQL ";
 };
 String STR_SVT_SQL_SYNTAX_ERROR_BEFORE
 {
@@ -1631,7 +1678,7 @@ String STR_SVT_SQL_SYNTAX_ERROR_BEFORE
     Text[ italian ] = "Davanti all'espressione \"#\".";
     Text[ portuguese_brazilian ] = "before \"#\" expression.";
     Text[ portuguese ] = "antes da expressão \"#\".";
-    Text[ danish ] = "før \"#\" udtryk.";
+    Text[ danish ] = "før \"#\"-udtryk.";
     Text[ french ] = "avant l'expression \"#\".";
     Text[ swedish ] = "före \"#\" uttryck.";
     Text[ dutch ] = "voor \"#\" uitdrukking.";
@@ -1650,6 +1697,7 @@ String STR_SVT_SQL_SYNTAX_ERROR_BEFORE
     Text[ turkish ] = "\"#\" teriminden önce.";
     Text[ finnish ] = "ennen \"#\" lauseketta.";
     Text[ catalan ] = "abans de l'expressió \"#\".";
+    Text[ thai ] = "à¸à¹ˆà¸­à¸™à¸à¸²à¸£à¸­à¸˜à¸´à¸šà¸²à¸¢ \"#\" ";
 };
 
 String STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
@@ -1665,7 +1713,7 @@ String STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
     Text[ swedish ] = "Värdet #1 kan inte användas med SOM!";
     Text[ russian ] = "Çíà÷åíèå #1 íå ìîæåò èñïîëüçîâàòüñÿ ñ ÊÀÊ!";
     Text[ italian ] = "Il valore #1 non può essere usato con COME!";
-    Text[ danish ] = "Det er ikke muligt at bruge værdien #1sammen med SOM!";
+    Text[ danish ] = "Værdien #1 kan ikke anvendes sammen med SOM!";
     Text[ polish ] = "Wartoœci #1 nie mo¿na zastosowaæ z JAK!";
     Text[ portuguese_brazilian ] = "The value #1 can not be used with LIKE!";
     Text[ japanese ] = "#1 ã®å€¤ã¯ LIKE ã¨ä¸€ç·’ã«ä½¿ç”¨ã§ãã¾ã›ã‚“ã€‚";
@@ -1676,6 +1724,7 @@ String STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
     Text[ turkish ] = "#1 değeri, GİBİ ile birlikte kullanılamaz!";
     Text[ finnish ] = "Arvoa #1 ei voi käyttää funktion LIKE kanssa.";
     Text[ catalan ] = "El valor #1 no es pot utilitzar amb LIKE.";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰à¸„à¹ˆà¸² #1 à¸à¸±à¸š LIKE à¹„à¸”à¹‰!";
 };
 
 String STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
@@ -1691,7 +1740,7 @@ String STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
     Text[ swedish ] = "SOM kan inte användas med det här fältet!";
     Text[ russian ] = "Èñïîëüçîâàòü ÊÀÊ â ıòîì ïîëå íåëüçÿ!";
     Text[ italian ] = "COME non può essere utilizzato in questo campo!";
-    Text[ danish ] = "Det er ikke muligt at bruge SOM sammen med dette felt!";
+    Text[ danish ] = "SOM kan ikke bruges ved dette felt!";
     Text[ polish ] = "JAK nie mo¿na u¿yæ przy tym polu!";
     Text[ portuguese_brazilian ] = "LIKE can not be used with this field!";
     Text[ japanese ] = "LIKE ã¯ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§ä½¿ç”¨ã§ãã¾ã›ã‚“ã€‚";
@@ -1702,6 +1751,7 @@ String STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE
     Text[ turkish ] = "GİBİ, bu alanda kullanılamaz!";
     Text[ finnish ] = "Funktiota LIKE ei voi käyttää tässä kentässä.";
     Text[ catalan ] = "LIKE no es pot utilitzar amb aquest camp.";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰ LIKE à¸à¸±à¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸™à¸µà¹‰à¹„à¸”à¹‰!";
 };
 
 String STR_SVT_SQL_SYNTAX_NO_NUM
@@ -1717,7 +1767,7 @@ String STR_SVT_SQL_SYNTAX_NO_NUM
     Text[ swedish ] = "Fältet kan inte jämföras med en teckensträng!";
     Text[ russian ] = "Ñğàâíèòü ïîëå ñî ñòğîêîé íåëüçÿ!";
     Text[ italian ] = "Il campo non può essere paragonato a una stringa!";
-    Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med en streng!";
+    Text[ danish ] = "Feltet kan ikke sammenlignes med en streng!";
     Text[ polish ] = "Pola nie mo¿na porównaæ z ci¹giem znaków!";
     Text[ portuguese_brazilian ] = "The field can not be compared with a string!";
     Text[ japanese ] = "ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯æ–‡å­—åˆ—ã§æ¯”è¼ƒã§ãã¾ã›ã‚“ã€‚";
@@ -1728,6 +1778,7 @@ String STR_SVT_SQL_SYNTAX_NO_NUM
     Text[ turkish ] = "Alan, bir karakter zinciri ile karşılaştırılamaz!";
     Text[ finnish ] = "Kenttää ei voi verrata merkkijonoon.";
     Text[ catalan ] = "El camp no es pot comparar amb una cadena.";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸£à¸µà¸¢à¸šà¹€à¸—à¸µà¸¢à¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸”à¹‰à¸§à¸¢à¸ªà¸²à¸¢à¸­à¸±à¸à¸‚à¸£à¸°à¹„à¸”à¹‰";
 };
 
 String STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
@@ -1743,7 +1794,7 @@ String STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
     Text[ swedish ] = "Fältet kan inte jämföras med ett datum!";
     Text[ russian ] = "Ñğàâíèòü ïîëå ñ äàòîé íåëüçÿ!";
     Text[ italian ] = "Il campo non può essere paragonato a un dato!";
-    Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med en dato!";
+    Text[ danish ] = "Feltet kan ikke sammenlignes med en dato!";
     Text[ polish ] = "Pola nie mo¿na porównaæ z dat¹!";
     Text[ portuguese_brazilian ] = "The field can not be compared with a ACCESS date!";
     Text[ japanese ] = "ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯æ—¥ä»˜ã§æ¯”è¼ƒã§ãã¾ã›ã‚“ã€‚";
@@ -1754,6 +1805,7 @@ String STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
     Text[ turkish ] = "Alan, bir tarih ile karşılaştırılamaz!";
     Text[ finnish ] = "Kenttää ei voi verrata päivämäärään.";
     Text[ catalan ] = "El camp no es pot comparar amb una data.";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸£à¸µà¸¢à¸šà¹€à¸—à¸µà¸¢à¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸”à¹‰à¸§à¸¢à¸à¸±à¸šà¸§à¸±à¸™à¸—à¸µà¹ˆà¹„à¸”à¹‰";
 };
 
 String STR_SVT_SQL_SYNTAX_INT_NO_VALID
@@ -1769,7 +1821,7 @@ String STR_SVT_SQL_SYNTAX_INT_NO_VALID
     Text[ swedish ] = "Fältet kan inte jämföras med ett heltal!";
     Text[ russian ] = "Ñğàâíèòü ïîëå ñ öåëûì ÷èñëîì íåëüçÿ!";
     Text[ italian ] = "Il campo non può essere paragonato a un integrale!";
-    Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med et heltal!";
+    Text[ danish ] = "Feltet kan ikke sammenlignes med et heltal!";
     Text[ polish ] = "Porównanie pola z liczb¹ ca³kowit¹ nie jest mo¿liwe!";
     Text[ portuguese_brazilian ] = "The field can not be compared with a integer!";
     Text[ japanese ] = "ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯æ•´æ•°ã§æ¯”è¼ƒã§ãã¾ã›ã‚“ã€‚";
@@ -1780,6 +1832,7 @@ String STR_SVT_SQL_SYNTAX_INT_NO_VALID
     Text[ turkish ] = "Alan, bir tamsayı ile karşılaştırılamaz!";
     Text[ finnish ] = "Kenttää ei voi verrata muuttujaan.";
     Text[ catalan ] = "El camp no es pot comparar amb un enter.";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸£à¸µà¸¢à¸šà¹€à¸—à¸µà¸¢à¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸”à¹‰à¸§à¸¢à¸ˆà¸³à¸™à¸§à¸™à¹€à¸•à¹‡à¸¡à¹„à¸”à¹‰";
 };
 String STR_SVT_SQL_SYNTAX_TABLE
 {
@@ -1793,7 +1846,7 @@ String STR_SVT_SQL_SYNTAX_TABLE
     Text[ french ] = "La table \"#\" est inconnue dans la base de données !";
     Text[ spanish ] = "¡La tabla \"#\" es desconocida en la base de datos!";
     Text[ italian ] = "La tabella \"#\" risulta sconosciuta al database";
-    Text[ danish ] = "The table \"#\" is unknown in the database!";
+    Text[ danish ] = "Tabellen \"#\" er ukendt i databasen!";
     Text[ swedish ] = "Tabellen \"#\" är okänd i databasen!";
     Text[ polish ] = "Tabela \"#\" jest nieznana w bazie danych!";
     Text[ portuguese_brazilian ] = "The table \"#\" is unknown in the database!";
@@ -1805,6 +1858,7 @@ String STR_SVT_SQL_SYNTAX_TABLE
     Text[ arabic ] = "ÇáÌÏæá \"#\" ÛíÑ ãÚÑæİ İí ŞÇÚÏÉ ÇáÈíÇäÇÊ!";
     Text[ finnish ] = "Taulukkoa \"#\" ei tunneta tietokannassa.";
     Text[ catalan ] = "La taula \"#\" és desconeguda a la base de dades.";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸à¸•à¸²à¸£à¸²à¸‡ \"#\" à¹ƒà¸™à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 String STR_SVT_SQL_SYNTAX_COLUMN
 {
@@ -1818,7 +1872,7 @@ String STR_SVT_SQL_SYNTAX_COLUMN
     Text[ french ] = "La colonne \"#\" est inconnue dans la table \"#\" !";
     Text[ spanish ] = "¡La columna \"#\" es desconocida en la tabla \"#\"!";
     Text[ italian ] = "La colonna \"#\" risulta sconosciuta alla tabella \"#\"!";
-    Text[ danish ] = "The column \"#\" is unknown in the table \"#\"!";
+    Text[ danish ] = "Kolonnen \"#\" er ukendt i tabellen \"#\"!";
     Text[ swedish ] = "Kolumnen \"#\" är okänd i tabellen \"#\"!";
     Text[ polish ] = "Kolumna \"#\" jest w tabeli \"#\" nieznana!";
     Text[ portuguese_brazilian ] = "The column \"#\" is unknown in the table \"#\"!";
@@ -1830,6 +1884,7 @@ String STR_SVT_SQL_SYNTAX_COLUMN
     Text[ arabic ] = "ÇáÚãæÏ \"#\" ÛíÑ ãÚÑæİ İí ÇáÌÏæá \"#\" !";
     Text[ finnish ] = "Saraketta \"#\" ei tunneta taulukossa \"#\".";
     Text[ catalan ] = "La columna \"#\" és desconeguda a la taula \"#\".";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ \"#\" à¹ƒà¸™à¸•à¸²à¸£à¸²à¸‡ \"#\"!";
 };
 String STR_SVT_SQL_SYNTAX_REAL_NO_VALID
 {
@@ -1844,7 +1899,7 @@ String STR_SVT_SQL_SYNTAX_REAL_NO_VALID
     Text[ swedish ] = "Fältet kan inte jämföras med ett flytande kommatal!";
     Text[ russian ] = "Ñğàâíèòü ïîëå ñ ÷èñëîì ñ ïëàâàşùåé çàïÿòîé íåëüçÿ!";
     Text[ italian ] = "Il campo non può essere paragonato a un numero in virgola mobile!";
-    Text[ danish ] = "Det er ikke muligt at sammenligne dette felt med et flydende kommatal!";
+    Text[ danish ] = "Feltet kan ikke sammenlignes med et flydende tal!";
     Text[ polish ] = "Porównanie pola z liczb¹ rzeczywist¹ nie jest mo¿liwe!";
     Text[ portuguese_brazilian ] = "The field can not be compared with a real!";
     Text[ japanese ] = "ã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯æµ®å‹•å°æ•°ã§æ¯”è¼ƒã§ãã¾ã›ã‚“ã€‚";
@@ -1855,6 +1910,7 @@ String STR_SVT_SQL_SYNTAX_REAL_NO_VALID
     Text[ turkish ] = "Alan, bir kayan nokta sayısı ile karşılaştırılamaz!";
     Text[ finnish ] = "Kenttää ei voi verrata irralliseen pistenumeroon.";
     Text[ catalan ] = "El camp no es pot comparar amb un número de coma flotant.";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸£à¸µà¸¢à¸šà¹€à¸—à¸µà¸¢à¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸”à¹‰à¸§à¸¢à¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸¨à¸™à¸´à¸¢à¸¡à¹„à¸”à¹‰";
 };
 
 String STR_SVT_SQL_SYNTAX_REAL_NO_INT
@@ -1870,7 +1926,7 @@ String STR_SVT_SQL_SYNTAX_REAL_NO_INT
     Text[ swedish ] = "Ett heltalsfält kan inte jämföras med ett flytande kommatal!";
     Text[ russian ] = "Ñğàâíèòü ïîëå öåëîãî ÷èñëà ñ ÷èñëîì ñ ïëàâàşùåé çàïÿòîé íåâîçìîæíî!";
     Text[ italian ] = "Un campo integrale non può essere paragonato a un numero in virgola mobile.";
-    Text[ danish ] = "Det er ikke muligt at sammenligne et heltalsfelt med et flydende kommatal!";
+    Text[ danish ] = "Et heltalfelt kan ikke sammenlignes med et flydende tal!";
     Text[ polish ] = "Pola liczby ca³kowitej nie mo¿na porównaæ z liczb¹ rzeczywist¹!";
     Text[ portuguese_brazilian ] = "A integer field can not be compared with a real!";
     Text[ japanese ] = "æ•´æ•°ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯æµ®å‹•å°æ•°ã§æ¯”è¼ƒã§ãã¾ã›ã‚“ã€‚";
@@ -1881,6 +1937,7 @@ String STR_SVT_SQL_SYNTAX_REAL_NO_INT
     Text[ turkish ] = "Bir tamsayı alanı, kayan nokta sayısı ile karşılaştırılamaz!";
     Text[ finnish ] = "Muuttujakenttää ei voi verrata irralliseen pistenumeroon.";
     Text[ catalan ] = "Un camp enter no es pot comparar amb un número de coma flotant!";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸£à¸µà¸¢à¸šà¹€à¸—à¸µà¸¢à¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸¥à¸‚à¸ˆà¸³à¸™à¸§à¸™à¹€à¸•à¹‡à¸¡à¸à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸¨à¸™à¸´à¸¢à¸¡à¹„à¸”à¹‰!";
 };
 String STR_QUERYDESIGN_NO_VIEW_SUPPORT
 {
@@ -1895,7 +1952,7 @@ String STR_QUERYDESIGN_NO_VIEW_SUPPORT
     Text[ spanish ] = "¡Esta base de datos no apoya ninguna visualización de tablas!";
     Text[ finnish ] = "Tietokanta ei tue taulukkonäkymiä.";
     Text[ italian ] = "Questo database non supporta la vista tabella";
-    Text[ danish ] = "This database doesn't support views!";
+    Text[ danish ] = "Denne database understøtter ingen tabelvisninger!";
     Text[ swedish ] = "Den här databasen understöder inga tabellvyer!";
     Text[ polish ] = "Ta baza danych nie obs³uguje widoków tabeli!";
     Text[ portuguese_brazilian ] = "This database doesn't support views!";
@@ -1906,6 +1963,7 @@ String STR_QUERYDESIGN_NO_VIEW_SUPPORT
     Text[ turkish ] = "This database doesn't support views!";
     Text[ arabic ] = "This database doesn't support views!";
     Text[ catalan ] = "Aquesta base de dades no soporta visualitzacions!";
+    Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸™à¸µà¹‰à¹„à¸¡à¹ˆà¸ªà¸™à¸±à¸šà¸ªà¸™à¸¸à¸™à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸•à¸²à¸£à¸²à¸‡!";
 };
 
 String STR_QUERYDESIGN_NO_VIEW_ASK
@@ -1921,7 +1979,7 @@ String STR_QUERYDESIGN_NO_VIEW_ASK
     Text[ spanish ] = "¿Desea crear una consulta en su lugar?";
     Text[ finnish ] = "Haluatko luoda kyselyn?";
     Text[ italian ] = "Volete avviare una ricerca?";
-    Text[ danish ] = "Do you want to create a view instead?";
+    Text[ danish ] = "Vil du i stedet oprette en forespørgsel?";
     Text[ swedish ] = "Vill du skapa en sökning i stället?";
     Text[ polish ] = "Utworzyæ wzamian kwerendê?";
     Text[ portuguese_brazilian ] = "Do you want to create a view instead?";
@@ -1932,6 +1990,7 @@ String STR_QUERYDESIGN_NO_VIEW_ASK
     Text[ turkish ] = "Do you want to create a view instead?";
     Text[ arabic ] = "Do you want to create a view instead?";
     Text[ catalan ] = "Voleu crear una consulta en el seu lloc?";
+    Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸ªà¸£à¹‰à¸²à¸‡à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡à¹à¸—à¸™à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 
 String STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
@@ -1946,7 +2005,7 @@ String STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
     Text[ french ] = "Impossible de comparer le critère saisi avec ce champ !";
     Text[ spanish ] = "¡El criterio indicado no se puede comparar con este campo!";
     Text[ italian ] = "Il criterio specificato non può essere paragonato a questo campo!";
-    Text[ danish ] = "Det angivne kriterium kan ikke sammenlignes med dette felt!";
+    Text[ danish ] = "Det angivne kriterium kan ikke sammenlignes med dette felt!!";
     Text[ swedish ] = "Det angivna kriteriet kan inte jämföras med det här fältet!!";
     Text[ polish ] = "Podanego kryterium nie mo¿na porównaæ z danym polem!!";
     Text[ portuguese_brazilian ] = "The entered critisim can not be compared with this field!!";
@@ -1958,6 +2017,7 @@ String STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
     Text[ turkish ] = "Belirtilen ölçüt, bu alan ile karşılaştırılamaz!!";
     Text[ finnish ] = "Syötettyä ehtoa ei voi verrata tähän kenttään.";
     Text[ catalan ] = "El criteri indicat no es pot comparar amb aquest camp!";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸£à¸µà¸¢à¸šà¹€à¸—à¸µà¸¢à¸šà¹€à¸à¸“à¸‘à¹Œà¸—à¸µà¹ˆà¸›à¹‰à¸­à¸™à¸”à¹‰à¸§à¸¢à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸™à¸µà¹‰à¹„à¸”à¹‰";
 };
 ErrorBox ERR_QRY_NOSTATEMENT
 {
@@ -1971,7 +2031,7 @@ ErrorBox ERR_QRY_NOSTATEMENT
     Message[ french ] = "Impossible de créer une requête !";
     Message[ spanish ] = "¡No se pudo crear ninguna consulta!";
     Message[ italian ] = "Impossibile creare una ricerca!";
-    Message[ danish ] = "No query could be created!";
+    Message[ danish ] = "Det var ikke muligt at oprette nogen forespørgsel!";
     Message[ swedish ] = "Det gick inte att skapa en sökning!";
     Message[ polish ] = "Utworzenie kwerendy nie powiod³o siê!";
     Message[ portuguese_brazilian ] = "No query could be created!";
@@ -1983,6 +2043,7 @@ ErrorBox ERR_QRY_NOSTATEMENT
     Message[ arabic ] = "No query could be created!";
     Message[ finnish ] = "Kyselyn luonti ei onnistunut.";
     Message[ catalan ] = "No s'ha pogut crear cap consulta!";
+    Message[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡à¹„à¸”à¹‰";
 };
 
 ErrorBox ERR_QRY_NOCRITERIA
@@ -1997,7 +2058,7 @@ ErrorBox ERR_QRY_NOCRITERIA
     Message[ french ] = "Impossible de créer une requête car aucun champ n'a été sélectionné !";
     Message[ spanish ] = "¡No se pudo crear ninguna consulta ya que no se ha seleccionado ningún campo!";
     Message[ italian ] = "Impossibile creare una ricerca perché non è stato selezionato un campo!";
-    Message[ danish ] = "No query could be created because no fields were selected!";
+    Message[ danish ] = "Der kunne ikke oprettes nogen forespørgsel, da der ikke er udvalgt nogen felter!";
     Message[ swedish ] = "Det gick inte att skapa en sökning eftersom inga fält hade markerats!";
     Message[ polish ] = "Utworzenie kwerendy nie powiod³o siê, poniewa¿ nie wybrano ¿adnych pól!";
     Message[ portuguese_brazilian ] = "No query could be created because no fields were selected!";
@@ -2009,6 +2070,7 @@ ErrorBox ERR_QRY_NOCRITERIA
     Message[ arabic ] = "No query could be created because no fields were selected!";
     Message[ finnish ] = "Kyselyn luonti ei onnistunut, koska kenttiä ei valittu.";
     Message[ catalan ] = "No s'ha pogut crear cap consulta perquè no s'ha seleccionat cap camp!";
+    Message[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡à¹„à¸”à¹‰à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸ˆà¸²à¸à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¹€à¸¥à¸·à¸­à¸à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 
 Menu RID_QUERY_DESIGN_MAIN_MENU
@@ -2098,7 +2160,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                     Text[ french ] = "Annuler";
                     Text[ spanish ] = "Deshacer";
                     Text[ italian ] = "Annulla";
-                    Text[ danish ] = "Undo";
+                    Text[ danish ] = "Fortryd";
                     Text[ swedish ] = "Ångra";
                     Text[ polish ] = "Cofnij";
                     Text[ portuguese_brazilian ] = "Undo";
@@ -2110,6 +2172,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                     Text[ arabic ] = "ÊÑÇÌÚ";
                     Text[ finnish ] = "Peruuta";
                         Text[ catalan ] = "Desfés";
+                        Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³";
                     };
                 MenuItem
                 {
@@ -2127,7 +2190,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                     Text[ french ] = "Restaurer";
                     Text[ spanish ] = "Restaurar";
                     Text[ italian ] = "Ripristina";
-                    Text[ danish ] = "Redo";
+                    Text[ danish ] = "Gendan";
                     Text[ swedish ] = "Återställ";
                     Text[ polish ] = "Przywróæ";
                     Text[ portuguese_brazilian ] = "Redo";
@@ -2139,6 +2202,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                     Text[ arabic ] = "ÅÚÇÏÉ";
                     Text[ finnish ] = "Toista ";
                         Text[ catalan ] = "Refés";
+                        Text[ thai ] = "à¸—à¸³à¸‹à¹‰à¸³";
                     };
                 MenuItem
                 {
@@ -2193,7 +2257,8 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             Text[ turkish ] = "~Düzenle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Edita";
-    };
+        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
+        };
     MenuItem
     {
         Identifier = MN_VIEW ;
@@ -2230,7 +2295,27 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                 };
             };
         };
-    };
+        Text[ english_us ] = "~View";
+            Text[ portuguese ] = "~View";
+            Text[ russian ] = "~View";
+            Text[ greek ] = "~View";
+            Text[ dutch ] = "~View";
+            Text[ french ] = "~Affichage";
+            Text[ spanish ] = "~Ver";
+            Text[ finnish ] = "~View";
+            Text[ italian ] = "~Visualizza";
+            Text[ danish ] = "~View";
+            Text[ swedish ] = "Vi~sa";
+            Text[ polish ] = "~View";
+            Text[ japanese ] = "è¡¨ç¤º(~V)";
+            Text[ korean ] = "ë³´ê¸°(~V)";
+            Text[ chinese_simplified ] = "è§†å›¾(~V)";
+            Text[ chinese_traditional ] = "æª¢è¦–(~V)";
+            Text[ turkish ] = "~View";
+            Text[ arabic ] = "~View";
+            Text[ catalan ] = "~Vista";
+            Text[ thai ] = "~à¸¡à¸¸à¸¡à¸¡à¸­à¸‡";
+        };
     MenuItem
     {
         Identifier = MN_INSERT ;
@@ -2254,7 +2339,27 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                 };
             };
         };
-    };
+        Text[ english_us ] = "~Insert";
+            Text[ portuguese ] = "~Insert";
+            Text[ russian ] = "~Insert";
+            Text[ greek ] = "~Insert";
+            Text[ dutch ] = "~Insert";
+            Text[ french ] = "~Insertion";
+            Text[ spanish ] = "~Insertar";
+            Text[ finnish ] = "~Insert";
+            Text[ italian ] = "~Incolla";
+            Text[ danish ] = "~Insert";
+            Text[ swedish ] = "~Infoga";
+            Text[ polish ] = "~Insert";
+            Text[ japanese ] = "æŒ¿å…¥(~I)";
+            Text[ korean ] = "ì‚½ì…(~I)";
+            Text[ chinese_simplified ] = "æ’å…¥(~I)";
+            Text[ chinese_traditional ] = "æ’å…¥(~I)";
+            Text[ turkish ] = "~Insert";
+            Text[ arabic ] = "~Insert";
+            Text[ catalan ] = "~Insereix";
+            Text[ thai ] = "~à¸§à¸²à¸‡";
+        };
 
     MenuItem
     {
@@ -2293,13 +2398,14 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             Text[ greek ] = "Å~ñãáëåßá";
             Text[ polish ] = "~Narzêdzia";
             Text[ japanese ] = "ãƒ„ãƒ¼ãƒ«(~T)";
-            Text[ korean ] = "ì˜µì…˜(~T)";
+            Text[ korean ] = "ë„êµ¬(~T)";
             Text[ chinese_simplified ] = "å·¥å…·(~T)";
             Text[ chinese_traditional ] = "å·¥å…·(~T)";
             Text[ arabic ] = "Ã~ÏæÇÊ";
             Text[ turkish ] = "~Araçlar";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eines";
+            Text[ catalan ] = "E~ines";
+            Text[ thai ] = "à¹€~à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­";
         };
         GLOBLMN_WINMN
         {
@@ -2323,7 +2429,7 @@ String STR_DATASOURCE_DELETED
     Text[ spanish ] = "Se ha eliminado la fuente de datos. No se pueden guardar datos correspondientes a ella.";
     Text[ finnish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ italian ] = "La sorgente dati è stata eliminata. Impossibile salvare i dati corrispondenti.";
-    Text[ danish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
+    Text[ danish ] = "Den tilhørende datakilde er blevet slettet. Det er ikke muligt at gemme data med relation til denne.";
     Text[ swedish ] = "Den tillhörande datakällan har raderats. Det går inte att spara några data som refererar till den.";
     Text[ polish ] = "Przynale¿ne Ÿród³o danych zosta³o usuniête. Zapisanie dotycz¹cych go danych nie jest mo¿liwe.";
     Text[ portuguese_brazilian ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
@@ -2334,30 +2440,103 @@ String STR_DATASOURCE_DELETED
     Text[ turkish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ arabic ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ catalan ] = "La font de les dades s'ha borrat. No és possible desar dades rellevants sobre ella.";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸­à¸”à¸„à¸¥à¹‰à¸­à¸‡à¸à¸±à¸™à¸‚à¸­à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸”à¹‰à¸–à¸¹à¸à¸¥à¸šà¹à¸¥à¹‰à¸§ à¸”à¸±à¸‡à¸™à¸±à¹‰à¸™ à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸šà¸±à¸™à¸—à¸¶à¸à¸„à¸§à¸²à¸¡à¸ªà¸±à¸¡à¸à¸±à¸™à¸˜à¹Œà¸à¸±à¸™à¸‚à¸­à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸à¸±à¸šà¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸”à¹‰";
 };
 
 String STR_QRY_COLUMN_NOT_FOUND
 {
     Text = "Die Spalte '$name$' ist unbekannt!";
     Text [ ENGLISH ] = "The column '$name$' is unknown!";
+    Text[ english_us ] = "The column '$name$' is unknown.";
+    Text[ portuguese ] = "The column '$name$' is unknown!";
+    Text[ russian ] = "The column '$name$' is unknown!";
+    Text[ greek ] = "The column '$name$' is unknown!";
+    Text[ dutch ] = "The column '$name$' is unknown!";
+    Text[ french ] = "La colonne '$name$' est inconnue !";
+    Text[ spanish ] = "La columna '$name$' se desconoce.";
+    Text[ finnish ] = "The column '$name$' is unknown!";
+    Text[ italian ] = "La colonna '$name$' è sconosciuta.";
+    Text[ danish ] = "The column '$name$' is unknown!";
+    Text[ swedish ] = "Kolumnen '$name$' är okänd!";
+    Text[ polish ] = "The column '$name$' is unknown!";
+    Text[ japanese ] = "åˆ— '$name$' ã¯ä¸æ˜ã§ã™ã€‚";
+    Text[ korean ] = "ì—´ '$name$' ì´(ê°€) ë¶ˆë¶„ëª…í•©ë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "åˆ— '$name$' ä¸æ˜ï¼";
+    Text[ chinese_traditional ] = "æ¬„ä½ '$name$' ä¸æ˜ï¼";
+    Text[ turkish ] = "The column '$name$' is unknown!";
+    Text[ arabic ] = "The column '$name$' is unknown!";
 };
 
 String STR_QRY_JOIN_COLUMN_COMPARE
 {
     Text = "Spalten dürfen nur mit '=' verglichen werden!";
     Text [ ENGLISH ] = "Columns can only be compared with the equal sign '=' .";
+    Text[ english_us ] = "Columns can only be compared using '='.";
+    Text[ portuguese ] = "Columns can only be compared with the equal sign '=' .";
+    Text[ russian ] = "Columns can only be compared with the equal sign '=' .";
+    Text[ greek ] = "Columns can only be compared with the equal sign '=' .";
+    Text[ dutch ] = "Columns can only be compared with the equal sign '=' .";
+    Text[ french ] = "Seul le signe '=' permet de comparer les colonnes.";
+    Text[ spanish ] = "Las columnas sólo se pueden comparar con el signo de igual '='.";
+    Text[ finnish ] = "Columns can only be compared with the equal sign '=' .";
+    Text[ italian ] = "Il confronto fra colonne è possibile solo con il segno '='.";
+    Text[ danish ] = "Columns can only be compared with the equal sign '=' .";
+    Text[ swedish ] = "Kolumner får bara jämföras med '='.";
+    Text[ polish ] = "Columns can only be compared with the equal sign '=' .";
+    Text[ japanese ] = "åˆ—ã¯ã‚¤ã‚³ãƒ¼ãƒ«è¨˜å· '=' ã‚’ä½¿ç”¨ã™ã‚‹ã“ã¨ã§ã®ã¿æ¯”è¼ƒã•ã‚Œã¾ã™ã€‚";
+    Text[ korean ] = "ì—´ì€ ë“±í˜¸ì¸ '=' ë¥¼ ì‚¬ìš©í•´ì•¼ë§Œ ë¹„êµë  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "è¦æ¯”è¾ƒåˆ—ï¼Œåªå¯ä»¥ä½¿ç”¨ç­‰å· '=' ã€‚";
+    Text[ chinese_traditional ] = "è¦æ¯”è¼ƒæ¬„ä½ï¼Œåªæ˜¯å¯ä»¥ä½¿ç”¨ç­‰è™Ÿ '=' ã€‚";
+    Text[ turkish ] = "Columns can only be compared with the equal sign '=' .";
+    Text[ arabic ] = "Columns can only be compared with the equal sign '=' .";
 };
 
 String STR_QRY_LIKE_LEFT_NO_COLUMN
 {
     Text = "Links eines 'WIE' Ausdrucks darf nur ein Spaltename stehen.";
     Text [ ENGLISH ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
+    Text[ english_us ] = "You must use a column name before 'LIKE'.";
+    Text[ portuguese ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
+    Text[ russian ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
+    Text[ greek ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
+    Text[ dutch ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
+    Text[ french ] = "Un nom de colonne doit figurer avant 'COMME'.";
+    Text[ spanish ] = "Delante de la instrucción 'COMO' debe aparecer un nombre de columna. ";
+    Text[ finnish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
+    Text[ italian ] = "L'enunciato 'COME' dev'essere preceduto da un nome di colonna.";
+    Text[ danish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
+    Text[ swedish ] = "Det måste stå ett kolumnnamn framför 'SOM'.";
+    Text[ polish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
+    Text[ japanese ] = "'LIKE' ã®å‰ã«åˆ—åã‚’è¨˜è¿°ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚";
+    Text[ korean ] = "'ê°™ìŒ' ì•ì— ì—´ì´ë¦„ì„ ì‚¬ìš©í•´ì•¼ë§Œ í•©ë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "åœ¨ 'LIKE' ä¹‹å‰å¿…é¡»å†™å…¥ä¸€ä¸ªåˆ—åç§°ã€‚";
+    Text[ chinese_traditional ] = "åœ¨ 'LIKE' ä¹‹å‰å¿…é ˆå¯«å…¥ä¸€å€‹æ¬„ä½åç¨±ã€‚";
+    Text[ turkish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
+    Text[ arabic ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
 };
 
 String STR_QRY_CHECK_CASESENSITIVE
 {
     Text = "Bitte überprüfen Sie die Gross- und Kleinschreibung.";
     Text [ ENGLISH ] = "Please check if you are using the correct case.";
+    Text[ english_us ] = "The column could not be found. Please note that the database is case-sensitive.";
+    Text[ portuguese ] = "Please check if you are using the correct case.";
+    Text[ russian ] = "Please check if you are using the correct case.";
+    Text[ greek ] = "Please check if you are using the correct case.";
+    Text[ dutch ] = "Please check if you are using the correct case.";
+    Text[ french ] = "Impossible de détecter la colonne. Veuillez noter que la base de données fait la distinction entre les majuscules et les minuscules.";
+    Text[ spanish ] = "No se encontró la columna. Compruebe que la base de datos distinga entre mayúsculas y minúsculas. ";
+    Text[ finnish ] = "Please check if you are using the correct case.";
+    Text[ italian ] = "Impossibile trovare la colonna. Vi preghiamo di osservare che il database è sensibile alle maiuscole e minuscole.";
+    Text[ danish ] = "Please check if you are using the correct case.";
+    Text[ swedish ] = "Det gick inte att hitta kolumnen. Tänk på att databasen skiljer mellan stor och liten bokstav.";
+    Text[ polish ] = "Please check if you are using the correct case.";
+    Text[ japanese ] = "åˆ—ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã§ã¯å¤§æ–‡å­—ã¨å°æ–‡å­—ãŒåŒºåˆ¥ã•ã‚Œã‚‹ã“ã¨ã«æ³¨æ„ã—ã¦ãã ã•ã„ã€‚";
+    Text[ korean ] = "ì—´ì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. ë°ì´í„°ë² ì´ìŠ¤ê°€ ëŒ€ì†Œë¬¸ìë¥¼ êµ¬ë¶„í•œë‹¤ëŠ” ì ì„ ìœ ì˜í•´ì£¼ì‹­ì‹œì˜¤.";
+    Text[ chinese_simplified ] = "æ— æ³•æ‰¾åˆ°åˆ—ã€‚è¯·æ³¨æ„æœ¬æ•°æ®åº“åŒºåˆ†å­—æ¯çš„å¤§å°å†™ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•æ‰¾åˆ°æ¬„ä½ã€‚è«‹æ³¨æ„æœ¬è³‡æ–™åº«å€åˆ†å­—æ¯çš„å¤§å°å¯«ã€‚";
+    Text[ turkish ] = "Please check if you are using the correct case.";
+    Text[ arabic ] = "Please check if you are using the correct case.";
 };
 
 
