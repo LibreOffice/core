@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:54:01 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ TabPage TP_DOCINFODESC
         Text[ czech ] = "Název";
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "~शीर्षक";
+        Text[ slovak ] = "~Nadpis";
     };
     Edit ED_TITLE
     {
@@ -148,6 +149,7 @@ TabPage TP_DOCINFODESC
         Text[ czech ] = "Předmět";
         Text[ hebrew ] = "‮נושא‬";
         Text[ hindi ] = "~विषय";
+        Text[ slovak ] = "P~redmet";
     };
     Edit ED_THEMA
     {
@@ -190,6 +192,7 @@ TabPage TP_DOCINFODESC
         Text[ czech ] = "Klíčová slova";
         Text[ hebrew ] = "‮מילות מפתח‬";
         Text[ hindi ] = "~प्रधानशब्द";
+        Text[ slovak ] = "~Kľúčové slová";
     };
     Edit ED_KEYWORDS
     {
@@ -232,6 +235,7 @@ TabPage TP_DOCINFODESC
         Text[ czech ] = "Komentář";
         Text[ hebrew ] = "‮הערה‬";
         Text[ hindi ] = "~अपवाद";
+        Text[ slovak ] = "~Komentár";
     };
     MultiLineEdit ED_COMMENT
     {
@@ -298,6 +302,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Typ:";
         Text[ hebrew ] = "‮סוג:‬";
         Text[ hindi ] = "वर्ग:";
+        Text[ slovak ] = "Typ:";
     };
     FixedText FT_FILE_SHOW_TYP
     {
@@ -335,6 +340,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Pouze ke čtení";
         Text[ hebrew ] = "‮קריאה בלבד‬";
         Text[ hindi ] = "~केवल-पढ़ने केलिए";
+        Text[ slovak ] = "Iba na č~ítanie";
     };
     FixedText FT_FILE
     {
@@ -367,6 +373,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Umístění:";
         Text[ hebrew ] = "‮מיקום:‬";
         Text[ hindi ] = "स्थान:";
+        Text[ slovak ] = "Umiestnenie:";
     };
     FixedText FT_FILE_VAL
     {
@@ -404,6 +411,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Velikost:";
         Text[ hebrew ] = "‮גודל:‬";
         Text[ hindi ] = "परिमाण:";
+        Text[ slovak ] = "Veľkosť:";
     };
     FixedText FT_FILE_SHOW_SIZE
     {
@@ -446,6 +454,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Vytvořený:";
         Text[ hebrew ] = "‮זמן יצירה:‬";
         Text[ hindi ] = "उत्पन्न किया:";
+        Text[ slovak ] = "Vytvorený:";
     };
     FixedText FT_CREATE_VAL
     {
@@ -483,6 +492,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Změněný:";
         Text[ hebrew ] = "‮זמן עידכון:‬";
         Text[ hindi ] = "सुधार किया:";
+        Text[ slovak ] = "Zmenený:";
     };
     FixedText FT_CHANGE_VAL
     {
@@ -520,6 +530,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Vytištěno:";
         Text[ hebrew ] = "‮הדפסה אחרונה: ‬";
         Text[ hindi ] = "छपाई किया:";
+        Text[ slovak ] = "Vytlačený:";
     };
     FixedText FT_PRINT_VAL
     {
@@ -558,6 +569,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Editováno:";
         Text[ hebrew ] = "‮זמן עריכה:‬";
         Text[ hindi ] = "संपादन किया:";
+        Text[ slovak ] = "Editovaný:";
     };
     FixedText FT_TIMELOG_VAL
     {
@@ -595,6 +607,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Verze:";
         Text[ hebrew ] = "‮מספר מסמך: ‬";
         Text[ hindi ] = "आवर्तन:";
+        Text[ slovak ] = "Verzia:";
     };
     FixedText FT_DOCNO_VAL
     {
@@ -632,6 +645,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Vyčistit";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     CheckBox CB_USE_USERDATA
     {
@@ -665,6 +679,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Použít informace o uživateli";
         Text[ hebrew ] = "‮שמירה עם שם משתמש‬";
         Text[ hindi ] = "उपभोक्ता ड़ॉटा ~लागू करो";
+        Text[ slovak ] = "Použiť informácie o užív~ateľovi";
     };
     FixedLine FL_FILE_3
     {
@@ -703,6 +718,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "Šablona:";
         Text[ hebrew ] = "‮תבנית: ‬";
         Text[ hindi ] = "नमूना:";
+        Text[ slovak ] = "Šablóna:";
     };
     FixedText FT_TEMPL_VAL
     {
@@ -738,6 +754,7 @@ TabPage TP_DOCINFODOC
         Text[ czech ] = "neznámá";
         Text[ hebrew ] = "‮לא מוכר‬";
         Text[ hindi ] = "अज्ञात";
+        Text[ slovak ] = "neznámy";
     };
 };
 
@@ -832,6 +849,7 @@ TabPage TP_DOCINFOUSER
         Text[ czech ] = "Vlastní položky...";
         Text[ hebrew ] = "‮שדות מידע...‬";
         Text[ hindi ] = "~सूचना क्षेत्र...";
+        Text[ slovak ] = "Vlas~tné položky...";
     };
 };
 
@@ -873,6 +891,7 @@ TabPage TP_DOCINFORELOAD
         Text[ portuguese_brazilian ] = "Do not refresh automatically";
         Text[ thai ] = "Do not refresh automatically";
         Text[ hindi ] = "Do not refresh automatically";
+        Text[ slovak ] = "Neobnovovať automaticky";
     };
 
     RadioButton RB_RELOADUPDATE
@@ -906,6 +925,7 @@ TabPage TP_DOCINFORELOAD
         Text[ portuguese_brazilian ] = "Refresh this document";
         Text[ thai ] = "Refresh this document";
         Text[ hindi ] = "Refresh this document";
+        Text[ slovak ] = "Obnoviť dokument";
     };
     FixedText FT_EVERY
     {
@@ -937,6 +957,7 @@ TabPage TP_DOCINFORELOAD
         Text[ czech ] = "každých";
         Text[ hebrew ] = "‮כל‬";
         Text[ hindi ] = "सब ";
+        Text[ slovak ] = "každých";
     };
     NumericField ED_RELOAD
     {
@@ -981,6 +1002,7 @@ TabPage TP_DOCINFORELOAD
         Text[ czech ] = "sekund";
         Text[ hebrew ] = "‮שניות‬";
         Text[ hindi ] = "सेकन्ड";
+        Text[ slovak ] = "Sekúnd";
     };
 
     RadioButton RB_FORWARDUPDATE
@@ -1000,7 +1022,7 @@ TabPage TP_DOCINFORELOAD
         Text[ finnish ] = "Redirect from this document";
         Text[ italian ] = "Inoltra da questo documento";
         Text[ danish ] = "Redirect from this document";
-        Text[ swedish ] = "Vidarebefordra fr�n det h�r dokumentet";
+        Text[ swedish ] = "Omdirigera fr�n det h�r dokumentet";
         Text[ polish ] = "Redirect from this document";
         Text[ japanese ] = "このドキュメントから転送する";
         Text[ korean ] = "이 문서로부터 다시 전송";
@@ -1014,6 +1036,7 @@ TabPage TP_DOCINFORELOAD
         Text[ portuguese_brazilian ] = "Redirect from this document";
         Text[ thai ] = "Redirect from this document";
         Text[ hindi ] = "Redirect from this document";
+        Text[ slovak ] = "Presmerovať z tohto dokumentu";
     };
     FixedText FT_AFTER
     {
@@ -1045,6 +1068,7 @@ TabPage TP_DOCINFORELOAD
         Text[ portuguese_brazilian ] = "after";
         Text[ thai ] = "after";
         Text[ hindi ] = "after";
+        Text[ slovak ] = "po";
     };
     NumericField ED_FORWARD
     {
@@ -1075,7 +1099,7 @@ TabPage TP_DOCINFORELOAD
         Text[ finnish ] = "sekuntia";
         Text[ italian ] = "secondi";
         Text[ danish ] = "Sekunder";
-        Text[ swedish ] = "sekund";
+        Text[ swedish ] = "sekunder";
         Text[ polish ] = "Sekundy";
         Text[ japanese ] = "秒毎";
         Text[ korean ] = "초 후";
@@ -1089,6 +1113,7 @@ TabPage TP_DOCINFORELOAD
         Text[ czech ] = "sekundách";
         Text[ hebrew ] = "‮שניות‬";
         Text[ hindi ] = "सेकन्ड";
+        Text[ slovak ] = "sekundách";
     };
     FixedText FT_URL
     {
@@ -1120,6 +1145,7 @@ TabPage TP_DOCINFORELOAD
         Text[ hebrew ] = "‮ל URL‬";
         Text[ thai ] = "to URL";
         Text[ hindi ] = "~URL";
+        Text[ slovak ] = "~URL";
     };
     Edit ED_URL
     {
@@ -1163,6 +1189,7 @@ TabPage TP_DOCINFORELOAD
         Text[ portuguese_brazilian ] = "to frame";
         Text[ thai ] = "to frame";
         Text[ hindi ] = "to frame";
+        Text[ slovak ] = "K rámcu";
     };
     ComboBox CB_FRAME
     {
@@ -1198,6 +1225,7 @@ TabPage TP_DOCINFORELOAD
         Text[ portuguese_brazilian ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ thai ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
         Text[ hindi ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL.";
+        Text[ slovak ] = "V prípade že si vyberiete možnosť \"%PLACEHOLDER%\", musíte zadať URL.";
     };
 
 };
@@ -1267,6 +1295,7 @@ TabDialog SID_DOCINFO
                 Text[ czech ] = "Obecné";
                 Text[ hebrew ] = "‮כללי‬";
                 Text[ hindi ] = "सामान्य";
+                Text[ slovak ] = "Všeobecný";
             };
             PageItem
             {
@@ -1298,6 +1327,7 @@ TabDialog SID_DOCINFO
                 Text[ czech ] = "Popis";
                 Text[ hebrew ] = "‮תאור‬";
                 Text[ hindi ] = "विवरण";
+                Text[ slovak ] = "Popis";
             };
             PageItem
             {
@@ -1330,6 +1360,7 @@ TabDialog SID_DOCINFO
                 Text[ czech ] = "Uživatelsky definované";
                 Text[ hebrew ] = "‮מוגדר על ידי המשתמש‬";
                 Text[ hindi ] = "उपभोक्ता से परिभाषित";
+                Text[ slovak ] = "Užívateľsky definované";
             };
             PageItem
             {
@@ -1361,6 +1392,7 @@ TabDialog SID_DOCINFO
                 Text[ czech ] = "Internet";
                 Text[ hebrew ] = "‮אינטרנט‬";
                 Text[ hindi ] = "इन्टरनेट्";
+                Text[ slovak ] = "Internet";
             };
         };
     };
@@ -1368,7 +1400,10 @@ TabDialog SID_DOCINFO
     Text[ czech ] = "Vlastnosti ";
     Text[ hebrew ] = "‮תכונות של‬";
     Text[ hindi ] = "का स्वभाव ";
+    Text[ slovak ] = "Vlastnosti ";
 };
+
+
 
 
 
