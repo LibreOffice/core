@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:37:04 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,10 +183,9 @@ public:
     USHORT      nLFOIndex;
     BYTE        nListLevel;
     BYTE        nOutlineLevel;      // falls Gliederungs-Style
-    BYTE        n81Flags;           // Fuer Bold, Italic, ...
-    BYTE        n81BiDiFlags;       // Fuer Bold, Italic, ...
+    sal_uInt16  n81Flags;           // Fuer Bold, Italic, ...
+    sal_uInt16  n81BiDiFlags;       // Fuer Bold, Italic, ...
     SvxLRSpaceItem maWordLR;
-    bool bInvisFlag;        // For invisibile
     bool bValid;            // leer oder Valid
     bool bImported;         // fuers rekursive Importieren
     bool bColl;             // true-> pFmt ist SwTxtFmtColl
@@ -218,7 +217,6 @@ public:
         nOutlineLevel( MAXLEVEL ),
         n81Flags( 0 ),
         n81BiDiFlags(0),
-        bInvisFlag(false),
         bValid(false),
         bImported(false),
         bColl(false),
