@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:47:20 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,12 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
         mpBtn->SetPressed( TRUE );
         mpFloatWin->StartFloat( TRUE );
         ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+
+        ImplClearLayoutData();
+        if( mpImplLB )
+            mpImplLB->GetMainWindow()->ImplClearLayoutData();
+        if( mpImplWin )
+            mpImplWin->ImplClearLayoutData();
     }
 
     return 0;
@@ -363,6 +369,12 @@ IMPL_LINK( ListBox, ImplPopupModeEndHdl, void*, p )
             mpImplLB->SetTravelSelect( bTravelSelect );
         }
     }
+
+    ImplClearLayoutData();
+    if( mpImplLB )
+        mpImplLB->GetMainWindow()->ImplClearLayoutData();
+    if( mpImplWin )
+        mpImplWin->ImplClearLayoutData();
 
     mpBtn->SetPressed( FALSE );
     ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
@@ -719,6 +731,65 @@ void ListBox::FillLayoutData() const
         AppendLayoutData( *pMainWin );
         pMainWin->SetLayoutDataParent( this );
     }
+}
+
+// -----------------------------------------------------------------------
+
+long ListBox::GetIndexForPoint( const Point& rPoint, USHORT& rPos ) const
+{
+    if( ! mpLayoutData )
+        FillLayoutData();
+
+    // check whether rPoint fits at all
+    long nIndex = Control::GetIndexForPoint( rPoint );
+    if( nIndex != -1 )
+    {
+        // point must be either in main list window
+        // or in impl window (dropdown case)
+        ImplListBoxWindow* pMain = mpImplLB->GetMainWindow();
+
+        // convert coordinates to ImplListBoxWindow pixel coordinate space
+        Point aConvPoint = LogicToPixel( rPoint );
+        aConvPoint = OutputToAbsoluteScreenPixel( aConvPoint );
+        aConvPoint = pMain->AbsoluteScreenToOutputPixel( aConvPoint );
+        aConvPoint = pMain->PixelToLogic( aConvPoint );
+
+        // try to find entry
+        USHORT nEntry = pMain->GetEntryPosForPoint( aConvPoint );
+        if( nEntry == LISTBOX_ENTRY_NOTFOUND )
+        {
+            // not found, maybe dropdown case
+            if( mpImplWin && mpImplWin->IsReallyVisible() )
+            {
+                // convert to impl window pixel coordinates
+                aConvPoint = LogicToPixel( rPoint );
+                aConvPoint = OutputToAbsoluteScreenPixel( aConvPoint );
+                aConvPoint = mpImplWin->AbsoluteScreenToOutputPixel( aConvPoint );
+
+                // check whether converted point is inside impl window
+                Size aImplWinSize = mpImplWin->GetOutputSizePixel();
+                if( aConvPoint.X() >= 0 && aConvPoint.Y() >= 0 && aConvPoint.X() < aImplWinSize.Width() && aConvPoint.Y() < aImplWinSize.Height() )
+                {
+                    // inside the impl window, the position is the current item pos
+                    rPos = mpImplWin->GetItemPos();
+                }
+                else
+                    nIndex = -1;
+            }
+            else
+                nIndex = -1;
+        }
+        else
+            rPos = nEntry;
+
+        DBG_ASSERT( nIndex != -1, "found index for point, but relative index failed" );
+    }
+
+    // get line relative index
+    if( nIndex != -1 )
+        nIndex = ToRelativeLineIndex( nIndex );
+
+    return nIndex;
 }
 
 // -----------------------------------------------------------------------
