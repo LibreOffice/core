@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-09 15:40:46 $
+ *  last change: $Author: mba $ $Date: 2001-02-14 08:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,11 @@ Frame::Frame( const Reference< XMultiServiceFactory >& xFactory )
     // Initialize a new dispatchhelper-object to handle dispatches for SELF private and fast!
     // We use these helper as slave for our interceptor helper ...
     // (Attention: These helper hold a weakreference to us!)
+#if SUPD>614
     ODispatchProvider* pDispatchHelper = new ODispatchProvider( m_xFactory, this );
+#else
+    ODispatchProvider* pDispatchHelper = new ODispatchProvider( m_xFactory, this, m_aMutex );
+#endif
 
     // Initialize a new interception helper object to handle dispatches and interceptor mechanism PRIVATE!
     // These helper don't need any reference to use ...
@@ -1187,9 +1191,12 @@ sal_Bool SAL_CALL Frame::setComponent(  const   Reference< awt::XWindow >&      
         return sal_False;
     /* HACK for sfx2! */
 
-    // Ready for multithreading
+    // mutex should be locked as short as possible, because otherwise deadlocks in multithreaded environments
+    // are guaranteed, because (de)registering listeners or disposing a VCL componente always tries to get
+    // the solar mutex; if this mutex is hold in another thread, this thread would be blocked if it tried to
+    // access this frame ( f.e. when a focus lost event should be processed )
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::setComponent()" )
-    // Safe impossible cases
+
     LOG_ASSERT( impldbg_checkParameter_setComponent( xComponentWindow, xController ), "Frame::setComponent()\nInvalid parameter detected.\n" )
 
     // always release controller before releasing window, because controller may want to access its window
@@ -1200,10 +1207,10 @@ sal_Bool SAL_CALL Frame::setComponent(  const   Reference< awt::XWindow >&      
 
     UNLOCK_MUTEX( aGuard, "Frame::setComponent()" )
 
-    // Release current component, if any exist.
+    // Release current component, if there is any
     if  ( bHasController || bHasWindow )
     {
-        // Send FrameAction-event to all listener.
+        // Send FrameAction event to all listeners
         impl_sendFrameActionEvent( FrameAction_COMPONENT_DETACHING );
     }
 
@@ -1220,7 +1227,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   Reference< awt::XWindow >&      
         impl_setController( xController );
     }
 
-    // Send FrameActionEvent to all listener
+    // Send FrameActionEvent to all listeners
     if  (
             ( xController.is()        ==  sal_True    )   ||
             ( xComponentWindow.is()   ==  sal_True    )
@@ -1238,8 +1245,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   Reference< awt::XWindow >&      
 
     m_bConnected = sal_True;
 
-    // A new component don't know anything about current active/focus states!
-    // We must tell her these now.
+    // A new component doesn't know anything about current active/focus states
     if  (
             ( m_eActiveState            ==  FOCUS       )   &&
             ( m_xComponentWindow.is()   ==  sal_True    )
@@ -1248,7 +1254,6 @@ sal_Bool SAL_CALL Frame::setComponent(  const   Reference< awt::XWindow >&      
         m_xComponentWindow->setFocus();
     }
 
-    // Return with result of this operation.
     return sal_True;
 }
 
@@ -1322,7 +1327,11 @@ void SAL_CALL Frame::removeFrameActionListener( const Reference< XFrameActionLis
 void SAL_CALL Frame::dispose() throw( RuntimeException )
 {
     Reference < XFrame > xThis( this );
-    // Ready for multithreading
+
+    // mutex should be locked as short as possible, because otherwise deadlocks in multithreaded environments
+    // are guaranteed, because (de)registering listeners or disposing a VCL componente always tries to get
+    // the solar mutex; if this mutex is hold in another thread, this thread would be blocked if it tried to
+    // access this frame ( f.e. when a focus lost event should be processed )
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::dispose()" )
 
     // Protection against recursive disposing!
@@ -1473,41 +1482,44 @@ void SAL_CALL Frame::focusLost( const awt::FocusEvent& aEvent ) throw( RuntimeEx
 //*****************************************************************************************************************
 void Frame::impl_setContainerWindow( const Reference< awt::XWindow >& xWindow )
 {
+    // mutex should be locked as short as possible, because otherwise deadlocks in multithreaded environments
+    // are guaranteed, because (de)registering listeners or disposing a VCL componente always tries to get
+    // the solar mutex; if this mutex is hold in another thread, this thread would be blocked if it tried to
+    // access this frame ( f.e. when a focus lost event should be processed )
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::impl_setContainerWindow()" )
-
-    // Remove this instance himself from "old" window-listener-container.
-    if ( m_xContainerWindow.is() == sal_True )
-    {
-        m_xContainerWindow->removeWindowListener( this );
-        m_xContainerWindow->removeFocusListener( this );
-    }
 
     // Remember old window; dispose later to avoid flickering.
     Reference< awt::XWindow > xOld = m_xContainerWindow;
-    // Safe new window reference.
+
+    // Save new window reference
     m_xContainerWindow = xWindow;
-
-    // Register this instance himself as new listener.
-    if ( m_xContainerWindow.is() == sal_True )
-    {
-        m_xContainerWindow->addWindowListener( this );
-        m_xContainerWindow->addFocusListener( this );
-    }
-
-    // If new window a on top, register this instance a listener to.
-    Reference< awt::XTopWindow > xTopWindow( m_xContainerWindow, UNO_QUERY );
-    if ( xTopWindow.is() == sal_True )
-    {
-        xTopWindow->addTopWindowListener( this );
-    }
 
     UNLOCK_MUTEX( aGuard, "Frame::impl_setContainerWindow()" )
 
-    // Dispose old window now.
+    // Remove this instance from old WindowListener container.
+    if ( xOld.is() == sal_True )
+    {
+        xOld->removeWindowListener( this );
+        xOld->removeFocusListener( this );
+    }
+
+    // Register this instance as new listener.
+    if ( xWindow.is() == sal_True )
+    {
+        xWindow->addWindowListener( this );
+        xWindow->addFocusListener( this );
+
+        // if possible register as TopWindowListener
+        Reference< awt::XTopWindow > xTopWindow( xWindow, UNO_QUERY );
+        if ( xTopWindow.is() == sal_True )
+            xTopWindow->addTopWindowListener( this );
+    }
+
+    // Dispose old window now
     if ( xOld.is() == sal_True )
     {
         // All VclComponents are XComponents; so call dispose before discarding
-        // a Reference< XVclComponent >, because this frame is the owner of the Component.
+        // a Reference< XVclComponent >, because this frame is the owner of the window
         xOld->setVisible( sal_False );
         xOld->dispose();
     }
