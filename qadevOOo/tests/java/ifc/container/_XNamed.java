@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XNamed.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:35 $
+ *  last change:$Date: 2003-09-08 10:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.container;
 
-import com.sun.star.container.XNamed;
 import lib.MultiMethodTest;
 import util.utils;
+
+import com.sun.star.container.XNamed;
 
 /**
 * Testing <code>com.sun.star.container.XNamed</code>
@@ -100,7 +101,6 @@ public class _XNamed extends MultiMethodTest {
         boolean result = true;
         boolean loc_result = true;
         String name = null;
-        String NewName = null;
 
         loc_result = ((name = oObj.getName()) != null);
         log.println("getting the name \"" + name + "\"");
@@ -129,7 +129,11 @@ public class _XNamed extends MultiMethodTest {
     */
     public void _setName(){
         String Oname = tEnv.getTestCase().getObjectName();
-        if (Oname.indexOf("Exporter")>0) {
+        String nsn = (String) tEnv.getObjRelation("NoSetName");
+        if (nsn != null) {
+            Oname = nsn;
+        }
+        if (Oname.indexOf("Exporter")>0 || nsn != null) {
             log.println("With "+Oname+" setName() doesn't work");
             log.println("see idl-file for further information");
             tRes.tested("setName()",true);

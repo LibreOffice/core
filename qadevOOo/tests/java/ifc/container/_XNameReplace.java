@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XNameReplace.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:36 $
+ *  last change:$Date: 2003-09-08 10:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.container;
 
+import lib.MultiMethodTest;
+import util.ValueComparer;
+
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameReplace;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import util.ValueComparer;
 /**
 * Testing <code>com.sun.star.container.XNameReplace</code>
 * interface methods :
@@ -122,9 +123,6 @@ public class _XNameReplace extends MultiMethodTest {
     */
     public void _replaceByName(){
         boolean result = true;
-        Object oOldInstance = null;
-        Object oNewInstance = null;
-        String sName = null;
         String[] oNames = null;
 
         int Index = 0;
