@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:35:11 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ namespace configmgr
 
         void applyToNode(INode const&);
         void applyToChildren(ISubtree const&);
+    protected:
+        virtual ~NodeAction() {}
     };
 
     struct NodeModification
@@ -120,6 +122,8 @@ namespace configmgr
 
         void applyToNode(INode&);
         void applyToChildren(ISubtree&);
+    protected:
+        virtual ~NodeModification() {}
     };
 
     class INode
@@ -198,7 +202,6 @@ namespace configmgr
         ,m_nDefaultLevels(other.m_nDefaultLevels)
         ,m_sTemplateName(other.m_sTemplateName)
         ,m_sTemplateModule(other.m_sTemplateModule)
-        ,m_sId() // do not copy ID while cloning !
         {}
 
     public:
@@ -219,10 +222,6 @@ namespace configmgr
             ,m_nDefaultLevels(0)
             ,m_sTemplateName(_rTemplateName)
             ,m_sTemplateModule(_rTemplateModule){}
-
-        bool        hasId() const               { return m_sId.getLength() != 0; }
-        OUString    getId() const               { return m_sId; }
-        void        setId(const OUString& _rId) { m_sId = _rId; }
 
         INode* getChild(OUString const& name)               { return doGetChild(name); }
         INode const* getChild(OUString const& name) const   { return doGetChild(name); }
