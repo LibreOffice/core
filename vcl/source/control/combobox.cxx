@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-03 13:04:12 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 13:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1345,4 +1345,20 @@ USHORT ComboBox::GetTopEntry() const
 Rectangle ComboBox::GetDropDownPosSizePixel() const
 {
     return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative( const_cast<ComboBox*>(this) ) : Rectangle();
+}
+
+// -----------------------------------------------------------------------
+
+const Wallpaper& ComboBox::GetDisplayBackground() const
+{
+    if( ! mpSubEdit->IsBackground() )
+        return Control::GetDisplayBackground();
+
+    const Wallpaper& rBack = mpSubEdit->GetBackground();
+    if( ! rBack.IsBitmap() &&
+        ! rBack.IsGradient() &&
+        rBack.GetColor().GetColor() == COL_TRANSPARENT
+        )
+        return Control::GetDisplayBackground();
+    return rBack;
 }
