@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:16:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,19 +792,25 @@ SwSectionFmt *wwSectionManager::InsertSection(
     if (!pPage)
         return 0;
 
-    SwFrmFmt& rFmt = pPage->GetMaster();
-    const SwFmtFrmSize&   rSz = rFmt.GetFrmSize();
-    const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
-    SwTwips nWidth = rSz.GetWidth();
-    long nLeft  = rLR.GetTxtLeft();
-    long nRight = rLR.GetRight();
-
     SwSectionFmt *pFmt = rSection.mpSection->GetFmt();
     ASSERT(pFmt, "impossible");
     if (!pFmt)
         return 0;
 
-    SetCols(*pFmt, rSection, (USHORT)(nWidth - nLeft - nRight) );
+    SwFrmFmt& rFmt = pPage->GetMaster();
+    const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
+    long nPageLeft  = rLR.GetLeft();
+    long nPageRight = rLR.GetRight();
+    long nSectionLeft = rSection.GetPageLeft() - nPageLeft;
+    long nSectionRight = rSection.GetPageRight() - nPageRight;
+    if ((nSectionLeft != 0) || (nSectionRight != 0))
+    {
+        SvxLRSpaceItem aLR(nSectionLeft, nSectionRight);
+        pFmt->SetAttr(aLR);
+    }
+
+    SetCols(*pFmt, rSection, rSection.GetPageWidth() -
+        rSection.GetPageLeft() - rSection.GetPageRight());
 
     //Set the columns to be UnBalanced if compatability option is set
     if (mrReader.pWDop->fNoColumnBalance  )
@@ -2439,7 +2445,10 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
 
 void SwWW8ImplReader::StopApo()
 {
-    if( pWFlyPara->bGrafApo )
+    ASSERT(pWFlyPara, "no pWFlyPara to close");
+    if (!pWFlyPara)
+        return;
+    if (pWFlyPara->bGrafApo)
     {
         // Grafik-Rahmen, der *nicht* eingefuegt wurde leeren Absatz incl.
         // Attributen entfernen
