@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
+ *  last change: $Author: os $ $Date: 2001-04-17 09:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,11 @@
 #include <globals.h>        // globale Konstanten z.B.
 #endif
 
-
+#if SUPD<629
+#ifndef RID_SW_TP_HTML_OPTSHDWCRSR
+#define RID_SW_TP_HTML_OPTSHDWCRSR (RID_OFA_START + 246)
+#endif
+#endif
 
 /* -----------------12.02.99 12:28-------------------
  *
@@ -585,7 +589,10 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
             }
         }
         break;
-        case RID_SW_TP_OPTSHDWCRSR:     pRet = SwShdwCrsrOptionsTabPage::Create(pParent, rSet); break;
+        case RID_SW_TP_OPTSHDWCRSR:
+        case RID_SW_TP_HTML_OPTSHDWCRSR:
+            pRet = SwShdwCrsrOptionsTabPage::Create(pParent, rSet);
+        break;
         case RID_SW_TP_REDLINE_OPT:     pRet = SwRedlineOptionsTabPage::Create(pParent, rSet); break;
         case RID_SW_TP_OPTLOAD_PAGE:    pRet = SwLoadOptPage::Create(pParent, rSet); break;
 #ifndef PRODUCT
@@ -600,6 +607,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/04/09 09:46:33  os
+    #85859# some option dialog errors fixed
+
     Revision 1.7  2001/03/22 10:34:48  os
     include removed
 
