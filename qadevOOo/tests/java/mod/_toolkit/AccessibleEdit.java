@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEdit.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-04-28 11:21:22 $
+ *  last change: $Date: 2003-05-27 13:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._toolkit;
 
 import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
@@ -133,10 +134,10 @@ public class AccessibleEdit extends TestCase {
         XInterface oObj = null;
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
-            oObj = (XInterface) Param.getMSF().createInstance
+            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
@@ -158,7 +159,7 @@ public class AccessibleEdit extends TestCase {
         XURLTransformer urlTransf = null;
 
         try {
-            XInterface transf = (XInterface)Param.getMSF().createInstance
+            XInterface transf = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.util.URLTransformer");
             urlTransf = (XURLTransformer)UnoRuntime.queryInterface
                 (XURLTransformer.class, transf);
@@ -248,7 +249,7 @@ public class AccessibleEdit extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
