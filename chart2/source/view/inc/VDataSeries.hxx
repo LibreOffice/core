@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-12 22:04:38 $
+ *  last change: $Author: iha $ $Date: 2003-12-15 19:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,14 @@ namespace chart
 class VDataSeries
 {
 public:
-    VDataSeries();
-    VDataSeries( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeries > );
+    VDataSeries( const ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::chart2::XDataSeries >& xDataSeries );
     virtual ~VDataSeries();
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeries >
+        getModel() const;
+
+    void setCategoryXAxis();
 
     sal_Int32   getTotalPointCount() const;
     double      getX( sal_Int32 index ) const;
@@ -153,12 +158,14 @@ public:
     rtl::OUString       getErrorBarsCID() const;
     rtl::OUString       getLabelsCID() const;
     rtl::OUString       getLabelCID_Stub() const;
+    rtl::OUString       getDataCurveCID( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xDataCurveModelProp ) const;
 
     ::drafts::com::sun::star::chart2::DataPointLabel*
                         getDataPointLabel( sal_Int32 index ) const;
     bool    getTextLabelMultiPropertyLists( sal_Int32 index, tNameSequence*& pPropNames, tAnySequence*& pPropValues ) const;
 
 private: //methods
+    VDataSeries();
     bool    isAttributedDataPoint( sal_Int32 index ) const;
 
 private: //member
@@ -171,6 +178,7 @@ private: //member
 
     //all points given by the model data (here are not only the visible points meant)
     sal_Int32                                                     m_nPointCount;
+
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XDataSequence >         m_xData_XValues;
     ::com::sun::star::uno::Reference<
@@ -178,7 +186,7 @@ private: //member
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XDataSequence >         m_xData_ZValues;
 
-    ::com::sun::star::uno::Sequence< double >                     m_XValues_Double;
+    mutable ::com::sun::star::uno::Sequence< double >             m_XValues_Double;
     ::com::sun::star::uno::Sequence< double >                     m_YValues_Double;
 
     ::com::sun::star::uno::Sequence< sal_Int32 >                  m_aAttributedDataPointIndexList;

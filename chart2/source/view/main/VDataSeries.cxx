@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-12 22:05:39 $
+ *  last change: $Author: iha $ $Date: 2003-12-15 19:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <drafts/com/sun/star/chart2/Symbol.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#endif
 
 //#include "CommonConverters.hxx"
 
@@ -101,46 +104,6 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::chart2;
-/*
-void PlottingPositionHelper::setTransformationSceneToScreen( const drawing::HomogenMatrix& rMatrix)
-{
-    m_aMatrixScreenToScene = HomogenMatrixToMatrix4D(rMatrix);
-}
-
-void PlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleData >& rScales )
-{
-    m_aScales = rScales;
-}
-*/
-VDataSeries::VDataSeries()
-    : m_xShape(NULL)
-    , m_xLabelsShape(NULL)
-    , m_xErrorBarsShape(NULL)
-    , m_xShapeFrontChild(NULL)
-    , m_xShapeBackChild(NULL)
-    , m_xDataSeries(NULL)
-    , m_aDataSequences()
-    , m_nPointCount(0)
-    , m_xData_XValues(NULL)
-    , m_xData_YValues(NULL)
-    , m_xData_ZValues(NULL)
-
-    , m_XValues_Double()
-    , m_YValues_Double()
-
-    , m_apLabel_Series(NULL)
-    , m_apLabelPropNames_Series(NULL)
-    , m_apLabelPropValues_Series(NULL)
-    , m_apLabel_AttributedPoint(NULL)
-    , m_apLabelPropNames_AttributedPoint(NULL)
-    , m_apLabelPropValues_AttributedPoint(NULL)
-
-    , m_nCurrentAttributedPoint(-1)
-    , m_apSymbolProperties_Series(NULL)
-    , m_apSymbolProperties_AttributedPoint(NULL)
-{
-
-}
 
 void initDoubleValues( uno::Sequence< double >& rDoubleValues,
                       const uno::Reference< XDataSequence >& xDataSequence )
@@ -169,7 +132,13 @@ void initDoubleValues( uno::Sequence< double >& rDoubleValues,
     }
 }
 
-VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries )
+
+VDataSeries::VDataSeries()
+{
+    DBG_ERROR("not implemented");
+}
+
+VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     : m_xShape(NULL)
     , m_xLabelsShape(NULL)
     , m_xErrorBarsShape(NULL)
@@ -230,7 +199,6 @@ VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries )
         }
     }
 
-
     uno::Reference<beans::XPropertySet> xProp(xDataSeries, uno::UNO_QUERY );
     if( xProp.is())
     {
@@ -261,6 +229,17 @@ VDataSeries::~VDataSeries()
 {
 }
 
+uno::Reference< XDataSeries > VDataSeries::getModel() const
+{
+    return m_xDataSeries;
+}
+
+void VDataSeries::setCategoryXAxis()
+{
+    m_xData_XValues = NULL;
+    m_XValues_Double.realloc(0);
+}
+
 rtl::OUString VDataSeries::getCID() const
 {
     return m_aCID;
@@ -282,6 +261,14 @@ rtl::OUString VDataSeries::getLabelsCID() const
 rtl::OUString VDataSeries::getLabelCID_Stub() const
 {
     return m_aLabelCID_Stub;
+}
+rtl::OUString VDataSeries::getDataCurveCID( const uno::Reference< beans::XPropertySet >& xDataCurveModelProp ) const
+{
+    rtl::OUString aRet;
+    uno::Reference< XIdentifiable > xCurveIdentifier( xDataCurveModelProp, uno::UNO_QUERY );
+    if(xCurveIdentifier.is())
+        aRet = ObjectIdentifier::createDataCurveCID( m_aIdentifier, xCurveIdentifier->getIdentifier() );
+    return aRet;
 }
 
 sal_Int32 VDataSeries::getTotalPointCount() const
@@ -319,17 +306,14 @@ double VDataSeries::getY( sal_Int32 index ) const
 
 uno::Sequence< double > VDataSeries::getAllX() const
 {
-    if(m_xData_XValues.is())
+    if(!m_xData_XValues.is() && !m_XValues_Double.getLength() && m_YValues_Double.getLength())
     {
-        return m_XValues_Double;
+        //init x values from category indexes
+        m_XValues_Double.realloc( m_YValues_Double.getLength() );
+        for(sal_Int32 nN=m_XValues_Double.getLength();nN--;)
+            m_XValues_Double[nN] = nN;
     }
-
-    // no x-values => categories indexes
-    uno::Sequence< double > aResult(m_YValues_Double.getLength());
-    for(sal_Int32 nN=m_YValues_Double.getLength();nN--;)
-        aResult[nN] = nN;
-
-    return aResult;
+    return m_XValues_Double;
 }
 
 uno::Sequence< double > VDataSeries::getAllY() const
