@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 07:43:35 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,6 +1312,52 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 pWindow->SetMouseTransparent( bMouseTransparent );
             }
             break;
+
+            case BASEPROPERTY_REPEAT:
+            {
+                sal_Bool bRepeat( FALSE );
+                Value >>= bRepeat;
+
+                WinBits nStyle = pWindow->GetStyle();
+                if ( bRepeat )
+                    nStyle |= WB_REPEAT;
+                else
+                    nStyle &= ~WB_REPEAT;
+                pWindow->SetStyle( nStyle );
+            }
+            break;
+
+            case BASEPROPERTY_REPEAT_DELAY:
+            {
+                sal_Int32 nRepeatDelay;
+                if ( Value >>= nRepeatDelay )
+                {
+                    AllSettings aSettings = pWindow->GetSettings();
+                    MouseSettings aMouseSettings = aSettings.GetMouseSettings();
+
+                    aMouseSettings.SetButtonRepeat( nRepeatDelay );
+                    aSettings.SetMouseSettings( aMouseSettings );
+
+                    pWindow->SetSettings( aSettings, TRUE );
+                }
+            }
+            break;
+
+            case BASEPROPERTY_SYMBOL_COLOR:
+            {
+                sal_Int32 nButtonTextColor = 0;
+                if ( !( Value >>= nButtonTextColor ) )
+                    nButtonTextColor = Application::GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+
+                AllSettings aSettings = pWindow->GetSettings();
+                StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+
+                aStyleSettings.SetButtonTextColor( Color( nButtonTextColor ) );
+
+                aSettings.SetStyleSettings( aStyleSettings );
+                pWindow->SetSettings( aSettings, TRUE );
+            }
+            break;
         }
     }
 }
@@ -1429,6 +1475,23 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             }
             break;
 
+            case BASEPROPERTY_REPEAT:
+                aProp <<= (sal_Bool)( 0 != ( GetWindow()->GetStyle() & WB_REPEAT ) );
+                break;
+
+            case BASEPROPERTY_REPEAT_DELAY:
+            {
+                sal_Int32 nButtonRepeat = GetWindow()->GetSettings().GetMouseSettings().GetButtonRepeat();
+                aProp <<= (sal_Int32)nButtonRepeat;
+            }
+            break;
+
+            case BASEPROPERTY_SYMBOL_COLOR:
+            {
+                sal_Int32 nButtonTextColor = GetWindow()->GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+                aProp <<= nButtonTextColor;
+            }
+            break;
         }
     }
     return aProp;
