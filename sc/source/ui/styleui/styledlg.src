@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:14:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ czech ] = "Čísla";
                 Text[ hebrew ] = "Zahlen";
                 Text[ hindi ] = "संख्या";
+                Text[ slovak ] = "Čísla";
             };
             PageItem
             {
@@ -152,6 +153,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट्";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -182,6 +184,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ czech ] = "Efekty pro písmo";
                 Text[ hebrew ] = "‮אפקטים לגופים‬";
                 Text[ hindi ] = "फ़ॉन्ट् प्रभाव";
+                Text[ slovak ] = "Efekty pre písmo";
             };
             PageItem
             {
@@ -214,6 +217,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ czech ] = "Zarovnání";
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
+                Text[ slovak ] = "Zarovnanie";
             };
             PageItem
             {
@@ -244,6 +248,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ czech ] = "Asijská typografie";
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "Asian Typography";
+                Text[ slovak ] = "Ázijská typografia";
             };
             PageItem
             {
@@ -276,6 +281,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ czech ] = "Okraje";
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
+                Text[ slovak ] = "Okraje";
             };
             PageItem
             {
@@ -308,6 +314,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
             PageItem
             {
@@ -340,6 +347,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ czech ] = "Ochrana buňky";
                 Text[ hebrew ] = "Zellschutz";
                 Text[ hindi ] = "कोष्ठ रक्षा";
+                Text[ slovak ] = "Ochrana bunky";
             };
         };
     };
@@ -358,6 +366,7 @@ TabDialog RID_SCDLG_STYLES_PAR
     Text[ czech ] = "Styl buňky";
     Text[ hebrew ] = "Zellvorlage";
     Text[ hindi ] = "कोष्ठ शैली";
+    Text[ slovak ] = "Štýl bunky";
 };
 TabDialog RID_SCDLG_STYLES_PAGE
 {
@@ -417,6 +426,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ czech ] = "Stránka";
                 Text[ hebrew ] = "‮דף‬";
                 Text[ hindi ] = "पृष्ठ";
+                Text[ slovak ] = "Stránka";
             };
             PageItem
             {
@@ -449,6 +459,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ czech ] = "Okraje";
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
+                Text[ slovak ] = "Okraje";
             };
             PageItem
             {
@@ -481,6 +492,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
             PageItem
             {
@@ -513,6 +525,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ czech ] = "Záhlaví";
                 Text[ hebrew ] = "‮כותרת עליונה‬";
                 Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
+                Text[ slovak ] = "Záhlavie";
             };
             PageItem
             {
@@ -545,6 +558,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ czech ] = "Zápatí";
                 Text[ hebrew ] = "‮כותרת תחתונה‬";
                 Text[ hindi ] = "पृष्ठ के नीचे की टीका";
+                Text[ slovak ] = "Zápätie";
             };
             PageItem
             {
@@ -577,6 +591,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ czech ] = "List";
                 Text[ hebrew ] = "Tabelle";
                 Text[ hindi ] = "शीट्";
+                Text[ slovak ] = "List";
             };
         };
     };
@@ -595,7 +610,10 @@ TabDialog RID_SCDLG_STYLES_PAGE
     Text[ czech ] = "Styl stránky";
     Text[ hebrew ] = "‮סגנון‬";
     Text[ hindi ] = "पृष्ठ शैली";
+    Text[ slovak ] = "Štýl stránky";
 };
+
+
 
 
 
