@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-08 16:26:42 $
+ *  last change: $Author: sj $ $Date: 2001-06-14 17:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,8 +726,24 @@ SvStream& operator>>( SvStream& rIn, PptOEPlaceholderAtom& rAtom )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+PptSlidePersistEntry::PptSlidePersistEntry() :
+    bNotesMaster        ( FALSE ),
+    bHandoutMaster      ( FALSE ),
+    bStarDrawFiller     ( FALSE ),
+    pHeaderFooterEntry  ( NULL ),
+    pSolverContainer    ( NULL ),
+    pPresentationObjects( NULL ),
+    pStyleSheet         ( NULL ),
+    ePageKind           ( PPT_MASTERPAGE ),
+    nDrawingDgId        ( 0xffffffff ),
+    nBackgroundOffset   ( 0 )
+{
+}
+
+
 PptSlidePersistEntry::~PptSlidePersistEntry()
 {
+    delete pStyleSheet;
     delete pPresentationObjects;
     delete pSolverContainer;
 };
@@ -750,7 +766,6 @@ SdrEscherImport::SdrEscherImport( SvStream& rDocStream_ ) :
     eCharSetSystem          ( gsl_getSystemTextEncoding() )
 {
     nIStarBats = nIWingdings = 0;
-    pExtParaProv = NULL;
 }
 
 SdrEscherImport::~SdrEscherImport()
@@ -761,7 +776,6 @@ SdrEscherImport::~SdrEscherImport()
     for ( pPtr = aOleObjectList.First(); pPtr; pPtr = aOleObjectList.Next() )
         delete (PPTOleEntry*)pPtr;
     delete pFonts;
-    delete pExtParaProv;
 }
 
 const PptSlideLayoutAtom* SdrEscherImport::GetSlideLayoutAtom() const
@@ -1449,7 +1463,7 @@ void SdrEscherImport::CheckTimesNewRoman() const
 SdrPowerPointImport::SdrPowerPointImport( SvStream& rDocStream ) :
     bOk                 ( rStCtrl.GetErrorCode() == SVSTREAM_OK ),
     SdrEscherImport     ( rDocStream ),
-    pPPTStyleSheet      ( NULL ),
+    pDefaultSheet       ( NULL ),
     pPersistPtr         ( NULL ),
     nPersistPtrAnz      ( 0 ),
     pMasterPages        ( NULL ),
@@ -1563,7 +1577,22 @@ SdrPowerPointImport::SdrPowerPointImport( SvStream& rDocStream ) :
             bOk = FALSE;
 
         if ( bOk )
-        {   // SlidePersists Lesen
+        {
+            if ( !pFonts )
+                ReadFontCollection();
+
+            // reading TxSI styles (default language setting ... )
+            PPTTextSpecInfoAtomInterpreter aTxSIStyle;
+            DffRecordHeader* pEnvHd = aDocRecManager.GetRecordHeader( PPT_PST_Environment );
+            if ( pEnvHd )
+            {
+                pEnvHd->SeekToContent( rStCtrl );
+                DffRecordHeader aTxSIStyleRecHd;
+                if ( SeekToRec( rStCtrl, PPT_PST_TxSIStyleAtom, pEnvHd->GetRecEndFilePos(), &aTxSIStyleRecHd ) )
+                    aTxSIStyle.Read( rStCtrl, aTxSIStyleRecHd, PPT_PST_TxSIStyleAtom );
+            }
+
+            // SlidePersists Lesen
             pMasterPages=new PptSlidePersistList;
             pSlidePages =new PptSlidePersistList;
             pNotePages  =new PptSlidePersistList;
@@ -1648,6 +1677,16 @@ SdrPowerPointImport::SdrPowerPointImport( SvStream& rDocStream ) :
                                         SetDgContainer( rStCtrl );  // set this, so that the escherimport is knowing of our drawings
                                     }
                                 }
+                                // office xp is supporting more than one stylesheet
+                                if ( ( pE->ePageKind == PPT_MASTERPAGE ) && ( pE->aSlideAtom.nMasterId == 0 ) )
+                                {
+                                    PPTTextSpecInfo aTxSI( 0 );
+                                    if ( aTxSIStyle.bValid && aTxSIStyle.aList.Count() )
+                                        aTxSI = *( ( (PPTTextSpecInfo*)aTxSIStyle.aList.GetObject( 0 ) ) );
+
+                                    pE->pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxSI );
+                                    pDefaultSheet = pE->pStyleSheet;
+                                }
                                 if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
                                     rStCtrl >> pE->aColorScheme;
                                 else
@@ -1670,14 +1709,14 @@ SdrPowerPointImport::SdrPowerPointImport( SvStream& rDocStream ) :
             }
         }
     }
-    if ( rStCtrl.GetError() != 0 )
+    if ( ( rStCtrl.GetError() != 0 ) || ( pDefaultSheet == NULL ) )
         bOk = FALSE;
+    pPPTStyleSheet = pDefaultSheet;
     rStCtrl.Seek( 0 );
 }
 
 SdrPowerPointImport::~SdrPowerPointImport()
 {
-    delete pPPTStyleSheet;
     for ( void* pPtr = aHyperList.First(); pPtr; pPtr = aHyperList.Next() )
         delete (SdHyperlinkEntry*)pPtr;
     delete pMasterPages;
@@ -2186,8 +2225,6 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 PptFontEntityAtom* pFont = new PptFontEntityAtom;
                 rStCtrl >> *pFont;
 
-                OutputDevice* pRefDev = pSdrModel->GetRefDevice();
-
                 Font aFont;
                 aFont.SetCharSet( pFont->eCharSet );
                 aFont.SetName( pFont->aName );
@@ -2500,10 +2537,42 @@ USHORT SdrPowerPointImport::GetPageCount( PptPageKind ePageKind ) const
     return 0;
 }
 
-void SdrPowerPointImport::SetPageNum( USHORT nPageNum, PptPageKind eKind )
+void SdrPowerPointImport::SetPageNum( sal_uInt16 nPageNum, PptPageKind eKind )
 {
     eAktPageKind = eKind;
     nAktPageNum = nPageNum;
+
+    pPPTStyleSheet = NULL;
+
+    sal_Bool bHasMasterPage = sal_True;
+    sal_uInt16 nMasterIndex = 0;
+
+    if ( eKind == PPT_MASTERPAGE )
+        nMasterIndex = nPageNum;
+    else
+    {
+        if ( HasMasterPage( nPageNum, eKind ) )
+            nMasterIndex = GetMasterPageIndex( nPageNum, eKind );
+        else
+            bHasMasterPage = sal_False;
+    }
+    if ( bHasMasterPage )
+    {
+        PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
+        if ( pPageList && nMasterIndex < pPageList->Count() )
+        {
+            PptSlidePersistEntry* pMasterPersist = (*pPageList)[ nMasterIndex ];
+            if ( ( pMasterPersist->pStyleSheet == NULL ) && pMasterPersist->aSlideAtom.nMasterId )
+            {
+                nMasterIndex = pMasterPages->FindPage( pMasterPersist->aSlideAtom.nMasterId );
+                if ( nMasterIndex != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
+                    pMasterPersist = (*pPageList)[ nMasterIndex ];
+            }
+            pPPTStyleSheet = pMasterPersist->pStyleSheet;
+         }
+    }
+    if ( !pPPTStyleSheet )
+        pPPTStyleSheet = pDefaultSheet;
 }
 
 Size SdrPowerPointImport::GetPageSize() const
@@ -2918,13 +2987,17 @@ SdrPage* SdrPowerPointImport::ImportPage()      // be sure not to import masterp
     PptSlidePersistEntry& rSlidePersist = *(*pList)[ nAktPageNum ];
     if ( rSlidePersist.bStarDrawFiller )
         return pRet;
+
     if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
     {
         USHORT nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
         pRet->InsertMasterPage( nMasterNum );
         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-        if ( pPageList && ( nMasterNum < pPageList->Count() ) )
-            pHFEM = (*pPageList)[ nMasterNum ]->pHeaderFooterEntry;     // get the masterpage's HeaderFooterEntry
+        if ( pPageList && nMasterNum < pPageList->Count() )
+        {
+            PptSlidePersistEntry& rMasterPersist = *(*pPageList)[ nMasterNum ];
+            pHFEM = rMasterPersist.pHeaderFooterEntry;  // get the masterpage's HeaderFooterEntry
+         }
     }
     DffRecordHeader aPageHd;
     if ( SeekToAktPage( &aPageHd ) )
@@ -3586,7 +3659,7 @@ SvStream& operator>>( SvStream& rIn, PPTExtParaLevel& rLevel )
     return rIn;
 }
 
-BOOL PPTExtParaProv::GetGraphic( UINT32 nInstance, Graphic& rGraph )
+BOOL PPTExtParaProv::GetGraphic( UINT32 nInstance, Graphic& rGraph ) const
 {
     BOOL bRetValue = FALSE;
     PPTBuGraEntry* pPtr;
@@ -3598,8 +3671,10 @@ BOOL PPTExtParaProv::GetGraphic( UINT32 nInstance, Graphic& rGraph )
     }
     if ( !bRetValue )
     {
-        for ( pPtr = (PPTBuGraEntry*)aBuGraList.First(); pPtr; pPtr = (PPTBuGraEntry*)aBuGraList.Next() )
+        sal_uInt32 i;
+        for ( i = 0; i < aBuGraList.Count(); i++ )
         {
+            pPtr = (PPTBuGraEntry*)aBuGraList.GetObject( i );
             if ( pPtr->nInstance == nInstance )
             {
                 bRetValue = TRUE;
@@ -3624,21 +3699,28 @@ BOOL PPTExtParaProv::SeekToContentOfBinaryData( SvStream& rSt, const DffRecordHe
     rProgTagBinaryDataHd.SeekToContent( rSt );
 
     rSt >> rContentHd;
-    if ( ( rContentHd.nRecType == PPT_PST_CString ) && ( rContentHd.nRecLen == 14 ) )
+    if ( rContentHd.nRecType == PPT_PST_CString )
     {
-        String      aString;
-        sal_uInt16  i = 7;
-        sal_Unicode *pTmp = aString.AllocBuffer( i );
-        while ( i-- )
+        sal_uInt16  n = 6;
+        sal_uInt32  i = rContentHd.nRecLen >> 1;
+        if ( i > n )
         {
-            rSt >> *pTmp++;
-        }
-        if ( aString == String( RTL_CONSTASCII_USTRINGPARAM( "___PPT9" ) ) )
-        {
-            rContentHd.SeekToEndOfRecord( rSt );
-            rSt >> rContentHd;
-            if ( rContentHd.nRecType == PPT_PST_BinaryTagData )
-                bRetValue = TRUE;
+            String aPre, aSuf;
+            sal_Unicode *pTmp = aPre.AllocBuffer( n );
+            while ( n-- )
+                rSt >> *pTmp++;
+            n = (sal_uInt16)( i - 6 );
+            pTmp = aSuf.AllocBuffer( n );
+            while ( n-- )
+                rSt >> *pTmp++;
+            sal_Int32 nVersion = aSuf.ToInt32();
+            if ( ( nVersion >= 9 ) && ( aPre == String( RTL_CONSTASCII_USTRINGPARAM( "___PPT" ) ) ) )
+            {
+                rContentHd.SeekToEndOfRecord( rSt );
+                rSt >> rContentHd;
+                if ( rContentHd.nRecType == PPT_PST_BinaryTagData )
+                    bRetValue = TRUE;
+            }
         }
     }
     if ( !bRetValue )
@@ -3734,6 +3816,9 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                 case PPT_PST_MasterText :   // first seen in: ms-tt02.ppt
                 case PPT_PST_SrKinsoku :
                 case PPT_PST_NewlyAddedAtomByPPT2000 :
+                case PPT_PST_NewlyAddedAtomByXP1037 :
+                case PPT_PST_NewlyAddedAtomByXP12004 :
+                case PPT_PST_NewlyAddedAtomByXP14001 :
                 break;
 #endif
             }
@@ -3754,37 +3839,44 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
         while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aContentDataHd.GetRecEndFilePos() ) )
         {
             rSt >> aHd;
-            if ( aHd.nRecType == PPT_PST_ExtendedParagraphMasterAtom )
+            switch ( aHd.nRecType )
             {
-                if ( aHd.nRecInstance < PPT_STYLESHEETENTRYS )
+                case PPT_PST_ExtendedParagraphMasterAtom :
                 {
-                    UINT16 nDepth, i = 0;
-                    rSt >> nDepth;
-                    if ( i <= 5 )
+                    if ( aHd.nRecInstance < PPT_STYLESHEETENTRYS )
                     {
-
-                        while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aHd.GetRecEndFilePos() ) && ( i < nDepth ) )
+                        UINT16 nDepth, i = 0;
+                        rSt >> nDepth;
+                        if ( i <= 5 )
                         {
-                            bStyles = TRUE;
-                            rSt >> aExtParaSheet[ aHd.nRecInstance ].aExtParaLevel[ i++ ];
+
+                            while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aHd.GetRecEndFilePos() ) && ( i < nDepth ) )
+                            {
+                                bStyles = TRUE;
+                                rSt >> aExtParaSheet[ aHd.nRecInstance ].aExtParaLevel[ i++ ];
+                            }
+#ifdef DBG_UTIL
+                            if ( rSt.Tell() != aHd.GetRecEndFilePos() )
+                                DBG_ERROR( "PPTExParaProv::PPTExParaProv - error reading PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
+#endif
                         }
 #ifdef DBG_UTIL
-                        if ( rSt.Tell() != aHd.GetRecEndFilePos() )
-                            DBG_ERROR( "PPTExParaProv::PPTExParaProv - error reading PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
+                        else DBG_ERROR( "PPTExParaProv::PPTExParaProv - depth is greater than 5 (SJ)" );
 #endif
                     }
 #ifdef DBG_UTIL
-                    else DBG_ERROR( "PPTExParaProv::PPTExParaProv - depth is greater than 5 (SJ)" );
+                    else DBG_ERROR( "PPTExParaProv::PPTExParaProv - instance out of range (SJ)" );
 #endif
-
                 }
-#ifdef DBG_UTIL
-                else DBG_ERROR( "PPTExParaProv::PPTExParaProv - instance out of range (SJ)" );
-#endif
+                default :
+                    DBG_ERROR( "PPTExParaProv::PPTExParaProv - unknown atom, assuming PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
+                case PPT_PST_NewlyAddedAtomByXP11008 :
+                case PPT_PST_NewlyAddedAtomByXP11010 :
+                case PPT_PST_NewlyAddedAtomByXP12010 :
+                case PPT_PST_NewlyAddedAtomByXP12011 :
+                case 0xf144 :
+                break;
             }
-#ifdef DBG_UTIL
-            else DBG_ERROR( "PPTExParaProv::PPTExParaProv - unknown atom, assuming PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
-#endif
             aHd.SeekToEndOfRecord( rSt );
         }
         break;
@@ -3801,6 +3893,16 @@ PPTExtParaProv::~PPTExtParaProv()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+PPTNumberFormatCreator::PPTNumberFormatCreator( PPTExtParaProv* pParaProv ) :
+    pExtParaProv ( pParaProv )
+{
+}
+
+PPTNumberFormatCreator::~PPTNumberFormatCreator()
+{
+    delete pExtParaProv;
+}
+
 BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManager,
     SvxNumberFormat& rNumberFormat, UINT32 nLevel, UINT32 nInstance, UINT32 nInstanceInSheet,
         UINT32 nFontHeight, PPTParagraphObj* pPara )
@@ -3812,6 +3914,10 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
     UINT32  nNumberingType = 0x30001;
     UINT16  nBuInstance = 0xffff;
 
+    const PPTExtParaProv* pParaProv = pExtParaProv;
+    if ( !pExtParaProv )
+        pParaProv = ( pPara ) ? pPara->mrStyleSheet.pExtParaProv
+                              : rManager.pPPTStyleSheet->pExtParaProv;
     if ( pPara )
     {
         nBuFlags = pPara->pParaSet->nBuFlags;
@@ -3828,12 +3934,11 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
     }
     if ( ( nBuFlags & 0x03800000 ) != 0x03800000 )  // merge style sheet
     {   // we have to read the master attributes
-        if ( rManager.pExtParaProv && ( nLevel < 5 ) )
+        if ( pParaProv && ( nLevel < 5 ) )
         {
-            PPTExtParaProv& rS = *rManager.pExtParaProv;
-            if ( rS.bStyles )
+            if ( pParaProv->bStyles )
             {
-                PPTExtParaLevel& rLev = rS.aExtParaSheet[ nInstance ].aExtParaLevel[ nLevel ];
+                const PPTExtParaLevel& rLev = pParaProv->aExtParaSheet[ nInstance ].aExtParaLevel[ nLevel ];
                 if ( rLev.bSet )
                 {
                     UINT32 nMaBuFlags = rLev.nBuFlags;
@@ -3852,7 +3957,7 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
     if ( nBuInstance != 0xffff )        // set graphical bullet
     {
         Graphic aGraphic;
-        if ( rManager.pExtParaProv->GetGraphic( nBuInstance, aGraphic ) )
+        if ( pParaProv->GetGraphic( nBuInstance, aGraphic ) )
         {
             SvxBrushItem aBrush( aGraphic, GPOS_MM );
             rNumberFormat.SetGraphicBrush( &aBrush );
@@ -4396,20 +4501,13 @@ void PPTParaSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL b
     }
 }
 
-PPTStyleSheet::PPTStyleSheet( SvStream& rIn, SdrPowerPointImport& rManager, const PPTTextSpecInfo& rTextSpecInfo ) :
-    maTxSI  ( rTextSpecInfo )
+PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, SdrPowerPointImport& rManager,
+                                const PPTTextSpecInfo& rTextSpecInfo ) :
+    maTxSI                  ( rTextSpecInfo ),
+    PPTNumberFormatCreator  ( new PPTExtParaProv( rManager, rIn, &rSlideHd ) )
 {
     UINT32 i;
     UINT32 nOldFilePos = rIn.Tell();
-    const DffRecordHeader *pH, *pHd = NULL;
-
-    // Richtigen MainMaster finden
-    for ( pH = rManager.aPptRecManager.GetRecordHeader( PPT_PST_MainMaster, SEEK_FROM_BEGINNING );
-            pH; pH = rManager.aPptRecManager.GetRecordHeader( PPT_PST_MainMaster, SEEK_FROM_CURRENT ) )
-    {
-        pHd = pH;
-    }
-    rManager.pExtParaProv = new PPTExtParaProv( rManager, rIn, pHd );
 
     // default stylesheets
     BOOL bFoundTxMasterStyleAtom04 = FALSE;
@@ -4426,123 +4524,120 @@ PPTStyleSheet::PPTStyleSheet( SvStream& rIn, SdrPowerPointImport& rManager, cons
     mpCharSheet[ TSS_TYPE_QUARTERBODY ] = mpCharSheet[ TSS_TYPE_HALFBODY ] = mpCharSheet[ TSS_TYPE_TITLE ] = mpCharSheet[ TSS_TYPE_SUBTITLE ] = NULL;
     mpParaSheet[ TSS_TYPE_QUARTERBODY ] = mpParaSheet[ TSS_TYPE_HALFBODY ] = mpParaSheet[ TSS_TYPE_TITLE ] = mpParaSheet[ TSS_TYPE_SUBTITLE ] = NULL;
 
-    if ( pHd )
+    rSlideHd.SeekToContent( rIn );
+    DffRecordHeader aTxMasterStyleHd;
+    while ( rIn.Tell() < rSlideHd.GetRecEndFilePos() )
     {
-        pHd->SeekToContent( rIn );
-        DffRecordHeader aTxMasterStyleHd;
-        while ( rIn.Tell() < pHd->GetRecEndFilePos() )
-        {
-            rIn >> aTxMasterStyleHd;
-            if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
-                break;
-            else
-                aTxMasterStyleHd.SeekToEndOfRecord( rIn );
-        }
-        while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < pHd->GetRecEndFilePos() ) )
-        {
-            UINT32 nInstance = aTxMasterStyleHd.nRecInstance;
-            if ( nInstance < PPT_STYLESHEETENTRYS )
-            {
-                if ( nInstance > 4 )
-                {
-                    delete mpCharSheet[ nInstance ];    // be sure to delete the old one if this instance comes twice
-                    delete mpParaSheet[ nInstance ];
-
-                    switch ( nInstance )
-                    {
-                        case TSS_TYPE_SUBTITLE :
-                        {
-                            mpCharSheet[ TSS_TYPE_SUBTITLE ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
-                            mpParaSheet[ TSS_TYPE_SUBTITLE ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
-                        }
-                        break;
-                        case TSS_TYPE_TITLE :
-                        {
-                            mpCharSheet[ TSS_TYPE_TITLE ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_PAGETITLE ] ) );
-                            mpParaSheet[ TSS_TYPE_TITLE ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_PAGETITLE ] ) );
-                        }
-                        break;
-                        case TSS_TYPE_HALFBODY :
-                        {
-                            mpCharSheet[ TSS_TYPE_HALFBODY ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
-                            mpParaSheet[ TSS_TYPE_HALFBODY ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
-                        }
-                        break;
-
-                        case TSS_TYPE_QUARTERBODY :
-                        {
-                            mpCharSheet[ TSS_TYPE_QUARTERBODY ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
-                            mpParaSheet[ TSS_TYPE_QUARTERBODY ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
-                        }
-                        break;
-                    }
-                }
-                else if ( nInstance == 4 )
-                    bFoundTxMasterStyleAtom04 = TRUE;
-                UINT16 nLevelAnz;
-                rIn >> nLevelAnz;
-                if ( nLevelAnz > 5 )
-                {
-                    DBG_ERROR( "PPTStyleSheet::Ppt-TextStylesheet hat mehr als 5 Ebenen! (SJ)" );
-                    nLevelAnz = 5;
-                }
-                USHORT nLev = 0;
-                BOOL bFirst = TRUE;
-                BOOL bSimpleText = FALSE;
-
-                while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz )
-                {
-                    if ( nLev && ( nInstance < 5 ) )
-                    {
-                        mpParaSheet[ nInstance ]->maParaLevel[ nLev ] = mpParaSheet[ nInstance ]->maParaLevel[ nLev - 1 ];
-                        mpCharSheet[ nInstance ]->maCharLevel[ nLev ] = mpCharSheet[ nInstance ]->maCharLevel[ nLev - 1 ];
-                    }
-                    // Ausnahme: Vorlage 5, 6 (MasterTitle Titel und SubTitel)
-                    if ( nInstance >= TSS_TYPE_SUBTITLE )
-                    {
-                        // NICHT bFirst
-                        bFirst = FALSE;
-                        bSimpleText = TRUE;
-
-                        // einen wegwerfen (evtl. Einruecktiefe? Oder Level?)
-                        UINT16 nShit;
-                        rIn >> nShit;
-                    }
-                    mpParaSheet[ nInstance ]->Read( rIn, TRUE, nLev, bFirst, bSimpleText );
-                    mpCharSheet[ nInstance ]->Read( rIn, TRUE, nLev, bFirst, bSimpleText );
-                    bFirst = FALSE;
-                    nLev++;
-                }
-#ifdef DBG_UTIL
-                if ( rIn.GetError() == 0 )
-                {
-                    ByteString aMsg;
-                    if ( rIn.Tell() > aTxMasterStyleHd.GetRecEndFilePos() )
-                    {
-                        aMsg += "\n  ";
-                        aMsg += "reading too many bytes:";
-                        aMsg += ByteString::CreateFromInt32( rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos() );
-                    }
-                    if ( rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() )
-                    {
-                        aMsg += "\n  ";
-                        aMsg += "reading too less bytes:";
-                        aMsg += ByteString::CreateFromInt32( aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell() );
-                    }
-                    if ( aMsg.Len() != 0 )
-                    {
-                        aMsg.Insert( "]:", 0 );
-                        aMsg.Insert( "PptStyleSheet::operator>>[", 0 );
-                        DBG_ERROR(aMsg.GetBuffer());
-                    }
-                }
-                if ( rIn.Tell() != aTxMasterStyleHd.GetRecEndFilePos() )
-                    DBG_ASSERT(0, "SJ: Falsche Anzahl von Bytes gelesen beim Import der PPT-Formatvorlagen");
-#endif
-            }
+        rIn >> aTxMasterStyleHd;
+        if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
+            break;
+        else
             aTxMasterStyleHd.SeekToEndOfRecord( rIn );
-            rIn >> aTxMasterStyleHd;
+    }
+    while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < rSlideHd.GetRecEndFilePos() ) )
+    {
+        UINT32 nInstance = aTxMasterStyleHd.nRecInstance;
+        if ( nInstance < PPT_STYLESHEETENTRYS )
+        {
+            if ( nInstance > 4 )
+            {
+                delete mpCharSheet[ nInstance ];    // be sure to delete the old one if this instance comes twice
+                delete mpParaSheet[ nInstance ];
+
+                switch ( nInstance )
+                {
+                    case TSS_TYPE_SUBTITLE :
+                    {
+                        mpCharSheet[ TSS_TYPE_SUBTITLE ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
+                        mpParaSheet[ TSS_TYPE_SUBTITLE ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
+                    }
+                    break;
+                    case TSS_TYPE_TITLE :
+                    {
+                        mpCharSheet[ TSS_TYPE_TITLE ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_PAGETITLE ] ) );
+                        mpParaSheet[ TSS_TYPE_TITLE ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_PAGETITLE ] ) );
+                    }
+                    break;
+                    case TSS_TYPE_HALFBODY :
+                    {
+                        mpCharSheet[ TSS_TYPE_HALFBODY ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
+                        mpParaSheet[ TSS_TYPE_HALFBODY ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
+                    }
+                    break;
+
+                    case TSS_TYPE_QUARTERBODY :
+                    {
+                        mpCharSheet[ TSS_TYPE_QUARTERBODY ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
+                        mpParaSheet[ TSS_TYPE_QUARTERBODY ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
+                    }
+                    break;
+                }
+            }
+            else if ( nInstance == 4 )
+                bFoundTxMasterStyleAtom04 = TRUE;
+            UINT16 nLevelAnz;
+            rIn >> nLevelAnz;
+            if ( nLevelAnz > 5 )
+            {
+                DBG_ERROR( "PPTStyleSheet::Ppt-TextStylesheet hat mehr als 5 Ebenen! (SJ)" );
+                nLevelAnz = 5;
+            }
+            USHORT nLev = 0;
+            BOOL bFirst = TRUE;
+            BOOL bSimpleText = FALSE;
+
+            while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz )
+            {
+                if ( nLev && ( nInstance < 5 ) )
+                {
+                    mpParaSheet[ nInstance ]->maParaLevel[ nLev ] = mpParaSheet[ nInstance ]->maParaLevel[ nLev - 1 ];
+                    mpCharSheet[ nInstance ]->maCharLevel[ nLev ] = mpCharSheet[ nInstance ]->maCharLevel[ nLev - 1 ];
+                }
+                // Ausnahme: Vorlage 5, 6 (MasterTitle Titel und SubTitel)
+                if ( nInstance >= TSS_TYPE_SUBTITLE )
+                {
+                    // NICHT bFirst
+                    bFirst = FALSE;
+                    bSimpleText = TRUE;
+
+                    // einen wegwerfen (evtl. Einruecktiefe? Oder Level?)
+                    UINT16 nShit;
+                    rIn >> nShit;
+                }
+                mpParaSheet[ nInstance ]->Read( rIn, TRUE, nLev, bFirst, bSimpleText );
+                mpCharSheet[ nInstance ]->Read( rIn, TRUE, nLev, bFirst, bSimpleText );
+                bFirst = FALSE;
+                nLev++;
+            }
+#ifdef DBG_UTIL
+            if ( rIn.GetError() == 0 )
+            {
+                ByteString aMsg;
+                if ( rIn.Tell() > aTxMasterStyleHd.GetRecEndFilePos() )
+                {
+                    aMsg += "\n  ";
+                    aMsg += "reading too many bytes:";
+                    aMsg += ByteString::CreateFromInt32( rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos() );
+                }
+                if ( rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() )
+                {
+                    aMsg += "\n  ";
+                    aMsg += "reading too less bytes:";
+                    aMsg += ByteString::CreateFromInt32( aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell() );
+                }
+                if ( aMsg.Len() != 0 )
+                {
+                    aMsg.Insert( "]:", 0 );
+                    aMsg.Insert( "PptStyleSheet::operator>>[", 0 );
+                    DBG_ERROR(aMsg.GetBuffer());
+                }
+            }
+            if ( rIn.Tell() != aTxMasterStyleHd.GetRecEndFilePos() )
+                DBG_ASSERT(0, "SJ: Falsche Anzahl von Bytes gelesen beim Import der PPT-Formatvorlagen");
+#endif
         }
+        aTxMasterStyleHd.SeekToEndOfRecord( rIn );
+        rIn >> aTxMasterStyleHd;
     }
     if ( !mpCharSheet[ TSS_TYPE_SUBTITLE ] )
     {
@@ -5437,7 +5532,7 @@ struct FieldEntry
 };
 
 
-PPTPortionObj::PPTPortionObj( PPTStyleSheet& rStyleSheet, UINT32 nInstance, UINT32 nDepth ) :
+PPTPortionObj::PPTPortionObj( const PPTStyleSheet& rStyleSheet, UINT32 nInstance, UINT32 nDepth ) :
     mrStyleSheet    ( rStyleSheet ),
     mnInstance      ( nInstance ),
     mnDepth         ( ( nDepth > 4 ) ? 4 : nDepth ),
@@ -5775,11 +5870,12 @@ SvxFieldItem* PPTPortionObj::GetTextField()
 //  -----------------------------------------------------------------------
 
 PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, UINT32 nInstance, UINT16 nDepth ) :
-    mrStyleSheet        ( rStyleSheet ),
-    mnInstance          ( nInstance ),
-    mnPortionCount      ( 0 ),
-    mpPortionList       ( NULL ),
-    mbTab               ( TRUE )        // style sheets always have to get the right tabulator setting
+    mrStyleSheet            ( rStyleSheet ),
+    mnInstance              ( nInstance ),
+    mnPortionCount          ( 0 ),
+    mpPortionList           ( NULL ),
+    PPTNumberFormatCreator  ( NULL ),
+    mbTab                   ( TRUE )        // style sheets always have to get the right tabulator setting
 {
     if ( nDepth > 4 )
         nDepth = 4;
@@ -5792,6 +5888,7 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader, const PPT
     PPTTextRulerInterpreter ( rRuler ),
     mrStyleSheet            ( rStyleSheet ),
     mnInstance              ( nInstance ),
+    PPTNumberFormatCreator  ( NULL ),
     mbTab                   ( FALSE ),
     mnCurrentObject         ( 0 ),
     mnPortionCount          ( 0 ),
@@ -6352,6 +6449,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
     if ( ( pObjData == NULL ) || ( pObjData->bShapeType ) )
     {
+        PPTExtParaProv* pExtParaProv = rSdrPowerPointImport.pPPTStyleSheet->pExtParaProv;
         if ( pObjData )
         {
             mpImplTextObj->mnShapeId = pObjData->nShapeId;
@@ -6375,7 +6473,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
             DffRecordHeader aProgTagHd;
             if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_ProgTags, aClientDataContainerHd.GetRecEndFilePos(), &aProgTagHd )
                     && rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_ProgBinaryTag, aProgTagHd.GetRecEndFilePos(), &aProgTagHd )
-                        && rSdrPowerPointImport.pExtParaProv->SeekToContent( rIn, aProgTagHd, aProgTagHd ) )
+                        && pExtParaProv->SeekToContent( rIn, aProgTagHd, aProgTagHd ) )
             {
                 rIn >> aExtParaHd;
             }
@@ -6441,7 +6539,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                         {
                             UINT32 nOldPos = rIn.Tell();
                             // try to locate the referenced ExtendedParaHd
-                            DffRecordHeader* pHd = rSdrPowerPointImport.pExtParaProv->
+                            DffRecordHeader* pHd = pExtParaProv->
                                                         aExtendedPresRules.GetRecordHeader( PPT_PST_ExtendedParagraphHeaderAtom,
                                                                                             SEEK_FROM_CURRENT_AND_RESTART );
                             DffRecordHeader     aPresRuleHd;
@@ -6464,7 +6562,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         break;
                                     }
                                 }
-                                pHd = rSdrPowerPointImport.pExtParaProv->
+                                pHd = pExtParaProv->
                                         aExtendedPresRules.GetRecordHeader( PPT_PST_ExtendedParagraphHeaderAtom,
                                                                             SEEK_FROM_CURRENT_AND_RESTART );
                                 if ( pHd == pFirst )
