@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 13:27:16 $
+ *  last change: $Author: jp $ $Date: 2001-02-21 14:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1796,8 +1796,7 @@ USHORT SwFldMgr::GetCurrLanguage() const
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     if( pSh )
-        pSh->GetCurLang();
-
+        return pSh->GetCurLang();
     return SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
 }
 
