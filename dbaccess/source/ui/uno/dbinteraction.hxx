@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:23:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,10 @@ namespace dbaui
         void    implHandle(
                     const ::com::sun::star::sdb::DocumentSaveRequest& _rParamRequest,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
+
+        /// handles requests which are not SDB-specific
+        bool    implHandleUnknown(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& _rxRequest );
 
         /// known continuation types
         enum Continuation
