@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:48:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include "tokens.h"
 #include "utf8conv.hxx"
 
-extern "C" { yyerror( char * ); }
-extern "C" { YYWarning( char * ); }
+extern "C" { int yyerror( char * ); }
+extern "C" { int YYWarning( char * ); }
 
 Export *pExport = 0L;
 
@@ -1044,10 +1044,10 @@ int Export::Execute( int nToken, char * pToken )
             sMapping.EraseAllChars( ' ' );
             sMapping.EraseAllChars( '\t' );
             if ( sKey.ToUpperAscii() == "SIZE" ) {
-                pResData->nWidth = sMapping.GetToken( 0, ',' ).ToInt64();
+                pResData->nWidth = ( USHORT ) sMapping.GetToken( 0, ',' ).ToInt64();
             }
             else if ( sKey == "POSSIZE" ) {
-                pResData->nWidth = sMapping.GetToken( 2, ',' ).ToInt64();
+                pResData->nWidth = ( USHORT ) sMapping.GetToken( 2, ',' ).ToInt64();
             }
         }
         break;
@@ -1126,7 +1126,7 @@ int Export::Execute( int nToken, char * pToken )
         case TEXTREFID : {
             bDontWriteOutput = TRUE;
              ByteString sKey = sToken.GetToken( 0, '=' ).EraseAllChars( '\t' ).EraseAllChars( ' ' );
-            USHORT nRefId = sToken.GetToken( 1, '=' ).GetToken( 0, ';' ).EraseAllChars( '\t' ).EraseAllChars( ' ' ).ToInt32();
+            USHORT nRefId = ( USHORT ) sToken.GetToken( 1, '=' ).GetToken( 0, ';' ).EraseAllChars( '\t' ).EraseAllChars( ' ' ).ToInt32();
             if (( sKey.ToUpperAscii() == "TEXT" ) ||
                 ( sKey == "MESSAGE" ) ||
                 ( sKey == "CUSTOMUNITTEXT" ) ||
