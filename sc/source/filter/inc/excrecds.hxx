@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:53:19 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,12 +455,6 @@ class ExcCell : public ExcRecord
 protected:
     ScAddress               aPos;
     sal_uInt32              mnXFId;
-    static UINT32           nCellCount;     // zaehlt DOPPELT: im Ctor und SaveCont
-    static ScProgress*      pPrgrsBar;
-#ifdef DBG_UTIL
-    friend class ExcDocument;
-    static INT32            _nRefCount;
-#endif
 
                             ExcCell(
                                 const ScAddress rPos,
@@ -478,20 +472,8 @@ public:
     inline void             SetXFId( sal_uInt32 nXFId )   { mnXFId = nXFId; }
     virtual sal_uInt32      GetXFId() const;
 
-    inline static void      ResetCellCount()        { nCellCount = 0; }
-    inline static void      IncCellCount()          { nCellCount++; }
-    inline static UINT32    GetCellCount()          { return nCellCount; }
-    inline static void      SetPrgrsBar( ScProgress& rNewBar );
-    inline static void      ClearPrgrsBar()         { pPrgrsBar = NULL; }
-
     virtual ULONG           GetLen() const;
 };
-
-inline void ExcCell::SetPrgrsBar( ScProgress& rNewBar )
-{
-    ResetCellCount();       // logisch... oder?
-    pPrgrsBar = &rNewBar;
-}
 
 
 //----------------------------------------------------------- class ExcNumber -
