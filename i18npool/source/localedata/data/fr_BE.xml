@@ -13,7 +13,6 @@
 <Platform>
 <PlatformID>generic</PlatformID>
 </Platform>
-<Varient></Varient>
 </LC_INFO>
 <LC_CTYPE unoid="generic">
 <Separators>
@@ -100,7 +99,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
-<FormatCode>J. MMM. AAAA</FormatCode>
+<FormatCode>J. MMM AAAA</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
