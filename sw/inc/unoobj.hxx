@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:35:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1112,12 +1112,19 @@ class SwXParagraphEnumeration : public SwSimpleEnumerationBaseClass,
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >           xParentText;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xNextPara;
 
-    BOOL                bFirstParagraph;
-    SwUnoCrsr*          GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
-    CursorType          eCursorType;
-    ULONG               nEndIndex;
+    const SwTable *     pOwnTable;
+    const SwStartNode * pOwnStartNode;  // start node of the cell the enumeration
+                                        // belongs to.
+                                        // Used to restrict the movement of the
+                                        // UNO cursor to the cell and its
+                                        // embedded tables.
     sal_Int32           nFirstParaStart;
     sal_Int32           nLastParaEnd;
+    ULONG               nEndIndex;
+    CursorType          eCursorType;
+    BOOL                bFirstParagraph;
+
+    SwUnoCrsr*          GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
 
 protected:
     virtual ~SwXParagraphEnumeration();
@@ -1140,6 +1147,13 @@ public:
 
     //SwClient
     virtual void            Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+    //non-Uno functions
+
+    void                SetOwnTable( const SwTable* pTable )        { pOwnTable = pTable; }
+    const SwTable*      GetOwnTable() const                         { return pOwnTable; }
+    void                SetOwnStartNode( const SwStartNode* pNode ) { pOwnStartNode = pNode; }
+    const SwStartNode*  GetOwnStartNode() const                     { return pOwnStartNode; }
 };
 /*-----------------07.04.98 08:15-------------------
 
@@ -1159,14 +1173,14 @@ class SwXParagraph : public cppu::WeakImplHelper10
 >,
     public SwClient
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >                   xParentText;
     SwEventListenerContainer    aLstnrCntnr;
     SfxItemPropertySet          aPropSet;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >                   xParentText;
     rtl::OUString               m_sText;
-    BOOL                        m_bIsDescriptor;
-
     sal_Int32                   nSelectionStartPos;
     sal_Int32                   nSelectionEndPos;
+    BOOL                        m_bIsDescriptor;
+
 
 protected:
     void SAL_CALL SetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
