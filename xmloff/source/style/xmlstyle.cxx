@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:29:38 $
+ *  last change: $Author: fs $ $Date: 2001-02-01 09:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,7 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         break;
 #if SUPD>615 || defined(PRIV_DEBUG)
     case XML_STYLE_FAMILY_CONTROL_ID:
-        xMapper = const_cast<SvXMLImport&>(GetImport()).GetFormImport()->getStylePropertyMapper();
+        xMapper = const_cast<SvXMLImport&>(GetImport()).GetFormImport()->getStylePropertyMapper().getBodyPtr();
         break;
 #endif
     }
