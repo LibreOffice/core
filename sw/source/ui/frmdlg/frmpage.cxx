@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-09 12:44:09 $
+ *  last change: $Author: os $ $Date: 2001-11-30 09:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,30 +232,30 @@ struct RelationMap
 
 static RelationMap __FAR_DATA aRelationMap[] =
 {
-    STR_FRAME,              STR_FRAME,                  LB_FRAME,               FRAME,
-    STR_PRTAREA,            STR_PRTAREA,                LB_PRTAREA,             PRTAREA,
-    STR_REL_PG_LEFT,        STR_MIR_REL_PG_LEFT,        LB_REL_PG_LEFT,         REL_PG_LEFT,
-    STR_REL_PG_RIGHT,       STR_MIR_REL_PG_RIGHT,       LB_REL_PG_RIGHT,        REL_PG_RIGHT,
-    STR_REL_FRM_LEFT,       STR_MIR_REL_FRM_LEFT,       LB_REL_FRM_LEFT,        REL_FRM_LEFT,
-    STR_REL_FRM_RIGHT,      STR_MIR_REL_FRM_RIGHT,      LB_REL_FRM_RIGHT,       REL_FRM_RIGHT,
-    STR_REL_PG_FRAME,       STR_REL_PG_FRAME,           LB_REL_PG_FRAME,        REL_PG_FRAME,
-    STR_REL_PG_PRTAREA,     STR_REL_PG_PRTAREA,         LB_REL_PG_PRTAREA,      REL_PG_PRTAREA,
-    STR_REL_CHAR,           STR_REL_CHAR,               LB_REL_CHAR,            REL_CHAR,
+    {STR_FRAME,             STR_FRAME,                  LB_FRAME,               FRAME},
+    {STR_PRTAREA,           STR_PRTAREA,                LB_PRTAREA,             PRTAREA},
+    {STR_REL_PG_LEFT,       STR_MIR_REL_PG_LEFT,        LB_REL_PG_LEFT,         REL_PG_LEFT},
+    {STR_REL_PG_RIGHT,      STR_MIR_REL_PG_RIGHT,       LB_REL_PG_RIGHT,        REL_PG_RIGHT},
+    {STR_REL_FRM_LEFT,      STR_MIR_REL_FRM_LEFT,       LB_REL_FRM_LEFT,        REL_FRM_LEFT},
+    {STR_REL_FRM_RIGHT,     STR_MIR_REL_FRM_RIGHT,      LB_REL_FRM_RIGHT,       REL_FRM_RIGHT},
+    {STR_REL_PG_FRAME,      STR_REL_PG_FRAME,           LB_REL_PG_FRAME,        REL_PG_FRAME},
+    {STR_REL_PG_PRTAREA,    STR_REL_PG_PRTAREA,         LB_REL_PG_PRTAREA,      REL_PG_PRTAREA},
+    {STR_REL_CHAR,          STR_REL_CHAR,               LB_REL_CHAR,            REL_CHAR},
 
-    STR_FLY_REL_PG_LEFT,    STR_FLY_MIR_REL_PG_LEFT,    LB_FLY_REL_PG_LEFT,     REL_PG_LEFT,
-    STR_FLY_REL_PG_RIGHT,   STR_FLY_MIR_REL_PG_RIGHT,   LB_FLY_REL_PG_RIGHT,    REL_PG_RIGHT,
-    STR_FLY_REL_PG_FRAME,   STR_FLY_REL_PG_FRAME,       LB_FLY_REL_PG_FRAME,    REL_PG_FRAME,
-    STR_FLY_REL_PG_PRTAREA, STR_FLY_REL_PG_PRTAREA,     LB_FLY_REL_PG_PRTAREA,  REL_PG_PRTAREA,
+    {STR_FLY_REL_PG_LEFT,       STR_FLY_MIR_REL_PG_LEFT,    LB_FLY_REL_PG_LEFT,     REL_PG_LEFT},
+    {STR_FLY_REL_PG_RIGHT,      STR_FLY_MIR_REL_PG_RIGHT,   LB_FLY_REL_PG_RIGHT,    REL_PG_RIGHT},
+    {STR_FLY_REL_PG_FRAME,      STR_FLY_REL_PG_FRAME,       LB_FLY_REL_PG_FRAME,    REL_PG_FRAME},
+    {STR_FLY_REL_PG_PRTAREA,    STR_FLY_REL_PG_PRTAREA,     LB_FLY_REL_PG_PRTAREA,  REL_PG_PRTAREA},
 
-    STR_REL_BORDER,         STR_REL_BORDER,             LB_VERT_FRAME,          FRAME,
-    STR_REL_PRTAREA,        STR_REL_PRTAREA,            LB_VERT_PRTAREA,        PRTAREA,
+    {STR_REL_BORDER,            STR_REL_BORDER,             LB_VERT_FRAME,          FRAME},
+    {STR_REL_PRTAREA,       STR_REL_PRTAREA,            LB_VERT_PRTAREA,        PRTAREA}
 };
 
 static RelationMap __FAR_DATA aAsCharRelationMap[] =
 {
-    STR_REL_BASE,   STR_REL_BASE,   LB_REL_BASE,    FRAME,
-    STR_REL_CHAR,   STR_REL_CHAR,   LB_REL_CHAR,    FRAME,
-    STR_REL_ROW,    STR_REL_ROW,    LB_REL_ROW,     FRAME,
+    {STR_REL_BASE,  STR_REL_BASE,   LB_REL_BASE,    FRAME},
+    {STR_REL_CHAR,   STR_REL_CHAR,   LB_REL_CHAR,   FRAME},
+    {STR_REL_ROW,    STR_REL_ROW,   LB_REL_ROW,     FRAME}
 };
 
 /*--------------------------------------------------------------------
@@ -267,30 +267,30 @@ static RelationMap __FAR_DATA aAsCharRelationMap[] =
 
 static FrmMap __FAR_DATA aHPageMap[] =
 {
-    STR_LEFT,           STR_MIR_LEFT,       HORI_LEFT,      HORI_PAGE_REL,
-    STR_RIGHT,          STR_MIR_RIGHT,      HORI_RIGHT,     HORI_PAGE_REL,
-    STR_CENTER_HORI,    STR_CENTER_HORI,    HORI_CENTER,    HORI_PAGE_REL,
-    STR_FROMLEFT,       STR_MIR_FROMLEFT,   HORI_NONE,      HORI_PAGE_REL
+    {STR_LEFT,          STR_MIR_LEFT,       HORI_LEFT,      HORI_PAGE_REL},
+    {STR_RIGHT,         STR_MIR_RIGHT,      HORI_RIGHT,     HORI_PAGE_REL},
+    {STR_CENTER_HORI,   STR_CENTER_HORI,    HORI_CENTER,    HORI_PAGE_REL},
+    {STR_FROMLEFT,      STR_MIR_FROMLEFT,   HORI_NONE,      HORI_PAGE_REL}
 };
 
 static FrmMap __FAR_DATA aHPageHtmlMap[] =
 {
-    STR_FROMLEFT,       STR_MIR_FROMLEFT,   HORI_NONE,      LB_REL_PG_FRAME
+    {STR_FROMLEFT,      STR_MIR_FROMLEFT,   HORI_NONE,      LB_REL_PG_FRAME}
 };
 
 #define VERT_PAGE_REL   (LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
 static FrmMap __FAR_DATA aVPageMap[] =
 {
-    STR_TOP,            STR_TOP,            SVX_VERT_TOP,       VERT_PAGE_REL,
-    STR_BOTTOM,         STR_BOTTOM,         SVX_VERT_BOTTOM,    VERT_PAGE_REL,
-    STR_CENTER_VERT,    STR_CENTER_VERT,    SVX_VERT_CENTER,    VERT_PAGE_REL,
-    STR_FROMTOP,        STR_FROMTOP,        SVX_VERT_NONE,      VERT_PAGE_REL,
+    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,       VERT_PAGE_REL},
+    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_BOTTOM,    VERT_PAGE_REL},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_CENTER,    VERT_PAGE_REL},
+    {STR_FROMTOP,       STR_FROMTOP,        SVX_VERT_NONE,      VERT_PAGE_REL}
 };
 
 static FrmMap __FAR_DATA aVPageHtmlMap[] =
 {
-    STR_FROMTOP,        STR_FROMTOP,        SVX_VERT_NONE,      LB_REL_PG_FRAME
+    {STR_FROMTOP,       STR_FROMTOP,        SVX_VERT_NONE,      LB_REL_PG_FRAME}
 };
 
 /*--------------------------------------------------------------------
@@ -302,22 +302,22 @@ static FrmMap __FAR_DATA aVPageHtmlMap[] =
 
 static FrmMap __FAR_DATA aHFrameMap[] =
 {
-    STR_LEFT,           STR_MIR_LEFT,       HORI_LEFT,  HORI_FRAME_REL,
-    STR_RIGHT,          STR_MIR_RIGHT,      HORI_RIGHT,     HORI_FRAME_REL,
-    STR_CENTER_HORI,    STR_CENTER_HORI,    HORI_CENTER,    HORI_FRAME_REL,
-    STR_FROMLEFT,       STR_MIR_FROMLEFT,   HORI_NONE,      HORI_FRAME_REL
+    {STR_LEFT,          STR_MIR_LEFT,       HORI_LEFT,  HORI_FRAME_REL},
+    {STR_RIGHT,         STR_MIR_RIGHT,      HORI_RIGHT,     HORI_FRAME_REL},
+    {STR_CENTER_HORI,   STR_CENTER_HORI,    HORI_CENTER,    HORI_FRAME_REL},
+    {STR_FROMLEFT,      STR_MIR_FROMLEFT,   HORI_NONE,      HORI_FRAME_REL}
 };
 
 static FrmMap __FAR_DATA aHFlyHtmlMap[] =
 {
-    STR_LEFT,           STR_MIR_LEFT,       HORI_LEFT,      LB_FLY_REL_PG_FRAME,
-    STR_FROMLEFT,       STR_MIR_FROMLEFT,   HORI_NONE,      LB_FLY_REL_PG_FRAME
+    {STR_LEFT,          STR_MIR_LEFT,       HORI_LEFT,      LB_FLY_REL_PG_FRAME},
+    {STR_FROMLEFT,      STR_MIR_FROMLEFT,   HORI_NONE,      LB_FLY_REL_PG_FRAME}
 };
 
 static FrmMap __FAR_DATA aVFlyHtmlMap[] =
 {
-    STR_TOP,            STR_TOP,            SVX_VERT_TOP,       LB_VERT_FRAME,
-    STR_FROMTOP,        STR_FROMTOP,        SVX_VERT_NONE,      LB_VERT_FRAME
+    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,       LB_VERT_FRAME},
+    {STR_FROMTOP,       STR_FROMTOP,        SVX_VERT_NONE,      LB_VERT_FRAME}
 };
 
 /*--------------------------------------------------------------------
@@ -330,39 +330,39 @@ static FrmMap __FAR_DATA aVFlyHtmlMap[] =
 
 static FrmMap __FAR_DATA aHParaMap[] =
 {
-    STR_LEFT,           STR_MIR_LEFT,       HORI_LEFT,      HORI_PARA_REL,
-    STR_RIGHT,          STR_MIR_RIGHT,      HORI_RIGHT,     HORI_PARA_REL,
-    STR_CENTER_HORI,    STR_CENTER_HORI,    HORI_CENTER,    HORI_PARA_REL,
-    STR_FROMLEFT,       STR_MIR_FROMLEFT,   HORI_NONE,      HORI_PARA_REL
+    {STR_LEFT,          STR_MIR_LEFT,       HORI_LEFT,      HORI_PARA_REL},
+    {STR_RIGHT,         STR_MIR_RIGHT,      HORI_RIGHT,     HORI_PARA_REL},
+    {STR_CENTER_HORI,   STR_CENTER_HORI,    HORI_CENTER,    HORI_PARA_REL},
+    {STR_FROMLEFT,      STR_MIR_FROMLEFT,   HORI_NONE,      HORI_PARA_REL}
 };
 
 #define HTML_HORI_PARA_REL  (LB_FRAME|LB_PRTAREA)
 
 static FrmMap __FAR_DATA aHParaHtmlMap[] =
 {
-    STR_LEFT,   STR_LEFT,   HORI_LEFT,      HTML_HORI_PARA_REL,
-    STR_RIGHT,  STR_RIGHT,  HORI_RIGHT,     HTML_HORI_PARA_REL,
+    {STR_LEFT,  STR_LEFT,   HORI_LEFT,      HTML_HORI_PARA_REL},
+    {STR_RIGHT, STR_RIGHT,  HORI_RIGHT,     HTML_HORI_PARA_REL}
 };
 
 static FrmMap __FAR_DATA aHParaHtmlAbsMap[] =
 {
-    STR_LEFT,           STR_MIR_LEFT,       HORI_LEFT,      HTML_HORI_PARA_REL,
-    STR_RIGHT,          STR_MIR_RIGHT,      HORI_RIGHT,     HTML_HORI_PARA_REL,
+    {STR_LEFT,          STR_MIR_LEFT,       HORI_LEFT,      HTML_HORI_PARA_REL},
+    {STR_RIGHT,         STR_MIR_RIGHT,      HORI_RIGHT,     HTML_HORI_PARA_REL}
 };
 
 #define VERT_PARA_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA)
 
 static FrmMap __FAR_DATA aVParaMap[] =
 {
-    STR_TOP,            STR_TOP,            SVX_VERT_TOP,       VERT_PARA_REL,
-    STR_BOTTOM,         STR_BOTTOM,         SVX_VERT_BOTTOM,    VERT_PARA_REL,
-    STR_CENTER_VERT,    STR_CENTER_VERT,    SVX_VERT_CENTER,    VERT_PARA_REL,
-    STR_FROMTOP,        STR_FROMTOP,        SVX_VERT_NONE,      VERT_PARA_REL,
+    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,       VERT_PARA_REL},
+    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_BOTTOM,    VERT_PARA_REL},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_CENTER,    VERT_PARA_REL},
+    {STR_FROMTOP,       STR_FROMTOP,        SVX_VERT_NONE,      VERT_PARA_REL}
 };
 
 static FrmMap __FAR_DATA aVParaHtmlMap[] =
 {
-    STR_TOP,            STR_TOP,            SVX_VERT_TOP,       LB_VERT_PRTAREA,
+    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,       LB_VERT_PRTAREA}
 };
 
 /*--------------------------------------------------------------------
@@ -375,48 +375,48 @@ static FrmMap __FAR_DATA aVParaHtmlMap[] =
 
 static FrmMap __FAR_DATA aHCharMap[] =
 {
-    STR_LEFT,           STR_MIR_LEFT,       HORI_LEFT,      HORI_CHAR_REL,
-    STR_RIGHT,          STR_MIR_RIGHT,      HORI_RIGHT,     HORI_CHAR_REL,
-    STR_CENTER_HORI,    STR_CENTER_HORI,    HORI_CENTER,    HORI_CHAR_REL,
-    STR_FROMLEFT,       STR_MIR_FROMLEFT,   HORI_NONE,      HORI_CHAR_REL
+    {STR_LEFT,          STR_MIR_LEFT,       HORI_LEFT,      HORI_CHAR_REL},
+    {STR_RIGHT,         STR_MIR_RIGHT,      HORI_RIGHT,     HORI_CHAR_REL},
+    {STR_CENTER_HORI,   STR_CENTER_HORI,    HORI_CENTER,    HORI_CHAR_REL},
+    {STR_FROMLEFT,      STR_MIR_FROMLEFT,   HORI_NONE,      HORI_CHAR_REL}
 };
 
 #define HTML_HORI_CHAR_REL  (LB_FRAME|LB_PRTAREA|LB_REL_CHAR)
 
 static FrmMap __FAR_DATA aHCharHtmlMap[] =
 {
-    STR_LEFT,           STR_LEFT,           HORI_LEFT,      HTML_HORI_CHAR_REL,
-    STR_RIGHT,          STR_RIGHT,          HORI_RIGHT,     HTML_HORI_CHAR_REL,
+    {STR_LEFT,          STR_LEFT,           HORI_LEFT,      HTML_HORI_CHAR_REL},
+    {STR_RIGHT,         STR_RIGHT,          HORI_RIGHT,     HTML_HORI_CHAR_REL}
 };
 
 static FrmMap __FAR_DATA aHCharHtmlAbsMap[] =
 {
-    STR_LEFT,           STR_MIR_LEFT,       HORI_LEFT,      LB_PRTAREA|LB_REL_CHAR,
-    STR_RIGHT,          STR_MIR_RIGHT,      HORI_RIGHT,     LB_PRTAREA,
-    STR_FROMLEFT,       STR_MIR_FROMLEFT,   HORI_NONE,      LB_REL_PG_FRAME
+    {STR_LEFT,          STR_MIR_LEFT,       HORI_LEFT,      LB_PRTAREA|LB_REL_CHAR},
+    {STR_RIGHT,         STR_MIR_RIGHT,      HORI_RIGHT,     LB_PRTAREA},
+    {STR_FROMLEFT,      STR_MIR_FROMLEFT,   HORI_NONE,      LB_REL_PG_FRAME}
 };
 
 #define VERT_CHAR_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA|LB_REL_CHAR)
 
 static FrmMap __FAR_DATA aVCharMap[] =
 {
-    STR_TOP,            STR_TOP,            SVX_VERT_TOP,           VERT_CHAR_REL,
-    STR_BOTTOM,         STR_BOTTOM,         SVX_VERT_BOTTOM,        VERT_CHAR_REL,
-    STR_BELOW,          STR_BELOW,          SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR,
-    STR_CENTER_VERT,    STR_CENTER_VERT,    SVX_VERT_CENTER,        VERT_CHAR_REL,
-    STR_FROMTOP,        STR_FROMTOP,        SVX_VERT_NONE,          VERT_CHAR_REL,
+    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,           VERT_CHAR_REL},
+    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_BOTTOM,        VERT_CHAR_REL},
+    {STR_BELOW,             STR_BELOW,          SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_CENTER,        VERT_CHAR_REL},
+    {STR_FROMTOP,       STR_FROMTOP,        SVX_VERT_NONE,          VERT_CHAR_REL}
 };
 
 
 static FrmMap __FAR_DATA aVCharHtmlMap[] =
 {
-    STR_BELOW,          STR_BELOW,          SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR,
+    {STR_BELOW,         STR_BELOW,          SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR}
 };
 
 static FrmMap __FAR_DATA aVCharHtmlAbsMap[] =
 {
-    STR_TOP,            STR_TOP,            SVX_VERT_TOP,           LB_REL_CHAR,
-    STR_BELOW,          STR_BELOW,          SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR
+    {STR_TOP,           STR_TOP,            SVX_VERT_TOP,           LB_REL_CHAR},
+    {STR_BELOW,             STR_BELOW,          SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR}
 };
 /*--------------------------------------------------------------------
     Beschreibung: Als Zeichen verankert
@@ -424,31 +424,31 @@ static FrmMap __FAR_DATA aVCharHtmlAbsMap[] =
 
 static FrmMap __FAR_DATA aVAsCharMap[] =
 {
-    STR_TOP,            STR_TOP,            SVX_VERT_TOP,           LB_REL_BASE,
-    STR_BOTTOM,         STR_BOTTOM,         SVX_VERT_BOTTOM,        LB_REL_BASE,
-    STR_CENTER_VERT,    STR_CENTER_VERT,    SVX_VERT_CENTER,        LB_REL_BASE,
+    {STR_TOP,               STR_TOP,            SVX_VERT_TOP,           LB_REL_BASE},
+    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_BOTTOM,        LB_REL_BASE},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_CENTER,        LB_REL_BASE},
 
-    STR_TOP,            STR_TOP,            SVX_VERT_CHAR_TOP,      LB_REL_CHAR,
-    STR_BOTTOM,         STR_BOTTOM,         SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR,
-    STR_CENTER_VERT,    STR_CENTER_VERT,    SVX_VERT_CHAR_CENTER,   LB_REL_CHAR,
+    {STR_TOP,               STR_TOP,            SVX_VERT_CHAR_TOP,      LB_REL_CHAR},
+    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_CHAR_BOTTOM,   LB_REL_CHAR},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_CHAR_CENTER,   LB_REL_CHAR},
 
-    STR_TOP,            STR_TOP,            SVX_VERT_LINE_TOP,      LB_REL_ROW,
-    STR_BOTTOM,         STR_BOTTOM,         SVX_VERT_LINE_BOTTOM,   LB_REL_ROW,
-    STR_CENTER_VERT,    STR_CENTER_VERT,    SVX_VERT_LINE_CENTER,   LB_REL_ROW,
+    {STR_TOP,               STR_TOP,            SVX_VERT_LINE_TOP,      LB_REL_ROW},
+    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_LINE_BOTTOM,   LB_REL_ROW},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_LINE_CENTER,   LB_REL_ROW},
 
-    STR_FROMBOTTOM,     STR_FROMBOTTOM,     SVX_VERT_NONE,          LB_REL_BASE
+    {STR_FROMBOTTOM,    STR_FROMBOTTOM,     SVX_VERT_NONE,          LB_REL_BASE}
 };
 
 static FrmMap __FAR_DATA aVAsCharHtmlMap[] =
 {
-    STR_TOP,            STR_TOP,            SVX_VERT_TOP,           LB_REL_BASE,
-    STR_CENTER_VERT,    STR_CENTER_VERT,    SVX_VERT_CENTER,        LB_REL_BASE,
+    {STR_TOP,               STR_TOP,            SVX_VERT_TOP,           LB_REL_BASE},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_CENTER,        LB_REL_BASE},
 
-    STR_TOP,            STR_TOP,            SVX_VERT_CHAR_TOP,      LB_REL_CHAR,
+    {STR_TOP,               STR_TOP,            SVX_VERT_CHAR_TOP,      LB_REL_CHAR},
 
-    STR_TOP,            STR_TOP,            SVX_VERT_LINE_TOP,      LB_REL_ROW,
-    STR_BOTTOM,         STR_BOTTOM,         SVX_VERT_LINE_BOTTOM,   LB_REL_ROW,
-    STR_CENTER_VERT,    STR_CENTER_VERT,    SVX_VERT_LINE_CENTER,   LB_REL_ROW,
+    {STR_TOP,               STR_TOP,            SVX_VERT_LINE_TOP,      LB_REL_ROW},
+    {STR_BOTTOM,        STR_BOTTOM,         SVX_VERT_LINE_BOTTOM,   LB_REL_ROW},
+    {STR_CENTER_VERT,   STR_CENTER_VERT,    SVX_VERT_LINE_CENTER,   LB_REL_ROW}
 };
 
 
