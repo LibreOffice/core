@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 12:24:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ struct ScMyDelAction : public ScMyBaseAction
     ScMyGeneratedList aGeneratedList;
     ScMyInsertionCutOff* pInsCutOff;
     ScMyMoveCutOffs aMoveCutOffs;
-    sal_Int16 nD;
+    sal_Int32 nD;
 
     ScMyDelAction(const ScChangeActionType nActionType);
     ~ScMyDelAction();
