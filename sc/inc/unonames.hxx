@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-21 11:32:36 $
+ *  last change: $Author: nn $ $Date: 2001-02-22 17:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,11 @@
 
 //  Styles
 #define SC_UNONAME_DISPNAME         "DisplayName"
+
+//  XStyleLoader
+#define SC_UNONAME_OVERWSTL         "OverwriteStyles"
+#define SC_UNONAME_LOADCELL         "LoadCellStyles"
+#define SC_UNONAME_LOADPAGE         "LoadPageStyles"
 
 //  SheetCellRange
 #define SC_UNONAME_POS              "Position"
