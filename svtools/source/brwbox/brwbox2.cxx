@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 14:19:34 $
+ *  last change: $Author: fs $ $Date: 2001-09-24 14:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,13 @@
  *
  ************************************************************************/
 
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#include <brwbox.hxx>
+#endif
+#include "brwbox.hxx"
+#ifndef _SFXDATWIN_HXX
 #include "datwin.hxx"
+#endif
 
 #ifndef _SV_SALGTYPE_HXX
 #include <vcl/salgtype.hxx>
@@ -72,15 +76,14 @@
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
 #endif
+#ifndef _STRING_
 #include <string>
+#endif
+#ifndef _ALGORITHM_
 #include <algorithm>
-
-#if SUPD<558
-BOOL            BrowseBox::m_bFocusOnlyCursor;
-Color           BrowseBox::m_aCursorColor;
-BrowserMode     BrowseBox::m_nCurrentMode;
 #endif
 
+using namespace ::com::sun::star::datatransfer;
 
 //===================================================================
 
@@ -92,7 +95,6 @@ extern const char* BrowseBoxCheckInvariants( const void * pVoid );
 
 DECLARE_LIST( BrowserColumns, BrowserColumn* );
 
-#if SUPD>626 || FS_PRIV_DEBUG
 //===================================================================
 
 void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel */ )
@@ -100,9 +102,7 @@ void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel *
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     // not interested in this event
 }
-#endif
 
-#if SUPD>627 || FS_PRIV_DEBUG
 //===================================================================
 
 sal_Int8 BrowseBox::AcceptDrop( const AcceptDropEvent& _rEvt )
@@ -140,18 +140,49 @@ sal_Int8 BrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
     // not interested in this event
     return DND_ACTION_NONE;
 }
-#endif
 
 //===================================================================
 
-#if SUPD>627 || FS_PRIV_DEBUG
 void* BrowseBox::implGetDataFlavors() const
 {
     if (static_cast<BrowserDataWin*>(pDataWin)->bCallingDropCallback)
         return &static_cast<BrowserDataWin*>(pDataWin)->GetDataFlavorExVector();
     return &GetDataFlavorExVector();
 }
-#endif
+
+//===================================================================
+
+sal_Bool BrowseBox::IsDropFormatSupported( SotFormatStringId _nFormat )
+{
+    if ( static_cast< BrowserDataWin* >( pDataWin )->bCallingDropCallback )
+        return static_cast< BrowserDataWin* >( pDataWin )->IsDropFormatSupported( _nFormat );
+
+    return DropTargetHelper::IsDropFormatSupported( _nFormat );
+}
+
+//===================================================================
+
+sal_Bool BrowseBox::IsDropFormatSupported( SotFormatStringId _nFormat ) const
+{
+    return const_cast< BrowseBox* >( this )->IsDropFormatSupported( _nFormat );
+}
+
+//===================================================================
+
+sal_Bool BrowseBox::IsDropFormatSupported( const DataFlavor& _rFlavor )
+{
+    if ( static_cast< BrowserDataWin* >( pDataWin )->bCallingDropCallback )
+        return static_cast< BrowserDataWin* >( pDataWin )->IsDropFormatSupported( _rFlavor );
+
+    return DropTargetHelper::IsDropFormatSupported( _rFlavor );
+}
+
+//===================================================================
+
+sal_Bool BrowseBox::IsDropFormatSupported( const DataFlavor& _rFlavor ) const
+{
+    return const_cast< BrowseBox* >( this )->IsDropFormatSupported( _rFlavor );
+}
 
 //===================================================================
 
