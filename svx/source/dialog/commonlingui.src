@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonlingui.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:31:49 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ catalan ] = "Origi~nal";
         Text[ finnish ] = "Alkuper�inen";
         Text[ thai ] = "ต้น~ฉบับ";
+        Text[ czech ] = "Původní";
+        Text[ hebrew ] = "~Original";
+        Text[ slovak ] = "Pôvod~né";
     };
     Control FT_AKTWORD
     {
@@ -135,6 +138,9 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Paraula";
         Text[ thai ] = "~คำ";
+        Text[ czech ] = "Slovo";
+        Text[ hebrew ] = "‮מילה‬";
+        Text[ slovak ] = "~Slovo";
     };
 
     Edit ED_NEWWORD
@@ -172,6 +178,9 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ catalan ] = "~Suggeriments";
         Text[ finnish ] = "Eh~dotukset";
         Text[ thai ] = "~คำแนะนำ";
+        Text[ czech ] = "Návrhy";
+        Text[ hebrew ] = "~Vorschläge";
+        Text[ slovak ] = "Náv~rhy";
     };
 
     PushButton BTN_IGNORE
@@ -203,6 +212,9 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ignora";
         Text[ thai ] = "เ~พิกเฉย";
+        Text[ czech ] = "Ignorovat";
+        Text[ hebrew ] = "‮להתעלם‬";
+        Text[ slovak ] = "~Ignorovať";
     };
 
     PushButton BTN_IGNOREALL
@@ -234,6 +246,9 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~gnora-ho tot";
         Text[ thai ] = "เพิ~กเฉยทั้งหมด";
+        Text[ czech ] = "Ignorovat vše";
+        Text[ hebrew ] = "Immer i~gnorieren";
+        Text[ slovak ] = "Vždy i~gnorovať";
     };
 
     PushButton BTN_CHANGE
@@ -261,11 +276,14 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ chinese_traditional ] = "替代(~R)";
         Text[ arabic ] = "�����";
         Text[ greek ] = "�������������";
-        Text[ korean ] = "바꿀 단어(~R)";
+        Text[ korean ] = "바꾸기(~R)";
         Text[ turkish ] = "De�i�tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Reempla�a";
         Text[ thai ] = "แ~ทนที่";
+        Text[ czech ] = "Nahradit";
+        Text[ hebrew ] = "‮החלפה‬";
+        Text[ slovak ] = "Nah~radiť";
     };
 
     PushButton BTN_CHANGEALL
@@ -292,11 +310,14 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ chinese_traditional ] = "自動替代(~E)";
         Text[ arabic ] = "����� ����";
         Text[ greek ] = "����� �������������";
-        Text[ korean ] = "모두 변경(~E)";
+        Text[ korean ] = "모두 바꾸기(~E)";
         Text[ turkish ] = "Her zaman de�i�tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reempla�a ~sempre";
         Text[ thai ] = "แท~นที่ทุกครั้ง";
+        Text[ czech ] = "Vždy nahrazovat";
+        Text[ hebrew ] = "I~mmer ersetzen";
+        Text[ slovak ] = "Vž~dy nahradiť";
     };
 
     FixedText FT_STATUS
@@ -348,7 +369,12 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tanca";
         Text[ thai ] = "~ปิด";
+        Text[ czech ] = "Zavřít";
+        Text[ hebrew ] = "‮סגירה‬";
+        Text[ slovak ] = "~Zavrieť";
     };
 };
+
+
 
 
