@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 08:42:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1112,8 +1112,35 @@ sal_Int32 SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str,
 
 /* ======================================================================= */
 
-/* constAsciiStr must be a "..." or char const aFoo[] = "..." */
+/** Supply an ASCII string literal together with its length.
+
+    This macro can be used to compute (some of) the arguments in function calls
+    like rtl::OString(RTL_CONSTASCII_STRINGPARAM("foo")) or
+    rtl::OUString::equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")).
+
+    @param constAsciiStr
+    must be an expression of type "(possibly cv-qualified reference to) array of
+    (possibly cv-qualified) char."  Each element of the referenced array must
+    represent an ASCII value in the range 0x00--0x7F.  The last element of the
+    referenced array is not considered part of the represented ASCII string, and
+    its value should be 0x00.  Depending on where this macro is used, the nature
+    of the supplied expression might be further restricted.
+*/
 #define RTL_CONSTASCII_STRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)sizeof(constAsciiStr)-1)
+
+/** Supply the length of an ASCII string literal.
+
+    This macro can be used to compute arguments in function calls like
+    rtl::OUString::match(other, RTL_CONSTASCII_LENGTH("prefix")).
+
+    @param constAsciiStr
+    must be an expression of type "(possibly cv-qualified reference to) array of
+    (possibly cv-qualified) char."  Each element of the referenced array must
+    represent an ASCII value in the range 0x00--0x7F.  The last element of the
+    referenced array is not considered part of the represented ASCII string, and
+    its value should be 0x00.  Depending on where this macro is used, the nature
+    of the supplied expression might be further restricted.
+*/
 #define RTL_CONSTASCII_LENGTH( constAsciiStr ) ((sal_Int32)(sizeof(constAsciiStr)-1))
 
 /* ======================================================================= */
