@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usereventqueue.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:00:49 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,50 +115,7 @@ namespace presentation
                 EventSharedPtr pEvent( rQueue.front() );
                 rQueue.pop();
 
-#if 0
                 return rEventQueue.addEvent( pEvent );
-#else
-                // TODO(T3): Take solution above, we'd otherwise call
-                // from an alien thread into the slideshow
-                // engine! Before doing so, though, we have to adapt
-                // sd::Slideshow, to call update() everytime a UI
-                // event is received!  Otherwise, the events might
-                // starve in our event queue.
-                try
-                {
-                    pEvent->fire();
-                }
-                catch( uno::Exception& )
-                {
-                    // catch anything here, we don't want
-                    // to leave this scope under _any_
-                    // circumstance. Although, do _not_
-                    // reinsert an activity that threw
-                    // once.
-
-                    // NOTE: we explicitely don't catch(...) here,
-                    // since this will also capture segmentation
-                    // violations and the like. In such a case, we
-                    // still better let our clients now...
-                    OSL_TRACE( "UserEventQueue::nextEventFromQueue(): Event threw a uno::Exception, action might not have been fully performed" );
-                }
-                catch( SlideShowException& )
-                {
-                    // catch anything here, we don't want
-                    // to leave this scope under _any_
-                    // circumstance. Although, do _not_
-                    // reinsert an activity that threw
-                    // once.
-
-                    // NOTE: we explicitely don't catch(...) here,
-                    // since this will also capture segmentation
-                    // violations and the like. In such a case, we
-                    // still better let our clients now...
-                    OSL_TRACE( "UserEventQueue::nextEventFromQueue(): Event threw a SlideShowException, action might not have been fully performed" );
-                }
-
-                return true;
-#endif
             }
         }
 
