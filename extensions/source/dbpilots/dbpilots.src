@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:31:31 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,14 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Text [ swedish ] = "AutoPilot för gruppelement";
     Text [ polish ] = "AutoPilot - Element grupowy";
     Text [ portuguese_brazilian ] = "AutoPilot Gruppenelement";
-    Text [ japanese ] = "µ°ÄÊß²Û¯Ä Šî–{—v‘f";
-    Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí Ğ¡×éµ¥Ôª";
-    Text [ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ¸s²Õ³æ¤¸";
+    Text [ japanese ] = "ï½µï½°ï¾„ï¾Šï¾Ÿï½²ï¾›ï½¯ï¾„ åŸºæœ¬è¦ç´ ";
+    Text [ chinese_simplified ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç† å°ç»„å•å…ƒ";
+    Text [ chinese_traditional ] = "è‡ªå‹•æª”æ¡ˆåŠ©ç† ç¾¤çµ„å–®å…ƒ";
     Text [ arabic ] = "ÚäÕÑ ãÌãæÚÉ ÇáãÑÔÏ ÇáÂáí";
     Text [ dutch ] = "AutoPiloot groepselement";
-    Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí Ğ¡×éµ¥Ôª";
+    Text [ chinese_simplified ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç† å°ç»„å•å…ƒ";
     Text [ greek ] = "Óôïé÷åßï ïìÜäáò ôïõ AutoPilot";
-    Text [ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ±×·ì ¿ä¼Ò";
+    Text [ korean ] = "ìë™íŒŒì¼ëŸ¿ ê·¸ë£¹ ìš”ì†Œ";
     Text [ turkish ] = "OtoPilot Grup öğesi";
 
     OutputSize      = TRUE ;
@@ -126,14 +126,14 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text [ swedish ] = "AutoPilot för tabellelement";
     Text [ polish ] = "AutoPilot - Element tabeli";
     Text [ portuguese_brazilian ] = "AutoPilot Tabellenelement";
-    Text [ japanese ] = "µ°ÄÊß²Û¯Ä Ã°ÌŞÙ‚Ì\\¬—v‘f";
-    Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ±í¸ñµ¥Ôª";
-    Text [ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ªí®æ³æ¤¸";
+    Text [ japanese ] = "ï½µï½°ï¾„ï¾Šï¾Ÿï½²ï¾›ï½¯ï¾„ ï¾ƒï½°ï¾Œï¾ï¾™ã®æ§‹æˆè¦ç´ ";
+    Text [ chinese_simplified ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç† è¡¨æ ¼å•å…ƒ";
+    Text [ chinese_traditional ] = "è‡ªå‹•æª”æ¡ˆåŠ©ç† è¡¨æ ¼å–®å…ƒ";
     Text [ arabic ] = "ÚäÕÑ ÌÏæá ÇáãÑÔÏ ÇáÂáí";
     Text [ dutch ] = "AutoPiloot Tabelelement";
-    Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ±í¸ñµ¥Ôª";
+    Text [ chinese_simplified ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç† è¡¨æ ¼å•å…ƒ";
     Text [ greek ] = "Óôïé÷åßï ğßíáêá ôïõ ÁõôïĞéëüôïõ";
-    Text [ korean ] = "ÀÚµ¿ÆÄÀÏ·µ Å×ÀÌºí ¿ä¼Ò";
+    Text [ korean ] = "ìë™íŒŒì¼ëŸ¿ í…Œì´ë¸” ìš”ì†Œ";
     Text [ turkish ] = "OtoPilot Tablo öğesi";
     Text[ catalan ] = "AutoPiloto - Elemento de tabla";
     Text[ finnish ] = "Automaattinen taulukkoelementin ohjaus";
@@ -154,14 +154,14 @@ String RID_STR_LISTWIZARD_TITLE
     Text[ swedish ] = "AutoPilot för listruta";
     Text[ polish ] = "AutoPilot - Pole listy";
     Text[ portuguese_brazilian ] = "Create group";
-    Text[ japanese ] = "µ°ÄÊß²Û¯Ä Ø½ÄÌ¨°ÙÄŞ";
-    Text[ chinese_simplified ] = "×Ô¶¯ÎÄµµÖúÀí ÁĞµ¥À¸";
-    Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ²M³æÄæ¦ì";
+    Text[ japanese ] = "ï½µï½°ï¾„ï¾Šï¾Ÿï½²ï¾›ï½¯ï¾„ ï¾˜ï½½ï¾„ï¾Œï½¨ï½°ï¾™ï¾„ï¾";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ–‡æ¡£åŠ©ç† åˆ—å•æ ";
+    Text[ chinese_traditional ] = "è‡ªå‹•æª”æ¡ˆåŠ©ç† æ¸…å–®æ¬„ä½";
     Text[ arabic ] = "ãÑÈÚ ŞÇÆãÉ ÇáãÑÔÏ ÇáÂáí";
     Text[ dutch ] = "AutoPiloot Keuzelijst";
-    Text[ chinese_simplified ] = "×Ô¶¯ÎÄµµÖúÀí ÁĞµ¥À¸";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ–‡æ¡£åŠ©ç† åˆ—å•æ ";
     Text[ greek ] = "Ğåäßï ëßóôáò ôïõ ÁõôïĞéëüôïõ";
-    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ¸ñ·Ï ÇÊµå";
+    Text[ korean ] = "ìë™íŒŒì¼ëŸ¿ ëª©ë¡ í•„ë“œ";
     Text[ turkish ] = "OtoPilot Liste alanı";
     Text[ catalan ] = "AutoPiloto - Listado";
     Text[ finnish ] = "AutoPilot Listenfeld";
@@ -181,14 +181,14 @@ String RID_STR_COMBOWIZARD_TITLE
     Text [ swedish ] = "AutoPilot för kombinationsfält";
     Text [ polish ] = "AutoPilot - Pole kombi";
     Text [ portuguese_brazilian ] = "Option Group AutoPilot";
-    Text [ japanese ] = "µ°ÄÊß²Û¯Ä ºİÎŞÎŞ¯¸½";
-    Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ×éºÏÀ¸";
-    Text [ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z ²Õ¦XÄæ¦ì";
+    Text [ japanese ] = "ï½µï½°ï¾„ï¾Šï¾Ÿï½²ï¾›ï½¯ï¾„ ï½ºï¾ï¾ï¾ï¾ï¾ï½¯ï½¸ï½½";
+    Text [ chinese_simplified ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç† ç»„åˆæ ";
+    Text [ chinese_traditional ] = "è‡ªå‹•æª”æ¡ˆåŠ©ç† çµ„åˆæ¬„ä½";
     Text [ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ ÇáãÑÔÏ ÇáÂáí";
     Text [ dutch ] = "AutoPiloot Combinatieveld";
-    Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ×éºÏÀ¸";
+    Text [ chinese_simplified ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç† ç»„åˆæ ";
     Text [ greek ] = "Ğåäßï óõíäõáóìïı ôïõ ÁõôïĞéëüôïõ";
-    Text [ korean ] = "ÀÚµ¿ÆÄÀÏ·µ: ÄŞº¸¹Ú½º";
+    Text [ korean ] = "ìë™íŒŒì¼ëŸ¿: ì½¤ë³´ë°•ìŠ¤";
     Text [ turkish ] = "OtoPilot Kombinasyon alanı";
     Text [ language_user1 ] = " ";
     Text[ catalan ] = "AutoPiloto - Campo combinado";
@@ -211,10 +211,10 @@ String RID_STR_COULDNOTOPENTABLE
     Text[ swedish ] = "Det gick inte att upprätta en tabellförbindelse till datakällan.";
     Text[ polish ] = "Po³¹czenie tabeli ze Ÿród³em bazy danych nie powiod³o siê.";
     Text[ portuguese_brazilian ] = "The connection to the data source could not be established.";
-    Text[ japanese ] = "ÃŞ°À¿°½‚Ö‚ÌÃ°ÌŞÙÚ‘±‚Í‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º·ÎÀÇ Å×ÀÌºí ¿¬°áÀÌ ÀÌ·ç¾îÁöÁö ¾Ê¾Ò½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÎŞ·¨ºÍÊı¾İÔ´½¨Á¢Á¬½Ó¡£";
-    Text[ chinese_traditional ] = "µLªk³s½u¨ì¸ê®Æ·½¡C";
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã¸ã®ï¾ƒï½°ï¾Œï¾ï¾™æ¥ç¶šã¯ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
+    Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ë¡œì˜ í…Œì´ë¸” ì—°ê²°ì´ ì´ë£¨ì–´ì§€ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "æ— æ³•å’Œæ•°æ®æºå»ºç«‹è¿æ¥ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•é€£ç·šåˆ°è³‡æ–™æºã€‚";
     Text[ turkish ] = "The connection to the data source could not be established.";
     Text[ arabic ] = "ÊÚĞÑ ÇáÇÊÕÇá ÈãÕÏÑ ÇáÈíÇäÇÊ.";
     Text[ catalan ] = "No se pudo crear la tabla \"Conección a la fuente de datos\".";
@@ -224,6 +224,9 @@ String RID_STR_COULDNOTOPENTABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/07/17 20:31:31  kz
+ *  Merge SRC638: 17.07.01 - 22:30:45
+ *
  *  Revision 1.16  2001/07/13 21:05:01  kz
  *  Merge SRC638: 13.07.01 - 23:04:02
  *
@@ -275,6 +278,7 @@ String RID_STR_COULDNOTOPENTABLE
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/
+
 
 
 
