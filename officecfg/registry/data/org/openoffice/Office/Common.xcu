@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:25:55 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 13:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@
       </node>
       <node oor:name="m1" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >slot:10427</value>
+          <value >service:com.sun.star.wizards.fax.CallWizard?start</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="de">~Fax...</value>
@@ -336,26 +336,11 @@
       </node>
       <node oor:name="m2" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >slot:10426</value>
+          <value >service:com.sun.star.wizards.agenda.CallWizard?start</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="de">~Agenda...</value>
           <value xml:lang="en-US">~Agenda...</value>
-        </prop>
-        <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
-        </prop>
-        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
-        </prop>
-      </node>
-      <node oor:name="m3" oor:op="replace" install:module="writer">
-        <prop oor:name="URL"  oor:type="xs:string">
-          <value >slot:10429</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="de">~Memo...</value>
-          <value xml:lang="en-US">~Memo...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
           <value >_self</value>
