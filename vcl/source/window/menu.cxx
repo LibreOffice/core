@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-02 07:24:44 $
+ *  last change: $Author: ssa $ $Date: 2002-10-02 07:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,10 +511,20 @@ void DecoToolBox::SetImages()
 {
     if( lastSize != -1 )
     {
-        BitmapEx aBmp( maImage.GetBitmap(), Color( COL_LIGHTMAGENTA ) );
-        aBmp.SetSizePixel( Size( lastSize, lastSize ) );
+        Bitmap aMask( maImage.GetBitmap() );
+        aMask.SetSizePixel( Size( lastSize, lastSize ) );
+        aMask.Erase( Color( COL_WHITE ) );
+        Bitmap aBmpOrg( maImage.GetBitmap() );
+        aBmpOrg.SetSizePixel( Size( lastSize, lastSize ) );
+        aBmpOrg.Erase( Color( COL_BLACK ) );
+
+        BitmapEx aBmp( aBmpOrg, aMask );
+        aBmp.SetTransparentColor( Color( COL_MAGENTA ) );
+
+        //BitmapEx aBmp( maImage.GetBitmap(), Color( COL_LIGHTMAGENTA ) );
+        //aBmp.SetSizePixel( Size( lastSize, lastSize ) );
         // TODO: erase transparent !!!
-        aBmp.Erase( GetSettings().GetStyleSettings().GetMenuBarColor() );
+        //aBmp.Erase( GetSettings().GetStyleSettings().GetMenuBarColor() );
 
         Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
         Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2, (lastSize - maImage.GetSizePixel().Height())/2 ),
