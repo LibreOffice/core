@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:59:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,17 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODE_HPP_
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#endif
+
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
+#endif
+
 #ifndef _SFX_OBJSH_HXX // SfxObjectShell
 #include <sfx2/objsh.hxx>
 #endif
@@ -93,10 +104,6 @@
 #include <svx/svdorect.hxx>
 #endif
 
-#ifndef SD_FADER_HXX
-#include "fader.hxx"
-#endif
-
 #include "docprev.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
@@ -111,7 +118,11 @@
 #endif
 #include "sdpage.hxx"
 
+using ::com::sun::star::drawing::XDrawPage;
+using ::com::sun::star::animations::XAnimationNode;
+
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 const int SdDocPreviewWin::FRAME = 4;
 
@@ -119,6 +130,8 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
 {
     mpObj = pObj;
     mnShowPage = nShowPage;
+    delete mpSlideShow;
+    mpSlideShow = 0;
 
     updateViewSettings();
 }
@@ -126,6 +139,7 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
 : Control(pParent, rResId), pMetaFile( 0 ), bInEffect(FALSE), mpObj(NULL), mnShowPage(0)
 {
+    mpSlideShow = 0;
     SetBorderStyle( WINDOW_BORDER_MONO );
     svtools::ColorConfig aColorConfig;
     SetBackground( Wallpaper( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) ) );
@@ -134,6 +148,7 @@ SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent )
 : Control(pParent, 0 ), pMetaFile( 0 ), bInEffect(FALSE), mpObj(NULL), mnShowPage(0)
 {
+    mpSlideShow = 0;
     SetBorderStyle( WINDOW_BORDER_MONO );
     svtools::ColorConfig aColorConfig;
     SetBackground( Wallpaper( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) ) );
@@ -144,6 +159,8 @@ SdDocPreviewWin::SdDocPreviewWin( Window* pParent )
 void SdDocPreviewWin::Resize()
 {
     Invalidate();
+    if( mpSlideShow )
+        mpSlideShow->resize( GetSizePixel() );
 }
 
 void SdDocPreviewWin::SetGDIFile( GDIMetaFile* pFile )
@@ -210,91 +227,31 @@ void SdDocPreviewWin::Paint( const Rectangle& rRect )
     ImpPaint( pMetaFile, (VirtualDevice*)this );
 }
 
-void SdDocPreviewWin::ShowEffect( presentation::FadeEffect eEffect, FadeSpeed eSpeed )
+void SdDocPreviewWin::startPreview()
 {
-    if(bInEffect || !pMetaFile)
-        return;
+    if( mpSlideShow )
+        delete mpSlideShow;
 
-    bInEffect = TRUE;
-
-    svtools::ColorConfig aColorConfig;
-
-    SetLineColor();
-    SetFillColor( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) );
-    DrawRect(Rectangle( Point(0,0 ), GetOutputSize()));
-
-    Point aPoint;
-    Size aSize( GetOutputSize() );
-    Point bPoint(aSize.Width()-2*FRAME, aSize.Height()-2*FRAME );
-    CalcSizeAndPos( pMetaFile, aSize, aPoint );
-    bPoint -= aPoint;
-    aPoint += Point( FRAME, FRAME );
-
-    // virtuelle Devices anlegen
-
-    VirtualDevice* pVDev = new VirtualDevice(*this);
-    pVDev->SetOutputSize( GetOutputSize() );
-    pVDev->SetFillColor( maDocumentColor );
-    pVDev->DrawRect(Rectangle(aPoint, aSize));
-
-    pVDev->SetLineColor();
-    pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) );
-    pVDev->DrawRect(Rectangle( Point(0,0 ), pVDev->GetOutputSize()));
-    if( pMetaFile )
+    ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell * >( mpObj );
+    if( mpObj )
     {
-        pVDev->SetFillColor( maDocumentColor );
-        pVDev->DrawRect(Rectangle(aPoint, aSize));
-        pMetaFile->WindStart();
-        pMetaFile->Play( pVDev, aPoint, aSize  );
+        SdDrawDocument* pDoc = pDocShell->GetDoc();
+
+        if( pDoc )
+        {
+            SdPage* pPage = pDoc->GetSdPage( mnShowPage, PK_STANDARD );
+
+            if( pPage )
+            {
+                mpSlideShow = new sd::Slideshow( 0, 0, pDoc );
+
+                Reference< XDrawPage > xDrawPage( pPage->getUnoPage(), UNO_QUERY );
+                Reference< XAnimationNode > xAnimationNode;
+
+                mpSlideShow->startPreview( xDrawPage, xAnimationNode, this );
+            }
+        }
     }
-
-    // ein Fader zum Ueberblenden
-    ::sd::Fader* pFader = new ::sd::Fader(this);
-    pFader->SetEffect( eEffect );
-    pFader->SetSpeed( eSpeed );
-    pFader->SetSource(Rectangle(aPoint, aSize));
-    pFader->SetTarget(Rectangle(aPoint, aSize));
-
-    // virtuelle Devices an Fader uebergeben
-    pFader->SetNewVirtualDevice(pVDev);
-
-    // ueberblenden
-    pFader->Fade();
-
-    delete pFader;
-
-//  DrawOutDev( Point( 0,0 ), GetOutputSize(), Point( 0,0 ), GetOutputSize(), *pVDev );
-
-    delete pVDev;
-
-
-
-/*
-    Point aPoint;
-    Size aSize = GetOutputSize();
-    Point bPoint( aSize.Width() - 2*FRAME, aSize.Height() - 2*FRAME );
-    CalcSizeAndPos( pMetaFile, aSize, aPoint );
-    bPoint -= aPoint;
-
-    aPoint += Point( FRAME, FRAME );
-    bPoint += Point( FRAME, FRAME );
-
-    svtools::ColorConfig aColorConfig;
-
-    // Hintergrund Schwarz
-    SetLineColor();
-    SetFillColor( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) );
-    DrawRect(Rectangle( Point(0,0 ), GetOutputSize()));
-
-    // korrigierte Seitengroesse, sonst kommt die letzte Pixelreihe(spalte)
-    // nicht mit
-    Size aPixelSize = PixelToLogic(Size(1,1));
-    aSize.Width()   += aPixelSize.Width();
-    aSize.Height() += aPixelSize.Height();
-
-*/
-
-    bInEffect = FALSE;
 }
 
 long SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
