@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-07 12:09:33 $
+ *  last change: $Author: oj $ $Date: 2002-08-13 08:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2107,24 +2107,36 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
     Color               aBackCol( rAllSettings.GetStyleSettings().GetWindowColor() );
     SvxFont&            rFont = rExampleWin.GetFont();
     SvxFont&            rCJKFont = rExampleWin.GetCJKFont();
+    SvxFont&            rCTLFont = rExampleWin.GetCTLFont();
+
     Font                aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, eLangType,
                                                         DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
     Font                aCJKFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_TEXT, eLangType,
                                                         DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
+    Font                aCTLFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_TEXT, eLangType,
+                                                        DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
     const Size          aDefSize( 0, 12 );
     aFont.SetSize( aDefSize );
     aCJKFont.SetSize( aDefSize );
+    aCTLFont.SetSize( aDefSize );
+
     aFont.SetFillColor( aBackCol );
     aCJKFont.SetFillColor( aBackCol );
+    aCTLFont.SetFillColor( aBackCol );
+
     aFont.SetWeight( WEIGHT_NORMAL );
     aCJKFont.SetWeight( WEIGHT_NORMAL );
+    aCTLFont.SetWeight( WEIGHT_NORMAL );
+
     rFont = aFont;
     rCJKFont = aCJKFont;
+    rCTLFont = aCTLFont;
+
     const Size          aNewSize( 0, rExampleWin.GetOutputSize().Height() * 2 / 3 );
     rFont.SetSize( aNewSize );
     rCJKFont.SetSize( aNewSize );
 
-    rExampleWin.SetFont( rFont, rCJKFont );
+    rExampleWin.SetFont( rFont, rCJKFont,rCTLFont );
 
     rExampleWin.UseResourceText();
 
