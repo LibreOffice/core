@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:32:31 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,8 @@ SwForm::SwForm( USHORT nTyp )
         {
             sBStr += SwForm::aFormTab;
             ByteString sTmp( RTL_CONSTASCII_STRINGPARAM( " ,65535,0," ));
-            if(TOX_CONTENT == nType)
+            if(TOX_CONTENT == nType || TOX_TABLES == nType ||
+                        TOX_ILLUSTRATIONS == nType || TOX_OBJECTS == nType)
             {
                 //the most right tab stop is "most_right_aligned"
                 sTmp += ByteString::CreateFromInt32( SVX_TAB_ADJUST_END );
