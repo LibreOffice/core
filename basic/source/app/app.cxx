@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: gh $ $Date: 2002-10-25 10:44:34 $
+ *  last change: $Author: gh $ $Date: 2002-11-08 13:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,11 +543,13 @@ IMPL_LINK( BasicApp, LateInit, void *, pDummy )
         }
     }
 
+/*  removed #104906#
     if ( !bFileLoaded )
     {
         AppWin *pWin = new AppBasEd( pFrame, NULL );
         pWin->Show();
     }
+    */
 
     pFrame->pStatus->SetStatusSize( pFrame->pStatus->GetStatusSize()+1 );
     pFrame->pStatus->SetStatusSize( pFrame->pStatus->GetStatusSize()-1 );
