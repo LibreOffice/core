@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-14 10:16:07 $
+ *  last change: $Author: kr $ $Date: 2001-04-20 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,11 @@ class Unmarshal implements IUnmarshal {
     Object readAny() throws Exception {
         TypeDescription typeDescription = readTypeDescription();
         Object object = readObject(typeDescription);
+
+        // the object can only be null, if the return is an void-any or null interface
+        // cause java does not know a "void value", we create a special any
+        if(object == null && typeDescription.getZClass() == void.class)
+            object = new Any(new Type(typeDescription), null);
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readAny:" + object);
 
