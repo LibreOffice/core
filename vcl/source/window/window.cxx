@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: sb $ $Date: 2002-06-20 09:31:32 $
+ *  last change: $Author: ssa $ $Date: 2002-06-21 13:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7624,10 +7624,10 @@ Window* Window::GetAccessibleParentWindow() const
 
 Window* Window::GetAccessibleParentWindow() const
 {
-    Window* pParent = GetParent();
-    if ( pParent && ( pParent->GetType() == WINDOW_BORDERWINDOW ) && ( pParent->GetChildCount() == 1 ) )
+    Window* pParent = mpParent;
+    if( pParent && !pParent->ImplIsAccessibleCandidate() )
     {
-        pParent = pParent->GetParent();
+        pParent = pParent->mpParent;
     }
     return pParent;
 }
