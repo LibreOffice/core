@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:56:25 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text [ ENGLISH ] = "AutoFormat" ;
     Text [ norwegian ] = "AutoFormat" ;
     Text [ italian ] = "Formattazione automatica" ;
-    Text [ portuguese_brazilian ] = "FormataÁ„o Autom·tica" ;
+    Text [ portuguese_brazilian ] = "Formata??o Autom?tica" ;
     Text [ portuguese ] = "AutoFormato" ;
     Text [ finnish ] = "Automaattinen muotoilu" ;
     Text [ danish ] = "AutoFormat" ;
@@ -176,7 +176,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "µ˜’˚øÌ/∏ﬂ(~U)";
         Text[ russian ] = "œÓ‰·Ó ¯ËËÌ˚/‚˚ÒÓÚ˚";
-        Text[ polish ] = "Dostosuj szerokoúÊ/wysokoúÊ";
+        Text[ polish ] = "Dostosuj szeroko?Ê/wysoko?Ê";
         Text[ japanese ] = "ïùÇ∆çÇÇ≥ÇÃí≤êÆ(~U)";
         Text[ chinese_traditional ] = "Ω’æ„ºe/∞™(~U)";
         Text[ arabic ] = "„·«¡„… «·⁄—÷ Ê«·«— ›«⁄";
@@ -288,7 +288,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ ENGLISH ] = "Orien~tation" ;
         Text [ norwegian ] = "Orien~tation" ;
         Text [ italian ] = "Orien~tamento" ;
-        Text [ portuguese_brazilian ] = "Orien~taÁ„o" ;
+        Text [ portuguese_brazilian ] = "Orien~ta??o" ;
         Text [ portuguese ] = "~Alinhamento" ;
         Text [ finnish ] = "~Tasaus" ;
         Text [ danish ] = "Justering" ;
@@ -319,7 +319,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ ENGLISH ] = "~Numberformat" ;
         Text [ norwegian ] = "~Numberformat" ;
         Text [ italian ] = "Formato ~numero" ;
-        Text [ portuguese_brazilian ] = "~Formatodon˙mero" ;
+        Text [ portuguese_brazilian ] = "~Formatodon?ero" ;
         Text [ portuguese ] = "~Formato numÈrico" ;
         Text [ finnish ] = "~Numeromuoto" ;
         Text [ danish ] = "Talformat" ;
@@ -520,7 +520,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ ENGLISH ] = "Add AutoFormat" ;
         Text [ norwegian ] = "Add AutoFormat" ;
         Text [ italian ] = "Aggiungi formattazione automatica" ;
-        Text [ portuguese_brazilian ] = "Acrescentar Formato autom·tico" ;
+        Text [ portuguese_brazilian ] = "Acrescentar Formato autom?tico" ;
         Text [ portuguese ] = "Adicionar AutoFormato" ;
         Text [ finnish ] = "Lis‰‰ automaattinen muotoilu" ;
         Text [ danish ] = "Tilf¯j AutoFormat" ;
@@ -605,7 +605,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ ENGLISH ] = "Delete AutoFormat" ;
         Text [ norwegian ] = "Delete AutoFormat" ;
         Text [ italian ] = "Cancella formattazione automatica" ;
-        Text [ portuguese_brazilian ] = "Apagar Formato Autom·tico" ;
+        Text [ portuguese_brazilian ] = "Apagar Formato Autom?tico" ;
         Text [ portuguese ] = "Eliminar AutoFormato" ;
         Text [ finnish ] = "Poista automaattinen muotoilu" ;
         Text [ danish ] = "Slet AutoFormat" ;
@@ -635,7 +635,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ ENGLISH ] = "Do you really want to delete the # autoFormat?" ;
         Text [ norwegian ] = "Do you really want to delete the # autoFormat?" ;
         Text [ italian ] = "Cancellare la formattazione automatica #?" ;
-        Text [ portuguese_brazilian ] = "Deseja realmente apagar o formato autom·tico #?" ;
+        Text [ portuguese_brazilian ] = "Deseja realmente apagar o formato autom?tico #?" ;
         Text [ portuguese ] = "Deseja realmente eliminar o formato autom·tico #?" ;
         Text [ finnish ] = "Haluatko varmasti poistaa automaaattisen muotoilun ?" ;
         Text [ danish ] = "Er du sikker pÂ, at du vil slette AutoFormat #?" ;
@@ -810,7 +810,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ english_us ] = "Mid" ;
         Text[ chinese_simplified ] = "÷–";
         Text[ russian ] = "—ÂÂ‰ËÌ‡";
-        Text[ polish ] = "årodek";
+        Text[ polish ] = "?rodek";
         Text[ japanese ] = "íÜâõ";
         Text[ chinese_traditional ] = "§§";
         Text[ arabic ] = "«·Ê”ÿ";
