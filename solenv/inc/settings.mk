@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.132 $
+#   $Revision: 1.133 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-29 10:02:39 $
+#   last change: $Author: rt $ $Date: 2003-06-10 13:15:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,6 +123,16 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
     @+$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg >& $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(UPDATER)"!=""
+
+.IF "$(BSCLIENT)"=="TRUE"
+.IF "$(UPDATER)"!="YES"
+incorrect_settings:
+    @+echo "#"
+    @+echo "#" ERROR: setsolar option -bsclient used but UPDATER=YES not set!
+    @+echo "#"
+    force_dmake_to_error
+.ENDIF
+.ENDIF
 
 .INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
 
