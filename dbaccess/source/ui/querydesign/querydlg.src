@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:44:53 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 06:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ turkish ] = "Seηenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones";
-        Text[ finnish ] = "Optionen";
+        Text[ finnish ] = "Asetukset";
     };
 
     RadioButton RB_INNER
@@ -309,7 +309,7 @@ String STR_QUERY_INNER_JOIN
     Text[ dutch ] = "Bevat alleen records waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ chinese_simplified ] = "Φ»°όΊ¬Α½Έφ±νΈρΦΠÒύΣΓΧΦ¶ΞΟΰΝ¬µΔΚύΎέΜυΔΏ΅£";
     Text[ greek ] = "Περιέχει μόνο τις εγγραφές των δεδομένων στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων και στους δύο πίνακες.";
-    Text[ korean ] = "ΎηΒΚ ΕΧΐΜΊνΐΜ Ώ¬°αµΘ ΗΚµεΐΗ ³»ΏλΐΜ°°ΐΊ ·ΉΔΪµεΈΈΐ» ΖχΗΤΗΥ΄Ο΄Ω.";
+    Text[ korean ] = "µΞ ΕΧΐΜΊνΐΗ ΈµΕ©µΘ ΗΚµε ³»ΏλΐΜ °°ΐΊ ·ΉΔΪµεΈΈΐ» ΖχΗΤΗΥ΄Ο΄Ω.";
     Text[ arabic ] = "ύαΗ νΝΚζν ΕαΗ Ϊαμ ΗαΣΜαΗΚ ΗαΚν νΚΨΗΘή ένεΗ γΝΚζνΗΚ ΗαΝήζα ΗαγΡΚΘΨΙ έν ίαΗ ΗαΜΟζανδ.";
     Text[ turkish ] = "Yalnύzca her iki tablodaki iliώkili alan iηeriklerinin aynύ olduπu kayύtlarύ iηerir.";
     Text[ language_user1 ] = " ";
@@ -338,7 +338,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ chinese_simplified ] = "Ί¬ΣΠ'%1'ΦΠµΔΛωΣΠΚύΎέΜυΔΏΊΝ'%2'ΦΠΑ½Έφ±νΈρÒύΣΓΧΦ¶ΞΟΰΝ¬µΔΚύΎέΜυΔΏ΅£";
     Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές του πίνακα '%1' και τις εγγραφές του πίνακα '%2' στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων των δύο πινάκων.";
-    Text[ korean ] = "ΕΧΐΜΊν'%1'Ώ΅Ό­΄Β Έπµη ·ΉΔΪµεµιΐ», ΕΧΐΜΊν '%2'Ώ΅Ό­΄Β ΎηΒΚ ΕΧΐΜΊνΐΜ Ώ¬°αµΘ ΗΚµεΐΗ ³»ΏλΐΜ °°ΐΊ ·ΉΔΪµεΈΈΐ» ΖχΗΤΗΥ΄Ο΄Ω .";
+    Text[ korean ] = "ΕΧΐΜΊν'%1'Ώ΅΄Β Έπµη ·ΉΔΪµε, ΕΧΐΜΊν '%2'Ώ΅΄Β µΞ ΕΧΐΜΊνΐΗ ΈµΕ©µΘ ΗΚµε ³»ΏλΐΜ °°ΐΊ ·ΉΔΪµεΈΈΐΜ ΖχΗΤµΛ΄Ο΄Ω .";
     Text[ arabic ] = "νΝΚζν Ϊαμ ία ΣΜαΗΚ '%1'΅ ζΣΜαΗΚ '%2' ΗαΚν ΚΚΨΗΘή ένεΗ γΝΚζνΗΚ ΗαΝήζα ΗαγΡΚΘΨΙ έν ίαΗ ΗαΜΟζανδ έήΨ.";
     Text[ turkish ] = "'%1' tablosundaki kayύtlarύn TAMAMINI ve '%2' tablosundaki kayύtlardan yalnύzca her iki tablodaki iliώkili alan iηerikleri aynύ olan kayύtlarύ iηerir.";
     Text[ language_user1 ] = " ";
