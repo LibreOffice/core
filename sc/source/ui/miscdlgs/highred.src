@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:14:22 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_traditional ] = "Åã¥Ü¤u§@ªí¤ºªºÅÜ§ó(~S)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ İí ÇáÌÏæá";
         Text[ greek ] = "ÅìöÜíéóç áëëáãşí ğßíáêá";
-        Text[ korean ] = "½ºÇÁ·¹µå½ÃÆ®»ó¿¡ º¯°æ»çÇ× º¸ÀÌ±â(~S)";
+        Text[ korean ] = "½ºÇÁ·¹µå½ÃÆ®¿¡ º¯°æ»çÇ× º¸ÀÌ±â(~S)";
         Text[ turkish ] = "~Tablodaki değişiklikleri görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar las modificaciones en la hoja";
@@ -121,7 +121,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ polish ] = "Ustawienia filtra";
         Text[ portuguese_brazilian ] = "Filter options";
         Text[ japanese ] = "Ì¨ÙÀ‚Ìİ’è";
-        Text[ korean ] = "Filter options";
+        Text[ korean ] = "ÇÊÅÍ ¿É¼Ç";
         Text[ chinese_simplified ] = "Ñ¡ÏîÉè¶¨";
         Text[ chinese_traditional ] = "³]©w¿z¿ï";
         Text[ turkish ] = "Filter options";
@@ -151,7 +151,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_traditional ] = "Åã¥Ü±µ¨üªºÅÜ§ó(~A)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ ÇáãŞÈæáÉ";
         Text[ greek ] = "ÅìöÜíéóç áğïäå÷ïìİíùí áëëáãşí";
-        Text[ korean ] = "Àû¿ëµÈ º¯°æ»çÇ× º¸ÀÌ±â(~A)";
+        Text[ korean ] = "Àû¿ëµÈ º¯°æ º¸ÀÌ±â(~A)";
         Text[ turkish ] = "~Kabul edilen değişiklikleri görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar las modificaciones aceptadas";
@@ -180,7 +180,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ chinese_traditional ] = "Åã¥Ü¤w©Úµ´ªºÅÜ§ó?®e(~R)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ ÇáãÑİæÖÉ";
         Text[ greek ] = "ĞñïâïëŞ áğïññéğôİùí áëëáãşí";
-        Text[ korean ] = "°ÅºÎµÈ º¯°æ»çÇ× º¸ÀÌ±â(~R)";
+        Text[ korean ] = "°ÅºÎµÈ º¯°æ»çÇ× Ç¥½Ã(~R)";
         Text[ turkish ] = "~Reddedilen değişiklikleri görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar las modificaciones rechazadas";
@@ -260,12 +260,13 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text[ chinese_traditional ] = "Åã¥ÜÅÜ§ó";
     Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ";
     Text[ greek ] = "ÅìöÜíéóç áëëáãşí";
-    Text[ korean ] = "º¯°æ»çÇ×¡¡º¸ÀÌ±â";
+    Text[ korean ] = "º¯°æ º¸ÀÌ±â";
     Text[ turkish ] = "Değişiklikleri görüntüle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostrar modificaciones";
     Text[ finnish ] = "Näytä muutokset";
 };
+
 
 
 
