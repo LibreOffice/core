@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdic.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-12 08:07:51 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ struct StrEQ
 
 namespace std
 {
-template <> struct std::hash< const rtl::OUString >
+template <> struct hash< const rtl::OUString >
 {
     inline size_t operator()( const rtl::OUString &rTxt ) const
     {
