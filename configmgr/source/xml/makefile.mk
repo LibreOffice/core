@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dg $ $Date: 2000-11-30 08:40:48 $
+#   last change: $Author: jb $ $Date: 2001-03-12 14:59:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 
 SLOFILES=\
+    $(SLO)$/treebuildercallback.obj \
+    $(SLO)$/notifycallback.obj \
     $(SLO)$/dataconverter.obj \
     $(SLO)$/valuehandler.obj \
     $(SLO)$/typeconverter.obj \
@@ -85,6 +87,8 @@ SLOFILES=\
     $(SLO)$/mergeupdates.obj \
     $(SLO)$/dataexport.obj \
     $(SLO)$/dataimport.obj \
+    $(SLO)$/xmlimport.obj \
+    $(SLO)$/saxadapter.obj \
     $(SLO)$/updatedom.obj \
     $(SLO)$/updatehandler.obj \
     $(SLO)$/updatetree.obj \
