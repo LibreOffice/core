@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:52:11 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ String STR_HUMAN_SWWEBDOC_NAME
     Text[ hebrew ] = "HTML";
     Text[ hindi ] = "HTML";
     Text[ slovak ] = "HTML";
+    Text[ hungarian ] = "HTML";
+    Text[ slovenian ] = "HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_40
 {
@@ -144,6 +146,8 @@ String STR_WRITER_WEBDOC_FULLTYPE_40
     Text[ hebrew ] = "%PRODUCTNAME 4.0 HTML";
     Text[ hindi ] = "%PRODUCTNAME 4.0 HTML";
     Text[ slovak ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ hungarian ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ slovenian ] = "HTML programa %PRODUCTNAME 4.0";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_50
 {
@@ -177,6 +181,8 @@ String STR_WRITER_WEBDOC_FULLTYPE_50
     Text[ hebrew ] = "%PRODUCTNAME 5.0 HTML";
     Text[ hindi ] = "%PRODUCTNAME 5.0 HTML";
     Text[ slovak ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ hungarian ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ slovenian ] = "HTML programa %PRODUCTNAME 5.0";
 };
 String STR_WRITER_WEBDOC_FULLTYPE
 {
@@ -186,11 +192,11 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Documento HTML";
     Text[ russian ] = "���-�������� (%PRODUCTNAME 6.0) ";
     Text[ greek ] = "%PRODUCTNAME 6.0 HTML - �������";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 HTML Document";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION HTML Document";
     Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION Document HTML";
     Text[ spanish ] = "Documento HTML %PRODUCTNAME %PRODUCTVERSION";
     Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION Documento HTML";
-    Text[ danish ] = "%PRODUCTNAME 6,0 HTML-dokument";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION HTML-dokument";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION-HTML-dokument";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Dokument HTML";
     Text[ portuguese_brazilian ] = "Documento HTML %PRODUCTNAME 6.0";
@@ -207,6 +213,8 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text[ hebrew ] = "%PRODUCTNAME 6.0 HTML-Dokument";
     Text[ hindi ] = "%PRODUCTNAME 6.0 HTML लेखपत्र";
     Text[ slovak ] = "HTML dokument %PRODUCTNAME %PRODUCTVERSION";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION HTML-dokumentum";
+    Text[ slovenian ] = "HTML dokument programa %PRODUCTNAME 6.0";
 };
 String STR_SHELLNAME_WEBTEXT
 {
@@ -240,6 +248,8 @@ String STR_SHELLNAME_WEBTEXT
     Text[ hebrew ] = "Text/Web";
     Text[ hindi ] = "टेक्स्ट्/वेब";
     Text[ slovak ] = "Text/Web";
+    Text[ hungarian ] = "Szöveg/Web";
+    Text[ slovenian ] = "Besedilo/Web";
 };
 String STR_SHELLNAME_WEBFRAME
 {
@@ -273,6 +283,8 @@ String STR_SHELLNAME_WEBFRAME
     Text[ hebrew ] = "Rahmen/Web";
     Text[ hindi ] = "फ्रेम/वेब";
     Text[ slovak ] = "Rámec/Web";
+    Text[ hungarian ] = "Keret/Web";
+    Text[ slovenian ] = "Okvir/Web";
 };
 String RID_WEBTOOLS_TOOLBOX
 {
@@ -284,7 +296,7 @@ String RID_WEBTOOLS_TOOLBOX
     Text [ french ] = "Barre d'instruments/Web" ;
     Text [ dutch ] = "Werktuigbalk/Web" ;
     Text [ swedish ] = "Verktygslist/Webb" ;
-    Text [ danish ] = "V�rkt�jslinje/Web" ;
+    Text [ danish ] = "Hovedv�rkt�jslinje/Web" ;
     Text [ portuguese_brazilian ] = "Barra de ferramentas principal/Web" ;
     Text [ portuguese ] = "Barra de ferramentas/Web" ;
     Text[ chinese_simplified ] = "主工具栏/万维网";
@@ -306,6 +318,8 @@ String RID_WEBTOOLS_TOOLBOX
     Text[ hebrew ] = "Werkzeugleiste/Web";
     Text[ hindi ] = "मुख्य औज़ार पट्टी/वेब";
     Text[ slovak ] = "Hlavný panel/Web";
+    Text[ hungarian ] = "Fő eszköztár/Web";
+    Text[ slovenian ] = "Glavna orodna vrstica/Web";
 };
 ToolBox RID_WEBTOOLS_TOOLBOX
 {
@@ -460,6 +474,8 @@ String RID_WEBTEXT_TOOLBOX
     Text[ hebrew ] = "Textobjektleiste/Web";
     Text[ hindi ] = "टेक्स्ट् वस्तु पट्टी/वेब";
     Text[ slovak ] = "Panel textových objektov";
+    Text[ hungarian ] = "Szövegobjektum eszköztár/Web";
+    Text[ slovenian ] = "Predmetna vrstica za besedilo/Web";
 };
 ToolBox RID_WEBTEXT_TOOLBOX
 {
@@ -544,6 +560,8 @@ String RID_WEBFRAME_TOOLBOX
     Text[ hebrew ] = "Rahmenobjektleiste/Web";
     Text[ hindi ] = "फ्रेम वस्तु पट्टी/वेब";
     Text[ slovak ] = "Panel objektov/Web";
+    Text[ hungarian ] = "Keretobjektum eszköztár/Web";
+    Text[ slovenian ] = "Predmetna vrstica za okvire/Web";
 };
 ToolBox RID_WEBFRAME_TOOLBOX
 {
@@ -616,6 +634,8 @@ String RID_WEBGRAPHIC_TOOLBOX
     Text[ hebrew ] = "Grafikobjektleiste/Web";
     Text[ hindi ] = "सुचित्र वस्तु पट्टी/वेब";
     Text[ slovak ] = "Panel grafických objektov/Web";
+    Text[ hungarian ] = "Képobjektum eszköztár/Web";
+    Text[ slovenian ] = "Predmetna vrstica za grafiko/Web";
 };
 ToolBox RID_WEBGRAPHIC_TOOLBOX
 {
@@ -660,7 +680,7 @@ String RID_WEBOLE_TOOLBOX
     Text [ portuguese_brazilian ] = "Objeto" ;
     Text [ portuguese ] = "Objecto" ;
     Text [ finnish ] = "Objekti" ;
-    Text [ danish ] = "Objekt" ;
+    Text [ danish ] = "Objekt/Web" ;
     Text [ french ] = "Objet/Web" ;
     Text [ swedish ] = "Objekt/Webb" ;
     Text [ dutch ] = "Object" ;
@@ -684,6 +704,8 @@ String RID_WEBOLE_TOOLBOX
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
     Text[ slovak ] = "Objekt/Web";
+    Text[ hungarian ] = "Objektum/Web";
+    Text[ slovenian ] = "Predmet/Web";
 };
 ToolBox RID_WEBOLE_TOOLBOX
 {
@@ -722,6 +744,7 @@ ToolBox RID_WEBOLE_TOOLBOX
 /*************************************************************************
 
 *************************************************************************/
+
 
 
 
