@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cgm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:15 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 
 #define CGM_BREAK_ACTION    0xffffffff
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
 #include <tools/stream.hxx>
@@ -356,7 +359,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     double  fDoubleBuf;
     float   fFloatBuf;
 
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
         bCompatible = sal_True;
 #else
         bCompatible = sal_False;
