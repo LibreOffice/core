@@ -2,9 +2,9 @@
 #
 #   $RCSfile: packagedef.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2005-02-02 13:51:54 $
+#   last change: $Date: 2005-03-22 13:50:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,12 @@
 #
 #*************************************************************************
 
+DIR_FILTERCFGOUT := $(MISC)$/filters 
+DIR_LOCFRAG      := $(DIR_FILTERCFGOUT)$/ui$/fragments
+DIR_LOCMERGE     := $(DIR_FILTERCFGOUT)$/ui$/merge
+DIR_LANGPACK     := $(DIR_FILTERCFGOUT)$/ui$/langpacks
+DIR_MODPACKS     := $(DIR_FILTERCFGOUT)$/modulepacks
+
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_base.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_writer.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_web.mk
@@ -74,7 +80,7 @@
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_palm.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_pocketword.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_pocketexcel.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_internalgraphics.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_drawgraphics.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_impressgraphics.mk
+.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_internalgraphics.mk
 
