@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseAccessContext.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:36:07 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,29 +96,23 @@
     becomes the default for all other known locales.
 
     </p>@see com::sun::star::util::XLocalizedAliases
+
+    @deprecated
  */
 published service DatabaseAccessContext
 {
-
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessContext: interface com::sun::star::container::XEnumerationAccess
     /** Enumeration on all registered data sources for a default locale.
      */
     interface com::sun::star::container::XEnumerationAccess;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessContext: interface com::sun::star::container::XNameAccess
     /** NameAccess on all registered data sources for a default locale.
      */
     interface com::sun::star::container::XNameAccess;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessContext: interface com::sun::star::util::XLocalizedAliases
     /** Interface for registering aliases for data sources.
      */
     interface com::sun::star::util::XLocalizedAliases;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessContext: interface com::sun::star::lang::XLocalizable
     /** Interface for setting and retrieving the default language.
      */
     interface com::sun::star::lang::XLocalizable;
