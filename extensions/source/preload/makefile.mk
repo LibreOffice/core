@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 12:57:19 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:09:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,10 +83,11 @@ SLOFILES=           $(SLO)$/services.obj\
                     $(SLO)$/preloadservices.obj\
                     $(SLO)$/oemwiz.obj
 
-SRCFILES=           preload.src
+SRS1NAME=$(TARGET)
+SRC1FILES=           preload.src
 
 RESLIB1NAME=preload
-RESLIB1SRSFILES= $(SRS)/preload.srs
+RESLIB1SRSFILES= $(SRS)$/preload.srs
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
