@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopti.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-19 17:56:04 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 07:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,9 @@ public:
                             { return ConfigItem::PutProperties( rNames, rValues ); }
     sal_Bool EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames)
                             { return ConfigItem::EnableNotification( rNames ); }
+
+    com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
+                            { return ConfigItem::GetNodeNames( rNode ); }
 };
 
 
