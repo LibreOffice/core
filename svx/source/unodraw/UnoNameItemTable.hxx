@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 09:19:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ private:
     void SAL_CALL ImplInsertByName( const rtl::OUString& aName, const com::sun::star::uno::Any& aElement );
 
 public:
-    SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId = 0 ) throw();
+    SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId ) throw();
     virtual ~SvxUnoNameItemTable() throw();
 
     virtual NameOrIndex* createItem() const throw() = 0;
