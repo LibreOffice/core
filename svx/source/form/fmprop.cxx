@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:17:40 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,6 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_LINECOLOR,"LineColor");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_BORDER,"Border");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_DROPDOWN,"Dropdown");
-    IMPLEMENT_CONSTASCII_USTRING(FM_PROP_MULTI,"Multi");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_HSCROLL,"HScroll");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_VSCROLL,"VScroll");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_TABSTOP,"Tabstop");
@@ -413,7 +412,6 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
             FmPropertyInfo(FM_PROP_DROPDOWN,            sal_True,  RID_STR_DROPDOWN),
             FmPropertyInfo(FM_PROP_AUTOCOMPLETE,        sal_True,  RID_STR_AUTOCOMPLETE),
             FmPropertyInfo(FM_PROP_LINECOUNT,           sal_True,  RID_STR_LINECOUNT),
-            FmPropertyInfo(FM_PROP_MULTI,               sal_True,  RID_STR_MULTILINE),
             FmPropertyInfo(FM_PROP_MULTILINE,           sal_True,  RID_STR_MULTILINE),
             FmPropertyInfo(FM_PROP_MULTISELECTION,      sal_True,  RID_STR_MULTISELECTION),
             FmPropertyInfo(FM_PROP_HSCROLL,             sal_True,  RID_STR_HSCROLL),
