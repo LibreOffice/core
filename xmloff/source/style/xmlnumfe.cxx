@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-19 14:52:15 $
+ *  last change: $Author: nn $ $Date: 2001-03-19 18:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,9 +829,12 @@ xub_StrLen lcl_FindSymbol( const String& sUpperStr, const String& sCurString )
     return STRING_NOTFOUND;                         // not found
 }
 
-void SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
+sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
                             const ::com::sun::star::lang::Locale& rLocale )
 {
+    //  returns TRUE if currency element was written
+
+    sal_Bool bRet = sal_False;
     pLocaleData->setLocale( rLocale );
     pCharClass->setLocale( rLocale );
     String sCurString = pLocaleData->getCurrSymbol();
@@ -850,6 +853,7 @@ void SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
         //  currency symbol (empty string -> default)
         OUString sEmpty;
         WriteCurrencyElement_Impl( sEmpty, sEmpty );
+        bRet = sal_True;
 
         //  text after currency symbol
         if ( nCont < nLength )
@@ -857,6 +861,8 @@ void SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     }
     else
         AddToTextElement_Impl( rString );       // simple text
+
+    return bRet;        // TRUE: currency element written
 }
 
 //-------------------------------------------------------------------------
@@ -1219,6 +1225,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
         //  second loop to write elements
 
         sal_Bool bNumWritten = sal_False;
+        sal_Bool bCurrencyWritten = sal_False;
         short nPrevType = 0;
         nPos = 0;
         bEnd = sal_False;
@@ -1244,11 +1251,11 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                             //  as text element
                             //! difference between '.' and ',' is lost here
                         }
-                        else if ( nFmtType == NUMBERFORMAT_CURRENCY && !bCurrFound )
+                        else if ( nFmtType == NUMBERFORMAT_CURRENCY && !bCurrFound && !bCurrencyWritten )
                         {
                             //  automatic currency symbol is implemented as part of
                             //  normal text -> search for the symbol
-                            WriteTextWithCurrency_Impl( *pElemStr,
+                            bCurrencyWritten = WriteTextWithCurrency_Impl( *pElemStr,
                                 SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
                         }
                         else
@@ -1256,15 +1263,32 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                     }
                     break;
                 case NF_KEY_CCC:
-                    //! must be different from short automatic format
-                    //! but should still be empty (meaning automatic)
-                    //  pElemStr is "CCC"
                     if (pElemStr)
-                        WriteCurrencyElement_Impl( *pElemStr, OUString() );
+                    {
+                        if ( bCurrencyWritten )
+                            AddToTextElement_Impl( *pElemStr );     // never more than one currency element
+                        else
+                        {
+                            //! must be different from short automatic format
+                            //! but should still be empty (meaning automatic)
+                            //  pElemStr is "CCC"
+
+                            WriteCurrencyElement_Impl( *pElemStr, OUString() );
+                            bCurrencyWritten = sal_True;
+                        }
+                    }
                     break;
                 case XMLNUM_SYMBOLTYPE_CURRENCY:
                     if (pElemStr)
-                        WriteCurrencyElement_Impl( *pElemStr, sCurrExt );
+                    {
+                        if ( bCurrencyWritten )
+                            AddToTextElement_Impl( *pElemStr );     // never more than one currency element
+                        else
+                        {
+                            WriteCurrencyElement_Impl( *pElemStr, sCurrExt );
+                            bCurrencyWritten = sal_True;
+                        }
+                    }
                     break;
                 case XMLNUM_SYMBOLTYPE_DIGIT:
                     if (!bNumWritten)           // write number part
