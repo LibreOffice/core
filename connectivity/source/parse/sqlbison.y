@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.18 2001-02-23 14:53:08 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.19 2001-03-12 18:20:35 fs Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-02-23 14:53:08 $ $Revision: 1.18 $
+//	$Author: fs $ $Date: 2001-03-12 18:20:35 $ $Revision: 1.19 $
 //
 // Description:
 //
@@ -3149,10 +3149,11 @@ Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberForm
 			{
 				if (i > 0 && aMatchStr.getStr()[i-1] == cEscape)
 					continue;
-				else if (c == sSearch[0])
-					aMatchStr.replaceAt(i ,1, ::rtl::OUString::createFromAscii((const sal_Char*)sReplace[0]));
 				else
-					aMatchStr.replaceAt(i ,1, ::rtl::OUString::createFromAscii((const sal_Char*)sReplace[1]));
+				{
+					sal_Unicode cCharacter = sReplace[(c == sSearch[0]) ? 0 : 1];
+					aMatchStr.replaceAt(i , 1, ::rtl::OUString(&cCharacter, 1));
+				}
 			}
 		}
 	}
