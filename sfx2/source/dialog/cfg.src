@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 15:58:48 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1718,7 +1718,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ chinese_traditional ] = "ΑΩ¦s¦b¤@¨Η¥u―ΰΕύµΉ§Φ³t¥\\―ΰªν°υ¦ζªΊ¶µ¥Ψ΅C\n±zΑΩ¬O­n±µ¨ό³o­Σ°tΈm΅H";
     Message[ arabic ] = "γΗÒΗαΚ εδΗαί ΕΟΞΗαΗΚ ΘεΗ γεΗγ αΗ νγίδ ΚΪννδεΗ ΕαΗ αήζΗΖγ ΗδΘΛΗήνΙ έήΨ.\n\nεα ΚΡνΟ ήΘζα ΗαΚίζνδ Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
     Message[ greek ] = "Υπάρχουν ακόμη εγγραφές με λειτουργίες των οποίων μπορεί να γίνει μόνο αντιστοίχιση με αναδυόμενα παράθυρα.\n\nΘέλετε να αποδεχτείτε τη διαμόρφωση αυτή;";
-    Message[ korean ] = "ΖΛΎχΏ΅ΈΈ ΑφΑ¤µΙ Όφ ΐΦ΄Β ±β΄Ιµιΐ» Αφ΄Ρ ΗΧΈρµιΐΜ ΎΖΑχ ΐΦ½ΐ΄Ο΄Ω. \n\n±Χ·΅µµ ΐΜ ±ΈΌΊΐ» ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ korean ] = "ΖΛΎχΏ΅ΈΈ ΑφΑ¤µΙ Όφ ΐΦ΄Β ±β΄Ιµιΐ» °΅Αψ ΗΧΈρµιΐΜ ΎΖΑχ ΐΦ½ΐ΄Ο΄Ω. \n\n±Χ·΅µµ ΐΜ ±ΈΌΊΐ» ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Yalnύzca aηύlan mφnόlere atanabilen iώlevleri olan giriώler mevcut.\n\nBu konfigόrasyon ile devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
 };
