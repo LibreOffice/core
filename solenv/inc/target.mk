@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.145 $
+#   $Revision: 1.146 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 13:28:40 $
+#   last change: $Author: rt $ $Date: 2004-09-20 12:27:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2725,11 +2725,11 @@ $(MISC)$/$(PRJNAME).hid : \
     @echo ---------------
     @+if exist $@ del $@
     @$(TOUCH) $@
-    @+if exist $(SRS)\*.hid dir $(SRS)\*.hid
-    @+if exist $(SRS)\*.hid type $(SRS)\*.hid >> $@
+#    @+if exist $(SRS)\*.hid dir $(SRS)\*.hid
+#    @+if exist $(SRS)\*.hid type $(SRS)\*.hid >> $@
 #   @+if exist $(MISC)\*.lst $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
-    @+if exist $(MISC)\*.* $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
-    @echo done Making $@
+#    @+if exist $(MISC)\*.* $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
+    @echo not made anymore
 
 #new hid.lst trigger with GEN_HID2=TRUE
 $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
