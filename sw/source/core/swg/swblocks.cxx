@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:33:51 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,7 @@
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -334,8 +332,8 @@ SwTextBlocks::SwTextBlocks( const String& rFile )
     String sFileName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     switch( SwImpBlocks::GetFileType( rFile ) )
     {
-    case SWBLK_SW2:     pImp = new Sw2TextBlocks( sFileName );  break;
-    case SWBLK_SW3:     pImp = new Sw3TextBlocks( sFileName );  break;
+    //case SWBLK_SW2:     pImp = new Sw2TextBlocks( sFileName );  break;
+    //case SWBLK_SW3:     pImp = new Sw3TextBlocks( sFileName );  break;
     case SWBLK_XML:     pImp = new SwXMLTextBlocks( sFileName ); break;
     case SWBLK_NO_FILE: pImp = new SwXMLTextBlocks( sFileName ); break;
     }
@@ -373,6 +371,7 @@ BOOL SwTextBlocks::IsOld() const
 }
 
 
+/*
 ULONG SwTextBlocks::ConvertToNew()
 {
     // Wir nehmen die aktuelle Datei, benennen diese in .BAK um
@@ -519,7 +518,7 @@ ULONG SwTextBlocks::ConvertToNew()
                             &pImp->aDateModified, &pImp->aTimeModified );
     }
     return nErr;
-}
+} */
 
 
 USHORT SwTextBlocks::GetCount() const
