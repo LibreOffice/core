@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-27 13:00:38 $
+ *  last change: $Author: mav $ $Date: 2003-11-04 14:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ public:
 
 // XEmbedPersist
 
-    virtual void SAL_CALL setPersistentEntry(
+    virtual sal_Bool SAL_CALL setPersistentEntry(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                     const ::rtl::OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
@@ -386,6 +386,14 @@ public:
                 ::com::sun::star::uno::RuntimeException );
 
 // XLinkageSupport
+
+    virtual void SAL_CALL breakLink( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                                     const ::rtl::OUString& sEntName )
+        throw ( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception,
+                ::com::sun::star::uno::RuntimeException );
 
     virtual sal_Bool SAL_CALL isLink()
         throw ( ::com::sun::star::embed::WrongStateException,

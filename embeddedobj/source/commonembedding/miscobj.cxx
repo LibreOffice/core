@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-27 12:57:29 $
+ *  last change: $Author: mav $ $Date: 2003-11-04 14:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,7 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
                                         static_cast< embed::XEmbeddedObject* >( this ),
                                         static_cast< embed::XVisualObject* >( this ),
                                         static_cast< embed::XEmbedPersist* >( this ),
+                                        static_cast< embed::XLinkageSupport* >( this ),
                                         static_cast< embed::XClassifiedObject* >( this ),
                                         static_cast< embed::XComponentSupplier* >( this ),
                                         static_cast< document::XEventBroadcaster* >( this ) );
@@ -277,6 +278,7 @@ uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
                                         ::getCppuType( (const uno::Reference< embed::XEmbeddedObject >*)NULL ),
                                         ::getCppuType( (const uno::Reference< embed::XVisualObject >*)NULL ),
                                         ::getCppuType( (const uno::Reference< embed::XEmbedPersist >*)NULL ),
+                                        ::getCppuType( (const uno::Reference< embed::XLinkageSupport >*)NULL ),
                                         ::getCppuType( (const uno::Reference< embed::XClassifiedObject >*)NULL ),
                                         ::getCppuType( (const uno::Reference< embed::XComponentSupplier >*)NULL ),
                                         ::getCppuType( (const uno::Reference< document::XEventBroadcaster >*)NULL ) );

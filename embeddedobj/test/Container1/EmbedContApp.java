@@ -617,18 +617,17 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
                         if ( xNameAccess != null && xNameAccess.hasByName( "LinkName" ) )
                             m_xStorage.removeElement( "LinkName" );
 
-                        XEmbedPersist xPersist = (XEmbedPersist)UnoRuntime.queryInterface( XEmbedPersist.class,
-                                                                                        m_xEmbedObj );
-                        if ( xPersist != null )
+                        XLinkageSupport xLinkage = (XLinkageSupport)UnoRuntime.queryInterface( XLinkageSupport.class,
+                                                                                                m_xEmbedObj );
+                        if ( xLinkage != null )
                         {
-                            PropertyValue[] pEmp = new PropertyValue[0];
-                            xPersist.setPersistentEntry( m_xStorage, "EmbedSub", EntryInitModes.ENTRY_NO_INIT, pEmp );
+                            xLinkage.breakLink( m_xStorage, "EmbedSub" );
                             m_bLinkObj = false;
                             m_aLinkURI = null;
                         }
                         else
                             JOptionPane.showMessageDialog( m_aFrame,
-                                                            "No XEmbedPersist in ConvertLink... !",
+                                                            "No XLinkageSupport in ConvertLink... !",
                                                             "Error:",
                                                             JOptionPane.ERROR_MESSAGE );
                     }

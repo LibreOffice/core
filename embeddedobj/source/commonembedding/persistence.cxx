@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-27 12:57:29 $
+ *  last change: $Author: mav $ $Date: 2003-11-04 14:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,7 @@ uno::Reference< frame::XModel > OCommonEmbeddedObject::CreateTempDocFromLink_Imp
 }
 
 //------------------------------------------------------
-void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
+sal_Bool SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const ::rtl::OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
@@ -593,36 +593,9 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_NO_INIT )
         {
             // the document just already changed its storage to store to
+            // the links to OOo documents will ignore this call and return false
             if ( m_bIsLink )
-            {
-                // for linked object it means that it becomes embedded object
-                // the document must switch it's persistence also
-
-                // the document is a new embedded object so it must be marked as modified
-                uno::Reference< frame::XModel > xDocument = CreateTempDocFromLink_Impl();
-                uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
-                if ( !xModif.is() )
-                    throw uno::RuntimeException();
-                try
-                {
-                    xModif->setModified( sal_True );
-                }
-                catch( uno::Exception& )
-                {}
-
-                m_pDocHolder->SetDocument( xDocument, m_bReadOnly );
-                OSL_ENSURE( m_pDocHolder->GetDocument().is(), "If document cant be created, an exception must be thrown!\n" );
-
-                if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
-                    m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
-                else if ( m_nObjectState == embed::EmbedStates::EMBED_ACTIVE )
-                    m_pDocHolder->Show();
-
-                m_bIsLink = sal_False;
-                m_aLinkFilterName = ::rtl::OUString();
-                m_aLinkURL = ::rtl::OUString();
-
-            }
+                return sal_False;
         }
         else if ( nEntryConnectionMode == embed::EntryInitModes::ENTRY_TRUNCATE_INIT )
         {
@@ -648,6 +621,8 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
     }
+
+    return sal_True;
 }
 
 //------------------------------------------------------
@@ -962,6 +937,88 @@ void SAL_CALL OCommonEmbeddedObject::reload(
 }
 
 //------------------------------------------------------
+void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xStorage,
+                                                const ::rtl::OUString& sEntName )
+        throw ( lang::IllegalArgumentException,
+                embed::WrongStateException,
+                io::IOException,
+                uno::Exception,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    if ( !xStorage.is() )
+        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
+                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            1 );
+
+    if ( !sEntName.getLength() )
+        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
+                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            2 );
+
+    if ( !m_bIsLink || m_nObjectState == -1 )
+    {
+        // it must be a linked initialized object
+        throw embed::WrongStateException(
+                    ::rtl::OUString::createFromAscii( "The object is not a valid linked object!\n" ),
+                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    }
+
+    if ( m_bWaitSaveCompleted )
+        throw embed::WrongStateException(
+                    ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
+    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
+    if ( !xNameAccess.is() )
+        throw uno::RuntimeException(); //TODO
+
+    // detect entry existence
+    sal_Bool bElExists = xNameAccess->hasByName( sEntName );
+
+    m_bReadOnly = sal_False;
+    sal_Int32 nStorageMode = embed::ElementModes::ELEMENT_READWRITE;
+
+    m_xObjectStorage = xStorage->openStorageElement( sEntName, nStorageMode );
+    m_xParentStorage = xStorage;
+    m_aEntryName = sEntName;
+
+    // the object should be based on the storage ??? TODO
+    if ( bElExists && !xStorage->isStorageElement( sEntName ) )
+        throw io::IOException(); // TODO access denied
+
+    // for linked object it means that it becomes embedded object
+    // the document must switch it's persistence also
+
+    // the document is a new embedded object so it must be marked as modified
+    uno::Reference< frame::XModel > xDocument = CreateTempDocFromLink_Impl();
+    uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+    if ( !xModif.is() )
+        throw uno::RuntimeException();
+    try
+    {
+        xModif->setModified( sal_True );
+    }
+    catch( uno::Exception& )
+    {}
+
+    m_pDocHolder->SetDocument( xDocument, m_bReadOnly );
+    OSL_ENSURE( m_pDocHolder->GetDocument().is(), "If document cant be created, an exception must be thrown!\n" );
+
+    if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+        m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
+    else if ( m_nObjectState == embed::EmbedStates::EMBED_ACTIVE )
+        m_pDocHolder->Show();
+
+    m_bIsLink = sal_False;
+    m_aLinkFilterName = ::rtl::OUString();
+    m_aLinkURL = ::rtl::OUString();
+}
+
+//------------------------------------------------------
 sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
@@ -980,9 +1037,9 @@ sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
 
 //------------------------------------------------------
 ::rtl::OUString SAL_CALL OCommonEmbeddedObject::getLinkURL()
-        throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException)
+        throw ( embed::WrongStateException,
+                uno::Exception,
+                uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
