@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recoveryui.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:22:49 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
 sal_Bool RecoveryUI::impl_doEmergencySave()
 {
     // create core service, which implements the real "emergency save" algorithm.
-    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xSMGR);
+    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xSMGR, sal_True);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create all needed dialogs for this operation
@@ -336,7 +336,7 @@ sal_Bool RecoveryUI::impl_doEmergencySave()
 void RecoveryUI::impl_doRecovery()
 {
     // create core service, which implements the real "emergency save" algorithm.
-    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xSMGR);
+    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xSMGR, sal_False);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create all needed dialogs for this operation
