@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-26 09:25:56 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,13 +294,11 @@ namespace dbtools
         @return
             <TRUE/> if the update request was successfully re-routed to one of the other updateXXX methods
     */
-    sal_Bool    implUpdateObject(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >& _rxUpdatedObject,
-        const sal_Int32 _nColumnIndex,
-        const ::com::sun::star::uno::Any& _rValue
-    )   SAL_THROW   (   (   ::com::sun::star::sdbc::SQLException
-                        ,   ::com::sun::star::uno::RuntimeException
-                    )   );
+    sal_Bool implUpdateObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >& _rxUpdatedObject,
+                                const sal_Int32 _nColumnIndex,
+                                const ::com::sun::star::uno::Any& _rValue)  SAL_THROW   (   (   ::com::sun::star::sdbc::SQLException,   ::com::sun::star::uno::RuntimeException)    );
+
+
 
     /** ask the user for parameters if the prepared statement needs some and sets them in the prepared statement
         @param _xConnection     the connection must support the iterface @see com::sun::star::sdb::XSQLQueryComposerFactory
@@ -323,6 +321,23 @@ namespace dbtools
                             const ::com::sun::star::uno::Any& x,
                             sal_Int32 sqlType,
                             sal_Int32 scale=0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+
+    /** implements <method scope="com.sun.star.sdb">XParameters::setObject</method>
+        <p>The object which is to be set is analyzed, and in case it is a simlpe scalar type for which there
+        is another setXXX method, this other method is used.</p>
+        @param _rxParameters
+            the interface to forward all setXXX calls to (except setObject)
+        @param _nColumnIndex
+            the column index to update
+        @param _rValue
+            the value to update
+        @return
+            <TRUE/> if the update request was successfully re-routed to one of the other updateXXX methods
+    */
+    sal_Bool implSetObject( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _rxParameters,
+                            const sal_Int32 _nColumnIndex,
+                            const ::com::sun::star::uno::Any& _rValue) SAL_THROW ( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
 
 //.........................................................................
 }   // namespace dbtools

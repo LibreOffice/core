@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-26 09:27:28 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1219,100 +1219,179 @@ void showError(const SQLExceptionInfo& _rInfo,
     }
 }
 
-    // -------------------------------------------------------------------------
-    sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
-        const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
+// -------------------------------------------------------------------------
+sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
+    const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
+{
+    sal_Bool bSuccessfullyReRouted = sal_True;
+    switch (_rValue.getValueTypeClass())
     {
-        sal_Bool bSuccessfullyReRouted = sal_False;
-        switch (_rValue.getValueTypeClass())
+        case TypeClass_ANY:
         {
-            case TypeClass_ANY:
-            {
-                Any aInnerValue;
-                _rValue >>= aInnerValue;
-                return implUpdateObject(_rxUpdatedObject, _nColumnIndex, aInnerValue);
-            }
+            Any aInnerValue;
+            _rValue >>= aInnerValue;
+            bSuccessfullyReRouted = implUpdateObject(_rxUpdatedObject, _nColumnIndex, aInnerValue);
+        }
+        break;
+
+        case TypeClass_VOID:
+            _rxUpdatedObject->updateNull(_nColumnIndex);
             break;
 
-            case TypeClass_VOID:
-                _rxUpdatedObject->updateNull(_nColumnIndex);
-                bSuccessfullyReRouted = sal_True;
-                break;
+        case TypeClass_STRING:
+            _rxUpdatedObject->updateString(_nColumnIndex, *(rtl::OUString*)_rValue.getValue());
+            break;
 
-            case TypeClass_STRING:
-                _rxUpdatedObject->updateString(_nColumnIndex, *(rtl::OUString*)_rValue.getValue());
-                bSuccessfullyReRouted = sal_True;
-                break;
+        case TypeClass_BOOLEAN:
+            _rxUpdatedObject->updateBoolean(_nColumnIndex, *(sal_Bool *)_rValue.getValue());
+            break;
 
-            case TypeClass_BOOLEAN:
-                _rxUpdatedObject->updateBoolean(_nColumnIndex, *(sal_Bool *)_rValue.getValue());
-                bSuccessfullyReRouted = sal_True;
-                break;
+        case TypeClass_BYTE:
+            _rxUpdatedObject->updateByte(_nColumnIndex, *(sal_Int8 *)_rValue.getValue());
+            break;
 
-            case TypeClass_BYTE:
-                _rxUpdatedObject->updateByte(_nColumnIndex, *(sal_Int8 *)_rValue.getValue());
-                bSuccessfullyReRouted = sal_True;
-                break;
+        case TypeClass_UNSIGNED_SHORT:
+        case TypeClass_SHORT:
+            _rxUpdatedObject->updateShort(_nColumnIndex, *(sal_Int16*)_rValue.getValue());
+            break;
 
-            case TypeClass_UNSIGNED_SHORT:
-            case TypeClass_SHORT:
-                _rxUpdatedObject->updateShort(_nColumnIndex, *(sal_Int16*)_rValue.getValue());
-                bSuccessfullyReRouted = sal_True;
-                break;
+        case TypeClass_CHAR:
+            _rxUpdatedObject->updateString(_nColumnIndex,::rtl::OUString((sal_Unicode *)_rValue.getValue(),1));
+            break;
 
-            case TypeClass_CHAR:
-                _rxUpdatedObject->updateShort(_nColumnIndex, *(sal_Int16*)(sal_Unicode *)_rValue.getValue());//XXX
-                bSuccessfullyReRouted = sal_True;
-                break;
+        case TypeClass_UNSIGNED_LONG:
+        case TypeClass_LONG:
+            _rxUpdatedObject->updateInt(_nColumnIndex, *(sal_Int32*)_rValue.getValue());
+            break;
 
-            case TypeClass_UNSIGNED_LONG:
-            case TypeClass_LONG:
-                _rxUpdatedObject->updateInt(_nColumnIndex, *(sal_Int32*)_rValue.getValue());
-                bSuccessfullyReRouted = sal_True;
-                break;
+        case TypeClass_FLOAT:
+            _rxUpdatedObject->updateFloat(_nColumnIndex, *(float*)_rValue.getValue());
+            break;
 
-            case TypeClass_FLOAT:
-                _rxUpdatedObject->updateFloat(_nColumnIndex, *(float*)_rValue.getValue());
-                bSuccessfullyReRouted = sal_True;
-                break;
+        case TypeClass_DOUBLE:
+            _rxUpdatedObject->updateDouble(_nColumnIndex, *(double*)_rValue.getValue());
+            break;
 
-            case TypeClass_DOUBLE:
-                _rxUpdatedObject->updateDouble(_nColumnIndex, *(double*)_rValue.getValue());
-                bSuccessfullyReRouted = sal_True;
-                break;
+        case TypeClass_SEQUENCE:
+            if (_rValue.getValueType() == ::getCppuType((const Sequence< sal_Int8 > *)0))
+                _rxUpdatedObject->updateBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
+            else
+                bSuccessfullyReRouted = sal_False;
+            break;
+        case TypeClass_STRUCT:
+            if (_rValue.getValueType() == ::getCppuType((const DateTime*)0))
+                _rxUpdatedObject->updateTimestamp(_nColumnIndex, *(DateTime*)_rValue.getValue());
+            else if (_rValue.getValueType() == ::getCppuType((const Date*)0))
+                _rxUpdatedObject->updateDate(_nColumnIndex, *(Date*)_rValue.getValue());
+            else if (_rValue.getValueType() == ::getCppuType((const Time*)0))
+                _rxUpdatedObject->updateTime(_nColumnIndex, *(Time*)_rValue.getValue());
+            else
+                bSuccessfullyReRouted = sal_False;
+            break;
 
-            case TypeClass_SEQUENCE:
-                if (_rValue.getValueType() == ::getCppuType((const Sequence< sal_Int8 > *)0))
-                {
-                    _rxUpdatedObject->updateBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
-                    bSuccessfullyReRouted = sal_True;
-                }
+        case TypeClass_INTERFACE:
+            if (_rValue.getValueType() == ::getCppuType(static_cast<Reference< XInputStream>*>(NULL)))
+            {
+                Reference< XInputStream >  xStream;
+                _rValue >>= xStream;
+                _rxUpdatedObject->updateBinaryStream(_nColumnIndex, xStream, xStream->available());
                 break;
-            case TypeClass_STRUCT:
-                bSuccessfullyReRouted = sal_True;
-                if (_rValue.getValueType() == ::getCppuType((const DateTime*)0))
-                    _rxUpdatedObject->updateTimestamp(_nColumnIndex, *(DateTime*)_rValue.getValue());
-                else if (_rValue.getValueType() == ::getCppuType((const Date*)0))
-                    _rxUpdatedObject->updateDate(_nColumnIndex, *(Date*)_rValue.getValue());
-                else if (_rValue.getValueType() == ::getCppuType((const Time*)0))
-                    _rxUpdatedObject->updateTime(_nColumnIndex, *(Time*)_rValue.getValue());
-                else
-                    bSuccessfullyReRouted = sal_False;
-                break;
-
-            case TypeClass_INTERFACE:
-                if (_rValue.getValueType() == ::getCppuType(static_cast<Reference< XInputStream>*>(NULL)))
-                {
-                    Reference< XInputStream >  xStream;
-                    _rValue >>= xStream;
-                    _rxUpdatedObject->updateBinaryStream(_nColumnIndex, xStream, xStream->available());
-                    bSuccessfullyReRouted = sal_True;
-                }
-                break;
-        }
-
-        return bSuccessfullyReRouted;
+            }
+            // run through
+        default:
+            bSuccessfullyReRouted = sal_False;
     }
+
+    return bSuccessfullyReRouted;
+}
+// -------------------------------------------------------------------------
+sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
+                        const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
+{
+    sal_Bool bSuccessfullyReRouted = sal_True;
+    switch (_rValue.getValueTypeClass())
+    {
+        case TypeClass_ANY:
+        {
+            Any aInnerValue;
+            _rValue >>= aInnerValue;
+            bSuccessfullyReRouted = implSetObject(_rxParameters, _nColumnIndex, aInnerValue);
+        }
+        break;
+
+        case TypeClass_VOID:
+            _rxParameters->setNull(_nColumnIndex,DataType::VARCHAR);
+            break;
+
+        case TypeClass_STRING:
+            _rxParameters->setString(_nColumnIndex, *(rtl::OUString*)_rValue.getValue());
+            break;
+
+        case TypeClass_BOOLEAN:
+            _rxParameters->setBoolean(_nColumnIndex, *(sal_Bool *)_rValue.getValue());
+            break;
+
+        case TypeClass_BYTE:
+            _rxParameters->setByte(_nColumnIndex, *(sal_Int8 *)_rValue.getValue());
+            break;
+
+        case TypeClass_UNSIGNED_SHORT:
+        case TypeClass_SHORT:
+            _rxParameters->setShort(_nColumnIndex, *(sal_Int16*)_rValue.getValue());
+            break;
+
+        case TypeClass_CHAR:
+            _rxParameters->setString(_nColumnIndex, ::rtl::OUString((sal_Unicode *)_rValue.getValue(),1));
+            break;
+
+        case TypeClass_UNSIGNED_LONG:
+        case TypeClass_LONG:
+            _rxParameters->setInt(_nColumnIndex, *(sal_Int32*)_rValue.getValue());
+            break;
+
+        case TypeClass_FLOAT:
+            _rxParameters->setFloat(_nColumnIndex, *(float*)_rValue.getValue());
+            break;
+
+        case TypeClass_DOUBLE:
+            _rxParameters->setDouble(_nColumnIndex, *(double*)_rValue.getValue());
+            break;
+
+        case TypeClass_SEQUENCE:
+            if (_rValue.getValueType() == ::getCppuType((const Sequence< sal_Int8 > *)0))
+            {
+                _rxParameters->setBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
+            }
+            else
+                bSuccessfullyReRouted = sal_False;
+            break;
+        case TypeClass_STRUCT:
+            if (_rValue.getValueType() == ::getCppuType((const DateTime*)0))
+                _rxParameters->setTimestamp(_nColumnIndex, *(DateTime*)_rValue.getValue());
+            else if (_rValue.getValueType() == ::getCppuType((const Date*)0))
+                _rxParameters->setDate(_nColumnIndex, *(Date*)_rValue.getValue());
+            else if (_rValue.getValueType() == ::getCppuType((const Time*)0))
+                _rxParameters->setTime(_nColumnIndex, *(Time*)_rValue.getValue());
+            else
+                bSuccessfullyReRouted = sal_False;
+            break;
+
+        case TypeClass_INTERFACE:
+            if (_rValue.getValueType() == ::getCppuType(static_cast<Reference< XInputStream>*>(NULL)))
+            {
+                Reference< XInputStream >  xStream;
+                _rValue >>= xStream;
+                _rxParameters->setBinaryStream(_nColumnIndex, xStream, xStream->available());
+                break;
+            }
+            // run through
+        default:
+            bSuccessfullyReRouted = sal_False;
+
+    }
+
+    return bSuccessfullyReRouted;
+}
 
 //==================================================================
 // OParameterContinuation
@@ -1420,97 +1499,99 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
 {
     if(!x.hasValue())
         _xParams->setNull(parameterIndex,sqlType);
-
-    switch(sqlType)
+    else
     {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-            _xParams->setString(parameterIndex,::comphelper::getString(x));
-            break;
+        switch(sqlType)
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                _xParams->setString(parameterIndex,::comphelper::getString(x));
+                break;
 
-        case DataType::FLOAT:
-        case DataType::REAL:
-            {
-                float nValue;
-                if(x >>= nValue)
+            case DataType::FLOAT:
+            case DataType::REAL:
                 {
-                    _xParams->setFloat(parameterIndex,nValue);
-                    break;
+                    float nValue;
+                    if(x >>= nValue)
+                    {
+                        _xParams->setFloat(parameterIndex,nValue);
+                        break;
+                    }
                 }
-            }
-            // run through if we couldn't set a float value
-        case DataType::DOUBLE:
-            _xParams->setDouble(parameterIndex,::comphelper::getDouble(x));
-            break;
-        case DataType::DATE:
-            {
-                ::com::sun::star::util::Date aValue;
-                if(x >>= aValue)
-                    _xParams->setDate(parameterIndex,aValue);
-            }
-            break;
-        case DataType::TIME:
-            {
-                ::com::sun::star::util::Time aValue;
-                if(x >>= aValue)
-                    _xParams->setTime(parameterIndex,aValue);
-            }
-            break;
-        case DataType::TIMESTAMP:
-            {
-                ::com::sun::star::util::DateTime aValue;
-                if(x >>= aValue)
-                    _xParams->setTimestamp(parameterIndex,aValue);
-            }
-            break;
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-        case DataType::LONGVARCHAR:
-            {
-                Sequence< sal_Int8> aBytes;
-                if(x >>= aBytes)
-                    _xParams->setBytes(parameterIndex,aBytes);
-                else
+                // run through if we couldn't set a float value
+            case DataType::DOUBLE:
+                _xParams->setDouble(parameterIndex,::comphelper::getDouble(x));
+                break;
+            case DataType::DATE:
                 {
-                    Reference< XBlob > xBlob;
-                    if(x >>= xBlob)
-                        _xParams->setBlob(parameterIndex,xBlob);
+                    ::com::sun::star::util::Date aValue;
+                    if(x >>= aValue)
+                        _xParams->setDate(parameterIndex,aValue);
+                }
+                break;
+            case DataType::TIME:
+                {
+                    ::com::sun::star::util::Time aValue;
+                    if(x >>= aValue)
+                        _xParams->setTime(parameterIndex,aValue);
+                }
+                break;
+            case DataType::TIMESTAMP:
+                {
+                    ::com::sun::star::util::DateTime aValue;
+                    if(x >>= aValue)
+                        _xParams->setTimestamp(parameterIndex,aValue);
+                }
+                break;
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+            case DataType::LONGVARCHAR:
+                {
+                    Sequence< sal_Int8> aBytes;
+                    if(x >>= aBytes)
+                        _xParams->setBytes(parameterIndex,aBytes);
                     else
                     {
-                        Reference< XClob > xClob;
-                        if(x >>= xClob)
-                            _xParams->setClob(parameterIndex,xClob);
+                        Reference< XBlob > xBlob;
+                        if(x >>= xBlob)
+                            _xParams->setBlob(parameterIndex,xBlob);
                         else
                         {
-                            Reference< ::com::sun::star::io::XInputStream > xBinStream;
-                            if(x >>= xBinStream)
-                                _xParams->setBinaryStream(parameterIndex,xBinStream,xBinStream->available());
+                            Reference< XClob > xClob;
+                            if(x >>= xClob)
+                                _xParams->setClob(parameterIndex,xClob);
+                            else
+                            {
+                                Reference< ::com::sun::star::io::XInputStream > xBinStream;
+                                if(x >>= xBinStream)
+                                    _xParams->setBinaryStream(parameterIndex,xBinStream,xBinStream->available());
+                            }
                         }
                     }
                 }
-            }
-            break;
-        case DataType::BIT:
-            _xParams->setBoolean(parameterIndex,::cppu::any2bool(x));
-            break;
-        case DataType::TINYINT:
-            _xParams->setByte(parameterIndex,::comphelper::getINT32(x));
-            break;
-        case DataType::SMALLINT:
-            _xParams->setShort(parameterIndex,::comphelper::getINT32(x));
-            break;
-        case DataType::INTEGER:
-            _xParams->setInt(parameterIndex,::comphelper::getINT32(x));
-            break;
-        default:
-            {
-                ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("Unknown SQL Type for PreparedStatement.setObjectWithInfo (SQL Type=");
-                aVal += ::rtl::OUString::valueOf(sqlType);
-                throw SQLException( aVal,_xParams,::rtl::OUString(),0,Any());
-            }
+                break;
+            case DataType::BIT:
+                _xParams->setBoolean(parameterIndex,::cppu::any2bool(x));
+                break;
+            case DataType::TINYINT:
+                _xParams->setByte(parameterIndex,::comphelper::getINT32(x));
+                break;
+            case DataType::SMALLINT:
+                _xParams->setShort(parameterIndex,::comphelper::getINT32(x));
+                break;
+            case DataType::INTEGER:
+                _xParams->setInt(parameterIndex,::comphelper::getINT32(x));
+                break;
+            default:
+                {
+                    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("Unknown SQL Type for PreparedStatement.setObjectWithInfo (SQL Type=");
+                    aVal += ::rtl::OUString::valueOf(sqlType);
+                    throw SQLException( aVal,_xParams,::rtl::OUString(),0,Any());
+                }
+        }
     }
 }
 //.........................................................................
@@ -1607,6 +1688,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35  2001/06/26 09:27:28  fs
+ *  #88392# +implUpdaetObject
+ *
  *  Revision 1.34  2001/06/22 10:53:35  oj
  *  #88455# new functions for parameters
  *
