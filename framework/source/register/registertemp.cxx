@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: registerservices.cxx,v $
+ *  $RCSfile: registertemp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: as $ $Date: 2000-12-13 09:23:06 $
  *
@@ -91,76 +91,15 @@
                              )
 =================================================================================================================*/
 
-#ifndef __FRAMEWORK_BAEHSERVICES_URLTRANSFORMER_HXX_
-#include <baeh_services/urltransformer.hxx>
+#ifndef __FRAMEWORK_BAEHSERVICES_MEDIATYPEDETECTIONHELPER_HXX_
+#include <baeh_services/mediatypedetectionhelper.hxx>
 #endif
-
-#ifndef __FRAMEWORK_BAEHSERVICES_PLUGINFRAME_HXX_
-#include <baeh_services/pluginframe.hxx>
-#endif
-
-#ifndef __FRAMEWORK_BAEHSERVICES_DESKTOP_HXX_
-#include <baeh_services/desktop.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_TASK_HXX_
-#include <services/task.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
-#include <services/frame.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_FRAMELOADERFACTORY_HXX_
-#include <services/frameloaderfactory.hxx>
-#endif
-
-#ifdef TF_FILTER//MUSTFILTER
-    #ifndef __FRAMEWORK_SERVICES_FILTERFACTORY_HXX_
-    #include <services/filterfactory.hxx>
-    #endif
-
-    #ifndef __FRAMEWORK_SERVICES_TYPEDETECTION_HXX_
-    #include <services/typedetection.hxx>
-    #endif
-#endif//MUSTFILTER
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-#ifdef TF_FILTER//MUSTFILTER
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
-                        COMPONENTINFO( ::framework::PlugInFrame                 )
-                        COMPONENTINFO( ::framework::Desktop                     )
-                        COMPONENTINFO( ::framework::Task                        )
-                        COMPONENTINFO( ::framework::Frame                       )
-                        COMPONENTINFO( ::framework::FrameLoaderFactory          )
-                        COMPONENTINFO( ::framework::FilterFactory               )
-                        COMPONENTINFO( ::framework::TypeDetection               )
+
+COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
                     )
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
-                        IFFACTORY( ::framework::PlugInFrame                     )   else
-                        IFFACTORY( ::framework::Desktop                         )   else
-                        IFFACTORY( ::framework::Task                            )   else
-                        IFFACTORY( ::framework::Frame                           )   else
-                        IFFACTORY( ::framework::FrameLoaderFactory              )   else
-                        IFFACTORY( ::framework::FilterFactory                   )   else
-                        IFFACTORY( ::framework::TypeDetection                   )
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper    )
                     )
-#else//MUSTFILTER
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
-                        COMPONENTINFO( ::framework::PlugInFrame                 )
-                        COMPONENTINFO( ::framework::Desktop                     )
-                        COMPONENTINFO( ::framework::Task                        )
-                        COMPONENTINFO( ::framework::Frame                       )
-                        COMPONENTINFO( ::framework::FrameLoaderFactory          )
-                    )
-
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
-                        IFFACTORY( ::framework::PlugInFrame                     )   else
-                        IFFACTORY( ::framework::Desktop                         )   else
-                        IFFACTORY( ::framework::Task                            )   else
-                        IFFACTORY( ::framework::Frame                           )   else
-                        IFFACTORY( ::framework::FrameLoaderFactory              )
-                    )
-#endif//MUSTFILTER

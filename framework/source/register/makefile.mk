@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: as $ $Date: 2000-11-23 14:52:09 $
+#   last change: $Author: as $ $Date: 2000-12-13 09:23:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,8 @@ LIBTARGET=			NO
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			\
-                    $(SLO)$/registerservices.obj
+                    $(SLO)$/registerservices.obj		\
+                    $(SLO)$/registertemp.obj
 
 # --- Targets ------------------------------------------------------
 

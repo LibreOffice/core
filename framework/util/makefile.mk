@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: as $ $Date: 2000-12-12 10:23:11 $
+#   last change: $Author: as $ $Date: 2000-12-13 09:19:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,19 +78,19 @@ NO_BSYMBOLIC=		TRUE
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
+# --- DLL Services ----------------------------------------------------
 
-# --- DLL BaehServices ----------------------------------------------------
+SHL1TARGET=		$(FRAMEWORK_TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1IMPLIB=		i$(TARGET)$(UPD)$(DLLPOSTFIX)
 
-SHL2TARGET=		$(FRAMEWORK_TARGET)$(UPD)$(DLLPOSTFIX)
-SHL2IMPLIB=		i$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1OBJS=		$(SLO)$/registerservices.obj
 
-SHL2OBJS=		$(SLO)$/registerservices.obj
-
-SHL2LIBS=		$(SLB)$/fwk_services.lib			\
+SHL1LIBS=		$(SLB)$/fwk_baehservices.lib		\
+                $(SLB)$/fwk_services.lib			\
                 $(SLB)$/fwk_helper.lib				\
                 $(SLB)$/fwk_classes.lib
 
-SHL2STDLIBS=	$(CPPULIB)							\
+SHL1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(VOSLIB)							\
                 $(SALLIB)							\
@@ -101,6 +101,27 @@ SHL2STDLIBS=	$(CPPULIB)							\
                 $(COMPHELPERLIB)					\
                 $(SVLLIB)							\
                 $(SOTLIB)
+
+SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME=		$(SHL1TARGET)
+
+DEF1EXPORTFILE=	exports.dxp
+
+# --- DLL temp. light Services ----------------------------------------------------
+
+SHL2TARGET=		fwl$(UPD)$(DLLPOSTFIX)
+SHL2IMPLIB=		ifwl$(UPD)$(DLLPOSTFIX)
+
+SHL2OBJS=		$(SLO)$/registertemp.obj
+
+SHL2LIBS=		$(SLB)$/fwk_baehservices.lib
+
+SHL2STDLIBS=	$(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(TOOLSLIB) 						\
+                $(SVLLIB)							\
+                $(SALLIB)
 
 SHL2DEF=		$(MISC)$/$(SHL2TARGET).def
 
