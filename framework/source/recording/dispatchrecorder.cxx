@@ -19,6 +19,8 @@
 #include <vcl/svapp.hxx>
 #endif
 
+using namespace ::com::sun::star::uno;
+
 namespace framework{
 
 //*****************************************************************************************************************
@@ -49,6 +51,57 @@ DEFINE_INIT_SERVICE(
     }
 )
 
+#include <typelib/typedescription.h>
+
+//--------------------------------------------------------------------------------------------------
+void flatten_struct_members(
+    ::std::vector< Any > * vec, void const * data,
+    typelib_CompoundTypeDescription * pTD )
+    SAL_THROW( () )
+{
+    if (pTD->pBaseTypeDescription)
+    {
+        flatten_struct_members( vec, data, pTD->pBaseTypeDescription );
+    }
+    for ( sal_Int32 nPos = 0; nPos < pTD->nMembers; ++nPos )
+    {
+        vec->push_back(
+            Any( (char const *)data + pTD->pMemberOffsets[ nPos ], pTD->ppTypeRefs[ nPos ] ) );
+    }
+}
+//==================================================================================================
+Sequence< Any > make_seq_out_of_struct(
+    Any const & val )
+    SAL_THROW( (RuntimeException) )
+{
+    Type const & type = val.getValueType();
+    TypeClass eTypeClass = type.getTypeClass();
+    if (TypeClass_STRUCT != eTypeClass && TypeClass_EXCEPTION != eTypeClass)
+    {
+        throw RuntimeException(
+            type.getTypeName() +
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("is no struct or exception!") ),
+            Reference< XInterface >() );
+    }
+    typelib_TypeDescription * pTD = 0;
+    TYPELIB_DANGER_GET( &pTD, type.getTypeLibType() );
+    OSL_ASSERT( pTD );
+    if (! pTD)
+    {
+        throw RuntimeException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get type descr of type ") ) +
+            type.getTypeName(),
+            Reference< XInterface >() );
+    }
+
+    ::std::vector< Any > vec;
+    vec.reserve( ((typelib_CompoundTypeDescription *)pTD)->nMembers ); // good guess
+    flatten_struct_members( &vec, val.getValue(), (typelib_CompoundTypeDescription *)pTD );
+    TYPELIB_DANGER_RELEASE( pTD );
+    return Sequence< Any >( &vec[ 0 ], vec.size() );
+}
+
+
 struct DispatchStatement
 {
     ::rtl::OUString aCommand;
@@ -68,6 +121,7 @@ DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::lang::XMulti
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
         , ::cppu::OWeakObject(                               )
         , m_xSMGR            ( xSMGR                         )
+        , m_xConverter( m_xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), css::uno::UNO_QUERY )
 {
 }
 
@@ -156,7 +210,7 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
 }
 
 //*************************************************************************
-static void AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgumentBuffer )
+void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgumentBuffer )
 {
     // if value == bool
     if (aValue.getValueType() == getBooleanCppuType())
@@ -193,6 +247,15 @@ static void AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgume
         aArgumentBuffer.append((sal_Int32)nVal);
     }
     else
+    // if value == sal_UniCode
+    if (aValue.getValueType() == getCppuCharType())
+    {
+        sal_Unicode nVal = *((sal_Unicode*)aValue.getValue());
+        aArgumentBuffer.appendAscii("\"");
+        aArgumentBuffer.append((sal_Unicode)nVal);
+        aArgumentBuffer.appendAscii("\"");
+    }
+    else
     // if value == float
     if (aValue.getValueType() == getCppuType((float*)0))
     {
@@ -223,10 +286,28 @@ static void AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgume
         sal_Int32 nVal = *(sal_Int32*)aValue.getValue();
         aArgumentBuffer.append((sal_Int32)nVal);
     }
-    else if (aValue.getValueType() == ::getCppuType((const css::uno::Sequence < css::uno::Any >*)0) )
+    else if (aValue.getValueTypeClass() == css::uno::TypeClass_STRUCT )
+    {
+        Sequence< Any > aSeq = make_seq_out_of_struct( aValue );
+        aArgumentBuffer.appendAscii("Array(");
+        for ( sal_Int32 nAny=0; nAny<aSeq.getLength(); nAny++ )
+        {
+            AppendToBuffer( aSeq[nAny], aArgumentBuffer );
+            if ( nAny+1 < aSeq.getLength() )
+                // not last argument
+                aArgumentBuffer.appendAscii(",");
+        }
+
+        aArgumentBuffer.appendAscii(")");
+    }
+    else if (aValue.getValueTypeClass() == css::uno::TypeClass_SEQUENCE )
     {
         css::uno::Sequence < css::uno::Any > aSeq;
-        aValue >>= aSeq;
+        css::uno::Any aNew;
+        try { aNew = m_xConverter->convertTo( aValue, ::getCppuType((const css::uno::Sequence < css::uno::Any >*)0) ); }
+        catch (css::uno::Exception&) {}
+
+        aNew >>= aSeq;
         aArgumentBuffer.appendAscii("Array(");
         for ( sal_Int32 nAny=0; nAny<aSeq.getLength(); nAny++ )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:27:44 $
+ *  last change: $Author: mba $ $Date: 2002-06-19 17:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,12 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
+#include <com/sun/star/script/XTypeConverter.hpp>
+#endif
+
 #include <limits.h>
+#include <comphelper/processfactory.hxx>
 
 #pragma hdrstop
 
@@ -1920,6 +1925,7 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
         rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nDist) : nDist);
     else
     {
+/*
         if ( bSerialize )
         {
             ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aSeq(4);
@@ -1930,6 +1936,7 @@ sal_Bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
             rVal <<= aSeq;
         }
         else
+*/
             rVal <<= aRetLine;
     }
 
@@ -2010,11 +2017,18 @@ sal_Bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             // usual struct
         }
-        else if (rVal.getValueType() != ::getCppuType((const ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any >*)0) )
+        else if (rVal.getValueTypeClass() == uno::TypeClass_SEQUENCE )
         {
             // serialization for basic macro recording
-            ::com::sun::star::uno::Sequence < com::sun::star::uno::Any > aSeq;
-            rVal >>= aSeq;
+            uno::Reference < script::XTypeConverter > xConverter
+                    ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+                    uno::UNO_QUERY );
+            uno::Sequence < uno::Any > aSeq;
+            uno::Any aNew;
+            try { aNew = xConverter->convertTo( rVal, ::getCppuType((const uno::Sequence < uno::Any >*)0) ); }
+            catch (uno::Exception&) {}
+
+            aNew >>= aSeq;
             if ( aSeq.getLength() == 4 )
             {
                 sal_Int32 nVal;
@@ -2755,6 +2769,7 @@ sal_Bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 
     if( !bIntMember )
     {
+/*
         if ( bSerialize )
         {
             ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aSeq(4);
@@ -2765,6 +2780,7 @@ sal_Bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
             rVal <<= aSeq;
         }
         else
+ */
             rVal <<= aRetLine;
     }
 
@@ -2793,12 +2809,18 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             {
                 // usual struct
             }
-            else if (rVal.getValueType() != ::getCppuType((const ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any >*)0) )
+            else if (rVal.getValueTypeClass() == uno::TypeClass_SEQUENCE )
             {
                 // serialization for basic macro recording
-                ::com::sun::star::uno::Sequence < com::sun::star::uno::Any > aSeq;
-                rVal >>= aSeq;
-                if ( aSeq.getLength() == 4 )
+                uno::Reference < script::XTypeConverter > xConverter
+                        ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+                        uno::UNO_QUERY );
+                uno::Any aNew;
+                uno::Sequence < uno::Any > aSeq;
+                try { aNew = xConverter->convertTo( rVal, ::getCppuType((const uno::Sequence < uno::Any >*)0) ); }
+                catch (uno::Exception&) {}
+
+                if( (aNew >>= aSeq) && aSeq.getLength() == 4 )
                 {
                     sal_Int32 nVal;
                     if ( aSeq[0] >>= nVal )
@@ -2809,6 +2831,21 @@ sal_Bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                         aBorderLine.OuterLineWidth = (sal_Int16) nVal;
                     if ( aSeq[3] >>= nVal )
                         aBorderLine.LineDistance = (sal_Int16) nVal;
+                }
+                else
+                    return sal_False;
+            }
+            else if (rVal.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < sal_Int16 >*)0) )
+            {
+                // serialization for basic macro recording
+                ::com::sun::star::uno::Sequence < sal_Int16 > aSeq;
+                rVal >>= aSeq;
+                if ( aSeq.getLength() == 4 )
+                {
+                    aBorderLine.Color = aSeq[0];
+                    aBorderLine.InnerLineWidth = aSeq[1];
+                    aBorderLine.OuterLineWidth = aSeq[2];
+                    aBorderLine.LineDistance = aSeq[3];
                 }
                 else
                     return sal_False;

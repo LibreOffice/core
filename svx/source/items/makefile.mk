@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: cl $ $Date: 2002-04-25 09:41:55 $
+#   last change: $Author: mba $ $Date: 2002-06-19 17:16:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,6 +115,7 @@ SLOFILES=	\
 
 EXCEPTIONSFILES= \
         $(SLO)$/paraitem.obj \
+        $(SLO)$/frmitems.obj \
         $(SLO)$/numitem.obj\
         $(SLO)$/xmlcnitm.obj
 

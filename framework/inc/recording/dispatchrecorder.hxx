@@ -63,6 +63,10 @@
 #include <com/sun/star/uno/RuntimeException.hdl>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
+#include <com/sun/star/script/XTypeConverter.hpp>
+#endif
+
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -86,6 +90,7 @@ class DispatchRecorder
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR        ;
         DispatchStatementList                                  m_aStatements;
         sal_Int32                                              m_nRecordingID ;
+        css::uno::Reference< css::script::XTypeConverter >     m_xConverter;
 
     // public interface
     public:
@@ -109,6 +114,8 @@ class DispatchRecorder
         void SAL_CALL implts_recordMacro( const ::rtl::OUString& aURL,
                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                                 sal_Bool bAsComment, ::rtl::OUStringBuffer& );
+        void SAL_CALL AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgumentBuffer );
+
 }; // class DispatcRecorder
 
 } // namespace framework
