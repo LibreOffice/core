@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
+ *  last change: $Author: abi $ $Date: 2001-05-17 09:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #endif
 #ifndef _RESULTSETFORROOT_HXX
 #include <provider/resultsetforroot.hxx>
+#endif
+#ifndef _RESULTSETFORQUERY_HXX
+#include <provider/resultsetforquery.hxx>
 #endif
 
 
@@ -318,6 +321,49 @@ public:
 
 
 
+class ResultSetForQueryFactory
+    : public ResultSetFactory
+{
+private:
+
+    Reference< XMultiServiceFactory >               m_xSMgr;
+    Reference< XContentProvider >                   m_xProvider;
+    sal_Int32                                       m_nOpenMode;
+    Sequence< Property >                            m_seq;
+    Sequence< NumberedSortingInfo >                 m_seqSort;
+    URLParameter                                    m_aURLParameter;
+
+
+public:
+
+    ResultSetForQueryFactory( const Reference< XMultiServiceFactory >& xSMgr,
+                              const Reference< XContentProvider >&  xProvider,
+                              sal_Int32 nOpenMode,
+                              const Sequence< Property >& seq,
+                              const Sequence< NumberedSortingInfo >& seqSort,
+                              URLParameter aURLParameter )
+        : m_xSMgr( xSMgr ),
+          m_xProvider( xProvider ),
+          m_nOpenMode( nOpenMode ),
+          m_seq( seq ),
+          m_seqSort( seqSort ),
+          m_aURLParameter( aURLParameter )
+    {
+    }
+
+    ResultSetBase* createResultSet()
+    {
+        return new ResultSetForQuery( m_xSMgr,
+                                      m_xProvider,
+                                      m_nOpenMode,
+                                      m_seq,
+                                      m_seqSort,
+                                      m_aURLParameter );
+    }
+};
+
+
+
 // virtual
 Any SAL_CALL Content::execute( const Command& aCommand,
                                 sal_Int32 CommandId,
@@ -377,10 +423,20 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                                                                      m_aURLParameter ) );
             aRet <<= xSet;
         }
-
-        if( m_aURLParameter.isQuery() )
+        else if( m_aURLParameter.isQuery() )
         {
-
+            Reference< XDynamicResultSet > xSet
+                = new DynamicResultSet( m_xSMgr,
+                                        this,
+                                        aOpenCommand,
+                                        Environment,
+                                        new ResultSetForQueryFactory( m_xSMgr,
+                                                                      m_xProvider.getBodyPtr(),
+                                                                      aOpenCommand.Mode,
+                                                                      aOpenCommand.Properties,
+                                                                      aOpenCommand.SortingInfo,
+                                                                      m_aURLParameter ) );
+            aRet <<= xSet;
         }
     }
     else

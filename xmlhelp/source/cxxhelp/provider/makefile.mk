@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
+#   last change: $Author: abi $ $Date: 2001-05-17 09:58:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ SLOFILES=\
     $(SLO)$/resultset.obj     	   \
     $(SLO)$/resultsetbase.obj      \
     $(SLO)$/resultsetforroot.obj   \
+    $(SLO)$/resultsetforquery.obj  \
     $(SLO)$/contentcaps.obj        \
     $(SLO)$/urlparameter.obj       \
     $(SLO)$/databases.obj
@@ -115,13 +116,16 @@ SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=exports.map
 
 # @@@ Add additional libs here.
-SHL1STDLIBS=\
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(SALLIB)  \
-    $(VOSLIB)  \
-    $(UCBHELPERLIB) \
-    libdb32.lib
+SHL1STDLIBS=                 \
+    $(CPPUHELPERLIB)         \
+    $(CPPULIB)               \
+    $(SALLIB)                \
+    $(VOSLIB)                \
+    $(UCBHELPERLIB)          \
+    libdb32.lib              \
+    $(SLB)$/jaqe.lib         \
+    $(SLB)$/jautil.lib       \
+    $(SLB)$/jadb.lib
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=$(LIB1TARGET)

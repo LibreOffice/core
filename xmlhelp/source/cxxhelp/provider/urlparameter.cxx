@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
+ *  last change: $Author: abi $ $Date: 2001-05-17 09:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,7 @@ void URLParameter::init( bool bDefaultLanguageIsInitialized )
 {
     m_bBerkeleyRead = false;
     m_bStart = false;
+    m_nHitCount = 100;                // The default maximum hitcount
 
 //      m_aTag = rtl::OUString::createFromAscii( "" );
 //      m_aId = rtl::OUString::createFromAscii( "" );
@@ -292,7 +293,7 @@ void URLParameter::init( bool bDefaultLanguageIsInitialized )
 
 //      m_aQuery = rtl::OUString::createFromAscii( "" );
 //      m_aScope = rtl::OUString::createFromAscii( "" );
-    m_nHitCount = 100;                // The default maximum hitcount
+
 }
 
 
@@ -444,7 +445,7 @@ bool URLParameter::name( bool modulePresent )
             return false;
         else
         {
-            m_aId = m_aExpr.copy( 1,idx );
+            m_aId = m_aExpr.copy( 1,idx-1 );
             m_aExpr = m_aExpr.copy( idx );
         }
     }
