@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:50:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -45,6 +45,7 @@ import java.util.Random;
 // base classes
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.*;
 
 // factory for creating components
@@ -85,20 +86,18 @@ public class Helper
     public Helper( String[] args )
     {
         // connect to a running office and get the ServiceManager
-        try
-        {
-            String sConnectString;
-            if( args.length > 0 )
-                sConnectString = args[ 0 ];
-            else
-                sConnectString = new String( "socket,host=localhost,port=2083" );
+        try {
+            // get the remote office component context
+            maContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
 
-            maMSFactory = connect( "uno:" + sConnectString + ";urp;StarOffice.ServiceManager" );
+            // get the remote office service manager
+            maMCFactory = maContext.getServiceManager();
         }
-        catch( Exception ex )
-        {
-            System.out.println( "Couldn't get ServiceManager: " + ex );
-            System.exit( 0 );
+        catch( Exception e) {
+            System.out.println( "Couldn't get ServiceManager: " + e );
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 
@@ -138,9 +137,10 @@ public class Helper
         XModel aResult = null;
         try
         {
-            XComponentLoader aLoader = (XComponentLoader) UnoRuntime.queryInterface(
-                XComponentLoader.class,
-                maMSFactory.createInstance( "com.sun.star.frame.Desktop" ) );
+            XComponentLoader aLoader = (XComponentLoader)
+                UnoRuntime.queryInterface(XComponentLoader.class,
+                maMCFactory.createInstanceWithContext("com.sun.star.frame.Desktop",
+                                                      maContext) );
 
             aResult = (XModel) UnoRuntime.queryInterface(
                 XModel.class,
@@ -149,9 +149,10 @@ public class Helper
                                               0,
                                               new PropertyValue[ 0 ] ) );
         }
-        catch( Exception ex )
+        catch( Exception e )
         {
-            System.out.println( "Couldn't create Document of type " + sDocType + ": " + ex );
+            System.err.println("Couldn't create Document of type "+ sDocType +": "+e);
+            e.printStackTrace();
             System.exit( 0 );
         }
 
@@ -164,29 +165,7 @@ public class Helper
     private final String  msChartSheetName = "Chart";
     private final String  msChartName      = "SampleChart";
 
-    private XMultiServiceFactory   maMSFactory;
+    private XComponentContext      maContext;
+    private XMultiComponentFactory maMCFactory;
     private XSpreadsheetDocument   maSpreadSheetDoc;
-
-
-    // ____________________
-
-    /** Connect to a running office that is accepting connections
-        and return the ServiceManager to instantiate office components
-     */
-    private XMultiServiceFactory connect( String sConnectString )
-        throws RuntimeException, Exception
-    {
-        XMultiServiceFactory aLocalServiceManager =
-            com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
-
-        XUnoUrlResolver aURLResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-            XUnoUrlResolver.class,
-            aLocalServiceManager.createInstance( "com.sun.star.bridge.UnoUrlResolver" ) );
-
-        XMultiServiceFactory aServiceManager = (XMultiServiceFactory) UnoRuntime.queryInterface(
-            XMultiServiceFactory.class,
-            aURLResolver.resolve( sConnectString ) );
-
-        return aServiceManager;
-    }
 }
