@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:01:43 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ portuguese ] = "Desenho" ;
         Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
         Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
-        Text[ polish ] = "Obiekt rysunkowy";
+        Text[ polish ] = "Obiekt graficzny";
         Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
         Text[ english_us ] = "Drawing";
     Text[ portuguese ] = "Desenho";
@@ -597,7 +597,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text[ italian ] = "Oggetto di disegno";
     Text[ danish ] = "Tegneobjekt";
     Text[ swedish ] = "Ritobjekt";
-    Text[ polish ] = "Obiekt rysunkowy";
+    Text[ polish ] = "Obiekt graficzny";
     Text[ portuguese_brazilian ] = "Zeichenobjekt";
     Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
     Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
@@ -696,7 +696,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_simplified ] = "Í¼ĞÎ";
         Text[ russian ] = "Ğèñóíîê";
         Text[ polish ] = "Grafika";
-        Text[ japanese ] = "¸Ş×Ì¨¯¸";
+        Text[ japanese ] = "}";
         Text[ chinese_traditional ] = "¹Ï§Î";
         Text[ arabic ] = "ÕæÑÉ";
         Text[ greek ] = "Ãñáöéêü";
@@ -1095,7 +1095,7 @@ String STR_IMGBTN_DRW_DOWN
     Text [ portuguese ] = "Objecto de desenho seguinte" ;
     Text[ chinese_simplified ] = "ÏÂÒ»¸ö»æÍ¼¶ÔÏó";
     Text[ russian ] = "Ñëåäóşùèé ãğàôè÷åñêèé îáúåêò";
-    Text[ polish ] = "Nastêpny obiekt rysunkowy";
+    Text[ polish ] = "Nastêpny obiekt graficzny";
     Text[ japanese ] = "Ÿ‚Ì•¶šµÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "¤U¤@­ÓÃ¸¹Ïª«¥ó";
     Text[ arabic ] = "ÇáßÇÆä ÇáÑÓæãí ÇáÊÇáí";
@@ -1196,7 +1196,7 @@ String STR_IMGBTN_GRF_DOWN
     Text[ chinese_simplified ] = "ÏÂÒ»¸öÍ¼ĞÎ";
     Text[ russian ] = "Ñëåäóşùèé ğèñóíîê";
     Text[ polish ] = "Nastêpna grafika";
-    Text[ japanese ] = "Ÿ‚Ì¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "Ÿ‚Ì}";
     Text[ chinese_traditional ] = "¤U¤@­Ó¹Ï§Î";
     Text[ arabic ] = "ÇáÕæÑÉ ÇáÊÇáíÉ";
     Text[ greek ] = "Åğüìåíï ãñáöéêü";
@@ -1498,7 +1498,7 @@ String STR_IMGBTN_DRW_UP
     Text [ portuguese ] = "Objecto de desenho anterior" ;
     Text[ chinese_simplified ] = "ÉÏÒ»¸ö»æÍ¼¶ÔÏó";
     Text[ russian ] = "Ïğåäûäóùèé ãğàôè÷åñêèé îáúåêò";
-    Text[ polish ] = "Poprzedni obiekt rysunkowy";
+    Text[ polish ] = "Poprzedni obiekt graficzny";
     Text[ japanese ] = "‘O‚Ì•¶šµÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "¤W¤@­ÓÃ¸¹Ïª«¥ó";
     Text[ arabic ] = "ÇáßÇÆä ÇáÑÓæãí ÇáÓÇÈŞ";
