@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:47:07 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,15 +70,15 @@
 #include <drafts/com/sun/star/configuration/backend/XTimeStamped.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XTIMESTAMPED_HPP_
 
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif // _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif // _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif // _CPPUHELPER_IMPLBASE2_HXX_
 
-namespace configmgr {
+namespace configmgr { namespace localbe {
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
@@ -104,11 +104,12 @@ class LocalFileLayer : public cppu::WeakImplHelper2<backend::XUpdatableLayer,
           Constructor using the file URL to define the source
           of the layer contents.
 
-          @param xContext   component context, used to access canned services
+          @param xFactory   service factory used to access canned services
           @param aFileUrl   file URL
           */
-        LocalFileLayer(const uno::Reference<uno::XComponentContext>& xContext,
-                       const rtl::OUString& aFileUrl) ;
+        LocalFileLayer(
+                const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+                const rtl::OUString& aFileUrl) ;
         /** Destructor */
         ~LocalFileLayer(void) ;
         // XUpdatableLayer
@@ -140,8 +141,8 @@ class LocalFileLayer : public cppu::WeakImplHelper2<backend::XUpdatableLayer,
 
     protected :
     private :
-        /** Component context for service access */
-        const uno::Reference<uno::XComponentContext>& mContext ;
+        /** Service factory */
+        const uno::Reference<lang::XMultiServiceFactory>& mFactory ;
         /** URL of the file being accessed */
         rtl::OUString mFileUrl ;
         /** Timestamp of the data at the last read operation */
@@ -152,6 +153,6 @@ class LocalFileLayer : public cppu::WeakImplHelper2<backend::XUpdatableLayer,
         uno::Reference<backend::XLayerHandler> mLayerWriter ;
 } ;
 
-} // configmgr
+} } // configmgr.localbe
 
 #endif // CONFIGMGR_LOCALBE_LOCALFILELAYER_HXX_

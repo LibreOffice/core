@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-07 16:47:07 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,27 +75,25 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif // _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 
-namespace configmgr {
+namespace configmgr { namespace localbe {
 
 //==============================================================================
 
 //------------------------------------------------------------------------------
 
 LocalFileLayer::LocalFileLayer(
-        const uno::Reference<uno::XComponentContext>& xContext,
+        const uno::Reference<lang::XMultiServiceFactory>& xFactory,
         const rtl::OUString& aFileUrl)
-: mContext(xContext), mFileUrl(aFileUrl) {
+: mFactory(xFactory), mFileUrl(aFileUrl) {
     static const rtl::OUString kXMLLayerParser(RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.configuration.backend.xml.LayerParser")) ;
     static const rtl::OUString kXMLLayerWriter(RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.configuration.backend.xml.LayerWriter")) ;
 
     mLayerReader = uno::Reference<backend::XLayer>::query(
-            mContext->getServiceManager()->createInstanceWithContext(
-                kXMLLayerParser, mContext)) ;
+                                    mFactory->createInstance(kXMLLayerParser)) ;
     mLayerWriter = uno::Reference<backend::XLayerHandler>::query(
-            mContext->getServiceManager()->createInstanceWithContext(
-                kXMLLayerWriter, mContext)) ;
+                                    mFactory->createInstance(kXMLLayerWriter)) ;
 }
 //------------------------------------------------------------------------------
 
@@ -158,5 +156,5 @@ rtl::OUString LocalFileLayer::getTimestamp(const rtl::OUString& aFileUrl) {
 }
 //------------------------------------------------------------------------------
 
-} // configmgr
+} } // configmgr.localbe
 
