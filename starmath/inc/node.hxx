@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: cmc $ $Date: 2000-11-21 12:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,6 +807,7 @@ public:
     }
 
     void SetSizeParameter(const Fraction &rValue, USHORT nType);
+    const Fraction & GetSizeParameter() const {return aFontSize;}
 
     virtual void Prepare(const SmFormat &rFormat);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -828,8 +829,8 @@ public:
         nNumRows = nNumCols = 0;
     }
 
-    USHORT GetNumRows() {return nNumRows;}
-    USHORT GetNumCols() {return nNumCols;}
+    USHORT GetNumRows() const {return nNumRows;}
+    USHORT GetNumCols() const {return nNumCols;}
     void SetRowCol(USHORT nMatrixRows, USHORT nMatrixCols);
 
     virtual SmNode * GetLeftMost() { return this; }
