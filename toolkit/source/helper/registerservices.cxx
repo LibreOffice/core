@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:45:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 #ifndef TOOLKIT_DIALOG_CONTROL_HXX
 #include <toolkit/controls/dialogcontrol.hxx>
 #endif
+#include "toolkit/dllapi.h"
 
 namespace toolkit
 {
@@ -275,12 +276,12 @@ IMPL_CREATEINSTANCE( UnoControlRoadmapModel )
 extern "C"
 {
 
-void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** ppEnv )
+TOOLKIT_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sal_Char** ppEnvTypeName, uno_Environment** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryKey )
+TOOLKIT_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryKey )
 {
     if (_pRegistryKey)
     {
@@ -348,7 +349,7 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
     return sal_False;
 }
 
-void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* _pRegistryKey )
+TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* _pRegistryKey )
 {
     void* pRet = NULL;
 
