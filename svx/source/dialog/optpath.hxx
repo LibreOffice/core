@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:47:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,10 @@ class HeaderBar;
 // forward ---------------------------------------------------------------
 
 class SvTabListBox;
-class OptHeaderTabListBox;
+namespace svx
+{
+    class OptHeaderTabListBox;
+}
 struct OptPath_Impl;
 
 // define ----------------------------------------------------------------
@@ -119,9 +122,9 @@ private:
     PushButton          aPathBtn;
     FixedLine           aStdBox;
 
-    HeaderBar*              pHeaderBar;
-    OptHeaderTabListBox*    pPathBox;
-    OptPath_Impl*           pImpl;
+    HeaderBar*                  pHeaderBar;
+    ::svx::OptHeaderTabListBox* pPathBox;
+    OptPath_Impl*               pImpl;
 
 #ifdef _SVX_OPTPATH_CXX
     DECL_LINK( PathHdl_Impl, PushButton * );
