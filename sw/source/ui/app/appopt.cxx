@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 09:17:50 $
+ *  last change: $Author: os $ $Date: 2001-05-04 12:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         SwMasterUsrPref* pPref = bTextDialog ? pUsrPref : pWebUsrPref;
         //kein MakeUsrPref, da hier nur die Optionen von Textdoks genommen werden duerfen
         SwView* pAppView = GetView();
+        if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
+            pAppView = 0;
         if(pAppView)
         {
         // wenn Text dann nicht WebView und umgekehrt
@@ -607,6 +609,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/04/17 09:17:50  os
+    #86002# second writer view tabpage: id added
+
     Revision 1.8  2001/04/09 09:46:33  os
     #85859# some option dialog errors fixed
 
