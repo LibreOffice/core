@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:37:30 $
+ *  last change: $Author: kz $ $Date: 2001-11-06 11:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1896,7 +1896,7 @@ String STR_DOCTYPENAME_SC
     Text[ polish ] = "Arkusz kalkulacyjny";
     Text[ portuguese_brazilian ] = "Spreadsheet";
     Text[ japanese ] = "表計算ﾄﾞｷｭﾒﾝﾄ";
-    Text[ korean ] = "스프레드시트";
+    Text[ korean ] = "스프레드시트 문서";
     Text[ chinese_simplified ] = "工作表文档";
     Text[ chinese_traditional ] = "工作表文件";
     Text[ turkish ] = "Hesap tablosu";
@@ -2152,6 +2152,7 @@ String STR_OPENOBJECT
 };
 
 // ******************************************************************* EOF
+
 
 
 
