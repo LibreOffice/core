@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2003-11-12 17:18:22 $
+ *  last change: $Author: kz $ $Date: 2004-01-19 17:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -916,7 +916,7 @@ Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, BOOL bSpecial )
 Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, BOOL bSpecial, BOOL bPreferPortionStart )
 {
     if ( !IsFormatted() && !IsFormatting() )
-        FormatDoc();
+        FormatAndUpdate();
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
     TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
@@ -1182,7 +1182,7 @@ ULONG TextEngine::GetTextHeight() const
     DBG_ASSERT( GetUpdateMode(), "Sollte bei Update=FALSE nicht verwendet werden: GetTextHeight" );
 
     if ( !IsFormatted() && !IsFormatting() )
-        ((TextEngine*)this)->FormatDoc();
+        ((TextEngine*)this)->FormatAndUpdate();
 
     return mnCurTextHeight;
 }
@@ -1192,7 +1192,7 @@ ULONG TextEngine::GetTextHeight( ULONG nParagraph ) const
     DBG_ASSERT( GetUpdateMode(), "Sollte bei Update=FALSE nicht verwendet werden: GetTextHeight" );
 
       if ( !IsFormatted() && !IsFormatting() )
-        ((TextEngine*)this)->FormatDoc();
+        ((TextEngine*)this)->FormatAndUpdate();
 
     return CalcParaHeight( nParagraph );
 }
@@ -1219,7 +1219,7 @@ ULONG TextEngine::CalcTextWidth( ULONG nPara )
 ULONG TextEngine::CalcTextWidth()
 {
     if ( !IsFormatted() && !IsFormatting() )
-        FormatDoc();
+        FormatAndUpdate();
 
     if ( mnCurTextWidth == 0xFFFFFFFF )
     {
@@ -1577,16 +1577,16 @@ void TextEngine::FormatFullDoc()
 {
     for ( ULONG nPortion = 0; nPortion < mpTEParaPortions->Count(); nPortion++ )
     {
-        TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPortion );
-        USHORT nLen = pTEParaPortion->GetNode()->GetText().Len();
+        TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPortion );        USHORT nLen = pTEParaPortion->GetNode()->GetText().Len();
         pTEParaPortion->MarkSelectionInvalid( 0, nLen );
     }
+    mbFormatted = FALSE;
     FormatDoc();
 }
 
 void TextEngine::FormatDoc()
 {
-    if ( !GetUpdateMode() || IsFormatting() )
+    if ( IsFormatted() || !GetUpdateMode() || IsFormatting() )
         return;
 
     mbIsFormatting = TRUE;
@@ -1594,6 +1594,7 @@ void TextEngine::FormatDoc()
 
     long nY = 0;
     BOOL bGrow = FALSE;
+    ULONG nOldCurTextWidth = mnCurTextWidth;
 
     maInvalidRec = Rectangle(); // leermachen
     for ( ULONG nPara = 0; nPara < mpTEParaPortions->Count(); nPara++ )
@@ -1626,7 +1627,7 @@ void TextEngine::FormatDoc()
                 maInvalidRec.Bottom() = nY + CalcParaHeight( nPara );
             }
 
-            if ( ( mnCurTextWidth != 0xFFFFFFFF ) && ( nOldParaWidth == mnCurTextWidth ) )
+            if ( ( mnCurTextWidth != 0xFFFFFFFF ) && ( nOldParaWidth == nOldCurTextWidth ) )
             {
                 ULONG nNewParaWidth = CalcTextWidth( nPara );
                 if ( nNewParaWidth >= mnCurTextWidth )
@@ -2106,16 +2107,21 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                 nL = nEnd-nTmpIndex;
                                                 if ( aTextEnd > *pSelEnd )
                                                     nL = pSelEnd->GetIndex() - nTmpIndex;
-                                                pOutDev->SetTextColor( rStyleSettings.GetHighlightTextColor() );
-                                                pOutDev->SetTextFillColor( rStyleSettings.GetHighlightColor() );
-                                                aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nTmpIndex, nTmpIndex+nL );
-                                                pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nL );
-                                                nTmpIndex += nL;
+                                                if ( nL )
+                                                {
+                                                    Color aOldTextColor = pOutDev->GetTextColor();
+                                                    pOutDev->SetTextColor( rStyleSettings.GetHighlightTextColor() );
+                                                    pOutDev->SetTextFillColor( rStyleSettings.GetHighlightColor() );
+                                                    aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nTmpIndex, nTmpIndex+nL );
+                                                    pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nL );
+                                                    pOutDev->SetTextColor( aOldTextColor );
+                                                    pOutDev->SetTextFillColor();
+                                                    nTmpIndex += nL;
+                                                }
 
                                                 // 3) Bereich nach Selektion
                                                 if ( nTmpIndex < nEnd )
                                                 {
-                                                    pOutDev->SetFont( aFont );
                                                     nL = nEnd-nTmpIndex;
                                                     aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nTmpIndex, nTmpIndex+nL );
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nEnd-nTmpIndex );
@@ -2585,17 +2591,9 @@ BOOL TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
 
     SetUpdateMode( bUpdate );
     FormatAndUpdate( GetActiveView() );
-//  if ( GetActiveView() )
-//      GetActiveView()->SetSelection( aNewSel );
+
     return rInput.GetError() ? FALSE : TRUE;
 }
-
-#if SUPD < 540
-BOOL TextEngine::Write( SvStream& rOutput, const TextSelection* pSel )
-{
-    return Write( rOutput, pSel, FALSE );
-}
-#endif
 
 BOOL TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, BOOL bHTML )
 {
