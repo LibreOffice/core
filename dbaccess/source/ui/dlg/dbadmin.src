@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:11:15 $
+ *  last change: $Author: fs $ $Date: 2000-10-26 18:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,22 +277,22 @@ TabDialog DLG_DATABASE_ADMINISTRATION
 };
 
 //-------------------------------------------------------------------------
-Image BMP_DATABASE
+Image IMG_DATABASE
 {
     ImageBitmap = Bitmap { File = "db.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
-Image BMP_DATABASE_MODIFIED
+Image IMG_DATABASE_MODIFIED
 {
     ImageBitmap = Bitmap { File = "db_modified.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
-Image BMP_DATABASE_NEW
+Image IMG_DATABASE_NEW
 {
     ImageBitmap = Bitmap { File = "db_new.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
-Image BMP_DATABASE_DELETED
+Image IMG_DATABASE_DELETED
 {
     ImageBitmap = Bitmap { File = "db_deleted.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
@@ -1442,6 +1442,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/10/24 12:11:15  fs
+ *  functionality added: browsing for system data sources (ODBC/Adabas/dbase/text)
+ *
  *  Revision 1.5  2000/10/20 09:53:17  fs
  *  handling for the SuppresVersionColumns property of a data source
  *
