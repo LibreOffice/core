@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-02 14:08:06 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,11 @@
 #include "prntopts.hrc"
 #include "sdresid.hxx"
 #include "prntopts.hxx"
-
-
+#include "app.hrc" //CHINA001
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
+#include <sfx2/request.hxx> //CHINA001
 // STATIC DATA -----------------------------------------------------------
 
 static USHORT pPrintOptRanges[] =
@@ -340,6 +343,17 @@ void    SdPrintOptions::SetDrawMode()
         Size aSize(aGrpOutput.GetSizePixel());
         aSize.Width() = nWidth;
         aGrpOutput.SetSizePixel(aSize);
+    }
+}
+
+void SdPrintOptions::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,sal_False);
+    if (pFlagItem)
+    {
+        UINT32 nFlags=pFlagItem->GetValue();
+        if ( ( nFlags & SD_DRAW_MODE ) == SD_DRAW_MODE )
+            SetDrawMode();
     }
 }
 
