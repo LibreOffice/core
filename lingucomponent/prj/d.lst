@@ -1,0 +1,3 @@
+..\%__SRC%\bin\*.dat %_DEST%\bin%_EXT%\*.dat
+..\%__SRC%\bin\*.idx %_DEST%\bin%_EXT%\*.idx
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
