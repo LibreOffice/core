@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:20:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #ifndef _COM_SUN_STAR_AWT_FONTPITCH_HPP_
 #include <com/sun/star/awt/FontPitch.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -112,7 +115,11 @@
 #include <functional>
 #include <algorithm>
 
+#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
+#endif
+
+using ::com::sun::star::style::VerticalAlignment;
 
 struct ImplPropertyInfo
 {
@@ -275,6 +282,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ValueMax" ),           BASEPROPERTY_VALUEMAX_DOUBLE,   ::getCppuType((const double*)0),        ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ValueMin" ),           BASEPROPERTY_VALUEMIN_DOUBLE,   ::getCppuType((const double*)0),        ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "ValueStep" ),          BASEPROPERTY_VALUESTEP_DOUBLE,  ::getCppuType((const double*)0),        ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "VerticalAlign" ),      BASEPROPERTY_VERTICALALIGN,     ::getCppuType((const VerticalAlignment*)0),::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "VisibleSize" ),        BASEPROPERTY_VISIBLESIZE,       ::getCppuType((const sal_Int32*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID, sal_True ),
 
 
