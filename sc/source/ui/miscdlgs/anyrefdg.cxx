@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:42:21 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 19:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #include <tools/shl.hxx>
 #include <svtools/taskbar.hxx>
 #include <sfx2/topfrm.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 
 
 #define ANYREFDG_CXX
@@ -381,10 +383,26 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
     if ( pScViewShell )
     {
         pScViewShell->UpdateInputHandler(TRUE);
-
-        ScDocShell* pDocSh = pScViewShell->GetViewData()->GetDocShell();
-        aDocName = pDocSh->GetTitle();
     }
+
+    // title has to be from the view that opened the dialog,
+    // even if it's not the current view
+
+    SfxObjectShell* pParentDoc = NULL;
+    if ( pMyBindings )
+    {
+        SfxDispatcher* pMyDisp = pMyBindings->GetDispatcher();
+        if (pMyDisp)
+        {
+            SfxViewFrame* pMyViewFrm = pMyDisp->GetFrame();
+            if (pMyViewFrm)
+                pParentDoc = pMyViewFrm->GetObjectShell();
+        }
+    }
+    if ( !pParentDoc && pScViewShell )                  // use current only if above fails
+        pParentDoc = pScViewShell->GetObjectShell();
+    if ( pParentDoc )
+        aDocName = pParentDoc->GetTitle();
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
 
@@ -521,7 +539,6 @@ BOOL __EXPORT ScAnyRefDlg::DoClose( USHORT nId )
 
     pSfxApp->LockDispatcher( FALSE );           //! hier und im dtor ?
 
-    //! remember the view for which the dialog was started
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if ( pViewFrm && pViewFrm->HasChildWindow(FID_INPUTLINE_STATUS) )
     {
@@ -537,7 +554,15 @@ BOOL __EXPORT ScAnyRefDlg::DoClose( USHORT nId )
     }
     //Application::GetAppWindow()->Enable();
 
-    SC_MOD()->SetRefDialog( nId, FALSE );
+    // find parent view frame to close dialog
+    SfxViewFrame* pMyViewFrm = NULL;
+    if ( pMyBindings )
+    {
+        SfxDispatcher* pMyDisp = pMyBindings->GetDispatcher();
+        if (pMyDisp)
+            pMyViewFrm = pMyDisp->GetFrame();
+    }
+    SC_MOD()->SetRefDialog( nId, FALSE, pMyViewFrm );
 
     pSfxApp->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
 
