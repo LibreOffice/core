@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-08 13:55:55 $
+ *  last change: $Author: gh $ $Date: 2002-11-12 11:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,22 +1124,34 @@ void BasicFrame::AddToLRU(String const& aFile)
     PopupMenu *pPopup  = GetMenuBar()->GetPopupMenu(RID_APPFILE);
 
     aConfig.SetGroup("LRU");
+    USHORT nMaxLRU = aConfig.ReadKey("MaxLRU","4").ToInt32();
     DirEntry aFileEntry( aFile );
-    USHORT i,nLastMove = 4;
+    USHORT i,nLastMove = nMaxLRU;
 
-    for ( i = 1 ; i<4 && nLastMove == 4 ; i++ )
+    for ( i = 1 ; i<nMaxLRU && nLastMove == nMaxLRU ; i++ )
     {
         if ( DirEntry( UniString( aConfig.ReadKey(LRUNr(i),""), RTL_TEXTENCODING_UTF8 ) ) == aFileEntry )
             nLastMove = i;
     }
 
+    if ( pPopup->GetItemPos( IDM_FILE_LRU1 ) == MENU_ITEM_NOTFOUND )
+        pPopup->InsertSeparator();
     for ( i = nLastMove ; i>1 ; i-- )
     {
-        aConfig.WriteKey(LRUNr(i), aConfig.ReadKey(LRUNr(i-1),""));
-        pPopup->SetItemText(IDM_FILE_LRU1 + i-1,FILENAME2MENU( i, pPopup->GetItemText(IDM_FILE_LRU1 + i-1-1).MENU2FILENAME ));
+        if ( aConfig.ReadKey(LRUNr(i-1),"").Len() )
+        {
+            aConfig.WriteKey(LRUNr(i), aConfig.ReadKey(LRUNr(i-1),""));
+            if ( pPopup->GetItemPos( IDM_FILE_LRU1 + i-1 ) == MENU_ITEM_NOTFOUND )
+                 pPopup->InsertItem(IDM_FILE_LRU1 + i-1, FILENAME2MENU( i, pPopup->GetItemText(IDM_FILE_LRU1 + i-1-1).MENU2FILENAME ));
+            else
+                pPopup->SetItemText(IDM_FILE_LRU1 + i-1,FILENAME2MENU( i, pPopup->GetItemText(IDM_FILE_LRU1 + i-1-1).MENU2FILENAME ));
+        }
     }
     aConfig.WriteKey(LRUNr(1), ByteString( aFile, RTL_TEXTENCODING_UTF8 ) );
-    pPopup->SetItemText(IDM_FILE_LRU1,FILENAME2MENU( 1, aFile) );
+    if ( pPopup->GetItemPos( IDM_FILE_LRU1 + i-1 ) == MENU_ITEM_NOTFOUND )
+         pPopup->InsertItem(IDM_FILE_LRU1,FILENAME2MENU( 1, aFile));
+    else
+        pPopup->SetItemText(IDM_FILE_LRU1,FILENAME2MENU( 1, aFile));
 }
 
 void BasicFrame::LoadLRU()
@@ -1149,8 +1161,10 @@ void BasicFrame::LoadLRU()
     BOOL       bAddSep = TRUE;
 
     aConfig.SetGroup("LRU");
+    USHORT nMaxLRU = aConfig.ReadKey("MaxLRU","4").ToInt32();
 
-    for (int i=1; i<=4 && pPopup!=NULL; i++)
+    int i;
+    for ( i = 1; i <= nMaxLRU && pPopup != NULL; i++)
     {
         String aFile = UniString( aConfig.ReadKey(LRUNr(i)), RTL_TEXTENCODING_UTF8 );
 
