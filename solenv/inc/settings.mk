@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-26 12:28:01 $
+#   last change: $Author: hjs $ $Date: 2001-10-30 13:08:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -738,20 +738,12 @@ CLASSPATH!:=$(CLASSPATH:s/tkt/no/)
 # Makros fuer die Librarynamen des Solar
 .INCLUDE : libs.mk
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2" 
-.IF "$(UPDATER)"=="YES"
+.IF "$(GUI)"=="WNT"
 VERSIONOBJ=$(SLO)$/_version.obj
-.ELSE
-VERSIONOBJ=_version.obj
-.ENDIF
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
-.IF "$(UPDATER)"=="YES"
 VERSIONOBJ=$(SLO)$/_version.o
-.ELSE
-VERSIONOBJ=$(SOLARENV)$/$(OUTPATH)$/lib$/_version.o
-.ENDIF
 .ENDIF
 
 .IF "$(GUI)"=="WNT"

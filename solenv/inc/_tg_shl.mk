@@ -1,5 +1,7 @@
 # unroll begin
 
+.IF "$(SHL1TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL1STDLIBS=
 .ENDIF
@@ -42,11 +44,14 @@ SHL1DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL1DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL1VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL1VERSIONOBJ:=$(VERSIONOBJ)
+SHL1DEPN+=$(SHL1VERSIONOBJ)
+$(MISC)$/$(SHL1VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -163,7 +168,7 @@ SHL1LINKRES*=$(MISC)$/$(SHL1TARGET).res
 SHL1DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 
-.IF "$(SHL1TARGETN)"!=""
+#.IF "$(SHL1TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -195,39 +200,6 @@ $(SHL1TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL1VERSIONOBJ:+"+\n") $(SHL1OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL1LIBS:+"+\n") $(SHL1STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL1DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL1LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL1STDLIBS:^"-l") $(SHL1OBJS) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) $(SHL1DEF)
-.ENDIF
-.IF "$(SHL1RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL1RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL1OBJS), $@, $(MISC)\$(@:b).map, $(SHL1LIBS) $(SHL1STDLIBS) $(STDSHL), $(SHL1DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
@@ -441,6 +413,8 @@ $(SHL1TARGETN) : \
 # Anweisungen fuer das Linken
 # unroll begin
 
+.IF "$(SHL2TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL2STDLIBS=
 .ENDIF
@@ -483,11 +457,14 @@ SHL2DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL2DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL2VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL2VERSIONOBJ:=$(VERSIONOBJ)
+SHL2DEPN+=$(SHL2VERSIONOBJ)
+$(MISC)$/$(SHL2VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -604,7 +581,7 @@ SHL2LINKRES*=$(MISC)$/$(SHL2TARGET).res
 SHL2DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 
-.IF "$(SHL2TARGETN)"!=""
+#.IF "$(SHL2TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -636,39 +613,6 @@ $(SHL2TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL2VERSIONOBJ:+"+\n") $(SHL2OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL2LIBS:+"+\n") $(SHL2STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL2DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL2LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL2STDLIBS:^"-l") $(SHL2OBJS) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) $(SHL2DEF)
-.ENDIF
-.IF "$(SHL2RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL2RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL2OBJS), $@, $(MISC)\$(@:b).map, $(SHL2LIBS) $(SHL2STDLIBS) $(STDSHL), $(SHL2DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
@@ -882,6 +826,8 @@ $(SHL2TARGETN) : \
 # Anweisungen fuer das Linken
 # unroll begin
 
+.IF "$(SHL3TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL3STDLIBS=
 .ENDIF
@@ -924,11 +870,14 @@ SHL3DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL3DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL3VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL3VERSIONOBJ:=$(VERSIONOBJ)
+SHL3DEPN+=$(SHL3VERSIONOBJ)
+$(MISC)$/$(SHL3VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -1045,7 +994,7 @@ SHL3LINKRES*=$(MISC)$/$(SHL3TARGET).res
 SHL3DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 
-.IF "$(SHL3TARGETN)"!=""
+#.IF "$(SHL3TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -1077,39 +1026,6 @@ $(SHL3TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL3VERSIONOBJ:+"+\n") $(SHL3OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL3LIBS:+"+\n") $(SHL3STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL3DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL3LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL3STDLIBS:^"-l") $(SHL3OBJS) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) $(SHL3DEF)
-.ENDIF
-.IF "$(SHL3RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL3RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL3OBJS), $@, $(MISC)\$(@:b).map, $(SHL3LIBS) $(SHL3STDLIBS) $(STDSHL), $(SHL3DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
@@ -1323,6 +1239,8 @@ $(SHL3TARGETN) : \
 # Anweisungen fuer das Linken
 # unroll begin
 
+.IF "$(SHL4TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL4STDLIBS=
 .ENDIF
@@ -1365,11 +1283,14 @@ SHL4DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL4DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL4VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL4VERSIONOBJ:=$(VERSIONOBJ)
+SHL4DEPN+=$(SHL4VERSIONOBJ)
+$(MISC)$/$(SHL4VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -1486,7 +1407,7 @@ SHL4LINKRES*=$(MISC)$/$(SHL4TARGET).res
 SHL4DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 
-.IF "$(SHL4TARGETN)"!=""
+#.IF "$(SHL4TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -1518,39 +1439,6 @@ $(SHL4TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL4VERSIONOBJ:+"+\n") $(SHL4OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL4LIBS:+"+\n") $(SHL4STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL4DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL4LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL4STDLIBS:^"-l") $(SHL4OBJS) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) $(SHL4DEF)
-.ENDIF
-.IF "$(SHL4RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL4RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL4OBJS), $@, $(MISC)\$(@:b).map, $(SHL4LIBS) $(SHL4STDLIBS) $(STDSHL), $(SHL4DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
@@ -1764,6 +1652,8 @@ $(SHL4TARGETN) : \
 # Anweisungen fuer das Linken
 # unroll begin
 
+.IF "$(SHL5TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL5STDLIBS=
 .ENDIF
@@ -1806,11 +1696,14 @@ SHL5DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL5DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL5VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL5VERSIONOBJ:=$(VERSIONOBJ)
+SHL5DEPN+=$(SHL5VERSIONOBJ)
+$(MISC)$/$(SHL5VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -1927,7 +1820,7 @@ SHL5LINKRES*=$(MISC)$/$(SHL5TARGET).res
 SHL5DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 
-.IF "$(SHL5TARGETN)"!=""
+#.IF "$(SHL5TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -1959,39 +1852,6 @@ $(SHL5TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL5VERSIONOBJ:+"+\n") $(SHL5OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL5LIBS:+"+\n") $(SHL5STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL5DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL5LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL5STDLIBS:^"-l") $(SHL5OBJS) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) $(SHL5DEF)
-.ENDIF
-.IF "$(SHL5RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL5RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL5OBJS), $@, $(MISC)\$(@:b).map, $(SHL5LIBS) $(SHL5STDLIBS) $(STDSHL), $(SHL5DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
@@ -2205,6 +2065,8 @@ $(SHL5TARGETN) : \
 # Anweisungen fuer das Linken
 # unroll begin
 
+.IF "$(SHL6TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL6STDLIBS=
 .ENDIF
@@ -2247,11 +2109,14 @@ SHL6DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL6DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL6VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL6VERSIONOBJ:=$(VERSIONOBJ)
+SHL6DEPN+=$(SHL6VERSIONOBJ)
+$(MISC)$/$(SHL6VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -2368,7 +2233,7 @@ SHL6LINKRES*=$(MISC)$/$(SHL6TARGET).res
 SHL6DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 
-.IF "$(SHL6TARGETN)"!=""
+#.IF "$(SHL6TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -2400,39 +2265,6 @@ $(SHL6TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL6VERSIONOBJ:+"+\n") $(SHL6OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL6LIBS:+"+\n") $(SHL6STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL6DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL6LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL6STDLIBS:^"-l") $(SHL6OBJS) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) $(SHL6DEF)
-.ENDIF
-.IF "$(SHL6RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL6RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL6OBJS), $@, $(MISC)\$(@:b).map, $(SHL6LIBS) $(SHL6STDLIBS) $(STDSHL), $(SHL6DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
@@ -2646,6 +2478,8 @@ $(SHL6TARGETN) : \
 # Anweisungen fuer das Linken
 # unroll begin
 
+.IF "$(SHL7TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL7STDLIBS=
 .ENDIF
@@ -2688,11 +2522,14 @@ SHL7DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL7DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL7VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL7VERSIONOBJ:=$(VERSIONOBJ)
+SHL7DEPN+=$(SHL7VERSIONOBJ)
+$(MISC)$/$(SHL7VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -2809,7 +2646,7 @@ SHL7LINKRES*=$(MISC)$/$(SHL7TARGET).res
 SHL7DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 
-.IF "$(SHL7TARGETN)"!=""
+#.IF "$(SHL7TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -2841,39 +2678,6 @@ $(SHL7TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL7VERSIONOBJ:+"+\n") $(SHL7OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL7LIBS:+"+\n") $(SHL7STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL7DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL7LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL7STDLIBS:^"-l") $(SHL7OBJS) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) $(SHL7DEF)
-.ENDIF
-.IF "$(SHL7RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL7RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL7OBJS), $@, $(MISC)\$(@:b).map, $(SHL7LIBS) $(SHL7STDLIBS) $(STDSHL), $(SHL7DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
@@ -3087,6 +2891,8 @@ $(SHL7TARGETN) : \
 # Anweisungen fuer das Linken
 # unroll begin
 
+.IF "$(SHL8TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL8STDLIBS=
 .ENDIF
@@ -3129,11 +2935,14 @@ SHL8DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL8DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL8VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL8VERSIONOBJ:=$(VERSIONOBJ)
+SHL8DEPN+=$(SHL8VERSIONOBJ)
+$(MISC)$/$(SHL8VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -3250,7 +3059,7 @@ SHL8LINKRES*=$(MISC)$/$(SHL8TARGET).res
 SHL8DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 
-.IF "$(SHL8TARGETN)"!=""
+#.IF "$(SHL8TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -3282,39 +3091,6 @@ $(SHL8TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL8VERSIONOBJ:+"+\n") $(SHL8OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL8LIBS:+"+\n") $(SHL8STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL8DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL8LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL8STDLIBS:^"-l") $(SHL8OBJS) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) $(SHL8DEF)
-.ENDIF
-.IF "$(SHL8RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL8RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL8OBJS), $@, $(MISC)\$(@:b).map, $(SHL8LIBS) $(SHL8STDLIBS) $(STDSHL), $(SHL8DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
@@ -3528,6 +3304,8 @@ $(SHL8TARGETN) : \
 # Anweisungen fuer das Linken
 # unroll begin
 
+.IF "$(SHL9TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL9STDLIBS=
 .ENDIF
@@ -3570,11 +3348,14 @@ SHL9DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL9DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL9VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL9VERSIONOBJ:=$(VERSIONOBJ)
+SHL9DEPN+=$(SHL9VERSIONOBJ)
+$(MISC)$/$(SHL9VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -3691,7 +3472,7 @@ SHL9LINKRES*=$(MISC)$/$(SHL9TARGET).res
 SHL9DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 
-.IF "$(SHL9TARGETN)"!=""
+#.IF "$(SHL9TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -3723,39 +3504,6 @@ $(SHL9TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL9VERSIONOBJ:+"+\n") $(SHL9OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL9LIBS:+"+\n") $(SHL9STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL9DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL9LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL9STDLIBS:^"-l") $(SHL9OBJS) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) $(SHL9DEF)
-.ENDIF
-.IF "$(SHL9RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL9RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL9OBJS), $@, $(MISC)\$(@:b).map, $(SHL9LIBS) $(SHL9STDLIBS) $(STDSHL), $(SHL9DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
@@ -3969,6 +3717,8 @@ $(SHL9TARGETN) : \
 # Anweisungen fuer das Linken
 # unroll begin
 
+.IF "$(SHL10TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL10STDLIBS=
 .ENDIF
@@ -4011,11 +3761,14 @@ SHL10DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL10DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descrip
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL10VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL10VERSIONOBJ:=$(VERSIONOBJ)
+SHL10DEPN+=$(SHL10VERSIONOBJ)
+$(MISC)$/$(SHL10VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -4132,7 +3885,7 @@ SHL10LINKRES*=$(MISC)$/$(SHL10TARGET).res
 SHL10DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
 
-.IF "$(SHL10TARGETN)"!=""
+#.IF "$(SHL10TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -4164,39 +3917,6 @@ $(SHL10TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL10VERSIONOBJ:+"+\n") $(SHL10OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL10LIBS:+"+\n") $(SHL10STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL10DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL10LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL10STDLIBS:^"-l") $(SHL10OBJS) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) $(SHL10DEF)
-.ENDIF
-.IF "$(SHL10RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL10RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL10OBJS), $@, $(MISC)\$(@:b).map, $(SHL10LIBS) $(SHL10STDLIBS) $(STDSHL), $(SHL10DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"

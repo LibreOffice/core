@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-25 18:03:02 $
+#   last change: $Author: hjs $ $Date: 2001-10-30 13:08:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,6 +100,8 @@ SHL1 SHL2 SHL3 SHL4 SHL5 SHL6 SHL7 SHL8 SHL9:
 # Anweisungen fuer das Linken
 # unroll begin
 
+.IF "$(SHL$(TNR)TARGETN)"!=""
+
 .IF "$(OS)"=="AIX"
 SHL$(TNR)STDLIBS=
 .ENDIF
@@ -142,11 +144,14 @@ SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL$(TNR)DESC:b)$($(WINVERSIONNAMES)_MAJOR)
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
-.IF "$(UPDATER)"=="YES"
 SHL$(TNR)VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$(VERSIONOBJ:f)
+.IF "$(UPDATER)"=="YES"
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
-SHL$(TNR)VERSIONOBJ:=$(VERSIONOBJ)
+SHL$(TNR)DEPN+=$(SHL$(TNR)VERSIONOBJ)
+$(MISC)$/$(SHL$(TNR)VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
+    +$(COPY) $< $@
+
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
@@ -263,7 +268,7 @@ SHL$(TNR)LINKRES*=$(MISC)$/$(SHL$(TNR)TARGET).res
 SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_description.obj
 .ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 
-.IF "$(SHL$(TNR)TARGETN)"!=""
+#.IF "$(SHL$(TNR)TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
@@ -295,39 +300,6 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(UPDATER)"=="YES"
         @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj 
 .ENDIF
-.IF "$(GUI)"=="OS2"
-.IF "$(UPDATER)"=="YES"
-.IF "$(COM)"=="ICC"
-        $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj /Ge+ /Gs+ /Gt+ /Gd+ -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ELSE			# "$(COM)"=="ICC" 
-        $(CC) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -Zomf -Zso -Zsys -DOS2 $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
-.ENDIF			# "$(COM)"=="ICC" 
-.ENDIF			# "$(UPDATER)"=="YES"
-#
-#	todo: try with $(LINKEXTENDLINE)!
-#
-    +-$(RM) $@
-.IF "$(COM)"=="ICC"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) @$(mktmp \
-        $(STDSLO:+"+\n") $(SHL$(TNR)VERSIONOBJ:+"+\n") $(SHL$(TNR)OBJS:+"+\n")), \
-        $(@), \
-        $(MISC)$/$(@:b).map, \
-        @$(mktmp $(SHL$(TNR)LIBS:+"+\n") $(SHL$(TNR)STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
-        $(SHL$(TNR)DEF:+"\n")
-.ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL$(TNR)LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL$(TNR)STDLIBS:^"-l") $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)DEF)
-.ENDIF
-.IF "$(SHL$(TNR)RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(SHL$(TNR)RES) $@
-.ENDIF			# "$(COMEX)"=="3"
-.ENDIF			# "$(GUI)"=="OS2"
-.IF "$(GUI)" == "WIN"
-.IF "$(COM)"=="BLC"
-    +$(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSSHL) $(STDSLO) $(SHL$(TNR)OBJS), $@, $(MISC)\$(@:b).map, $(SHL$(TNR)LIBS) $(SHL$(TNR)STDLIBS) $(STDSHL), $(SHL$(TNR)DEF)) >& $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ENDIF			# "$(COM)"=="BLC"
-.ENDIF			# "$(GUI)"=="WIN"
 .IF "$(GUI)" == "WNT"
 .IF "$(UPDATER)"=="YES"
 .IF "$(COM)"=="GCC"
