@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:54:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,9 +279,9 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pScMod->SetRefInputHdl(pScMod->GetInputHdl());
 
         pDoc = pViewData->GetDocument();
-        USHORT nCol = pViewData->GetCurX();
-        USHORT nRow = pViewData->GetCurY();
-        USHORT nTab = pViewData->GetTabNo();
+        SCCOL nCol = pViewData->GetCurX();
+        SCROW nRow = pViewData->GetCurY();
+        SCTAB nTab = pViewData->GetTabNo();
         aCursorPos = ScAddress( nCol, nRow, nTab );
 
         pScMod->InitFormEditData();                             // neu anlegen
@@ -703,14 +703,14 @@ void ScFormulaDlg::DoEnter(BOOL bOk)
     if ( pScViewShell )
     {
         ScViewData* pVD=pScViewShell->GetViewData();
-        USHORT nExecTab = aCursorPos.Tab();
+        SCTAB nExecTab = aCursorPos.Tab();
         if ( nExecTab != pVD->GetTabNo() )
             pScViewShell->SetTabNo( nExecTab );
 
-        USHORT nRow=aCursorPos.Row();
-        USHORT nCol=aCursorPos.Col();
+        SCROW nRow=aCursorPos.Row();
+        SCCOL nCol=aCursorPos.Col();
 
-        if(pVD->GetCurX()!=nRow || pVD->GetCurY()!=nCol)
+        if(pVD->GetCurX()!=nCol || pVD->GetCurY()!=nRow)
             pScViewShell->SetCursor(nCol,nRow);
     }
 
