@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.11 $
+#  $Revision: 1.12 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:54:03 $
+#  last change: $Author: obo $ $Date: 2003-10-20 13:12:48 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -51,6 +51,11 @@ include $(SETTINGS)/dk.mk
 COMPONENT_NAME=ConverterServletExample
 OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT_NAME)
 
+OUT_WAR=$(OUT_COMP_CLASS)/conversion
+OUT_WAR_WEB_INF=$(OUT_WAR)/WEB-INF
+OUT_WAR_CLASSES=$(OUT_WAR_WEB_INF)/classes
+OUT_WAR_LIB=$(OUT_WAR_WEB_INF)/lib
+
 JAVAFILES  = \
 	ConverterServlet.java
 
@@ -90,8 +95,26 @@ $(CLASSFILES) : $(JAVAFILES) $(OFFICE_CLASSES_DIR)/cos.jar $(OFFICE_CLASSES_DIR)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
-ConverterServletExample : $(CLASSFILES)
+$(OUT_CLASS)/conversion.war : $(CLASSFILES) ConverterServlet.html web.xml
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	-$(MKDIR) $(subst /,$(PS),$(OUT_WAR))
+	-$(MKDIR) $(subst /,$(PS),$(OUT_WAR_WEB_INF))
+	-$(MKDIR) $(subst /,$(PS),$(OUT_WAR_CLASSES))
+	-$(MKDIR) $(subst /,$(PS),$(OUT_WAR_LIB))
+	$(COPY) $(subst /,$(PS),$(OUT_COMP_CLASS)/ConverterServlet.class) $(subst /,$(PS),$(OUT_WAR_CLASSES))
+	$(COPY) ConverterServlet.html $(subst /,$(PS),$(OUT_WAR))
+	$(COPY) web.xml $(subst /,$(PS),$(OUT_WAR_WEB_INF))
+	$(COPY) $(subst /,$(PS),$(OFFICE_CLASSES_DIR)/jurt.jar) $(subst /,$(PS),$(OUT_WAR_LIB))
+	$(COPY) $(subst /,$(PS),$(OFFICE_CLASSES_DIR)/unoil.jar) $(subst /,$(PS),$(OUT_WAR_LIB))
+	$(COPY) $(subst /,$(PS),$(OFFICE_CLASSES_DIR)/ridl.jar) $(subst /,$(PS),$(OUT_WAR_LIB))
+	$(COPY) $(subst /,$(PS),$(OFFICE_CLASSES_DIR)/sandbox.jar) $(subst /,$(PS),$(OUT_WAR_LIB))
+	$(COPY) $(subst /,$(PS),$(OFFICE_CLASSES_DIR)/juh.jar) $(subst /,$(PS),$(OUT_WAR_LIB))
+	$(COPY) $(subst /,$(PS),$(OFFICE_CLASSES_DIR)/cos.jar) $(subst /,$(PS),$(OUT_WAR_LIB))
+	cd $(subst /,$(PS),$(OUT_WAR)) && jar cvfM ../../$(@F) .
+
+ConverterServletExample : $(OUT_CLASS)/conversion.war
 	@echo --------------------------------------------------------------------------------
+	@echo The "$(QM)$?$(QM)" file was created and can be used.
 	@echo Please see the README file for more information how to use the converter 
 	@echo servlet.
 	@echo --------------------------------------------------------------------------------
