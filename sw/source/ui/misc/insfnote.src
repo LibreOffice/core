@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:59:02 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ english_us ] = "Type" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ swedish ] = "Typ" ;
-        Text [ danish ] = "Type" ;
+        Text [ danish ] = "F" ;
         Text [ italian ] = "Tipo" ;
         Text [ spanish ] = "Tipo" ;
         Text [ french ] = "Type" ;
@@ -350,7 +350,7 @@ ModalDialog DLG_INS_FOOTNOTE
     Text[ japanese ] = "θ„ζ³¨γ®ζΏε…¥";
     Text[ chinese_traditional ] = "ζ’ε…¥θ¨»θ…³";
     Text[ arabic ] = "ΕΟΡΗΜ ΝΗΤνΙ ΣέανΙ";
-    Text[ greek ] = "Προσθήκη υποσημείωσης";
+    Text[ greek ] = "Εισαγωγή υποσημείωσης";
     Text[ korean ] = "κ°μ£Ό μ‚½μ…";
     Text[ turkish ] = "Dipnot ekle";
     Text[ language_user1 ] = " ";
@@ -361,6 +361,7 @@ ModalDialog DLG_INS_FOOTNOTE
     Text[ hindi ] = "ΰ¤ªΰ¥ƒΰ¤·ΰ¥ΰ¤  ΰ¤•ΰ¥‡ ΰ¤¨ΰ¥€ΰ¤ΰ¥‡ ΰ¤•ΰ¥€ ΰ¤ΰ¥€ΰ¤•ΰ¤Ύ ΰ¤ΰ¥‹ΰ¤΅ΰ¤Όΰ¥‹";
     Text[ slovak ] = "VloΕΎiΕ¥ poznΓ΅mku pod Δiarou";
 };
+
 
 
 
