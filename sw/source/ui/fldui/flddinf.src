@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:20:44 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TabPage TP_FLD_DOKINF
         Text[ russian ] = "Òèï ïîëÿ";
         Text[ polish ] = "Typ pola";
         Text[ japanese ] = "Ì¨°ÙÄŞÀ²Ìß(~T)";
-        Text[ chinese_traditional ] = "Ãş«¬(~T)";
+        Text[ chinese_traditional ] = "Äæ¦ìÃş«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
         Text[ korean ] = "ÇÊµåÀ¯Çü(~T)";
@@ -351,14 +351,14 @@ TabPage TP_FLD_DOKINF
         Text [ french ] = "Contenu f~ixe" ;
         Text [ dutch ] = "~Inhoud fixeren" ;
         Text [ portuguese ] = "~Contéudo fixo" ;
-        Text[ chinese_simplified ] = "¹Ì¶¨ÄÚÈİ(~X)";
+        Text[ chinese_simplified ] = "¹Ì¶¨ÄÚÈİ(~F)";
         Text[ russian ] = "Ôèêñ. ñîäåğæèìîå";
         Text[ polish ] = "Sta³a treœæ";
-        Text[ japanese ] = "“à—e‚ÌŒÅ’è(~X)";
-        Text[ chinese_traditional ] = "©T©w¤º®e(~X)";
+        Text[ japanese ] = "“à—e‚ÌŒÅ’è(~F)";
+        Text[ chinese_traditional ] = "©T©w¤º®e(~F)";
         Text[ arabic ] = "ÊËÈíÊ ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Ğáãßùóç ğåñ~éå÷ïìİíùí";
-        Text[ korean ] = "³»¿ë °íÁ¤(~X)";
+        Text[ korean ] = "³»¿ë °íÁ¤(~F)";
         Text[ turkish ] = "İçeriği sabitle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fijar contenido";
@@ -420,6 +420,7 @@ TabPage TP_FLD_DOKINF
     Text[ catalan ] = "Información del documento";
     Text[ finnish ] = "Asiakirjatiedot";
 };
+
 
 
 
