@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-22 15:43:07 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,7 +1099,7 @@ Reference< xml::XImportContext > DialogImport::getStyle(
 //##################################################################################################
 
 //==================================================================================================
-SAL_DLLEXPORT Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
+Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     Reference< container::XNameContainer > const & xDialogModel )
     SAL_THROW( (Exception) )
 {

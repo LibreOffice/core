@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_helper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 14:56:40 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ struct NameSpaceUid
     @return
             document handler for parser
 */
-SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL createDocumentHandler(
     NameSpaceUid const * pNamespaceUids, sal_Int32 nNameSpaceUids,
     sal_Int32 nUnknownNamespaceUid,
@@ -232,13 +232,13 @@ protected:
 ##################################################################################################*/
 
 //==================================================================================================
-SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
 SAL_CALL createInputStream(
     ::rtl::ByteSequence const & rInData )
     SAL_THROW( () );
 
 //==================================================================================================
-SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
 SAL_CALL createOutputStream(
     ::rtl::ByteSequence * pOutData )
     SAL_THROW( () );

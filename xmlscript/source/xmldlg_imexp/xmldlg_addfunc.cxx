@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_addfunc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ Reference< io::XInputStream > InputStreamProvider::createInputStream()
 }
 
 //==================================================================================================
-SAL_DLLEXPORT Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
+Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
     Reference< container::XNameContainer > const & xDialogModel )
     SAL_THROW( (Exception) )
 {
@@ -131,7 +131,7 @@ SAL_DLLEXPORT Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
 }
 
 //==================================================================================================
-SAL_DLLEXPORT void SAL_CALL importDialogModel(
+void SAL_CALL importDialogModel(
     Reference< io::XInputStream > xInput,
     Reference< container::XNameContainer > const & xDialogModel )
     SAL_THROW( (Exception) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-22 15:43:07 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,7 +851,7 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
 //##################################################################################################
 
 //==================================================================================================
-SAL_DLLEXPORT void SAL_CALL exportDialogModel(
+void SAL_CALL exportDialogModel(
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
     Reference< container::XNameContainer > const & xDialogModel )
     SAL_THROW( (Exception) )
