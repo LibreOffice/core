@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:11:08 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ class Window;
 class SdTransferable;
 struct SpellCallbackInfo;
 struct StyleRequestData;
+class SdDrawDocument;
 
 #ifndef SV_DECL_SDDRAWDOCSHELL_DEFINED
 #define SV_DECL_SDDRAWDOCSHELL_DEFINED
@@ -158,6 +159,62 @@ public:
 
     virtual void Undo();
     virtual void Redo();
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// #109538#
+
+class ImpPageListWatcher
+{
+protected:
+    // typedefs for a vector of SdPages
+    typedef ::std::vector< SdPage* > SdPageVector;
+
+    const SdrModel&                 mrModel;
+
+    SdPageVector                    maPageVectorStandard;
+    SdPageVector                    maPageVectorNotes;
+    SdPage*                         mpHandoutPage;
+
+    sal_Bool                        mbPageListValid;
+
+    void ImpRecreateSortedPageListOnDemand();
+    virtual sal_uInt32 ImpGetPageCount() const = 0;
+    virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const = 0;
+
+public:
+    ImpPageListWatcher(const SdrModel& rModel);
+    virtual ~ImpPageListWatcher();
+
+    void Invalidate() { mbPageListValid = sal_False; }
+    SdPage* GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum = 0L);
+    sal_uInt32 GetSdPageCount(PageKind ePgKind);
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+class ImpDrawPageListWatcher : public ImpPageListWatcher
+{
+protected:
+    virtual sal_uInt32 ImpGetPageCount() const;
+    virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const;
+
+public:
+    ImpDrawPageListWatcher(const SdrModel& rModel);
+    virtual ~ImpDrawPageListWatcher();
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+class ImpMasterPageListWatcher : public ImpPageListWatcher
+{
+protected:
+    virtual sal_uInt32 ImpGetPageCount() const;
+    virtual SdPage* ImpGetPage(sal_uInt32 nIndex) const;
+
+public:
+    ImpMasterPageListWatcher(const SdrModel& rModel);
+    virtual ~ImpMasterPageListWatcher();
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -221,6 +278,10 @@ private:
     International*      mpInternational;
     CharClass*          mpCharClass;
     ::com::sun::star::lang::Locale* mpLocale;
+
+    // #109538#
+    ImpDrawPageListWatcher*                     mpDrawPageListWatcher;
+    ImpMasterPageListWatcher*                   mpMasterPageListWatcher;
 
     void                UpdatePageObjectsInNotes(USHORT nStartPos);
     void                FillOnlineSpellingList(SdPage* pPage);
@@ -696,6 +757,10 @@ private:
         USHORT nInsertionPoint,
         BOOL bIsPageBack,
         BOOL bIsPageObj);
+
+    // #109538#
+    virtual void PageListChanged();
+    virtual void MasterPageListChanged();
 };
 
 #endif // _DRAWDOC_HXX
