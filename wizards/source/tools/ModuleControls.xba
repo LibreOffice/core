@@ -239,7 +239,9 @@ Dim FilterIndex as Integer
 		UIFilterName = oStoreDialog.GetCurrentFilter()
 		FilterIndex = IndexInArray(UIFilterName, FilterNames())
 		FilterName = FilterNames(FilterIndex,2)
+		On Local Error Goto NOSAVING
 		If FilterName = &quot;&quot;  Then
+			&apos; Todo: Den Fall abfangen, wenn ein zu überschreibendes Dokument schreibgeschützt ist (weil es z.B. gerade geöffnet ist)
 			oDocument.StoreAsUrl(sPath, NoArgs())
 		Else
 			oStoreProperties(0).Name = &quot;FilterName&quot;
@@ -248,6 +250,14 @@ Dim FilterIndex as Integer
 		End If
 	End If
 	StoreDocument() = sPath
+	Exit Function
+NOSAVING:
+	If Err &lt;&gt; 0 Then
+&apos;		Msgbox(&quot;Document cannot be saved under &apos;&quot; &amp; ConvertFromUrl(sPath) &amp; &quot;&apos;&quot;, 48, GetProductName())
+		sPath = &quot;&quot;
+		Resume NOERROR
+		NOERROR:
+	End If	
 End Function
 
 

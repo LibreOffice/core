@@ -178,7 +178,6 @@ Sub ShowHelperDialog(aEvent)
 Dim oSystemNode as Object
 Dim sSystem as String
 Dim oLanguageNode as Object
-Dim oLocDocument as Object
 Dim sLocale as String
 Dim sLocaleList() as String
 Dim sLanguage as String
@@ -194,15 +193,11 @@ Dim sDocType as String
 	sLocaleList() = ArrayoutofString(sLocale, &quot;-&quot;)
 	sLanguage = sLocaleList(0)
 	sHelpUrl = &quot;vnd.sun.star.help://&quot; &amp; sDocType &amp; &quot;/&quot; &amp; HelpID &amp; &quot;?Language=&quot; &amp; sLanguage &amp; &quot;&amp;System=&quot; &amp; sSystem
-	oLogDocument = StarDesktop.LoadComponentFromURL( &quot;private:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs())
-	oLogText = oLogDocument.Text
-	oCursor = oLogText.createTextCursor()
-	oCursor.SetString(sHelpUrl)
 	StarDesktop.LoadComponentfromUrl(sHelpUrl, &quot;OFFICE_HELP&quot;, 63, NoArgs())
 End Sub
 
 
-Sub SaveDataToFile(FilePath as String, DataList() as String)
+Sub SaveDataToFile(FilePath as String, DataList())
 Dim FileChannel as Integer
 Dim i as Integer
 Dim oFile as Object
@@ -226,7 +221,7 @@ Dim sCRLF as String
 End Sub
 
 
-Function LoadDataFromFile(FilePath as String, DataList() as String) as Boolean
+Function LoadDataFromFile(FilePath as String, DataList()) as Boolean
 Dim oInputStream as Object
 Dim i as Integer
 Dim oUcb as Object
@@ -239,17 +234,17 @@ Dim MaxIndex as Integer
 		oFile = oUcb.OpenFileReadWrite(FilePath)
 		oInputStream.SetInputStream(oFile.GetInputStream)
 		i = -1
-		Redim Preserve DataList(MaxIndex) as String
+		Redim Preserve DataList(MaxIndex)
 		While Not oInputStream.IsEOF
 			i = i + 1
 			If i &gt; MaxIndex Then
 				MaxIndex = MaxIndex + 10
-				Redim Preserve DataList(MaxIndex) as String
+				Redim Preserve DataList(MaxIndex)
 			End If
 			DataList(i) = oInputStream.ReadLine
 		Wend
 		If i &gt; -1 And i &lt;&gt; MaxIndex Then
-			Redim Preserve DataList(i) as String
+			Redim Preserve DataList(i)
 		End If
 		LoadDataFromFile() = True
 		oOutputStream.CloseInput()
