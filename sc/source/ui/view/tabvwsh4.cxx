@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-21 17:29:22 $
+ *  last change: $Author: nn $ $Date: 2001-03-12 15:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,10 +341,13 @@ void ScTabViewShell::UpdateOleZoom()
     if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
         Size aObjSize = ((SfxInPlaceObject*)pDocSh)->GetVisArea().GetSize();
-        Window* pWin = GetActiveWin();
-        Size aWinHMM = pWin->PixelToLogic( pWin->GetOutputSizePixel(), MAP_100TH_MM );
-        SetZoomFactor( Fraction( aWinHMM.Width(),aObjSize.Width() ),
-                        Fraction( aWinHMM.Height(),aObjSize.Height() ) );
+        if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
+        {
+            Window* pWin = GetActiveWin();
+            Size aWinHMM = pWin->PixelToLogic( pWin->GetOutputSizePixel(), MAP_100TH_MM );
+            SetZoomFactor( Fraction( aWinHMM.Width(),aObjSize.Width() ),
+                            Fraction( aWinHMM.Height(),aObjSize.Height() ) );
+        }
     }
 }
 
