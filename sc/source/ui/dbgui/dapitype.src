@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:04:46 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ czech ] = "Současný výběr";
         Text[ hebrew ] = "~Aktuelle Selektion";
         Text[ hindi ] = "~प्रचलित चुनाव";
+        Text[ slovak ] = "~Aktuálny výber";
     };
     RadioButton BTN_DATABASE
     {
@@ -157,6 +158,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ czech ] = "Zdroj dat registrován v %PRODUCTNAME";
         Text[ hebrew ] = "~In %PRODUCTNAME angemeldete Datenquelle";
         Text[ hindi ] = "%PRODUCTNAME में ~ड़ॉटा मूल को रजिस्टर किया है";
+        Text[ slovak ] = "Zdroj ~dát registrovaný v %PRODUCTNAME";
     };
     RadioButton BTN_EXTERNAL
     {
@@ -190,6 +192,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ czech ] = "Externí zdroj/rozhraní";
         Text[ hebrew ] = "~Externe Quelle/Schnittstelle";
         Text[ hindi ] = "~बाहरी मूल/इन्टरफेस ";
+        Text[ slovak ] = "~Externý zdroj/rozhranie";
     };
     FixedLine FL_FRAME
     {
@@ -222,6 +225,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬l";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Text[ english_us ] = "Select Source";
     Text[ portuguese ] = "Seleccionar fonte";
@@ -248,6 +252,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     Text[ czech ] = "Vyberte zdroj";
     Text[ hebrew ] = "Quelle auswählen";
     Text[ hindi ] = "मूल को चुनो";
+    Text[ slovak ] = "Vyberte zdroj";
 };
 
 
@@ -314,6 +319,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ czech ] = "Služba";
         Text[ hebrew ] = "~Service";
         Text[ hindi ] = "~सेवा";
+        Text[ slovak ] = "~Služba";
     };
     ListBox LB_SERVICE
     {
@@ -354,6 +360,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ czech ] = "Zdroj";
         Text[ hebrew ] = "~Quelle";
         Text[ hindi ] = "मू~ल";
+        Text[ slovak ] = "Zd~roj";
     };
     Edit ED_SOURCE
     {
@@ -393,6 +400,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ czech ] = "Jméno";
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_NAME
     {
@@ -432,6 +440,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ czech ] = "Uživatel";
         Text[ hebrew ] = "~Benutzer";
         Text[ hindi ] = "उप~भोक्ता";
+        Text[ slovak ] = "Užívat~eľ";
     };
     Edit ED_USER
     {
@@ -471,6 +480,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ czech ] = "Heslo";
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "~कूटशब्द";
+        Text[ slovak ] = "~Heslo";
     };
     Edit ED_PASSWD
     {
@@ -511,6 +521,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Text[ english_us ] = "External Source";
     Text[ portuguese ] = "Fonte de dados externa";
@@ -537,6 +548,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Text[ czech ] = "Externí zdroj";
     Text[ hebrew ] = "Externe Datenquelle";
     Text[ hindi ] = "बाहरी मूल";
+    Text[ slovak ] = "Externý zdroj";
 };
 
 
@@ -604,6 +616,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ czech ] = "Databáze";
         Text[ hebrew ] = "~Datenbank";
         Text[ hindi ] = "~लेखासंचय";
+        Text[ slovak ] = "~Databáza";
     };
     ListBox LB_DATABASE
     {
@@ -645,6 +658,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ czech ] = "Zdroj dat";
         Text[ hebrew ] = "Daten~quelle";
         Text[ hindi ] = "ड़ॉटा मू~ल";
+        Text[ slovak ] = "Zdr~oj dát";
     };
     ComboBox CB_OBJECT
     {
@@ -686,6 +700,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Typ";
     };
     ListBox LB_OBJTYPE
     {
@@ -883,6 +898,13 @@ ModalDialog RID_SCDLG_DAPIDATA
         < "Sql" ; Default ; > ;
         < "Sql [Native]" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "List" ; Default ; > ;
+        < "Dotaz" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [natívny]" ; Default ; > ;
+    };
     };
 
     FixedLine FL_FRAME
@@ -916,6 +938,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Text[ english_us ] = "Select Data Source";
     Text[ portuguese ] = "Seleccionar fonte de dados";
@@ -942,7 +965,10 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ czech ] = "Vyberte zdroj dat";
     Text[ hebrew ] = "Datenquelle auswählen";
     Text[ hindi ] = "ड़ॉटा मूल चुनो";
+    Text[ slovak ] = "Vyber zdroj dát";
 };
+
+
 
 
 
