@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:05:54 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 13:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,11 +171,13 @@ void OStatement_BASE2::disposing()
     disposeResultSet();
 
     OSL_ENSURE(m_aStatementHandle,"OStatement_BASE2::disposing: StatementHandle is null!");
-    if (N3SQLFreeStmt(m_aStatementHandle,SQL_RESET_PARAMS) ||
-        N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND) ||
-        N3SQLFreeStmt(m_aStatementHandle,SQL_CLOSE))
-        OTools::ThrowException(m_pConnection,N3SQLFreeStmt(m_aStatementHandle,SQL_DROP),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    N3SQLFreeStmt(m_aStatementHandle,SQL_RESET_PARAMS);
+    N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
+    N3SQLFreeStmt(m_aStatementHandle,SQL_CLOSE);
+        //  OTools::ThrowException(m_pConnection,N3SQLFreeStmt(m_aStatementHandle,SQL_DROP),m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
+    N3SQLFreeHandle(SQL_HANDLE_STMT,m_aStatementHandle);
+    m_aStatementHandle = NULL;
     if (m_pConnection)
         m_pConnection->release();
 
