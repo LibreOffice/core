@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtml.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:58:18 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 #include <svtools/asynclink.hxx>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "docinf.hxx"
 
@@ -200,4 +202,3 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame,
 
     pFrame->SetMargin( aMargin );
 }
-
