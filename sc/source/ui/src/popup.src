@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:35:58 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #include "sc.hrc" // -> #include <sfx.hrc>
 #include <svx/globlmn.hrc>
@@ -575,7 +574,7 @@ Menu RID_POPUP_TAB
             Text [ dutch ] = "~Invoegen..." ;
             Text [ spanish ] = "~Insertar hoja..." ;
             Text [ english_us ] = "~Insert Sheet..." ;
-            Text[ chinese_simplified ] = "æ’å…¥å·¥ä½œè¡¨(~I)...";
+            Text[ chinese_simplified ] = "æ’å…¥å·¥ä½œè¡¨...";
             Text[ russian ] = "Âñòàâèòü...";
             Text[ polish ] = "W~staw...";
             Text[ japanese ] = "è¡¨ã®æŒ¿å…¥(~I)...";
@@ -611,7 +610,7 @@ Menu RID_POPUP_TAB
             Text [ dutch ] = "~Wissen..." ;
             Text [ spanish ] = "~Borrar hoja..." ;
             Text [ english_us ] = "~Delete Sheet..." ;
-            Text[ chinese_simplified ] = "åˆ é™¤å·¥ä½œè¡¨(~D)...";
+            Text[ chinese_simplified ] = "åˆ é™¤å·¥ä½œè¡¨...";
             Text[ russian ] = "Óäàëèòü...";
             Text[ polish ] = "~Usuñ...";
             Text[ japanese ] = "è¡¨ã®å‰Šé™¤(~D)...";
@@ -647,7 +646,7 @@ Menu RID_POPUP_TAB
             Text [ dutch ] = "~Naam wijzigen..." ;
             Text [ spanish ] = "~Cambiar nombre a hoja..." ;
             Text [ english_us ] = "~Rename Sheet..." ;
-            Text[ chinese_simplified ] = "é‡å‘½åå·¥ä½œè¡¨(~R)...";
+            Text[ chinese_simplified ] = "é‡å‘½åå·¥ä½œè¡¨...";
             Text[ russian ] = "Ïåğåèìåíîâàòü...";
             Text[ polish ] = "~Zmieñ nazwê...";
             Text[ japanese ] = "è¡¨ã®åå‰ã®å¤‰æ›´(~R)...";
@@ -683,7 +682,7 @@ Menu RID_POPUP_TAB
             Text [ dutch ] = "~Verplaatsen/kopiëren..." ;
             Text [ spanish ] = "~Desplazar/copiar hoja..." ;
             Text [ english_us ] = "~Move/Copy Sheet..." ;
-            Text[ chinese_simplified ] = "ç§»åŠ¨/å¤åˆ¶å·¥ä½œè¡¨(~M)...";
+            Text[ chinese_simplified ] = "ç§»åŠ¨/å¤åˆ¶å·¥ç»„è¡¨...";
             Text[ russian ] = "Ïåğåìåñòèòü/êîïèğîâàòü...";
             Text[ polish ] = "~Przenieœ/kopiuj...";
             Text[ japanese ] = "è¡¨ã®ç§»å‹•ã¾ãŸã¯ã‚³ãƒ”ãƒ¼(~M)...";
@@ -744,6 +743,7 @@ Menu RID_POPUP_TAB
             HelpId = FID_TAB_RTL ;
             Text = "Tabelle ~rechts-nach-links" ;
             Text [ english_us ] = "S~heet Right-To-Left" ;
+            Text[ chinese_simplified ] = "è¡¨æ ¼ä»å³è‡³å·¦";
         };
     };
 };
