@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-20 11:13:50 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 15:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,11 +138,16 @@ String STR_ACCESS_ENDNOTE_DESC
 };
 String STR_ACCESS_REPLACEMENT_POSTIT
 {
-    Text = "[Post-It]" ;
-    Text [ english ] = "[Annotation]" ;
+    Text = "[Post-It: $(ARG1)]" ;
+    Text [ english ] = "[Annotation: $(ARG1)]" ;
 };
 String STR_ACCESS_REPLACEMENT_FRAME
 {
-    Text = "[Frame]" ;
-    Text [ english ] = "[Frame]" ;
+    Text = "[Frame: $(ARG1)]" ;
+    Text [ english ] = "[Frame: $(ARG1)]" ;
+};
+String STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS
+{
+    Text = "[Bullet]" ;
+    Text [ english ] = "[Bullet]" ;
 };

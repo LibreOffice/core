@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-09 14:08:13 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 15:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,22 +266,29 @@ void SwAccessiblePortionData::Special(
         break;
         case POR_FLYCNT:
         {
-            // retrieve the Graphic/OLE-Node for this graphic (as
-            // SwNoTxtNode) and ask for the text description
+            // fly-frame: text-box, graphic or OLE frame
+            // Retrieve the Graphic/OLE-Node (as SwNoTxtNode) and ask
+            // for the its description. If it's no SwNoTxtNode, or the
+            // description is empty, use the SwFrmFmt name instead.
             SwTxtAttr* pAttr = pTxtNode->GetTxtAttr(
                 static_cast<USHORT>( nModelPosition ), RES_TXTATR_FLYCNT );
             DBG_ASSERT( pAttr != NULL, "Fly expected!" );
 
-            const SfxPoolItem& rItem =
-                pAttr->GetFlyCnt().GetFrmFmt()->GetAttr( RES_CNTNT, FALSE );
+            const SwFrmFmt* rFrameFmt = pAttr->GetFlyCnt().GetFrmFmt();
+            const SfxPoolItem& rItem = rFrameFmt->GetAttr( RES_CNTNT, FALSE );
             SwNodeIndex aIndex =
                 *( static_cast<const SwFmtCntnt&>( rItem ).GetCntntIdx() );
 
             aIndex++;
             SwNoTxtNode* pNoTxtNode = aIndex.GetNode().GetNoTxtNode();
-            DBG_ASSERT( pNoTxtNode != NULL, "FlyCnt without graphics?" );
 
-            OUString sDescription = OUString( pNoTxtNode->GetAlternateText() );
+            // get the description or format name
+            OUString sDescription;
+            if( pNoTxtNode != NULL )
+                sDescription = OUString( pNoTxtNode->GetAlternateText() );
+            if( sDescription.getLength() == 0 )
+                sDescription = OUString( rFrameFmt->GetName() );
+
             sDisplay = SwAccessibleContext::GetResource(
                 STR_ACCESS_REPLACEMENT_FRAME, &sDescription );
         }
