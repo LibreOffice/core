@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellCursorObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:01:35 $
+ *  last change:$Date: 2003-09-08 12:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,28 +58,31 @@
  *
  *
  ************************************************************************/
-
 package mod._sc;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
-import com.sun.star.sheet.XSheetCellCursor;
-import com.sun.star.sheet.XSheetCellRange;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.table.XCellRange;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+import util.ValueComparer;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XSheetCellRange;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.table.XCell;
+import com.sun.star.table.XCellRange;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+
 
 /**
 * Test for object which is represented by service
@@ -138,32 +141,33 @@ import com.sun.star.uno.Type;
 * @see ifc.table._XColumnRowRange
 */
 public class ScCellCursorObj extends TestCase {
-      XSpreadsheetDocument xSheetDoc = null ;
+    XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
 
         try {
-            log.println( "creating a Spreadsheet document" );
+            log.println("creating a Spreadsheet document");
             xSheetDoc = SOF.createCalcDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn³t create document", e);
         }
-
     }
 
     /**
     * Disposes Spreadsheet document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-                        UnoRuntime.queryInterface (XComponent.class, xSheetDoc);
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xSheetDoc ");
+
+        XComponent oComp = (XComponent) UnoRuntime.queryInterface(
+                                   XComponent.class, xSheetDoc);
 
         oComp.dispose();
     }
@@ -183,70 +187,163 @@ public class ScCellCursorObj extends TestCase {
     *      retieved from collection)</li>
     * </ul>
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
-        TestEnvironment tEnv = null ;
+        TestEnvironment tEnv = null;
         XSpreadsheet oSheet = null;
-        XSheetCellCursor oCellCursor = null;
+        XCellRange testRange = null;
+
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "Creating a test environment" );
+        log.println("Creating a test environment");
 
+        XSpreadsheets oSpreadsheets = ((XSpreadsheetDocument) UnoRuntime.queryInterface(
+                                               XSpreadsheetDocument.class,
+                                               xSheetDoc)).getSheets();
 
-        XSpreadsheets oSpreadsheets = ((XSpreadsheetDocument)
-                    UnoRuntime.queryInterface(
-                        XSpreadsheetDocument.class, xSheetDoc)).getSheets();
         try {
-            oSheet = (XSpreadsheet) AnyConverter.toObject(new Type(XSpreadsheet.class),
-                oSpreadsheets.getByName(oSpreadsheets.getElementNames()[0]) );
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                             new Type(XSpreadsheet.class),
+                             oSpreadsheets.getByName(
+                                     oSpreadsheets.getElementNames()[0]));
 
-            XCellRange testRange = oSheet.getCellRangeByName("$A$1:$D$4") ;
-            XSheetCellRange testSheetRange = (XSheetCellRange)
-                    UnoRuntime.queryInterface(XSheetCellRange.class, testRange);
-            oCellCursor = oSheet.createCursorByRange(testSheetRange) ;
-            oSheet.getCellByPosition(1,1).setValue(1) ;
-            oSheet.getCellByPosition(4,5).setValue(1) ;
+            testRange = oSheet.getCellRangeByName("$A$1:$D$4");
+
+            XSheetCellRange testSheetRange = (XSheetCellRange) UnoRuntime.queryInterface(
+                                                     XSheetCellRange.class,
+                                                     testRange);
+            oObj = oSheet.createCursorByRange(testSheetRange);
+            oSheet.getCellByPosition(1, 1).setValue(1);
+            oSheet.getCellByPosition(4, 5).setValue(1);
+            oSheet.getCellByPosition(3, 2).setFormula("xTextDoc");
+            oSheet.getCellByPosition(3, 3).setFormula("xTextDoc");
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while creating test object:") ;
-            e.printStackTrace(log) ;
+            log.println("Exception occured while creating test object:");
+            e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Exception occured while creating test object:") ;
-            e.printStackTrace(log) ;
+            log.println("Exception occured while creating test object:");
+            e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occured while creating test object:") ;
-            e.printStackTrace(log) ;
+            log.println("Exception occured while creating test object:");
+            e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occured while creating test object:") ;
-            e.printStackTrace(log) ;
+            log.println("Exception occured while creating test object:");
+            e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         }
 
-        log.println("Test object successfully created.") ;
+        log.println("Test object successfully created.");
 
-        tEnv = new TestEnvironment(oCellCursor);
+        tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("CRDESC","Column and RowDescriptions can't be changed for this Object");
+        tEnv.addObjRelation("CRDESC",
+                            "Column and RowDescriptions can't be changed for this Object");
 
-        tEnv.addObjRelation( "SHEET", oSheet );
-        tEnv.addObjRelation("NewData", new Object[][]{{"","","",""},
-                                                      {"","2","3","4"},
-                                                      {"","2","3","4"},
-                                                      {"","2","3","4"}});
+        tEnv.addObjRelation("SHEET", oSheet);
+        tEnv.addObjRelation("NewData",
+                            new Object[][]
+        {
+            { "", "", "", "" },
+            { "", "2", "3", "4" },
+            { "", "2", "3", "4" },
+            { "", "2", "3", "4" }
+        });
 
-        XPropertySet PropSet = (XPropertySet)
-                    UnoRuntime.queryInterface(XPropertySet.class, oCellCursor);
-        tEnv.addObjRelation("PropSet",PropSet);
+        XPropertySet PropSet = (XPropertySet) UnoRuntime.queryInterface(
+                                       XPropertySet.class, oObj);
+        tEnv.addObjRelation("PropSet", PropSet);
 
-        return tEnv ;
+        //Adding relation for util.XSortable
+        final PrintWriter finalLog = log;
+        final XCellRange oTable = testRange;
+        tEnv.addObjRelation("SORTCHECKER",
+                            new ifc.util._XSortable.XSortChecker() {
+            PrintWriter out = finalLog;
 
-    } // finish method startAutoTest
+            public void setPrintWriter(PrintWriter log) {
+                out = log;
+            }
 
+            public void prepareToSort() {
+                try {
+                    oTable.getCellByPosition(0, 0).setValue(4);
+                    oTable.getCellByPosition(0, 1).setFormula("b");
+                    oTable.getCellByPosition(0, 2).setValue(3);
+                    oTable.getCellByPosition(0, 3).setValue(23);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    out.println("Exception while checking sort");
+                }
+            }
 
+            public boolean checkSort(boolean isSortNumbering,
+                                     boolean isSortAscending) {
+                out.println("Sort checking...");
 
-}    // finish class ScCellCursorObj
+                boolean res = false;
+                String[] value = new String[4];
 
+                for (int i = 0; i < 4; i++) {
+                    try {
+                        XCell cell = oTable.getCellByPosition(0, i);
+                        value[i] = cell.getFormula();
+                    } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                        out.println("Exception while checking sort");
+                    }
+                }
+
+                if (isSortNumbering) {
+                    if (isSortAscending) {
+                        out.println("Sorting ascending");
+
+                        String[] rightVal = { "3", "4", "23", "b" };
+                        String[] vals = { value[0], value[1], value[2], value[3] };
+                        res = ValueComparer.equalValue(vals, rightVal);
+                        out.println("Expected 3, 4, 23, b");
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
+                                        value[3]);
+                    } else {
+                        String[] rightVal = { "b", "23", "4", "3" };
+                        String[] vals = { value[0], value[1], value[2], value[3] };
+                        res = ValueComparer.equalValue(vals, rightVal);
+                        out.println("Expected b, 23, 4, 3");
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
+                                        value[3]);
+                    }
+                } else {
+                    if (isSortAscending) {
+                        String[] rightVal = { "3", "4", "23", "b" };
+                        res = ValueComparer.equalValue(value, rightVal);
+                        out.println("Expected 3, 4, 23, b");
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
+                                        value[3]);
+                    } else {
+                        String[] rightVal = { "b", "23", "4", "3" };
+                        res = ValueComparer.equalValue(value, rightVal);
+                        out.println("Expected b, 23, 4, 3");
+                        out.println("getting: " + value[0] + ", " +
+                                        value[1] + ", " + value[2] + ", " +
+                                        value[3]);
+                    }
+                }
+
+                if (res) {
+                    out.println("Sorted correctly");
+                } else {
+                    out.println("Sorted uncorrectly");
+                }
+
+                return res;
+            }
+        });
+
+        return tEnv;
+    }
+} // finish class ScCellCursorObj
