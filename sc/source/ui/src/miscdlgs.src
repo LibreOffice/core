@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:41:51 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3085,7 +3085,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ russian ] = "Çàïîëíèòü ğÿäû";
     Text[ polish ] = "Wype³nij serie";
     Text[ japanese ] = "˜A‘±ÃŞ°À";
-    Text[ chinese_traditional ] = "¶¶§Ç";
+    Text[ chinese_traditional ] = "¥R¶ñ§Ç¦C";
     Text[ arabic ] = "ÊÚÈÆÉ ÇáÓáÓáÉ";
     Text[ greek ] = "ÓõìğëŞñùóç óåéñÜò";
     Text[ korean ] = "¿¬¼ÓÀ¸·Î Ã¤¿ì±â";
@@ -3813,6 +3813,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ catalan ] = "Modificar datos fuente";
     Text[ finnish ] = "Vaihda lähdetietoalue";
 };
+
 
 
 
