@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-12-06 01:20:05 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-07 19:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ struct SalGraphicsData
 
     RgnHandle       mhClipRgn;      // Clip Region Handle
         RgnHandle       mhGrowRgn;      // Grow Region Handle
-    RgnHandle       mhVisiableRgn;      // Visible Region Handle
+    RgnHandle       mhVisiRgn;      // Visible Region Handle
 
     // Pen, brush, and text colors
 
@@ -118,15 +118,9 @@ struct SalGraphicsData
 
     // Font attributes
 
-    BYTE*           mpFontCharSets;     // All Charsets for the current font
-    BYTE            mnFontCharSetCount;     // Number of Charsets of the current font; 0 - if not queried
-    unsigned long       mnFontKernPairCount;    // Number of Kerning Pairs of the current Font
-    BOOL            mbFontKernInit;     // FALSE: FontKerns must be queried
-    int             mnFontOverhang;     // Font-Overhang
-    int         mnFontNum;      // Mac FontFamilyId
+    int         mnFontID;       // Mac FontFamilyId
     int         mnFontSize;     // Mac Font Size
-    int         mnFontMode;     // Mac Font transfer mode
-    Style           mnFontFace;     // Mac Font Style
+    Style           mnFontStyle;        // Mac Font Style
 
     // Pen attributes and status
 

@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.19 $
- *  last change: $Author: pluby $ $Date: 2000-12-06 03:11:19 $
+ *  $Revision: 1.20 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-07 19:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ static BOOL CheckCurrDrawMode ( PortDrawMode        eUpdateDrawMode,
         GetPort( &pCGrafPort );
 
         // Is the current graph port the same as the graph port in SalGraphics?
+        // That is to say, are they pointing to the same starting memory block?
 
         if ( pCGrafPort != rSalGraphicsData->mpCGrafPort )
         {
@@ -191,10 +192,10 @@ static BOOL CheckCurrDrawMode ( PortDrawMode        eUpdateDrawMode,
             case eDrawFill:
             {
                 RGBColor aBrushColor = rSalGraphicsData->maBrushColor;
-                short    aPenMode    = rSalGraphicsData->mnPenMode;
+                short    nPenMode    = rSalGraphicsData->mnPenMode;
 
                 PenNormal();
-                PenMode( aPenMode );
+                PenMode( nPenMode );
 
                 RGBForeColor( &aBrushColor );
 
@@ -204,10 +205,10 @@ static BOOL CheckCurrDrawMode ( PortDrawMode        eUpdateDrawMode,
             case eDrawLine:
             {
                 RGBColor aPenColor = rSalGraphicsData->maPenColor;
-                 short    aPenMode  = rSalGraphicsData->mnPenMode;
+                 short    nPenMode  = rSalGraphicsData->mnPenMode;
 
                 PenNormal();
-                PenMode( aPenMode );
+                PenMode( nPenMode );
 
                 RGBForeColor( &aPenColor );
 
@@ -220,9 +221,9 @@ static BOOL CheckCurrDrawMode ( PortDrawMode        eUpdateDrawMode,
 
                 RGBForeColor( &aTextColor );
 
-                TextFont( rSalGraphicsData->mnFontNum  );
-                TextFace( rSalGraphicsData->mnFontFace );
-                TextSize( rSalGraphicsData->mnFontSize );
+                TextFont( rSalGraphicsData->mnFontID    );
+                TextFace( rSalGraphicsData->mnFontStyle );
+                TextSize( rSalGraphicsData->mnFontSize  );
 
                 break;
             } // case eDrawText
@@ -238,7 +239,10 @@ static BOOL CheckCurrDrawMode ( PortDrawMode        eUpdateDrawMode,
 
 // -----------------------------------------------------------------------
 
-static void CheckRectBounds ( Rect *rSrcRect, Rect *rDstRect, const Rect *rPortBoundsRect )
+static void CheckRectBounds ( Rect        *rSrcRect,
+                              Rect        *rDstRect,
+                              const Rect  *rPortBoundsRect
+                            )
 
 {
     if ( rSrcRect->top < rPortBoundsRect->top )
@@ -284,7 +288,10 @@ static void Index2EightBitColor ( long        *pIndex,                         
                                 ){    CTabPtr    pRGBCTable     = NULL;  PixMapPtr  pGDevicePixMap = NULL;         pGDevicePixMap = *(*pGDevice).gdPMap;  pRGBCTable     = *(*pGDevicePixMap).pmTable;  if ( *pIndex <= pRGBCTable->ctSize )   {      RGBColor  aRGBColor;              aRGBColor        = pRGBCTable->ctTable[*pIndex].rgb;       rRGBColor->red   = aRGBColor.red;      rRGBColor->green = aRGBColor.green;        rRGBColor->blue  = aRGBColor.blue; } // if} // Index2EightBitColor
 // -----------------------------------------------------------------------
 //
-// Here we will convert index color to either 8-bit or 32-bit color
+// Here we will convert index SAL color to either 8-bit or 32-bit color.
+// For 16-bit color we shall let Mac OS compute the nearest color
+// from that of 32-bit color using the Euclidean 2-norm in RGB color
+// space.
 //
 // -----------------------------------------------------------------------
 
@@ -306,26 +313,53 @@ SalGraphics::SalGraphics()
 {
     RGBColor aBlackColor;
 
+    // QuickDraw graph port and GWorld
+
+    maGraphicsData.mpCGrafPort = NULL;
+    maGraphicsData.mhGDevice   = NULL;
+
+    // Regions within a current port
+
     maGraphicsData.mhClipRgn = NULL;
     maGraphicsData.mhGrowRgn = NULL;
+    maGraphicsData.mhVisiRgn = NULL;
 
-    maGraphicsData.mnPenMode        = patCopy;
-    maGraphicsData.mbTransparentPen = FALSE;
-
-    maGraphicsData.mhDefBrush         = NULL;
-    maGraphicsData.mbTransparentBrush = FALSE;
-
-    // Black color
+    // Set black color
 
     aBlackColor.red   = 0x0000;
     aBlackColor.green = 0x0000;
     aBlackColor.blue  = 0x0000;
 
-    // Set pen, brush, and text colors
+    // Set brush, pen, and text colors
 
-    maGraphicsData.maBrushColor = aBlackColor;
     maGraphicsData.maPenColor   = aBlackColor;
+    maGraphicsData.maBrushColor = aBlackColor;
     maGraphicsData.maTextColor  = aBlackColor;
+
+    // Font attributes
+
+    maGraphicsData.mnFontID    = kFontIDGeneva;
+    maGraphicsData.mnFontSize  = 10;
+    maGraphicsData.mnFontStyle = normal;
+
+    // Pen attributes and status
+
+    maGraphicsData.mnPenMode        = patCopy;
+    maGraphicsData.mbTransparentPen = FALSE;
+
+    // Brush attributes and status
+
+    maGraphicsData.mhDefBrush         = NULL;
+    maGraphicsData.mbTransparentBrush = FALSE;
+
+    // Miscellaneous status flags
+
+    maGraphicsData.mnCurrStatus   = 0;
+    maGraphicsData.meCurrDrawMode = eDrawNil;
+    maGraphicsData.mbPrinter      = FALSE;
+    maGraphicsData.mbVirDev       = TRUE;
+    maGraphicsData.mbWindow       = TRUE;
+    maGraphicsData.mbScreen       = TRUE;
 
     // Set background and foreground colors
 
@@ -345,6 +379,11 @@ SalGraphics::~SalGraphics()
     if ( maGraphicsData.mhGrowRgn != NULL )
     {
         DisposeRgn( maGraphicsData.mhGrowRgn );
+    } // if
+
+    if ( maGraphicsData.mhGrowRgn != NULL )
+    {
+        DisposeRgn( maGraphicsData.mhVisiRgn );
     } // if
 
     if ( maGraphicsData.mhDefBrush != NULL )
