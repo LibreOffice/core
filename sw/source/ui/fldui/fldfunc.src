@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:47:35 $
+ *  last change: $Author: obo $ $Date: 2000-12-04 11:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,7 @@ TabPage TP_FLD_FUNC
         Text[ chinese_traditional ] = "¥N";
         Text[ arabic ] = "›Ì Â–Â «·Õ«·…";
         Text[ greek ] = "‘¸ÙÂ";
-        Text[ korean ] = "¥Ÿ¿Ω";
+        Text[ korean ] = "±◊ ¥Ÿ¿Ω";
         Text[ turkish ] = "O halde";
         Text[ language_user1 ] = " ";
     };
