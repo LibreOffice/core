@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:26:32 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,20 +83,20 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
-#ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeParameterPair_hpp__
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeParameterPair_hpp__
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETER_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETER_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #endif
-#ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeTextFrame_hpp__
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeTextFrame_hpp__
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #endif
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
@@ -158,12 +158,12 @@ class EnhancedCustomShape2d : public SfxItemSet
         std::vector< ::boost::shared_ptr< ExpressionNode > >                                                    vNodesSharedPtr;
 
 
-        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment >            seqSegments;
-        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqCoordinates;
-        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame >          seqTextFrames;
-        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqGluePoints;
-        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >    seqAdjustmentValues;
-        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues >                                  seqHandles;
+        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >            seqSegments;
+        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqCoordinates;
+        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame >          seqTextFrames;
+        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqGluePoints;
+        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >    seqAdjustmentValues;
+        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues >                          seqHandles;
 
         sal_Bool                    bTextFlow       : 1;
         sal_Bool                    bFilled         : 1;
@@ -175,9 +175,9 @@ class EnhancedCustomShape2d : public SfxItemSet
 
         sal_Bool                    SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
         Color                       GetColorData( const Color& rFillColor, sal_uInt32 nIndex );
-        sal_Bool                    GetParameter( double& rParameterReturnValue,  const drafts::com::sun::star::drawing::EnhancedCustomShapeParameter&,
+        sal_Bool                    GetParameter( double& rParameterReturnValue,  const com::sun::star::drawing::EnhancedCustomShapeParameter&,
                                                     const sal_Bool bReplaceGeoWidth, const sal_Bool bReplaceGeoHeight ) const;
-        Point                       GetPoint( const drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair&,
+        Point                       GetPoint( const com::sun::star::drawing::EnhancedCustomShapeParameterPair&,
                                                     const sal_Bool bScale = sal_True, const sal_Bool bReplaceGeoSize = sal_False ) const;
 
         static void                 SwapStartAndEndArrow( SdrObject* pObj );
@@ -197,15 +197,15 @@ class EnhancedCustomShape2d : public SfxItemSet
             sal_Bool    bMirroredY;
             sal_Bool    bSwitched;
 
-            drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aPosition;
-            drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair   aPolar;
+            com::sun::star::drawing::EnhancedCustomShapeParameterPair   aPosition;
+            com::sun::star::drawing::EnhancedCustomShapeParameterPair   aPolar;
 
-            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aRadiusRangeMinimum;
-            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aRadiusRangeMaximum;
-            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aXRangeMinimum;
-            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aXRangeMaximum;
-            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMinimum;
-            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMaximum;
+            com::sun::star::drawing::EnhancedCustomShapeParameter       aRadiusRangeMinimum;
+            com::sun::star::drawing::EnhancedCustomShapeParameter       aRadiusRangeMaximum;
+            com::sun::star::drawing::EnhancedCustomShapeParameter       aXRangeMinimum;
+            com::sun::star::drawing::EnhancedCustomShapeParameter       aXRangeMaximum;
+            com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMinimum;
+            com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMaximum;
         };
 
         sal_Bool                    IsFlipVert() { return bFlipV; };
@@ -249,11 +249,11 @@ class EnhancedCustomShape2d : public SfxItemSet
 
         static void                 AppendEnhancedCustomShapeEquationParameter( rtl::OUString& rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );
 
-        static void                 SetEnhancedCustomShapeEquationParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter&
+        static void                 SetEnhancedCustomShapeEquationParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );
-        static void                 SetEnhancedCustomShapeParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter&
+        static void                 SetEnhancedCustomShapeParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int32 nValue );
-        static void                 SetEnhancedCustomShapeHandleParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter&
+        static void                 SetEnhancedCustomShapeHandleParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int32 nPara, const sal_Bool bIsSpecialValue, sal_Bool bHorz );
         static sal_Bool             ConvertSequenceToEnhancedCustomShape2dHandle( const com::sun::star::beans::PropertyValues& rHandleProperties,
                                         EnhancedCustomShape2d::Handle& rDestinationHandle );
