@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:46:26 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,49 @@ Pair Control::GetLineStartEnd( long nLine ) const
 
 // -----------------------------------------------------------------------
 
+long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
+{
+    // is the index sensible at all ?
+    if( nIndex >= 0 && nIndex < m_aDisplayText.Len() )
+    {
+        int nDisplayLines = m_aLineIndices.size();
+        // if only 1 line exists, then absolute and relative index are
+        // identical -> do nothing
+        if( nDisplayLines > 1 )
+        {
+            int nLine;
+            for( nLine = nDisplayLines-1; nLine >= 0; nLine-- )
+            {
+                if( m_aLineIndices[nLine] <= nIndex )
+                {
+                    nIndex -= m_aLineIndices[nLine];
+                    break;
+                }
+            }
+            if( nLine < 0 )
+            {
+                DBG_ASSERT( nLine >= 0, "ToRelativeLineIndex failed" );
+                nIndex = -1;
+            }
+        }
+    }
+    else
+        nIndex = -1;
+
+    return nIndex;
+}
+
+// -----------------------------------------------------------------------
+
+long Control::ToRelativeLineIndex( long nIndex ) const
+{
+    if( ! mpLayoutData )
+        FillLayoutData();
+    return mpLayoutData ? mpLayoutData->ToRelativeLineIndex( nIndex ) : -1;
+}
+
+// -----------------------------------------------------------------------
+
 String Control::GetDisplayText() const
 {
     if( ! mpLayoutData )
@@ -371,7 +414,7 @@ void Control::SetLayoutDataParent( const Control* pParent ) const
 
 // -----------------------------------------------------------------
 
-void Control::ImplSubControlLayoutChanged() const
+void Control::ImplClearLayoutData() const
 {
     delete mpLayoutData, mpLayoutData = NULL;
 }
@@ -381,5 +424,5 @@ void Control::ImplSubControlLayoutChanged() const
 ControlLayoutData::~ControlLayoutData()
 {
     if( m_pParent )
-        m_pParent->ImplSubControlLayoutChanged();
+        m_pParent->ImplClearLayoutData();
 }
