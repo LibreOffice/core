@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-03-27 10:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ oneway		return IDL_ONEWAY;
 			}
 
 {STRING_LITERAL}	{
-            	yylval.sval = new ::rtl::OString(yytext);
+            	yylval.sval = new ::rtl::OString(yytext+1, strlen(yytext)-2);
 				return IDL_STRING_LITERAL;
 			}
 
