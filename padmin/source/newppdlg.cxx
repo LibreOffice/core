@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newppdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-22 14:59:21 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #endif
 #ifndef _PSPRINT_HELPER_HXX_
 #include <psprint/helper.hxx>
-#endif
-#ifndef _SVT_FILEDLG_HXX
-#include <filedlg.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -254,11 +251,10 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
     }
     else if( pButton == &m_aSearchBtn )
     {
-        PathDialog aDlg( this );
-        aDlg.SetPath( m_aPathBox.GetText() );
-        if( aDlg.Execute() )
+        String aPath( m_aPathBox.GetText() );
+        if( chooseDirectory( this, aPath ) )
         {
-            m_aPathBox.SetText( aDlg.GetPath() );
+            m_aPathBox.SetText( aPath );
             Import();
         }
     }

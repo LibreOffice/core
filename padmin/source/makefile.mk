@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pl $ $Date: 2001-07-09 15:46:37 $
+#   last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,15 +71,13 @@ LIBTARGET=NO
 
 # --- Files --------------------------------------------------------
 
-SRCFILES=padialog.src filedlg2.src rtsetup.src
+SRCFILES=padialog.src rtsetup.src
 
 RESLIB1NAME=spa
 RESLIB1SRSFILES= $(SRS)$/padmin.srs
 RESLIB1DEPN=\
     padialog.src	\
     padialog.hrc	\
-    filedlg2.hrc	\
-    filedlg2.src	\
     rtsetup.src		\
     rtsetup.hrc
 RESLIB1BMPS=\
@@ -94,8 +92,6 @@ SLOFILES=\
     $(SLO)$/cmddlg.obj			\
     $(SLO)$/progress.obj		\
     $(SLO)$/newppdlg.obj		\
-    $(SLO)$/filedlg.obj			\
-    $(SLO)$/filedlg2.obj		\
     $(SLO)$/prtsetup.obj		\
     $(SLO)$/prgsbar.obj			\
     $(SLO)$/fontentry.obj		\
@@ -130,6 +126,7 @@ APP1OBJS=\
 APP1STDLIBS=	\
             -l$(SHL1TARGET)		\
             $(SHL1STDLIBS)		\
+            $(UCBHELPERLIB)		\
             -lXext -lX11
 
 # --- Targets ------------------------------------------------------

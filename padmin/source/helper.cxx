@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-04 14:06:14 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,30 @@
 #ifndef _CONFIG_HXX
 #include <tools/config.hxx>
 #endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+
+
 
 using namespace osl;
 using namespace rtl;
 using namespace padmin;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::ui::dialogs;
 
 #define MAX_PATH 1024
 
@@ -276,4 +296,30 @@ void padmin::freePadminRC()
 {
     if( pRC )
         delete pRC, pRC = NULL;
+}
+
+bool padmin::chooseDirectory( Window* pParent, String& rInOutPath )
+{
+    bool bRet = false;
+    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    if( xFactory.is() )
+    {
+        Reference< XFolderPicker > xFolderPicker( xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) ) ), UNO_QUERY );
+        if( xFolderPicker.is() )
+        {
+            INetURLObject aObj( rInOutPath, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+            xFolderPicker->setDisplayDirectory( aObj.GetMainURL() );
+            if( xFolderPicker->execute() == ExecutableDialogResults::OK )
+            {
+                aObj = INetURLObject( xFolderPicker->getDirectory() );
+                rInOutPath = aObj.PathToFileName();
+                bRet = true;
+            }
+        }
+#ifdef DEBUG
+        else
+            fprintf( stderr, "could not get FolderPicker service\n" );
+#endif
+    }
+    return bRet;
 }

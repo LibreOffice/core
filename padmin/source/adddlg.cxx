@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #endif
 #ifndef _PSPRINT_STRHELPER_HXX_
 #include <psprint/strhelper.hxx>
-#endif
-#ifndef _SVT_FILEDLG_HXX
-#include <filedlg.hxx>
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
@@ -450,10 +447,9 @@ IMPL_LINK( APCommandPage, ClickBtnHdl, PushButton*, pButton )
     }
     else if( pButton == &m_aPdfDirBtn )
     {
-        PathDialog aDialog( this );
-        aDialog.SetPath( m_aPdfDirEdt.GetText() );
-        if( aDialog.Execute() )
-            m_aPdfDirEdt.SetText( aDialog.GetPath() );
+        String aPath( m_aPdfDirEdt.GetText() );
+        if( chooseDirectory( this, aPath ) )
+            m_aPdfDirEdt.SetText( aPath );
     }
     return 0;
 }

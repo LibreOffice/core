@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:36 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,14 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _UCBHELPER_CONTENTBROKER_HXX
+#include <ucbhelper/contentbroker.hxx>
+#endif
+
+#ifndef _UCBHELPER_CONFIGURATIONKEYS_HXX_
+#include <ucbhelper/configurationkeys.hxx>
+#endif
+
 using namespace padmin;
 using namespace rtl;
 using namespace cppu;
@@ -150,10 +158,28 @@ void MyApp::Main()
         fprintf( stderr, "could not create service factory\n" );
 #endif
 
+    /*
+     *  Create UCB.
+     */
+    Sequence< Any > aArgs( 2 );
+    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xFactory, aArgs );
+
+#ifdef DEBUG
+    if ( !bSuccess )
+        fprintf( stderr, "Error creating UCB\n" );
+#endif
+
     pPADialog = PADialog::Create( NULL , FALSE );
     Application::SetDisplayName( pPADialog->GetText() );
     pPADialog->Execute();
     delete pPADialog;
+
+    /*
+     *  clean up UCB
+     */
+    ::ucb::ContentBroker::deinitialize();
 
     OString aTmp( OUStringToOString( aWriteRdbName, RTL_TEXTENCODING_ISO_8859_1 ) );
     unlink( aTmp.getStr() );

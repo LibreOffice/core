@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,72 +96,74 @@ class Config;
 
 namespace padmin
 {
-    class DelMultiListBox : public MultiListBox
+class DelMultiListBox : public MultiListBox
+{
+    Link            m_aDelPressedLink;
+public:
+    DelMultiListBox( Window* pParent, const ResId& rResId ) :
+            MultiListBox( pParent, rResId ) {}
+    ~DelMultiListBox() {}
+
+    virtual long Notify( NotifyEvent& rEvent );
+
+    Link setDelPressedLink( const Link& rLink )
     {
-        Link            m_aDelPressedLink;
-    public:
-        DelMultiListBox( Window* pParent, const ResId& rResId ) :
-                MultiListBox( pParent, rResId ) {}
-        ~DelMultiListBox() {}
-
-        virtual long Notify( NotifyEvent& rEvent );
-
-        Link setDelPressedLink( const Link& rLink )
-            {
-                Link aOldLink( m_aDelPressedLink );
+        Link aOldLink( m_aDelPressedLink );
                 m_aDelPressedLink = rLink;
                 return aOldLink;
-            }
-        const Link& getDelPressedLink() const { return m_aDelPressedLink; }
-    };
+    }
+    const Link& getDelPressedLink() const { return m_aDelPressedLink; }
+};
 
-    class DelListBox : public ListBox
-    {
-        Link            m_aDelPressedLink;
-    public:
-        DelListBox( Window* pParent, const ResId& rResId ) :
+class DelListBox : public ListBox
+{
+    Link            m_aDelPressedLink;
+public:
+    DelListBox( Window* pParent, const ResId& rResId ) :
                 ListBox( pParent, rResId ) {}
-        ~DelListBox() {}
+    ~DelListBox() {}
 
-        virtual long Notify( NotifyEvent& rEvent );
+    virtual long Notify( NotifyEvent& rEvent );
 
-        Link setDelPressedLink( const Link& rLink )
-            {
-                Link aOldLink( m_aDelPressedLink );
-                m_aDelPressedLink = rLink;
-                return aOldLink;
-            }
-        const Link& getDelPressedLink() const { return m_aDelPressedLink; }
-    };
-
-    class QueryString : public ModalDialog
+    Link setDelPressedLink( const Link& rLink )
     {
-    private:
-        OKButton     m_aOKButton;
-        CancelButton m_aCancelButton;
-        FixedText    m_aFixedText;
-        Edit         m_aEdit;
-        ComboBox     m_aComboBox;
+        Link aOldLink( m_aDelPressedLink );
+        m_aDelPressedLink = rLink;
+        return aOldLink;
+    }
+    const Link& getDelPressedLink() const { return m_aDelPressedLink; }
+};
 
-        String&      m_rReturnValue;
-        bool         m_bUseEdit;
+class QueryString : public ModalDialog
+{
+private:
+    OKButton     m_aOKButton;
+    CancelButton m_aCancelButton;
+    FixedText    m_aFixedText;
+    Edit         m_aEdit;
+    ComboBox     m_aComboBox;
 
-        DECL_LINK( ClickBtnHdl, Button* );
+    String&      m_rReturnValue;
+    bool         m_bUseEdit;
 
-    public:
-        QueryString( Window*, String &, String &, const ::std::list< String >& rChoices = ::std::list<String>() );
-        // parent window, Query text, initial value
-        ~QueryString();
-    };
+    DECL_LINK( ClickBtnHdl, Button* );
 
-    BOOL AreYouSure( Window*, int nRid = -1 );
+public:
+    QueryString( Window*, String &, String &, const ::std::list< String >& rChoices = ::std::list<String>() );
+    // parent window, Query text, initial value
+    ~QueryString();
+};
 
-    ResId PaResId( ULONG nId );
+BOOL AreYouSure( Window*, int nRid = -1 );
 
-    void FindFiles( const String& rDirectory, ::std::list< String >& rResult, const String& rSuffixes );
+ResId PaResId( ULONG nId );
 
-    Config& getPadminRC();
-    void freePadminRC();
+void FindFiles( const String& rDirectory, ::std::list< String >& rResult, const String& rSuffixes );
+
+Config& getPadminRC();
+void freePadminRC();
+
+bool chooseDirectory( Window* pParent, String& rInOutPath );
 
 } // namespace padmin
 

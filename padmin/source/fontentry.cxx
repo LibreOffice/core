@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 16:03:31 $
+ *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #endif
 #ifndef _PAD_FONTENTRY_HXX_
 #include <fontentry.hxx>
-#endif
-#ifndef _SVT_FILEDLG_HXX
-#include <filedlg.hxx>
 #endif
 #ifndef _PAD_HELPER_HXX_
 #include <helper.hxx>
@@ -685,11 +682,10 @@ IMPL_LINK( FontImportDialog, ClickBtnHdl, Button*, pButton )
 {
     if( pButton == &m_aFromBtn )
     {
-        PathDialog aDlg( this );
-        aDlg.SetPath( m_aFromDirEdt.GetText() );
-        if( aDlg.Execute() )
+        String aPath( m_aFromDirEdt.GetText() );
+        if( chooseDirectory( this, aPath ) )
         {
-            m_aFromDirEdt.SetText( aDlg.GetPath() );
+            m_aFromDirEdt.SetText( aPath );
             RefreshTimeoutHdl( NULL );
         }
     }
