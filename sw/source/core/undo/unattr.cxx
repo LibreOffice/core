@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:37:40 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ void SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
 //          pCont->ConnectToLayout();
         SdrObject* pObj = pCont->GetMaster();
 
-        if( pCont->GetAnchor() && !pObj->IsInserted() )
+        if( pCont->GetAnchorFrm() && !pObj->IsInserted() )
         {
             ASSERT( pDoc->GetDrawModel(), "RestoreFlyAnchor without DrawModel" );
             pDoc->GetDrawModel()->GetPage( 0 )->InsertObject( pObj );
