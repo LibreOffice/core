@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:57:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@ class SwFmt;
 class PolyPolygon;
 class TextRanger;
 class Color;
+// --> OD 2004-10-06 #i26945#
+class SwAnchoredObject;
+// <--
 
 // eine kleine Schweinerei, weil enums nicht forward-deklariert werden koennen.
 typedef MSHORT _FlyCntnt;
@@ -183,8 +186,12 @@ class SwTxtFly
     void CalcRightMargin( SwRect &rFly, MSHORT nPos, const SwRect &rLine ) const;
     void CalcLeftMargin( SwRect &rFly, MSHORT nPos, const SwRect &rLine ) const;
     MSHORT GetPos( const SdrObject *pObj ) const;
-    sal_Bool GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
+    // --> OD 2004-10-06 #i26945# - change first parameter:
+    // Now it's the <SwAnchoredObject> instance of the floating screen object
+    sal_Bool GetTop( const SwAnchoredObject* _pAnchoredObj,
+                     const sal_Bool bInFtn,
                      const sal_Bool bInFooterOrHeader );
+    // <--
     SwTwips CalcMinBottom() const;
     const SwCntntFrm* _GetMaster();
 
