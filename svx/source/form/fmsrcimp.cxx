@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:33:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,7 +548,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bo
     sal_Bool bMovedAround(sal_False);
     do
     {
-        if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
+        if (m_eMode == SM_ALLOWSCHEDULE) //CHINA001  if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
         {
             Application::Reschedule();
             Application::Reschedule();
@@ -609,7 +609,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const
     ::rtl::OUString sCurrentCheck;
     do
     {
-        if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
+        if (m_eMode == SM_ALLOWSCHEDULE) //CHINA001  if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
         {
             Application::Reschedule();
             Application::Reschedule();
@@ -704,7 +704,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
     sal_Bool bMovedAround(sal_False);
     do
     {
-        if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
+        if (m_eMode == SM_ALLOWSCHEDULE) //CHINA001   if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
         {
             Application::Reschedule();
             Application::Reschedule();
@@ -789,7 +789,7 @@ DBG_NAME(FmSearchEngine);
 //------------------------------------------------------------------------
 FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
             const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
-            const Reference< XNumberFormatsSupplier > & xFormatSupplier, FmSearchDialog::SEARCH_MODE eMode)
+            const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)//CHINA001 const Reference< XNumberFormatsSupplier > & xFormatSupplier, FmSearchDialog::SEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
     ,m_bUsingTextComponents(sal_False)
@@ -818,7 +818,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
 //------------------------------------------------------------------------
 FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
         const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
-        const InterfaceArray& arrFields, FmSearchDialog::SEARCH_MODE eMode)
+        const InterfaceArray& arrFields, FMSEARCH_MODE eMode)//CHINA001 const InterfaceArray& arrFields, FmSearchDialog::SEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_xOriginalIterator(xCursor)
     ,m_xClonedIterator(m_xOriginalIterator, sal_True)
@@ -1245,7 +1245,7 @@ void FmSearchEngine::ImplStartNextSearch()
     m_bCancelAsynchRequest = sal_False;
     m_bSearchingCurrently = sal_True;
 
-    if (m_eMode == FmSearchDialog::SM_USETHREAD)
+    if (m_eMode == SM_USETHREAD)//CHINA001 if (m_eMode == FmSearchDialog::SM_USETHREAD)
     {
         FmSearchThread* pSearcher = new FmSearchThread(this);
             // der loescht sich nach Beendigung selber ...
