@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-10 17:21:42 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,11 @@
 #endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
+#endif
+
+// #i13033#
+#ifndef _CLONELIST_HXX_
+#include <clonelist.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -397,6 +402,11 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
         ULONG nCloneErrCnt=0;
         ULONG nOb,nObAnz=pSrcPg->GetObjCount();
         BOOL bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
+
+        // #i13033#
+        // New mechanism to re-create the connections of cloned connectors
+        CloneList aCloneList;
+
         for (nOb=0; nOb<nObAnz; nOb++) {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
             SdrObject* pNeuObj=pSrcOb->Clone(pDstLst->GetPage(),pDstLst->GetModel());
@@ -421,56 +431,22 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
                     // Das erledigt das ModelHasChanged der MarkView.
                     MarkObj(pNeuObj,pMarkPV,FALSE,TRUE);
                 }
-            } else {
+
+                // #i13033#
+                aCloneList.AddPair(pSrcOb, pNeuObj);
+            }
+            else
+            {
                 nCloneErrCnt++;
             }
         }
-        // und nun zu den Konnektoren
-        // Die neuen Objekte in pDstLst werden auf die der pSrcPg abgebildet
-        // und so die Objektverbindungen hergestellt.
-        // Aehnliche Implementation an folgenden Stellen:
-        //    void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
-        //    SdrModel* SdrExchangeView::GetMarkedObjModel() const
-        //    BOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
-        //    void SdrEditView::CopyMarked()
-        if (nCloneErrCnt==0) {
-            for (nOb=0; nOb<nObAnz; nOb++) {
-                const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
-                SdrEdgeObj* pSrcEdge=PTR_CAST(SdrEdgeObj,pSrcOb);
-                if (pSrcEdge!=NULL) {
-                    SdrObject* pSrcNode1=pSrcEdge->GetConnectedNode(TRUE);
-                    SdrObject* pSrcNode2=pSrcEdge->GetConnectedNode(FALSE);
-                    if (pSrcNode1!=NULL && pSrcNode1->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode1=NULL; // Listenuebergreifend
-                    if (pSrcNode2!=NULL && pSrcNode2->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode2=NULL; // ist (noch) nicht
-                    if (pSrcNode1!=NULL || pSrcNode2!=NULL) {
-                        SdrObject* pDstEdgeTmp=pDstLst->GetObj(nDstObjAnz0+nOb);
-                        SdrEdgeObj* pDstEdge=PTR_CAST(SdrEdgeObj,pDstEdgeTmp);
-                        if (pDstEdge!=NULL) {
-                            if (pSrcNode1!=NULL) {
-                                ULONG nDstNode1=pSrcNode1->GetOrdNum();
-                                SdrObject* pDstNode1=pDstLst->GetObj(nDstNode1+nDstObjAnz0);
-                                if (pDstNode1!=NULL) { // Sonst grober Fehler!
-                                    pDstEdge->ConnectToNode(TRUE,pDstNode1);
-                                } else {
-                                    DBG_ERROR("SdrExchangeView::Paste(): pDstNode1==NULL!");
-                                }
-                            }
-                            if (pSrcNode2!=NULL) {
-                                ULONG nDstNode2=pSrcNode2->GetOrdNum();
-                                SdrObject* pDstNode2=pDstLst->GetObj(nDstNode2+nDstObjAnz0);
-                                if (pDstNode2!=NULL) { // Node war sonst wohl nicht markiert
-                                    pDstEdge->ConnectToNode(FALSE,pDstNode2);
-                                } else {
-                                    DBG_ERROR("SdrExchangeView::Paste(): pDstNode2==NULL!");
-                                }
-                            }
-                        } else {
-                            DBG_ERROR("SdrExchangeView::Paste(): pDstEdge==NULL!");
-                        }
-                    }
-                }
-            }
-        } else {
+
+        // #i13033#
+        // New mechanism to re-create the connections of cloned connectors
+        aCloneList.CopyConnections();
+
+        if(0L != nCloneErrCnt)
+        {
 #ifdef DBG_UTIL
             ByteString aStr("SdrExchangeView::Paste(): Fehler beim Clonen ");
 
@@ -623,7 +599,16 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( BOOL bNoVDevIfOneMtfMarked ) 
             aMtf.Stop();
             aMtf.WindStart();
             aMtf.SetPrefMapMode( aMap );
-            aMtf.SetPrefSize( aBoundSize );
+
+            // #i8506# Add something to the prefsize, to prevent
+            // the draw shapes from clipping away the right/bottom-
+            // most line. Honestly, I have not the slightest idea
+            // why exactly 32 does the trick here, but that's the
+            // smallest number which still works even for the highest
+            // zoom level.
+            // See also #108486# for further details.
+            aMtf.SetPrefSize( Size(aBoundSize.Width()+32,
+                                   aBoundSize.Height()+32) );
         }
     }
 
@@ -782,6 +767,10 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
             rObjVector1.push_back( pMark );
     }
 
+    // #i13033#
+    // New mechanism to re-create the connections of cloned connectors
+    CloneList aCloneList;
+
     for( n = 0, nCount = aObjVectors.size(); n < nCount; n++ )
     {
         ::std::vector< SdrMark* >& rObjVector = aObjVectors[ n ];
@@ -809,61 +798,21 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
                 if (aP.X()!=0 || aP.Y()!=0) pNeuObj->NbcMove(Size(aP.X(),aP.Y()));
                 SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 pNeuPag->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
+
+                // #i13033#
+                aCloneList.AddPair(pObj, pNeuObj);
             }
             else
                 nCloneErrCnt++;
         }
     }
 
-    // und nun zu den Konnektoren
-    // Die Objekte in pNeuPag werden auf die MarkList abgebildet
-    // und so die Objektverbindungen hergestellt.
-    // Aehnliche Implementation an folgenden Stellen:
-    //    void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
-    //    SdrModel* SdrExchangeView::GetMarkedObjModel() const
-    //    BOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
-    //    void SdrEditView::CopyMarked()
-    if (nCloneErrCnt==0) {
-        for (n=0; n<aMark.GetMarkCount(); n++) {
-            SdrMark* pM=aMark.GetMark(n);
-            SdrObject* pO=pM->GetObj();
-            SdrEdgeObj* pSrcEdge=PTR_CAST(SdrEdgeObj,pO);
-            if (pSrcEdge!=NULL) {
-                SdrObject* pSrcNode1=pSrcEdge->GetConnectedNode(TRUE);
-                SdrObject* pSrcNode2=pSrcEdge->GetConnectedNode(FALSE);
-                if (pSrcNode1!=NULL && pSrcNode1->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode1=NULL; // Listenuebergreifend
-                if (pSrcNode2!=NULL && pSrcNode2->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode2=NULL; // ist (noch) nicht
-                if (pSrcNode1!=NULL || pSrcNode2!=NULL) {
-                    SdrObject* pDstEdgeTmp=pNeuPag->GetObj(n);
-                    SdrEdgeObj* pDstEdge=PTR_CAST(SdrEdgeObj,pDstEdgeTmp);
-                    if (pDstEdge!=NULL) {
-                        if (pSrcNode1!=NULL) {
-                            ULONG nDstNode1=((SdrMarkList*)&aMark)->FindObject(pSrcNode1);
-                            SdrObject* pDstNode1=NULL;
-                            if (nDstNode1!=CONTAINER_ENTRY_NOTFOUND) {
-                                pDstNode1=pNeuPag->GetObj(nDstNode1);
-                            }
-                            if (pDstNode1!=NULL) { // Node war sonst wohl nicht markiert
-                                pDstEdge->ConnectToNode(TRUE,pDstNode1);
-                            }
-                        }
-                        if (pSrcNode2!=NULL) {
-                            ULONG nDstNode2=((SdrMarkList*)&aMark)->FindObject(pSrcNode2);
-                            SdrObject* pDstNode2=NULL;
-                            if (nDstNode2!=CONTAINER_ENTRY_NOTFOUND) {
-                                pDstNode2=pNeuPag->GetObj(nDstNode2);
-                            }
-                            if (pDstNode2!=NULL) { // Node war sonst wohl nicht markiert
-                                pDstEdge->ConnectToNode(FALSE,pDstNode2);
-                            }
-                        }
-                    } else {
-                        DBG_ERROR("SdrExchangeView::GetMarkedObjModel(): pDstEdge==NULL!");
-                    }
-                }
-            }
-        }
-    } else {
+    // #i13033#
+    // New mechanism to re-create the connections of cloned connectors
+    aCloneList.CopyConnections();
+
+    if(0L != nCloneErrCnt)
+    {
 #ifdef DBG_UTIL
         ByteString aStr("SdrExchangeView::GetMarkedObjModel(): Fehler beim Clonen ");
 
