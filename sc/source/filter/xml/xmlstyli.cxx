@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:01:22 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
             if( IsXMLToken(aLocalName, XML_CONDITION ) )
                 sCondition = rValue;
             else if( IsXMLToken(aLocalName, XML_APPLY_STYLE_NAME ) )
-                sApplyStyle = rValue;
+                sApplyStyle = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, rValue);
             else if ( IsXMLToken(aLocalName, XML_BASE_CELL_ADDRESS ) )
                 sBaseCell = rValue;
         }
