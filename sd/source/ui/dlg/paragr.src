@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 23:17:31 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,15 +124,15 @@ TabDialog TAB_PARAGRAPH
                 Text = "Asiatische Typography" ;
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
-                Text[ portuguese ] = "Asian typography";
-                Text[ russian ] = "Asian typography";
-                Text[ greek ] = "Asian typography";
-                Text[ dutch ] = "Asian typography";
+                Text[ portuguese ] = "Tipografia asi·tica";
+                Text[ russian ] = "¿ÁË‡ÚÒÍËÂ ¯ËÙÚ˚";
+                Text[ greek ] = "¡ÛÈ·ÙÈÍﬁ ÙıÔ„Ò·ˆﬂ·";
+                Text[ dutch ] = "Asiatische typografie";
                 Text[ french ] = "Typographie asiatique";
-                Text[ spanish ] = "Asian typography";
-                Text[ italian ] = "Asian typography";
+                Text[ spanish ] = "TipografÌa asi·tica";
+                Text[ italian ] = "Tipografia asiatica";
                 Text[ danish ] = "Asian typography";
-                Text[ swedish ] = "Asian typography";
+                Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "òaï∂àÛç¸ÇÃëÃçŸ";
