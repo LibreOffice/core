@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-11 16:40:35 $
+ *  last change: $Author: jp $ $Date: 2001-05-11 17:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,7 @@ static const SmTokenTableEntry * GetTokenTableEntry( const String &rName )
 
 ///////////////////////////////////////////////////////////////////////////
 
-CharClass& GetCharClass()
+static CharClass& GetCharClass()
 {
     static CharClass aCharClass( SvxCreateLocale(
                         Application::GetAppInternational().GetLanguage() ) );
