@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:48:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ SdrPageView* FmFormView::ShowPage(SdrPage* pPage, const Point& rOffs)
             // damit der Formular-Navigator auf den Seitenwechsel reagieren kann
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL , sal_True, sal_False);
 
-            pFormShellImpl->SetSelection(GetMarkList());
+            pFormShellImpl->SetSelection(GetMarkedObjectList());
         }
     }
     return pPV;
@@ -718,7 +718,7 @@ sal_Bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 FmFormObj* FmFormView::getMarkedGrid() const
 {
     FmFormObj* pObj = NULL;
-    const SdrMarkList& rMarkList = GetMarkList();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     if ( 1 == rMarkList.GetMarkCount() )
     {
         SdrMark* pMark = rMarkList.GetMark(0);
