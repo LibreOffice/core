@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2003-12-08 13:24:09 $
+#   last change: $Author: thb $ $Date: 2004-02-04 12:11:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,8 @@ ENABLE_EXCEPTIONS=TRUE
 SHL1OBJS=  \
     $(SLO)$/basegfx1d.obj \
     $(SLO)$/basegfx2d.obj \
-    $(SLO)$/basegfx3d.obj
+    $(SLO)$/basegfx3d.obj \
+    $(SLO)$/tools.obj	
 
 SHL1TARGET= tests
 SHL1STDLIBS= 	$(TOOLSLIB)		 \
