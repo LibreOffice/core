@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:05:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@
 #include "formmetadata.hxx"
 #endif
 #include <algorithm>
+#include <functional>
 
 //------------------------------------------------------------------------
 // !!! outside the namespace !!!
