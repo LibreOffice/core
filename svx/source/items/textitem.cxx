@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-19 10:08:26 $
+ *  last change: $Author: pb $ $Date: 2002-08-15 13:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,15 +506,14 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, USHORT) const
     rStrm.ReadByteString(aStyle);
 
     // Task 91008/90471: set the "correct" textencoding
-    eFontTextEncoding = GetSOLoadTextEncoding( eFontTextEncoding,
-                                                   rStrm.GetVersion() );
+    eFontTextEncoding = (BYTE)GetSOLoadTextEncoding( eFontTextEncoding, (USHORT)rStrm.GetVersion() );
+
     // irgendwann wandelte sich der StarBats vom ANSI- zum SYMBOL-Font
     if ( RTL_TEXTENCODING_SYMBOL != eFontTextEncoding && aName.EqualsAscii("StarBats") )
         eFontTextEncoding = RTL_TEXTENCODING_SYMBOL;
 
-    return new SvxFontItem(  (FontFamily)eFamily, aName, aStyle,
-                             (FontPitch)eFontPitch,  (rtl_TextEncoding)eFontTextEncoding,
-                            Which() );
+    return new SvxFontItem( (FontFamily)eFamily, aName, aStyle,
+                            (FontPitch)eFontPitch, (rtl_TextEncoding)eFontTextEncoding, Which() );
 }
 
 //------------------------------------------------------------------------
@@ -3675,33 +3674,37 @@ void SvxScriptSetItem::GetSlotIds( USHORT nSlotId, USHORT& rLatin,
     }
 }
 
-void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian,
-                        SvxFontItem& rComplex )
+void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rComplex )
 {
     const USHORT nItemCnt = 3;
-    static struct {
-        USHORT nFntType, nLanguage;
-    }  aOutTypeArr[ nItemCnt ] = {
+
+    static struct
+    {
+        USHORT nFontType;
+        USHORT nLanguage;
+    }
+    aOutTypeArr[ nItemCnt ] =
+    {
         {  DEFAULTFONT_LATIN_TEXT, LANGUAGE_ENGLISH_US },
         {  DEFAULTFONT_CJK_TEXT, LANGUAGE_ENGLISH_US },
         {  DEFAULTFONT_CTL_TEXT, LANGUAGE_ARABIC_SAUDI_ARABIA }
     };
+
     SvxFontItem* aItemArr[ nItemCnt ] = { &rLatin, &rAsian, &rComplex };
 
-    for( USHORT n = 0; n < nItemCnt; ++n )
+    for ( USHORT n = 0; n < nItemCnt; ++n )
     {
-        Font aFnt( OutputDevice::GetDefaultFont(
-            aOutTypeArr[ n ].nFntType, aOutTypeArr[ n ].nLanguage,
-            DEFAULTFONT_FLAGS_ONLYONE, 0 ));
-        SvxFontItem* pI = aItemArr[ n ];
-        pI->GetFamily() = aFnt.GetFamily();
-        pI->GetFamilyName() = aFnt.GetName();
-        pI->GetStyleName().Erase();
-        pI->GetPitch() = aFnt.GetPitch();
-        pI->GetCharSet() = aFnt.GetCharSet();
+        Font aFont( OutputDevice::GetDefaultFont( aOutTypeArr[ n ].nFontType,
+                                                  aOutTypeArr[ n ].nLanguage,
+                                                  DEFAULTFONT_FLAGS_ONLYONE, 0 ) );
+        SvxFontItem* pItem = aItemArr[ n ];
+        pItem->GetFamily() = aFont.GetFamily();
+        pItem->GetFamilyName() = aFont.GetName();
+        pItem->GetStyleName().Erase();
+        pItem->GetPitch() = aFont.GetPitch();
+        pItem->GetCharSet() = aFont.GetCharSet();
     }
 }
-
 
 // returns for a language the scripttype
 USHORT GetScriptTypeOfLanguage( USHORT nLang )
@@ -3714,48 +3717,52 @@ USHORT GetScriptTypeOfLanguage( USHORT nLang )
     USHORT nScript;
     switch( nLang )
     {
-    case LANGUAGE_CHINESE:
-    case LANGUAGE_CHINESE_TRADITIONAL:
-    case LANGUAGE_CHINESE_SIMPLIFIED:
-    case LANGUAGE_CHINESE_HONGKONG:
-    case LANGUAGE_CHINESE_SINGAPORE:
-    case LANGUAGE_CHINESE_MACAU:
-    case LANGUAGE_JAPANESE:
-    case LANGUAGE_KOREAN:
-    case LANGUAGE_KOREAN_JOHAB:
-        nScript = SCRIPTTYPE_ASIAN;
-        break;
+        // CJK
+        case LANGUAGE_CHINESE:
+        case LANGUAGE_CHINESE_TRADITIONAL:
+        case LANGUAGE_CHINESE_SIMPLIFIED:
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_SINGAPORE:
+        case LANGUAGE_CHINESE_MACAU:
+        case LANGUAGE_JAPANESE:
+        case LANGUAGE_KOREAN:
+        case LANGUAGE_KOREAN_JOHAB:
+            nScript = SCRIPTTYPE_ASIAN;
+            break;
 
-    case LANGUAGE_ARABIC:
-    case LANGUAGE_ARABIC_SAUDI_ARABIA:
-    case LANGUAGE_ARABIC_IRAQ:
-    case LANGUAGE_ARABIC_EGYPT:
-    case LANGUAGE_ARABIC_LIBYA:
-    case LANGUAGE_ARABIC_ALGERIA:
-    case LANGUAGE_ARABIC_MOROCCO:
-    case LANGUAGE_ARABIC_TUNISIA:
-    case LANGUAGE_ARABIC_OMAN:
-    case LANGUAGE_ARABIC_YEMEN:
-    case LANGUAGE_ARABIC_SYRIA:
-    case LANGUAGE_ARABIC_JORDAN:
-    case LANGUAGE_ARABIC_LEBANON:
-    case LANGUAGE_ARABIC_KUWAIT:
-    case LANGUAGE_ARABIC_UAE:
-    case LANGUAGE_ARABIC_BAHRAIN:
-    case LANGUAGE_ARABIC_QATAR:
-    case LANGUAGE_HEBREW:
-    case LANGUAGE_URDU:
-    case LANGUAGE_URDU_PAKISTAN:
-    case LANGUAGE_URDU_INDIA:
-    case LANGUAGE_THAI:
-    case LANGUAGE_VIETNAMESE:
-    case LANGUAGE_HINDI:
-    case LANGUAGE_KANNADA:
-    case LANGUAGE_TELUGU:
-    case LANGUAGE_TAMIL:
-    case LANGUAGE_GUJARATI:
-        nScript = SCRIPTTYPE_COMPLEX;
-        break;
+        // CTL
+        case LANGUAGE_ARABIC:
+        case LANGUAGE_ARABIC_SAUDI_ARABIA:
+        case LANGUAGE_ARABIC_IRAQ:
+        case LANGUAGE_ARABIC_EGYPT:
+        case LANGUAGE_ARABIC_LIBYA:
+        case LANGUAGE_ARABIC_ALGERIA:
+        case LANGUAGE_ARABIC_MOROCCO:
+        case LANGUAGE_ARABIC_TUNISIA:
+        case LANGUAGE_ARABIC_OMAN:
+        case LANGUAGE_ARABIC_YEMEN:
+        case LANGUAGE_ARABIC_SYRIA:
+        case LANGUAGE_ARABIC_JORDAN:
+        case LANGUAGE_ARABIC_LEBANON:
+        case LANGUAGE_ARABIC_KUWAIT:
+        case LANGUAGE_ARABIC_UAE:
+        case LANGUAGE_ARABIC_BAHRAIN:
+        case LANGUAGE_ARABIC_QATAR:
+        case LANGUAGE_HEBREW:
+        case LANGUAGE_MARATHI:
+        case LANGUAGE_PUNJABI:
+        case LANGUAGE_GUJARATI:
+        case LANGUAGE_HINDI:
+        case LANGUAGE_KANNADA:
+        case LANGUAGE_TAMIL:
+        case LANGUAGE_TELUGU:
+        case LANGUAGE_THAI:
+        case LANGUAGE_URDU:
+        case LANGUAGE_URDU_PAKISTAN:
+        case LANGUAGE_URDU_INDIA:
+        case LANGUAGE_VIETNAMESE: // not included in langtab.src?
+            nScript = SCRIPTTYPE_COMPLEX;
+            break;
 
 // currently not knowing scripttype - defaultet to LATIN:
 /*
@@ -3768,7 +3775,6 @@ USHORT GetScriptTypeOfLanguage( USHORT nLang )
 #define LANGUAGE_BASQUE                     0x042D
 #define LANGUAGE_BELARUSIAN                 0x0423
 #define LANGUAGE_BENGALI                    0x0445
-#define LANGUAGE_GUJARATI                   0x0447
 #define LANGUAGE_INDONESIAN                 0x0421
 #define LANGUAGE_KASHMIRI                   0x0460
 #define LANGUAGE_KASHMIRI_INDIA             0x0860
@@ -3783,11 +3789,9 @@ USHORT GetScriptTypeOfLanguage( USHORT nLang )
 #define LANGUAGE_MALAY_BRUNEI_DARUSSALAM    0x083E
 #define LANGUAGE_MALAYALAM                  0x044C
 #define LANGUAGE_MANIPURI                   0x0458
-#define LANGUAGE_MARATHI                    0x044E
 #define LANGUAGE_NEPALI                     0x0461
 #define LANGUAGE_NEPALI_INDIA               0x0861
 #define LANGUAGE_ORIYA                      0x0448
-#define LANGUAGE_PUNJABI                    0x0446
 #define LANGUAGE_SANSKRIT                   0x044F
 #define LANGUAGE_SERBIAN                    0x041A
 #define LANGUAGE_SERBIAN_LATIN              0x081A
