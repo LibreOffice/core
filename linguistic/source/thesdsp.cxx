@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdsp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-01-25 10:57:01 $
+ *  last change: $Author: tl $ $Date: 2001-02-27 16:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
             RemoveControlChars( aChkWord );
 
         INT32 nLen = pEntry->aSvcRefs.getLength();
-        DBG_ASSERT( nLen = pEntry->aSvcImplNames.getLength(),
+        DBG_ASSERT( nLen == pEntry->aSvcImplNames.getLength(),
                 "lng : sequence length mismatch");
         DBG_ASSERT( pEntry->aFlags.nLastTriedSvcIndex < nLen,
                 "lng : index out of range");
