@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-05 15:52:03 $
+ *  last change: $Author: ka $ $Date: 2002-04-03 13:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,6 +1455,9 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
             break;
 
         case KEY_UP:
+        case KEY_PAGEUP:
+        {
+            const long nLineCount = ( ( KEY_UP == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
             do
             {
                 if ( nCalcPos == VALUESET_ITEM_NONEITEM )
@@ -1463,13 +1466,13 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                         nItemPos = mnCurCol;
                     else
                     {
-                        nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+mnCurCol;
+                        nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(mnCurCol%mnCols);
                         if ( nItemPos+mnCols <= nLastItem )
                             nItemPos += mnCols;
                     }
                 }
-                else if ( nCalcPos >= mnCols )
-                    nItemPos = nCalcPos-mnCols;
+                else if ( nCalcPos >= ( nLineCount * mnCols ) )
+                    nItemPos = nCalcPos - ( nLineCount * mnCols );
                 else
                 {
                     if ( mpNoneItem )
@@ -1483,7 +1486,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             nItemPos = nCalcPos;
                         else
                         {
-                            nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+nCalcPos;
+                            nItemPos = ((((nLastItem+1)/mnCols)-1)*mnCols)+(nCalcPos%mnCols);
                             if ( nItemPos+mnCols <= nLastItem )
                                 nItemPos += mnCols;
                         }
@@ -1492,15 +1495,19 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                 nCalcPos = nItemPos;
             }
             while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
-            break;
+        }
+        break;
 
         case KEY_DOWN:
+        case KEY_PAGEDOWN:
+        {
+            const long nLineCount = ( ( KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
             do
             {
                 if ( nCalcPos == VALUESET_ITEM_NONEITEM )
                     nItemPos = mnCurCol;
-                else if ( nCalcPos+mnCols <= nLastItem )
-                    nItemPos = nCalcPos+mnCols;
+                else if ( nCalcPos + ( nLineCount * mnCols ) <= nLastItem )
+                    nItemPos = nCalcPos + ( nLineCount * mnCols );
                 else
                 {
                     if ( mpNoneItem )
@@ -1514,7 +1521,8 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                 nCalcPos = nItemPos;
             }
             while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
-            break;
+        }
+        break;
 
         default:
             Control::KeyInput( rKEvt );
