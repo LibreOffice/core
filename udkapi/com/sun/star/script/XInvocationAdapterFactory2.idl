@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInvocationAdapterFactory2.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: mi $ $Date: 2001-01-31 09:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ interface XInvocationAdapterFactory2 : com::sun::star::uno::XInterface
      *                   given types
      */
     com::sun::star::uno::XInterface createAdapter(
-        [in] XInvocation Invocation, [in] sequence< TYPE_XIDLCLASS > aTypes );
+        [in] XInvocation Invocation, [in] sequence< type > aTypes );
 };
 
 //=============================================================================
@@ -107,6 +107,9 @@ interface XInvocationAdapterFactory2 : com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:36  hjs
     initial import
 

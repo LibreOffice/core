@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeConverter.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: mi $ $Date: 2001-01-31 09:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ interface XTypeConverter: com::sun::star::uno::XInterface
     /** converts the value in <var>aFrom</var> to the specified type.
      */
     any convertTo( [in] any aFrom,
-             [in] TYPE_XIDLCLASS xDestinationType )
+             [in] type xDestinationType )
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::script::CannotConvertException );
 
@@ -123,6 +123,9 @@ interface XTypeConverter: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:36  hjs
     initial import
 

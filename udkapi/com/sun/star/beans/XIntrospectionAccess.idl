@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIntrospectionAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-12 10:21:31 $
+ *  last change: $Author: mi $ $Date: 2001-01-31 09:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ interface XIntrospectionAccess: com::sun::star::uno::XInterface
             a sequence of the types of listener interfaces which are
             supported by the introspected object.
      */
-    [const] sequence<TYPE_XIDLCLASS> getSupportedListeners();
+    [const] sequence<type> getSupportedListeners();
 
     //-------------------------------------------------------------------------
 
@@ -291,7 +291,7 @@ interface XIntrospectionAccess: com::sun::star::uno::XInterface
 
         @see com::sun::star::beans::XExactName
      */
-    [const] com::sun::star::uno::XInterface queryAdapter( [in] TYPE_XIDLCLASS aInterfaceType )
+    [const] com::sun::star::uno::XInterface queryAdapter( [in] type aInterfaceType )
             raises( com::sun::star::beans::IllegalTypeException );
 
 };
@@ -303,6 +303,9 @@ interface XIntrospectionAccess: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/12 10:21:31  jbu
+    reconstructed some method references, that have gone lost during merges
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

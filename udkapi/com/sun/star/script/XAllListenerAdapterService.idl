@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAllListenerAdapterService.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: mi $ $Date: 2001-01-31 09:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ interface XAllListenerAdapterService: com::sun::star::uno::XInterface
         You must call <code>return-&amp;gt;queryInterface( ListenerType.getUik() )</code>
         to get the correct listener interface.
      */
-    com::sun::star::uno::XInterface createAllListerAdapter( [in] TYPE_XIDLCLASS xListenerType,
+    com::sun::star::uno::XInterface createAllListerAdapter( [in] type xListenerType,
              [in] com::sun::star::script::XAllListener xListener,
              [in] any aHelper );
 
@@ -110,6 +110,9 @@ interface XAllListenerAdapterService: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:35  hjs
     initial import
 
