@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 13:57:37 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
@@ -887,6 +890,7 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
         {
             pListBox->InsertEntry(pColNames[nCol]);
         }
+        ::comphelper::disposeComponent( xColsSupp );
     }
     return(TRUE);
 }
@@ -909,6 +913,7 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
         {
             pListBox->InsertEntry(pColNames[nCol]);
         }
+        ::comphelper::disposeComponent( xColsSupp );
     }
     return(TRUE);
 }
@@ -1649,6 +1654,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             uno::Reference< XPropertySet > xColumn;
             aCol >>= xColumn;
             nRet = GetColumnFmt(xSource, xConnection, xColumn, pNFmtr, nLanguage);
+            ::comphelper::disposeComponent( xColsSupp );
         }
         else
             nRet = pNFmtr->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM );
@@ -1763,6 +1769,7 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
             Any aType = xCol->getPropertyValue(C2S("Type"));
             aType >>= nRet;
         }
+        ::comphelper::disposeComponent( xColsSupp );
     }
     return nRet;
 }
@@ -1797,40 +1804,49 @@ uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Refe
                                     const String& rTableOrQuery,
                                     BYTE    eTableOrQuery)
 {
-    uno::Reference< sdbcx::XColumnsSupplier> xRet;
-    if(SW_DB_SELECT_QUERY != eTableOrQuery)
+    Reference< sdbcx::XColumnsSupplier> xRet;
+    try
     {
-        uno::Reference<XTablesSupplier> xTSupplier = uno::Reference<XTablesSupplier>(xConnection, UNO_QUERY);
-        if(xTSupplier.is())
+        if(eTableOrQuery == SW_DB_SELECT_UNKNOWN)
         {
-            uno::Reference<XNameAccess> xTbls = xTSupplier->getTables();
-            if(xTbls->hasByName(rTableOrQuery))
-                try
-                {
-                    Any aTable = xTbls->getByName(rTableOrQuery);
-                    uno::Reference<XPropertySet> xPropSet;
-                    aTable >>= xPropSet;
-                    xRet = uno::Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
-                }
-                catch(Exception&){}
+            //search for a table with the given command name
+            Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
+            if(xTSupplier.is())
+            {
+                Reference<XNameAccess> xTbls = xTSupplier->getTables();
+                eTableOrQuery = xTbls->hasByName(rTableOrQuery) ?
+                            SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY;
+            }
         }
+        sal_Int32 nCommandType = SW_DB_SELECT_TABLE == eTableOrQuery ?
+                CommandType::TABLE : CommandType::QUERY;
+        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+        Reference<XRowSet> xRowSet(
+                xMgr->createInstance(C2U("com.sun.star.sdb.RowSet")), UNO_QUERY);
+
+        ::rtl::OUString sDataSource;
+        Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection, sDataSource);
+        Reference<XPropertySet> xSourceProperties(xSource, UNO_QUERY);
+        if(xSourceProperties.is())
+        {
+            xSourceProperties->getPropertyValue(C2U("Name")) >>= sDataSource;
+        }
+
+        Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
+        xRowProperties->setPropertyValue(C2U("DataSourceName"), makeAny(sDataSource));
+        xRowProperties->setPropertyValue(C2U("Command"), makeAny(::rtl::OUString(rTableOrQuery)));
+        xRowProperties->setPropertyValue(C2U("CommandType"), makeAny(nCommandType));
+        xRowProperties->setPropertyValue(C2U("FetchSize"), makeAny((sal_Int32)10));
+        xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(xConnection));
+        xRowSet->execute();
+        xRet = Reference<XColumnsSupplier>( xRowSet, UNO_QUERY );
     }
-    if(!xRet.is() && SW_DB_SELECT_QUERY != SW_DB_SELECT_TABLE)
+    catch( const uno::Exception& rEx )
     {
-        uno::Reference<XQueriesSupplier> xQSupplier = uno::Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
-        if(xQSupplier.is())
-        {
-            uno::Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-            if ( xQueries->hasByName(rTableOrQuery) )
-                try
-                {
-                    xQueries->getByName(rTableOrQuery) >>= xRet;
-                }
-                catch(Exception&)
-                {
-                }
-        }
+        rEx;
+        DBG_ERROR("Exception in SwDBMgr::GetColumnSupplier")
     }
+
     return xRet;
 }
 /* -----------------------------05.07.00 13:44--------------------------------
