@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ void    OutputDevice::ImplReMirror( Region &rRegion ) const
 
 #ifndef REMOTE_APPSERVER
 
-int OutputDevice::ImplGetGraphics()
+int OutputDevice::ImplGetGraphics() const
 {
     DBG_TESTSOLARMUTEX();
 
@@ -639,16 +639,16 @@ int OutputDevice::ImplGetGraphics()
         if ( mpGraphics )
         {
             mpNextGraphics = pSVData->maGDIData.mpFirstWinGraphics;
-            pSVData->maGDIData.mpFirstWinGraphics = this;
+            pSVData->maGDIData.mpFirstWinGraphics = const_cast<OutputDevice*>(this);
             if ( mpNextGraphics )
-                mpNextGraphics->mpPrevGraphics = this;
+                mpNextGraphics->mpPrevGraphics = const_cast<OutputDevice*>(this);
             if ( !pSVData->maGDIData.mpLastWinGraphics )
-                pSVData->maGDIData.mpLastWinGraphics = this;
+                pSVData->maGDIData.mpLastWinGraphics = const_cast<OutputDevice*>(this);
         }
     }
     else if ( meOutDevType == OUTDEV_VIRDEV )
     {
-        VirtualDevice* pVirDev = (VirtualDevice*)this;
+        const VirtualDevice* pVirDev = (const VirtualDevice*)this;
 
         if ( pVirDev->mpVirDev )
         {
@@ -663,23 +663,23 @@ int OutputDevice::ImplGetGraphics()
             if ( mpGraphics )
             {
                 mpNextGraphics = pSVData->maGDIData.mpFirstVirGraphics;
-                pSVData->maGDIData.mpFirstVirGraphics = this;
+                pSVData->maGDIData.mpFirstVirGraphics = const_cast<OutputDevice*>(this);
                 if ( mpNextGraphics )
-                    mpNextGraphics->mpPrevGraphics = this;
+                    mpNextGraphics->mpPrevGraphics = const_cast<OutputDevice*>(this);
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
-                    pSVData->maGDIData.mpLastVirGraphics = this;
+                    pSVData->maGDIData.mpLastVirGraphics = const_cast<OutputDevice*>(this);
             }
         }
     }
     else if ( meOutDevType == OUTDEV_PRINTER )
     {
-        Printer* pPrinter = (Printer*)this;
+        const Printer* pPrinter = (const Printer*)this;
 
         if ( pPrinter->mpJobGraphics )
             mpGraphics = pPrinter->mpJobGraphics;
         else if ( pPrinter->mpDisplayDev )
         {
-            VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
+            const VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
             mpGraphics = pVirDev->mpVirDev->GetGraphics();
             while ( !mpGraphics )
             {
@@ -691,11 +691,11 @@ int OutputDevice::ImplGetGraphics()
             if ( mpGraphics )
             {
                 mpNextGraphics = pSVData->maGDIData.mpFirstVirGraphics;
-                pSVData->maGDIData.mpFirstVirGraphics = this;
+                pSVData->maGDIData.mpFirstVirGraphics = const_cast<OutputDevice*>(this);
                 if ( mpNextGraphics )
-                    mpNextGraphics->mpPrevGraphics = this;
+                    mpNextGraphics->mpPrevGraphics = const_cast<OutputDevice*>(this);
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
-                    pSVData->maGDIData.mpLastVirGraphics = this;
+                    pSVData->maGDIData.mpLastVirGraphics = const_cast<OutputDevice*>(this);
             }
         }
         else
@@ -711,11 +711,11 @@ int OutputDevice::ImplGetGraphics()
             if ( mpGraphics )
             {
                 mpNextGraphics = pSVData->maGDIData.mpFirstPrnGraphics;
-                pSVData->maGDIData.mpFirstPrnGraphics = this;
+                pSVData->maGDIData.mpFirstPrnGraphics = const_cast<OutputDevice*>(this);
                 if ( mpNextGraphics )
-                    mpNextGraphics->mpPrevGraphics = this;
+                    mpNextGraphics->mpPrevGraphics = const_cast<OutputDevice*>(this);
                 if ( !pSVData->maGDIData.mpLastPrnGraphics )
-                    pSVData->maGDIData.mpLastPrnGraphics = this;
+                    pSVData->maGDIData.mpLastPrnGraphics = const_cast<OutputDevice*>(this);
             }
         }
     }
