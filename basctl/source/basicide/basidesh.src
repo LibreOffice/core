@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-08 07:47:42 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 14:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1806,6 +1806,7 @@ String RID_STR_SEARCHALLMODULES
 };
 Edit RID_EDT_WATCHEDIT
 {
+    HelpId = HID_BASICIDE_WATCHWINDOW_EDIT ;
     Border = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 80 , 12 ) ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-02 13:40:32 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 14:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #define HID_BASICIDE_WATCHWINDOW                (HID_BASICIDE_START +  29)
 #define HID_BASICIDE_STACKWINDOW                (HID_BASICIDE_START +  30)
 #define HID_BASICIDE_TABBAR                     (HID_BASICIDE_START +  31)
+#define HID_BASICIDE_WATCHWINDOW_EDIT (HID_BASICIDE_START + 32)
+#define HID_BASICIDE_WATCHWINDOW_LIST (HID_BASICIDE_START + 33)
+#define HID_BASICIDE_STACKWINDOW_LIST (HID_BASICIDE_START + 34)
 
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-09 13:25:21 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 14:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,6 +1322,7 @@ WatchWindow::WatchWindow( Window* pParent ) :
 {
     nVirtToolBoxHeight = aXEdit.GetSizePixel().Height() + 7;
 
+    aTreeListBox.SetHelpId(HID_BASICIDE_WATCHWINDOW_LIST);
     aTreeListBox.EnableInplaceEditing( TRUE );
     aTreeListBox.SetSelectHdl( LINK( this, WatchWindow, TreeListHdl ) );
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
@@ -1494,7 +1495,7 @@ StackWindow::StackWindow( Window* pParent ) :
     aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
-
+    aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox.SetHighlightRange();
     aTreeListBox.Show();
