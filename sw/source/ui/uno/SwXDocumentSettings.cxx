@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-05 14:58:02 $
+ *  last change: $Author: jp $ $Date: 2001-06-26 14:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,9 +335,6 @@ void SwXDocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries
                         throw IllegalArgumentException();
                 }
                 pDoc->SetCharCompressType(static_cast < SwCharCompressType > (nMode) );
-                SwEditShell* pEditSh = pDoc->GetEditShell();
-                if(pEditSh)
-                    pEditSh->ChgHyphenation();
             }
             break;
             case HANDLE_APPLY_USER_DATA:
