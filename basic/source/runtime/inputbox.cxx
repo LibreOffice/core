@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
+ *  last change: $Author: ab $ $Date: 2002-10-17 14:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,21 +144,12 @@ void SvRTLInputBox::InitButtons( const Size& rDlgSize )
 
 void SvRTLInputBox::PositionDialog(long nXTwips, long nYTwips, const Size& rDlgSize)
 {
-    Size aScreenSzApp(Window::GetOutputSizePixel());
-    aScreenSzApp = PixelToLogic( aScreenSzApp );
-
-    Point aDlgPosApp( nXTwips, nYTwips );
-    aDlgPosApp = LogicToPixel( aDlgPosApp, MAP_TWIP );
-    aDlgPosApp = PixelToLogic( aDlgPosApp );
-    if ( nXTwips == -1 || nYTwips == -1 ||
-         aDlgPosApp.X() >= aScreenSzApp.Width() ||
-         aDlgPosApp.Y() >= aScreenSzApp.Height() )
-    {
-        aDlgPosApp.X() = ( aScreenSzApp.Width() - rDlgSize.Width() ) / 2;
-        aDlgPosApp.Y() = ( aScreenSzApp.Height() - rDlgSize.Height() ) / 2;
-    }
     SetSizePixel( LogicToPixel(rDlgSize) );
-    SetPosPixel( LogicToPixel(aDlgPosApp) );
+    if( nXTwips != -1 && nYTwips != -1 )
+    {
+        Point aDlgPosApp( nXTwips, nYTwips );
+        SetPosPixel( LogicToPixel( aDlgPosApp, MAP_TWIP ) );
+    }
 }
 
 void SvRTLInputBox::PositionEdit( const Size& rDlgSize )
