@@ -8473,3 +8473,7 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?GetStorage@@YAPAVSotStorage@@ABVString@@G@Z
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx213054651@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\SRC654\src\sfx2\source\doc\objmisc.cxx2002625643@@YAXABVSbxVariableRef@@PAX@Z
+?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx1378514082@@YAXABVSbxVariableRef@@PAX@Z
+??0IOException@io@star@sun@com@@QAE@XZ
+??0IllegalArgumentIOException@frame@star@sun@com@@QAE@ABV01234@@Z
+??1IllegalArgumentIOException@frame@star@sun@com@@QAE@XZ
