@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:06:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 10:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,19 +925,15 @@ BOOL SwDoc::Redo( SwUndoIter& rUndoIter )
 String SwDoc::GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds ) const
 {
     String aTmpStr;
-    USHORT nId;
 
     if (pStr != NULL)
     {
-        nId = GetRedoIds( pStr, pRedoIds );
+        GetRedoIds( pStr, pRedoIds );
         aTmpStr = *pStr;
     }
     else
-        nId = GetRedoIds( &aTmpStr, pRedoIds );
+        GetRedoIds( &aTmpStr, pRedoIds );
 
-
-    if (nId <= UNDO_END)
-        return String();
 
     return aTmpStr;
 }
