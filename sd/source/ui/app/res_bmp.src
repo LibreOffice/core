@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-09 08:08:08 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,9 @@ PushButton RID_PREVIEW_BUTTON
     Text[ korean ] = "μ¬μƒ";
     Text[ turkish ] = "Ηalύώtύr";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Reproducir";
+    Text[ catalan ] = "Reprodueix";
     Text[ finnish ] = "Toista";
+    Text[ thai ] = "ΰΉ€ΰΈ¥ΰΉΰΈ™";
 };
 Bitmap BMP_TAB_PAGEMODE
 {
@@ -1384,11 +1385,11 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ chinese_simplified ] = "ε›Ύε½Άε―Ήθ±΅ζ ·εΌ";
             Text[ russian ] = "Γπΰτθχερκθε ρςθλθ";
             Text[ polish ] = "Style obiektσw graficznych";
-            Text[ japanese ] = "ε›³ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„ο½½οΎ€ο½²οΎ™";
+            Text[ japanese ] = "ε›³γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ‚Ήγ‚Ώγ‚¤γƒ«";
             Text[ chinese_traditional ] = "ε–ε½Άη‰©δ»¶ζ¨£εΌ";
             Text[ arabic ] = "ΓδγΗΨ ίΗΖδΗΚ ΥζΡΙ";
             Text[ greek ] = "Στυλ αντικειμένων γραφικών";
-            Text[ korean ] = "κ·Έλν”½κ°μ²΄ μ ν•";
+            Text[ korean ] = "κ·Έλν”½κ°μ²΄ ν…ν”λ¦Ώ";
             Text[ turkish ] = "Grafik nesne biηimi";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             FilterList =
@@ -1414,7 +1415,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ chinese_simplified ] = "ζΌ”η¤Ίζ–‡η¨Ώε―Ήθ±΅ζ ·εΌ";
             Text[ russian ] = "Ρςθλθ οπεηενςΰφθθ";
             Text[ polish ] = "Style obiektσw prezentacji";
-            Text[ japanese ] = "οΎοΎοΎο½ΎοΎοΎοΎƒο½°ο½Όο½®οΎο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„ο½½οΎ€ο½²οΎ™";
+            Text[ japanese ] = "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ‚Ήγ‚Ώγ‚¤γƒ«";
             Text[ chinese_traditional ] = "η°΅ε ±ζ¨£εΌ";
             Text[ arabic ] = "ΓδγΗΨ ίΗΖδ ΪΡΦ ΚήΟνγν";
             Text[ greek ] = "Πρότυπα αντικειμένων παρουσίασης";
