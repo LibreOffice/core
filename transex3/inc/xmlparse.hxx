@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlparse.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-11 13:55:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-18 08:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,7 @@ public:
 
     /// returns file name
     const String &GetName() { return sFileName; }
+    const std::vector<ByteString> getOrder(){ return order; }
 
 private:
     // writes a string as UTF8 with dos line ends to a given stream
@@ -322,6 +323,8 @@ private:
     //HashMap nodes_include,nodes_localize,nodes_print;
     TagMap      nodes_localize;
     XMLHashMap* XMLStrings;
+
+    std::vector <ByteString> order;
 };
 
 /// An Utility class for XML
