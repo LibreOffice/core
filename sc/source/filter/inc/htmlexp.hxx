@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-07-20 18:35:45 $
+ *  last change: $Author: er $ $Date: 2002-04-09 13:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,18 @@ struct ScHTMLStyle
     Color               aBackgroundColor;
     String              aFontFamilyName;
     UINT32              nFontHeight;        // Item-Value
+    USHORT              nFontSizeNumber;    // HTML value 1-7
+    BOOL                bInitialized;
+
+    ScHTMLStyle() : nFontHeight(0), nFontSizeNumber(2), bInitialized(0) {}
 
     const ScHTMLStyle& operator=( const ScHTMLStyle& r )
         {
             aBackgroundColor    = r.aBackgroundColor;
             aFontFamilyName     = r.aFontFamilyName;
             nFontHeight         = r.nFontHeight;
+            nFontSizeNumber     = r.nFontSizeNumber;
+            bInitialized        = r.bInitialized;
             return *this;
         }
 };
@@ -127,11 +133,11 @@ class ScHTMLExport : public ScExportBase
     static const USHORT nDefaultFontSize[SC_HTML_FONTSIZES];
     // HtmlFontSz[1-7] in s*3.ini [user]
     static USHORT       nFontSize[SC_HTML_FONTSIZES];
+    static const char*  pFontSizeCss[SC_HTML_FONTSIZES];
     static const USHORT nCellSpacing;
     static const sal_Char __FAR_DATA sIndentSource[];
 
     ScHTMLGraphList     aGraphList;
-    ScHTMLStyle         aHTMLStyleGlobal;
     ScHTMLStyle         aHTMLStyle;
     String              aStreamPath;
     String              aCId;           // Content-Id fuer Mail-Export
@@ -188,6 +194,7 @@ class ScHTMLExport : public ScExportBase
                                         USHORT nStartRow, USHORT nEndRow );
 
     USHORT              GetFontSizeNumber( USHORT nHeight );
+    const char*         GetFontSizeCss( USHORT nHeight );
     USHORT              ToPixel( USHORT nTwips );
     Size                MMToPixel( const Size& r100thMMSize );
     void                IncIndent( short nVal );
