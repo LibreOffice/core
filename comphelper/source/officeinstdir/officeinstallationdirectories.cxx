@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeinstallationdirectories.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:19:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,47 @@ OfficeInstallationDirectories_createInstance(
 }
 
 //=========================================================================
+static bool makeCanonicalFileURL( rtl::OUString & rURL )
+{
+    OSL_ENSURE( rURL.matchAsciiL( "file:", sizeof( "file:" ) - 1 , 0 ) ,
+                "File URL expected!" );
+
+    rtl::OUString aNormalizedURL;
+    if ( osl::FileBase::getAbsoluteFileURL( rtl::OUString(),
+                                            rURL,
+                                            aNormalizedURL )
+            == osl::DirectoryItem::E_None )
+    {
+        osl::DirectoryItem aDirItem;
+        if ( osl::DirectoryItem::get( aNormalizedURL, aDirItem )
+                == osl::DirectoryItem::E_None )
+        {
+            osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+
+            if ( aDirItem.getFileStatus( aFileStatus )
+                    == osl::DirectoryItem::E_None )
+            {
+                aNormalizedURL = aFileStatus.getFileURL();
+
+                if ( aNormalizedURL.getLength() > 0 )
+                {
+                    if ( aNormalizedURL
+                            .getStr()[ aNormalizedURL.getLength() - 1 ]
+                                != sal_Unicode( '/' ) )
+                        rURL = aNormalizedURL;
+                    else
+                        rURL = aNormalizedURL
+                                .copy( 0, aNormalizedURL.getLength() - 1 );
+
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+//=========================================================================
 //=========================================================================
 //
 // OfficeInstallationDirectories Implementation.
@@ -206,8 +247,10 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
         // late init m_pOfficeDir and m_pUserDir
         initDirs();
 
-        // @@@ should this really be case sensitive? How to make canonical URL?
-        sal_Int32 nIndex = URL.indexOf( *m_pOfficeDir );
+        rtl::OUString aCanonicalURL( URL );
+        makeCanonicalFileURL( aCanonicalURL );
+
+        sal_Int32 nIndex = aCanonicalURL.indexOf( *m_pOfficeDir );
         if ( nIndex  != -1 )
         {
             return rtl::OUString(
@@ -217,8 +260,7 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
         }
         else
         {
-            // @@@ should this really be case sensitive? How to make canonical URL?
-            sal_Int32 nIndex = URL.indexOf( *m_pUserDir );
+            sal_Int32 nIndex = aCanonicalURL.indexOf( *m_pUserDir );
             if ( nIndex  != -1 )
             {
                 return rtl::OUString(
@@ -341,9 +383,7 @@ void OfficeInstallationDirectories::initDirs()
                 OSL_ENSURE( m_pOfficeDir->getLength() > 0,
                         "Unable to obtain office installation directory!" );
 
-                // make dir absolute; it may be relative.
-                osl::FileBase::getAbsoluteFileURL(
-                    rtl::OUString(), *m_pOfficeDir, *m_pOfficeDir );
+                makeCanonicalFileURL( *m_pOfficeDir );
 
                 *m_pUserDir =
                     xExpander->expandMacros(
@@ -353,9 +393,7 @@ void OfficeInstallationDirectories::initDirs()
                 OSL_ENSURE( m_pUserDir->getLength() > 0,
                         "Unable to obtain office user data directory!" );
 
-                // make dir absolute; it may be relative.
-                osl::FileBase::getAbsoluteFileURL(
-                    rtl::OUString(), *m_pUserDir, *m_pUserDir );
+                makeCanonicalFileURL( *m_pUserDir );
             }
         }
     }
