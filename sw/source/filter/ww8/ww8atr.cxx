@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:20:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1515,7 +1515,10 @@ static Writer& OutWW8_Relief( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutWW8_CharRotate( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-    if( rWrtWW8.bWrtWW8 )
+    // #i36867 In word the text in a table is rotated via the TC or 0x7629
+    // This means you can only rotate all or none of the text adding 0xCA78
+    // here corrupts the table, hence !rWrtWW8.bIsInTable
+    if( rWrtWW8.bWrtWW8 && !rWrtWW8.bIsInTable )
     {
         const SvxCharRotateItem& rAttr = (const SvxCharRotateItem&)rHt;
 
@@ -2159,24 +2162,9 @@ void SwWW8Writer::EndTOX( const SwSection& rSect )
     bInWriteTOX = false;
 }
 
-void SwapQuotesInField(String &rFmt)
-{
-    //Swap unescaped " and ' with ' and "
-    xub_StrLen nLen = rFmt.Len();
-    for (xub_StrLen nI = 0; nI < nLen; ++nI)
-    {
-        if ((rFmt.GetChar(nI) == '\"') && (!nI || rFmt.GetChar(nI-1) != '\\'))
-            rFmt.SetChar(nI, '\'');
-        else if ((rFmt.GetChar(nI) == '\'') && (!nI || rFmt.GetChar(nI-1) != '\\'))
-            rFmt.SetChar(nI, '\"');
-    }
-}
-
-// GetDatePara, GetTimePara, GetNumberPara modifizieren die String-Ref
-// Es werden die deutschen Format-Spezifier benutzt, da im FIB auch dt. als
-// Creator angegeben ist.
 bool SwWW8Writer::GetNumberFmt(const SwField& rFld, String& rStr)
 {
+    // Returns a date or time format string by using the US NfKeywordTable
     bool bHasFmt = false;
     SvNumberFormatter* pNFmtr = pDoc->GetNumberFormatter();
     UINT32 nFmtIdx = rFld.GetFormat();
@@ -2185,58 +2173,20 @@ bool SwWW8Writer::GetNumberFmt(const SwField& rFld, String& rStr)
     {
         USHORT nLng = rFld.GetLanguage();
         LocaleDataWrapper aLocDat( pNFmtr->GetServiceManager(),
-            SvNumberFormatter::ConvertLanguageToLocale( nLng ) );
+            SvNumberFormatter::ConvertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
+
         if( !pKeyMap )
         {
             pKeyMap = new NfKeywordTable;
             NfKeywordTable& rKeyMap = *(NfKeywordTable*)pKeyMap;
-//          aKeyMap[ NF_KEY_NONE = 0,
-//          aKeyMap[ NF_KEY_E,
-            rKeyMap[ NF_KEY_AMPM    ].ASSIGN_CONST_ASC( "AM/PM" );
-            rKeyMap[ NF_KEY_AP      ].ASSIGN_CONST_ASC( "A/P" );
-            rKeyMap[ NF_KEY_MI      ].ASSIGN_CONST_ASC( "m" );
-            rKeyMap[ NF_KEY_MMI     ].ASSIGN_CONST_ASC( "mm" );
-            rKeyMap[ NF_KEY_M       ].ASSIGN_CONST_ASC( "M" );
-            rKeyMap[ NF_KEY_MM      ].ASSIGN_CONST_ASC( "MM" );
-            rKeyMap[ NF_KEY_MMM     ].ASSIGN_CONST_ASC( "MMM" );
-            rKeyMap[ NF_KEY_MMMM    ].ASSIGN_CONST_ASC( "MMMM" );
-            rKeyMap[ NF_KEY_MMMMM   ].ASSIGN_CONST_ASC( "MMMMM" );
-            rKeyMap[ NF_KEY_H       ].ASSIGN_CONST_ASC( "H" );
-            rKeyMap[ NF_KEY_HH      ].ASSIGN_CONST_ASC( "HH" );
-            rKeyMap[ NF_KEY_S       ].ASSIGN_CONST_ASC( "s" );
-            rKeyMap[ NF_KEY_SS      ].ASSIGN_CONST_ASC( "ss" );
-//          aKeyMap[ NF_KEY_Q,
-//          aKeyMap[ NF_KEY_QQ,
-            rKeyMap[ NF_KEY_D       ].ASSIGN_CONST_ASC( "t" );
-            rKeyMap[ NF_KEY_DD      ].ASSIGN_CONST_ASC( "tt" );
-            rKeyMap[ NF_KEY_DDD     ].ASSIGN_CONST_ASC( "ttt" );
-            rKeyMap[ NF_KEY_DDDD    ].ASSIGN_CONST_ASC( "tttt" );
-            rKeyMap[ NF_KEY_YY      ].ASSIGN_CONST_ASC( "jj" );
-            rKeyMap[ NF_KEY_YYYY    ].ASSIGN_CONST_ASC( "jjjj" );
-            rKeyMap[ NF_KEY_NN      ].ASSIGN_CONST_ASC( "ttt" );
-            rKeyMap[ NF_KEY_NNNN    ].ASSIGN_CONST_ASC( "tttt" );
-//          aKeyMap[ NF_KEY_CCC,
-//          aKeyMap[ NF_KEY_GENERAL,
-//          aKeyMap[ NF_KEY_NNN,
-//          aKeyMap[ NF_KEY_WW,
-//          aKeyMap[ NF_KEY_QUARTER,
-//          aKeyMap[ NF_KEY_TRUE,
-//          aKeyMap[ NF_KEY_FALSE,
-//          aKeyMap[ NF_KEY_BOOLEAN,
-            rKeyMap[ NF_KEY_AAA     ].ASSIGN_CONST_ASC( "aaa" );
-            rKeyMap[ NF_KEY_AAAA    ].ASSIGN_CONST_ASC( "aaaa" );
-            rKeyMap[ NF_KEY_EC      ].ASSIGN_CONST_ASC( "e" );
-            rKeyMap[ NF_KEY_EEC     ].ASSIGN_CONST_ASC( "ee" );
-            rKeyMap[ NF_KEY_G       ].ASSIGN_CONST_ASC( "g" );
-            rKeyMap[ NF_KEY_GG      ].ASSIGN_CONST_ASC( "gg" );
-            rKeyMap[ NF_KEY_GGG     ].ASSIGN_CONST_ASC( "ggg" );
+            pNFmtr->FillKeywordTable( rKeyMap, LANGUAGE_ENGLISH_US );
         }
 
         String sFmt(pNumFmt->GetMappedFormatstring(*(NfKeywordTable*)pKeyMap,
             aLocDat));
         if (sFmt.Len())
         {
-            SwapQuotesInField(sFmt);
+            sw::ms::SwapQuotesInField(sFmt);
 
             rStr.APPEND_CONST_ASC( "\\@\"" );
             rStr += sFmt;
@@ -2528,7 +2478,8 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         else
         {
             ww::eField eFld = (DATEFLD & nSubType) ? ww::eDATE : ww::eTIME;
-            rWW8Wrt.OutField(pFld, eFld, FieldString(eFld));
+            sStr.Insert(FieldString(eFld), 0);
+            rWW8Wrt.OutField(pFld, eFld, sStr);
         }
         break;
     case RES_DOCSTATFLD:
@@ -4562,6 +4513,8 @@ void SwWW8WrTabu::Del(const SvxTabStop &rTS, long nAdjustment)
 //  PutAll( SwWW8Writer& rWW8Wrt ) schreibt das Attribut nach rWrt.pO
 void SwWW8WrTabu::PutAll(SwWW8Writer& rWrt)
 {
+    if (!nAdd && !nDel) //It its a no-op
+        return;
     ASSERT(nAdd <= 255, "more than 255 added tabstops ?");
     ASSERT(nDel <= 255, "more than 244 removed tabstops ?");
     if (nAdd > 255)
