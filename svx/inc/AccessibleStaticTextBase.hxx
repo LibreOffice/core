@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-10 17:23:03 $
+ *  last change: $Author: thb $ $Date: 2002-06-12 13:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,8 @@ namespace accessibility
             model) contained in the given SvxEditSource.
 
         */
-        explicit AccessibleStaticTextBase( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >&  rInterface,
-                                           ::std::auto_ptr< SvxEditSource > pEditSource );
+        AccessibleStaticTextBase( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rInterface,
+                                  ::std::auto_ptr< SvxEditSource > pEditSource );
         virtual ~AccessibleStaticTextBase();
 
     private:
