@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:08:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,11 @@
 #ifndef _XDEF_HXX //autogen
 #include <xdef.hxx>
 #endif
-#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
-#include <com/sun/star/i18n/TransliterationModules.hdl>
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
+#include <com/sun/star/i18n/TextConversionOption.hpp>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -213,6 +216,11 @@
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
+
+
+using namespace com::sun::star::i18n;
+
+
 
 SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 {
@@ -516,7 +524,22 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
             break;
 
         case SID_HANGUL_HANJA_CONVERSION:
-            pOLV->StartTextConversion( LANGUAGE_KOREAN );
+            pOLV->StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, 0, sal_True, sal_False );
+            break;
+
+        case SID_CHINESE_CONVERSION:
+            {
+                sal_Bool bSimplified  = sal_True;    // to be obtained from dialog...
+                sal_Bool bUseVariants = sal_True;    // to be obtained from dialog...
+                LanguageType nSrcLang    = bSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                LanguageType nTargetLang = bSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                sal_Int32 nOptions    = bUseVariants ? TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+
+                Font aTargetFont = pOLV->GetWindow()->GetDefaultFont( DEFAULTFONT_CJK_TEXT,
+                                            nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
+
+                pOLV->StartTextConversion( nSrcLang, nTargetLang, &aTargetFont, nOptions, sal_False, sal_False );
+            }
             break;
 
         default:
