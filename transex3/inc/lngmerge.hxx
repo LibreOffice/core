@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:39:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ private:
     ByteString sSource;
     BOOL bDBIsUTF8;
     BOOL bULF;
+    bool bQuiet;
     std::vector<ByteString> aLanguages;
 
     void FillInFallbacks( ByteStringHashMap Text );
@@ -91,7 +92,7 @@ private:
                     const ByteString &rSDFFile, const ByteString &rPrj ,
                     const ByteString &rRoot , const ByteString &sActFileName , const ByteString &sID );
 public:
-    LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat );
+    LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat, bool bQuiet_in );
     ~LngParser();
 
     BOOL CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );
