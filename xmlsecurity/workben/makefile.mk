@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mmi $ $Date: 2004-07-16 05:22:13 $
+#   last change: $Author: rt $ $Date: 2004-11-26 15:02:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,8 +77,8 @@ TARGETTYPE=GUI
 
 # --- Files --------------------------------------------------------
 
-OBJFILES=		$(OBJ)$/signaturetest.obj $(OBJ)$/storagehelper.obj
-EXCEPTIONSFILES=$(OBJ)$/signaturetest.obj $(OBJ)$/storagehelper.obj
+OBJFILES=		$(OBJ)$/signaturetest.obj
+EXCEPTIONSFILES=$(OBJ)$/signaturetest.obj
 
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
