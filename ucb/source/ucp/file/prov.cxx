@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-13 08:13:28 $
+ *  last change: $Author: hro $ $Date: 2001-03-15 12:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,6 @@ FileProvider::queryContent(
     throw( IllegalIdentifierException,
            uno::RuntimeException)
 {
-
     rtl::OUString aUnc;
     sal_Bool err = m_pMyShell->getUnqFromUrl( xIdentifier->getContentIdentifier(),
                                               aUnc );
@@ -582,7 +581,7 @@ FileProvider::compareContentIds(
         if ( error == osl::FileBase::E_None )
             error = aItem2.getFileStatus( aStatus2 );
 
-        if ( error != osl::FileBase::E_None )
+        if ( error == osl::FileBase::E_None )
             iComp = aStatus1.getFilePath().compareTo( aStatus2.getFilePath() );
     }
 
