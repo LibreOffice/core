@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:22:30 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #include "excimp8.hxx"
 
 
-ColRowSettings::ColRowSettings( RootData& rRootData ) :
+XclImpColRowSettings::XclImpColRowSettings( RootData& rRootData ) :
     ExcRoot( &rRootData )
 {
     nDefWidth = nDefHeight = 0;
@@ -104,7 +104,7 @@ ColRowSettings::ColRowSettings( RootData& rRootData ) :
 }
 
 
-ColRowSettings::~ColRowSettings()
+XclImpColRowSettings::~XclImpColRowSettings()
 {
     delete[] pRowFlags;
     delete[] pHeight;
@@ -113,7 +113,7 @@ ColRowSettings::~ColRowSettings()
 }
 
 
-void ColRowSettings::Reset( void )
+void XclImpColRowSettings::Reset( void )
 {
     SCCOL   nC;
     for( nC = 0 ; nC <= MAXCOL ; nC++ )
@@ -131,7 +131,7 @@ void ColRowSettings::Reset( void )
 }
 
 
-void ColRowSettings::Apply( SCTAB nScTab )
+void XclImpColRowSettings::Apply( SCTAB nScTab )
 {
     if( !bDirty )
         return;
@@ -226,7 +226,7 @@ void ColRowSettings::Apply( SCTAB nScTab )
 
         if( nLastHeight != nHeight )
         {
-            DBG_ASSERT( nC > 0, "ColRowSettings::Apply(): Algorithmus-Fehler!" );
+            DBG_ASSERT( nC > 0, "XclImpColRowSettings::Apply(): Algorithmus-Fehler!" );
 
             if( nLastHeight )
                 rD.SetRowHeightRange( nStart, nC - 1, nScTab, nLastHeight );
@@ -245,7 +245,7 @@ void ColRowSettings::Apply( SCTAB nScTab )
 }
 
 
-void ColRowSettings::SetHiddenFlags( SCTAB nScTab )
+void XclImpColRowSettings::SetHiddenFlags( SCTAB nScTab )
 {
     ScDocument& rDoc = pExcRoot->pIR->GetDoc();
 
@@ -291,10 +291,10 @@ void ColRowSettings::SetHiddenFlags( SCTAB nScTab )
 }
 
 
-void ColRowSettings::HideColRange( SCCOL nColFirst, SCCOL nColLast )
+void XclImpColRowSettings::HideColRange( SCCOL nColFirst, SCCOL nColLast )
 {
-    DBG_ASSERT( nColFirst <= nColLast, "+ColRowSettings::HideColRange(): First > Last?!" );
-    DBG_ASSERT( ValidCol(nColLast), "+ColRowSettings::HideColRange(): ungueltige Column" );
+    DBG_ASSERT( nColFirst <= nColLast, "+XclImpColRowSettings::HideColRange(): First > Last?!" );
+    DBG_ASSERT( ValidCol(nColLast), "+XclImpColRowSettings::HideColRange(): ungueltige Column" );
 
     if( !ValidCol(nColLast) )
         nColLast = MAXCOL;
@@ -308,10 +308,10 @@ void ColRowSettings::HideColRange( SCCOL nColFirst, SCCOL nColLast )
 }
 
 
-void ColRowSettings::SetWidthRange( SCCOL nColFirst, SCCOL nColLast, UINT16 nNew )
+void XclImpColRowSettings::SetWidthRange( SCCOL nColFirst, SCCOL nColLast, UINT16 nNew )
 {
-    DBG_ASSERT( nColFirst <= nColLast, "+ColRowSettings::SetColWidthRange(): First > Last?!" );
-    DBG_ASSERT( ValidCol(nColLast), "+ColRowSettings::SetColWidthRange(): ungueltige Column" );
+    DBG_ASSERT( nColFirst <= nColLast, "+XclImpColRowSettings::SetColWidthRange(): First > Last?!" );
+    DBG_ASSERT( ValidCol(nColLast), "+XclImpColRowSettings::SetColWidthRange(): ungueltige Column" );
 
     if( !ValidCol(nColLast) )
         nColLast = MAXCOL;
@@ -326,10 +326,10 @@ void ColRowSettings::SetWidthRange( SCCOL nColFirst, SCCOL nColLast, UINT16 nNew
 }
 
 
-void ColRowSettings::SetDefaultXF( SCCOL nColFirst, SCCOL nColLast, UINT16 nXF )
+void XclImpColRowSettings::SetDefaultXF( SCCOL nColFirst, SCCOL nColLast, UINT16 nXF )
 {
-    DBG_ASSERT( nColFirst <= nColLast, "+ColRowSettings::SetDefaultXF(): First > Last?!" );
-    DBG_ASSERT( ValidCol(nColLast), "+ColRowSettings::SetDefaultXF(): ungueltige Column" );
+    DBG_ASSERT( nColFirst <= nColLast, "+XclImpColRowSettings::SetDefaultXF(): First > Last?!" );
+    DBG_ASSERT( ValidCol(nColLast), "+XclImpColRowSettings::SetDefaultXF(): ungueltige Column" );
 
     if( !ValidCol(nColLast) )
         nColLast = MAXCOL;
@@ -343,14 +343,14 @@ void ColRowSettings::SetDefaultXF( SCCOL nColFirst, SCCOL nColLast, UINT16 nXF )
 }
 
 
-void ColRowSettings::SetDefaults( UINT16 nWidth, UINT16 nHeight )
+void XclImpColRowSettings::SetDefaults( UINT16 nWidth, UINT16 nHeight )
 {
     nDefWidth = nWidth;
     nDefHeight = nHeight;
 }
 
 
-void ColRowSettings::_SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
+void XclImpColRowSettings::_SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
 {
     pHeight[ nRow ] = nExcelHeight & 0x7FFF;
 
