@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog DLG_DOCINFO_EDT
     Text [ ENGLISH ] = "Edit info names" ;
     Text [ norwegian ] = "Rediger informasjonnavn" ;
     Text [ italian ] = "Modifica informazioni nomi" ;
-    Text [ portuguese_brazilian ] = "Editar nomes de info" ;
+    Text [ portuguese_brazilian ] = "Editar nomes dos campos" ;
     Text [ portuguese ] = "Editar nomes das informações" ;
     Text [ finnish ] = "Muokkaa kenttänimiä" ;
     Text [ danish ] = "Rediger infonavne" ;
@@ -84,7 +84,7 @@ ModalDialog DLG_DOCINFO_EDT
     Text [ english_us ] = "Edit Field Names" ;
     Text[ chinese_simplified ] = "ç¼–è¾‘æ ‡é¢˜";
     Text[ russian ] = "Ïğàâêà èìåí ïîëåé";
-    Text[ polish ] = "Edytuj nazwy informacji";
+    Text[ polish ] = "Edytuj nazwy pól";
     Text[ japanese ] = "æƒ…å ±åã‚’ç·¨é›†";
     Text[ chinese_traditional ] = "ç·¨è¼¯æ¨™é¡Œ";
     Text[ arabic ] = "ÊÍÑíÑ ÈØÇŞÇÊ ÇáãÚáæãÇÊ";
@@ -119,10 +119,13 @@ ModalDialog DLG_DOCINFO_EDT
         Text[ arabic ] = "ÇáÃÓãÇÁ";
         Text[ greek ] = "Ïíüìáôá";
         Text[ korean ] = "ì´ë¦„";
-        Text[ turkish ] = "Ad";
+        Text[ turkish ] = "İsimler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Noms";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
+        Text[ czech ] = "NÃ¡zvy";
+        Text[ hebrew ] = "â€®×©××•×ªâ€¬";
+        Text[ hindi ] = "à¤¨à¤¾à¤®";
     };
     Edit ED_INFO1
     {
@@ -168,7 +171,19 @@ ModalDialog DLG_DOCINFO_EDT
         TabStop = TRUE ;
     };
     Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸Šà¸·à¹ˆà¸­à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+    Text[ czech ] = "Upravit nÃ¡zvy polÃ­";
+    Text[ hebrew ] = "â€®×¢×¨×™×›×ª ×©××•×ª ×©×“×•×ªâ€¬";
+    Text[ hindi ] = "à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤¨à¤¾à¤®à¥‹à¤‚ à¤•à¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
 };
+
+
+
+
+
+
+
+
+
 
 
 
