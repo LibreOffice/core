@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:18:23 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 16:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 
 #include "userinstall.hxx"
 #include "langselect.hxx"
-#include "license.hxx"
 
 #include <stdio.h>
 
@@ -169,28 +168,16 @@ namespace desktop {
             case Bootstrap::PATH_EXISTS:
                 // path exists, check if an installation lives there
                 if (aReadmeFile.open(0) == FileBase::E_None) {
-                    if (License::check()) return E_None;
-                    else return E_License;
+                    return E_None;
                 }
             case Bootstrap::PATH_VALID:
                 // found a path but need to create user install
-                aError = create_user_install(aUserInstallPath);
-
                 {
                     Reference< XMultiServiceFactory > xMultiServiceFactory( ::comphelper::getProcessServiceFactory() );
                     rDesktop.RegisterServices( xMultiServiceFactory );
                 }
 
-                if (aError == E_None)
-                {
-                    // if installation was created, check license
-                    if (License::check())
-                        return E_None;
-                    else
-                        return E_License;
-                }
-                else
-                    return aError;
+                return create_user_install(aUserInstallPath);
             default:
                 return E_Unknown;
         }
