@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recently_used_file_handler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:06:53 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,38 @@
 #include "internal/xml_parser.hxx"
 #include "internal/i_xml_parser_event_handler.hxx"
 
+#include <comphelper/processfactory.hxx>
+
+#ifndef _COM_SUN_STAR_URI_XEXTERNALURIREFERENCETRANSLATOR_HPP_
+#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_URI_EXTERNALURIREFERENCETRANSLATOR_HPP_
+#include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_Hpp_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 #include <map>
 #include <vector>
 #include <algorithm>
 #include <functional>
+
+using namespace ::com::sun::star;
 
 namespace /* private */ {
 
@@ -534,6 +562,31 @@ namespace /* private */ {
                     </RecentItem>
                 </RecentFiles>
 */
+
+const rtl::OUString DEFAULT_CONTEXT = rtl::OUString::createFromAscii("DefaultContext");
+
+// We need to re-encode file urls because osl_getFileURLFromSystemPath converts
+// to UTF-8 before encoding non ascii characters, which is not what other apps expect.
+rtl::OUString translateToExternalUrl(const rtl::OUString& internalUrl)
+{
+    rtl::OUString extUrl;
+
+    uno::Reference< lang::XMultiServiceFactory > sm = comphelper::getProcessServiceFactory();
+    if (sm.is())
+    {
+        uno::Reference< beans::XPropertySet > pset;
+        sm->queryInterface( getCppuType( &pset )) >>= pset;
+        if (pset.is())
+        {
+            uno::Reference< uno::XComponentContext > context;
+            pset->getPropertyValue(DEFAULT_CONTEXT) >>= context;
+            if (context.is())
+                extUrl = uri::ExternalUriReferenceTranslator::create(context)->translateToExternal(internalUrl);
+        }
+    }
+    return extUrl;
+}
+
 extern "C" void add_to_recently_used_file_list(const rtl::OUString& file_url, const rtl::OUString& mime_type)
 {
     try
@@ -542,8 +595,10 @@ extern "C" void add_to_recently_used_file_list(const rtl::OUString& file_url, co
         recently_used_item_list_t item_list;
         cleanup_guard guard(item_list);
 
+        rtl::OUString externalUrl = translateToExternalUrl(file_url);
+
         read_recently_used_items(ruf, item_list);
-        recently_used_item_list_add(item_list, file_url, mime_type);
+        recently_used_item_list_add(item_list, (externalUrl.getLength()) ? externalUrl : file_url, mime_type);
         write_recently_used_items(ruf, item_list);
     }
     catch(const char* ex)
