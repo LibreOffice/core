@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:10:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,8 @@ public:
         // In Undo/Redo/Repeat wird dann immer auf diesen zurueck geschaltet
     USHORT GetRedlineMode() const { return nOrigRedlineMode; }
     void SetRedlineMode( USHORT eMode ) { nOrigRedlineMode = eMode; }
+
+    bool IsDelBox() const;
 
         // sicher und setze die RedlineDaten
     static BOOL FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
@@ -458,6 +460,7 @@ class SwUndoDelete: public SwUndo, private SwUndRng, private SwUndoSaveCntnt
     BOOL bDelFullPara : 1;  // TRUE: gesamte Nodes wurden geloescht
     BOOL bResetPgDesc : 1;  // TRUE: am nachfolgenden Node das PgDsc zuruecksetzen
     BOOL bResetPgBrk : 1;   // TRUE: am nachfolgenden Node das PgBreak zuruecksetzen
+    BOOL bSpecialSectNd : 1; // TRUE: special section node treatement
 
     BOOL SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd );
@@ -921,6 +924,7 @@ public:
         nAbsDiff = (USHORT)nAbsDif;
         nRelDiff = (USHORT)nRelDif;
     }
+
     OUT_UNDOBJ( TblNodesChg )
 };
 
