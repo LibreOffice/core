@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-06 15:27:20 $
+ *  last change: $Author: fs $ $Date: 2001-04-24 16:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,10 @@
 #endif
 #else
 #include "sfxsids.hrc"
+#endif
+
+#ifndef _SFX_HRC
+#include "sfx.hrc"
 #endif
 
 #include <topfrm.hxx>
@@ -1403,10 +1407,15 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
         if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DOCCHANGED )
             changing();
+
 #if SUPD>614
         SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &rHint );
         if ( pNamedHint )
+        {
+            if ( SFX_EVENT_SAVEASDOCDONE == pNamedHint->GetEventId() )
+                m_pData->m_sURL = m_pData->m_pObjectShell->GetMedium()->GetName();
             postEvent_Impl( *pNamedHint );
+        }
 #endif
     }
 }
