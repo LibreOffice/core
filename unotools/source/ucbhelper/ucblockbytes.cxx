@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-18 13:05:55 $
+ *  last change: $Author: obo $ $Date: 2000-10-19 11:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,14 +343,14 @@ CommandThread_Impl::CommandThread_Impl( UcbLockBytesRef xLockBytes,
     m_xListener = new UcbPropertiesChangeListener_Impl( m_xLockBytes );
     Reference< XPropertiesChangeNotifier > xProps ( xContent, UNO_QUERY );
     if ( xProps.is() )
-        xProps->addPropertiesChangeListener( Sequence<::rtl::OUString>(), m_xListener );
+        xProps->addPropertiesChangeListener( Sequence< ::rtl::OUString >(), m_xListener );
 }
 
 CommandThread_Impl::~CommandThread_Impl()
 {
     Reference< XPropertiesChangeNotifier > xProps ( m_pContent->get(), UNO_QUERY );
     if ( xProps.is() )
-        xProps->removePropertiesChangeListener( Sequence<::rtl::OUString>(), m_xListener );
+        xProps->removePropertiesChangeListener( Sequence< ::rtl::OUString >(), m_xListener );
     delete m_pContent;
 }
 
