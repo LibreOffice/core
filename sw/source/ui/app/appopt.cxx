@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 09:50:38 $
+ *  last change: $Author: jp $ $Date: 2001-08-24 08:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,8 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     SfxItemSet* pRet = new SfxItemSet (GetPool(),   FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
                                     SID_PRINTPREVIEW,       SID_PRINTPREVIEW,
                                     SID_ATTR_GRID_OPTIONS,  SID_ATTR_GRID_OPTIONS,
-                                    FN_PARAM_PRINTER,       FN_PARAM_WRTSHELL,
+                                    FN_PARAM_PRINTER,       FN_PARAM_STDFONTS,
+                                    FN_PARAM_WRTSHELL,      FN_PARAM_WRTSHELL,
                                     FN_PARAM_ADDPRINTER,    FN_PARAM_ADDPRINTER,
                                     SID_ATTR_METRIC,        SID_ATTR_METRIC,
                                     SID_ATTR_DEFTABSTOP,    SID_ATTR_DEFTABSTOP,
@@ -235,7 +236,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
                                     FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED,
                                     FN_HSCROLL_METRIC,      FN_VSCROLL_METRIC,
                                     SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
-                                    RES_CHRATR_CJK_LANGUAGE,   RES_CHRATR_CJK_LANGUAGE,
+                                    SID_ATTR_CHAR_CJK_LANGUAGE,   SID_ATTR_CHAR_CJK_LANGUAGE,
 #ifndef PRODUCT
                                     FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
 #endif
@@ -263,7 +264,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
             rWrtShell.GetDefault(RES_CHRATR_LANGUAGE), SID_ATTR_LANGUAGE);
 
         pRet->Put((const SvxLanguageItem&)
-            rWrtShell.GetDefault(RES_CHRATR_CJK_LANGUAGE), RES_CHRATR_CJK_LANGUAGE);
+            rWrtShell.GetDefault(RES_CHRATR_CJK_LANGUAGE), SID_ATTR_CHAR_CJK_LANGUAGE);
     }
     else
     {
@@ -284,7 +285,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
 
         aLang = aLinguCfg.GetProperty(C2U("DefaultLocale_CJK"));
         aLang >>= aLocale;
-        pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), RES_CHRATR_CJK_LANGUAGE));
+        pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), SID_ATTR_CHAR_CJK_LANGUAGE));
 
     }
     if(bTextDialog)
