@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-29 15:38:26 $
+ *  last change: $Author: fs $ $Date: 2002-06-12 13:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,8 @@ Any UnoControl::queryAggregation( const Type & rType ) throw(RuntimeException)
                                         SAL_STATIC_CAST( XPropertiesChangeListener*, this ),
                                         SAL_STATIC_CAST( XEventListener*, this ),
                                         SAL_STATIC_CAST( XServiceInfo*, this ),
-                                        SAL_STATIC_CAST( XTypeProvider*, this ) );
+                                        SAL_STATIC_CAST( XTypeProvider*, this ),
+                                        SAL_STATIC_CAST( XAccessible*, this ) );
     return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
 }
 
@@ -324,7 +325,8 @@ getCppuType( ( Reference< XControl>* ) NULL ),
 getCppuType( ( Reference< XWindow>* ) NULL ),
 getCppuType( ( Reference< XView>* ) NULL ),
 getCppuType( ( Reference< XPropertiesChangeListener>* ) NULL ),
-getCppuType( ( Reference< XServiceInfo>* ) NULL )
+getCppuType( ( Reference< XServiceInfo>* ) NULL ),
+getCppuType( ( Reference< XAccessible >* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
 void UnoControl::disposeAccessibleContext()
@@ -332,6 +334,7 @@ void UnoControl::disposeAccessibleContext()
     Reference< XComponent > xContextComp( maAccessibleContext.get(), UNO_QUERY );
     if ( xContextComp.is() )
     {
+        maAccessibleContext = NULL;
         try
         {
             xContextComp->removeEventListener( this );
@@ -341,7 +344,6 @@ void UnoControl::disposeAccessibleContext()
         {
             DBG_ERROR( "UnoControl::disposeAccessibleContext: could not dispose my AccessibleContext!" );
         }
-        maAccessibleContext = NULL;
     }
 }
 
