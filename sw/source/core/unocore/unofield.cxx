@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::rtl;
 
+sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rAny );
 
 /******************************************************************************
  *
@@ -1142,7 +1143,7 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
     if(pType)
     {
         sal_Bool bSetValue = sal_True;
-        if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_SUB_TYPE))
+        if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_SUB_TYPE)))
         {
             const SvStringsDtor& rExtraArr = m_pDoc->GetExtraNmArray();
             String sTypeName = pType->GetName();
@@ -1167,7 +1168,7 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
             pType->PutValue(aValue, rPropertyName);
     }
     else if(!pType && m_pDoc &&
-        ( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_NAME)))
+        ( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME))) )
     {
         OUString uTmp;
         aValue >>= uTmp;
@@ -1224,19 +1225,19 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
     {
         if(nResTypeId == RES_USERFLD)
         {
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CONTENT))
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)))
             {
                 OUString uTmp;
                 aValue >>= uTmp;
                 sParam1 = String(uTmp);
             }
-            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_VALUE ))
+            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
             {
                 if(aValue.getValueType() != ::getCppuType((const double*)0))
                     throw IllegalArgumentException();
                 fParam1 = *(double*)aValue.getValue();
             }
-            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_IS_EXPRESSION ))
+            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_EXPRESSION )))
             {
                 if(aValue.getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
@@ -1248,13 +1249,13 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
             OUString uTmp;
             aValue >>= uTmp;
             String sTmp(uTmp);
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_BASE_NAME))
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
                 sParam1 = sTmp;
-            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_TABLE_NAME))
+            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
                 sParam2 = sTmp;
-            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COLUMN_NAME))
+            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
                 sParam3 = sTmp;
-            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COMMAND_TYPE))
+            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)))
                 aValue >>= nParam2;
 
             if(sParam1.Len() && sParam2.Len() && sParam3.Len())
@@ -1264,23 +1265,23 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
         }
         else if(RES_SETEXPFLD == nResTypeId)
         {
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_NUMBERING_SEPARATOR))
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
             {
                 OUString uTmp;
                 aValue >>= uTmp;
                 sParam1 = uTmp;
             }
-            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CHAPTER_NUMBERING_LEVEL))
+            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
             {
                 aValue >>= nParam1;
             }
         }
         else if(RES_SETEXPFLD == nResTypeId)
         {
-            USHORT nPart = COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DDE_COMMAND_TYPE)  ? 0 :
-                COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DDE_COMMAND_FILE)  ? 1 :
-                    COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DDE_COMMAND_ELEMENT)  ? 2 :
-                    COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_IS_AUTOMATIC_UPDATE) ? 3 : USHRT_MAX;
+            USHORT nPart = rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
+                rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE))  ? 1 :
+                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
+                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
             if(nPart  < 3 )
             {
                 OUString uTmp;
@@ -1340,12 +1341,11 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
     SwFieldType* pType = GetFldType(sal_True);
     if(pType)
     {
-        if(COMPARE_EQUAL == rPropertyName.compareToAscii("Name"))
+        if(rPropertyName.equalsAsciiL( MAP_CHAR_LEN("Name")))
         {
             aRet <<= OUString(SwXFieldMaster::GetProgrammaticName(*pType, *GetDoc()));
         }
-        else if( rPropertyName.equalsAsciiL(UNO_NAME_INSTANCE_NAME.pName,
-                                            UNO_NAME_INSTANCE_NAME.nNameLen) )
+        else if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_INSTANCE_NAME)) )
         {
             String sName;
             if (SwXTextFieldMasters::getInstanceName(*pType, sName))
@@ -1353,7 +1353,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                 aRet <<= OUString(sName);
             }
         }
-        else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DEPENDENT_TEXT_FIELDS))
+        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS)) )
         {
             //fill all text fields into a sequence
             SwClientIter aIter( *pType );
@@ -1394,49 +1394,49 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         }
         else
         {
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COMMAND_TYPE))
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)) )
                 aRet <<= nParam2;
         }
     }
     else
     {
-        if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COMMAND_TYPE))
+        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)) )
             aRet <<= nParam2;
         else if(nResTypeId == RES_USERFLD)
         {
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CONTENT))
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)) )
                 aRet <<= (OUString)sParam1;
-            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_VALUE ))
+            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
                 aRet <<= fParam1;
-            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_IS_EXPRESSION ))
+            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_EXPRESSION )))
                 aRet.setValue(&bParam1, ::getBooleanCppuType());
         }
         else if(RES_DBFLD == nResTypeId)
         {
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_BASE_NAME))
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
                 aRet <<= (OUString)sParam1;
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_TABLE_NAME))
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
                 aRet <<= (OUString)sParam2;
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COLUMN_NAME))
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
                 aRet <<= (OUString)sParam3;
         }
         else if(RES_SETEXPFLD == nResTypeId)
         {
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_NUMBERING_SEPARATOR))
+            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
             {
                 aRet <<= (OUString)sParam1;
             }
-            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CHAPTER_NUMBERING_LEVEL))
+            else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
             {
                 aRet <<= nParam1;
             }
         }
         else if(RES_SETEXPFLD == nResTypeId)
         {
-            USHORT nPart = COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DDE_COMMAND_TYPE)  ? 0 :
-                COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DDE_COMMAND_FILE)  ? 1 :
-                    COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DDE_COMMAND_ELEMENT)  ? 2 :
-                    COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_IS_AUTOMATIC_UPDATE) ? 3 : USHRT_MAX;
+            USHORT nPart = rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE))  ? 0 :
+                rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE)) ? 1 :
+                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
+                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
             if(nPart  < 3 )
             {
                 aRet <<= (OUString)sParam1.GetToken(nPart, cTokenSeperator);
@@ -1949,7 +1949,7 @@ void SwXTextField::attachToRange(
                 if(m_pProps->pDateTime)
                 {
                     Any aVal; aVal <<= *m_pProps->pDateTime;
-                    pFld->PutValue(aVal, C2U(UNO_NAME_DATE_TIME_VALUE.pName));
+                    pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_DATE_TIME_VALUE)));
                 }
                 ((SwDateTimeField*)pFld)->SetOffset(m_pProps->nSubType);
             }
@@ -1978,7 +1978,7 @@ void SwXTextField::attachToRange(
                 pFld = new SwChapterField((SwChapterFieldType*)pFldType, m_pProps->nUSHORT1);
                 ((SwChapterField*)pFld)->SetLevel(m_pProps->nByte1);
                 Any aVal; aVal <<= (sal_Int16)m_pProps->nUSHORT1;
-                pFld->PutValue(aVal, C2U(UNO_NAME_CHAPTER_FORMAT));
+                pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_CHAPTER_FORMAT)));
             }
             break;
             case SW_SERVICE_FIELDTYPE_AUTHOR:
@@ -2024,11 +2024,11 @@ void SwXTextField::attachToRange(
                 if(m_pProps->sPar3.Len())
                     ((SwGetRefField*)pFld)->SetExpand(m_pProps->sPar3);
                 Any aVal; aVal <<=(sal_Int16)m_pProps->nUSHORT1;
-                pFld->PutValue(aVal, C2U(UNO_NAME_REFERENCE_FIELD_PART));
+                pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_REFERENCE_FIELD_PART)));
                 aVal <<=(sal_Int16)m_pProps->nUSHORT2;
-                pFld->PutValue(aVal, C2U(UNO_NAME_REFERENCE_FIELD_SOURCE));
+                pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_REFERENCE_FIELD_SOURCE)));
                 aVal <<=(sal_Int16)m_pProps->nSHORT1;
-                pFld->PutValue(aVal, C2U(UNO_NAME_SEQUENCE_NUMBER));
+                pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_SEQUENCE_NUMBER)));
             }
             break;
             case SW_SERVICE_FIELDTYPE_JUMP_EDIT:
@@ -2131,7 +2131,7 @@ void SwXTextField::attachToRange(
                                                 m_pProps->nUSHORT1);
                 ((SwPageNumberField*)pFld)->SetUserString(m_pProps->sPar1);
                 Any aVal; aVal <<= m_pProps->nSubType;
-                pFld->PutValue(aVal, C2U(UNO_NAME_SUB_TYPE));
+                pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_SUB_TYPE)));
             }
             break;
             case SW_SERVICE_FIELDTYPE_DDE:
@@ -2308,7 +2308,7 @@ void SwXTextField::attachToRange(
                 if(m_pProps->aPropSeq.getLength())
                 {
                     Any aVal; aVal <<= m_pProps->aPropSeq;
-                    pFld->PutValue(aVal, C2U(UNO_NAME_FIELDS));
+                    pFld->PutValue(aVal, C2U(SW_PROP_NAME_STR(UNO_NAME_FIELDS)));
                 }
             }
             break;
@@ -2468,9 +2468,9 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         // Sonderbehandlung Serienbrieffeld
         sal_uInt16 nWhich = pFmtFld->GetFld()->GetTyp()->Which();
         if( RES_DBFLD == nWhich &&
-            (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_BASE_NAME) ||
-                COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_TABLE_NAME)||
-                    COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COLUMN_NAME)))
+            (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
+                rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME))||
+                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME))))
         {
             // hier muss ein neuer Feldtyp angelegt werden und
             // das Feld an den neuen Typ umgehaengt werden
@@ -2518,11 +2518,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             break;
             case FIELD_PROP_SUBTYPE:
             {
-                try
-                {
-                    m_pProps->nSubType = ::comphelper::getEnumAsINT32(aValue);
-                }
-                catch(Exception &) {}
+                m_pProps->nSubType = GetEnumAsInt32( aValue );
             }
             break;
             case FIELD_PROP_BYTE1 :
@@ -3362,5 +3358,18 @@ void SwXFieldEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
         pDoc = 0;
+}
+
+
+sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rAny )
+{
+    sal_Int32 eVal = - 1;
+    try {
+        eVal = ::comphelper::getEnumAsINT32(rAny);
+    }
+    catch(Exception &)
+    {
+    }
+    return eVal;
 }
 
