@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 15:57:52 $
+ *  last change: $Author: tl $ $Date: 2001-03-19 16:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,7 +509,10 @@ void SwEditShell::ApplyAutoMark()
         //
         INT32 nSrchFlags = 0;
         if (!bCaseSensitive)
+        {
             nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+            nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
+        }
         if ( bWordOnly)
             nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
         if ( bLEV_Relaxed)

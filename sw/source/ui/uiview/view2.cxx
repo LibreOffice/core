@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:11:50 $
+ *  last change: $Author: tl $ $Date: 2001-03-19 16:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
 #include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -286,6 +289,7 @@ static USHORT nPageCnt = 0;
 const char __FAR_DATA sStatusDelim[] = " : ";
 
 using namespace com::sun::star;
+using namespace com::sun::star::i18n;
 using namespace com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -1199,7 +1203,10 @@ BOOL SwView::JumpToSwMark( const String& rMark )
                 //
                 INT32 nSrchFlags = 0;
                 if (!bCaseSensitive)
-                    nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+                {
+                    //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+                    nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
+                }
                 if ( bWordOnly)
                     nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
                 if ( bLEV_Relaxed)

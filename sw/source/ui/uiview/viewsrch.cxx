@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:12:45 $
+ *  last change: $Author: tl $ $Date: 2001-03-19 16:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
 #include <com/sun/star/util/SearchFlags.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
@@ -137,6 +140,7 @@
 #include "view.hrc"
 
 using namespace com::sun::star;
+using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 
@@ -700,7 +704,10 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     //
     INT32 nSrchFlags = 0;
     if (!bCaseSensitive)
-        nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+    {
+        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+        nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
+    }
     if ( bWordOnly)
         nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
     if ( bLEV_Relaxed)
@@ -891,6 +898,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/12 08:12:45  tl
+    SearcParam => SearchOptions and implied changes
+
     Revision 1.3  2000/11/20 09:26:31  jp
     must change: SearchText->TextSearch and use namespace
 
