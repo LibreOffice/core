@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:17:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,14 +236,20 @@ namespace dbaui
         @param _bDisplayError
             determines whether the method should display an error, when it happens, or simply absorb it
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-            getDataSourceByName_displayError(
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >
+        getDataSourceByName_displayError(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDBContext,
                 const ::rtl::OUString& _rDataSourceName,
                 Window* _pErrorMessageParent,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB,
                 bool _bDisplayError
             );
+
+    /** returns either the model when data source is given as parameter,
+        or returns a data source when a model is given.
+        @param _xObject Either a data source or a model.
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getDataSourceOrModel(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xObject);
 
     /** maps com::sun::star::awt::TextAlign to SvxCellHorJustify
         @param com::sun::star::awt::TextAlign& _nAlignment
