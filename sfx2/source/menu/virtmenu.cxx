@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-16 15:49:05 $
+ *  last change: $Author: mba $ $Date: 2001-09-07 09:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,6 +927,7 @@ void SfxVirtualMenu::InvalidateKeyCodes()
 //        if ( pPopup )
 //            pPopup->InvalidateKeyCodes();
 //        else if ( nId )
+        if ( nId && !pSVMenu->GetPopupMenu( nId ) )
         {
             KeyCode aCode = pAccMgr->GetKeyCode( nId );
             if ( !aCode.GetCode() && pAccMgr != pAppAccel )
