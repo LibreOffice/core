@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hdu $ $Date: 2001-10-31 15:57:46 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 16:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,7 +1064,7 @@ IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
             c_Shifted >>= 4;
         }
         if( c < 256 )
-            sprintf( buf+6, " (%d)", c );
+            std::sprintf( buf+6, " (%d)", c );
         aTemp = String::CreateFromAscii( buf );
     }
     aCharCodeText.SetText( aTemp );
