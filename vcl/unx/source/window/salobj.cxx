@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:47:41 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_SALOBJ_CXX
 #include <prex.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/shape.h>
