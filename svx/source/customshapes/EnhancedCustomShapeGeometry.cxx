@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:27:15 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
 #include "EnhancedCustomShapeGeometry.hxx"
 #endif
@@ -1756,9 +1755,16 @@ static const mso_CustomShape msoQuadArrowCallout =
 
 static const SvxMSDffVertPair mso_sptCircularArrowVert[] =
 {
-    { 3 MSO_I, 3 MSO_I }, { 20 MSO_I, 20 MSO_I }, { 19 MSO_I, 18 MSO_I }, { 17 MSO_I, 16 MSO_I },
-    { 0, 0 }, { 21600, 21600 }, { 9 MSO_I, 8 MSO_I }, { 11 MSO_I, 10 MSO_I },
-    { 24 MSO_I, 23 MSO_I }, { 40 MSO_I, 39 MSO_I }, { 29 MSO_I, 28 MSO_I }
+    { 0x03 MSO_I, 0x03 MSO_I },
+    { 0x14 MSO_I, 0x14 MSO_I },
+    { 0x13 MSO_I, 0x12 MSO_I },
+    { 0x11 MSO_I, 0x10 MSO_I },
+    { 0, 0 }, { 21600, 21600 },
+    { 0x09 MSO_I, 0x08 MSO_I },
+    { 0x0B MSO_I, 0x0A MSO_I },
+    { 0x18 MSO_I, 0x17 MSO_I },
+    { 0x2F MSO_I, 0x2E MSO_I },
+    { 0x1D MSO_I, 0x1C MSO_I }
 };
 static const sal_uInt16 mso_sptCircularArrowSegm[] =
 {
@@ -1766,47 +1772,54 @@ static const sal_uInt16 mso_sptCircularArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptCircularArrowCalc[] =
 {
-    { 0x2000, DFF_Prop_adjustValue, 0, 0 },         // 0
-    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },        // 1
-    { 0x2000, DFF_Prop_adjust3Value, 0, 0 },        // 2
-    { 0x8000, 10800, 0,DFF_Prop_adjust3Value },     // 3
-    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },     // 4
-    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },     // 5
-    { 0x4009, 10800, DFF_Prop_adjust2Value, 0 },    // 6
-    { 0x400a, 10800, DFF_Prop_adjust2Value, 0 },    // 7
-    { 0x2000, 0x0404, 10800, 0 },                   // 8
-    { 0x2000, 0x0405, 10800, 0 },                   // 9
-    { 0x2000, 0x0406, 10800, 0 },                   // 10
-    { 0x2000, 0x0407, 10800, 0 },                   // 11
-    { 0x6009, 0x0403, DFF_Prop_adjustValue, 0 },    // 12
-    { 0x600a, 0x0403, DFF_Prop_adjustValue, 0 },    // 13
-    { 0x6009, 0x0403, DFF_Prop_adjust2Value, 0 },   // 14
-    { 0x600a, 0x0403, DFF_Prop_adjust2Value, 0 },   // 15
-    { 0x2000, 0x040c, 10800, 0 },                   // 16
-    { 0x2000, 0x040d, 10800, 0 },                   // 17
-    { 0x2000, 0x040e, 10800, 0 },                   // 18
-    { 0x2000, 0x040f, 10800, 0 },                   // 19
-    { 0x8000, 21600, 0, 0x0403 },                   // 20
-    { 0x4009, 12600, DFF_Prop_adjust2Value, 0 },    // 21
-    { 0x400a, 12600, DFF_Prop_adjust2Value, 0 },    // 22
-    { 0x2000, 0x0415, 10800, 0 },                   // 23
-    { 0x2000, 0x0416, 10800, 0 },                   // 24
-    { 0x2000, DFF_Prop_adjust3Value, 0, 1800 },     // 25
-    { 0x6009, 0x0419, DFF_Prop_adjust2Value, 0 },   // 26
-    { 0x600a, 0x0419, DFF_Prop_adjust2Value, 0 },   // 27
-    { 0x2000, 0x041a, 10800, 0 },                   // 28
-    { 0x2000, 0x041b, 10800, 0 },                   // 29
-    { 0x2001, 0x0403, 1, 2 },                       // 30
-    { 0x8000, 10800, 0, 0x041e },                   // 31
-    { 0x4001, 35,   0x0403, 10800 },                // 32
-    { 0x2000, 0x0420, 10, 0 },                      // 33
-    { 0x2001, 0x0421, 256, 1 },                     // 34
-    { 0x2001, 0x0422, 256, 1 },                     // 35
-    { 0x6000, 0x0423, DFF_Prop_adjust2Value, 0 },   // 36
-    { 0x6009, 0x041f, 0x0424, 0 },                  // 37
-    { 0x600a, 0x041f, 0x0424, 0 },                  // 38
-    { 0x2000, 0x0425, 10800, 0 },                   // 39
-    { 0x2000, 0x0426, 10800, 0 }                    // 40
+    { 0x2000, 0x0147, 0x0000, 0x0000 },
+    { 0x2000, 0x0148, 0x0000, 0x0000 },
+    { 0x2000, 0x0149, 0x0000, 0x0000 },
+    { 0x4000, 0x2A30, 0x0149, 0x0000 },
+    { 0x4009, 0x2A30, 0x0147, 0x0000 },
+    { 0x400A, 0x2A30, 0x0147, 0x0000 },
+    { 0x4009, 0x2A30, 0x0148, 0x0000 },
+    { 0x400A, 0x2A30, 0x0148, 0x0000 },
+    { 0x2000, 0x0404, 0x2A30, 0x0000 },
+    { 0x2000, 0x0405, 0x2A30, 0x0000 },
+    { 0x2000, 0x0406, 0x2A30, 0x0000 },
+    { 0x2000, 0x0407, 0x2A30, 0x0000 },
+    { 0x6009, 0x0403, 0x0147, 0x0000 },
+    { 0x600A, 0x0403, 0x0147, 0x0000 },
+    { 0x6009, 0x0403, 0x0148, 0x0000 },
+    { 0x600A, 0x0403, 0x0148, 0x0000 },
+    { 0x2000, 0x040C, 0x2A30, 0x0000 },
+    { 0x2000, 0x040D, 0x2A30, 0x0000 },
+    { 0x2000, 0x040E, 0x2A30, 0x0000 },
+    { 0x2000, 0x040F, 0x2A30, 0x0000 },
+    { 0x8000, 0x5460, 0x0000, 0x0403 },
+    { 0x4009, 0x34BC, 0x0148, 0x0000 },
+    { 0x400A, 0x34BC, 0x0148, 0x0000 },
+    { 0x2000, 0x0415, 0x2A30, 0x0000 },
+    { 0x2000, 0x0416, 0x2A30, 0x0000 },
+    { 0x2000, 0x0149, 0x0000, 0x0A8C },
+    { 0x6009, 0x0419, 0x0148, 0x0000 },
+    { 0x600A, 0x0419, 0x0148, 0x0000 },
+    { 0x2000, 0x041A, 0x2A30, 0x0000 },
+    { 0x2000, 0x041B, 0x2A30, 0x0000 },
+    { 0xA000, 0x041D, 0x0000, 0x0418 },
+    { 0xA000, 0x041D, 0x0000, 0x0418 },
+    { 0x6001, 0x041E, 0x041F, 0x0001 },
+    { 0xA000, 0x041C, 0x0000, 0x0417 },
+    { 0xA000, 0x041C, 0x0000, 0x0417 },
+    { 0x6001, 0x0421, 0x0422, 0x0001 },
+    { 0x6000, 0x0420, 0x0423, 0x0000 },
+    { 0x200D, 0x0424, 0x0000, 0x0000 },
+    { 0x200E, 0x0148, 0x002D, 0x0000 },
+    { 0x6009, 0x0425, 0x0426, 0x0000 },
+    { 0x200E, 0x0148, 0x002D, 0x0000 },
+    { 0x600A, 0x0425, 0x0428, 0x0000 },
+    { 0x000E, 0x0000, 0x002D, 0x0000 },
+    { 0x6009, 0x0427, 0x042A, 0x0000 },
+    { 0x000E, 0x0000, 0x002D, 0x0000 },
+    { 0x6009, 0x0429, 0x042C, 0x0000 },
+    { 0x6000, 0x041C, 0x042B, 0x0000 },
+    { 0x6000, 0x041D, 0x042D, 0x0000 }
 };
 static const sal_Int32 mso_sptCircularArrowDefault[] =
 {
@@ -1819,9 +1832,9 @@ static const SvxMSDffTextRectangles mso_sptCircularArrowTextRect[] =    // todo
 static const SvxMSDffHandle mso_sptCircularArrowHandle[] =
 {
     {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
-        10800, 0x100, 10800, 10800, 10800, 10800, 0x80000000, 0x7fffffff },
+        10800, 0x100, 10800, 10800, 10800, 10800, 0xff4c0000, 0x00b40000 },
     {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
-        0x102, 0x101, 10800, 10800, 0, 10800, 0x80000000, 0x7fffffff }
+        0x102, 0x101, 10800, 10800, 0, 10800, 0xff4c0000, 0x00b40000 }
 };
 static const mso_CustomShape msoCircularArrow =
 {
@@ -4468,8 +4481,8 @@ static const SvxMSDffVertPair mso_sptFlowChartMultidocumentVert[] =
 static const sal_uInt16 mso_sptFlowChartMultidocumentSegm[] =
 {
     0x4000, 0x000a, 0x2002, 0x6000, 0x8000,
-    0x4000, 0x0002, 0x8000,
-    0x4000, 0x0002, 0x8000
+    0x4000, 0xaa00, 0x0002, 0x8000,         // NO FILL
+    0x4000, 0xaa00, 0x0002, 0x8000          // NO FILL
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartMultidocumentTextRect[] =
 {
