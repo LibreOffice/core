@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:41:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,9 @@
 #include <com/sun/star/uno/Exception.hpp>
 #endif
 
+#ifndef  _COM_SUN_STAR_UTIL_XOFFICEINSTALLATIONDIRECTORIES_HPP_
+#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
+#endif
 
 #include "sfxresid.hxx"
 #include "doc.hrc"
@@ -197,6 +200,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::util;
 
 using namespace rtl;
 using namespace ucb;
@@ -238,10 +242,11 @@ class GroupData_Impl;
 
 class SfxDocTplService_Impl
 {
-    Reference< XMultiServiceFactory >   mxFactory;
-    Reference< XCommandEnvironment >    maCmdEnv;
-    Reference< XPersist >               mxInfo;
-    Reference< XTypeDetection >         mxType;
+    Reference< XMultiServiceFactory >           mxFactory;
+    Reference< XCommandEnvironment >            maCmdEnv;
+    Reference< XPersist >                       mxInfo;
+    Reference< XTypeDetection >                 mxType;
+    Reference< XOfficeInstallationDirectories > mxOfficeInstDirs;
 
     ::osl::Mutex                maMutex;
     Sequence< OUString >        maTemplateDirs;
@@ -298,6 +303,11 @@ class SfxDocTplService_Impl
     void                        addGroupToHierarchy( GroupData_Impl *pGroup );
 
     void                        updateData( DocTemplates_EntryData_Impl *pData );
+
+    static bool                 propertyCanContainOfficeDir( const rtl::OUString & rPropName );
+    void                        initOfficeInstDirs();
+    void                        makeRelocatableURL( rtl::OUString & rURL );
+    void                        makeAbsoluteURL( rtl::OUString & rURL );
 
 public:
                                  SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory );
@@ -792,6 +802,7 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
     // Store the property
     try
     {
+        Any aPropValue( rPropValue );
         Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
 
         // check, wether or not the property exists, create it, when not
@@ -810,9 +821,37 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
             }
         }
 
+        // To ensure a reloctable office installation, the path to the
+        // office installtion directory must never be stored directly.
+        if ( propertyCanContainOfficeDir( rPropName ) )
+        {
+            OUString aValue;
+            if ( rPropValue >>= aValue )
+            {
+                makeRelocatableURL( aValue );
+                aPropValue = makeAny( aValue );
+            }
+            else
+            {
+                Sequence< OUString > aValues;
+                if ( rPropValue >>= aValues )
+                {
+                    for ( sal_Int32 n = 0; n < aValues.getLength(); n++ )
+                    {
+                        makeRelocatableURL( aValues[ n ] );
+                    }
+                    aPropValue = makeAny( aValues );
+                }
+                else
+                {
+                    OSL_ENSURE( false, "Unsupported property value type" );
+                }
+            }
+        }
+
         // now set the property
 
-        rContent.setPropertyValue( rPropName, rPropValue );
+        rContent.setPropertyValue( rPropName, aPropValue );
         bPropertySet = sal_True;
     }
     catch ( RuntimeException& ) {}
@@ -842,12 +881,116 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
         // now get the property
 
         rPropValue = rContent.getPropertyValue( rPropName );
+
+        // To ensure a reloctable office installation, the path to the
+        // office installtion directory must never be stored directly.
+        if ( propertyCanContainOfficeDir( rPropName ) )
+        {
+            OUString aValue;
+            if ( rPropValue >>= aValue )
+            {
+                makeAbsoluteURL( aValue );
+                rPropValue = makeAny( aValue );
+            }
+            else
+            {
+                Sequence< OUString > aValues;
+                if ( rPropValue >>= aValues )
+                {
+                    for ( sal_Int32 n = 0; n < aValues.getLength(); n++ )
+                    {
+                        makeAbsoluteURL( aValues[ n ] );
+                    }
+                    rPropValue = makeAny( aValues );
+                }
+                else
+                {
+                    OSL_ENSURE( false, "Unsupported property value type" );
+                }
+            }
+        }
+
         bGotProperty = sal_True;
     }
     catch ( RuntimeException& ) {}
     catch ( Exception& ) {}
 
     return bGotProperty;
+}
+
+// -----------------------------------------------------------------------
+// static
+bool SfxDocTplService_Impl::propertyCanContainOfficeDir(
+                                        const rtl::OUString & rPropName )
+{
+    // Note: TargetURL is handled by UCB itself (because it is a property
+    //       with a predefined semantic). Additional Core properties introduced
+    //       be a client app must be handled by the client app itself, because
+    //       the UCB does not know the semantics of those properties.
+    return ( rPropName.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( TARGET_DIR_URL ) ) ||
+             rPropName.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( PROPERTY_DIRLIST ) ) );
+}
+
+// -----------------------------------------------------------------------
+void SfxDocTplService_Impl::initOfficeInstDirs()
+{
+    if ( !mxOfficeInstDirs.is() )
+    {
+        osl::MutexGuard aGuard( maMutex );
+        if ( !mxOfficeInstDirs.is() )
+        {
+            OSL_ENSURE( mxFactory.is(), "No service manager!" );
+
+            Reference< XComponentContext > xCtx;
+            Reference< XPropertySet > xPropSet( mxFactory, UNO_QUERY );
+            if ( xPropSet.is() )
+            {
+                xPropSet->getPropertyValue(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
+                >>= xCtx;
+            }
+
+            OSL_ENSURE( xCtx.is(),
+                        "Unable to obtain component context from "
+                        "service manager!" );
+
+            if ( xCtx.is() )
+            {
+                xCtx->getValueByName(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "/singletons/"
+                        "com.sun.star.util.theOfficeInstallationDirectories" ) ) )
+                >>= mxOfficeInstDirs;
+            }
+
+            OSL_ENSURE( mxOfficeInstDirs.is(),
+                        "Unable to obtain office installation directory "
+                        "singleton!" );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+void SfxDocTplService_Impl::makeRelocatableURL( rtl::OUString & rURL )
+{
+    if ( rURL.getLength() > 0 )
+    {
+        initOfficeInstDirs();
+        rURL = mxOfficeInstDirs->makeRelocatableURL( rURL );
+    }
+}
+
+// -----------------------------------------------------------------------
+void SfxDocTplService_Impl::makeAbsoluteURL( rtl::OUString & rURL )
+{
+    if ( rURL.getLength() > 0 )
+    {
+        initOfficeInstDirs();
+        rURL = mxOfficeInstDirs->makeAbsoluteURL( rURL );
+    }
 }
 
 //-----------------------------------------------------------------------------
