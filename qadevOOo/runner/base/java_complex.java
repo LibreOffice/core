@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_complex.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-08-07 15:04:51 $
+ *  last change:$Date: 2003-10-06 12:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,9 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.Enumeration;
 import complexlib.ComplexTestCase;
-import lib.DynamicClassLoader;
+import util.DynamicClassLoader;
 import share.DescGetter;
+import stats.OutProducerFactory;
 import helper.ComplexDescGetter;
 import helper.AppProvider;
 import helper.CfgParser;
@@ -156,9 +157,9 @@ public class java_complex implements TestBase{
                 office.closeExistingOffice(param, false);
             }
 
-            LogWriter out = (LogWriter)dcl.getInstance(
-                                            (String)param.get("OutProducer"));
+            LogWriter out = OutProducerFactory.createOutProducer(param);
 
+            out.initialize(entries[i], true);
             out.summary(entries[i]);
             returnVal &= entries[i].State.endsWith("OK");
         }
