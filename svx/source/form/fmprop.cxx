@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 16:57:59 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,12 @@ namespace svxform
             aComposableProperties.insert( FM_PROP_DEFAULT_SPINVALUE );
             aComposableProperties.insert( FM_PROP_SPININCREMENT );
             aComposableProperties.insert( FM_PROP_LINEENDFORMAT );
+            aComposableProperties.insert( FM_PROP_TOGGLE );
+            aComposableProperties.insert( FM_PROP_FOCUSONCLICK );
+            aComposableProperties.insert( FM_PROP_HIDEINACTIVESELECTION );
+            aComposableProperties.insert( FM_PROP_VISUALEFFECT );
+            aComposableProperties.insert( FM_PROP_BORDERCOLOR );
+            aComposableProperties.insert( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImagePosition" ) ) );
         }
         return aComposableProperties;
     }
@@ -300,21 +306,31 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_TEXTLINECOLOR, "TextLineColor");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_FONTEMPHASISMARK, "FontEmphasisMark");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_FONTRELIEF, "FontRelief");
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SCROLLVALUE_MIN     , "ScrollValueMin"     );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SCROLLVALUE_MAX     , "ScrollValueMax"     );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_DEFAULT_SCROLLVALUE , "DefaultScrollValue" );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_LINEINCREMENT       , "LineIncrement"      );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_BLOCKINCREMENT      , "BlockIncrement"     );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_ORIENTATION         , "Orientation"        );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_REPEAT              , "Repeat"             );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_REPEATDELAY         , "RepeatDelay"        );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SYMBOLCOLOR         , "SymbolColor"        );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_VISIBILESIZE        , "VisibleSize"        );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPINVALUE_MIN       , "SpinValueMin"       );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPINVALUE_MAX       , "SpinValueMin"       );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_DEFAULT_SPINVALUE   , "DefaultSpinValue"   );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPININCREMENT       , "SpinIncrement"      );
-    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_LINEENDFORMAT       , "LineEndFormat"      );
+
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SCROLLVALUE_MIN,             "ScrollValueMin"            );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SCROLLVALUE_MAX,             "ScrollValueMax"            );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_DEFAULT_SCROLLVALUE,         "DefaultScrollValue"        );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_LINEINCREMENT,               "LineIncrement"             );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_BLOCKINCREMENT,              "BlockIncrement"            );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_ORIENTATION,                 "Orientation"               );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_REPEAT,                      "Repeat"                    );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_REPEATDELAY,                 "RepeatDelay"               );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SYMBOLCOLOR,                 "SymbolColor"               );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_VISIBILESIZE,                "VisibleSize"               );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPINVALUE_MIN,               "SpinValueMin"              );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPINVALUE_MAX,               "SpinValueMax"              );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_DEFAULT_SPINVALUE,           "DefaultSpinValue"          );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_SPININCREMENT,               "SpinIncrement"             );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_LINEENDFORMAT,               "LineEndFormat"             );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_TOGGLE,                      "Toggle"                    );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_FOCUSONCLICK,                "FocusOnClick"              );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_HIDEINACTIVESELECTION,       "HideInactiveSelection"     );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_VISUALEFFECT,                "VisualEffect"              );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_BORDERCOLOR,                 "BorderColor"               );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_DYNAMIC_CONTROL_BORDER,      "DynamicControlBorder"      );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_FOCUS,  "ControlBorderColorOnFocus" );
+    IMPLEMENT_CONSTASCII_USTRING( FM_PROP_CONTROL_BORDER_COLOR_MOUSE,  "ControlBorderColorOnHover" );
+
 }   // namespace svxform
 
 //------------------------------------------------------------------------
