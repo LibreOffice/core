@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-04 11:30:03 $
+ *  last change: $Author: nn $ $Date: 2001-10-11 10:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,12 +271,14 @@ void ScDrawTransferObj::AddSupportedFormats()
 {
     if ( bGrIsBit )             // single bitmap graphic
     {
+        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMATSTR_ID_SVXB );
         AddFormat( SOT_FORMAT_BITMAP );
         AddFormat( SOT_FORMAT_GDIMETAFILE );
     }
     else if ( bGraphic )        // other graphic
     {
+        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMATSTR_ID_SVXB );
         AddFormat( SOT_FORMAT_GDIMETAFILE );
         AddFormat( SOT_FORMAT_BITMAP );
