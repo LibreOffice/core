@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sb $ $Date: 2001-03-08 15:05:21 $
+ *  last change: $Author: hro $ $Date: 2001-03-16 11:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2372,7 +2372,7 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
 
             osl::DirectoryItem aDirItem;
 
-            while( ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
+            while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
             {
                 sal_Bool IsDocument;
                 osl::FileStatus aFileStatus( n_Mask );
@@ -2396,11 +2396,11 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                 newDstUnqPath += tit;
 
                 if ( newSrcUnqPath != dstUnqPath )
-                    copy_recursive( newSrcUnqPath,newDstUnqPath,newTypeToCopy,false );
+                    err = copy_recursive( newSrcUnqPath,newDstUnqPath,newTypeToCopy,false );
             }
 
-            if( next != osl::FileBase::E_NOENT )
-                err = osl::FileBase::E_INVAL;
+            if( err == osl::FileBase::E_None && next != osl::FileBase::E_NOENT )
+                err = next;
         }
         aDir.close();
     }
