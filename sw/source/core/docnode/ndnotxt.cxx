@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnotxt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:56:27 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #ifndef _IPOBJ_HXX
 #include <so3/ipobj.hxx>
 #endif
-#ifndef _SV_POLY_HXX
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _CONTDLG_HXX_
 #include <svx/contdlg.hxx>
