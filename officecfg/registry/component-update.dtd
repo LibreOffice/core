@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ELEMENT oor:node ((prop|node)*)>
-<!ATTLIST oor:node
+<!ELEMENT oor:component-data ((prop|node)*)>
+<!ATTLIST oor:component-data
   oor:name NMTOKEN #REQUIRED
   oor:package NMTOKEN #REQUIRED
   oor:finalized (true | false) #IMPLIED
