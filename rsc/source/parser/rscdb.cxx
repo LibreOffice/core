@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:41:59 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 13:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #pragma hdrstop
 
 // C and C++ Includes.
+#include <ctype.h>      // isdigit(), isalpha()
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -70,6 +71,7 @@
 #include <tools/intn.hxx>
 #include <tools/fsys.hxx>
 #include <tools/rc.h>
+#include <rtl/strbuf.hxx>
 
 // Programmabhaengige Includes.
 #ifndef _RSCTREE_HXX
@@ -84,6 +86,11 @@
 #ifndef _RSCDB_HXX
 #include <rscdb.hxx>
 #endif
+#ifndef _RSCRSC_HXX
+#include <rscrsc.hxx>
+#endif
+
+using namespace rtl;
 
 /*************************************************************************
 |*
@@ -775,11 +782,12 @@ IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteRcCtor, RscTop *, pRef )
 |*    Letzte Aenderung  MM 22.07.91
 |*
 *************************************************************************/
-ERRTYPE RscTypCont::WriteRc( FILE * fOutput )
+
+ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 {
     RscSysEntry * pSysEntry;
     ERRTYPE       aError;
-    RscEnumerateRef aEnumRef( this, pRoot, fOutput );
+    RscEnumerateRef aEnumRef( this, pRoot, rContext.fOutput );
 
     aIdTranslator.Clear();
     nFilePos = 0;
@@ -787,55 +795,12 @@ ERRTYPE RscTypCont::WriteRc( FILE * fOutput )
 
     aError = aEnumRef.WriteRc();
 
-    if( aError.IsOk() )
-    {
-        // Systemabhaengige Resourcen schreiben
-        pSysEntry = aSysLst.First();
-        while( pSysEntry && aError.IsOk() )
-        {
-            UniString aUniFileName( pSysEntry->aFileName, RTL_TEXTENCODING_ASCII_US );
-            DirEntry aFullName( aUniFileName );
-            aFullName.Find( UniString( GetSysSearchPath(), RTL_TEXTENCODING_ASCII_US ) );
-            pSysEntry->aFileName = ByteString( aFullName.GetFull(), RTL_TEXTENCODING_ASCII_US );
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "found sys dep file %s\n", pSysEntry->aFileName.GetBuffer() );
-#endif
-            if( !::Append( fOutput, pSysEntry->aFileName.GetBuffer() ) )
-            {
-                pEH->FatalError( ERR_OPENFILE, RscId(), pSysEntry->aFileName.GetBuffer() );
-                break;
-            }
-            UniString aUniFileName2( pSysEntry->aFileName, RTL_TEXTENCODING_ASCII_US );
-            FileStat aFS( aUniFileName2 );
-            if( !aFS.IsKind( FSYS_KIND_FILE ) )
-            {
-                pEH->FatalError( ERR_OPENFILE, RscId(), pSysEntry->aFileName.GetBuffer() );
-                break;
-            }
+    // version control
+    RscWriteRc aMem( nByteOrder );
+    aVersion.pClass->WriteRcHeader( aVersion, aMem, this, RscId( RSCVERSION_ID ), 0, TRUE );
+    aEnumRef.aEnumObj.WriteRcFile( aMem, rContext.fOutput );
 
-            // Tabelle wird entsprechend gefuellt
-            PutTranslatorKey( ((ULONG)RT_SYS_BITMAP << 16) + pSysEntry->nKey );
-            UINT32 nSize = aFS.GetSize();
-            IncFilePos( nSize );
-
-            // wegen Alignment
-            nSize = sizeof( int ) - nSize % sizeof( int );
-            nSize %= sizeof( int );
-            IncFilePos( nSize );
-            while( nSize-- )
-                fputc( 0, fOutput );
-
-            pSysEntry = aSysLst.Next();
-        }
-
-        // Versionskontrolle schreiben
-        RscWriteRc  aMem( nByteOrder );
-        aVersion.pClass->WriteRcHeader( aVersion, aMem, this,
-                                        RscId( RSCVERSION_ID ), 0, TRUE );
-        aEnumRef.aEnumObj.WriteRcFile( aMem, fOutput );
-    }
-
-    return( aError );
+    return aError;
 }
 
 /*************************************************************************
@@ -1129,4 +1094,3 @@ USHORT RscTypCont::PutTranslatorKey( ULONG nKey )
     aIdTranslator.Insert( nKey, (void*)nFilePos );
     return nPMId++;
 }
-
