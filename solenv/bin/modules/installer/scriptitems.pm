@@ -341,8 +341,8 @@ sub replace_setup_variables
     # string $buildid, which is used to replace the setup variable <buildid>
 
     my $localminor = "flat";
-    if ( $installer::globals::updatepack ) { $localminor = $installer::globals::lastminor; }
-    else { $localminor = $installer::globals::minor; }
+    if ( $installer::globals::minor ne "" ) { $localminor = $installer::globals::minor; }
+    else { $localminor = $installer::globals::lastminor; }
 
     my $localbuild = $installer::globals::build;
 
