@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protocolhandlercache.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:34:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+
+#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#include <unotools/configpathes.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -267,7 +271,7 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
                              PatternHash** ppPattern )
 {
     // list of all uno implementation names without encoding
-    css::uno::Sequence< ::rtl::OUString > lNames = GetNodeNames( SETNAME_HANDLER, ::utl::CONFIG_NAME_LOCAL_NAME );
+    css::uno::Sequence< ::rtl::OUString > lNames = GetNodeNames( SETNAME_HANDLER, ::utl::CONFIG_NAME_LOCAL_PATH );
     sal_Int32 nSourceCount = lNames.getLength();
     sal_Int32 nTargetCount = nSourceCount;
     // list of all full qualified path names of configuration entries
@@ -300,7 +304,7 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
     {
         // create it new for every loop to guarantee a real empty object!
         ProtocolHandler aHandler;
-        aHandler.m_sUNOName = lNames[nSource];
+        aHandler.m_sUNOName = ::utl::extractFirstFromConfigurationPath(lNames[nSource]);
 
         // unpack all values of this handler
         css::uno::Sequence< ::rtl::OUString > lTemp;
