@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2001-12-03 13:41:04 $
+ *  last change: $Author: mba $ $Date: 2001-12-04 16:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,7 +1295,8 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
     int nRet = ::StartDoc( hDC, &aInfo );
     if ( nRet <= 0 )
     {
-        if ( (nRet == SP_USERABORT) || (nRet == SP_APPABORT) || (GetLastError() == ERROR_PRINT_CANCELLED) )
+        long nError = GetLastError();
+        if ( (nRet == SP_USERABORT) || (nRet == SP_APPABORT) || (nError == ERROR_PRINT_CANCELLED) || (nError == ERROR_CANCELLED) )
             maPrinterData.mnError = SAL_PRINTER_ERROR_ABORT;
         else
             maPrinterData.mnError = SAL_PRINTER_ERROR_GENERALERROR;
