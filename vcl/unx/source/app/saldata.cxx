@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:25:01 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,47 +394,47 @@ void SalData::deInitNWF( void )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalXLib::SalXLib()
 {
-    Timeout_.tv_sec         = 0;
-    Timeout_.tv_usec        = 0;
-    nTimeoutMS_             = 0;
+    m_aTimeout.tv_sec       = 0;
+    m_aTimeout.tv_usec      = 0;
+    m_nTimeoutMS            = 0;
 
     nFDs_                   = 0;
     FD_ZERO( &aReadFDS_ );
     FD_ZERO( &aExceptionFDS_ );
 
-    pTimeoutFDS_[0] = pTimeoutFDS_[1] = -1;
-    if (pipe (pTimeoutFDS_) != -1)
+    m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
+    if (pipe (m_pTimeoutFDS) != -1)
     {
         // initialize 'wakeup' pipe.
         int flags;
 
         // set close-on-exec descriptor flag.
-        if ((flags = fcntl (pTimeoutFDS_[0], F_GETFD)) != -1)
+        if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFD)) != -1)
         {
             flags |= FD_CLOEXEC;
-            fcntl (pTimeoutFDS_[0], F_SETFD, flags);
+            fcntl (m_pTimeoutFDS[0], F_SETFD, flags);
         }
-        if ((flags = fcntl (pTimeoutFDS_[1], F_GETFD)) != -1)
+        if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFD)) != -1)
         {
             flags |= FD_CLOEXEC;
-            fcntl (pTimeoutFDS_[1], F_SETFD, flags);
+            fcntl (m_pTimeoutFDS[1], F_SETFD, flags);
         }
 
         // set non-blocking I/O flag.
-        if ((flags = fcntl (pTimeoutFDS_[0], F_GETFL)) != -1)
+        if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFL)) != -1)
         {
             flags |= O_NONBLOCK;
-            fcntl (pTimeoutFDS_[0], F_SETFL, flags);
+            fcntl (m_pTimeoutFDS[0], F_SETFL, flags);
         }
-        if ((flags = fcntl (pTimeoutFDS_[1], F_GETFL)) != -1)
+        if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFL)) != -1)
         {
             flags |= O_NONBLOCK;
-            fcntl (pTimeoutFDS_[1], F_SETFL, flags);
+            fcntl (m_pTimeoutFDS[1], F_SETFL, flags);
         }
 
         // insert [0] into read descriptor set.
-        FD_SET( pTimeoutFDS_[0], &aReadFDS_ );
-        nFDs_ = pTimeoutFDS_[0] + 1;
+        FD_SET( m_pTimeoutFDS[0], &aReadFDS_ );
+        nFDs_ = m_pTimeoutFDS[0] + 1;
     }
 
     bWasXError_                     = FALSE;
@@ -446,8 +446,8 @@ SalXLib::SalXLib()
 SalXLib::~SalXLib()
 {
     // close 'wakeup' pipe.
-    close (pTimeoutFDS_[0]);
-    close (pTimeoutFDS_[1]);
+    close (m_pTimeoutFDS[0]);
+    close (m_pTimeoutFDS[1]);
 }
 
 
@@ -701,24 +701,24 @@ void SalXLib::Remove( int nFD )
 bool SalXLib::CheckTimeout( bool bExecuteTimers )
 {
     bool bRet = false;
-    if( Timeout_.tv_sec ) // timer is started
+    if( m_aTimeout.tv_sec ) // timer is started
     {
         timeval aTimeOfDay;
         gettimeofday( &aTimeOfDay, 0 );
-        if( aTimeOfDay >= Timeout_ )
+        if( aTimeOfDay >= m_aTimeout )
         {
             bRet = true;
             if( bExecuteTimers )
             {
                 // timed out, update timeout
-                Timeout_ = aTimeOfDay;
+                m_aTimeout = aTimeOfDay;
                 /*
-               *  #107827# autorestart immediately, will be stopped (or set
-               *  to different value in notify hdl if necessary;
-               *  CheckTimeout should return false while
-               *  timers are being dispatched.
-               */
-                Timeout_ += nTimeoutMS_;
+                *  #107827# autorestart immediately, will be stopped (or set
+                *  to different value in notify hdl if necessary;
+                *  CheckTimeout should return false while
+                *  timers are being dispatched.
+                */
+                m_aTimeout += m_nTimeoutMS;
                 // notify
                 GetSalData()->Timeout();
             }
@@ -771,11 +771,11 @@ void SalXLib::Yield( BOOL bWait )
     if (bWait)
     {
         pTimeout = 0;
-        if (Timeout_.tv_sec) // Timer is started.
+        if (m_aTimeout.tv_sec) // Timer is started.
         {
             // determine remaining timeout.
             gettimeofday (&Timeout, 0);
-            Timeout = Timeout_ - Timeout;
+            Timeout = m_aTimeout - Timeout;
             if (yield__ >= Timeout)
             {
                 // guard against micro timeout.
@@ -806,10 +806,10 @@ void SalXLib::Yield( BOOL bWait )
         CheckTimeout();
 
     // handle wakeup events.
-    if ((nFound > 0) && (FD_ISSET(pTimeoutFDS_[0], &ReadFDS)))
+    if ((nFound > 0) && (FD_ISSET(m_pTimeoutFDS[0], &ReadFDS)))
     {
         int buffer;
-        while (read (pTimeoutFDS_[0], &buffer, sizeof(buffer)) > 0)
+        while (read (m_pTimeoutFDS[0], &buffer, sizeof(buffer)) > 0)
             continue;
         nFound -= 1;
     }
@@ -856,7 +856,7 @@ void SalXLib::Yield( BOOL bWait )
 
 void SalXLib::Wakeup()
 {
-    write (pTimeoutFDS_[1], "", 1);
+    write (m_pTimeoutFDS[1], "", 1);
 }
 
 void SalXLib::PostUserEvent()
