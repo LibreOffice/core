@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-16 13:34:53 $
+ *  last change: $Author: tra $ $Date: 2001-05-25 08:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,8 +362,6 @@ void CSmplMailClient::initAttachementList(
     OUString aSysPath;
     for ( sal_uInt32 i = 0; i < nAttachements; i++ )
     {
-#ifdef TF_FILEURL
-
         osl::FileBase::RC rc =
             osl::FileBase::getSystemPathFromFileURL(
                 aAttachementList[i], aSysPath );
@@ -380,10 +378,9 @@ void CSmplMailClient::initAttachementList(
                 aSysPath.getLength( ),
                 osl_getThreadTextEncoding( ) ) );
 
-        m_AttachementList[i].lpszFileName = const_cast< LPSTR >(
+        m_AttachementList[i].lpszPathName = const_cast< LPSTR >(
             m_AttchmtsSysPathList.back( ).getStr( ) );
-
-#endif
+        m_AttachementList[i].nPosition = -1;
     }
 }
 
