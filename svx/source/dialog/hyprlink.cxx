@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 09:37:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 18:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #include <svtools/urihelper.hxx>
-
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include "hlnkitem.hxx"
 #include "dialogs.hrc"
@@ -137,7 +139,7 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *pBindings, Window* pParent) :
 {
     FreeResource();
 
-    mpManager = pBindings->GetImageManager();
+    mpManager = SfxImageManager::GetImageManager( 0 );
     mpManager->RegisterToolBox( this );
 
     SetImages();
@@ -210,8 +212,7 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *pBindings, Window* pParent) :
 
 SvxHyperlinkDlg::~SvxHyperlinkDlg()
 {
-    SfxImageManager* pManager = GetBindings().GetImageManager();
-    pManager->ReleaseToolBox(this);
+    SfxImageManager::GetImageManager( 0 )->ReleaseToolBox(this);
 
     if (pTargetMenu != NULL)
         delete pTargetMenu;
@@ -831,9 +832,7 @@ void SvxHyperlinkDlg::DataChanged( const DataChangedEvent& rDCEvt )
     ToolBox::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE))
-    {
         SetImages();
-    }
 }
 
 // --------------------------------------------------------------------
