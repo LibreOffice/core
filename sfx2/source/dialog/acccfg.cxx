@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:14:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,8 +559,10 @@ void SfxAcceleratorConfigPage::Init( SfxAcceleratorManager* pAccMgr )
 
 void SfxAcceleratorConfigPage::ResetConfig()
 {
+    USHORT i;
+
     aEntriesBox.Clear();
-    for ( USHORT i = 0; i < ACC_CODEARRSIZE; i++ )
+    for ( i = 0; i < ACC_CODEARRSIZE; i++ )
         aAccelArr[i] = 0;
 
     for ( i = 0; i < aConfigAccelArr.Count(); i++ )
