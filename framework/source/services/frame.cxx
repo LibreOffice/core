@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: as $ $Date: 2001-11-02 07:54:37 $
+ *  last change: $Author: mba $ $Date: 2001-12-11 16:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2773,6 +2773,7 @@ void Frame::impl_filterSpecialTargets( ::rtl::OUString& sTarget )
             ( sTarget   ==  SPECIALTARGET_SELF      )   ||
             ( sTarget   ==  SPECIALTARGET_PARENT    )   ||
             ( sTarget   ==  SPECIALTARGET_TOP       )   ||
+            ( sTarget   ==  SPECIALTARGET_DEFAULT   )   ||
             ( sTarget   ==  SPECIALTARGET_BLANK     )
         )
     {
