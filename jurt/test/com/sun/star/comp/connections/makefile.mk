@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2000-11-03 08:57:59 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:02:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,27 +57,14 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..$/..
-
+PRJ := ..$/..$/..$/..$/..$/..
 PRJNAME := jurt
+TARGET := test_com_sun_star_comp_connections
+
 PACKAGE := com$/sun$/star$/comp$/connections
-TARGET  := test_com_sun_star_comp_connections
+JAVATESTFILES := PipedConnection_Test.java
+JARFILES := ridl.jar
 
-
-# --- Settings -----------------------------------------------------
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-
-# Files --------------------------------------------------------
-
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/XConnection_Test.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/PipedConnection_Test.class
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE: javaunittest.mk
