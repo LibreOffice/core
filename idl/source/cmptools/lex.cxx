@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ByteString SvToken::GetTokenAsString() const
             aStr = aString;
             break;
         case SVTOKEN_INTEGER:
-            aStr = nLong;
+            aStr = ByteString::CreateFromInt64(nLong);
             break;
         case SVTOKEN_STRING:
             aStr = aString;
@@ -128,9 +128,9 @@ ByteString SvToken::Print() const
 {
     ByteString aStr;
     aStr += "Line = ";
-    aStr += nLine;
+    aStr += ByteString::CreateFromInt64(nLine);
     aStr += ", Column = ";
-    aStr += nColumn;
+    aStr += ByteString::CreateFromInt64(nColumn);
     aStr += ", ";
     switch( nType )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,8 @@ void SvMetaName::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         WriteTab( rOutStm, nTab );
         rOutStm << "helpcontext("
-                << ByteString( GetHelpContext().GetValue() ).GetBuffer()
+                << ByteString::CreateFromInt64(
+                    GetHelpContext().GetValue() ).GetBuffer()
                 << ")," << endl;
     }
 }
