@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: mib $ $Date: 2000-12-14 09:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,8 +223,7 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW != eDestEnc,
                     "wrong destination encoding" );
     const sal_Char *pStr = 0;
-    sal_Char cOut = 0U;
-
+    sal_Char cANSI = 0;
     switch( c )
     {
     case 0xA0:      // is a hard blank
@@ -239,39 +238,58 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
 
     default:
         // Convert character to ISO8859-1 temporarily
-        sal_Char cANSI = ByteString::ConvertFromUnicode(
+        cANSI = ByteString::ConvertFromUnicode(
                                     c, RTL_TEXTENCODING_ISO_8859_1, FALSE );
         // If it could be converted, there may be an entity for the character.
         if( cANSI )
             pStr = lcl_svhtml_GetEntityForANSIChar( cANSI );
-
-        if( !pStr )
-        {
-            cOut = RTL_TEXTENCODING_ISO_8859_1 == eDestEnc
-                    ? cANSI
-                    : ByteString::ConvertFromUnicode( c, eDestEnc, FALSE );
-
-            // If the character could not be converted to the destination
-            // character set, the original character code is truncated to
-            // an 8-bit-character code.
-            if( !cOut )
-                cOut = (sal_Char)c;
-        }
-        break;
     }
 
-    if( !pStr && ( (cOut>=' ' && cOut<='~') || cOut=='\t' ||
-                    RTL_TEXTENCODING_ISO_8859_1 == eDestEnc ) )
-        rDest += cOut;
+    if( pStr )
+    {
+        ((rDest += '&') += pStr) += ';';
+    }
     else
     {
-        rDest += '&';
-        if( pStr )
-            rDest += pStr;
-        else
-            (rDest += '#') +=
-                ByteString::CreateFromInt32( (sal_Int32)cOut );
-        rDest += ';';
+        switch( eDestEnc )
+        {
+        case RTL_TEXTENCODING_ISO_8859_1:
+            rDest += (cANSI ? cANSI : (sal_Char)c);
+            break;
+        case RTL_TEXTENCODING_UTF8:
+            {
+                sal_Char cBuffer[3];
+                size_t nLen = ByteString::ConvertFromUnicode( c, cBuffer, 3,
+                                                        RTL_TEXTENCODING_UTF8 );
+                if( nLen )
+                {
+                    sal_Char *pBuffer = cBuffer;
+                    while( nLen-- )
+                        rDest += *pBuffer++;
+                }
+                else
+                {
+                    rDest += (sal_Char)c;
+                }
+            }
+            break;
+        default:
+            {
+                // We allow 8 bit encoding here only
+                sal_Char cOut = ByteString::ConvertFromUnicode( c,
+                                                        eDestEnc, FALSE );
+                // If the character could not be converted to the destination
+                // character set, the original character code is truncated to
+                // an 8-bit-character code.
+                if( !cOut )
+                    cOut = (sal_Char)c;
+                if( (cOut>=' ' && cOut<='~') || cOut=='\t' )
+                    rDest += cOut;
+                else
+                    (((rDest += '&') += '#') +=
+                        ByteString::CreateFromInt32( (sal_Int32)cOut )) += ';';
+            }
+        }
     }
 }
 
@@ -283,7 +301,7 @@ void HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
         eDestEnc = gsl_getSystemTextEncoding();
 
     for( sal_uInt32 i=0UL, nLen = rSrc.Len(); i < nLen; i++ )
-        lcl_ConvertCharToHTML( rSrc.GetChar( i ), rDest,  eDestEnc );
+        lcl_ConvertCharToHTML( rSrc.GetChar( (xub_StrLen)i ), rDest,  eDestEnc );
 }
 
 SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
@@ -311,7 +329,7 @@ SvStream& HTMLOutFuncs::Out_String( SvStream& rStream, const String& rStr,
                                     rtl_TextEncoding eDestEnc )
 {
     for( sal_uInt32 n = 0UL; n < rStr.Len(); n++ )
-        HTMLOutFuncs::Out_Char( rStream, rStr.GetChar( n ), eDestEnc );
+        HTMLOutFuncs::Out_Char( rStream, rStr.GetChar( (xub_StrLen)n ), eDestEnc );
     return rStream;
 }
 
@@ -686,7 +704,7 @@ ByteString& HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString& aStrTD,
             }
             else
                 nLang = LANGUAGE_SYSTEM;
-            ((aStrTD += nLang) += ';') += aNumStr;
+            ((aStrTD += ByteString::CreateFromInt32(nLang)) += ';') += aNumStr;
         }
         aStrTD += '\"';
     }
