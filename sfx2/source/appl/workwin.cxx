@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 11:38:20 $
+ *  last change: $Author: obo $ $Date: 2001-02-20 08:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2678,7 +2678,8 @@ void SfxWorkWindow::EndAutoShow_Impl( Point aPos )
         if ( p && p->IsAutoHide() )
         {
             Point aLocalPos = p->ScreenToOutputPixel( aPos );
-            Rectangle aRect( Point(), p->GetSizePixel() );
+        Point aEmptyPoint = Point();
+            Rectangle aRect( aEmptyPoint, p->GetSizePixel() );
             if ( !aRect.IsInside( aLocalPos ) )
                 p->FadeOut();
         }
