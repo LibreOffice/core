@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.30 2002-05-06 09:34:55 bm Exp $
+	$Id: chart.mod,v 1.31 2002-05-06 10:08:55 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -230,9 +230,9 @@
 	that represents the data for the whole chart
 -->
 <!ELEMENT chart:series ( chart:domain*,
-                         chart:mean-value,
-						 chart:regression-curve,
-						 chart:error-indicator,
+                         chart:mean-value?,
+						 chart:regression-curve?,
+						 chart:error-indicator?,
 						 chart:data-point* )>
 <!ATTLIST chart:series
 		  chart:values-cell-range-address %cell-range-address; #IMPLIED
