@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:50:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,12 +132,6 @@
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OFAACCFG_HXX //autogen
-#include <offmgr/ofaaccfg.hxx>
-#endif
 #ifndef _MySVXACORR_HXX
 #include <svx/svxacorr.hxx>
 #endif
@@ -245,6 +239,8 @@
 #include <sfx2/request.hxx>
 #endif
 
+#include <svx/acorrcfg.hxx>
+
 #define COMMON_INI_LIST \
         rView(rShell),\
         ePageMove(MV_NO),\
@@ -273,7 +269,7 @@
 
 SvxAutoCorrect* lcl_IsAutoCorr()
 {
-       SvxAutoCorrect* pACorr = OFF_APP()->GetAutoCorrConfig()->GetAutoCorrect();
+       SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     if( pACorr && !pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                             ChgFractionSymbol | ChgOrdinalNumber |
                             ChgToEnEmDash | SetINetAttr | Autocorrect ))
