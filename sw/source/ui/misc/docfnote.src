@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:07:48 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,21 +194,21 @@ TabPage TP_FOOTNOTEOPTION
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Nu~mmerierung" ;
         Text [ ENGLISH ] = "Numbering" ;
-        Text[ english_us ] = "Numbering";
+        Text[ english_us ] = "Num~bering";
         Text[ portuguese ] = "Numbering";
         Text[ russian ] = "Íóìåğàöèÿ";
         Text[ greek ] = "Áñßè~ìçóç";
         Text[ dutch ] = "Numbering";
-        Text[ french ] = "Numbering";
-        Text[ spanish ] = "Numbering";
+        Text[ french ] = "Nu~mérotation";
+        Text[ spanish ] = "~Numeración";
         Text[ italian ] = "Numbering";
         Text[ danish ] = "Numbering";
         Text[ swedish ] = "Nu~mrering";
         Text[ polish ] = "Numeracja";
         Text[ portuguese_brazilian ] = "Numbering";
-        Text[ japanese ] = "Numbering";
+        Text[ japanese ] = "”Ô†•t‚¯";
         Text[ korean ] = "Numbering";
-        Text[ chinese_simplified ] = "Numbering";
+        Text[ chinese_simplified ] = "±àºÅ";
         Text[ chinese_traditional ] = "½s¸¹";
         Text[ turkish ] = "Numbering";
         Text[ arabic ] = "ÇáÊÑŞíã";
@@ -267,24 +267,24 @@ TabPage TP_FOOTNOTEOPTION
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "~Zählung" ;
         Text [ ENGLISH ] = "Counting" ;
-        Text[ english_us ] = "Counting";
+        Text[ english_us ] = "~Counting";
         Text[ portuguese ] = "Counting";
         Text[ russian ] = "Ñ÷åò";
         Text[ greek ] = "Ìİôñçóç";
         Text[ dutch ] = "Counting";
-        Text[ french ] = "Counting";
-        Text[ spanish ] = "Counting";
+        Text[ french ] = "~Comptage";
+        Text[ spanish ] = "Contar";
         Text[ italian ] = "Counting";
         Text[ danish ] = "Counting";
-        Text[ swedish ] = "Counting";
-        Text[ polish ] = "Counting";
+        Text[ swedish ] = "Räk~ning";
+        Text[ polish ] = "Liczenie";
         Text[ portuguese_brazilian ] = "Counting";
-        Text[ japanese ] = "Counting";
+        Text[ japanese ] = "”‚¦‚é";
         Text[ korean ] = "Counting";
-        Text[ chinese_simplified ] = "Counting";
+        Text[ chinese_simplified ] = "¼ÆÊı";
         Text[ chinese_traditional ] = "­p¼Æ";
         Text[ turkish ] = "Counting";
-        Text[ arabic ] = "Counting";
+        Text[ arabic ] = "ÊÚÏÇÏ";
     };
     ListBox LB_NUMCOUNT
     {
@@ -450,7 +450,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ swedish ] = "~Framför" ;
         Text [ dutch ] = "~Ervoor" ;
         Text [ spanish ] = "~Delante" ;
-        Text [ english_us ] = "Be~fore" ;
+        Text [ english_us ] = "~Before" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "Ö®Ç°(~F)";
         Text[ russian ] = "Äî";
@@ -488,7 +488,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ swedish ] = "B~akom" ;
         Text [ dutch ] = "E~rachter" ;
         Text [ spanish ] = "D~etrás" ;
-        Text [ english_us ] = "Aft~er" ;
+        Text [ english_us ] = "~After" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "Ö®ºó(~E)";
         Text[ russian ] = "Ïîñëå";
@@ -518,7 +518,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ English ] = "Position" ;
         Text [ english_us ] = "Position" ;
         Text [ portuguese_brazilian ] = "Position" ;
-        Text [ swedish ] = "Position" ;
+        Text [ swedish ] = "Placering" ;
         Text [ danish ] = "Placering" ;
         Text [ italian ] = "Posizione" ;
         Text [ spanish ] = "Posición" ;
@@ -879,7 +879,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ swedish ] = "~På följande sida" ;
         Text [ dutch ] = "V~olgende pagina" ;
         Text [ spanish ] = "En pág. sig~uiente" ;
-        Text [ english_us ] = "~Start of next page" ;
+        Text [ english_us ] = "Star~t of next page" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ĞøÒ³(~S)";
         Text[ russian ] = "Ñëåäóşùàÿ ñòğàíèöà";
@@ -944,21 +944,21 @@ TabPage TP_ENDNOTEOPTION
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Nu~mmerierung" ;
         Text [ ENGLISH ] = "Numbering" ;
-        Text[ english_us ] = "Numbering";
+        Text[ english_us ] = "~Numbering";
         Text[ portuguese ] = "Numbering";
         Text[ russian ] = "Íóìåğàöèÿ";
         Text[ greek ] = "Áñßèì~çóç";
         Text[ dutch ] = "Numbering";
-        Text[ french ] = "Numbering";
-        Text[ spanish ] = "Numbering";
+        Text[ french ] = "Nu~mérotation";
+        Text[ spanish ] = "Numeración";
         Text[ italian ] = "Numbering";
         Text[ danish ] = "Numbering";
         Text[ swedish ] = "Nu~mrering";
         Text[ polish ] = "Numeracja";
         Text[ portuguese_brazilian ] = "Numbering";
-        Text[ japanese ] = "Numbering";
+        Text[ japanese ] = "”Ô†•t‚¯";
         Text[ korean ] = "Numbering";
-        Text[ chinese_simplified ] = "Numbering";
+        Text[ chinese_simplified ] = "±àºÅ";
         Text[ chinese_traditional ] = "½s¸¹";
         Text[ turkish ] = "Numbering";
         Text[ arabic ] = "ÇáÊÑŞíã";
@@ -1052,7 +1052,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ swedish ] = "~Framför" ;
         Text [ dutch ] = "~Ervoor" ;
         Text [ spanish ] = "~Delante" ;
-        Text [ english_us ] = "Be~fore" ;
+        Text [ english_us ] = "~Before" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "Ö®Ç°(~F)";
         Text[ russian ] = "Äî";
@@ -1090,7 +1090,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ swedish ] = "Ba~kom" ;
         Text [ dutch ] = "E~rachter" ;
         Text [ spanish ] = "D~etrás" ;
-        Text [ english_us ] = "Aft~er" ;
+        Text [ english_us ] = "~After" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "Ö®ºó(~E)";
         Text[ russian ] = "Ïîñëå";
