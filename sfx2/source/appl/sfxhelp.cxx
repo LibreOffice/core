@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:34:43 $
+ *  last change: $Author: pb $ $Date: 2004-10-26 10:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,6 +873,15 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
                 aFactoryShortName = aDefaultModule;
 
             aHelpText = pImp->GetHelpText( aCommandURL, aFactoryShortName );
+
+            // add some debug information?
+            if ( bIsDebug )
+            {
+                aHelpText += DEFINE_CONST_UNICODE("\n-------------\n");
+                aHelpText += String( aModuleIdentifier );
+                aHelpText += DEFINE_CONST_UNICODE("\n");
+                aHelpText += aCommandURL;
+            }
         }
     }
     catch ( Exception& )
