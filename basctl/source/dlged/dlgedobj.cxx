@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-23 16:12:17 $
+ *  last change: $Author: tbe $ $Date: 2001-03-30 12:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,7 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
         Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
         const ::rtl::OUString* pNames = aNames.getConstArray();
         sal_Int32 nCtrls = aNames.getLength();
-        ::std::vector<::rtl::OUString> aNameList(nCtrls);
+        ::std::vector< ::rtl::OUString > aNameList(nCtrls);
 
         // fill helper list
         for ( sal_Int16 i = 0; i < nCtrls; i++ )
