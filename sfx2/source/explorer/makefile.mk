@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pb $ $Date: 2001-05-07 10:37:30 $
+#   last change: $Author: dv $ $Date: 2001-07-09 15:17:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,9 +81,6 @@ SLOFILES = \
         $(SLO)$/nochaos.obj		\
         $(SLO)$/exptypes.obj	\
         $(SLO)$/infodlgs.obj	\
-        $(SLO)$/iodlg.obj		\
-        $(SLO)$/iodlgimp.obj	\
-        $(SLO)$/iodlgimpl.obj	\
         $(SLO)$/sfxdir.obj
 
 .IF "$(GUI)"=="WNT"
