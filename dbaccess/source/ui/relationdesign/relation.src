@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2002-05-28 20:14:08 $
+ *  last change: $Author: rt $ $Date: 2002-06-10 15:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,16 +560,16 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ russian ] = "~Insert";
             Text[ greek ] = "~Insert";
             Text[ dutch ] = "~Insert";
-            Text[ french ] = "~Insert";
+            Text[ french ] = "~Insertion";
             Text[ spanish ] = "~Insertar";
             Text[ finnish ] = "~Insert";
-            Text[ italian ] = "~Insert";
+            Text[ italian ] = "~Inserisci";
             Text[ danish ] = "~Insert";
             Text[ swedish ] = "~Infoga";
             Text[ polish ] = "~Insert";
             Text[ portuguese_brazilian ] = "~Insert";
-            Text[ japanese ] = "~Insert";
-            Text[ korean ] = "붙여넣기(~P)";
+            Text[ japanese ] = "挿入(~I)";
+            Text[ korean ] = "삽입(~I)";
             Text[ chinese_simplified ] = "插入(~I)";
             Text[ chinese_traditional ] = "插入(~I)";
             Text[ turkish ] = "~Insert";
