@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parhtml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:43:30 $
+ *  last change: $Author: mib $ $Date: 2001-10-15 08:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1870,23 +1870,23 @@ FASTBOOL HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     BOOL bUCS2B = FALSE;
     if( bSwitchToUCS2 )
     {
-        if( 0xfeU == (sal_Char)pHeader[0] &&
-            0xffU == (sal_Char)pHeader[1] )
+        if( 0xfeU == (sal_uChar)pHeader[0] &&
+            0xffU == (sal_uChar)pHeader[1] )
         {
             eEnc = RTL_TEXTENCODING_UCS2;
             bUCS2B = TRUE;
         }
-        else if( 0xffU == (sal_Char)pHeader[0] &&
-                 0xfeU == (sal_Char)pHeader[1] )
+        else if( 0xffU == (sal_uChar)pHeader[0] &&
+                 0xfeU == (sal_uChar)pHeader[1] )
         {
             eEnc = RTL_TEXTENCODING_UCS2;
         }
     }
     if( RTL_TEXTENCODING_UCS2 == eEnc &&
-        (0xfe == (sal_Char)pHeader[0] && 0xff == (sal_Char)pHeader[1]) ||
-        (0xff == (sal_Char)pHeader[0] && 0xfe == (sal_Char)pHeader[1]) )
+        (0xfe == (sal_uChar)pHeader[0] && 0xff == (sal_uChar)pHeader[1]) ||
+        (0xff == (sal_uChar)pHeader[0] && 0xfe == (sal_uChar)pHeader[1]) )
     {
-        if( 0xfe == (sal_Char)pHeader[0] )
+        if( 0xfe == (sal_uChar)pHeader[0] )
             bUCS2B = TRUE;
 
         sal_uInt32 nLen;
