@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-24 14:35:18 $
+ *  last change: $Author: os $ $Date: 2002-10-08 11:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1575,10 +1575,7 @@ Reference< XTextRange >  SwXShape::getAnchor(void) throw( RuntimeException )
             (rAnchor.GetCntntAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
-            SwPaM aPam(rPos);
-            DBG_ERROR("ParentText ?")
-            Reference< XText >  xText;
-            aRef = new SwXTextRange(aPam, xText);
+            aRef = SwXTextRange::CreateTextRangeFromPosition(pFmt->GetDoc(), rPos, 0);
         }
     }
     else
