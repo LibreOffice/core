@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-25 20:08:20 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,9 +146,6 @@
 #endif
 #ifndef _DOCFLD_HXX
 #include <docfld.hxx>
-#endif
-#ifndef _FINDER_HXX
-#include <finder.hxx>
 #endif
 
 
@@ -451,7 +448,7 @@ static ULONG SwDocStat::* __READONLY_DATA aDocStat2[ 4 ] =
     for( n = 0; n < 4; ++n )
         ((SwCalcExp*)VarTable[ aHashValue[ n + 7 ] ])->nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
 
-    SvxAddressItem aAdr( pPathFinder->GetAddress() );
+    SvxAddressItem aAdr( *SFX_APP()->GetIniManager() );
 
     ((SwCalcExp*)VarTable[ aHashValue[ 11 ] ])->nValue.PutString( aAdr.GetFirstName() );
     ((SwCalcExp*)VarTable[ aHashValue[ 12 ] ])->nValue.PutString( aAdr.GetName() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 10:59:15 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,17 @@
 #ifndef _PARHTML_HXX //autogen
 #include <svtools/parhtml.hxx>
 #endif
+#ifndef _SFXINIMGR_HXX //autogen
+#include <svtools/iniman.hxx>
+#endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
+#endif
+#ifndef _SFXAPP_HXX //autogen
+#include <sfx2/app.hxx>
 #endif
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
@@ -134,9 +140,6 @@
 #endif
 #ifndef _SW3IO_HXX
 #include <sw3io.hxx>
-#endif
-#ifndef _FINDER_HXX
-#include <finder.hxx>
 #endif
 #ifndef _W4WFLT_HXX
 #include <w4wflt.hxx>           // AutoDetect
@@ -506,10 +509,11 @@ BOOL SwReader::CheckPasswd( const String& rPasswd, const Reader& rOptions )
 ULONG ReadFilterFlags( const sal_Char* pName, const sal_Char* pAltName )
 {
     String sName( String::CreateFromAscii( pName ));
-    String aStr( pPathFinder->GetIniUserEntry( sName ));   // aName suchen
+    String aStr( SFX_APP()->GetIniManager()->Get( SFX_GROUP_USER, sName ));   // aName suchen
 
     if( !aStr.Len() && pAltName && *pAltName  )
-        aStr = pPathFinder->GetIniUserEntry( sName.AssignAscii( pAltName ));
+        aStr = SFX_APP()->GetIniManager()->Get( SFX_GROUP_USER,
+                                            sName.AssignAscii( pAltName ));
 
     ULONG nVal = 0;
     if( aStr.Len() )
@@ -1510,6 +1514,9 @@ Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 10:59:15  hr
+      initial import
+
       Revision 1.175  2000/09/18 16:04:39  willem.vandorp
       OpenOffice header added.
 

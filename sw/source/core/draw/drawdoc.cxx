@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,14 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
+#endif
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
@@ -126,11 +126,14 @@
 |*
 \************************************************************************/
 
+const String GetPalettePath()
+{
+    SvtPathOptions aPathOpt;
+    return aPathOpt.GetPalettePath();
+}
 
 SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
-    FmFormModel( SFX_APP()->GetAppIniManager()->Get(
-                                        SFX_KEY_PALETTE_PATH ),
-                 &pD->GetAttrPool(), 0, TRUE ),
+    FmFormModel( ::GetPalettePath(), &pD->GetAttrPool(), 0, TRUE ),
     pDoc( pD )
 {
     SetScaleUnit( MAP_TWIP );
@@ -170,9 +173,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
 
 
 SwDrawDocument::SwDrawDocument( SfxItemPool *pPool, SwDocShell *pDocSh )
-    : FmFormModel( SFX_APP()->GetAppIniManager()->
-                                Get( SFX_KEY_PALETTE_PATH ),
-                     pPool, 0, TRUE ),
+    : FmFormModel( ::GetPalettePath(), pPool, 0, TRUE ),
     pDoc( pDocSh->GetDoc() )
 {
     SetScaleUnit( MAP_TWIP );

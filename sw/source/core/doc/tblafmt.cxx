@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _SFX_INIMGR_HXX
 #include <sfx2/inimgr.hxx>
 #endif
@@ -122,9 +125,6 @@
 #endif
 #ifndef _CELLATR_HXX
 #include <cellatr.hxx>
-#endif
-#ifndef _FINDER_HXX
-#include <finder.hxx>
 #endif
 
 
@@ -904,8 +904,8 @@ BOOL SwTableAutoFmtTbl::Load()
                 RTL_CONSTASCII_STRINGPARAM( sAutoTblFmtName )));
     if( SFX_INIMANAGER()->SearchFile( sNm, SFX_KEY_USERCONFIG_PATH ))
     {
-        SvFileStream aStream( sNm, STREAM_STD_READ );
-        bRet = Load( aStream );
+        SfxMedium aStream( sNm, STREAM_STD_READ, TRUE );
+        bRet = Load( *aStream.GetInStream() );
     }
     else
         bRet = FALSE;
@@ -914,7 +914,8 @@ BOOL SwTableAutoFmtTbl::Load()
 
 BOOL SwTableAutoFmtTbl::Save() const
 {
-    String sNm( URIHelper::SmartRelToAbs(SFX_INIMANAGER()->Get( SFX_KEY_USERCONFIG_PATH )));
+    SvtPathOptions aPathOpt;
+    String sNm( URIHelper::SmartRelToAbs( aPathOpt.GetUserConfigPath() ));
     sNm += INET_PATH_TOKEN;
     sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( sAutoTblFmtName ));
     SfxMedium aStream(sNm, STREAM_STD_WRITE, TRUE );

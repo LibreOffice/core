@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,15 +66,20 @@
 
 #pragma hdrstop
 
-
-#ifndef _SFXDOCINF_HXX //autogen
-#include <sfx2/docinf.hxx>
-#endif
 #ifndef _HTMLTOKN_H
 #include <svtools/htmltokn.h>
 #endif
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
+#endif
+#ifndef _SFXINIMGR_HXX //autogen
+#include <svtools/iniman.hxx>
+#endif
+#ifndef _SFXAPP_HXX //autogen
+#include <sfx2/app.hxx>
+#endif
+#ifndef _SFXDOCINF_HXX //autogen
+#include <sfx2/docinf.hxx>
 #endif
 
 
@@ -84,13 +89,24 @@
 #ifndef _NDTXT_HXX //autogen
 #include <ndtxt.hxx>
 #endif
-#include "doc.hxx"
-#include "finder.hxx"
-#include "fldbas.hxx"
-#include "docufld.hxx"
-#include "flddat.hxx"
-#include "htmlfld.hxx"
-#include "swhtml.hxx"
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
+#endif
+#ifndef _DOCUFLD_HXX
+#include <docufld.hxx>
+#endif
+#ifndef _FLDDAT_HXX
+#include <flddat.hxx>
+#endif
+#ifndef _HTMLFLD_HXX
+#include <htmlfld.hxx>
+#endif
+#ifndef _SWHTML_HXX
+#include <swhtml.hxx>
+#endif
 
 struct HTMLNumFmtTblEntry
 {
@@ -307,7 +323,7 @@ void SwHTMLParser::NewField()
         (RES_EXTUSERFLD == (RES_FIELDS)nType ||
          RES_AUTHORFLD == (RES_FIELDS)nType) )
     {
-        String aUser( pPathFinder->GetUserName() );
+        String aUser( SFX_APP()->GetIniManager()->GetUserFullName() );
         const SfxDocumentInfo *pDocInfo = pDoc->GetInfo();
         const String& rChanged = pDocInfo->GetChanged().GetName();
         const String& rCreated = pDocInfo->GetCreated().GetName();
@@ -683,11 +699,14 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfld.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfld.cxx,v 1.2 2000-10-06 13:08:26 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:55  hr
+      initial import
+
       Revision 1.30  2000/09/18 16:04:44  willem.vandorp
       OpenOffice header added.
 

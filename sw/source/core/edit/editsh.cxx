@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-28 11:31:07 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,6 @@
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _FINDER_HXX //autogen
-#include <finder.hxx>
 #endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,24 +113,30 @@
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
-#endif
 
-#ifndef _SVX_ADRITEM_HXX
-#include <svx/adritem.hxx>
-#endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _INTN_HXX //autogen
+#include <tools/intn.hxx>
+#endif
+#ifndef _APP_HXX //autogen
+#include <vcl/svapp.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
+#endif
+#ifndef _SFXINIMGR_HXX //autogen
+#include <svtools/iniman.hxx>
+#endif
+#ifndef _SFXAPP_HXX //autogen
+#include <sfx2/app.hxx>
+#endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
@@ -138,10 +144,11 @@
 #ifndef _SFXDOCTEMPL_HXX //autogen
 #include <sfx2/doctempl.hxx>
 #endif
-
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
+#ifndef _SVX_ADRITEM_HXX
+#include <svx/adritem.hxx>
 #endif
+
+
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
 #endif
@@ -190,9 +197,6 @@
 #ifndef _FLDDAT_HXX
 #include <flddat.hxx>
 #endif
-#ifndef _FINDER_HXX
-#include <finder.hxx>       // AuthorField
-#endif
 #ifndef _DOCFLD_HXX
 #include <docfld.hxx>
 #endif
@@ -213,6 +217,9 @@
 #endif
 #ifndef _HINTS_HXX
 #include <hints.hxx>
+#endif
+#ifndef _UNOPRNMS_HXX
+#include <unoprnms.hxx>
 #endif
 
 #define URL_DECODE  INetURLObject::DECODE_WITH_CHARSET
@@ -453,9 +460,16 @@ SwAuthorFieldType::SwAuthorFieldType(SwDoc* pDocument)
 
 String SwAuthorFieldType::Expand(sal_uInt32 nFmt) const
 {
+    String sRet;
+    SvtUserOptions aOpt;
     if((nFmt & 0xff) == AF_NAME)
-        return pPathFinder->GetUserName();
-    return pPathFinder->GetShortUserName();
+    {
+        sRet = SFX_APP()->GetIniManager()->GetUserFullName();
+//      ((sRet = aOpt.GetFirstName() ) += ' ' ) += aOpt.GetLastName();
+    }
+    else
+        sRet = aOpt.GetID();
+    return sRet;
 }
 
 SwFieldType* SwAuthorFieldType::Copy() const
@@ -1844,7 +1858,7 @@ SwFieldType* SwExtUserFieldType::Copy() const
  ---------------------------------------------------------------------------*/
 String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 nFormat) const
 {
-    SvxAddressItem aAdr( pPathFinder->GetAddress() );
+    SvxAddressItem aAdr( *SFX_APP()->GetIniManager() );
     String aRet( aEmptyStr );
     sal_uInt16 nRet = USHRT_MAX;
     switch(nSub)

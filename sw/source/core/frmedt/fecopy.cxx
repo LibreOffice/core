@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2000-10-06 13:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,32 +73,29 @@
 #define NEEDED_BY_FESHVIEW
 #endif
 
-#ifndef _SVX_FILLITEM_HXX //autogen
-#include <svx/xfillit.hxx>
+#ifndef _GRAPH_HXX //autogen
+#include <vcl/graph.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#ifndef _SVDPAGE_HXX //autogen
-#include <svx/svdpage.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
-#include <sfx2/app.hxx>
-#endif
-#ifndef _XOUTBMP_HXX //autogen
-#include <svx/xoutbmp.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX //autogen
-#include <svx/svdoole2.hxx>
-#endif
-#ifndef _FM_FMMODEL_HXX
-#include <svx/fmmodel.hxx>
+#ifndef _EXCHANGE_HXX //autogen
+#include <vcl/exchange.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
-#ifndef _GRAPH_HXX //autogen
-#include <vcl/graph.hxx>
+#ifndef _DTRANS_HXX //autogen
+#include <so3/dtrans.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _SFXDISPATCH_HXX //autogen
+#include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
 #endif
 #ifndef _SVX_XEXCH_HXX
 #include <svx/xexch.hxx>
@@ -112,26 +109,32 @@
 #ifndef _SVX_XFLCLIT_HXX //autogen
 #include <svx/xflclit.hxx>
 #endif
-#ifndef _DTRANS_HXX //autogen
-#include <so3/dtrans.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
-#include <sfx2/dispatch.hxx>
-#endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
-#endif
 #ifndef _SVDCAPT_HXX //autogen
 #include <svx/svdocapt.hxx>
 #endif
 #ifndef _SVDOUNO_HXX //autogen
 #include <svx/svdouno.hxx>
+#endif
+#ifndef _SVX_FILLITEM_HXX //autogen
+#include <svx/xfillit.hxx>
+#endif
+#ifndef _SVDPAGE_HXX //autogen
+#include <svx/svdpage.hxx>
+#endif
+#ifndef _XOUTBMP_HXX //autogen
+#include <svx/xoutbmp.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX //autogen
+#include <svx/svdoole2.hxx>
+#endif
+#ifndef _FM_FMMODEL_HXX
+#include <svx/fmmodel.hxx>
 #endif
 
 #ifndef _FMTANCHR_HXX //autogen
@@ -211,12 +214,6 @@
 #endif
 #ifndef _REDLENUM_HXX
 #include <redlenum.hxx>
-#endif
-#ifndef _SFXVIEWSH_HXX
-#include <sfx2/viewsh.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
 #endif
 
 
@@ -1158,9 +1155,10 @@ void SwFEShell::Paste( SvStorageStream& rStrm, USHORT nAction,
     SET_CURR_SHELL( this );
     StartAllAction();
     StartUndo();
-    String aTmpStr( SFX_APP()->GetAppIniManager()->Get(SFX_KEY_PALETTE_PATH));
-    FmFormModel* pModel = new FmFormModel( aTmpStr, (SfxItemPool*)0,
-                                    (SvPersist*)GetDoc()->GetDocShell() );
+
+    SvtPathOptions aPathOpt;
+    FmFormModel* pModel = new FmFormModel( aPathOpt.GetPalettePath(),
+                    (SfxItemPool*)0, (SvPersist*)GetDoc()->GetDocShell() );
     pModel->SetStreamingSdrModel(TRUE);
     rStrm.Seek(0);
     pModel->GetItemPool().Load( rStrm );
