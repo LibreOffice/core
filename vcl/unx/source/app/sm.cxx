@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:16:54 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,6 +403,9 @@ void SessionManagerClient::close()
     {
         ICEConnectionObserver::deactivate();
 #ifdef USE_SM_EXTENSION
+        // shut down the listening thread
+        ICEConnectionObserver::deactivate();
+        // close the connection
         SmcCloseConnection( aSmcConnection, 0, NULL );
         SMprintf( "SmcConnection closed\n" );
 #endif
@@ -481,6 +484,7 @@ void ICEConnectionObserver::deactivate()
             ICEThread = NULL;
         }
         osl_destroyMutex( ICEMutex );
+        ICEMutex = NULL;
     }
 }
 
