@@ -2,9 +2,9 @@
  *
  *  $RCSfile: st_list.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:27:41 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,8 @@ class DynamicList : public ST_List< XY* >
 
 template <class XX>
 ST_List<XX>::ST_List()
-    :   len(0),
-        inhalt(0),
+    :   inhalt(0),
+        len(0),
         allocated(0)
 {
     alloc(1);
@@ -185,8 +185,8 @@ ST_List<XX>::ST_List()
 
 template <class XX>
 ST_List<XX>::ST_List( const ST_List<XX> & i_rList )
-    :   len(0),
-        inhalt(0),
+    :   inhalt(0),
+        len(0),
         allocated(0)
 {
     alloc(i_rList.size());
