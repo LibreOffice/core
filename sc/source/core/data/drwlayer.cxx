@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:25:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,9 @@ __EXPORT ScDrawLayer::~ScDrawLayer()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
-    Clear();
+    // #116168#
+    //Clear();
+    ClearModel(sal_True);
 
     delete pUndoGroup;
     if( !--nInst )
@@ -474,7 +476,12 @@ void ScDrawLayer::ScCopyPage( USHORT nOldPos, USHORT nNewPos, BOOL bAlloc )
         SdrObject* pOldObject = aIter.Next();
         while (pOldObject)
         {
-            SdrObject* pNewObject = pOldObject->Clone( pNewPage, this );
+            // #116235#
+            SdrObject* pNewObject = pOldObject->Clone();
+            //SdrObject* pNewObject = pOldObject->Clone( pNewPage, this );
+            pNewObject->SetModel(this);
+            pNewObject->SetPage(pNewPage);
+
             pNewObject->NbcMove(Size(0,0));
             pNewPage->InsertObject( pNewObject );
             if (bRecording)
@@ -1525,7 +1532,12 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, USHORT nTab, const Rectangle
                 DBG_ASSERT( pDestPage, "no page" );
                 if (pDestPage)
                 {
-                    SdrObject* pNewObject = pOldObject->Clone( pDestPage, pDestModel );
+                    // #116235#
+                    SdrObject* pNewObject = pOldObject->Clone();
+                    //SdrObject* pNewObject = pOldObject->Clone( pDestPage, pDestModel );
+                    pNewObject->SetModel(pDestModel);
+                    pNewObject->SetPage(pDestPage);
+
                     pNewObject->NbcMove(Size(0,0));
                     pDestPage->InsertObject( pNewObject );
 
@@ -1644,7 +1656,11 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, USHORT nSourceTab, cons
         Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
         if ( rSourceRange.IsInside( aObjRect ) )
         {
-            SdrObject* pNewObject = pOldObject->Clone( pDestPage, this );
+            // #116235#
+            SdrObject* pNewObject = pOldObject->Clone();
+            //SdrObject* pNewObject = pOldObject->Clone( pDestPage, this );
+            pNewObject->SetModel(this);
+            pNewObject->SetPage(pDestPage);
 
             if ( bMirrorObj )
                 MirrorRTL( pNewObject );        // first mirror, then move
