@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:18:40 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1790,13 +1790,22 @@ sal_Bool FmXFormShell::CanMoveLeft(const Reference< XFormController>& xControlle
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::CanMoveLeft(const Reference< XPropertySet>& _xControllerModel)
 {
-    if (!_xControllerModel.is())
-        return sal_False;
-
-    Reference< XResultSet> xCursor(_xControllerModel, UNO_QUERY);
-    sal_Bool bIsNew = ::comphelper::getBOOL(_xControllerModel->getPropertyValue(FM_PROP_ISNEW));
-    sal_Int32 nCount    = ::comphelper::getINT32(_xControllerModel->getPropertyValue(FM_PROP_ROWCOUNT));
-    return nCount && (!xCursor->isFirst() || bIsNew);
+    sal_Bool bCan = sal_False;
+    try
+    {
+        if ( _xControllerModel.is() )
+        {
+            Reference< XResultSet> xCursor(_xControllerModel, UNO_QUERY);
+            sal_Bool bIsNew = ::comphelper::getBOOL(_xControllerModel->getPropertyValue(FM_PROP_ISNEW));
+            sal_Int32 nCount    = ::comphelper::getINT32(_xControllerModel->getPropertyValue(FM_PROP_ROWCOUNT));
+            bCan = ( nCount && ( !xCursor->isFirst() || bIsNew ) );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "FmXFormShell::CanMoveLeft: caught an exception!" );
+    }
+    return bCan;
 }
 
 //------------------------------------------------------------------------------
@@ -1812,25 +1821,34 @@ sal_Bool FmXFormShell::CanMoveRight(const Reference< XFormController>& xControll
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::CanMoveRight(const Reference< XPropertySet>& _xControllerModel)
 {
-    if (!_xControllerModel.is())
-        return sal_False;
+    sal_Bool bCan = sal_False;
+    try
+    {
+        if ( _xControllerModel.is() )
+        {
+            Reference< XResultSet> xCursor(_xControllerModel, UNO_QUERY);
+            sal_Int32 nCount        = ::comphelper::getINT32(_xControllerModel->getPropertyValue(FM_PROP_ROWCOUNT));
+            sal_Bool  bIsModified   = ::comphelper::getBOOL(_xControllerModel->getPropertyValue(FM_PROP_ISMODIFIED));
+            sal_Bool  bIsNew        = ::comphelper::getBOOL(_xControllerModel->getPropertyValue(FM_PROP_ISNEW));
+            sal_Bool  bCanInsert    = OStaticDataAccessTools().canInsert(_xControllerModel);
 
-    Reference< XResultSet> xCursor(_xControllerModel, UNO_QUERY);
-    sal_Int32 nCount        = ::comphelper::getINT32(_xControllerModel->getPropertyValue(FM_PROP_ROWCOUNT));
-    sal_Bool  bIsModified   = ::comphelper::getBOOL(_xControllerModel->getPropertyValue(FM_PROP_ISMODIFIED));
-    sal_Bool  bIsNew        = ::comphelper::getBOOL(_xControllerModel->getPropertyValue(FM_PROP_ISNEW));
-    sal_Bool  bCanInsert    = OStaticDataAccessTools().canInsert(_xControllerModel);
-
-    return  (
-                (   nCount
-                &&  !xCursor->isLast()
-                &&  !bIsNew
-                )
-            )
-            ||
-            (
-                bCanInsert && (!bIsNew || bIsModified)
-            );
+            bCan =  (
+                        (   nCount
+                        &&  !xCursor->isLast()
+                        &&  !bIsNew
+                        )
+                    )
+                    ||
+                    (
+                        bCanInsert && (!bIsNew || bIsModified)
+                    );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "FmXFormShell::CanMoveLeft: caught an exception!" );
+    }
+    return bCan;
 }
 
 //------------------------------------------------------------------------
