@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcommuni.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 15:47:30 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@ DECLARE_LIST( StringList, String * );
 #define _STRING_LIST
 #endif
 
+#ifndef _PROCESS_HXX
+#include <basic/process.hxx>
+#endif
+
 class Process;
 
 class CommunicationManagerClientViaSocketTT : public CommunicationManagerClientViaSocket
@@ -78,7 +82,7 @@ public:
     CommunicationManagerClientViaSocketTT();
 
     virtual BOOL StartCommunication();
-    virtual BOOL StartCommunication( String aApp, String aParams );
+    virtual BOOL StartCommunication( String aApp, String aParams, Environment *pChildEnv );
 
 protected:
     virtual BOOL RetryConnect();
@@ -86,6 +90,7 @@ protected:
     Time aFirstRetryCall;
     String aAppPath;
     String aAppParams;
+    Environment aAppEnv;
     Process *pProcess;
 };
 
