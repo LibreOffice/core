@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoregisterhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-20 11:10:53 $
+ *  last change: $Author: lla $ $Date: 2003-01-21 13:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ AutomaticRegisterHelper::AutomaticRegisterHelper(rtl::OUString const& _sDLLName,
     else
     {
         fprintf(stderr, "warning: Function 'registerAllTestFunction' not found.\n");
+        fprintf(stderr, "If you think, you are right, build testshl2 completly new.\n");
     }
 }
 
