@@ -1,3 +1,9 @@
+mkdir: %_DEST%\bin%_EXT%\local
+
+..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.bin
+..\%__SRC%\bin\soremote.exe %_DEST%\bin%_EXT%\remote\soffice.exe
+..\%__SRC%\bin\solocal.exe %_DEST%\bin%_EXT%\local\soffice.exe
+
 ..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.exe
 ..\%__SRC%\bin\wrp?????.dll %_DEST%\bin%_EXT%\wrp?????.dll
 
