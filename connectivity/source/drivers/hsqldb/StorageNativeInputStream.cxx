@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageNativeInputStream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:09:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,15 @@ using namespace ::connectivity::hsqldb;
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_openStream
   (JNIEnv * env, jobject obj_this,jstring key, jstring name, jint mode)
 {
-    Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_openStream(env,obj_this,name,key,mode);
+#if OSL_DEBUG_LEVEL > 1
+    {
+        ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+        sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".input"));
+        ::rtl::OString sName = ::rtl::OUStringToOString(sOrgName,RTL_TEXTENCODING_ASCII_US);
+        getStreams()[sOrgName] = fopen( sName.getStr(), "a+" );
+    }
+#endif
+    StorageContainer::registerStream(env,name,key,mode);
 }
 // -----------------------------------------------------------------------------
 
@@ -141,39 +149,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
 JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
   (JNIEnv * env, jobject obj_this,jstring key, jstring name, jbyteArray buffer, jint off, jint len)
 {
-    ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
-    Reference< XInputStream> xIn = pHelper.get() ? pHelper->getInputStream() : Reference< XInputStream>();
-    OSL_ENSURE(xIn.is(),"Input stream is NULL!");
-    if ( xIn.is() )
-    {
-        sal_Int32 nBytesRead = 0;
-
-        jsize nLen = env->GetArrayLength(buffer);
-        Sequence< ::sal_Int8 > aData(nLen);
-
-        sal_Int32 av = xIn->available();
-        if ( av != 0 && nLen > av)
-            nBytesRead = xIn->readBytes(aData, av);
-        else
-            nBytesRead = xIn->readBytes(aData,nLen);
-
-        // Casting bytesRead to an int is okay, since the user can
-        // only pass in an integer length to read, so the bytesRead
-        // must <= len.
-        //
-        if (nBytesRead <= 0) {
-            return -1;
-        } else if (nBytesRead < len) {
-            env->SetByteArrayRegion(buffer,off,nBytesRead,&aData[0]);
-        } else {
-            env->SetByteArrayRegion(buffer,off,len,&aData[0]);
-        }
-        return nBytesRead;
-    }
-    ThrowException( env,
-                    "java/io/IOException",
-                    "Stream is not valid");
-    return -1;
+    return Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2_3BII(env,obj_this,name,key,buffer,off,len);
 }
 // -----------------------------------------------------------------------------
 
@@ -185,6 +161,14 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_close
   (JNIEnv * env, jobject obj_this,jstring key, jstring name)
 {
+#if OSL_DEBUG_LEVEL > 1
+    {
+        ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+        sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".input"));
+        fclose( getStreams()[sOrgName] );
+        getStreams().erase(sOrgName);
+    }
+#endif
     StorageContainer::revokeStream(env,name,key);
 }
 // -----------------------------------------------------------------------------
@@ -228,7 +212,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputSt
             }
             catch(Exception& e)
             {
-                OSL_ENSURE(0,"Exception catched! : writeBytes(aData);");
+                OSL_ENSURE(0,"Exception catched! : skip();");
                 if (JNI_FALSE != env->ExceptionCheck())
                     env->ExceptionClear();
                 ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
@@ -268,7 +252,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
         }
         catch(Exception& e)
         {
-            OSL_ENSURE(0,"Exception catched! : writeBytes(aData);");
+            OSL_ENSURE(0,"Exception catched! : available();");
             if (JNI_FALSE != env->ExceptionCheck())
                 env->ExceptionClear();
             ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
@@ -306,10 +290,13 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
         Sequence< ::sal_Int8 > aData(nLen);
 
         sal_Int32 av = xIn->available();
-        if ( av != 0 && nLen > av)
-            nBytesRead = xIn->readBytes(aData, av);
-        else
-            nBytesRead = xIn->readBytes(aData,nLen);
+        if ( av > 0 )
+        {
+            if (nLen > av)
+                nBytesRead = xIn->readBytes(aData, av);
+            else
+                nBytesRead = xIn->readBytes(aData,nLen);
+        }
 
         // Casting bytesRead to an int is okay, since the user can
         // only pass in an integer length to read, so the bytesRead
@@ -318,7 +305,14 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
         if (nBytesRead <= 0) {
             return -1;
         }
-        env->SetByteArrayRegion(buffer,0,nLen,&aData[0]);
+        OSL_ENSURE(nLen >= nBytesRead,"Buffer is too small!");
+        OSL_ENSURE(aData.getLength() >= nBytesRead,"Buffer is too small!");
+        env->SetByteArrayRegion(buffer,0,nBytesRead,&aData[0]);
+#if OSL_DEBUG_LEVEL > 1
+        ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+        sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".input"));
+        fwrite(&aData[0],sizeof(sal_Int8),nBytesRead,getStreams()[sOrgName]);
+#endif
     }
     return nBytesRead;
 }
