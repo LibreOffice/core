@@ -14,6 +14,8 @@ document.writeln("==============================================================
 document.writeln("JScript<br>");
 document.writeln("================================================================================<p>");
 
+//var name : String = "Fred";
+//print(name);
 var arr= new Array( 1, 2, 3, 4, 0);
 var arrInt= new Array( 1,2,3,4,5);
 var arrDouble= new Array( 1.2345, 12.345, 123.45, 1234.5, 12345);
@@ -322,41 +324,84 @@ for(i in _ret)
     }
 }
 Log.print( bOk, "methodXInterface");
-
+//======================================================================================
 document.writeln("<br>");
+var inVal, outVal, retVal;
+outVal = new Array();
 
+inVal = 77;
+retVal = oletest.in_methodByte(inVal)
 oletest.testout_methodByte( outVal );
-Log.print( outVal[0] == 111, "testout_methodByte");
+Log.print( retVal == inVal, "in_methodByte");
+Log.print( outVal[0] == inVal, "testout_methodByte");
 
+inVal = 3.14
+retVal = oletest.in_methodFloat(inVal);
 oletest.testout_methodFloat( outVal );
+Log.print( retVal > 3.14 && retVal < 3.15, "in_methodFloat");
 Log.print( outVal[0] > 3.13 && outVal[0] < 3.15, "testout_methodFloat");
+//Log.print( outVal[0] == inVal, "testout_methodFloat");
 
+retVal = oletest.in_methodDouble(inVal)
 oletest.testout_methodDouble( outVal );
+Log.print( retVal == inVal, "in_methodDouble");
 Log.print( outVal[0] == 3.14, "testout_methodDouble" );
 
+inVal = true;
+retVal = oletest.in_methodBool(inVal);
 oletest.testout_methodBool( outVal );
+Log.print(retVal == inVal, "in_methodBool");
 Log.print( outVal[0] == true, "testout_methodBool");
 
+inVal = 111
+retVal = oletest.in_methodShort(inVal);
 oletest.testout_methodShort( outVal );
-Log.print( outVal[0] == 222, "testout_methodShort");
+Log.print(retVal == inVal, "in_methodShort");
+Log.print( outVal[0] == inVal, "testout_methodShort");
 
+retVal = oletest.in_methodUShort(inVal);
 oletest.testout_methodUShort( outVal );
-Log.print( outVal[0] == 333, "testout_methodUShort");
+Log.print(retVal == inVal, "in_methodUShort");
+Log.print( outVal[0] == inVal, "testout_methodUShort");
 
+retVal = oletest.in_methodLong(inVal); 
 oletest.testout_methodLong( outVal );
-Log.print( outVal[0] == 444, "testout_methodLong");
+Log.print(retVal == inVal, "in_methodLong");
+Log.print( outVal[0] == inVal, "testout_methodLong");
 
+retVal = oletest.in_methodULong(inVal);
 oletest.testout_methodULong( outVal );
-Log.print( outVal[0] == 555, "testout_methodULong");
+Log.print(retVal == inVal, "in_methodULong");
+Log.print( outVal[0] == inVal, "testout_methodULong");
 
+retVal = oletest.in_methodChar(inVal);
 oletest.testout_methodChar( outVal );
-Log.print( outVal[0] == 65, "testout_methodChar");
+Log.print(retVal == inVal, "in_methodChar");
+Log.print( outVal[0] == inVal, "testout_methodChar");
 
+inVal = "Hello World";
+retVal = oletest.in_methodString(inVal);
 oletest.testout_methodString( outVal );
-Log.print( outVal[0] == "a little string", "testout_methodString");
+Log.print(retVal == inVal, "in_methodString");
+Log.print( outVal[0] == inVal, "testout_methodString");
 
+retVal = oletest.in_methodAny(inVal);
 oletest.testout_methodAny( outVal );
-Log.print( outVal[0] == "I am a string in an any", "testout_methodAny");
+Log.print(retVal == inVal, "in_methodAny");
+Log.print( outVal[0] == inVal, "testout_methodAny");
+
+inVal =  new Object();
+retVal = oletest.in_methodXInterface(inVal);
+oletest.testout_methodXInterface(outVal);
+Log.print(retVal === inVal, "in_methodXInterface");
+Log.print(outVal[0] === inVal, "testout_methodXInterface");
+
+inVal =  oletest;
+retVal = oletest.in_methodXInterface(inVal);
+oletest.testout_methodXInterface(outVal);
+Log.print(retVal === inVal, "in_methodXInterface");
+Log.print(outVal[0] === inVal, "testout_methodXInterface");
+
 
 oletest.testout_methodSequence( outVal );
 var arr= new VBArray( outVal[0]).toArray();
@@ -395,61 +440,82 @@ var in3= -2222;
 oletest.testout_methodMulParams4( in1, outVal, in2, outVal2, in3 );
 Log.print( (outVal[0] > 4.13 && outVal[0] < 4.15) && (outVal2[0] == 1112), "testout_methodMulParams4");
 
-oletest.testout_methodXInterface( outVal );
-var obj= outVal[0];
-Log.print( outVal[0].AttrAny2 == "Property Any", "testout_methodXInterface");
-
 document.writeln("<p>");
 
-outVal[0]= 100;
+inVal = 100;
+outVal[0]= inVal;
 oletest.testinout_methodByte( outVal );
-Log.print( outVal[0] == 101, "testinout_methodByte");
+oletest.testinout_methodByte( outVal );
+Log.print( outVal[0] == inVal, "testinout_methodByte");
 
-outVal[0]= 3.14;
+inVal = 3.14;
+outVal[0]= inVal;
 oletest.testinout_methodFloat( outVal );
-Log.print( outVal[0] > 4.13 && outVal[0] < 4.15, "testinout_methodFloat");
+oletest.testinout_methodFloat( outVal );
+Log.print( outVal[0] > 3.13 && outVal[0] < 3.15, "testinout_methodFloat");
 
-outVal[0]= 3.14;
+inVal = 3.14
+outVal[0]= inVal;
 oletest.testinout_methodDouble( outVal );
-Log.print( outVal[0] > 4.13 && outVal[0] < 4.15, "testinout_methodDouble");
+oletest.testinout_methodDouble( outVal );
+Log.print( outVal[0] == inVal, "testinout_methodDouble");
 
-outVal[0]= false;
+inVal = true;
+outVal[0]= inVal;
 oletest.testinout_methodBool( outVal );
-Log.print( outVal[0] == true, "testinout_methodBool");
+oletest.testinout_methodBool( outVal );
+Log.print( outVal[0] == inVal, "testinout_methodBool");
 
-outVal[0]= 200;
+inVal = 200;
+outVal[0]= inVal;
 oletest.testinout_methodShort( outVal );
-Log.print( outVal[0] == 201, "testinout_methodShort");
+oletest.testinout_methodShort( outVal );
+Log.print( outVal[0] == inVal, "testinout_methodShort");
 
-outVal[0]= 300;
+inVal = 300;
+outVal[0]= inVal;
 oletest.testinout_methodUShort( outVal );
-Log.print( outVal[0] == 301, "testinout_methodUShort");
+oletest.testinout_methodUShort( outVal );
+Log.print( outVal[0] == inVal, "testinout_methodUShort");
 
-outVal[0]= 400;
+inVal = 400
+outVal[0]= inVal;
 oletest.testinout_methodLong( outVal );
-Log.print( outVal[0] == 401, "testinout_methodLong");
+oletest.testinout_methodLong( outVal );
+Log.print( outVal[0] == inVal, "testinout_methodLong");
 
-outVal[0]= 500;
+inVal = 500;
+outVal[0]= inVal;
 oletest.testinout_methodULong( outVal );
-Log.print( outVal[0] == 501, "testinout_methodULong");
+oletest.testinout_methodULong( outVal );
+Log.print( outVal[0] == inVal, "testinout_methodULong");
 
-outVal[0]= "A";
+inVal = "B";
+outVal[0]= inVal;
 oletest.testinout_methodChar( outVal );
+oletest.testinout_methodChar( outVal );
+
 Log.print( outVal[0] == 66, "testinout_methodChar");
 
-outVal[0]= "I am a string";
+inVal = "Hello World 2!";
+outVal[0]= inVal;
 oletest.testinout_methodString( outVal );
-Log.print( outVal[0] == "I am a string out string", "testinout_methodString");
+oletest.testinout_methodString( outVal );
+Log.print( outVal[0] == inVal, "testinout_methodString");
 
-outVal[0]= arrInt;
+inVal = new Object();
+outVal[0]= inVal;
 oletest.testinout_methodAny( outVal ); 
-var arr2= new VBArray( outVal[0]).toArray();
-Log.print( isEqualAr(arrInt, arr2), "testinout_methodAny");
+oletest.testinout_methodAny( outVal ); 
+Log.print( outVal[0] === inVal, "testinout_methodAny");
 
-outVal[0]= arrInt;
+inVal = arrInt;
+outVal[0] = inVal;
 oletest.testinout_methodSequence( outVal );
-arr= new VBArray( outVal[0]).toArray();
-Log.print( isEqualAr( arr, new Array( 2,3,4,5,6)), "testinout_methodSequence");
+oletest.testinout_methodSequence( outVal );
+retVal = new VBArray(outVal[0]).toArray();
+
+Log.print( isEqualAr(retVal, new Array(3,4,5,6,7)), "testinout_methodSequence");
 		 
 
 outVal[0]= arrSeq;
@@ -900,39 +966,72 @@ Log.print bOk, "AttrXInterface"
         
 'out params ================================================================================
 document.writeln("<p>")
-        
-oletest.testout_methodByte outVal
-Log.print outVal = 111, "testout_methodByte"
+Dim inVal, outVal, retVal
 
+inVal = 111
+retVal = oletest.in_methodByte(inVal)
+oletest.testout_methodByte outVal
+Log.print inVal = retVal, "in_methodByte"
+Log.print outVal = inVal, "testout_methodByte"
+
+inVal = 3.14
+retVal = oletest.in_methodFloat(inVal)
 oletest.testout_methodFloat outVal 
+Log.print inVal = retVal, "in_methodFloat"
 Log.print outVal > 3.13 AND outVal < 3.15, "testout_methodFloat"
 
+inVal = 3.14
+retVal = oletest.in_methodDouble(inVal)
 oletest.testout_methodDouble outVal 
+Log.print inVal = retVal, "in_methodDouble"
 Log.print outVal = 3.14, "testout_methodDouble"
 
+inVal = true
+retVal = oletest.in_methodBool(inVal)
 oletest.testout_methodBool outVal 
-Log.print outVal = true, "testout_methodBool"
+Log.print inVal = retVal, "in_methodBool"
+Log.print outVal = inVal, "testout_methodBool"
 
+inVal = 222
+retVal = oletest.in_methodShort(inVal)
 oletest.testout_methodShort outVal 
-Log.print outVal = 222, "testout_methodShort"
+Log.print inVal = retVal, "in_methodShort"
+Log.print outVal = inVAl, "testout_methodShort"
 
+inVal = 333
+retVal = oletest.in_methodUShort(inVal)
 oletest.testout_methodUShort outVal 
-Log.print outVal = 333, "testout_methodUShort"
+Log.print inVal = retVal, "in_methodUShort"
+Log.print outVal = inVal, "testout_methodUShort"
 
+inVal = 4444
+retVal = oletest.in_methodLong(inVal)
 oletest.testout_methodLong outVal 
-Log.print outVal = 444, "testout_methodLong"
+Log.print inVal = retVal, "in_methodLong"
+Log.print outVal = inVal, "testout_methodLong"
 
+inVal = 5555
+retVal = oletest.in_methodULong(inVal)
 oletest.testout_methodULong outVal 
-Log.print outVal = 555, "testout_methodULong"
+Log.print inVal = retVal, "in_methodULong"
+Log.print outVal = inVal, "testout_methodULong"
 
+inVal = 65
+retVal = oletest.in_methodChar(inVal)
 oletest.testout_methodChar outVal 
+Log.print inVal = retVal, "in_methodChar"
 Log.print outVal = 65, "testout_methodChar"
 
+inVal = "Hello World 3!"
+retVal = oletest.in_methodString(inVal)
 oletest.testout_methodString outVal 
-Log.print outVal = "a little string", "testout_methodString"
+Log.print inVal = retVal, "in_methodString"
+Log.print outVal = inVal, "testout_methodString"
 
+inVal = "Hello World 4!"
+retVal = oletest.in_methodAny(inVal)
 oletest.testout_methodAny outVal 
-Log.print outVal = "I am a string in an any", "testout_methodAny"
+Log.print outVal = inVal, "testout_methodAny"
 
 oletest.testout_methodSequence outVal 
 Log.print isEqualVBAr(outVal, Array( 0,1,2,3,4,5,6,7,8,9)), "testout_methodSequence"
@@ -983,13 +1082,11 @@ Log.print ret, "testout_methodXInterface"
 Set outVal= Nothing
 document.writeln("missing: testout_methodXInterface <br>")
 
-outVal= 1
+inVal = 1
+outVal= inVal
 oletest.testinout_methodByte outVal
-ret= false
-If outVal = 2 Then
-  ret= true
-End if
-Log.print ret, "testinout_methodByte"
+oletest.testinout_methodByte outVal
+Log.print inVal = outVal, "testinout_methodByte"
 
 
 document.writeln("missing: testinout_methodFloat  <br>")
@@ -1381,6 +1478,22 @@ arFunctions["testinout_methodSequence"]="void testinout_methodSequence( [inout] 
 arFunctions["testinout_methodSequence2"]="void testinout_methodSequence2( [inout] sequence < sequence< long > > rOut)";
 arFunctions["testinout_methodXInterface"]="void testinout_methodXInterface( [inout] com::sun::star::script::XInvocation rOut)";
 arFunctions["testinout_methodXInterface2"]="void testinout_methodXInterface2( [inout] com::sun::star::uno::XInterface rOut)";
+
+arFunctions["in_methodByte"]= "byte in_methodByte( [in] byte rIn )";
+arFunctions["in_methodFloat"]= "float in_methodFloat( [in] float rIn);"
+arFunctions["in_methodDouble"]= "double in_methodDouble( [in] double rIn)";
+arFunctions["in_methodBool"]= "boolean in_methodBool( [in] boolean rIn)";
+arFunctions["in_methodShort"]= "short in_methodShort( [in] short rIn)";
+arFunctions["in_methodUShort"]= "unsigned short in_methodUShort( [in] unsigned short rIn)";
+arFunctions["in_methodLong"]= "long in_methodLong( [in]  long rIn)";
+arFunctions["in_methodULong"]= "unsigned long in_methodULong( [in] unsigned long rIn)";
+arFunctions["in_methodHyper"]= "hyper in_methodHyper( [in]  hyper rIn)";
+arFunctions["in_methodUHyper"]= "unsigned hyper in_methodHyper( [in]  unsigned hyper rIn)";
+arFunctions["in_methodString"]= "string in_methodString( [in] string rIn)";
+arFunctions["in_methodChar"]= "char in_methodChar( [in] char rIn)";
+arFunctions["in_methodAny"]= "any in_methodAny	( [in] any rIn)";
+arFunctions["in_methodXInterface"]= "XInterface in_methodXInterface([in] XInterface rIn)";
+
 
 arFunctions["methodAnyTest1"]="any methodAnyTest1( [in] any rIn)";
 arFunctions["AttrAny2"]= "[attribute]  any AttrAny2";
