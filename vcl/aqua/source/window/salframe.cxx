@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-01 18:03:08 $
+ *  last change: $Author: pluby $ $Date: 2000-12-01 22:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ void SalFrame::Show( BOOL bVisible )
         VCLWindow_Close( maFrameData.mhWnd );
     } // else
 
+#ifdef 0
     // This is temporary code for testing only and should be removed
     // when development of the SalObject class is complete. This code
     // allows us to test our SalGraphics drawing methods.
@@ -363,6 +364,7 @@ void SalFrame::Show( BOOL bVisible )
                                          );
         } // for
     } // for
+#endif // 0
 } // SalFrame::Show
 
 // -----------------------------------------------------------------------
