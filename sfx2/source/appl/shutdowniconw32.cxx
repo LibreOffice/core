@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-15 08:40:19 $
+ *  last change: $Author: ssa $ $Date: 2001-07-05 12:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,10 +383,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             switch( lParam )
             {
                 case WM_LBUTTONDBLCLK:
-                    //ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:5500" ) ) );
-                    // due to #88164 we cannot open-from-template as default action
-                    // so stick with ordinary fileopen
-                    ShutdownIcon::FileOpen();
+                    ShutdownIcon::FromTemplate();
                     break;
 
                 case WM_RBUTTONDOWN:
@@ -420,7 +417,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                             ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( DRAW_URL ) ) );
                         break;
                         case IDM_TEMPLATE:
-                            ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:5500" ) ) );
+                            ShutdownIcon::FromTemplate();
                         break;
                         case IDM_INSTALL:
                             ShutdownIcon::SetAutostart( !ShutdownIcon::GetAutostart() );

@@ -53,6 +53,7 @@ class ShutdownIcon :    public ::com::sun::star::frame::XTerminateListener,
 
         static void FileOpen();
         static void OpenURL( ::rtl::OUString& aURL );
+        static void FromTemplate();
 
         static void SetAutostart( bool bActivate );
         static bool GetAutostart();

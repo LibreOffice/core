@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-08 10:03:22 $
+ *  last change: $Author: ssa $ $Date: 2001-07-05 12:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,30 @@
 #include <vos/mutex.hxx>
 #include <svtools/imagemgr.hxx>
 
+
+
 #ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
 #include <com/sun/star/frame/XTasksSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#endif
 #ifndef _FILEDLGHELPER_HXX
 #include <filedlghelper.hxx>
 #endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+#include "dispatch.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -81,6 +96,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+using namespace ::vos;
 using namespace ::rtl;
 using namespace ::sfx2;
 
@@ -206,6 +223,40 @@ void ShutdownIcon::FileOpen()
         FileDialogHelper dlg( WB_OPEN );
         if ( ERRCODE_NONE == dlg.Execute() )
             OpenURL( OUString( dlg.GetPath() ) );
+    }
+}
+
+// ---------------------------------------------------------------------------
+
+void ShutdownIcon::FromTemplate()
+{
+    if ( getInstance() && getInstance()->m_xDesktop.is() )
+    {
+        Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop ( getInstance()->m_xDesktop, UNO_QUERY);
+        Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
+        if ( !xFrame.is() )
+            xFrame = Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
+
+        URL aTargetURL;
+        aTargetURL.Complete = OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:5500" ) );
+        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+        xTrans->parseStrict( aTargetURL );
+
+        Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
+        Reference < ::com::sun::star::frame::XDispatch > xDisp;
+        if ( xProv.is() )
+            if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
+                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+            else
+                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
+        if ( xDisp.is() )
+        {
+            Sequence<PropertyValue> aArgs(1);
+            PropertyValue* pArg = aArgs.getArray();
+            pArg[0].Name = rtl::OUString::createFromAscii("Referer");
+            pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
+            xDisp->dispatch( aTargetURL, aArgs );
+        }
     }
 }
 
