@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 15:47:29 $
+ *  last change: $Author: dbo $ $Date: 2001-03-16 12:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
-/* MACROS EXPANDED AND CHECKED IN
 
 //==================================================================================================
 #define __DEF_COMPIMPLHELPER_A( N ) \
@@ -120,7 +119,7 @@ public: \
         { return getClassData( s_aCD ).getTypes(); } \
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException) \
         { return getClassData( s_aCD ).getImplementationId(); } \
-    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException) \
+    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException) \
     { \
         ::osl::ClearableMutexGuard aGuard( rBHelper.rMutex ); \
         if (!rBHelper.bDisposed && !rBHelper.bInDispose) \
@@ -232,7 +231,5 @@ __DEF_COMPIMPLHELPER_A( N ) \
 __DEF_COMPIMPLHELPER_B( N ) \
 __DEF_COMPIMPLHELPER_C( N )
 #endif
-
-MACROS EXPANDED AND CHECKED IN */
 
 #endif

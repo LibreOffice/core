@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 15:47:29 $
+ *  last change: $Author: dbo $ $Date: 2001-03-16 12:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,6 @@ struct ClassData : public ClassDataBase
 //==================================================================================================
 ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () );
 }
-
-/* MACROS EXPANDED AND CHECKED IN
 
 //
 // settle down beavis, here comes the macro template hell :]
@@ -244,7 +242,5 @@ __DEF_IMPLHELPER_POST_A( N ) \
 __DEF_IMPLHELPER_POST_B( N ) \
 __DEF_IMPLHELPER_POST_C( N )
 #endif
-
-MACROS EXPANDED AND CHECKED IN */
 
 #endif
