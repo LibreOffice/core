@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-28 13:19:41 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 09:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ TabPage TP_DROPCAPS
         Text[ turkish ] = "Karakter sayýsý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Número de caracteres";
-        Text[ finnish ] = "~Merkkien määrä";
+        Text[ finnish ] = "~Merkkien m??r?";
     };
     NumericField FLD_DROPCAPS
     {
@@ -290,7 +290,7 @@ TabPage TP_DROPCAPS
         Text [ italian ] = "D~istanza dal testo" ;
         Text [ portuguese_brazilian ] = "D~ist?ncia" ;
         Text [ portuguese ] = "~Distância do texto" ;
-        Text [ finnish ] = "Etäisyys tekstiin" ;
+        Text [ finnish ] = "Et?isyys tekstiin" ;
         Text [ danish ] = "Afstand til tekst" ;
         Text [ french ] = "~Écart du texte" ;
         Text [ swedish ] = "A~vstånd till text" ;
@@ -411,7 +411,7 @@ TabPage TP_DROPCAPS
         Text [ italian ] = "Modello di carattere" ;
         Text [ portuguese_brazilian ] = "Es~tilo" ;
         Text [ portuguese ] = "Es~tilo de caracteres" ;
-        Text [ finnish ] = "~Merkistön tyyli" ;
+        Text [ finnish ] = "~Merkist? tyyli" ;
         Text [ danish ] = "Tegntypografi" ;
         Text [ french ] = "~Style de caractères" ;
         Text [ swedish ] = "Tecken~formatmall" ;
@@ -468,6 +468,7 @@ TabPage TP_DROPCAPS
     };
 };
  // ********************************************************************** EOF
+
 
 
 
