@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:15:47 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #endif
 
 #include <string.h>         // memset()
+
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
@@ -2012,12 +2016,12 @@ String WW8Read_xstz(SvStream& rStrm, USHORT nChars, bool bAtEndSeekRel1)
             pData = aStr.GetBufferAccess();
         }
 
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
         ULONG n;
         sal_Unicode *pWork;
         for( n = 0, pWork = pData; n < b; ++n, ++pWork )
             *pWork = SWAPSHORT( *pWork );
-#endif // ifdef __BIGENDIAN
+#endif // ifdef OSL_BIGENDIAN
     }
 
     if( bAtEndSeekRel1 )
@@ -2103,11 +2107,11 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
 
     pSt->Seek( nFilePos );
     pSt->Read( pPLCF_PosArray, nPLCF );
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
     for( nIdx = 0; nIdx <= nIMax; nIdx++ )
         pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
     nIdx = 0;
-#endif // __BIGENDIAN
+#endif // OSL_BIGENDIAN
     if( bNoEnd )
         nIMax++;
     if( nStruct ) // Pointer auf Inhalts-Array
@@ -2255,11 +2259,11 @@ void WW8PLCF::ReadPLCF( SvStream* pSt, long nFilePos, long nPLCF )
 
     pSt->Seek( nFilePos );
     pSt->Read( pPLCF_PosArray, nPLCF );
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
     for( nIdx = 0; nIdx <= nIMax; nIdx++ )
         pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
     nIdx = 0;
-#endif // __BIGENDIAN
+#endif // OSL_BIGENDIAN
     // Pointer auf Inhalts-Array
     pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
 
@@ -2375,10 +2379,10 @@ WW8PLCFpcd::WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct )
 
     pSt->Seek( nFilePos );
     pSt->Read( pPLCF_PosArray, nPLCF );
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
     for( long nI = 0; nI <= nIMax; nI++ )
       pPLCF_PosArray[nI] = SWAPLONG( pPLCF_PosArray[nI] );
-#endif // __BIGENDIAN
+#endif // OSL_BIGENDIAN
 
     // Pointer auf Inhalts-Array
     pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
