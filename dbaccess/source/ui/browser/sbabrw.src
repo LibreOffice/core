@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-29 09:50:11 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,7 +874,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
     /* ### ACHTUNG: Neuer Text in Resource? Sollen die selektierten Daten gelöscht werden? : Sollen die selektierten Daten gel÷scht werden? */
     Message = "Sollen die selektierten Daten gelöscht werden?" ;
     Message [ English ] = "Delete selected row(s)." ;
-    Message [ portuguese ] = "Deseja eliminar os dados seleccionados?" ;
+    Message [ portuguese ] = "Eliminar os dados seleccionados?" ;
     Message [ english_us ] = "Do you want to delete the selected data?" ;
     Message [ portuguese_brazilian ] = "Sollen die selektierten Daten gelöscht werden?" ;
     Message [ swedish ] = "Skall de markerade data raderas?" ;
@@ -885,7 +885,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message [ dutch ] = "Wilt u de geselecteerde gegevens verwijderen?" ;
     Message[ chinese_simplified ] = "ÄúÒªÉ¾³ıÑ¡ÖĞµÄÊı¾İÂğ£¿";
     Message[ russian ] = "Óäàëèòü âûäåëåííûå äàííûå?";
-    Message[ polish ] = "Czy usun¹æ zaznaczone dane?";
+    Message[ polish ] = "Usun¹æ zaznaczone dane?";
     Message[ japanese ] = "‘I‘ğ‚µ‚½ÃŞ°À‚ğíœ‚µ‚Ü‚·‚©B";
     Message[ chinese_traditional ] = "±z­n§R°£¿ï¤¤ªº¸ê®Æ¡S";
     Message[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÈíÇäÇÊ ÇáãÍÏÏÉ¿";

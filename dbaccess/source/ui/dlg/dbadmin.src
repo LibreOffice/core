@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 15:44:40 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
             Text[ polish ] = "Nowe Ÿród³o danych";
             Text[ portuguese_brazilian ] = "New data source";
             Text[ japanese ] = "V‚µ‚¢ÃŞ°À¿°½";
-            Text[ korean ] = "New data source";
+            Text[ korean ] = "»õ·Î¿î µ¥ÀÌÅÍ ¼Ò½º";
             Text[ chinese_simplified ] = "ĞÂÊı¾İÔ´";
             Text[ chinese_traditional ] = "·sªº¸ê®Æ·½";
             Text[ turkish ] = "New data source";
@@ -309,7 +309,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ polish ] = "Tabele";
         Text[ portuguese_brazilian ] = "Tabellen";
         Text[ japanese ] = "Ã°ÌŞÙ";
-        Text[ korean ] = "Å×ÀÌºí";
+        Text[ korean ] = "Ç¥";
         Text[ chinese_simplified ] = "±í¸ñ";
         Text[ chinese_traditional ] = "ªí®æ";
         Text[ turkish ] = "Tablolar";
@@ -327,7 +327,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     Text[ polish ] = "Zarz¹dzaj Ÿród³em danych";
     Text[ portuguese_brazilian ] = "Datasource administration";
     Text[ japanese ] = "ÃŞ°À¿°½‚ÌŠÇ—";
-    Text[ korean ] = "Datasource administration";
+    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º °ü¸®";
     Text[ chinese_simplified ] = "¹ÜÀíÊı¾İÔ´";
     Text[ chinese_traditional ] = "ºŞ²z¸ê®Æ·½";
     Text[ turkish ] = "Datasource administration";
@@ -382,7 +382,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "~Nazwa:";
         Text[ portuguese_brazilian ] = "~Name:";
         Text[ japanese ] = "–¼‘O(~N):";
-        Text[ korean ] = "~Name:";
+        Text[ korean ] = "~ÀÌ¸§:";
         Text[ chinese_simplified ] = "Ãû³Æ(~N)£º";
         Text[ chinese_traditional ] = "¦WºÙ(~N)¡G";
         Text[ turkish ] = "~Name:";
@@ -416,7 +416,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "Po³¹czenie";
         Text[ portuguese_brazilian ] = "Connection";
         Text[ japanese ] = "Ú‘±";
-        Text[ korean ] = "Connection";
+        Text[ korean ] = "¿¬°á";
         Text[ chinese_simplified ] = "Á¬½Ó";
         Text[ chinese_traditional ] = "³s½u";
         Text[ turkish ] = "Connection";
@@ -476,7 +476,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "ród³o danych URL";
         Text[ portuguese_brazilian ] = "~Data source URL:";
         Text[ japanese ] = "ÃŞ°À¿°½ URL(~D):";
-        Text[ korean ] = "~Data source URL:";
+        Text[ korean ] = "~µ¥ÀÌÅÍ ¼Ò½º URL:";
         Text[ chinese_simplified ] = "Êı¾İÔ´ URL(~D)£º";
         Text[ chinese_traditional ] = "¸ê®Æ·½ URL(~D)¡G";
         Text[ turkish ] = "~Data source URL:";
@@ -509,7 +509,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "...";
         Text[ portuguese_brazilian ] = "Durchsuchen...";
         Text[ japanese ] = "...";
-        Text[ korean ] = "Å½»ö...";
+        Text[ korean ] = "...";
         Text[ chinese_simplified ] = "...";
         Text[ chinese_traditional ] = "...";
         Text[ turkish ] = "Tara...";
@@ -534,7 +534,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "Chwilowa przerwa:";
         Text[ portuguese_brazilian ] = "Timeout:";
         Text[ japanese ] = "À²Ñ±³Ä:";
-        Text[ korean ] = "Timeout:";
+        Text[ korean ] = "Å¸ÀÓ¾Æ¿ô:";
         Text[ chinese_simplified ] = "³¬¹ıÊ±ÏŞ£º";
         Text[ chinese_traditional ] = "¶W¹L®É­­¡G";
         Text[ turkish ] = "Timeout:";
@@ -580,7 +580,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "Istnieje inne Ÿród³o danych o tej samej nazwie. Poniewa¿ nazwy Ÿrode³ danych musz¹ byæ globalnie jednoznaczne, nale¿y wybraæ inn¹ nazwê.";
         Text[ portuguese_brazilian ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
         Text[ japanese ] = "‚±‚Ì–¼‘O‚Ì•t‚¢‚½•Ê‚ÌÃŞ°À¿°½‚ª‚·‚Å‚É‚ ‚è‚Ü‚·BÃŞ°À¿°½–¼‚ğ‚Í‚Á‚«‚è‚Æ‹æ•Ê‚·‚é‚½‚ß‚É‚ÍA‚Ù‚©‚Ì–¼‘O‚ğ‘I‘ğ‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B";
-        Text[ korean ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
+        Text[ korean ] = "ÀÌ ÀÌ¸§À» °¡Áø ÆÄÀÏÀÌ ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù.  ¼Ò½º ÀÌ¸§Àº  Àü¿ªÀûÀ¸·Î À¯ÀÏÇØ¾ß ÇÏ¹Ç·Î,  ´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇØ¾ß  ÇÕ´Ï´Ù.";
         Text[ chinese_simplified ] = "ÒÑ¾­´æÔÚÒ»¸öÍ¬ÃûµÄÊı¾İÔ´¡£ÒòÎªÊı¾İÔ´Ãû³Æ±ØĞëÊÇÒ»¸öÍ¨ÓÃµÄÓĞĞ§Ãû³Æ£¬½¨ÒéÄú²ÉÓÃÁíÒ»¸öÃû³Æ¡£";
         Text[ chinese_traditional ] = "¤w¸g¦s¦b¤@­Ó¦P¦Wªº¸ê®Æ·½¡C¦]¬°¤@­Ó¸ê®Æ·½ªº¦WºÙ¥²¶·³q¥Î©úÚÌ¡A½Ğ±z±Ä¥Î¥t¥~¤@­Ó¦³®Äªº¦WºÙ¡C";
         Text[ turkish ] = "There already is another data source with this name. Since data source names have to be globally unique, you have to choose another one.";
@@ -603,7 +603,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "To Ÿród³o danych zosta³o usuniête.";
         Text[ portuguese_brazilian ] = "This data source is scheduled to be deleted.";
         Text[ japanese ] = "‚±‚ÌÃŞ°À¿°½‚ÍÕ°»Ş°‚É‚æ‚Á‚Äíœ‚³‚ê‚Ä‚¢‚Ü‚·B";
-        Text[ korean ] = "This data source is scheduled to be deleted.";
+        Text[ korean ] = "±ÍÇÏ´Â µ¥ÀÌÅÍ¼Ò½º¸¦ »èÁ¦ÇÏ¿´½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÄúÒÑ¾­É¾³ıÁËÕâ¸öÊı¾İÔ´¡£";
         Text[ chinese_traditional ] = "±z¤w¸g§R°£¤F³o­Ó¸ê®Æ·½¡C";
         Text[ turkish ] = "This data source is scheduled to be deleted.";
@@ -626,7 +626,7 @@ TabPage PAGE_GENERAL
         Text[ polish ] = "Za³adowanie biblioteki programu #lib# nie by³o mo¿liwe. Jest ona byæ mo¿e uszkodzona. Wybór Ÿród³a danych ODBC nie jest mo¿liwy.";
         Text[ portuguese_brazilian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
         Text[ japanese ] = "#lib# ÌßÛ¸Ş×Ñ×²ÌŞ×Ø‚ğ“Ç‚İ‚ß‚È‚©‚Á‚½‚©A‚Ü‚½‚Í‚»‚ê©‘Ì‚ÉÄ×ÌŞÙ‚ª‚ ‚è‚Ü‚·B ODBC ÃŞ°À¿°½‚Í‘I‘ğ‚Å‚«‚Ü‚¹‚ñB";
-        Text[ korean ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
+        Text[ korean ] = "ÇÁ·Î±×·¥ ¶óÀÌºê·¯¸® #lib#¸¦ ·ÎµåÇÒ ¼ö ¾ø¾ú°Å³ª ¶Ç´Â °íÀåÀÔ´Ï´Ù. ODBC µ¥ÀÌÅÍ ¼Ò½º ¼±ÅÃÀÌ °¡´ÉÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÎŞ·¨×°Èë³ÌĞò¿â #lib# »òÒÑ¾­Ëğ»µ¡£ÎŞ·¨Ñ¡Ôñ ODBC Êı¾İÔ´¡£";
         Text[ chinese_traditional ] = "µLªkÅª¨úµ{¦¡®w #lib# ©Î¤w¸g¤w¸g·l§¥¡CµLªk¿ï¾Ü ODBC ¸ê®Æ·½¡C";
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
@@ -636,24 +636,24 @@ TabPage PAGE_GENERAL
     {
         Text = "Auf Ihrem System wurden keine Adabas-Datenquellen gefunden.";
         Text [ english ] = "No Adabas data sources have been found on your system.";
-        Text [ english_us ] = "No Adabas data sources have been found on your system.";
-        Text[ portuguese ] = "No Adabas data sources have been found on your system.";
-        Text[ russian ] = "No Adabas data sources have been found on your system.";
+        Text [ english_us ] = "There are no Adabas data sources on your system.";
+        Text[ portuguese ] = "No seu sistema não existe nenhuma fonte de dados Adabas.";
+        Text[ russian ] = "Èñòî÷íèê äàííûõ Adabas â Âàøåé ñèñòåìå íå îáíàğóæåí.";
         Text[ greek ] = "Äåí âñİèçêå êáìßá ğñïİëåõóç äåäïìİíùí ôïõ Adabas óôï óıóôçìá óáò.";
         Text[ dutch ] = "Op uw systeem werden geen Adabas-gegevensbronnen gevonden.";
         Text[ french ] = "Aucune source de données Adabas n'a été détectée dans votre système.";
-        Text[ spanish ] = "No Adabas data sources have been found on your system.";
-        Text[ italian ] = "No Adabas data sources have been found on your system.";
+        Text[ spanish ] = "No se han encontrado fuentes de datos Adabas en su sistema.";
+        Text[ italian ] = "Impossibile trovare una sorgente dati Adabas nel sistema";
         Text[ danish ] = "No Adabas data sources have been found on your system.";
         Text[ swedish ] = "Inga Adabasdatakällor har hittats på Ditt system.";
-        Text[ polish ] = "No Adabas data sources have been found on your system.";
+        Text[ polish ] = "W systemie komputera u¿ytkownika nie znaleziono Ÿróde³ danych Adabas.";
         Text[ portuguese_brazilian ] = "No Adabas data sources have been found on your system.";
-        Text[ japanese ] = "No Adabas data sources have been found on your system.";
-        Text[ korean ] = "No Adabas data sources have been found on your system.";
-        Text[ chinese_simplified ] = "No Adabas data sources have been found on your system.";
+        Text[ japanese ] = "‚¨g‚¢‚Ì¼½ÃÑã‚É Adabas ÃŞ°À¿°½‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+        Text[ korean ] = "»ç¿ëÀÚÀÇ ½Ã½ºÅÛ¿¡¼­ Adabas µ¥ÀÌÅÍ ¼Ò½º¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
+        Text[ chinese_simplified ] = "ÔÚÄúµÄÏµÍ³ÉÏÃ»ÓĞ°²×° Adabas Êı¾İ¿â¡£";
         Text[ chinese_traditional ] = "¦b±zªº¨t²Î¤W¨S¦³¦w¸Ë Adabas ¸ê®Æ·½¡C";
         Text[ turkish ] = "No Adabas data sources have been found on your system.";
-        Text[ arabic ] = "No Adabas data sources have been found on your system.";
+        Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ãÕÇÏÑ ÈíÇäÇÊ Adabas Úáì äÙÇãß.";
     };
 };
 
@@ -724,7 +724,7 @@ TabPage PAGE_DBASE
         Text[ chinese_traditional ] = "¦r«¬(~C)";
         Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
         Text[ greek ] = "Óåô ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ ¼¼Æ®(~C)";
+        Text[ korean ] = "¹®ÀÚ ÁıÇÕ(~C)";
         Text[ turkish ] = "Karakter kümesi";
         Text[ language_user1 ] = " ";
     };
@@ -748,7 +748,7 @@ TabPage PAGE_DBASE
         Text[ chinese_traditional ] = "¼Ğ»x...";
         Text[ arabic ] = "İåÇÑÓ...";
         Text[ greek ] = "ÅõñåôŞñ~éá...";
-        Text[ korean ] = "ÀÎµ¦½º";
+        Text[ korean ] = "»öÀÎ";
         Text[ turkish ] = "Dizinler...";
         Text[ language_user1 ] = " ";
         Text[ italian ] = "I~ndici...";
@@ -867,7 +867,7 @@ TabPage PAGE_JDBC
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ(~U)";
         Text[ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
         Text[ greek ] = "¼íïìá ÷ñŞóôç";
-        Text[ korean ] = "»ç¿ëÀÚ¸í(~U)";
+        Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§(~U)";
         Text[ turkish ] = "Kullanıcı adı";
         Text[ language_user1 ] = " ";
     };
@@ -899,7 +899,7 @@ TabPage PAGE_JDBC
         Text[ polish ] = "Wymagane jest has³o";
         Text[ portuguese_brazilian ] = "beim Öffnen ~fragen";
         Text[ japanese ] = "Êß½Ü°ÄŞ‚ª•K—v";
-        Text[ korean ] = "¿­ ¶§ ¿äÃ»";
+        Text[ korean ] = "ÆĞ½º¿öµå°¡ ÇÊ¿äÇÕ´Ï´Ù";
         Text[ chinese_simplified ] = "±ØĞëÊäÈëÃÜÂë";
         Text[ chinese_traditional ] = "¥²¶·¿é¤J±K½X";
         Text[ turkish ] = "Açarken sor";
@@ -934,7 +934,7 @@ TabPage PAGE_JDBC
         Text[ chinese_traditional ] = "¦r«¬(~C)";
         Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
         Text[ greek ] = "Óåô ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ ¼¼Æ®(~C)";
+        Text[ korean ] = "¹®ÀÚ ÁıÇÕ(~C)";
         Text[ turkish ] = "Karakter kümesi";
         Text[ language_user1 ] = " ";
     };
@@ -981,7 +981,7 @@ TabPage PAGE_ODBC
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ(~U)";
         Text[ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
         Text[ greek ] = "¼íïìá ÷ñŞóôç";
-        Text[ korean ] = "»ç¿ëÀÚ¸í(~U)";
+        Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§(~U)";
         Text[ turkish ] = "Kullanıcı adı";
         Text[ language_user1 ] = " ";
     };
@@ -1013,7 +1013,7 @@ TabPage PAGE_ODBC
         Text[ polish ] = "Podaj has³o";
         Text[ portuguese_brazilian ] = "Password required";
         Text[ japanese ] = "Êß½Ü°ÄŞ‚ª•K—v";
-        Text[ korean ] = "Password required";
+        Text[ korean ] = "ÆĞ½º¿öµå°¡ ÇÊ¿äÇÕ´Ï´Ù";
         Text[ chinese_simplified ] = "±ØĞëÊäÈëÃÜÂë";
         Text[ chinese_traditional ] = "¥²¶·¿é¤J±K½X";
         Text[ turkish ] = "Password required";
@@ -1083,7 +1083,7 @@ TabPage PAGE_ODBC
         Text[ chinese_traditional ] = "¦r«¬(~C)";
         Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
         Text[ greek ] = "Óåô ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ ¼¼Æ®(~C)";
+        Text[ korean ] = "¹®ÀÚ ÁıÇÕ(~C)";
         Text[ turkish ] = "Karakter kümesi";
         Text[ language_user1 ] = " ";
     };
@@ -1131,7 +1131,7 @@ TabPage PAGE_TEXT
         Text[ chinese_traditional ] = "¤º¤å§t¦³­¶­º";
         Text[ arabic ] = "íÔÊãá ÇáäÕ Úáì ÑÃÓ ÇáÕİÍÉ";
         Text[ greek ] = "Ôï êåßìåíï ğåñéİ÷åé êåöáëßäá";
-        Text[ korean ] = "Çì´õ¸¦ Æ÷ÇÔÇÑ ÅØ½ºÆ®";
+        Text[ korean ] = "¸Ó¸®±ÛÀÌ Æ÷ÇÔµÇ¾î ÀÖ´Â ÅØ½ºÆ®";
         Text[ turkish ] = "Metin üstbilgi içeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -1159,7 +1159,7 @@ TabPage PAGE_TEXT
         Text[ chinese_traditional ] = "Äæ¦ì¤À¹j²Å";
         Text[ arabic ] = "İÇÕá ÇáÍŞá";
         Text[ greek ] = "Äéá÷ùñéóôŞò ğåäßùí";
-        Text[ korean ] = "ÇÊµå ±¸ºĞÀÚ";
+        Text[ korean ] = "ÇÊµå ºĞ¸®ÀÚ";
         Text[ turkish ] = "Alan ayırıcısı";
         Text[ language_user1 ] = " ";
     };
@@ -1195,7 +1195,7 @@ TabPage PAGE_TEXT
         Text[ chinese_traditional ] = "¤å¦r¤À¹j²Å";
         Text[ arabic ] = "İÇÕá ÇáäÕ";
         Text[ greek ] = "Äéá÷ùñéóôéêü ê~åéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® ±¸ºĞÀÚ";
+        Text[ korean ] = "ÅØ½ºÆ®  ºĞ¸®ÀÚ";
         Text[ turkish ] = "Metin ayırıcısı";
         Text[ language_user1 ] = " ";
     };
@@ -1232,7 +1232,7 @@ TabPage PAGE_TEXT
         Text[ chinese_traditional ] = "¤p¼ÆÂI²Å¸¹";
         Text[ arabic ] = "İÇÕá ÚÔÑí";
         Text[ greek ] = "~Äéá÷ùñéóôéêü äåêáäéêşí";
-        Text[ korean ] = "¼Ò¼ö ±¸ºĞÀÚ";
+        Text[ korean ] = "¼Ò¼öÁ¡ ºĞ¸®ÀÚ";
         Text[ turkish ] = "Ondalık ayırıcısı";
     };
     ComboBox CM_DECIMALSEPARATOR
@@ -1276,7 +1276,7 @@ TabPage PAGE_TEXT
         Text[ chinese_traditional ] = "¤d¦ì¤À¹j²Å";
         Text[ arabic ] = "İÇÕá ÇáÃáæİ";
         Text[ greek ] = "Äé~á÷ùñéóôéêü ÷éëßùí";
-        Text[ korean ] = "Ãµ´ÜÀ§ ±¸ºĞÁ¡";
+        Text[ korean ] = "Ãµ´ÜÀ§ ºĞ¸®ÀÚ";
         Text[ turkish ] = "Binlik ayırıcısı";
     };
     ComboBox CM_THOUSANDSSEPARATOR
@@ -1363,7 +1363,7 @@ TabPage PAGE_TEXT
         Text[ chinese_traditional ] = "¦r«¬(~C)";
         Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
         Text[ greek ] = "Óåô ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ ¼¼Æ®(~C)";
+        Text[ korean ] = "¹®ÀÚ ÁıÇÕ(~C)";
         Text[ turkish ] = "Karakter kümesi";
         Text[ language_user1 ] = " ";
     };
@@ -1428,7 +1428,7 @@ TabPage PAGE_TEXT
         Text[ chinese_traditional ] = "¥²¶·«ü©w#1 ¡C";
         Text[ arabic ] = "íÌÈ ÅÏÎÇá #1.";
         Text[ greek ] = "#1 ğñİğåé íá ïñéóôåß.";
-        Text[ korean ] = "#1 Àº ¹İµå½Ã ¼³Á¤µÇ¾î¾ß ÇÕ´Ï´Ù.";
+        Text[ korean ] = "#1 Àº(´Â)  ¹İµå½Ã ¼³Á¤µÇ¾î¾ß ÇÕ´Ï´Ù.";
         Text[ turkish ] = "#1 belirlenmiş olmalı.";
         Text[ language_user1 ] = " ";
     };
@@ -1452,7 +1452,7 @@ TabPage PAGE_TEXT
         Text[ chinese_traditional ] = "#1 ©M #2 ¥²¶·¤£¬Û¦P¡C";
         Text[ arabic ] = "íÌÈ Ãä íßæä #1 æ #2 ãÎÊáİíä.";
         Text[ greek ] = "#1 êáé #2 ğñİğåé íá äéáöİñïõí.";
-        Text[ korean ] = "#1°ú #2 ¹İµå½Ã ´Ù¸§.";
+        Text[ korean ] = "#1°ú #2´Â ¹İµå½Ã ¼­·Î ´Ş¶ó¾ß ÇÕ´Ï´Ù.";
         Text[ turkish ] = "#1 ve #2 farklı olmalı.";
         Text[ language_user1 ] = " ";
     };
@@ -1476,7 +1476,7 @@ TabPage PAGE_TEXT
         Text[ chinese_traditional ] = "#1 ¤£¯à°÷§t¦³³q°t²Å '*,?' ¡C";
         Text[ arabic ] = "áÇ íõÓãÍ ÈÃÍÑİ ÇáÈÏá¡ ãËá *,?¡ İí #1.";
         Text[ greek ] = "Äåí åğéôñİğïíôáé ôá óıìâïëá êñÜôçóçò èİóçò üğùò (?,*) óôï #1.";
-        Text[ korean ] = "#1 ¿¡¼­ ±âÈ£ ? ¿Í * ´Â »ç¿ëµÉ¼ö ¾ø½À´Ï´Ù.";
+        Text[ korean ] = "#1 ¿¡¼­ ¿ÍÀÏµåÄ«µå ? ¿Í * ´Â »ç¿ëµÉ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "*,? gibi değişkenler #1 için kullanılamaz.";
         Text[ language_user1 ] = " ";
     };
@@ -1507,7 +1507,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "Filtr";
         Text[ portuguese_brazilian ] = "Filter";
         Text[ japanese ] = "Ì¨ÙÀ";
-        Text[ korean ] = "Filter";
+        Text[ korean ] = "ÇÊÅÍ";
         Text[ chinese_simplified ] = "É¸Ñ¡";
         Text[ chinese_traditional ] = "¿z¿ï";
         Text[ turkish ] = "Filter";
@@ -1533,7 +1533,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "~Wszystkie";
         Text[ portuguese_brazilian ] = "~All";
         Text[ japanese ] = "‚·‚×‚Ä";
-        Text[ korean ] = "~All";
+        Text[ korean ] = "~¸ğµÎl";
         Text[ chinese_simplified ] = "È«²¿(~A)";
         Text[ chinese_traditional ] = "¥ş³¡(~A)";
         Text[ turkish ] = "~All";
@@ -1558,7 +1558,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "~Brak";
         Text[ portuguese_brazilian ] = "~None";
         Text[ japanese ] = "‚È‚µ";
-        Text[ korean ] = "~None";
+        Text[ korean ] = "~¾øÀ½";
         Text[ chinese_simplified ] = "ÎŞ(~N)";
         Text[ chinese_traditional ] = "µL(~N)";
         Text[ turkish ] = "~None";
@@ -1583,7 +1583,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "~Wybór";
         Text[ portuguese_brazilian ] = "~Selection";
         Text[ japanese ] = "‘I‘ğ";
-        Text[ korean ] = "~Selection";
+        Text[ korean ] = "~¼±ÅÃ";
         Text[ chinese_simplified ] = "Ñ¡Ôñ(~S)";
         Text[ chinese_traditional ] = "¿ï¨ú(~S)";
         Text[ turkish ] = "~Selection";
@@ -1619,7 +1619,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ polish ] = "St³um kolumny wersji";
         Text[ portuguese_brazilian ] = "Suppress version columns";
         Text[ japanese ] = "ÊŞ°¼Ş®İ—“‚ğ‰B‚·";
-        Text[ korean ] = "Suppress version columns";
+        Text[ korean ] = "¹öÀü ¿­ ¾ïÁ¦";
         Text[ chinese_simplified ] = "ÒşÈë°æ±¾À¸Î»";
         Text[ chinese_traditional ] = "Áô¤Jª©¥»Äæ¦ì";
         Text[ turkish ] = "Suppress version columns";
@@ -1645,7 +1645,7 @@ WarningBox ERR_NOREGISTEREDDATASOURCES
     Message[ polish ] = "W danym momencie brak zarejestrowanych Ÿróde³ danych.";
     Message[ portuguese_brazilian ] = "Currently, there are no registered data sources.";
     Message[ japanese ] = "‚¢‚Ü‚Ì“_‚Å‚ÍÃŞ°À¿°½‚Í“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-    Message[ korean ] = "Currently, there are no registered data sources.";
+    Message[ korean ] = "ÇöÀç µî·ÏµÈ µ¥ÀÌÅÍ ¼Ò½º°¡ ¾ø½À´Ï´Ù.";
     Message[ chinese_simplified ] = "µ±Ç°Ã»ÓĞµÇ¼ÇÈÎºÎÊı¾İÔ´¡£";
     Message[ chinese_traditional ] = "·í«e¤£¦s¦b¥ô¦óµn°Oªº¸ê®Æ·½¡C";
     Message[ turkish ] = "Currently, there are no registered data sources.";
@@ -1668,7 +1668,7 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message[ polish ] = "Nazwa usuniêtego Ÿród³a danych przypisana zosta³a innemu plikowi! Nale¿y zmieniæ jego nazwê, aby móc odtworzyæ aktualne Ÿród³o danych.";
     Message[ portuguese_brazilian ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
     Message[ japanese ] = "‚·‚Å‚Éíœ‚µ‚½ÃŞ°À‚Ì–¼‘O‚ª•Ê‚ÌÃŞ°À¿°½‚É“ü—Í‚³‚ê‚Ü‚µ‚½BŒ»İ‚Ì‚à‚Ì‚ğ•œŒ³‚·‚é‚É‚ÍA‚Ü‚¸‹ŒÃŞ°À‚Ì–¼‘O‚ğ•ÏX‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B";
-    Message[ korean ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
+    Message[ korean ] = "»ç¿ëÀÚ´Â »èÁ¦µÈ µ¥ÀÌÅÍ ¼Ò½ºÀÇ ÀÌ¸§À» ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ ¼Ò½º¿¡ ºÎ¿©ÇÏ¿´½À´Ï´Ù. ÇöÀç °ÍÀ» º¹¿øÇÏ±â À§ÇØ¼­´Â ¸ÕÀú °ÍÀÇ ÀÌ¸§À» º¯°æÇØ¾ß ÇÕ´Ï´Ù.";
     Message[ chinese_simplified ] = "ÄúÒÑ¾­ÓÃÒ»¸ö±»É¾³ıµÄÊı¾İÔ´Ãû³ÆÃüÃûÁËÒ»¸öÆäËûµÄÊı¾İÔ´£¡Äú±ØĞëÖØÃüÃûÄÇÒ»¸öÊı¾İÔ´£¬È»ºó²ÅÄÜ»Ö¸´µ±Ç°µÄÊı¾İÔ´¡£";
     Message[ chinese_traditional ] = "±z¤w¸g¬°¥t¤@­Ó¸ê®Æ·½«ü©w¤F³o­Ó¦WºÙ¡I±z¥²¶·¥ı°õ¦æ­«·s©R¦W©R¥O¡AµM¦Z¤~¯à°÷«ìÎ`·í«eªº¸ê®Æ·½¡C";
     Message[ turkish ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
@@ -1692,7 +1692,7 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text[ polish ] = "Po³¹czenie ze Ÿród³em danych \"$name$\" wymaga wprowadzenia has³a.";
     Text[ portuguese_brazilian ] = "Connecting to data source \"$name$\" requires you to enter a password.";
     Text[ japanese ] = "\"$name$\" ÃŞ°À¿°½‚Ö‚ÌÚ‘±‚É‚ÍÊß½Ü°ÄŞ‚Ì“ü—Í‚ª•K—v‚Å‚·B";
-    Text[ korean ] = "Connecting to data source \"$name$\" requires you to enter a password.";
+    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º \"$name$\" ¿¡ ¿¬°áÇÏ±â À§ÇØ¼­´Â ÆĞ½º¿öµå¸¦ ÀÔ·ÂÇØ¾ß ÇÕ´Ï´Ù.";
     Text[ chinese_simplified ] = "¶ÁÈ¡Êı¾İÔ´ \"$name$\" ÒªÇóÄúÊäÈëÃÜÂë¡£";
     Text[ chinese_traditional ] = "³s½u¨ì¸ê®Æ·½ \"$name$\" ¥²¶·¿é¤J¤@­Ó±K½X¡C";
     Text[ turkish ] = "Connecting to data source \"$name$\" requires you to enter a password.";
@@ -1715,7 +1715,7 @@ String STR_DATASOURCE_DEFAULTNAME
     Text[ polish ] = "ród³o danych";
     Text[ portuguese_brazilian ] = "datas source";
     Text[ japanese ] = "ÃŞ°À¿°½";
-    Text[ korean ] = "datas source";
+    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
     Text[ chinese_simplified ] = "Êı¾İÔ´";
     Text[ chinese_traditional ] = "¸ê®Æ·½";
     Text[ turkish ] = "datas source";
@@ -1738,11 +1738,11 @@ String STR_ERR_EMPTY_DSN_NAME
     Text[ polish ] = "Nazwa Ÿród³a danych nie mo¿e byæ pusta!";
     Text[ portuguese_brazilian ] = "The data source name must not be empty!";
     Text[ japanese ] = "ÃŞ°À¿°½–¼‚ª‹ó”’‚Å‚Í‚¢‚¯‚Ü‚¹‚ñB";
-    Text[ korean ] = "The data source name must not be empty!";
+    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º ÀÌ¸§ÀÌ ºñ¾î ÀÖ¾î¼­´Â ¾ÈµË´Ï´Ù!";
     Text[ chinese_simplified ] = "Êı¾İÔ´Ãû³Æ²»¿ÉÒÔ¿ÕÈ±£¡";
     Text[ chinese_traditional ] = "¸ê®Æ·½¦WºÙ¤£¥i¥HªÅ¯Ê¡I";
     Text[ turkish ] = "The data source name must not be empty!";
-    Text[ arabic ] = "The data source name must not be empty!";
+    Text[ arabic ] = "íÌÈ ÃáÇ íßæä ÇÓã ãÕÏÑ ÇáÈíÇäÇÊ İÇÑÛÇğ!";
 };
 Menu MENU_DATASOURCELIST_POPUP
 {
@@ -1766,7 +1766,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text[ polish ] = "nowe Ÿród³o danych";
             Text[ portuguese_brazilian ] = "new data source";
             Text[ japanese ] = "V‚µ‚¢ÃŞ°À¿°½";
-            Text[ korean ] = "new data source";
+            Text[ korean ] = "»õ·Î¿î µ¥ÀÌÅÍ ¼Ò½º";
             Text[ chinese_simplified ] = "ĞÂµÄÊı¾İÔ´";
             Text[ chinese_traditional ] = "·sªº¸ê®Æ·½";
             Text[ turkish ] = "new data source";
@@ -1790,7 +1790,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text[ polish ] = "Usuñ Ÿród³o danych";
             Text[ portuguese_brazilian ] = "delete data source";
             Text[ japanese ] = "ÃŞ°À¿°½‚Ìíœ";
-            Text[ korean ] = "delete data source";
+            Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º »èÁ¦";
             Text[ chinese_simplified ] = "É¾³ıÊı¾İÔ´";
             Text[ chinese_traditional ] = "§R°£¸ê®Æ·½";
             Text[ turkish ] = "delete data source";
@@ -1814,7 +1814,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text[ polish ] = "Odtwórz Ÿród³o danych";
             Text[ portuguese_brazilian ] = "restore data source";
             Text[ japanese ] = "ÃŞ°À¿°½‚Ì•œŒ³";
-            Text[ korean ] = "restore data source";
+            Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º º¹¿ø";
             Text[ chinese_simplified ] = "»Ö¸´Êı¾İÔ´";
             Text[ chinese_traditional ] = "«ìÎ`¸ê®Æ·½";
             Text[ turkish ] = "restore data source";
@@ -1826,6 +1826,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2000/11/22 15:44:40  oj
+ *  #80269# remove property long names
+ *
  *  Revision 1.14  2000/11/15 21:09:13  kz
  *  Merge SRC613: 11/15/00 - 22:08:39 (NoBranch)
  *
