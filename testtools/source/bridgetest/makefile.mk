@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:47:41 $
+#   last change: $Author: rt $ $Date: 2004-08-20 09:16:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -192,11 +192,12 @@ MY_JARS=java_uno.jar ridl.jar jurt.jar juh.jar
 MY_CLASSPATH_TMP=$(foreach,i,$(MY_JARS) $(SOLARBINDIR)$/$i)$(PATH_SEPERATOR)$(XCLASSPATH)
 MY_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))$(PATH_SEPERATOR)..$/class
 
+# Use "127.0.0.1" instead of "localhost", see #i32281#:
 $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
     +echo java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar \
         com.sun.star.comp.bridge.TestComponentMain \
-        \""uno:socket,host=localhost,port=2002;urp;test"\" \
+        \""uno:socket,host=127.0.0.1,port=2002;urp;test"\" \
         > $@
     $(GIVE_EXEC_RIGHTS) $@
 
