@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdocumentclassification.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:22:53 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 13:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ namespace svxform
                 if ( xChild.is() )
                     return getTypedModelNode< TYPE >( xChild->getParent() );
                 else
-                    return NULL;
+                    return Reference< TYPE >();
             }
         }
 
@@ -144,7 +144,7 @@ namespace svxform
             {
                 Reference< XNameContainer > xXForms;
                 Reference< XFormsSupplier > xSuppForms( _rxDocumentModel, UNO_QUERY );
-                xXForms = xSuppForms.is() ? xSuppForms->getXForms() : NULL;
+                xXForms = xSuppForms.is() ? xSuppForms->getXForms() : Reference< XNameContainer >();
                 if ( xXForms.is() )
                     return eEnhancedForm;
             }
