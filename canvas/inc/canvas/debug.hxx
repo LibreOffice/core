@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:02:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ inline void debug_ensure_and_throw( bool bCondition, const char* pMsg )
     OSL_ENSURE(bCondition,pMsg);
     if( !bCondition )
         throw ::com::sun::star::uno::RuntimeException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(pMsg) ),
+            ::rtl::OUString::createFromAscii( pMsg ),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 }
 
@@ -93,7 +93,7 @@ inline void debug_check_and_throw( bool bCondition, const char* pMsg )
     OSL_ENSURE(bCondition,pMsg);
     if( !bCondition )
         throw ::com::sun::star::lang::IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(pMsg) ),
+            ::rtl::OUString::createFromAscii( pMsg ),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(),
             0 );
 }
