@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-02 21:09:59 $
+ *  last change: $Author: kz $ $Date: 2001-11-07 21:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -16996,12 +16996,12 @@ String SIP_EE_CHAR_FONTHEIGHT
     Text[ swedish ] = "Teckenstorlek";
     Text[ polish ] = "Rozmiar czcionki";
     Text[ portuguese_brazilian ] = "Font size";
-    Text[ japanese ] = "οΎο½«οΎοΎ„ ο½»ο½²ο½½οΎ";
-    Text[ chinese_simplified ] = "ε­—δ½“ε¤§ε°";
-    Text[ chinese_traditional ] = "ε­—ε‹ε¤§ε°";
+    Text[ japanese ] = "οΎο½«οΎοΎ„γ®ο½»ο½²ο½½οΎ";
+    Text[ chinese_simplified ] = "ε­—δ½“θ§„ζ Ό";
+    Text[ chinese_traditional ] = "ε­—ε‹θ¦ζ Ό";
     Text[ arabic ] = "ΝΜγ ΗαΞΨ";
     Text[ dutch ] = "Schriftgrootte";
-    Text[ chinese_simplified ] = "ε­—δ½“ε¤§ε°";
+    Text[ chinese_simplified ] = "ε­—δ½“θ§„ζ Ό";
     Text[ greek ] = "Μέγεθος γραμματοσειράς";
     Text[ korean ] = "κΈ€κΌ΄ ν¬κΈ°";
     Text[ turkish ] = "Yazύtipi boyutu";
@@ -17730,6 +17730,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
