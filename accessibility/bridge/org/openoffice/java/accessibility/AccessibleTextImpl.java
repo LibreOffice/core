@@ -60,7 +60,7 @@ package org.openoffice.java.accessibility;
 import com.sun.star.awt.*;
 import com.sun.star.style.*;
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 import javax.accessibility.AccessibleText;
 import javax.swing.text.StyleConstants;
@@ -123,8 +123,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                     s = " ";
                 }
                 return s;
-            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            } catch (com.sun.star.uno.RuntimeException e) {
+            } catch (com.sun.star.uno.Exception e) {
             }
         }
         return null;
@@ -327,10 +326,29 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         }
     }
 
+    static String [] attributeList = {
+        "ParaAdjust",
+        "CharBackColor",
+        "CharWeight",
+        "ParaFirstLineIndent",
+        "CharFontPitch",
+        "CharHeight",
+        "CharColor",
+        "CharPosture",
+        "ParaLeftMargin",
+        "ParaLineSpacing",
+        "ParaTopMargin",
+        "ParaBottomMargin",
+        "CharStrikeout",
+        "CharEscapement",
+        "ParaTabStops",
+        "CharUnderline"
+    };
+
     /** Returns the AttributSet for a given character at a given index */
     public javax.swing.text.AttributeSet getCharacterAttribute(int index) {
         try {
-            com.sun.star.beans.PropertyValue[] propertyValues = unoObject.getCharacterAttributes(index);
+            com.sun.star.beans.PropertyValue[] propertyValues = unoObject.getCharacterAttributes(index, attributeList);
             javax.swing.text.SimpleAttributeSet attributeSet = new javax.swing.text.SimpleAttributeSet();
             if (null != propertyValues) {
                 for (int i = 0; i < propertyValues.length; i++) {
@@ -394,8 +412,11 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                     s = " ";
                 }
                 return s;
-            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            } catch (com.sun.star.uno.RuntimeException e) {
+            } catch (com.sun.star.uno.Exception e) {
+                if (Build.DEBUG) {
+                    System.err.println(this + e .getClass().getName() + " caught in getBeforeIndex(" + part + ", " + index + "): ");
+                    System.err.println(e.getMessage());
+                }
             }
         }
         return null;
@@ -432,6 +453,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                    if (Build.DEBUG) {
                        System.err.println(this + "IndexOutOfBoundsException caught for getAtIndex(" + part + "," + index + ")");
+                    System.err.println(e.getMessage());
                 }
                 // Workaround for #104847#
                 if (type == AccessibleTextType.LINE) {
