@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-05 13:42:23 $
+ *  last change: $Author: ssa $ $Date: 2002-11-15 12:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,6 +650,7 @@ void ImplSalYield( BOOL bWait )
 {
     MSG aMsg;
 
+    SalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( bWait )
     {
         if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
@@ -684,7 +685,16 @@ void SalInstance::Yield( BOOL bWait )
     }
     if ( pSalData->mnAppThreadId != nCurThreadId )
     {
-        ImplSendMessage( maInstData.mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)0 );
+        // #97739# A SendMessage call blocks until the called thread (here: the main thread)
+        // returns. During a yield however, messages are processed in the main thread that might
+        // result in a new message loop due to opening a dialog. Thus, SendMessage would not
+        // return which will block this thread!
+        // Solution: just give up the time slice and hope that messages are processed
+        // by the main thread anyway (where all windows are created)
+        // If the mainthread is not currently handling messages, then our SendMessage would
+        // also do nothing, so this seems to be reasonable.
+        //ImplSendMessage( maInstData.mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)0 );
+        Sleep(1);
         n = nCount;
         while ( n )
         {
@@ -718,6 +728,8 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_THREADYIELD:
+            // #97739#: we should never reach this point
+            // other threads do not actively yield anymore, they just sleep (see SalInstance::Yield)
             ImplSalYield( (BOOL)wParam );
             rDef = FALSE;
             break;
