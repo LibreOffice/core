@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-07 15:11:21 $
+ *  last change: $Author: kz $ $Date: 2000-12-13 12:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2056,7 +2056,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
             {
                 DBG_ASSERT( ( pAttrib->Which() >= EE_CHAR_START ) && ( pAttrib->Which() <= EE_FEATURE_END ), "Unglueltiges Attribut in Seek() " );
                 if ( IsScriptItemValid( pAttrib->Which(), nScriptType ) )
-                #if SUPD > 615
+                #if SUPD >= 615
                     pAttrib->SetFont( rFont, pOut );
                 #else
                     pAttrib->SetFont( rFont );
