@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:06:25 $
+ *  last change: $Author: rt $ $Date: 2000-11-29 10:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,7 +676,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "€Ί€εΌΠΕÒ";
         Text[ arabic ] = "ΕΤΗΡΙ γΡΜΪνΙ";
         Text[ greek ] = "Σημάδι κειμένου";
-        Text[ korean ] = "Γ₯ °₯ΗΗ";
+        Text[ korean ] = "Γ₯°₯ΗΗ";
         Text[ turkish ] = "Metin iώareti";
         Text[ language_user1 ] = " ";
     };
@@ -1175,7 +1175,7 @@ String STR_IMGBTN_BKM_DOWN
     Text[ chinese_traditional ] = "€U€@­Σ®ΡΕÒ";
     Text[ arabic ] = "ΗαΕΤΗΡΙ ΗαγΡΜΪνΙ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενο σημάδι κειμένου";
-    Text[ korean ] = "΄Ωΐ½ Γ₯ °₯ΗΗ";
+    Text[ korean ] = "΄Ωΐ½ Γ₯°₯ΗΗ";
     Text[ turkish ] = "Sonraki metin iώareti";
     Text[ language_user1 ] = " ";
 };
@@ -1575,7 +1575,7 @@ String STR_IMGBTN_BKM_UP
     Text[ chinese_traditional ] = "€W€@­Σ®ΡΕÒ";
     Text[ arabic ] = "ΗαΕΤΗΡΙ ΗαγΡΜΪνΙ ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενο σημάδι κειμένου";
-    Text[ korean ] = "ΐΜΐό  Γ₯ °₯ΗΗ";
+    Text[ korean ] = "ΐΜΐό  Γ₯°₯ΗΗ";
     Text[ turkish ] = "Φnceki metin iώareti";
     Text[ language_user1 ] = " ";
 };
