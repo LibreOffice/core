@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:58:21 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,9 @@
 #include "arealink.hxx"
 #endif
 
+#ifndef SC_XLFORMULA_HXX
+#include "xlformula.hxx"
+#endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
@@ -506,12 +509,17 @@ void XclImpValidation::ReadDv( XclImpStream& rStrm )
     sal_uInt32 nFlags;
     rStrm >> nFlags;
 
-    // messages
+    // message strings
     String aPromptTitle, aErrorTitle, aPromptMessage, aErrorMessage;
+
+    /*  Empty strings are single NUL characters in Excel (string length is 1).
+        -> Do not let the stream replace them with '?' characters. */
+    rStrm.SetNulSubstChar( '\0' );
     rStrm.AppendUniString( aPromptTitle );
     rStrm.AppendUniString( aErrorTitle );
     rStrm.AppendUniString( aPromptMessage );
     rStrm.AppendUniString( aErrorMessage );
+    rStrm.SetNulSubstChar();    // back to default
 
     // formula(s)
     if( rStrm.GetRecLeft() > 8 )
@@ -519,28 +527,35 @@ void XclImpValidation::ReadDv( XclImpStream& rStrm )
         sal_uInt16 nLen;
 
         // first formula
-        const ScTokenArray* pFmla1 = NULL;
+        // string list is single tStr token with NUL separators -> replace them with LF
+        rStrm.SetNulSubstChar( '\n' );
+        ::std::auto_ptr< ScTokenArray > pTokArr1;
         rStrm >> nLen;
         rStrm.Ignore( 2 );
         if( nLen )
         {
+            const ScTokenArray* pTokArr = NULL;
             rFmlaConv.Reset();
-            rFmlaConv.Convert( pFmla1, nLen, FT_RangeName );
+            rFmlaConv.Convert( pTokArr, nLen, FT_RangeName );
+            // formula converter owns pTokArr -> create a copy of the token array
+            if( pTokArr )
+                pTokArr1.reset( pTokArr->Clone() );
         }
-        // formula converter owns pFmla1 -> create a copy of the token array
-        ::std::auto_ptr< const ScTokenArray > pFmla1AutoPtr( pFmla1 ? pFmla1->Clone() : NULL );
-        pFmla1 = pFmla1AutoPtr.get();
+        rStrm.SetNulSubstChar();    // back to default
 
         // second formula
-        const ScTokenArray* pFmla2 = NULL;
+        ::std::auto_ptr< ScTokenArray > pTokArr2;
         rStrm >> nLen;
         rStrm.Ignore( 2 );
         if( nLen )
         {
+            const ScTokenArray* pTokArr = NULL;
             rFmlaConv.Reset();
-            rFmlaConv.Convert( pFmla2, nLen, FT_RangeName );
+            rFmlaConv.Convert( pTokArr, nLen, FT_RangeName );
+            // formula converter owns pTokArr -> create a copy of the token array
+            if( pTokArr )
+                pTokArr2.reset( pTokArr->Clone() );
         }
-        // we do not own pFmla2
 
         // read all cell ranges
         ScRangeList aRanges;
@@ -583,9 +598,14 @@ void XclImpValidation::ReadDv( XclImpStream& rStrm )
             const ScRange* pRange = aRanges.GetObject( 0 );
             if( bIsValid && pRange )
             {
-                ScValidationData aValidData( eValMode, eCondMode, pFmla1, pFmla2, &rDoc, pRange->aStart );
+                // process string list of a list validity (convert to list of string tokens)
+                if( pTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
+                    XclTokenArrayHelper::ConvertStringToList( *pTokArr1, '\n' );
+
+                ScValidationData aValidData( eValMode, eCondMode, pTokArr1.get(), pTokArr2.get(), &rDoc, pRange->aStart );
 
                 aValidData.SetIgnoreBlank( ::get_flag( nFlags, EXC_DV_IGNOREBLANK ) );
+                aValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, ValidListType::INVISIBLE, ValidListType::UNSORTED ) );
 
                 // *** prompt box ***
                 if( aPromptTitle.Len() || aPromptMessage.Len() )
@@ -683,12 +703,12 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
             String aToken( aTables.GetQuotedToken( 0, aQuotedPairs, cSep, nStringIx ) );
             sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.ToInt32() : 0;
             if( nTabNum > 0 )
-                ScfTools::AddToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );
+                ScGlobal::AddToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );
             else
             {
-                ScfTools::EraseQuotes( aToken );
+                ScGlobal::EraseQuotes( aToken );
                 if( aToken.Len() )
-                    ScfTools::AddToken( maTables, ScfTools::GetNameFromHTMLName( aToken ), cSep );
+                    ScGlobal::AddToken( maTables, ScfTools::GetNameFromHTMLName( aToken ), cSep );
             }
         }
     }
