@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drbezob.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:42:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
         case SID_BEZIER_SYMMTR:
         case SID_BEZIER_CLOSE:
         {
-            const SdrMarkList& rMarkList = pView->GetMarkList();
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
             if (rMarkList.GetMark(0) && !pView->IsAction())
             {
@@ -339,7 +339,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                 }
             }
 
-            if ( !pView->HasMarkedObj() )
+            if ( !pView->AreObjectsMarked() )
                 pViewSh->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
             rReq.Ignore();
