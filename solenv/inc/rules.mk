@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2000-12-15 17:05:22 $
+#   last change: $Author: hjs $ $Date: 2000-12-21 11:23:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -570,9 +570,9 @@ $(MISC)$/%.dpj : makefile.mk
 .ENDIF
 .ELSE 			# "$(ndep)"==""
 .IF "$(GUI)"=="UNX"
-    @$(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/:/ /) -i $i) $(JAVACLASSFILES))
+    @+echo $(shell +$(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/:/ /) -i $i) $(JAVACLASSFILES)))
 .ELSE
-    $(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/;/ /) -i $i) $(JAVACLASSFILES))
+    @+echo $(shell +$(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/;/ /) -i $i) $(JAVACLASSFILES)))
 .ENDIF
 .ENDIF			# "$(nodep)"==""
 
