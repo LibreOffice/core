@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2001-12-18 13:44:13 $
+ *  last change: $Author: sj $ $Date: 2001-12-18 14:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -944,18 +944,19 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 }
                 else
                 {
-                    Graphic         aGraphic;
                     INetURLObject   aTmp( aGraphicUrl );
                     SvStream* pIn = ::utl::UcbStreamHelper::CreateStream(
                         aTmp.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
                     if ( pIn )
                     {
+                        Graphic aGraphic;
                         sal_uInt32 nErrCode = GraphicConverter::Import( *pIn, aGraphic );
                         if ( nErrCode == ERRCODE_NONE )
                         {
                             aGraphicObject = aGraphic;
                             aUniqueId = aGraphicObject.GetUniqueID();
                         }
+                        delete pIn;
                     }
                 }
             }
