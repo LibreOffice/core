@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:RecText" toolbar:helpid="helpid:10624" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:AbsoluteRecord" toolbar:helpid="helpid:10622" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:RecFromText" toolbar:helpid="helpid:10625" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:RecTotal" toolbar:helpid="helpid:10626" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FirstRecord" toolbar:helpid="helpid:10616" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:PrevRecord" toolbar:helpid="helpid:10618" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:NextRecord" toolbar:helpid="helpid:10617" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:LastRecord" toolbar:helpid="helpid:10619" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:RecSave" toolbar:helpid="helpid:10627" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:RecUndo" toolbar:helpid="helpid:10630" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:NewRecord" toolbar:helpid="helpid:10620" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DeleteRecord" toolbar:helpid="helpid:10621" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Refresh" toolbar:helpid="helpid:10724" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:RecSearch" toolbar:helpid="helpid:10725" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Sortup" toolbar:helpid="helpid:10712" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SortDown" toolbar:helpid="helpid:10713" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:AutoFilter" toolbar:helpid="helpid:10716" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FormFilter" toolbar:helpid="helpid:10729" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:OrderCrit" toolbar:helpid="helpid:10714" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:RemoveFilterSort" toolbar:helpid="helpid:10711" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ViewFormAsGrid" toolbar:helpid="helpid:10761" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FormFiltered" toolbar:helpid="helpid:10723" toolbar:text="" />
+</toolbar:toolbar>
