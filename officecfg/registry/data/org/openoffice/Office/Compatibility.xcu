@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Compatibility.xcu,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:32:55 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 <oor:component-data oor:name="Compatibility" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="WriterCompatibilityVersion">
         <prop oor:name="OOo11" oor:type="xs:string">
-            <value>StarOffice 6.0/7</value>
+            <value>${WRITERCOMPATIBILITYVERSIONOOO11}</value>
         </prop>
     </node>
     <node oor:name="AllFileFormats">
