@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:16:52 $
+ *  last change: $Author: hr $ $Date: 2004-12-20 09:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,7 +42,6 @@
  *
  *
  ************************************************************************/
-#include <interface.hxx>
 #include <cstdio>
 #include <sys/utsname.h>
 #include <_version.h>
@@ -56,6 +55,10 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <pthread.h>
+
+#include <hash_map>
+#include <vector>
+#include <string>
 
 #if defined (LINUX) || (FREEBSD)
 #include <netinet/in.h>
@@ -502,79 +505,14 @@ struct RequestParams
     unsigned short uPort;
     const char *pProxyServer;
     unsigned short uProxyPort;
-    WizardDialog *pDialog;
 };
 
-extern "C" void *http_send_thread( void *arg )
-{
-    RequestParams *request = (RequestParams *)arg;
 
-    int oldtype;
-
-    /* Killing me hardly ;-) */
-    pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, &oldtype );
-
-    request->success = SendHTTPRequest(
-        request->fpin,
-        request->pServer,
-        request->uPort,
-        request->pProxyServer,
-        request->uProxyPort
-        );
-
-    request->pDialog->hide_sendingstatus();
-
-    return 0;
-}
-
-bool SendAsyncHTTPRequest(
-                WizardDialog &rDialog,
-                FILE *fp,
-                const char *pszServer,
-                unsigned short uPort = 80,
-                const char *pszProxyServer = NULL,
-                unsigned short uProxyPort = 8080 )
-{
-    RequestParams   request;
-
-    request.success = false;
-    request.pDialog = &rDialog;
-    request.fpin = fp;
-    request.pServer = pszServer;
-    request.uPort = uPort;
-    request.pProxyServer = pszProxyServer;
-    request.uProxyPort = uProxyPort;
-
-    pthread_t thread = 0;
-
-    if (
-        0 == pthread_create (
-            &thread,
-            NULL,
-            http_send_thread,
-            (void*)&request )
-            )
-    {
-        gint response = rDialog.show_sendingstatus( TRUE );
-
-        pthread_cancel( thread );
-
-        void *thread_result = NULL;
-
-        pthread_join( thread, &thread_result );
-    }
-
-    return request.success;
-}
-
-
-bool send_crash_report( WizardDialog *pDialog, const hash_map< string, string >& rSettings )
+bool send_crash_report( const hash_map< string, string >& rSettings )
 {
     if ( 0 == strcasecmp( rSettings.find( "CONTACT" )->second.c_str(), "true" ) &&
          !trim_string(rSettings.find( "EMAIL" )->second).length() )
     {
-        if ( pDialog )
-            pDialog->show_messagebox( StringResource::get( "%ERROR_MSG_NOEMAILADDRESS%" ) );
         return false;
     }
 
@@ -597,41 +535,15 @@ bool send_crash_report( WizardDialog *pDialog, const hash_map< string, string >&
         WriteSOAPRequest( fptemp );
         fseek( fptemp, 0, SEEK_SET );
 
-        if ( pDialog )
-            bSuccess = SendAsyncHTTPRequest(
-                *pDialog,
-                fptemp,
-                REPORT_SERVER, REPORT_PORT,
-                bUseProxy ? pProxyServer : NULL,
-                uProxyPort ? uProxyPort : 8080
-                );
-        else
-        {
-            bSuccess = SendHTTPRequest(
-                fptemp,
-                REPORT_SERVER, REPORT_PORT,
-                bUseProxy ? pProxyServer : NULL,
-                uProxyPort ? uProxyPort : 8080
-                );
-        }
+        bSuccess = SendHTTPRequest(
+            fptemp,
+            REPORT_SERVER, REPORT_PORT,
+            bUseProxy ? pProxyServer : NULL,
+            uProxyPort ? uProxyPort : 8080
+            );
 
         fclose( fptemp );
 
-        if ( bSuccess )
-        {
-            if ( pDialog )
-                pDialog->show_sendingstatus( FALSE );
-        }
-        else
-        {
-            if ( pDialog )
-                pDialog->show_messagebox( StringResource::get( "%ERROR_MSG_PROXY%" ) );
-        }
-    }
-    else
-    {
-        if ( pDialog )
-            pDialog->show_messagebox( StringResource::get("%ERROR_MSG_DISK_FULL%") );
     }
 
     unlink( g_szDescriptionFile );
@@ -753,11 +665,11 @@ static long setup_commandline_arguments( int argc, char** argv, int *pSignal )
                 "\n%s crash_report %s\n\n" \
                 "/?, -h[elp]          %s\n\n" \
                 "%-20s %s\n\n",
-                StringResource::get( "%MSG_CMDLINE_USAGE%" ),
-                StringResource::get( "%MSG_PARAM_PROCESSID%" ),
-                StringResource::get( "%MSG_PARAM_HELP_DESCRIPTION%" ),
-                StringResource::get( "%MSG_PARAM_PROCESSID%" ),
-                StringResource::get( "%MSG_PARAM_PROCESSID_DESCRIPTION%" )
+                "%MSG_CMDLINE_USAGE%",
+                "%MSG_PARAM_PROCESSID%",
+                "%MSG_PARAM_HELP_DESCRIPTION%",
+                "%MSG_PARAM_PROCESSID%",
+                "%MSG_PARAM_PROCESSID_DESCRIPTION%"
                 );
             break;
         }
@@ -1152,11 +1064,6 @@ int main( int argc, char** argv )
 
     if ( setup_version() )
     {
-           gtk_set_locale ();
-           gtk_init (&argc, &argv);
-
-           StringResource::init( argc, argv );
-
         long pid = setup_commandline_arguments( argc, argv, &g_signal );
 
         if ( g_bLoadReport )
@@ -1166,33 +1073,12 @@ int main( int argc, char** argv )
 
         if ( g_bSendReport )
         {
-            if ( !get_accessibility_state() && !g_bNoUI )
-            {
-                WizardDialog aDialog;
+            hash_map< string, string > aDialogSettings;
 
-                hash_map< string, string >& rDialogSettings = aDialog.getSettings();
+            read_settings( aDialogSettings );
+            read_settings_from_environment( aDialogSettings );
 
-                read_settings( rDialogSettings );
-                read_settings_from_environment( rDialogSettings );
-
-                aDialog.insertPage( new WelcomePage( &aDialog ) );
-                aDialog.insertPage( new MainPage( &aDialog ) );
-
-                aDialog.show();
-
-                gtk_main();
-
-                write_settings( rDialogSettings );
-            }
-            else
-            {
-                hash_map< string, string > aDialogSettings;
-
-                read_settings( aDialogSettings );
-                read_settings_from_environment( aDialogSettings );
-
-                send_crash_report( NULL, aDialogSettings );
-            }
+            send_crash_report( aDialogSettings );
         }
         else
         {
