@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 10:10:29 $
+ *  last change: $Author: mba $ $Date: 2001-05-17 12:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ using namespace package_ucp;
 #define NONE_MODIFIED           sal_uInt32( 0x00 )
 #define MEDIATYPE_MODIFIED      sal_uInt32( 0x01 )
 #define COMPRESSED_MODIFIED     sal_uInt32( 0x02 )
-#define ENCRYPTED_MODIFIED      sal_uInt32( 0x03 )
+#define ENCRYPTED_MODIFIED      sal_uInt32( 0x04 )
 
 //=========================================================================
 //=========================================================================
