@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iprcache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-11 17:13:17 $
+ *  last change: $Author: tl $ $Date: 2001-11-08 07:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ class IPRCachedWord
 
 public:
     IPRCachedWord( const String& rWord, IPRCachedWord* pFollow, INT16 nLang )
-        : aWord( rWord ), pPrev( NULL ), pFollow( pFollow ),
+        : aWord( rWord ), pNext( 0 ), pPrev( 0 ), pFollow( pFollow ),
           nLanguage( nLang ), nFound( 0 ) {}
     ~IPRCachedWord(){}
 
@@ -456,7 +456,7 @@ BOOL IPRSpellCache::CheckWord( const String& rWord, INT16 nLang, BOOL bAllLang )
         {
             IPRCachedWord* pTmp = pRun->GetNext();
             while( pTmp && !( bRet = ( rWord == pTmp->GetWord() &&
-                (nLang == pRun->GetLang() || bAllLang) ) ) )
+                (nLang == pTmp->GetLang() || bAllLang) ) ) )
             {
                 pRun = pTmp;
                 pTmp = pTmp->GetNext();
