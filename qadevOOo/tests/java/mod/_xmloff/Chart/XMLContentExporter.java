@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLContentExporter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:57 $
+ *  last change:$Date: 2003-05-27 14:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public class XMLContentExporter extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating a chartdocument" );
@@ -153,7 +153,7 @@ public class XMLContentExporter extends TestCase {
     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
-        XMultiServiceFactory xMSF = tParam.getMSF() ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
         XInterface oObj = null;
         final String exportStr = "XMLContentExporter" ;
 
