@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:21:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,10 +542,6 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
         ( bPipeVeto           == sal_False )
       )
     {
-        // #110897#
-        // ModifiedDocumentsWindow::Remove();
-        ModifiedDocumentsWindow::Remove( m_xFactory );
-
         // Step over all child tasks and ask they "WOULD YOU DIE?"
         css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lTasks = m_aChildTaskContainer.getAllElements();
         sal_Int32                                                       nCount = lTasks.getLength()                    ;
