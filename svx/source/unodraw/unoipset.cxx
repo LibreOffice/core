@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 15:38:48 $
+ *  last change: $Author: cl $ $Date: 2001-11-05 13:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ uno::Reference< beans::XPropertySetInfo > SvxInfoSetCache::getCachedPropertySetI
                SfxItemPropertyMap pointers. This will cause a cache overflow as the current
                implementation is designed for a limited number of different SfxItemPropertyMap
                pointers */
-            DBG_ASSERT( mpGlobalCache->maInfoMap.size(), "WARNING: SvxInfoSetCache::get(), possible cache overflow!" );
+            DBG_ASSERT( mpGlobalCache->maInfoMap.size() < 200, "WARNING: SvxInfoSetCache::get(), possible cache overflow!" );
 
         }
     }
@@ -217,7 +217,7 @@ const SfxItemPropertyMap* SvxInfoSetCache::getSortedPropertyMap( const SfxItemPr
            SfxItemPropertyMap pointers. This will cause a cache overflow as the current
            implementation is designed for a limited number of different SfxItemPropertyMap
            pointers */
-        DBG_ASSERT( mpGlobalCache->maPropertyMap.size(), "WARNING: SvxInfoSetCache::get(), possible cache overflow!" );
+        DBG_ASSERT( mpGlobalCache->maPropertyMap.size() < 200, "WARNING: SvxInfoSetCache::get(), possible cache overflow!" );
     }
 
     return pSortedMap;
