@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2001-03-13 21:50:39 $
+ *  last change: $Author: svesik $ $Date: 2001-03-13 21:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,13 @@
 #include <stdlib.h>         //wegen fcvt
 #endif
 #if defined(MAC) || defined(NETBSD)
+#if defined(NETBSD)
+extern "C" {
+#endif
 char *fcvt(double value, int ndigit, int *decpt, int *sign);
+#if defined(NETBSD)
+}
+#endif
 #endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen
