@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:10:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,9 @@
 
 #include <algorithm>
 #include "opengrf.hxx"
+
+#include "svxdlg.hxx" //CHINA001
+#include "dialogs.hrc" //CHINA001
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -2785,7 +2788,11 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, pMenu )
 --------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, BulletHdl_Impl, Button *, pBtn )
 {
-    SvxCharacterMap* pMap = new SvxCharacterMap(this, TRUE);
+    //CHINA001 SvxCharacterMap* pMap = new SvxCharacterMap(this, TRUE);
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    AbstractSvxCharacterMap* pMap = pFact->CreateSvxCharacterMap( this,  ResId(RID_SVXDLG_CHARMAP), TRUE );
+    DBG_ASSERT(pMap, "Dialogdiet fail!");//CHINA001
 
     USHORT nMask = 1;
     const Font* pFmtFont = 0;
