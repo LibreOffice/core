@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:13:43 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,15 @@
 #endif
 #ifndef _SVX_DLG_HYPERLINK_HXX //autogen
 #include <svx/hyprlink.hxx>
+#endif
+#ifndef _SVX_TBXCUSTOMSHAPES_HXX
+#include <svx/tbxcustomshapes.hxx>
+#endif
+#ifndef _SVX_FONTWORK_GALLERY_DIALOG_HXX
+#include <svx/fontworkgallery.hxx>
+#endif
+#ifndef _SVX_EXTRUSION_CONTROLS_HXX
+#include <svx/extrusioncontrols.hxx>
 #endif
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
@@ -569,6 +578,23 @@ void SwDLL::RegisterControls()
     SwTbxInsertCtrl::RegisterControl(FN_INSERT_OBJ_CTRL, pMod );
     SwTbxAutoTextCtrl::RegisterControl(FN_INSERT_FIELD_CTRL, pMod );
     SwTbxAutoTextCtrl::RegisterControl(FN_GLOSSARY_DLG, pMod );
+
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_BASIC, pMod );
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_SYMBOL, pMod );
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_ARROW, pMod );
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_FLOWCHART, pMod );
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_CALLOUT, pMod );
+    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_STAR, pMod );
+
+    svx::ExtrusionDepthControl::RegisterControl( SID_EXTRUSION_DEPTH_FLOATER, pMod );
+    svx::ExtrusionDirectionControl::RegisterControl( SID_EXTRUSION_DIRECTION_FLOATER, pMod );
+    svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
+    svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
+    svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
+
+    svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPES, pMod );
+    svx::FontWorkAlignmentControl::RegisterControl( SID_FONTWORK_ALIGNMENT_FLOATER, pMod );
+    svx::FontWorkCharacterSpacingControl::RegisterControl( SID_FONTWORK_CHARACTER_SPACING_FLOATER, pMod );
 
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
     SvxUndoRedoControl::RegisterControl(SID_UNDO, pMod );
