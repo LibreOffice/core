@@ -17,8 +17,7 @@ mkdir: %_DEST%\inc%_EXT%\bridges\java
 ..\%__SRC%\lib\liburp_uno* %_DEST%\lib%_EXT%\liburp_uno*
 ..\%__SRC%\bin\urp_uno* %_DEST%\bin%_EXT%\urp_uno*
 ..\%__SRC%\lib\libjava_uno* %_DEST%\lib%_EXT%\libjava_uno*
-..\%__SRC%\bin\java_uno* %_DEST%\bin%_EXT%\java_uno*
-..\%__SRC%\lib\java_uno.jar %_DEST%\bin%_EXT%\java_uno.jar
+..\%__SRC%\class\java_uno.jar %_DEST%\bin%_EXT%\java_uno.jar
 
 ..\%__SRC%\bin\prot_uno_uno.* %_DEST%\bin%_EXT%\prot_uno_uno.*
 ..\%__SRC%\lib\libprot_uno_uno.* %_DEST%\lib%_EXT%\libprot_uno_uno.*
