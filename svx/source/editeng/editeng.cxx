@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:12:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1270,14 +1270,14 @@ void EditEngine::SetText( const XubString& rText )
         pImpEditEngine->FormatAndUpdate();
 }
 
-sal_uInt32 EditEngine::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
+sal_uInt32 EditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     sal_Bool bUndoEnabled = pImpEditEngine->IsUndoEnabled();
     pImpEditEngine->EnableUndo( sal_False );
     pImpEditEngine->SetText( XubString() );
     EditPaM aPaM( pImpEditEngine->GetEditDoc().GetStartPaM() );
-    pImpEditEngine->Read( rInput, eFormat, EditSelection( aPaM, aPaM ), pHTTPHeaderAttrs );
+    pImpEditEngine->Read( rInput, rBaseURL, eFormat, EditSelection( aPaM, aPaM ), pHTTPHeaderAttrs );
     pImpEditEngine->EnableUndo( bUndoEnabled );
     return rInput.GetError();
 }
