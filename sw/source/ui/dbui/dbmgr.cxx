@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 11:22:42 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2418,12 +2418,18 @@ void SwNewDBMgr::RemoveDbtoolsClient()
 Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sDataSourceName)
 {
     Reference<XDataSource> xSource;
-    Reference<XChild> xChild(_xConnection, UNO_QUERY);
-    if ( xChild.is() )
-        xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
-    if ( !xSource.is() )
-        xSource = SwNewDBMgr::GetDbtoolsClient().getDataSource(_sDataSourceName, ::comphelper::getProcessServiceFactory());
-
+    try
+    {
+        Reference<XChild> xChild(_xConnection, UNO_QUERY);
+        if ( xChild.is() )
+            xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+        if ( !xSource.is() )
+            xSource = SwNewDBMgr::GetDbtoolsClient().getDataSource(_sDataSourceName, ::comphelper::getProcessServiceFactory());
+    }
+    catch(const Exception&)
+    {
+        DBG_ERROR("exception in getDataSourceAsParent caught")
+    }
     return xSource;
 }
 /* -----------------------------20.08.2002 12:00------------------------------
