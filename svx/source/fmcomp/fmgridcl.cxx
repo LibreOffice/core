@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 12:59:19 $
+ *  last change: $Author: oj $ $Date: 2002-11-22 12:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2178,21 +2178,24 @@ void FmGridControl::KeyInput( const KeyEvent& rKEvt )
                 bDone = sal_True;
                 break;
             case KEY_DELETE:
-                if ( GetSelectColumnCount() && GetPeer() )
+                if ( GetSelectColumnCount() && GetPeer() && m_nCurrentSelectedColumn >= 0 )
                 {
                     Reference< ::com::sun::star::container::XIndexContainer >  xCols(GetPeer()->getColumns());
                     if ( xCols.is() )
                     {
                         try
                         {
-                            Reference< XInterface >  xCol;
-                            xCols->getByIndex(m_nCurrentSelectedColumn) >>= xCol;
-                            xCols->removeByIndex(m_nCurrentSelectedColumn);
-                            ::comphelper::disposeComponent(xCol);
+                            if ( m_nCurrentSelectedColumn < xCols->getCount() )
+                            {
+                                Reference< XInterface >  xCol;
+                                xCols->getByIndex(m_nCurrentSelectedColumn) >>= xCol;
+                                xCols->removeByIndex(m_nCurrentSelectedColumn);
+                                ::comphelper::disposeComponent(xCol);
+                            }
                         }
                         catch(const Exception&)
                         {
-                            OSL_ENSURE(0,"exception occured while droping column");
+                            OSL_ENSURE(0,"exception occured while deleting a column");
                         }
                     }
                 }
