@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:24:13 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ String STR_SETREFPAGEFLD
     Text [ spanish ] = "Determinar variable de página" ;
     Text [ french ] = "Variable de la page" ;
     Text [ dutch ] = "Paginavariabele definiëren" ;
-    Text [ swedish ] = "Sätt sidvariabler" ;
+    Text [ swedish ] = "Sätt sidvariabel" ;
     Text [ danish ] = "Definer sidevariabel" ;
     Text [ portuguese ] = "Definir variável de página" ;
     Text [ portuguese_brazilian ] = "Seitenvariable setzen" ;
@@ -652,7 +652,7 @@ String STR_GETREFPAGEFLD
     Text [ italian ] = "Mostra variabile di pagina" ;
     Text [ spanish ] = "Mostrar variable de página" ;
     Text [ french ] = "Afficher variable de page" ;
-    Text [ swedish ] = "Visa sidvariabler" ;
+    Text [ swedish ] = "Visa sidvariabel" ;
     Text [ danish ] = "Vis sidevariabel" ;
     Text [ portuguese ] = "Mostrar variável de página" ;
     Text [ portuguese_brazilian ] = "Seitenvariable anzeigen" ;
@@ -784,7 +784,7 @@ String STR_DBFLD
     TEXT [ finnish ] = "Yhdistelykenttä" ;
     TEXT [ danish ] = "Brevfletningsfelt" ;
     TEXT [ french ] = "Champ de mailing" ;
-    TEXT [ swedish ] = "Fält för kopplad utskrift" ;
+    TEXT [ swedish ] = "Standardbrevfält" ;
     TEXT [ dutch ] = "Standaardbriefveld" ;
     TEXT [ spanish ] = "Campo de carta en serie" ;
     TEXT [ english_us ] = "Form letter field" ;
