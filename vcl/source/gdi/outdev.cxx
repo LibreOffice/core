@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: th $ $Date: 2001-02-23 16:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,8 @@ OutputDevice::OutputDevice() :
     mnDPIY              = 0;
     mnTextOffX          = 0;
     mnTextOffY          = 0;
+    mnEmphasisAscent    = 0;
+    mnEmphasisDescent   = 0;
     mnDrawMode          = 0;
     meOutDevType        = OUTDEV_DONTKNOW;
     mbMap               = FALSE;
@@ -322,6 +324,7 @@ OutputDevice::OutputDevice() :
     maTextFillColorDummy= maFont.GetFillColor();
     meTextAlign         = maFont.GetAlign();
     meRasterOp          = ROP_OVERPAINT;
+    mnAntialiasing      = 0;
     mbLineColor         = TRUE;
     mbFillColor         = TRUE;
     mbInitLineColor     = TRUE;
