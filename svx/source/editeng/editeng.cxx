@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:21:14 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <eeng_pch.hxx>
 
 // #define _SOLAR__PRIVATE 1
@@ -2106,6 +2105,22 @@ EESpellState EditEngine::HasSpellErrors()
 
     return pImpEditEngine->HasSpellErrors();
 #endif
+}
+
+sal_Bool EditEngine::HasConvertibleTextPortion( LanguageType nLang )
+{
+#ifdef SVX_LIGHT
+    return sal_False;
+#else
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->HasConvertibleTextPortion( nLang );
+#endif
+}
+
+sal_Bool __EXPORT EditEngine::ConvertNextDocument()
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return sal_False;
 }
 
 sal_Bool EditEngine::HasText( const SvxSearchItem& rSearchItem )
