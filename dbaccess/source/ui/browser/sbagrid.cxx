@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 12:19:33 $
+ *  last change: $Author: fs $ $Date: 2001-04-10 08:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,22 @@
 #include "sbagrid.hrc"
 #endif
 
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+
 #define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
 #define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
 #define ITEMID_ORIENTATION      SID_ATTR_ALIGN_ORIENTATION
 #define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
 #define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
+#define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
 
 
+#define _ZFORLIST_DECLARE_TABLE
+#ifndef _SVX_NUMINF_HXX
+#include <svx/numinf.hxx>
+#endif
 #ifndef _EEITEMID_HXX
 #include <svx/eeitemid.hxx>
 #endif
@@ -183,10 +192,6 @@
 #include <svx/wghtitem.hxx>
 #endif
 
-#ifndef SBA_VCARDEXCHANGE_FORMAT
-#define SBA_VCARDEXCHANGE_FORMAT    "+//ISBN 1-887687-00-9::versit::PDI//vCard"
-#endif
-
 #ifndef _SVX_POSTITEM_HXX //autogen wg. SvxPostureItem
 #include <svx/postitem.hxx>
 #endif
@@ -254,6 +259,9 @@
 #endif
 #ifndef _SV_CLIP_HXX
 #include <vcl/clip.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
 #ifndef _SVX_DBEXCH_HRC
 #include <svx/dbexch.hrc>
@@ -1206,12 +1214,14 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
             { 0, 0 },
             { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEM_POOLABLE },
             { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEM_POOLABLE },
-            { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE }
+            { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE },
+            { SID_ATTR_NUMBERFORMAT_INFO,       SFX_ITEM_POOLABLE }
         };
         static sal_uInt16 aAttrMap[] =
         {
             SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
             SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
+            SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
             0
         };
 
@@ -1220,7 +1230,8 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
             new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
             new SfxUInt32Item(SBA_DEF_FMTVALUE),
             new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-            new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_False)
+            new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_False),
+            new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
         };
 
         SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
@@ -1241,6 +1252,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
                     OSL_ENSURE(0,"Invalid TextAlign!");
             }
         pFormatDescriptor->Put(SvxHorJustifyItem(eJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
+        sal_Bool bText = sal_False;
         if (bHasFormat)
         {
             sal_Int32 nFormatKey = ::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY));
@@ -1248,6 +1260,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
             sal_Int32 nFieldType = ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE));
             if ((DataType::CHAR == nFieldType) || (DataType::VARCHAR == nFieldType) || (DataType::LONGVARCHAR == nFieldType))
             {
+                sal_Bool bText = sal_True;
                 pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
                 if (!pFormatter->IsTextFormat(nFormatKey))
                     // text fields can only have text formats
@@ -1257,9 +1270,16 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
             pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, nFormatKey));
         }
 
+        if (!bText)
+        {
+            double dPreviewVal = 1234.56789;
+            SvxNumberInfoItem aFormatter(pFormatter, dPreviewVal, SID_ATTR_NUMBERFORMAT_INFO);
+            pFormatDescriptor->Put(aFormatter);
+        }
+
         {   // want the dialog to be destroyed before our set
             SbaSbAttrDlg aDlg(this, pFormatDescriptor, pFormatter, nFlags);
-            if (aDlg.Execute())
+            if (RET_OK == aDlg.Execute())
             {
                 // ------------
                 // ItemSet->UNO
@@ -1292,6 +1312,20 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
                 {
                     SFX_ITEMSET_GET(*pSet, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, sal_True);
                     xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, makeAny((sal_Int32)pFormat->GetValue()));
+                }
+            }
+                // deleted formats
+            const SfxItemSet* pResult = aDlg.GetOutputItemSet();
+            if (pResult)
+            {
+                const SfxPoolItem* pItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
+                const SvxNumberInfoItem* pInfoItem = static_cast<const SvxNumberInfoItem*>(pItem);
+                if (pInfoItem && pInfoItem->GetDelCount())
+                {
+                    const sal_uInt32* pDeletedKeys = pInfoItem->GetDelArray();
+
+                    for (sal_uInt16 i=0; i< pInfoItem->GetDelCount(); ++i, ++pDeletedKeys)
+                        pFormatter->DeleteEntry(*pDeletedKeys);
                 }
             }
         }
@@ -1772,22 +1806,22 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SbaGridControl::QueryDrop(const BrowserDropEvent& rEvt)
+sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 {
+    sal_Int8 nAction = DND_ACTION_NONE;
+
     // we need a valid connection
     if (!::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (getDataSource(),UNO_QUERY)).is())
-        return sal_False;
+        return nAction;
 
-    sal_Bool bAllow = sal_False;
-
+/*
     // check formats
     SvDataObjectRef xDataObj = SvDataObject::PasteDragServer( rEvt );
     if (!xDataObj.Is())
         return sal_False;
 
     const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
-    if ((rTypeList.Get(Exchange::RegisterFormatName(String::CreateFromAscii(SBA_VCARDEXCHANGE_FORMAT)))) ||
-        (rTypeList.Get(Exchange::RegisterFormatName(String::CreateFromAscii(SBA_DATAEXCHANGE_FORMAT)))) )
+    if ((rTypeList.Get(Exchange::RegisterFormatName(String::CreateFromAscii(SBA_DATAEXCHANGE_FORMAT)))) )
     {
         bAllow = (GetOptions() & OPT_INSERT) && rEvt.GetColumnId() > 0 && rEvt.GetRow() >= 0;
         ((BrowserDropEvent&)rEvt).SetAction(DROP_COPY);
@@ -1869,21 +1903,23 @@ sal_Bool SbaGridControl::QueryDrop(const BrowserDropEvent& rEvt)
 
     } while (sal_False);
 
-    return (bAllow) ? bAllow : FmGridControl::QueryDrop(rEvt);
+*/
+    return (DND_ACTION_NONE != nAction) ? nAction : FmGridControl::AcceptDrop(rEvt);
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SbaGridControl::Drop(const BrowserDropEvent& rEvt)
+sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 {
     // we need some properties of our data source
     Reference< XPropertySet >  xDataSource = getDataSource();
     if (!xDataSource.is())
-        return sal_False;
+        return DND_ACTION_NONE;
 
     // we need a valid connection
     if (!::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (xDataSource,UNO_QUERY)).is())
-        return sal_False;
+        return DND_ACTION_NONE;
 
+/*
     //////////////////////////////////////////////////////////////////////
     // DataExch-String holen
     SotDataObjectRef xDataObj = ((DropEvent&)rEvt).GetData();
@@ -1901,7 +1937,7 @@ sal_Bool SbaGridControl::Drop(const BrowserDropEvent& rEvt)
             --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
 
         DBG_ASSERT((nCol != BROWSER_INVALIDID) && (nRow < nCorrectRowCount), "SbaGridControl::Drop : dropped on an invalid position !");
-            // QueryDrop should have catched this
+            // AcceptDrop should have caught this
 
         // from now we work with ids instead of positions
         nCol = GetColumnId(nCol);
@@ -2006,6 +2042,8 @@ sal_Bool SbaGridControl::Drop(const BrowserDropEvent& rEvt)
 //      return sal_True;
 //  }
     return sal_False;
+*/
+    return DND_ACTION_NONE;
 }
 
 //------------------------------------------------------------------------------

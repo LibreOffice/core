@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 08:16:51 $
+ *  last change: $Author: fs $ $Date: 2001-04-10 08:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,8 +312,8 @@ namespace dbaui
         // BrowseBox overridables
         virtual void    Select();
         virtual void    CursorMoved();
-        virtual sal_Bool    QueryDrop(const BrowserDropEvent& rEvt);
-        virtual sal_Bool    Drop(const BrowserDropEvent& rEvt);
+        virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt );
+        virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
         virtual void    MouseButtonDown( const BrowserMouseEvent& rMEvt);
 
         // DbBrowseBox overridables
