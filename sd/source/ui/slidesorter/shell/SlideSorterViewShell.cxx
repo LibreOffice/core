@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:18:31 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include "sdpage.hxx"
 #include "SdUnoSlideView.hxx"
 #include "PaneManager.hxx"
+#include "DrawDocShell.hxx"
 
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
@@ -164,6 +165,7 @@ SlideSorterViewShell::SlideSorterViewShell (
 
 
     SetPool( &GetDoc()->GetPool() );
+    SetUndoManager( GetDoc()->GetDocSh()->GetUndoManager() );
 
     mpView = mpSlideSorterView.get();
     if (pFrameViewArgument != NULL)
