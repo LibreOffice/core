@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 19:01:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1075,7 +1075,7 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStart, xub_StrLen nEnd,
                             // uneindeutig
                             rSet.InvalidateItem( nWh );
                     }
-                __DELETE( coArrSz ) aAttrArr;
+                delete[] aAttrArr;
             }
         }
         if( aFmtSet.Count() )
