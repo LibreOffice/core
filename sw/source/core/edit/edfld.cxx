@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:05:27 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,9 +417,11 @@ SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
         ((SwSetExpField&)rFld).GetInputFlag() ) )
     {
         const SfxPoolItem* pItem;
-        USHORT n, nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
+        USHORT n, nMaxItems =
+            pDoc->GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
         for( n = 0; n < nMaxItems; ++n )
-            if( 0 != (pItem = pDoc->GetAttrPool().GetItem( RES_TXTATR_FIELD, n ) )
+            if( 0 != (pItem =
+                      pDoc->GetAttrPool().GetItem( RES_TXTATR_FIELD, n ) )
                 && ((SwFmtFld*)pItem)->GetFld() == &rFld )
             {
                 pTFld = ((SwFmtFld*)pItem)->GetTxtFld();
@@ -447,59 +449,21 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         SwPaM* pCrsr = GetCrsr();
         SwTxtFld *pTxtFld;
         SwFmtFld *pFmtFld;
-        if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-            ( 0 != ( pTxtFld = GetDocTxtFld( pCrsr->Start() ) ) ||
-              0 != ( pTxtFld = lcl_FindInputFld( GetDoc(), rFld ) ) ) &&
-            ( pFmtFld = (SwFmtFld*)&pTxtFld->GetFld())->GetFld()
-                ->GetTyp()->Which() == rFld.GetTyp()->Which() )
+
+//      if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
+//          ( 0 != ( pTxtFld = GetDocTxtFld( pCrsr->Start() ) ) ||
+//            0 != ( pTxtFld = lcl_FindInputFld( GetDoc(), rFld ) ) ) &&
+//          ( pFmtFld = (SwFmtFld*)&pTxtFld->GetFld())->GetFld()
+//              ->GetTyp()->Which() == rFld.GetTyp()->Which() )
+        if ( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark())
         {
-            // Das gefundene Feld wird angepasst ...
-            pFmtFld->GetFld()->ChangeFormat( rFld.GetFormat() );
-            pFmtFld->GetFld()->SetLanguage( rFld.GetLanguage() );
-            switch( nFldWhich )
-            {
-            case RES_SETEXPFLD:
-            case RES_GETEXPFLD:
-            case RES_HIDDENTXTFLD:
-            case RES_HIDDENPARAFLD:
-                GetDoc()->UpdateExpFlds( pTxtFld );
-                break;
+            pTxtFld = GetDocTxtFld(pCrsr->Start());
 
-            case RES_TABLEFLD:
-                {
-                    const SwTableNode* pTblNd = GetDoc()->IsIdxInTbl(
-                                            pCrsr->GetPoint()->nNode );
-                    if( pTblNd )
-                    {
-                        SwTableFmlUpdate aTblUpdate( &pTblNd->GetTable() );
-                        GetDoc()->UpdateTblFlds( &aTblUpdate );
-                    }
-                }
-                break;
+            if (pTxtFld != 0)
+                pTxtFld = lcl_FindInputFld( GetDoc(), rFld);
 
-            case RES_MACROFLD:
-                if( pTxtFld->GetpTxtNode() )
-                    ((SwTxtNode*)pTxtFld->GetpTxtNode())->Modify( 0, pFmtFld );
-                break;
-
-            case RES_DBFLD:
-                {
-                    // JP 10.02.96: ChgValue aufrufen, damit die Format-
-                    //              aenderung den ContentString richtig setzt
-                    SwDBField* pDBFld = (SwDBField*)pFmtFld->GetFld();
-                    if (pDBFld->IsInitialized())
-                        pDBFld->ChgValue( pDBFld->GetValue(), TRUE );
-                }
-                // kein break;
-
-            default:
-                pFmtFld->Modify( 0, pMsgHnt );
-            }
-
-            // Die Felder die wir berechnen koennen werden hier expli.
-            // zum Update angestossen.
-            if( nFldWhich == RES_USERFLD )
-                GetDoc()->UpdateUsrFlds();
+            if (pTxtFld != 0)
+                GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, TRUE); // #111840#
         }
 
         // bOkay (statt return wg. EndAllAction) wird FALSE,
@@ -516,7 +480,8 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 SwPaM aCurPam( *PCURCRSR->GetMark(), *PCURCRSR->GetPoint() );
                 SwPaM aPam( *PCURCRSR->GetPoint() );
 
-                SwPosition *pCurStt = aCurPam.Start(), *pCurEnd = aCurPam.End();
+                SwPosition *pCurStt = aCurPam.Start(), *pCurEnd =
+                    aCurPam.End();
                 /*
                  * Fuer den Fall, dass zwei aneinanderliegende Felder in einem
                  * PaM liegen, hangelt sich aPam portionsweise bis zum Ende.
@@ -540,41 +505,15 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                         pCurFld = pFmtFld->GetFld();
 
                         // bei gemischten Feldtypen
-                        if( pCurFld->GetTyp()->Which() != rFld.GetTyp()->Which() )
+                        if( pCurFld->GetTyp()->Which() !=
+                            rFld.GetTyp()->Which() )
                             bOkay = FALSE;
 
-                        // Das gefundene selektierte Feld wird angepasst ...
-                        pCurFld->ChangeFormat( rFld.GetFormat() );
-                        if( RES_SETEXPFLD == nFldWhich ||
-                            RES_GETEXPFLD == nFldWhich ||
-                            RES_HIDDENTXTFLD == nFldWhich )
-                            GetDoc()->UpdateExpFlds( pTxtFld );
-                        else if( RES_TABLEFLD == nFldWhich )
-                        {
-                            SwPaM* pPam = IsTableMode() ? GetTblCrs() : &aCurPam;
-                            const SwTableNode* pTblNd = GetDoc()->IsIdxInTbl(
-                                                    pPam->GetPoint()->nNode );
-                            if( pTblNd )
-                            {
-                                SwTableFmlUpdate aTblUpdate( &pTblNd->GetTable() );
-                                pCurFld->GetTyp()->Modify( 0, &aTblUpdate );
-                            }
-                            // bei Tabellen-SSelection ist hier Ende !!
-                            if( IsTableMode() )
-                            {
-                                bTblSelBreak = TRUE;
-                                break;
-                            }
-                        }
-                        else
-                            pFmtFld->Modify( 0, pMsgHnt );
-
-                        // Die Felder die wir berechnen koennen werden hier
-                        //  expli. zum Update angestossen.
-                        if( nFldWhich == RES_USERFLD )
-                            GetDoc()->UpdateUsrFlds();
+                        bTblSelBreak = GetDoc()->UpdateFld(pTxtFld, rFld,
+                                                           pMsgHnt, FALSE); // #111840#
                     }
-                    // Der Suchbereich wird um den gefundenen Bereich verkuerzt.
+                    // Der Suchbereich wird um den gefundenen Bereich
+                    // verkuerzt.
                     pCurStt->nContent++;
                 }
             }
