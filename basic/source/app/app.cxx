@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:28:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,9 +150,11 @@ using namespace com::sun::star::beans;
 
 #endif /* _USE_UNO */
 
+IMPL_GEN_RES_STR;
+
 #ifdef DBG_UTIL
 // filter Messages generated due to missing configuration  Bug:#83887#
-void TestToolDebugMessageFilter( const sal_Char *pString )
+void TestToolDebugMessageFilter( const sal_Char *pString, BOOL bIsOsl )
 {
     static BOOL static_bInsideFilter = FALSE;
 
@@ -166,20 +168,29 @@ void TestToolDebugMessageFilter( const sal_Char *pString )
 
     BOOL bIgnore = FALSE;
 
-    // OSL
-    if ( aMessage.Search( CByteString("PropertySetRegistry::") ) != STRING_NOTFOUND )
-        bIgnore = TRUE;
-    if ( aMessage.Search( CByteString("AcquireTree failed") ) != STRING_NOTFOUND )
-        bIgnore = TRUE;
-    if ( aMessage.Search( CByteString("Cannot open Configuration: Connector: unknown delegatee com.sun.star.connection.Connector.portal") ) != STRING_NOTFOUND )
-        bIgnore = TRUE;
-
-    // VCL
-    if ( aMessage.Search( CByteString("property value missing") ) != STRING_NOTFOUND )
-        bIgnore = TRUE;
-    if ( aMessage.Search( CByteString("getDateFormatsImpl") ) != STRING_NOTFOUND
-      && aMessage.Search( CByteString("no date formats") ) != STRING_NOTFOUND )
-      bIgnore = TRUE;
+    if ( bIsOsl )
+    {
+        // OSL
+        if ( aMessage.Search( CByteString("PropertySetRegistry::") ) != STRING_NOTFOUND )
+            bIgnore = TRUE;
+        if ( aMessage.Search( CByteString("AcquireTree failed") ) != STRING_NOTFOUND )
+            bIgnore = TRUE;
+        if ( aMessage.Search( CByteString("Cannot open Configuration: Connector: unknown delegatee com.sun.star.connection.Connector.portal") ) != STRING_NOTFOUND )
+            bIgnore = TRUE;
+    }
+    else
+    {
+        // DBG
+#if ! (OSL_DEBUG_LEVEL > 1)
+        if ( aMessage.Search( CByteString("SelectAppIconPixmap") ) != STRING_NOTFOUND )
+            bIgnore = TRUE;
+#endif
+        if ( aMessage.Search( CByteString("property value missing") ) != STRING_NOTFOUND )
+            bIgnore = TRUE;
+        if ( aMessage.Search( CByteString("getDateFormatsImpl") ) != STRING_NOTFOUND
+            && aMessage.Search( CByteString("no date formats") ) != STRING_NOTFOUND )
+            bIgnore = TRUE;
+    }
 
     if ( bIgnore )
     {
@@ -187,23 +198,36 @@ void TestToolDebugMessageFilter( const sal_Char *pString )
         return;
     }
 
-    try
+    if ( bIsOsl )
     {
-        aBasicApp.DbgPrintMsgBox( pString );
+        // due to issue #i36895 only print on console
+        // unfortunately the osl assertions deadlock by design :-( on recursive calls of assertions
+        printf("%s\n", pString );
     }
-    catch ( ... )
+    else
     {
-        printf("DbgPrintMsgBox failed: %s\n", pString );
+        try
+        {
+            aBasicApp.DbgPrintMsgBox( pString );
+        }
+        catch ( ... )
+        {
+            printf("DbgPrintMsgBox failed: %s\n", pString );
+        }
     }
 /*    DBG_INSTOUTERROR( DBG_OUT_MSGBOX )
     DBG_ERROR( pString );
     DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )*/
     static_bInsideFilter = FALSE;
 }
+void SAL_CALL DBG_TestToolDebugMessageFilter( const sal_Char *pString )
+{
+        TestToolDebugMessageFilter( pString, FALSE );
+}
 void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString )
 {
     if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
-        TestToolDebugMessageFilter( pString );
+        TestToolDebugMessageFilter( pString, TRUE );
 }
 #endif
 
@@ -374,7 +398,7 @@ void BasicApp::Main( )
 #ifdef DBG_UTIL
 //  Install filter for OSLAsserts
     DbgPrintMsgBox = DbgGetPrintMsgBox();
-    DbgSetPrintTestTool( TestToolDebugMessageFilter );
+    DbgSetPrintTestTool( DBG_TestToolDebugMessageFilter );
     DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )
 
     if ( osl_setDebugMessageFunc( osl_TestToolDebugMessageFilter ) )
@@ -473,14 +497,16 @@ void BasicApp::Main( )
     }
     catch( class Exception & rEx)
     {
-        printf( "%s\n", ByteString( String(rEx.Message), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-        InfoBox( NULL, String( rEx.Message ) ).Execute();
+        printf( "Exception not caught: %s\n", ByteString( String(rEx.Message), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+        String aMsg( String::CreateFromAscii( "Exception not caught: " ) );
+        aMsg.Append( String( rEx.Message ) );
+        InfoBox( NULL, aMsg ).Execute();
         throw;
     }
     catch( ... )
     {
-        printf( "unknown exception occured\n" );
-        InfoBox( NULL, String::CreateFromAscii( "unknown exception occured" ) ).Execute();
+        printf( "unknown Exception not caught\n" );
+        InfoBox( NULL, String::CreateFromAscii( "unknown Exception not caught" ) ).Execute();
         throw;
     }
 }
