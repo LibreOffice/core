@@ -2,9 +2,9 @@
  *
  *  $RCSfile: joburl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-10-11 13:41:14 $
+ *  last change: $Author: cd $ $Date: 2002-10-14 11:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
-#include <threadhelp/WriteGuard.hxx>
+#include <threadhelp/writeguard.hxx>
 #endif
 
 #ifndef __FRAMEWORK_GENERAL_H_
