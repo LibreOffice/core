@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:53:24 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,9 @@ void ScXMLTableContext::EndElement()
         {
             ScOutlineArray* pColArray = pOutlineTable->GetColArray();
             sal_Int32 nDepth = pColArray->GetDepth();
-            for (sal_Int32 i = 0; i < nDepth; i++)
+            sal_Int32 i;
+
+            for ( i = 0; i < nDepth; i++)
             {
                 sal_Int32 nCount = pColArray->GetCount(static_cast<USHORT>(i));
                 sal_Bool bChanged(sal_False);
