@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 16:26:04 $
+ *  last change: $Author: fs $ $Date: 2001-01-22 08:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,10 +410,11 @@ void ensureClassInfos()
         // and while reading a wrapper determines which kind of model it is
     // register the wrapper for the FormattedField, as it handles the XPersistObject::write
     // so that version <= 5.1 are able to read it
-    aServices.realloc(2);
+    aServices.realloc(3);
     aServices.getArray()[0] = frm::FRM_COMPONENT_FORMATTEDFIELD;
     aServices.getArray()[1] = frm::FRM_SUN_COMPONENT_FORMATTEDFIELD;
-    registerClassInfo(::rtl::OUString::createFromAscii("com.sun.star.comp.forms.") + ::rtl::OUString::createFromAscii("OFormattedFieldWrapper_ForcedFormatted"),
+    aServices.getArray()[2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseFormattedField");
+    registerClassInfo(::rtl::OUString::createFromAscii("com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"),
         aServices,
         frm::OFormattedFieldWrapper_CreateInstance_ForceFormatted);
 
