@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 16:13:41 $
+ *  last change: $Author: os $ $Date: 2001-08-15 09:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,15 @@
 #ifndef _UIITEMS_HXX
 #include <uiitems.hxx>
 #endif
-
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
 
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
@@ -176,12 +184,13 @@
 #include <globals.h>        // globale Konstanten z.B.
 #endif
 
-#if SUPD<632
-#ifndef RID_SW_TP_STD_FONT_CJK
-#define RID_SW_TP_STD_FONT_CJK          (RID_OFA_START + 247)
-#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
 #endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 /* -----------------12.02.99 12:28-------------------
  *
  * --------------------------------------------------*/
@@ -225,6 +234,8 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
                                     FN_PARAM_SHADOWCURSOR,  FN_PARAM_SHADOWCURSOR,
                                     FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED,
                                     FN_HSCROLL_METRIC,      FN_VSCROLL_METRIC,
+                                    SID_ATTR_LANGUAGE,      SID_ATTR_LANGUAGE,
+                                    RES_CHRATR_CJK_LANGUAGE,   RES_CHRATR_CJK_LANGUAGE,
 #ifndef PRODUCT
                                     FN_PARAM_SWTEST,        FN_PARAM_SWTEST,
 #endif
@@ -248,6 +259,11 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
             pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));
         pRet->Put(SwPtrItem(FN_PARAM_WRTSHELL, &rWrtShell));
 
+        pRet->Put((const SvxLanguageItem&)
+            rWrtShell.GetDefault(RES_CHRATR_LANGUAGE), SID_ATTR_LANGUAGE);
+
+        pRet->Put((const SvxLanguageItem&)
+            rWrtShell.GetDefault(RES_CHRATR_CJK_LANGUAGE), RES_CHRATR_CJK_LANGUAGE);
     }
     else
     {
@@ -259,6 +275,17 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
 
         pPrt = new SfxPrinter(pSet);
         pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));*/
+
+        SvtLinguConfig  aLinguCfg;
+        Any aLang = aLinguCfg.GetProperty(C2U("DefaultLocale"));
+        Locale aLocale;
+        aLang >>= aLocale;
+        pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), SID_ATTR_LANGUAGE));
+
+        aLang = aLinguCfg.GetProperty(C2U("DefaultLocale_CJK"));
+        aLang >>= aLocale;
+        pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), RES_CHRATR_CJK_LANGUAGE));
+
     }
     if(bTextDialog)
         pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));
@@ -624,273 +651,5 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
     return pRet;
 }
 
-/*-------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.13  2001/05/11 10:37:23  os
-    #86883# basic fonts asian added
-
-    Revision 1.12  2001/05/10 08:46:10  os
-    store print options at the document
-
-    Revision 1.11  2001/05/07 13:58:02  os
-    #86002# don't apply web settings to text view and vice versa
-
-    Revision 1.10  2001/05/04 12:06:24  os
-    check whether the view is active
-
-    Revision 1.9  2001/04/17 09:17:50  os
-    #86002# second writer view tabpage: id added
-
-    Revision 1.8  2001/04/09 09:46:33  os
-    #85859# some option dialog errors fixed
-
-    Revision 1.7  2001/03/22 10:34:48  os
-    include removed
-
-    Revision 1.6  2001/03/22 09:16:59  os
-    options dialog changes
-
-    Revision 1.5  2001/02/09 07:56:41  os
-    TabPage size changed
-
-    Revision 1.4  2000/10/30 14:33:37  jp
-    GetBinding: View must not exist
-
-    Revision 1.3  2000/10/06 13:31:28  jp
-    should changes: don't use IniManager
-
-    Revision 1.2  2000/09/28 15:22:17  os
-    use of configuration service in view options
-
-    Revision 1.1.1.1  2000/09/18 17:14:31  hr
-    initial import
-
-    Revision 1.163  2000/09/18 16:05:10  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.162  2000/09/07 15:59:19  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.161  2000/09/07 08:25:44  os
-    FaxName now in SwPrintOptions
-
-    Revision 1.160  2000/05/10 11:52:26  os
-    Basic API removed
-
-    Revision 1.159  2000/03/03 15:16:58  os
-    StarView remainders removed
-
-    Revision 1.158  2000/02/11 14:42:32  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.157  1999/06/25 06:34:50  OS
-    #67193# default tabstop from current document
-
-
-      Rev 1.156   25 Jun 1999 08:34:50   OS
-   #67193# default tabstop from current document
-
-      Rev 1.155   10 Jun 1999 10:52:08   JP
-   have to change: no AppWin from SfxApp
-
-      Rev 1.154   08 Jun 1999 15:29:16   OS
-   #66606# HTML background: use WhichId
-
-      Rev 1.153   19 Mar 1999 15:32:18   OS
-   #63750# Tabellenmode auch wieder an der akt. Tabelle setzen
-
-      Rev 1.152   04 Mar 1999 13:54:40   OS
-   #62613# eigene Ids fuer alle HTML-Pages
-
-      Rev 1.151   25 Feb 1999 10:19:04   OS
-   #62329# eigene Id fuer Sw-Html-Einfuegen-Page
-
-      Rev 1.150   17 Feb 1999 15:07:36   OS
-   #61890# Methoden fuer alte Optionsdialoge geloescht
-
-      Rev 1.149   16 Feb 1999 08:08:20   OS
-   #61890# Syntaxfehler TestTabPage
-
-      Rev 1.148   15 Feb 1999 09:20:36   OS
-   #61890# Virt. Methoden fuer neuen Optionendialog ueberladen
-
-      Rev 1.147   27 Jan 1999 10:05:22   OS
-   #58677# Cursor in Readonly-Bereichen
-
-      Rev 1.146   04 Dec 1998 13:35:26   OS
-   #60117# Raster-Slots nach dem Dialog invalidieren
-
-      Rev 1.145   08 Sep 1998 16:47:58   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.144   18 Aug 1998 16:48:54   TJ
-   include
-
-      Rev 1.143   13 Jul 1998 14:39:54   OS
-   include #51814#
-
-      Rev 1.142   13 Jul 1998 08:48:00   OS
-   Dialog-Parent richtig setzen #51814#
-
-      Rev 1.141   06 Jul 1998 14:53:46   OS
-   Scrollbars in FrameDocs disablen
-
-      Rev 1.140   29 Apr 1998 09:27:40   MA
-   BackgroundBrush -> RetoucheColor
-
-      Rev 1.139   05 Mar 1998 14:44:10   OM
-   Redline-Attribute in Module-Cfg speichern
-
-      Rev 1.138   02 Mar 1998 12:50:20   OS
-   Schattencursor-Slot bei Bedarf invalidieren #47601#
-
-      Rev 1.137   23 Feb 1998 12:40:06   OM
-   Redlining-Optionen
-
-      Rev 1.136   28 Nov 1997 14:26:52   MA
-   includes
-
-      Rev 1.135   24 Nov 1997 14:22:48   MA
-   includes
-
-      Rev 1.134   14 Nov 1997 17:14:04   OS
-   TblChgMode auch an der akt. Tabelle setzen #45521#
-
-      Rev 1.133   11 Nov 1997 14:02:58   MA
-   precomp entfernt
-
-      Rev 1.132   03 Nov 1997 16:13:08   JP
-   neu: Optionen/-Page/Basic-Schnittst. fuer ShadowCursor
-
-      Rev 1.131   09 Aug 1997 12:46:32   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.130   08 Aug 1997 17:26:54   OM
-   Headerfile-Umstellung
-
-      Rev 1.129   08 Jul 1997 14:04:14   OS
-   ConfigItems von der App ans Module
-
-      Rev 1.128   19 Jun 1997 16:02:42   OS
-   DefPaqe an den Dialog weiterreichen #40584#
-
-      Rev 1.127   11 Jun 1997 09:17:04   OS
-   Def-Page-Item fuer den Optionsdialog wieder auswerten #40584#
-
-      Rev 1.126   09 Jun 1997 14:28:26   MA
-   chg: Browse-Flag nur noch am Doc
-
-      Rev 1.125   06 Jun 1997 12:43:12   MA
-   chg: versteckte Absaetze ausblenden
-
-      Rev 1.124   25 Mar 1997 15:55:46   OS
-   _if_ fuer Semikolon ?
-
-      Rev 1.123   05 Feb 1997 13:34:46   OS
-   PrintOptins auch fuer Web
-
-      Rev 1.122   03 Feb 1997 12:07:22   OS
-   kompletter Einstellungesdialog fuer HTML-Dok
-
-      Rev 1.121   30 Jan 1997 11:10:08   OS
-   UsrPrefs verdoppelt
-
-      Rev 1.120   14 Jan 1997 14:26:48   OS
-   TabDist auch an der Shell setzen
-
-      Rev 1.119   14 Jan 1997 08:46:26   MA
-   includes
-
-      Rev 1.118   13 Jan 1997 16:46:06   OS
-   Metric und TabStop am Module
-
-      Rev 1.117   19 Dec 1996 17:38:38   OS
-   werden MetaChars ausgewaehlt, muessen auch die Sonderzeichen eingeschaltet werden
-
-      Rev 1.116   11 Dec 1996 14:16:46   OS
-   Optionenumbau - Reste
-
-      Rev 1.115   04 Dec 1996 14:56:10   OS
-   Umbau Optionsdialoge
-
-      Rev 1.114   04 Dec 1996 14:19:30   OS
-   neue Ids fuer Optionendialoge
-
-      Rev 1.113   03 Dec 1996 16:57:02   AMA
-   Chg: Der Drucker wird nur im !Browsemodus angelegt.
-
-      Rev 1.112   11 Nov 1996 19:32:06   OS
-   alten Code entfernt
-
-      Rev 1.111   06 Nov 1996 19:49:24   MH
-   SwSplCfg -> OfaSplCfg
-
-      Rev 1.110   01 Nov 1996 18:02:42   MA
-   Writer Module
-
-      Rev 1.109   21 Oct 1996 09:37:04   OS
-   ColorTable sichern
-
-      Rev 1.108   07 Sep 1996 13:49:52   OS
-   Hintergrundpage auch ohne BrowseView
-
-      Rev 1.107   04 Sep 1996 08:03:48   OS
-   neu: Grundschriften-Tabpage
-
-      Rev 1.106   03 Sep 1996 16:54:18   OS
-   Tabpage Standardfonts
-
-      Rev 1.105   03 Sep 1996 10:15:58   OS
-   Reste
-
-      Rev 1.104   31 Aug 1996 17:15:08   OS
-   neue Optionendialoge
-
-      Rev 1.103   30 Aug 1996 12:36:20   OS
-   UpdateGlosPath kann Blockliste aktualisieren
-
-      Rev 1.102   27 Aug 1996 11:50:54   OS
-   alten cast entfernt
-
-      Rev 1.101   26 Aug 1996 16:55:40   OS
-   neu: Brush fuer BrowseView
-
-      Rev 1.100   29 Jul 1996 19:37:42   MA
-   includes
-
-      Rev 1.99   17 Jul 1996 13:41:06   OS
-   Printereinstellungen auch ohne View
-
-      Rev 1.98   11 Jun 1996 16:44:52   OS
-   UndoActionCount als Null uebergeben, wenn fuer die akt. Shell DoesUndo() == FALSE, Bug #28570#
-
-      Rev 1.98   11 Jun 1996 16:33:22   OS
-   UndoActionCount als Null uebergeben, wenn fuer die akt. Shell DoesUndo() == FALSE, Bug #28570#
-
-      Rev 1.97   10 Jun 1996 13:03:02   OS
-   Range fuer Optionendialog fuer neue Proxies erweitert
-
-      Rev 1.96   24 May 1996 14:58:58   OS
-   HelpIdas aktualisiert
-
-      Rev 1.95   10 May 1996 11:35:52   NF
-   Zeile 76 auskommentiert
-
-      Rev 1.94   09 May 1996 12:38:00   OS
-   Range fuer Optionendialog erweitert
-
-      Rev 1.93   30 Apr 1996 14:00:02   OS
-   Item fuer Preview schicken, DocDisplayTabPage nicht mehr on demand
-
-      Rev 1.92   27 Apr 1996 17:01:52   OS
-   MakeUsrPref benutzen
-
-      Rev 1.91   25 Apr 1996 16:25:28   OS
-   ViewOptions-Umbau: alle Aktionen an pVOpt
-
-      Rev 1.90   24 Apr 1996 15:02:50   OS
-   Umstellung UsrPref/ViewOption
-
- -------------------------------------------------------------------------*/
 
 

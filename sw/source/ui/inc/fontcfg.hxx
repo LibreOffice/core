@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 10:37:17 $
+ *  last change: $Author: os $ $Date: 2001-08-15 09:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
 
 #define FONT_STANDARD       0
 #define FONT_OUTLINE        1
@@ -122,7 +125,7 @@ public:
     void     SetFontIndex  (const String& rSet, sal_Bool bCJK)
                     {    ChangeString(bCJK ? FONT_INDEX_CJK : FONT_INDEX, rSet);}
 
-    static String   GetDefaultFor(USHORT nFontType);
+    static String   GetDefaultFor(USHORT nFontType, LanguageType eLang);
 };
 #endif
 

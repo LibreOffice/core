@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-09 09:26:43 $
+ *  last change: $Author: os $ $Date: 2001-08-15 09:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
 #endif
 #ifndef _SVX_DLGUTIL_HXX //autogen
 #include <svx/dlgutil.hxx>
@@ -660,7 +663,8 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
     bSetIdxDefault(TRUE),
     bIdxDefault(FALSE),
     bDeletePrinter(FALSE),
-    bCJKMode(FALSE)
+    bCJKMode(FALSE),
+    eLanguage(::GetSystemLanguage())
 {
     FreeResource();
     aStandardPB.SetClickHdl(LINK(this, SwStdFontTabPage, StandardHdl));
@@ -802,6 +806,11 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
 --------------------------------------------------*/
 void SwStdFontTabPage::Reset( const SfxItemSet& rSet )
 {
+    const SfxPoolItem* pLang;
+    if( SFX_ITEM_SET == rSet.GetItemState(
+        bCJKMode ? SID_ATTR_CHAR_CJK_LANGUAGE : SID_ATTR_LANGUAGE, FALSE, &pLang))
+        eLanguage = ((const SvxLanguageItem*)pLang)->GetValue();
+
     String sTmp(aStdChrFL.GetText());
     sTmp.SearchAndReplaceAscii("%1", bCJKMode ? sScriptAsian : sScriptWestern);
     aStdChrFL.SetText(sTmp);
@@ -908,11 +917,11 @@ IMPL_LINK( SwStdFontTabPage, StandardHdl, PushButton *, EMPTYARG )
         { FONT_INDEX,       FONT_INDEX_CJK }
     };
     USHORT nOff = bCJKMode ? 1 : 0;
-    aStandardBox.SetText(SwStdFontConfig::GetDefaultFor(aIdArr[0][nOff]));
-    aTitleBox   .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[1][nOff]));
-    aListBox    .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[2][nOff]));
-    aLabelBox   .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[3][nOff]));
-    aIdxBox     .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[4][nOff]));
+    aStandardBox.SetText(SwStdFontConfig::GetDefaultFor(aIdArr[0][nOff], eLanguage));
+    aTitleBox   .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[1][nOff], eLanguage));
+    aListBox    .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[2][nOff], eLanguage));
+    aLabelBox   .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[3][nOff], eLanguage));
+    aIdxBox     .SetText(SwStdFontConfig::GetDefaultFor(aIdArr[4][nOff], eLanguage));
 
     aStandardBox.SaveValue();
     aTitleBox   .SaveValue();

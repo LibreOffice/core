@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-28 09:17:07 $
+ *  last change: $Author: os $ $Date: 2001-08-15 09:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,9 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 SwStdFontConfig::SwStdFontConfig() :
     utl::ConfigItem(C2U("Office.Writer"))
 {
+    LanguageType eLang = ::GetSystemLanguage();
     for(sal_Int16 i = 0; i < DEF_FONT_COUNT; i++)
-        sDefaultFonts[i] = GetDefaultFor(i);
+        sDefaultFonts[i] = GetDefaultFor(i, eLang);
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -150,9 +151,10 @@ void    SwStdFontConfig::Commit()
     OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
+    LanguageType eLang = ::GetSystemLanguage();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        if(GetDefaultFor(nProp) != sDefaultFonts[nProp])
+        if(GetDefaultFor(nProp, eLang) != sDefaultFonts[nProp])
                 pValues[nProp] <<= OUString(sDefaultFonts[nProp]);
     }
     PutProperties(aNames, aValues);
@@ -168,8 +170,9 @@ SwStdFontConfig::~SwStdFontConfig()
 BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
     BOOL bSame;
-    String sDefFont(GetDefaultFor(FONT_STANDARD));
-    String sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK));
+    LanguageType eLang = ::GetSystemLanguage();
+    String sDefFont(GetDefaultFor(FONT_STANDARD, eLang));
+    String sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK, eLang));
     switch( nFontType )
     {
         case FONT_STANDARD:
@@ -181,7 +184,7 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
         case FONT_OUTLINE :
         case FONT_OUTLINE_CJK :
             bSame = sDefaultFonts[nFontType] ==
-                GetDefaultFor(nFontType);
+                GetDefaultFor(nFontType, eLang);
         break;
         case FONT_LIST    :
         case FONT_CAPTION :
@@ -204,9 +207,8 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 /* -----------------11.01.99 13:16-------------------
  * Standards auslesen
  * --------------------------------------------------*/
-String  SwStdFontConfig::GetDefaultFor(USHORT nFontType)
+String  SwStdFontConfig::GetDefaultFor(USHORT nFontType, LanguageType eLang)
 {
-    LanguageType eLang = ::GetSystemLanguage();
     String sRet;
     USHORT nFontId;
     switch( nFontType )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: os $ $Date: 2001-08-15 09:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,7 @@ class SwStdFontTabPage : public SfxTabPage
     SfxPrinter*         pPrt;
     SwStdFontConfig*    pFontConfig;
     SwWrtShell*         pWrtShell;
+    LanguageType        eLanguage;
     // waren nur defaults vorhanden? wurden sie mit den Boxen ueberschrieben
     BOOL    bListDefault    :1;
     BOOL    bSetListDefault :1;
