@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 10:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,43 +352,44 @@ OColumn* OQuery_LINUX::createColumn(const ::rtl::OUString& _rName) const
 // -----------------------------------------------------------------------------
 void OQuery_LINUX::readColumnSettings(const OConfigurationNode& _rConfigLocation)
 {
-//  try
-//  {
-//      Reference< XStatement > xStmt = m_xConnection->createStatement();
-//      OSL_ENSURE(xStmt.is(),"No Statement created!");
-//      if(xStmt.is())
-//      {
-//          Reference< XColumnsSupplier > xRs(xStmt->executeQuery(m_sCommand),UNO_QUERY);
-//          OSL_ENSURE(xRs.is(),"No Resultset created!");
-//          if(xRs.is())
-//          {
-//              Reference< XNameAccess > xColumns = xRs->getColumns();
-//              if(xColumns.is())
-//              {
-//                  Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-//                  const ::rtl::OUString* pBegin = aNames.getConstArray();
-//                  const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
-//                  for(;pBegin != pEnd;++pBegin)
-//                  {
-//                      Reference<XPropertySet> xSource;
-//                      xColumns->getByName(*pBegin) >>= xSource;
-//                      OTableColumn* pColumn = new OTableColumn(xSource);
-//                      m_aColumnMap[*pBegin] = pColumn;
-//                  }
-//              }
-//              ::comphelper::disposeComponent(xRs);
-//          }
-//          ::comphelper::disposeComponent(xStmt);
-//      }
-//
-//      m_bColumnsOutOfDate = sal_False;
-//      m_pColumns->setInitialized();
-//  }
-//  catch(SQLException&)
-//  {
-//  }
+    try
+    {
+        Reference< XStatement > xStmt = m_xConnection->createStatement();
+        OSL_ENSURE(xStmt.is(),"No Statement created!");
+        if(xStmt.is())
+        {
+            Reference< XColumnsSupplier > xRs(xStmt->executeQuery(m_sCommand),UNO_QUERY);
+            OSL_ENSURE(xRs.is(),"No Resultset created!");
+            if(xRs.is())
+            {
+                Reference< XNameAccess > xColumns = xRs->getColumns();
+                if(xColumns.is())
+                {
+                    Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
+                    const ::rtl::OUString* pBegin = aNames.getConstArray();
+                    const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
+                    for(;pBegin != pEnd;++pBegin)
+                    {
+                        Reference<XPropertySet> xSource;
+                        xColumns->getByName(*pBegin) >>= xSource;
+                        OTableColumn* pColumn = new OTableColumn(xSource);
+                        m_aColumnMap[*pBegin] = pColumn;
+                    }
+                }
+                ::comphelper::disposeComponent(xRs);
+            }
+            ::comphelper::disposeComponent(xStmt);
+        }
+
+        // must be set because otherwise we refill the columns again which isn't nescessary
+        m_bColumnsOutOfDate = sal_False;
+        m_pColumns->setInitialized();
+    }
+    catch(SQLException&)
+    {
+    }
     OQueryDescriptor::readColumnSettings(_rConfigLocation);
-    m_aColumnMap.clear();
+    m_aColumnMap = ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess>();
 }
 
 //........................................................................

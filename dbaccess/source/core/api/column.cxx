@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 10:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,8 @@ void OColumns::loadSettings(const OConfigurationNode& _rLocation)
                 append(*pColumNames, pExistent);
             else
             {
-                OSL_ENSURE(sal_False, "OColumns::loadSettings : createColumn returned nonsense !");
+                // column doesn't exist any longer so delete the config node
+                aLocation.removeNode(*pColumNames);
                 continue;
             }
         }

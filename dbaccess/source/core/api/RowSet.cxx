@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 09:09:29 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 10:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 #ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
 #include "querycomposer.hxx"
 #endif
@@ -234,30 +237,6 @@ namespace dbaccess
 {
 //..................................................................
 
-//==================================================================
-// OParameterContinuation
-//==================================================================
-class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
-{
-    Sequence< PropertyValue >       m_aValues;
-
-public:
-    OParameterContinuation() { }
-
-    Sequence< PropertyValue >   getValues() const { return m_aValues; }
-
-// XInteractionSupplyParameters
-    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException);
-};
-
-//------------------------------------------------------------------
-void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException)
-{
-    m_aValues = _rValues;
-}
-//..................................................................
-}
-//..................................................................
 
 //--------------------------------------------------------------------------
 Reference< XInterface > ORowSet_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
@@ -1681,18 +1660,12 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
 
     ClearableMutexGuard aGuard( m_aMutex );
 
+
     // create and fill a composer
     Reference<XSQLQueryComposer>  xComposer = getCurrentSettingsComposer(this, m_xServiceManager);
 
     // we have to set this here again because getCurrentSettingsComposer can force a setpropertyvalue
     m_bOwnConnection        = sal_True;
-    Reference<XParametersSupplier>  xParameters = Reference<XParametersSupplier> (xComposer, UNO_QUERY);
-
-    Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
-    Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
-    sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
-
-
     try
     {
         freeResources();
@@ -1703,57 +1676,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
             setActiveConnection(Reference< XConnection >());
         calcConnection(_rxHandler);
         m_bRebuildConnOnExecute = sal_False;
-
-        if (nParamCount)
-        {
-            // build an interaction request
-            // two continuations (Ok and Cancel)
-            OInteractionAbort* pAbort = new OInteractionAbort;
-            OParameterContinuation* pParams = new OParameterContinuation;
-            // the request
-            ParametersRequest aRequest;
-            aRequest.Parameters = xParamsAsIndicies;
-            aRequest.Connection = m_xActiveConnection;
-            OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
-            Reference< XInteractionRequest > xRequest(pRequest);
-            // some knittings
-            pRequest->addContinuation(pAbort);
-            pRequest->addContinuation(pParams);
-
-            // execute the request
-            _rxHandler->handle(xRequest);
-
-            if (!pParams->wasSelected())
-                // canceled by the user (i.e. (s)he canceled the dialog)
-                throw RowSetVetoException();
-
-            // now transfer the values from the continuation object to the parameter columns
-            Sequence< PropertyValue > aFinalValues = pParams->getValues();
-            const PropertyValue* pFinalValues = aFinalValues.getConstArray();
-            for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
-            {
-                Reference< XPropertySet > xParamColumn;
-                ::cppu::extractInterface(xParamColumn, xParamsAsIndicies->getByIndex(i));
-                if (xParamColumn.is())
-                {
-#ifdef DBG_UTIL
-                    ::rtl::OUString sName;
-                    xParamColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-                    DBG_ASSERT(sName.equals(pFinalValues->Name), "ORowSet::executeWithCompletion: inconsistent parameter names!");
-#endif
-                    // determine the field type and ...
-                    sal_Int32 nParamType = 0;
-                    xParamColumn->getPropertyValue(PROPERTY_TYPE) >>= nParamType;
-                    // ... the scale of the parameter column
-                    sal_Int32 nScale = 0;
-                    if (hasProperty(PROPERTY_SCALE, xParamColumn))
-                        xParamColumn->getPropertyValue(PROPERTY_SCALE) >>= nScale;
-                    // and set the value
-                    static_cast< XParameters* >(this)->setObjectWithInfo(i + 1, pFinalValues->Value, nParamType, nScale);
-                        // (the index of the parameters is one-based)
-                }
-            }
-        }
+        ::dbtools::askForParameters(xComposer,this,m_xActiveConnection,_rxHandler);
     }
     // ensure that only the allowed exceptions leave this block
     catch(SQLException&)
@@ -1853,52 +1776,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                     sal_Int32 i = 1;
                     for(ORowVector< ORowSetValue >::const_iterator aIter = m_aParameterRow.begin(); aIter != m_aParameterRow.end();++aIter,++i)
                     {
-                        if(aIter->isNull())
-                            xParam->setNull(i,aIter->getTypeKind());
-                        else
-                        {
-                            switch(aIter->getTypeKind())
-                            {
-                                case DataType::CHAR:
-                                case DataType::VARCHAR:
-                                case DataType::DECIMAL:
-                                case DataType::NUMERIC:
-                                    xParam->setString(i,*aIter);
-                                    break;
-                                case DataType::DOUBLE:
-                                case DataType::FLOAT:
-                                case DataType::REAL:
-                                    xParam->setDouble(i,*aIter);
-                                    break;
-                                case DataType::DATE:
-                                    xParam->setDate(i,*aIter);
-                                    break;
-                                case DataType::TIME:
-                                    xParam->setTime(i,*aIter);
-                                    break;
-                                case DataType::TIMESTAMP:
-                                    xParam->setTimestamp(i,*aIter);
-                                    break;
-                                case DataType::BINARY:
-                                case DataType::VARBINARY:
-                                case DataType::LONGVARBINARY:
-                                case DataType::LONGVARCHAR:
-                                    xParam->setBytes(i,*aIter);
-                                    break;
-                                case DataType::BIT:
-                                    xParam->setBoolean(i,*aIter);
-                                    break;
-                                case DataType::TINYINT:
-                                    xParam->setByte(i,*aIter);
-                                    break;
-                                case DataType::SMALLINT:
-                                    xParam->setShort(i,*aIter);
-                                    break;
-                                case DataType::INTEGER:
-                                    xParam->setInt(i,*aIter);
-                                    break;
-                            }
-                        }
+                        ::dbtools::setObjectWithInfo(xParam,i,aIter->makeAny(),aIter->getTypeKind());
                     }
                     m_aParameterRow.clear();
                     Reference< XResultSet> xRs = m_xStatement->executeQuery();
@@ -2969,7 +2847,7 @@ void ORowSetClone::rowDelete(const ::com::sun::star::uno::Any& _rBookmark)
 {
     if(compareBookmarks(_rBookmark,m_aBookmark) == 0)
     {
-        OSL_ENSURE(m_aBookmark.hasValue(),"Bookamrk isn't valid!");
+        OSL_ENSURE(m_aBookmark.hasValue(),"ORowSetClone::rowDelete: Bookmark isn't valid!");
         ::osl::MutexGuard aGuard( m_rMutex );
         m_pCache->moveToBookmark(m_aBookmark);
         m_nPosition = m_pCache->getRow();
@@ -3001,3 +2879,4 @@ void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,c
 }
 
 
+}
