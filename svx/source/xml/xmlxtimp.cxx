@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:38:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 09:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,6 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const Reference< XNameC
             uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY_THROW );
             uno::Reference < io::XStream > xIStm;
             uno::Reference< io::XActiveDataSource > xSource;
-
 
             xml::sax::InputSource aParserInput;
             aParserInput.sSystemId = aMedium.GetName();
