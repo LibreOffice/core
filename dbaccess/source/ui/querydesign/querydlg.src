@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:52:41 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones";
+        Text[ finnish ] = "Optionen";
     };
 
     RadioButton RB_INNER
@@ -137,6 +138,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ turkish ] = "~Ýç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Interior";
+        Text[ finnish ] = "~Innerer";
     };
     RadioButton RB_LEFT
     {
@@ -167,6 +169,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Izquierda";
+        Text[ finnish ] = "~Linker";
     };
     RadioButton RB_RIGHT
     {
@@ -197,6 +200,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ turkish ] = "~Sað";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Derecha";
+        Text[ finnish ] = "~Rechter";
     };
     RadioButton RB_FULL
     {
@@ -227,6 +231,7 @@ ModalDialog DLG_QRY_JOIN
         Text[ arabic ] = "ÕáÉ ßÇãáÉ";
         Text[ turkish ] = "Tam";
         Text[ catalan ] = "~Completa";
+        Text[ finnish ] = "~Vollständiger";
     };
 
     MultiLineEdit ML_HELPTEXT
@@ -280,6 +285,7 @@ ModalDialog DLG_QRY_JOIN
     Text[ turkish ] = "Birleþme özellikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propiedades de unión";
+    Text[ finnish ] = "Verbundeigenschaften";
 };
 
 String STR_QUERY_INNER_JOIN
@@ -308,6 +314,7 @@ String STR_QUERY_INNER_JOIN
     Text[ turkish ] = "Yalnýzca her iki tablodaki iliþkili alan içeriklerinin ayný olduðu kayýtlarý içerir.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contiene solo los registros en los que los contenidos de los campos vinculados de ambas tablas con iguales.";
+    Text[ finnish ] = "Beinhaltet nur die Datensätze, bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
 };
 
 String STR_QUERY_LEFTRIGHT_JOIN
@@ -336,6 +343,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ turkish ] = "'%1' tablosundaki kayýtlarýn TAMAMINI ve '%2' tablosundaki kayýtlardan yalnýzca her iki tablodaki iliþkili alan içerikleri ayný olan kayýtlarý içerir.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contiene TODOS los registros de datos de '%1' y solo los registros de '%2' en los que los contenidos de los campos vinculados de ambas tablas son iguales.";
+    Text[ finnish ] = "Beinhaltet ALLE Datensätze aus '%1' und nur die Datensätze aus '%2', bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
 };
 
 String STR_QUERY_FULL_JOIN
@@ -364,5 +372,6 @@ String STR_QUERY_FULL_JOIN
     Text[ turkish ] = "'%1' ve '%2' tablolarýndaki TÜM kayýtlarý içerir.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contiene TODOS los registros de datos de '%1' y de '%2'";
+    Text[ finnish ] = "Beinhaltet ALLE Datensätze aus '%1' und aus '%2'.";
 };
 
