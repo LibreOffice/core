@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:47:30 $
+ *  last change: $Author: mib $ $Date: 2001-07-30 13:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,8 +555,38 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         }
         if( SV_EMBEDDED_OWN == nType && pOLENd->GetChartTblName().Len() )
         {
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_TABLE,
-            pOLENd->GetChartTblName() );
+            OUString sRange( pOLENd->GetChartTblName() );
+            OUStringBuffer aBuffer( sRange.getLength() + 2 );
+            for( sal_Int32 i=0; i < sRange.getLength(); i++ )
+            {
+                sal_Unicode c = sRange[i];
+                switch( c  )
+                {
+                    case ' ':
+                    case '.':
+                    case '\'':
+                    case '\\':
+                        if( !aBuffer.getLength() )
+                        {
+                            aBuffer.append( (sal_Unicode)'\'' );
+                            aBuffer.append( sRange.copy( 0, i ) );
+                        }
+                        if( '\'' == c || '\\' == c )
+                            aBuffer.append( (sal_Unicode)'\\' );
+                        // no break!
+                    default:
+                        if( aBuffer.getLength() )
+                            aBuffer.append( c );
+                }
+            }
+            if( aBuffer.getLength() )
+            {
+                aBuffer.append( (sal_Unicode)'\'' );
+                sRange = aBuffer.makeStringAndClear();
+            }
+
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES,
+            sRange );
         }
         eElementName = SV_EMBEDDED_OUTPLACE==nType ? XML_OBJECT_OLE
                                                    : XML_OBJECT;

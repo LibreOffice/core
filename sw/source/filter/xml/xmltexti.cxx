@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-28 13:31:51 $
+ *  last change: $Author: mib $ $Date: 2001-07-30 13:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #pragma hdrstop
 
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
 #endif
@@ -317,7 +321,74 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
         SwOLENode *pOLENd = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetOLENode();
         ASSERT( pOLENd, "Where is the OLE node" );
-        pOLENd->SetChartTblName( GetRenameMap().Get( XML_TEXT_RENAME_TYPE_TABLE, rTblName ) );
+
+        OUStringBuffer aBuffer( rTblName.getLength() );
+        sal_Bool bQuoted = sal_False;
+        sal_Bool bEscape = sal_False;
+        sal_Bool bError = sal_False;
+        for( sal_Int32 i=0; i < rTblName.getLength(); i++ )
+        {
+            sal_Bool bEndOfNameFound = sal_False;
+            sal_Unicode c = rTblName[i];
+            switch( c )
+            {
+            case '\'':
+                if( bEscape )
+                {
+                    aBuffer.append( c );
+                    bEscape = sal_False;
+                }
+                else if( bQuoted )
+                {
+                    bEndOfNameFound = sal_True;
+                }
+                else if( 0 == i )
+                {
+                    bQuoted = sal_True;
+                }
+                else
+                {
+                    bError = sal_True;
+                }
+                break;
+            case '\\':
+                if( bEscape )
+                {
+                    aBuffer.append( c );
+                    bEscape = sal_False;
+                }
+                else
+                {
+                    bEscape = sal_True;
+                }
+                break;
+            case ' ':
+            case '.':
+                if( !bQuoted )
+                {
+                    bEndOfNameFound = sal_True;
+                }
+                else
+                {
+                    aBuffer.append( c );
+                    bEscape = sal_False;
+                }
+                break;
+            default:
+                {
+                    aBuffer.append( c );
+                    bEscape = sal_False;
+                }
+                break;
+            }
+            if( bError || bEndOfNameFound )
+                break;
+        }
+        if( !bError )
+        {
+            OUString sTblName( aBuffer.makeStringAndClear() );
+            pOLENd->SetChartTblName( GetRenameMap().Get( XML_TEXT_RENAME_TYPE_TABLE, sTblName ) );
+        }
     }
 
     Rectangle aVisArea( 0, 0, nWidth, nHeight );
