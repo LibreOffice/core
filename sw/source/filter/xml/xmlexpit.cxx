@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:56:40 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     if(pLRSpace->GetPropLeft() != 100)
                         rUnitConverter.convertPercent( aOut, pLRSpace->GetPropLeft() );
                     else
-                        rUnitConverter.convertMeasure( aOut, pLRSpace->GetTxtLeft() );
+                        rUnitConverter.convertMeasure( aOut, pLRSpace->GetLeft() );
                     break;
 
                 case  MID_R_MARGIN:
