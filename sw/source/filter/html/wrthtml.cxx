@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-19 19:34:29 $
+ *  last change: $Author: mib $ $Date: 2001-06-29 10:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ sal_uInt32 SwHTMLWriter::WriteStream()
 
     eCSS1Unit = (FieldUnit)SW_MOD()->GetMetric( pDoc->IsHTMLMode() );
 
-    sal_Bool bWriteUTF8 = sal_False;
+    sal_Bool bWriteUTF8 = bWriteClipboardDoc;
     eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8
                           : pHtmlOptions->GetTextEncoding();
     const sal_Char *pCharSet =
@@ -1401,11 +1401,14 @@ void GetHTMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.7 2001-02-19 19:34:29 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.8 2001-06-29 10:37:29 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/02/19 19:34:29  jp
+      use HTMLOption of TextEncoding
+
       Revision 1.6  2000/12/21 16:21:48  jp
       writegraphic optional in original format and not general as JPG
 

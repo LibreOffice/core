@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-05 15:01:28 $
+ *  last change: $Author: mib $ $Date: 2001-06-29 10:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1423,18 +1423,21 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_META:
-        if( IsNewDoc() )
         {
-            SwDocShell *pDocSh = pDoc->GetDocShell();
-            SvKeyValueIterator *pHTTPHeader =
-                pDocSh ? pDocSh->GetHeaderAttributes() : 0;
+            SvKeyValueIterator *pHTTPHeader = 0;
+            if( IsNewDoc() )
+            {
+                SwDocShell *pDocSh = pDoc->GetDocShell();
+                if( pDocSh )
+                    pHTTPHeader = pDocSh->GetHeaderAttributes();
+            }
             SfxDocumentInfo aInfo( *pDoc->GetInfo() );
-
             if( ParseMetaOptions( &aInfo, pHTTPHeader ) )
             {
-                pDoc->SetInfo( aInfo );
+                if( IsNewDoc() )
+                    pDoc->SetInfo( aInfo );
             }
-            else
+            else if( IsNewDoc() )
             {
                 ParseMoreMetaOptions();
             }
@@ -5267,6 +5270,9 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/04/05 15:01:28  jp
+      access the html.vor only at used time, not in startup
+
       Revision 1.7  2001/03/07 08:06:13  mib
       #84201#: 6.0 template support
 
