@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:08:00 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ class SvxEmphasisMarkItem;
 class SvxCharScaleWidthItem;
 class SvxCharRotateItem;
 class SvxCharReliefItem;
+class SvxCharHiddenItem;
 
 class SwFmtCharFmt;
 class SwFmtINetFmt;
@@ -204,6 +205,7 @@ public:
     inline const SvxCharScaleWidthItem  &GetCharScaleW() const;
     inline const SvxCharRotateItem      &GetCharRotate() const;
     inline const SvxCharReliefItem      &GetCharRelief() const;
+    inline const SvxCharHiddenItem      &GetCharHidden() const;
 
 private:
     SwTxtAttr( const SwTxtAttr& );
@@ -464,6 +466,11 @@ inline const SvxCharReliefItem& SwTxtAttr::GetCharRelief() const
     return (const SvxCharReliefItem&)*pAttr;
 }
 
+inline const SvxCharHiddenItem& SwTxtAttr::GetCharHidden() const
+{
+    ASSERT( pAttr && pAttr->Which() == RES_CHRATR_HIDDEN, "Falsche Abfrage" );
+    return (const SvxCharHiddenItem&)*pAttr;
+}
 
     // #ifndef _TXATBASE_HXX
 #endif
