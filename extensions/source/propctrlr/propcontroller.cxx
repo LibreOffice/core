@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 14:08:05 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 16:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,6 +728,13 @@ namespace pcr
             // show the property box, again
             if (haveView())
             {
+                if (m_nGenericPageId)
+                    getPropertyBox()->SetPage( m_nGenericPageId );
+                else if (m_nDataPageId)
+                    getPropertyBox()->SetPage( m_nDataPageId );
+                else if (m_nEventPageId)
+                    getPropertyBox()->SetPage( m_nEventPageId );
+
                 getPropertyBox()->Show();
                 // activate the old page
                 syncPropertyToView();
@@ -960,6 +967,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/02/19 14:08:05  fs
+ *  #83649# correctly eval the return value of getIntrospecteeProperty / #84041# infrastructure for activating pages from outside
+ *
  *  Revision 1.5  2001/02/05 08:58:27  fs
  *  #83468# +m_nClassId
  *
