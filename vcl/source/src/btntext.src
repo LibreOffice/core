@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:08:25 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 11:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ String SV_BUTTONTEXT_YES
     TEXT[ dutch ] = "~Ja";
     TEXT[ chinese_simplified ] = "ÊÇ(~Y)";
     TEXT[ greek ] = "Íáé";
-    TEXT[ korean ] = "¿¹";
+    TEXT[ korean ] = "¿¹(~Y)";
     TEXT[ turkish ] = "~Evet";
     TEXT[ language_user1 ] = " ";
 };
@@ -168,7 +168,7 @@ String SV_BUTTONTEXT_NO
     TEXT[ dutch ] = "~Nee";
     TEXT[ chinese_simplified ] = "·ñ(~N)";
     TEXT[ greek ] = "¼÷é";
-    TEXT[ korean ] = "¾Æ´Ï¿À";
+    TEXT[ korean ] = "¾Æ´Ï¿À(~N)";
     TEXT[ turkish ] = "~Hayýr";
     TEXT[ language_user1 ] = " ";
 };
@@ -195,7 +195,7 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ dutch ] = "H~erhalen";
     TEXT[ chinese_simplified ] = "ÖØÊÔ(~R)";
     TEXT[ greek ] = "ÅðáíÜëçøç";
-    TEXT[ korean ] = "¹Ýº¹";
+    TEXT[ korean ] = "¹Ýº¹(~R)";
     TEXT[ turkish ] = "Y~inele";
     TEXT[ language_user1 ] = " ";
 };
@@ -222,7 +222,7 @@ String SV_BUTTONTEXT_HELP
     TEXT[ dutch ] = "~Help";
     TEXT[ chinese_simplified ] = "°ïÖú(~H)";
     TEXT[ greek ] = "ÂïÞèåéá";
-    TEXT[ korean ] = "µµ¿ò¸»";
+    TEXT[ korean ] = "µµ¿ò¸»(~H)";
     TEXT[ turkish ] = "~Yardým";
     TEXT[ language_user1 ] = " ";
 };
@@ -249,7 +249,7 @@ String SV_BUTTONTEXT_MORE
     TEXT[ dutch ] = "~Overige";
     TEXT[ chinese_simplified ] = "ÆäËû(~M)";
     TEXT[ greek ] = "Ðñüóèåôá";
-    TEXT[ korean ] = "ÀÚ¼¼È÷";
+    TEXT[ korean ] = "ÀÚ¼¼È÷(~M)";
     TEXT[ turkish ] = "A~yrýntýlar";
     TEXT[ language_user1 ] = " ";
 };
