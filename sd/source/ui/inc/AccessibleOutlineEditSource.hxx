@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-13 18:50:10 $
+ *  last change: $Author: thb $ $Date: 2002-07-31 08:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,6 @@ class Window;
 
 namespace accessibility
 {
-    class AccessibleOutlineEditSource_Impl;
-
     /** Implementation of the SvxEditSource interface in the SdOutlineView
 
         This class connects the SdOutlineView and its EditEngine
