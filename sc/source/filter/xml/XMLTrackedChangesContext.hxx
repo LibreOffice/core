@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-09 18:28:24 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,8 @@ class ScXMLCellContentDeletionContext : public SvXMLImportContext
     sal_Int32                           nMatrixRows;
     sal_uInt16                          nType;
     sal_uInt8                           nMatrixFlag;
-    sal_Bool                            bBigRange;
-    sal_Bool                            bContainsCell;
+    sal_Bool                            bBigRange : 1;
+    sal_Bool                            bContainsCell : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -313,12 +313,12 @@ class ScXMLChangeCellContext : public SvXMLImportContext
     double&                 rDateTimeValue;
     double                  fValue;
     sal_uInt16&             rType;
-    sal_Bool                bIsMatrix;
-    sal_Bool                bIsCoveredMatrix;
-    sal_Bool                bEmpty;
-    sal_Bool                bFirstParagraph;
-    sal_Bool                bString;
-    sal_Bool                bFormula;
+    sal_Bool                bIsMatrix : 1;
+    sal_Bool                bIsCoveredMatrix : 1;
+    sal_Bool                bEmpty : 1;
+    sal_Bool                bFirstParagraph : 1;
+    sal_Bool                bString : 1;
+    sal_Bool                bFormula : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:43:01 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ struct ScMyColumnRowGroup
 {
     sal_Int32   nField;
     sal_Int16   nLevel;
-    sal_Bool    bDisplay;
+    sal_Bool    bDisplay : 1;
 
     ScMyColumnRowGroup();
     sal_Bool operator< (const ScMyColumnRowGroup& rGroup);
@@ -93,7 +93,7 @@ class ScMyOpenCloseColumnRowGroup
     rtl::OUString               sName;
     ScMyColumnRowGroupVec       aTableStart;
     ScMyFieldGroupVec           aTableEnd;
-    sal_Bool                    bNamespaced;
+    sal_Bool                    bNamespaced : 1;
 
     void OpenGroup(const ScMyColumnRowGroup& rGroup);
     void CloseGroup();

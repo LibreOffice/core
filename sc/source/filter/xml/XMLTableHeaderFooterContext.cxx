@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 13:09:22 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,9 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         sal_Bool bOn = *(sal_Bool *)aAny.getValue();
         if ( bOn != bDisplay )
         {
-            aAny.setValue( &bDisplay, ::getBooleanCppuType() );
+            sal_Bool bTempDisplay(bDisplay);
+            aAny.setValue( &bTempDisplay, ::getBooleanCppuType() );
+            bDisplay = bTempDisplay;
             xPropSet->setPropertyValue( sOn, aAny );
         }
     }

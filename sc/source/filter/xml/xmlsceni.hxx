@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsceni.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,11 @@ private:
     rtl::OUString   sComment;
     Color           aBorderColor;
     ScRangeList     aScenarioRanges;
-    sal_Bool        bDisplayBorder;
-    sal_Bool        bCopyBack;
-    sal_Bool        bCopyStyles;
-    sal_Bool        bCopyFormulas;
-    sal_Bool        bIsActive;
+    sal_Bool        bDisplayBorder : 1;
+    sal_Bool        bCopyBack : 1;
+    sal_Bool        bCopyStyles : 1;
+    sal_Bool        bCopyFormulas : 1;
+    sal_Bool        bIsActive : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

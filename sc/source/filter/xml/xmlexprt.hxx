@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 15:46:38 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ class ScDocument;
 struct ScMyDrawPage
 {
     com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage;
-    sal_Bool bHasForms;
+    sal_Bool bHasForms : 1;
 };
 
 typedef std::vector<sal_Int32> ScMyTableShapeIndexes;
@@ -131,25 +131,25 @@ class ScXMLExport : public SvXMLExport
     ScMyTableShapes                     aTableShapes;
     ScMyDrawPages                       aDrawPages;
 
-    sal_Bool                    bHasRowHeader;
-    sal_Bool                    bRowHeaderOpen;
-    sal_Bool                    mbShowProgress : 1;
-    sal_Bool                    bShapeStyles;
-    sal_Int32                   nOpenRow;
-    sal_Int32                   nProgressReference;
-    sal_Int32                   nProgressValue;
-    sal_Int32                   nProgressObjects;
-    sal_Int32                   nOldProgressValue;
-    sal_Int16                   nCurrentTable;
     std::vector<sal_Int32>      nLastColumns;
     std::vector<sal_Int32>      nLastRows;
-
     ScMyShapesContainer*        pShapesContainer;
     ScMyMergedRangesContainer*  pMergedRangesContainer;
     ScMyValidationsContainer*   pValidationsContainer;
     ScMyDetectiveObjContainer*  pDetectiveObjContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
+    sal_Int32                   nOpenRow;
+    sal_Int32                   nProgressReference;
+    sal_Int32                   nProgressValue;
+    sal_Int32                   nProgressObjects;
+    sal_Int32                   nOldProgressValue;
+    sal_Int16                   nCurrentTable;
+    sal_Bool                    bHasRowHeader : 1;
+    sal_Bool                    bRowHeaderOpen : 1;
+    sal_Bool                    mbShowProgress : 1;
+    sal_Bool                    bShapeStyles : 1;
+
 
     void            WriteTablesView(const com::sun::star::uno::Any& aTableView);
     void            WriteView(const com::sun::star::uno::Any& aView);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 15:46:38 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ class ScXMLChangeTrackingImportHelper;
 class ScXMLBodyContext : public SvXMLImportContext
 {
     rtl::OUString   sPassword;
-    sal_Bool        bProtected;
+    sal_Bool        bProtected : 1;
 
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }

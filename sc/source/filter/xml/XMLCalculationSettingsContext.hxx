@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-23 14:58:05 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,11 @@ class ScXMLCalculationSettingsContext : public SvXMLImportContext
     com::sun::star::util::Date aNullDate;
     double fIterationEpsilon;
     sal_Int32 nIterationCount;
-    sal_Bool bIsIterationEnabled;
-    sal_Bool bCalcAsShown;
-    sal_Bool bIgnoreCase;
-    sal_Bool bLookUpLabels;
-    sal_Bool bMatchWholeCell;
+    sal_Bool bIsIterationEnabled : 1;
+    sal_Bool bCalcAsShown : 1;
+    sal_Bool bIgnoreCase : 1;
+    sal_Bool bLookUpLabels : 1;
+    sal_Bool bMatchWholeCell : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

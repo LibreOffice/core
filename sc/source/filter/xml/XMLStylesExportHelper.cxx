@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-15 14:52:44 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,9 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
             aValidation.bShowImputMessage = bShowImputMessage;
             aValidation.aValidationType = aValidationType;
             aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)));
-            aAny >>= aValidation.bIgnoreBlanks;
+            sal_Bool bIgnoreBlanks(sal_False);
+            aAny >>= bIgnoreBlanks;
+            aValidation.bIgnoreBlanks = bIgnoreBlanks;
             aAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)));
             aAny >>= aValidation.aAlertStyle;
             uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);

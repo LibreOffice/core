@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:43:01 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,9 @@ struct ScMyValidation
     com::sun::star::sheet::ValidationAlertStyle aAlertStyle;
     com::sun::star::sheet::ValidationType       aValidationType;
     com::sun::star::sheet::ConditionOperator    aOperator;
-    sal_Bool                    bShowErrorMessage;
-    sal_Bool                    bShowImputMessage;
-    sal_Bool                    bIgnoreBlanks;
+    sal_Bool                    bShowErrorMessage : 1;
+    sal_Bool                    bShowImputMessage : 1;
+    sal_Bool                    bIgnoreBlanks : 1;
 
                                 ScMyValidation();
                                 ~ScMyValidation();
@@ -146,7 +146,7 @@ struct ScMyRowFormatRange
     sal_Int32   nRepeatRows;
     sal_Int32   nIndex;
     sal_Int32   nValidationIndex;
-    sal_Bool    bIsAutoStyle;
+    sal_Bool    bIsAutoStyle : 1;
 
     ScMyRowFormatRange();
     sal_Bool operator<(const ScMyRowFormatRange& rRange);
@@ -178,7 +178,7 @@ struct ScMyFormatRange
     com::sun::star::table::CellRangeAddress aRangeAddress;
     sal_Int32                               nStyleNameIndex;
     sal_Int32                               nValidationIndex;
-    sal_Bool                                bIsAutoStyle;
+    sal_Bool                                bIsAutoStyle : 1;
 
     ScMyFormatRange();
     sal_Bool operator< (const ScMyFormatRange& rRange);

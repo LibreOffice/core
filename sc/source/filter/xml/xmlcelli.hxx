@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 17:52:59 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ struct ScMyAnnotation
     rtl::OUString sAuthor;
     rtl::OUString sCreateDate;
     rtl::OUString sText;
-    sal_Bool bDisplay;
+    sal_Bool bDisplay : 1;
 };
 
 class ScXMLTableRowCellContext : public SvXMLImportContext
@@ -117,21 +117,21 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     rtl::OUString sCurrencySymbol;
     rtl::OUString sStyleName;
     rtl::OUString sContentValidationName;
+    double      fValue;
     sal_Int32   nMergedRows, nMergedCols;
     sal_Int32   nMatrixRows, nMatrixCols;
-    sal_Bool    bIsMerged;
-    sal_Bool    bIsMatrix;
-    sal_Bool    bIsFormula;
-    sal_Bool    bHasSubTable;
-    sal_Bool    bIsCovered;
-    sal_Bool    bHasAnnotation;
-    sal_Bool    bIsEmpty;
-    sal_Bool    bHasTextImport;
-    sal_Bool    bIsFirstTextImport;
+    sal_Int32   nRepeatedRows;
     sal_Int32   nCellsRepeated;
     sal_Int16   nCellType;
-    sal_Int32   nRepeatedRows;
-    double      fValue;
+    sal_Bool    bIsMerged : 1;
+    sal_Bool    bIsMatrix : 1;
+    sal_Bool    bIsFormula : 1;
+    sal_Bool    bHasSubTable : 1;
+    sal_Bool    bIsCovered : 1;
+    sal_Bool    bHasAnnotation : 1;
+    sal_Bool    bIsEmpty : 1;
+    sal_Bool    bHasTextImport : 1;
+    sal_Bool    bIsFirstTextImport : 1;
     ScMyAnnotation          aMyAnnotation;
     ScMyImpDetectiveObjVec  aDetectiveObjVec;
     ScMyImpCellRangeSource  aCellRangeSource;

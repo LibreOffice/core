@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-05 10:30:19 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,9 +617,13 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
     uno::Reference< table::XCellRange > xCellRange( xTable, uno::UNO_QUERY );
     if( xCellRange.is() )
     {
+        sal_Bool bIsMatrixBase(sal_False);
         if( rExport.IsMatrix( xCellRange, xTable, rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row,
-                rMyCell.aMatrixRange, rMyCell.bIsMatrixBase ) )
-            rMyCell.bIsMatrixCovered = !rMyCell.bIsMatrixBase;
+                rMyCell.aMatrixRange, bIsMatrixBase ) )
+        {
+            rMyCell.bIsMatrixBase = bIsMatrixBase;
+            rMyCell.bIsMatrixCovered = !bIsMatrixBase;
+        }
     }
 }
 

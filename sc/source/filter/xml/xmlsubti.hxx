@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:10:43 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,13 +158,13 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShapes > xShapes;
     rtl::OUString                       sCurrentSheetName;
     rtl::OUString                       sPassword;
+    std::vector<ScMyTableData*>         aTableVec;
+    com::sun::star::table::CellAddress  aRealCellPos;
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
-    std::vector<ScMyTableData*>         aTableVec;
     sal_Int16                           nTableCount;
     sal_Int16                           nCurrentSheet;
-    com::sun::star::table::CellAddress  aRealCellPos;
-    sal_Bool                            bProtection;
+    sal_Bool                            bProtection : 1;
 
     sal_Bool                            IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
                                                 const sal_Int32 nCol, const sal_Int32 nRow,

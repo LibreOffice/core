@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:43:01 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ struct ScMyMergedRange
 {
     com::sun::star::table::CellRangeAddress aCellRange;
     sal_Int32                   nRows;
-    sal_Bool                    bIsFirst;
+    sal_Bool                    bIsFirst : 1;
     sal_Bool                    operator<(const ScMyMergedRange& aRange);
 };
 
@@ -242,7 +242,7 @@ struct ScMyDetectiveObj
     ::com::sun::star::table::CellAddress        aPosition;
     ::com::sun::star::table::CellRangeAddress   aSourceRange;
     ScDetectiveObjType                          eObjType;
-    sal_Bool                                    bHasError;
+    sal_Bool                                    bHasError : 1;
     sal_Bool operator<(const ScMyDetectiveObj& rDetObj);
 };
 
@@ -315,17 +315,17 @@ struct ScMyCell
     ScMyDetectiveObjVec         aDetectiveObjVec;
     ScMyDetectiveOpVec          aDetectiveOpVec;
 
-    sal_Bool                    bHasShape;
-    sal_Bool                    bIsMergedBase;
-    sal_Bool                    bIsCovered;
-    sal_Bool                    bHasAreaLink;
-    sal_Bool                    bHasEmptyDatabase;
-    sal_Bool                    bHasDetectiveObj;
-    sal_Bool                    bHasDetectiveOp;
+    sal_Bool                    bHasShape : 1;
+    sal_Bool                    bIsMergedBase : 1;
+    sal_Bool                    bIsCovered : 1;
+    sal_Bool                    bHasAreaLink : 1;
+    sal_Bool                    bHasEmptyDatabase : 1;
+    sal_Bool                    bHasDetectiveObj : 1;
+    sal_Bool                    bHasDetectiveOp : 1;
 
-    sal_Bool                    bIsMatrixBase;
-    sal_Bool                    bIsMatrixCovered;
-    sal_Bool                    bHasAnnotation;
+    sal_Bool                    bIsMatrixBase : 1;
+    sal_Bool                    bIsMatrixCovered : 1;
+    sal_Bool                    bHasAnnotation : 1;
 
                                 ScMyCell();
                                 ~ScMyCell();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,9 @@ class ScXMLTableRowsContext : public SvXMLImportContext
     sal_Int32 nHeaderEndRow;
     sal_Int32 nGroupStartRow;
     sal_Int32 nGroupEndRow;
-    sal_Bool bHeader;
-    sal_Bool bGroup;
-    sal_Bool bGroupDisplay;
+    sal_Bool bHeader : 1;
+    sal_Bool bGroup : 1;
+    sal_Bool bGroupDisplay : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 15:46:38 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,11 +620,11 @@ struct tScMyCellRange
 
 struct ScMyNamedExpression
 {
-    sal_Bool        bIsExpression;
     rtl::OUString   sName;
     rtl::OUString   sContent;
     rtl::OUString   sBaseCellAddress;
     rtl::OUString   sRangeType;
+    sal_Bool        bIsExpression : 1;
 };
 
 typedef std::list<const ScMyNamedExpression*> ScMyNamedExpressions;
@@ -642,9 +642,9 @@ struct ScMyImportValidation
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;
-    sal_Bool                                        bShowErrorMessage;
-    sal_Bool                                        bShowImputMessage;
-    sal_Bool                                        bIgnoreBlanks;
+    sal_Bool                                        bShowErrorMessage : 1;
+    sal_Bool                                        bShowImputMessage : 1;
+    sal_Bool                                        bIgnoreBlanks : 1;
 };
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
@@ -733,15 +733,16 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDataPilotMemberAttrTokenMap;
     SvXMLTokenMap           *pConsolidationAttrTokenMap;
 
-    sal_uInt16              nStyleFamilyMask;// Mask of styles to load
-    sal_Bool                bLoadDoc : 1;   // Load doc or styles only
-    sal_Bool                bRemoveLastChar;
-
     ScMyTables              aTables;
 
     ScMyNamedExpressions    aMyNamedExpressions;
     ScMyImportValidations   aValidations;
     ScMyImpDetectiveOpArray aDetectiveOpArray;
+
+    sal_uInt16              nStyleFamilyMask;// Mask of styles to load
+    sal_Bool                bLoadDoc : 1;   // Load doc or styles only
+    sal_Bool                bRemoveLastChar : 1;
+
 
 protected:
 

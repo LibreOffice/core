@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllabri.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-26 13:23:21 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ class ScXMLLabelRangeContext : public SvXMLImportContext
 private:
     ::rtl::OUString             sLabelRangeStr;
     ::rtl::OUString             sDataRangeStr;
-    sal_Bool                    bColumnOrientation;
+    sal_Bool                    bColumnOrientation : 1;
 
     const ScXMLImport&          GetScImport() const     { return (const ScXMLImport&)GetImport(); }
     ScXMLImport&                GetScImport()           { return (ScXMLImport&)GetImport(); }

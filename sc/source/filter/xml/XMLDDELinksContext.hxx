@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:43:01 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,8 @@ struct ScDDELinkCell
 {
     rtl::OUString sValue;
     double fValue;
-    sal_Bool bString;
-    sal_Bool bEmpty;
+    sal_Bool bString : 1;
+    sal_Bool bEmpty : 1;
 };
 
 typedef std::list<ScDDELinkCell> ScDDELinkCells;
@@ -109,10 +109,10 @@ class ScXMLDDELinkContext : public SvXMLImportContext
     rtl::OUString   sApplication;
     rtl::OUString   sTopic;
     rtl::OUString   sItem;
-    sal_uInt8       nMode;
     sal_Int32       nPosition;
     sal_Int32       nColumns;
     sal_Int32       nRows;
+    sal_uInt8       nMode;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -240,9 +240,9 @@ class ScXMLDDECellContext : public SvXMLImportContext
     rtl::OUString   sValue;
     double          fValue;
     sal_Int32       nCells;
-    sal_Bool        bString;
-    sal_Bool        bString2;
-    sal_Bool        bEmpty;
+    sal_Bool        bString : 1;
+    sal_Bool        bString2 : 1;
+    sal_Bool        bEmpty : 1;
 
     ScXMLDDELinkContext* pDDELink;
 

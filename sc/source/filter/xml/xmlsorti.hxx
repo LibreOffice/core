@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,11 @@ class ScXMLSortContext : public SvXMLImportContext
 
     com::sun::star::uno::Sequence <com::sun::star::util::SortField> aSortFields;
     com::sun::star::table::CellAddress aOutputPosition;
-    sal_Bool    bCopyOutputData;
-    sal_Bool    bBindFormatsToContent;
-    sal_Bool    bIsCaseSensitive;
-    sal_Bool    bEnabledUserList;
     sal_Int16   nUserListIndex;
+    sal_Bool    bCopyOutputData : 1;
+    sal_Bool    bBindFormatsToContent : 1;
+    sal_Bool    bIsCaseSensitive : 1;
+    sal_Bool    bEnabledUserList : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

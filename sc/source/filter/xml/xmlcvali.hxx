@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-15 15:04:03 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,9 @@ class ScXMLContentValidationContext : public SvXMLImportContext
     rtl::OUString   sErrorMessageType;
     rtl::OUString   sBaseCellAddress;
     rtl::OUString   sCondition;
-    sal_Bool        bAllowEmptyCell;
-    sal_Bool        bDisplayHelp;
-    sal_Bool        bDisplayError;
+    sal_Bool        bAllowEmptyCell : 1;
+    sal_Bool        bDisplayHelp : 1;
+    sal_Bool        bDisplayError : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -154,7 +154,7 @@ class ScXMLHelpMessageContext : public SvXMLImportContext
     rtl::OUString   sTitle;
     rtl::OUStringBuffer sMessage;
     sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
+    sal_Bool        bDisplay : 1;
 
     ScXMLContentValidationContext* pValidationContext;
 
@@ -185,7 +185,7 @@ class ScXMLErrorMessageContext : public SvXMLImportContext
     rtl::OUStringBuffer sMessage;
     rtl::OUString   sMessageType;
     sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
+    sal_Bool        bDisplay : 1;
 
     ScXMLContentValidationContext* pValidationContext;
 
@@ -213,7 +213,7 @@ public:
 class ScXMLErrorMacroContext : public SvXMLImportContext
 {
     rtl::OUString   sName;
-    sal_Bool        bExecute;
+    sal_Bool        bExecute : 1;
 
     ScXMLContentValidationContext* pValidationContext;
 

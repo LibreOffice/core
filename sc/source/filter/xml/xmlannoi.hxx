@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-15 14:43:50 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@ class ScXMLAnnotationContext : public SvXMLImportContext
     rtl::OUString   sAuthor;
     rtl::OUString   sCreateDate;
     sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
-    sal_Bool        bHasTextP;
+    sal_Bool        bDisplay : 1;
+    sal_Bool        bHasTextP : 1;
     ScXMLTableRowCellContext*   pCellContext;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,15 +128,15 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     ScAddress       aFilterOutputPosition;
     ScQueryParam    aSourceQueryParam;
     ScMySourceType  nSourceType;
-    sal_Bool        bIsNative;
-    sal_Bool        bIgnoreEmptyRows;
-    sal_Bool        bIdentifyCategories;
-    sal_Bool        bUseRegularExpression;
-    sal_Bool        bIsCaseSensitive;
-    sal_Bool        bSkipDuplicates;
-    sal_Bool        bFilterCopyOutputData;
-    sal_Bool        bTargetRangeAddress;
-    sal_Bool        bSourceCellRange;
+    sal_Bool        bIsNative : 1;
+    sal_Bool        bIgnoreEmptyRows : 1;
+    sal_Bool        bIdentifyCategories : 1;
+    sal_Bool        bUseRegularExpression : 1;
+    sal_Bool        bIsCaseSensitive : 1;
+    sal_Bool        bSkipDuplicates : 1;
+    sal_Bool        bFilterCopyOutputData : 1;
+    sal_Bool        bTargetRangeAddress : 1;
+    sal_Bool        bSourceCellRange : 1;
 
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -308,10 +308,10 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     ScXMLDataPilotTableContext* pDataPilotTable;
     ScDPSaveDimension*          pDim;
 
-    sal_Int16                   nOrientation;
     sal_Int32                   nUsedHierarchy;
     sal_Int16                   nFunction;
-    sal_Bool                    bShowEmpty;
+    sal_Int16                   nOrientation;
+    sal_Bool                    bShowEmpty : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -449,8 +449,8 @@ class ScXMLDataPilotMemberContext : public SvXMLImportContext
     ScXMLDataPilotFieldContext* pDataPilotField;
 
     rtl::OUString sName;
-    sal_Bool    bDisplay;
-    sal_Bool    bDisplayDetails;
+    sal_Bool    bDisplay : 1;
+    sal_Bool    bDisplayDetails : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

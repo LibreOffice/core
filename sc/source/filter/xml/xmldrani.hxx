@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,27 +125,27 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     com::sun::star::table::CellAddress aFilterOutputPosition;
     com::sun::star::table::CellRangeAddress aFilterConditionSourceRangeAddress;
     com::sun::star::sheet::DataImportMode nSourceType;
-    sal_Bool        bNative;
-    sal_Bool        bIsSelection;
-    sal_Bool        bKeepFormats;
-    sal_Bool        bMoveCells;
-    sal_Bool        bStripData;
-    sal_Bool        bOrientation;
-    sal_Bool        bContainsHeader;
-    sal_Bool        bAutoFilter;
-    sal_Bool        bSubTotalsBindFormatsToContent;
-    sal_Bool        bSubTotalsIsCaseSensitive;
-    sal_Bool        bSubTotalsInsertPageBreaks;
-    sal_Bool        bSubTotalsSortGroups;
-    sal_Bool        bSubTotalsEnabledUserList;
-    sal_Bool        bSubTotalsAscending;
-    sal_Int16       nSubTotalsUserListIndex;
-    sal_Int16       nSubTotalRuleGroupFieldNumber;
-    sal_Bool        bFilterCopyOutputData;
-    sal_Bool        bFilterIsCaseSensitive;
-    sal_Bool        bFilterSkipDuplicates;
-    sal_Bool        bFilterUseRegularExpressions;
-    sal_Bool        bFilterConditionSourceRange;
+    sal_Bool        bNative : 1;
+    sal_Bool        bIsSelection : 1;
+    sal_Bool        bKeepFormats : 1;
+    sal_Bool        bMoveCells : 1;
+    sal_Bool        bStripData : 1;
+    sal_Bool        bOrientation : 1;
+    sal_Bool        bContainsHeader : 1;
+    sal_Bool        bAutoFilter : 1;
+    sal_Bool        bSubTotalsBindFormatsToContent : 1;
+    sal_Bool        bSubTotalsIsCaseSensitive : 1;
+    sal_Bool        bSubTotalsInsertPageBreaks : 1;
+    sal_Bool        bSubTotalsSortGroups : 1;
+    sal_Bool        bSubTotalsEnabledUserList : 1;
+    sal_Bool        bSubTotalsAscending : 1;
+    sal_Int16       nSubTotalsUserListIndex : 1;
+    sal_Int16       nSubTotalRuleGroupFieldNumber : 1;
+    sal_Bool        bFilterCopyOutputData : 1;
+    sal_Bool        bFilterIsCaseSensitive : 1;
+    sal_Bool        bFilterSkipDuplicates : 1;
+    sal_Bool        bFilterUseRegularExpressions : 1;
+    sal_Bool        bFilterConditionSourceRange : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

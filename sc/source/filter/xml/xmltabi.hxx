@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:39:59 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ class ScXMLImport;
 class ScXMLTableContext : public SvXMLImportContext
 {
     rtl::OUString   sPrintRanges;
-    sal_Bool        bStartFormPage;
+    sal_Bool        bStartFormPage : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
