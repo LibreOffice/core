@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:25:41 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 14:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Identificador d'ajuda";
         Text[ thai ] = "ID ช่วยเหลือ";
-        Text[ czech ] = "Určení nápovědy";
+        Text[ czech ] = "ID nápovědy";
         Text[ hebrew ] = "Hilfe-Identifikation";
         Text[ hindi ] = "सहायता ID";
         Text[ slovak ] = "ID Pomocníka";
@@ -290,6 +290,8 @@ ModalDialog RID_MACROOPTIONS
     Text[ hindi ] = "विवरण";
     Text[ slovak ] = "Popis";
 };
+
+
 
 
 
