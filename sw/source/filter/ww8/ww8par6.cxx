@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-12 17:33:40 $
+ *  last change: $Author: cmc $ $Date: 2001-11-14 17:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1165,7 +1165,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                 //     -- or in the sections before this one --
                 //     regardless whether they are used in this section or not
                 pHdFt->GetTextPosExact( nI+ (nActSectionNo+1)*6, nStart, nLen );
-                if( nLen <=2 || nActSectionNo )
+                if( nLen <=2 && nActSectionNo )
                 {
                     short nOldSectionNo = nActSectionNo;
                     do
@@ -3941,15 +3941,29 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
     //sprmPDxaLeft1
     case     19:
     case 0x8411:
+        /*
+        #94672#
+        As part of an attempt to break my spirit ww 8+ formats can contain ww
+        7- lists. If they do and the list is part of the style, then when
+        removing the list from a paragraph of that style there appears to be a
+        bug where the hanging indent value which the list set is still
+        factored into the left indent of the paragraph. Its not listed in the
+        winword dialogs, but it is clearly there. So if our style has a broken
+        ww 7- list and we know that the list has been removed then we will
+        factor the original list applied hanging into our calculation.
+        */
+        if (pCollA[nAktColl].bHasBrokenWW6List && pPlcxMan)
+        {
+            const BYTE *pIsZeroedList = pPlcxMan->GetPapPLCF()->HasSprm(0x460B);
+            if (*pIsZeroedList == 0)
+                nPara +=aLR.GetTxtFirstLineOfst();
+        }
+
         aLR.SetTxtFirstLineOfst( nPara );
         if( pAktColl )
-        {
             pCollA[nAktColl].nTxtFirstLineOfst = nPara; // fuer Tabs merken
-        }
         else
-        {
             nTxtFirstLineOfst = nPara; // fuer Tabs merken
-        }
         break;
     //sprmPDxaRight
     case     16:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
+ *  last change: $Author: cmc $ $Date: 2001-11-14 17:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ public:
     BOOL        bColl           :1; // TRUE -> pFmt ist SwTxtFmtColl
     BOOL        bImportSkipped  :1; // nur TRUE bei !bNewDoc && vorh. Style
     BOOL        bHasStyNumRule  :1; // TRUE -> Benannter NumRule in Style
+    BOOL        bHasBrokenWW6List :1;   //TRUE -> WW8+ style has a WW7- list
 
     SwWW8StyInf() :
         sWWStyleName( aEmptyStr ),
@@ -223,7 +224,8 @@ public:
         bImported( FALSE ),
         bColl( FALSE ),
         bImportSkipped( FALSE ),
-        bHasStyNumRule( FALSE )
+        bHasStyNumRule( FALSE ),
+        bHasBrokenWW6List( FALSE )
     {}
 
     ~SwWW8StyInf()

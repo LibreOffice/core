@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-11-14 17:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1606,6 +1606,8 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16 nId, const sal_uInt8* pData,
     {
         // aktuelle Liste ist hier zu Ende, was ist zu tun ???
         nListLevel = nWW8MaxListLevel;
+        if (pStyles && !bVer67)
+            pStyles->nWwNumLevel = 0;
     }
     else
     {
@@ -1613,6 +1615,19 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16 nId, const sal_uInt8* pData,
         if( !pData ) return;
         // die Streamdaten sind hier Null basiert, so wie wir es brauchen
         nListLevel = *pData;
+
+        if (pStyles && !bVer67)
+        {
+            /*
+            #94672#
+            if this is the case, then if the numbering is actually stored in
+            winword 6 format, and its likely that sprmPIlvl has been abused
+            to set the ww6 list level information which we will need when we
+            reach the true ww6 list def.  So set it now
+            */
+            pStyles->nWwNumLevel = nListLevel;
+        }
+
         if( nWW8MaxListLevel <= nListLevel )
             nListLevel = nWW8MaxListLevel;
         else
@@ -1658,24 +1673,54 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16 nId, const sal_uInt8* pData,
                 }
             }
 
+            /*
+            #94672#
+            If you have a paragraph in word with left and/or hanging indent
+            and remove its numbering, then the indentation appears to get
+            reset, but not back to the base style, instead its goes to a blank
+            setting.
+            Unless its a broken ww6 list in 97 in which case more hackery is
+            required, some more details about that in
+            ww8par6.cxx#SwWW8ImplReader::Read_LR
+            */
+            SvxLRSpaceItem aLR;
+            if (pCollA[nAktColl].bHasBrokenWW6List)
+            {
+                const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)
+                    pCollA[nAktColl].pFmt->GetAttr( RES_LR_SPACE );
+                aLR.SetTxtFirstLineOfst(-rLR.GetTxtFirstLineOfst());
+            }
+            NewAttr( aLR );
+
             nLFOPosition = USHRT_MAX;
         }
         else
         {
-            // die Streamdaten sind hier 1 basiert, wir ziehen EINS ab
             nLFOPosition = (sal_uInt16)nData-1;
-            if( USHRT_MAX > nLFOPosition)
+            /*
+            #94672#
+            If we are a ww8+ style with ww7- style lists then there is a
+            bizarre broken word bug where when the list is removed from a para
+            the ww6 list first line indent still affects the first line
+            indentation.  Setting this flag will allow us to recover from this
+            braindeadness
+            */
+            if( pAktColl && (nLFOPosition == 2047-1) )
+                pCollA[nAktColl].bHasBrokenWW6List = TRUE;
+
+            // die Streamdaten sind hier 1 basiert, wir ziehen EINS ab
+            if ( (USHRT_MAX > nLFOPosition) && (nLFOPosition != 2047-1) )
             {
                 /*
-                    traurig: WW8 speichert manchmal keine Level-Attribute ab, auch wenn
-                                     die Liste *nicht* bSimpleList hat.
-                    daher: nach Auftreten von sprmPIlfo sofort die Liste anklemmen, auch
-                                 wenn kein sprmPIlvl vorher kam!
+                    traurig: WW8 speichert manchmal keine Level-Attribute ab,
+                    auch wenn die Liste *nicht* bSimpleList hat.
+
+                    daher: nach Auftreten von sprmPIlfo sofort die Liste
+                    anklemmen, auch wenn kein sprmPIlvl vorher kam!
 
                     schoener waere gewesen:
-                            if(    (nWW8MaxListLevel == nListLevel)
-                                    && pLstManager
-                                    && pLstManager->IsSimpleList(   nLFOPosition ) )
+                        if(    (nWW8MaxListLevel == nListLevel) && pLstManager
+                            && pLstManager->IsSimpleList(   nLFOPosition ) )
                                 nListLevel = 0;
                 */
                 if(nWW8MaxListLevel == nListLevel)
