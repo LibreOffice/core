@@ -566,7 +566,10 @@ void VSeriesPlotter::createErrorBar(
             bool bClipped =
                 lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, *m_pPosHelper, aPos, aSize );
 
-            m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir, bClipped );
+            setMappedProperties(
+                m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir, bClipped ),
+                xErrorBarProperties,
+                PropertyMapper::getPropertyNameMapForLineProperties() );
         }
 
         if( bShowNeg )
@@ -583,7 +586,10 @@ void VSeriesPlotter::createErrorBar(
             bool bClipped =
                 lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, *m_pPosHelper, aPos, aSize );
 
-            m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir, bClipped );
+            setMappedProperties(
+                m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir, bClipped ),
+                xErrorBarProperties,
+                PropertyMapper::getPropertyNameMapForLineProperties() );
         }
     }
     catch( uno::Exception & e )
