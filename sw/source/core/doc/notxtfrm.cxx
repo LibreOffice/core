@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:06:25 $
+ *  last change: $Author: ama $ $Date: 2002-03-06 09:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
         pFont->SetWeight( WEIGHT_BOLD );
         pFont->SetStyleName( aEmptyStr );
         pFont->SetName( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "Helvetica" )));
+                            RTL_CONSTASCII_STRINGPARAM( "Arial Unicode" )));
         pFont->SetFamily( FAMILY_SWISS );
         pFont->SetTransparent( TRUE );
     }
