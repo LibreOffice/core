@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:41 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,6 +986,28 @@ XubString SdrUndoCopyObj::GetComment() const
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoCopyObj,aStr);
     return aStr;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// #i11702#
+
+SdrUndoObjectLayerChange::SdrUndoObjectLayerChange(SdrObject& rObj, SdrLayerID aOldLayer, SdrLayerID aNewLayer)
+:   SdrUndoObj(rObj),
+    maOldLayer(aOldLayer),
+    maNewLayer(aNewLayer)
+{
+}
+
+void SdrUndoObjectLayerChange::Undo()
+{
+    ImpShowPageOfThisObject();
+    pObj->SetLayer(maOldLayer);
+}
+
+void SdrUndoObjectLayerChange::Redo()
+{
+    pObj->SetLayer(maNewLayer);
+    ImpShowPageOfThisObject();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
