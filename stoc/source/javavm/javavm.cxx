@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-29 08:25:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,7 +889,7 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
         OSL_TRACE("javavm.cxx: couldn't get safety settings because of >%s<", message.getStr());
 #endif
     }
-    jvm.addSystemClasspath( retrieveComponentClassPath( "UNO_SHARE_PACKAGES_CACHE" ) );
+    jvm.addSystemClasspath( retrieveComponentClassPath( "UNO_SHARED_PACKAGES_CACHE" ) );
     jvm.addUserClasspath( retrieveComponentClassPath( "UNO_USER_PACKAGES_CACHE" ) );
 
 //For a non product office we use the flag -ea
