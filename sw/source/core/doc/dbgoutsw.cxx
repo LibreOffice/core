@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:46:48 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,59 +714,78 @@ const char * dbg_out(SwNodes & rNodes)
     return dbg_out(lcl_dbg_out(rNodes));
 }
 
+static String lcl_dbg_out(const SwUndo & rUndo)
+{
+    String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
+
+    aStr += String::CreateFromInt32(rUndo.GetId());
+    aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
+
+    switch(rUndo.GetId())
+    {
+    case UNDO_START:
+        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+        aStr +=
+            String::CreateFromInt32(reinterpret_cast
+                                    <const SwUndoStart &>(rUndo).
+                                    GetUserId());
+        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+        aStr += String::CreateFromInt32(reinterpret_cast
+                                        <const SwUndoStart &>(rUndo).
+                                        GetEndOffset());
+        aStr += String(" ", RTL_TEXTENCODING_ASCII_US);
+
+        break;
+
+    case UNDO_END:
+        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+        aStr +=
+            String::CreateFromInt32(reinterpret_cast
+                                    <const SwUndoEnd &>(rUndo).
+                                    GetId());
+        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+        aStr += String::CreateFromInt32(reinterpret_cast
+                                        <const SwUndoEnd &>(rUndo).
+                                        GetSttOffset());
+        aStr += String(" ", RTL_TEXTENCODING_ASCII_US);
+
+        break;
+    }
+
+    aStr += rUndo.GetComment();
+    aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
+
+    return aStr;
+}
+
+const char * dbg_out(const SwUndo & rUndo)
+{
+    return dbg_out(lcl_dbg_out(rUndo));
+}
+
 static String lcl_dbg_out(const SwUndos & rUndos)
 {
-    String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
-    int nLevel = 0;
+    int nIndent = 0;
 
-    for (USHORT n = 0; n < rUndos.Count(); n++)
+    String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
+
+    for (ULONG n = 0; n < rUndos.Count(); n++)
     {
         SwUndo * pUndo = rUndos[n];
 
         if (pUndo->GetId() == UNDO_END)
-            nLevel--;
+            nIndent--;
 
-        for (int n1 = 0; n1 < nLevel; n1++)
+        for (int nI = 0; n < nIndent; nI++)
             aStr += String("  ", RTL_TEXTENCODING_ASCII_US);
 
-        aStr += String("[ ", RTL_TEXTENCODING_ASCII_US);
-        aStr += String::CreateFromInt32(n);
-        aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
-        aStr += String::CreateFromInt32(pUndo->GetId());
-
-        switch(pUndo->GetId())
-        {
-        case UNDO_START:
-            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-            aStr +=
-                String::CreateFromInt32(((SwUndoStart *) pUndo)->GetUserId());
-            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-            aStr += String::CreateFromInt32(((SwUndoStart *) pUndo)
-                                            ->GetEndOffset());
-
-            break;
-
-        case UNDO_END:
-            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-            aStr +=
-                String::CreateFromInt32(((SwUndoEnd *) pUndo)->GetUserId());
-            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-            aStr += String::CreateFromInt32(((SwUndoEnd *) pUndo)
-                                            ->GetSttOffset());
-
-            break;
-
-        default:
-            break;
-        }
-
-        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-        aStr += pUndo->GetComment();
-        aStr += String(" ]\n", RTL_TEXTENCODING_ASCII_US);
+        aStr += lcl_dbg_out(*pUndo);
+        aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
 
         if (pUndo->GetId() == UNDO_START)
-            nLevel++;
+            nIndent++;
     }
+
     aStr += String("]\n", RTL_TEXTENCODING_ASCII_US);
 
     return aStr;
