@@ -1,9 +1,8 @@
 ..\%__SRC%\bin\lng* %_DEST%\bin%_EXT%\lng*
-..\%__SRC%\lib\lib* %_DEST%\lib%_EXT%\lib*
+..\%__SRC%\lib\ilng* %_DEST%\lib%_EXT%\ilng*
 mkdir: %_DEST%\inc%_EXT%\linguistic
 hedabu: ..\inc\lngprops.hxx %_DEST%\inc%_EXT%\linguistic\lngprops.hxx
 hedabu: ..\inc\misc.hxx %_DEST%\inc%_EXT%\linguistic\misc.hxx
 hedabu: ..\inc\spelldta.hxx %_DEST%\inc%_EXT%\linguistic\spelldta.hxx
 hedabu: ..\inc\hyphdta.hxx %_DEST%\inc%_EXT%\linguistic\hyphdta.hxx
-hedabu: ..\inc\thesdta.hxx %_DEST%\inc%_EXT%\linguistic\thesdta.hxx
 hedabu: ..\inc\iprcache.hxx %_DEST%\inc%_EXT%\linguistic\iprcache.hxx
