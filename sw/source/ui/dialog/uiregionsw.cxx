@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:10:47 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,8 +193,6 @@
 
 SV_IMPL_OP_PTRARR_SORT( SectReprArr, SectReprPtr )
 
-
-USHORT lcl_GetRegion( const String& rRegionName, SwWrtShell& rWrtShell );
 void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox );
 
 /* -----------------25.06.99 15:38-------------------
@@ -1411,195 +1409,6 @@ Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden, BOOL bHighContras
 {
     ImageList& rImgLst = bHighContrast ? aImageILH : aImageIL;
     return rImgLst.GetImage((!bHidden+(bProtect<<1)) + 1);
-}
-/*--------------------------------------------------------------------
-    Beschreibung:   Bereiche einfuegen
- --------------------------------------------------------------------*/
-
-
-//CHINA001 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
-//CHINA001 {
-//CHINA001 SwWrtShell& rSh = GetShell();
-//CHINA001 const SfxItemSet *pSet = rReq.GetArgs();
-//CHINA001
-//CHINA001 SfxItemSet aSet(GetPool(),
-//CHINA001 RES_COL, RES_COL,
-//CHINA001 RES_LR_SPACE, RES_LR_SPACE,
-//CHINA001 RES_COLUMNBALANCE, RES_FRAMEDIR,
-//CHINA001 RES_BACKGROUND, RES_BACKGROUND,
-//CHINA001 RES_FRM_SIZE, RES_FRM_SIZE,
-//CHINA001 RES_FTN_AT_TXTEND, RES_END_AT_TXTEND,
-//CHINA001 SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-//CHINA001 0);
-//CHINA001
-//CHINA001 if (!pSet || pSet->Count()==0)
-//CHINA001 {
-//CHINA001 SwRect aRect;
-//CHINA001 rSh.CalcBoundRect(aRect, FLY_IN_CNTNT);
-//CHINA001
-//CHINA001 long nWidth = aRect.Width();
-//CHINA001 aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
-//CHINA001
-//CHINA001 // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
-//CHINA001 aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
-//CHINA001 SwInsertSectionTabDialog aTabDlg(&GetView().GetViewFrame()->GetWindow(),aSet , rSh);
-//CHINA001 aTabDlg.Execute();
-//CHINA001 rReq.Ignore();
-//CHINA001  }
-//CHINA001  else
-//CHINA001 {
-//CHINA001 const SfxPoolItem *pItem = 0;
-//CHINA001 String aTmpStr;
-//CHINA001 if ( SFX_ITEM_SET ==
-//CHINA001 pSet->GetItemState(FN_PARAM_REGION_NAME, TRUE, &pItem) )
-//CHINA001 aTmpStr = rSh.GetUniqueSectionName(
-//CHINA001 &((const SfxStringItem *)pItem)->GetValue() );
-//CHINA001      else
-//CHINA001 aTmpStr = rSh.GetUniqueSectionName();
-//CHINA001
-//CHINA001 SwSection    aSection(CONTENT_SECTION,aTmpStr);
-//CHINA001 rReq.SetReturnValue(SfxStringItem(FN_INSERT_REGION, aTmpStr));
-//CHINA001
-//CHINA001 aSet.Put( *pSet );
-//CHINA001 if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem)||
-//CHINA001 SFX_ITEM_SET == pSet->GetItemState(FN_INSERT_REGION, FALSE, &pItem))
-//CHINA001 {
-//CHINA001 SwFmtCol aCol;
-//CHINA001 SwRect aRect;
-//CHINA001 rSh.CalcBoundRect(aRect, FLY_IN_CNTNT);
-//CHINA001 long nWidth = aRect.Width();
-//CHINA001
-//CHINA001 USHORT nCol = ((SfxUInt16Item *)pItem)->GetValue();
-//CHINA001 if(nCol)
-//CHINA001 {
-//CHINA001 aCol.Init( nCol, 0, nWidth );
-//CHINA001 aSet.Put(aCol);
-//CHINA001          }
-//CHINA001      }
-//CHINA001      else if(SFX_ITEM_SET == pSet->GetItemState(RES_COL, FALSE, &pItem))
-//CHINA001 {
-//CHINA001 aSet.Put(*pItem);
-//CHINA001      }
-//CHINA001
-//CHINA001 const BOOL bHidden = SFX_ITEM_SET ==
-//CHINA001 pSet->GetItemState(FN_PARAM_REGION_HIDDEN, TRUE, &pItem)?
-//CHINA001 (BOOL)((const SfxBoolItem *)pItem)->GetValue():FALSE;
-//CHINA001 const BOOL bProtect = SFX_ITEM_SET ==
-//CHINA001 pSet->GetItemState(FN_PARAM_REGION_PROTECT, TRUE, &pItem)?
-//CHINA001 (BOOL)((const SfxBoolItem *)pItem)->GetValue():FALSE;
-//CHINA001 aSection.SetProtect(bProtect);
-//CHINA001 aSection.SetHidden(bHidden);
-//CHINA001 if(SFX_ITEM_SET ==
-//CHINA001 pSet->GetItemState(FN_PARAM_REGION_CONDITION, TRUE, &pItem))
-//CHINA001 aSection.SetCondition(((const SfxStringItem *)pItem)->GetValue());
-//CHINA001
-//CHINA001 String aFile, aSub;
-//CHINA001 if(SFX_ITEM_SET ==
-//CHINA001 pSet->GetItemState(FN_PARAM_1, TRUE, &pItem))
-//CHINA001 aFile = ((const SfxStringItem *)pItem)->GetValue();
-//CHINA001
-//CHINA001 if(SFX_ITEM_SET ==
-//CHINA001 pSet->GetItemState(FN_PARAM_3, TRUE, &pItem))
-//CHINA001 aSub = ((const SfxStringItem *)pItem)->GetValue();
-//CHINA001
-//CHINA001
-//CHINA001 if(aFile.Len() || aSub.Len())
-//CHINA001 {
-//CHINA001 String sLinkFileName(so3::cTokenSeperator);
-//CHINA001 sLinkFileName += so3::cTokenSeperator;
-//CHINA001 sLinkFileName.SetToken(0, so3::cTokenSeperator,aFile);
-//CHINA001
-//CHINA001 if(SFX_ITEM_SET ==
-//CHINA001 pSet->GetItemState(FN_PARAM_2, TRUE, &pItem))
-//CHINA001 sLinkFileName.SetToken(1, so3::cTokenSeperator,
-//CHINA001 ((const SfxStringItem *)pItem)->GetValue());
-//CHINA001
-//CHINA001 sLinkFileName += aSub;
-//CHINA001 aSection.SetType( FILE_LINK_SECTION );
-//CHINA001 aSection.SetLinkFileName(sLinkFileName);
-//CHINA001      }
-//CHINA001 rSh.InsertSection(aSection, aSet.Count() ? &aSet : 0);
-//CHINA001 rReq.Done();
-//CHINA001  }
-//CHINA001 }
-
-//CHINA001 IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSection*, pSect )
-//CHINA001 {
-//CHINA001 if( pSect )
-//CHINA001  {
-//CHINA001 SfxItemSet aSet(pThis->GetView().GetPool(),
-//CHINA001 RES_COL, RES_COL,
-//CHINA001 RES_BACKGROUND, RES_BACKGROUND,
-//CHINA001 RES_FRM_SIZE, RES_FRM_SIZE,
-//CHINA001 SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-//CHINA001 0);
-//CHINA001 SwRect aRect;
-//CHINA001 pThis->CalcBoundRect(aRect, FLY_IN_CNTNT);
-//CHINA001 long nWidth = aRect.Width();
-//CHINA001 aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
-//CHINA001 // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
-//CHINA001 aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
-//CHINA001 SwInsertSectionTabDialog aTabDlg(&pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis);
-//CHINA001 aTabDlg.SetSection(*pSect);
-//CHINA001 aTabDlg.Execute();
-//CHINA001
-//CHINA001 delete pSect;
-//CHINA001  }
-//CHINA001 return 0;
-//CHINA001 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Bereich bearbeiten
- --------------------------------------------------------------------*/
-
-//CHINA001 void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
-//CHINA001 {
-//CHINA001 const SfxItemSet* pArgs = rReq.GetArgs();
-//CHINA001 int nSlot = rReq.GetSlot();
-//CHINA001 const SfxPoolItem* pItem = 0;
-//CHINA001 if(pArgs)
-//CHINA001 pArgs->GetItemState(nSlot, FALSE, &pItem);
-//CHINA001 SwWrtShell& rWrtShell = GetShell();
-//CHINA001
-//CHINA001 switch ( nSlot )
-//CHINA001  {
-//CHINA001      case FN_EDIT_REGION:
-//CHINA001      {
-//CHINA001 Window* pParentWin = &GetView().GetViewFrame()->GetWindow();
-//CHINA001 BOOL bStart = TRUE;
-//CHINA001 if(bStart)
-//CHINA001          {
-//CHINA001 SwEditRegionDlg* pEditRegionDlg = new SwEditRegionDlg(
-//CHINA001 pParentWin, rWrtShell );
-//CHINA001 if(pItem && pItem->ISA(SfxStringItem))
-//CHINA001              {
-//CHINA001 pEditRegionDlg->SelectSection(((const SfxStringItem*)pItem)->GetValue());
-//CHINA001              }
-//CHINA001 pEditRegionDlg->Execute();
-//CHINA001 delete pEditRegionDlg;
-//CHINA001          }
-//CHINA001          else
-//CHINA001 InfoBox(pParentWin, SW_RES(REG_WRONG_PASSWORD)).Execute();
-//CHINA001      }
-//CHINA001 break;
-//CHINA001  }
-//CHINA001 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Hilfsfunktion - Bereichsindex ermitteln
- --------------------------------------------------------------------*/
-
-USHORT lcl_GetRegion( const String& rRegionName, SwWrtShell& rWrtShell )
-{
-    USHORT nCount = rWrtShell.GetSectionFmtCount();
-    for(USHORT i=0; i< nCount; i++)
-    {
-        const SwSectionFmt& rFmt = rWrtShell.GetSectionFmt(i);
-        if(rFmt.IsInNodesArr() && rFmt.GetSection()->GetName()
-                == rRegionName)
-            return i;
-    }
-    return USHRT_MAX;
 }
 
 /*--------------------------------------------------------------------
