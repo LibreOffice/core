@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-28 12:27:21 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 10:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,9 +927,10 @@ void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
     {
         delete pPrt;
         pPrt = pP;
-        if ( bCallPrtDataChanged )
-            PrtDataChanged();
     }
+
+    if ( bCallPrtDataChanged )
+        PrtDataChanged();
 
     if( bInitPageDesc )
     {
