@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-07 10:35:52 $
+ *  last change: $Author: obo $ $Date: 2001-05-08 07:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,8 @@ Bitmap Printer::GetPreparedBitmap( const Point& rDstPt, const Size& rDstSz,
 
     if( !aBmp.IsEmpty() )
     {
-        const Rectangle aBmpRect( Point(), aBmp.GetSizePixel() );
+        Point aPoint = Point();
+        const Rectangle aBmpRect( aPoint, aBmp.GetSizePixel() );
         Rectangle       aSrcRect( rSrcPt, rSrcSz );
 
         // do cropping if neccessary
@@ -649,7 +650,8 @@ BitmapEx Printer::GetPreparedBitmapEx( const Point& rDstPt, const Size& rDstSz,
 
     if( !aBmpEx.IsEmpty() )
     {
-        const Rectangle aBmpRect( Point(), aBmpEx.GetSizePixel() );
+        Point aPoint = Point();
+        const Rectangle aBmpRect( aPoint, aBmpEx.GetSizePixel() );
         Rectangle       aSrcRect( rSrcPt, rSrcSz );
 
         // do cropping if neccessary
