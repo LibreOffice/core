@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:50:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@
 #ifndef _SD_PGJUMP_HXX
 #include <pgjump.hxx>
 #endif
+#include "PaneHider.hxx"
 
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
@@ -609,6 +610,7 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
             mpViewShell->SetActiveWindow( mpShowWindow );
             mpShowWindow->SetViewShell (mpViewShell);
             mpViewShell->GetViewShellBase().ShowUIControls (false);
+            mpPaneHider.reset(new PaneHider(*mpViewShell));
 
             mpViewShell->GetViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
         }
@@ -887,6 +889,7 @@ void SlideshowImpl::stopShow()
         if( meAnimationMode == ANIMATIONMODE_SHOW )
         {
             mpViewShell->GetViewShellBase().ShowUIControls (true);
+            mpPaneHider.reset();
         }
         else if( meAnimationMode == ANIMATIONMODE_PREVIEW )
         {
