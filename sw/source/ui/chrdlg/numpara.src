@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 07:34:05 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,9 @@ TabPage TP_NUMPARA
         Text = "~Nummerierungsvorlage" ;
         Text [ ENGLISH ] = "~Number style" ;
         Text [ portuguese ] = "Estilo de numeração" ;
-        Text [ english_us ] = "~Numbering Style" ;
+        Text [ english_us ] = "Numbering Style" ;
         Text [ portuguese_brazilian ] = "Numerierungsvorlage" ;
-        Text [ swedish ] = "Numreringsformatmall" ;
+        Text [ swedish ] = "~Numreringsformatmall" ;
         Text [ danish ] = "Nummereringstypografi" ;
         Text [ italian ] = "Modello di numerazione" ;
         Text [ spanish ] = "Estilo de numeración" ;
@@ -265,27 +265,27 @@ TabPage TP_NUMPARA
         Text [ English ] = "~Start at" ;
         Hide = TRUE ;
         Disable = TRUE ;
-        Text [ portuguese ] = "~Começar em" ;
+        Text [ portuguese ] = "~Começar em:" ;
         Text [ english_us ] = "~Start with" ;
-        Text [ portuguese_brazilian ] = "~Beginnen mit" ;
+        Text [ portuguese_brazilian ] = "~Beginnen mit:" ;
         Text [ swedish ] = "~Börja med" ;
-        Text [ danish ] = "Begynd med" ;
-        Text [ italian ] = "~Inizia con" ;
+        Text [ danish ] = "Begynd med:" ;
+        Text [ italian ] = "~Inizia con..." ;
         Text [ spanish ] = "Empezar ~con" ;
-        Text [ french ] = "~Commencer avec" ;
-        Text [ dutch ] = "~Beginnen met" ;
+        Text [ french ] = "~Commencer avec :" ;
+        Text [ dutch ] = "~Beginnen met:" ;
         Text[ chinese_simplified ] = "¿ªÊ¼´Ó(~S)";
-        Text[ russian ] = "Íà÷àòü ñ";
+        Text[ russian ] = "Íà÷àòü ñ:";
         Text[ polish ] = "Zacznij od";
         Text[ japanese ] = "ŠJn”Ô†(~S)";
         Text[ chinese_traditional ] = "¶}©l±q(~S)";
-        Text[ arabic ] = "ÇáÈÏÁ ÈÜ";
-        Text[ greek ] = "¸íáñîç áğü";
-        Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ(~S)";
-        Text[ turkish ] = "~Başlangıç değeri";
+        Text[ arabic ] = "ÇáÈÏÁ ÈÜ:";
+        Text[ greek ] = "¸íáñîç áğü:";
+        Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ(~S):";
+        Text[ turkish ] = "~Başlangıç değeri:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Empezar ~con";
-        Text[ finnish ] = "~Aloita kohteella";
+        Text[ catalan ] = "Empezar ~con:";
+        Text[ finnish ] = "~Aloita kohteella:";
     };
     NumericField NF_NEW_START
     {
@@ -397,27 +397,27 @@ TabPage TP_NUMPARA
         Text = "B~eginnen mit" ;
         Text [ English ] = "~Start at" ;
         Disable = TRUE ;
-        Text [ portuguese ] = "~Começar em" ;
+        Text [ portuguese ] = "~Começar em:" ;
         Text [ english_us ] = "~Start with" ;
-        Text [ portuguese_brazilian ] = "~Beginnen mit" ;
+        Text [ portuguese_brazilian ] = "~Beginnen mit:" ;
         Text [ swedish ] = "Börja m~ed" ;
-        Text [ danish ] = "Begynd med" ;
-        Text [ italian ] = "~Inizia con" ;
+        Text [ danish ] = "Begynd med:" ;
+        Text [ italian ] = "~Inizia con..." ;
         Text [ spanish ] = "Empezar ~con" ;
-        Text [ french ] = "~Commencer avec" ;
-        Text [ dutch ] = "~Beginnen met" ;
-        Text[ chinese_simplified ] = "¿ªÊ¼´Ó(~S)£º";
-        Text[ russian ] = "Íà÷àòü ñ";
+        Text [ french ] = "~Commencer avec :" ;
+        Text [ dutch ] = "~Beginnen met:" ;
+        Text[ chinese_simplified ] = "¿ªÊ¼´Ó(~S)";
+        Text[ russian ] = "Íà÷àòü ñ:";
         Text[ polish ] = "Zacznij od";
         Text[ japanese ] = "ŠJn”Ô†(~S)";
-        Text[ chinese_traditional ] = "¶}©l±q(~S)¡G";
-        Text[ arabic ] = "ÇáÈÏÁ ÈÜ";
-        Text[ greek ] = "¸íáñîç ì~å";
-        Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ(~S)";
-        Text[ turkish ] = "~Başlangıç değeri";
+        Text[ chinese_traditional ] = "¶}©l±q(~S)";
+        Text[ arabic ] = "ÇáÈÏÁ ÈÜ:";
+        Text[ greek ] = "¸íáñîç ì~å:";
+        Text[ korean ] = "¿Í ÇÔ²² ½ÃÀÛ(~S):";
+        Text[ turkish ] = "~Başlangıç değeri:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Empezar ~con";
-        Text[ finnish ] = "~Aloitus";
+        Text[ catalan ] = "Empezar ~con:";
+        Text[ finnish ] = "~Aloitus:";
     };
     NumericField NF_RESTART_PARA
     {
@@ -437,5 +437,6 @@ TabPage TP_NUMPARA
     };
 };
  // ********************************************************************** EOF
+
 
 
