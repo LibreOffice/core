@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:58:59 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ sal_Bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
     if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
         aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
 
-    sArg = sCmdArgs.copy(i+1, sCmdArgs.getLength()-i);
+    sArg = sCmdArgs.copy(i+1, sCmdArgs.getLength()-i-1);
     if (sArg.indexOf(CMDURL_SPART_ONLY) == 0)
         aStyle.sStyle = sArg.copy(LEN_SPART, sArg.getLength()-LEN_SPART);
     else
