@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hro $ $Date: 2003-06-10 15:22:38 $
+ *  last change: $Author: hro $ $Date: 2003-06-11 16:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1084,6 +1084,8 @@ int main( int argc, char** argv )
 {
     freopen( "/dev/null", "w", stderr );
 
+    setup_program_dir( argv[0] );
+
     // Don't start if accessiblity is enabled or report server is not given
 
     if ( !get_accessibility_state() && setup_version() )
@@ -1092,8 +1094,6 @@ int main( int argc, char** argv )
            gtk_init (&argc, &argv);
 
            StringResource::init( argc, argv );
-
-        setup_program_dir( argv[0] );
 
         long pid = setup_commandline_arguments( argc, argv, &g_signal );
 
