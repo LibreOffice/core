@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdresid.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:42:42 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SDRESID_HXX
-#define _SDRESID_HXX
+#ifndef SD_RESID_HXX
+#define SD_RESID_HXX
 
 
 #ifndef _RESID_HXX //autogen
