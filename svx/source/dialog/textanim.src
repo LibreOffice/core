@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-24 17:22:43 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         };
         stringlist [ portuguese ] =
         {
-            < "Sem efeito" ; Default ; > ;
+            < "Sem efeitos" ; Default ; > ;
             < "Intermitente" ; Default ; > ;
             < "Deslize cont璯uo" ; Default ; > ;
             < "De um lado para o outro" ; Default ; > ;
@@ -216,7 +216,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
             < "無效果" ; Default ; > ;
         < "閃爍" ; Default ; > ;
         < "持續" ; Default ; > ;
-        < "來回活動" ; Default ; > ;
+        < "來回移動" ; Default ; > ;
         < "單向進入" ; Default ; > ;
     };
     StringList [ greek ] =
