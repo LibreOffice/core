@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-03 15:27:55 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,15 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 /******************************************************************************
  *
@@ -112,15 +116,15 @@ using namespace ::rtl;
  --------------------------------------------------*/
 class SwSearchProperties_Impl
 {
-    beans::PropertyValue**          pValueArr; //
+    PropertyValue**             pValueArr; //
     sal_uInt16                      nArrLen;
 public:
     SwSearchProperties_Impl();
     ~SwSearchProperties_Impl();
 
-    void    SetProperties(const Sequence< beans::PropertyValue >& aSearchAttribs)
-        throw( beans::UnknownPropertyException, lang::IllegalArgumentException, RuntimeException );
-    const Sequence< beans::PropertyValue > GetProperties() const;
+    void    SetProperties(const Sequence< PropertyValue >& aSearchAttribs)
+        throw( UnknownPropertyException, lang::IllegalArgumentException, RuntimeException );
+    const Sequence< PropertyValue > GetProperties() const;
 
     void    FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSearch) const;
     sal_Bool    HasAttributes() const;
@@ -138,8 +142,8 @@ SwSearchProperties_Impl::SwSearchProperties_Impl() :
             nArrLen++;
         pMap++;
     }
-    pValueArr = new beans::PropertyValue*[nArrLen];
-    *pValueArr = new beans::PropertyValue[nArrLen];
+    pValueArr = new PropertyValue*[nArrLen];
+    *pValueArr = new PropertyValue[nArrLen];
     for(sal_uInt16 i = 0; i < nArrLen; i++)
         pValueArr[i] = 0;
 }
@@ -155,12 +159,12 @@ SwSearchProperties_Impl::~SwSearchProperties_Impl()
 /* -----------------23.06.99 13:09-------------------
 
  --------------------------------------------------*/
-void    SwSearchProperties_Impl::SetProperties(const Sequence< beans::PropertyValue >& aSearchAttribs)
-                throw( beans::UnknownPropertyException, lang::IllegalArgumentException, RuntimeException )
+void    SwSearchProperties_Impl::SetProperties(const Sequence< PropertyValue >& aSearchAttribs)
+                throw( UnknownPropertyException, lang::IllegalArgumentException, RuntimeException )
 {
     const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR);
     long nLen = aSearchAttribs.getLength();
-    const beans::PropertyValue* pProps = aSearchAttribs.getConstArray();
+    const PropertyValue* pProps = aSearchAttribs.getConstArray();
     //delete all existing values
     for(long i = 0; i < nArrLen; i++)
     {
@@ -179,22 +183,22 @@ void    SwSearchProperties_Impl::SetProperties(const Sequence< beans::PropertyVa
             nIndex++;
         }
         if(!pTempMap->nWID)
-            throw beans::UnknownPropertyException();
-        pValueArr[nIndex] = new beans::PropertyValue(pProps[i]);
+            throw UnknownPropertyException();
+        pValueArr[nIndex] = new PropertyValue(pProps[i]);
     }
 }
 /* -----------------23.06.99 13:08-------------------
 
  --------------------------------------------------*/
-const Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperties() const
+const Sequence< PropertyValue > SwSearchProperties_Impl::GetProperties() const
 {
     sal_uInt16 nPropCount = 0;
     for(sal_uInt16 i = 0; i < nArrLen; i++)
         if(pValueArr[i])
             nPropCount++;
 
-    Sequence< beans::PropertyValue > aRet(nPropCount);
-    beans::PropertyValue* pProps = aRet.getArray();
+    Sequence< PropertyValue > aRet(nPropCount);
+    PropertyValue* pProps = aRet.getArray();
     nPropCount = 0;
     for(i = 0; i < nArrLen; i++)
     {
@@ -574,16 +578,16 @@ void SwXTextSearch::setReplaceString(const OUString& rReplaceString) throw( Runt
 /*-- 14.12.98 13:07:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< beans::XPropertySetInfo >  SwXTextSearch::getPropertySetInfo(void) throw( RuntimeException )
+Reference< XPropertySetInfo >  SwXTextSearch::getPropertySetInfo(void) throw( RuntimeException )
 {
-    static Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo(_pMap);
+    static Reference< XPropertySetInfo >  aRef = new SfxItemPropertySetInfo(_pMap);
     return aRef;
 }
 /*-- 14.12.98 13:07:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const Any& aValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException,
+    throw( UnknownPropertyException, PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -591,6 +595,8 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const Any& a
                                                 _pMap, rPropertyName);
     if(pMap)
     {
+        if ( pMap->nFlags & PropertyAttribute::READONLY)
+            throw lang::IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
         sal_Bool bVal = FALSE;
         if(aValue.getValueType() == ::getBooleanCppuType())
             bVal = *(sal_Bool*)aValue.getValue();
@@ -611,11 +617,13 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const Any& a
             break;
         };
     }
+    else
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 }
 /*-- 14.12.98 13:07:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     Any aRet;
@@ -625,6 +633,7 @@ Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( beans:
     sal_Bool bSet = sal_False;
     sal_Int16 nSet = 0;
     if(pMap)
+    {
         switch(pMap->nWID)
         {
             case WID_SEARCH_ALL :           bSet = bAll; goto SET_BOOL;
@@ -646,33 +655,36 @@ SET_UINT16:
             aRet <<= nSet;
             break;
         };
+    }
+    else
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     return aRet;
 }
 /*-- 14.12.98 13:07:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSearch::addPropertyChangeListener(const OUString& PropertyName, const Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+void SwXTextSearch::addPropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 14.12.98 13:07:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSearch::removePropertyChangeListener(const OUString& PropertyName, const Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+void SwXTextSearch::removePropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 14.12.98 13:07:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSearch::addVetoableChangeListener(const OUString& PropertyName, const Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+void SwXTextSearch::addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 14.12.98 13:07:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSearch::removeVetoableChangeListener(const OUString& PropertyName, const Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
+void SwXTextSearch::removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
@@ -695,22 +707,22 @@ void SwXTextSearch::setValueSearch(sal_Bool ValueSearch_) throw( RuntimeExceptio
 /*-- 14.12.98 13:07:15---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Sequence< beans::PropertyValue > SwXTextSearch::getSearchAttributes(void) throw( RuntimeException )
+Sequence< PropertyValue > SwXTextSearch::getSearchAttributes(void) throw( RuntimeException )
 {
     return  pSearchProperties->GetProperties();
 }
 /*-- 14.12.98 13:07:16---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSearch::setSearchAttributes(const Sequence< beans::PropertyValue >& rSearchAttribs)
-    throw( beans::UnknownPropertyException, lang::IllegalArgumentException, RuntimeException )
+void SwXTextSearch::setSearchAttributes(const Sequence< PropertyValue >& rSearchAttribs)
+    throw( UnknownPropertyException, lang::IllegalArgumentException, RuntimeException )
 {
     pSearchProperties->SetProperties(rSearchAttribs);
 }
 /*-- 14.12.98 13:07:16---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Sequence< beans::PropertyValue > SwXTextSearch::getReplaceAttributes(void)
+Sequence< PropertyValue > SwXTextSearch::getReplaceAttributes(void)
     throw( RuntimeException )
 {
     return pReplaceProperties->GetProperties();
@@ -718,8 +730,8 @@ Sequence< beans::PropertyValue > SwXTextSearch::getReplaceAttributes(void)
 /*-- 14.12.98 13:07:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSearch::setReplaceAttributes(const Sequence< beans::PropertyValue >& rReplaceAttribs)
-    throw( beans::UnknownPropertyException, lang::IllegalArgumentException, RuntimeException )
+void SwXTextSearch::setReplaceAttributes(const Sequence< PropertyValue >& rReplaceAttribs)
+    throw( UnknownPropertyException, lang::IllegalArgumentException, RuntimeException )
 {
     pReplaceProperties->SetProperties(rReplaceAttribs);
 }
@@ -812,6 +824,9 @@ void SwXTextSearch::FillSearchOptions( SearchOptions& rSearchOpt ) const
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/09/03 15:27:55  mtg
+    #88673# fix complete word searching
+
     Revision 1.2  2001/03/27 21:36:56  jp
     new: fill searchoptions structue
 
