@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-14 16:59:31 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+/** @HTML */
 
 #ifndef _OSL_MODULE_H_
 #define _OSL_MODULE_H_
@@ -110,6 +111,11 @@ typedef struct _oslModule * oslModule;
 typedef void* oslModule;
 #endif
 
+/** Generic Function pointer type that will be used as symbol address.
+    @see osl_getFunctionSymbol.
+    @see osl_getModuleURLFromFunctionAddress.
+*/
+typedef void ( SAL_CALL *oslGenericFunction )( void );
 
 /** Load a shared library or module.
     @param strModuleName denotes the name of the module to be loaded.
@@ -121,22 +127,66 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
 */
 void SAL_CALL osl_unloadModule(oslModule Module);
 
-/** lookup the specified symbolname.
-    @return address of the symbol or NULL if lookup failed,
+/** lookup the specified symbol name.
+    @return address of the symbol or NULL if lookup failed.
 */
-void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName);
+void* SAL_CALL osl_getSymbol( oslModule Module, rtl_uString *strSymbolName);
 
-/** Lookup URL of module which is mapped at the specified address
-    @param  pv specifies an address in the process memory space
-    @param  pustrURL receives the URL of the module that is mapped at pv
-    @return sal_True on success, sal_False if no module can be found at the specified address
+/** Lookup the specified function symbol name.
+
+    osl_getFunctionSymbol is an alternative function for osl_getSymbol.
+    Use Function pointer as symbol address to conceal type conversion.
+
+    @param Module
+    [in] the handle of the Module.
+
+    @param ustrFunctionSymbolName
+    [in] Name of the function that will be looked up.
+
+    @return
+    <dl>
+    <dt>Function address.</dt>
+    <dd>on success</dd>
+    <dt>NULL</dt>
+    <dd>lookup failed or the parameter are invalid.</dd>
+    </dl>
+
+    @see osl_getSymbol
 */
+oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString *ustrFunctionSymbolName );
 
+/** Lookup URL of module which is mapped at the specified address.
+    @param pv specifies an address in the process memory space.
+    @param pustrURL receives the URL of the module that is mapped at pv.
+    @return sal_True on success, sal_False if no module can be found at the specified address.
+*/
 sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL );
+
+/** Lookup URL of module which is mapped at the specified function address.
+
+    osl_getModuleURLFromFunctionAddress is an alternative function for osl_getModuleURLFromAddress.
+    Use Function pointer as symbol address to conceal type conversion.
+
+    @param pf
+    [in] function address in oslGenericFunction format.
+
+    @param pustrFunctionURL
+    [out] receives the URL of the module that is mapped at pf.
+
+    @return
+    <dl>
+    <dt>sal_True</dt>
+    <dd>on success</dd>
+    <dt>sal_False</dt>
+    <dd>no module can be found at the specified function address or parameter is somewhat invalid.</dd>
+    </dl>
+
+    @see osl_getModuleURLFromAddress
+*/
+sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction pf, rtl_uString **pustrFunctionURL );
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif  /* _OSL_MODULE_H_  */
-
