@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSearchable.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ module com {  module sun {  module star {  module util {
     loop
     </listing>
  */
-interface XSearchable: com::sun::star::uno::XInterface
+published interface XSearchable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** creates a <type>SearchDescriptor</type> which contains properties that
