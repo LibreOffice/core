@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-09 17:42:15 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 13:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,7 +1293,7 @@ void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
     {
         const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
         SwTxtNode* pTxtNd = pStt->nNode.GetNode().GetTxtNode();
-        rJoinTxt = 0 != pTxtNd;
+        rJoinTxt = (0 != pTxtNd) && pEnd->nNode.GetNode().IsTxtNode();
 
         if( rJoinTxt && pStt == rPam.GetPoint() &&
             0 != ( pTxtNd = pEnd->nNode.GetNode().GetTxtNode() ) &&
