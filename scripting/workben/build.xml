@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-11-14 15:02:10 $
+#   last change: $Author: dfoster $ $Date: 2002-11-18 14:57:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,6 +148,8 @@
     <zip destfile="${out}/class/sframeworkinstall/sframework/ooscriptframe.zip"
         basedir="${out}/class/sframework">
     </zip>
+    <copy file="${prj}/common/bin/scripting64401.res"
+        todir="${out}/class/sframework"/>
   </target>
   <!-- ===================== Package regsingletons ========================= -->
   <target name="packagesingletons">
@@ -158,7 +160,7 @@
     <mkdir dir="${out}/class/sframeworkinstall/solaris_sparc"/>
     <copy file="${env.SOLARVER}/unxsols3${proext}/bin${env.UPDMINOREXT}/regsingleton" todir="${out}/class/sframeworkinstall/solaris_sparc"/>
   </target>
-  <!-- ===================== Package scripts, dislogs & examples =========== -->
+  <!-- ===================== Package scripts, dialogs & examples =========== -->
   <target name="packagedialogsandexamples" depends="buildexamples">
     <mkdir dir="${out}/class/sframeworkinstall/bindingdialog"/>
     <copy todir="${out}/class/sframeworkinstall/bindingdialog">
@@ -171,6 +173,17 @@
         <fileset dir="${out}/class/examples/"/>
     </copy>
   </target>
+  <!-- ===================== Package IDE Jar files ========================= -->
+  <target name="packageidestuff">
+    <mkdir dir="${out}/class/sframeworkinstall/ide"/>
+    <copy todir="${out}/class/sframeworkinstall/ide">
+        <fileset dir="${out}/class/examples/">
+            <include name="**/OfficeScripting.jar"/>
+            <include name="**/office.jar.jar"/>
+            <include name="**/idesupport.jar"/>
+        </fileset>
+    </copy>
+  </target>
 
   <!-- ======================== Compile Classes ========================== -->
   <target name="compileinstaller">
@@ -181,7 +194,7 @@
   </target>
 
   <!-- ===================== jar ========================= -->
-  <target name="jar" depends="compileinstaller,packagedialogsandexamples,packagesingletons,buildunopackage">
+  <target name="jar" depends="compileinstaller,packagedialogsandexamples,packagesingletons,buildunopackage,packageidestuff">
     <jar jarfile="${jardir}/${installerjarname}"
          basedir="${installerclasses}/..">
         <manifest>
