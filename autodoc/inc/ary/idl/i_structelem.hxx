@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_structelem.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:11:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,6 @@ class StructElement : public CodeEntity
                             Ce_id               i_nNameRoom,
                             Type_id             i_nType );
                         ~StructElement();
-#if ENABLE_UDM
-    static void         SetupUdmTraits_(
-                            udm::struct_traits<StructElement> &
-                                                o_rTraits );
-#endif // ENABLE_UDM
 
     // INQUIRY
     Type_id             Type() const;
@@ -145,4 +140,3 @@ StructElement::Type() const
 
 
 #endif
-

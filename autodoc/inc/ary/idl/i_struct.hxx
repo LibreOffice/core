@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_struct.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:11:35 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@ namespace ifc_struct
 }
 
 
-/*  OPEN?
-*/
-
 /** @resp
     Represents an IDL struct.
 */
@@ -97,10 +94,15 @@ class Struct : public CodeEntity
                         Struct(
                             const String &      i_sName,
                             Ce_id               i_nOwner,
-                            Type_id             i_nBase );
+                            Type_id             i_nBase,
+                            const String &      i_sTemplateParameter, // = String::Null_() // First let the compiler find old calls to this function
+                            Type_id             i_nTemplateParameterType
+                                                );
                         ~Struct();
     // INQUIRY
-    Type_id             Base() const            { return nBase; }
+    Type_id             Base() const;
+    String              TemplateParameter() const;
+    Type_id             TemplateParameterType() const;
 
     // ACCESS
     void                Add_Member(
@@ -125,6 +127,8 @@ class Struct : public CodeEntity
     Ce_id               nOwner;
 
     Type_id             nBase;
+    String              sTemplateParameter;
+    Type_id             nTemplateParameterType;
     ElementList         aElements;
 };
 
@@ -132,9 +136,29 @@ class Struct : public CodeEntity
 
 // IMPLEMENTATION
 
+inline Type_id
+Struct::Base() const
+{
+    return nBase;
+}
+
+inline String
+Struct::TemplateParameter() const
+{
+    return sTemplateParameter;
+}
+
+inline Type_id
+Struct::TemplateParameterType() const
+{
+    return nTemplateParameterType;
+}
+
 inline void
 Struct::Add_Member( Ce_id i_nMember )
-    { aElements.push_back(i_nMember); }
+{
+    aElements.push_back(i_nMember);
+}
 
 
 }   // namespace idl
@@ -142,5 +166,3 @@ Struct::Add_Member( Ce_id i_nMember )
 
 
 #endif
-
-
