@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mhu $ $Date: 2001-05-12 17:06:35 $
+#   last change: $Author: jbu $ $Date: 2001-05-18 14:34:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,12 +78,12 @@ MULTITHREAD_OBJ=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/logmodule.obj	\
+SLOFILES=	\
             $(SLO)$/utility.obj
 
 
 #.IF "$(UPDATER)"=="YES"
-OBJFILES=	$(OBJ)$/logmodule.obj	\
+OBJFILES=	\
             $(OBJ)$/utility.obj
 #.ENDIF
 

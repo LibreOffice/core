@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 16:28:04 $
+ *  last change: $Author: jbu $ $Date: 2001-05-18 14:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,6 @@
 #include <osl/file.h>
 #include <systools/win32/kernel9x.h>
 
-#include <osl/logmodule.h>
-
 /*
     under WIN32, we use the void* oslModule
     as a WIN32 HANDLE (which is also a 32-bit value)
@@ -102,8 +100,6 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     rtl_uString_release(Module);
     SetErrorMode(errorMode);
 
-    if( ret )
-        osl_logModule( ret , strModuleName );
     return ret;
 }
 
@@ -114,7 +110,6 @@ void SAL_CALL osl_unloadModule(oslModule Module)
 {
     OSL_ASSERT(Module);
     FreeLibrary((HINSTANCE)Module);
-    osl_unlogModule( Module );
 }
 
 /*****************************************************************************/
