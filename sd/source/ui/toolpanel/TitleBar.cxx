@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleBar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:58:31 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,6 +693,45 @@ void TitleBar::MouseButtonUp (const MouseEvent& rEvent)
     // the docking window is not invoked.
 }
 
+
+
+
+void TitleBar::DataChanged (const DataChangedEvent& rEvent)
+{
+    ::Window::DataChanged (rEvent);
+
+    switch (rEvent.GetType())
+    {
+        case DATACHANGED_SETTINGS:
+            if ((rEvent.GetFlags() & SETTINGS_STYLE) == NULL)
+                break;
+            // else fall through.
+        case DATACHANGED_FONTS:
+        case DATACHANGED_FONTSUBSTITUTION:
+        {
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+            // Font.
+            Font aFont = rStyleSettings.GetAppFont();
+            if (IsControlFont())
+                aFont.Merge(GetControlFont());
+            SetZoomedPointFont(aFont);
+
+            // Color.
+            Color aColor;
+            if (IsControlForeground())
+                aColor = GetControlForeground();
+            else
+                aColor = rStyleSettings.GetButtonTextColor();
+            SetTextColor(aColor);
+            SetTextFillColor();
+
+            Resize();
+            Invalidate();
+        }
+        break;
+    }
+}
 
 
 } } // end of namespace ::sd::toolpanel
