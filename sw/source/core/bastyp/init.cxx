@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:16:20 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,6 +431,9 @@ USHORT __FAR_DATA aTableSetRange[] = {
     RES_KEEP,           RES_KEEP,
     RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
     RES_FRAMEDIR,       RES_FRAMEDIR,
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS,
+    // <-- collapsing
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
@@ -606,7 +609,9 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { FN_TABLE_ROW_SPLIT, SFX_ITEM_POOLABLE },            // RES_ROW_SPLIT
     // DVO, OD 18.09.2003 #i18732# - use slot-id define in svx
     { SID_SW_FOLLOW_TEXT_FLOW, SFX_ITEM_POOLABLE },         // RES_FOLLOW_TEXT_FLOW
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY1
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    { SID_SW_COLLAPSING_BORDERS, SFX_ITEM_POOLABLE },       // RES_COLLAPSING_BORDERS
+    // <-- collapsing
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY2
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY3
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY4
@@ -876,8 +881,11 @@ void _InitCore()
 
     // OD 18.09.2003 #i18732#
     aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] = new SwFmtFollowTextFlow( TRUE );
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] = new SfxBoolItem( RES_COLLAPSING_BORDERS, FALSE );
+    // <-- collapsing
+
 // FrmAttr-Dummies
-    aAttrTab[ RES_FRMATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY1 );
     aAttrTab[ RES_FRMATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY2 );
     aAttrTab[ RES_FRMATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY3 );
     aAttrTab[ RES_FRMATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY4 );
