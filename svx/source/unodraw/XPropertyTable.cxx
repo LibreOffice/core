@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyTable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
+ *  last change: $Author: cl $ $Date: 2001-03-08 11:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw()
 
     Any aAny;
     drawing::PolyPolygonBezierCoords aBezier;
-    ImplSvxConvertXPolygonToPolyPolygonBezier( ((XLineEndEntry*)pEntry)->GetLineEnd(), aBezier );
+    SvxConvertXPolygonToPolyPolygonBezier( ((XLineEndEntry*)pEntry)->GetLineEnd(), aBezier );
     aAny <<= aBezier;
     return aAny;
 }
@@ -434,7 +434,7 @@ XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const Any&
     XPolygon aPolygon;
     drawing::PolyPolygonBezierCoords* pCoords = (drawing::PolyPolygonBezierCoords*)rAny.getValue();
     if( pCoords->Coordinates.getLength() > 0 )
-        ImplSvxConvertPolyPolygonBezierToXPolygon( pCoords, aPolygon );
+        SvxConvertPolyPolygonBezierToXPolygon( pCoords, aPolygon );
 
     const String aName( rName );
     return new XLineEndEntry( aPolygon, aName );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopolyhelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:26:48 $
+ *  last change: $Author: cl $ $Date: 2001-03-08 11:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,12 @@ class XPolygon;
 
 /** convert a drawing::PolyPolygonBezierCoords to a XPolygon
 */
-void ImplSvxConvertPolyPolygonBezierToXPolygon( const com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolygon& rNewPolygon )
+void SvxConvertPolyPolygonBezierToXPolygon( const com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolygon& rNewPolygon )
     throw( com::sun::star::lang::IllegalArgumentException );
 
 /** convert a XPolygon to a drawing::PolyPolygonBezierCoords
 */
-void ImplSvxConvertXPolygonToPolyPolygonBezier( const XPolygon& rPolygon, com::sun::star::drawing::PolyPolygonBezierCoords& rRetval )
+void SvxConvertXPolygonToPolyPolygonBezier( const XPolygon& rPolygon, com::sun::star::drawing::PolyPolygonBezierCoords& rRetval )
     throw();
 
 #endif

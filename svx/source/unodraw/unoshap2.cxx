@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 22:50:23 $
+ *  last change: $Author: cl $ $Date: 2001-03-08 11:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1464,7 +1464,7 @@ uno::Sequence< OUString > SAL_CALL SvxGraphicObject::getSupportedServiceNames()
 }
 
 
-void ImplSvxConvertPolyPolygonBezierToXPolygon( const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolygon& rNewPolygon )
+void SvxConvertPolyPolygonBezierToXPolygon( const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolygon& rNewPolygon )
     throw( lang::IllegalArgumentException )
 {
     sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
@@ -1492,7 +1492,7 @@ void ImplSvxConvertPolyPolygonBezierToXPolygon( const drawing::PolyPolygonBezier
     }
 }
 
-void ImplSvxConvertXPolygonToPolyPolygonBezier( const XPolygon& rPolygon, drawing::PolyPolygonBezierCoords& rRetval )
+void SvxConvertXPolygonToPolyPolygonBezier( const XPolygon& rPolygon, drawing::PolyPolygonBezierCoords& rRetval ) throw()
 {
     // Polygone innerhalb vrobereiten
     rRetval.Coordinates.realloc(1);

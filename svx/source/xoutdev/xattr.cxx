@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-07 13:21:40 $
+ *  last change: $Author: cl $ $Date: 2001-03-08 11:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 // include ---------------------------------------------------------------
 
+#ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONBEZIERCOORDS_HPP_
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
 #include <com/sun/star/drawing/Hatch.hpp>
 #endif
@@ -105,6 +109,10 @@
 
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
+#endif
+
+#ifndef _SVX_UNOPOLYHELPER_HXX
+#include "unopolyhelper.hxx"
 #endif
 
 #include <tools/bigint.hxx>
@@ -1490,22 +1498,9 @@ sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
     }
     else
     {
-        rVal.clear();
-
-        const UINT16 nCount = aXPolygon.GetPointCount();
-        if( nCount != 0 )
-        {
-            ::com::sun::star::drawing::PointSequence aLineStartEnd(nCount);
-
-            ::com::sun::star::awt::Point* pMemAddr = aLineStartEnd.getArray();
-
-            // XPolygon aXPolygon in aLineStartEnd kopieren
-            for(UINT16 a=0;a<nCount;a++)
-                *pMemAddr++ = ::com::sun::star::awt::Point( aXPolygon[a].X(), aXPolygon[a].Y() );
-
-
-            rVal <<= aLineStartEnd;
-        }
+        com::sun::star::drawing::PolyPolygonBezierCoords aBezier;
+        SvxConvertXPolygonToPolyPolygonBezier( aXPolygon, aBezier );
+        rVal <<= aBezier;
     }
 
     return sal_True;
@@ -1513,29 +1508,26 @@ sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 
 sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    if( !rVal.hasValue() )
+    if( nMemberId == MID_NAME )
     {
-        aXPolygon.SetSize( 0 );
+        return sal_False;
     }
     else
     {
-        ::com::sun::star::drawing::PointSequence aLinePolygon;
-        if(!(rVal >>= aLinePolygon))
-            return sal_False;
-
-        UINT32 nPointCount = (UINT32)aLinePolygon.getLength();
-
-        aXPolygon.SetSize((UINT16)nPointCount);
-        ::com::sun::star::awt::Point* pMemAddr = aLinePolygon.getArray();
-
-        for(UINT32 a=0;a<nPointCount;a++)
+        aXPolygon.SetSize( 0 );
+        if( rVal.hasValue() && rVal.getValue() )
         {
-            aXPolygon[(USHORT)a] = Point( pMemAddr->X, pMemAddr->Y );
-            pMemAddr++;
+            if( rVal.getValueType() != ::getCppuType((const com::sun::star::drawing::PolyPolygonBezierCoords*)0) )
+                return sal_False;
+
+            aXPolygon.SetSize(0);
+            com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
+            if( pCoords->Coordinates.getLength() > 0 )
+                SvxConvertPolyPolygonBezierToXPolygon( pCoords, aXPolygon );
         }
     }
 
-    return sal_False;
+    return sal_True;
 }
 
 /** this function searches in both the models pool and the styles pool for XLineStartItem
@@ -2202,23 +2194,9 @@ sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMembe
     }
     else
     {
-        rVal.clear();
-
-        const UINT16 nCount = aXPolygon.GetPointCount();
-        if( nCount != 0 )
-        {
-            ::com::sun::star::drawing::PointSequence aLineStartEnd(nCount);
-
-            ::com::sun::star::awt::Point* pMemAddr = aLineStartEnd.getArray();
-
-            // XPolygon aXPolygon in aLineStartEnd kopieren
-            for(UINT16 a=0;a<nCount;a++)
-            {
-                *pMemAddr++ = ::com::sun::star::awt::Point( aXPolygon[a].X(), aXPolygon[a].Y() );
-            }
-
-            rVal <<= aLineStartEnd;
-        }
+        com::sun::star::drawing::PolyPolygonBezierCoords aBezier;
+        SvxConvertXPolygonToPolyPolygonBezier( aXPolygon, aBezier );
+        rVal <<= aBezier;
     }
 
     return sal_True;
@@ -2226,31 +2204,27 @@ sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMembe
 
 sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    if( !rVal.hasValue() )
+    if( nMemberId == MID_NAME )
     {
-        aXPolygon.SetSize( 0 );
+        return sal_False;
     }
     else
     {
-        ::com::sun::star::drawing::PointSequence aLinePolygon;
-        if(!(rVal >>= aLinePolygon))
-            return sal_False;
-
-        UINT32 nPointCount = (UINT32)aLinePolygon.getLength();
-
-        aXPolygon.SetSize((UINT16)nPointCount);
-        ::com::sun::star::awt::Point* pMemAddr = aLinePolygon.getArray();
-
-        for(UINT32 a=0;a<nPointCount;a++)
+        aXPolygon.SetSize( 0 );
+        if( rVal.hasValue() && rVal.getValue() )
         {
-            aXPolygon[(USHORT)a] = Point( pMemAddr->X, pMemAddr->Y );
-            pMemAddr++;
+            if( rVal.getValueType() != ::getCppuType((const com::sun::star::drawing::PolyPolygonBezierCoords*)0) )
+                return sal_False;
+
+            aXPolygon.SetSize(0);
+            com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
+            if( pCoords->Coordinates.getLength() > 0 )
+                SvxConvertPolyPolygonBezierToXPolygon( pCoords, aXPolygon );
         }
     }
 
     return sal_True;
 }
-
 
 // ----------------------------
 // class XLineStartWidthItem
