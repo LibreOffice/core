@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:51:52 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ TabPage TP_DOC_STAT
         Text[ hebrew ] = "‮מספר העמודים:‬";
         Text[ hindi ] = "पृष्ठों की संख्या:";
         Text[ slovak ] = "Počet strán:";
+        Text[ hungarian ] = "Oldalak száma:";
+        Text[ slovenian ] = "Število strani:";
     };
     FixedText FT_TABLE
     {
@@ -137,6 +139,8 @@ TabPage TP_DOC_STAT
         Text[ hebrew ] = "‮מספר הטבלאות:‬";
         Text[ hindi ] = "सारणियों की संख्या:";
         Text[ slovak ] = "Počet tabuliek:";
+        Text[ hungarian ] = "Táblázatok száma:";
+        Text[ slovenian ] = "Število tabel:";
     };
     FixedText FT_GRF
     {
@@ -149,7 +153,7 @@ TabPage TP_DOC_STAT
         Text [ portuguese_brazilian ] = "N�mero de Figuras:" ;
         Text [ portuguese ] = "N�mero de imagens:" ;
         Text [ finnish ] = "Kuvien m��r�:" ;
-        Text [ danish ] = "Antal billeder:" ;
+        Text [ danish ] = "Antal grafikobjekter:" ;
         Text [ french ] = "Nombre d'images :" ;
         Text [ swedish ] = "Antal grafikobjekt:" ;
         Text [ dutch ] = "Aantal afbeeldingen:" ;
@@ -172,6 +176,8 @@ TabPage TP_DOC_STAT
         Text[ hebrew ] = "‮מספר האוביקטים הגרפיים:‬";
         Text[ hindi ] = "सुचित्रों की संख्या:";
         Text[ slovak ] = "Počet obrázkov:";
+        Text[ hungarian ] = "Képek száma:";
+        Text[ slovenian ] = "Število grafik:";
     };
     FixedText FT_OLE
     {
@@ -207,6 +213,8 @@ TabPage TP_DOC_STAT
         Text[ hebrew ] = "OLE‮מספר ה ‬";
         Text[ hindi ] = "OLE वस्तुओं की संख्या:";
         Text[ slovak ] = "Počet OLE objektov:";
+        Text[ hungarian ] = "OLE objektumok száma:";
+        Text[ slovenian ] = "Število OLE predmetov:";
     };
     FixedText FT_PARA
     {
@@ -242,6 +250,8 @@ TabPage TP_DOC_STAT
         Text[ hebrew ] = "‮מספר הפסקאות‬";
         Text[ hindi ] = "परिच्छेदों की संख्या:";
         Text[ slovak ] = "Počet odstavcov:";
+        Text[ hungarian ] = "Bekezdések száma:";
+        Text[ slovenian ] = "Število odstavkov:";
     };
     FixedText FT_WORD
     {
@@ -277,6 +287,8 @@ TabPage TP_DOC_STAT
         Text[ hebrew ] = "‮מספר המלים:‬";
         Text[ hindi ] = "शब्दों की संख्या:";
         Text[ slovak ] = "Počet slov:";
+        Text[ hungarian ] = "Szavak száma:";
+        Text[ slovenian ] = "Število besed:";
     };
     FixedText FT_CHAR
     {
@@ -312,6 +324,8 @@ TabPage TP_DOC_STAT
         Text[ hebrew ] = "‮מספר התוים:‬";
         Text[ hindi ] = "अक्षरों की संख्या:";
         Text[ slovak ] = "Počet znakov:";
+        Text[ hungarian ] = "Betűk száma:";
+        Text[ slovenian ] = "Število znakov:";
     };
     FixedText FT_LINE
     {
@@ -323,7 +337,7 @@ TabPage TP_DOC_STAT
         Text [ english_us ] = "Number of Lines:" ;
         Text [ portuguese_brazilian ] = "N�mero de Linhas:" ;
         Text [ swedish ] = "Antal rader:" ;
-        Text [ danish ] = "Antal r�kker:" ;
+        Text [ danish ] = "Antal linjer:" ;
         Text [ italian ] = "Numero di righe:" ;
         Text [ spanish ] = "N�mero de l�neas:" ;
         Text [ french ] = "Nombre de lignes :" ;
@@ -345,6 +359,8 @@ TabPage TP_DOC_STAT
         Text[ hebrew ] = "‮מספר השורות:‬";
         Text[ hindi ] = "रेखाओं की संख्या:";
         Text[ slovak ] = "Počet riadkov:";
+        Text[ hungarian ] = "Sorok száma:";
+        Text[ slovenian ] = "Število vrstic:";
     };
     FixedText FT_PAGE_COUNT
     {
@@ -405,7 +421,7 @@ TabPage TP_DOC_STAT
         Text [ english_us ] = "~Update" ;
         Text [ portuguese_brazilian ] = "~Atualizar" ;
         Text [ swedish ] = "Uppd~atera" ;
-        Text [ danish ] = "Opdater" ;
+        Text [ danish ] = "~Opdater" ;
         Text [ italian ] = "Aggiorna" ;
         Text [ spanish ] = "Actualizar" ;
         Text [ french ] = "~Actualiser" ;
@@ -427,8 +443,12 @@ TabPage TP_DOC_STAT
         Text[ hebrew ] = "‮עדכון‬";
         Text[ hindi ] = "~अपडेट्";
         Text[ slovak ] = "~Aktualizovať";
+        Text[ hungarian ] = "~Frissítés";
+        Text[ slovenian ] = "~Posodobi";
     };
 };
+
+
 
 
 
