@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap_gfx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-31 11:43:15 $
+ *  last change: $Author: cp $ $Date: 2001-08-30 12:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,10 +700,10 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
 
         for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
-            nBit    = rBitmap.GetPixelIdx (nRow, nColumn);
-            nByte   |= nBit << nBitPos;
-            nBitPos += 1;
-            if (nBitPos == 8)
+            nBit   = rBitmap.GetPixelIdx (nRow, nColumn);
+            nByte |= nBit << (7 - nBitPos);
+
+            if (++nBitPos == 8)
             {
                 pEncoder->EncodeByte (nByte);
                 nBitPos = 0;
