@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: is $ $Date: 2004-09-02 15:10:09 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:25:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,7 +157,9 @@ installer::parameter::set_childproductnames();
 if (!($installer::globals::languages_defined_in_productlist)) { installer::languages::analyze_languagelist(); }
 installer::parameter::outputparameter();
 
+print "pre updateckeck\n";
 installer::control::check_updatepack();
+print "post updateckeck\n";
 
 $installer::globals::build = uc($installer::globals::build);    # using "SRC680" instead of "src680"
 
@@ -1064,10 +1066,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                     {
                         my $newdir = installer::epmfile::create_new_directory_structure($newepmdir);
 
-                        if (($installer::globals::product =~ /office/i ) || ($installer::globals::product =~ /suite/i ))
+                        if ( ! $installer::globals::languagepack )   # the following not for language packs
                         {
-                            # Copying the cde, kde and gnome packages into the installation set
-                            installer::epmfile::put_systemintegration_into_installset($newdir, $includepatharrayref, $allvariableshashref);
+                            if (($installer::globals::product =~ /office/i ) || ($installer::globals::product =~ /suite/i ))
+                            {
+                                # Copying the cde, kde and gnome packages into the installation set
+                                installer::epmfile::put_systemintegration_into_installset($newdir, $includepatharrayref, $allvariableshashref);
+                            }
                         }
 
                         # Adding child projects to installation dynamically
@@ -1100,10 +1105,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                             # determine the destination directory
                             my $newepmdir = installer::epmfile::determine_installdir_ooo();
 
-                            if (($installer::globals::product =~ /office/i ) || ($installer::globals::product =~ /suite/i ))
+                            if ( ! $installer::globals::languagepack )   # the following not for language packs
                             {
-                                # Copying the cde, kde and gnome packages into the installation set
-                                installer::epmfile::put_systemintegration_into_installset($newepmdir, $includepatharrayref, $allvariableshashref);
+                                if (($installer::globals::product =~ /office/i ) || ($installer::globals::product =~ /suite/i ))
+                                {
+                                    # Copying the cde, kde and gnome packages into the installation set
+                                    installer::epmfile::put_systemintegration_into_installset($newepmdir, $includepatharrayref, $allvariableshashref);
+                                }
                             }
                         }
                     }
