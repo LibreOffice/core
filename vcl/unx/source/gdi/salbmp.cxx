@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:37:48 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #ifdef FREEBSD
 #include <sys/types.h>
 #endif
-#include <sys/shm.h>
 #include <prex.h>
 #include <postx.h>
 #include <salunx.h>
