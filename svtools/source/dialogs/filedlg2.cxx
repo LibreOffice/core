@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:25:00 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,8 +454,6 @@ IMPL_LINK( ImpPathDialog, DblClickHdl, ListBox*, pBox )
     }
     else
         aNewPath += aEntry;
-
-    USHORT nCurPos = pBox->GetSelectEntryPos();
 
     pSvPathDialog->EnterWait();
 
@@ -935,8 +933,6 @@ IMPL_LINK( ImpFileDialog, DblClickHdl, ListBox *, pBox )
         }
     }
 
-    USHORT nCurPos = pBox->GetSelectEntryPos();
-
     GetFileDialog()->EnterWait();
 
     UniString aFull = aNewPath.GetFull();
@@ -1088,7 +1084,6 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
                     aTmpName.ToLowerAscii();
                 if( ( aFileStat.GetKind() & FSYS_KIND_FILE ) && aTmpMask.Matches( aTmpName ) )
                 {
-                    ULONG n = aFileStat.GetKind();
                     if( pFileList )
                         pFileList->InsertEntry( aName );
                 }
