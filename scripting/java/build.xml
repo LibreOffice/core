@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-10-17 09:28:32 $
+#   last change: $Author: toconnor $ $Date: 2002-11-13 16:54:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,10 +61,11 @@
 #
 #*************************************************************************
 -->
-<project name="Scipting Framework" default="jar" basedir=".">
+<project name="Scipting Framework" default="all" basedir=".">
 
   <!-- =================== Environmental Properties ======================= -->
 
+  <property file="build.env"/>
   <property name="prj" value=".."/>
   <property name="build.compiler"   value="classic"/>
   <property name="optimize"   value="on"/>
@@ -73,19 +74,32 @@
   <property name="storageclasses" value="${out}/class/storagetemp"/>
   <property name="jardir" value="${out}/class"/>
   <property name="bindir" value="${out}/bin"/>
+  <property name="idesupport.dir" value="org/openoffice/idesupport"/>
+  <property name="netbeans.dir" value="org/openoffice/netbeans/modules/office"/>
+  <property name="jedit.dir" value="org/openoffice/jedit/OfficeScripting"/>
   <property name="scriptingjarname" value="ScriptRuntimeForJava.jar"/>
   <!-- <property name="storagejarname" value="StorageProxy.jar"/> -->
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
     <pathelement location="${solar.jar}/unoil.jar"/>
-    <!-- <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/> -->
+    <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>
     <pathelement location="${solar.jar}/jurt.jar"/>
     <pathelement location="${solar.jar}/jut.jar"/>
     <pathelement location="${solar.jar}/juh.jar"/>
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/sandbox.jar"/>
+  </path>
+
+  <path id="openide.class.path">
+    <pathelement path="${netbeans.home}/lib/openide.jar"/>
+  </path>
+
+  <path id="jedit.class.path">
+    <pathelement location="${jedit.install.dir}/jedit.jar"/>
+    <pathelement location="${install.dir}/Console.jar"/>
+    <pathelement location="${install.dir}/xerces.jar"/>
   </path>
 
   <!-- ===================== Prepare Directories ========================= -->
@@ -100,10 +114,46 @@
   <target name="compile" depends="prepare">
     <javac srcdir="JRuntime/" destdir="${scriptingclasses}"
               includes="**/*.java" classpathref="idlclasspath"
-       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+       debug="${debug}" optimize="${optimize}" deprecation="off"/>
     <!-- <javac srcdir="StorageProxy/" destdir="${storageclasses}"
            includes="**/*.java" classpathref="idlclasspath"
             debug="${debug}" optimize="${optimize}" deprecation="on"/>-->
+  </target>
+
+  <target name="idesupport.compile" depends="prepare">
+    <javac srcdir="." destdir="${jardir}"
+           debug="${debug}" deprecation="on">
+      <exclude name="${idesupport.dir}/**/.*/*"/>
+      <exclude name="${idesupport.dir}/localoffice/**/*"/>
+      <include name="${idesupport.dir}/*.java"/>
+      <include name="${idesupport.dir}/*/*.java"/>
+    </javac>
+  </target>
+
+  <target name="localoffice.compile" depends="prepare">
+    <javac srcdir="." destdir="${jardir}"
+           debug="${debug}" deprecation="on">
+      <classpath refid="idlclasspath"/>
+      <exclude name="${idesupport.dir}/localoffice/.*/*"/>
+      <include name="${idesupport.dir}/localoffice/*.java"/>
+    </javac>
+  </target>
+
+  <target name="jedit.compile" depends="idesupport.compile, prepare">
+    <javac srcdir="." destdir="${jardir}"
+           debug="${debug}" deprecation="on" includeJavaRuntime="yes">
+      <classpath refid="jedit.class.path"/>
+      <include name="${jedit.dir}/**/*.java"/>
+    </javac>
+  </target>
+
+  <target name="netbeans.compile" depends="idesupport.compile, prepare">
+    <javac srcdir="." destdir="${jardir}"
+           debug="${debug}" deprecation="on">
+      <classpath refid="openide.class.path"/>
+      <exclude name="${netbeans.dir}/**/.*/*"/>
+      <include name="${netbeans.dir}/**/*.java"/>
+    </javac>
   </target>
 
   <!-- ===================== jar ========================= -->
@@ -124,16 +174,84 @@
     </jar>
   </target>
 
+  <target name="idesupport.jar" depends="idesupport.compile">
+    <jar jarfile="${jardir}/idesupport.jar">
+      <fileset dir="${jardir}">
+          <include name="${idesupport.dir}/**/*.class"/>
+          <exclude name="${idesupport.dir}/localoffice/*.class"/>
+      </fileset>
+      <fileset dir=".">
+        <include name="${idesupport.dir}/ui/add.gif"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <target name="localoffice.jar" depends="localoffice.compile">
+    <unjar
+      src="${prj}/../unoil/${inpath}/class/unoil.jar"
+      dest="${jardir}"/>
+    <jar jarfile="${jardir}/localoffice.jar">
+      <fileset dir="${jardir}">
+        <include name="${idesupport.dir}/localoffice/*.class"/>
+        <include name="drafts/com/sun/star/script/framework/storage/*.class"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <target name="jedit.jar" depends="jedit.compile">
+    <jar jarfile="${jardir}/OfficeScripting.jar">
+      <fileset dir="${jardir}">
+        <include name="OfficeScripting/**/*.class"/>
+      </fileset>
+      <fileset dir="${jedit.dir}">
+        <include name="actions.xml"/>
+        <include name="dockables.xml"/>
+        <include name="**/*.props"/>
+        <include name="**/*.gif"/>
+        <include name="**/*.java_"/>
+        <include name="index.html"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <target name="netbeans.jar" depends="netbeans.compile">
+    <jar jarfile="${jardir}/office.jar" manifest="manifest.mf">
+      <fileset dir="${jardir}">
+        <include name="${netbeans.dir}/**/*.class"/>
+        <exclude name="${netbeans.dir}/**/ParcelDescriptorChildren.class"/>
+        <exclude name="${netbeans.dir}/**/ScriptNode.class"/>
+        <include name="${idesupport.dir}/**/*.class"/>
+        <exclude name="${idesupport.dir}/localoffice/*.class"/>
+      </fileset>
+      <fileset dir=".">
+        <include name="${idesupport.dir}/ui/add.gif"/>
+        <include name="${netbeans.dir}/resources/*"/>
+        <include name="${netbeans.dir}/resources/templates/*"/>
+        <include name="${netbeans.dir}/**/Bundle*"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <!-- Uncomment this target when building within NetBeans to reinstall the
+       module.
+  <target name="netbeans.install" depends="netbeans.package">
+    <copy file="${jardir}/localoffice.jar"
+          tofile="${netbeans.home}/modules/ext/localoffice.jar"/>
+    <nbinstaller action="reinstall" module="${jardir}/office.jar"/>
+  </target>
+  -->
+
   <!-- ====================== Clean Generated Files ===================== -->
   <target name="clean">
     <delete dir="${scriptingclasses}"/>
     <delete dir="${storageclasses}"/>
     <delete dir="${jardir}/${scriptingjarname}"/>
-    <delete dir="${jardir}/${storagejarname}"/>
+    <delete file="${jardir}/office.jar"/>
+    <delete file="${jardir}/localoffice.jar"/>
+    <delete file="${jardir}/OfficeScripting.jar"/>
+    <delete file="${jardir}/idesupport.jar"/>
   </target>
 
   <!-- ========================= All In One Build ======================= -->
-  <target name="all" depends="clean,jar"/>
-
-
+  <target name="all" depends="clean,idesupport.jar,localoffice.jar,netbeans.jar,jedit.jar,jar"/>
 </project>
