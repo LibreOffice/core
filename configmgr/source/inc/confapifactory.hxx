@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:22:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,9 @@ namespace configmgr
         uno::Reference<uno::XInterface> SAL_CALL
             instantiateLocalResourceStratum( CreationContext const& xContext );
 
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateLocalMultiStratum( CreationContext const& xContext );
+
         const ServiceRegistrationInfo * getLocalBackendServiceInfo();
         const ServiceRegistrationInfo * getLocalDataImportServiceInfo();
         const ServiceRegistrationInfo * getLocalHierarchyBrowserServiceInfo();
@@ -201,6 +204,7 @@ namespace configmgr
         const ServiceRegistrationInfo * getLocalDataStratumServiceInfo();
         const ServiceRegistrationInfo * getLocalReadonlyStratumServiceInfo();
         const ServiceRegistrationInfo * getLocalResourceStratumServiceInfo();
+        const ServiceRegistrationInfo * getLocalMultiStratumServiceInfo();
     } // localbe
 
 } //  namespace configmgr
