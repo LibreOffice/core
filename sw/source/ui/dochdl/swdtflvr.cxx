@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-01 10:14:02 $
+ *  last change: $Author: os $ $Date: 2001-08-03 13:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2434,17 +2434,23 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             SfxUsrAnyItem* pCommandTypeItem = 0;
             SfxUsrAnyItem* pColumnNameItem = 0;
 
+            ODataAccessDescriptor aDesc;
             DataFlavorExVector& rVector = rData.GetDataFlavorExVector();
+            BOOL bDataAvailable = TRUE;
             if(OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR))
+                aDesc = OColumnTransferable::extractColumnDescriptor(rData);
+            else if(ODataAccessObjectTransferable::canExtractObjectDescriptor(rVector) )
+                aDesc = ODataAccessObjectTransferable::extractObjectDescriptor(rData);
+            else
+                bDataAvailable = FALSE;
+            if(bDataAvailable)
             {
-                ODataAccessDescriptor aColDesc = OColumnTransferable::extractColumnDescriptor(
-                                                                    rData);
-                pConnectionItem = new SfxUsrAnyItem(FN_DB_CONNECTION_ANY, aColDesc[daConnection]);
-                pColumnItem = new SfxUsrAnyItem(FN_DB_COLUMN_ANY, aColDesc[daColumnObject]);
-                pSourceItem = new SfxUsrAnyItem(FN_DB_DATA_SOURCE_ANY, aColDesc[daDataSource]);
-                pCommandItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_ANY, aColDesc[daCommand]);
-                pCommandTypeItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aColDesc[daCommandType]);
-                pColumnNameItem = new SfxUsrAnyItem(FN_DB_DATA_COLUMN_NAME_ANY, aColDesc[daColumnName]);
+                pConnectionItem = new SfxUsrAnyItem(FN_DB_CONNECTION_ANY, aDesc[daConnection]);
+                pColumnItem = new SfxUsrAnyItem(FN_DB_COLUMN_ANY, aDesc[daColumnObject]);
+                pSourceItem = new SfxUsrAnyItem(FN_DB_DATA_SOURCE_ANY, aDesc[daDataSource]);
+                pCommandItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_ANY, aDesc[daCommand]);
+                pCommandTypeItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aDesc[daCommandType]);
+                pColumnNameItem = new SfxUsrAnyItem(FN_DB_DATA_COLUMN_NAME_ANY, aDesc[daColumnName]);
             }
 
             SwView& rView = rSh.GetView();
