@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-05 13:15:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,9 +172,6 @@
 #endif
 #ifndef _DBU_APP_HRC_
 #include "dbu_app.hrc"
-#endif
-#ifndef _SV_TOOLBOX_HXX //autogen wg. ToolBox
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
@@ -356,7 +353,7 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
     ::std::vector< ::rtl::OUString> aInsertList;
     aInsertList.resize(aSeq.getLength()+1);
     sal_Int32 i = 0;
-    for(sal_Int32 j=0; j < aInsertList.size() ;++i,++j)
+    for(sal_uInt32 j=0; j < aInsertList.size() ;++i,++j)
     {
         ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
             ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::std::select2nd<ODatabaseExport::TPositions::value_type>()));
@@ -893,8 +890,8 @@ void OApplicationController::impl_initialize( const Sequence< Any >& aArguments 
         const SfxFilter* pFilter = getStandardFilter();
         if ( pFilter )
         {
-            aFileDlg.AddFilter(pFilter->GetFilterName(),pFilter->GetDefaultExtension());
-            aFileDlg.SetCurrentFilter(pFilter->GetFilterName());
+            aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
+            aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
 
         Reference< XNameAccess > xDatabaseContext(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
@@ -917,7 +914,7 @@ void OApplicationController::impl_initialize( const Sequence< Any >& aArguments 
                         if ( xStr.is() )
                             xStr->store();
 
-                        Execute(SID_DB_APP_DSCONNECTION_TYPE);
+                        Execute(SID_DB_APP_DSCONNECTION_TYPE,Sequence<PropertyValue>());
                         getContainer()->disableControls(isDataSourceReadOnly());
                     }
                     catch(Exception)
@@ -930,10 +927,6 @@ void OApplicationController::impl_initialize( const Sequence< Any >& aArguments 
         }
 
     }
-
-    Execute(SID_DB_APP_VIEW_FORMS);
-
-    InvalidateAll();
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames)
