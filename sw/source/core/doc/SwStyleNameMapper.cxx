@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 18:16:00 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,35 @@ const struct SwTableEntry NumRuleProgNameTable [] =
 };
 #undef ENTRY
 
+sal_Bool SwStyleNameMapper::SuffixIsUser ( const String & rString )
+{
+    const sal_Unicode *pChar = rString.GetBuffer();
+    sal_Int32 nLen = rString.Len();
+    return nLen <= 8 ? sal_False :
+           pChar[nLen-7] == ' ' &&
+           pChar[nLen-6] == '(' &&
+           pChar[nLen-5] == 'u' &&
+           pChar[nLen-4] == 's' &&
+           pChar[nLen-3] == 'e' &&
+           pChar[nLen-2] == 'r' &&
+           pChar[nLen-1] == ')';
+}
+void SwStyleNameMapper::CheckSuffixAndDelete ( String & rString )
+{
+    const sal_Unicode *pChar = rString.GetBuffer();
+    sal_Int32 nLen = rString.Len();
+    if (nLen > 8 &&
+        pChar[nLen-7] == ' ' &&
+        pChar[nLen-6] == '(' &&
+        pChar[nLen-5] == 'u' &&
+        pChar[nLen-4] == 's' &&
+        pChar[nLen-3] == 'e' &&
+        pChar[nLen-2] == 'r' &&
+        pChar[nLen-1] == ')')
+    {
+        rString.Erase ( nLen - 7, 7 );
+    }
+}
 const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, sal_Bool bProgName )
 {
     NameToIdHash *pHash;
@@ -630,11 +659,58 @@ const String& SwStyleNameMapper::GetUIName ( const String& rName, SwGetPoolIdFro
     return nId != USHRT_MAX ? GetUIName( nId, rName ) : rName;
 }
 
+
 // Get the programmatic Name from the UI name
 const String& SwStyleNameMapper::GetProgName( const String& rName, SwGetPoolIdFromName eFlags )
 {
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
     return nId != USHRT_MAX ? GetProgName( nId, rName ) : rName;
+}
+
+// Get the programmatic name from the UI name in rName and put it into rFillName
+void SwStyleNameMapper::FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName eFlags, sal_Bool bDisambiguate )
+{
+    sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
+    if ( bDisambiguate && nId == USHRT_MAX )
+    {
+        // rName isn't in our UI name table...check if it's in the programmatic one
+        nId = GetPoolIdFromProgName ( rName, eFlags );
+
+        rFillName = rName;
+        if (nId == USHRT_MAX )
+        {
+            // It isn't ...make sure the suffix isn't already " (user)"...if it is,
+            // we need to add another one
+            if ( SuffixIsUser ( rFillName ) )
+                rFillName.AppendAscii ( RTL_CONSTASCII_STRINGPARAM ( " (user)" ) );
+        }
+        else
+        {
+            // It's in the programmatic name table...append suffix
+            rFillName.AppendAscii ( RTL_CONSTASCII_STRINGPARAM ( " (user)" ) );
+        }
+    }
+    else
+    {
+        // If we aren't trying to disambiguate, then just do a normal fill
+        fillNameFromId ( nId, rFillName, sal_True);
+    }
+}
+// Get the UI name from the programmatic name in rName and put it into rFillName
+void SwStyleNameMapper::FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName eFlags, sal_Bool bDisambiguate )
+{
+    sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
+    if ( bDisambiguate && nId == USHRT_MAX )
+    {
+        rFillName = rName;
+        // rName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
+        CheckSuffixAndDelete ( rFillName );
+    }
+    else
+    {
+        // If we aren't trying to disambiguate, then just do a normal fill
+        fillNameFromId ( nId, rFillName, sal_False);
+    }
 }
 
 const String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, const String& rFillName, sal_Bool bProgName )

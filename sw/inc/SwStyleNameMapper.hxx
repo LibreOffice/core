@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 17:21:11 $
+ *  last change: $Author: mtg $ $Date: 2001-08-16 12:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,22 @@
  * 3. Page contains the PageDesc name array.
  * 4. Frame contains the FrmFmt name array.
  * 5. Numbering Rule contains the NumRule name array.
+ */
+
+/*
+ * There is a further complication that came to light later. If someone enters
+ * a user-defined style name which is the same as a programmatic name, this
+ * name clash must be handled.
+ *
+ * Therefore, when there is a danger of a nameclash, the boolean bDisambiguate
+ * must be set to true in the SwStyleNameMapper call (it defaults to false).
+ * This will cause the following to happen:
+ *
+ * If the UI style name either equals a programmatic name or already ends
+ * with " (user)", then it must append " (user)" to the end.
+ *
+ * When a programmatic name is being converted to a UI name, if it ends in
+ * " (user)", we simply remove it.
  */
 
 class SvStringsDtor;
@@ -211,11 +227,16 @@ protected:
     static void fillNameFromId ( sal_uInt16 nId, String &rName, sal_Bool bProgName );
     static const String& getNameFromId ( sal_uInt16 nId, const String &rName, sal_Bool bProgName );
     static const NameToIdHash& getHashTable ( SwGetPoolIdFromName, sal_Bool bProgName );
+    static sal_Bool SuffixIsUser ( const String & rString );
+    static void CheckSuffixAndDelete ( String & rString );
+
 public:
     // This gets the UI Name from the programmatic name
     static const String& GetUIName ( const String& rName, SwGetPoolIdFromName );
+    static         void FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName, sal_Bool bDisambiguate = sal_False );
     // Get the programmatic Name from the UI name
-    static const String& GetProgName( const String& rName, SwGetPoolIdFromName );
+    static const String& GetProgName ( const String& rName, SwGetPoolIdFromName );
+    static         void FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName, sal_Bool bDisambiguate = sal_False );
 
     // This gets the UI Name from the Pool ID
     static          void FillUIName ( sal_uInt16 nId, String& rFillName );
