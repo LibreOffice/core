@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 13:05:29 $
+#   last change: $Author: obo $ $Date: 2004-11-23 17:09:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -223,7 +223,7 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/bridgetest.uno$(DLLPOST) $(DLLDEST)$/cppobj.uno$(DLLPOST) \
         $(MISC)$/$(TARGET)$/bootstrap.rdb
     - $(MKDIR) $(@:d)
-    cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb -r uno_services.rdb\
+    +cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb -r uno_services.rdb\
         -c acceptor.uno$(DLLPOST) \
         -c bridgefac.uno$(DLLPOST) \
         -c connector.uno$(DLLPOST) \
