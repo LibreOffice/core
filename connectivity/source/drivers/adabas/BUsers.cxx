@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:12:08 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 12:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,11 @@ void SAL_CALL OUsers::appendByDescriptor( const Reference< XPropertySet >& descr
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE USER ");
     ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
-    aSql = aSql + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
+    ::rtl::OUString sUserName;
+    descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sUserName;
+    sUserName = sUserName.toAsciiUpperCase();
+    descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sUserName));
+    aSql = aSql + aQuote + sUserName + aQuote
                 + ::rtl::OUString::createFromAscii(" PASSWORD ")
                 + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)));
     aSql += ::rtl::OUString::createFromAscii(" RESOURCE NOT EXCLUSIVE");

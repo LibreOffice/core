@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 09:28:50 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 12:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,13 +152,14 @@ OUserExtend::OUserExtend(   OAdabasConnection* _pConnection,const ::rtl::OUStrin
 typedef connectivity::sdbcx::OUser  OUser_TYPEDEF;
 void OUserExtend::construct()
 {
-    OAdabasUser::construct();
+
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),    PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
 {
     Sequence< Property > aProps;
+    describeProperties(aProps);
     return new cppu::OPropertyArrayHelper(aProps);
 }
 // -------------------------------------------------------------------------
@@ -290,7 +291,7 @@ void SAL_CALL OAdabasUser::revokePrivileges( const ::rtl::OUString& objName, sal
     if(sPrivs.getLength())
     {
         ::rtl::OUString sGrant;
-        sGrant += ::rtl::OUString::createFromAscii("GRANT ");
+        sGrant += ::rtl::OUString::createFromAscii("REVOKE ");
         sGrant += sPrivs;
         sGrant += ::rtl::OUString::createFromAscii(" ON ");
         Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
