@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:43:30 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,8 @@
 #define TEXTTYPE_MULTILINE      1
 #define TEXTTYPE_RICHTEXT       2
 
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 //............................................................................
 namespace pcr
 {
@@ -904,7 +906,14 @@ namespace pcr
 
         // a tab dialog with a single page
         SfxSingleTabDialog* pDlg = new SfxSingleTabDialog( getDialogParent(), aCoreSet, 0 );
-        SvxNumberFormatTabPage* pPage = (SvxNumberFormatTabPage*) SvxNumberFormatTabPage::Create(pDlg, aCoreSet);
+        //CHINA001 SvxNumberFormatTabPage* pPage = (SvxNumberFormatTabPage*) SvxNumberFormatTabPage::Create(pDlg, aCoreSet);
+        //add by CHINA001 begin
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create(); //CHINA001
+        DBG_ASSERT(pFact, "CreateFactory fail!");
+        ::CreateTabPage fnCreatePage  = pFact->GetTabPageCreatorFunc(RID_SVXPAGE_NUMBERFORMAT);
+        DBG_ASSERT(fnCreatePage, "Dialogdiet error!");//CHINA001
+        SfxTabPage* pPage = (*fnCreatePage)( pDlg, aCoreSet );
+        // end by CHINA001
         const SfxPoolItem& rInfoItem = pPage->GetItemSet().Get(SID_ATTR_NUMBERFORMAT_INFO);
         pDlg->SetTabPage(pPage);
 
