@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-30 07:10:51 $
+ *  last change: $Author: pb $ $Date: 2001-09-11 08:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _SVTOOLS_IMAGEMGR_HXX
 #include <svtools/imagemgr.hxx>
+#endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
 #endif
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
@@ -1117,8 +1120,10 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
 {
     // wenn keine Childs vorhanden sind, gfs. Childs
     // einfuegen
-    if(!GetModel()->HasChilds(pEntry))
+    if ( !GetModel()->HasChilds( pEntry ) )
     {
+        WaitObject aWaitCursor( this );
+
         // hier sind alle initial eingefuegt
         SfxErrorContext aEc(ERRCTX_SFX_CREATEOBJSH, pDlg->pDialog);
         if(VIEW_TEMPLATES == GetViewType() && 0 == GetModel()->GetDepth(pEntry))
@@ -2010,20 +2015,25 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 */
 {
     sfx2::FileDialogHelper aFileDlg( WB_OPEN );
-
-    const SfxObjectFactory& rFact = SfxObjectFactory::GetDefaultFactory();
-    USHORT nMax = rFact.GetFilterCount();
-    for ( USHORT i = 0; i < nMax; ++i )
+    // add <All> filter
+    aFileDlg.AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ),
+                        DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+    // add filters of all modules
+    USHORT i, j, nCount = SfxObjectFactory::GetObjectFactoryCount_Impl();
+    for( i = 0; i < nCount; ++i )
     {
-        const SfxFilter* pFilter = rFact.GetFilter(i);
-        if ( pFilter->IsInternal() )
-            continue;
-        BOOL bIsImpFilter = pFilter->CanImport();
-        if ( bIsImpFilter && pFilter->IsAllowedAsTemplate() )
+        const SfxObjectFactory& rObjFact = SfxObjectFactory::GetObjectFactory_Impl(i);
+        USHORT nMax = rObjFact.GetFilterCount();
+        for ( j = 0; j < nMax; ++j )
         {
-            aFileDlg.AddFilter( pFilter->GetUIName(), pFilter->GetWildcard()() );
+            const SfxFilter* pFilter = rObjFact.GetFilter(j);
+            if ( pFilter->IsInternal() )
+                continue;
+            if ( pFilter->CanImport() && pFilter->IsAllowedAsTemplate() )
+                aFileDlg.AddFilter( pFilter->GetUIName(), pFilter->GetWildcard()() );
         }
     }
+    // add config and basic filter
     aFileDlg.AddFilter( String(SfxResId(RID_STR_FILTCONFIG)), DEFINE_CONST_UNICODE( "*.cfg" ) );
     aFileDlg.AddFilter( String(SfxResId(RID_STR_FILTBASIC)), DEFINE_CONST_UNICODE( "*.sbl" ) );
 
