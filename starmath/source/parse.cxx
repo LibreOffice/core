@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-10 08:24:34 $
+ *  last change: $Author: tl $ $Date: 2002-10-16 06:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,7 @@ const sal_Int32 coNumStartFlags =
         KParseTokens::IGNORE_LEADING_WS;
 // Continuing characters for numbers, may be any numeric or dot.
 const sal_Int32 coNumContFlags =
-    ( coStartFlags | KParseTokens::ASC_DOT ) & ~KParseTokens::IGNORE_LEADING_WS;
+    ( coNumStartFlags | KParseTokens::ASC_DOT ) & ~KParseTokens::IGNORE_LEADING_WS;
 
 void SmParser::NextToken()
 {
@@ -488,8 +488,7 @@ void SmParser::NextToken()
     const CharClass& rCC = SM_MOD1()->GetSysLocale().GetCharClass();
     do
     {
-        //?? does parseAnyToken handles Japanese (CJK) spaces correct ??
-        // seems not to be so...
+        // skip white spaces
         while (UnicodeType::SPACE_SEPARATOR ==
                         rCC.getType( BufferString, BufferIndex ))
            ++BufferIndex;
