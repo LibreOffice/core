@@ -4,7 +4,7 @@
         <prop oor:name="Extensions"><value>html htm</value></prop>
         <prop oor:name="MediaType"><value>text/html</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
-        <prop oor:name="PreferredFilter"><value>draw_html_Export</value></prop>
+        <prop oor:name="PreferredFilter"/>
         <prop oor:name="UIName">
             <value>HTML</value>
         </prop>
