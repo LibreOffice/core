@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdundo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,17 @@
 #ifndef _SD_SDUNDO_HXX
 #define _SD_SDUNDO_HXX
 
-
 #ifndef _UNDO_HXX //autogen
 #include <svtools/undo.hxx>
 #endif
 
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
+
 class SdDrawDocument;
 
-class SdUndoAction : public SfxUndoAction
+class SD_DLLPUBLIC SdUndoAction : public SfxUndoAction
 {
     String aComment;
 protected:
