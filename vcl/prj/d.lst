@@ -8,10 +8,10 @@ mkdir: %_DEST%\inc%_EXT%\vcl\unx
 mkdir: %_DEST%\ucr%_EXT%
 mkdir: %_DEST%\ucr%_EXT%\vcl
 
-..\%__SRC%\bin\remote\vcl%upd%??.dll %_DEST%\bin%_EXT%\remote\vcl?????.dll
-..\%__SRC%\bin\vcl%UPD%??.res %_DEST%\bin%_EXT%\vcl%upd%??.res
-..\%__SRC%\bin\vcl%upd%??.dll %_DEST%\bin%_EXT%\vcl?????.dll
-..\%__SRC%\bin\vcl%upd%??.sym %_DEST%\bin%_EXT%\vcl?????.sym
+..\%__SRC%\bin\remote\vcl?????.dll %_DEST%\bin%_EXT%\remote\vcl?????.dll
+..\%__SRC%\bin\vcl?????.res %_DEST%\bin%_EXT%\vcl?????.res
+..\%__SRC%\bin\vcl?????.dll %_DEST%\bin%_EXT%\vcl?????.dll
+..\%__SRC%\bin\vcl?????.sym %_DEST%\bin%_EXT%\vcl?????.sym
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
@@ -24,7 +24,7 @@ mkdir: %_DEST%\ucr%_EXT%\vcl
 ..\%__SRC%\lib\remote\*.so %_DEST%\bin%_EXT%\remote\*.so
 ..\%__SRC%\lib\remote\*.so %_DEST%\lib%_EXT%\remote\*.so
 ..\%__SRC%\lib\vcl.lib %_DEST%\lib%_EXT%\vcl.lib
-..\%__SRC%\misc\vcl%upd%??.map %_DEST%\bin%_EXT%\vcl?????.map
+..\%__SRC%\misc\vcl?????.map %_DEST%\bin%_EXT%\vcl?????.map
 ..\%__SRC%\obj\main.obj %_DEST%\lib%_EXT%\xsvmain.obj
 ..\%__SRC%\obj\salmain.obj %_DEST%\lib%_EXT%\salmain.obj
 ..\%__SRC%\obj\svapp.obj %_DEST%\lib%_EXT%\xsvapp.obj
