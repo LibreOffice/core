@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:19:42 $
+ *  last change: $Author: sab $ $Date: 2000-12-20 13:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ int SvXMLStyleIndexCmp_Impl( const SvXMLStyleIndex_Impl& r1,
 typedef SvXMLStyleContext *SvXMLStyleContextPtr;
 DECLARE_LIST( SvXMLStyleContexts_Impl, SvXMLStyleContextPtr )
 
-DECLARE_CONTAINER_SORT( SvXMLStyleIndices_Impl, SvXMLStyleIndex_Impl )
+DECLARE_CONTAINER_SORT_DEL( SvXMLStyleIndices_Impl, SvXMLStyleIndex_Impl )
 IMPL_CONTAINER_SORT( SvXMLStyleIndices_Impl, SvXMLStyleIndex_Impl,
                        SvXMLStyleIndexCmp_Impl )
 
