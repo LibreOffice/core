@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:57:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 12:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,8 +415,8 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
         {
             if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
             {
-                pTmpView->ChangeVLinealMetric(eHScrollMetric);
-                pTmpView->ChangeTabMetric(eVScrollMetric);
+                pTmpView->ChangeVLinealMetric(eVScrollMetric);
+                pTmpView->ChangeTabMetric(eHScrollMetric);
             }
 
             pTmpView = SwModule::GetNextView(pTmpView);
