@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:44:04 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
+        Text[ slovak ] = "Typ";
     };
     FixedText FT_PATH
     {
@@ -159,6 +160,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ czech ] = "Cesta";
         Text[ hebrew ] = "‮מסלול‬";
         Text[ hindi ] = "मार्ग";
+        Text[ slovak ] = "Cesta";
     };
     Control LB_PATH
     {
@@ -199,6 +201,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ czech ] = "Upravit...";
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "~संपादन...";
+        Text[ slovak ] = "~Upraviť...";
     };
     PushButton BTN_STANDARD
     {
@@ -231,6 +234,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
+        Text[ slovak ] = "Výcho~dzie";
     };
     FixedLine GB_STD
     {
@@ -264,6 +268,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "अनुपस्थिति";
+        Text[ slovak ] = "Východzie";
     };
     Image IMG_LOCK
     {
@@ -286,6 +291,7 @@ TabPage RID_SFXPAGE_PATH
     Text[ czech ] = "Cesty";
     Text[ hebrew ] = "‮מסלולים‬";
     Text[ hindi ] = "मार्ग";
+    Text[ slovak ] = "Cesty";
 };
 ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
 {
@@ -318,8 +324,11 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message[ czech ] = "Konfigurace a adresář pro poštu musejí být určeny jako rozdílné adresáře.\nProsím zadejte novou cestu.";
     Message[ hebrew ] = "‮ספרית התצורה וספרית הדואר חייבים להיות נפרדות.\nנא לבחור מסלול חדש.‬";
     Message[ hindi ] = "रूपरेखा और मेइल् डैरक्टरियों को भिन्न डैरक्टरियों की तरह निर्दिष्ट करना चाहिए ।\nकृपया नया मार्ग को चुनिए ।";
+    Message[ slovak ] = "Konfiguračný a poštový adresár musia byť určené ako rozdielne adresáre.\nProsím zadajte novú cestu.";
 };
  // ******************************************************************* EOF
+
+
 
 
 
