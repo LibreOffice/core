@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: hro $ $Date: 2000-09-29 10:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <rtl/alloc.h>
 
 /*
     Thread-data structure hidden behind oslThread:
@@ -578,21 +579,31 @@ void SAL_CALL osl_yieldThread()
     Sleep(0);
 }
 
+typedef struct _TLS
+{
+    DWORD                           dwIndex;
+    oslThreadKeyCallbackFunction    pfnCallback;
+} TLS, *PTLS;
 
 /*****************************************************************************/
 /* osl_createThreadKey */
 /*****************************************************************************/
-oslThreadKey SAL_CALL osl_createThreadKey(void)
+oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback)
 {
-    DWORD index;
+    PTLS    pTls = rtl_allocateMemory( sizeof(TLS) );
 
-    /* increment index by one, to have a key which is not equal to zero */
-       if ((index = TlsAlloc()) != 0xFFFFFFFF)
-          index += 1;
-    else
-        index = 0;
+    if ( pTls )
+    {
+        pTls->pfnCallback = pCallback;
+        if ( (DWORD)-1 == (pTls->dwIndex = TlsAlloc()) )
+        {
+            rtl_freeMemory( pTls );
+            pTls = 0;
+        }
 
-    return ((oslThreadKey)index);
+    }
+
+    return ((oslThreadKey)pTls);
 }
 
 /*****************************************************************************/
@@ -601,7 +612,12 @@ oslThreadKey SAL_CALL osl_createThreadKey(void)
 void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 {
     if (Key != 0)
-        TlsFree((DWORD)Key - 1);
+    {
+        PTLS    pTls = (PTLS)Key;
+
+        TlsFree( pTls->dwIndex );
+        rtl_freeMemory( pTls );
+    }
 }
 
 /*****************************************************************************/
@@ -610,7 +626,11 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
 {
     if (Key != 0)
-        return (TlsGetValue((DWORD)Key - 1));
+    {
+        PTLS    pTls = (PTLS)Key;
+
+        return (TlsGetValue( pTls->dwIndex ));
+    }
 
     return (NULL);
 }
@@ -621,7 +641,21 @@ void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
 sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
     if (Key != 0)
-        return (TlsSetValue(((DWORD)Key - 1), pData) != 0);
+    {
+        PTLS    pTls = (PTLS)Key;
+        void*   pOldData;
+        BOOL    fSuccess;
+
+        if ( pTls->pfnCallback )
+            pOldData = TlsGetValue( pTls->dwIndex );
+
+        fSuccess = TlsSetValue( pTls->dwIndex, pData );
+
+        if ( fSuccess && pTls->pfnCallback )
+            pTls->pfnCallback( pOldData );
+
+        return (fSuccess != FALSE);
+    }
 
     return (sal_False);
 }
@@ -724,6 +758,9 @@ rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding( rtl_TextEncoding Encoding )
 /*************************************************************************
 *
 *    $Log: not supported by cvs2svn $
+*    Revision 1.1.1.1  2000/09/18 15:17:23  hr
+*    initial import
+*
 *    Revision 1.30  2000/09/18 14:29:03  willem.vandorp
 *    OpenOffice header added.
 *
