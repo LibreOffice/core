@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDrawView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-28 08:51:51 $
+ *  last change:$Date: 2003-09-08 10:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.drawing;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawView;
-import lib.MultiMethodTest;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 
