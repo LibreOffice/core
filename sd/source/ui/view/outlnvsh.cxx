@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-15 14:07:05 $
+ *  last change: $Author: dl $ $Date: 2000-12-18 12:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,6 +1440,9 @@ void SdOutlineViewShell::ReadFrameViewData(FrameView* pView)
         pOutl->SetControlWord(nCntrl | EE_CNTRL_NOCOLORS);   // Farbansicht ausschalten
     else
         pOutl->SetControlWord(nCntrl & ~EE_CNTRL_NOCOLORS);  // Farbansicht einschalten
+
+    USHORT nPage = pFrameView->GetSelectedPage();
+    pLastPage = pDoc->GetSdPage( nPage, PK_STANDARD );
 }
 
 
