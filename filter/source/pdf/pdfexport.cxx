@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 11:43:31 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 13:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <so3/embobj.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/filterconfigitem.hxx>
+#include <svtools/FilterConfigItem.hxx>
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>

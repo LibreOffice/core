@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 11:43:30 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 13:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
-#include <svtools/filterconfigitem.hxx>
+#include <svtools/FilterConfigItem.hxx>
 
 // ----------------
 // - ImpPDFDialog -

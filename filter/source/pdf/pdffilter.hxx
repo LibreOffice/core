@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdffilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-16 15:57:27 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 13:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::io;
-using namespace ::std;
 
 // -------------
 // - PDFFilter -
