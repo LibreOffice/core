@@ -1,0 +1,266 @@
+/*************************************************************************
+ *
+ *  $RCSfile: CustomAnimationPane.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:05:14 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =======================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =========================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "CustomAnimationPane.hrc"
+#include "CustomAnimation.hrc"
+
+ModalDialog DLG_CUSTOMANIMATIONPANE
+{
+    OutputSize = TRUE;
+    Moveable = TRUE;
+    CloseAble = TRUE;
+    Sizeable = TRUE;
+    Size = MAP_APPFONT( 160, 300 );
+    Text [ de ] = "Benutzerdefinierte Animation";
+    Text [ en-US ] = "Custom Animation";
+
+    FixedLine FL_EFFECT
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 260, 8 );
+
+        Text [ de ] = "Effekt";
+        Text [ en-US ] = "Effect";
+    };
+
+    PushButton PB_ADD_EFFECT
+    {
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 50, 14 );
+
+        Text [ de ] = "Hinzufügen...";
+        Text [ en-US ] = "Add...";
+    };
+
+    PushButton PB_CHANGE_EFFECT
+    {
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 50, 14 );
+
+        Text [ de ] = "Ändern...";
+        Text [ en-US ] = "Change...";
+    };
+
+    PushButton PB_REMOVE_EFFECT
+    {
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 50, 14 );
+
+        Text [ de ] = "Entfernen";
+        Text [ en-US ] = "Remove";
+    };
+
+    FixedLine FL_MODIFY
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 260, 8 );
+
+        Text [ de ] = "Effekt ändern";
+        Text [ en-US ] = "Modify effect";
+    };
+
+    FixedText FT_START
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Starten";
+        Text [ en-US ] = "Start";
+    };
+
+    ListBox LB_START
+    {
+        Size = MAP_APPFONT ( 120 , 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+
+        StringList [ de ] =
+        {
+            < "Beim Klicken" ; > ;
+            < "Mit Vorheriger" ; > ;
+            < "Nach Vorheriger" ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "On click" ; > ;
+            < "With previous" ; > ;
+            < "After previous" ; > ;
+        };
+    };
+
+    FixedText FT_PROPERTY
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Eigenschaft";
+        Text [ en-US ] = "Property";
+    };
+
+    ListBox LB_PROPERTY
+    {
+        Size = MAP_APPFONT ( 120 , 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    PushButton PB_PROPERTY_MORE
+    {
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 16, 14 );
+
+        Text [ de ] = "...";
+        Text [ en-US ] = "...";
+
+        QuickHelpText [ de ] = "Effektoptionen";
+        QuickHelpText [en-US ] = "Effect Options";
+    };
+
+    FixedText FT_SPEED
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Geschwindigkeit";
+        Text [ en-US ] = "Speed";
+    };
+
+    ComboBox CB_SPEED
+    {
+        Size = MAP_APPFONT ( 120 , 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    Control CT_CUSTOM_ANIMATION_LIST
+    {
+        TabStop = TRUE;
+        Border = TRUE;
+    };
+
+    FixedText FT_CHANGE_ORDER
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Reihenfolge ändern:";
+        Text [ en-US ] = "Change order:";
+    };
+
+    PushButton PB_MOVE_UP
+    {
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 16, 14 );
+    };
+
+    PushButton PB_MOVE_DOWN
+    {
+        OutputSize = TRUE;
+        TabStop = TRUE;
+        Size = MAP_APPFONT( 16, 14 );
+    };
+
+    FixedLine FL_SEPERATOR1
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 8, 8 );
+    };
+
+    PushButton PB_PLAY
+    {
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE;
+
+        Text [ de ] = "Wiedergabe";
+        Text [ en-US ] = "Play";
+    };
+
+    PushButton PB_SLIDE_SHOW
+    {
+        Size = MAP_APPFONT ( 80 , 14 ) ;
+        TabStop = TRUE;
+
+        Text [ de ] = "Bildschirmpräsentation";
+        Text [ en-US ] = "Slide Show";
+    };
+
+    FixedLine FL_SEPERATOR2
+    {
+        Size = MAP_APPFONT( 8, 8 );
+    };
+
+    CheckBox CB_AUTOPREVIEW
+    {
+        Size = MAP_APPFONT ( 120 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Automatische Vorschau" ;
+        Text [ en-US ] = "Automatic preview" ;
+    };
+};
+
