@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-15 12:10:14 $
+ *  last change: $Author: tra $ $Date: 2001-05-16 06:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,14 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
     if( NULL == params || '\0' == params->Language[0] )
         return FALSE;
 
-    // get the ISO language code for this locale
-    //
-    // remeber: we call the GetLocaleInfoW function
-    // because the ansi version of this function returns
-    // an error under WinNT/2000 when called with an
-    // unicode only lcid
+    /*
+        get the ISO language code for this locale
+
+        remeber: we call the GetLocaleInfoW function
+        because the ansi version of this function returns
+        an error under WinNT/2000 when called with an
+        unicode only lcid
+    */
     if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, 4 ) )
 
     {
