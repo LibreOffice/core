@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 12:08:28 $
+ *  last change: $Author: oj $ $Date: 2001-01-15 09:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,12 +161,6 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getTypeInfo(  ) throw(SQ
     aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("BOOL"));
-    aRow[2] = makeAny(DataType::BIT);
-    aRow[3] = makeAny((sal_Int32)1);
-    aRow[9] = makeAny((sal_Int32)ColumnSearch::BASIC);
-    aRows.push_back(aRow);
-
     aRow[1] = makeAny(::rtl::OUString::createFromAscii("DATE"));
     aRow[2] = makeAny(DataType::DATE);
     aRow[3] = makeAny((sal_Int32)10);
@@ -174,10 +168,36 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getTypeInfo(  ) throw(SQ
     aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
     aRows.push_back(aRow);
 
+    aRow[1] = makeAny(::rtl::OUString::createFromAscii("TIME"));
+    aRow[2] = makeAny(DataType::TIME);
+    aRow[3] = makeAny((sal_Int32)8);
+    aRow[4] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRows.push_back(aRow);
+
+    aRow[1] = makeAny(::rtl::OUString::createFromAscii("TIMESTAMP"));
+    aRow[2] = makeAny(DataType::TIMESTAMP);
+    aRow[3] = makeAny((sal_Int32)19);
+    aRow[4] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRows.push_back(aRow);
+
+    aRow[1] = makeAny(::rtl::OUString::createFromAscii("BOOL"));
+    aRow[2] = makeAny(DataType::BIT);
+    aRow[3] = makeAny((sal_Int32)1);
+    aRow[9] = makeAny((sal_Int32)ColumnSearch::BASIC);
+    aRows.push_back(aRow);
+
     aRow[1] = makeAny(::rtl::OUString::createFromAscii("DECIMAL"));
     aRow[2] = makeAny(DataType::DECIMAL);
     aRow[3] = makeAny((sal_Int32)20);
     aRow[15] = makeAny((sal_Int32)15);
+    aRows.push_back(aRow);
+
+    aRow[1] = makeAny(::rtl::OUString::createFromAscii("DOUBLE"));
+    aRow[2] = makeAny(DataType::DOUBLE);
+    aRow[3] = makeAny((sal_Int32)20);
+    aRow[15] = makeAny((sal_Int32)0);
     aRows.push_back(aRow);
 
     aRow[1] = makeAny(::rtl::OUString::createFromAscii("NUMERIC"));
