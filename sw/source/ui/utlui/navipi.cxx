@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-21 16:00:49 $
+ *  last change: $Author: os $ $Date: 2000-12-12 14:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,19 +961,12 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     aGlobalToolBox.SetClickHdl( LINK(this, SwNavigationPI, ToolBoxClickHdl) );
     aGlobalToolBox.CheckItem(FN_GLOBAL_SWITCH, TRUE);
 
-#ifndef MAC
-    Font aFont(aContentTree.GetFont());
+    Font aFont(String::CreateFromAscii("Andale WT UI"), GetFont().GetSize());
     aFont.SetWeight(WEIGHT_NORMAL);
     aContentTree.SetFont(aFont);
     aGlobalTree.SetFont(aFont);
     GetPageEdit().SetFont(aFont);
 
-#endif
-#if defined( WIN ) || defined( WNT )
-    Font aSwiss = System::GetStandardFont( STDFONT_SWISS );
-    aContentTree.SetFont(aSwiss);
-    aGlobalTree.SetFont(aSwiss);
-#endif
     StartListening(*SFX_APP());
     SfxImageManager* pImgMan = SFX_APP()->GetImageManager();
     pImgMan->RegisterToolBox(&aContentToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
