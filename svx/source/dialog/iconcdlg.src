@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:06:53 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,36 +62,9 @@
 
 String RID_SVXSTR_ICONCHOICEDLG_RESETBUT
 {
-    Text = "~Zurück" ;
-    Text [ ENGLISH ] = "~Reset" ;
-    Text [ english_us ] = "~Back" ;
-    Text[ portuguese ] = "~Anterior";
-    Text[ russian ] = "Íàçàä";
-    Text[ greek ] = "~Ğßóù";
-    Text[ dutch ] = "~Vorige";
-    Text[ french ] = "Précédent";
-    Text[ spanish ] = "~Regresar";
-    Text[ italian ] = "Indietro";
-    Text[ danish ] = "~Tilbage";
-    Text[ swedish ] = "~Tillbaka";
-    Text[ polish ] = "~Wstecz";
-    Text[ portuguese_brazilian ] = "~Voltar";
-    Text[ japanese ] = "æˆ»ã‚‹(~B)";
-    Text[ korean ] = "ë’¤ë¡œ(~B)";
-    Text[ chinese_simplified ] = "è¿˜åŸ(~B)";
-    Text[ chinese_traditional ] = "å¾©åŸ(~B)";
-    Text[ arabic ] = "ÇáÓÇÈŞ";
-    Text[ turkish ] = "Geri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Enrere";
-    Text[ finnish ] = "~Edellinen";
-    Text[ thai ] = "~à¸à¸¥à¸±à¸šà¹„à¸›";
-    Text[ czech ] = "ZpÄ›t";
-    Text[ hebrew ] = "â€®×§×•×“×â€¬";
-    Text[ hindi ] = "~à¤ªà¥€à¤›à¥‡";
-    Text[ slovak ] = "~SpÃ¤Å¥";
-    Text[ hungarian ] = "~Vissza";
-    Text[ slovenian ] = "N~azaj";
+    Text [ de ] = "~Zurück" ;
+    Text [ en-US ] = "~Back" ;
+    Text [ x-comment ] = " ";
 };
 
 
