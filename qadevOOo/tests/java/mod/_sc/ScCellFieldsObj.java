@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellFieldsObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:01:56 $
+ *  last change:$Date: 2003-09-08 12:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,14 @@
 
 package mod._sc;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -71,16 +79,10 @@ import com.sun.star.table.XCell;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextFieldsSupplier;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object that represents a colection of text fields
@@ -140,7 +142,6 @@ public class ScCellFieldsObj extends TestCase {
     protected synchronized TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
 
-        XInterface oInterface = null;
         XInterface oObj = null;
         XText oText = null;
         XTextContent oContent = null;
