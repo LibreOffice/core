@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:01:33 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #ifndef _EDITSH_HXX
 #define _EDITSH_HXX
+
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -72,6 +73,10 @@
 #ifndef _SVXSWAFOPT_HXX
 #include <svx/swafopt.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _CRSRSH_HXX
 #include <crsrsh.hxx>   // fuer Basisklasse
 #endif
@@ -81,6 +86,7 @@
 #ifndef _SWDBDATA_HXX
 #include <swdbdata.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #endif
@@ -205,7 +211,7 @@ SV_DECL_PTRARR_DEL( SwGetINetAttrs, SwGetINetAttr*, 0, 5 )
 #define CNT_HasGrf(USH) ((USH)&CNT_GRF)
 #define CNT_HasOLE(USH) ((USH)&CNT_OLE)
 
-class SwEditShell: public SwCrsrShell
+class SW_DLLPUBLIC SwEditShell: public SwCrsrShell
 {
     static SvxSwAutoFmtFlags* pAutoFmtFlags;
 
@@ -216,17 +222,17 @@ class SwEditShell: public SwCrsrShell
     // fuer die PamCorrAbs/-Rel Methoden
     friend class SwUndo;
 
-    SfxPoolItem& _GetChrFmt( SfxPoolItem& ) const;
+    SW_DLLPRIVATE SfxPoolItem& _GetChrFmt( SfxPoolItem& ) const;
 
     /*
      * liefert einen Pointer auf einen SwGrfNode; dieser wird von
      * GetGraphic() und GetGraphicSize() verwendet.
      */
-    SwGrfNode *_GetGrfNode() const ;
+    SW_DLLPRIVATE SwGrfNode *_GetGrfNode() const ;
 
-    void DeleteSel( SwPaM& rPam, BOOL* pUndo = 0 );
+    SW_DLLPRIVATE void DeleteSel( SwPaM& rPam, BOOL* pUndo = 0 );
 
-    void _SetSectionAttr( SwSectionFmt& rSectFmt, const SfxItemSet& rSet );
+    SW_DLLPRIVATE void _SetSectionAttr( SwSectionFmt& rSectFmt, const SfxItemSet& rSet );
 
 public:
     // Editieren (immer auf allen selektierten Bereichen)
