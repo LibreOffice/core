@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@ ModelessDialog DLG_INSERT_CHART
         Text [ portuguese_brazilian ] = "Falls die markierten Zellen nicht die gew?schten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben m?hten" ;
         Text [ portuguese ] = "Se as cйlulas marcadas nгo incluнrem os dados desejados, marque-os agora.\n\nInclua as cйlulas contendo os tнtulos das colunas e linhas se desejar vк-las representadas no seu grбfico." ;
         Text[ chinese_simplified ] = "»зєы—°÷–µƒµ•‘™Єс√ї”– эЊЁ£ђƒ«√і«лƒъ—°‘с«ш”т°£\n\nƒъњ…“‘“≤—°÷–Ѕ–±кћвЇЌ––±кћв£ђ»зіЋ’в–©„ Ѕѕ“≤їб±їѕ‘ Њ‘ЏЌЉ±нƒЏ°£";
-        Text[ russian ] = "≈сли отмеченные €чейки не содержат желаемых данных, выделите сейчас эту область.\n\n¬ключите также €чейки с пометками столбцов или строк, ес";
-        Text[ polish ] = "Je?li zaznaczone komуrki nie zawierajє potrzebnych danych, zaznacz teraz ten obszar ponownie.\n\nZaznacz rуwnieњ komуrki z etykietami wierszy lub kolumn , je?li majє one zostaж przedstawione w twojej grafice.";
+        Text[ russian ] = "≈сли выделенные €чейки не содержат требуемых данных, выделите сейчас диапазон €чеек с нужным содержимым.\n\n¬ыделите также €чейки с названи€ми столбцов или строк, если они должны быть представлены на рисунке.";
+        Text[ polish ] = "JeЬli zaznaczone komуrki nie zawierajє potrzebnych danych, zaznacz teraz ten obszar ponownie.\n\nZaznacz rуwnieњ komуrki z etykietami wierszy lub kolumn , jeЬli majє one zostaж przedstawione w twojej grafice.";
         Text[ japanese ] = "ХKЧvВ»√ё∞јВ™К№В№ВкВƒВҐВйЊўВ™В№ВЊСIСрВ≥ВкВƒВҐВ»ВҐПкНЗВЌБAН°ВїВћФЌИЌВрСIСрВµВƒВ≠ВЊВ≥ВҐБB\n\nЄё„ћВ…НАЦЏЦЉВрХ\\О¶ВЈВйВљВяВ…ВЌБAНsВ∆ЧсВћНАЦЏЧУВрК№ВяВљЊўФЌИЌВрУьЧЌВµВƒВ≠ВЊВ≥ВҐБB";
         Text[ chinese_traditional ] = "¶p™Gњп®ъ™Їјx¶sЃж®S¶≥ЄкЃ∆°MіNљ–±zњпЊ№∞ѕ∞м°C\n\n±z•i•Hњп§§¶CЉ–√D©M¶жЉ–√D°A≥oЉЋ°Aєѕ™н§]Ј|≈г•№•X≥o®«ЄкЃ∆°C";
         Text[ arabic ] = "≈–« я«д  «бќб«н« «бгЌѕѕ… б«  Ќ жн Џбм «б»н«д«  «бгЎбж»…° ёг » Ќѕнѕ «бдЎ«ё\n\n»г« Ён –бя «бќб«н«° «б н  Ќ жн Џбм Џд«жнд ’ЁжЁ √ж √Џгѕ…° ж–бя ≈–";
@@ -111,7 +111,7 @@ ModelessDialog DLG_INSERT_CHART
         Size = MAP_APPFONT ( 38 , 10 ) ;
         Text = "~Bereich" ;
         Text [ ENGLISH ] = "~Area" ;
-        Text [ ENGLISH_US ] = "~Area" ;
+        Text [ ENGLISH_US ] = "A~rea" ;
         Text [ italian ] = "Area" ;
         Text [ spanish ] = "~Ѕrea" ;
         Text [ french ] = "C~atйgorie" ;
@@ -365,3 +365,4 @@ ModelessDialog DLG_INSERT_CHART
     Text[ catalan ] = "AutoFormato diagrama (1-4)";
     Text[ finnish ] = "Automaattinen kaavion muotoilu(1-4)";
 };
+
