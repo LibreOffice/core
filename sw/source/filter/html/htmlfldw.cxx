@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfldw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:54:54 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,8 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 SwHTMLWriter::GetCSS1ScriptForScriptType( nScriptType );
             xub_StrLen nEndPos = (xub_StrLen)pBreakIt->xBreak->endOfScript(
                                     sExpand, nPos, nScriptType );
-            if( nScript != rHTMLWrt.nCSS1Script )
+            if( nScript != CSS1_OUTMODE_ANY_SCRIPT &&
+                /* #108791# */ nScript != rHTMLWrt.nCSS1Script )
             {
                 sal_uInt16 *pWhichIds;
                 switch( nScript )
