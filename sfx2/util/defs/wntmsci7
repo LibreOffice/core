@@ -8580,3 +8580,9 @@ _TI1?AVException@uno@star@sun@com@@
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx2302126@@YAXABVSbxVariableRef@@PAX@Z
 ?GetRecorder@SfxBindings@@QBE?AV?$Reference@VXDispatchRecorder@frame@star@sun@com@@@uno@star@sun@com@@XZ
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx3212129192@@YAXABVSbxVariableRef@@PAX@Z
+??1?$Reference@VXCloseable@util@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??_R0?AVCloseVetoException@util@star@sun@com@@@8
+?lcl_translateBasic2Uno@?%O:\SRC658\src\sfx2\source\doc\objmisc.cxx1854713571@@YAXABVSbxVariableRef@@PAX@Z
+?__query@?$Reference@VXCloseable@util@star@sun@com@@@uno@star@sun@com@@CAPAVXCloseable@util@345@PAVXInterface@2345@@Z
+?updateImages@SfxStyleFamilies@@QAEEABVResId@@W4BmpColorMode@@@Z
+?DataChanged@SfxTemplateDialog@@EAEXABVDataChangedEvent@@@Z
