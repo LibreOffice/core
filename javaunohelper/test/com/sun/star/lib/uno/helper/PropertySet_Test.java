@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-25 12:51:05 $
+ *  last change: $Author: jl $ $Date: 2002-04-29 11:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,6 +1493,8 @@ class TestClass2 extends PropertySet
     protected char charB;
     char charC;
 
+    int intMemberA;
+
     public Character charClassA;
     protected Character charClassB;
     Character charClassC;
@@ -1541,10 +1543,11 @@ class TestClass2 extends PropertySet
         boolean r[]= new boolean[50];
         int i= 0;
 
-        registerProperty("charA", (short) 0);
-        registerProperty("charB", (short) 0);
-        registerProperty("charC", (short) 0);
-        registerProperty("charClassB", PropertyAttribute.MAYBEVOID);
+        registerProperty("charA", "charA", (short) 0);
+        registerProperty("charB", "charB", (short) 0);
+        registerProperty("charC", "charC", (short) 0);
+        registerProperty("charClassB", "charClassB", PropertyAttribute.MAYBEVOID);
+        registerProperty("IntProp", "intMemberA", (short) 0);
 
         XPropertySetInfo info= getPropertySetInfo();
         Property[] props= info.getProperties();
@@ -1563,6 +1566,9 @@ class TestClass2 extends PropertySet
            else if (aProp.Name.equals("charClassB") && aProp.Type.equals(new Type(char.class)) &&
                 aProp.Attributes == PropertyAttribute.MAYBEVOID)
                r[i++]= true;
+           else if (aProp.Name.equals("IntProp") && aProp.Type.equals(new Type(int.class)) &&
+                aProp.Attributes == 0)
+               r[i++]= true;
            else
                r[i++]= false;
         }
@@ -1574,6 +1580,10 @@ class TestClass2 extends PropertySet
             r[i++]= val.equals(ret);
             setPropertyValue("charClassB",val);
             ret= getPropertyValue("charClassB");
+            r[i++]= val.equals(ret);
+            val= new Integer(111);
+            setPropertyValue("IntProp",val);
+            ret= getPropertyValue("IntProp");
             r[i++]= val.equals(ret);
         }
         catch(Exception e)
