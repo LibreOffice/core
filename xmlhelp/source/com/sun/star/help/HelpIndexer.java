@@ -32,6 +32,7 @@ public class HelpIndexer {
     private HelpURLStreamHandlerFactory _urlHandler = null;
     private String _language = null, _module = null, _system = null;
 
+
     public HelpIndexer( HelpURLStreamHandlerFactory urlHandler,String language, String module, String system )
       {
            _urlHandler = urlHandler;
@@ -45,16 +46,27 @@ public class HelpIndexer {
     {
         String _tag,_id;
 
-          TagInfo( String id,String tag )
+          public TagInfo( String id,String tag )
            {
             _tag = tag;
              _id = id;
         }
+
+        public String get_tag()
+          {
+            return _tag;
+        }
+
+         public String get_id()
+          {
+               return _id;
+           }
     }
+
 
     private final class DocInfo
      {
-          private String _url,_id;
+          private String _url = null,_id = null;
 
         private ArrayList _helptags = new ArrayList();
 
@@ -84,10 +96,16 @@ public class HelpIndexer {
         {
             return _id;
         }
+
+        public ArrayList getAppendices()
+        {
+            return _helptags;
+        }
       }
 
 
     Hashtable _hashDocInfo = new Hashtable();
+    Hashtable _hashHelptext = new Hashtable();
 
 
      private void schnitzel()
@@ -100,11 +118,11 @@ public class HelpIndexer {
         {
             table = new Db( null,0 );
              table.set_error_stream( System.err );
-            table.set_errpfx( "schnitzel" );
+            table.set_errpfx( "indexing" );
 
 
                // Create indexDirectory, if not existent
-             String indexDirectory = installDirectory + _language + File.separator + _module + ".index";
+             String indexDirectory = installDirectory + _language + File.separator + _module + ".idx";
               File indexDir = new File( indexDirectory );
                if( indexDir.exists() && indexDir.isFile() )
                 indexDir.delete();
@@ -141,62 +159,63 @@ public class HelpIndexer {
             boolean first = true;
               key.set_flags( Db.DB_DBT_MALLOC );      // Initially the cursor must allocate the necessary memory
              data.set_flags( Db.DB_DBT_MALLOC );
-            int cut = 0;
-            while( Db.DB_NOTFOUND != cursor.get( key,data,Db.DB_NEXT ) && cut++ < 200000 )
+            while( Db.DB_NOTFOUND != cursor.get( key,data,Db.DB_NEXT ) )
             {
                 try
                 {
                        String keyStr = key.getString();
                     String dataStr = data.getFile();
-                    String tagStr = null;
-
-                      int idx;
-                    boolean isDocument = true;
-                      if( ( idx = dataStr.indexOf( '#' ) ) != -1 )
-                    {
-                         tagStr = dataStr.substring( 1+idx );
-                           //dataStr = dataStr( 0,idx );
-                        isDocument = false;
-                      }
+                    String tagStr = data.getHash();
 
                     DocInfo info = ( DocInfo ) _hashDocInfo.get( dataStr );
+
                      if( info == null )
                      {
                         info = new DocInfo();
                         _hashDocInfo.put( dataStr,info );
                     }
 
-                      if( !isDocument )
-                    {
+                      if( ! tagStr.equals( "" ) )
                           info.append( keyStr,tagStr );
-                     }
-                      else
-                       {
+                    else
+                     {
                         String url = "vnd.sun.star.help://" + _module + "/" + keyStr + "?Language=" + _language + "&System=" + _system;
                         info.setURL( url );
-                         info.setId( keyStr );
-                    }
+                        info.setId( keyStr );
+                      }
                 }
                 catch( Exception e )
                    {
                   }
+                   if( first )
+                  {
+                    key.set_flags( Db.DB_DBT_REALLOC );
+                     data.set_flags( Db.DB_DBT_REALLOC );
+                     first = false;
+                }
             }
             cursor.close();
                table.close( 0 );
 
             System.out.println( "Indexing..." );
               Enumeration enum = _hashDocInfo.elements();
-            cut = 0;
-            while( enum.hasMoreElements() && cut < 20 )
+            int cut = 0;
+             while( enum.hasMoreElements() && cut < 1000000000 )
              {
                   try
                 {
                       DocInfo info = ( DocInfo ) enum.nextElement();
                      String url = info.getURL();
                     if( url == null )
-                         continue;
+                     {
+                         System.out.println( "<----------------------------------->" );
+                         System.out.println( "big error: found helptext without URL" );
+                          System.out.println( "<----------------------------------->" );
+                          continue;
+                      }
                       cut++;
-                      System.out.println( url );
+
+                      // System.out.println( url );
                        _urlHandler.setMode( null );
                       byte[] embResolved = getSourceDocument( url );
                      InputSource in = new InputSource( new ByteArrayInputStream( embResolved ) );
@@ -207,6 +226,19 @@ public class HelpIndexer {
                            System.out.println( "Found tag without valid id" );
                     else
                         addKeywords( docResolved,info.getId() );
+
+                      Object[] attrList = info.getAppendices().toArray();
+                       for( int i = 0; i < attrList.length; ++i )
+                    {
+                        TagInfo tag = ( TagInfo ) attrList[i];
+                         Node node = extractHelptext( docResolved,tag.get_tag() );
+                           if( node != null )
+                           {
+                            String text = dump(node);
+                            _hashHelptext.put( tag.get_id(),text );
+                           }
+                    }
+
                      _urlHandler.setMode( embResolved );
                       builder.indexDocument( new URL( url ),"" );
                 }
@@ -215,6 +247,7 @@ public class HelpIndexer {
                 }
              }
               builder.close();
+               dumpHelptext();
             _keywords.dump();
 /*
             // Now the database may be indexed, the keywords and helptexts are extracted
@@ -355,9 +388,9 @@ public class HelpIndexer {
         NodeIterator it = new NodeIterator( node );
           while( ( test=it.next() ) != null )
         {
-            if( !found && test.getNodeName().equals("Help:HelpID" ) && ((Element)test).getAttribute("value").equals(tag) )
+            if( !found && test.getNodeName().equals("help:help-id" ) && ((Element)test).getAttribute("value").equals(tag) )
                    found = true;
-               if( found && test.getNodeName().equals("Help:HelpText") )
+               if( found && test.getNodeName().equals("help:help-text") )
                  return test;
           }
         return null;
@@ -425,8 +458,6 @@ public class HelpIndexer {
               {
                   list[j++] = ( String ) enum.nextElement();
                }
-            Arrays.sort( list );
-            // Now dump the whole thing to a database
 
             Db table;
               try
@@ -461,6 +492,47 @@ public class HelpIndexer {
     }
 
 
+     void dumpHelptext()
+     {
+        Enumeration enum = _hashHelptext.keys();
+           int j = 0;
+        String[] list = new String[ _hashHelptext.size() ];
+           while( enum.hasMoreElements() )
+          {
+              list[j++] = ( String ) enum.nextElement();
+        }
+
+        Db table;
+          try
+        {
+            table = new Db( null,0 );
+
+            String fileName = HelpDatabases.getInstallDirectory()
+                              + _language
+                            + File.separator
+                            + _module
+                               + ".ht";
+
+            table.open( fileName,null,Db.DB_BTREE,Db.DB_CREATE,0644 );
+
+            for( int i = 0; i < list.length; ++i )
+            {
+                String data = ( String ) _hashHelptext.get( list[i] );
+                  StringDbt key = new StringDbt( list[i] );
+                StringDbt value = new StringDbt( data );
+                table.put( null,key,value,0);
+            }
+            table.close( 0 );
+        }
+        catch( Exception e )
+        {
+            System.out.println( "error writing keydata" );
+        }
+    }
+
+
+
+
     Keywords _keywords = new Keywords();
 
     private void addKeywords( Node node,String id )
@@ -469,7 +541,7 @@ public class HelpIndexer {
           NodeIterator it = new NodeIterator( node );
         while( ( test=it.next() ) != null )
          {
-              if( test.getNodeName().equals( "Help:Keyword" ) )
+              if( test.getNodeName().equals( "help:key-word" ) )
             {
                 String keyword = (( Element ) test).getAttribute( "value" );
                 // System.out.println( "found keyword: " + keyword );
@@ -497,6 +569,7 @@ public class HelpIndexer {
         }
          if( node.getNodeType() == Node.ELEMENT_NODE )
           {
+            /*
              String start = "<" + node.getNodeName();
                NamedNodeMap attr = node.getAttributes();
                for( int j = 0; j < attr.getLength(); ++j )
@@ -505,7 +578,9 @@ public class HelpIndexer {
             }
             start += ">";
               String end = "</" + node.getNodeName() + ">";
+
                return start + app + end;
+            */
            }
         else if( node.getNodeType() == Node.TEXT_NODE )
         {
