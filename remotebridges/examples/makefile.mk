@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2000-10-16 11:51:56 $
+#   last change: $Author: kz $ $Date: 2000-10-17 09:28:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,8 @@ INCPRE+=$(UNOUCROUT)
 UNOTYPES = \
         com.sun.star.lang.XSingleServiceFactory \
         com.sun.star.uno.XNamingService \
+        com.sun.star.uno.XWeak \
+        com.sun.star.uno.XAggregation \
         com.sun.star.lang.XMultiServiceFactory \
         com.sun.star.lang.XTypeProvider \
         com.sun.star.frame.XComponentLoader\
