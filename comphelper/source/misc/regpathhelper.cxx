@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-10-09 16:27:18 $
+ *  last change: $Author: cd $ $Date: 2000-10-18 12:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ static OUString getDefaultLocalRegistry()
     sal_uInt32 nArgs = startInfo.getCommandArgCount();
     sal_Bool bIsPortalUser = sal_False, bFindProfile = sal_False;
     OUString sArg;
-    while( nArgs >= 0 )
+    while( nArgs > 0 )
       {
         if ( !startInfo.getCommandArg(--nArgs, sArg) )
           {
