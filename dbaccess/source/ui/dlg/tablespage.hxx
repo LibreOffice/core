@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 14:12:22 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 08:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ namespace dbaui
         void    doSelect(SvLBoxEntry*);
 
         /// executes a toolbox slot
-        void doToolboxAction(sal_uInt16 _nId);
+        virtual void onToolBoxAction( sal_uInt16 _nClickedItemId );
 
         /// deletes all selected tables
         void dropSelection();
@@ -229,6 +229,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/14 14:12:22  fs
+ *  #86945# add notifiers to the tables container of newly opened table design components
+ *
  *  Revision 1.2  2001/08/14 12:10:12  fs
  *  preparations for #86945# (be a container listener ...)
  *
