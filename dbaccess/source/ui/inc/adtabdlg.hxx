@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:09:42 $
+ *  last change: $Author: oj $ $Date: 2001-03-19 12:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 namespace dbaui
 {
     //========================================================================
-    class OQueryTableView;
+    class OJoinTableView;
     class OAddTableDlg : public ModelessDialog
     {
         FixedText           aFTTable;
@@ -107,7 +107,7 @@ namespace dbaui
 
         String              aDefaultString;
 
-        OQueryTableView*    m_pTableView;
+        OJoinTableView*     m_pTableView;
 
         BOOL IsAddAllowed();
         void AddTable();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 14:45:38 $
+ *  last change: $Author: oj $ $Date: 2001-03-19 12:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ OAddTableDlg::OAddTableDlg( Window* pParent)
              ,aDefaultString( ResId( STR_DEFAULT ) )
 {
     DBG_CTOR(OAddTableDlg,NULL);
-    m_pTableView = static_cast<OQueryTableView*>(pParent);
+    m_pTableView = static_cast<OJoinTableView*>(pParent);
     // der Close-Button hat schon einen Standard-Help-Text, den ich aber hier nicht haben moechte, also den Text ruecksetzen
     // und eine neue ID verteilen
     aCloseButton.SetHelpText(String());
@@ -236,6 +236,7 @@ IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, pButton )
 BOOL OAddTableDlg::Close()
 {
     m_pTableView->getDesignView()->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
+    m_pTableView->getDesignView()->getController()->getView()->GrabFocus();
     return ModelessDialog::Close();
 }
 
