@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:48:38 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,10 +220,14 @@ using namespace ::com::sun::star::util;
     #define XColumnsSupplier ::com::sun::star::sdbcx::XColumnsSupplier
     #define XDispatchProviderInterceptor ::com::sun::star::frame::XDispatchProviderInterceptor
     #define XDispatchProvider ::com::sun::star::frame::XDispatchProvider
+    #define XAccessibleContext ::com::sun::star::accessibility::XAccessibleContext
+    #define XAccessible ::com::sun::star::accessibility::XAccessible
 #else
     using ::com::sun::star::sdbcx::XColumnsSupplier;
     using ::com::sun::star::frame::XDispatchProviderInterceptor;
     using ::com::sun::star::frame::XDispatchProvider;
+    using ::com::sun::star::accessibility::XAccessible;
+    using ::com::sun::star::accessibility::XAccessibleContext;
 #endif
 
 
@@ -2095,6 +2099,35 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else
         VCLXWindow::setProperty( PropertyName, Value );
+}
+
+//------------------------------------------------------------------------------
+Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
+{
+    Reference< XAccessibleContext > xContext;
+
+    // use the AccessibleContext provided by the VCL window
+    Window* pGrid = GetWindow();
+    if ( pGrid )
+    {
+        Reference< XAccessible > xAcc( pGrid->GetAccessible( TRUE ) );
+        if ( xAcc.is() )
+            xContext = xAcc->getAccessibleContext();
+        // TODO: this has a slight conceptual problem:
+        //
+        // We know that the XAccessible and XAccessibleContext implementation of the browse
+        // box is the same (the class implements both interfaces), which, speaking strictly,
+        // is bad here (means when a browse box acts as UnoControl): We (the FmXGridPeer) are
+        // the XAccessible here, and the browse box should be able to provide us an XAccessibleContext,
+        // but it should _not_ be the XAccessible itself.
+        // However, as long as no client implementation uses dirty hacks such as querying an
+        // XAccessibleContext for XAccessible, this should not be a problem.
+    }
+
+    if ( !xContext.is() )
+        xContext = VCLXWindow::CreateAccessibleContext( );
+
+    return xContext;
 }
 
 //------------------------------------------------------------------------------
