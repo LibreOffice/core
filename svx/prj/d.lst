@@ -619,6 +619,23 @@ hedabu: ..\inc\writingmodeitem.hxx %_DEST%\inc%_EXT%\svx\writingmodeitem.hxx
 hedabu: ..\inc\ParseContext.hxx %_DEST%\inc%_EXT%\svx\ParseContext.hxx
 hedabu: ..\inc\countryid.hxx %_DEST%\inc%_EXT%\svx\countryid.hxx
 
+mkdir: %_DEST%\inc%_EXT%\svx\sdr
+mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
+..\inc\svx\sdr\properties\properties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\properties.hxx
+..\inc\svx\sdr\properties\emptyproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\emptyproperties.hxx
+..\inc\svx\sdr\properties\e3dlatheproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\e3dlatheproperties.hxx
+..\inc\svx\sdr\properties\e3dextrudeproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\e3dextrudeproperties.hxx
+..\inc\svx\sdr\properties\e3dcompoundproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\e3dcompoundproperties.hxx
+..\inc\svx\sdr\properties\e3dproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\e3dproperties.hxx
+..\inc\svx\sdr\properties\rectangleproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\rectangleproperties.hxx
+..\inc\svx\sdr\properties\attributeproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\attributeproperties.hxx
+..\inc\svx\sdr\properties\defaultproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\defaultproperties.hxx
+..\inc\svx\sdr\properties\textproperties.hxx %_DEST%\inc%_EXT%\svx\sdr\properties\textproperties.hxx
+
+mkdir: %_DEST%\inc%_EXT%\svx\sdr\contact
+..\inc\svx\sdr\contact\viewcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontact.hxx
+..\inc\svx\sdr\contact\viewobjectcontactlist.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactlist.hxx
+
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
 ..\xml\SvxShape.xml %_DEST%\xml%_EXT%\SvxShape.xml
