@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-10 20:36:45 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,7 +816,7 @@ TabPage TP_TABLE_COLUMN
         Text [ italian ] = "Adatta larghezza tabella" ;
         Text [ spanish ] = "~Ajustar ancho de la tabla" ;
         Text [ french ] = "Adapter la ~largeur de tableau" ;
-        Text [ dutch ] = "Tabelbreedte aanpassen" ;
+        Text [ dutch ] = "~Tabelbreedte aanpassen" ;
         Text [ english_us ] = "Adapt table ~width" ;
         Text [ swedish ] = "Anpassa ~tabellbredd" ;
         Text [ danish ] = "Tilpas tabelbredde" ;
@@ -847,7 +847,7 @@ TabPage TP_TABLE_COLUMN
         Text [ italian ] = "Modifica colonne proporzionalmente" ;
         Text [ spanish ] = "~Modificar columnas proporcionalmente" ;
         Text [ french ] = "Modifier les colonnes ~proportionnellement" ;
-        Text [ dutch ] = "Kolommen gelijkmatig wijzigen" ;
+        Text [ dutch ] = "~Kolommen gelijkmatig wijzigen" ;
         Text [ portuguese ] = "Ajustar colunas proporcionalmente" ;
         Text[ chinese_simplified ] = "¶ФіЖµШµчХыБРїн(~J)";
         Text[ russian ] = "Изменить равномерно столбцы";
@@ -1478,7 +1478,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ italian ] = "Alto" ;
         Text [ spanish ] = "~Arriba" ;
         Text [ french ] = "En ~haut" ;
-        Text [ dutch ] = "Boven" ;
+        Text [ dutch ] = "~Boven" ;
         Text [ portuguese_brazilian ] = "Oben" ;
         Text [ portuguese ] = "Em cima" ;
         Text[ chinese_simplified ] = "ЙП(~O)";
@@ -1504,7 +1504,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ italian ] = "Centro" ;
         Text [ spanish ] = "~Centro" ;
         Text [ french ] = "~Milieu" ;
-        Text [ dutch ] = "Midden" ;
+        Text [ dutch ] = "~Midden" ;
         Text [ portuguese_brazilian ] = "Mitte" ;
         Text [ portuguese ] = "Centro" ;
         Text[ chinese_simplified ] = "ЦР(~R)";
@@ -1530,7 +1530,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ italian ] = "Basso" ;
         Text [ spanish ] = "A~bajo" ;
         Text [ french ] = "En ~bas" ;
-        Text [ dutch ] = "Beneden" ;
+        Text [ dutch ] = "~Beneden" ;
         Text [ portuguese_brazilian ] = "Unten" ;
         Text [ portuguese ] = "Em baixo" ;
         Text[ chinese_simplified ] = "ПВ";
