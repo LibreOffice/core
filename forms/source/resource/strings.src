@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 21:17:44 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ arabic ] = " ⁄–— «· ⁄—› ⁄·Ï „Õ ÊÌ«  „—»⁄  Õ—Ì— Ê”—œ √Ê „—»⁄ ﬁ«∆„….";
     Text[ turkish ] = "The contents of a combo box or list field could not be determined.";
     Text[ catalan ] = "No se pudo determinar el contenido de un campo combinado o un listado.";
+    Text[ finnish ] = "Yhdistelm‰ruudun tai luettelokent‰n sis‰ltˆ‰ ei voitu m‰‰ritt‰‰.";
 };
 
 String RID_STR_IMPORT_GRAPHIC
@@ -111,6 +112,7 @@ String RID_STR_IMPORT_GRAPHIC
     Text[ arabic ] = "≈œ—«Ã ’Ê—…";
     Text[ turkish ] = "Insert graphics";
     Text[ catalan ] = "Insertar imagen";
+    Text[ finnish ] = "Lis‰‰ kuva";
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_NAME
@@ -136,6 +138,7 @@ String RID_STR_CONTROL_SUBSTITUTED_NAME
     Text[ arabic ] = "„” »œ·";
     Text[ turkish ] = "substituted";
     Text[ catalan ] = "reemplazado";
+    Text[ finnish ] = "korvattu";
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
@@ -161,6 +164,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ arabic ] = "ÕœÀ Œÿ√ √À‰«¡  Õ„Ì· ⁄‰’— «· Õﬂ„ Â–«. ·Â–«  „ «” »œ«·Â »⁄‰’— ‰«∆».";
     Text[ turkish ] = "While loading this control an error occured. Therefore, it was replaced with a placeholder.";
     Text[ catalan ] = "Ha ocurrido un error al cargar este Control. Por ello se ha reemplazado con un comodÌn.";
+    Text[ finnish ] = "Ohjainta ladattaessa on ilmennyt virhe. Ohjain korvattiin paikkamerkill‰.";
 };
 
 String RID_STR_READERROR
@@ -171,7 +175,7 @@ String RID_STR_READERROR
     Text [ italian ] = "Errore durante la lettura di dati dal database" ;
     Text [ portuguese_brazilian ] = "Erro ao ler dados da base de dados" ;
     Text [ portuguese ] = "Erro ao ler dados da base de dados" ;
-    Text [ finnish ] = "Virhe luettaessa tietoja tietokannasta" ;
+    Text [ finnish ] = "On ilmennyt virhe luettaessa tietokannan tietoja" ;
     Text [ danish ] = "Fejl under lÊsning af data fra databasen" ;
     Text [ french ] = "Erreur lors de la lecture des donnÈes de la base de donnÈes" ;
     Text [ swedish ] = "Fel vid l‰sning av data frÂn databasen" ;
@@ -198,7 +202,7 @@ String RID_STR_CONNECTERROR
     Text [ italian ] = "Impossibile creare la connessione" ;
     Text [ portuguese_brazilian ] = "N∆o consigo criar a conex∆o" ;
     Text [ portuguese ] = "N„o foi possÌvel estabelecer ligaÁ„o." ;
-    Text [ finnish ] = "Yhteytt‰ ei voi muodostaa" ;
+    Text [ finnish ] = "Yhteyden muodostaminen ei onnistunut" ;
     Text [ danish ] = "Det var ikke muligt at oprette forbindelsen" ;
     Text [ french ] = "Connexion impossible" ;
     Text [ swedish ] = "Uppkoppling avbruten" ;
@@ -240,6 +244,7 @@ String RID_ERR_LOADING_FORM
     Text[ arabic ] = " ⁄–—  Õ„Ì· «·„Õ ÊÌ«  «·»Ì«‰Ì….";
     Text[ turkish ] = "The data content could not be loaded.";
     Text[ catalan ] = "No se pudieron cargar los contenidos de los datos.";
+    Text[ finnish ] = "Tietosis‰llˆn lataaminen ei onnistunut.";
 };
 
 String RID_ERR_REFRESHING_FORM
@@ -266,6 +271,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ turkish ] = "The data content could not be refreshed.";
     Text[ language_user1 ] = "The meaning here is 'refresh', not 'update'.";
     Text[ catalan ] = "No se pudieron actualizar los contenidos de los datos.";
+    Text[ finnish ] = "Tietosis‰llˆn p‰ivitt‰minen ei onnistunut.";
 };
 
 String RID_STR_ERR_INSERTRECORD
@@ -291,6 +297,7 @@ String RID_STR_ERR_INSERTRECORD
     Text[ arabic ] = "ÕœÀ Œÿ√ √À‰«¡ ≈œ—«Ã «·”Ã· «·ÃœÌœ";
     Text[ turkish ] = "Error inserting the new record";
     Text[ catalan ] = "Error al insertar un nuevo registro de datos.";
+    Text[ finnish ] = "Virhe lis‰tt‰ess‰ uutta tietuetta";
 };
 
 String RID_STR_ERR_UPDATERECORD
@@ -316,6 +323,7 @@ String RID_STR_ERR_UPDATERECORD
     Text[ arabic ] = "ÕœÀ Œÿ√ √À‰«¡ ﬂ «»… «·”Ã· «·Õ«·Ì";
     Text[ turkish ] = "Error updating the current record";
     Text[ catalan ] = "Error al escribir el registro actual de datos.";
+    Text[ finnish ] = "Virhe p‰ivitett‰ess‰ nykyist‰ tietuetta";
 };
 
 String RID_STR_ERR_DELETERECORD
@@ -341,6 +349,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ arabic ] = "ÕœÀ Œÿ√ √À‰«¡ Õ–› «·”Ã· «·Õ«·Ì";
     Text[ turkish ] = "Error deleting the current record";
     Text[ catalan ] = "Error al eliminar el registro actual de datos.";
+    Text[ finnish ] = "Virhe poistettaessa nykyist‰ tietuetta";
 };
 
 String RID_STR_ERR_DELETERECORDS
@@ -366,4 +375,5 @@ String RID_STR_ERR_DELETERECORDS
     Text[ arabic ] = "ÕœÀ Œÿ√ √À‰«¡ Õ–› «·”Ã·«  «·„œ—Ã…";
     Text[ turkish ] = "Error deleting the specified records";
     Text[ catalan ] = "Error al eliminar los registros de datos indicados.";
+    Text[ finnish ] = "Virhe poistettaessa m‰‰ritettyj‰ tietueita";
 };
