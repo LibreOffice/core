@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-06-19 10:54:22 $
+ *  last change: $Author: gt $ $Date: 2002-07-11 13:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1936,9 +1936,10 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     aWidowRowNo         ( this, ResId( ED_WIDOWS ) ),
     aWidowRowLabel      ( this, ResId( FT_WIDOWS ) ),
     aExtendFL           ( this, ResId( FL_OPTIONS ) ),
-    aPropertiesFL       ( this,     ResId( FL_PROPERTIES    )),
-    aTextDirectionFT    ( this,  ResId( FT_TEXTDIRECTION )),
-    aTextDirectionLB    ( this,  ResId( LB_TEXTDIRECTION )),
+    aBreaksFL           ( this, ResId( FL_BREAKS ) ),
+    aPropertiesFL       ( this, ResId( FL_PROPERTIES    )),
+    aTextDirectionFT    ( this, ResId( FT_TEXTDIRECTION )),
+    aTextDirectionLB    ( this, ResId( LB_TEXTDIRECTION )),
     bHtmlMode   ( FALSE ),
     bPageBreak  ( TRUE ),
     nStdPos     ( 0 )

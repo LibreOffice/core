@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: os $ $Date: 2002-06-19 11:00:30 $
+ *  last change: $Author: gt $ $Date: 2002-07-11 13:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1932,8 +1932,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ thai ] = "ใส่ยัติภังค์";
     };
     FixedLine FL_OPTIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 64 ) ;
+    {   // is moved one section deeper to not raise unnecessary translations
+        Pos = MAP_APPFONT ( 6 , 108 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Zus�tze" ;
         Text [ ENGLISH ] = "Options" ;
@@ -1962,24 +1962,23 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ catalan ] = "Opciones";
         Text[ thai ] = "ตัวเลือก";
     };
+    FixedLine FL_BREAKS
+    {
+        Pos = MAP_APPFONT ( 6 , 64 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Umbr�che" ;
+        Text [ ENGLISH ] = "Breaks" ;
+        Text [ english_us ] = "Breaks" ;
+        Group = TRUE ;
+    };
     TriStateBox BTN_PAGEBREAK
     {
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 12 , 76 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text = "~Umbruch" ;
-        Text [ ENGLISH ] = "~Break" ;
-        Text [ norwegian ] = "~Skift" ;
-        Text [ italian ] = "I~nterruzione" ;
-        Text [ portuguese_brazilian ] = "~Interrup??o" ;
-        Text [ portuguese ] = "~Quebra" ;
-        Text [ finnish ] = "~Keskeytys" ;
-        Text [ danish ] = "Skift" ;
-        Text [ french ] = "~Saut" ;
-        Text [ swedish ] = "~Brytning" ;
-        Text [ dutch ] = "~Afbreking" ;
-        Text [ spanish ] = "~Salto" ;
-        Text [ english_us ] = "~Break" ;
+        Text = "~Zulassen" ;
+        Text [ ENGLISH ] = "~Enable" ;
+        Text [ english_us ] = "~Enable" ;
         Group = TRUE ;
         Text[ chinese_simplified ] = "换页(~B)";
         Text[ russian ] = "������";
@@ -2046,8 +2045,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_PAGECOLL
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT (12 , 91 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT (21 , 91 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
         Text = "mit Seitenvor~lage" ;
         Text [ ENGLISH ] = "With temp~late" ;
         Text [ norwegian ] = "Med m~al" ;
@@ -2129,7 +2128,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox BTN_KEEPTOGETHER
     {
-        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Pos = MAP_APPFONT ( 12 , 120 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Absatz ni~cht trennen" ;
         Text [ ENGLISH ] = "~Keep together" ;
@@ -2160,7 +2159,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox CB_KEEPTOGETHER
     {
-        Pos = MAP_APPFONT ( 130, 106 ) ;
+        Pos = MAP_APPFONT ( 12, 135 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "Abs�~tze zusammenhalten" ;
         Text [ ENGLISH ] = "Kee~p paragraphs together" ;
@@ -2191,8 +2190,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_ORPHANS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
-        Size = MAP_APPFONT ( 115 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 150 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
         Text = "Schuster~jungenregelung" ;
         Text [ ENGLISH ] = "~Orphan control" ;
         Group = TRUE ;
@@ -2223,8 +2222,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 130 , 120 ) ;
-        Size = MAP_APPFONT ( 26 , 12 ) ;
+        Pos = MAP_APPFONT ( 128 , 149 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -2238,7 +2237,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_ORPHANS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 121 ) ;
+        Pos = MAP_APPFONT ( 155 , 151 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Zeilen" ;
         Text [ ENGLISH ] = "Rows" ;
@@ -2270,8 +2269,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_WIDOWS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 137 ) ;
-        Size = MAP_APPFONT ( 115 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 166 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
         Text = "Hu~renkinderregelung" ;
         Text [ ENGLISH ] = "~Widow control" ;
         Group = TRUE ;
@@ -2302,8 +2301,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 130 , 136 ) ;
-        Size = MAP_APPFONT ( 26 , 12 ) ;
+        Pos = MAP_APPFONT ( 128 , 165 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -2317,7 +2316,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_WIDOWS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 137 ) ;
+        Pos = MAP_APPFONT ( 155 , 167 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Zeilen" ;
         Text [ ENGLISH ] = "Rows" ;

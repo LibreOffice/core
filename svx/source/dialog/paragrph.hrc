@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-06-19 10:54:23 $
+ *  last change: $Author: gt $ $Date: 2002-07-11 13:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,10 @@
 #define FL_OPTIONS                      74
 #define FT_PAGENUM                      75
 #define ED_PAGENUM                      76
+#define FL_BREAKS                       77
 
 #define CB_KEEPTOGETHER                 80
-#define FT_MAXHYPH              81
+#define FT_MAXHYPH                      81
 #define ED_MAXHYPH                      83
 
 #define CB_REGISTER                     84
