@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-26 19:20:03 $
+ *  last change: $Author: er $ $Date: 2001-08-09 11:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,6 +749,10 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     USHORT nTab = GetSaveTab();
     aDocument.GetDataStart( nTab, nFirstCol, nFirstRow );
     aDocument.GetCellArea( nTab, nLastCol, nLastRow );
+    if ( nFirstCol > nLastCol )
+        nFirstCol = nLastCol;
+    if ( nFirstRow > nLastRow )
+        nFirstRow = nLastRow;
     ScProgress aProgress( this, ScGlobal::GetRscString( STR_SAVE_DOC ),
                                                     nLastRow - nFirstRow );
     SvNumberFormatter* pNumFmt = aDocument.GetFormatTable();
