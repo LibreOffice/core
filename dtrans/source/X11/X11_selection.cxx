@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 12:07:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,7 +990,6 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
                 handleXEvent( aEvent );
             }
         }
-        osl_yieldThread();
     } while( ! it->second->m_aDataArrived.check() && time(NULL)-nBegin < 3 );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -3188,10 +3187,8 @@ void SelectionManager::dragDoDispatch()
     aTVal.Seconds = 0;
     aTVal.Nanosec = 200000000;
     oslThread aThread = m_aDragExecuteThread;
-    osl_yieldThread();
     while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(NULL)-m_nDropTimeout < 5 ) && osl_scheduleThread( aThread ) )
     {
-        osl_yieldThread();
         // let the thread in the run method do the dispatching
         // just look occasionally here whether drop timed out or is completed
         osl_waitThread( &aTVal );
