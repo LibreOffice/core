@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.127 $
+#   $Revision: 1.128 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 16:21:19 $
+#   last change: $Author: hjs $ $Date: 2002-10-22 16:04:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2751,8 +2751,10 @@ killobj:
     +-cd $(REAL_$(SECOND_BUILD)_OBJ) && $(TYPE) $(mktmp  $(REAL_$(SECOND_BUILD)_OBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
 .IF "$(DEPOBJFILES)" != ""
-    +-cd $(DEPOBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:f)) | xargs -n 20 rm
-    +-cd $(DEPOBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
+    +-cd $(SLO) && $(TYPE) $(mktmp  $(DEPOBJFILES:f)) | xargs -n 20 rm
+    +-cd $(SLO) && $(TYPE) $(mktmp  $(DEPOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
+    +-cd $(OBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:f)) | xargs -n 20 rm
+    +-cd $(OBJ) && $(TYPE) $(mktmp  $(DEPOBJFILES:s/.obj/.o/:f)) | xargs -n 20 rm
 .ENDIF
     @+echo objects weg!
 
