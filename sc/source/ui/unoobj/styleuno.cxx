@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-24 17:30:25 $
+ *  last change: $Author: nn $ $Date: 2001-04-25 18:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include "convuno.hxx"
 #include "tablink.hxx"
 #include "unonames.hxx"
+#include "unowids.hxx"
 #include "globstr.hrc"
 
 using namespace ::com::sun::star;
@@ -150,7 +151,7 @@ const SfxItemPropertyMap* lcl_GetCellStyleMap()
         {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,   &::getCppuType((const float*)0),            0, MID_WEIGHT },
         {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,&::getCppuType((const float*)0),           0, MID_WEIGHT },
         {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,&::getCppuType((const float*)0),           0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNONAME_DISPNAME), 0,                  &::getCppuType((rtl::OUString*)0),  beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_DISPNAME), SC_WID_UNO_DISPNAME,&::getCppuType((rtl::OUString*)0),  beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &::getCppuType((const table::CellHoriJustify*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &::getBooleanCppuType(),            0, 0 },
@@ -169,7 +170,7 @@ const SfxItemPropertyMap* lcl_GetCellStyleMap()
         {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &::getCppuType((const sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &::getCppuType((const table::CellVertJustify*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &::getCppuType((const table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  0,                  &::getCppuType((const table::TableBorder*)0),       0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &::getCppuType((const table::TableBorder*)0),       0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &::getCppuType((const table::CellVertJustify*)0),   0, 0 },
         {0,0,0,0}
@@ -195,62 +196,62 @@ const SfxItemPropertyMap* lcl_GetPageStyleMap()
         {MAP_CHAR_LEN(SC_UNO_PAGE_BOTTMARGIN),  ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_CENTERHOR),   ATTR_PAGE_HORCENTER,&::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_CENTERVER),   ATTR_PAGE_VERCENTER,&::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_DISPNAME),     0,                  &::getCppuType((rtl::OUString*)0),  beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_DISPNAME),     SC_WID_UNO_DISPNAME,&::getCppuType((rtl::OUString*)0),  beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FIRSTPAGE),   ATTR_PAGE_FIRSTPAGENO,&::getCppuType((const sal_Int16*)0),      0, 0 },
 //
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKCOL),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFFILT),  ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_FILTER },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFLOC),   ATTR_BACKGROUND,    &::getCppuType((const style::GraphicLocation*)0),   0, MID_GRAPHIC_POSITION },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFURL),   ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_URL },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
-        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKCOL), ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBODYDIST), ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_UP_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBRDDIST),  ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBOTTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBOTTBDIS), ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRDYNAMIC), ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRHEIGHT),   ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_HEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRDYNAMIC),  ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRON),       ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHARED),   ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTBDIS), ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTMAR),  ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_L_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRON),      ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTBOR), ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, RIGHT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTBDIS),ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTMAR), ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_R_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHADOW),   ATTR_SHADOW,        &::getCppuType((const table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRSHARED),  ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBOR),   ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBDIS),  ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKCOL),  SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFFILT),  SC_WID_UNO_FOOTERSET,&::getCppuType((const ::rtl::OUString*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFLOC),   SC_WID_UNO_FOOTERSET,&::getCppuType((const style::GraphicLocation*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFURL),   SC_WID_UNO_FOOTERSET,&::getCppuType((const ::rtl::OUString*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKTRAN), SC_WID_UNO_FOOTERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKCOL), SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBODYDIST), SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBRDDIST),  SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBOTTBOR),  SC_WID_UNO_FOOTERSET,&::getCppuType((const table::BorderLine*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBOTTBDIS), SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRDYNAMIC), SC_WID_UNO_FOOTERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRHEIGHT),   SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRDYNAMIC),  SC_WID_UNO_FOOTERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRON),       SC_WID_UNO_FOOTERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHARED),   SC_WID_UNO_FOOTERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTBOR),  SC_WID_UNO_FOOTERSET,&::getCppuType((const table::BorderLine*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTBDIS), SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRLEFTMAR),  SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRON),      SC_WID_UNO_FOOTERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTBOR), SC_WID_UNO_FOOTERSET,&::getCppuType((const table::BorderLine*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTBDIS),SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRRIGHTMAR), SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRSHADOW),   SC_WID_UNO_FOOTERSET,&::getCppuType((const table::ShadowFormat*)0), 0, 0 },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRSHARED),  SC_WID_UNO_FOOTERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBOR),   SC_WID_UNO_FOOTERSET,&::getCppuType((const table::BorderLine*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBDIS),  SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
 //
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKCOL),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFFILT),  ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_FILTER },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFLOC),   ATTR_BACKGROUND,    &::getCppuType((const style::GraphicLocation*)0),   0, MID_GRAPHIC_POSITION },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFURL),   ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_URL },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
-        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKCOL), ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBODYDIST), ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_LO_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBRDDIST),  ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBOTTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBOTTBDIS), ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRDYNAMIC), ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRHEIGHT),   ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_HEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRDYNAMIC),  ATTR_PAGE_DYNAMIC,  &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRON),       ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHARED),   ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTBOR),  ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTBDIS), ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTMAR),  ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_L_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRON),      ATTR_PAGE_ON,       &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTBOR), ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, RIGHT_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTBDIS),ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTMAR), ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_R_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHADOW),   ATTR_SHADOW,        &::getCppuType((const table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRSHARED),  ATTR_PAGE_SHARED,   &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRTOPBOR),   ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRTOPBDIS),  ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKCOL),  SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFFILT),  SC_WID_UNO_HEADERSET,&::getCppuType((const ::rtl::OUString*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFLOC),   SC_WID_UNO_HEADERSET,&::getCppuType((const style::GraphicLocation*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFURL),   SC_WID_UNO_HEADERSET,&::getCppuType((const ::rtl::OUString*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKTRAN), SC_WID_UNO_HEADERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKCOL), SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBODYDIST), SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBRDDIST),  SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBOTTBOR),  SC_WID_UNO_HEADERSET,&::getCppuType((const table::BorderLine*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBOTTBDIS), SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRDYNAMIC), SC_WID_UNO_HEADERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRHEIGHT),   SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRDYNAMIC),  SC_WID_UNO_HEADERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRON),       SC_WID_UNO_HEADERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHARED),   SC_WID_UNO_HEADERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTBOR),  SC_WID_UNO_HEADERSET,&::getCppuType((const table::BorderLine*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTBDIS), SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRLEFTMAR),  SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRON),      SC_WID_UNO_HEADERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTBOR), SC_WID_UNO_HEADERSET,&::getCppuType((const table::BorderLine*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTBDIS),SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRRIGHTMAR), SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRSHADOW),   SC_WID_UNO_HEADERSET,&::getCppuType((const table::ShadowFormat*)0), 0, 0 },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRSHARED),  SC_WID_UNO_HEADERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRTOPBOR),   SC_WID_UNO_HEADERSET,&::getCppuType((const table::BorderLine*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRTOPBDIS),  SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
 //
         {MAP_CHAR_LEN(SC_UNO_PAGE_HEIGHT),      ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_HEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(OLD_UNO_PAGE_BACKTRANS),  ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
@@ -284,8 +285,8 @@ const SfxItemPropertyMap* lcl_GetPageStyleMap()
         {MAP_CHAR_LEN(SC_UNO_PAGE_TOPBORDER),   ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_TOPBRDDIST),  ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_TOPMARGIN),   ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_UP_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKTRAN),ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
-        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKTRAN),ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKTRAN),SC_WID_UNO_FOOTERSET,&::getBooleanCppuType(),                       0, 0 },
+        {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKTRAN),SC_WID_UNO_HEADERSET,&::getBooleanCppuType(),                       0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_WIDTH),       ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_WIDTH | CONVERT_TWIPS },
         {0,0,0,0}
     };
@@ -1200,7 +1201,8 @@ void SAL_CALL ScStyleObj::setName( const rtl::OUString& aNewName )
 
 // beans::XPropertyState
 
-const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const String& rPropName, UINT16& rWhich )
+const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const String& rPropName,
+                                        const SfxItemPropertyMap*& rpResultEntry )
 {
     //! OUString as argument?
 
@@ -1211,27 +1213,27 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const String& rPropName, UIN
         if ( eFamily == SFX_STYLE_FAMILY_PAGE )
         {
             pMap = SfxItemPropertyMap::GetByName( lcl_GetHeaderStyleMap(), rPropName );
-            if ( pMap )
+            if ( pMap )     // only item-wids in header/footer map
             {
-                rWhich = pMap->nWID;
+                rpResultEntry = pMap;
                 return &((const SvxSetItem&)pStyle->GetItemSet().Get(ATTR_PAGE_HEADERSET)).GetItemSet();
             }
             pMap = SfxItemPropertyMap::GetByName( lcl_GetFooterStyleMap(), rPropName );
-            if ( pMap )
+            if ( pMap )     // only item-wids in header/footer map
             {
-                rWhich = pMap->nWID;
+                rpResultEntry = pMap;
                 return &((const SvxSetItem&)pStyle->GetItemSet().Get(ATTR_PAGE_FOOTERSET)).GetItemSet();
             }
         }
         pMap = SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), rPropName );
-        if ( pMap && pMap->nWID )
+        if ( pMap && IsScItemWid( pMap->nWID ) )
         {
-            rWhich = pMap->nWID;
+            rpResultEntry = pMap;
             return &pStyle->GetItemSet();
         }
     }
 
-    rWhich = 0;
+    rpResultEntry = NULL;
     return NULL;
 }
 
@@ -1241,12 +1243,13 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const rtl::OUString&
     ScUnoGuard aGuard;
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
     String aString = aPropertyName;
-    UINT16 nWhich = 0;
 
-    const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aString, nWhich );
+    const SfxItemPropertyMap* pResultEntry = NULL;
+    const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aString, pResultEntry );
 
-    if ( pItemSet && nWhich )
+    if ( pItemSet && pResultEntry )
     {
+        USHORT nWhich = pResultEntry->nWID;
         SfxItemState eState = pItemSet->GetItemState( nWhich, sal_False );
 
         //  if no rotate value is set, look at orientation
@@ -1286,7 +1289,13 @@ void SAL_CALL ScStyleObj::setPropertyToDefault( const rtl::OUString& aPropertyNa
                             throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    SetOrResetPropertyValue_Impl( aPropertyName, NULL );
+
+    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+    pMap = SfxItemPropertyMap::GetByName( pMap, aPropertyName );
+    if ( !pMap )
+        throw beans::UnknownPropertyException();
+
+    SetOnePropertyValue( pMap, NULL );
 }
 
 uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aPropertyName )
@@ -1296,12 +1305,14 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
     ScUnoGuard aGuard;
     String aString = aPropertyName;
     uno::Any aAny;
-    UINT16 nWhich = 0;
 
-    const SfxItemSet* pStyleSet = GetStyleItemSet_Impl( aString, nWhich );
+    const SfxItemPropertyMap* pResultEntry = NULL;
+    const SfxItemSet* pStyleSet = GetStyleItemSet_Impl( aString, pResultEntry );
 
-    if ( pStyleSet && nWhich )
+    if ( pStyleSet && pResultEntry )
     {
+        USHORT nWhich = pResultEntry->nWID;
+
         //  Default ist Default vom ItemPool, nicht vom Standard-Style,
         //  damit es zu setPropertyToDefault passt
         SfxItemSet aEmptySet( *pStyleSet->GetPool(), pStyleSet->GetRanges() );
@@ -1337,10 +1348,169 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
                                 GetValue() == VOBJ_MODE_SHOW );
                 break;
             default:
-                aAny = aPropSet.getPropertyValue(aString, *pItemSet);
+                aAny = aPropSet.getPropertyValue( *pResultEntry, *pItemSet );
         }
     }
     return aAny;
+}
+
+// XMultiPropertySet
+
+void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< rtl::OUString >& aPropertyNames,
+                                                const uno::Sequence< uno::Any >& aValues )
+                                throw (beans::PropertyVetoException, lang::IllegalArgumentException,
+                                        lang::WrappedTargetException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    sal_Int32 nCount = aPropertyNames.getLength();
+    if ( aValues.getLength() != nCount )
+        throw lang::IllegalArgumentException();
+
+    if ( nCount )
+    {
+        const rtl::OUString* pNames = aPropertyNames.getConstArray();
+        const uno::Any* pValues = aValues.getConstArray();
+
+        const SfxItemPropertyMap* pPropertyMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap* pMap = pPropertyMap;
+        for (sal_Int32 i = 0; i < nCount; i++)
+        {
+            String aNameString = pNames[i];
+            pMap = SfxItemPropertyMap::GetByName( pMap, aNameString );
+            SetOnePropertyValue( pMap, &pValues[i] );
+            if (!pMap)
+                pMap = pPropertyMap;
+            else
+                pMap++;
+        }
+    }
+}
+
+uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyValues(
+                                    const uno::Sequence< rtl::OUString >& aPropertyNames )
+                                throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    //! optimize
+
+    sal_Int32 nCount = aPropertyNames.getLength();
+    uno::Sequence<uno::Any> aSequence( nCount );
+    if ( nCount )
+    {
+        uno::Any* pValues = aSequence.getArray();
+        for (sal_Int32 i=0; i<nCount; i++)
+            pValues[i] = getPropertyValue( aPropertyNames[i] );
+    }
+    return aSequence;
+}
+
+void SAL_CALL ScStyleObj::addPropertiesChangeListener( const uno::Sequence<rtl::OUString>& aPropertyNames,
+                                    const uno::Reference<beans::XPropertiesChangeListener>& xListener )
+                                throw (uno::RuntimeException)
+{
+    // no bound properties
+}
+
+void SAL_CALL ScStyleObj::removePropertiesChangeListener(
+                                    const uno::Reference<beans::XPropertiesChangeListener>& xListener )
+                                throw (uno::RuntimeException)
+{
+    // no bound properties
+}
+
+void SAL_CALL ScStyleObj::firePropertiesChangeEvent( const uno::Sequence<rtl::OUString>& aPropertyNames,
+                                    const uno::Reference<beans::XPropertiesChangeListener>& xListener )
+                                throw (uno::RuntimeException)
+{
+    // no bound properties
+}
+
+// XMultiPropertyStates
+// getPropertyStates already defined for XPropertyState
+
+void SAL_CALL ScStyleObj::setAllPropertiesToDefault() throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    SfxStyleSheetBase* pStyle = GetStyle_Impl();
+    if ( pStyle )
+    {
+        //  #70909# cell styles cannot be modified if any sheet is protected
+        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
+            throw uno::RuntimeException();
+
+        SfxItemSet& rSet = pStyle->GetItemSet();
+        rSet.ClearItem();                               // set all items to default
+
+        //! merge with SetOneProperty
+
+        ScDocument* pDoc = pDocShell->GetDocument();
+        if ( eFamily == SFX_STYLE_FAMILY_PARA )
+        {
+            //  row heights
+
+            VirtualDevice aVDev;
+            Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
+            double nPPTX = aLogic.X() / 1000.0;
+            double nPPTY = aLogic.Y() / 1000.0;
+            Fraction aZoom(1,1);
+            pDoc->StyleSheetChanged( pStyle, sal_False, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
+
+            pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
+            pDocShell->SetDocumentModified();
+        }
+        else
+        {
+            pDocShell->PageStyleModified( aStyleName, sal_True );
+        }
+    }
+}
+
+void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<rtl::OUString>& aPropertyNames )
+                                throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    sal_Int32 nCount = aPropertyNames.getLength();
+    if ( nCount )
+    {
+        const rtl::OUString* pNames = aPropertyNames.getConstArray();
+
+        const SfxItemPropertyMap* pPropertyMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap* pMap = pPropertyMap;
+        for (sal_Int32 i = 0; i < nCount; i++)
+        {
+            String aNameString = pNames[i];
+            pMap = SfxItemPropertyMap::GetByName( pMap, aNameString );
+            SetOnePropertyValue( pMap, NULL );
+            if (!pMap)
+                pMap = pPropertyMap;
+            else
+                pMap++;
+        }
+    }
+}
+
+uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyDefaults(
+                                const uno::Sequence<rtl::OUString>& aPropertyNames )
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+                                uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    //! optimize
+
+    sal_Int32 nCount = aPropertyNames.getLength();
+    uno::Sequence<uno::Any> aSequence( nCount );
+    if ( nCount )
+    {
+        uno::Any* pValues = aSequence.getArray();
+        for (sal_Int32 i=0; i<nCount; i++)
+            pValues[i] = getPropertyDefault( aPropertyNames[i] );
+    }
+    return aSequence;
 }
 
 // beans::XPropertySet
@@ -1359,30 +1529,38 @@ void SAL_CALL ScStyleObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    SetOrResetPropertyValue_Impl( aPropertyName, &aValue );
+
+    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+    pMap = SfxItemPropertyMap::GetByName( pMap, aPropertyName );
+    if ( !pMap )
+        throw beans::UnknownPropertyException();
+
+    SetOnePropertyValue( pMap, &aValue );
 }
 
-void ScStyleObj::SetOrResetPropertyValue_Impl(const rtl::OUString& aPropertyName, const uno::Any* pValue)
+void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno::Any* pValue )
+                                throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
-    if (pStyle)
+    if ( pStyle && pMap )
     {
         //  #70909# cell styles cannot be modified if any sheet is protected
         if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
-            return;         //! exception?
+            throw uno::RuntimeException();
 
-        String aString = aPropertyName;
+        String aString = String::CreateFromAscii( pMap->pName );
+
         SfxItemSet& rSet = pStyle->GetItemSet();    // direkt im lebenden Style aendern...
         sal_Bool bDone = sal_False;
         if ( eFamily == SFX_STYLE_FAMILY_PAGE )
         {
             const SfxItemPropertyMap* pHeaderMap =
                     SfxItemPropertyMap::GetByName( lcl_GetHeaderStyleMap(), aString );
-            if ( pHeaderMap && pHeaderMap->nWID )
+            if ( pHeaderMap )   // only item-wids in header/footer map
             {
                 SvxSetItem aNewHeader( (const SvxSetItem&)rSet.Get(ATTR_PAGE_HEADERSET) );
                 if (pValue)
-                    aPropSet.setPropertyValue(aString, *pValue, aNewHeader.GetItemSet());
+                    aPropSet.setPropertyValue( *pHeaderMap, *pValue, aNewHeader.GetItemSet() );
                 else
                     aNewHeader.GetItemSet().ClearItem( pHeaderMap->nWID );
                 rSet.Put( aNewHeader );
@@ -1392,11 +1570,11 @@ void ScStyleObj::SetOrResetPropertyValue_Impl(const rtl::OUString& aPropertyName
             {
                 const SfxItemPropertyMap* pFooterMap =
                         SfxItemPropertyMap::GetByName( lcl_GetFooterStyleMap(), aString );
-                if ( pFooterMap && pFooterMap->nWID )
+                if ( pFooterMap )   // only item-wids in header/footer map
                 {
                     SvxSetItem aNewFooter( (const SvxSetItem&)rSet.Get(ATTR_PAGE_FOOTERSET) );
                     if (pValue)
-                        aPropSet.setPropertyValue(aString, *pValue, aNewFooter.GetItemSet());
+                        aPropSet.setPropertyValue( *pFooterMap, *pValue, aNewFooter.GetItemSet() );
                     else
                         aNewFooter.GetItemSet().ClearItem( pFooterMap->nWID );
                     rSet.Put( aNewFooter );
@@ -1408,7 +1586,7 @@ void ScStyleObj::SetOrResetPropertyValue_Impl(const rtl::OUString& aPropertyName
         {
             const SfxItemPropertyMap* pMap =
                     SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), aString );
-            if ( pMap && pMap->nWID )
+            if ( pMap && IsScItemWid( pMap->nWID ) )
             {
                 if (pValue)
                 {
@@ -1512,7 +1690,7 @@ void ScStyleObj::SetOrResetPropertyValue_Impl(const rtl::OUString& aPropertyName
                             {
                                 rSet.Put( rSet.Get(pMap->nWID) );
                             }
-                            aPropSet.setPropertyValue(aString, *pValue, rSet);
+                            aPropSet.setPropertyValue( *pMap, *pValue, rSet );
                     }
                 }
                 else
@@ -1561,12 +1739,14 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
     ScUnoGuard aGuard;
     String aString = aPropertyName;
     uno::Any aAny;
-    UINT16 nWhich = 0;
 
-    const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aString, nWhich );
+    const SfxItemPropertyMap* pResultEntry = NULL;
+    const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aString, pResultEntry );
 
-    if ( pItemSet && nWhich )
+    if ( pItemSet && pResultEntry )
     {
+        USHORT nWhich = pResultEntry->nWID;
+
         switch ( nWhich )       // fuer Item-Spezial-Behandlungen
         {
             case ATTR_VALUE_FORMAT:
@@ -1626,10 +1806,10 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                 {
                     SfxItemSet aNoEmptySet( *pItemSet );
                     aNoEmptySet.Put( aNoEmptySet.Get( nWhich ) );
-                    aAny = aPropSet.getPropertyValue(aString, aNoEmptySet);
+                    aAny = aPropSet.getPropertyValue( *pResultEntry, aNoEmptySet );
                 }
                 else
-                    aAny = aPropSet.getPropertyValue(aString, *pItemSet);
+                    aAny = aPropSet.getPropertyValue( *pResultEntry, *pItemSet );
         }
     }
     else if ( aString.EqualsAscii( SC_UNONAME_DISPNAME ) )      // read-only

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: nn $ $Date: 2001-04-25 18:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,14 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSTATES_HPP_
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -105,8 +111,8 @@
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 
 class SfxStyleSheetBase;
@@ -256,10 +262,12 @@ public:
 };
 
 
-class ScStyleObj : public ::cppu::WeakImplHelper5<
+class ScStyleObj : public ::cppu::WeakImplHelper7<
                     ::com::sun::star::style::XStyle,
                     ::com::sun::star::beans::XPropertySet,
+                    ::com::sun::star::beans::XMultiPropertySet,
                     ::com::sun::star::beans::XPropertyState,
+                    ::com::sun::star::beans::XMultiPropertyStates,
                     ::com::sun::star::lang::XUnoTunnel,
                     ::com::sun::star::lang::XServiceInfo >,
                 public SfxListener
@@ -271,9 +279,11 @@ private:
     String                  aStyleName;
 
     SfxStyleSheetBase*      GetStyle_Impl();
-    const SfxItemSet*       GetStyleItemSet_Impl( const String& rPropName, UINT16& rWhich );
-    void                    SetOrResetPropertyValue_Impl( const rtl::OUString& aPropertyName,
-                                                        const ::com::sun::star::uno::Any* pValue );
+    const SfxItemSet*       GetStyleItemSet_Impl( const String& rPropName, const SfxItemPropertyMap*& rpMapEntry );
+    void                    SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                                    const ::com::sun::star::uno::Any* pValue )
+                                            throw(::com::sun::star::lang::IllegalArgumentException,
+                                                    ::com::sun::star::uno::RuntimeException);
 
 public:
                             ScStyleObj();
@@ -341,6 +351,25 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
+                            // XMultiPropertySet
+    virtual void SAL_CALL   setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
+                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
+                                throw (::com::sun::star::beans::PropertyVetoException,
+                                    ::com::sun::star::lang::IllegalArgumentException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
+                            getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener )
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertiesChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener )
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener )
+                                throw (::com::sun::star::uno::RuntimeException);
+
                             // XPropertyState
     virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState(
                                     const ::rtl::OUString& PropertyName )
@@ -357,6 +386,20 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault(
                                     const ::rtl::OUString& aPropertyName )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+
+                            // XMultiPropertyStates
+    // getPropertyStates already defined for XPropertyState
+    virtual void SAL_CALL   setAllPropertiesToDefault() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setPropertiesToDefault( const ::com::sun::star::uno::Sequence<
+                                        ::rtl::OUString >& aPropertyNames )
+                                throw (::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
+                            getPropertyDefaults( const ::com::sun::star::uno::Sequence<
+                                        ::rtl::OUString >& aPropertyNames )
+                                throw (::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
 
