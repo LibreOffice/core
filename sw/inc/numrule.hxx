@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:02:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 10:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,5 +392,7 @@ public:
     }
 
 };
+
+sal_Unicode GetBulletChar(BYTE nLevel);
 
 #endif  // _NUMRULE_HXX
