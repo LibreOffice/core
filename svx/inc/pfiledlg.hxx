@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiledlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-18 13:30:38 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,17 @@
 #include <sfx2/filedlghelper.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 /*************************************************************************
 |*
 |* Filedialog to insert Plugin-Fileformats
 |*
 \************************************************************************/
 
-class SvxPluginFileDlg
+class SVX_DLLPUBLIC SvxPluginFileDlg
 {
 private:
     sfx2::FileDialogHelper          maFileDlg;
