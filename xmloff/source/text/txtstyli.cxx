@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:42:31 $
+ *  last change: $Author: dvo $ $Date: 2004-07-15 17:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ void XMLTextStyleContext::FillPropertySet(
 
             OUString sCollapsingBorders =
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "CollapsingBorders" ) );
-            DBG_ASSERT( xInfo->hasPropertyByName( sCollapsingBorders ),
+            DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sCollapsingBorders ),
                         "property missing?" );
             rPropSet->setPropertyValue( sCollapsingBorders,
                 (aContextIDs[2].nIndex == -1)
