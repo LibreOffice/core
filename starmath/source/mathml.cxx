@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-19 14:58:48 $
+ *  last change: $Author: cmc $ $Date: 2001-07-23 09:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,14 +164,7 @@ using namespace ::xmloff::token;
 #undef WANTEXCEPT
 sal_Unicode UnicodeToStarMath(sal_uInt16 rChar)
 {
-    sal_Unicode cMathChar = rChar;
-    for (int i=sizeof(MathType::aMathTypeTable)-1;i>=0;i--)
-        if (rChar == MathType::aMathTypeTable[i])
-        {
-            cMathChar = i | 0xf000;
-            break;
-        }
-    return cMathChar;
+    return rChar;
 }
 
 /// read a component (file + filter version)
@@ -3283,7 +3276,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int nLevel)
     SvXMLElementExport aMath(*this,XML_NAMESPACE_MATH,sXML_mo,
         sal_True,sal_False);
     sal_Unicode nArse[2];
-    nArse[0] = MathType::aMathTypeTable[pTemp->GetText().GetChar(0)&0x00FF];
+    nArse[0] = pTemp->GetText().GetChar(0);
     DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
@@ -3295,7 +3288,7 @@ void SmXMLExport::ExportPolygon(const SmNode *pNode, int nLevel)
     SvXMLElementExport aMath(*this,XML_NAMESPACE_MATH,sXML_mo,
         sal_True,sal_False);
     sal_Unicode nArse[2];
-    nArse[0] = MathType::aMathTypeTable[pTemp->GetPolygon().GetChar()&0x00FF];
+    nArse[0] = pTemp->GetPolygon().GetChar();
     DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
@@ -3486,25 +3479,25 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
         nArse[1] = 0;
         if (pLeft->GetType() == NPOLYGON)
         {
-            nArse[0] = MathType::aMathTypeTable[ static_cast<
-                const SmPolygonNode* >(pLeft)->GetPolygon().GetChar()&0x00FF];
+            nArse[0] = static_cast<
+                const SmPolygonNode* >(pLeft)->GetPolygon().GetChar();
         }
         else
         {
-            nArse[0] = MathType::aMathTypeTable[ static_cast<
-                const SmMathSymbolNode* >(pLeft)->GetText().GetChar(0)&0x00FF];
+            nArse[0] = static_cast<
+                const SmMathSymbolNode* >(pLeft)->GetText().GetChar(0);
         }
         DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
         AddAttribute(XML_NAMESPACE_MATH,sXML_open,nArse);
         if (pRight->GetType() == NPOLYGON)
         {
-            nArse[0] = MathType::aMathTypeTable[static_cast<
-                const SmPolygonNode* >(pRight)->GetPolygon().GetChar()&0x00FF];
+            nArse[0] = static_cast<
+                const SmPolygonNode* >(pRight)->GetPolygon().GetChar();
         }
         else
         {
-            nArse[0] = MathType::aMathTypeTable[static_cast<
-                const SmMathSymbolNode* >(pRight)->GetText().GetChar(0)&0x00FF];
+            nArse[0] = static_cast<
+                const SmMathSymbolNode* >(pRight)->GetText().GetChar(0);
         }
         DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
         AddAttribute(XML_NAMESPACE_MATH,sXML_close,nArse);

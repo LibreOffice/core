@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-20 13:23:48 $
+ *  last change: $Author: cmc $ $Date: 2001-07-23 09:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2700,10 +2700,8 @@ void SmMathSymbolNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat
 
 void SmMathSymbolNode::CreateTextFromNode(String &rText)
 {
-//  rText.Append(MathType::aMathTypeTable[GetToken().cMathChar&0x00FF]);
     String sStr;
-    MathType::LookupChar(MathType::aMathTypeTable[GetToken().cMathChar&0x00FF],
-        sStr);
+    MathType::LookupChar(GetToken().cMathChar, sStr);
     sStr.EraseLeadingAndTrailingChars();
     rText.Append(sStr);
 }

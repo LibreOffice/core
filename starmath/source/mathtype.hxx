@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-27 13:47:14 $
+ *  last change: $Author: cmc $ $Date: 2001-07-23 09:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,6 @@ private:
 public:
     static sal_Bool LookupChar(sal_Unicode nChar,String &rRet,
         sal_uInt8 nVersion=3,sal_uInt8 nTypeFace=0);
-    static sal_Unicode aMathTypeTable[256]; //Magic lookup table
 };
 
 
