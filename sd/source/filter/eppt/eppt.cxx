@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 10:54:35 $
+ *  last change: $Author: sj $ $Date: 2001-11-19 18:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1516,15 +1516,20 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
     if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ) ) )
         aAny >>= eFe;
 
+    sal_uInt32  nSoundRef = 0;
+    sal_Bool    bIsSound = GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) );
+    if ( bIsSound )
+        nSoundRef = maSoundCollection.GetId( *(::rtl::OUString*)aAny.getValue() );
+
     sal_Bool bNeedsSSSlideInfoAtom = ( bVisible == FALSE )
                                     || ( mnDiaMode == 2 )
+                                    || ( bIsSound )
                                     || ( eFe != ::com::sun::star::presentation::FadeEffect_NONE );
     if ( bNeedsSSSlideInfoAtom )
     {
         sal_uInt8   nDirection = 0;
         sal_uInt8   nTransitionType = 0;
         sal_uInt16  nBuildFlags = 1;        // advange by mouseclick
-        sal_uInt8   nSoundRef = 0;
         INT32       nSlideTime = 0;         // muss noch !!!
         sal_uInt8   nSpeed = 1;
 
@@ -1654,19 +1659,21 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
             nBuildFlags |= 0x400;
         if ( bVisible == FALSE )
             nBuildFlags |= 4;
+        if ( bIsSound )
+            nBuildFlags |= 16;
 
         if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Duration" ) ) ) )// duration of this slide
             nSlideTime = *(INT32*)aAny.getValue() << 10;        // in ticks
 
 
         mpPptEscherEx->AddAtom( 16, EPP_SSSlideInfoAtom );
-        *mpStrm << (sal_uInt32)nSlideTime                       // standtime in ticks
-                << (sal_uInt32)0
-                << (sal_uInt8)nDirection
-                << (sal_uInt8)nTransitionType
-                << (sal_uInt16)nBuildFlags
-                << (sal_uInt8)nSpeed
-                << (sal_uInt8)nSoundRef << (sal_uInt8)0 << (sal_uInt8)0;
+        *mpStrm << nSlideTime       // standtime in ticks
+                << nSoundRef
+                << nDirection
+                << nTransitionType
+                << nBuildFlags
+                << nSpeed
+                << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0;
     }
 
     EscherSolverContainer aSolverContainer;
