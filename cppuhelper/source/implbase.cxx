@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-15 12:33:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THR
 
     if (arType2Offset[nType2Offset].pTD)
         ++nType2Offset;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
     {
         OString msg( "### cannot get type description for " );
@@ -318,7 +318,7 @@ void WeakComponentImplHelperBase::release()
         }
         catch (RuntimeException & exc) // don't break throw ()
         {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( 0, msg.getStr() );
 #endif
@@ -356,7 +356,7 @@ void WeakComponentImplHelperBase::dispose()
             MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( 0, msg.getStr() );
 #endif
@@ -453,7 +453,7 @@ void WeakAggComponentImplHelperBase::release()
         }
         catch (RuntimeException & exc) // don't break throw ()
         {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( 0, msg.getStr() );
 #endif
@@ -491,7 +491,7 @@ void WeakAggComponentImplHelperBase::dispose()
             MutexGuard aGuard( rBHelper.rMutex );
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( 0, msg.getStr() );
 #endif
