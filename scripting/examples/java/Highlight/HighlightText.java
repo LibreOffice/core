@@ -51,7 +51,7 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
 
         try {
             findDialog = xDialogProvider.createDialog(
-                "vnd.sun.star.script://" +
+                "vnd.sun.star.script:" +
                 "ScriptBindingLibrary.Highlight?location=application");
         }
         catch (java.lang.Exception e) {
