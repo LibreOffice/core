@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dll.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 13:56:00 $
+ *  last change: $Author: mhu $ $Date: 2001-10-15 06:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,10 +90,6 @@ void SetSVData( SVDATA* pSVData );
 // -------------------------------
 
 // Um Resourcen wieder freizugeben
-#ifdef WNT
-void ImpDeInitWinTools();
-#else
 inline void ImpDeInitWinTools() {}
-#endif
 
-#endif // _DLL_HXX
+#endif /* _DLL_HXX */
