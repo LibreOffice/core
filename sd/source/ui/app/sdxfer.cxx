@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-26 14:18:46 $
+ *  last change: $Author: cl $ $Date: 2001-10-04 11:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
+
 #include <so3/outplace.hxx>
+#include <svx/unomodel.hxx>
 
 #include "docshell.hxx"
 #include "sdview.hxx"
@@ -535,6 +540,12 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 
 // -----------------------------------------------------------------------------
 
+/* testcode
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+*/
+
 sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& rFlavor )
 {
     sal_Bool bRet = sal_False;
@@ -544,18 +555,27 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
         case( SDTRANSFER_OBJECTTYPE_DRAWMODEL ):
         {
             SdDrawDocument* pDoc = (SdDrawDocument*) pObject;
-
             pDoc->BurnInStyleSheetAttributes();
             pDoc->SetStreamingSdrModel( TRUE );
             pDoc->RemoveNotPersistentObjects( TRUE );
-            rxOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
             rxOStm->SetBufferSize( 16348 );
-            pDoc->PreSave();
-            pDoc->GetItemPool().SetFileFormatVersion( (USHORT) rxOStm->GetVersion() );
-            pDoc->GetItemPool().Store( *rxOStm );
-            *rxOStm << *pDoc;
-            pDoc->PostSave();
-            rxOStm->Commit();
+            {
+                com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                if( SvxDrawingLayerExport( pDoc, xDocOut ) )
+                    rxOStm->Commit();
+            }
+
+/* testcode
+            {
+                const rtl::OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "file:///e:/test.xml" ) );
+                SfxMedium aMedium( aURL, STREAM_WRITE | STREAM_TRUNC, TRUE );
+                aMedium.IsRemote();
+                com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
+                if( SvxDrawingLayerExport( pDoc, xDocOut ) )
+                    aMedium.Commit();
+            }
+*/
+
             pDoc->SetStreamingSdrModel( FALSE );
 
             bRet = ( rxOStm->GetError() == ERRCODE_NONE );
