@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:31:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,8 @@
 #ifndef _COM_SUN_STAR_SDBC_TRANSACTIONISOLATION_HPP_
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
-#include <com/sun/star/lang/DisposedException.hpp>
-#endif
 #ifndef _DBHELPER_DBCHARSET_HXX_
 #include <connectivity/dbcharset.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
@@ -105,7 +99,6 @@ extern "C" void*  SAL_CALL OMozabConnection_CreateInstance(void* _pDriver)
 
 
 using namespace connectivity::mozab;
-//  using namespace connectivity;
 using namespace dbtools;
 
 //------------------------------------------------------------------------------
@@ -123,6 +116,12 @@ const sal_Char* OConnection::getSDBC_SCHEME_MOZILLA()
 {
     static sal_Char*    SDBC_SCHEME_MOZILLA         = MOZAB_MOZILLA_SCHEMA;
     return SDBC_SCHEME_MOZILLA;
+}
+// -----------------------------------------------------------------------------
+const sal_Char* OConnection::getSDBC_SCHEME_THUNDERBIRD()
+{
+    static sal_Char*    SDBC_SCHEME_THUNDERBIRD         = MOZAB_THUNDERBIRD_SCHEMA;
+    return SDBC_SCHEME_THUNDERBIRD;
 }
 // -----------------------------------------------------------------------------
 const sal_Char* OConnection::getSDBC_SCHEME_LDAP()
@@ -153,7 +152,6 @@ OConnection::OConnection(MozabDriver*   _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_pDriver(_pDriver),
                          m_xMetaData(NULL),
-                         m_nAnonABCount( 0 ),
                          m_nMaxResultRecords( -1 ),
                          m_eSDBCAddressType(SDBCAddress::Unknown),
                          m_aNameMapper(NULL)
@@ -168,8 +166,6 @@ OConnection::~OConnection()
 {
     if(!isClosed())
         close();
-
-
     m_pDriver->release();
     m_pDriver = NULL;
 }
@@ -241,6 +237,16 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_MOZILLA() ) == 0 ) {
         m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_MOZILLA );
         m_eSDBCAddressType = SDBCAddress::Mozilla;
+        if(sAdditionalInfo.getLength())
+            m_sMozillaProfile = sAdditionalInfo;
+    }
+    else
+    if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_THUNDERBIRD() ) == 0 ) {
+        //Yes. I am sure it is MOZ_SCHEME_MOZILLA
+        m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_MOZILLA );
+        m_eSDBCAddressType = SDBCAddress::ThunderBird;
+        if(sAdditionalInfo.getLength())
+            m_sMozillaProfile = sAdditionalInfo;
     }
     else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_LDAP() ) == 0 ) {
         rtl::OUString sBaseDN;
