@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:43:22 $
+ *  last change: $Author: oj $ $Date: 2001-06-29 11:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,25 @@
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef DBAUI_TYPEINFO_HXX
+#include "TypeInfo.hxx"
+#endif
 
 // .........................................................................
 namespace dbaui
 {
 // .........................................................................
 using namespace ::dbtools;
+using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::sdbcx;
@@ -123,6 +136,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui::dialogs;
+
 
 
 // -----------------------------------------------------------------------------
@@ -264,8 +278,81 @@ void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< 
 
     return vRet;
 }
-// -----------------------------------------------------------------------------
 
+const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
+                               sal_Int32 _nType,
+                               const ::rtl::OUString& _sTypeName,
+                               sal_Int32 _nPrecision,
+                               sal_Int32 _nScale,
+                               sal_Bool& _brForceToType)
+{
+    const OTypeInfo* pTypeInfo = NULL;
+    _brForceToType = sal_False;
+    // search for type
+    ::std::pair<OTypeInfoMap::const_iterator, OTypeInfoMap::const_iterator> aPair = _rTypeInfo.equal_range(_nType);
+    OTypeInfoMap::const_iterator aIter = aPair.first;
+    if(aIter != _rTypeInfo.end()) // compare with end is correct here
+    {
+        for(;aIter != aPair.second;++aIter)
+        {
+            // search the best matching type
+    #ifdef DBG_UTIL
+            ::rtl::OUString sDBTypeName = aIter->second->aTypeName;
+            sal_Int32       nDBTypePrecision = aIter->second->nPrecision;
+            sal_Int32       nDBTypeScale = aIter->second->nMaximumScale;
+    #endif
+            if  (   (   !_sTypeName.getLength()
+                    ||  (aIter->second->aTypeName   == _sTypeName)
+                    )
+                &&  (aIter->second->nPrecision      >= _nPrecision)
+                &&  (aIter->second->nMaximumScale   >= _nScale)
+                )
+                break;
+        }
+
+        if (aIter == aPair.second)
+        {
+            for(aIter = aPair.first; aIter != aPair.second; ++aIter)
+            {
+                // search the best matching type (now comparing the local names)
+                if  (   (aIter->second->aLocalTypeName  == _sTypeName)
+                    &&  (aIter->second->nPrecision      >= _nPrecision)
+                    &&  (aIter->second->nMaximumScale   >= _nScale)
+                    )
+                {
+                    OSL_ENSURE(sal_False,
+                        (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
+                        +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
+                        +=  ::rtl::OString("\" (expected type name ")
+                        +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
+                        +=  ::rtl::OString(" matches the type's local name).")).getStr());
+                    break;
+                }
+            }
+        }
+
+        if (aIter == aPair.second)
+        {   // no match for the names, no match for the local names
+            // -> drop the precision and the scale restriction, accept any type with the property
+            // type id (nType)
+
+            OSL_ENSURE(sal_False,
+                (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
+                +=  ::rtl::OString(" (expected type name: ")
+                +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
+                +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
+
+            pTypeInfo = aPair.first->second;
+            _brForceToType = sal_True;
+        }
+        else
+            pTypeInfo = aIter->second;
+    }
+    else
+        OSL_ENSURE(sal_False, "getTypeInfoFromType: no type info found for this type!");
+
+    return pTypeInfo;
+}
 // .........................................................................
 }
 // .........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
+ *  last change: $Author: oj $ $Date: 2001-06-29 11:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,37 +693,24 @@ void OCopyTableWizard::loadData()
 
             pActFieldDescr = new OFieldDescription();
             // search for type
-            ::std::pair<OTypeInfoMap::iterator, OTypeInfoMap::iterator> aPair = m_aTypeInfo.equal_range(nType);
-            OTypeInfoMap::iterator aIter = aPair.first;
-            if(aIter == m_aTypeInfo.end())
-            {   // type not in destination database
-                aPair = m_aTypeInfo.equal_range(DataType::VARCHAR);
-            }
-            for(;aIter != aPair.second;++aIter)
-            {
-                // search the best matching type
-                if( aIter->second->aTypeName == sTypeName   &&
-                    aIter->second->nPrecision >= nPrecision &&
-                    aIter->second->nMaximumScale >= nScale)
-                    break;
-            }
+            sal_Bool bForce;
+            const OTypeInfo* pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,nPrecision,nScale,bForce);
 
-            OTypeInfo* pType = aIter->second;
-            pActFieldDescr->SetType(pType);
-            switch(pType->nType)
+            pActFieldDescr->SetType(pTypeInfo);
+            switch(pTypeInfo->nType)
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
-                    pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(50),pType->nPrecision));
+                    pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(50),pTypeInfo->nPrecision));
                     break;
                 default:
-                    if(pType->nPrecision && pType->nMaximumScale)
+                    if(pTypeInfo->nPrecision && pTypeInfo->nMaximumScale)
                     {
                         pActFieldDescr->SetPrecision(5);
                         pActFieldDescr->SetScale(0);
                     }
-                    else if(pType->nPrecision)
-                        pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(16),pType->nPrecision));
+                    else if(pTypeInfo->nPrecision)
+                        pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(16),pTypeInfo->nPrecision));
             }
 
             pActFieldDescr->SetName(sName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeInfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 15:42:27 $
+ *  last change: $Author: oj $ $Date: 2001-06-29 11:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,20 @@ const sal_uInt16 TYPE_OTHER     = 30;
 
 
     typedef ::std::multimap<sal_Int32,OTypeInfo*> OTypeInfoMap;
+    /** return the most suitable typeinfo for a requested type
+        @param  _rTypeInfo      contains a map of type to typeinfo
+        @param  _nType          the requested type
+        @param  _sTypeName      the typename
+        @param  _nPrecision     the precision
+        @param  _nScale         the scale
+        @param  _brForceToType  true when type was found which has some differenes
+    */
+    const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
+                               sal_Int32 _nType,
+                               const ::rtl::OUString& _sTypeName,
+                               sal_Int32 _nPrecision,
+                               sal_Int32 _nScale,
+                               sal_Bool& _brForceToType);
 }
 
 #endif // DBAUI_TYPEINFO_HXX
