@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:19:17 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 10:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,7 +639,7 @@ String STR_PRESOBJ_MPNOTESTEXT
     Text[ dutch ] = "Klik om het formaat van de aantekeningen te bewerken";
     Text[ chinese_simplified ] = "ΗλΔϊ°΄»χΚσ±κ£¬±ΰΌ­±ΈΧΆµΔΈρΚ½΅£";
     Text[ greek ] = "Κάντε κλικ για να επεξεργάσετετη μορφή των σημειώσεων";
-    Text[ korean ] = "ΈήΈπ Ό­½Δ ΖνΑύΐ» ΐ§ΗΨ Ε¬Έ―ΗΟ½Κ½ΓΏΐ";
+    Text[ korean ] = "ΈήΈπ Ό­½Δΐ»  ΖνΑύΗΟ±β ΐ§ΗΨ Ε¬Έ―ΗΟ½Κ½ΓΏΐ";
     Text[ turkish ] = "Notlarύn formatύnύ dόzenlemek iηin tύklayύn";
     Text[ language_user1 ] = " ";
 };
@@ -747,7 +747,7 @@ String STR_PRESOBJ_NOTESTEXT
     Text[ dutch ] = "Klik om aantekeningen toe te voegen";
     Text[ chinese_simplified ] = "µ¥»χΚσ±κΌόΜνΌΣ±ΈΧΆ";
     Text[ greek ] = "Κάντε κλικ για να προσθέσετε σημειώσεις";
-    Text[ korean ] = "Ε¬Έ―ΐΈ·Ξ ΈήΈπ Γί°΅";
+    Text[ korean ] = "Ε¬Έ―ΗΨΌ­  ΈήΈπ Γί°΅";
     Text[ turkish ] = "Not eklemek iηin tύklayύn";
     Text[ language_user1 ] = " ";
 };
