@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:16 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 namespace dbaui
 {
 //.........................................................................
-
+#define SPACEBETWEENENTRIES     4
 //========================================================================
 //= OMarkableTreeListBox
 //========================================================================
@@ -121,6 +121,8 @@ void OMarkableTreeListBox::Paint(const Rectangle& _rRect)
 //------------------------------------------------------------------------
 void OMarkableTreeListBox::InitButtonData()
 {
+    USHORT nSize = SPACEBETWEENENTRIES;
+    SetSpaceBetweenEntries(nSize);
     SetNodeDefaultImages( );
 
     m_pCheckButton = new SvLBoxButtonData( this );
