@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabhtch.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-04 12:52:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,90 +196,90 @@ Bitmap* XHatchTable::CreateBitmapForUI( long nIndex, BOOL bDelete )
 
 /************************************************************************/
 
-SvStream& XHatchTable::ImpStore( SvStream& rOut )
-{
-    // Schreiben
-    rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
-
-    // Tabellentyp schreiben (0 = gesamte Tabelle)
-    rOut << (long)0;
-
-    // Anzahl der Eintraege
-    rOut << (long)Count();
-
-    // die Eintraege
-    XHatchEntry* pEntry = (XHatchEntry*)aTable.First();;
-    for (long nIndex = 0; nIndex < Count(); nIndex++)
-    {
-        rOut << (long)aTable.GetCurKey();
-
-        // UNICODE: rOut << pEntry->GetName();
-        rOut.WriteByteString(pEntry->GetName());
-
-        XHatch& rHatch = pEntry->GetHatch();
-        rOut << (long)rHatch.GetHatchStyle();
-        rOut << rHatch.GetColor().GetRed();
-        rOut << rHatch.GetColor().GetGreen();
-        rOut << rHatch.GetColor().GetBlue();
-        rOut << rHatch.GetDistance();
-        rOut << rHatch.GetAngle();
-        pEntry = (XHatchEntry*)aTable.Next();
-    }
-
-    return rOut;
-}
+//BFS01SvStream& XHatchTable::ImpStore( SvStream& rOut )
+//BFS01{
+//BFS01 // Schreiben
+//BFS01 rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
+//BFS01
+//BFS01 // Tabellentyp schreiben (0 = gesamte Tabelle)
+//BFS01 rOut << (long)0;
+//BFS01
+//BFS01 // Anzahl der Eintraege
+//BFS01 rOut << (long)Count();
+//BFS01
+//BFS01 // die Eintraege
+//BFS01 XHatchEntry* pEntry = (XHatchEntry*)aTable.First();;
+//BFS01 for (long nIndex = 0; nIndex < Count(); nIndex++)
+//BFS01 {
+//BFS01     rOut << (long)aTable.GetCurKey();
+//BFS01
+//BFS01     // UNICODE: rOut << pEntry->GetName();
+//BFS01     rOut.WriteByteString(pEntry->GetName());
+//BFS01
+//BFS01     XHatch& rHatch = pEntry->GetHatch();
+//BFS01     rOut << (long)rHatch.GetHatchStyle();
+//BFS01     rOut << rHatch.GetColor().GetRed();
+//BFS01     rOut << rHatch.GetColor().GetGreen();
+//BFS01     rOut << rHatch.GetColor().GetBlue();
+//BFS01     rOut << rHatch.GetDistance();
+//BFS01     rOut << rHatch.GetAngle();
+//BFS01     pEntry = (XHatchEntry*)aTable.Next();
+//BFS01 }
+//BFS01
+//BFS01 return rOut;
+//BFS01}
 
 /************************************************************************/
 
-SvStream& XHatchTable::ImpRead( SvStream& rIn )
-{
-    // Lesen
-    rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
-
-    delete pBmpTable;
-    pBmpTable = new Table( 16, 16 );
-
-    XHatchEntry* pEntry = NULL;
-    long        nType;
-    long        nCount;
-    long        nIndex;
-    XubString   aName;
-
-    long        nStyle;
-    USHORT      nRed;
-    USHORT      nGreen;
-    USHORT      nBlue;
-    long        nDistance;
-    long        nAngle;
-
-    rIn >> nType;
-
-    // gesamte Tabelle?
-    if (nType == 0)
-    {
-        rIn >> nCount;
-        for (long nI = 0; nI < nCount; nI++)
-        {
-            rIn >> nIndex;
-
-            // UNICODE: rIn >> aName;
-            rIn.ReadByteString(aName);
-
-            rIn >> nStyle;
-            rIn >> nRed;
-            rIn >> nGreen;
-            rIn >> nBlue;
-            rIn >> nDistance;
-            rIn >> nAngle;
-
-            Color aColor ( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue);
-            XHatch aHatch(aColor, (XHatchStyle)nStyle, nDistance, nAngle);
-            pEntry = new XHatchEntry (aHatch, aName);
-            Insert (nIndex, pEntry);
-        }
-    }
-    return( rIn );
-}
+//BFS01SvStream& XHatchTable::ImpRead( SvStream& rIn )
+//BFS01{
+//BFS01 // Lesen
+//BFS01 rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
+//BFS01
+//BFS01 delete pBmpTable;
+//BFS01 pBmpTable = new Table( 16, 16 );
+//BFS01
+//BFS01 XHatchEntry* pEntry = NULL;
+//BFS01 long        nType;
+//BFS01 long        nCount;
+//BFS01 long        nIndex;
+//BFS01 XubString   aName;
+//BFS01
+//BFS01 long        nStyle;
+//BFS01 USHORT      nRed;
+//BFS01 USHORT      nGreen;
+//BFS01 USHORT      nBlue;
+//BFS01 long        nDistance;
+//BFS01 long        nAngle;
+//BFS01
+//BFS01 rIn >> nType;
+//BFS01
+//BFS01 // gesamte Tabelle?
+//BFS01 if (nType == 0)
+//BFS01 {
+//BFS01     rIn >> nCount;
+//BFS01     for (long nI = 0; nI < nCount; nI++)
+//BFS01     {
+//BFS01         rIn >> nIndex;
+//BFS01
+//BFS01         // UNICODE: rIn >> aName;
+//BFS01         rIn.ReadByteString(aName);
+//BFS01
+//BFS01         rIn >> nStyle;
+//BFS01         rIn >> nRed;
+//BFS01         rIn >> nGreen;
+//BFS01         rIn >> nBlue;
+//BFS01         rIn >> nDistance;
+//BFS01         rIn >> nAngle;
+//BFS01
+//BFS01         Color aColor ( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue);
+//BFS01         XHatch aHatch(aColor, (XHatchStyle)nStyle, nDistance, nAngle);
+//BFS01         pEntry = new XHatchEntry (aHatch, aName);
+//BFS01         Insert (nIndex, pEntry);
+//BFS01     }
+//BFS01 }
+//BFS01 return( rIn );
+//BFS01}
 
 // -----------------
 // class XHatchList
@@ -336,7 +336,7 @@ XHatchEntry* XHatchList::Get(long nIndex) const
 
 BOOL XHatchList::Load()
 {
-#ifndef SVX_LIGHT
+//BFS01#ifndef SVX_LIGHT
     if( bListDirty )
     {
         bListDirty = FALSE;
@@ -354,47 +354,47 @@ BOOL XHatchList::Load()
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtHatch, 3 ) );
 
-        // check if file exists, SfxMedium shows an errorbox else
-        {
-            com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
-            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
+//BFS01     // check if file exists, SfxMedium shows an errorbox else
+//BFS01     {
+//BFS01         com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
+//BFS01         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
+//BFS01
+//BFS01         sal_Bool bOk = pIStm && ( pIStm->GetError() == 0);
+//BFS01
+//BFS01         if( pIStm )
+//BFS01             delete pIStm;
+//BFS01
+//BFS01         if( !bOk )
+//BFS01             return sal_False;
+//BFS01     }
 
-            sal_Bool bOk = pIStm && ( pIStm->GetError() == 0);
-
-            if( pIStm )
-                delete pIStm;
-
-            if( !bOk )
-                return sal_False;
-        }
-
-        {
-            SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, TRUE );
-            SvStream* pStream = aMedium.GetInStream();
-            if( !pStream )
-                return( FALSE );
-
-            char aCheck[6];
-            pStream->Read( aCheck, 6 );
-
-            // Handelt es sich um die gew"unschte Tabelle?
-            if( memcmp( aCheck, aChckHatch, sizeof( aChckHatch ) ) == 0 ||
-                memcmp( aCheck, aChckHatch0, sizeof( aChckHatch0 ) ) == 0 )
-            {
-                ImpRead( *pStream );
-                return( pStream->GetError() == SVSTREAM_OK );
-            }
-            else if( memcmp( aCheck, aChckXML, sizeof( aChckXML ) ) != 0 )
-            {
-                return FALSE;
-            }
-
-        }
+//BFS01     {
+//BFS01         SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, TRUE );
+//BFS01         SvStream* pStream = aMedium.GetInStream();
+//BFS01         if( !pStream )
+//BFS01             return( FALSE );
+//BFS01
+//BFS01         char aCheck[6];
+//BFS01         pStream->Read( aCheck, 6 );
+//BFS01
+//BFS01         // Handelt es sich um die gew"unschte Tabelle?
+//BFS01         if( memcmp( aCheck, aChckHatch, sizeof( aChckHatch ) ) == 0 ||
+//BFS01             memcmp( aCheck, aChckHatch0, sizeof( aChckHatch0 ) ) == 0 )
+//BFS01         {
+//BFS01             ImpRead( *pStream );
+//BFS01             return( pStream->GetError() == SVSTREAM_OK );
+//BFS01         }
+//BFS01         else if( memcmp( aCheck, aChckXML, sizeof( aChckXML ) ) != 0 )
+//BFS01         {
+//BFS01             return FALSE;
+//BFS01         }
+//BFS01
+//BFS01     }
 
         uno::Reference< container::XNameContainer > xTable( SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-#endif
+//BFS01#endif
     return( FALSE );
 }
 
@@ -402,7 +402,7 @@ BOOL XHatchList::Load()
 
 BOOL XHatchList::Save()
 {
-#ifndef SVX_LIGHT
+//BFS01#ifndef SVX_LIGHT
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
@@ -437,9 +437,9 @@ BOOL XHatchList::Save()
 
     return( aMedium.GetError() == 0 );
 */
-#else
-    return FALSE;
-#endif
+//BFS01#else
+//BFS01 return FALSE;
+//BFS01#endif
 }
 
 /************************************************************************/
@@ -551,150 +551,149 @@ Bitmap* XHatchList::CreateBitmapForUI( long nIndex, BOOL bDelete )
 
 /************************************************************************/
 
-SvStream& XHatchList::ImpStore( SvStream& rOut )
-{
-    // Schreiben
-    rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
-
-    // Version statt Anzahl, um auch alte Tabellen zu lesen
-    rOut << (long) -1;
-
-    // Anzahl der Eintraege
-    rOut << (long)Count();
-
-    // die Eintraege
-    XHatchEntry* pEntry = NULL;
-    for (long nIndex = 0; nIndex < Count(); nIndex++)
-    {
-        // Versionsverwaltung: Version 0
-        XIOCompat aIOC( rOut, STREAM_WRITE, 0 );
-
-        pEntry = Get(nIndex);
-
-        // UNICODE: rOut << pEntry->GetName();
-        rOut.WriteByteString(pEntry->GetName());
-
-        XHatch& rHatch = pEntry->GetHatch();
-        rOut << (long)rHatch.GetHatchStyle();
-        USHORT nCol = rHatch.GetColor().GetRed();
-        nCol = nCol << 8;
-        rOut << nCol;
-
-        nCol = rHatch.GetColor().GetGreen();
-        nCol = nCol << 8;
-        rOut << nCol;
-
-        nCol = rHatch.GetColor().GetBlue();
-        nCol = nCol << 8;
-        rOut << nCol;
-        rOut << rHatch.GetDistance();
-        rOut << rHatch.GetAngle();
-    }
-
-    return rOut;
-}
-
-/************************************************************************/
-
-XubString& XHatchList::ConvertName( XubString& rStrName )
-{
-    BOOL bFound = FALSE;
-
-    for( USHORT i=0; i<(RID_SVXSTR_HATCH_DEF_END-RID_SVXSTR_HATCH_DEF_START+1) && !bFound; i++ )
-    {
-        XubString aStrDefName = SVX_RESSTR( RID_SVXSTR_HATCH_DEF_START + i );
-        if( rStrName.Search( aStrDefName ) == 0 )
-        {
-            rStrName.Replace( 0, aStrDefName.Len(), SVX_RESSTR( RID_SVXSTR_HATCH_START + i ) );
-            bFound = TRUE;
-        }
-    }
-
-    return rStrName;
-}
+//BFS01SvStream& XHatchList::ImpStore( SvStream& rOut )
+//BFS01{
+//BFS01 // Schreiben
+//BFS01 rOut.SetStreamCharSet( gsl_getSystemTextEncoding() );
+//BFS01
+//BFS01 // Version statt Anzahl, um auch alte Tabellen zu lesen
+//BFS01 rOut << (long) -1;
+//BFS01
+//BFS01 // Anzahl der Eintraege
+//BFS01 rOut << (long)Count();
+//BFS01
+//BFS01 // die Eintraege
+//BFS01 XHatchEntry* pEntry = NULL;
+//BFS01 for (long nIndex = 0; nIndex < Count(); nIndex++)
+//BFS01 {
+//BFS01     // Versionsverwaltung: Version 0
+//BFS01     XIOCompat aIOC( rOut, STREAM_WRITE, 0 );
+//BFS01
+//BFS01     pEntry = Get(nIndex);
+//BFS01
+//BFS01     // UNICODE: rOut << pEntry->GetName();
+//BFS01     rOut.WriteByteString(pEntry->GetName());
+//BFS01
+//BFS01     XHatch& rHatch = pEntry->GetHatch();
+//BFS01     rOut << (long)rHatch.GetHatchStyle();
+//BFS01     USHORT nCol = rHatch.GetColor().GetRed();
+//BFS01     nCol = nCol << 8;
+//BFS01     rOut << nCol;
+//BFS01
+//BFS01     nCol = rHatch.GetColor().GetGreen();
+//BFS01     nCol = nCol << 8;
+//BFS01     rOut << nCol;
+//BFS01
+//BFS01     nCol = rHatch.GetColor().GetBlue();
+//BFS01     nCol = nCol << 8;
+//BFS01     rOut << nCol;
+//BFS01     rOut << rHatch.GetDistance();
+//BFS01     rOut << rHatch.GetAngle();
+//BFS01 }
+//BFS01
+//BFS01 return rOut;
+//BFS01}
 
 /************************************************************************/
 
-SvStream& XHatchList::ImpRead( SvStream& rIn )
-{
-    // Lesen
-    rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
+//BFS01XubString& XHatchList::ConvertName( XubString& rStrName )
+//BFS01{
+//BFS01 BOOL bFound = FALSE;
+//BFS01
+//BFS01 for( USHORT i=0; i<(RID_SVXSTR_HATCH_DEF_END-RID_SVXSTR_HATCH_DEF_START+1) && !bFound; i++ )
+//BFS01 {
+//BFS01     XubString aStrDefName = SVX_RESSTR( RID_SVXSTR_HATCH_DEF_START + i );
+//BFS01     if( rStrName.Search( aStrDefName ) == 0 )
+//BFS01     {
+//BFS01         rStrName.Replace( 0, aStrDefName.Len(), SVX_RESSTR( RID_SVXSTR_HATCH_START + i ) );
+//BFS01         bFound = TRUE;
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 return rStrName;
+//BFS01}
 
-    delete pBmpList;
-    pBmpList = new List( 16, 16 );
+/************************************************************************/
 
-    XHatchEntry* pEntry = NULL;
-    long        nCount;
-    XubString       aName;
+//BFS01SvStream& XHatchList::ImpRead( SvStream& rIn )
+//BFS01{
+//BFS01 // Lesen
+//BFS01 rIn.SetStreamCharSet( RTL_TEXTENCODING_IBM_850 );
+//BFS01
+//BFS01 delete pBmpList;
+//BFS01 pBmpList = new List( 16, 16 );
+//BFS01
+//BFS01 XHatchEntry* pEntry = NULL;
+//BFS01 long        nCount;
+//BFS01 XubString       aName;
+//BFS01
+//BFS01 long        nStyle;
+//BFS01 USHORT      nRed;
+//BFS01 USHORT      nGreen;
+//BFS01 USHORT      nBlue;
+//BFS01 long        nDistance;
+//BFS01 long        nAngle;
+//BFS01 Color       aColor;
+//BFS01
+//BFS01 rIn >> nCount;
+//BFS01
+//BFS01 if( nCount >= 0 ) // Alte Tabellen (bis 3.00)
+//BFS01 {
+//BFS01     for( long nIndex = 0; nIndex < nCount; nIndex++ )
+//BFS01     {
+//BFS01         // UNICODE:rIn >> aName;
+//BFS01         rIn.ReadByteString(aName);
+//BFS01
+//BFS01         aName = ConvertName( aName );
+//BFS01         rIn >> nStyle;
+//BFS01         rIn >> nRed;
+//BFS01         rIn >> nGreen;
+//BFS01         rIn >> nBlue;
+//BFS01         rIn >> nDistance;
+//BFS01         rIn >> nAngle;
+//BFS01
+//BFS01         aColor = Color( (BYTE) ( nRed   >> 8 ),
+//BFS01                         (BYTE) ( nGreen >> 8 ),
+//BFS01                         (BYTE) ( nBlue  >> 8 ) );
+//BFS01         XHatch aHatch(aColor, (XHatchStyle)nStyle, nDistance, nAngle);
+//BFS01         pEntry = new XHatchEntry (aHatch, aName);
+//BFS01         Insert (pEntry, nIndex);
+//BFS01     }
+//BFS01 }
+//BFS01 else // ab 3.00a
+//BFS01 {
+//BFS01     rIn >> nCount;
+//BFS01
+//BFS01     for( long nIndex = 0; nIndex < nCount; nIndex++ )
+//BFS01     {
+//BFS01         // Versionsverwaltung
+//BFS01         XIOCompat aIOC( rIn, STREAM_READ );
+//BFS01
+//BFS01         // UNICODE: rIn >> aName;
+//BFS01         rIn.ReadByteString(aName);
+//BFS01
+//BFS01         aName = ConvertName( aName );
+//BFS01         rIn >> nStyle;
+//BFS01         rIn >> nRed;
+//BFS01         rIn >> nGreen;
+//BFS01         rIn >> nBlue;
+//BFS01         rIn >> nDistance;
+//BFS01         rIn >> nAngle;
+//BFS01
+//BFS01         if (aIOC.GetVersion() > 0)
+//BFS01         {
+//BFS01             // lesen neuer Daten ...
+//BFS01         }
+//BFS01
+//BFS01         aColor = Color( (BYTE) ( nRed   >> 8 ),
+//BFS01                         (BYTE) ( nGreen >> 8 ),
+//BFS01                         (BYTE) ( nBlue  >> 8 ) );
+//BFS01         XHatch aHatch(aColor, (XHatchStyle)nStyle, nDistance, nAngle);
+//BFS01         pEntry = new XHatchEntry (aHatch, aName);
+//BFS01         Insert (pEntry, nIndex);
+//BFS01     }
+//BFS01 }
+//BFS01 return( rIn );
+//BFS01}
 
-    long        nStyle;
-    USHORT      nRed;
-    USHORT      nGreen;
-    USHORT      nBlue;
-    long        nDistance;
-    long        nAngle;
-    Color       aColor;
-
-    rIn >> nCount;
-
-    if( nCount >= 0 ) // Alte Tabellen (bis 3.00)
-    {
-        for( long nIndex = 0; nIndex < nCount; nIndex++ )
-        {
-            // UNICODE:rIn >> aName;
-            rIn.ReadByteString(aName);
-
-            aName = ConvertName( aName );
-            rIn >> nStyle;
-            rIn >> nRed;
-            rIn >> nGreen;
-            rIn >> nBlue;
-            rIn >> nDistance;
-            rIn >> nAngle;
-
-            aColor = Color( (BYTE) ( nRed   >> 8 ),
-                            (BYTE) ( nGreen >> 8 ),
-                            (BYTE) ( nBlue  >> 8 ) );
-            XHatch aHatch(aColor, (XHatchStyle)nStyle, nDistance, nAngle);
-            pEntry = new XHatchEntry (aHatch, aName);
-            Insert (pEntry, nIndex);
-        }
-    }
-    else // ab 3.00a
-    {
-        rIn >> nCount;
-
-        for( long nIndex = 0; nIndex < nCount; nIndex++ )
-        {
-            // Versionsverwaltung
-            XIOCompat aIOC( rIn, STREAM_READ );
-
-            // UNICODE: rIn >> aName;
-            rIn.ReadByteString(aName);
-
-            aName = ConvertName( aName );
-            rIn >> nStyle;
-            rIn >> nRed;
-            rIn >> nGreen;
-            rIn >> nBlue;
-            rIn >> nDistance;
-            rIn >> nAngle;
-
-            if (aIOC.GetVersion() > 0)
-            {
-                // lesen neuer Daten ...
-            }
-
-            aColor = Color( (BYTE) ( nRed   >> 8 ),
-                            (BYTE) ( nGreen >> 8 ),
-                            (BYTE) ( nBlue  >> 8 ) );
-            XHatch aHatch(aColor, (XHatchStyle)nStyle, nDistance, nAngle);
-            pEntry = new XHatchEntry (aHatch, aName);
-            Insert (pEntry, nIndex);
-        }
-    }
-    return( rIn );
-}
-
-
-
+// eof
