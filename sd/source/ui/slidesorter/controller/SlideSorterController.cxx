@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:21:12 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,6 +548,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
         }
         else if (pWindow == rShell.GetActiveWindow())
         {
+            /*
             switch (pEvent->GetId())
             {
                 case VCLEVENT_WINDOW_GETFOCUS:
@@ -558,6 +559,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                     GetFocusManager().HideFocus();
                     break;
             }
+            */
         }
         else
         {
