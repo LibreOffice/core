@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-05 11:20:44 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,6 +505,7 @@ XML_CONSTASCII_ACTION( sXML_double, "double" );
 XML_CONSTASCII_ACTION( sXML_double_sided, "double-sided" );
 XML_CONSTASCII_ACTION( sXML_draft, "draft");
 XML_CONSTASCII_ACTION( sXML_draw, "draw" );
+XML_CONSTASCII_ACTION( sXML_drawing, "drawing" );
 XML_CONSTASCII_ACTION( sXML_drawings, "drawings" );
 XML_CONSTASCII_ACTION( sXML_drawpool , "drawpool" );
 XML_CONSTASCII_ACTION( sXML_drop_cap, "drop-cap" );
@@ -527,7 +528,6 @@ XML_CONSTASCII_ACTION( sXML_end_angle, "end-angle" );
 XML_CONSTASCII_ACTION( sXML_end_cell_address, "end-cell-address" );
 XML_CONSTASCII_ACTION( sXML_end_color, "end-color" );
 XML_CONSTASCII_ACTION( sXML_end_intensity, "end-intensity" );
-XML_CONSTASCII_ACTION( sXML_end_transparency, "end-transparency" );
 XML_CONSTASCII_ACTION( sXML_end_x, "end-x" );
 XML_CONSTASCII_ACTION( sXML_end_y, "end-y" );
 XML_CONSTASCII_ACTION( sXML_endnote, "endnote" );
@@ -1087,6 +1087,7 @@ XML_CONSTASCII_ACTION( sXML_posture_oblique, "oblique" );
 XML_CONSTASCII_ACTION( sXML_power, "power" );
 XML_CONSTASCII_ACTION( sXML_precision_as_shown, "precision-as-shown" );
 XML_CONSTASCII_ACTION( sXML_prefix, "prefix" );
+XML_CONSTASCII_ACTION( sXML_presentation, "presentation" );
 XML_CONSTASCII_ACTION( sXML_presentation_chart , "chart" );
 XML_CONSTASCII_ACTION( sXML_presentation_graphic , "graphic" );
 XML_CONSTASCII_ACTION( sXML_presentation_notes , "notes" );
@@ -1291,7 +1292,6 @@ XML_CONSTASCII_ACTION( sXML_start, "start" );
 XML_CONSTASCII_ACTION( sXML_start_color, "start-color" );
 XML_CONSTASCII_ACTION( sXML_start_intensity, "start-intensity" );
 XML_CONSTASCII_ACTION( sXML_start_numbering_at, "start-numbering-at" );
-XML_CONSTASCII_ACTION( sXML_start_transparency, "start-transparency" );
 XML_CONSTASCII_ACTION( sXML_start_value, "start-value" );
 XML_CONSTASCII_ACTION( sXML_statistics, "statistics" );
 XML_CONSTASCII_ACTION( sXML_status, "status" );
