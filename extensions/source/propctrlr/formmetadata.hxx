@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:26:29 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,7 @@ namespace pcr
         sal_Int32               getPropertyHelpId(sal_Int32 _nId) const;
         sal_Int16               getPropertyPos(sal_Int32 _nId) const;
         sal_uInt32              getPropertyUIFlags(sal_Int32 _nId) const;
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                                getPropertyEnumRepresentations(sal_Int32 _nId) const;
+        virtual ::std::vector< String > getPropertyEnumRepresentations(sal_Int32 _nId) const;
 
     protected:
         static const OPropertyInfoImpl* getPropertyInfo();
@@ -138,6 +137,11 @@ namespace pcr
 #define PROP_FLAG_DIALOG_VISIBLE    0x00000002  // the property is visible when inspecting a dialog object
 #define PROP_FLAG_VIRTUAL_PROP      0x00000004  // the property is a "virtual" property
 #define PROP_FLAG_DATA_PROPERTY     0x00000008  // the property is to appear on the "Data" page
+#define PROP_FLAG_ACTUATING         0x00000010  // the property is "actuating" - when it changes,
+                                                //  dependent properties (their UI, more concrete) need
+                                                //  also to be updated
+#define PROP_FLAG_ENUM              0x00000020  // the property is some kind of enum property, i.e. its
+                                                // value is chose from a fixed list of possible values
 
     //========================================================================
     //= property ids (for all browseable properties)
@@ -159,7 +163,7 @@ namespace pcr
     #define PROPERTY_ID_DATASOURCE           14
     #define PROPERTY_ID_COMMAND              15
     #define PROPERTY_ID_COMMANDTYPE          16
-    #define PROPERTY_ID_FILTER_CRITERIA      17
+    #define PROPERTY_ID_FILTER               17
     #define PROPERTY_ID_SORT                 18
     #define PROPERTY_ID_INSERTONLY           19
     #define PROPERTY_ID_ALLOWADDITIONS       20
@@ -210,7 +214,7 @@ namespace pcr
     #define PROPERTY_ID_DROPDOWN             67
     #define PROPERTY_ID_AUTOCOMPLETE         68
     #define PROPERTY_ID_LINECOUNT            69
-    #define PROPERTY_ID_MULTI                70
+    #define PROPERTY_ID_WORDBREAK            70
     #define PROPERTY_ID_MULTILINE            71
     #define PROPERTY_ID_MULTISELECTION       72
         // free
@@ -274,6 +278,7 @@ namespace pcr
     #define PROPERTY_ID_DEFAULT_SPINVALUE    131
     #define PROPERTY_ID_SPININCREMENT        132
     #define PROPERTY_ID_REPEAT               133
+    #define PROPERTY_ID_SHOW_SCROLLBARS      134
 
 //............................................................................
 } // namespace pcr
