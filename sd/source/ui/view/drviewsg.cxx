@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-07 10:34:21 $
+ *  last change: $Author: ka $ $Date: 2002-08-09 09:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ void SdDrawViewShell::ExecIMap( SfxRequest& rReq )
                     pSdrObj->InsertUserData( new SdIMapInfo( rImageMap ) );
                 else
                     pIMapInfo->SetImageMap( rImageMap );
+
+                pDoc->SetChanged( sal_True );
             }
         }
     }
