@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 20:38:31 $
+ *  last change: $Author: os $ $Date: 2002-03-27 08:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ Window RID_SCDLG_NAVIGATOR
         Border = FALSE ;
         ItemImageList = ImageList
         {
-            ImageBitmap = Bitmap { File = "navipi.bmp" ; };
+            ImageBitmap = Bitmap { File = "na_vipi.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
             IdList =  // 3
             {
@@ -778,7 +778,7 @@ Window RID_SCDLG_NAVIGATOR
 };
 ImageList RID_IMAGELIST_NAVCONT
 {
-    ImageBitmap = Bitmap { File = "ncont.bmp" ; };
+    ImageBitmap = Bitmap { File = "nc_ont.bmp" ; };
     MaskColor = STD_MASKCOLOR ;
     IdList =
     {
