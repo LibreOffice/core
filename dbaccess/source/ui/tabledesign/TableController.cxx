@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:51:19 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 09:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,6 @@ void OTableController::disposing()
 {
     OGenericUnoController::disposing();
 
-    delete m_pView;
     m_pView     = NULL;
 
     stopConnectionListening(m_xConnection);
