@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue_Test.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:55 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 11:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ public class JobQueue_Test {
             // send a request to ourself
 
             ThreadPool.addThread(_context);
-            Job job = new Job(new MyReceiver(null),      // receiver
+            Job job = new Job(this, new MyReceiver(null),      // receiver
                               new MyMessage(true,
                                             MyInterface.class,
                                             UnoRuntime.generateOid(this),
@@ -224,7 +224,7 @@ public class JobQueue_Test {
                                                   "asyncCall",
                                                   new Object[]{new Integer(myImpl.getNext())});
 
-            Job job = new Job(myReceiver, myMessage);
+            Job job = new Job(myImpl, myReceiver, myMessage);
 
             jobQueue.putJob(job, context);
         }
@@ -244,7 +244,7 @@ public class JobQueue_Test {
                                                   new Object[]{new Integer(myImpl.getNext())});
 
 
-            Job job_do = new Job(myReceiver, myMessage);
+            Job job_do = new Job(myImpl, myReceiver, myMessage);
 
             job_do._disposeId = context;
             if(thread == null) {
@@ -266,7 +266,7 @@ public class JobQueue_Test {
                                             myImpl,
                                             null,
                                             null);
-                Job job_return = new Job(myReceiver, myMessage);
+                Job job_return = new Job(myImpl, myReceiver, myMessage);
 
                 jobQueue.putJob(job_return, context);
                 jobQueue.enter(context);
