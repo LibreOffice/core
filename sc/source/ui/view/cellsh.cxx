@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:40:49 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 //#include <sfx2/objitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/langitem.hxx>
-#include <vcl/system.hxx>
 
 #include "cellsh.hxx"
 #include "sc.hrc"
