@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemaparser.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:29 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,16 +144,20 @@ void SAL_CALL SchemaParser::startElement( const OUString& aName, const uno::Refe
 
     case ElementType::import:
         this->handleImport(aInfo,xAttribs);
+        this->startSkipping( aName, xAttribs );
         break;
 
     case ElementType::instance:
         this->handleInstance(aInfo,xAttribs);
+        this->startSkipping( aName, xAttribs );
         break;
 
     case ElementType::item_type:
         this->handleItemType(aInfo,xAttribs);
+        this->startSkipping( aName, xAttribs );
         break;
 
+    case ElementType::layer:
     case ElementType::node:
         raiseParseException( "Schema XML parser - Invalid data: found unspecified 'node' element.\n");
         // fall thru
@@ -267,8 +271,6 @@ void SchemaParser::handleImport( ElementInfo const & aInfo, const uno::Reference
 
     else
         raiseParseException("Schema XML parser - Invalid data: Missing component attribute for import directive.\n");
-
-    this->startSkipping(aInfo.name,xAttribs);
 }
 // -----------------------------------------------------------------------------
 
@@ -280,8 +282,6 @@ void SchemaParser::handleInstance( ElementInfo const & aInfo, const uno::Referen
 
     else
         raiseParseException("Schema XML parser - Invalid data: Missing type information for instantiation directive.\n");
-
-    this->startSkipping(aInfo.name,xAttribs);
 }
 // -----------------------------------------------------------------------------
 
@@ -293,18 +293,16 @@ void SchemaParser::handleItemType( ElementInfo const & aInfo, const uno::Referen
 
     else
         raiseParseException("Schema XML parser - Invalid data: Missing type information for instantiation directive.\n");
-
-    this->startSkipping(aInfo.name,xAttribs);
 }
 // -----------------------------------------------------------------------------
 
 void SchemaParser::startNode( ElementInfo const & aInfo, const uno::Reference< sax::XAttributeList >& xAttribs )
 {
+    bool bStartTemplate = ( !isInNode() && m_selected == selectTemplates );
+
     BasicParser::startNode(aInfo,xAttribs);
 
     OSL_ASSERT(aInfo.type == ElementType::set || aInfo.type == ElementType::group);
-
-    bool bStartTemplate = ( !isInNode() && m_selected == selectTemplates );
 
     using backenduno::TemplateIdentifier;
 
@@ -338,7 +336,7 @@ void SchemaParser::endNode()
 
     bool bEndedTemplate = ( !isInNode() && m_selected == selectTemplates );
 
-    if (!bEndedTemplate)
+    if (bEndedTemplate)
         m_xHandler->endTemplate();
 
     else

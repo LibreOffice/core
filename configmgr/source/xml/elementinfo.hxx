@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementinfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-17 11:57:01 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ namespace configmgr
                 unknown,
 
                 schema,
+                layer,
 
                 component,
                 templates,

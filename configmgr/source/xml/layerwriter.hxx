@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerwriter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:42:24 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ namespace configmgr
                     throw (backenduno::MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
         private:
+            bool isInElement() const;
             void checkInElement(bool bInElement, bool bInProperty = false);
 
             void startNode();

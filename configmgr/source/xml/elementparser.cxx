@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:37:41 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,9 @@ ElementType::Enum ElementParser::getNodeType(OUString const& _sElementName, SaxA
     else if (_sElementName.equals(TAG_IMPORT))
         eResult = ElementType::import;
 
+    else if (_sElementName.equals(TAG_LAYER))
+        eResult = ElementType::layer;
+
     else if (_sElementName.equals(TAG_SCHEMA))
         eResult = ElementType::schema;
 
@@ -199,10 +202,11 @@ OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList 
         bPackage = this->maybeGetAttribute(_xAttribs,ATTR_PACKAGE,aPackage);
         break;
 
-    case ElementType::node:
+    case ElementType::layer:
         bPackage = this->maybeGetAttribute(_xAttribs,ATTR_CONTEXT,aPackage);
         break;
 
+    case ElementType::node:
     case ElementType::set:
     case ElementType::group:
     case ElementType::instance:
@@ -231,6 +235,8 @@ OUString ElementParser::getName(OUString const& _sElementName, SaxAttributeList 
         if (!bNameFound) return _sElementName;
         break;
     }
+
+    OSL_ENSURE(aName.getLength(),"Found empty name tag on element");
 
     if (bPackage)
     {

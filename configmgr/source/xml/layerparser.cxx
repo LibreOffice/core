@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:37:00 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ void SAL_CALL LayerParser::startElement( const OUString& aName, const uno::Refer
     case ElementType::group: case ElementType::set:
         OSL_ENSURE( false, "Layer XML parser - Unexpected: found group/set element (should be 'node')\n");
         // fall thru
+    case ElementType::layer:
     case ElementType::node:
         this->startNode(aInfo,xAttribs);
         OSL_ASSERT( this->isInNode() && !this->isInProperty() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstrings.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-17 08:55:17 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ namespace configmgr
 #define OOR_PREFIX_ "oor:"
 // ... but not into (most) tag names
 #define OOR_TAG_PREFIX_
+// ... but into root tag names
+#define OOR_ROOTTAG_PREFIX_ OOR_PREFIX_
 //----------------------------------------------------------------------------
     // extern declaration for strings used in the XML format
         // namespace prefixes
@@ -84,7 +86,8 @@ namespace configmgr
         IMPLEMENT_CONSTASCII_USTRING(NS_URI_XS, "http://www.w3.org/2001/XMLSchema");
 
         // tag names
-        IMPLEMENT_CONSTASCII_USTRING(TAG_SCHEMA,    OOR_PREFIX_"component-schema");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_SCHEMA,    OOR_ROOTTAG_PREFIX_"component-schema");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_LAYER,     OOR_ROOTTAG_PREFIX_"node");
 
         IMPLEMENT_CONSTASCII_USTRING(TAG_COMPONENT, OOR_TAG_PREFIX_"component");
         IMPLEMENT_CONSTASCII_USTRING(TAG_TEMPLATES, OOR_TAG_PREFIX_"templates");
@@ -145,9 +148,9 @@ namespace configmgr
         IMPLEMENT_CONSTASCII_USTRING(VALUETYPE_LIST_SUFFIX, "-list");
 
         // States for update actions
-        IMPLEMENT_CONSTASCII_USTRING(OPERATION_MODIFY,      OOR_PREFIX_"modify");
-        IMPLEMENT_CONSTASCII_USTRING(OPERATION_REPLACE,     OOR_PREFIX_"replace");
-        IMPLEMENT_CONSTASCII_USTRING(OPERATION_REMOVE,      OOR_PREFIX_"remove");
+        IMPLEMENT_CONSTASCII_USTRING(OPERATION_MODIFY,      "modify");
+        IMPLEMENT_CONSTASCII_USTRING(OPERATION_REPLACE,     "replace");
+        IMPLEMENT_CONSTASCII_USTRING(OPERATION_REMOVE,      "remove");
 
         // the default separator for strings
         IMPLEMENT_CONSTASCII_USTRING(SEPARATOR_WHITESPACE,  " ");

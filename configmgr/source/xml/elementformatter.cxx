@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:42:24 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,7 @@ OUString ElementFormatter::getElementTag() const
     switch (m_aElementType)
     {
     case ElementType::schema:    return TAG_SCHEMA;
+    case ElementType::layer:     return TAG_LAYER;
 
     case ElementType::component: return TAG_COMPONENT;
     case ElementType::templates: return TAG_TEMPLATES;

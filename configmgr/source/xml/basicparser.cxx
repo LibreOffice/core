@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,8 @@ BasicParser::BasicParser(ServiceFactory const & _xSvcFactory)
 {
     if (!m_xTypeConverter.is())
         throw uno::RuntimeException();
+
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
 }
 // -----------------------------------------------------------------------------
 
@@ -162,6 +164,29 @@ BasicParser::~BasicParser()
 }
 // -----------------------------------------------------------------------------
 
+#ifdef _DEBUG
+void BasicParser::dbgUpdateLocation()
+{
+#ifndef DBG_UTIL
+    OUString  dbgPublicId,    dbgSystemId;
+    sal_Int32 dbgLineNo,      dbgColumnNo;
+#endif // DBG_UTIL
+
+    if (m_xLocator.is())
+    {
+        dbgPublicId   = m_xLocator->getPublicId();
+        dbgSystemId   = m_xLocator->getSystemId();
+        dbgLineNo     = m_xLocator->getLineNumber();
+        dbgColumnNo   = m_xLocator->getColumnNumber();
+    }
+    else
+    {
+        dbgPublicId = dbgSystemId = OUString::createFromAscii("<<<unknown>>>");
+        dbgLineNo = dbgColumnNo = -1;
+    }
+}
+#endif
+// -----------------------------------------------------------------------------
 void SAL_CALL BasicParser::startDocument(  )
         throw (sax::SAXException, uno::RuntimeException)
 {
@@ -175,11 +200,15 @@ void SAL_CALL BasicParser::startDocument(  )
     while (!m_aNodes.empty()) m_aNodes.pop();
 
     m_bEmpty = true;
+
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
 }
 // -----------------------------------------------------------------------------
 
 void SAL_CALL BasicParser::endDocument(  ) throw (sax::SAXException, uno::RuntimeException)
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     if (!m_aNodes.empty() || isSkipping() || isInValueData())
         raiseParseException( "Configuration XML Parser - Invalid XML: Unexpected end of document" );
 
@@ -190,6 +219,8 @@ void SAL_CALL BasicParser::endDocument(  ) throw (sax::SAXException, uno::Runtim
 void SAL_CALL BasicParser::characters( const OUString& aChars )
         throw (sax::SAXException, uno::RuntimeException)
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     if (isInValueData())
     {
         m_pValueData->content += aChars;
@@ -204,6 +235,7 @@ void SAL_CALL BasicParser::characters( const OUString& aChars )
 void SAL_CALL BasicParser::ignorableWhitespace( const OUString& aWhitespaces )
         throw (sax::SAXException, uno::RuntimeException)
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
     if (isInValueData())
     {
         OSL_ENSURE(false, "Configuration XML: Unexpected ignorable (!) whitespace instruction in value data");
@@ -220,6 +252,7 @@ void SAL_CALL BasicParser::ignorableWhitespace( const OUString& aWhitespaces )
 void SAL_CALL BasicParser::processingInstruction( const OUString& aTarget, const OUString& aData )
         throw (sax::SAXException, uno::RuntimeException)
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
     OSL_ENSURE(false, "Unexpected processing instruction in Configuration XML");
 }
 // -----------------------------------------------------------------------------
@@ -228,11 +261,14 @@ void SAL_CALL BasicParser::setDocumentLocator( const uno::Reference< sax::XLocat
         throw (sax::SAXException, uno::RuntimeException)
 {
     m_xLocator = xLocator;
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
 }
 // -----------------------------------------------------------------------------
 
 void BasicParser::startNode( ElementInfo const & aInfo, const uno::Reference< sax::XAttributeList >& xAttribs )
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     OSL_ENSURE( !isSkipping(), "While skipping, call startSkipping() instead of startNode()");
     OSL_ENSURE( aInfo.type != ElementType::property, "For properties, call startProperty() instead of startNode()");
 
@@ -248,6 +284,8 @@ void BasicParser::startNode( ElementInfo const & aInfo, const uno::Reference< sa
 
 void BasicParser::endNode( )
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     OSL_ENSURE( !isSkipping(), "While skipping, honor wasSkipping() instead of calling endNode()");
     OSL_ENSURE( !isInProperty(), "For properties, call endProperty() instead of endNode()" );
 
@@ -287,6 +325,8 @@ ElementInfo const & BasicParser::getActiveNodeInfo( )
 
 void BasicParser::startProperty( ElementInfo const & aInfo, const uno::Reference< sax::XAttributeList >& xAttribs )
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     OSL_ENSURE( !isSkipping(), "While skipping, call startSkipping() instead of startProperty()");
     OSL_ENSURE( aInfo.type == ElementType::property, "For non-property nodes, call startNode() instead of startProperty()");
 
@@ -306,6 +346,8 @@ void BasicParser::startProperty( ElementInfo const & aInfo, const uno::Reference
 
 void BasicParser::endProperty( )
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     OSL_ENSURE( !isSkipping(), "While skipping, honor wasSkipping() instead of calling endProperty()");
     OSL_ENSURE( isInProperty(), "For non-property nodes, call endNode() instead of endProperty()" );
 
@@ -341,6 +383,8 @@ bool BasicParser::isInUnhandledProperty()
 
 void BasicParser::startValueData(const uno::Reference< sax::XAttributeList >& xAttribs)
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     if (!isInProperty())
         raiseParseException( "Configuration XML Parser - Invalid Data: A value may occur only within a property" );
 
@@ -360,7 +404,7 @@ void BasicParser::startValueData(const uno::Reference< sax::XAttributeList >& xA
                 !m_pValueData->isTypeSet() ||
                 m_pValueData->isList(),
                 "Warning: Spurious oor:separator on value that is not a list");
-    OSL_ENSURE( !m_pValueData->hasSeparator() || !
+    OSL_ENSURE( !m_pValueData->hasSeparator() ||
                 !m_pValueData->isNull(),
                 "Warning: Spurious oor:separator on value that is not a list");
 
@@ -394,6 +438,8 @@ OUString BasicParser::getValueDataLocale()
 
 uno::Any BasicParser::getCurrentValue()
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     OSL_ASSERT( isInValueData() );
 
     uno::Any aResult;
@@ -421,6 +467,8 @@ uno::Any BasicParser::getCurrentValue()
 /// end collecting data for a value
 void BasicParser::endValueData()
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     OSL_ASSERT( isInValueData() );
 
     delete m_pValueData, m_pValueData = NULL;
@@ -433,6 +481,8 @@ void BasicParser::endValueData()
 
 void BasicParser::startSkipping( const OUString& aName, const uno::Reference< sax::XAttributeList >& xAttribs )
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     m_aNodes.push( ElementInfo(aName) );
     ++m_nSkipLevels;
 }
@@ -440,6 +490,8 @@ void BasicParser::startSkipping( const OUString& aName, const uno::Reference< sa
 
 bool BasicParser::wasSkipping( const OUString& aName )
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     if (m_nSkipLevels == 0) return false;
 
     if (m_aNodes.empty())
@@ -464,6 +516,8 @@ bool BasicParser::isSkipping( )
 void BasicParser::raiseParseException( uno::Any const & _aTargetException, sal_Char const * _pMsg )
         CFG_THROW2 (sax::SAXException, uno::RuntimeException)
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     if (_pMsg == 0) _pMsg = "Configuration XML Parser: Invalid Data: ";
 
     OUString sMessage = OUString::createFromAscii(_pMsg);
@@ -479,6 +533,8 @@ void BasicParser::raiseParseException( uno::Any const & _aTargetException, sal_C
 void BasicParser::raiseParseException( sal_Char const * _pMsg )
         CFG_THROW2 (sax::SAXException, uno::RuntimeException)
 {
+    OSL_DEBUG_ONLY( dbgUpdateLocation() );
+
     if (_pMsg == 0) _pMsg = "Configuration XML Parser: Invalid XML";
 
     OUString const sMessage = OUString::createFromAscii(_pMsg);

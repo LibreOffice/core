@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerwriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:42:24 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ void SAL_CALL LayerWriter::endLayer(  )
 void SAL_CALL LayerWriter::overrideNode( const OUString& aName, sal_Int16 aAttributes )
         throw (backenduno::MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ElementInfo aInfo(aName, ElementType::node);
+    ElementInfo aInfo(aName, this->isInElement() ? ElementType::node : ElementType::layer);
     aInfo.flags = aAttributes;
     aInfo.op = Operation::modify;
 
@@ -304,9 +304,15 @@ void LayerWriter::raiseIllegalTypeException(sal_Char const * pMsg)
 }
 // -----------------------------------------------------------------------------
 
+bool LayerWriter::isInElement() const
+{
+    return m_aTagStack.empty();
+}
+// -----------------------------------------------------------------------------
+
 void LayerWriter::checkInElement(bool bInElement, bool bInProperty)
 {
-    if (bInElement != m_aTagStack.empty())
+    if (bInElement != this->isInElement())
     {
         sal_Char const * pMsg = bInElement ?
             "LayerWriter: Illegal Data: Operation requires a started node" :

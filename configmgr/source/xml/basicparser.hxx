@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,15 @@ namespace configmgr
             sal_uInt16                      m_nSkipLevels;
             bool                            m_bEmpty;
             bool                            m_bInProperty;
+
+#ifdef _DEBUG
+#ifdef DBG_UTIL
+            OUString  dbgPublicId,    dbgSystemId;
+            sal_Int32 dbgLineNo,      dbgColumnNo;
+#endif // DBG_UTIL
+            void dbgUpdateLocation();
+#endif // _DEBUG
+
         public:
             typedef uno::Reference< lang::XMultiServiceFactory > ServiceFactory;
 
