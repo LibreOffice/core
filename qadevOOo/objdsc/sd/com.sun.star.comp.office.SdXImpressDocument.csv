@@ -19,6 +19,8 @@
 "SdXImpressDocument";"com::sun::star::drawing::DrawingDocument";"VisibleArea"
 "SdXImpressDocument";"com::sun::star::drawing::DrawingDocument";"ForbiddenCharacters"
 "SdXImpressDocument";"com::sun::star::presentation::XCustomPresentationSupplier";"getCustomPresentations()"
+"SdXImpressDocument";"com::sun::star::view::XPrintJobBroadcaster#optional";"addPrintJobListener()"
+"SdXImpressDocument";"com::sun::star::view::XPrintJobBroadcaster#optional";"removePrintJobListener()"
 "SdXImpressDocument";"com::sun::star::document::XViewDataSupplier#optional";"getViewData()"
 "SdXImpressDocument";"com::sun::star::document::XViewDataSupplier#optional";"setViewData()"
 "SdXImpressDocument";"com::sun::star::frame::XStorable";"hasLocation()"
