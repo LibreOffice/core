@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:44:11 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,14 +924,14 @@ OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleDescription() throw( Run
 void ScAccessibleCsvRuler::ensureValidIndex( sal_Int32 nIndex ) const
         throw( IndexOutOfBoundsException )
 {
-    if( nIndex >= implGetTextLength() )
+    if( (nIndex < 0) || (nIndex >= implGetTextLength()) )
         throw IndexOutOfBoundsException();
 }
 
 void ScAccessibleCsvRuler::ensureValidIndexWithEnd( sal_Int32 nIndex ) const
         throw( IndexOutOfBoundsException )
 {
-    if( nIndex > implGetTextLength() )
+    if( (nIndex < 0) || (nIndex > implGetTextLength()) )
         throw IndexOutOfBoundsException();
 }
 
@@ -1253,30 +1253,30 @@ sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleSelected( sal_Int32 nRow, sal
     return isAccessibleColumnSelected( nColumn );
 }
 
-
-// XAccessibleExtendedTable ---------------------------------------------------
-
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
-        throw( RuntimeException )
+        throw( IndexOutOfBoundsException, RuntimeException )
 {
     ScUnoGuard aGuard;
     ensureAlive();
+    ensureValidPosition( nRow, nColumn );
     return implGetIndex( nRow, nColumn );
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRow( sal_Int32 nChildIndex )
-        throw( RuntimeException )
+        throw( IndexOutOfBoundsException, RuntimeException )
 {
     ScUnoGuard aGuard;
     ensureAlive();
+    ensureValidIndex( nChildIndex );
     return implGetRow( nChildIndex );
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumn( sal_Int32 nChildIndex )
-        throw( RuntimeException )
+        throw( IndexOutOfBoundsException, RuntimeException )
 {
     ScUnoGuard aGuard;
     ensureAlive();
+    ensureValidIndex( nChildIndex );
     return implGetColumn( nChildIndex );
 }
 
