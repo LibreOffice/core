@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 11:00:02 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 17:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,7 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
             if ( aUserData.Len() )
                 pFrame->GetViewShell()->ReadUserData( aUserData, !bLoadDocWins );
             else if ( aSeq.getLength() )
-                pFrame->GetViewShell()->ReadUserDataSequence( aSeq );
+                pFrame->GetViewShell()->ReadUserDataSequence( aSeq, !bLoadDocWins );
         }
 
         // perhaps there are more windows to load
