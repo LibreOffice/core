@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:50:49 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
 {
     ItemList =
     {
-        < "Standard" ; > ;
+        < "Meine Vorlagen" ; > ;
         < "Geschäftliche Korrespondenz" ; > ;
         < "Sonstige geschäftliche Dokumente" ; > ;
         < "Private Korrespondenz und Dokumente" ; > ;
@@ -97,7 +97,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ ENGLISH ] =
     {
-        < "Default" ; > ;
+        < "My Templates" ; > ;
         < "Business correspondence" ; > ;
         < "Other business documents" ; > ;
         < "Personal correspondence and documents" ; > ;
@@ -110,7 +110,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ english_us ] =
     {
-        < "Default" ; > ;
+        < "My Templates" ; > ;
         < "Business Correspondence" ; > ;
         < "Other Business Documents" ; > ;
         < "Personal Correspondence and Documents" ; > ;
