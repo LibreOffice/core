@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsanalyze.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-11 13:45:18 $
+#   last change: $Author: hr $ $Date: 2004-12-13 17:25:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,16 +102,16 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.5 $ ';
+my $id_str = ' $Revision: 1.6 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
 print "$script_name -- version: $script_rev\n";
 
-#### hardcoded globals #####
+#### FIXME: hardcoded globals #####
 
 # Don't use this tool on a MWS workspaces in the veto
-# list, because the behavior my not be clearly defined
+# list, because the behavior may not be clearly defined
 # examples:
 #   no MWS branch exists
 #   MWS branch is obsolete
@@ -144,7 +144,7 @@ my $mode                  = $script_name;   # operational mode (cwsanalyze|cwsin
 my $opt_fast              = 0;              # fast mode, disable conflict check
 my $opt_force             = 0;              # force integration
 my $opt_no_set_integrated = 0;              # don't toggle integration status
-my $vcsid = "unkown";
+my $vcsid = "unknown";
 my @args_bak = @ARGV;
 
 #### main #####
@@ -388,7 +388,7 @@ sub analyze_module
             STDOUT->autoflush(0);
             if ( !@{$co_ref} ) {
                 print_error("Was not able to checkout module '$module',", 0);
-                print_error("this might be caused by connection failures or authentication problems.", 0);
+                print_error("this might be caused by connection failures or authentification problems.", 0);
                 print_error("Please check your \$HOME/.cvspass for missing entries!", 50);
             }
             # save working dir for later perusal
@@ -737,7 +737,7 @@ sub update_file
         # find out if we need to use the '-kk' flag for merging
         my ($status, $working_rev, $repository_rev, $sticky_tag, $branch_rev,
                 $sticky_date, $sticky_options) = $cvs_archive->status();
-        if ( $status eq 'unkownfailure' || $status eq 'connectionfailure' ) {
+        if ( $status eq 'unknownfailure' || $status eq 'connectionfailure' ) {
             print_error("can't get status of '$file': $status", 0);
             return undef;
         }
@@ -933,7 +933,7 @@ sub print_warning
 {
     my $message     = shift;
     print STDERR "$script_name: ";
-    print STDERR "WARNING $message\n";
+    print STDERR "WARNING: $message\n";
     return;
 }
 
