@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:14:49 $
+ *  last change: $Author: nn $ $Date: 2001-12-19 11:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class SdrObject;
+struct SvEventDescription;
 
 //------------------------------------------------------------------------
 
@@ -107,6 +108,8 @@ private:
     SdrObject* GetSdrObject() const throw();
 
 public:
+    static const SvEventDescription* GetSupportedMacroItems();
+
                             // ctor modifies xShape parameter
                             ScShapeObj( ::com::sun::star::uno::Reference<
                                             ::com::sun::star::drawing::XShape > & xShape );

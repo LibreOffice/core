@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
+ *  last change: $Author: nn $ $Date: 2001-12-19 11:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,8 @@ const SfxItemPropertyMap* lcl_GetShapeMap()
     return aShapeMap_Impl;
 }
 
-const SvEventDescription* lcl_GetSupportedMacroItems()
+// static
+const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
     {
@@ -273,10 +274,10 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
             if( pIMapInfo )
             {
                 const ImageMap& rIMap = pIMapInfo->GetImageMap();
-                xImageMap = SvUnoImageMap_createInstance( rIMap, lcl_GetSupportedMacroItems() );
+                xImageMap = SvUnoImageMap_createInstance( rIMap, GetSupportedMacroItems() );
             }
             else
-                xImageMap = SvUnoImageMap_createInstance( lcl_GetSupportedMacroItems() );
+                xImageMap = SvUnoImageMap_createInstance( GetSupportedMacroItems() );
         }
         aAny <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
     }
