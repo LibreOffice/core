@@ -10,6 +10,9 @@
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XLAYER_HPP_
+#include <com/sun/star/drawing/XLayer.hpp>
+#endif
 
 #ifndef _SFX_SFXBASECONTROLLER_HXX_
 #include <sfx2/sfxbasecontroller.hxx>
@@ -163,6 +166,19 @@ protected:
     void setMasterPageMode(sal_Bool MasterPageMode_) throw();
     sal_Bool getLayerMode(void) const throw();
     void setLayerMode(sal_Bool LayerMode_) throw();
+
+    /** Return a reference to the active layer object.
+        @return
+            The returned value may be empty when the internal state of this
+            view is not valid (like during destruction.)
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> getActiveLayer (void) throw ();
+
+    /** Make the specified object the active layer.
+        @param rxLayer
+            The new layer object.
+    */
+    void setActiveLayer (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>& rxLayer) throw ();
 
     SdUnoDrawViewKind   meKind;
 
