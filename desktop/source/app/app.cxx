@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-06 15:05:19 $
+ *  last change: $Author: mba $ $Date: 2001-11-09 16:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include "desktopresid.hxx"
 #include "dispatchwatcher.hxx"
 
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
@@ -137,6 +140,8 @@
 #ifndef _COM_SUN_STAR_CONFIGURATION_INSTALLATIONINCOMPLETEEXCEPTION_HPP_
 #include <com/sun/star/configuration/InstallationIncompleteException.hpp>
 #endif
+
+#include <com/sun/star/beans/XMaterialHolder.hpp>
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -432,12 +437,12 @@ void PreloadConfigTrees()
     }
 }
 
+static String aBrandName;
+static String aVersion;
+static String aExtension;
+
 void ReplaceStringHookProc( UniString& rStr )
 {
-    static String aBrandName;
-    static String aVersion;
-    static String aExtension;
-
     static int nAll = 0, nPro = 0;
 
     if ( !aBrandName.Len() )
@@ -451,9 +456,12 @@ void ReplaceStringHookProc( UniString& rStr )
         aRet >>= aTmp;
         aVersion = aTmp;
 
-        aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTEXTENSION );
-        aRet >>= aTmp;
-        aExtension = aTmp;
+        if ( !aExtension.Len() )
+        {
+            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTEXTENSION );
+            aRet >>= aTmp;
+            aExtension = aTmp;
+        }
     }
 
     nAll++;
@@ -1105,6 +1113,58 @@ void Desktop::Main()
     // ----  Startup screen ----
     OpenStartupScreen();
 
+#ifndef BUILD_SOSL
+    // get the tabreg service to determine the product extension string for an evaluation version
+    Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+    Reference < XMaterialHolder > xHolder( xSMgr->createInstance(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.tab.tabreg" ) ) ), UNO_QUERY );
+    if ( xHolder.is() )
+    {
+        // get a sequence of strings for the defined locales
+        // a registered version doesn't provide data
+        Any aData = xHolder->getMaterial();
+        Sequence < NamedValue > aSeq;
+        if ( aData >>= aSeq )
+        {
+            // determine current locale
+            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+            ::rtl::OUString aTmp;
+            aRet >>= aTmp;
+
+            // only first part of locale must match
+            ::rtl::OUString aLocale;
+            sal_Int32 nPos = aTmp.indexOf('_');
+            if ( nPos > 0 )
+                aLocale = aTmp.copy( 0, nPos );
+            else
+                aLocale = aTmp;
+
+            // find string for matching locale
+            sal_Int32 nCount = aSeq.getLength();
+            for ( sal_Int32 n=0; n<nCount; n++ )
+            {
+                const NamedValue& rValue = aSeq[n];
+                if ( rValue.Name == aLocale )
+                {
+                    rValue.Value >>= aTmp;
+                    aExtension = aTmp;
+                    break;
+                }
+            }
+
+            if ( n == nCount )
+                // current locale is unknown for service, use default
+                aExtension = DEFINE_CONST_UNICODE("Evaluation Version");
+        }
+    }
+    else
+    {
+        // library missing
+        aExtension = DEFINE_CONST_UNICODE("Evaluation Version");
+        //StartSetup( DEFINE_CONST_UNICODE("-repair") );
+        //_exit(666);
+    }
+#endif
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
 
