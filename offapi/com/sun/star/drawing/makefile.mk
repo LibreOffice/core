@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 10:40:02 $
+#   last change: $Author: kz $ $Date: 2005-03-01 18:11:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,8 @@ IDLFILES=\
     ControlShape.idl\
     CoordinateSequence.idl\
     CoordinateSequenceSequence.idl\
+    CustomShape.idl\
+    CustomShapeEngine.idl\
     DashStyle.idl\
     DashTable.idl\
     Defaults.idl\
@@ -116,6 +118,20 @@ IDLFILES=\
     DrawPages.idl\
     DrawViewMode.idl\
     EllipseShape.idl\
+    EnhancedCustomShapeAdjustmentValue.idl\
+    EnhancedCustomShapeExtrusion.idl\
+    EnhancedCustomShapeGeometry.idl\
+    EnhancedCustomShapeGluePointType.idl\
+    EnhancedCustomShapeHandle.idl\
+    EnhancedCustomShapeParameter.idl\
+    EnhancedCustomShapeParameterPair.idl\
+    EnhancedCustomShapeParameterType.idl\
+    EnhancedCustomShapePath.idl\
+    EnhancedCustomShapeSegment.idl\
+    EnhancedCustomShapeSegmentCommand.idl\
+    EnhancedCustomShapeTextFrame.idl\
+    EnhancedCustomShapeTextPath.idl\
+    EnhancedCustomShapeTextPathMode.idl\
     EscapeDirection.idl\
     FillProperties.idl\
     FillStyle.idl\
@@ -202,6 +218,8 @@ IDLFILES=\
     XConnectableShape.idl\
     XConnectorShape.idl\
     XControlShape.idl\
+    XCustomShapeEngine.idl\
+    XCustomShapeHandle.idl\
     XDrawPage.idl\
     XDrawPageDuplicator.idl\
     XDrawPageExpander.idl\
