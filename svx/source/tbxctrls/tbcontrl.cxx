@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:28:55 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,6 +526,9 @@ void SvxStyleBox_Impl::Select()
             }
         }
 
+        // #i36723# after ReleaseFocus() the new entry is included into the List
+        sal_Bool bCreateNew = GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND;
+
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
             This instance may be deleted in the meantime (i.e. when a dialog is opened
             while in Dispatch()), accessing members will crash in this case. */
@@ -537,7 +540,6 @@ void SvxStyleBox_Impl::Select()
                 SetText( aSelEntry );
             SaveValue();
 
-            sal_Bool bCreateNew = GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND;
             Sequence< PropertyValue > aArgs( 2 );
             aArgs[0].Value  = makeAny( OUString( aSelEntry ) );
             aArgs[1].Name   = OUString::createFromAscii( "Family" );
