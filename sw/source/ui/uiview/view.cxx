@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 14:08:22 $
+ *  last change: $Author: tl $ $Date: 2000-11-19 11:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,8 +243,8 @@
 #endif
 
 
-#ifndef _LINGU_LNGPROPS_HHX_
-#include <lingu/lngprops.hxx>
+#ifndef _LINGUISTIC_LNGPROPS_HHX_
+#include <linguistic/lngprops.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 11:39:59 $
+ *  last change: $Author: tl $ $Date: 2000-11-19 11:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
 #endif
-#ifndef _LINGU_LNGPROPS_HHX_
-#include <lingu/lngprops.hxx>
+#ifndef _LINGUISTIC_LNGPROPS_HHX_
+#include <linguistic/lngprops.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>

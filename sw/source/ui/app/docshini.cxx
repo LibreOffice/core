@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 20:32:32 $
+ *  last change: $Author: tl $ $Date: 2000-11-19 11:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,8 @@
 #endif
 
 
-#ifndef _LINGU_LNGPROPS_HHX_
-#include <lingu/lngprops.hxx>
+#ifndef _LINGUISTIC_LNGPROPS_HHX_
+#include <linguistic/lngprops.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
@@ -772,6 +772,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/10/31 20:32:32  jp
+    change usage of filestream to medium
+
     Revision 1.5  2000/10/31 15:44:59  hr
     #65293#: includes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:51:23 $
+ *  last change: $Author: tl $ $Date: 2000-11-19 11:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,8 +225,8 @@
 #include <uinums.hxx>
 #endif
 
-#ifndef _LINGU_LNGPROPS_HHX_
-#include <lingu/lngprops.hxx>
+#ifndef _LINGUISTIC_LNGPROPS_HHX_
+#include <linguistic/lngprops.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
