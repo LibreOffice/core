@@ -29,6 +29,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\form\binding
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\form\validation
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\formula
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\frame
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\frame\status
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\graphic
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\i18n
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\installation
@@ -66,7 +67,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\linguistic2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\input
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\sax
-mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\dom   
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\dom
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\xpath
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\dom\events
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\dom\views
@@ -153,6 +154,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 ..\%__SRC%\inc\com\sun\star\formula\*.hpp %_DEST%\inc%_EXT%\com\sun\star\formula\*.hpp
 ..\%__SRC%\inc\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\com\sun\star\frame\*.hdl
 ..\%__SRC%\inc\com\sun\star\frame\*.hpp %_DEST%\inc%_EXT%\com\sun\star\frame\*.hpp
+..\%__SRC%\inc\com\sun\star\frame\status\*.hdl %_DEST%\inc%_EXT%\com\sun\star\frame\status\*.hdl
+..\%__SRC%\inc\com\sun\star\frame\status\*.hpp %_DEST%\inc%_EXT%\com\sun\star\frame\status\*.hpp
 ..\%__SRC%\inc\com\sun\star\graphic\*.hdl %_DEST%\inc%_EXT%\com\sun\star\graphic\*.hdl
 ..\%__SRC%\inc\com\sun\star\graphic\*.hpp %_DEST%\inc%_EXT%\com\sun\star\graphic\*.hpp
 ..\%__SRC%\inc\com\sun\star\i18n\*.hdl %_DEST%\inc%_EXT%\com\sun\star\i18n\*.hdl
