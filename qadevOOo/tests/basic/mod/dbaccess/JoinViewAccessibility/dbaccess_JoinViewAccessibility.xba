@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: dbaccess_JoinViewAccessibility.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:04 $ 
+'*  last change:$Date: 2003-05-27 12:06:07 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -145,15 +145,15 @@ On Error Goto ErrHndl
     xRoot = utils.at_getAccessibleObject(oWin)
 
     Dim pageTabList As Object
-    pageTabList = utils.at_getAccessibleObjectForRole(xRoot, 31)
+    pageTabList = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PAGE_TAB_LIST)
 
     pageTabList.selectAccessibleChild(3)
     wait(500)
 
     Dim editQueryButton As Object
-    editQueryButton = utils.at_getAccessibleObjectForRole(xRoot, 35, "Edit Query")
+    editQueryButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON, "Edit Query")
 
-    cancelButton = utils.at_getAccessibleObjectForRole(xRoot, 35, "Cancel")
+    cancelButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON, "Cancel")
 
     editQueryButton.doAccessibleAction(0)
     wait(1000)
@@ -162,7 +162,7 @@ On Error Goto ErrHndl
     queryWindow = oWin
     xRoot = utils.at_getAccessibleObject(oWin)
 
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 54)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.VIEW_PORT)
 
 Exit Sub
 ErrHndl:
@@ -170,7 +170,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    queryWindow.dispose()
+    utils.closeObject(queryWindow)
     if NOT isNull(cancelButton) then
         cancelButton.doAccessibleAction(0)
         wait(1000)
