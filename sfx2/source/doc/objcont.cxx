@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-16 12:48:16 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 08:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1748,29 +1748,10 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
 SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
 {
-    SfxApplication *pApp = SFX_APP();
-
-    if ( bForce || pImp->pCfgMgr )
+    if ( bForce && !pImp->pEventConfig )
     {
-        // Wenn kein bForce, aber es eine DocConfig gibt, mu\s auch eine
-        // EventConfig angelegt werden
-        if ( !pImp->pCfgMgr )
-        {
-            // Es soll eine EventConfig konfiguriert werden, dazu mu\s sie am
-            // ConfigManager des Dokuments h"angen
-            GetConfigManager( TRUE );
-//            SfxConfigManager *pMgr = pApp->GetConfigManager();
-//            if ( this == SfxObjectShell::Current() )
-//                pImp->pCfgMgr->Activate( pMgr );
-        }
-
-        // Gegebenenfalls EventConfig erzeugen und ans Dokument konfigurieren
-        if ( !pImp->pEventConfig )
-        {
-            pImp->pEventConfig =
-                new SfxEventConfigItem_Impl( SFX_ITEMTYPE_DOCEVENTCONFIG,
-                    pApp->GetEventConfig(), this );
-        }
+        pImp->pEventConfig = new SfxEventConfigItem_Impl( SFX_ITEMTYPE_DOCEVENTCONFIG,
+                    SFX_APP()->GetEventConfig(), this );
     }
 
     return pImp->pEventConfig;
