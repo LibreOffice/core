@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-07 19:34:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "º¯°æ(~G)";
         Text[ turkish ] = "~Deðiþiklikler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Modificaciones";
     };
     FixedText FT_REMOVE
     {
@@ -119,6 +120,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Silinenler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminaciones";
     };
     FixedText FT_INSERT
     {
@@ -145,6 +147,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "»ðÀÔ(~I)";
         Text[ turkish ] = "~Eklemeler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Inserciones";
     };
     FixedText FT_MOVE
     {
@@ -171,6 +174,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "ÀÌµ¿(~M)";
         Text[ turkish ] = "~Taþýnan giriþler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Desplazamientos";
     };
     FixedLine GB_COLORCHGS
     {
@@ -197,6 +201,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "º¯°æÀ» À§ÇÑ »ö»ó";
         Text[ turkish ] = "Deðiþiklikleri gösteren renkler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Colores para las modificaciones";
     };
     ListBox CLB_CONTENT
     {
@@ -249,5 +254,6 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ korean ] = "ÀÛ¼ºÀÚ";
         Text[ turkish ] = "Yazana göre";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Según autor";
     };
 };
