@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-17 08:54:14 $
+ *  last change: $Author: ama $ $Date: 2002-01-21 09:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,6 +1016,150 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 |*
 |*************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+
+void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
+{
+    SwPageFrm *pOldPage = FindPageFrm();
+    const SwRect aOld( AddSpacesToFrm() );
+    SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchor(), rNew );
+    if( pCnt->IsProtected() )
+        pCnt = (SwCntntFrm*)GetAnchor();
+
+    Point aNew( rNew );
+    SwPageFrm *pPage = 0;
+    if ( pCnt->IsInDocBody() )
+    {
+        //#38848 Vom Seitenrand in den Body ziehen.
+        pPage = pCnt->FindPageFrm();
+        ::lcl_PointToPrt( aNew, pPage->GetUpper() );
+        SwRect aTmp( aNew, Size( 0, 0 ) );
+        pPage = (SwPageFrm*)::FindPage( aTmp, pPage );
+        ::lcl_PointToPrt( aNew, pPage );
+    }
+
+    //RelPos einstellen, nur auf Wunsch invalidieren.
+    //rNew ist eine Absolute Position. Um die RelPos korrekt einzustellen
+    //muessen wir uns die Entfernung von rNew zum Anker im Textfluss besorgen.
+//!!!!!Hier kann Optimiert werden: FindAnchor koennte die RelPos mitliefern!
+    const SwFrm *pFrm = 0;
+    SwTwips nY;
+    SWRECTFN( pCnt )
+    BOOL bFlyVert = IsVertical();
+    if ( pCnt->Frm().IsInside( aNew ) )
+    {
+        if( bVert )
+        {
+            nY = pCnt->Frm().Left() + pCnt->Frm().Width() - rNew.X();
+            if( bFlyVert )
+                nY += Frm().Width();
+        }
+        else
+            nY = rNew.Y() - pCnt->Frm().Top();
+    }
+    else
+    {
+        SwDistance aDist;
+        pFrm = ::lcl_CalcDownDist( aDist, aNew, pCnt );
+        nY = aDist.nMain + aDist.nSub;
+    }
+
+    SwTwips nX = 0;
+
+    if ( pCnt->IsFollow() )
+    {
+        //Flys haengen niemals an einem Follow sondern immer am
+        //Master, den suchen wir uns jetzt.
+        const SwCntntFrm *pOriginal = pCnt;
+        const SwCntntFrm *pFollow = pCnt;
+        while ( pCnt->IsFollow() )
+        {
+            do
+            {   pCnt = pCnt->GetPrevCntntFrm();
+            } while ( pCnt->GetFollow() != pFollow );
+            pFollow = pCnt;
+        }
+        SwTwips nDiff = 0;
+        do
+        {   const SwFrm *pUp = pFollow->GetUpper();
+            nDiff += pUp->Prt().Height() - pFollow->GetRelPos().Y();
+            pFollow = pFollow->GetFollow();
+        } while ( pFollow != pOriginal );
+        nY += nDiff;
+        nX = pCnt->Frm().Left() - pOriginal->Frm().Left();
+    }
+
+    if ( nY == LONG_MAX )
+    {
+        if( bVert )
+            nY = pCnt->Frm().Left() + pCnt->Frm().Width() - rNew.X();
+        else
+            nY = rNew.Y() - pCnt->Frm().Top();
+    }
+    if( bVert )
+    {
+        if( !pFrm )
+            nX += rNew.Y() - pCnt->Frm().Top();
+        else
+            nX = rNew.Y() - pFrm->Frm().Top();
+    }
+    else
+    {
+        if( !pFrm )
+            nX += rNew.X() - pCnt->Frm().Left();
+        else
+            nX = rNew.X() - pFrm->Frm().Left();
+    }
+    GetFmt()->GetDoc()->StartUndo( UNDO_START );
+
+    if( pCnt != GetAnchor() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
+                                  GetFmt()->GetDoc()->IsHTMLMode() ) )
+    {
+        //Das Ankerattribut auf den neuen Cnt setzen.
+        SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+        SwFmtAnchor aAnch( pFmt->GetAnchor() );
+        SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
+        if( IsAutoPos() && pCnt->IsTxtFrm() )
+        {
+            SwCrsrMoveState eTmpState( MV_SETONLYTEXT );
+            Point aPt( rNew );
+            if( pCnt->GetCrsrOfst( pPos, aPt, &eTmpState )
+                && pPos->nNode == *pCnt->GetNode() )
+            {
+                aLastCharRect.Height( 0 );
+                if( REL_CHAR == pFmt->GetVertOrient().GetRelationOrient() )
+                    nY = LONG_MAX;
+                if( REL_CHAR == pFmt->GetHoriOrient().GetRelationOrient() )
+                    nX = LONG_MAX;
+            }
+            else
+            {
+                pPos->nNode = *pCnt->GetNode();
+                pPos->nContent.Assign( pCnt->GetNode(), 0 );
+            }
+        }
+        else
+        {
+            pPos->nNode = *pCnt->GetNode();
+            pPos->nContent.Assign( pCnt->GetNode(), 0 );
+        }
+        pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
+    }
+    else if ( pPage && pPage != GetPage() )
+        GetPage()->MoveFly( this, pPage );
+
+    const Point aRelPos = bVert ? Point( -nY, nX ) : Point( nX, nY );
+    ChgRelPos( aRelPos );
+
+    GetFmt()->GetDoc()->EndUndo( UNDO_END );
+
+    if ( pOldPage != FindPageFrm() )
+        ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,
+                             FALSE );
+}
+
+#else
+
 void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 {
     SwPageFrm *pOldPage = FindPageFrm();
@@ -1131,6 +1275,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,
                              FALSE );
 }
+#endif
 
 /*************************************************************************
 |*
@@ -1699,10 +1844,14 @@ void SwFlyAtCntFrm::MakeFlyPos()
         //Damit das Teil ggf. auf die richtige Seite gestellt und in die
         //PrtArea des LayLeaf gezogen werden kann, muss hier seine
         //absolute Position berechnet werden.
+        BOOL bFlyVert = IsVertical();
         if( bVert )
+        {
             aFrm.Pos().X() = GetAnchor()->Frm().Left() +
-                             GetAnchor()->Frm().Width() -
-                             aRelPos.X() + nRelDiff - aFrm.Width();
+                             GetAnchor()->Frm().Width() - aRelPos.X() +nRelDiff;
+            if( bFlyVert )
+                aFrm.Pos().X() -= aFrm.Width();
+        }
         else
             aFrm.Pos().Y() = GetAnchor()->Frm().Top() +
                              (aRelPos.Y() - nRelDiff);
@@ -1833,8 +1982,9 @@ void SwFlyAtCntFrm::MakeFlyPos()
         if( bVert )
         {
             aFrm.Pos().X() = GetAnchor()->Frm().Left() +
-                             GetAnchor()->Frm().Width() -
-                             aRelPos.X() - aFrm.Width();
+                             GetAnchor()->Frm().Width() - aRelPos.X();
+            if( bFlyVert )
+                aFrm.Pos().X() -= aFrm.Width();
         }
         else
             aFrm.Pos().Y() = aRelPos.Y() + GetAnchor()->Frm().Top();

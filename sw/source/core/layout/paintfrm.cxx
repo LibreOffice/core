@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 14:38:15 $
+ *  last change: $Author: ama $ $Date: 2002-01-21 09:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1409,7 +1409,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
                 ePos = pBrush->GetGraphicPos();
                 if( pGrf->IsSupportedGraphic() )
                     // don't the use the specific output device! Bug 94802
-                    aGrfSize = ::GetGraphicSizeTwip( *pGrf );
+                    aGrfSize = ::GetGraphicSizeTwip( *pGrf, 0 );
             }
         }
         else

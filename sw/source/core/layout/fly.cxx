@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-20 16:25:45 $
+ *  last change: $Author: ama $ $Date: 2002-01-21 09:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     //Grosseneinstellung, Fixe groesse ist immer die Breite
     const SwFmtFrmSize &rFrmSize = pFmt->GetFrmSize();
 #ifdef VERTICAL_LAYOUT
+    bDerivedVert = 0;
     SwFrm* pTmp = bDerivedVert ? pAnch : this;
     BOOL bVert = pTmp ? pTmp->IsVertical() : FALSE;
     if( bVert )
@@ -1051,8 +1052,12 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         SWRECTFN( GetAnchor() )
         SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
         SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
-        if( bVert && !bRev )
-            nTmpY -= Frm().Width();
+        if( bVert )
+        {
+            nTmpY = -nTmpY;
+            if( IsVertical() )
+                nTmpY -= Frm().Width();
+        }
 #else
         SwTwips nTmpY = rNewPos.Y() == LONG_MAX ? 0 : rNewPos.Y();
 #endif
@@ -1098,13 +1103,15 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         aVert.SetPos( nTmpY );
         aSet.Put( aVert );
 
-        //Fuer Flys im Cnt ist die horizontale Ausrichtung uninterressant,
+        //Fuer Flys im Cnt ist die horizontale Ausrichtung uninteressant,
         //den sie ist stets 0.
         if ( !IsFlyInCntFrm() )
         {
 #ifdef VERTICAL_LAYOUT
             SwTwips nNewX = bVert ? rNewPos.Y() : rNewPos.X();
             SwTwips nTmpX = nNewX == LONG_MAX ? 0 : nNewX;
+            if( !bVert && IsVertical() )
+                nTmpX += Frm().Width();
 #else
             SwTwips nTmpX = rNewPos.X() == LONG_MAX ? 0 : rNewPos.X();
 #endif
@@ -1595,6 +1602,7 @@ void SwFlyFrm::MakeFlyPos()
         GetAnchor()->Calc();
 #ifdef VERTICAL_LAYOUT
         SWRECTFN( GetAnchor() );
+        BOOL bFlyVert = IsVertical();
 #endif
             //Die Werte in den Attributen muessen ggf. upgedated werden,
             //deshalb werden hier Attributinstanzen und Flags benoetigt.
@@ -1642,7 +1650,11 @@ void SwFlyFrm::MakeFlyPos()
                 nYPos = 0;
 #ifdef VERTICAL_LAYOUT
             if( bVert )
-                aRelPos.X() = bRev ? nYPos : -Frm().Width()-nYPos;
+            {
+                aRelPos.X() = bRev ? nYPos : -nYPos;
+                if( bFlyVert )
+                    aRelPos.X() -= Frm().Width();
+            }
             else
                 aRelPos.Y() = nYPos;
         }
@@ -1698,7 +1710,7 @@ void SwFlyFrm::MakeFlyPos()
             if( bVert )
             {
                 if( !bRev )
-                    nRelPosY = - nRelPosY - nFrmHeight;
+                    nRelPosY = - nRelPosY;
                 aRelPos.X() = nRelPosY;
             }
             else
@@ -1869,7 +1881,11 @@ void SwFlyFrm::MakeFlyPos()
         if( bVert )
             aRelPos.Y() = nRelX;
         else
+        {
             aRelPos.X() = nRelX;
+            if( bFlyVert )
+                aRelPos.X() -= Frm().Width();
+        }
         if ( HORI_NONE != aHori.GetHoriOrient() &&
             aHori.GetPos() != nRelX )
         {   aHori.SetPos( nRelX );
