@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-19 13:10:57 $
+ *  last change: $Author: mtg $ $Date: 2001-03-19 13:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,13 +450,9 @@ SvXMLImportContext *XMLConfigItemSetContext::CreateChildContext( USHORT nPrefix,
 
 void XMLConfigItemSetContext::EndElement()
 {
+    rAny <<= aProps.GetSequence();
     if (pBaseContext)
-    {
-        rAny <<= aProps.GetSequence();
         pBaseContext->AddPropertyValue();
-    }
-    else
-        DBG_ERROR("no BaseContext");
 }
 
 //=============================================================================
