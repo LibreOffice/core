@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: lla $ $Date: 2000-11-03 08:51:06 $
+#   last change: $Author: lla $ $Date: 2000-11-20 10:08:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,8 @@ SLOFILES=\
     $(SLO)$/updatedom.obj \
     $(SLO)$/dataconverter.obj \
     $(SLO)$/valuehandler.obj \
+    $(SLO)$/updatehandler.obj \
+    $(SLO)$/updatetree.obj \
 
 
 # --- Targets ---
