@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transparencygroupaction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:57:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #include <rtl/logfile.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XBITMAP_HPP__
-#include <drafts/com/sun/star/rendering/XBitmap.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP__
+#include <com/sun/star/rendering/XBitmap.hpp>
 #endif
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -127,7 +127,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace cppcanvas
 {
