@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:37:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1959,6 +1959,18 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDDEFieldPropMap;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DROPDOWN :
+            {
+                static SfxItemPropertyMap aDropDownMap          [] =
+                {
+                    {SW_PROP_NMID(UNO_NAME_ITEMS), FIELD_PROP_STRINGS, CPPU_E2T(CPPUTYPE_OUSTRINGS), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_SELITEM), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_NAME), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aDropDownMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_HIDDEN_PARA           :
