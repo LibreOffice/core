@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
+ *  last change: $Author: os $ $Date: 2002-10-11 12:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,7 +823,7 @@ BOOL SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, USHORT* pP )
         const String& rTmp2 = rNew.sDlgEntry;
         xub_StrLen nFndPos2 = 0;
         String sNum2( rTmp2.GetToken( 0, ' ', nFndPos2 ));
-        BOOL bIsNum2IsNumeric = rCC.isNumeric( sNum2 );
+        BOOL bIsNum2IsNumeric = rCC.isAsciiNumeric( sNum2 );
         sal_Int32 nNum2 = bIsNum2IsNumeric ? sNum2.ToInt32() : 0;
 
         nO--;
