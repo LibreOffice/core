@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-11 17:08:58 $
+ *  last change: $Author: tbe $ $Date: 2001-07-17 08:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,6 @@
 
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-
-#ifndef _BASOBJ_HXX //autogen
-#include <basctl/basobj.hxx>
 #endif
 
 #ifndef _BASMGR_HXX //autogen
@@ -223,7 +219,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& rSet)
 
                 if (pBasic)
                 {
-                    SbModule* pModule = BasicIDE::FindModule( pBasic, sName.GetToken( 2, '.') );
+                    SbModule* pModule = pBasic->FindModule( sName.GetToken( 2, '.') );
                     GetFldMgr().SetMacroModule(pModule);
                 }
             }
@@ -728,6 +724,9 @@ IMPL_LINK( SwFldFuncPage, ModifyHdl, Edit *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/07/11 17:08:58  jp
+    #89582#: look for the dropped content flag at ConditionEdit controls
+
     Revision 1.3  2001/07/05 18:41:36  jp
     changes for TF_DATA
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 12:10:53 $
+ *  last change: $Author: tbe $ $Date: 2001-07-17 08:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,9 @@
 #endif
 #ifndef _SB_SBMOD_HXX //autogen
 #include <basic/sbmod.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _VIEW_HXX
@@ -1896,61 +1899,109 @@ BOOL SwFldMgr::ChooseMacro(const String &rSelMacro)
             }
         }
     }
-    SbMethod* pMethod = BasicIDE::ChooseMacro(FALSE, TRUE, sSelMacro);
+
+    String aMacroURL = BasicIDE::SelectMacro(FALSE, TRUE, sSelMacro);
     BOOL bRet = FALSE;
 
-    if (pMethod)
+    // aMacroURL has the following format:
+    // 'macro:///libname.modulename.macroname(args)'               => Macro via App-BasMgr
+    // 'macro://[docname|.]/libname.modulename.macroname(args)'    => Macro via corresponging Doc-BasMgr
+
+    // but for the UI we need this format:
+    // 'macroname.modulename.libname.[appname|docname]'
+
+    if ( aMacroURL.Len() != 0 )
     {
-        SbModule* pModule = pMethod->GetModule();
-        SbxObject* pObject = pModule->GetParent();
+        // parse macro URL
+        sal_uInt16 nHashPos = aMacroURL.Search( '/', 8 );
+        sal_uInt16 nArgsPos = aMacroURL.Search( '(' );
 
-        SetMacroModule(pModule);
+        String aBasMgrName( INetURLObject::decode(aMacroURL.Copy( 8, nHashPos - 8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+        String aQualifiedName( INetURLObject::decode(aMacroURL.Copy( nHashPos + 1, nArgsPos - nHashPos - 1 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+        String aLibName    = aQualifiedName.GetToken(0, sal_Unicode('.'));
+        String aModuleName = aQualifiedName.GetToken(1, sal_Unicode('.'));
+        String aMacroName  = aQualifiedName.GetToken(2, sal_Unicode('.'));
 
-        ASSERT(pObject->IsA(TYPE(StarBASIC)), "Kein Basic gefunden!");
-
-        String sMacro(pMethod->GetName());
-        sMacro += '.';
-        sMacro += pModule->GetName();
-        sMacro += '.';
-        sMacro += pObject->GetName();
-        sMacro += '.';
-
-        StarBASIC* pLib = (StarBASIC*)pObject;
         pSfxApp->EnterBasicCall();
-        BOOL bFound = FALSE;
-        BasicManager* pBasicMgr = pSfxApp->GetBasicManager();
-        SfxObjectShell* pDocShell = 0;
-        while ( !bFound && pBasicMgr )
+
+        // find doc shell and basic manager
+        SfxObjectShell* pShell = 0;
+        BasicManager* pBasMgr = 0;
+
+        if ( aBasMgrName.Len() == 0 )
         {
-            USHORT nLibs = pBasicMgr->GetLibCount();
-            for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
+            // application basic
+            pBasMgr = pSfxApp->GetBasicManager();
+        }
+        else if ( aBasMgrName.EqualsAscii( "." ) )
+        {
+            // this document
+            SwWrtShell *pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
+            if (pSh)
             {
-                StarBASIC* pL = pBasicMgr->GetLib( nLib );
-                if ( pL == pLib )
-                {
-                    bFound = TRUE;
+                pShell = (SfxObjectShell*)pSh->GetView().GetDocShell();
+                pBasMgr = ( pShell ? pShell->GetBasicManager() : 0 );
+            }
+        }
+        else
+        {
+            // document basic
+            pBasMgr = pSfxApp->GetBasicManager();
+
+            while ( pBasMgr )
+            {
+                String aMgrName;
+
+                if (pShell)
+                    aMgrName = pShell->GetTitle( SFX_TITLE_APINAME );
+                else
+                    aMgrName = Application::GetAppName();
+
+                if ( aMgrName == aBasMgrName )
                     break;
+
+                if ( pShell  )
+                    pShell = SfxObjectShell::GetNext( *pShell );
+                else
+                    pShell = SfxObjectShell::GetFirst();
+
+                pBasMgr = ( pShell ? pShell->GetBasicManager() : 0 );
+            }
+        }
+        ASSERT(pBasMgr, "SwFldMgr::ChooseMacro: No BasicManager found!");
+
+        if ( pBasMgr)
+        {
+            StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
+            ASSERT(pBasic, "SwFldMgr::ChooseMacro: No Basic found!");
+
+            if ( pBasic )
+            {
+                SbModule* pModule = pBasic->FindModule( aModuleName );
+
+                if ( pModule )
+                {
+                    SetMacroModule( pModule );
+
+                    // construct macro path
+                    String aMacro( aMacroName );
+                    aMacro += '.';
+                    aMacro += aModuleName;
+                    aMacro += '.';
+                    aMacro += aLibName;
+                    aMacro += '.';
+
+                    if ( pShell )
+                        aMacro += pShell->GetName();
+                    else
+                        aMacro += pSfxApp->GetName();
+
+                    SetMacroPath( aMacro );
+                    bRet = TRUE;
                 }
             }
-            if(!bFound)
-            {
-                if ( pDocShell  )
-                    pDocShell = SfxObjectShell::GetNext( *pDocShell );
-                else
-                    pDocShell = SfxObjectShell::GetFirst();
-            }
-
-            pBasicMgr = ( pDocShell ? pDocShell->GetBasicManager() : 0 );
         }
         pSfxApp->LeaveBasicCall();
-        if(pDocShell)
-            sMacro += pDocShell->GetName();
-        else
-            sMacro += pSfxApp->GetName();
-
-
-        SetMacroPath(sMacro);
-        bRet = TRUE;
     }
 
     return bRet;
