@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformatter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:42:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,9 +210,23 @@ class SwObjectFormatter
 
         /** intrinsic method to format a certain floating screen object
 
+            OD 2005-01-10 #i40147# - add parameter <_bCheckForMovedFwd>
+
             @author OD
+
+            @param _rAnchoredObj
+            input parameter - anchored object, which have to be formatted.
+
+            @param _bCheckForMovedFwd
+            input parameter - boolean indicating, that after a successful
+            format of the anchored object the anchor frame has to be checked,
+            if it would moved forward due to the positioning of the anchored object.
+            default value: false
+            value only considered, if wrapping style influence has to be
+            considered for the positioning of the anchored object.
         */
-        virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj ) = 0;
+        virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
+                                  const bool _bCheckForMovedFwd = false ) = 0;
 
         /** intrinsic method to format all floating screen objects
 
