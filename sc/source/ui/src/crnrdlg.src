@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 21:43:20 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,17 +132,17 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡/·Å´ó";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     RadioButton BTN_COLHEAD
     {
@@ -157,7 +157,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ portuguese ] = "Contém ~cabeçalhos das colunas" ;
         Text [ finnish ] = "~Sisältää sarakkeen otsikot" ;
         Text [ danish ] = "indeholder kolonneoverskrifter" ;
-        Text [ french ] = "contient des en-têtes de ~colonnes" ;
+        Text [ french ] = "En-têtes de ~colonnes inclus" ;
         Text [ swedish ] = "innehåller ~kolumnhuvuden" ;
         Text [ dutch ] = "~bevat kolomkoppen" ;
         Text [ spanish ] = "Contiene títulos de ~columnas" ;
@@ -187,14 +187,14 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ danish ] = "indeholder rækkeoverskrifter" ;
         Text [ italian ] = "Include intestazioni righe" ;
         Text [ spanish ] = "contiene títulos de ~filas" ;
-        Text [ french ] = "contient des en-têtes de ~lignes" ;
+        Text [ french ] = "En-têtes de ~lignes inclus" ;
         Text [ portuguese ] = "Contém ~cabeçalhos das linhas" ;
         Text [ portuguese_brazilian ] = "enth?lt ~Zeilenk?fe" ;
         Text[ chinese_simplified ] = "°üº¬ĞĞ±êÌâ(~R)";
         Text[ russian ] = "Ñîäåğæèò íàçâàíèÿ ñòğîê";
         Text[ polish ] = "zawiera nag³ówki wierszy";
         Text[ japanese ] = "s‚Ì€–Ú—“‚ğŠÜ‚Ş(~R)";
-        Text[ chinese_traditional ] = "¥]§tÄæ¼ĞÃD(~R)";
+        Text[ chinese_traditional ] = "¥]§t¦C¼ĞÃD(~R)";
         Text[ arabic ] = "íÊÖãä ÑÄæÓ Õİæİ";
         Text[ greek ] = "ğåñéİ÷åé êåöáëßäåò ãñáììşí";
         Text[ korean ] = "Çà ¸Ó¸®±Û Æ÷ÇÔ(~R)";
@@ -218,14 +218,14 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ french ] = "Pour la plage de ~données" ;
         Text [ dutch ] = "voor ~gegevensbereik" ;
         Text [ portuguese ] = "para a área ~dos dados" ;
-        Text[ chinese_simplified ] = "ÓÃÓÚÊı¾İÇøÓò";
+        Text[ chinese_simplified ] = "ÓÃÓÚÊı¾İÇøÓò(~D)";
         Text[ russian ] = "Äëÿ äèàïàçîíà äàííûõ";
         Text[ polish ] = "dla zakresu danych";
-        Text[ japanese ] = "ÃŞ°À”ÍˆÍ";
-        Text[ chinese_traditional ] = "¥Î©ó¸ê®Æ°Ï°ì";
+        Text[ japanese ] = "ÃŞ°À”ÍˆÍ(~D)";
+        Text[ chinese_traditional ] = "¥Î©ó¸ê®Æ°Ï°ì(~D)";
         Text[ arabic ] = "áäØÇŞ ÇáÈíÇäÇÊ";
         Text[ greek ] = "ãéá ğåñéï÷Ş ~äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍ±¸¿ªÀÇ";
+        Text[ korean ] = "µ¥ÀÌÅÍ ¹üÀ§·Î(~D)";
         Text[ turkish ] = "Veri aralığı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "para el área de datos";
@@ -255,17 +255,17 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Pienennä!";
+        QuickHelpText[ finnish ] = "Pienennä";
     };
     OKButton BTN_OK
     {
@@ -362,12 +362,13 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ chinese_traditional ] = "©w¸q¼ĞÃD°Ï°ì";
     Text[ arabic ] = "ÊÚÑíİ äØÇŞ ÇáÚäæäÉ";
     Text[ greek ] = "Ïñéóìüò ğåñéï÷Şò åğéãñáöŞò";
-    Text[ korean ] = "¶óº§¿µ¿ª Á¤ÀÇ";
+    Text[ korean ] = "¶óº§ ¹üÀ§ Á¤ÀÇ";
     Text[ turkish ] = "Başlık aralığını belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir área de etiqueta";
     Text[ finnish ] = "Määritä nimiöalue";
 };
+
 
 
 
