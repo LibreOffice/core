@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-21 11:46:52 $
+ *  last change: $Author: sj $ $Date: 2001-04-06 13:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,6 +621,7 @@ BOOL SdDrawDocShell::ConvertTo( SfxMedium& rMedium )
             pFilter = new SdPPTFilter( rMedium, *this, sal_True );
             ((SdPPTFilter*)pFilter)->PreSaveBasic();
             SvStorageRef xOleSource( new SvStorage( String() ) );
+            xOleSource->SetVersion( SOFFICE_FILEFORMAT_50 );
             sal_Bool bInPlaceObjects = SfxInPlaceObject::SaveAs( &xOleSource );
             if( bInPlaceObjects )
                 bInPlaceObjects = SfxInPlaceObject::SaveAsChilds( &xOleSource );
