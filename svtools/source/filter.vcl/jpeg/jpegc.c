@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpegc.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-19 15:02:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ struct my_error_mgr
     jmp_buf setjmp_buffer;
 };
 
+void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
+void jpeg_svstream_dest (j_compress_ptr cinfo, void* outfile);
 
 METHODDEF( void )
 my_error_exit (j_common_ptr cinfo)
@@ -89,7 +91,6 @@ my_output_message (j_common_ptr cinfo)
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message) (cinfo, buffer);
 }
-
 
 void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
 {
@@ -118,7 +119,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
 
     jpeg_create_decompress( &cinfo );
     bDecompCreated = 1;
-    jpeg_stdio_src( &cinfo, pIStm );
+        jpeg_svstream_src( &cinfo, pIStm );
     jpeg_read_header( &cinfo, TRUE );
 
     cinfo.scale_num = 1;
@@ -171,7 +172,6 @@ Exit:
         jpeg_destroy_decompress( &cinfo );
 }
 
-
 long WriteJPEG( void* pJPEGWriter, void* pOStm,
                 long nWidth, long nHeight,
                 long nQualityPercent, void* pCallbackData )
@@ -193,7 +193,7 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
     jpeg_create_compress( &cinfo );
     bCompCreated = 1;
 
-    jpeg_stdio_dest( &cinfo, pOStm );
+    jpeg_svstream_dest( &cinfo, pOStm );
 
     cinfo.image_width = (JDIMENSION) nWidth;
     cinfo.image_height = (JDIMENSION) nHeight;
