@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 17:03:00 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:41:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=sw
 TARGET=sw
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
+LIBTARGET=NO
 
 # --- Settings ------------------------------------------------------------
 
@@ -110,14 +111,28 @@ RESLIB1SRSFILES= \
     $(sw_res_files)
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
-SHL1VERSIONMAP= $(TARGET).map
+#SHL1VERSIONMAP= $(TARGET).map
 SHL1IMPLIB= _$(TARGET)
-SHL1LIBS= \
-    $(SLB)$/core1.lib\
-    $(SLB)$/core2.lib\
-    $(SLB)$/filter.lib\
-    $(SLB)$/ui1.lib\
-    $(SLB)$/ui2.lib
+SHL1LIBS= $(SLB)$/swall.lib
+
+LIB1TARGET      =$(SLB)$/swall.lib
+
+LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
+    $(OUT)$/slo$/swdll.obj
+
+LIB1FILES       = \
+                $(LIBPRE) $(SLB)$/core1.lib	\
+        $(LIBPRE) $(SLB)$/core2.lib	\
+        $(LIBPRE) $(SLB)$/filter.lib	\
+        $(LIBPRE) $(SLB)$/ui1.lib	\
+        $(LIBPRE) $(SLB)$/ui2.lib
+        
+#SHL1LIBS= \
+#	$(SLB)$/core1.lib\
+#	$(SLB)$/core2.lib\
+#	$(SLB)$/filter.lib\
+#	$(SLB)$/ui1.lib\
+#	$(SLB)$/ui2.lib
 
 .IF "$(OS)"!="MACOSX"
 # static libraries
@@ -162,19 +177,20 @@ SHL1DEPN=   \
     $(SLB)$/core2.lib\
     $(SLB)$/filter.lib\
     $(SLB)$/ui1.lib\
-    $(SLB)$/ui2.lib
+    $(SLB)$/ui2.lib 
 
 
-SHL1OBJS= \
-    $(OUT)$/slo$/swmodule.obj \
-    $(OUT)$/slo$/swdll.obj
+#SHL1OBJS= \
+#	$(OUT)$/slo$/swmodule.obj \
+#	$(OUT)$/slo$/swdll.obj
 #	$(SLO)$/.obj		  ^ \ nicht vergessen!
 
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1BASE=	0x1e000000
-
+DEF1DEPN        =$(MISC)$/$(SHL1TARGET).flt
 DEF1NAME	=$(SHL1TARGET)
+DEFLIB1NAME=swall
 
 SHL2TARGET= swd$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB= swdimp
@@ -207,5 +223,128 @@ SHL2OBJS+=  \
 
 SHL2DEPN+=  makefile.mk
 
+# add for swui
+SHL3TARGET= swui$(UPD)$(DLLPOSTFIX)
+SHL3IMPLIB= swuiimp
+SHL3VERSIONMAP= swui.map
+SHL3DEF=$(MISC)$/$(SHL3TARGET).def
+DEF3NAME=       $(SHL3TARGET)
+
+SHL3STDLIBS= \
+        $(ISWLIB) \
+            $(SVXLIB) \
+            $(SFX2LIB) \
+            $(GOODIESLIB) \
+            $(SO2LIB) \
+            $(SVTOOLLIB) \
+            $(TKLIB) \
+            $(VCLLIB) \
+            $(SVLLIB) \
+            $(SOTLIB) \
+            $(UNOTOOLSLIB) \
+            $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
+            $(UCBHELPERLIB)	\
+            $(CPPUHELPERLIB)	\
+            $(CPPULIB) \
+            $(VOSLIB) \
+            $(SALLIB) \
+            $(ICUUCLIB)	\
+            $(BASICLIB)
+            
+SHL3LIBS=   $(SLB)$/swui.lib
+LIB3TARGET = $(SLB)$/swui.lib
+
+LIB3OBJFILES = \
+        $(SLO)$/swuiexp.obj     \
+        $(SLO)$/swdlgfact.obj	\
+        $(SLO)$/addrdlg.obj \
+        $(SLO)$/ascfldlg.obj \
+        $(SLO)$/break.obj \
+        $(SLO)$/bookmark.obj \
+        $(SLO)$/changedb.obj \
+        $(SLO)$/chardlg.obj \
+        $(SLO)$/convert.obj \
+        $(SLO)$/cption.obj \
+        $(SLO)$/dbinsdlg.obj \
+        $(SLO)$/docfnote.obj	\
+        $(SLO)$/docstdlg.obj \
+         $(SLO)$/envlop1.obj \
+         $(SLO)$/envfmt.obj  \
+         $(SLO)$/envprt.obj  \
+         $(SLO)$/label1.obj  \
+          $(SLO)$/labfmt.obj  \
+          $(SLO)$/labelexp.obj \
+           $(SLO)$/labprt.obj  \
+           $(SLO)$/drpcps.obj \
+           $(SLO)$/pardlg.obj \
+           $(SLO)$/pattern.obj \
+            $(SLO)$/pggrid.obj \
+            $(SLO)$/pgfnote.obj \
+            $(SLO)$/rowht.obj \
+            $(SLO)$/selglos.obj \
+            $(SLO)$/split.obj \
+            $(SLO)$/splittbl.obj \
+             $(SLO)$/srtdlg.obj	\
+             $(SLO)$/tautofmt.obj	\
+             $(SLO)$/tblnumfm.obj \
+             $(SLO)$/uiborder.obj \
+             $(SLO)$/wrap.obj	\
+             $(SLO)$/colwd.obj	\
+             $(SLO)$/tabledlg.obj \
+             $(SLO)$/fldtdlg.obj \
+             $(SLO)$/fldedt.obj \
+             $(SLO)$/fldpage.obj \
+             $(SLO)$/flddb.obj \
+             $(SLO)$/flddinf.obj \
+             $(SLO)$/flddok.obj \
+             $(SLO)$/fldfunc.obj \
+             $(SLO)$/fldref.obj \
+             $(SLO)$/fldvar.obj \
+             $(SLO)$/swrenamexnameddlg.obj	\
+             $(SLO)$/swmodalredlineacceptdlg.obj	\
+        $(SLO)$/abstract.obj \
+    $(SLO)$/frmdlg.obj \
+    $(SLO)$/tmpdlg.obj \
+    $(SLO)$/frmpage.obj \
+    $(SLO)$/glosbib.obj \
+    $(SLO)$/glossary.obj \
+    $(SLO)$/inpdlg.obj \
+    $(SLO)$/insfnote.obj \
+    $(SLO)$/insrc.obj \
+    $(SLO)$/instable.obj \
+    $(SLO)$/insrule.obj \
+    $(SLO)$/javaedit.obj \
+    $(SLO)$/linenum.obj \
+    $(SLO)$/mailmrge.obj \
+    $(SLO)$/multmrk.obj \
+    $(SLO)$/mergetbl.obj \
+    $(SLO)$/outline.obj \
+    $(SLO)$/num.obj \
+    $(SLO)$/column.obj \
+    $(SLO)$/cnttab.obj \
+    $(SLO)$/cntex.obj \
+    $(SLO)$/uiregionsw.obj \
+    $(SLO)$/optload.obj \
+        $(SLO)$/optcomp.obj \
+        $(SLO)$/optpage.obj \
+        $(SLO)$/swuiccoll.obj \
+        $(SLO)$/numpara.obj \
+        $(SLO)$/swdialmgr.obj \
+        $(SLO)$/swuiidxmrk.obj 
+        
+#SHL3OBJS= \
+#        $(SLO)$/swuiexp.obj     \
+#        $(SLO)$/swabstdlg.obj	\
+#        $(SLO)$/swdlgfact.obj
+
+
+
 .INCLUDE :  target.mk
+
+
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @+$(TYPE) sw.flt > $@
 
