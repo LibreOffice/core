@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,18 +156,21 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     Text[ italian ] = "Filtri";
     Text[ danish ] = "Filter";
     Text[ swedish ] = "Filter";
-    Text[ polish ] = "Filtr";
-    Text[ portuguese_brazilian ] = "Filter";
+    Text[ polish ] = "Filtry";
+    Text[ portuguese_brazilian ] = "Filtros";
     Text[ japanese ] = "フィルタ";
     Text[ korean ] = "필터";
     Text[ chinese_simplified ] = "筛选";
     Text[ chinese_traditional ] = "篩選";
     Text[ arabic ] = "�����";
-    Text[ turkish ] = "Filtre";
+    Text[ turkish ] = "Filtreler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtres";
     Text[ finnish ] = "Suodattimet";
     Text[ thai ] = "ตัวกรอง";
+    Text[ czech ] = "Filtry";
+    Text[ hebrew ] = "‮מסננים‬";
+    Text[ hindi ] = "फ़िल्टरें";
 };
 
 // -----------
@@ -188,17 +191,20 @@ String RID_SVXSTR_UNDO_GRAFMODE
     Text[ russian ] = "����������� �����";
     Text[ italian ] = "Modo grafico";
     Text[ danish ] = "Grafikmodus";
-    Text[ polish ] = "Tryb grafiki";
-    Text[ portuguese_brazilian ] = "Graphics mode";
+    Text[ polish ] = "Tryb graficzny";
+    Text[ portuguese_brazilian ] = "Modo Figuras";
     Text[ japanese ] = "図モード";
     Text[ korean ] = "그림 모드";
     Text[ chinese_simplified ] = "图形模式";
     Text[ chinese_traditional ] = "圖形模式";
     Text[ arabic ] = "��� �����";
-    Text[ turkish ] = "Grafik kipi";
+    Text[ turkish ] = "Grafik Modu";
     Text[ catalan ] = "Mode gr�fic";
     Text[ finnish ] = "Grafiikkatila";
     Text[ thai ] = "โหมดกราฟิค";
+    Text[ czech ] = "Grafický režim";
+    Text[ hebrew ] = "‮מצב גרפי‬";
+    Text[ hindi ] = "सुचित्र प्रकार";
 };
 String RID_SVXSTR_UNDO_GRAFRED
 {
@@ -214,17 +220,20 @@ String RID_SVXSTR_UNDO_GRAFRED
     Text[ russian ] = "���������� ��������";
     Text[ italian ] = "Percentuale di rosso";
     Text[ danish ] = "R�d-andel";
-    Text[ polish ] = "Zawarto�� czerw.";
-    Text[ portuguese_brazilian ] = "Red portion";
+    Text[ polish ] = "Czerwony";
+    Text[ portuguese_brazilian ] = "Vermelho";
     Text[ japanese ] = "赤色の割合";
     Text[ korean ] = "적색";
     Text[ chinese_simplified ] = "红色比例";
     Text[ chinese_traditional ] = "紅色比例";
     Text[ arabic ] = "���� ������";
-    Text[ turkish ] = "K�rm�z� oran�";
+    Text[ turkish ] = "K�rm�z�";
     Text[ catalan ] = "Vermell";
     Text[ finnish ] = "Punainen";
     Text[ thai ] = "แดง";
+    Text[ czech ] = "Červená";
+    Text[ hebrew ] = "‮אדום‬";
+    Text[ hindi ] = "लाल";
 };
 String RID_SVXSTR_UNDO_GRAFGREEN
 {
@@ -240,17 +249,20 @@ String RID_SVXSTR_UNDO_GRAFGREEN
     Text[ russian ] = "���������� ��������";
     Text[ italian ] = "Percentuale di verde";
     Text[ danish ] = "Gr�n-andel";
-    Text[ polish ] = "Zawarto�� zielonego";
-    Text[ portuguese_brazilian ] = "Green portion";
+    Text[ polish ] = "Zielony";
+    Text[ portuguese_brazilian ] = "Verde";
     Text[ japanese ] = "緑色の割合";
     Text[ korean ] = "녹색";
     Text[ chinese_simplified ] = "绿色比例";
     Text[ chinese_traditional ] = "綠色比例";
     Text[ arabic ] = "���� ������";
-    Text[ turkish ] = "Ye�il oran�";
+    Text[ turkish ] = "Ye�il";
     Text[ catalan ] = "Verd";
     Text[ finnish ] = "Vihre�";
     Text[ thai ] = "เขียว";
+    Text[ czech ] = "Zelená";
+    Text[ hebrew ] = "‮ירוק‬";
+    Text[ hindi ] = "हरा";
 };
 String RID_SVXSTR_UNDO_GRAFBLUE
 {
@@ -266,17 +278,20 @@ String RID_SVXSTR_UNDO_GRAFBLUE
     Text[ russian ] = "���������� ������";
     Text[ italian ] = "Percentuale di blu";
     Text[ danish ] = "Bl�-andel";
-    Text[ polish ] = "Zawarto�� niebiesk.";
-    Text[ portuguese_brazilian ] = "Blue portion";
+    Text[ polish ] = "Niebieski";
+    Text[ portuguese_brazilian ] = "Azul";
     Text[ japanese ] = "青色の割合";
     Text[ korean ] = "청색";
     Text[ chinese_simplified ] = "蓝色比例";
     Text[ chinese_traditional ] = "藍色比例";
     Text[ arabic ] = "���� ������";
-    Text[ turkish ] = "Mavi oran�";
+    Text[ turkish ] = "Mavi";
     Text[ catalan ] = "Blau";
     Text[ finnish ] = "Sininen";
     Text[ thai ] = "น้ำเงิน";
+    Text[ czech ] = "Modrá";
+    Text[ hebrew ] = "‮כחול‬";
+    Text[ hindi ] = "नीला";
 };
 String RID_SVXSTR_UNDO_GRAFLUMINANCE
 {
@@ -293,7 +308,7 @@ String RID_SVXSTR_UNDO_GRAFLUMINANCE
     Text[ italian ] = "Luminosit�";
     Text[ danish ] = "Lysstyrke";
     Text[ polish ] = "Jasno��";
-    Text[ portuguese_brazilian ] = "Luminance";
+    Text[ portuguese_brazilian ] = "Brilho";
     Text[ japanese ] = "明度";
     Text[ korean ] = "밝기";
     Text[ chinese_simplified ] = "亮度";
@@ -303,6 +318,9 @@ String RID_SVXSTR_UNDO_GRAFLUMINANCE
     Text[ catalan ] = "Brillantor";
     Text[ finnish ] = "Kirkkaus";
     Text[ thai ] = "ความสว่าง";
+    Text[ czech ] = "Jas";
+    Text[ hebrew ] = "‮בהירות‬";
+    Text[ hindi ] = "चमकीलापन";
 };
 String RID_SVXSTR_UNDO_GRAFCONTRAST
 {
@@ -319,16 +337,19 @@ String RID_SVXSTR_UNDO_GRAFCONTRAST
     Text[ italian ] = "Contrasto";
     Text[ danish ] = "Kontrast";
     Text[ polish ] = "Kontrast";
-    Text[ portuguese_brazilian ] = "Contrast";
+    Text[ portuguese_brazilian ] = "Contraste";
     Text[ japanese ] = "コントラスト";
     Text[ korean ] = "대비";
     Text[ chinese_simplified ] = "对比度";
     Text[ chinese_traditional ] = "對比度";
     Text[ arabic ] = "�������";
-    Text[ turkish ] = "Kontrast� azalt";
+    Text[ turkish ] = "Kar��tl�k";
     Text[ catalan ] = "Contrast";
     Text[ finnish ] = "Kontrasti";
     Text[ thai ] = "ความคมชัด";
+    Text[ czech ] = "Kontrast";
+    Text[ hebrew ] = "‮ניגוד‬";
+    Text[ hindi ] = "भेद दिखलाना";
 };
 String RID_SVXSTR_UNDO_GRAFGAMMA
 {
@@ -344,17 +365,20 @@ String RID_SVXSTR_UNDO_GRAFGAMMA
     Text[ russian ] = "�����";
     Text[ italian ] = "Gamma";
     Text[ danish ] = "Gamma";
-    Text[ polish ] = "Gama";
-    Text[ portuguese_brazilian ] = "Gamma";
+    Text[ polish ] = "Gamma";
+    Text[ portuguese_brazilian ] = "Gama";
     Text[ japanese ] = "ガンマ";
     Text[ korean ] = "감마";
     Text[ chinese_simplified ] = "灰色系数";
     Text[ chinese_traditional ] = "灰色系數";
     Text[ arabic ] = "����";
-    Text[ turkish ] = "Gamma";
+    Text[ turkish ] = "Gama";
     Text[ catalan ] = "Gamma";
     Text[ finnish ] = "Gamma";
     Text[ thai ] = "แกมม่า";
+    Text[ czech ] = "Gamma";
+    Text[ hebrew ] = "‮גמא‬";
+    Text[ hindi ] = "गामा";
 };
 String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
 {
@@ -371,7 +395,7 @@ String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
     Text[ italian ] = "Trasparenza";
     Text[ danish ] = "Transparens";
     Text[ polish ] = "Przezroczysto��";
-    Text[ portuguese_brazilian ] = "Transparency";
+    Text[ portuguese_brazilian ] = "Transpar�ncia";
     Text[ japanese ] = "透過性";
     Text[ korean ] = "투명도";
     Text[ chinese_simplified ] = "透明";
@@ -381,6 +405,9 @@ String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transpar�ncia";
     Text[ finnish ] = "L�pin�kyvyys";
     Text[ thai ] = "ความโปร่งแสง";
+    Text[ czech ] = "Průhlednost";
+    Text[ hebrew ] = "‮שקיפות‬";
+    Text[ hindi ] = "पारदर्शकता";
 };
 String RID_SVXSTR_GRAFCROP
 {
@@ -397,19 +424,35 @@ String RID_SVXSTR_GRAFCROP
     Text[ danish ] = "Besk�r";
     Text[ swedish ] = "Besk�r";
     Text[ polish ] = "Przytnij";
-    Text[ portuguese_brazilian ] = "Crop";
+    Text[ portuguese_brazilian ] = "Recortar";
     Text[ japanese ] = "トリミング";
     Text[ korean ] = "다듬기";
     Text[ chinese_simplified ] = "裁剪";
     Text[ chinese_traditional ] = "裁剪";
-    Text[ turkish ] = "Crop";
+    Text[ turkish ] = "K�rma";
     Text[ arabic ] = "������";
     Text[ catalan ] = "Retalla";
     Text[ finnish ] = "Rajaa";
     Text[ thai ] = "ครอบตัด";
+    Text[ czech ] = "Oříznout";
+    Text[ hebrew ] = "‮חיתוך‬";
+    Text[ hindi ] = "क्रोप";
 };
 
 // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
