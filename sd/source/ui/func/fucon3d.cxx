@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-18 15:02:24 $
+ *  last change: $Author: aw $ $Date: 2002-03-19 14:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,7 +583,8 @@ SdrObject* FuConst3dObj::CreateDefaultObject(const sal_uInt16 nID, const Rectang
         }
     }
 
-    pScene->SetLogicRect(rRectangle);
+    // #97016#, #98245# use changed rectangle, not original one
+    pScene->SetLogicRect(aRect);
 
     return pScene;
 }
