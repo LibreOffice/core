@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:31:28 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2341,7 +2341,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ spanish ] = "~Título";
             Text[ italian ] = "~Titolo";
             Text[ danish ] = "~Titel";
-            Text[ swedish ] = "~Titel";
+            Text[ swedish ] = "~Namn";
             Text[ polish ] = "~Tytu³";
             Text[ portuguese_brazilian ] = "~Title";
             Text[ japanese ] = "À²ÄÙ(~T)";
