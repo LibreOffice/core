@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:00:50 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,11 +60,16 @@
  ************************************************************************/
 #ifndef _DOC_HXX
 #define _DOC_HXX
+
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
 #ifndef _TIMER_HXX //autogen
 #include <vcl/timer.hxx>
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -1222,7 +1227,7 @@ public:
     void SetDefault( const SfxItemSet& );
 
     // Erfrage das Default Attribut in diesem Dokument.
-    const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
+    SW_DLLPUBLIC const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
     // TextAttribute nicht mehr aufspannen lassen
     sal_Bool DontExpandFmt( const SwPosition& rPos, sal_Bool bFlag = sal_True );
 
@@ -1430,7 +1435,7 @@ public:
         //  Dokument - Statistics
     inline const SwDocStat  &GetDocStat() const { return *pDocStat; }
     void SetDocStat( const SwDocStat& rStat );
-    void UpdateDocStat( SwDocStat& rStat );
+    SW_DLLPUBLIC void UpdateDocStat( SwDocStat& rStat );
 
     sal_uInt16 GetPageCount() const;
     const Size GetPageSize( sal_uInt16 nPageNum ) const;
