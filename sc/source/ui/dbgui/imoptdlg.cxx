@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-07-29 15:14:55 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aEdTextSep.Hide();
         aCbFixed.Hide();
         aLbFont.GrabFocus();
+        aLbFont.SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
     }
 
     aLbFont.SelectTextEncoding( pOptions ? pOptions->eCharSet :
@@ -339,6 +340,14 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
     return 0;
 }
 
+ IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox*, pLb )
+{
+    if ( pLb == &aLbFont )
+    {
+        aBtnOk.Click();
+    }
+    return 0;
+}
 
 //------------------------------------------------------------------------
 //  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
