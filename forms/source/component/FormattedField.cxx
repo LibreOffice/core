@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:30:07 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 14:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const Reference<XMultiServi
 OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFactory)
             :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD, sal_False )
                                     // use the old control name for compytibility reasons
-            ,OErrorBroadcaster( rBHelper )
+            ,OErrorBroadcaster( OComponentHelper::rBHelper )
             ,OPropertyChangeListener(m_aMutex)
             ,m_bOriginalNumeric(sal_False)
             ,m_bNumeric(sal_False)

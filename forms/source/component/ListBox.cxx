@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:31:10 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 14:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ DBG_NAME(OListBoxModel);
 OListBoxModel::OListBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_CONTROL_LISTBOX)
                                     // use the old control name for compytibility reasons
-    ,OErrorBroadcaster( rBHelper )
+    ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,m_aRefreshListeners(m_aMutex)
     ,m_bBoundComponent(sal_False)
     ,m_nNULLPos(-1)
