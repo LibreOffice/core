@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-03 16:13:49 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,7 @@ String STR_COLOR
     Text[ chinese_traditional ] = "ΓC¦β";
     Text[ arabic ] = "αζδ";
     Text[ greek ] = "Χρώμα";
-    Text[ korean ] = "»φ";
+    Text[ korean ] = "»φ»σ";
     Text[ turkish ] = "Renk";
     Text[ language_user1 ] = " ";
 };
