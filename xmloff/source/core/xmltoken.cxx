@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 12:32:55 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2545,6 +2545,8 @@ namespace xmloff { namespace token {
         TOKEN( "data-pilot-groups"),                // XML_DATA_PILOT_GROUPS
         TOKEN( "data-pilot-group"),                 // XML_DATA_PILOT_GROUP
         TOKEN( "group-source-field-name"),          // XML_GROUP_SOURCE_FIELD_NAME
+
+        TOKEN( "image-opacity" ),               // XML_IMAGE_OPACITY // #i25616#
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
