@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 15:45:23 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:04:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -170,55 +170,36 @@ SHL2LIBS= \
     $(SLB)$/ui1.lib\
     $(SLB)$/ui2.lib
 
+# static libraries
+SHL2STDLIBS+= $(SCHLIB) $(SMLIB)
 
-SHL2STDLIBS= \
-    $(SALLIB) \
-    $(SFXLIB) \
+# dynamic libraries
+SHL2STDLIBS+= \
     $(OFALIB) \
-    $(SFXDEBUGLIB) \
-    $(BASICLIB) \
     $(SVXLIB) \
+    $(SFXLIB) \
+    $(XMLOFFLIB) \
+    $(BASICLIB) \
     $(GOODIESLIB) \
-    $(CHANNELLIB) \
-    $(INETLIBSH) \
-    $(SVMEMLIB) \
     $(SO2LIB) \
     $(SVTOOLLIB) \
-    $(SVLLIB)	\
-    $(SVLIB) \
-    $(SOTLIB) \
-    $(TOOLSLIB) \
-    $(UNOLIB) \
-    $(ONELIB) \
-    $(CPPULIB) \
-    $(CPPUHELPERLIB) \
-    $(UNOTOOLSLIB) \
-    $(VOSLIB) \
     $(TKLIB) \
+    $(VCLLIB) \
+    $(SVLLIB)	\
+    $(SOTLIB) \
+    $(UNOTOOLSLIB) \
+    $(TOOLSLIB) \
+    $(COMPHELPERLIB) \
     $(UCBHELPERLIB) \
-    $(XMLOFFLIB) \
-        $(COMPHELPERLIB) \
-        $(ICUI18NLIB)
-
-
-.IF "$(GUI)" ==	"UNX"
-SHL2STDLIBS += \
-    $(SCHLIB) \
-    $(SMLIB)
-.ENDIF
-
-.IF "$(SOLAR_JAVA)" != ""
-SHL2STDLIBS+= \
-        $(SJLIB)
-.ENDIF
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(VOSLIB) \
+    $(SALLIB) \
+    $(ICUUCLIB)
 
 .IF "$(GUI)"=="WNT"
-SHL2STDLIBS+= \
-            advapi32.lib
-.ELSE
-#SHL2STDLIBS+= \
-#			$(MAILLIB)
-.ENDIF
+SHL2STDLIBS+= advapi32.lib
+.ENDIF # WNT
 
 #			uno.lib usr.lib sj.lib aofa.lib
 #			ysch.lib  ysim.lib ysm.lib basic.lib ich.lib
