@@ -100,6 +100,7 @@ Dim Maxindex as Integer
 Dim OldsLocTemplatePath
 Dim sTemplateKeyName as String
 Dim sTemplateValueName as String
+	On Local Error Goto NOVAlIDSYSTEMPATH
 	Select Case WizardMode
 		Case SBMICROSOFTMODE
 			If GetGUIType = 1 Then &apos; Windows
@@ -148,6 +149,12 @@ Dim sTemplateValueName as String
 				GetTemplateDefaultPath = SOTemplatePath
 			End If
 	End Select
+NOVALIDSYSTEMPATH:
+	If Err &lt;&gt; 0 Then
+		GetTemplateDefaultPath() = SOWorkPath
+		Resume ONITGOES
+		ONITGOES:
+	End If	
 End Function
 
 
@@ -197,4 +204,5 @@ Dim vValue As String        &apos; Key value
     lRetVal = QueryValueEx(hKey, sValueName, vValue)
     RegCloseKeyA (hKey)
     QueryValue = vValue
-End Function</script:module>
+End Function
+</script:module>
