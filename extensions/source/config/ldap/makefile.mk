@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 15:18:56 $
+#   last change: $Author: obo $ $Date: 2005-03-18 10:40:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ SLOFILES=\
     $(SLO)$/ldapuserprof.obj	\
     $(SLO)$/ldapaccess.obj	\
     $(SLO)$/ldapuserprofilelayer.obj \
+    $(SLO)$/propertysethelper.obj \
     $(SLO)$/componentdef.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib        
