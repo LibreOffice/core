@@ -24,12 +24,14 @@
 #endif
 
 #include <systools/win32/uwinapi.h>
+#include <rtl/digest.h>
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <io.h>
 #include <fcntl.h>
 #include <string>
+#include <hash_map>
 #include <winsock.h>
 #include <malloc.h>
 #include <process.h>
@@ -37,11 +39,7 @@
 #if _MSC_VER < 1300
 #define COMEX "9"
 #else
-#if _MSC_VER < 1310
 #define COMEX "8"
-#else
-#define COMEX "10"
-#endif
 #endif
 
 #ifdef PRODUCT
@@ -62,8 +60,10 @@
 using namespace ::std;
 
 
+wstring  g_strProductKey;
 string  g_strDefaultLanguage;
 FILE    *g_fpStackFile = NULL;
+FILE    *g_fpChecksumFile = NULL;
 DWORD   g_dwExceptionCode = 0;
 
 CHAR    g_szReportServerA[MAX_HOSTNAME] = "";
@@ -489,7 +489,7 @@ BOOL WriteReportFile( CrashReportParams *pParams )
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                     "<!DOCTYPE errormail:errormail PUBLIC \"-//OpenOffice.org//DTD ErrorMail 1.0//EN\" \"errormail.dtd\">\n"
                     "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" usertype=\"%s\">\n"
-                    "<reportmail:mail xmlns:reportmail=\"http://openoffice.org/2002/reportmail\" version=\"1.0\" feedback=\"%s\" email=\"%s\">\n",
+                    "<reportmail:mail xmlns:reportmail=\"http://openoffice.org/2002/reportmail\" version=\"1.1\" feedback=\"%s\" email=\"%s\">\n",
                     pszUserType ? pszUserType : "",
                     pParams->fAllowContact ? "true" : "false",
                     pParams->fAllowContact ? xml_encode(szEmail).c_str() : ""
@@ -535,6 +535,9 @@ BOOL WriteReportFile( CrashReportParams *pParams )
 
                 fseek( g_fpStackFile, 0, SEEK_SET );
                 fcopy( g_fpStackFile, fp );
+
+                fseek( g_fpChecksumFile, 0, SEEK_SET );
+                fcopy( g_fpChecksumFile, fp );
 
                 fprintf( fp, "</errormail:errormail>\n" );
 
@@ -1282,9 +1285,142 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
 
 
 
+//*****************************************************************************
+//* Generate MD5 checksum
+//*****************************************************************************
+
+#define MAGIC_DESCRIPTION_FILLER    'x'
+#define MAGIC_DESCRIPTION_COUNT     80
+
+static void repatch_soffice_exe( void *pBuffer, size_t nBufSize )
+{
+    wchar_t DescriptionBuffer[MAGIC_DESCRIPTION_COUNT];
+
+    memset( DescriptionBuffer, 0, sizeof(DescriptionBuffer) );
+    wcsncpy( DescriptionBuffer, g_strProductKey.c_str(), elementsof(DescriptionBuffer) - 1 );
+
+    bool bPatched = false;
+
+    do
+    {
+        void *pFound = memchr( pBuffer, ((char *)DescriptionBuffer)[0], nBufSize );
+
+        if ( pFound )
+        {
+            size_t distance = (char *)pFound - (char *)pBuffer;
+
+            if ( nBufSize >= distance )
+            {
+                nBufSize -= distance;
+
+                if ( nBufSize >= sizeof(DescriptionBuffer) &&
+                    0 == memcmp( pFound, DescriptionBuffer, sizeof(DescriptionBuffer) ) )
+                {
+                    for ( int i = 0; i < 80; i++ )
+                    {
+                        ((wchar_t *)pFound)[i] = MAGIC_DESCRIPTION_FILLER;
+                    }
+                    bPatched = true;
+                }
+                else
+                {
+                    pBuffer = (void *)(((char *)pFound) + 1);
+                    nBufSize--;
+                }
+            }
+            else
+                nBufSize = 0;
+        }
+        else
+            nBufSize = 0;
+    } while ( !bPatched && nBufSize );
+}
+
+static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum, sal_uInt32 nChecksumLen )
+{
+    sal_uInt32  nBytesProcessed = 0;
+
+    FILE *fp = fopen( filename, "rb" );
+
+    if ( fp )
+    {
+        long    nFileSize;
+
+        if ( 0 == fseek( fp, 0, SEEK_END ) && -1 != (nFileSize = ftell(fp)) )
+        {
+            rewind( fp );
+
+            sal_uInt8 *pBuffer = new sal_uInt8[nFileSize];
+            size_t nBytesRead = fread( pBuffer, 1, nFileSize, fp );
+
+            if ( nBytesRead == nFileSize )
+            {
+                if ( 0 == stricmp( GetFileName(filename).c_str(), "soffice.exe" ) )
+                    repatch_soffice_exe( pBuffer, nBytesRead );
+
+                rtlDigestError error = rtl_digest_MD5 (
+                    pBuffer,   nBytesRead,
+                    pChecksum, nChecksumLen );
+
+                if ( rtl_Digest_E_None == error )
+                    nBytesProcessed = nBytesRead;
+            }
+
+            delete[] pBuffer;
+        }
+
+        fclose( fp );
+
+    }
+
+    return nBytesProcessed;
+}
+
+#if 0
+static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum, sal_uInt32 nChecksumLen )
+{
+    sal_uInt32  nBytesProcessed = 0;
+
+    FILE *fp = fopen( filename, "rb" );
+
+    if ( fp )
+    {
+        rtlDigest digest = rtl_digest_createMD5();
+
+        if ( digest )
+        {
+            size_t          nBytesRead;
+            sal_uInt8       buffer[4096];
+            rtlDigestError  error = rtl_Digest_E_None;
+
+            while ( rtl_Digest_E_None == error &&
+                0 != (nBytesRead = fread( buffer, 1, sizeof(buffer), fp )) )
+            {
+                error = rtl_digest_updateMD5( digest, buffer, nBytesRead );
+                nBytesProcessed += nBytesRead;
+            }
+
+            if ( rtl_Digest_E_None == error )
+            {
+                error = rtl_digest_getMD5( digest, pChecksum, nChecksumLen );
+            }
+
+            if ( rtl_Digest_E_None != error )
+                nBytesProcessed = 0;
+
+            rtl_digest_destroyMD5( digest );
+        }
+
+        fclose( fp );
+    }
+
+    return nBytesProcessed;
+}
+
+#endif
 //***************************************************************************
 
-static bool WriteStackFile( FILE *fout, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
+static bool WriteStackFile( FILE *fout, hash_map< string, string >& rLibraries, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
 {
     bool    fSuccess = false;
 
@@ -1353,6 +1489,8 @@ static bool WriteStackFile( FILE *fout, DWORD dwProcessId, PEXCEPTION_POINTERS p
 
                     if ( SymGetModuleInfo( hProcess, frame.AddrPC.Offset, &moduleInfo ) )
                     {
+                        rLibraries[ GetFileName( moduleInfo.LoadedImageName ).c_str() ] = moduleInfo.LoadedImageName;
+
                         DWORD   dwRelOffset = 0;
                         BYTE    symbolBuffer[sizeof(IMAGEHLP_SYMBOL) + 256 ];
                         PIMAGEHLP_SYMBOL    pSymbol = (PIMAGEHLP_SYMBOL)symbolBuffer;
@@ -1403,6 +1541,43 @@ static bool WriteStackFile( FILE *fout, DWORD dwProcessId, PEXCEPTION_POINTERS p
     }
 
     return fSuccess;
+}
+
+bool WriteChecksumFile( FILE *fchksum, const hash_map< string, string >& rLibraries )
+{
+    bool success = false;
+
+    if ( fchksum && rLibraries.size() )
+    {
+        fprintf( fchksum, "<errormail:Checksums type=\"MD5\">\n" );
+
+        hash_map< string, string >::const_iterator iter;
+
+        for ( iter = rLibraries.begin();
+            iter != rLibraries.end();
+            iter++ )
+        {
+            sal_uInt8 checksum[RTL_DIGEST_LENGTH_MD5];
+            sal_uInt32 nBytesProcessed = calc_md5_checksum(
+                iter->second.c_str(),
+                checksum, sizeof(checksum) );
+
+            if ( nBytesProcessed )
+            {
+                fprintf( fchksum, "<errormail:Checksum sum=\"0x" );
+                for ( int i = 0; i < sizeof(checksum); fprintf( fchksum, "%02X", checksum[i++] ) );
+                fprintf( fchksum, "\" bytes=\"%d\" file=\"%s\"/>\n",
+                    nBytesProcessed,
+                    GetFileName( iter->first ) );
+            }
+        }
+
+        fprintf( fchksum, "</errormail:Checksums>\n" );
+
+        success = true;
+    }
+
+    return success;
 }
 
 //***************************************************************************
@@ -1797,6 +1972,8 @@ static bool ReadBootstrapParams()
         )
     {
         TCHAR   *pVersion = _tcschr( szBuffer, ' ' );
+
+        g_strProductKey = szBuffer;
 
         if ( pVersion )
         {
@@ -2260,9 +2437,15 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int )
     {
         if ( WriteDumpFile( dwProcessId, pExceptionPointers, dwThreadId ) )
         {
+            hash_map< string, string > aLibraries;
+
             g_fpStackFile = _tmpfile();
 
-            WriteStackFile( g_fpStackFile, dwProcessId, pExceptionPointers );
+            WriteStackFile( g_fpStackFile, aLibraries, dwProcessId, pExceptionPointers );
+
+            g_fpChecksumFile = _tmpfile();
+
+            WriteChecksumFile( g_fpChecksumFile, aLibraries );
 
             InitCommonControls();
 
@@ -2291,6 +2474,9 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int )
 
             if ( g_fpStackFile )
                 fclose( g_fpStackFile );
+
+            if ( g_fpChecksumFile )
+                fclose( g_fpChecksumFile );
         }
     }
 
