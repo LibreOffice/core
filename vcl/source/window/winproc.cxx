@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-20 11:42:23 $
+ *  last change: $Author: cp $ $Date: 2001-03-08 12:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,14 +1032,20 @@ static Window* ImplGetKeyInputWindow( Window* pWindow )
     // determine last input time
     pSVData->maAppData.mnLastInputTime = Time::GetSystemTicks();
 
-    // find window
+    // find window - is every time the window which has currently the
+    // focus or the last time the focus.
     Window* pChild = pWindow->mpFrameData->mpFocusWin;
 
-    // Nur KeyInput an das Focus-Window auswerten
-    if ( !pChild || (pChild != pSVData->maWinData.mpFocusWin) )
+    // no child - than no input
+    if ( !pChild )
         return 0;
-    DBG_ASSERT( pChild == pSVData->maWinData.mpFocusWin,
-                "ImplHandleKey: Keyboard-Input is sent to the wrong frame" );
+
+    // We call also KeyInput if we haven't the focus, because on Unix
+    // system this is often the case when a Lookup Choise Window has
+    // the focus - because this windows send the KeyInput directly to
+    // the window without resetting the focus
+    DBG_ASSERTWARNING( pChild == pSVData->maWinData.mpFocusWin,
+                       "ImplHandleKey: Keyboard-Input is sent to a frame without focus" );
 
     // no keyinput to disabled windows
     if ( !pChild->IsEnabled() || !pChild->IsInputEnabled() )
@@ -1162,16 +1168,8 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     }
 
     // find window
-    Window* pChild = pWindow->mpFrameData->mpFocusWin;
-
-    // Nur KeyInput an das Focus-Window auswerten
-    if ( !pChild || (pChild != pSVData->maWinData.mpFocusWin) )
-        return 0;
-    DBG_ASSERT( pChild == pSVData->maWinData.mpFocusWin,
-                "ImplHandleKey: Keyboard-Input is sent to the wrong frame" );
-
-    // no keyinput to disabled windows
-    if ( !pChild->IsEnabled() || !pChild->IsInputEnabled() )
+    Window* pChild = ImplGetKeyInputWindow( pWindow );
+    if ( !pChild )
         return 0;
 
     // call handler
