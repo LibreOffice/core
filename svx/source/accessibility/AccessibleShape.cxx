@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 12:49:04 $
+ *  last change: $Author: sab $ $Date: 2002-04-12 11:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,8 +258,8 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     CheckDisposedState ();
     awt::Rectangle aBoundingBox;
 
-    ::awt::Point aPixelPosition (getLocationOnScreen());
-    ::awt::Size aPixelSize (getSize());
+    awt::Point aPixelPosition (getLocationOnScreen());
+    awt::Size aPixelSize (getSize());
     Reference<XAccessibleComponent> xParentComponent (getAccessibleParent(), uno::UNO_QUERY);
     if (xParentComponent.is())
     {

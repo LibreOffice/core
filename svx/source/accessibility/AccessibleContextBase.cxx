@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 12:42:29 $
+ *  last change: $Author: sab $ $Date: 2002-04-12 11:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ AccessibleContextBase::AccessibleContextBase (
         mxRelationSet (NULL)
 {
     // Create the state set.
-    ::utl::AccessibleStateSetHelper* pStateSet (new ::utl::AccessibleStateSetHelper ());
+    ::utl::AccessibleStateSetHelper* pStateSet  = new ::utl::AccessibleStateSetHelper ();
     mxStateSet = pStateSet;
 
     // Set some states.  Don't use the SetState method because no events
@@ -133,7 +133,7 @@ AccessibleContextBase::AccessibleContextBase (
     }
 
     // Create the relation set.
-    ::utl::AccessibleRelationSetHelper* pRelationSet (new ::utl::AccessibleRelationSetHelper ());
+    ::utl::AccessibleRelationSetHelper* pRelationSet = new ::utl::AccessibleRelationSetHelper ();
     mxRelationSet = pRelationSet;
 }
 
@@ -149,9 +149,9 @@ AccessibleContextBase::~AccessibleContextBase(void)
 
 void AccessibleContextBase::SetState (sal_Int16 aState)
 {
-    ::utl::AccessibleStateSetHelper* pStateSet (
-        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get()));
-    if (pStateSet != NULL)
+    ::utl::AccessibleStateSetHelper* pStateSet =
+        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+    if ((pStateSet != NULL) && !pStateSet->contains(aState))
     {
         pStateSet->AddState (aState);
 
@@ -169,9 +169,9 @@ void AccessibleContextBase::SetState (sal_Int16 aState)
 
 void AccessibleContextBase::ResetState (sal_Int16 aState)
 {
-    ::utl::AccessibleStateSetHelper* pStateSet (
-        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get()));
-    if (pStateSet != NULL)
+    ::utl::AccessibleStateSetHelper* pStateSet =
+        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+    if ((pStateSet != NULL) && pStateSet->contains(aState))
     {
         pStateSet->RemoveState (aState);
 
@@ -356,8 +356,8 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     CheckDisposedState ();
 
     // Create a copy of the relation set and return it.
-    ::utl::AccessibleRelationSetHelper* pRelationSet (
-        static_cast< ::utl::AccessibleRelationSetHelper*>(mxRelationSet.get()));
+    ::utl::AccessibleRelationSetHelper* pRelationSet =
+        static_cast< ::utl::AccessibleRelationSetHelper*>(mxRelationSet.get());
     if (pRelationSet != NULL)
     {
         return uno::Reference<XAccessibleRelationSet> (
@@ -385,8 +385,8 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     CheckDisposedState ();
 
     // Create a copy of the state set and return it.
-    ::utl::AccessibleStateSetHelper* pStateSet (
-        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get()));
+    ::utl::AccessibleStateSetHelper* pStateSet =
+        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
     if (pStateSet != NULL)
     {
         return uno::Reference<XAccessibleStateSet> (
@@ -646,8 +646,8 @@ void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
         ::cppu::OInterfaceIteratorHelper I (*pContainer);
         while (I.hasMoreElements())
         {
-            XAccessibleEventListener* pxListener (
-                static_cast<XAccessibleEventListener*>(I.next()));
+            XAccessibleEventListener* pxListener =
+                static_cast<XAccessibleEventListener*>(I.next());
             pxListener->notifyEvent (aEvent);
         }
     }

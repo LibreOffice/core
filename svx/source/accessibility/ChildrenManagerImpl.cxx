@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 12:59:54 $
+ *  last change: $Author: sab $ $Date: 2002-04-12 11:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ void SAL_CALL
                 break;
         if (i<maVisibleChildren.size())
         {
-            ChildDescriptor& rChildDescriptor (maVisibleChildren[i]);
+            ChildDescriptor& rChildDescriptor = maVisibleChildren[i];
             if (rChildDescriptor.mpAccessibleShape != NULL)
                 rChildDescriptor.mpAccessibleShape->CommitChange (
                     AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
