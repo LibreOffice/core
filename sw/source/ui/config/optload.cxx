@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:28:06 $
+ *  last change: $Author: os $ $Date: 2001-03-30 13:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 /*-----------------18.01.97 12.42-------------------
 
 --------------------------------------------------*/
-inline lcl_MoveWin(Window& rWin, long nDiff)
+inline void lcl_MoveWin(Window& rWin, long nDiff)
 {
     Point aPos(rWin.GetPosPixel());
     aPos.Y() -= nDiff;
