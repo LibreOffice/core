@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 12:50:37 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #include <tools/datetime.hxx>
 #include <vcl/svapp.hxx>
 #include <ucbhelper/content.hxx>
+#include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 
@@ -118,6 +119,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
+using namespace com::sun::star::task;
 using namespace rtl;
 using namespace comphelper;
 using namespace osl;
@@ -421,7 +423,11 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aFolderObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
+                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+
+        Content aCnt( aFolderObj.GetMainURL(), new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
         Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(5);
         OUString* pProps = aProps.getArray();
