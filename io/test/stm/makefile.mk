@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2000-12-08 11:07:33 $
+#   last change: $Author: jbu $ $Date: 2001-06-14 07:42:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,9 @@ UNOTYPES =	com.sun.star.test.XSimpleTest \
         com.sun.star.lang.XMultiServiceFactory	\
         com.sun.star.lang.XServiceInfo	\
         com.sun.star.lang.XSingleServiceFactory	\
+        com.sun.star.lang.XSingleComponentFactory	\
+        com.sun.star.lang.XMultiComponentFactory	\
+        com.sun.star.uno.XComponentContext	\
         com.sun.star.lang.XTypeProvider	\
         com.sun.star.registry.XImplementationRegistration	\
         com.sun.star.registry.XRegistryKey	\
@@ -113,7 +116,6 @@ SHL1TARGET= $(TARGET)
 SHL1STDLIBS= \
         $(SALLIB) 	 \
         $(CPPULIB) \
-        $(VOSLIB) \
         $(CPPUHELPERLIB)
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
