@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:02:37 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-#pragma hdrstop
-
-// ============================================================================
 
 #ifndef SC_XLOCX_HXX
 #include "xlocx.hxx"
@@ -136,9 +129,9 @@
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
 #endif
-
-#include "xcl97rec.hxx"
-
+#ifndef SC_XEESCHER_HXX
+#include "xeescher.hxx"
+#endif
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -164,15 +157,13 @@ using ::com::sun::star::drawing::XControlShape;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 
-
 #define EXC_STREAMNAME_CTLS     String( RTL_CONSTASCII_USTRINGPARAM( "Ctls" ) )
-
 
 // OCX controls ===============================================================
 
 XclOcxConverter::XclOcxConverter( const XclRoot& rRoot ) :
-    SvxMSConvertOCXControls( rRoot.GetDocShell(), NULL ),
-    mrDoc( rRoot.GetDoc() ),
+    SvxMSConvertOCXControls( rRoot.GetDocShell(), 0 ),
+    mrRoot( rRoot ),
     mnCurrScTab( 0 ),
     mnCachedScTab( 0 )
 {
@@ -182,14 +173,14 @@ XclOcxConverter::~XclOcxConverter()
 {
 }
 
-void XclOcxConverter::SetCurrScTab( SCTAB nScTab )
+void XclOcxConverter::SetScTab( SCTAB nScTab )
 {
     /*  Invalidate SvxMSConvertOCXControls::xFormComps whenever sheet index changes,
         otherwise GetDrawPage() will not be called in SvxMSConvertOCXControls::GetFormComps(). */
     if( mnCurrScTab != nScTab )
-        xFormComps = NULL;
+        xFormComps = 0;
 
-    mnCurrScTab = static_cast<sal_uInt16>(nScTab);
+    mnCurrScTab = nScTab;
 }
 
 const Reference< XDrawPage >& XclOcxConverter::GetDrawPage()
@@ -197,20 +188,16 @@ const Reference< XDrawPage >& XclOcxConverter::GetDrawPage()
     // find and cache draw page if uninitialized or sheet index has been changed
     if( !xDrawPage.is() || (mnCachedScTab != mnCurrScTab) )
     {
-        if( ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer() )
+        // mnCurrTab set in ReadControl() contains sheet index of current control
+        if( SdrPage* pPage = mrRoot.GetSdrPage( mnCurrScTab ) )
         {
-            // mnCurrTab set in ReadControl() contains sheet index of current control
-            if( SdrPage* pPage = pDrawLayer->GetPage( mnCurrScTab ) )
-            {
-                xDrawPage = Reference< XDrawPage >( pPage->getUnoPage(), UNO_QUERY );
-                mnCachedScTab = mnCurrScTab;
-            }
+            xDrawPage = Reference< XDrawPage >( pPage->getUnoPage(), UNO_QUERY );
+            mnCachedScTab = mnCurrScTab;
         }
     }
 
     return xDrawPage;
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -227,11 +214,11 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
     if( mxStrm.Is() && rOcxCtrl.IsControl() )
     {
         // virtual call of GetDrawPage() needs current sheet index
-        SetCurrScTab( rOcxCtrl.GetScTab() );
+        SetScTab( rOcxCtrl.GetScTab() );
 
         // stream position of the extra data for this control
         sal_uInt32 nStrmPos = rOcxCtrl.GetCtrlStreamPos();
-        mxStrm->Seek( nStrmPos );
+        mxStrm->Seek( static_cast< ULONG >( nStrmPos ) );
 
         // the shape to fill
         Reference< XShape > xShape;
@@ -251,10 +238,19 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
         {
             if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
             {
-                // set the spreadsheet links
                 Reference< XControlShape > xControlShape( xShape, UNO_QUERY );
                 if( xControlShape.is() )
-                    ConvertSheetLinks( xControlShape->getControl(), rOcxCtrl );
+                {
+                    Reference< XControlModel > xModel( xControlShape->getControl() );
+                    Reference< XPropertySet > xPropSet( xModel, UNO_QUERY );
+                    if( xModel.is() && xPropSet.is() )
+                    {
+                        // set the spreadsheet links
+                        ConvertSheetLinks( xModel, rOcxCtrl );
+                        // set additional control properties
+                        rOcxCtrl.SetProperties( xPropSet );
+                    }
+                }
 
                 rOcxCtrl.SetSdrObj( pSdrObj );
                 return true;
@@ -267,7 +263,7 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
 bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl )
 {
     // virtual call of GetDrawPage() needs current sheet index
-    SetCurrScTab( rTbxCtrl.GetScTab() );
+    SetScTab( rTbxCtrl.GetScTab() );
 
     const Reference< XMultiServiceFactory >& rxServiceFactory = GetServiceFactory();
     if( rxServiceFactory.is() )
@@ -432,7 +428,6 @@ void XclImpOcxConverter::ConvertSheetLinks(
     }
 }
 
-
 // ----------------------------------------------------------------------------
 
 XclExpOcxConverter::XclExpOcxConverter( const XclExpRoot& rRoot ) :
@@ -445,7 +440,7 @@ XclExpOcxConverter::XclExpOcxConverter( const XclExpRoot& rRoot ) :
 
 XclExpObjOcxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& rxShape )
 {
-    XclExpObjOcxCtrl* pOcxCtrl = NULL;
+    XclExpObjOcxCtrl* pOcxCtrl = 0;
 
     // the shape to export
     Reference< XControlShape > xControlShape( rxShape, UNO_QUERY );
@@ -461,12 +456,12 @@ XclExpObjOcxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& 
             if( mxStrm.Is() )
             {
                 String aClassName;
-                sal_uInt32 nStrmStart = mxStrm->Tell();
+                sal_uInt32 nStrmStart = static_cast< sal_uInt32 >( mxStrm->Tell() );
 
                 // writes from xControlModel into mxStrm, raw class name returned in aClassName
                 if( WriteOCXExcelKludgeStream( mxStrm, xControlModel, rxShape->getSize(), aClassName ) )
                 {
-                    sal_uInt32 nStrmSize = mxStrm->Tell() - nStrmStart;
+                    sal_uInt32 nStrmSize = static_cast< sal_uInt32 >( mxStrm->Tell() - nStrmStart );
                     // adjust the class name to "Forms.***.1"
                     aClassName.InsertAscii( "Forms.", 0 ).AppendAscii( ".1" );
                     pOcxCtrl = new XclExpObjOcxCtrl( GetRoot(), rxShape, aClassName, nStrmStart, nStrmSize );
@@ -482,7 +477,7 @@ XclExpObjOcxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& 
 
 XclExpObjTbxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& rxShape )
 {
-    XclExpObjTbxCtrl* pTbxCtrl = NULL;
+    XclExpObjTbxCtrl* pTbxCtrl = 0;
 
     // the shape to export
     Reference< XControlShape > xControlShape( rxShape, UNO_QUERY );
@@ -550,7 +545,6 @@ void XclExpOcxConverter::ConvertSheetLinks(
         }
     }
 }
-
 
 // ============================================================================
 
