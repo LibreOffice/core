@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thumbviewer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:35:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,70 @@
 
 #include <shellapi.h>
 #include <memory>
+
+extern HINSTANCE g_hModule;
+
+namespace internal
+{
+    /* The signet.png used for thumbnails of signed documents
+       is contained as resource in this module, the resource
+       id is 2000 */
+    void LoadSignetImageFromResource(ZipFile::ZipContentBuffer_t& buffer)
+    {
+        HRSRC hrc = FindResource(g_hModule, TEXT("#2000"), RT_RCDATA);
+        DWORD size = SizeofResource(g_hModule, hrc);
+        HGLOBAL hglob = LoadResource(g_hModule, hrc);
+        char* data = reinterpret_cast<char*>(LockResource(hglob));
+        buffer = ZipFile::ZipContentBuffer_t(data, data + size);
+    }
+
+    bool IsSignedDocument(const ZipFile* zipfile)
+    {
+        return zipfile->HasContent("META-INF/documentsignatures.xml");
+    }
+
+    bool IsWindowsXP()
+    {
+        OSVERSIONINFO osvi;
+        ZeroMemory(&osvi, sizeof(osvi));
+        osvi.dwOSVersionInfoSize = sizeof(osvi);
+        GetVersionEx(&osvi);
+
+        return ((osvi.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
+                ((osvi.dwMajorVersion >= 5) && (osvi.dwMinorVersion >= 1)));
+    }
+
+    /* Calculate where to position the signet image.
+       On Windows ME we need to shift the signet a
+       little bit to the left because Windows ME
+       puts an overlay icon to the lower right
+       corner of a thumbnail image so that our signet
+       we be hidden. */
+    Gdiplus::Point CalcSignetPosition(
+        const Gdiplus::Rect& canvas, const Gdiplus::Rect& thumbnail_border, const Gdiplus::Rect& signet)
+    {
+        int x = 0;
+        int y = 0;
+        int hoffset = canvas.GetRight() - thumbnail_border.GetRight();
+        int voffset = canvas.GetBottom() - thumbnail_border.GetBottom();
+
+        if (hoffset > voffset)
+        {
+            x = thumbnail_border.GetRight() - signet.GetRight() + min(signet.GetRight() / 2, hoffset);
+            y = thumbnail_border.GetBottom() - signet.GetBottom();
+        }
+        else
+        {
+            x = thumbnail_border.GetRight() - signet.GetRight();
+            y = thumbnail_border.GetBottom() - signet.GetBottom() + min(signet.GetBottom() / 2, voffset);
+        }
+
+        if (!IsWindowsXP())
+            x -= 15;
+
+        return Gdiplus::Point(x,y);
+    }
+}
 
 class StreamOnZipBuffer : public IStream
 {
@@ -282,10 +346,17 @@ CThumbviewer::CThumbviewer(long RefCnt) :
 
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     Gdiplus::GdiplusStartup(&gdiplus_token_, &gdiplusStartupInput, NULL);
+
+    ZipFile::ZipContentBuffer_t img_data;
+    internal::LoadSignetImageFromResource(img_data);
+    IStream* stream = new StreamOnZipBuffer(img_data);
+    signet_ = new Gdiplus::Bitmap(stream, TRUE);
+    stream->Release();
 }
 
 CThumbviewer::~CThumbviewer()
 {
+    delete signet_;
     Gdiplus::GdiplusShutdown(gdiplus_token_);
     InterlockedDecrement(&g_DllRefCnt);
 }
@@ -339,7 +410,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
 
     try
     {
-        std::auto_ptr<ZipFile> zipfile(new ZipFile(filename_));
+        std::auto_ptr<ZipFile> zipfile(new ZipFile(WStringToString(filename_)));
 
         if (zipfile->HasContent(THUMBNAIL_CONTENT))
         {
@@ -361,10 +432,10 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
 
             if (memDC)
             {
-                UINT offset = 2; // reserve a little border space
+                UINT offset = 3; // reserve a little border space
 
                 Gdiplus::Rect canvas(0, 0, thumbnail_size_.cx, thumbnail_size_.cy);
-                Gdiplus::Rect canvas_thumbnail(0, 0, thumbnail_size_.cx - 2*offset, thumbnail_size_.cy - 2*offset);
+                Gdiplus::Rect canvas_thumbnail(offset, offset, thumbnail_size_.cx - 2 * offset, thumbnail_size_.cy - 2 * offset);
 
                 Gdiplus::Rect scaledRect = CalcScaledAspectRatio(
                     Gdiplus::Rect(0, 0, thumbnail_png.GetWidth(), thumbnail_png.GetHeight()), canvas_thumbnail);
@@ -374,21 +445,17 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
                     DWORD ct[256];
                 } dib;
 
+                ZeroMemory(&dib, sizeof(dib));
+
                 dib.bi.biSize = sizeof(BITMAPINFOHEADER);
                 dib.bi.biWidth = thumbnail_size_.cx;
                 dib.bi.biHeight = thumbnail_size_.cy;
                 dib.bi.biPlanes = 1;
-                dib.bi.biBitCount = color_depth_;
+                dib.bi.biBitCount = static_cast<WORD>(color_depth_);
                 dib.bi.biCompression = BI_RGB;
-                dib.bi.biSizeImage = 0;
-                dib.bi.biXPelsPerMeter = 0;
-                dib.bi.biYPelsPerMeter = 0;
-                dib.bi.biClrUsed = 0;
-                dib.bi.biClrImportant = 0;
 
                 LPVOID lpBits;
                 HBITMAP hMemBmp = CreateDIBSection(memDC, (LPBITMAPINFO)&dib, DIB_RGB_COLORS, &lpBits, NULL, 0);
-
                 HGDIOBJ hOldObj = SelectObject(memDC, hMemBmp);
 
                 Gdiplus::Graphics graphics(memDC);
@@ -400,7 +467,8 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
                 scaledRect.X = (canvas.Width - scaledRect.Width) / 2;
                 scaledRect.Y = (canvas.Height - scaledRect.Height) / 2;
 
-                graphics.DrawRectangle(&blackPen, scaledRect);
+                Gdiplus::Rect border_rect(scaledRect.X, scaledRect.Y, scaledRect.Width, scaledRect.Height);
+                graphics.DrawRectangle(&blackPen, border_rect);
 
                 scaledRect.X += 1;
                 scaledRect.Y += 1;
@@ -409,8 +477,23 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
 
                 graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
                 Gdiplus::Status stat = graphics.DrawImage(
-                    &thumbnail_png, scaledRect, canvas_thumbnail.X, canvas_thumbnail.Y,
+                    &thumbnail_png, scaledRect, 0 , 0,
                     thumbnail_png.GetWidth(), thumbnail_png.GetHeight(), Gdiplus::UnitPixel);
+
+                /* Add a signet sign to the thumbnail of signed documents */
+                if (internal::IsSignedDocument(zipfile.get()))
+                {
+                    double SCALING_FACTOR = 0.6;
+                    Gdiplus::Rect signet_scaled(
+                        0, 0, static_cast<INT>(signet_->GetWidth() * SCALING_FACTOR), static_cast<INT>(signet_->GetHeight() * SCALING_FACTOR));
+                    Gdiplus::Point pos_signet = internal::CalcSignetPosition(canvas_thumbnail, border_rect, signet_scaled);
+                    Gdiplus::Rect dest(pos_signet.X, pos_signet.Y, signet_scaled.GetRight(), signet_scaled.GetBottom());
+
+                    stat = graphics.DrawImage(
+                        signet_, dest,
+                        0, 0, signet_->GetWidth(), signet_->GetHeight(),
+                        Gdiplus::UnitPixel);
+                }
 
                 if (stat == Gdiplus::Ok)
                 {
@@ -444,6 +527,8 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::GetLocation(
 
     *pdwFlags = IEIFLAG_CACHE; // we don't cache the image
 
+    wcsncpy(pszPathBuffer, filename_.c_str(), cchMax);
+
     return NOERROR;
 }
 
@@ -459,7 +544,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::GetClassID(CLSID* pClassID)
 
 HRESULT STDMETHODCALLTYPE CThumbviewer::Load(LPCOLESTR pszFileName, DWORD)
 {
-    filename_ = WStringToString(pszFileName);
+    filename_ = pszFileName;
     return S_OK;
 }
 
@@ -486,3 +571,4 @@ Gdiplus::Rect CThumbviewer::CalcScaledAspectRatio(Gdiplus::Rect src, Gdiplus::Re
 
     return result;
 }
+
