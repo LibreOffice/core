@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:51:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,22 +764,18 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeEx
     return bCheck;
 }
 // -----------------------------------------------------------------------------
-void OTableController::AddSupportedFeatures()
+void OTableController::describeSupportedFeatures()
 {
-    OSingleDocumentController::AddSupportedFeatures();
+    OSingleDocumentController::describeSupportedFeatures();
 
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Redo")]            = ID_BROWSER_REDO;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")]            = ID_BROWSER_SAVEDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")]            = ID_BROWSER_UNDO;
-
-    //  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserMode")] = SID_BROWSER_MODE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:HelpMenu")]        = SID_HELPMENU;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:NewDoc")]          = SID_NEWDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAs")]          = ID_BROWSER_SAVEASDOC;
-
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBIndexDesign")]   = SID_INDEXDESIGN;
-
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:EditDoc")] = ID_BROWSER_EDITDOC;
+    implDescribeSupportedFeature( ".uno:Redo",          ID_BROWSER_REDO,        CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Save",          ID_BROWSER_SAVEDOC,     CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Undo",          ID_BROWSER_UNDO,        CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:HelpMenu",      SID_HELPMENU,           CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:NewDoc",        SID_NEWDOC,             CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:SaveAs",        ID_BROWSER_SAVEASDOC,   CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:DBIndexDesign", SID_INDEXDESIGN,        CommandGroup::APPLICATION );
+    implDescribeSupportedFeature( ".uno:EditDoc",       ID_BROWSER_EDITDOC,     CommandGroup::EDIT );
 }
 // -----------------------------------------------------------------------------
 SfxUndoManager* OTableController::getUndoMgr()
