@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:30:33 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,29 +222,6 @@ public:
         }
 };
 
-class SimpleParser
-{
-private:
-    USHORT nPos;
-    ByteString aSource;
-    ByteString aLastToken;
-//  static ByteString aLastUnknownToken;
-    TokenList aTokenList;
-
-    TokenInfo aNextTag;     // to store closetag in case of combined tags like <br/>
-
-    ByteString GetNextTokenString();
-
-public:
-    SimpleParser();
-    void Parse( ByteString PaSource );
-    TokenInfo GetNextToken();
-    ByteString GetTokenText();
-    static ByteString GetLexem( TokenInfo const &aToken );
-    USHORT GetScanningPosition(){ return nPos; }
-    TokenList GetTokenList(){ return aTokenList; }
-};
-
 class ParserMessage
 {
     USHORT nErrorNr;
@@ -267,6 +244,29 @@ public:
 };
 
 DECLARE_LIST( ParserMessageList, ParserMessage* );
+
+class SimpleParser
+{
+private:
+    USHORT nPos;
+    ByteString aSource;
+    ByteString aLastToken;
+//  static ByteString aLastUnknownToken;
+    TokenList aTokenList;
+
+    TokenInfo aNextTag;     // to store closetag in case of combined tags like <br/>
+
+    ByteString GetNextTokenString( ParserMessageList &rErrorList );
+
+public:
+    SimpleParser();
+    void Parse( ByteString PaSource );
+    TokenInfo GetNextToken( ParserMessageList &rErrorList );
+    ByteString GetTokenText();
+    static ByteString GetLexem( TokenInfo const &aToken );
+    USHORT GetScanningPosition(){ return nPos; }
+    TokenList GetTokenList(){ return aTokenList; }
+};
 
 class TokenParser
 {
@@ -299,7 +299,7 @@ public:
     TokenParser();
     void Parse( const ByteString &aCode );
     ParserMessageList& GetErrors(){ return aErrorList; }
-    BOOL HasErrors(){ return ( aErrorList.Count() ); }
+    BOOL HasErrors(){ return ( aErrorList.Count() > 0 ); }
     TokenList GetTokenList(){ return aParser.GetTokenList(); }
 };
 
@@ -314,7 +314,7 @@ private:
     BOOL IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens );
 public:
     BOOL ReferenceOK( const ByteString &aReference );
-    BOOL TesteeOK( const ByteString &aTestee );
+    BOOL TesteeOK( const ByteString &aTestee, BOOL bHasSourceLine );
 
     ParserMessageList& GetReferenceErrors(){ return aReferenceParser.GetErrors(); }
     BOOL HasReferenceErrors(){ return aReferenceParser.HasErrors(); }
@@ -323,6 +323,6 @@ public:
     BOOL HasTesteeErrors(){ return aTesteeParser.HasErrors(); }
 
     ParserMessageList& GetCompareWarnings(){ return aCompareWarningList; }
-    BOOL HasCompareWarnings(){ return ( aCompareWarningList.Count() ); }
+    BOOL HasCompareWarnings(){ return ( aCompareWarningList.Count() > 0 ); }
 };
 
