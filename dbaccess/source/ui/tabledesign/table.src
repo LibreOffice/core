@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 08:24:48 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,7 +884,7 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 3 , 1 ) ;
-    Size = MAP_APPFONT ( 200 , 14 ) ;
+    //  Size = MAP_APPFONT ( 200 , 14 ) ;
     OutputSize = TRUE ;
     Align = BOXALIGN_TOP ;
     ItemImageList = RID_DEFAULTIMAGELIST_SC ;
