@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-04 14:05:24 $
+ *  last change: $Author: ka $ $Date: 2002-03-08 08:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,9 +423,10 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
     SdPage* pBMPage = pBookmarkDoc->GetSdPage(0,PK_STANDARD);
     SdPage* pPage = GetSdPage(nSdPageCount - 1, PK_STANDARD);
 
-    if (bNoDialogs)
+    if( bNoDialogs )
     {
-        bScaleObjects = pPage->IsScaleObjects();
+        if( !pBookmarkList )
+            bScaleObjects = pPage->IsScaleObjects();
     }
     else
     {
