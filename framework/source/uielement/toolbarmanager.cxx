@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:44:23 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,17 +204,28 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-static const char   ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-static const char   ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
-static const char   ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
-static const char   ITEM_DESCRIPTOR_LABEL[]       = "Label";
-static const char   ITEM_DESCRIPTOR_TYPE[]        = "Type";
-static const char   ITEM_DESCRIPTOR_VISIBLE[]     = "IsVisible";
-static const char   ITEM_DESCRIPTOR_WIDTH[]       = "Width";
-static const char   HELPID_PREFIX[]               = "helpid:";
-static const char   HELPID_PREFIX_TESTTOOL[]      = ".HelpId:";
-static sal_Int32    HELPID_PREFIX_LENGTH          = 7;
-static const USHORT STARTID_CUSTOMIZE_POPUPMENU   = 1000;
+static const char   ITEM_DESCRIPTOR_COMMANDURL[]    = "CommandURL";
+static const char   ITEM_DESCRIPTOR_HELPURL[]       = "HelpURL";
+static const char   ITEM_DESCRIPTOR_CONTAINER[]     = "ItemDescriptorContainer";
+static const char   ITEM_DESCRIPTOR_LABEL[]         = "Label";
+static const char   ITEM_DESCRIPTOR_TYPE[]          = "Type";
+static const char   ITEM_DESCRIPTOR_VISIBLE[]       = "IsVisible";
+static const char   ITEM_DESCRIPTOR_WIDTH[]         = "Width";
+static const char   ITEM_DESCRIPTOR_STYLE[]         = "Style";
+
+static const sal_Int32 ITEM_DESCRIPTOR_COMMANDURL_LEN  = 10;
+static const sal_Int32 ITEM_DESCRIPTOR_HELPURL_LEN     = 7;
+static const sal_Int32 ITEM_DESCRIPTOR_CONTAINER_LEN   = 23;
+static const sal_Int32 ITEM_DESCRIPTOR_LABEL_LEN       = 5;
+static const sal_Int32 ITEM_DESCRIPTOR_TYPE_LEN        = 4;
+static const sal_Int32 ITEM_DESCRIPTOR_VISIBLE_LEN     = 9;
+static const sal_Int32 ITEM_DESCRIPTOR_WIDTH_LEN       = 5;
+static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = 5;
+
+static const char   HELPID_PREFIX[]                 = "helpid:";
+static const char   HELPID_PREFIX_TESTTOOL[]        = ".HelpId:";
+static sal_Int32    HELPID_PREFIX_LENGTH            = 7;
+static const USHORT STARTID_CUSTOMIZE_POPUPMENU     = 1000;
 
 
 class ImageOrientationListener : public svt::FrameStatusListener
@@ -344,11 +355,11 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     OUString  aHelpIdAsString( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX_TESTTOOL ));
     OUString  aToolbarName = rResourceName.copy( idx );
     aHelpIdAsString += aToolbarName;
-    if ( aToolbarName.equalsAscii( "fullscreenbar" ))
-    {
-        m_pToolBar->SetStyle( m_pToolBar->GetStyle() & ~WB_CLOSEABLE );
-        m_pToolBar->SetFloatStyle( m_pToolBar->GetFloatStyle() & ~WB_CLOSEABLE );
-    }
+//    if ( aToolbarName.equalsAscii( "fullscreenbar" ))
+//    {
+//        m_pToolBar->SetStyle( m_pToolBar->GetStyle() & ~WB_CLOSEABLE );
+//        m_pToolBar->SetFloatStyle( m_pToolBar->GetFloatStyle() & ~WB_CLOSEABLE );
+//    }
     m_pToolBar->SetSmartHelpId( SmartId( aHelpIdAsString ) );
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
@@ -1118,6 +1129,25 @@ void ToolBarManager::AddImageOrientationListener()
     }
 }
 
+sal_uInt16 ToolBarManager::ConvertStyleToToolboxItemBits( sal_Int32 nStyle )
+{
+    sal_uInt16 nItemBits( 0 );
+    if ( nStyle & ::com::sun::star::ui::ItemStyle::RADIO_CHECK )
+        nItemBits |= TIB_RADIOCHECK;
+    if ( nStyle & ::com::sun::star::ui::ItemStyle::ALIGN_LEFT )
+        nItemBits |= TIB_LEFT;
+    if ( nStyle & ::com::sun::star::ui::ItemStyle::AUTO_SIZE )
+        nItemBits |= TIB_AUTOSIZE;
+    if ( nStyle & ::com::sun::star::ui::ItemStyle::DROP_DOWN )
+        nItemBits |= TIB_DROPDOWN;
+    if ( nStyle & ::com::sun::star::ui::ItemStyle::REPEAT )
+        nItemBits |= TIB_REPEAT;
+    if ( nStyle & ::com::sun::star::ui::ItemStyle::DROPDOWN_ONLY )
+        nItemBits |= TIB_DROPDOWNONLY;
+
+    return nItemBits;
+}
+
 void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContainer )
 {
     OString aTbxName = rtl::OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
@@ -1196,6 +1226,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         sal_uInt16                  nType( ::com::sun::star::ui::ItemType::DEFAULT );
         sal_uInt16                  nWidth( 0 );
         sal_Bool                    bIsVisible( sal_True );
+        sal_uInt32                  nStyle( 0 );
 
         try
         {
@@ -1203,25 +1234,28 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
             {
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
-                    if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+                    if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_COMMANDURL, ITEM_DESCRIPTOR_COMMANDURL_LEN ))
                         aProp[i].Value >>= aCommandURL;
-                    else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
+                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_HELPURL, ITEM_DESCRIPTOR_HELPURL_LEN ))
                         aProp[i].Value >>= aHelpURL;
-                    else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
+                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_LABEL, ITEM_DESCRIPTOR_LABEL_LEN ))
                         aProp[i].Value >>= aLabel;
-                    else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
+                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_TYPE, ITEM_DESCRIPTOR_TYPE_LEN ))
                         aProp[i].Value >>= nType;
-                    else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_VISIBLE ))
+                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_VISIBLE, ITEM_DESCRIPTOR_VISIBLE_LEN ))
                         aProp[i].Value >>= bIsVisible;
-                    else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_WIDTH ))
+                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_WIDTH, ITEM_DESCRIPTOR_WIDTH_LEN ))
                         aProp[i].Value >>= nWidth;
+                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_STYLE, ITEM_DESCRIPTOR_STYLE_LEN ))
+                        aProp[i].Value >>= nStyle;
                 }
 
                 if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && ( aCommandURL.getLength() > 0 ))
                 {
                     OUString aString( RetrieveLabelFromCommand( aCommandURL ));
 
-                    m_pToolBar->InsertItem( nId, aString );
+                    sal_uInt16 nItemBits = ConvertStyleToToolboxItemBits( nStyle );
+                    m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
                     m_pToolBar->SetQuickHelpText( nId, aString );
                     if ( aLabel.getLength() > 0 )
