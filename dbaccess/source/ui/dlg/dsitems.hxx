@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:06:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 #define DSID_THOUSANDSDELIMITER     19          // thousands delimiter, SfxUInt16Item
 #define DSID_TEXTFILEEXTENSION      20          // extension for text files, SfxStringItem
 #define DSID_TEXTFILEHEADER         21          // the text file contains a header?, SfxBoolItem
-#define DSID_NEWDATASOURCE          22          // meta data: sal_True if the data source described by the set is new
-#define DSID_DELETEDDATASOURCE      23          // meta data: sal_True if the data source described by the set is to-be-deleted
+#define DSID_PARAMETERNAMESUBST     22
+#define DSID_CONN_PORTNUMBER        23
 #define DSID_SUPPRESSVERSIONCL      24          // meta data: sal_True if the data source described by the set is to-be-deleted
 #define DSID_DATASOURCE_UNO         25          // meta data: OPropertySetItem, the data source the set represents
 #define DSID_CONN_SHUTSERVICE       26
@@ -96,16 +96,25 @@
 #define DSID_CONN_CTRLUSER          29
 #define DSID_CONN_CTRLPWD           30
 #define DSID_USECATALOG             31          // should the driver use the catalog name when the database is filebased
-#define DSID_CONN_LDAP_HOSTNAME     32
+#define DSID_CONN_HOSTNAME          32
 #define DSID_CONN_LDAP_BASEDN       33
-#define DSID_CONN_LDAP_USESSL       34
-#define DSID_CONN_LDAP_PORTNUMBER   35
-#define DSID_CONN_LDAP_ROWCOUNT     36
-#define DSID_SQL92CHECK             37
-#define DSID_AUTOINCREMENTVALUE     38
-#define DSID_AUTORETRIEVEVALUE      39
-#define DSID_AUTORETRIEVEENABLED    40
-#define DSID_DOSLINEENDS            41
+#define DSID_CONN_LDAP_PORTNUMBER   34
+#define DSID_CONN_LDAP_ROWCOUNT     35
+#define DSID_SQL92CHECK             36
+#define DSID_AUTOINCREMENTVALUE     37
+#define DSID_AUTORETRIEVEVALUE      38
+#define DSID_AUTORETRIEVEENABLED    39
+#define DSID_APPEND_TABLE_ALIAS     40
+#define DSID_MYSQL_PORTNUMBER       41
+#define DSID_IGNOREDRIVER_PRIV      42
+#define DSID_BOOLEANCOMPARISON      43
+#define DSID_ORACLE_PORTNUMBER      44
+#define DSID_ENABLEOUTERJOIN        45
+#define DSID_CATALOG                46
+#define DSID_SCHEMA                 47
+#define DSID_INDEXAPPENDIX          48
+#define DSID_CONN_LDAP_USESSL       49
+#define DSID_DOSLINEENDS            50
 
 
 //========================================================================
