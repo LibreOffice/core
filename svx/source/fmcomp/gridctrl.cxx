@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:50:44 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2417,11 +2417,14 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
         m_nSeekPos = nRow;
     else
     {
-        long nSteps = nRow - (m_pSeekCursor->getRow() - 1);// Tatsaechliche Position im Cursor
-        bAbsolute = bAbsolute || (abs(nSteps) > 100);   // Sprung zu groß ?
+
         sal_Bool bSuccess=sal_False;
+        long nSteps = 0;
         try
         {
+            nSteps = nRow - (m_pSeekCursor->getRow() - 1);// Tatsaechliche Position im Cursor
+            bAbsolute = bAbsolute || (abs(nSteps) > 100);   // Sprung zu groß ?
+
             if (bAbsolute)  // absolut positionierung
             {
                 if ((bSuccess = m_pSeekCursor->absolute(nRow + 1)))
