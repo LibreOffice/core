@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:47:52 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,8 +362,11 @@ namespace sdr
         void ViewObjectContact::PaintObjectHierarchy(DisplayInfo& rDisplayInfo)
         {
             // test for ghosted displaying, see old SdrObjList::Paint
+            // #i29129# No ghosted display for printing.
             sal_Bool bDoGhostedDisplaying(
-                IsActiveGroup() && GetObjectContact().DoVisualizeEnteredGroup());
+                IsActiveGroup()
+                && GetObjectContact().DoVisualizeEnteredGroup()
+                && !rDisplayInfo.OutputToPrinter());
 
             if(bDoGhostedDisplaying)
             {
