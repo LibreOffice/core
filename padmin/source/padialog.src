@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
+ *  last change: $Author: pl $ $Date: 2001-06-21 12:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,7 @@ ModalDialog RID_PADIALOG
     };
     CancelButton RID_PA_BTN_CANCEL
     {
+        DefButton = TRUE;
         Pos = MAP_APPFONT( 200, 150 );
         Size = MAP_APPFONT( 50, 12 );
         Text = "Schließen";
@@ -508,7 +509,7 @@ ModalDialog RID_PADIALOG
     {
         Pos = MAP_APPFONT( 6, 5 );
         Size = MAP_APPFONT( 248, 8 );
-        Text = "Installierte Drucker";
+        Text = "~Installierte Drucker";
         Text [ english ]  = "Installed printers";
         Text[ english_us ] = "Installed printers";
         Text[ portuguese ] = "Impressoras instaladas";
@@ -752,7 +753,7 @@ ModalDialog RID_PADIALOG
     {
         Pos = MAP_APPFONT( 200, 66 );
         Size = MAP_APPFONT( 50, 12 );
-        Text = "E~ntfernen...";
+        Text = "Ent~fernen...";
         Text [english] = "~Remove...";
         Text[ english_us ] = "Remove...";
         Text[ portuguese ] = "~Remover...";
@@ -922,6 +923,7 @@ ModalDialog RID_STRINGQUERYDLG
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 130 , 16 ) ;
+        Wordbreak=TRUE;
     };
     Edit RID_STRQRY_EDT_NEWNAME
     {
@@ -996,8 +998,8 @@ String RID_PA_TXT_TESTPAGE_PRINTED
 
 String RID_QRY_PRTNAME
 {
-    Text = "Neuer Druckername" ;
-    Text [ English ] = "New name" ;
+    Text = "~Neuer Druckername" ;
+    Text [ English ] = "~New name" ;
 };
 
 String RID_TXT_TESTPAGE_MODEL
@@ -2450,7 +2452,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
     FixedText RID_ADDP_CHDEV_TXT_OVER
     {
         Pos = MAP_APPFONT( 40, 25 );
-        Size = MAP_APPFONT( 220, 8 );
+        Size = MAP_APPFONT( 180, 8 );
         Text = "Möchten Sie";
         Text [english] = "Do you want to";
         Text[ english_us ] = "Do you want to";
@@ -2477,7 +2479,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
     RadioButton RID_ADDP_CHDEV_BTN_PRINTER
     {
         Pos = MAP_APPFONT ( 40, 40 );
-        Size = MAP_APPFONT( 200, 10 );
+        Size = MAP_APPFONT( 180, 10 );
         Text = "einen ~Drucker anlegen";
         Text [english] = "add a ~printer";
         Text[ english_us ] = "Add a ~printer";
@@ -2504,21 +2506,21 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
     RadioButton RID_ADDP_CHDEV_BTN_FAX
     {
         Pos = MAP_APPFONT ( 40, 50 );
-        Size = MAP_APPFONT( 200, 10 );
+        Size = MAP_APPFONT( 180, 10 );
         Text = "eine Fa~xlösung anbinden";
         Text [english] = "connect to a fa~x solution";
     };
     RadioButton RID_ADDP_CHDEV_BTN_PDF
     {
         Pos = MAP_APPFONT ( 40, 60 );
-        Size = MAP_APPFONT( 200, 10 );
+        Size = MAP_APPFONT( 180, 10 );
         Text = "einen ~PDF-Konverter anbinden";
         Text [english] = "connect to a P~DF converter";
     };
     RadioButton RID_ADDP_CHDEV_BTN_OLD
     {
         Pos = MAP_APPFONT ( 40, 70 );
-        Size = MAP_APPFONT( 200, 10 );
+        Size = MAP_APPFONT( 180, 10 );
         Text = "Drucker aus einer StarOffice Installation ~importieren";
         Text [english] = "~import printers from a StarOffice installation";
         Text[ english_us ] = "~Import printers from a StarOffice installation";
@@ -2726,9 +2728,9 @@ TabPage RID_ADDP_PAGE_COMMAND
     FixedText RID_ADDP_CMD_TXT_COMMAND
     {
         Pos = MAP_APPFONT( 10, 10 );
-        Size = MAP_APPFONT( 165, 24 );
+        Size = MAP_APPFONT( 220, 16 );
         WordBreak = TRUE;
-        Text = "Geben Sie bitte eine ~Kommandozeile ein, mit der dieses Gerät angesprochend werden kann";
+        Text = "Geben Sie bitte eine ~Kommandozeile ein, mit der dieses Gerät angesprochen werden kann";
         Text [english] = "Please enter a command ~line appropriate for this device";
         Text[ english_us ] = "Please enter a command line appropriate for this device.";
         Text[ portuguese ] = "Indique uma linha de comando que permita contactar este periférico.";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-21 12:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,19 +343,28 @@ void RTSPaperPage::update()
     if( pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) ) )
         m_pParent->insertAllPPDValues( m_aDuplexBox, pKey );
     else
+    {
+        m_aDuplexText.Enable( FALSE );
         m_aDuplexBox.Enable( FALSE );
+    }
 
     // paper
     if( pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) ) )
         m_pParent->insertAllPPDValues( m_aPaperBox, pKey );
     else
+    {
+        m_aPaperText.Enable( FALSE );
         m_aPaperBox.Enable( FALSE );
+    }
 
     // input slots
     if( pKey = m_pParent->m_aJobData.m_pParser->getKey( String::CreateFromAscii( "InputSlot" ) ) )
         m_pParent->insertAllPPDValues( m_aSlotBox, pKey );
     else
+    {
+        m_aSlotText.Enable( FALSE );
         m_aSlotBox.Enable( FALSE );
+    }
 }
 
 // --------------------------------------------------------------------------

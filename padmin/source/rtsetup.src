@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-21 12:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,7 +810,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
     {
         Pos = MAP_APPFONT( 5, 145 );
         Size = MAP_APPFONT( 107, 8 );
-        Text = "Ersetze Sc~hriftart";
+        Text = "E~rsetze Schriftart";
         Text [ english ] = "~Substitute font";
         Text[ english_us ] = "Repla~ce font";
         Text[ portuguese ] = "~Substituir tipo de letra";
@@ -1003,29 +1003,29 @@ TabPage RID_RTS_COMMANDPAGE
     FixedText RID_RTS_CMD_TXT_CONFIGURE
     {
         Pos = MAP_APPFONT( 11, 56 );
-        Size = MAP_APPFONT( 130, 10 );
-        Text = "~Konfigurieren als :";
-        Text [ english ] = "~Configure as : ";
-        Text[ english_us ] = "~Configure as:";
-        Text[ portuguese ] = "~Configurar como:";
-        Text[ russian ] = " онфигурировать как :";
-        Text[ greek ] = "Configure as : ";
-        Text[ dutch ] = "~Configureren als: ";
-        Text[ french ] = "~Configurer comme :";
-        Text[ spanish ] = "Con~figurar como :";
-        Text[ italian ] = "Configura come :";
-        Text[ danish ] = "Configure as : ";
-        Text[ swedish ] = "~Konfigurera som :";
-        Text[ polish ] = "Konfiguruj jako :";
-        Text[ portuguese_brazilian ] = "Configure as : ";
-        Text[ japanese ] = "РЁТиСќПџ:";
-        Text[ korean ] = "Configure as : ";
+        Size = MAP_APPFONT( 85, 10 );
+        Text = "~Konfigurieren als";
+        Text [ english ] = "~Configure as";
+        Text[ english_us ] = "~Configure as";
+        Text[ portuguese ] = "~Configurar como";
+        Text[ russian ] = " онфигурировать как";
+        Text[ greek ] = "Configure as";
+        Text[ dutch ] = "~Configureren als";
+        Text[ french ] = "~Configurer comme";
+        Text[ spanish ] = "Con~figurar como";
+        Text[ italian ] = "Configura come";
+        Text[ danish ] = "Configure as";
+        Text[ swedish ] = "~Konfigurera som";
+        Text[ polish ] = "Konfiguruj jako";
+        Text[ portuguese_brazilian ] = "Configure as";
+        Text[ japanese ] = "РЁТиСќПџ";
+        Text[ korean ] = "Configure as";
         Text[ chinese_simplified ] = "≈д÷√≥…£Ї";
         Text[ chinese_traditional ] = "∞tЄm¶®°G";
-        Text[ turkish ] = "Configure as : ";
-        Text[ arabic ] = " яжнд я№ :";
-        Text[ finnish ] = "Konfigurieren als :";
-        Text[ catalan ] = "Configure as : ";
+        Text[ turkish ] = "Configure as";
+        Text[ arabic ] = " яжнд я№";
+        Text[ finnish ] = "Konfigurieren als";
+        Text[ catalan ] = "Configure as";
     };
 
     CheckBox RID_RTS_CMD_BOX_SWALLOWFAXNO
@@ -1097,12 +1097,12 @@ TabPage RID_RTS_COMMANDPAGE
     FixedText RID_RTS_CMD_TXT_PRTNAME
     {
         Pos = MAP_APPFONT ( 11 , 16 ) ;
-        Size = MAP_APPFONT ( 150 , 8 ) ;
+        Size = MAP_APPFONT ( 210 , 8 ) ;
     };
     FixedText RID_RTS_CMD_TXT_CONNECT
     {
         Pos = MAP_APPFONT ( 11 , 26 ) ;
-        Size = MAP_APPFONT ( 150 , 8 ) ;
+        Size = MAP_APPFONT ( 210 , 8 ) ;
         Text = "Kommando: " ;
         Text [ English ] = "Command: " ;
         Text[ english_us ] = "Command: ";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:35 $
+ *  last change: $Author: pl $ $Date: 2001-06-21 12:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,8 @@ namespace padmin
     private:
         OKButton     m_aOKButton;
         CancelButton m_aCancelButton;
-        Edit         m_aEdit;
         FixedText    m_aFixedText;
+        Edit         m_aEdit;
 
         String&      m_rReturnValue;
 
