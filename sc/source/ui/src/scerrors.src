@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 11:33:46 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_simplified ] = "ÔÚÊäÈëÊ±ÄÚ´æ²»×ã¡£";
         Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè ïğè èìïîğòèğîâàíèè.";
         Text[ polish ] = "Za ma³o pamiêci dla importu.";
-        Text[ japanese ] = "²İÎß°Ä‚Ì•s\\•ª‚ÈÒÓØ‹ó‚«—e—ÊB";
+        Text[ japanese ] = "²İÎß°Ä‚É•s\\•ª‚ÈÒÓØ‹ó‚«—e—ÊB";
         Text[ chinese_traditional ] = "¦b¿é¤J®É°O¾ĞÅé¤£¨¬¡C";
         Text[ arabic ] = "ÇáĞÇßÑÉ áíÓÊ ßÇİíÉ ÃËäÇÁ ÇáÇÓÊíÑÇÏ.";
         Text[ greek ] = "ÊáôÜ ôçí åéóáãùãŞ ğñïİêõøå ğñüâëçìá ìíŞìçò.";
