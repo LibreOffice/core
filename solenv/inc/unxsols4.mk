@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:02:53 $
+#   last change: $Author: hr $ $Date: 2003-07-09 12:10:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ CFLAGSCC=-xCC
 CFLAGSCXX=-features=no%altspell,no%localfor -library=no%Cstd
 
 # flags required for crashdump feature
-CFLAGSCRASHDUMP=-g0
+CFLAGSCRASHDUMP=-g0 -xs
 
 CFLAGSEXCEPTIONS=
 CFLAGS_NO_EXCEPTIONS=-noex
