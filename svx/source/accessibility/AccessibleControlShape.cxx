@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:49:48 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,9 @@ AccessibleControlShape::~AccessibleControlShape (void)
     if ( m_xControlContextProxy.is() )
         m_xControlContextProxy->setDelegator( NULL );
     m_xControlContextProxy.clear();
-        // this should remove the _one_and_only_ "real" reference (means not delegated to
+    m_xControlContextTypeAccess.clear();
+    m_xControlContextComponent.clear();
+        // this should remove the _only_ three "real" reference (means not delegated to
         // ourself) to this proxy, and thus delete it
 }
 
@@ -355,6 +357,8 @@ void AccessibleControlShape::Init()
                 if ( xFactory.is() && xNativeControlContext.is() )
                 {
                     m_xControlContextProxy = xFactory->createProxy( xNativeControlContext );
+                    OSL_VERIFY( xNativeControlContext->queryInterface( ::getCppuType( &m_xControlContextTypeAccess ) ) >>= m_xControlContextTypeAccess );
+                    OSL_VERIFY( xNativeControlContext->queryInterface( ::getCppuType( &m_xControlContextComponent ) ) >>= m_xControlContextComponent );
 
                     // aggregate the proxy
                     osl_incrementInterlockedCount( &m_refCount );
@@ -526,9 +530,8 @@ Sequence< Type > SAL_CALL AccessibleControlShape::getTypes() throw (RuntimeExcep
     Sequence< Type > aOwnTypes = AccessibleControlShape_Base::getTypes();
 
     Sequence< Type > aAggregateTypes;
-    Reference< XTypeProvider > xAggTypes;
-    if ( query_aggregation( m_xControlContextProxy, xAggTypes ) )
-        aAggregateTypes = xAggTypes->getTypes();
+    if ( m_xControlContextTypeAccess.is() )
+        aAggregateTypes = m_xControlContextTypeAccess->getTypes();
 
     Sequence< Type > aAllTypes = concatSequences( aShapeTypes, aOwnTypes, aAggregateTypes );
 
@@ -772,9 +775,8 @@ void SAL_CALL AccessibleControlShape::disposing (void)
         if ( xControlModes.is() )
             xControlModes->removeModeChangeListener( this );
 
-        Reference< XComponent > xInnerComponent;
-        if ( query_aggregation( m_xControlContextProxy, xInnerComponent ) )
-            xInnerComponent->dispose();
+        if ( m_xControlContextComponent.is() )
+            m_xControlContextComponent->dispose();
         // do _not_ clear m_xControlContextProxy! This has to be done in the dtor for correct ref-count handling
 
         // no need to dispose the proxy/inner context anymore
