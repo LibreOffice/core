@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 13:56:05 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fupoor.hxx"
+
 #include <svx/svxids.hrc>
 
 #ifndef _AEITEM_HXX //autogen
@@ -109,21 +111,32 @@
 #include <com/sun/star/container/XChild.hpp>
 #endif
 
-#include "frmview.hxx"
-
+#ifndef SD_FRAMW_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "app.hrc"
-
-#include "fupoor.hxx"
+#ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
+#endif
 #include "sdpage.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "drviewsh.hxx"
-#include "sdwindow.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "zoomlist.hxx"
-#include "sdclient.hxx"
+#ifndef SD_CLIENT_HXX
+#include "Client.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 
 // #97016# IV
 #ifndef _SVDITER_HXX
@@ -138,6 +151,7 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
+namespace sd {
 
 TYPEINIT0( FuPoor );
 
@@ -147,22 +161,26 @@ TYPEINIT0( FuPoor );
 |*
 \************************************************************************/
 
-FuPoor::FuPoor(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-               SdDrawDocument* pDrDoc, SfxRequest& rReq) :
-    pViewShell(pViewSh),
-    pWindow(pWin),
-    pView(pView),
-    pDoc(pDrDoc),
-    pDocSh( pDrDoc->GetDocSh() ),
-    nSlotId( rReq.GetSlot() ),
-    pDialog(NULL),
-    bIsInDragMode(FALSE),
-    bScrollable (FALSE),
-    bDelayActive (FALSE),
-    bNoScrollUntilInside (TRUE),
-    nSlotValue(0),
-    // #95491# remember MouseButton state
-    mnCode(0)
+FuPoor::FuPoor (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDrDoc,
+    SfxRequest& rReq)
+    : pViewShell(pViewSh),
+      pWindow(pWin),
+      pView(pView),
+      pDoc(pDrDoc),
+      pDocSh( pDrDoc->GetDocSh() ),
+      nSlotId( rReq.GetSlot() ),
+      pDialog(NULL),
+      bIsInDragMode(FALSE),
+      bScrollable (FALSE),
+      bDelayActive (FALSE),
+      bNoScrollUntilInside (TRUE),
+      nSlotValue(0),
+      // #95491# remember MouseButton state
+      mnCode(0)
 {
     ReceiveRequest(rReq);
 
@@ -342,9 +360,10 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(rKEvt.GetKeyCode().IsMod1())
             {
-                if(pViewShell && pViewShell->ISA(SdDrawViewShell))
+                if(pViewShell && pViewShell->ISA(DrawViewShell))
                 {
-                    SdDrawViewShell* pDrawViewShell = (SdDrawViewShell*)pViewShell;
+                    DrawViewShell* pDrawViewShell =
+                        static_cast<DrawViewShell*>(pViewShell);
                     SdPage* pActualPage = pDrawViewShell->GetActualPage();
                     SdrTextObj* pCandidate = 0L;
 
@@ -461,8 +480,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // Zoom vergroessern
                 pViewShell->SetZoom(pWindow->GetZoom() * 3 / 2);
 
-                if (pViewShell->ISA(SdDrawViewShell))
-                    ((SdDrawViewShell*) pViewShell)->SetZoomOnPage(FALSE);
+                if (pViewShell->ISA(DrawViewShell))
+                    static_cast<DrawViewShell*>(pViewShell)
+                        ->SetZoomOnPage(FALSE);
 
                 bReturn = TRUE;
             }
@@ -476,8 +496,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // Zoom verringern
                 pViewShell->SetZoom(pWindow->GetZoom() * 2 / 3);
 
-                if (pViewShell->ISA(SdDrawViewShell))
-                    ((SdDrawViewShell*) pViewShell)->SetZoomOnPage(FALSE);
+                if (pViewShell->ISA(DrawViewShell))
+                    static_cast<DrawViewShell*>(pViewShell)
+                        ->SetZoomOnPage(FALSE);
 
                 bReturn = TRUE;
             }
@@ -536,10 +557,12 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_HOME:
         {
-            if (!pView->IsTextEdit() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
+            if (!pView->IsTextEdit()
+                && pViewShell->ISA(DrawViewShell)
+                && !bSlideShow)
             {
                // Sprung zu erster Seite
-               ((SdDrawViewShell*) pViewShell)->SwitchPage(0);
+               static_cast<DrawViewShell*>(pViewShell)->SwitchPage(0);
                bReturn = TRUE;
             }
         }
@@ -547,12 +570,16 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_END:
         {
-            if (!pView->IsTextEdit() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
+            if (!pView->IsTextEdit()
+                && pViewShell->ISA(DrawViewShell)
+                && !bSlideShow)
             {
                 // Sprung zu letzter Seite
-                SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
-                ((SdDrawViewShell*) pViewShell)->SwitchPage(pDoc->GetSdPageCount(
-                                                 pPage->GetPageKind()) - 1);
+                SdPage* pPage =
+                    static_cast<DrawViewShell*>(pViewShell)->GetActualPage();
+                static_cast<DrawViewShell*>(pViewShell)
+                    ->SwitchPage(pDoc->GetSdPageCount(
+                        pPage->GetPageKind()) - 1);
                 bReturn = TRUE;
             }
         }
@@ -560,7 +587,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_PAGEUP:
         {
-            if(pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
+            if(pViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
                 // The page-up key works either with no or with the CTRL
                 // modifier.  The reaction in either case is the same.
@@ -569,7 +596,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     // The type of reaction depends on whether the layer
                     // mode is active.
-                    if (static_cast<SdDrawViewShell*>(pViewShell)->GetLayerMode())
+                    if (static_cast<DrawViewShell*>(pViewShell)->GetLayerMode())
                     {
                         // With the layer mode active pressing page-up
                         // moves to the previous layer.
@@ -584,18 +611,22 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                         // Previous page.
                         bReturn = TRUE;
-                        SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
+                        SdPage* pPage = static_cast<DrawViewShell*>(pViewShell)
+                            ->GetActualPage();
                         USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
 
                         if (nSdPage > 0)
                         {
-                            // Switch the page and send events regarding
-                            // deactivation the old page and activating the new one.
-                            SdTabControl* pPageTabControl =
-                                static_cast<SdDrawViewShell*>(pViewShell)->GetPageTabControl();
+                            // Switch the page and send events
+                            // regarding deactivation the old page and
+                            // activating the new one.
+                            TabControl* pPageTabControl =
+                                static_cast<DrawViewShell*>(pViewShell)
+                                ->GetPageTabControl();
                             if (pPageTabControl->IsReallyShown())
                                 pPageTabControl->SendDeactivatePageEvent ();
-                            ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage - 1);
+                            static_cast<DrawViewShell*>(pViewShell)
+                                ->SwitchPage(nSdPage - 1);
                             if (pPageTabControl->IsReallyShown())
                                 pPageTabControl->SendActivatePageEvent ();
                         }
@@ -607,7 +638,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_PAGEDOWN:
         {
-            if(pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
+            if(pViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
                 // The page-down key works either with no or with the CTRL
                 // modifier.  The reaction in either case is the same.
@@ -616,7 +647,8 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     // The type of reaction depends on whether the layer
                     // mode is active.
-                    if (static_cast<SdDrawViewShell*>(pViewShell)->GetLayerMode())
+                    if (static_cast<DrawViewShell*>(pViewShell)
+                        ->GetLayerMode())
                     {
                         // With the layer mode active pressing page-down
                         // moves to the next layer.
@@ -631,18 +663,22 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                         // Next page.
                         bReturn = TRUE;
-                        SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
+                        SdPage* pPage = static_cast<DrawViewShell*>(pViewShell)
+                            ->GetActualPage();
                         USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
 
                         if (nSdPage < pDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
                         {
-                            // Switch the page and send events regarding
-                            // deactivation the old page and activating the new one.
-                            SdTabControl* pPageTabControl =
-                                static_cast<SdDrawViewShell*>(pViewShell)->GetPageTabControl();
+                            // Switch the page and send events
+                            // regarding deactivation the old page and
+                            // activating the new one.
+                            TabControl* pPageTabControl =
+                                static_cast<DrawViewShell*>(pViewShell)
+                                ->GetPageTabControl();
                             if (pPageTabControl->IsReallyShown())
                                 pPageTabControl->SendDeactivatePageEvent ();
-                            ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage + 1);
+                            static_cast<DrawViewShell*>(pViewShell)
+                                ->SwitchPage(nSdPage + 1);
                             if (pPageTabControl->IsReallyShown())
                                 pPageTabControl->SendActivatePageEvent ();
                         }
@@ -971,9 +1007,11 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // #99039# test if there is a title object there. If yes, try to
                 // set it to edit mode and start typing...
-                if(pViewShell->ISA(SdDrawViewShell) && EditEngine::IsSimpleCharInput(rKEvt))
+                if(pViewShell->ISA(DrawViewShell)
+                    && EditEngine::IsSimpleCharInput(rKEvt))
                 {
-                    SdDrawViewShell* pDrawViewShell = (SdDrawViewShell*)pViewShell;
+                    DrawViewShell* pDrawViewShell =
+                        static_cast<DrawViewShell*>(pViewShell);
                     SdPage* pActualPage = pDrawViewShell->GetActualPage();
                     SdrTextObj* pCandidate = 0L;
 
@@ -1254,9 +1292,10 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
 
 void FuPoor::SwitchLayer (sal_Int32 nOffset)
 {
-    if(pViewShell && pViewShell->ISA(SdDrawViewShell))
+    if(pViewShell && pViewShell->ISA(DrawViewShell))
     {
-        SdDrawViewShell* pDrawViewShell = (SdDrawViewShell*)pViewShell;
+        DrawViewShell* pDrawViewShell =
+            static_cast<DrawViewShell*>(pViewShell);
 
         // Calculate the new index.
         sal_Int32 nIndex = pDrawViewShell->GetActiveTabLayerIndex() + nOffset;
@@ -1270,8 +1309,8 @@ void FuPoor::SwitchLayer (sal_Int32 nOffset)
         // Set the new active layer.
         if (nIndex != pDrawViewShell->GetActiveTabLayerIndex ())
         {
-            SdLayerTab* pLayerTabControl =
-                static_cast<SdDrawViewShell*>(pViewShell)->GetLayerTabControl();
+            LayerTabBar* pLayerTabControl =
+                static_cast<DrawViewShell*>(pViewShell)->GetLayerTabControl();
             pLayerTabControl->SendDeactivatePageEvent ();
 
             pDrawViewShell->SetActiveTabLayerIndex (nIndex);
@@ -1298,3 +1337,4 @@ bool FuPoor::cancel()
     return false;
 }
 
+} // end of namespace sd
