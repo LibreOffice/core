@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:27:49 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,9 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void    EndDialog(long nResult = 0);
     virtual void    EnableRubySupport( sal_Bool _bVal );
     virtual void    SetByCharacter( sal_Bool _bByCharacter ) ;
+    virtual void    SetConversionDirectionState( sal_Bool _bTryBothDirections, HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
     virtual void    SetConversionFormat( HangulHanjaConversion::ConversionFormat _eType );
+    virtual void    SetOptionsChangedHdl( const Link& _rHdl );
     virtual void    SetIgnoreHdl( const Link& _rHdl );
     virtual void    SetIgnoreAllHdl( const Link& _rHdl ) ;
     virtual void    SetChangeHdl( const Link& _rHdl ) ;
@@ -183,6 +185,7 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void    SetConversionFormatChangedHdl( const Link& _rHdl ) ;
     virtual void    SetFindHdl( const Link& _rHdl );
     virtual sal_Bool        GetUseBothDirections( ) const;
+    virtual HangulHanjaConversion::ConversionDirection    GetDirection( HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const;
     virtual void    SetCurrentString(
                     const String& _rNewString,
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions,
