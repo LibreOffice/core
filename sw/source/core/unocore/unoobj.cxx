@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-12 07:30:28 $
+ *  last change: $Author: mtg $ $Date: 2001-06-12 16:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2262,7 +2262,9 @@ uno::Any SwXTextCursor::getPropertyDefault(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        aRet = GetPropertyDefault(*pUnoCrsr, aPropSet, rPropertyName);
+        if( !rPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( UNO_NAME_IS_SKIP_HIDDEN_TEXT.pName ) ) &&
+            !rPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( UNO_NAME_IS_SKIP_PROTECTED_TEXT.pName ) ) )
+            aRet = GetPropertyDefault(*pUnoCrsr, aPropSet, rPropertyName);
     }
     else
         throw uno::RuntimeException();
