@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:29:41 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,8 +802,12 @@ protected:
     virtual XMLShapeImportHelper* CreateShapeImport();
 
 public:
-    ScXMLImport(const sal_uInt16 nImportFlag);
-        ~ScXMLImport() throw();
+    // #110680#
+    ScXMLImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const sal_uInt16 nImportFlag);
+
+    ~ScXMLImport() throw();
 
     // namespace office
     SvXMLImportContext *CreateMetaContext(
