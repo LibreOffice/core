@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:24:34 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@
 #define HID_DLG_DBCHANGE                        (HID_EXTENSIONS_START + 75)
 #define HID_SELECTION_TLB                       (HID_EXTENSIONS_START + 76)
 
+// TODO: why do these use HID_FORMS_START as base? Weird ...
 #define HID_PROP_TITLE                          (HID_FORMS_START +  115)
 #define HID_PROP_STEP                           (HID_FORMS_START +  116)
 #define HID_PROP_VALUE                          (HID_FORMS_START +  117)
@@ -197,5 +198,35 @@
 #define HID_PROP_DEFAULT_SPINVALUE              (HID_FORMS_START +  143)
 #define HID_PROP_SPININCREMENT                  (HID_FORMS_START +  144)
 #define HID_PROP_REPEAT                         (HID_FORMS_START +  145)
+#define HID_PROP_WORDBREAK                      (HID_FORMS_START +  146)
+#define HID_PROP_SHOW_SCROLLBARS                (HID_FORMS_START +  147)
+#define HID_PROP_TABORDER_CONTROLS              (HID_FORMS_START +  148)
+#define HID_FIELDLINK_DETAIL_COLUMN             (HID_FORMS_START +  149)
+#define HID_FIELDLINK_MASTER_COLUMN             (HID_FORMS_START +  150)
+#define UID_FIELDLINK_DETAIL1                   (HID_FORMS_START +  151)
+#define UID_FIELDLINK_MASTER1                   (HID_FORMS_START +  152)
+#define UID_FIELDLINK_DETAIL2                   (HID_FORMS_START +  153)
+#define UID_FIELDLINK_MASTER2                   (HID_FORMS_START +  154)
+#define UID_FIELDLINK_DETAIL3                   (HID_FORMS_START +  155)
+#define UID_FIELDLINK_MASTER3                   (HID_FORMS_START +  156)
+#define UID_FIELDLINK_DETAIL4                   (HID_FORMS_START +  157)
+#define UID_FIELDLINK_MASTER4                   (HID_FORMS_START +  158)
+
+// ----------------------------------------------------------------------------
+#define UID_PROP_DLG_FONT_TYPE                  (HID_FORMS_START +  180)
+#define UID_PROP_DLG_IMAGE_URL                  (HID_FORMS_START +  181)
+#define UID_PROP_DLG_BACKGROUNDCOLOR            (HID_FORMS_START +  182)
+#define UID_PROP_DLG_SYMBOLCOLOR            (HID_FORMS_START +  183)
+#define UID_PROP_DLG_ATTR_DATASOURCE            (HID_FORMS_START +  184)
+#define UID_PROP_DLG_ATTR_TARGET_URL            (HID_FORMS_START +  185)
+#define UID_PROP_DLG_NUMBER_FORMAT              (HID_FORMS_START +  186)
+#define UID_PROP_DLG_CONTROLLABEL               (HID_FORMS_START +  187)
+#define UID_PROP_DLG_FILLCOLOR                  (HID_FORMS_START +  188)
+#define UID_PROP_DLG_TABINDEX                   (HID_FORMS_START +  189)
+#define UID_PROP_DLG_SQLCOMMAND                 (HID_FORMS_START +  190)
+#define UID_PROP_DLG_FORMLINKFIELDS             (HID_FORMS_START +  191)
+#define UID_PROP_DLG_FILTER                     (HID_FORMS_START +  192)
+#define UID_PROP_DLG_ORDER                      (HID_FORMS_START +  193)
+#define UID_PROP_DLG_SELECTION                  (HID_FORMS_START +  194)
 
 #endif
