@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:56:34 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4891,7 +4891,7 @@ PPTTextSpecInfoAtomInterpreter::~PPTTextSpecInfoAtomInterpreter()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImport& rMan, const DffRecordHeader& rTextHeader,
-                                                        PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd )
+                                                        PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd, sal_uInt32 nInstance )
 {
     sal_uInt32 nMerk = rIn.Tell();
     sal_uInt32 nExtParaPos = ( rExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom ) ? rExtParaHd.nFilePos + 8 : 0;
@@ -4929,7 +4929,12 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             if ( ( nChar & 0xff00 ) == 0xf000 )         // in this special case we got a symbol
                 aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_SYMBOL ), LIST_APPEND );
             else if ( nChar == 0xd )
-                aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_NEWLINE ), LIST_APPEND );
+            {
+                if ( nInstance == TSS_TYPE_PAGETITLE )
+                    *pPtr = 0xb;
+                else
+                    aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_NEWLINE ), LIST_APPEND );
+            }
         }
         if ( i )
             aString = String( pBuf, (sal_uInt16)i );
@@ -4940,11 +4945,16 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
         sal_Char cLo, *pBuf = new sal_Char[ nMaxLen + 1 ];
         pBuf[ nMaxLen ] = 0;
         rIn.Read( pBuf, nMaxLen );
-        const sal_Char* pPtr = pBuf;
+        sal_Char* pPtr = pBuf;
         while ( ( cLo = *pPtr ) )
         {
             if ( cLo == 0xd )
-                aSpecMarkerList.Insert( (void*)( pPtr - pBuf | PPT_SPEC_NEWLINE ), LIST_APPEND );
+            {
+                if ( nInstance == TSS_TYPE_PAGETITLE )
+                    *pPtr = 0xb;
+                else
+                    aSpecMarkerList.Insert( (void*)( pPtr - pBuf | PPT_SPEC_NEWLINE ), LIST_APPEND );
+            }
             pPtr++;
         }
         xub_StrLen nLen = pPtr - pBuf;
@@ -6601,7 +6611,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                         aClientTextBoxHd, rIn );
 
                         PPTStyleTextPropReader aStyleTextPropReader( rIn, rSdrPowerPointImport, aClientTextBoxHd,
-                                                                        aTextRulerInterpreter, aExtParaHd );
+                                                                        aTextRulerInterpreter, aExtParaHd, nInstance );
                         sal_uInt32 nParagraphs = mpImplTextObj->mnParagraphCount = aStyleTextPropReader.aParaPropList.Count();
 
 #ifdef DBG_EXTRACT_BUDATA
