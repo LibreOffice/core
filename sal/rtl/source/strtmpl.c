@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 09:20:20 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,21 +129,18 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
                                                            const IMPL_RTL_STRCODE* pStr2,
                                                            sal_Int32 nStr2Len )
 {
-    const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
-    const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
-    sal_Int32 nRet;
-    while ( (pStr1 < pStr1End) && (pStr2 < pStr2End) )
-    {
-        nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
-               ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )));
-        if ( nRet )
-            return nRet;
+    sal_Int32 nRet = nStr1Len - nStr2Len;
+    int nCount = (nRet <= 0) ? nStr1Len : nStr2Len;
 
-        pStr1++;
-        pStr2++;
-    }
+    --pStr1;
+    --pStr2;
+    while( (--nCount >= 0) && (*++pStr1 == *++pStr2) );
 
-    return nStr1Len - nStr2Len;
+    if( nCount >= 0 )
+        nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))
+             - ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )));
+
+    return nRet;
 }
 
 /* ----------------------------------------------------------------------- */
