@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 14:33:38 $
+ *  last change: $Author: mtg $ $Date: 2001-10-26 21:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,13 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEl_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-#include <hash_map>
 #ifndef _ZIP_PACKAGE_FOLDER_HXX
 #include <ZipPackageFolder.hxx>
 #endif
 #ifndef _ZIP_PACKAGE_STREAM_HXX
 #include <ZipPackageStream.hxx>
 #endif
+#include <hash_map>
 
 struct ContentInfo
 {
@@ -95,6 +95,11 @@ struct ContentInfo
     , pFolder ( pNewFolder )
     , xTunnel ( pNewFolder )
     {
+    }
+    ~ContentInfo ()
+    {
+        if (bFolder)
+            pFolder->releaseUpwardRef();
     }
 };
 #endif
