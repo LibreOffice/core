@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-19 18:08:50 $
+ *  last change: $Author: ssa $ $Date: 2002-11-20 12:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,6 +881,7 @@ SalInfoPrinter::SalInfoPrinter()
     maPrinterData.mhDC          = 0;
     maPrinterData.mpGraphics    = NULL;
     maPrinterData.mbGraphics    = FALSE;
+    m_bPapersInit               = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -897,17 +898,48 @@ SalInfoPrinter::~SalInfoPrinter()
 
 // -----------------------------------------------------------------------
 
-void SalInfoPrinter::InitPaperFormats()
+void SalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
 {
     m_aPaperFormats.clear();
+
+    ULONG   nCount = ImplDeviceCaps( this, DC_PAPERSIZE, NULL, pSetupData );
+    POINT*  pPaperSizes = NULL;
+    char* pNamesBuffer = NULL;
+    if ( nCount && (nCount != ((ULONG)-1)) )
+    {
+        pPaperSizes = new POINT[nCount];
+        memset( pPaperSizes, 0, nCount*sizeof(POINT) );
+        ImplDeviceCaps( this, DC_PAPERSIZE, (LPTSTR)pPaperSizes, pSetupData );
+
+        pNamesBuffer = new char[nCount*64];
+        ImplDeviceCaps( this, DC_PAPERNAMES, pNamesBuffer, pSetupData );
+    }
+
+    for ( ULONG i = 0; i < nCount; i++ )
+    {
+        vcl::PaperInfo aInfo;
+        aInfo.m_nPaperWidth  = (pPaperSizes[i].x + 5) / 10;
+        aInfo.m_nPaperHeight = (pPaperSizes[i].y + 5) / 10;
+        pNamesBuffer[(i+1)*64-1] = '\0';    // make very long names zero terminated
+        aInfo.m_aPaperName = ImplSalGetUniString( (const char*)(pNamesBuffer + (i*64)) );
+        m_aPaperFormats.push_back( aInfo );
+    }
+
+    delete [] pNamesBuffer;
+    delete [] pPaperSizes;
     m_bPapersInit = true;
 }
 
 // -----------------------------------------------------------------------
 
-int SalInfoPrinter::GetLandscapeAngle()
+int SalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
 {
-    return 900;
+    int nRet = ImplDeviceCaps( this, DC_ORIENTATION, NULL, pSetupData );
+
+    if( nRet != -1 )
+        return nRet * 10;
+    else
+        return 900; // guess
 }
 
 // -----------------------------------------------------------------------
