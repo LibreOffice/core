@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseAccessConnection.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:35:54 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
  published interface XSQLQueryComposerFactory;
 
 
-// DocMerge from xml: service com::sun::star::sdb::DatabaseAccessConnection
 /** specifies a component, which supplies and stores additional information related
     to a certain database connection, such as, DatabaseQueries, FormDocuments, and ReportDocuments.
     Objects for data definition are supplied as well, for instance, Tables, Views, etc.
@@ -95,11 +94,11 @@
     will close only one of these connections. You have to close all connections in order
     to close the connection to the database.
     </p>
+
+    @deprecated
 */
 published service DatabaseAccessConnection
 {
-
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessConnection: service com::sun::star::sdbc::Connection
     /** supporting of the base connection service.
              <p><B>Note:</B><br/>
                  Don't use the "dispose" method of the XComponent interface, as the DataAccess
@@ -109,20 +108,14 @@ published service DatabaseAccessConnection
      */
     service com::sun::star::sdbc::Connection;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessConnection: service com::sun::star::sdbcx::DatabaseDefinition
     /** access to the DatabaseDefinition beans of the connection.
      */
     service com::sun::star::sdbcx::DatabaseDefinition;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessConnection: interface com::sun::star::container::XChild
     /** access to the owning data access bean.
      */
     interface com::sun::star::container::XChild;
 
-
-    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessConnection: interface com::sun::star::sdb::XSQLQueryComposerFactory
     /** returns a tool for composing queries.
      */
     interface XSQLQueryComposerFactory;
