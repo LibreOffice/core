@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-06 08:18:39 $
+ *  last change: $Author: vg $ $Date: 2002-08-09 09:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ namespace pcr
 
         autoSizeWindow();
 
-#ifdef SUPD < 650
+#if SUPD < 650
         SetExtFormat(XTDATEF_SYSTEM_SHORT_YYYY);
 #else
         SetExtDateFormat(XTDATEF_SYSTEM_SHORT_YYYY);
@@ -926,7 +926,7 @@ namespace pcr
             m_pImplEdit = NULL;
         }
         {
-            ::std::auto_ptr<Window< aTemp(m_pDropdownButton);
+            ::std::auto_ptr<Window> aTemp(m_pDropdownButton);
             m_pDropdownButton = NULL;
         }
     }
@@ -1258,6 +1258,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2002/08/06 08:18:39  oj
+ *  #102058# use auto_ptr in dtor and insert SUPD < 650 for SetExtDateFormat change
+ *
  *  Revision 1.6  2002/02/19 14:04:22  hr
  *  #65293#: SetExtFormar() -> SetExtDateFormat()
  *
