@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:11:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ polish ] = "Jakie okrelenia powinny zawieraζ pola opcji?";
         Text[ portuguese_brazilian ] = "Which ~names do you want to give the Option Fields?";
         Text[ japanese ] = "µΜίΌ®έΜ¨°ΩΔή‚Ι‚Η‚Μ–Ό‘O‚π‚Β‚―‚ά‚·‚©B(~N)";
-        Text[ korean ] = "Ύξ¶² ΐΜΈ§ΐΜ ΏΙΌΗ ΗΚµεΏ΅ ΖχΗΤµΗΎξΎί ΗΥ΄Ο±ξ?";
+        Text[ korean ] = "Ύξ¶² ΐΜΈ§ΐΜ ΏΙΌΗ ΗΚµεΏ΅ ΖχΗΤµΗΎξΎί ΗΥ΄Ο±ξ(~N)?";
         Text[ chinese_simplified ] = "ÒªΚΉΣΓµΔΡ΅ΟξΧΦ¶ΞµΔΓϋ³Ζ(~N)£Ώ";
         Text[ chinese_traditional ] = "­n¨Ο¥ΞªΊΏο¶µΔζ¦μªΊ¦WΊΩ(~N)΅H";
         Text[ turkish ] = "Which ~names do you want to give the Option Fields?";
@@ -144,7 +144,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ polish ] = "Pola opcji";
         Text[ portuguese_brazilian ] = "~Option Fields";
         Text[ japanese ] = "µΜίΌ®έΜ¨°ΩΔή(~O)";
-        Text[ korean ] = "ΏΙΌΗ ΗΚµε";
+        Text[ korean ] = "ΏΙΌΗ ΗΚµε(~O)";
         Text[ chinese_simplified ] = "Ρ΅ΟξΧΦ¶Ξ(~O)";
         Text[ chinese_traditional ] = "Ώο¶µΔζ¦μ(~O)";
         Text[ turkish ] = "~Option Fields";
@@ -217,8 +217,8 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text[ portuguese_brazilian ] = "Should one option field be selected as a default?";
         Text[ japanese ] = "µΜίΌ®έΜ¨°ΩΔή‚P‚Β‚Ν•W€‚Ζ‚µ‚Δ‘I‘π‚µ‚ά‚·‚©B";
         Text[ korean ] = "ΗΟ³ªΐΗ ΏΙΌΗ ΗΚµε°΅ ±βΊ»ΐΈ·Ξ Ό±ΕΓµΗΎξΎί ΗΥ΄Ο±ξ?";
-        Text[ chinese_simplified ] = "ÒªΡ΅ΤρΚΉΣΓÒ»ΈφΔ¬ΘΟΡ΅ΟξΧΦ¶Ξ£Ώ";
-        Text[ chinese_traditional ] = "­nΏοΎά¨Ο¥ΞΌΠ·ΗΔζ¦μ΅H";
+        Text[ chinese_simplified ] = "ÒªΡ΅ΤρΚΉΣΓÒ»ΈφΔ¬ΘΟµΔΡ΅ΟξΧΦ¶Ξ£Ώ";
+        Text[ chinese_traditional ] = "­nΏοΎά¨Ο¥Ξ¤@­ΣΌΠ·ΗªΊΏο¶µΔζ¦μ΅H";
         Text[ turkish ] = "Should one option field be selected as a default?";
         Text[ arabic ] = "εα ΚΡνΟ ΗΞΚνΗΡ ΓΝΟ ΓÒΡΗΡ ΗαΞνΗΡΗΚ ίΗέΚΡΗΦνΏ";
         Text[ catalan ] = "ΏDesea que se seleccione un botσn de opciσn de forma predeterminada?";
@@ -245,7 +245,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text[ polish ] = "Tak, wybierz nastκpujΉce:";
         Text[ portuguese_brazilian ] = "~Yes, the following:";
         Text[ japanese ] = "‚Ν‚ΆAΘ‰Ί‚Μ‚Ζ‚¨‚θ‚Ε‚·(~Y):";
-        Text[ korean ] = "ΏΉ, ΄Ωΐ½°ϊ °°½ΐ΄Ο΄Ω:";
+        Text[ korean ] = "ΏΉ, ΄Ωΐ½°ϊ °°½ΐ΄Ο΄Ω(~Y):";
         Text[ chinese_simplified ] = "ΚΗ£¬Ρ΅ΤρΘηΟΒ(~Y)£Ί";
         Text[ chinese_traditional ] = "¬O΅AΏοΎά¥H¤UªΊ(~Y)΅G";
         Text[ turkish ] = "~Yes, the following:";
@@ -579,7 +579,7 @@ String RID_STR_GROUPWIZ_DBFIELD
     Text [ arabic ] = "νγίδί ΝέΩ ήνγΙ γΜγζΪΙ ΗαΞνΗΡΗΚ έν Νήα ήΗΪΟΙ ΘνΗδΗΚ Γζ ΗΣΚΞΟΗγε έν ΪγανΙ αΗΝήΙ.";
     Text [ dutch ] = "U kunt de waarde van de optiegroep opslaan in een databaseveld of hem een andere keer gebruiken.";
     Text [ chinese_simplified ] = "ΔϊΔάΉ»½«Ρ΅ΟξΠ΅ΧιµΔΚύΦµ΄ζΘλÒ»ΈφΚύΎέΏβ»ςÒΤΊσµχΣΓΛό΅£";
-    Text [ greek ] = "Μπορείτε να αποθηκεύσετε την τιμή της ομάδας επιλογής σε ένα πεδίο βάσης δεδομένων ή να το χρησιμοποιήσετε μελλοντικά για κάποια ενέργει";
+    Text [ greek ] = "Μπορείτε να αποθηκεύσετε την τιμή της ομάδας επιλογής σε ένα πεδίο βάσης δεδομένων ή να το χρησιμοποιήσετε μελλοντικά για κάποια ενέργεια.";
     Text [ korean ] = "ΏΙΌΗ ±Χ·μΐΗ °ªΐ» µ¥ΐΜΕΝΊ£ΐΜ½Ί ΗΚµεΏ΅ ΐϊΐεΗΟ°Ε³ª ΎΥΐΈ·ΞΐΗ ΐΫΎχΏ΅ »ηΏλΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text [ turkish ] = "Seηenek alanύnύn deπerini bir veritabanύ alanύnda kaydedebilir ya da bu deπeri daha sonra yapύlacak bir iώlemde kullanabilirsiniz.";
     Text[ catalan ] = "Puede guardar el valor del grupo de opciones en un campo de base de datos o usarlo para una acciσn posterior.";
@@ -589,6 +589,9 @@ String RID_STR_GROUPWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/06/29 02:11:46  kz
+ *  Merge SRC633: 29.06.01 - 04:12:02
+ *
  *  Revision 1.13  2001/06/21 21:44:46  kz
  *  Merge SRC633: 06/21/01 - 23:44:44
  *
@@ -631,6 +634,7 @@ String RID_STR_GROUPWIZ_DBFIELD
  *
  *  Revision 1.0 14.02.01 12:47:37  fs
  ************************************************************************/
+
 
 
 
