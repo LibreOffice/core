@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:51:11 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,14 @@
 
 #define SMDLL   1
 
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
 #endif
 #ifndef _SOT_SOTREF_HXX //autogen
 #include <sot/sotref.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SFX_INTERNO_HXX //autogen
-#include <sfx2/interno.hxx>
 #endif
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
@@ -95,15 +92,12 @@
 #include "smmod.hxx"
 #endif
 
+#include <vcl/jobset.hxx>
+
 class SmNode;
 class SmSymSetManager;
 class SfxPrinter;
 class Printer;
-
-#ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
-#define SO2_DECL_SVSTORAGESTREAM_DEFINED
-SO2_DECL_REF(SvStorageStream)
-#endif
 
 #define HINT_DATACHANGED    1004
 
@@ -153,19 +147,16 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
-                    public SfxListener
+class SmDocShell : public SfxObjectShell, public SfxListener
 {
     friend class SmPrinterAccess;
 
     String              aText;
     SmFormat            aFormat;
     SmParser            aInterpreter;
-    SvStorageStreamRef  aDocStream;
     String              aAccText;
     SmSymSetManager    *pSymSetMgr;
     SmNode             *pTree;
-    SvInPlaceMenuBar   *pMenuBar;
     SfxMenuBarManager  *pMenuMgr;
     SfxItemPool        *pEditEngineItemPool;
     EditEngine         *pEditEngine;
@@ -198,20 +189,19 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
                                   String* pAppName,
                                   String* pFullTypeName,
                                   String* pShortTypeName,
-                                  long    nFileFormat = SOFFICE_FILEFORMAT_CURRENT) const;
+                                  sal_Int32 nFileFormat ) const;
 
     virtual BOOL        SetData( const String& rData );
     virtual ULONG       GetMiscStatus() const;
     virtual void        OnDocumentPrinterChanged( Printer * );
-    virtual BOOL        InitNew(SvStorage *);
-    virtual BOOL        Load(SvStorage *);
-    virtual BOOL        Insert(SvStorage *);
+    virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual BOOL        Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual BOOL        Insert( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
             void        ImplSave(  SvStorageStreamRef xStrm  );
     virtual BOOL        Save();
-    virtual BOOL        SaveAs( SvStorage *pNewStor );
+    virtual BOOL        SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual BOOL        ConvertTo( SfxMedium &rMedium );
-    virtual BOOL        SaveCompleted( SvStorage *pNewStor );
-    virtual void        HandsOff();
+    virtual BOOL        SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();
@@ -233,7 +223,7 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
 public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+1);
-    SFX_DECL_OBJECTFACTORY(SmDocShell);
+    SFX_DECL_OBJECTFACTORY();
 
                 SmDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
     virtual     ~SmDocShell();
