@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 11:36:57 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _IODETECT_CXX
 #define _IODETECT_CXX
 
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>       // for ASSERT
+#endif
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
@@ -406,6 +409,20 @@ FASTBOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
     return bRet;
 }
 
+void TerminateBuffer(sal_Char *pBuffer, ULONG nBytesRead, ULONG nBufferLen)
+{
+    ASSERT(nBytesRead <= nBufferLen - 2,
+        "what you read must be less than the max + null termination");
+    ASSERT(!(nBufferLen & 0x00000001), "nMaxReadBuf must be an even number");
+    if (nBytesRead <= nBufferLen - 2)
+    {
+        pBuffer[nBytesRead] = '\0';
+        pBuffer[nBytesRead+1] = '\0';
+        if (nBytesRead & 0x00000001)
+            pBuffer[nBytesRead+2] = '\0';
+    }
+}
+
     /* Feststellen ob das File in dem entsprechenden Format vorliegt. */
     /* Z.z werden nur unsere eigene Filter unterstuetzt               */
 FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
@@ -434,23 +451,19 @@ FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
                 SvStream* pStrm = rMedium.GetInStream();
                 if( pStrm && !pStrm->GetError() )
                 {
-                    sal_Char aBuffer[ 4097 ];
-                    ULONG nBytesRead = pStrm->Read( aBuffer, 4096 );
-                    pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-                    if( nBytesRead<=80 )
+                    sal_Char aBuffer[4098];
+                    const ULONG nMaxRead = sizeof(aBuffer) - 2;
+                    ULONG nBytesRead = pStrm->Read(aBuffer, nMaxRead);
+                    pStrm->Seek(STREAM_SEEK_TO_BEGIN);
+                    TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
+                    for (USHORT i = 0; i < MAXFILTER; ++i)
                     {
-                        aBuffer[nBytesRead] = '\0';
-                        aBuffer[nBytesRead+1] = '\0';
-                        if( (nBytesRead & 0x00000001) != 0 )
-                            aBuffer[nBytesRead+2] = '\0';
-                    }
-
-                    for( USHORT i = 0; i < MAXFILTER; ++i )
-                        if( aReaderWriter[i].IsFilter( rFmtName ) )
+                        if (aReaderWriter[i].IsFilter(rFmtName))
                         {
                             bRet = 0 != aReaderWriter[i].IsReader( aBuffer, nBytesRead, rMedium.GetPhysicalName() );
                             break;
                         }
+                    }
                 }
             }
 
@@ -511,15 +524,16 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         return 0;
     }
 
-    sal_Char aBuffer[ 4098 ];
+    sal_Char aBuffer[4098];
+    const ULONG nMaxRead = sizeof(aBuffer) - 2;
     ULONG nBytesRead;
-    if( pMedium )
+    if (pMedium)
     {
         SvStream* pIStrm = pMedium->GetInStream();
         if( !pIStrm || SVSTREAM_OK != pIStrm->GetError() )
             return 0;
         ULONG nCurrPos = pIStrm->Tell();
-        nBytesRead = pIStrm->Read( aBuffer, 4096 );
+        nBytesRead = pIStrm->Read(aBuffer, nMaxRead);
         pIStrm->Seek( nCurrPos );
     }
     else
@@ -530,17 +544,12 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         if( !rFileName.Len() || SVSTREAM_OK != aStrm.GetError() )
             return 0;
 
-        nBytesRead = aStrm.Read( aBuffer, 4096 );
+        nBytesRead = aStrm.Read(aBuffer, nMaxRead);
         aStrm.Close();
     }
-    DBG_ASSERT( nBytesRead<=4096, "zu viele Bytes gelesen?" );
-    if( nBytesRead <= 4096 )
-    {
-        aBuffer[nBytesRead] = '\0';
-        aBuffer[nBytesRead+1] = '\0';
-        if( (nBytesRead & 0x00000001) != 0 )
-            aBuffer[nBytesRead+2] = '\0';
-    }
+
+    TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
+
 
     /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     /* suche nach dem bestimmten Filter, falls kein entsprechender        */
