@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:35:41 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,6 +645,20 @@ bool XclTools::IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNe
         return true;
     }
     return false;
+}
+
+// stream handling ------------------------------------------------------------
+
+void XclTools::SkipSubStream( XclImpStream& rStrm )
+{
+    bool bLoop = true;
+    while( bLoop && rStrm.StartNextRecord() )
+    {
+        sal_uInt16 nRecId = rStrm.GetRecId();
+        bLoop = nRecId != EXC_ID_EOF;
+        if( (nRecId == EXC_ID2_BOF) || (nRecId == EXC_ID3_BOF) || (nRecId == EXC_ID4_BOF) || (nRecId == EXC_ID5_BOF) )
+            SkipSubStream( rStrm );
+    }
 }
 
 // read/write colors ----------------------------------------------------------
