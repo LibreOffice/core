@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:41:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,7 @@ enum OpCodeEnum
         ocDecimal           = SC_OPCODE_DECIMAL,
         ocConvert           = SC_OPCODE_CONVERT,
         ocRoman             = SC_OPCODE_ROMAN,
+        ocHyperLink     = SC_OPCODE_HYPERLINK,
         ocEnd2Par           = SC_OPCODE_END_2_PAR,
     // internes Allerlei
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
