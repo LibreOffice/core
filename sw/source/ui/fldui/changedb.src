@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 20:09:10 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ arabic ] = "έν γΡΘΪ ΗαΝζΗΡ εΠΗ΅ νγίδί ΗΣΚΘΟΗα ήζΗΪΟ ΗαΘνΗδΗΚ΅ ΗαΚν ΚΥα ΕανεΗ έν γΣΚδΟί ΘζΗΣΨΙ Νήζα ήζΗΪΟ ΗαΘνΗδΗΚ΅ ΘΓΞΡμ. αΗΝΩ Γδε νγίδί Ϊγα ΚΫννΡ ζΗΝΟ";
         Text[ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk.";
         Text[ chinese_simplified ] = "ΤΪΥβΈφ¶Τ»°ΏςΔΪΔϊΔάΉ»ΚΉΣΓΑνÒ»ΈφΚύΎέΏβΐ΄΄ϊΜζµ±Η°±ΰΌ­µΔΞΔµµ¶ΑΘ΅µΔΚύΎέΏβ΅£ΓΏ΄Ξ±ΰΌ­ΞΔµµΚ±Φ»ΔάÒ»΄ΞΜζ»»ΚύΎέΏβ΅£ΤΪΧσ·½µΔΑΠµ¥ΔΪΏΙÒΤΦ΄ΠΠ¶ΰΦΨΡ΅ΤρµΔΉ¦Δά΅£";
-        Text[ greek ] = "Σε αυτόν τον διάλογο μπορείτε να ανταλλάξετε τις βάσεις δεδομένων, τις οποίες χρησιμοποιείτε για το έγγραφο σας μέσω των πεδίων βάσεων δεδομένων, με άλλες βάσεις δεδομένων. Επιτρέπεται μόνο μια αλλαγή ανά εργάσιμη ημέρα. Στο αριστερό τμήμα μπορούν να γίνουν πολλαλές επιλογές.";
+        Text[ greek ] = "Σε αυτόν τον διάλογο μπορείτε να αλλάξετε τις βάσεις δεδομένων, τις οποίες χρησιμοποιείτε στο έγγραφό σας μέσω των πεδίων βάσεων δεδομένων. Επιτρέπεται μόνο μια αλλαγή κάθε φορά. Στο αριστερό τμήμα μπορούν να γίνουν πολλαλές επιλογές.";
         Text[ korean ] = "ΐΜ ΄λΘ­»σΐΪΏ΅Ό­, ±ΝΗΟ΄Β Ή®Ό­Ώ΅Ό­ µ¥ΐΜΕΝΊ£ΐΜ½ΊΏ΅ ΑΆ±ΩΗΟ°Ε³ª ±³Θ―ΗΟ΄Β µ¥ΐΜΕΝΊ£ΐΜ½Ί ΗΚµεΈ¦ »ηΏλΗΟ½ΗΌφ ΐΦ½ΐ΄Ο΄Ω.ΗΡΉψΏ΅ ΗΡΉψ Ί―°ζΐΜ ΈΈµιΎξ  Αύ΄Ο΄Ω. ΏήΒΚΐΗ Έ®½ΊΖ® »σΏ΅Ό­, ΄ΩΑί Ό±ΕΓΐΜ ?";
         Text[ turkish ] = "Bu pencerede, belgenizdeki veritabanύ alanlarύ yoluyla eriώtiπiniz veritabanlarύnύ baώkalarύ ile deπiώtirebilirsiniz. Her iώlemde yalnύzca tek bir deπiώiklik yapύlabilir. Soldaki listede birden fazla seηim yapύlabilir.";
         Text[ language_user1 ] = " ";
@@ -428,3 +428,4 @@ ModalDialog DLG_CHANGE_DB
     Text[ catalan ] = "Cambiar Bases de Datos";
     Text[ finnish ] = "Vaihda tietokannat";
 };
+
