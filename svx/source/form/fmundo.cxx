@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:47 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 07:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,7 +925,7 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
 {
     if (rNewMod.GetObjectShell())
         rNewMod.GetObjectShell()->SetModified(sal_True);
-    if(static_STR_UNDO_PROPERTY.Len() != 0)
+    if(static_STR_UNDO_PROPERTY.Len() == 0)
         static_STR_UNDO_PROPERTY = SVX_RES(RID_STR_UNDO_PROPERTY);
 }
 
