@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-28 15:40:20 $
+ *  last change: $Author: mba $ $Date: 2002-01-29 15:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,6 @@ void FileStreamWrapper_Impl::checkConnected()
         throw NotConnectedException(::rtl::OUString(), const_cast<XWeak*>(static_cast<const XWeak*>(this)));
     if ( !m_pSvStream )
     {
-        m_pSvStream = new SvFileStream( m_aURL, STREAM_STD_READ );
         m_pSvStream = ::utl::UcbStreamHelper::CreateStream( m_aURL, STREAM_STD_READ );
 #ifdef DEBUG
         ++nOpenFiles;
@@ -755,12 +754,16 @@ Reference<XInputStream> UCBStorageStream_Impl::GetXInputStream()
             if( Init() )
             {
                 CopySourceToTemporary();
-                aResult = new ::utl::OInputStreamWrapper( m_pStream );
+
+                // owner transfer of stream to wrapper
+                aResult = new ::utl::OInputStreamWrapper( m_pStream, TRUE );
+                m_pStream->Seek(0);
 
                 if( aResult.is() )
                 {
                     // temporary stream can not be used here any more
                     // and can not be opened untill wrapper is closed
+                    // stream is deleted by wrapper after use
                     m_pStream = NULL;
                     m_nRepresentMode = xinputstream;
                 }
@@ -809,7 +812,7 @@ BOOL UCBStorageStream_Impl::Init()
         if ( !m_aTempURL.Len() )
             m_aTempURL = ::utl::TempFile().GetURL();
 
-        m_pStream = ::utl::UcbStreamHelper::CreateStream( m_aTempURL, STREAM_WRITE );
+        m_pStream = ::utl::UcbStreamHelper::CreateStream( m_aTempURL, STREAM_STD_READWRITE );
 #ifdef DEBUG
         ++nOpenFiles;
 #endif
