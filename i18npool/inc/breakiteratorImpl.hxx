@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:27 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,7 @@
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 
-#include <tools/string.hxx>
-#include <tools/list.hxx>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -163,7 +162,7 @@ private :
         com::sun::star::lang::Locale aLocale;
         com::sun::star::uno::Reference < XBreakIterator > xBI;
     };
-    List lookupTable;
+    std::vector<lookupTableItem*> lookupTable;
     com::sun::star::lang::Locale aLocale;
     com::sun::star::uno::Reference < XBreakIterator > xBI;
 
