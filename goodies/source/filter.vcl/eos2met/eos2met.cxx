@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:30:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ BYTE METWriter::FindChrSet(const Font & rFont)
 void METWriter::WriteChrSets()
 {
     USHORT i;
-    char c;
+    char c = 0;
     METChrSet * pCS;
     BYTE nbyte;
 
@@ -1212,6 +1212,9 @@ void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
                     nStyle = 2;     // LINE_DASH
             }
             break;
+            case LineStyle_SOLID:
+            case LineStyle_FORCE_EQUAL_SIZE:
+                break;  // not handled -Wall
         }
         WillWriteOrder( 2 );
         *pMET << (BYTE)0x18 << nStyle;      // set LineType
@@ -2675,8 +2678,9 @@ extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
