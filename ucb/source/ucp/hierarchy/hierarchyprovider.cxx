@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-08 12:58:41 $
+ *  last change: $Author: kso $ $Date: 2001-05-14 08:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,8 @@ Reference< XContent > SAL_CALL HierarchyContentProvider::queryContent(
     // Check URL scheme...
 
     OUString aScheme( OUString::createFromAscii( HIERARCHY_URL_SCHEME ) );
-    if ( !Identifier->getContentProviderScheme().equalsIgnoreCase( aScheme ) )
+    if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase(
+                                                                aScheme ) )
         throw IllegalIdentifierException();
 
     // Check URL. Must be at least the URL of the Root Folder.
