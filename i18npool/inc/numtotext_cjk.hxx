@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-07 00:19:07 $
+ *  last change: $Author: khong $ $Date: 2002-09-06 07:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ protected:
     const sal_Unicode *numberChar;
     sal_Int16 numberFlag;
     sal_Int16 bulletCount;
+    sal_Bool recycleBullet;
     sal_Int16 number;
     sal_Int16 exponentCount;
     sal_Int16 *multiplierExponent;
@@ -121,6 +122,8 @@ TRANSLITERATION_NUMTOTEXT_CJK ( AIUHalfWidth_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( IROHAFullWidth_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( IROHAHalfWidth_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( CircledNumber )
+TRANSLITERATION_NUMTOTEXT_CJK ( TianGan_zh )
+TRANSLITERATION_NUMTOTEXT_CJK ( DiZi_zh )
 #endif
 #undef TRANSLITERATION_NUMTOTEXT
 
