@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:56:11 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:09:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -170,11 +170,12 @@ SLOFILES=			$(SLO)$/controlfontdialog.obj	\
                     $(SLO)$/modulepcr.obj
 
 
-SRCFILES=			propres.src	 \
+SRS1NAME=$(TARGET)
+SRC1FILES=			propres.src	 \
                     formres.src
 
 RESLIB1NAME=pcr
-RESLIB1SRSFILES= $(SRS)/pcr.srs
+RESLIB1SRSFILES= $(SRS)$/pcr.srs
 #RESLIB1DEPN= pcr.src pcr.hrc
 
 IMGLST_SRS=$(SRS)$/pcr.srs
