@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: jb $ $Date: 2001-09-28 13:31:54 $
+#   last change: $Author: jb $ $Date: 2001-11-02 12:18:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,9 +87,9 @@ SHL1STDLIBS=\
     $(OSLLIB)					\
     $(SALHELPERLIB)				\
     $(SALLIB)					\
-    $(UNOTOOLSLIB)				\
     $(CPPRTLLIB)
 
+#	$(UNOTOOLSLIB)				\
 #	$(ZLIB3RDLIB) \
 
 SHL1DEPN=
@@ -127,8 +127,9 @@ SHL2STDLIBS=\
     $(OSLLIB)					\
     $(SALHELPERLIB)				\
     $(SALLIB)					\
-    $(UNOTOOLSLIB)				\
     $(CPPRTLLIB)
+
+#	$(UNOTOOLSLIB)				\
 
 SHL2DEPN=
 SHL2IMPLIB=	i$(SHL2TARGET)
