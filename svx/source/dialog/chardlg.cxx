@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2001-01-24 14:45:35 $
+ *  last change: $Author: pb $ $Date: 2001-02-09 06:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5141,6 +5141,22 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
         rSet.ClearItem( nWhich );
 
     return bModified;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharPositionPage::FillUserData()
+{
+    const sal_Unicode cTok = ';';
+
+    String sUser( UniString::CreateFromInt32( m_nSuperEsc ) );
+    sUser.Append( cTok );
+    sUser.Append( UniString::CreateFromInt32( m_nSubEsc ) );
+    sUser.Append( cTok );
+    sUser.Append( UniString::CreateFromInt32( m_nSuperProp ) );
+    sUser.Append( cTok );
+    sUser.Append( UniString::CreateFromInt32( m_nSubProp ) );
+    SetUserData( sUser );
 }
 
 // class SvxCharTwoLinesPage ------------------------------------------------
