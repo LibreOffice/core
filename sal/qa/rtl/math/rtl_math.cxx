@@ -1,0 +1,596 @@
+#ifdef WIN32
+// LLA: take a look into Microsofts math.h implementation, why this define is need
+#define _USE_MATH_DEFINES
+#endif
+
+#include <math.h>
+#include <cppunit/simpleheader.hxx>
+#include <rtl/math.h>
+#include <rtl/string.hxx>
+
+#include "valueequal.hxx"
+
+namespace rtl_math
+{
+
+class test : public CppUnit::TestFixture
+{
+public:
+    // initialise your test code values here.
+    void setUp()
+    {
+    }
+
+    void tearDown()
+    {
+    }
+
+
+    void equalCheck(double _nResult, double _nExpect) /* throws Exception */
+        {
+            bool bEqualResult = is_double_equal(_nResult, _nExpect);
+
+            rtl::OString sError = "rtl_math_round expected result is wrong should:(";
+            sError += rtl::OString::valueOf(_nExpect);
+            sError += ") but is:(";
+            sError += rtl::OString::valueOf(_nResult);
+            sError += ")";
+
+            CPPUNIT_ASSERT_MESSAGE(sError.getStr(), bEqualResult == true);
+        }
+
+    // insert your test code here.
+    void round_000()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nValue = M_PI;
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(nValue, 0, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(3.0));
+
+        nResult = rtl_math_round(nValue, 2, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(3.14));
+
+        nResult = rtl_math_round(nValue, 3, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(3.142));
+
+        nResult = rtl_math_round(nValue, 10, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(3.1415926536));
+    }
+
+    // insert your test code here.
+    void round_001_positiv()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(0.1, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.11, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.13, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.14, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.1499999, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.15, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.151, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.16, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.199999999, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(0.2));
+    }
+
+    void round_001_negativ()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(-0.1, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.11, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.13, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.14, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.1499999, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.15, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.151, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.16, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.19999999999, 1, rtl_math_RoundingMode_Corrected);
+        equalCheck(nResult, double(-0.2));
+    }
+// -----------------------------------------------------------------------------
+    void round_002_positiv()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(0.1, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.11, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.13, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.14, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.1499999, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.15, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.151, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.16, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.199999999, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(0.1));
+    }
+
+    void round_002_negativ()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(-0.1, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.11, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.13, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.14, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.1499999, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.15, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.151, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.16, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.19999999999, 1, rtl_math_RoundingMode_Down);
+        equalCheck(nResult, double(-0.1));
+    }
+// -----------------------------------------------------------------------------
+    void round_003_positiv()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(0.1, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.11, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.13, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.14, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.1499999, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.15, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.151, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.16, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.199999999, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(0.2));
+    }
+
+    void round_003_negativ()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(-0.1, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.11, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.13, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.14, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.1499999, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.15, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.151, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.16, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.19999999999, 1, rtl_math_RoundingMode_Up);
+        equalCheck(nResult, double(-0.2));
+    }
+// -----------------------------------------------------------------------------
+    void round_004_positiv()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(0.1, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.11, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.13, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.14, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.1499999, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.15, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.151, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.16, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.199999999, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(0.1));
+    }
+
+    void round_004_negativ()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(-0.1, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.11, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.13, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.14, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.1499999, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.15, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.151, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.16, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.19999999999, 1, rtl_math_RoundingMode_Floor);
+        equalCheck(nResult, double(-0.2));
+    }
+// -----------------------------------------------------------------------------
+    void round_005_positiv()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(0.1, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.11, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.13, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.14, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.1499999, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.15, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.151, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.16, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.199999999, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(0.2));
+    }
+
+    void round_005_negativ()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(-0.1, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.11, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.13, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.14, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.1499999, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.15, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.151, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.16, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.19999999999, 1, rtl_math_RoundingMode_Ceiling);
+        equalCheck(nResult, double(-0.1));
+    }
+// -----------------------------------------------------------------------------
+    void round_006_positiv()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(0.1, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.11, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.13, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.14, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.1499999, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.15, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.151, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.16, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.199999999, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(0.2));
+    }
+
+    void round_006_negativ()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(-0.1, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.11, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.13, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.14, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.1499999, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.15, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.151, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.16, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.19999999999, 1, rtl_math_RoundingMode_HalfDown);
+        equalCheck(nResult, double(-0.2));
+    }
+// -----------------------------------------------------------------------------
+    void round_007_positiv()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(0.1, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.11, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.13, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.14, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.1499999, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(0.1));
+
+        nResult = rtl_math_round(0.15, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.151, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.16, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(0.2));
+
+        nResult = rtl_math_round(0.199999999, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(0.2));
+    }
+
+    void round_007_negativ()
+    {
+        // this is demonstration code
+        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+
+        double nResult = 0.0;
+
+        nResult = rtl_math_round(-0.1, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.11, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.13, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.14, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.1499999, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(-0.1));
+
+        nResult = rtl_math_round(-0.15, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.151, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.16, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(-0.2));
+
+        nResult = rtl_math_round(-0.19999999999, 1, rtl_math_RoundingMode_HalfUp);
+        equalCheck(nResult, double(-0.2));
+    }
+
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
+    // because these macros are need by auto register mechanism.
+
+    CPPUNIT_TEST_SUITE(test);
+    CPPUNIT_TEST(round_000);
+
+    CPPUNIT_TEST(round_001_positiv);
+    CPPUNIT_TEST(round_001_negativ);
+
+    CPPUNIT_TEST(round_002_positiv);
+    CPPUNIT_TEST(round_002_negativ);
+
+    CPPUNIT_TEST(round_003_positiv);
+    CPPUNIT_TEST(round_003_negativ);
+
+    CPPUNIT_TEST(round_004_positiv);
+    CPPUNIT_TEST(round_004_negativ);
+
+    CPPUNIT_TEST(round_005_positiv);
+    CPPUNIT_TEST(round_005_negativ);
+
+    CPPUNIT_TEST(round_006_positiv);
+    CPPUNIT_TEST(round_006_negativ);
+
+    CPPUNIT_TEST(round_007_positiv);
+    CPPUNIT_TEST(round_007_negativ);
+
+    CPPUNIT_TEST_SUITE_END();
+}; // class test
+
+// -----------------------------------------------------------------------------
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_math::test, "rtl_math");
+} // namespace rtl_math
+
+
+// -----------------------------------------------------------------------------
+
+// this macro creates an empty function, which will called by the RegisterAllFunctions()
+// to let the user the possibility to also register some functions by hand.
+NOADDITIONAL;
+
