@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:34:32 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,7 @@ class SbiRuntime
     void StepCLOSE( USHORT ),   StepPRCHAR( USHORT ),   StepARGTYP( USHORT );
     // Alle Opcodes mit zwei Operanden
     void StepRTL( USHORT, USHORT ),     StepPUBLIC( USHORT, USHORT );
+    void StepPUBLIC_Impl( USHORT, USHORT, bool bUsedForClassModule );
     void StepFIND( USHORT, USHORT ),    StepELEM( USHORT, USHORT );
     void StepGLOBAL( USHORT, USHORT ),  StepLOCAL( USHORT, USHORT );
     void StepPARAM( USHORT, USHORT),    StepCREATE( USHORT, USHORT );
@@ -457,6 +458,7 @@ class SbiRuntime
     void StepTCREATE(USHORT,USHORT),    StepDCREATE(USHORT,USHORT);
     void StepGLOBAL_P( USHORT, USHORT ),StepFIND_G( USHORT, USHORT );
     void StepDCREATE_REDIMP(USHORT,USHORT), StepDCREATE_IMPL(USHORT,USHORT,BOOL);
+    void StepFIND_CM( USHORT, USHORT );
 public:
     xub_StrLen  nLine,nCol1,nCol2;  // aktuelle Zeile, Spaltenbereich
     SbiRuntime* pNext;               // Stack-Chain
