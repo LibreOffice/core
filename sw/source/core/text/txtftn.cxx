@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:09:28 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1431,7 +1431,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
             pFnt->SetVertical( ((SvxCharRotateItem*)pItem)->GetValue(),
                                 rInf.GetTxtFrm()->IsVertical() );
 
-        pFnt->ChgPhysFnt( pInf->GetVsh(), pInf->GetOut() );
+        pFnt->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
 
         if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
             sal_True, &pItem ))
@@ -1452,7 +1452,7 @@ SwFtnSave::~SwFtnSave()
         // SwFont zurueckstellen
         *pFnt = *pOld;
         pFnt->GetTox() = pOld->GetTox();
-        pFnt->ChgPhysFnt( pInf->GetVsh(), pInf->GetOut() );
+        pFnt->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
         delete pOld;
     }
 }
