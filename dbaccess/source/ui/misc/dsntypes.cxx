@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:36:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,25 +204,27 @@ void ODsnTypeCollection::initUserDriverTypes(const Reference< XMultiServiceFacto
             if ( aThisDriverSettings.isValid() )
             {
                 // read the needed information
-                ::rtl::OUString sDsnPrefix,sDsnTypeDisplayName;
+                ::rtl::OUString sDsnPrefix,sDsnTypeDisplayName,sExtension;
                 aThisDriverSettings.getNodeValue(getDriverTypeDisplayNodeName()) >>= sDsnTypeDisplayName;
                 aThisDriverSettings.getNodeValue(getDriverDsnPrefixNodeName()) >>= sDsnPrefix;
+                aThisDriverSettings.getNodeValue(getDriverExtensionNodeName()) >>= sExtension;
 
                 m_aDsnTypesDisplayNames.push_back(sDsnTypeDisplayName);
                 m_aDsnPrefixes.push_back(sDsnPrefix);
                 m_aDsnTypes.push_back(static_cast<DATASOURCE_TYPE>(DST_USERDEFINE1 + i++));
+                m_aUserExtensions.push_back(sExtension);
             }
         }
     }
 }
 
 //-------------------------------------------------------------------------
-DATASOURCE_TYPE ODsnTypeCollection::getType(const String& _rDsn)
+DATASOURCE_TYPE ODsnTypeCollection::getType(const String& _rDsn) const
 {
     DATASOURCE_TYPE eType = DST_UNKNOWN;
     // look for user defined driver types
-    StringVector::iterator aIter = m_aDsnPrefixes.begin();
-    StringVector::iterator aEnd = m_aDsnPrefixes.end();
+    StringVector::const_iterator aIter = m_aDsnPrefixes.begin();
+    StringVector::const_iterator aEnd = m_aDsnPrefixes.end();
     for (; aIter != aEnd; ++aIter)
     {
         if ( _rDsn.Len() >= aIter->Len() && aIter->EqualsIgnoreCaseAscii(_rDsn,0, aIter->Len()) )
@@ -239,7 +241,7 @@ DATASOURCE_TYPE ODsnTypeCollection::getType(const String& _rDsn)
 }
 
 //-------------------------------------------------------------------------
-String ODsnTypeCollection::getTypeDisplayName( DATASOURCE_TYPE _eType, sal_Bool bWizardMode)
+String ODsnTypeCollection::getTypeDisplayName(DATASOURCE_TYPE _eType) const
 {
     String sDisplayName;
 
@@ -251,7 +253,7 @@ String ODsnTypeCollection::getTypeDisplayName( DATASOURCE_TYPE _eType, sal_Bool 
 }
 
 //-------------------------------------------------------------------------
-String ODsnTypeCollection::getDatasourcePrefix(DATASOURCE_TYPE _eType)
+String ODsnTypeCollection::getDatasourcePrefix(DATASOURCE_TYPE _eType) const
 {
     String sPrefix;
     sal_Int32 nIndex = implDetermineTypeIndex(_eType);
@@ -262,7 +264,7 @@ String ODsnTypeCollection::getDatasourcePrefix(DATASOURCE_TYPE _eType)
 }
 
 //-------------------------------------------------------------------------
-String ODsnTypeCollection::cutPrefix(const String& _rDsn)
+String ODsnTypeCollection::cutPrefix(const String& _rDsn) const
 {
     DATASOURCE_TYPE eType = getType(_rDsn);
     String sPrefix = getDatasourcePrefix(eType);
@@ -359,13 +361,13 @@ void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,const Reference
     }
 }
 //-------------------------------------------------------------------------
-String ODsnTypeCollection::getTypeDisplayName(const String& _rDsn)
+String ODsnTypeCollection::getTypeDisplayName(const String& _rDsn) const
 {
     return getTypeDisplayName(getType(_rDsn));
 }
 
 //-------------------------------------------------------------------------
-sal_Bool ODsnTypeCollection::isFileSystemBased(DATASOURCE_TYPE _eType)
+sal_Bool ODsnTypeCollection::isFileSystemBased(DATASOURCE_TYPE _eType) const
 {
     switch (_eType)
     {
@@ -375,6 +377,20 @@ sal_Bool ODsnTypeCollection::isFileSystemBased(DATASOURCE_TYPE _eType)
         case DST_MSACCESS:
             return sal_True;
 
+        case DST_USERDEFINE1:
+        case DST_USERDEFINE2:
+        case DST_USERDEFINE3:
+        case DST_USERDEFINE4:
+        case DST_USERDEFINE5:
+        case DST_USERDEFINE6:
+        case DST_USERDEFINE7:
+        case DST_USERDEFINE8:
+        case DST_USERDEFINE9:
+        case DST_USERDEFINE10:
+        {
+            StringVector::size_type nPos = static_cast<sal_Int16>(_eType-DST_USERDEFINE1);
+            return nPos < m_aUserExtensions.size() ? m_aUserExtensions[nPos].Len() != 0 : sal_False;
+        }
         default:
             return sal_False;
     }
@@ -434,8 +450,10 @@ sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
         case DST_OUTLOOKEXP:
         case DST_JDBC:
         case DST_EVOLUTION:
-        default:
             bEnableBrowseButton = FALSE;
+            break;
+        default:
+            bEnableBrowseButton = getTypeExtension(_eType).Len() != 0;
             break;
     }
     return bEnableBrowseButton;
@@ -443,7 +461,7 @@ sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
 
 
 //-------------------------------------------------------------------------
-sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
+sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType) const
 {
     switch (_eType)
     {
@@ -482,7 +500,7 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
 }
 
 //-------------------------------------------------------------------------
-DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
+DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
 {
     sal_uInt16 nSeparator = _rDsn.Search((sal_Unicode)':');
     if (STRING_NOTFOUND == nSeparator)
@@ -568,7 +586,7 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
     return DST_UNKNOWN;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(DATASOURCE_TYPE _eType)
+sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(DATASOURCE_TYPE _eType) const
 {
     DBG_ASSERT(
             (m_aDsnTypesDisplayNames.size() == m_aDsnPrefixes.size())
@@ -655,11 +673,16 @@ Sequence<PropertyValue> ODsnTypeCollection::getEmbeddedDatabaseProperties(const 
     return aRet;
 }
 //-------------------------------------------------------------------------
-sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(const String& _rDsn)
+sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(const String& _rDsn) const
 {
     return implDetermineTypeIndex(getType(_rDsn));
 }
-
+// -----------------------------------------------------------------------------
+String ODsnTypeCollection::getTypeExtension(DATASOURCE_TYPE _eType) const
+{
+    StringVector::size_type nPos = static_cast<sal_Int16>(_eType-DST_USERDEFINE1);
+    return nPos < m_aUserExtensions.size() ? m_aUserExtensions[nPos] : String();
+}
 //-------------------------------------------------------------------------
 ODsnTypeCollection::TypeIterator ODsnTypeCollection::begin() const
 {
@@ -779,7 +802,6 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
 {
     return new DbuTypeCollectionItem(*this);
 }
-
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
