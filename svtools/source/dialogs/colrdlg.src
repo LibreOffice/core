@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:08:46 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Vermelho" ;
         Text[ chinese_simplified ] = "∫Ï…´(~R)";
         Text[ russian ] = "~ ‡ÒÌ.";
-        Text[ polish ] = "Czerw.";
+        Text[ polish ] = "Czerwony";
         Text[ japanese ] = "ê‘(~R)";
         Text[ chinese_traditional ] = "¨ı¶‚(~R)";
         Text[ arabic ] = "√Õ„—";
@@ -132,6 +132,7 @@ ModalDialog DLG_COLOR
         Text[ turkish ] = "~K˝rm˝z˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Rojo";
+        Text[ finnish ] = "~Punainen";
     };
     FixedText FT_GREEN
     {
@@ -163,6 +164,7 @@ ModalDialog DLG_COLOR
         Text[ turkish ] = "~Ye˛il";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Verde";
+        Text[ finnish ] = "~Vihre‰";
     };
     FixedText FT_BLUE
     {
@@ -181,7 +183,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Azul" ;
         Text[ chinese_simplified ] = "¿∂…´(~B)";
         Text[ russian ] = "—ËÌËÈ";
-        Text[ polish ] = "Nieb.";
+        Text[ polish ] = "Niebieski";
         Text[ japanese ] = "ê¬(~B)";
         Text[ chinese_traditional ] = "¬≈¶‚(~B)";
         Text[ arabic ] = "√“—ﬁ";
@@ -192,6 +194,7 @@ ModalDialog DLG_COLOR
         Text[ turkish ] = "~Mavi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Azul";
+        Text[ finnish ] = "~Sininen";
     };
     NumericField NUM_RED
     {
@@ -254,6 +257,7 @@ ModalDialog DLG_COLOR
         Text[ turkish ] = "~Camgˆbei";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cian";
+        Text[ finnish ] = "~Syaani";
     };
     FixedText FT_MAGENTA
     {
@@ -283,6 +287,7 @@ ModalDialog DLG_COLOR
         Text[ turkish ] = "M~or";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Magenta";
+        Text[ finnish ] = "~Purppura";
     };
     FixedText FT_YELLOW
     {
@@ -312,6 +317,7 @@ ModalDialog DLG_COLOR
         Text[ turkish ] = "~Sar˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Amarillo";
+        Text[ finnish ] = "~Keltainen";
     };
     FixedText FT_KEY
     {
@@ -341,6 +347,7 @@ ModalDialog DLG_COLOR
         Text[ turkish ] = "~Key";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Llave";
+        Text[ finnish ] = "~Avain";
     };
     MetricField NUM_CYAN
     {
@@ -443,6 +450,7 @@ ModalDialog DLG_COLOR
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Color";
+        Text[ finnish ] = "~S‰vy";
     };
     NumericField NUM_HUE
     {
@@ -485,6 +493,7 @@ ModalDialog DLG_COLOR
         Text[ turkish ] = "~Doygunluk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~SaturaciÛn";
+        Text[ finnish ] = "~Kyll‰isyys";
     };
     NumericField NUM_SATURATION
     {
@@ -525,6 +534,7 @@ ModalDialog DLG_COLOR
         Text[ turkish ] = "Par~lakl˝k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Brillo";
+        Text[ finnish ] = "~Kirkkaus";
     };
     NumericField NUM_LUMINANCE
     {
@@ -584,4 +594,5 @@ ModalDialog DLG_COLOR
     Text[ turkish ] = "Renk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color";
+    Text[ finnish ] = "V‰ri";
 };
