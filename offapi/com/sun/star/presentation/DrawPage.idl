@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawPage.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:46 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,74 @@ service DrawPage
     /** defines the speed of the fade-in effect of this page.
      */
     [property] com::sun::star::presentation::AnimationSpeed Speed;
+
+    //-------------------------------------------------------------------------
+
+    /** defines if a header presentation shape from the master page is visible
+        on this page.
+    */
+
+    [optional, property] boolean IsHeaderVisible;
+
+    //-------------------------------------------------------------------------
+
+    /** defines the text that is displayd in a header textfield rendered on this
+        page.
+    */
+    [optional, property] string HeaderText;
+
+    //-------------------------------------------------------------------------
+
+    /** defines if a footer presentation shape from the master page is visible
+        on this page.
+    */
+
+    [optional, property] boolean IsFooterVisible;
+
+    //-------------------------------------------------------------------------
+
+    /** defines the text that is displayd in a footer textfield rendered on this
+        page.
+    */
+    [optional, property] string FooterText;
+
+    //-------------------------------------------------------------------------
+
+    /** defines if a page number presentation shape from the master page is visible
+        on this page.
+    */
+
+    [optional, property] boolean IsPageNumberVisible;
+
+    //-------------------------------------------------------------------------
+
+    /** defines if a date and time presentation shape from the master page is visible
+        on this page.
+    */
+
+    [optional, property] boolean IsDateTimeVisible;
+
+    //-------------------------------------------------------------------------
+
+    /** defines if a date and time text field shows a fixed string value or the
+        current date on this page.
+    */
+
+    [optional, property] boolean IsDateTimeFixed;
+
+    //-------------------------------------------------------------------------
+
+    /** defines the text that is displayd in a date and time textfield rendered on this
+        page. This value is only used if <code>IsDateTimeFixed</code> is <true/>.
+    */
+    [optional, property] string DateTimeText;
+
+    //-------------------------------------------------------------------------
+
+    /** defines the format that is used to format a date and time text field on
+        this page. This is only used if <code>IsDateTimeFixed</code> is <false/>.
+    */
+    [optional, property] long DateTimeFormat;
 };
 
 //=============================================================================
