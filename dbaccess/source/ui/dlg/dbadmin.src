@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 11:22:36 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 06:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,12 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ chinese_traditional ] = "™нЃж";
         Text[ turkish ] = "Tablolar";
         Text[ arabic ] = "ћѕ«жб";
+    };
+    String STR_PAGETITLE_QUERIES
+    {
+        Text = "Abfragen" ;
+        Text [ ENGLISH ] = "Queries" ;
+        Text [ english_us ] = "Queries" ;
     };
     Text[ portuguese ] = "Gerir fontes de dados";
     Text[ russian ] = "”правление источником данных";
@@ -1758,11 +1764,72 @@ TabPage PAGE_TABLESUBSCRIPTION
     };
 };
 
+//.........................................................................
+TabPage PAGE_QUERYADMINISTRATION
+{
+    SVLook = TRUE ;
+    Hide = TRUE;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    HelpId = HID_DSADMIN_QUERYADMINISTRATION;
+
+    GroupBox GB_QUERIES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 192 , 126 ) ;
+        Text = "Abfragen";
+        Text [ english ] = "Queries";
+        Text [ english_us ] = "Queries";
+    };
+    ListBox LB_QUERIES
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 180 , 109 ) ;
+        Border = TRUE;
+        SVLook = TRUE;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_QUERIES;
+    };
+    PushButton PB_NEWQUERY
+    {
+        Pos = MAP_APPFONT ( 204, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        SVLook = TRUE;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_QUERIES_NEW;
+        Text = "~Neu";
+        Text[ english ] = "~New";
+        Text[ english_us ] = "~New";
+    };
+    PushButton PB_EDITQUERY
+    {
+        Pos = MAP_APPFONT ( 204, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        SVLook = TRUE;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_QUERIES_EDIT;
+        Text = "~Bearbeiten";
+        Text[ english ] = "~Edit";
+        Text[ english_us ] = "~Edit";
+    };
+    PushButton PB_DELETEQUERY
+    {
+        Pos = MAP_APPFONT ( 204, 40 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        SVLook = TRUE;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_QUERIES_DELETE;
+        Text = "~Lцschen";
+        Text[ english ] = "~Delete";
+        Text[ english_us ] = "~Delete";
+    };
+};
+
 
 WarningBox ERR_NOREGISTEREDDATASOURCES
 {
     Message = "Es sind augenblicklich keine Datenquellen registriert.";
-    Message [ english ] = "Currently, there are no registered data sources.";
+    Message [ english ] = "There are no registered data sources, at present.";
     Message [ english_us ] = "There are no registered data sources, at present.";
     Message[ portuguese ] = "De momento, nгo hб fontes de dados registadas.";
     Message[ russian ] = "¬ данный момент источник данных не зарегистрирован.";
@@ -1961,72 +2028,14 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/01/04 11:22:36  fs
+ *  #81485# +ADO page
+ *
  *  Revision 1.22  2000/12/14 08:52:10  fs
  *  #81845# +HID_DSADMIN_SPECIAL_MESSAGE
  *
  *  Revision 1.21  2000/12/11 16:32:49  fs
  *  broaded the data source list
- *
- *  Revision 1.20  2000/12/06 15:13:35  rt
- *  Merge SRC614: 06.12.00 - 16:13:06
- *
- *  Revision 1.19  2000/12/05 15:58:43  fs
- *  #79820# HID_DSADMIN_DIALOG
- *
- *  Revision 1.18  2000/12/05 12:48:48  fs
- *  #80539# removed two obsolete ids
- *
- *  Revision 1.17  2000/12/03 10:30:16  fs
- *  #79820# some new help ids
- *
- *  Revision 1.16  2000/12/01 08:08:42  kz
- *  Merge SRC614: 01.12.00 - 09:07:46
- *
- *  Revision 1.15  2000/11/22 15:44:40  oj
- *  #80269# remove property long names
- *
- *  Revision 1.14  2000/11/15 21:09:13  kz
- *  Merge SRC613: 11/15/00 - 22:08:39 (NoBranch)
- *
- *  Revision 1.13  2000/11/10 17:42:46  fs
- *  +STR_NO_ADABASE_DATASOURCES
- *
- *  Revision 1.12  2000/11/09 12:29:24  kz
- *  Merge SRC612: 09.11.00 - 13:28:47 (NoBranch)
- *
- *  Revision 1.11  2000/11/02 15:20:15  fs
- *  #79380# +STR_ERR_EMPTY_DSN_NAME
- *
- *  Revision 1.10  2000/10/30 15:24:19  fs
- *  no password fields anymore - don't want to have them in and _data source aministration_ dialog
- *
- *  Revision 1.9  2000/10/30 13:48:17  fs
- *  #79820# some help ids
- *
- *  Revision 1.8  2000/10/30 13:01:23  fs
- *  #79823# minor changes
- *
- *  Revision 1.7  2000/10/26 18:19:35  fs
- *  BMP_DATABASE* -> IMG_DATABASE*
- *
- *  Revision 1.6  2000/10/24 12:11:15  fs
- *  functionality added: browsing for system data sources (ODBC/Adabas/dbase/text)
- *
- *  Revision 1.5  2000/10/20 09:53:17  fs
- *  handling for the SuppresVersionColumns property of a data source
- *
- *  Revision 1.4  2000/10/12 16:20:42  fs
- *  new implementations ... still under construction
- *
- *  Revision 1.3  2000/10/11 11:31:03  fs
- *  new implementations - still under construction
- *
- *  Revision 1.2  2000/10/09 12:39:29  fs
- *  some (a lot of) new imlpementations - still under development
- *
- *  Revision 1.1  2000/10/05 10:05:05  fs
- *  initial checkin
- *
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-17 09:17:27 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 06:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,6 +618,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     // add the initial tab pages
     AddTabPage(PAGE_GENERAL, String(ResId(STR_PAGETITLE_GENERAL)), OGeneralPage::Create, NULL);
     AddTabPage(PAGE_TABLESUBSCRIPTION, String(ResId(STR_PAGETITLE_TABLESUBSCRIPTION)), OTableSubscriptionPage::Create, NULL);
+//  AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
 
     // no local resources needed anymore
     FreeResource();
@@ -818,6 +819,9 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
         case PAGE_TABLESUBSCRIPTION:
             static_cast<OTableSubscriptionPage&>(_rPage).setServiceFactory(m_xORB);
             static_cast<OTableSubscriptionPage&>(_rPage).SetAdminDialog(this);
+            break;
+        case PAGE_QUERYADMINISTRATION:
+            static_cast<OQueryAdministrationPage&>(_rPage).setServiceFactory(m_xORB);
             break;
     }
 
@@ -1160,6 +1164,7 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     }
     // remove the table/query tab pages
     RemoveTabPage(PAGE_TABLESUBSCRIPTION);
+//  RemoveTabPage(PAGE_QUERYADMINISTRATION);
 
     // extract all relevant data from the property set of the data source
     translateProperties(_rxDatasource, *GetInputSetImpl());
@@ -1183,6 +1188,7 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     {
         OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
         AddTabPage(PAGE_TABLESUBSCRIPTION, String(ResId(STR_PAGETITLE_TABLESUBSCRIPTION)), OTableSubscriptionPage::Create, NULL);
+//      AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
     }
 
     m_bResetting = sal_True;
@@ -2223,6 +2229,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2001/01/17 09:17:27  fs
+ *  #82627# implApplyChanges: do an ShowPage after applying the changes
+ *
  *  Revision 1.28  2001/01/04 11:23:01  fs
  *  #81485# +ADO page
  *
@@ -2246,67 +2255,6 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
  *
  *  Revision 1.21  2000/11/28 11:41:42  oj
  *  #80827# check dbroot if dbconfig failed
- *
- *  Revision 1.20  2000/11/23 09:03:58  oj
- *  #80558# don't show delete when no datasource exist
- *
- *  Revision 1.19  2000/11/21 15:00:54  oj
- *  #80549# wrong dsn for text
- *
- *  Revision 1.18  2000/11/10 17:36:53  fs
- *  small bug fixes
- *
- *  Revision 1.17  2000/11/10 16:28:02  fs
- *  #80185# implApplyChanges: reset some meta-data-items
- *
- *  Revision 1.16  2000/11/03 09:15:07  fs
- *  #79998# SetSavePasswordText
- *
- *  Revision 1.15  2000/10/31 08:03:35  fs
- *  +selectDataSource - supporting an initial selecting when creating as service
- *
- *  Revision 1.14  2000/10/30 15:24:02  fs
- *  getCurrent...: add user property value if not empty only
- *
- *  Revision 1.13  2000/10/30 13:00:37  fs
- *  #79823# ODatasourceSelector: +(WB_TABSTOP | WB_DIALOGCONTROL)
- *
- *  Revision 1.12  2000/10/30 11:04:13  fs
- *  #79868# disable the Reset button when selecting deleted data sources
- *
- *  Revision 1.11  2000/10/30 08:01:04  fs
- *  getCurrentSettings: no password dialog if the current data source type does not need authentication
- *
- *  Revision 1.10  2000/10/26 15:02:16  oj
- *  localstrings for dll
- *
- *  Revision 1.9  2000/10/26 07:31:30  fs
- *  introduced fillDatasourceInfo, with this now getCurrentSettings collects _all_ relevant properties
- *
- *  Revision 1.8  2000/10/24 12:12:26  fs
- *  ODatasourceMap::update takes a non-constant set (to reset the ORIGINALNAME item)
- *
- *  Revision 1.7  2000/10/23 12:56:50  fs
- *  added apply functionality
- *
- *  Revision 1.6  2000/10/20 09:53:17  fs
- *  handling for the SuppresVersionColumns property of a data source
- *
- *  Revision 1.5  2000/10/13 16:06:20  fs
- *  implemented the usage if the 'Info' property of the data sources / allow key usage in the data source list
- *
- *  Revision 1.4  2000/10/12 16:20:42  fs
- *  new implementations ... still under construction
- *
- *  Revision 1.3  2000/10/11 11:31:03  fs
- *  new implementations - still under construction
- *
- *  Revision 1.2  2000/10/09 12:39:29  fs
- *  some (a lot of) new imlpementations - still under development
- *
- *  Revision 1.1  2000/10/05 10:04:31  fs
- *  initial checkin
- *
  *
  *  Revision 1.0 20.09.00 10:55:58  fs
  ************************************************************************/

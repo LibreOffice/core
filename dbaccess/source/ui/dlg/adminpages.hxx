@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 11:21:45 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 06:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,41 @@ private:
     virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 };
 
+//========================================================================
+//= OQueryAdministrationPage
+//========================================================================
+class OQueryAdministrationPage : public OGenericAdministrationPage
+{
+private:
+    GroupBox        m_aFrame;
+    ListBox         m_aQueries;
+    PushButton      m_aNew;
+    PushButton      m_aEdit;
+    PushButton      m_aDelete;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                    m_xORB;
+
+public:
+    static  SfxTabPage* Create( Window* _pParent, const SfxItemSet& _rAttrSet);
+
+    void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
+        { m_xORB = _rxORB; }
+
+protected:
+    OQueryAdministrationPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+    ~OQueryAdministrationPage();
+
+    virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+    virtual BOOL        FillItemSet(SfxItemSet& _rCoreAttrs);
+    virtual void        ActivatePage(const SfxItemSet& _rSet);
+
+protected:
+    DECL_LINK(OnNewQuery, PushButton*);
+    DECL_LINK(OnEditQuery, PushButton*);
+    DECL_LINK(OnDeleteQuery, PushButton*);
+};
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
@@ -487,6 +522,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/01/04 11:21:45  fs
+ *  #81485# +OAdoDetailsPage
+ *
  *  Revision 1.16  2000/12/07 14:15:42  oj
  *  #81131# check installed adabas dbs
  *

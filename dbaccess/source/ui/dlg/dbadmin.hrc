@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 11:22:06 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 06:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #define LB_DATASOURCES          2
 #define LB_CHARSET              3
 #define LB_TIMEOUT_UNIT         4
+#define LB_QUERIES              5
 
 #define ET_CONNECTURL           1
 #define ET_DATASOURCENAME       2
@@ -99,10 +100,14 @@
 #define PB_INDICIES             2
 #define PB_ADDALLTABLES         3
 #define PB_NEW_DATASOURCE       4
+#define PB_NEWQUERY             5
+#define PB_EDITQUERY            6
+#define PB_DELETEQUERY          7
 
 #define GB_CONNECTION           1
 #define GB_DBASE_MAIN           2
 #define GB_TABLESUBSCRIPTION    3
+#define GB_QUERIES              4
 
 #define CB_PASSWORD_REQUIRED    1
 #define CB_SHOWDELETEDROWS      2
@@ -147,6 +152,7 @@
 #define STR_COULDNOTLOAD_ODBCLIB            15
 #define STR_NO_ADABASE_DATASOURCES          16
 #define STR_PAGETITLE_ADO                   17
+#define STR_PAGETITLE_QUERIES               18
 
 //========================================================================
 // menu item ids
@@ -159,6 +165,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/01/04 11:22:06  fs
+ *  #81485# +STR_PAGETITLE_ADO
+ *
  *  Revision 1.8  2000/11/22 15:44:05  oj
  *  #80269# remove property long names
  *

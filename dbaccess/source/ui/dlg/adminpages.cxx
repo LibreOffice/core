@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-25 12:14:03 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 06:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,12 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -128,6 +134,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
+#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #endif
 
 #include <stdlib.h>
@@ -141,18 +153,19 @@
 #include "odbcconfig.hxx"
 #endif
 
+//.........................................................................
+namespace dbaui
+{
+//.........................................................................
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
 using namespace ::dbtools;
-
-//.........................................................................
-namespace dbaui
-{
-//.........................................................................
 
 #define FILL_STRING_ITEM(editcontrol, itemset, itemid, modifiedflag)    \
     if (editcontrol.GetText() != editcontrol.GetSavedValue())           \
@@ -255,7 +268,7 @@ OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
         {
             DATASOURCE_TYPE eType = aTypeLoop.getType();
             sal_Int32 nPos = m_aDatasourceType.InsertEntry(aTypeLoop.getDisplayName());
-            m_aDatasourceType.SetEntryData(nPos, reinterpret_cast<void*>(eType));
+            m_aDatasourceType.SetEntryData((sal_uInt16)nPos, reinterpret_cast<void*>(eType));
         }
     }
 
@@ -1506,7 +1519,7 @@ String OTextDetailsPage::GetSeparator( const ComboBox& rBox, const String& rList
     if( nPos == COMBOBOX_ENTRY_NOTFOUND )
         return rBox.GetText().Copy(0);
     else
-        return String(rList.GetToken((nPos*2)+1, nTok ).ToInt32());
+        return String(rList.GetToken(((nPos*2)+1), nTok ).ToInt32());
             // somewhat strange ... translates for instance an "32" into " "
 }
 
@@ -1519,7 +1532,7 @@ void OTextDetailsPage::SetSeparator( ComboBox& rBox, const String& rList, const 
 
     for( i=0 ; i<nCnt ; i+=2 )
     {
-        String  sTVal(rList.GetToken( i+1, nTok ).ToInt32());
+        String  sTVal(rList.GetToken( (i+1), nTok ).ToInt32());
 
         if( sTVal == rVal )
         {
@@ -1903,6 +1916,110 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
     return 0L;
 }
 
+//========================================================================
+//= OQueryAdministrationPage
+//========================================================================
+//------------------------------------------------------------------------
+OQueryAdministrationPage::OQueryAdministrationPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    :OGenericAdministrationPage( pParent, ModuleRes(PAGE_QUERYADMINISTRATION), _rCoreAttrs )
+    ,m_aFrame       (this, ResId(GB_QUERIES))
+    ,m_aQueries     (this, ResId(LB_QUERIES))
+    ,m_aNew         (this, ResId(PB_NEWQUERY))
+    ,m_aEdit        (this, ResId(PB_EDITQUERY))
+    ,m_aDelete      (this, ResId(PB_DELETEQUERY))
+{
+    FreeResource();
+}
+
+//------------------------------------------------------------------------
+OQueryAdministrationPage::~OQueryAdministrationPage()
+{
+}
+
+//------------------------------------------------------------------------
+SfxTabPage* OQueryAdministrationPage::Create( Window* _pParent, const SfxItemSet& _rAttrSet)
+{
+    return new OQueryAdministrationPage(_pParent, _rAttrSet);
+}
+
+//------------------------------------------------------------------------
+void OQueryAdministrationPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+{
+    // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+    sal_Bool bValid, bReadonly;
+    getFlags(_rSet, bValid, bReadonly);
+}
+
+//------------------------------------------------------------------------
+void OQueryAdministrationPage::ActivatePage(const SfxItemSet& _rSet)
+{
+    // get the name of the data source
+    SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True);
+    DBG_ASSERT(pNameItem, "OQueryAdministrationPage::ActivatePage: missing the name attribute!");
+
+    // clear the queries list box
+    m_aQueries.Clear();
+
+    // need a service factory
+    if (!m_xORB.is())
+    {
+        DBG_ERROR("OQueryAdministrationPage::ActivatePage: have no service facrory!");
+        OGenericAdministrationPage::ActivatePage(_rSet);
+        return;
+    }
+
+    // get the database context
+    Reference< XNameAccess > xQueries;
+    try
+    {
+        Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        Reference< XQueryDefinitionsSupplier > xSuppQueries;
+        ::cppu::extractInterface(xSuppQueries, xDatabaseContext->getByName(pNameItem->GetValue()));
+        if (xSuppQueries.is())
+            xQueries = xSuppQueries->getQueryDefinitions();
+    }
+    catch(Exception&)
+    {
+    }
+
+    if (!xQueries.is())
+    {
+        DBG_ERROR("OQueryAdministrationPage::ActivatePage: could not retrieve the queries for the data source!");
+    }
+    else
+    {
+        // the icon for single queries
+        Image aImage(ModuleRes(IMG_DATABASE));
+        // populate the list
+        try
+        {
+            Sequence< ::rtl::OUString > aQueries = xQueries->getElementNames();
+            const ::rtl::OUString* pQueries = aQueries.getConstArray();
+            const ::rtl::OUString* pEnd = pQueries + aQueries.getLength();
+            for (;pQueries != pEnd; ++pQueries)
+                m_aQueries.InsertEntry(*pQueries, aImage);
+
+            // due to a bug in Resize, the focus rect will have a wrong height without the following
+            Size aSizePixel = m_aQueries.GetSizePixel();
+            m_aQueries.SetSizePixel(Size(aSizePixel.Width(), aSizePixel.Height() - 1));
+            m_aQueries.SetSizePixel(aSizePixel);
+        }
+        catch(Exception& e)
+        {
+            DBG_ERROR(  ::rtl::OString("OQueryAdministrationPage::ActivatePage: something went wront while retrieving the query names (message: ")
+                    +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=  ::rtl::OString(")!"));
+        }
+    }
+}
+
+//------------------------------------------------------------------------
+BOOL OQueryAdministrationPage::FillItemSet(SfxItemSet& _rCoreAttrs)
+{
+    // we haven't any items transported via this mechanism
+    return sal_False;
+}
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
@@ -1910,6 +2027,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/01/25 12:14:03  fs
+ *  #83192# initialization of m_sDsn corrected
+ *
  *  Revision 1.25  2001/01/04 11:21:45  fs
  *  #81485# +OAdoDetailsPage
  *
@@ -1927,64 +2047,6 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
  *
  *  Revision 1.20  2000/12/07 14:15:42  oj
  *  #81131# check installed adabas dbs
- *
- *  Revision 1.19  2000/12/01 08:06:01  kso
- *  #80644# - ::ucb::ContentCreationException -> ::com::sun::star::ucb::ContentCreationException
- *
- *  Revision 1.18  2000/11/30 08:32:30  fs
- *  #80003# changed some sal_uInt16 to sal_Int32 (need some -1's)
- *
- *  Revision 1.17  2000/11/29 22:29:40  fs
- *  #80003# implementation of the character set map changed
- *
- *  Revision 1.16  2000/11/28 13:48:15  fs
- *  #80152# m_bDisplayingDeleted -> m_bDisplayingInvalid
- *
- *  Revision 1.15  2000/11/28 11:41:42  oj
- *  #80827# check dbroot if dbconfig failed
- *
- *  Revision 1.14  2000/11/22 15:44:05  oj
- *  #80269# remove property long names
- *
- *  Revision 1.13  2000/11/10 17:35:29  fs
- *  no parameter in checkItems anymore - did not make sense in the context it is called / some small bug fixes
- *
- *  Revision 1.12  2000/11/02 15:20:04  fs
- *  #79983# +isBrowseable / #79830# +checkItems
- *
- *  Revision 1.11  2000/11/02 14:18:21  fs
- *  #79967# check the getenv return against NULL
- *
- *  Revision 1.10  2000/10/30 15:22:25  fs
- *  no password fields anymore - don't want to have them in and _data source aministration_ dialog
- *
- *  Revision 1.9  2000/10/30 13:48:29  fs
- *  some help ids
- *
- *  Revision 1.8  2000/10/24 12:11:15  fs
- *  functionality added: browsing for system data sources (ODBC/Adabas/dbase/text)
- *
- *  Revision 1.7  2000/10/20 09:53:17  fs
- *  handling for the SuppresVersionColumns property of a data source
- *
- *  Revision 1.6  2000/10/18 08:48:16  obo
- *  Syntax error with linux compiler #65293#
- *
- *  Revision 1.5  2000/10/13 16:04:22  fs
- *  Separator changed to string / getDetailIds
- *
- *  Revision 1.4  2000/10/12 16:20:42  fs
- *  new implementations ... still under construction
- *
- *  Revision 1.3  2000/10/11 11:31:02  fs
- *  new implementations - still under construction
- *
- *  Revision 1.2  2000/10/09 12:39:28  fs
- *  some (a lot of) new imlpementations - still under development
- *
- *  Revision 1.1  2000/10/05 10:04:12  fs
- *  initial checkin
- *
  *
  *  Revision 1.0 26.09.00 11:47:18  fs
  ************************************************************************/
