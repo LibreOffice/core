@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:53 $
+ *  last change: $Author: dbo $ $Date: 2000-12-08 12:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ inline void __defaultConstructElements(
         allocSeq( ppSequence, nElementSize, nAlloc );
 
         sal_Int32 nValueOffset = ((typelib_UnionTypeDescription *)pElementTypeDescr)->nValueOffset;
-        sal_Int32 nDefaultDiscr = ((typelib_UnionTypeDescription *)pElementTypeDescr)->nDefaultDiscriminant;
+        sal_Int64 nDefaultDiscr = ((typelib_UnionTypeDescription *)pElementTypeDescr)->nDefaultDiscriminant;
 
         typelib_TypeDescription * pDefaultTypeDescr = 0;
         TYPELIB_DANGER_GET( &pDefaultTypeDescr, ((typelib_UnionTypeDescription *)pElementTypeDescr)->pDefaultTypeRef );
