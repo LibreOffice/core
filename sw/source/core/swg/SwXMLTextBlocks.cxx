@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:21:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 
 #ifndef _SWSWERROR_H
 #include <swerror.h>
+#endif
+#ifndef _SOT_EXCHANGE_HXX
+#include <sot/exchange.hxx>
 #endif
 
 
@@ -338,6 +341,11 @@ ULONG SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPacka
     }
     */
     xRoot = xBlkRoot->OpenUCBStorage( rPackageName, STREAM_STGWRITE );
+    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+    ::rtl::OUString aMime( SotExchange::GetFormatMimeType( SOT_FORMATSTR_ID_STARWRITER_8 ) );
+    ::com::sun::star::uno::Any aAny;
+    aAny <<= aMime;
+    xRoot->SetProperty( aPropName, aAny );
     return 0;
 }
 ULONG SwXMLTextBlocks::BeginPutDoc( const String& rShort, const String& rLong )
