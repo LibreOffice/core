@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-26 15:55:43 $
+ *  last change: $Author: jp $ $Date: 2002-03-21 12:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,21 @@ class _FndBox
     SwTableLine *pLineBefore;   //Zum Loeschen/Restaurieren des Layouts.
     SwTableLine *pLineBehind;
 
+    static void AddToFndBox( _FndBox*& rpParent, const SwTableBox& rBox );
+    static void AppendLine( _FndBox& rBox, const SwTableLine& rLine );
+    static void AppendBox( _FndLine& rLine, const SwTableBox& rBox );
+    static void AddSelLine( _FndBox& rBox, const SwTableLine& rLine,
+                                SwSelBoxes& rBoxes );
+    static void AddSelBox( _FndLine& rLine, const SwTableBox& rBox,
+                                SwSelBoxes& rBoxes );
 public:
     _FndBox( SwTableBox* pB, _FndLine* pFL ) :
         pBox(pB), pUpper(pFL), pLineBefore( 0 ), pLineBehind( 0 ) {}
+
+    // fill with the structure from the selection (the selboxes)
+    _FndBox( const SwSelBoxes& rBoxes );
+    // fill with the structure from the TableLine
+    _FndBox( const SwTableLine& rLine );
 
     const _FndLines&    GetLines() const    { return aLines; }
         _FndLines&      GetLines()          { return aLines; }
@@ -248,24 +260,6 @@ public:
 
     void SetUpper( _FndBox* pUp ) { pUpper = pUp; }
 };
-
-
-struct _FndPara
-{
-    _FndBox* pFndBox;
-    _FndLine* pFndLine;
-    const SwSelBoxes& rBoxes;
-
-    _FndPara( const SwSelBoxes& rBxs, _FndBox* pFB )
-        : rBoxes( rBxs ), pFndBox( pFB ) {}
-    _FndPara( const _FndPara& rPara, _FndBox* pFB )
-        : rBoxes(rPara.rBoxes), pFndLine(rPara.pFndLine), pFndBox(pFB) {}
-    _FndPara( const _FndPara& rPara, _FndLine* pFL )
-        : rBoxes(rPara.rBoxes), pFndLine(pFL), pFndBox(rPara.pFndBox) {}
-};
-
-BOOL _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara );
-BOOL _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara );
 
 
 #endif  //  _TBLSEL_HXX
