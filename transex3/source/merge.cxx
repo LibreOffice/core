@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
+ *  last change: $Author: nf $ $Date: 2001-04-25 11:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,10 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, BOOL bErrLog,
             sLID = sLine.GetToken( 5, '\t' );
             sPFO = sLine.GetToken( 7, '\t' );
             nLANG = sLine.GetToken( 9, '\t' ).ToInt32();
+
+            if ( bUTF8 )
+                sLine = UTF8Converter::ConvertFromUTF8( sLine, Export::GetCharSet( nLANG ));
+
             sTEXT = sLine.GetToken( 10, '\t' );
             sQHTEXT = sLine.GetToken( 12, '\t' );
             sTITLE = sLine.GetToken( 13, '\t' );
