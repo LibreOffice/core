@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:03:49 $
+ *  last change: $Author: kz $ $Date: 2004-01-19 17:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,13 @@
 #define ID_GetErrorCount   39
 #define ID_GetWarningCount 40
 #define ID_GetUseFileWarningCount 41
-#define ID_GetTestCaseName 42
-#define ID_GetTestCaseFileName 43
-#define ID_GetTestCaseLineNr 44
-#define ID_StopOnSyntaxError 45
+#define ID_GetErrorList    42
+#define ID_GetWarningList  43
+#define ID_GetUseFileWarningList 44
+#define ID_GetTestCaseName 45
+#define ID_GetTestCaseFileName 46
+#define ID_GetTestCaseLineNr 47
+#define ID_StopOnSyntaxError 48
 
 #define ID_DoNothing    99
 
@@ -311,7 +314,13 @@ public:
     BOOL bLnaguageExtensionLoaded;      // Wurde über 'use' was geladen? Für syntax highlighting
     SfxBroadcaster *pTTSfxBroadcaster;
 
-    ULONG nErrorCount, nWarningCount, nIncludeFileWarningCount;
+    ULONG nErrorCount;
+    ULONG nWarningCount;
+    ULONG nIncludeFileWarningCount;
+
+    SbxDimArrayRef xErrorList;
+    SbxDimArrayRef xWarningList;
+    SbxDimArrayRef xIncludeFileWarningList;
 
     BOOL bIsStart;                      // set tu TRUE while command Start is initiating the communication
 
@@ -335,7 +344,7 @@ public:
 };
 
 
-#define ADD_TO_LOG( aLogTypep, aMsgp, aFilenamep, nLinep, nCol1p, nCol2p)\
+#define ADD_TO_LOG( aLogTypep, aMsgp, aFilenamep, nLinep, nCol1p, nCol2p, aRevisionp, pLogList )\
 {                                                                       \
     TTLogMsg *pLogMsg = new TTLogMsg();                                 \
     pLogMsg->aDebugData.aMsg = aMsgp;                                   \
@@ -346,62 +355,77 @@ public:
     pLogMsg->aDebugData.nCol2 = nCol2p;                                 \
     pLogMsg->aDebugData.aLogType = aLogTypep;                           \
     aLogHdl.Call( pLogMsg );                                            \
+    if( pLogList )                                                      \
+    {                                                                   \
+        SbxDimArray* pLogArray = (SbxDimArray*)pLogList;                \
+        SbxVariable* pVar = new SbxVariable( SbxSTRING );               \
+        String aCollect;                                                \
+        aCollect.Append( pLogMsg->aDebugData.aFilename );               \
+        aCollect.AppendAscii( ";" );                                    \
+        aCollect.Append( String::CreateFromInt32( nLinep ) );           \
+        aCollect.AppendAscii( ";" );                                    \
+        aCollect.Append( aRevisionp );              \
+        aCollect.AppendAscii( ";" );                                    \
+        aCollect.Append( pLogMsg->aDebugData.aMsg );                                        \
+        pVar->PutString( aCollect );                                    \
+        pLogArray->Insert( pVar, pLogArray->Count() );  \
+    }                                                                   \
     delete pLogMsg;                                                     \
 }                                                                       \
 
 
 #define ADD_RUN_LOG()                                                   \
-    ADD_TO_LOG(LOG_RUN, String(), String(), 0, 0, 0)                                \
+    ADD_TO_LOG(LOG_RUN, String(), String(), 0, 0, 0, String(), NULL)                    \
 
-#define ADD_ERROR_LOG(aMsg, aFilename, nLine, nCol1, nCol2)             \
+#define ADD_ERROR_LOG(aMsg, aFilename, nLine, nCol1, nCol2, aRevision)              \
 {                                                                       \
-    ADD_TO_LOG(LOG_ERROR, aMsg, aFilename, nLine, nCol1, nCol2)         \
+    ADD_TO_LOG(LOG_ERROR, aMsg, aFilename, nLine, nCol1, nCol2, aRevision, &pImpl->xErrorList) \
     pImpl->nErrorCount++;                                               \
 }
 
 #define ADD_CALL_STACK_LOG(aMsg, aFilename, nLine, nCol1, nCol2)        \
-    ADD_TO_LOG(LOG_CALL_STACK, aMsg, aFilename, nLine, nCol1, nCol2)    \
+    ADD_TO_LOG(LOG_CALL_STACK, aMsg, aFilename, nLine, nCol1, nCol2, String(), NULL)    \
 
 
-#define ADD_AUTO_LOG(aLogType, aMsg)                                    \
+#define ADD_AUTO_LOG(aLogType, aMsg, pLogList)                          \
 {                                                                       \
     if ( BasicRuntimeAccess::HasRuntime() )                             \
     {                                                                   \
         BasicRuntime aRun = BasicRuntimeAccess::GetRuntime();           \
         ADD_TO_LOG(aLogType, aMsg, aRun.GetModuleName(SbxNAME_SHORT_TYPES), \
-            aRun.GetLine(), aRun.GetCol1(), aRun.GetCol2())                     \
+            aRun.GetLine(), aRun.GetCol1(), aRun.GetCol2(), aRun.GetSourceRevision(), pLogList) \
     }                                                                   \
     else                                                                \
     {                                                                   \
-        ADD_TO_LOG(aLogType, aMsg, UniString(), 0, 0, STRING_LEN)               \
+        ADD_TO_LOG(aLogType, aMsg, UniString(), 0, 0, STRING_LEN, String(), pLogList)   \
     }                                                                   \
 }                                                                       \
 
 #define ADD_CASE_LOG(aMsg)                                              \
-    ADD_AUTO_LOG(LOG_TEST_CASE, aMsg)                                   \
+    ADD_AUTO_LOG(LOG_TEST_CASE, aMsg, NULL)                             \
 
 #define ADD_MESSAGE_LOG(aMsg)                                           \
-    ADD_AUTO_LOG(LOG_MESSAGE, aMsg)                                     \
+    ADD_AUTO_LOG(LOG_MESSAGE, aMsg, NULL)                               \
 
 #define ADD_WARNING_LOG(aMsg)                                           \
 {                                                                       \
-    ADD_AUTO_LOG(LOG_WARNING, aMsg)                                     \
+    ADD_AUTO_LOG(LOG_WARNING, aMsg, &pImpl->xWarningList)               \
     pImpl->nWarningCount++;                                             \
 }
 
-#define ADD_WARNING_LOG2(aMsg, aFilename, nLine)                        \
+#define ADD_WARNING_LOG2(aMsg, aFilename, nLine )                       \
 {                                                                       \
-    ADD_TO_LOG(LOG_WARNING, aMsg, aFilename, nLine, 0, STRING_LEN)      \
+    ADD_TO_LOG(LOG_WARNING, aMsg, aFilename, nLine, 0, STRING_LEN, String(), &pImpl->xWarningList) \
     pImpl->nWarningCount++;                                             \
 }
 
 #define ADD_ASSERTION_LOG(aMsg)                                         \
-    ADD_AUTO_LOG(LOG_ASSERTION, aMsg)                                   \
+    ADD_AUTO_LOG(LOG_ASSERTION, aMsg, NULL)                             \
 
 #define ADD_QA_ERROR_LOG(aMsg)                                          \
     if ( pImpl->bEnableQaErrors )                                       \
     {                                                                   \
-        ADD_AUTO_LOG(LOG_QA_ERROR, aMsg)                                \
+        ADD_AUTO_LOG(LOG_QA_ERROR, aMsg, NULL)                          \
     }
 
 #endif
