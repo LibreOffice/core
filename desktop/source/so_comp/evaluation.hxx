@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evaluation.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:35:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
+namespace desktop {
+
 class SOEvaluation : public ::cppu::WeakImplHelper4< XExactName, XMaterialHolder, XComponent, XServiceInfo >
 {
     ::osl::Mutex                        m_aMutex;
@@ -128,6 +130,15 @@ public:
     virtual ::rtl::OUString SAL_CALL    getImplementationName() throw ( RuntimeException );
     virtual sal_Bool SAL_CALL           supportsService( const ::rtl::OUString& rServiceName ) throw ( RuntimeException );
     virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( RuntimeException );
-};
 
+    static const char* interfaces[];
+    static const char* implementationName;
+    static const char* serviceName;
+    static Reference<XInterface> SAL_CALL CreateInstance(
+        const Reference< XMultiServiceFactory >&);
+
+
+
+};
+}
 #endif // _SOCOMP_EVALUATION_HXX_
