@@ -69,7 +69,7 @@ USE_JAVAVER:=TRUE
 
 .IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
 
-JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar 
+JARFILES = jurt.jar unoil.jar ridl.jar 
 JAVAFILES = \
     AccessBridge.java \
     KeyHandler.java \
