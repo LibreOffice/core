@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-06-03 08:57:45 $
+ *  last change: $Author: os $ $Date: 2002-10-14 10:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                 if ( SFX_ITEM_SET == rSet.GetItemState( nWhichBox, FALSE ) &&
                      pBoxInfoItem->IsValid( VALID_DISTANCE ) )
                 {
-                    if( !aFrameSel.IsAnyLineSet()||
+                    BOOL bIsAnyLineSet = aFrameSel.IsAnyLineSet();
+                    if( !bIsAnyLineSet||
                         !pBoxInfoItem->IsMinDist() )
                     {
                         aLeftMF.SetMin( 0 );
@@ -516,14 +517,19 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                     // ist der Abstand auf nicht-default gesetzt,
                     // dann soll der Wert auch nicht
                     // mehr autom. veraendert werden
-                    const long nDefDist = pBoxInfoItem->GetDefDist();
+
+                    // if the distance is set with no active border line
+                    // or it is null with an active border line
+                    // no automatic changes should be made
+                    const long nDefDist = bIsAnyLineSet ? pBoxInfoItem->GetDefDist() : 0;
+                    BOOL bDiffDist = (nDefDist != nLeftDist ||
+                                nDefDist != nRightDist ||
+                                nDefDist != nTopDist   ||
+                                nDefDist != nBottomDist);
                     if((pBoxItem->GetDistance() ||
                             (nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_TABLE))&&
                                 aFrameSel.IsAnyLineSet()) &&
-                                (nDefDist != nLeftDist ||
-                                nDefDist != nRightDist ||
-                                nDefDist != nTopDist   ||
-                                nDefDist != nBottomDist) )
+                                bDiffDist )
                     {
                         aLeftMF.SetModifyFlag();
                         aRightMF.SetModifyFlag();
