@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-08 17:04:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/SchemaAttribute.hpp>
-#include <drafts/com/sun/star/configuration/backend/NodeAttribute.hpp>
+#include <com/sun/star/configuration/backend/SchemaAttribute.hpp>
+#include <com/sun/star/configuration/backend/NodeAttribute.hpp>
 
 // -----------------------------------------------------------------------------
 
@@ -211,7 +211,7 @@ void ElementFormatter::maybeAddFlag(FlagsType _eFlags, FlagsType _eSelect, OUStr
 
 void ElementFormatter::addNodeFlags(FlagsType _eFlags)
 {
-    using namespace drafts::com::sun::star::configuration::backend;;
+    using namespace ::com::sun::star::configuration::backend;
 
     maybeAddFlag(_eFlags,SchemaAttribute::REQUIRED,    ATTR_FLAG_NULLABLE, false);
     maybeAddFlag(_eFlags,SchemaAttribute::LOCALIZED,   ATTR_FLAG_LOCALIZED);
@@ -229,6 +229,8 @@ void ElementFormatter::addOperation(Operation::Enum _eOp)
     {
     case Operation::none:       break;
     case Operation::modify:     break ; //addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_MODIFY));  break;
+    case Operation::clear:      OSL_ENSURE(false,"'clear' operation is not yet supported"); break ;
+                                //addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_CLEAR));  break;
     case Operation::replace:    addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_REPLACE)); break;
     case Operation::remove:     addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_REMOVE));  break;
 
