@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:43:35 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1616,24 +1616,10 @@ void SfxDispatcher::SetMenu_Impl()
         if ( pTop && pTop->GetBindings().GetDispatcher() == this )
         {
             SfxTopFrame* pFrm = pTop->GetTopFrame_Impl();
-            SfxMenuBarManager* pMenuBar = pImp->pFrame->GetViewShell()->GetMenuBar_Impl(); // GetOrCreate!
+            if ( pFrm->IsMenuBarOn_Impl() && !pFrm->IsMenuBarVisible_Impl() )
+                pImp->pFrame->GetViewShell()->GetMenuBar_Impl(); // GetOrCreate!
         }
     }
-/*
-            if ( pMenuBar )
-            {
-                MenuBar* pMenu = (MenuBar*) pMenuBar->GetMenu()->GetSVMenu();
-                pFrm->LockResize_Impl( TRUE );
-                pFrm->SetMenuBar_Impl( pMenu );
-                pFrm->LockResize_Impl( FALSE );
-            }
-            else if ( pImp->pParent )
-            {
-                pImp->pParent->SetMenu_Impl();
-            }
-        }
-    }
-*/
 }
 
 long SfxDispatcher::Update_Impl( sal_Bool bForce )
@@ -1729,8 +1715,10 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     if ( pTask && bSet )
     {
         pTaskWin = pTask->GetWorkWindow_Impl();
-        pTaskWin->ResetStatusBar_Impl();
+        //pTaskWin->ResetStatusBar_Impl();
     }
+
+    pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->ResetStatusBar_Impl();
 
     SfxDispatcher *pDispat = this;
     while ( pDispat )
@@ -1781,7 +1769,8 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     }
 
     if ( pTaskWin )
-        pTaskWin->UpdateStatusBar_Impl();
+        pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->UpdateStatusBar_Impl();
+        //pTaskWin->UpdateStatusBar_Impl();
 
     if ( pBindings )
         pBindings->DLEAVEREGISTRATIONS();
@@ -2083,7 +2072,8 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
             // Ich kontrolliere die StatusBar einer Task auch wenn ich nicht aktiv bin, aber
             // zu einem internem InPlaceFrame oder einem anderen ViewFrame innerhalb der Task geh"ore
             SfxBindings& rBindings = pImp->pFrame->GetBindings();
-            pTaskWin->SetStatusBar_Impl( nStatBarId, pStatusBarShell, rBindings );
+            //pTaskWin->SetStatusBar_Impl( nStatBarId, pStatusBarShell, rBindings );
+            pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->SetStatusBar_Impl( nStatBarId, pStatusBarShell, rBindings );
         }
     }
 
@@ -2583,9 +2573,9 @@ sal_Bool SfxDispatcher::_FindServer
             return sal_False;
     }
 
-    sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly ) ||
-                ( pImp->pFrame && pImp->pFrame->GetObjectShell() &&
-                  pImp->pFrame->GetObjectShell()->IsLoading() );
+    sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly );
+//              ( pImp->pFrame && pImp->pFrame->GetObjectShell() );
+//                pImp->pFrame->GetObjectShell()->IsLoading() );
 
     // durch alle Shells der verketteten Dispatchern von oben nach unten suchen
 #ifdef DBG_UTILx
@@ -3147,6 +3137,38 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, const SfxPoolItem* &rp
     return SFX_ITEM_DISABLED;
 }
 
+SfxItemState SfxDispatcher::QueryState( USHORT nSID, ::com::sun::star::uno::Any& rAny )
+{
+    SfxShell *pShell = 0;
+    const SfxSlot *pSlot = 0;
+    if ( GetShellAndSlot_Impl( nSID, &pShell, &pSlot, sal_False, sal_False ) )
+    {
+        const SfxPoolItem* pItem( 0 );
+
+        pItem = pShell->GetSlotState( nSID );
+        if ( !pItem )
+            return SFX_ITEM_DISABLED;
+        else
+        {
+            ::com::sun::star::uno::Any aState;
+            if ( !pItem->ISA(SfxVoidItem) )
+            {
+                USHORT nSubId( 0 );
+                SfxItemPool& rPool = pShell->GetPool();
+                USHORT nWhich = rPool.GetWhich( nSID );
+                if ( rPool.GetMetric( nWhich ) == SFX_MAPUNIT_TWIP )
+                    nSubId |= CONVERT_TWIPS;
+                pItem->QueryValue( aState, (BYTE)nSubId );
+            }
+            rAny = aState;
+
+            return SFX_ITEM_AVAILABLE;
+        }
+    }
+
+    return SFX_ITEM_DISABLED;
+}
+
 sal_Bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const
 {
     sal_uInt16 nShellCount = pImp->aStack.Count();
@@ -3463,9 +3485,9 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
     if ( pImp->bQuiet )
         return sal_False;
 
-    sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly ) ||
-                ( pImp->pFrame && pImp->pFrame->GetObjectShell() &&
-                  pImp->pFrame->GetObjectShell()->IsLoading() );
+    sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly );
+//              ( pImp->pFrame && pImp->pFrame->GetObjectShell());
+//                pImp->pFrame->GetObjectShell()->IsLoading() );
 
     for ( sal_uInt16 i=0 ; i < nTotCount; ++i )
     {
