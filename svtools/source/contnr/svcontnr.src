@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svcontnr.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:26:35 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,158 +89,28 @@ Image RID_IMG_TREENODE_EXPANDED_HC
 
 String STR_SVT_ACC_DESC_TABLISTBOX
 {
-    Text = "Zeile: %1, Spalte: %2";
-    Text [ english_us ] = "Row: %1, Column: %2";
-    Text[ portuguese ] = "Row: %1, Column: %2";
-    Text[ russian ] = "Row: %1, Column: %2";
-    Text[ greek ] = "Row: %1, Column: %2";
-    Text[ dutch ] = "Row: %1, Column: %2";
-    Text[ french ] = "Ligne : %1, colonne : %2";
-    Text[ spanish ] = "Fila: %1, columna: %2";
-    Text[ finnish ] = "Row: %1, Column: %2";
-    Text[ italian ] = "Riga: %1, colonna: %2";
-    Text[ danish ] = "R�kke: %1, Kolonne: %2";
-    Text[ swedish ] = "Rad: %1, kolumn: %2";
-    Text[ polish ] = "Row: %1, Column: %2";
-    Text[ portuguese_brazilian ] = "Linha: %1, Coluna: %2";
-    Text[ japanese ] = "行: %1, 列: %2";
-    Text[ korean ] = "행: %1, 열: %2";
-    Text[ chinese_simplified ] = "行：%1, 列：%2";
-    Text[ chinese_traditional ] = "列：%1，欄：%2";
-    Text[ turkish ] = "Sat�r: %1,  S�tun: %2";
-    Text[ arabic ] = "Row: %1, Column: %2";
-    Text[ catalan ] = "Row: %1, Column: %2";
-    Text[ thai ] = "Row: %1, Column: %2";
-    Text[ czech ] = "Řádek: %1, Sloupec: %2";
-    Text[ hebrew ] = "‮שורה: %1, עמוד: %2‬";
-    Text[ hindi ] = "Row: %1, Column: %2";
-    Text[ slovak ] = "Riadok: %1, Stĺpec: %2";
-    Text[ hungarian ] = "Sor: %1, oszlop: %2";
-    Text[ slovenian ] = "Vrstica: %1, Stolpec: %2";
+    Text [ de ] = "Zeile: %1, Spalte: %2";
+    Text [ en-US ] = "Row: %1, Column: %2";
 };
 String STR_SVT_ACC_DESC_FILEVIEW
 {
-    Text = ", Typ: %1, URL: %2";
-    Text [ english_us ] = ", Type: %1, URL: %2";
-    Text[ portuguese ] = ", Type: %1, URL: %2";
-    Text[ russian ] = ", Type: %1, URL: %2";
-    Text[ greek ] = ", Type: %1, URL: %2";
-    Text[ dutch ] = ", Type: %1, URL: %2";
-    Text[ french ] = ", type : %1, URL : %2";
-    Text[ spanish ] = ", Tipo: %1, URL: %2";
-    Text[ finnish ] = ", Type: %1, URL: %2";
-    Text[ italian ] = ", tipo: %1, URL: %2";
-    Text[ danish ] = ", Type: %1, URL: %2";
-    Text[ swedish ] = ", typ: %1, URL: %2";
-    Text[ polish ] = ", Type: %1, URL: %2";
-    Text[ portuguese_brazilian ] = ", Tipo: %1, URL: %2";
-    Text[ japanese ] = ", タイプ: %1, URL: %2";
-    Text[ korean ] = ", 유형: %1, URL: %2";
-    Text[ chinese_simplified ] = "，类型：%1, URL: %2";
-    Text[ chinese_traditional ] = "，類型：%1，URL：%2";
-    Text[ turkish ] = ", T�r: %1, URL: %2";
-    Text[ arabic ] = ", Type: %1, URL: %2";
-    Text[ catalan ] = ", Type: %1, URL: %2";
-    Text[ thai ] = ", Type: %1, URL: %2";
-    Text[ czech ] = ", Typ: %1, URL: %2";
-    Text[ hebrew ] = "סוג: %1, URL: %2";
-    Text[ hindi ] = ", Type: %1, URL: %2";
-    Text[ slovak ] = ", Typ: %1, URL: %2";
-    Text[ hungarian ] = ", Típus: %1, URL: %2";
-    Text[ slovenian ] = ", Vrsta: %1, URL: %2";
+    Text [ de ] = ", Typ: %1, URL: %2";
+    Text [ en-US ] = ", Type: %1, URL: %2";
 };
 String STR_SVT_ACC_DESC_FOLDER
 {
-    Text = "Ordner";
-    Text [ english_us ] = "Folder";
-    Text[ portuguese ] = "Pasta";
-    Text[ russian ] = "�����";
-    Text[ greek ] = "�������";
-    Text[ dutch ] = "Map";
-    Text[ french ] = "Dossier";
-    Text[ spanish ] = "Carpeta";
-    Text[ finnish ] = "Kansio";
-    Text[ italian ] = "Cartella";
-    Text[ danish ] = "Mappe";
-    Text[ swedish ] = "Mapp";
-    Text[ polish ] = "Foldery";
-    Text[ portuguese_brazilian ] = "Pasta";
-    Text[ japanese ] = "フォルダ";
-    Text[ korean ] = "폴더";
-    Text[ chinese_simplified ] = "文件夹";
-    Text[ chinese_traditional ] = "資料夾";
-    Text[ turkish ] = "Dizin";
-    Text[ arabic ] = "����";
-    Text[ catalan ] = "Carpeta";
-    Text[ thai ] = "โฟลเดอร์";
-    Text[ czech ] = "Adresář";
-    Text[ hebrew ] = "‮תיקיה‬";
-    Text[ hindi ] = "कोष्ठ";
-    Text[ slovak ] = "Priečinok";
-    Text[ hungarian ] = "Mappa";
-    Text[ slovenian ] = "Mapa";
+    Text [ de ] = "Ordner";
+    Text [ en-US ] = "Folder";
 };
 String STR_SVT_ACC_DESC_FILE
 {
-    Text = "Datei";
-    Text [ english_us ] = "File";
-    Text[ portuguese ] = "Ficheiro";
-    Text[ russian ] = "����";
-    Text[ greek ] = "������";
-    Text[ dutch ] = "Bestand";
-    Text[ french ] = "Fichier";
-    Text[ spanish ] = "Archivo";
-    Text[ finnish ] = "Tiedosto";
-    Text[ italian ] = "File";
-    Text[ danish ] = "Fil";
-    Text[ swedish ] = "Fil";
-    Text[ polish ] = "Plik";
-    Text[ portuguese_brazilian ] = "Arquivo";
-    Text[ japanese ] = "ファイル";
-    Text[ korean ] = "파일";
-    Text[ chinese_simplified ] = "文件";
-    Text[ chinese_traditional ] = "檔案";
-    Text[ turkish ] = "Dosya";
-    Text[ arabic ] = "���";
-    Text[ catalan ] = "Fitxer";
-    Text[ thai ] = "แฟ้ม";
-    Text[ czech ] = "Soubor";
-    Text[ hebrew ] = "‮קובץ‬";
-    Text[ hindi ] = "फाइल";
-    Text[ slovak ] = "Súbor";
-    Text[ hungarian ] = "Fájl";
-    Text[ slovenian ] = "Datoteka";
+    Text [ de ] = "Datei";
+    Text [ en-US ] = "File";
 };
 String STR_SVT_ACC_EMPTY_FIELD
 {
-    Text = "Leeres Feld";
-    Text [ english_us ] = "Empty Field";
-    Text[ portuguese ] = "Empty Field";
-    Text[ russian ] = "Empty Field";
-    Text[ greek ] = "Empty Field";
-    Text[ dutch ] = "Empty Field";
-    Text[ french ] = "Champ vide";
-    Text[ spanish ] = "Campo vac�o";
-    Text[ finnish ] = "Empty Field";
-    Text[ italian ] = "Campo vuoto";
-    Text[ danish ] = "Tomt felt";
-    Text[ swedish ] = "Tomt f�lt";
-    Text[ polish ] = "Empty Field";
-    Text[ japanese ] = "空白フィールド";
-    Text[ korean ] = "빈 필드";
-    Text[ chinese_simplified ] = "空白字段";
-    Text[ chinese_traditional ] = "空白欄位";
-    Text[ turkish ] = "Bo� Alan";
-    Text[ arabic ] = "Empty Field";
-    Text[ catalan ] = "Empty Field";
-    Text[ thai ] = "Empty Field";
-    Text[ czech ] = "Prázdné pole";
-    Text[ hebrew ] = "Empty Field";
-    Text[ portuguese_brazilian ] = "Campo vazio";
-    Text[ hindi ] = "Empty Field";
-    Text[ slovak ] = "Prázdne pole";
-    Text[ hungarian ] = "Üres mező";
-    Text[ slovenian ] = "Prazno polje";
+    Text [ de ] = "Leeres Feld";
+    Text [ en-US ] = "Empty Field";
 };
 
 
