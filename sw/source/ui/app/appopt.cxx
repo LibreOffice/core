@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:31:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,6 +403,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 
     SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
     SwModuleOptions* pMCfg = GetModuleConfig();
+    SwMasterUsrPref* pPref = bTextDialog ? pUsrPref : pWebUsrPref;
 
     const SfxPoolItem* pItem;
     SfxBindings *pBindings = pAppView ? &pAppView->GetViewFrame()->GetBindings()
@@ -459,10 +460,9 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     if( SFX_ITEM_SET == rSet.GetItemState(FN_HSCROLL_METRIC,
                                                     FALSE, &pItem ) )
     {
-        SFX_APP()->SetOptions(rSet);
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
-        pUsrPref->SetHScrollMetric(eUnit);
+        pPref->SetHScrollMetric(eUnit);
         if(pAppView)
             pAppView->ChangeTabMetric(eUnit);
     }
@@ -470,10 +470,9 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     if( SFX_ITEM_SET == rSet.GetItemState(FN_VSCROLL_METRIC,
                                                     FALSE, &pItem ) )
     {
-        SFX_APP()->SetOptions(rSet);
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
-        pUsrPref->SetVScrollMetric(eUnit);
+        pPref->SetVScrollMetric(eUnit);
         if(pAppView)
             pAppView->ChangeVLinealMetric(eUnit);
     }
@@ -482,7 +481,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
                                                     FALSE, &pItem ) )
     {
         USHORT nTabDist = ((const SfxUInt16Item*)pItem)->GetValue();
-        pUsrPref->SetDefTab(nTabDist);
+        pPref->SetDefTab(nTabDist);
         if(pAppView)
         {
             SvxTabStopItem aDefTabs( 0, 0 );
