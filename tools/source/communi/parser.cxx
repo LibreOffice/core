@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-23 13:58:39 $
+ *  last change: $Author: nf $ $Date: 2001-05-07 14:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,27 +102,38 @@ ByteString &InformationParser::ReadLine()
 /*****************************************************************************/
 {
     ByteString sLine;
+
     if ( bRecover ) {
         bRecover = FALSE;
     }
     else {
-        pActStream->ReadLine( sLine );
+         if ( !pActStream->IsEof()) {
+            pActStream->ReadLine( sLine );
+            ULONG nLen;
+            do {
+                nLen = sLine.Len();
+                sLine.EraseLeadingChars( 0x09 );
+                sLine.EraseLeadingChars( ' ' );
+            } while ( nLen != sLine.Len());
 
-        ULONG nLen;
-        do {
-            nLen = sLine.Len();
-            sLine.EraseLeadingChars( 0x09 );
-            sLine.EraseLeadingChars( ' ' );
-        } while ( sLine.Len() < nLen );
-        do {
-            nLen = sLine.Len();
-            sLine.EraseTrailingChars( 0x09 );
-            sLine.EraseTrailingChars( ' ' );
-        } while ( sLine.Len() < nLen );
+            do {
+                nLen = sLine.Len();
+                sLine.EraseTrailingChars( 0x09 );
+                sLine.EraseTrailingChars( ' ' );
+            } while ( nLen != sLine.Len());
 
-        if ( bReplaceVariables ) {
-            while( sLine.SearchAndReplace( "%UPD", sUPD ) != (USHORT)-1 );
-            while( sLine.SearchAndReplace( "%VERSION", sVersion ) != (USHORT)-1 );
+            if (( sLine.Search( "#" ) == 0 ) || ( !sLine.Len())) {
+                if ( sCurrentComment.Len())
+                    sCurrentComment += "\n";
+                sCurrentComment += sLine;
+                return ReadLine();
+            }
+            else {
+                if ( bReplaceVariables ) {
+                    while( sLine.SearchAndReplace( "%UPD", sUPD ) != (USHORT)-1 );
+                    while( sLine.SearchAndReplace( "%VERSION", sVersion ) != (USHORT)-1 );
+                }
+            }
         }
 
         sOldLine = sLine;
@@ -163,8 +174,10 @@ GenericInformation *InformationParser::ReadKey(
     GenericInformation *pInfo = NULL;
 
     ByteString sLine( ReadLine());
-    ByteString sKey( "" );
-    ByteString sValue( "" );
+    ByteString sKey;
+    ByteString sValue;
+    ByteString sComment( sCurrentComment );
+    sCurrentComment = "";
 
     // key separated from value by tab?
     USHORT nWSPos = sLine.Search( ' ' );
@@ -198,10 +211,12 @@ GenericInformation *InformationParser::ReadKey(
         nLevel--;
         pInfo = new GenericInformation( sKey, sValue,
                         pExistingList, pSubList );
+        pInfo->SetComment( sComment );
     }
     else {
         Recover();
         pInfo = new GenericInformation( sKey, sValue, pExistingList );
+        pInfo->SetComment( sComment );
     }
 
     return pInfo;
@@ -230,8 +245,16 @@ BOOL InformationParser::Save( SvStream &rOutStream,
         // Key-Value Paare schreiben
         pGenericInfo = pSaveList->GetObject( nInfoListCount );
         sTmpStr = "";
-        for( i=0; i<nLevel; i++)
-          sTmpStr += cKeyLevelChars;
+        for( ULONG j=0; j<nLevel; j++)
+              sTmpStr += cKeyLevelChars;
+
+        for ( i = 0; i < pGenericInfo->GetComment().GetTokenCount( '\n' ); i++ ) {
+            sTmpStr += pGenericInfo->GetComment().GetToken( i, '\n' );
+            sTmpStr += "\n";
+            for( ULONG j=0; j<nLevel; j++)
+                  sTmpStr += cKeyLevelChars;
+        }
+
         sTmpStr += pGenericInfo->GetBuffer();
         sTmpStr += ' ';
         sTmpStr += pGenericInfo->GetValue();
