@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:33:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _SVDOOLE2_HXX
 #include "svdoole2.hxx"
+#endif
+#ifndef _SVDOMEDIA_HXX
+#include "svdomedia.hxx"
 #endif
 
 #include <so3/outplace.hxx>
@@ -889,6 +892,140 @@ Any SAL_CALL SvxFrameShape::getPropertyValue( const OUString& PropertyName ) thr
     }
 
     return SvxOle2Shape::getPropertyValue( PropertyName );
+}
+
+/***********************************************************************
+*                                                                      *
+***********************************************************************/
+
+SvxMediaShape::SvxMediaShape( SdrObject* pObj ) throw()
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_MEDIA) )
+{
+    SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MediaShape" ) ) );
+}
+
+//----------------------------------------------------------------------
+SvxMediaShape::~SvxMediaShape() throw()
+{
+}
+
+//----------------------------------------------------------------------
+
+void SAL_CALL SvxMediaShape::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+{
+    OGuard                      aGuard( Application::GetSolarMutex() );
+    const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMapEntry( rPropertyName );
+    bool                        bOwn = false;
+
+    if( pMap && pObj && pModel )
+    {
+        SdrMediaObj* pMedia = PTR_CAST( SdrMediaObj, pObj );
+
+        if( pMedia && ( pMap->nWID >= OWN_ATTR_MEDIA_URL ) && ( pMap->nWID <= OWN_ATTR_MEDIA_ZOOM ) )
+        {
+            ::avmedia::MediaItem aItem;
+
+            switch( pMap->nWID )
+            {
+                case OWN_ATTR_MEDIA_URL:
+                {
+                    OUString aURL;
+
+                    if( rValue >>= aURL )
+                        aItem.setURL( aURL );
+                }
+                break;
+
+                case( OWN_ATTR_MEDIA_LOOP ):
+                {
+                    sal_Bool bLoop;
+
+                    if( rValue >>= bLoop )
+                        aItem.setLoop( bLoop );
+                }
+                break;
+
+                case( OWN_ATTR_MEDIA_MUTE ):
+                {
+                    sal_Bool bMute;
+
+                    if( rValue >>= bMute )
+                        aItem.setMute( bMute );
+                }
+                break;
+
+                case( OWN_ATTR_MEDIA_VOLUMEDB ):
+                {
+                    sal_Int16 nVolumeDB;
+
+                    if( rValue >>= nVolumeDB )
+                        aItem.setVolumeDB( nVolumeDB );
+                }
+                break;
+
+                case( OWN_ATTR_MEDIA_ZOOM ):
+                {
+                    ::com::sun::star::media::ZoomLevel eLevel;
+
+                    if( rValue >>= eLevel )
+                        aItem.setZoom( eLevel );
+                }
+                break;
+
+                default:
+                    throw IllegalArgumentException();
+            }
+
+            pMedia->setMediaProperties( aItem );
+            bOwn = true;
+        }
+    }
+
+    if( !bOwn )
+        SvxShape::setPropertyValue( rPropertyName, rValue );
+}
+
+//----------------------------------------------------------------------
+
+Any SAL_CALL SvxMediaShape::getPropertyValue( const OUString& rPropertyName )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    OGuard                      aGuard( Application::GetSolarMutex() );
+    const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMapEntry( rPropertyName );
+
+    if( pMap && pObj && pModel )
+    {
+        SdrMediaObj* pMedia = PTR_CAST( SdrMediaObj, pObj );
+
+        if( pMedia && ( pMap->nWID >= OWN_ATTR_MEDIA_URL ) && ( pMap->nWID <= OWN_ATTR_MEDIA_ZOOM ) )
+        {
+            const ::avmedia::MediaItem aItem( pMedia->getMediaProperties() );
+
+            switch( pMap->nWID )
+            {
+                case OWN_ATTR_MEDIA_URL:
+                    return makeAny( aItem.getURL() );
+
+                case( OWN_ATTR_MEDIA_LOOP ):
+                    return makeAny( (sal_Bool) aItem.isLoop() );
+
+                case( OWN_ATTR_MEDIA_MUTE ):
+                    return makeAny( (sal_Bool) aItem.isMute() );
+
+                case( OWN_ATTR_MEDIA_VOLUMEDB ):
+                    return makeAny( (sal_Int16) aItem.getVolumeDB() );
+
+                case( OWN_ATTR_MEDIA_ZOOM ):
+                    return makeAny( aItem.getZoom() );
+
+                default:
+                    throw IllegalArgumentException();
+            }
+        }
+    }
+
+    return SvxShape::getPropertyValue( rPropertyName );
 }
 
 #endif
