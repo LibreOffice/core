@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: fs $ $Date: 2000-09-19 15:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,12 @@ DECLARE_TABLE( ImplPropertyTable, ImplPropertyInfo* );
 
 static void lcl_ImplMergeFontProperty( ::com::sun::star::awt::FontDescriptor& rFD, sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rValue )
 {
+    // some props are defined with other types than the matching FontDescriptor members have
+    // (e.g. FontWidth, FontSlant)
+    // 78474 - 09/19/2000 - FS
+    float       nExtractFloat = 0;
+    sal_Int16   nExtractShort = 0;
+
     switch ( nPropId )
     {
         case BASEPROPERTY_FONTDESCRIPTORPART_NAME:          rValue >>= rFD.Name;
@@ -143,11 +149,11 @@ static void lcl_ImplMergeFontProperty( ::com::sun::star::awt::FontDescriptor& rF
                                                             break;
         case BASEPROPERTY_FONTDESCRIPTORPART_CHARSET:       rValue >>= rFD.CharSet;
                                                             break;
-        case BASEPROPERTY_FONTDESCRIPTORPART_HEIGHT:        rValue >>= rFD.Height;
+        case BASEPROPERTY_FONTDESCRIPTORPART_HEIGHT:        rValue >>= nExtractFloat; rFD.Height = nExtractFloat;
                                                             break;
         case BASEPROPERTY_FONTDESCRIPTORPART_WEIGHT:        rValue >>= rFD.Weight;
                                                             break;
-        case BASEPROPERTY_FONTDESCRIPTORPART_SLANT:         rValue >>= rFD.Slant;
+        case BASEPROPERTY_FONTDESCRIPTORPART_SLANT:         rValue >>= nExtractShort; rFD.Slant = (::com::sun::star::awt::FontSlant)nExtractShort;
                                                             break;
         case BASEPROPERTY_FONTDESCRIPTORPART_UNDERLINE:     rValue >>= rFD.Underline;
                                                             break;
