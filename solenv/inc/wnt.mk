@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 18:25:01 $
+#   last change: $Author: hjs $ $Date: 2005-02-14 15:36:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,9 +131,9 @@ CXX*=nmcl
 CXX*=nmcl /NMttOn
 .ELSE
 .IF "$(syntax)"!=""
-CXX*=$(SOLARROOT)\gcc\h-i386-cygwin32\bin\i386-cygwin32-gcc
+CXX*:=$(SOLARROOT)\gcc\h-i386-cygwin32\bin\i386-cygwin32-gcc
 .ELSE
-CXX*=$(WRAPCMD) cl
+CXX*:=$(WRAPCMD) cl
 .ENDIF
 .ENDIF
 .ENDIF
