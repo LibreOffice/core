@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:16:43 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,12 @@
 #endif
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _FCHRFMT_HXX
+#include <fchrfmt.hxx>
 #endif
 
 #ifndef _ERRHDL_HXX
@@ -1310,6 +1316,7 @@ void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWh
 
 SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
             const sal_Bool bBefore, const sal_uInt16 nId, const sal_uInt32 nNdIdx,
+            const String& rCharacterStyle,
             const sal_Bool bCpyBrd )
 {
     sal_Bool bWasUndo = DoesUndo();
@@ -1317,7 +1324,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
     if( bWasUndo )
     {
         ClearRedo();
-        pUndo = new SwUndoInsertLabel( eType, rTxt, bBefore, nId, bCpyBrd );
+        pUndo = new SwUndoInsertLabel( eType, rTxt, bBefore, nId, rCharacterStyle, bCpyBrd );
         DoUndo( sal_False );
     }
 
@@ -1325,20 +1332,20 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
 
     //Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt werden
     //muss
-    ASSERT( nId < GetFldTypes()->Count(), "FldType ueberindiziert." );
-    SwFieldType *pType = (*GetFldTypes())[nId];
-    ASSERT( pType->Which() == RES_SETEXPFLD, "Falsche Id fuer Label" );
-    SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr, SVX_NUM_ARABIC);
+    ASSERT( nId == USHRT_MAX  || nId < GetFldTypes()->Count(), "FldType ueberindiziert." );
+    SwFieldType *pType = nId != USHRT_MAX ? (*GetFldTypes())[nId] : 0;
+    ASSERT( !pType || pType->Which() == RES_SETEXPFLD, "Falsche Id fuer Label" );
 
     SwTxtFmtColl *pColl = 0;
-    for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
-    {
-        if( (*pTxtFmtCollTbl)[ --i ]->GetName() == pType->GetName() )
+    if( pType )
+        for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
         {
-            pColl = (*pTxtFmtCollTbl)[i];
-            break;
+            if( (*pTxtFmtCollTbl)[ --i ]->GetName() == pType->GetName() )
+            {
+                pColl = (*pTxtFmtCollTbl)[i];
+                break;
+            }
         }
-    }
     if( !pColl )
     {
         ASSERT( !this, "TxtCollection fuer Label nicht gefunden." );
@@ -1539,8 +1546,12 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
     if( pNew )
     {
         //String aufbereiten
-        String aTxt( aFld.GetTyp()->GetName() );
-        aTxt += ' ';
+        String aTxt;
+        if(pType)
+        {
+            aTxt += pType->GetName();
+            aTxt += ' ';
+        }
         xub_StrLen nIdx = aTxt.Len();
         aTxt += rTxt;
 
@@ -1548,8 +1559,25 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
         SwIndex aIdx( pNew, 0 );
         pNew->Insert( aTxt, aIdx );
 
+        //
         //Feld einfuegen
-        pNew->Insert( SwFmtFld( aFld ), nIdx, nIdx );
+        if(pType)
+        {
+            SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr, SVX_NUM_ARABIC);
+            pNew->Insert( SwFmtFld( aFld ), nIdx, nIdx );
+            if(rCharacterStyle.Len())
+            {
+                SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
+                if( !pCharFmt )
+                {
+                    const USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, GET_POOLID_CHRFMT);
+                    pCharFmt = GetCharFmtFromPool( nId );
+                }
+                if(pCharFmt)
+                    pNew->Insert( SwFmtCharFmt( pCharFmt ), 0,
+                                        nIdx + 1, SETATTR_DONTEXPAND );
+            }
+        }
 
         if ( bTable )
         {
@@ -1609,7 +1637,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     if( bWasUndo )
     {
         ClearRedo();
-        pUndo = new SwUndoInsertLabel( LTYPE_DRAW, rTxt, sal_False, nId, sal_False );
+        pUndo = new SwUndoInsertLabel( LTYPE_DRAW, rTxt, sal_False, nId, aEmptyStr, sal_False );
         DoUndo( sal_False );
         SetNoDrawUndoObj( sal_True );
     }
