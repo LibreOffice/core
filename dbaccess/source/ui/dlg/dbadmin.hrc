@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:39:01 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@
 #define FT_BASEDN               19
 #define FT_PORTNUMBER           20
 #define FT_LDAPROWCOUNT         21
+#define FT_AUTOINCREMENTVALUE   22
+#define FT_RETRIEVE_AUTO        23
 
 #define LB_DATATYPE             1
 #define LB_DATASOURCES          2
@@ -101,6 +103,8 @@
 #define ET_TIMEOUT_NUMBER       7
 #define ET_HOSTNAME             8
 #define ET_BASEDN               9
+#define ET_AUTOINCREMENTVALUE  10
+#define ET_RETRIEVE_AUTO       11
 
 #define PB_BROWSECONNECTION     1
 #define PB_INDICIES             2
@@ -118,6 +122,7 @@
 #define CB_SUPPRESVERSIONCL     5
 #define CB_USECATALOG           6
 #define CB_SQL92CHECK           7
+#define CB_RETRIEVE_AUTO        8
 
 #define FL_SEPARATOR1           1
 #define FL_SEPARATOR2           2
@@ -181,6 +186,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2002/07/09 12:39:01  oj
+ *  #99921# check if datasource allows to check names
+ *
  *  Revision 1.20  2001/06/25 08:24:31  oj
  *  #88699# new ids for controls
  *
