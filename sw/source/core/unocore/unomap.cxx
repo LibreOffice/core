@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:47:00 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1419,6 +1419,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_HEIGHT), FN_UNO_ROW_HEIGHT,     CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,CONVERT_TWIPS },
                     { SW_PROP_NMID(UNO_NAME_IS_AUTO_HEIGHT), FN_UNO_ROW_AUTO_HEIGHT,    CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE , 0 },
                     { SW_PROP_NMID(UNO_NAME_SIZE_TYPE), RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
+                    { SW_PROP_NMID(UNO_NAME_IS_SPLIT_ALLOWED), RES_ROW_SPLIT,       CPPU_E2T(CPPUTYPE_BOOLEAN)  , PropertyAttribute::MAYBEVOID, 0},
                 //  { SW_PROP_NMID(UNO_NAME_HEIGHT), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT32)  ,         PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
                 //  { SW_PROP_NMID(UNO_NAME_SHADOW_FORMAT), RES_SHADOW,             CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS},
                     {0,0,0,0,0}
@@ -1631,7 +1632,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_TAB_STOP_DISTANCE), RES_PARATR_TABSTOP,     CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, MID_STD_TAB | CONVERT_TWIPS},
                     COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
                     COMMON_HYPERLINK_PROPERTIES
-                    { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),  PropertyAttribute::MAYBEVOID,     0},    \
+                    { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),  PropertyAttribute::MAYBEVOID,     0},
+                    { SW_PROP_NMID(UNO_NAME_IS_SPLIT_ALLOWED), RES_ROW_SPLIT,       CPPU_E2T(CPPUTYPE_BOOLEAN)  , PropertyAttribute::MAYBEVOID, 0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextDefaultMap_Impl;
