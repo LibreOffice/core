@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
+ *  last change: $Author: oj $ $Date: 2001-08-08 08:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,12 +110,14 @@ namespace dbaui
         FixedText           m_FT_TABLE_RIGHT;
         OColumnTreeBox      m_CTRL_LEFT;    // left side
         OColumnTreeBox      m_CTRL_RIGHT;   // right side
-        ImageButton          m_ibColumn_up;
-        ImageButton          m_ibColumn_down;
-        ImageButton          m_ibColumn_up_right;
-        ImageButton          m_ibColumn_down_right;
+        ImageButton         m_ibColumn_up;
+        ImageButton         m_ibColumn_down;
+        ImageButton         m_ibColumn_up_right;
+        ImageButton         m_ibColumn_down_right;
         PushButton          m_pbAll;
         PushButton          m_pbNone;
+        String              m_sSourceText;
+        String              m_sDestText;
 
         sal_Bool            m_bAttrsChanged;
 

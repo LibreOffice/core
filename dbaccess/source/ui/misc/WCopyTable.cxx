@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 14:12:01 $
+ *  last change: $Author: oj $ $Date: 2001-08-08 08:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,12 +179,13 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
             m_xSourceObject->getPropertyValue(PROPERTY_SCHEMANAME)  >>= sSchema;
             m_xSourceObject->getPropertyValue(PROPERTY_NAME)        >>= sTable;
 
-            ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,m_sName,sal_False);
+            ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,m_sSourceName,sal_False);
         }
         else
-            _xSourceObject->getPropertyValue(PROPERTY_NAME)         >>= m_sName;
+            _xSourceObject->getPropertyValue(PROPERTY_NAME)         >>= m_sSourceName;
+        m_sName = m_sSourceName;
     }
-    loadData(); // create the field description
+    loadData(m_xSourceObject,m_vSourceColumns,m_vSourceVec); // create the field description
 
 }
 // -----------------------------------------------------------------------------
@@ -320,7 +321,7 @@ void OCopyTableWizard::CheckColumns()
         Reference< XDatabaseMetaData >  xMetaData(m_xConnection->getMetaData());
         sal_Bool bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
 
-        if(m_vDestColumns.size())
+        if(!m_vDestColumns.empty())
         {   // we have dest columns so look for the column matching
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
             for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
@@ -504,25 +505,26 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
         m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first);
 }
 // -----------------------------------------------------------------------------
-void OCopyTableWizard::loadData()
+void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
+                                ODatabaseExport::TColumns& _rColumns,
+                                ODatabaseExport::TColumnVector& _rColVector)
 {
-    ODatabaseExport::TColumns::iterator aIter = m_vSourceColumns.begin();
+    ODatabaseExport::TColumns::iterator aIter = _rColumns.begin();
 
-    for(;aIter != m_vSourceColumns.end();++aIter)
+    for(;aIter != _rColumns.end();++aIter)
         delete aIter->second;
 
-    m_vSourceVec.clear();
-    m_vSourceColumns.clear();
+    _rColVector.clear();
+    _rColumns.clear();
 
     OSL_ENSURE(m_xConnection.is(),"OCopyTableWizard::CheckColumns: No connection!");
     if(m_xConnection.is())
     {
-        Reference< XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
         //////////////////////////////////////////////////////////////////////
         // Datenstruktur mit Daten aus DatenDefinitionsObjekt fuellen
-        if(m_xSourceObject.is())
+        if(_xTable.is())
         {
-            Reference<XColumnsSupplier> xColSup(m_xSourceObject,UNO_QUERY);
+            Reference<XColumnsSupplier> xColSup(_xTable,UNO_QUERY);
             OSL_ENSURE(xColSup.is(),"No XColumnsSupplier!");
             Reference<XNameAccess> xColumns = xColSup->getColumns();
             OFieldDescription* pActFieldDescr = NULL;
@@ -583,12 +585,10 @@ void OCopyTableWizard::loadData()
                                 pActFieldDescr->SetPrecision(::std::min<sal_Int32>(nPrec,pTypeInfo->nPrecision));
                         }
                 }
-
-                m_vSourceColumns[pActFieldDescr->GetName()] = pActFieldDescr;
-                m_vSourceVec.push_back(m_vSourceColumns.insert(ODatabaseExport::TColumns::value_type(pActFieldDescr->GetName(),pActFieldDescr)).first);
+                _rColVector.push_back(_rColumns.insert(ODatabaseExport::TColumns::value_type(pActFieldDescr->GetName(),pActFieldDescr)).first);
             }
             // fill the primary  key information
-            Reference<XNameAccess> xKeyColumns  = getKeyColumns();
+            Reference<XNameAccess> xKeyColumns  = getKeyColumns(_xTable);
             if(xKeyColumns.is())
             {
                 Sequence< ::rtl::OUString> aKeyColumns = xKeyColumns->getElementNames();
@@ -597,8 +597,8 @@ void OCopyTableWizard::loadData()
 
                 for(;pKeyBegin != pKeyEnd;++pKeyBegin)
                 {
-                    ODatabaseExport::TColumns::iterator aIter = m_vSourceColumns.find(*pKeyBegin);
-                    if(aIter != m_vSourceColumns.end())
+                    ODatabaseExport::TColumns::iterator aIter = _rColumns.find(*pKeyBegin);
+                    if(aIter != _rColumns.end())
                         aIter->second->SetPrimaryKey(sal_True);
                 }
             }
@@ -617,11 +617,11 @@ void OCopyTableWizard::clearDestColumns()
     m_vDestColumns.clear();
 }
 // -----------------------------------------------------------------------------
-Reference<XNameAccess> OCopyTableWizard::getKeyColumns() const
+Reference<XNameAccess> OCopyTableWizard::getKeyColumns(const Reference<XPropertySet>& _xTable) const
 {
     // use keys and indexes for excat postioning
     // first the keys
-    Reference<XKeysSupplier> xKeySup(m_xSourceObject,UNO_QUERY);
+    Reference<XKeysSupplier> xKeySup(_xTable,UNO_QUERY);
     Reference<XIndexAccess> xKeys;
     if(xKeySup.is())
         xKeys = xKeySup->getKeys();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-20 13:33:58 $
+ *  last change: $Author: oj $ $Date: 2001-08-08 08:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ sal_Bool OCopyTable::LeavePage()
     m_pParent->m_bCreatePrimaryColumn   = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
     m_pParent->m_aKeyName               = m_edKeyName.GetText();
 
-    // a table that comes from a html or rtf import already has a name that is valid in the db
+    // first check if the table already exists in the database
     if( m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA )
     {
         Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
@@ -285,23 +285,25 @@ sal_Bool OCopyTable::LeavePage()
     }
 
     if(!m_edTableName.GetSavedValue().Equals(m_edTableName.GetText()))
-    { // table exist and name has changed
+    { // table exists and name has changed
         if(m_pParent->getCreateStyle() == OCopyTableWizard::WIZARD_APPEND_DATA)
         {
             m_pParent->clearDestColumns();
-            m_pParent->m_xSourceObject = NULL;
+            //  m_pParent->m_xSourceObject = NULL;
+            m_pParent->m_xDestObject = NULL;
             Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
             Reference<XNameAccess> xTables;
             if(xSup.is())
                 xTables = xSup->getTables();
             if(xTables.is() && xTables->hasByName(m_edTableName.GetText()))
             {
-                xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xSourceObject;
-                m_pParent->loadData();
+                // set new destination
+                xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xDestObject;
+                m_pParent->loadData(m_pParent->m_xDestObject,m_pParent->m_vDestColumns,m_pParent->m_aDestVec);
                 // #90027#
-                m_pParent->CheckColumns();
+                //  m_pParent->CheckColumns();
             }
-            if(!m_pParent->m_xSourceObject.is())
+            if(!m_pParent->m_xDestObject.is())
             {
                 ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME)).Execute();
                 return sal_False;
@@ -309,7 +311,7 @@ sal_Bool OCopyTable::LeavePage()
         }
         else if(m_eOldStyle == OCopyTableWizard::WIZARD_APPEND_DATA)
         {
-            m_pParent->m_xSourceObject = NULL;
+            m_pParent->m_xDestObject = NULL;
             m_edTableName.SaveValue();
             return LeavePage();
         }
@@ -321,20 +323,22 @@ sal_Bool OCopyTable::LeavePage()
             case OCopyTableWizard::WIZARD_APPEND_DATA:
             {
                 m_pParent->clearDestColumns();
-                m_pParent->m_xSourceObject = NULL;
+                //  m_pParent->m_xSourceObject = NULL;
+                m_pParent->m_xDestObject = NULL;
                 Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
                 Reference<XNameAccess> xTables;
                 if(xSup.is())
                     xTables = xSup->getTables();
                 if(xTables.is() && xTables->hasByName(m_edTableName.GetText()))
                 {
-                    xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xSourceObject;
-                    m_pParent->loadData();
+                    xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xDestObject;
+                    m_pParent->loadData(m_pParent->m_xDestObject,m_pParent->m_vDestColumns,m_pParent->m_aDestVec);
+                    //  m_pParent->loadData();
                     // #90027#
-                    m_pParent->CheckColumns();
+                    //  m_pParent->CheckColumns();
                 }
 
-                if(!m_pParent->m_xSourceObject.is())
+                if(!m_pParent->m_xDestObject.is())
                 {
                     ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME)).Execute();
                     m_edTableName.GrabFocus();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
+ *  last change: $Author: oj $ $Date: 2001-08-08 08:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,11 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
     m_CTRL_LEFT.SetWindowBits( WB_FORCE_MAKEVISIBLE );
     m_CTRL_RIGHT.SetWindowBits( WB_FORCE_MAKEVISIBLE );
 
+    m_sSourceText   = m_FT_TABLE_LEFT.GetText();
+    m_sSourceText.AppendAscii("\n");
+    m_sDestText     = m_FT_TABLE_RIGHT.GetText();
+    m_sDestText.AppendAscii("\n");
+
     FreeResource();
 }
 // -----------------------------------------------------------------------
@@ -139,7 +144,18 @@ void OWizNameMatching::Reset()
 {
     // urspr"unglichen zustand wiederherstellen
     DBG_CHKTHIS(OWizNameMatching,NULL);
-    m_bFirstTime = sal_False;
+    // the left tree contains bitmaps so i need to resize the right one
+    if(m_bFirstTime)
+    {
+        m_CTRL_RIGHT.SetReadOnly(); // sets autoinc to readonly
+        m_CTRL_RIGHT.SetEntryHeight(m_CTRL_LEFT.GetEntryHeight());
+        m_CTRL_RIGHT.SetIndent(m_CTRL_LEFT.GetIndent());
+        m_CTRL_RIGHT.SetSpaceBetweenEntries(m_CTRL_LEFT.GetSpaceBetweenEntries());
+
+        m_bFirstTime = sal_False;
+    }
+
+    //  m_CTRL_LEFT.Clear();
 }
 // -----------------------------------------------------------------------
 void OWizNameMatching::ActivatePage( )
@@ -147,27 +163,20 @@ void OWizNameMatching::ActivatePage( )
     DBG_CHKTHIS(OWizNameMatching,NULL);
 
     // set source table name
-    String aName = m_FT_TABLE_LEFT.GetText();
-    aName.AppendAscii("\n");
+    String aName = m_sSourceText;
+    aName += String(m_pParent->m_sSourceName);
 
-    aName += String(m_pParent->m_sName);
     m_FT_TABLE_LEFT.SetText(aName);
 
     // set dest table name
-    aName = m_FT_TABLE_RIGHT.GetText();
-    aName.AppendAscii("\n");
-
-    //  aName += ;
+    aName = m_sDestText;
+    aName += String(m_pParent->m_sName);
     m_FT_TABLE_RIGHT.SetText(aName);
 
-    m_CTRL_RIGHT.SetReadOnly(); // sets autoinc to readonly
-    m_CTRL_LEFT.FillListBox(*m_pParent->getSrcVector());
 
-    // the left tree contains bitmaps so i need to resize the right one
-    m_CTRL_RIGHT.SetEntryHeight(m_CTRL_LEFT.GetEntryHeight());
-    m_CTRL_RIGHT.SetIndent(m_CTRL_LEFT.GetIndent());
-    m_CTRL_RIGHT.SetSpaceBetweenEntries(m_CTRL_LEFT.GetSpaceBetweenEntries());
+    m_CTRL_LEFT.FillListBox(*m_pParent->getSrcVector());
     m_CTRL_RIGHT.FillListBox(*m_pParent->getDestVector());
+
 
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_False);
     m_CTRL_LEFT.GrabFocus();
@@ -178,12 +187,12 @@ sal_Bool OWizNameMatching::LeavePage()
     DBG_CHKTHIS(OWizNameMatching,NULL);
 
     const ODatabaseExport::TColumnVector* pSrcColumns       = m_pParent->getSrcVector();
-    ODatabaseExport::TColumnVector::const_iterator aIter    = pSrcColumns->begin();
-    for(;aIter != pSrcColumns->end();++aIter)
-    {
-        m_pParent->m_vColumnPos.push_back(CONTAINER_ENTRY_NOTFOUND);
-        m_pParent->m_vColumnTypes.push_back(0);
-    }
+
+    m_pParent->m_vColumnPos.clear();
+    m_pParent->m_vColumnTypes.clear();
+    m_pParent->m_vColumnPos.resize(pSrcColumns->size(),CONTAINER_ENTRY_NOTFOUND);
+    m_pParent->m_vColumnTypes.resize(pSrcColumns->size(),CONTAINER_ENTRY_NOTFOUND);
+
 
     const ODatabaseExport::TColumns* pDestColumns = m_pParent->getSourceColumns();
 
@@ -200,13 +209,13 @@ sal_Bool OWizNameMatching::LeavePage()
         sal_Int32 nPos = m_CTRL_LEFT.GetModel()->GetAbsPos(pLeftEntry);
         if(m_CTRL_LEFT.GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
         {
-            const ODatabaseExport::TColumnVector* pDestColumns      = m_pParent->getDestVector();
+            const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
             ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
             for(;aDestIter != pDestColumns->end();++aDestIter)
                 if((*aDestIter)->second == pDestField)
                     break;
 
-            m_pParent->m_vColumnPos[nPos]   = pSrcColumns->end() - aDestIter;
+            m_pParent->m_vColumnPos[nPos]   = pDestColumns->end() - aDestIter;
             m_pParent->m_vColumnTypes[nPos] = pDestField->GetType();
         }
         else

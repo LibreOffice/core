@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
+ *  last change: $Author: oj $ $Date: 2001-08-08 08:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,11 @@ namespace dbaui
         DECL_LINK( ImplOKHdl    , OKButton* );
         DECL_LINK( ImplActivateHdl, WizardDialog* );
         void CheckColumns();
-        void loadData();
+        void loadData(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xTable,
+                        ODatabaseExport::TColumns& _rColumns,
+                        ODatabaseExport::TColumnVector& _rColVector);
         void construct();
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xTable) const;
         // need for table creation
         void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup,const ODatabaseExport::TColumnVector* _pVec,sal_Bool _bKeyColumns=sal_False);
         void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec);
@@ -168,6 +170,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
         ::com::sun::star::lang::Locale  m_aLocale;
         ::rtl::OUString                 m_sName;    // for a table the name is composed
+        ::rtl::OUString                 m_sSourceName;
         ::rtl::OUString                 m_aKeyName;
     public:
         enum Wizard_Create_Style
