@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:24:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,10 @@ const sal_uInt8 EXC_CACHEDVAL_ERROR         = 0x10;
 
 const sal_Int32 EXC_POINTS_PER_INCH         = 72;
 const sal_Int32 EXC_TWIPS_PER_INCH          = EXC_POINTS_PER_INCH * 20;
+
+const sal_uInt8 EXC_ROT_BOTTOM_TOP          = 90;       /// Vertical rotation bottom->top.
+const sal_uInt8 EXC_ROT_TOP_BOTTOM          = 180;      /// Vertical rotation top->bottom.
+const sal_uInt8 EXC_ROT_STACKED             = 0xFF;     /// Characters vertically stacked.
 
 
 // Records (ordered by lowest record ID) ======================================
