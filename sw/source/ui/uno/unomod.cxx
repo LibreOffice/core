@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-25 10:06:05 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 14:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,8 @@ void SwXPrintSettings::setPropertyValue(const OUString& rPropertyName,
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bVal = sal_False;
 
-    if(COMPARE_EQUAL != rPropertyName.compareToAscii(UNO_NAME_PRINT_ANNOTATION_MODE))
+    if(   COMPARE_EQUAL != rPropertyName.compareToAscii(UNO_NAME_PRINT_ANNOTATION_MODE)
+       && COMPARE_EQUAL != rPropertyName.compareToAscii(UNO_NAME_PRINT_FAX_NAME) )
         bVal = *(sal_Bool*)aValue.getValue();
 
     SwPrintOptions* pPrtOpt = SW_MOD()->GetPrtOptions(bWeb);
@@ -261,12 +262,22 @@ void SwXPrintSettings::setPropertyValue(const OUString& rPropertyName,
             case WID_PRTSET_CONTROLS       : pPrtOpt->SetPrintControl(bVal);  break;
             case WID_PRTSET_PAGE_BACKGROUND: pPrtOpt->SetPrintPageBackground(bVal);  break;
             case WID_PRTSET_BLACK_FONTS    : pPrtOpt->SetPrintBlackFont(bVal);  break;
+            case WID_PRTSET_PAPER_FROM_SETUP: pPrtOpt->SetPaperFromSetup(bVal);  break;
             case WID_PRTSET_ANNOTATION_MODE:
             {
                 sal_Int16 nVal;
-                    aValue >>= nVal;
+                aValue >>= nVal;
                 if(nVal <= text::NotePrintMode_PAGE_END)
                     pPrtOpt->SetPrintPostIts(nVal);
+                else
+                    throw lang::IllegalArgumentException();
+            }
+            break;
+            case WID_PRTSET_FAX_NAME:
+            {
+                OUString sString;
+                if (aValue >>= sString)
+                    pPrtOpt->SetFaxName(sString);
                 else
                     throw lang::IllegalArgumentException();
             }
@@ -302,7 +313,14 @@ uno::Any SwXPrintSettings::getPropertyValue(const OUString& rPropertyName)
             case WID_PRTSET_CONTROLS       : bBoolVal = pPrtOpt->IsPrintControl();  break;
             case WID_PRTSET_PAGE_BACKGROUND: bBoolVal = pPrtOpt->IsPrintPageBackground();  break;
             case WID_PRTSET_BLACK_FONTS    : bBoolVal = pPrtOpt->IsPrintBlackFont();  break;
+            case WID_PRTSET_PAPER_FROM_SETUP: bBoolVal = pPrtOpt->IsPaperFromSetup();  break;
             case WID_PRTSET_ANNOTATION_MODE: bBool = FALSE; aRet <<= (sal_Int16)pPrtOpt->GetPrintPostIts();  break;
+            case WID_PRTSET_FAX_NAME :
+            {
+                bBool = FALSE;
+                aRet <<= pPrtOpt->GetFaxName();
+            }
+            break;
             default: DBG_ERROR("Diese Id gibt's nicht!");
         }
         if(bBool)
@@ -650,6 +668,9 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( Runt
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/01/25 10:06:05  os
+    #82876# support of com.sun.star.text.GlobalSettings
+
     Revision 1.1.1.1  2000/09/18 17:14:49  hr
     initial import
 
