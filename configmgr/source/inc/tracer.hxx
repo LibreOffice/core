@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:17:18 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ class OConfigTracer
     friend class OTraceIndent;
 
 protected:
-    static  ::osl::Mutex    s_aMutex;
+    static  ::osl::Mutex &  getMutex();
     static OTracerSetup*    s_pImpl;
 #ifdef WNT
     static timeb            s_aStartTime;
