@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:47:17 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,25 +62,36 @@
 #ifndef OSL_MODULE_H
 #include <osl/module.h>
 #endif
+#ifndef OSL_PROCESS_H
+#include <osl/process.h>
+#endif
 #ifndef RTL_STRING_HXX
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#include <svunx.h>
+#include <prex.h>
+#include <X11/Xatom.h>
+#include <postx.h>
 
 #include <salinst.hxx>
 #include <saldata.hxx>
 
 #include <cstdio>
+#include <unistd.h>
 
 using namespace rtl;
 
-typedef SalInstance*(*salFactoryProc)();
+typedef SalInstance*(*salFactoryProc)( oslModule pModule);
+
+static oslModule pCloseModule = NULL;
 
 static SalInstance* tryInstance( const OUString& rModuleBase )
 {
     SalInstance* pInst = NULL;
 
     OUStringBuffer aModName( 128 );
-    aModName.appendAscii( SAL_DLLPREFIX );
+    aModName.appendAscii( SAL_DLLPREFIX"vclplug_" );
     aModName.append( rModuleBase );
     aModName.append( (sal_Int32)SUPD );
     aModName.appendAscii( SAL_DLLPOSTFIX );
@@ -94,33 +105,255 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
         salFactoryProc aProc = (salFactoryProc)osl_getSymbol( aMod, aSym.pData );
         if( aProc )
         {
-            pInst = aProc();
+            pInst = aProc( aMod );
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "sal plugin %s produced instance %p\n",
                      OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr(),
                      pInst );
 #endif
+            pCloseModule = aMod;
         }
-#if OSL_DEBUG_LEVEL > 1
         else
+        {
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "could not load symbol %s from shared object %s\n",
                      OUStringToOString( aSym, RTL_TEXTENCODING_ASCII_US ).getStr(),
                      OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
+            osl_unloadModule( aMod );
+        }
     }
 #if OSL_DEBUG_LEVEL > 1
     else
         fprintf( stderr, "could not load shared object %s\n",
                  OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
+
     return pInst;
+}
+
+static const char* autodetect_gnome( Display* pDisplay )
+{
+    const char* pRet = NULL;
+
+    // warning: this check is coincidental, GNOME does not
+    // explicitly advertise itself
+    Atom nAtom1 = XInternAtom( pDisplay, "GNOME_SM_PROXY", True );
+    Atom nAtom2 = XInternAtom( pDisplay, "NAUTILUS_DESKTOP_WINDOW_ID", True );
+    if( nAtom1 || nAtom2 )
+    {
+        int nProperties = 0;
+        Atom* pProperties = XListProperties( pDisplay, DefaultRootWindow( pDisplay ), &nProperties );
+        if( pProperties && nProperties )
+        {
+            for( int i = 0; i < nProperties; i++ )
+                if( pProperties[ i ] == nAtom1 ||
+                    pProperties[ i ] == nAtom2 )
+                {
+                    pRet = "gtk";
+                }
+            XFree( pProperties );
+        }
+    }
+    return pRet;
+}
+
+static bool bWasXError = false;
+
+static inline bool WasXError()
+{
+    bool bRet = bWasXError;
+    bWasXError = false;
+    return bRet;
+}
+
+extern "C"
+{
+    static int autodect_error_handler( Display*, XErrorEvent* )
+    {
+        bWasXError = true;
+        return 0;
+    }
+}
+
+static OUString getNetWMName( Display* pDisplay )
+{
+    OUString aRet;
+
+    Atom nWmCheck   = XInternAtom( pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
+    Atom nWmName    = XInternAtom( pDisplay, "_NET_WM_NAME", True );
+    if( nWmName && nWmCheck )
+    {
+        XLIB_Window         aCheckWin   = None;
+        Atom                aRealType   = None;
+        int                 nFormat     = 8;
+        unsigned long       nItems      = 0;
+        unsigned long       nBytesLeft  = 0;
+        unsigned char*  pProperty   = NULL;
+        XGetWindowProperty( pDisplay,
+                            DefaultRootWindow( pDisplay ),
+                            nWmCheck,
+                            0, 1,
+                            False,
+                            XA_WINDOW,
+                            &aRealType,
+                            &nFormat,
+                            &nItems,
+                            &nBytesLeft,
+                            &pProperty );
+        if( aRealType == XA_WINDOW && nFormat == 32 && nItems != 0 )
+            aCheckWin = *(XLIB_Window*)pProperty;
+        if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
+
+        // see if that window really exists and has the check property set
+        if( aCheckWin != None )
+        {
+            // clear error flag
+            WasXError();
+            // get the property
+            XGetWindowProperty( pDisplay,
+                                aCheckWin,
+                                nWmCheck,
+                                0, 1,
+                                False,
+                                XA_WINDOW,
+                                &aRealType,
+                                &nFormat,
+                                &nItems,
+                                &nBytesLeft,
+                                &pProperty );
+            if( ! WasXError() && aRealType == XA_WINDOW && nFormat == 32 && nItems != 0 && pProperty )
+            {
+                if( aCheckWin == *(XLIB_Window*)pProperty )
+                {
+                    XFree( pProperty );
+                    pProperty = NULL;
+                    XGetWindowProperty( pDisplay,
+                                        aCheckWin,
+                                        nWmName,
+                                        0, 256,
+                                        False,
+                                        AnyPropertyType,
+                                        &aRealType,
+                                        &nFormat,
+                                        &nItems,
+                                        &nBytesLeft,
+                                        &pProperty );
+                    if( !WasXError() && nItems != 0 && pProperty && *pProperty )
+                    {
+                        if( aRealType == XA_STRING ) // some WM's use this although the should use UTF8_STRING
+                        {
+                            aRet = rtl::OStringToOUString( rtl::OString( (sal_Char*)pProperty ), RTL_TEXTENCODING_ISO_8859_1 );
+                        }
+                        else
+                            aRet = rtl::OStringToOUString( rtl::OString( (sal_Char*)pProperty ), RTL_TEXTENCODING_UTF8 );
+                    }
+                }
+            }
+            if( pProperty )
+            {
+                XFree( pProperty );
+                pProperty = NULL;
+            }
+        }
+    }
+    return aRet;
+}
+
+static const char* autodetect_kde( Display* pDisplay )
+{
+    const char* pRet = NULL;
+    // check for kwin
+    rtl::OUString aWM = getNetWMName( pDisplay );
+    if( aWM.equalsIgnoreAsciiCaseAscii( "KWin" ) )
+        pRet = "kde";
+
+    return pRet;
+}
+
+static const char* autodetect_plugin()
+{
+    // get display to connect to
+    static const char* pDisplayStr = getenv( "DISPLAY" );
+    int nParams = osl_getCommandArgCount();
+    OUString aParam;
+    OString aBParm;
+    for( int i = 0; i < nParams-1; i++ )
+    {
+        osl_getCommandArg( i, &aParam.pData );
+        if( aParam.equalsAscii( "-display" ) || aParam.equalsAscii( "--display" ) )
+        {
+            osl_getCommandArg( i+1, &aParam.pData );
+            aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
+            pDisplayStr = aBParm.getStr();
+            break;
+        }
+    }
+
+    const char* pRet = NULL;
+    // no server at all: dummy plugin
+    if( ! pDisplayStr || !*pDisplayStr )
+        pRet = "dummy";
+    else
+    {
+        Display* pDisplay = XOpenDisplay( pDisplayStr );
+        if( pDisplay )
+        {
+            int(*pOldHdl)(Display*,XErrorEvent*) = XSetErrorHandler( autodect_error_handler );
+#ifdef ENABLE_GTK_AUTODETECT
+            pRet = autodetect_gnome( pDisplay );
+#endif
+            if( ! pRet )
+                pRet = autodetect_kde( pDisplay );
+            if( ! pRet )
+                pRet = "gen";
+
+            // set the default handler again
+            XSetErrorHandler( pOldHdl );
+
+            XCloseDisplay( pDisplay );
+        }
+    }
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "plugin autodetection: %s\n", pRet );
+#endif
+
+    return pRet;
 }
 
 SalInstance *CreateSalInstance()
 {
     SalInstance*    pInst = NULL;
 
-    pInst = tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "pure_x_" ) ) );
+    static const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
+
+    if( !(pUsePlugin && *pUsePlugin) )
+        pUsePlugin = autodetect_plugin();
+
+    if( pUsePlugin && *pUsePlugin )
+        pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
+
+#ifdef ENABLE_GTK_AUTODETECT
+    if( ! pInst )
+        pInst = tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "gtk" ) ) );
+#endif
+
+    if( ! pInst )
+        pInst = tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "kde" ) ) );
+
+    // fallback to gen
+    if( ! pInst )
+        pInst = tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "gen" ) ) );
+
+    if( ! pInst )
+    {
+        fprintf( stderr, "no suitable windowing system found, exiting.\n" );
+        _exit( 1 );
+    }
 
     return pInst;
 }
@@ -128,6 +361,8 @@ SalInstance *CreateSalInstance()
 void DestroySalInstance( SalInstance *pInst )
 {
     delete pInst;
+    if( pCloseModule )
+        osl_unloadModule( pCloseModule );
 }
 
 void InitSalData()
