@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 20:54:25 $
+ *  last change: $Author: mhu $ $Date: 2001-08-09 16:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORBASE_CXX_ "$Revision: 1.2 $"
+#define _STORE_STORBASE_CXX_ "$Revision: 1.3 $"
 
 #ifndef __ALGORITHM__
 #include <algorithm>
@@ -227,10 +227,10 @@ sal_uInt32 OStorePageGuard::crc32 (
     if (pData)
     {
         register const sal_uInt8 *p = (const sal_uInt8*)pData;
-        register const sal_uInt8 *q = p + nSize;
+        register sal_uInt32       n;
 
         nCRC32 = ~nCRC32;
-        while (p < q)
+        for (n = nSize; n > 0; n--)
             nCRC32 = updcrc32 (nCRC32, *(p++));
         nCRC32 = ~nCRC32;
     }
