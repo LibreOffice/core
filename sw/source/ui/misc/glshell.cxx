@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glshell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-15 13:16:44 $
+ *  last change: $Author: mtg $ $Date: 2001-06-06 09:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         }
 
         // Dokumenttitel setzen
-        SfxViewFrame* pFrame = SFX_APP()->CreateViewFrame( *xDocSh, nViewId );
+        SfxViewFrame* pFrame = SFX_APP()->CreateViewFrame( *xDocSh, nViewId, !bShow );
         String aDocTitle(SW_RES( STR_GLOSSARY ));
         aDocTitle += sLongName;
 
@@ -399,6 +399,9 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/05/15 13:16:44  mtg
+    Moved conversion code into glossary.cxx
+
     Revision 1.2  2001/05/03 14:42:16  mtg
     #75825# Set a boolean to show a frame or not, so frames are not displayed when auto texts are edited over the API
 
