@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 14:22:00 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,20 +59,21 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUDRAW_HXX
-#define _SD_FUDRAW_HXX
+#ifndef SD_FU_DRAW_HXX
+#define SD_FU_DRAW_HXX
 
 #ifndef _SV_POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
 #endif
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
 struct SdrViewEvent;
 class SdrObject;
 
+namespace sd {
 
 /*************************************************************************
 |*
@@ -80,21 +81,17 @@ class SdrObject;
 |*
 \************************************************************************/
 
-class FuDraw : public FuPoor
+class FuDraw
+    : public FuPoor
 {
- protected:
-    Pointer aNewPointer;
-    Pointer aOldPointer;
-    BOOL    bMBDown;
-    BOOL    bDragHelpLine;
-    USHORT  nHelpLine;
-    BOOL    bPermanent;
-
- public:
+public:
     TYPEINFO();
 
-    FuDraw(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-            SdDrawDocument* pDoc, SfxRequest& rReq);
+    FuDraw (ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
     virtual ~FuDraw();
 
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
@@ -125,8 +122,16 @@ class FuDraw : public FuPoor
         @returns true if a active function was aborted
     */
     virtual bool cancel();
+
+protected:
+    Pointer aNewPointer;
+    Pointer aOldPointer;
+    BOOL    bMBDown;
+    BOOL    bDragHelpLine;
+    USHORT  nHelpLine;
+    BOOL    bPermanent;
 };
 
-
+} // end of namespace sd
 
 #endif      // _SD_FUDRAW_HXX
