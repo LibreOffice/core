@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamhelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #include <rtl/alloc.h>
 
-#include <assert.h>
 #include <string.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
