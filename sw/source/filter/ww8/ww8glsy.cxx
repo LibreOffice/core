@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
+ *  last change: $Author: cmc $ $Date: 2002-05-07 13:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,39 +260,42 @@ BOOL WW8Glossary::Load( SwTextBlocks &rBlocks, BOOL bSaveRelFile )
         rtl_TextEncoding eStructCharSet =
             WW8Fib::GetFIBCharset(pGlossary->chseTables);
 
-        WW8ReadSTTBF( TRUE, *xTableStream,
-                        pGlossary->fcSttbfglsy, pGlossary->lcbSttbfglsy, 0,
-                        eStructCharSet, aStrings, &aExtra );
+        WW8ReadSTTBF( TRUE, *xTableStream, pGlossary->fcSttbfglsy,
+            pGlossary->lcbSttbfglsy, 0, eStructCharSet, aStrings, &aExtra );
+
         rStrm->Seek(0);
 
-        SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL));
-        if( xDocSh->DoInitNew( 0 ) )
+        if (nStrings = aStrings.Count())
         {
-            SwDoc *pD =  ((SwDocShell*)(&xDocSh))->GetDoc();
-            SwWW8ImplReader* pRdr = new
-                SwWW8ImplReader(pGlossary->nVersion , xStg, &rStrm, *pD, TRUE);
-
-            SwNodeIndex
-                aIdx(*pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
-            if( !aIdx.GetNode().IsTxtNode() )
+            SfxObjectShellRef xDocSh(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
+            if (xDocSh->DoInitNew(0))
             {
-                ASSERT( !this, "wo ist der TextNode?" );
-                pD->GetNodes().GoNext( &aIdx );
+                SwDoc *pD =  ((SwDocShell*)(&xDocSh))->GetDoc();
+                SwWW8ImplReader* pRdr = new SwWW8ImplReader(pGlossary->nVersion,
+                    xStg, &rStrm, *pD, TRUE);
+
+                SwNodeIndex aIdx(
+                    *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
+                if( !aIdx.GetNode().IsTxtNode() )
+                {
+                    ASSERT( !this, "wo ist der TextNode?" );
+                    pD->GetNodes().GoNext( &aIdx );
+                }
+                SwPaM aPamo( aIdx );
+                aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetCntntNode(),
+                    0);
+                pRdr->LoadDoc(aPamo,this);
+
+                bRet = MakeEntries(pD, rBlocks, bSaveRelFile, aStrings, aExtra);
+
+                delete pRdr;
             }
-            SwPaM aPamo( aIdx );
-            aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetCntntNode(), 0);
-            pRdr->LoadDoc(aPamo,this);
+            xDocSh->DoClose();
+            rBlocks.EndPutMuchBlockEntries();
 
-            bRet = MakeEntries( pD, rBlocks, bSaveRelFile, aStrings, aExtra );
-
-            delete pRdr;
+            aStrings.DeleteAndDestroy( 0, nStrings );
+            aExtra.DeleteAndDestroy( 0, aExtra.Count() );
         }
-        xDocSh->DoClose();
-        rBlocks.EndPutMuchBlockEntries();
-
-        nStrings = aStrings.Count();
-        aStrings.DeleteAndDestroy( 0, nStrings );
-        aExtra.DeleteAndDestroy( 0, aExtra.Count() );
     }
     return bRet;
 }
@@ -300,38 +303,37 @@ BOOL WW8Glossary::Load( SwTextBlocks &rBlocks, BOOL bSaveRelFile )
 
 BOOL WW8GlossaryFib::IsGlossaryFib()
 {
-    if( !nFibError )
+    if (!nFibError)
     {
         INT16 nFibMin;
         INT16 nFibMax;
-        switch( nVersion )  // beachte: 6 steht fuer "6 ODER 7",
-                            // 7 steht fuer "NUR 7"
-            {
-        case 6:
-            nFibMin = 0x0065;   // von 101 WinWord 6.0
-            //     102    "
-            // und 103 WinWord 6.0 fuer Macintosh
-            //     104    "
-            nFibMax = 0x0069;   // bis 105 WinWord 95
-            break;
-        case 7:
-            nFibMin = 0x0069;   // von 105 WinWord 95
-            nFibMax = 0x0069;   // bis 105 WinWord 95
-            break;
-        case 8:
-            nFibMin = 0x006A;   // von 106 WinWord 97
-            nFibMax = 0x00c1;   // bis 193 WinWord 97 (?)
-            break;
-        default:
-            nFibMin = 0;            // Programm-Fehler!
-            nFibMax = 0;
-            nFib    = 1;
+        switch(nVersion)
+        {
+            case 6:
+                nFibMin = 0x0065;   // von 101 WinWord 6.0
+                //     102    "
+                // und 103 WinWord 6.0 fuer Macintosh
+                //     104    "
+                nFibMax = 0x0069;   // bis 105 WinWord 95
+                break;
+            case 7:
+                nFibMin = 0x0069;   // von 105 WinWord 95
+                nFibMax = 0x0069;   // bis 105 WinWord 95
+                break;
+            case 8:
+                nFibMin = 0x006A;   // von 106 WinWord 97
+                nFibMax = 0x00c2;   // bis 194 WinWord 2000
+                break;
+            default:
+                nFibMin = 0;            // Programm-Fehler!
+                nFibMax = 0;
+                nFib = nFibBack = 1;
+                break;
         }
-        if(    ( nFib < nFibMin )
-            || ( nFib > nFibMax ) )
+        if ( (nFibBack < nFibMin) || (nFibBack > nFibMax) )
             nFibError = ERR_SWG_READ_ERROR; // Error melden
     }
-    return(0 == nFibError);
+    return !nFibError;
 }
 
 UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream &rTableStrm,
