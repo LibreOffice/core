@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-24 13:14:09 $
+ *  last change: $Author: sb $ $Date: 2001-08-24 13:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,27 +1312,27 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_WRONGMEDIUM & ERRCODE_RES_MASK)
     {
-        Text = "Legen Sie bitte den Datenträger $(ARG1) ein.";
-        Text[english] = "Please insert disk $(ARG1).";
-        Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇáŞÑÕ $(ARG1) .";
+        Text = "Legen Sie bitte den Datenträger $(ARG1) ein";
+        Text[english] = "Please insert disk $(ARG1)";
+        Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇáŞÑÕ $(ARG1)";
         Text[ chinese_simplified ] = "è¯·æ‚¨æ”¾å…¥è½¯ç›˜ $(ARG1)ã€‚";
         Text[ chinese_traditional ] = "è«‹æ”¾ç½®ç£ç‰‡ $(ARG1) ã€‚";
-        Text[ danish ] = "Indsæt venligst datamediet $(ARG1).";
-        Text[ dutch ] = "Leg datamedium in station $(ARG1).";
-        Text[ english_us ] = "Please insert data storage medium $(ARG1).";
-        Text[ french ] = "Insérez le média $(ARG1).";
-        Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôïí äßóêï $(ARG1).";
-        Text[ italian ] = "Inserite il supporto dati $(ARG1).";
+        Text[ danish ] = "Indsæt venligst datamediet $(ARG1)";
+        Text[ dutch ] = "Leg datamedium in station $(ARG1)";
+        Text[ english_us ] = "Please insert data storage medium $(ARG1)";
+        Text[ french ] = "Insérez le média $(ARG1)";
+        Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôïí äßóêï $(ARG1)";
+        Text[ italian ] = "Inserite il supporto dati $(ARG1)";
         Text[ japanese ] = "åª’ä½“ $(ARG1) ã‚’å…¥ã‚Œã¦ãã ã•ã„ã€‚";
-        Text[ korean ] = "ë°ì´í„° ë§¤ì²´ $(ARG1)ì„(ë¥¼) ì‚½ì…í•˜ì‹­ì‹œì˜¤ .";
-        Text[ polish ] = "Wsuñ proszê noœnik danych $(ARG1).";
-        Text[ portuguese ] = "Introduza o media $(ARG1).";
-        Text[ portuguese_brazilian ] = "Please insert disk $(ARG1).";
-        Text[ russian ] = "Âñòàâüòå, ïîæàëóéñòà, äèñê $(ARG1).";
-        Text[ spanish ] = "Inserte por favor el medio $(ARG1).";
-        Text[ swedish ] = "Lägg in datamediet $(ARG1).";
-        Text[ turkish ] = "Please insert disk $(ARG1).";
-        Text[ catalan ] = "Inserte por favor el medio $(ARG1).";
-        Text[ finnish ] = "Syötä tallennusväline $(ARG1).";
+        Text[ korean ] = "ë°ì´í„° ë§¤ì²´ $(ARG1)ì„(ë¥¼) ì‚½ì…í•˜ì‹­ì‹œì˜¤";
+        Text[ polish ] = "Wsuñ proszê noœnik danych $(ARG1)";
+        Text[ portuguese ] = "Introduza o media $(ARG1)";
+        Text[ portuguese_brazilian ] = "Please insert disk $(ARG1)";
+        Text[ russian ] = "Âñòàâüòå, ïîæàëóéñòà, äèñê $(ARG1)";
+        Text[ spanish ] = "Inserte por favor el medio $(ARG1)";
+        Text[ swedish ] = "Lägg in datamediet $(ARG1)";
+        Text[ turkish ] = "Please insert disk $(ARG1)";
+        Text[ catalan ] = "Inserte por favor el medio $(ARG1)";
+        Text[ finnish ] = "Syötä tallennusväline $(ARG1)";
     };
 };
