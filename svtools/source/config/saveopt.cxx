@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-25 10:15:52 $
+ *  last change: $Author: os $ $Date: 2001-07-02 07:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,16 @@
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
+class SvtSaveOptions_Impl;
+class SvtLoadOptions_Impl;
 
-static SvtSaveOptions_Impl* pOptions = NULL;
+struct SvtLoadSaveOptions_Impl
+{
+    SvtSaveOptions_Impl* pSaveOpt;
+    SvtLoadOptions_Impl* pLoadOpt;
+};
+
+static SvtLoadSaveOptions_Impl* pOptions = NULL;
 static sal_Int32           nRefCount = 0;
 
 class SvtSaveOptions_Impl : public utl::ConfigItem
@@ -102,6 +110,7 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bSaveUnpacked;
 public:
                             SvtSaveOptions_Impl();
+                            ~SvtSaveOptions_Impl();
 
     virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void            Commit();
@@ -278,6 +287,9 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     }
 }
 
+SvtSaveOptions_Impl::~SvtSaveOptions_Impl()
+{}
+
 void SvtSaveOptions_Impl::Commit()
 {
     Sequence< OUString > aNames = GetPropertyNames();
@@ -342,12 +354,68 @@ void SvtSaveOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames 
     DBG_ERRORFILE( "properties have been changed" );
 }
 
+
+class SvtLoadOptions_Impl : public utl::ConfigItem
+{
+
+    sal_Bool                            bLoadUserDefinedSettings;
+
+public:
+                            SvtLoadOptions_Impl();
+                            ~SvtLoadOptions_Impl();
+
+    virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void            Commit();
+
+    void                    SetLoadUserSettings(sal_Bool b){bLoadUserDefinedSettings = b; SetModified();}
+    sal_Bool                IsLoadUserSettings() const {return bLoadUserDefinedSettings;}
+};
+// -----------------------------------------------------------------------
+const sal_Char cUserDefinedSettings[] = "UserDefinedSettings";
+
+SvtLoadOptions_Impl::SvtLoadOptions_Impl()
+    : ConfigItem( OUString::createFromAscii("Office.Common/Load") )
+    , bLoadUserDefinedSettings( sal_False )
+{
+    Sequence< OUString > aNames(1);
+    aNames[0] = OUString::createFromAscii(cUserDefinedSettings);
+    Sequence< Any > aValues = GetProperties( aNames );
+    EnableNotification( aNames );
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
+    if (pValues[0].getValueTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
+         bLoadUserDefinedSettings = *(sal_Bool *)pValues[0].getValue();
+}
+// -----------------------------------------------------------------------
+SvtLoadOptions_Impl::~SvtLoadOptions_Impl()
+{
+}
+// -----------------------------------------------------------------------
+void SvtLoadOptions_Impl::Commit()
+{
+    Sequence< OUString > aNames(1);
+    aNames[0] = OUString::createFromAscii(cUserDefinedSettings);
+    Sequence< Any > aValues( 1 );
+    aValues[0].setValue(&bLoadUserDefinedSettings, ::getBooleanCppuType());
+    PutProperties( aNames, aValues );
+}
+// -----------------------------------------------------------------------
+void SvtLoadOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
+{
+    DBG_ERRORFILE( "properties have been changed" );
+}
+// -----------------------------------------------------------------------
+
 SvtSaveOptions::SvtSaveOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
     if ( !pOptions )
-        pOptions = new SvtSaveOptions_Impl;
+    {
+        pOptions = new SvtLoadSaveOptions_Impl;
+        pOptions->pSaveOpt = new SvtSaveOptions_Impl;
+        pOptions->pLoadOpt = new SvtLoadOptions_Impl;
+    }
     ++nRefCount;
     pImp = pOptions;
 }
@@ -360,139 +428,154 @@ SvtSaveOptions::~SvtSaveOptions()
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if ( !--nRefCount )
     {
-        if ( pOptions->IsModified() )
-            pOptions->Commit();
+        if ( pOptions->pSaveOpt->IsModified() )
+            pOptions->pSaveOpt->Commit();
+        if ( pOptions->pLoadOpt->IsModified() )
+            pOptions->pLoadOpt->Commit();
+
+        DELETEZ( pOptions->pLoadOpt );
+        DELETEZ( pOptions->pSaveOpt );
         DELETEZ( pOptions );
     }
 }
 
 void SvtSaveOptions::SetAutoSaveTime( sal_Int32 n )
 {
-    pImp->SetAutoSaveTime( n );
+    pImp->pSaveOpt->SetAutoSaveTime( n );
 }
 
 sal_Int32 SvtSaveOptions::GetAutoSaveTime() const
 {
-    return pImp->GetAutoSaveTime();
+    return pImp->pSaveOpt->GetAutoSaveTime();
 }
 
 void SvtSaveOptions::SetUseUserData( sal_Bool b )
 {
-    pImp->SetUseUserData( b );
+    pImp->pSaveOpt->SetUseUserData( b );
 }
 
 sal_Bool SvtSaveOptions::IsUseUserData() const
 {
-    return pImp->IsUseUserData();
+    return pImp->pSaveOpt->IsUseUserData();
 }
 
 void SvtSaveOptions::SetBackup( sal_Bool b )
 {
-    pImp->SetBackup( b );
+    pImp->pSaveOpt->SetBackup( b );
 }
 
 sal_Bool SvtSaveOptions::IsBackup() const
 {
-    return pImp->IsBackup();
+    return pImp->pSaveOpt->IsBackup();
 }
 
 void SvtSaveOptions::SetAutoSave( sal_Bool b )
 {
-    pImp->SetAutoSave( b );
+    pImp->pSaveOpt->SetAutoSave( b );
 }
 
 sal_Bool SvtSaveOptions::IsAutoSave() const
 {
-    return pImp->IsAutoSave();
+    return pImp->pSaveOpt->IsAutoSave();
 }
 
 void SvtSaveOptions::SetAutoSavePrompt( sal_Bool b )
 {
-    pImp->SetAutoSavePrompt( b );
+    pImp->pSaveOpt->SetAutoSavePrompt( b );
 }
 
 sal_Bool SvtSaveOptions::IsAutoSavePrompt() const
 {
-    return pImp->IsAutoSavePrompt();
+    return pImp->pSaveOpt->IsAutoSavePrompt();
 }
 
 void SvtSaveOptions::SetDocInfoSave(sal_Bool b)
 {
-    pImp->SetDocInfoSave( b );
+    pImp->pSaveOpt->SetDocInfoSave( b );
 }
 
 sal_Bool SvtSaveOptions::IsDocInfoSave() const
 {
-    return pImp->IsDocInfoSave();
+    return pImp->pSaveOpt->IsDocInfoSave();
 }
 
 void SvtSaveOptions::SetSaveWorkingSet( sal_Bool b )
 {
-    pImp->SetSaveWorkingSet( b );
+    pImp->pSaveOpt->SetSaveWorkingSet( b );
 }
 
 sal_Bool SvtSaveOptions::IsSaveWorkingSet() const
 {
-    return pImp->IsSaveWorkingSet();
+    return pImp->pSaveOpt->IsSaveWorkingSet();
 }
 
 void SvtSaveOptions::SetSaveDocWins( sal_Bool b )
 {
-    pImp->SetSaveDocWins( b );
+    pImp->pSaveOpt->SetSaveDocWins( b );
 }
 
 sal_Bool SvtSaveOptions::IsSaveDocWins() const
 {
-    return pImp->IsSaveDocWins();
+    return pImp->pSaveOpt->IsSaveDocWins();
 }
 
 void SvtSaveOptions::SetSaveDocView( sal_Bool b )
 {
-    pImp->SetSaveDocView( b );
+    pImp->pSaveOpt->SetSaveDocView( b );
 }
 
 sal_Bool SvtSaveOptions::IsSaveDocView() const
 {
-    return pImp->IsSaveDocView();
+    return pImp->pSaveOpt->IsSaveDocView();
 }
 
 void SvtSaveOptions::SetSaveRelINet( sal_Bool b )
 {
-    pImp->SetSaveRelINet( b );
+    pImp->pSaveOpt->SetSaveRelINet( b );
 }
 
 sal_Bool SvtSaveOptions::IsSaveRelINet() const
 {
-    return pImp->IsSaveRelINet();
+    return pImp->pSaveOpt->IsSaveRelINet();
 }
 
 void SvtSaveOptions::SetSaveRelFSys( sal_Bool b )
 {
-    pImp->SetSaveRelFSys( b );
+    pImp->pSaveOpt->SetSaveRelFSys( b );
 }
 
 sal_Bool SvtSaveOptions::IsSaveRelFSys() const
 {
-    return pImp->IsSaveRelFSys();
+    return pImp->pSaveOpt->IsSaveRelFSys();
 }
 
 void SvtSaveOptions::SetSaveUnpacked( sal_Bool b )
 {
-    pImp->SetSaveUnpacked( b );
+    pImp->pSaveOpt->SetSaveUnpacked( b );
 }
 
 sal_Bool SvtSaveOptions::IsSaveUnpacked() const
 {
-    return pImp->IsSaveUnpacked();
+    return pImp->pSaveOpt->IsSaveUnpacked();
 }
 SvtSaveOptions::SaveGraphicsMode SvtSaveOptions::GetSaveGraphicsMode() const
 {
-    return pImp->GetSaveGraphicsMode();
+    return pImp->pSaveOpt->GetSaveGraphicsMode();
 }
 
 void SvtSaveOptions::SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode )
 {
     // #87097#: don't allow setting of this property (it isn't needed anymore)
-    // pImp->SetSaveGraphicsMode( eMode );
+    // pImp->pSaveOpt->SetSaveGraphicsMode( eMode );
+}
+
+void       SvtSaveOptions::SetLoadUserSettings(sal_Bool b)
+{
+    pImp->pLoadOpt->SetLoadUserSettings(b);
+}
+
+sal_Bool   SvtSaveOptions::IsLoadUserSettings() const
+{
+    return pImp->pLoadOpt->IsLoadUserSettings();
 }
 
