@@ -30,6 +30,8 @@
 "SwXTextDocument";"com::sun::star::text::TextDocument";"TwoDigitYear#optional"
 "SwXTextDocument";"com::sun::star::text::XTextEmbeddedObjectsSupplier#optional";"getEmbeddedObjects()"
 "SwXTextDocument";"com::sun::star::text::XChapterNumberingSupplier#optional";"getChapterNumberingRules()"
+"SwXTextDocument";"com::sun::star::view::XPrintJobBroadcaster#optional";"addPrintJobListener()"
+"SwXTextDocument";"com::sun::star::view::XPrintJobBroadcaster#optional";"removePrintJobListener()"
 "SwXTextDocument";"com::sun::star::text::XFootnotesSupplier#optional";"getFootnotes()"
 "SwXTextDocument";"com::sun::star::text::XFootnotesSupplier#optional";"getFootnoteSettings()"
 "SwXTextDocument";"com::sun::star::text::XTextGraphicObjectsSupplier#optional";"getGraphicObjects()"
