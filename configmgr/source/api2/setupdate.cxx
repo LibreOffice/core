@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setupdate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:37 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ uno::Any SAL_CALL BasicSet::queryInterface( uno::Type const& rType ) throw (uno:
         aRet = cppu::queryInterface(rType
                     , static_cast< css::container::XNameContainer *>(this)
                     , static_cast< css::container::XNameReplace *>(this)
+                    , static_cast< css::beans::XPropertyWithState *>(this)
                     , static_cast< css::lang::XSingleServiceFactory *>(this)
                     );
     }
@@ -120,6 +121,7 @@ uno::Any SAL_CALL BasicValueSet::queryInterface( uno::Type const& rType ) throw 
         aRet = cppu::queryInterface(rType
                     , static_cast< css::container::XNameContainer *>(this)
                     , static_cast< css::container::XNameReplace *>(this)
+                    , static_cast< css::beans::XPropertyWithState *>(this)
                     );
     }
     return aRet;
@@ -133,6 +135,7 @@ uno::Sequence< uno::Type > SAL_CALL BasicSet::getTypes( ) throw (uno::RuntimeExc
     cppu::OTypeCollection aTypes(
         configapi::getReferenceType(static_cast< css::container::XNameContainer *>(this)),
         configapi::getReferenceType(static_cast< css::container::XNameReplace *>(this)),
+        configapi::getReferenceType(static_cast< css::beans::XPropertyWithState *>(this)),
         configapi::getReferenceType(static_cast< css::lang::XSingleServiceFactory *>(this)),
         BasicSetAccess::getTypes());
 
@@ -146,6 +149,7 @@ uno::Sequence< uno::Type > SAL_CALL BasicValueSet::getTypes( ) throw (uno::Runti
     cppu::OTypeCollection aTypes(
         configapi::getReferenceType(static_cast< css::container::XNameContainer *>(this)),
         configapi::getReferenceType(static_cast< css::container::XNameReplace *>(this)),
+        configapi::getReferenceType(static_cast< css::beans::XPropertyWithState *>(this)),
         BasicSetAccess::getTypes());
 
     return aTypes.getTypes();
