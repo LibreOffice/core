@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 17:58:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,8 @@ private:
 
     ScNavigatorSettings*    pNavSettings;
 
-    String                  aPendingUserData;           // used in first Activate
+    // used in first Activate
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aPendingUserData;
     BOOL                    bFirstActivate;
 
     BOOL                    bActiveDrawSh;
@@ -237,6 +238,8 @@ private:
     SC_DLLPRIVATE SfxShell*     GetMySubShell() const;
 
     SC_DLLPRIVATE void          DoReadUserData( const String& rData );
+    SC_DLLPRIVATE void          DoReadUserDataSequence( const ::com::sun::star::uno::Sequence<
+                                     ::com::sun::star::beans::PropertyValue >& rSettings );
 
     SC_DLLPRIVATE DECL_LINK( SimpleRefClose, String* );
     SC_DLLPRIVATE DECL_LINK( SimpleRefDone, String* );
