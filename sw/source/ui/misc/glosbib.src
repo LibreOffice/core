@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ ModalDialog DLG_BIB_BASE
         Text[ chinese_simplified ] = "·Φΐΰ";
         Text[ russian ] = "Κΰςεγξπθÿ";
         Text[ polish ] = "Obszar";
-        Text[ japanese ] = "•ª—ή";
+        Text[ japanese ] = "ΈήΩ°Μί";
         Text[ chinese_traditional ] = "°Ο°μ";
         Text[ arabic ] = "έΖΙ";
         Text[ greek ] = "Κατηγορία";
@@ -255,7 +255,7 @@ ModalDialog DLG_BIB_BASE
     Text[ chinese_simplified ] = "±ΰΌ­ΗψΣς";
     Text[ russian ] = "Οπΰβκΰ κΰςεγξπθι";
     Text[ polish ] = "Edytuj obszary";
-    Text[ japanese ] = "•ª—ή‚Μ•ÒW";
+    Text[ japanese ] = "ΈήΩ°Μί‚Μ•ÒW";
     Text[ chinese_traditional ] = "½sΏθ°Ο°μ";
     Text[ arabic ] = "ΚΝΡνΡ ΗαέΖΗΚ";
     Text[ greek ] = "Επεξεργασία κατηγοριών";
