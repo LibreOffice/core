@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,7 +849,7 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message [ spanish ] = "Al desactivar el encabezamiento o pie de pбgina se eliminarб su contenido.\nїDesea eliminarlo?" ;
     Message [ english_us ] = "Removing headers or footers deletes the contents.\nAre you sure you want to delete this text?" ;
     Message[ chinese_simplified ] = "К§»оТіГј»тТіЅЕѕН»бЙѕіэµ±З°ПЦґжµДОДЧЦЎЈ\nДъТЄЙѕіэХвР©ОДЧЦВрЈї";
-    Message[ russian ] = "Отключение колонтитулов вызовет удаление имеющегося текста.\nВы хотите удалить содержание?";
+    Message[ russian ] = "Отключение колонтитулов вызовет удаление имеющегося текста.\nВы хотите удалить содержимое?";
     Message[ polish ] = "Wyі№czenie stopki i nagіуwka spowoduje usuniкcie istniej№cego tekstu. \nChcesz skasowaж ten tekst?";
     Message[ japanese ] = "НЇАЮ‚Ь‚Ѕ‚НМЇА‚рЉO‚·‚ЖЉY“–•”•Є‚М“а—e‚аЌнЏњ‚і‚к‚Ь‚·ЃB\nЌнЏњ‚µ‚Д‚а‚ж‚л‚µ‚ў‚Е‚·‚©?";
     Message[ chinese_traditional ] = "Ґў¬Ў­¶­є©О­¶§АґN·|§R°Ј·н«eІ{¦sЄє¤е¦rЎC\n±z­n§R°ЈіoЁЗ¤е¦rЎH";
