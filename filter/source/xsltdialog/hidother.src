@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hidother.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:31:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "xmlfilterhelpids.hrc"
+
+hidspecial HID_XML_SOURCE_FILE_DIALOG                   { HelpId = HID_XML_SOURCE_FILE_DIALOG; };
+hidspecial HID_XML_SOURCE_FILE_VALIDATE                 { HelpId = HID_XML_SOURCE_FILE_VALIDATE; };
+hidspecial HID_XML_FILTER_SETTINGS_DIALOG               { HelpId = HID_XML_FILTER_SETTINGS_DIALOG; };
+hidspecial HID_XML_FILTER_LIST                          { HelpId = HID_XML_FILTER_LIST; };
+hidspecial HID_XML_FILTER_NEW                           { HelpId = HID_XML_FILTER_NEW; };
+hidspecial HID_XML_FILTER_EDIT                          { HelpId = HID_XML_FILTER_EDIT; };
+hidspecial HID_XML_FILTER_TEST                          { HelpId = HID_XML_FILTER_TEST; };
+hidspecial HID_XML_FILTER_DELETE                        { HelpId = HID_XML_FILTER_DELETE; };
+hidspecial HID_XML_FILTER_SAVE                          { HelpId = HID_XML_FILTER_SAVE; };
+hidspecial HID_XML_FILTER_OPEN                          { HelpId = HID_XML_FILTER_OPEN; };
+hidspecial HID_XML_FILTER_CLOSE                         { HelpId = HID_XML_FILTER_CLOSE; };
+
+hidspecial HID_XML_FILTER_TABDIALOG                     { HelpId = HID_XML_FILTER_TABDIALOG; };
+hidspecial HID_XML_FILTER_TABPAGE_BASIC                 { HelpId = HID_XML_FILTER_TABPAGE_BASIC; };
+hidspecial HID_XML_FILTER_TABPAGE_XSLT                  { HelpId = HID_XML_FILTER_TABPAGE_XSLT; };
+hidspecial HID_XML_FILTER_NAME                          { HelpId = HID_XML_FILTER_NAME; };
+hidspecial HID_XML_FILTER_APPLICATION                   { HelpId = HID_XML_FILTER_APPLICATION; };
+hidspecial HID_XML_FILTER_INTERFACE_NAME                { HelpId = HID_XML_FILTER_INTERFACE_NAME; };
+hidspecial HID_XML_FILTER_EXTENSION                     { HelpId = HID_XML_FILTER_EXTENSION; };
+hidspecial HID_XML_FILTER_DESCRIPTION                   { HelpId = HID_XML_FILTER_DESCRIPTION; };
+hidspecial HID_XML_FILTER_DOCTYPE                       { HelpId = HID_XML_FILTER_DOCTYPE; };
+hidspecial HID_XML_FILTER_DTD                           { HelpId = HID_XML_FILTER_DTD; };
+hidspecial HID_XML_FILTER_DTD_BROWSE                    { HelpId = HID_XML_FILTER_DTD_BROWSE; };
+hidspecial HID_XML_FILTER_EXPORT_XSLT                   { HelpId = HID_XML_FILTER_EXPORT_XSLT; };
+hidspecial HID_XML_FILTER_EXPORT_XSLT_BROWSE            { HelpId = HID_XML_FILTER_EXPORT_XSLT_BROWSE; };
+hidspecial HID_XML_FILTER_IMPORT_XSLT                   { HelpId = HID_XML_FILTER_IMPORT_XSLT; };
+hidspecial HID_XML_FILTER_IMPORT_XSLT_BROWSE            { HelpId = HID_XML_FILTER_IMPORT_XSLT_BROWSE; };
+hidspecial HID_XML_FILTER_IMPORT_TEMPLATE               { HelpId = HID_XML_FILTER_IMPORT_TEMPLATE; };
+hidspecial HID_XML_FILTER_IMPORT_TEMPLATE_BROWSE        { HelpId = HID_XML_FILTER_IMPORT_TEMPLATE_BROWSE; };
+
+hidspecial HID_XML_FILTER_TEST_DIALOG                   { HelpId = HID_XML_FILTER_TEST_DIALOG; };
+
+hidspecial HID_XML_FILTER_TEST_EXPORT_BROWSE            { HelpId = HID_XML_FILTER_TEST_EXPORT_BROWSE; };
+hidspecial HID_XML_FILTER_TEST_EXPORT_CURRENT           { HelpId = HID_XML_FILTER_TEST_EXPORT_CURRENT; };
+hidspecial HID_XML_FILTER_TEST_EXPORT_CURRENT_FILE      { HelpId = HID_XML_FILTER_TEST_EXPORT_CURRENT_FILE; };
+
+hidspecial HID_XML_FILTER_TEST_IMPORT_XSLT_FILE         { HelpId = HID_XML_FILTER_TEST_IMPORT_XSLT_FILE; };
+hidspecial HID_XML_FILTER_TEST_IMPORT_TEMPLATE_FILE     { HelpId = HID_XML_FILTER_TEST_IMPORT_TEMPLATE_FILE; };
+hidspecial HID_XML_FILTER_TEST_IMPORT_DISPLAY_SOURCE    { HelpId = HID_XML_FILTER_TEST_IMPORT_DISPLAY_SOURCE; };
+hidspecial HID_XML_FILTER_TEST_IMPORT_BROWSE            { HelpId = HID_XML_FILTER_TEST_IMPORT_BROWSE; };
+hidspecial HID_XML_FILTER_TEST_IMPORT_RECENT            { HelpId = HID_XML_FILTER_TEST_IMPORT_RECENT; };
+hidspecial HID_XML_FILTER_TEST_IMPORT_RECENT_FILE       { HelpId = HID_XML_FILTER_TEST_IMPORT_RECENT_FILE; };
+hidspecial HID_XML_FILTER_TEST_CLOSE                    { HelpId = HID_XML_FILTER_TEST_CLOSE; };
+
+hidspecial HID_XML_FILTER_TEST_VALIDATE_OUPUT           { HelpId = HID_XML_FILTER_TEST_VALIDATE_OUPUT; };
+hidspecial HID_XML_FILTER_OUTPUT_WINDOW                 { HelpId = HID_XML_FILTER_OUTPUT_WINDOW; };
+
+hidspecial HID_XML_FILTER_TEST_EXPORT_XSLT_FILE         { HelpId = HID_XML_FILTER_TEST_EXPORT_XSLT_FILE; };
+hidspecial HID_XML_FILTER_TABPAGE_CTRL                  { HelpId = HID_XML_FILTER_TABPAGE_CTRL; };
