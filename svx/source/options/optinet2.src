@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:34:38 $
+ *  last change: $Author: os $ $Date: 2001-05-16 07:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     FixedLine GB_SETTINGS
     {
         Pos = MAP_APPFONT ( GB_TYPES_LEFT , GB_TYPES_TOP ) ;
-        Size = MAP_APPFONT ( 251 , 8 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Einstellungen" ;
         Text [ English ] = "Settings" ;
         Text [ english_us ] = "Settings" ;
