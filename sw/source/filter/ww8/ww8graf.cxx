@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 12:00:20 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,8 +1352,6 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
 
         if (nEndCpFly-nStartCpFly)
         {
-            WW8AnchoringProperties aAnchoring;
-            aAnchoring.Remove(*this,pCtrlStck);
             WW8ReaderSave aSave( this );
 
             // set Pam into the FlyFrame
@@ -1368,7 +1366,6 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
                 : MAN_TXBX_HDFT );
 
             aSave.Restore( this );
-            aAnchoring.Insert(pCtrlStck);
         }
 
         if( pObj->GetPage() )
@@ -2494,10 +2491,10 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         }
     }
 
-    return AutoAnchors(pRetFrmFmt);
+    return AddAutoAnchor(pRetFrmFmt);
 }
 
-SwFrmFmt *SwWW8ImplReader::AutoAnchors(SwFrmFmt *pFmt)
+SwFrmFmt *SwWW8ImplReader::AddAutoAnchor(SwFrmFmt *pFmt)
 {
     /*
      * anchored to character at the current position will move along the
@@ -2508,6 +2505,13 @@ SwFrmFmt *SwWW8ImplReader::AutoAnchors(SwFrmFmt *pFmt)
     if ((pFmt) && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
         pAnchorStck->AddAnchor(*pPaM->GetPoint(), pFmt);
     return pFmt;
+}
+
+void SwWW8ImplReader::RemoveAutoAnchor(const SwFrmFmt *pFmt)
+{
+    ASSERT(pFmt,"remove anchor, no fmt");
+    if ((pFmt) && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
+        pAnchorStck->RemoveAnchor(pFmt);
 }
 
 void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
@@ -2711,9 +2715,6 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         // Box-0 erhaelt den Text fuer die ganze Kette!
         if( !pRecord->aTextId.nSequence )
         {
-            WW8AnchoringProperties aAnchoring;
-            aAnchoring.Remove(*this,pCtrlStck);
-
             // rette Flags u.ae. und setze sie zurueck
             WW8ReaderSave aSave( this );
 
@@ -2739,7 +2740,6 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
                 EmbeddedFlyFrameSizeLock(aStart,pRetFrmFmt);
 #endif
             aSave.Restore( this );
-            aAnchoring.Insert(pCtrlStck);
         }
     }
     return pRetFrmFmt;
@@ -2959,15 +2959,33 @@ void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrmFmt *pFmt)
     NewAttr(rPos, SwFltAnchor(pFmt));
 }
 
+void SwWW8FltAnchorStack::RemoveAnchor(const SwFrmFmt *pFmt)
+{
+    ASSERT(pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT,
+        "Don't use fltanchors with inline frames, slap!");
+    USHORT nCnt = Count();
+    for (USHORT i=0; i < nCnt; ++i)
+    {
+        SwFltStackEntry* pEntry = (*this)[i];
+        ASSERT(pEntry->pAttr->Which() == RES_FLTR_ANCHOR,"Impossible!");
+        const SwFltAnchor *pAnchor = (const SwFltAnchor *)(pEntry->pAttr);
+        if (pAnchor->GetFrmFmt() == pFmt)
+        {
+            DeleteAndDestroy(i--);
+            --nCnt;
+        }
+    }
+}
+
 void SwWW8FltAnchorStack::Flush()
 {
     USHORT nCnt = Count();
-    for (USHORT i=0; i < nCnt; i++)
+    for (USHORT i=0; i < nCnt; ++i)
     {
         SwFltStackEntry *pEntry = (*this)[i];
         SwPosition aDummy(pEntry->nMkNode);
         SetAttrInDoc(aDummy,pEntry);
-        DeleteAndDestroy(i);
-        i--; nCnt--;
+        DeleteAndDestroy(i--);
+        --nCnt;
     }
 }

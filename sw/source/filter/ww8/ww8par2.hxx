@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-24 15:50:11 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,17 +98,6 @@ private:
     SfxItemSet aChrSet,aParSet;
 };
 
-class WW8AnchoringProperties
-{
-public:
-    WW8AnchoringProperties() : pStack(0) {}
-    ~WW8AnchoringProperties() { delete pStack; }
-    void Remove(SwWW8ImplReader &rRdr, SwFltControlStack* pCtrlStck);
-    void Insert(SwFltControlStack* pCtrlStck);
-private:
-    SwFltControlStack *pStack;
-};
-
 struct WW8FlyPara
 {                       // WinWord-Attribute
                         // Achtung: *Nicht* umsortieren, da Teile mit
@@ -168,7 +157,7 @@ struct WW8SwFlyPara
     void BoxUpWidth( long nWidth );
     const SwPosition* GetMainTextPos() const    // Fuer PageDesc aus Apo
                 { return pMainTextPos; };
-    WW8AnchoringProperties aAnchoring;
+    SwWW8FltAnchorStack *pOldAnchorStck;
 };
 
 class SwWW8StyInf

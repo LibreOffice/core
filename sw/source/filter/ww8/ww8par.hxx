@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 12:00:20 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,7 @@ public:
     SwWW8FltAnchorStack(SwDoc* pDo, ULONG nFieldFl)
         : SwFltControlStack( pDo, nFieldFl ) {}
     void AddAnchor(const SwPosition& rPos,SwFrmFmt *pFmt);
+    void RemoveAnchor(const SwFrmFmt *pFmt);
     void Flush();
 };
 
@@ -952,7 +953,8 @@ friend class WW8FormulaControl;
         const Graphic* pGraph, const String& rFileName, const String& rGrName,
         const SfxItemSet& rGrfSet );
 
-    SwFrmFmt *AutoAnchors(SwFrmFmt *pFmt);
+    SwFrmFmt *AddAutoAnchor(SwFrmFmt *pFmt);
+    void RemoveAutoAnchor(const SwFrmFmt *pFmt);
     SwFrmFmt* ImportGraf1( WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos );
     SwFrmFmt* ImportGraf(  SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0,
         BOOL bSetToBackground = FALSE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 10:26:17 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,10 +336,9 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
         if( !pFlySet )
         {
             pTempSet = new SfxItemSet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
-                                                              RES_FRMATR_END-1);
+                RES_FRMATR_END-1);
 
             pFlySet = pTempSet;
-
 
             // Abstand/Umrandung raus
             if( !bNew )
@@ -350,17 +349,16 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
             pTempSet->Put( aAnchor );
 
             const Size aSizeTwip = OutputDevice::LogicToLogic(
-                                        aGraph.GetPrefSize(),
-                                        aGraph.GetPrefMapMode(),
-                                        MAP_TWIP );
+                aGraph.GetPrefSize(), aGraph.GetPrefMapMode(), MAP_TWIP );
 
             pTempSet->Put( SwFmtFrmSize( ATT_FIX_SIZE, aSizeTwip.Width(),
-                                                     aSizeTwip.Height() ) );
+                aSizeTwip.Height() ) );
             pTempSet->Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
 
-            if( pSFlyPara )         // OLE im Rahmen ?
-            {                       // ok, Rahmen auf Bildgroesse vergroessern
-                                    //  ( nur wenn Auto-Breite )
+            if( pSFlyPara )
+            {
+                // OLE im Rahmen ?  ok, Rahmen auf Bildgroesse vergroessern (
+                // nur wenn Auto-Breite )
                 pSFlyPara->BoxUpWidth( aSizeTwip.Width() );
             }
         }
@@ -378,14 +376,12 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
                 pFmt = FindFrmFmt( pRet );
             }
         }
-        else if( GRAPHIC_GDIMETAFILE == aGraph.GetType() ||
-                 GRAPHIC_BITMAP == aGraph.GetType() )
+        else if (
+                    GRAPHIC_GDIMETAFILE == aGraph.GetType() ||
+                    GRAPHIC_BITMAP == aGraph.GetType()
+                )
         {
-            pFmt = rDoc.Insert( *pPaM,
-                        aEmptyStr, aEmptyStr,   // Name der Grafik !!
-                        &aGraph,
-                        pFlySet,                // Attribute fuer den FlyFrm
-                        0 );                    // Attribute fuer die Grafik
+            pFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &aGraph, pFlySet,0);
         }
         delete pTempSet;
     }
@@ -449,32 +445,12 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph, BOOL bTstOCX,
         {
             SvStorageRef xSrc1 = xSrc0->OpenStorage( aSrcStgName,
                 STREAM_READWRITE| STREAM_SHARE_DENYALL );
-#if 1
+
             GDIMetaFile aWMF;
 
             if (ImportOleWMF(xSrc1,aWMF,nX,nY))
                 rGraph = Graphic( aWMF );
-#else
-            OLE_MFP aMfp;
-            GDIMetaFile aWMF;
-            if( SwWw6ReadMetaStream( aWMF, &aMfp, xSrc1 ) )
-            {
-                /*
-                take scaling factor as found in PIC and apply it to graphic.
-                */
-                SwWw8ReadScaling( nX, nY, xSrc1 );
-                Size aFinalSize, aOrigSize;
-                aFinalSize.Width() = nX;
-                aFinalSize.Height() = nY;
-                aFinalSize = OutputDevice::LogicToLogic(
-                    aFinalSize, MAP_TWIP, aWMF.GetPrefMapMode() );
-                aOrigSize = aWMF.GetPrefSize();
-                Fraction aScaleX(aFinalSize.Width(),aOrigSize.Width());
-                Fraction aScaleY(aFinalSize.Height(),aOrigSize.Height());
-                aWMF.Scale( aScaleX, aScaleY );
-                rGraph = Graphic( aWMF );
-            }
-#endif
+
             // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
             else if( SwWw6ReadMacPICTStream( rGraph, xSrc1 ) )
             {
@@ -564,7 +540,7 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
 {
     SvStrings aAuthorNames( 0, 16 );
     WW8ReadSTTBF( !bVer67, rStrm, nTblPos, nTblSiz, bVer67 ? 2 : 0,
-                    eStructCharSet, aAuthorNames );
+        eStructCharSet, aAuthorNames );
 
     for( USHORT nAuthor = 0; nAuthor < aAuthorNames.Count(); ++nAuthor )
     {
@@ -610,7 +586,6 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
         {
             pSprmCIbstRMark = pPlcxMan->HasCharSprm( bIns ? 0x4804 : 0x4863 );
             pSprmCDttmRMark = pPlcxMan->HasCharSprm( bIns ? 0x6805 : 0x6864 );
-//          pSprmCIdslRMark = pPlcxMan->HasCharSprm( bIns ? 0x4807 : 0x4867 );
         }
     }
     if( !pSprmCIbstRMark || !pSprmCDttmRMark ) return;

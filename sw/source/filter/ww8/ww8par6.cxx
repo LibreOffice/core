@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-24 15:50:11 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2813,39 +2813,6 @@ void WW8DupProperties::Insert(const SwPosition &rPos)
     }
 }
 
-void WW8AnchoringProperties::Remove(SwWW8ImplReader &rR,
-    SwFltControlStack *pCtrlStck)
-{
-    //Remove anchors from stack so they will not be closed inside textboxes
-    //will be reinserted after textbox has ended.
-    if (!pStack)
-    {
-        pStack = new SwFltControlStack(&rR.GetDoc(),rR.GetFieldFlags());
-        if (!pStack)
-            return;
-    }
-    for (USHORT nI = pCtrlStck->Count(); nI > 0; nI--)
-    {
-        SwFltStackEntry* pEntry = new SwFltStackEntry(*(*pCtrlStck)[ nI-1 ]);
-        if (pEntry->pAttr->Which() == RES_FLTR_ANCHOR)
-        {
-            pStack->Insert(pEntry,pStack->Count());
-            pCtrlStck->DeleteAndDestroy( nI-1 );
-        }
-    }
-}
-
-void WW8AnchoringProperties::Insert(SwFltControlStack *pCtrlStck)
-{
-    //reinsert anchors at their original position
-    for (USHORT nI = pStack ? pStack->Count() : 0; nI > 0; nI--)
-    {
-        SwFltStackEntry* pEntry = new SwFltStackEntry(*(*pStack)[ nI-1 ]);
-        pCtrlStck->Insert(pEntry,pCtrlStck->Count());
-        pStack->DeleteAndDestroy( nI-1 );
-    }
-}
-
 void SwWW8ImplReader::MoveInsideFly(const SwFrmFmt *pFlyFmt)
 {
     WW8DupProperties aDup(rDoc,pCtrlStck);
@@ -2958,7 +2925,8 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
         //remove fltanchors, otherwise they will be closed inside the
         //frame, which makes no sense, restore them after the frame is
         //closed
-        pSFlyPara->aAnchoring.Remove(*this,pCtrlStck);
+        pSFlyPara->pOldAnchorStck = pAnchorStck;
+        pAnchorStck = new SwWW8FltAnchorStack(&rDoc, nFieldFlags);
 
         MoveInsideFly(pSFlyPara->pFlyFmt);
 
@@ -3028,7 +2996,8 @@ void SwWW8ImplReader::StopApo()
 
         MoveOutsideFly(pSFlyPara->pFlyFmt,*pSFlyPara->pMainTextPos);
 
-        pSFlyPara->aAnchoring.Insert(pCtrlStck);
+        DeleteAnchorStk();
+        pAnchorStck = pSFlyPara->pOldAnchorStck;
 
         // Ist die Fly-Breite durch eine innenliegende Grafik vergroessert
         // worden ( bei automatischer Breite des Flys ), dann muss die Breite
