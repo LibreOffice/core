@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:33:55 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1925,6 +1925,9 @@ void Desktop::OpenClients()
         } else if (pArgs->IsHelpImpress()) {
             bShowHelp = sal_True;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
+        } else if (pArgs->IsHelpBase()) {
+            bShowHelp = sal_True;
+            aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdatabase/start");
         } else if (pArgs->IsHelpBasic()) {
             bShowHelp = sal_True;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
@@ -2172,6 +2175,8 @@ void Desktop::OpenDefault()
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_CALC );
         else if ( pArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_IMPRESS );
+        else if ( pArgs->IsBase() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DATABASE );
         else if ( pArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DRAW );
         else if ( pArgs->IsMath() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
@@ -2191,6 +2196,8 @@ void Desktop::OpenDefault()
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_CALC );
         else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_IMPRESS );
+        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DATABASE );
         else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DRAW );
         else
