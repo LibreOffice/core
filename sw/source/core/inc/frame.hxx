@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:10:36 $
+ *  last change: $Author: ama $ $Date: 2001-03-14 14:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,8 @@ enum MakePageType
     MAKEPAGE_NONE,      //Keine Seite bzw. Fussnote anlegen
     MAKEPAGE_APPEND,    //Nur ggf. Seite anhaengen
     MAKEPAGE_INSERT,    //Seite ggf. anhaengen oder einfuegen.
-    MAKEPAGE_FTN        //Fussnote ggf. einfuegen.
+    MAKEPAGE_FTN,       //Fussnote ggf. einfuegen.
+    MAKEPAGE_NOSECTION  // Don't create section frames
 };
 
 typedef SdrObject* SdrObjectPtr;

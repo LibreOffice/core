@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:43:36 $
+ *  last change: $Author: ama $ $Date: 2001-03-14 14:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1573,9 +1573,12 @@ void SwFlyAtCntFrm::MakeFlyPos()
                     {   //Dem Textfluss folgen.
                         nRel -= nAvail;
                         const BOOL bSct = pOrient->IsInSct();
+                        MakePageType eMakePage = bFtn ? MAKEPAGE_NONE
+                                                      : MAKEPAGE_APPEND;
+                        if( bSct )
+                            eMakePage = MAKEPAGE_NOSECTION;
                         const SwFrm *pTmp = pOrient->
-                            GetLeaf( ( bFtn || bSct ) ? MAKEPAGE_NONE : MAKEPAGE_APPEND,
-                                        TRUE, GetAnchor() );
+                            GetLeaf( eMakePage, TRUE, GetAnchor() );
                         if ( pTmp && ( !bSct || pOrient->FindSctFrm()->
                                 IsAnFollow( pTmp->FindSctFrm() ) ) )
                         {
@@ -1660,8 +1663,9 @@ void SwFlyAtCntFrm::MakeFlyPos()
                     //Das teil passt nimmer, da hilft auch kein moven.
                     break;
 
-                const SwLayoutFrm *pNextLay = pOrient->GetLeaf(
-                    ( bFtn || bSct ) ? MAKEPAGE_NONE : MAKEPAGE_APPEND, TRUE, GetAnchor() );
+                const SwLayoutFrm *pNextLay = pOrient->GetLeaf( bSct ?
+                    MAKEPAGE_NOSECTION : bFtn ? MAKEPAGE_NONE : MAKEPAGE_APPEND,
+                    TRUE, GetAnchor() );
                 if ( pNextLay && ( !bSct || ( pOrient->FindSctFrm()->
                      IsAnFollow( pNextLay->FindSctFrm() ) && pNextLay->Prt().Height() ) ) )
                 {

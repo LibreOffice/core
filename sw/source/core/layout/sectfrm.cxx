@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-24 10:46:00 $
+ *  last change: $Author: ama $ $Date: 2001-03-14 14:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1523,6 +1523,8 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
             pFirst = pFirst->GetNext();
         if( pFirst && pFirst->IsSctFrm() && pSect->GetFollow() == pFirst )
             pNew = pSect->GetFollow();
+        else if( MAKEPAGE_NOSECTION == eMakePage )
+            return pLayLeaf;
         else
         {
             pNew = new SwSectionFrm( *pSect, FALSE );

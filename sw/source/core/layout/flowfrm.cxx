@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:47:13 $
+ *  last change: $Author: ama $ $Date: 2001-03-14 14:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,8 +863,8 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
             //Der Seitentyp nicht der gewuenschte ist, in diesem Fall muessen
             //wir eine Seite des richtigen Typs einfuegen.
 
-            if ( !IsFlowFrm() &&
-                 (eMakePage == MAKEPAGE_NONE || eMakePage == MAKEPAGE_APPEND) )
+            if( !IsFlowFrm() && ( eMakePage == MAKEPAGE_NONE ||
+                eMakePage==MAKEPAGE_APPEND || eMakePage==MAKEPAGE_NOSECTION ) )
                 return pLayLeaf;
 
             SwPageFrm *pNew = pLayLeaf->FindPageFrm();
