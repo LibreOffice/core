@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 09:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,6 +794,7 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
     nLevels( 0 ),
     bConsecutive( sal_False ),
     bOutline( bOutl ),
+//  bUsed( sal_False ),
     sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
     sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ),
     sName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ),
@@ -899,6 +900,8 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
         {
             const Reference< XIndexReplace >& rNumRule =
                 GetImport().GetTextImport()->GetChapterNumbering();
+            // We don't set xNumberingRules here, to avoid using them
+            // as numbering rules.
             if( rNumRule.is() )
                 FillUnoNumRule( rNumRule, 0 );
         }
@@ -958,17 +961,13 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
             bNew = !*(sal_Bool *)aAny.getValue();
         }
 
-        // for styles the real name is the style name
-        sRealName = rName;
-
         Any aAny = xPropSet->getPropertyValue( sNumberingRules );
-        Reference<XIndexReplace> xNumRule;
-        aAny >>= xNumRule;
-        nLevels = xNumRule->getCount();
+        aAny >>= xNumRules;
+        nLevels = xNumRules->getCount();
         if( bOverwrite || bNew )
         {
-            FillUnoNumRule( xNumRule, 0 );
-            aAny <<= xNumRule;
+            FillUnoNumRule( xNumRules, 0 );
+            aAny <<= xNumRules;
             xPropSet->setPropertyValue( sNumberingRules, aAny );
         }
         else
@@ -983,25 +982,23 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
 void SvxXMLListStyleContext::CreateAndInsertAuto() const
 {
     DBG_ASSERT( !bOutline, "Outlines cannot be inserted here" );
-    DBG_ASSERT( !bUsed, "Numbering Rule is existing already" );
+    DBG_ASSERT( !xNumRules.is(), "Numbering Rule is existing already" );
 
     const OUString& rName = GetName();
-    if( bOutline || bUsed || 0 == rName.getLength() )
+    if( bOutline || xNumRules.is() || 0 == rName.getLength() )
     {
         ((SvxXMLListStyleContext *)this)->SetValid( sal_False );
         return;
     }
 
-    Reference<XIndexReplace> xNumRule = CreateNumRule(
-        ((SvxXMLListStyleContext *)this)->sRealName, GetImport().GetModel() );
-    DBG_ASSERT( sRealName.getLength(), "no internal name" );
-    ((SvxXMLListStyleContext *)this)->nLevels = xNumRule->getCount();
+    ((SvxXMLListStyleContext *)this)->xNumRules = CreateNumRule(
+        GetImport().GetModel() );
+    ((SvxXMLListStyleContext *)this)->nLevels = xNumRules->getCount();
 
-    FillUnoNumRule( xNumRule, 0 );
+    FillUnoNumRule( xNumRules, 0 );
 }
 
 Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(
-                                OUString& rRealName,
                                 const Reference < XModel > & rModel )
 {
     Reference<XIndexReplace> xNumRule;
@@ -1011,25 +1008,12 @@ Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(
     if( !xFactory.is() )
         return xNumRule;
 
-    Reference < XInterface > xIfc = xFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.NumberingRule")) );
+    Reference < XInterface > xIfc = xFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.NumberingRules")) );
     if( !xIfc.is() )
         return xNumRule;
 
     xNumRule = Reference<XIndexReplace>( xIfc, UNO_QUERY );
     DBG_ASSERT( xNumRule.is(), "go no numbering rule" );
-    if( !xNumRule.is() )
-        return xNumRule;
-
-    Reference < XPropertySet > xPropSet( xNumRule, UNO_QUERY );
-    Reference< XPropertySetInfo > xPropSetInfo;
-    if (xPropSet.is())
-        xPropSetInfo = xPropSet->getPropertySetInfo();
-    const OUString sName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
-    if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sName ) )
-    {
-        Any aAny = xPropSet->getPropertyValue( sName );
-        aAny >>= rRealName;
-    }
 
     return xNumRule;
 }
