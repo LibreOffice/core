@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:04:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 11:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_END_GUIDE, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE, XML_ATACTION_IN2INCH,
+    { XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE, XML_ATACTION_CAPTION_ESCAPE_OASIS,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_CAPTION_LINE_LENGTH, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */
@@ -214,6 +214,11 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
                                                  XML_AUTO_GROW_WIDTH    ), 0 },
+
+    { XML_NAMESPACE_STYLE, XML_PROTECT, XML_ATACTION_DECODE_PROTECT, 0 },
+    { XML_NAMESPACE_STYLE, XML_MIRROR, XML_ATACTION_DRAW_MIRROR_OASIS, 0 },
+    { XML_NAMESPACE_DRAW, XML_GAMMA, XML_ATACTION_GAMMA_OASIS, 0 },
+
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
@@ -428,6 +433,9 @@ XMLTransformerActionInit aParagraphPropertyOASISAttrActionTable[] =
           NO_PARAMS },
     { XML_NAMESPACE_FO, XML_KEEP_WITH_NEXT, XML_OPTACTION_KEEP_WITH_NEXT,
           NO_PARAMS }, /* generated entry */
+
+    { XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_OPTACTION_DRAW_WRITING_MODE, 0 },
+
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
