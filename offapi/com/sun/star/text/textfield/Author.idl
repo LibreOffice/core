@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Author.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-14 13:17:49 $
+ *  last change: $Author: os $ $Date: 2002-01-09 07:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_text_textfield_ConditionalText_idl__
-#define __com_sun_star_text_textfield_ConditionalText_idl_
+#ifndef __com_sun_star_text_textfield_Author_idl__
+#define __com_sun_star_text_textfield_Author_idl_
 
 #include <com/sun/star/text/TextField.idl>
 
@@ -69,7 +69,7 @@
 module com { module sun { module star { module text { module textfield {
 
 //=============================================================================
-/** specifies service of a author text field.
+/** specifies service of an author text field.
     @see com::sun::star::text::TextField
 */
 service Author
