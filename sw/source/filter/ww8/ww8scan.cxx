@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:32:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,9 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xCA71, 0, L_VAR}, // undocumented, text backcolour
         {0x303C, 1, L_FIX}, // undocumented, sep
         {0x245B, 1, L_FIX}, // undocumented, para autobefore
-        {0x245C, 1, L_FIX}  // undocumented, para autoafter
+        {0x245C, 1, L_FIX}, // undocumented, para autoafter
+        // undocumented, don't add space between para of the same style
+        {0x246D, 1, L_FIX}
     };
 
     static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
@@ -5167,7 +5169,7 @@ WW8Fib::WW8Fib( SvStream& rSt, BYTE nWantedVersion,UINT32 nOffset )
     rSt >> fcSttbfAtnbkmk;
     rSt >> lcbSttbfAtnbkmk;
 
-        // weiteres short nur bei Ver67 ueberspringen
+    // weiteres short nur bei Ver67 ueberspringen
     if (bVer67)
     {
         rSt.SeekRel( 1*sizeof( INT16) );
@@ -5224,6 +5226,10 @@ WW8Fib::WW8Fib( SvStream& rSt, BYTE nWantedVersion,UINT32 nOffset )
     rSt >> lcbPlcfHdrtxbxTxt;
     rSt >> fcPlcffldHdrTxbx;
     rSt >> lcbPlcffldHdrTxbx;
+    rSt >> fcStwUser;
+    rSt >> lcbStwUser;
+    rSt >> fcSttbttmbd;
+    rSt >> lcbSttbttmbd;
 
     if( 0 == rSt.GetError() )
     {
