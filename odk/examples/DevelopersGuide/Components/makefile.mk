@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:43:36 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:11:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,6 @@ PROTOCOLHANLDERADDONCPP_FILES=\
     $(DESTPROTOCOLHANDLERADDONCPP)$/addon.hxx \
     $(DESTPROTOCOLHANDLERADDONCPP)$/Addons.xcu \
     $(DESTPROTOCOLHANDLERADDONCPP)$/component.cxx \
-    $(DESTPROTOCOLHANDLERADDONCPP)$/exports.dxp \
     $(DESTPROTOCOLHANDLERADDONCPP)$/Makefile \
     $(DESTPROTOCOLHANDLERADDONCPP)$/ProtocolHandler.xcu \
     $(DESTPROTOCOLHANDLERADDONCPP)$/ProtocolHandlerAddon_cpp.uno.xml
@@ -102,21 +101,23 @@ PROTOCOLHANLDERADDONJAVA_FILES=\
 
 CPPCOMPONENT_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/CppComponent$/CppComponent.uno.xml \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/CppComponent$/exports.dxp \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/CppComponent$/Makefile \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/CppComponent$/service1_impl.cxx \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/CppComponent$/service2_impl.cxx \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/CppComponent$/SimpleComponent.sxw \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/CppComponent$/TestCppComponent.cxx \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/CppComponent$/SimpleComponent.odt \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/CppComponent$/some.idl
 
 JAVACOMPONENT_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/Makefile \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/RunComponent.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/TestComponentA.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/TestComponentB.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/TestServiceProvider.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/TestJavaComponent.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/XSomethingA.idl \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/XSomethingB.idl
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/XSomethingB.idl \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/SomethingA.idl \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Components$/JavaComponent$/SomethingB.idl
 
 DESTTHUMBS=$(DESTDIRDEVGUIDEEXAMPLES)$/Components$/Thumbs
 THUMBS_FILES=\
@@ -125,6 +126,7 @@ THUMBS_FILES=\
     $(DESTTHUMBS)$/org$/openoffice$/comp$/test$/Makefile \
     $(DESTTHUMBS)$/org$/openoffice$/test$/ImageShrink.idl \
     $(DESTTHUMBS)$/org$/openoffice$/test$/XImageShrink.idl \
+    $(DESTTHUMBS)$/org$/openoffice$/test$/XImageShrinkFilter.idl \
     $(DESTTHUMBS)$/org$/openoffice$/test$/Makefile \
     $(DESTTHUMBS)$/thumbs.mk \
     $(DESTTHUMBS)$/Makefile
