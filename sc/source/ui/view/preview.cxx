@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:14:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,10 @@
 
 #define SC_PREVIEW_SHADOWSIZE   2
 
-long lcl_GetDisplayStart( USHORT nTab, ScDocument* pDoc, long* pPages )
+long lcl_GetDisplayStart( SCTAB nTab, ScDocument* pDoc, long* pPages )
 {
     long nDisplayStart = 0;
-    for (USHORT i=0; i<nTab; i++)
+    for (SCTAB i=0; i<nTab; i++)
     {
         if ( pDoc->NeedPageResetAfterTab(i) )
             nDisplayStart = 0;
@@ -165,7 +165,7 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
     // #114135#
     if ( pModel )
     {
-        if ( pDrawView && !pDrawView->GetPageViewPgNum(nTab) )
+        if ( pDrawView && !pDrawView->GetPageViewPgNum(static_cast<sal_uInt16>(nTab)) )
         {
             //  die angezeigte Page der DrawView umzustellen (s.u.) funktioniert nicht ?!?
             delete pDrawView;
@@ -179,7 +179,7 @@ void ScPreview::UpdateDrawView()        // nTab muss richtig sein
             // (Einstellung "Im Entwurfsmodus oeffnen"), darum hier zuruecksetzen
             pDrawView->SetDesignMode( TRUE );
             pDrawView->SetPrintPreview( TRUE );
-            pDrawView->ShowPagePgNum( nTab, Point() );
+            pDrawView->ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
         }
 #if 0
         else if ( !pDrawView->GetPageViewPgNum(nTab) )      // angezeigte Page umstellen
@@ -205,7 +205,7 @@ void ScPreview::TestLastPage()
         {
             nPageNo = nTotalPages - 1;
             nTab = nTabCount - 1;
-            while (nTab && !nPages[nTab])       // letzte nicht leere Tabelle
+            while (nTab > 0 && !nPages[nTab])       // letzte nicht leere Tabelle
                 --nTab;
             DBG_ASSERT(nPages[nTab],"alle Tabellen leer?");
             nTabPage = nPages[nTab] - 1;
@@ -220,8 +220,10 @@ void ScPreview::TestLastPage()
         {
             nTab = 0;
             nPageNo = nTabPage = nTabStart = nDisplayStart = 0;
-            aState.nPrintTab = aState.nStartCol = aState.nStartRow =
-            aState.nEndCol = aState.nEndRow = aState.nZoom =
+            aState.nPrintTab = 0;
+                        aState.nStartCol = aState.nEndCol = 0;
+                        aState.nStartRow = aState.nEndRow = 0;
+                        aState.nZoom = 0;
             aState.nPagesX = aState.nPagesY = 0;
             aState.nTabPages = aState.nTotalPages =
             aState.nPageStart = aState.nDocPages = 0;
@@ -230,16 +232,15 @@ void ScPreview::TestLastPage()
 }
 
 
-void ScPreview::CalcPages( USHORT nToWhichTab )
+void ScPreview::CalcPages( SCTAB nToWhichTab )
 {
     WaitObject( this );
 
     ScDocument* pDoc = pDocShell->GetDocument();
     nTabCount = pDoc->GetTableCount();
-    USHORT i;
 
-    USHORT nAnz = Min( nTabCount, USHORT(nToWhichTab+1) );
-    USHORT nStart = nTabsTested;
+    SCTAB nAnz = Min( nTabCount, SCTAB(nToWhichTab+1) );
+    SCTAB nStart = nTabsTested;
     if (!bValid)
     {
         nStart = 0;
@@ -251,9 +252,9 @@ void ScPreview::CalcPages( USHORT nToWhichTab )
     //  but always all sheets are used (there is no selected sheet)
     ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
 
-    for (i=nStart; i<nAnz; i++)
+    for (SCTAB i=nStart; i<nAnz; i++)
     {
-        long nAttrPage = i ? nFirstAttr[i-1] : 1;
+        long nAttrPage = i > 0 ? nFirstAttr[i-1] : 1;
 
         long nThisStart = nTotalPages;
         ScPrintFunc aPrintFunc( this, pDocShell, i, nAttrPage, 0, NULL, &aOptions );
@@ -296,8 +297,7 @@ void ScPreview::RecalcPages()                   // nur nPageNo geaendert
     if (!bValid)
         return;                         // dann wird CalcPages aufgerufen
 
-    USHORT nOldTab = nTab;
-    USHORT i;
+    SCTAB nOldTab = nTab;
 
     BOOL bDone = FALSE;
     while (nPageNo >= nTotalPages && nTabsTested < nTabCount)
@@ -309,7 +309,7 @@ void ScPreview::RecalcPages()                   // nur nPageNo geaendert
     if (!bDone)
     {
         long nPartPages = 0;
-        for (i=0; i<nTabsTested; i++)
+        for (SCTAB i=0; i<nTabsTested; i++)
         {
             long nThisStart = nPartPages;
             nPartPages += nPages[i];
@@ -627,9 +627,9 @@ void ScPreview::SetPageNo( long nPage )
 }
 
 
-long ScPreview::GetFirstPage(USHORT nTab)
+long ScPreview::GetFirstPage(SCTAB nTab)
 {
-    USHORT nTabCount = pDocShell->GetDocument()->GetTableCount();
+    SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
     if (nTab >= nTabCount)
         nTab = nTabCount-1;
 
@@ -639,7 +639,7 @@ long ScPreview::GetFirstPage(USHORT nTab)
         CalcPages( nTab );
         UpdateDrawView();       // Tabelle evtl. geaendert
 
-        for (USHORT i=0; i<nTab; i++)
+        for (SCTAB i=0; i<nTab; i++)
             nPage += nPages[i];
 
         // bei leerer Tabelle vorhergehende Seite
@@ -652,7 +652,7 @@ long ScPreview::GetFirstPage(USHORT nTab)
 }
 
 
-Size lcl_GetDocPageSize( ScDocument* pDoc, USHORT nTab )
+Size lcl_GetDocPageSize( ScDocument* pDoc, SCTAB nTab )
 {
     String aName = pDoc->GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
