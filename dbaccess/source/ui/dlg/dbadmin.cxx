@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 14:11:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,12 +340,14 @@ Reference< XDriver > ODbAdminDialog::getDriver()
         throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
 
 
-    sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
-
     Reference< XDriver > xDriver = xDriverManager->getDriverByURL(getConnectionURL());
     if (!xDriver.is())
+    {
+        sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
+        sCurrentActionError.SearchAndReplaceAscii("#connurl#", getConnectionURL());
         // will be caught and translated into an SQLContext exception
         throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
+    }
     return xDriver;
 }
 // -----------------------------------------------------------------------------
@@ -2026,6 +2028,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.70  2001/08/14 14:11:33  fs
+ *  #86945# +getCurrentDataSource
+ *
  *  Revision 1.69  2001/08/01 08:32:04  fs
  *  #88530# if the address book type is initially selected, default the sub-type to something meaningfull
  *
