@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:01:53 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,6 @@
 
 #include "excform.hxx"
 
-
 // Shared string table ========================================================
 
 XclImpSst::XclImpSst( const XclImpRoot& rRoot ) :
@@ -202,7 +201,6 @@ ScBaseCell* XclImpSst::CreateCell( sal_uInt32 nSstIndex, sal_uInt32 nXFIndex ) c
     return XclImpStringHelper::CreateCell( *this, *pString, nXFIndex );
 }
 
-
 // Hyperlinks =================================================================
 
 namespace {
@@ -213,7 +211,7 @@ namespace {
 void lclAppendString32( String& rString, XclImpStream& rStrm, sal_uInt32 nChars, bool b16Bit )
 {
     sal_uInt16 nReadChars = static_cast< sal_uInt16 >( ::std::min( nChars, 0xFFFFUL ) );
-    rStrm.AppendRawUniString( rString, nReadChars, b16Bit );
+    rString.Append( rStrm.ReadRawUniString( nReadChars, b16Bit ) );
     // ignore remaining chars
     sal_uInt32 nIgnore = nChars - nReadChars;
     if( b16Bit )
@@ -291,7 +289,6 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rURL, SCCOL nScCol, SC
 }
 
 } // namespace
-
 
 // ----------------------------------------------------------------------------
 
@@ -418,7 +415,6 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
     }
 }
 
-
 // Label ranges ===============================================================
 
 void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
@@ -474,7 +470,6 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
         xLabelRangesRef->Append( ScRangePair( *pRange, aDataRange ) );
     }
 }
-
 
 // Conditional formatting =====================================================
 
@@ -653,7 +648,6 @@ void XclImpCondFormat::Apply()
     }
 }
 
-
 // ----------------------------------------------------------------------------
 
 XclImpCondFormatManager::XclImpCondFormatManager( const XclImpRoot& rRoot ) :
@@ -681,7 +675,6 @@ void XclImpCondFormatManager::Apply()
         pFmt->Apply();
     maCondFmtList.Clear();
 }
-
 
 // Data Validation ============================================================
 
@@ -713,15 +706,13 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
     rStrm >> nFlags;
 
     // message strings
-    String aPromptTitle, aErrorTitle, aPromptMessage, aErrorMessage;
-
     /*  Empty strings are single NUL characters in Excel (string length is 1).
         -> Do not let the stream replace them with '?' characters. */
     rStrm.SetNulSubstChar( '\0' );
-    rStrm.AppendUniString( aPromptTitle );
-    rStrm.AppendUniString( aErrorTitle );
-    rStrm.AppendUniString( aPromptMessage );
-    rStrm.AppendUniString( aErrorMessage );
+    String aPromptTitle(   rStrm.ReadUniString() );
+    String aErrorTitle(    rStrm.ReadUniString() );
+    String aPromptMessage( rStrm.ReadUniString() );
+    String aErrorMessage(  rStrm.ReadUniString() );
     rStrm.SetNulSubstChar();    // back to default
 
     // formula(s)
@@ -847,7 +838,6 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
     }
 }
 
-
 // Web queries ================================================================
 
 XclImpWebQuery::XclImpWebQuery( const ScRange& rDestRange ) :
@@ -873,8 +863,7 @@ void XclImpWebQuery::ReadParamqry( XclImpStream& rStrm )
 
 void XclImpWebQuery::ReadWqstring( XclImpStream& rStrm )
 {
-    maURL.Erase();
-    rStrm.AppendUniString( maURL );
+    maURL = rStrm.ReadUniString();
 }
 
 void XclImpWebQuery::ReadWqsettings( XclImpStream& rStrm )
@@ -893,9 +882,8 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
 {
     if( meMode == xlWQSpecTables )
     {
-        String aTables;
         rStrm.Ignore( 4 );
-        rStrm.AppendUniString( aTables );
+        String aTables( rStrm.ReadUniString() );
 
         const sal_Unicode cSep = ';';
         aTables.SearchAndReplaceAll( ',', cSep );
@@ -930,7 +918,6 @@ void XclImpWebQuery::Apply( ScDocument& rDoc, const String& rFilterName )
     }
 }
 
-
 // ----------------------------------------------------------------------------
 
 void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
@@ -938,8 +925,7 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
     if( GetBiff() == xlBiff8 )
     {
         rStrm.Ignore( 10 );
-        String aXclName;
-        rStrm.AppendUniString( aXclName );
+        String aXclName( rStrm.ReadUniString() );
 
         // #101529# find the defined name used in Calc
         if( const XclImpName* pName = GetNameBuffer().FindName( aXclName, GetCurrScTab() ) )
@@ -992,6 +978,108 @@ void XclImpWebQueryBuffer::Apply()
         pQuery->Apply( rDoc, aFilterName );
 }
 
+// Decryption =================================================================
+
+namespace {
+
+XclImpDecrypterRef lclReadFilepass5( XclImpStream& rStrm )
+{
+    XclImpDecrypterRef xDecr;
+    DBG_ASSERT( rStrm.GetRecLeft() == 4, "lclReadFilepass5 - wrong record size" );
+    if( rStrm.GetRecLeft() == 4 )
+    {
+        sal_uInt16 nKey, nHash;
+        rStrm >> nKey >> nHash;
+        xDecr.reset( new XclImpBiff5Decrypter( rStrm.GetRoot(), nKey, nHash ) );
+    }
+    return xDecr;
+}
+
+XclImpDecrypterRef lclReadFilepass8_Standard( XclImpStream& rStrm )
+{
+    XclImpDecrypterRef xDecr;
+    DBG_ASSERT( rStrm.GetRecLeft() == 48, "lclReadFilepass8 - wrong record size" );
+    if( rStrm.GetRecLeft() == 48 )
+    {
+        sal_uInt8 pnDocId[ 16 ];
+        sal_uInt8 pnSaltData[ 16 ];
+        sal_uInt8 pnSaltHash[ 16 ];
+        rStrm.Read( pnDocId, 16 );
+        rStrm.Read( pnSaltData, 16 );
+        rStrm.Read( pnSaltHash, 16 );
+        xDecr.reset( new XclImpBiff8Decrypter(
+            rStrm.GetRoot(), pnDocId, pnSaltData, pnSaltHash ) );
+    }
+    return xDecr;
+}
+
+XclImpDecrypterRef lclReadFilepass8_Strong( XclImpStream& rStrm )
+{
+    // not supported
+    return XclImpDecrypterRef();
+}
+
+XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
+{
+    XclImpDecrypterRef xDecr;
+
+    sal_uInt16 nMode;
+    rStrm >> nMode;
+    switch( nMode )
+    {
+        case EXC_FILEPASS_BIFF5:
+            xDecr = lclReadFilepass5( rStrm );
+        break;
+
+        case EXC_FILEPASS_BIFF8:
+        {
+            rStrm.Ignore( 2 );
+            sal_uInt16 nSubMode;
+            rStrm >> nSubMode;
+            switch( nSubMode )
+            {
+                case EXC_FILEPASS_BIFF8_STD:
+                    xDecr = lclReadFilepass8_Standard( rStrm );
+                break;
+                case EXC_FILEPASS_BIFF8_STRONG:
+                    xDecr = lclReadFilepass8_Strong( rStrm );
+                break;
+                default:
+                    DBG_ERRORFILE( "lclReadFilepass8 - unknown BIFF8 encryption sub mode" );
+            }
+        }
+        break;
+
+        default:
+            DBG_ERRORFILE( "lclReadFilepass8 - unknown encryption mode" );
+    }
+
+    return xDecr;
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
+{
+    XclImpDecrypterRef xDecr;
+    rStrm.DisableDecryption();
+
+    switch( rStrm.GetRoot().GetBiff() )
+    {
+        case xlBiff2:
+        case xlBiff3:
+        case xlBiff4:
+        case xlBiff5:
+        case xlBiff7:   xDecr = lclReadFilepass5( rStrm );  break;
+        case xlBiff8:   xDecr = lclReadFilepass8( rStrm );  break;
+        default:        DBG_ERROR_BIFF();
+    };
+    rStrm.SetDecrypter( xDecr );
+
+    return xDecr.get() ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
+}
 
 // ============================================================================
 
