@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-09 09:08:56 $
+ *  last change: $Author: nf $ $Date: 2001-02-13 09:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,11 @@
  *
  ************************************************************************/
 #include <stdlib.h>
+#include <stdio.h>
 #include <sstring.hxx>
 
 #include "stream.hxx"
+#include "geninfo.hxx"
 #include "prj.hxx"
 
 #pragma hdrstop
@@ -307,7 +309,7 @@ ByteString CommandData::GetCommandTypeString()
             break;
         default :
             aRetStr = "usr";
-            aRetStr += ByteString( nCommand + 1 - COMMAND_USER_START );
+            aRetStr += ByteString::CreateFromInt64( nCommand + 1 - COMMAND_USER_START );
 
     }
 
@@ -497,10 +499,124 @@ Star::Star(String aFileName, USHORT nMode )
 /*****************************************************************************/
                 : nStarMode( nMode )
 {
-    ByteString aString;
-    aFileList.Insert( new String( aFileName ));
+    Read( aFileName );
+}
 
-    DirEntry aEntry( aFileName );
+/*****************************************************************************/
+Star::Star( SolarFileList *pSolarFiles )
+/*****************************************************************************/
+                : nStarMode( STAR_MODE_MULTIPLE_PARSE )
+{
+    // this ctor is used by StarBuilder to get the information for the whole workspace
+    Read( pSolarFiles );
+}
+
+/*****************************************************************************/
+Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
+/*****************************************************************************/
+{
+    ByteString sPath( rVersion );
+#ifdef UNX
+    sPath += "/settings/SOLARLIST";
+#else
+    sPath += "/settings/UNXSOLARLIST";
+#endif
+    GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
+
+    if( pInfo && pInfo->GetValue().Len()) {
+        String sFileName( pInfo->GetValue(), RTL_TEXTENCODING_ASCII_US );
+        nStarMode = STAR_MODE_SINGLE_PARSE;
+        Read( sFileName );
+    }
+    else {
+        SolarFileList aFileList;
+
+        sPath = rVersion;
+        sPath += "/drives";
+
+        GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
+        if ( pInfo && pInfo->GetSubList())  {
+            GenericInformationList *pDrives = pInfo->GetSubList();
+            for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
+                GenericInformation *pDrive = pDrives->GetObject( i );
+                if ( pDrive ) {
+                    DirEntry aEntry;
+                    BOOL bOk = FALSE;
+#ifdef UNX
+                    sPath = "UnixVolume";
+                    GenericInformation *pUnixVolume = pDrive->GetInfo( sPath );
+                    if ( pUnixVolume ) {
+                        String sRoot( pUnixVolume->GetValue(), RTL_TEXTENCODING_ASCII_US );
+                        aEntry = DirEntry( sRoot );
+                        bOK = TRUE;
+                     }
+#else
+                    bOk = TRUE;
+                    String sRoot( *pDrive, RTL_TEXTENCODING_ASCII_US );
+                    sRoot += String::CreateFromAscii( "\\" );
+                    aEntry = DirEntry( sRoot );
+#endif
+                    if ( bOk ) {
+                        sPath = "projects";
+                        GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, TRUE );
+                        if ( pProjectsKey ) {
+                            sPath = rVersion;
+                            sPath += "/settings/PATH";
+                            GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
+                            if( pPath ) {
+                                ByteString sAddPath( pPath->GetValue());
+#ifdef UNX
+                                sAddPath.SearchAndReplaceAll( "\\", "/" );
+#else
+                                sAddPath.SearchAndReplaceAll( "/", "\\" );
+#endif
+                                String ssAddPath( sAddPath, RTL_TEXTENCODING_ASCII_US );
+                                aEntry += DirEntry( ssAddPath );
+                            }
+                            GenericInformationList *pProjects = pProjectsKey->GetSubList();
+                            if ( pProjects ) {
+                                String sPrjDir( String::CreateFromAscii( "prj" ));
+                                String sSolarFile( String::CreateFromAscii( "build.lst" ));
+
+                                for ( ULONG i = 0; i < pProjects->Count(); i++ ) {
+                                    ByteString sProject( *pProjects->GetObject( i ));
+                                    String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
+                                    DirEntry aPrjEntry( aEntry );
+                                    aPrjEntry += DirEntry( ssProject );
+                                    aPrjEntry += DirEntry( sPrjDir );
+                                    aPrjEntry += DirEntry( sSolarFile );
+
+                                    aFileList.Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );
+
+                                    ByteString sFile( aPrjEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+                                    fprintf( stdout, "%s\n", sFile.GetBuffer());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+//      Read( &aFileList );
+        for ( ULONG i = 0; i < aFileList.Count(); i++ )
+            delete aFileList.GetObject( i );
+    }
+}
+
+/*****************************************************************************/
+Star::~Star()
+/*****************************************************************************/
+{
+}
+
+/*****************************************************************************/
+void Star::Read( String &rFileName )
+/*****************************************************************************/
+{
+    ByteString aString;
+    aFileList.Insert( new String( rFileName ));
+
+    DirEntry aEntry( rFileName );
     aEntry.ToAbs();
     aEntry = aEntry.GetPath().GetPath().GetPath();
     sSourceRoot = aEntry.GetFull();
@@ -517,11 +633,9 @@ Star::Star(String aFileName, USHORT nMode )
 }
 
 /*****************************************************************************/
-Star::Star( SolarFileList *pSolarFiles )
+void Star::Read( SolarFileList *pSolarFiles )
 /*****************************************************************************/
-                : nStarMode( STAR_MODE_MULTIPLE_PARSE )
 {
-    // this ctor is used by StarBuilder to get the information for the whole workspace
     while(  pSolarFiles->Count()) {
         ByteString aString;
 
@@ -531,12 +645,6 @@ Star::Star( SolarFileList *pSolarFiles )
     }
 
     Expand_Impl();
-}
-
-/*****************************************************************************/
-Star::~Star()
-/*****************************************************************************/
-{
 }
 
 /*****************************************************************************/
