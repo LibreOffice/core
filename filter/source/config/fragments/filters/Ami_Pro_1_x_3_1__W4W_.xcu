@@ -1,13 +1,13 @@
     <node oor:name="Ami Pro 1.x-3.1 (W4W)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>W4W33_0</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">Ami Pro 1.x-3.1</value>
+        </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_Ami_Pro_1x_31_W4W</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value>W4W33_0</value></prop>
-        <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="UIName">
-            <value>Ami Pro 1.x-3.1</value>
-        </prop>
-        <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
     </node>
