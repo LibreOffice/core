@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 17:11:14 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:25:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,8 +82,8 @@ LIBTARGET=NO
 USE_DEFFILE=YES
 
 USE_DEFFILE=TRUE
-INCPRE+= -I$(SOLARINCDIR)$/external$/atl
 
+INCPRE+= -I$(ATL_INCLUDE)	
 # --- Settings -----------------------------------------------------
 
 ENABLE_EXCEPTIONS=TRUE
@@ -131,7 +131,7 @@ UNOTYPES= \
     com.sun.star.uno.Exception		\
     com.sun.star.uno.XWeak			\
     com.sun.star.uno.XAggregation		\
-    com.sun.star.reflection.XIdlReflection	
+    com.sun.star.reflection.XIdlReflection
 
 #	com.sun.star.beans.XMaterialHolder	\
 
@@ -149,9 +149,9 @@ SLOFILES= \
             $(SLO)$/olethread.obj	\
             $(SLO)$/oledll.obj		\
         $(SLO)$/jscriptclasses.obj	\
-        $(SLO)$/ole2uno.obj		
+        $(SLO)$/ole2uno.obj
 
-        
+
 
 
 SHL1TARGET=$(TARGET)
@@ -163,7 +163,12 @@ SHL1STDLIBS=\
     $(LIBCIMT) 	\
     ole32.lib 	\
     uuid.lib 	\
+    advapi32.lib	\
     oleaut32.lib
+
+.IF "$(COMEX)"=="8"
+    SHL1STDLIBS+= $(COMPATH)$/atlmfc$/lib$/atls.lib
+.ENDIF
 
 #SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1LIBS=
