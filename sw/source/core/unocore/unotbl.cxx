@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: os $ $Date: 2002-10-09 13:06:00 $
+ *  last change: $Author: tl $ $Date: 2002-10-10 11:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3713,19 +3713,21 @@ sal_Bool SwXTextTable::supportsService(const OUString& rServiceName) throw( uno:
 {
     String sServiceName(rServiceName);
     return (sServiceName.EqualsAscii("com.sun.star.document.LinkTarget")  ||
-                sServiceName.EqualsAscii("com.sun.star.text.TextTable")  ||
-                sServiceName.EqualsAscii("com.sun.star.text.TextContent"));
+            sServiceName.EqualsAscii("com.sun.star.text.TextTable")  ||
+            sServiceName.EqualsAscii("com.sun.star.text.TextContent") ||
+            sServiceName.EqualsAscii("com.sun.star.text.TextSortable"));
 }
 /* -----------------25.10.99 15:12-------------------
 
  --------------------------------------------------*/
 uno::Sequence< OUString > SwXTextTable::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aRet(3);
+    uno::Sequence< OUString > aRet(4);
     OUString* pArr = aRet.getArray();
-    pArr[0] = C2U("com.sun.star.text.TextTable");
-    pArr[1] = C2U("com.sun.star.document.LinkTarget");
+    pArr[0] = C2U("com.sun.star.document.LinkTarget");
+    pArr[1] = C2U("com.sun.star.text.TextTable");
     pArr[2] = C2U("com.sun.star.text.TextContent");
+    pArr[2] = C2U("com.sun.star.text.TextSortable");
     return aRet;
 }
 
