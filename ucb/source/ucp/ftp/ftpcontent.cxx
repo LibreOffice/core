@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 13:59:09 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 16:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,10 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/simpleauthenticationrequest.hxx>
+#include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -338,7 +341,6 @@ Any SAL_CALL FTPContent::execute(
                 aRet = p->getRequest();
             }
 
-
 //              if(aCommand.Name.compareToAscii(
 //                  "getPropertyValues") == 0 &&
 //                 action != NOACTION) {
@@ -393,7 +395,16 @@ Any SAL_CALL FTPContent::execute(
 
                 aRet <<= getPropertyValues(Properties,Environment);
             }
-            else if(aCommand.Name.compareToAscii("setPropertyValues") == 0) {
+            else if(aCommand.Name.compareToAscii("setPropertyValues") == 0)
+            {
+                Sequence<PropertyValue> propertyValues;
+
+                if( ! ( aCommand.Argument >>= propertyValues ) ) {
+                    aRet <<= IllegalArgumentException();
+                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                }
+
+                aRet <<= setPropertyValues(propertyValues);
             }
             else if(aCommand.Name.compareToAscii("getCommandInfo") == 0) {
                 // Note: Implemented by base class.
@@ -570,4 +581,25 @@ Reference< XRow > FTPContent::getPropertyValues(
     }
 
     return Reference<XRow>(xRow.getBodyPtr());
+}
+
+
+
+Sequence<Any> FTPContent::setPropertyValues(
+    const Sequence<PropertyValue>& seqPropVal)
+{
+    Sequence<Property> props =
+        getProperties(Reference<XCommandEnvironment>(0));
+
+    Sequence<Any> ret(seqPropVal.getLength());
+    for(sal_Int32 i = 0; i < ret.getLength(); ++i) {
+        ret[i] <<= UnknownPropertyException();
+        for(sal_Int32 j = 0; j < props.getLength(); ++j)
+            if(props[j].Name == seqPropVal[i].Name) {
+                ret[i] <<= IllegalAccessException();
+                break;
+            }
+    }
+
+    return ret;
 }

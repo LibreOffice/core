@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:16 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 16:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,11 @@ namespace ftp
             const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment >& Environment
         );
+
+        ::com::sun::star::uno::Sequence<::com::sun::star::uno::Any>
+        setPropertyValues(
+            const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::beans::PropertyValue>& seqPropVal);
 
         void insert(const com::sun::star::ucb::InsertCommandArgument&);
     };
