@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:28:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,6 @@
 
 #ifndef _SVMEMPOOL_HXX
 #include <tools/mempool.hxx>
-#endif
-#ifndef _VCL_VCLENUM_HXX
-#include <vcl/vclenum.hxx>
-#endif
-#ifndef _SVX_SVXENUM_HXX
-#include <svx/svxenum.hxx>
 #endif
 
 #ifndef SC_RANGELST_HXX
@@ -150,11 +144,9 @@ class XclImpFont : protected XclImpRoot
 {
 private:
     XclFontData                 maData;         /// All font attributes.
-    FontFamily                  meFontFamily;   /// VCL font family for later use.
-    CharSet                     meFontCharSet;  /// VCL font character set for later use.
-    bool                        mbIsWestern;    /// true = font contains ASCII characters.
-    bool                        mbIsAsian;      /// true = font contains CJK characters.
-    bool                        mbIsComplex;    /// true = font contains CTL characters.
+    bool                        mbAscii;        /// true = font contains ASCII characters.
+    bool                        mbCjk;          /// true = font contains CJK characters.
+    bool                        mbCtl;          /// true = font contains CTL characters.
 
 public:
     explicit                    XclImpFont( const XclImpRoot& rRoot );
@@ -168,8 +160,13 @@ public:
     inline const XclFontData&   GetFontData() const { return maData; }
     /** Returns true, if the font contains superscript or subscript. */
     inline bool                 HasEscapement() const { return maData.meEscapem != xlEscNone; }
-    /** Returns the width of the '0' character on current printer (twips). */
-    long                        GetCharWidth() const;
+
+    /** Returns true, if this font contains ASCII characters. */
+    inline bool                 HasAscii() const { return mbAscii; }
+    /** Returns true, if this font contains CJK characters. */
+    inline bool                 HasCjk() const { return mbCjk; }
+    /** Returns true, if this font contains CTL characters. */
+    inline bool                 HasCtl() const { return mbCtl; }
 
     /** Reads a FONT record for all BIFF versions. */
     void                        ReadFont( XclImpStream& rStrm );
@@ -185,18 +182,8 @@ public:
                                     XclFontWhichIDMode eMode,
                                     bool bSkipPoolDefs = false ) const;
 
-    /** Calculates the Calc font family from the Excel family. */
-    static FontFamily           GetScFontFamily( sal_uInt8 nXclFamily, const String& rName, CharSet eDefCharSet );
-    /** Calculates the Calc font character set from the Excel character set. */
-    static CharSet              GetScFontCharSet( sal_uInt8 nXclCharSet );
-    /** Calculates the Calc font posture from the Excel posture. */
-    static FontItalic           GetScFontPosture( bool bXclItalic );
     /** Calculates the Calc font weight from the Excel weight. */
     static FontWeight           GetScFontWeight( sal_uInt16 nXclWeight );
-    /** Calculates the Calc font underline style from the Excel underline style. */
-    static FontUnderline        GetScFontUnderline( XclUnderline eXclUnderl );
-    /** Calculates the Calc escapement style from the Excel escapement style. */
-    static SvxEscapement        GetScFontEscapement( XclEscapement eXclEscapem );
 
 private:
     /** Reads and sets height and flags. */
@@ -212,8 +199,6 @@ private:
     /** Tests whether the font contains CJK or CTL characters.
         @descr  This is only a weak guess using preselected characters. */
     void                        GuessScriptType();
-    /** Updates char set, font family and script types after reading or setting data. */
-    void                        Update();
 };
 
 
@@ -317,7 +302,7 @@ struct XclImpCellAlign : public XclCellAlign
 
     /** Inserts items representing this alignment style into the item set.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
-    void                        FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
+    void                        FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFont, bool bSkipPoolDefs = false ) const;
 };
 
 
