@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 15:07:38 $
+ *  last change: $Author: mtg $ $Date: 2001-09-26 12:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 if ( bFolder )
                 {
                     sal_Int32 nDirIndex = aName.lastIndexOf ( '/', nStreamIndex );
-                    sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex, nStreamIndex );
+                    sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
                     if ( sTemp == (*aIter).second->getName() )
                         return makeAny ( Reference < XUnoTunnel > ( (*aIter).second ) );
                     else
@@ -573,7 +573,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
                 if ( bFolder )
                 {
                     sal_Int32 nDirIndex = aName.lastIndexOf ( '/', nStreamIndex );
-                    sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex, nStreamIndex );
+                    sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
                     if ( sTemp == (*aIter).second->getName() )
                         return sal_True;
                     else
