@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-12 10:41:53 $
+ *  last change: $Author: tbe $ $Date: 2001-06-12 15:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,21 +693,24 @@ void SfxObjectShell::InitBasicManager_Impl
         pImp->pBasicMgr = pSfxBasicManager = new SfxBasicManager( pBas );
     }
 
+    // Standard lib name
+    rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+
     // Basic container
     SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
         ( DEFINE_CONST_UNICODE( "StarBasic" ), pSfxBasicManager, pStor );
     pBasicCont->acquire();  // Hold via UNO
     Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
-    if ( xBasicCont.is() )
-        xBasicCont->createLibrary( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Standard" ) ) );   // create Standard library
+    if ( xBasicCont.is() && !xBasicCont->hasByName( aStdLibName ) )
+        xBasicCont->createLibrary( aStdLibName );   // create Standard library
     pImp->pBasicLibContainer = pBasicCont;
 
     // Dialog container
     SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( pStor );
     pDialogCont->acquire(); // Hold via UNO
     Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
-    if ( xDialogCont.is() )
-        xDialogCont->createLibrary( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Standard" ) ) );  // create Standard library
+    if ( xDialogCont.is() && !xDialogCont->hasByName( aStdLibName ) )
+        xDialogCont->createLibrary( aStdLibName );  // create Standard library
     pImp->pDialogLibContainer = pDialogCont;
 
     BasicManagerImpl* pBasMgrImpl = new BasicManagerImpl();
