@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsViewOverlay.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:13:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,23 +79,36 @@ namespace {
 class ShowingModeGuard
 {
 public:
-    explicit ShowingModeGuard (::sd::slidesorter::view::OverlayBase& rOverlay)
+    explicit ShowingModeGuard (::sd::slidesorter::view::OverlayBase& rOverlay,
+        bool bHideAndSave = false)
         : mrOverlay (rOverlay),
-          mbIsShowing (mrOverlay.IsShowing())
+          mbIsShowing (mrOverlay.IsShowing()),
+          mbRestorePending(false)
     {
         if (mbIsShowing)
+            if (bHideAndSave)
+            {
+                mrOverlay.GetViewOverlay().HideAndSave (
+                    ::sd::slidesorter::view::ViewOverlay::OPT_XOR);
+                mbRestorePending = true;
+            }
             mrOverlay.Hide();
     }
 
     ~ShowingModeGuard (void)
     {
         if (mbIsShowing)
+        {
             mrOverlay.Show();
+            if (mbRestorePending)
+                mrOverlay.GetViewOverlay().Restore ();
+        }
     }
 
 private:
     ::sd::slidesorter::view::OverlayBase& mrOverlay;
     bool mbIsShowing;
+    bool mbRestorePending;
 };
 }
 
@@ -202,11 +215,19 @@ void ViewOverlay::HideAndSave (OverlayPaintType eType)
         // Hide the overlays.
         if (eType==OPT_ALL || eType==OPT_XOR)
         {
-            maSelectionRectangleOverlay.Hide();
-            maSubstitutionOverlay.Hide();
+            if (mbSelectionRectangleWasVisible)
+                maSelectionRectangleOverlay.Hide();
         }
+        if (mbSubstitutionDisplayWasVisible)
+            maSubstitutionOverlay.Hide();
+
         if (eType==OPT_ALL || eType==OPT_PAINT)
-            maInsertionIndicatorOverlay.Hide();
+        {
+            if (mbMouseOverIndicatorWasVisible)
+                maMouseOverIndicatorOverlay.Hide();
+            if (mbInsertionIndicatorWasVisible)
+                maInsertionIndicatorOverlay.Hide();
+        }
     }
 }
 
@@ -224,10 +245,10 @@ void ViewOverlay::Restore (void)
             if (mbMouseOverIndicatorWasVisible)
                 maMouseOverIndicatorOverlay.Show();
         }
+        if (mbSubstitutionDisplayWasVisible)
+            maSubstitutionOverlay.Show();
         if (meSavedStateType==OPT_ALL || meSavedStateType==OPT_XOR)
         {
-            if (mbSubstitutionDisplayWasVisible)
-                maSubstitutionOverlay.Show();
             if (mbSelectionRectangleWasVisible)
                 maSelectionRectangleOverlay.Show();
         }
@@ -256,7 +277,6 @@ OverlayBase::~OverlayBase (void)
 
 
 void OverlayBase::Paint (void)
-
 {
 }
 
@@ -301,6 +321,14 @@ void OverlayBase::Hide (void)
         mbIsShowing = false;
         Paint ();
     }
+}
+
+
+
+
+ViewOverlay& OverlayBase::GetViewOverlay (void)
+{
+    return mrViewOverlay;
 }
 
 
@@ -426,9 +454,12 @@ void SelectionRectangleOverlay::Paint (void)
 
 void SelectionRectangleOverlay::Show (void)
 {
-    Start (maAnchor);
-    Update (maSecondCorner);
-    OverlayBase::Show();
+    if ( ! mbIsShowing)
+    {
+        Start (maAnchor);
+        Update (maSecondCorner);
+        OverlayBase::Show();
+    }
 }
 
 
@@ -436,8 +467,11 @@ void SelectionRectangleOverlay::Show (void)
 
 void SelectionRectangleOverlay::Hide (void)
 {
-    mrViewOverlay.GetViewShell().GetSlideSorterController().GetView().EndEncirclement();
-    OverlayBase::Hide();
+    if (mbIsShowing)
+    {
+        mrViewOverlay.GetViewShell().GetSlideSorterController().GetView().EndEncirclement();
+        OverlayBase::Hide();
+    }
 }
 
 
@@ -487,20 +521,9 @@ void InsertionIndicatorOverlay::SetPositionAndSize (
 {
     if (maBoundingBox != aNewBoundingBox)
     {
-        bool bIsShowing = IsShowing();
-        if (bIsShowing)
-        {
-            mrViewOverlay.HideAndSave (ViewOverlay::OPT_XOR);
-            Hide();
-        }
+        ShowingModeGuard aGuard (*this, true);
 
         maBoundingBox = aNewBoundingBox;
-
-        if (bIsShowing)
-        {
-            Show();
-            mrViewOverlay.Restore ();
-        }
     }
 }
 
@@ -511,9 +534,9 @@ void InsertionIndicatorOverlay::Paint (void)
 {
     Color aColor;
     if (mbIsShowing)
-        aColor =Application::GetSettings().GetStyleSettings().GetFontColor();
+        aColor = Application::GetSettings().GetStyleSettings().GetFontColor();
     else
-        aColor =Application::GetSettings().GetStyleSettings().GetWindowColor();
+        aColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     mrViewOverlay.GetViewShell().DrawFilledRect (
         maBoundingBox,
         aColor,
@@ -620,7 +643,7 @@ void MouseOverIndicatorOverlay::SetSlideUnderMouse (
 {
     if (mpPageUnderMouse != pDescriptor)
     {
-        ShowingModeGuard aGuard (*this);
+        ShowingModeGuard aGuard (*this, true);
 
         mpPageUnderMouse = pDescriptor;
     }
