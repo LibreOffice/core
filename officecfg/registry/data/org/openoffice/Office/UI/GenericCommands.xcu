@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:09:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 12:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1794,10 +1794,41 @@
                     <value xml:lang="en-US">Hangul/Hanja Conversion...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ChineseConversion" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Chinesische Übersetzung...</value>
+                    <value xml:lang="en-US">Chinese translation...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:InsertListbox" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Listenfeld</value>
                     <value xml:lang="en-US">List Box</value>
+                    <value xml:lang="ar">�مربع قائمة</value>
+                    <value xml:lang="no">List Box</value>
+                    <value xml:lang="ca">Quadre de llista</value>
+                    <value xml:lang="zh-TW">清單方框</value>
+                    <value xml:lang="cs">Pole seznamu</value>
+                    <value xml:lang="da">Rulleliste</value>
+                    <value xml:lang="el">Πλαίσιο λίστας</value>
+                    <value xml:lang="es">Listado</value>
+                    <value xml:lang="fi">Luetteloruutu</value>
+                    <value xml:lang="fr">Zone de liste</value>
+                    <value xml:lang="he">‮תיבת רשימה‬</value>
+                    <value xml:lang="it">Casella di riepilogo</value>
+                    <value xml:lang="ja">リストボックス</value>
+                    <value xml:lang="ko">목록 필드</value>
+                    <value xml:lang="nl">Keuzelijst</value>
+                    <value xml:lang="pl">Pole listy</value>
+                    <value xml:lang="pt-BR">Caixa de Listagem</value>
+                    <value xml:lang="ru">Список</value>
+                    <value xml:lang="sk">Pole zoznamu</value>
+                    <value xml:lang="sv">Listruta</value>
+                    <value xml:lang="th">กล่องรายการ</value>
+                    <value xml:lang="tr">Liste Kutusu</value>
+                    <value xml:lang="hi">सूची बॉक्स</value>
+                    <value xml:lang="zh-CN">列表框</value>
+                    <value xml:lang="pt">Caixa de listagem</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -4789,6 +4820,12 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Rechtschreibprüfung</value>
                     <value xml:lang="en-US">~Spellcheck</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:LanguageMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Sprache</value>
+                    <value xml:lang="en-US">Language</value>
                 </prop>
             </node>
             <node oor:name=".uno:ViewMenu" oor:op="replace">
