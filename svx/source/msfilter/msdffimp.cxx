@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-26 15:01:57 $
+ *  last change: $Author: sj $ $Date: 2001-05-02 10:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2319,7 +2319,7 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
 
         // Default: non perspective
 
-        rCamera.SetProjection( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4 ? PR_PERSPECTIVE : PR_PARALLEL );
+        rCamera.SetProjection( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4 ? PR_PARALLEL : PR_PERSPECTIVE );
         pScene->SetCamera( rCamera );
         pScene->SetItemSet(aSet);
 
