@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 08:07:11 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 12:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,8 +748,10 @@ namespace xmloff
         {
             // it's the ListSource attribute
             OSL_ENSURE(0 == m_aListSource.getLength(), "OListAndComboImport::handleAttribute: already have a value for the ListSource property!");
-            m_aListSource.realloc(1);
-            m_aListSource[0] = _rValue;
+            PropertyValue aListSource;
+            aListSource.Name = PROPERTY_LISTSOURCE;
+            aListSource.Value <<= _rValue;
+            implPushBackPropertyValue(aListSource);
         }
         else
             OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
@@ -835,15 +837,19 @@ namespace xmloff
     //---------------------------------------------------------------------
     OComboItemImport::OComboItemImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const OListAndComboImportRef& _rListBox)
-        :OAccumulateCharacters(_rImport, _nPrefix, _rName)
+        :SvXMLImportContext(_rImport, _nPrefix, _rName)
         ,m_xListBoxImport(_rListBox)
     {
     }
 
     //---------------------------------------------------------------------
-    void OComboItemImport::EndElement()
+    void OComboItemImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
-        m_xListBoxImport->implPushBackLabel(getCharacters());
+        const ::rtl::OUString sLabelAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
+            GetPrefix(), ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_LABEL)));
+        m_xListBoxImport->implPushBackLabel(_rxAttrList->getValueByName(sLabelAttributeName));
+
+        SvXMLImportContext::StartElement(_rxAttrList);
     }
 
     //=====================================================================
@@ -1104,6 +1110,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/03/20 08:07:11  fs
+ *  #85115# for compatibility reason recognize the old 'detail-fiels' for a while ...
+ *
  *  Revision 1.14  2001/03/16 14:36:39  sab
  *  did the required change (move of extract.hxx form cppuhelper to comphelper)
  *
