@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:07:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 #ifndef _OSL_CONDITN_HXX_
 #include <osl/conditn.hxx>
 #endif
@@ -124,7 +127,7 @@ namespace desktop
 String GetURL_Impl( const String& rName );
 
 OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
-OSecurity           OfficeIPCThread::maSecurity;
+namespace { struct Security : public rtl::Static<OSecurity, Security> {}; }
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
 
@@ -355,13 +358,14 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
     do
     {
+        OSecurity &rSecurity = Security::get();
         // Try to create pipe
-        if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, maSecurity ))
+        if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, rSecurity ))
         {
             // Pipe created
             nPipeMode = PIPEMODE_CREATED;
         }
-        else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Open, maSecurity )) // Creation not successfull, now we try to connect
+        else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Open, rSecurity )) // Creation not successfull, now we try to connect
         {
             // Pipe connected to first office
             nPipeMode = PIPEMODE_CONNECTED;
@@ -465,7 +469,7 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         // send thread a termination message
         // this is done so the subsequent join will not hang
         // because the thread hangs in accept of pipe
-        OPipe Pipe( pOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, maSecurity );
+        OPipe Pipe( pOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, Security::get() );
         //Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
         if (Pipe.isValid())
         {
