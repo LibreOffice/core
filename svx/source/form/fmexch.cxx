@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-11 17:34:09 $
+ *  last change: $Author: hr $ $Date: 2001-08-14 15:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,6 @@
  ************************************************************************/
 #ifndef _SVX_FMEXCH_HXX
 #include "fmexch.hxx"
-#endif
-
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
 #endif
 
 #ifndef _SVSTOR_HXX //autogen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 07:51:43 $
+ *  last change: $Author: hr $ $Date: 2001-08-14 15:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
-#endif
-
-#ifndef _SV_EXCHANGE_HXX
-#include <vcl/exchange.hxx>
 #endif
 
 #ifndef _SVX_FMEXCH_HXX
