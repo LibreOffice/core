@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:20:59 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLPAGE_HXX
 #include "xlpage.hxx"
 #endif
@@ -86,17 +84,21 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_XLCONST_HXX
+#include "xlconst.hxx"
+#endif
+
 // Paper size =================================================================
 
 struct XclPaperSize
 {
-    SvxPaper                    mePaper;            /// SVX paper size identifier.
-    sal_Int32                   mnWidth;            /// Paper width in twips.
-    sal_Int32                   mnHeight;           /// Paper height in twips.
+    SvxPaper            mePaper;            /// SVX paper size identifier.
+    long                mnWidth;            /// Paper width in twips.
+    long                mnHeight;           /// Paper height in twips.
 };
 
-#define IN2TWIPS( v )      ((sal_Int32)((v) * EXC_TWIPS_PER_INCH + 0.5))
-#define MM2TWIPS( v )      ((sal_Int32)((v) * EXC_TWIPS_PER_INCH / CM_PER_INCH / 10.0 + 0.5))
+#define IN2TWIPS( v )      ((long)((v) * EXC_TWIPS_PER_INCH + 0.5))
+#define MM2TWIPS( v )      ((long)((v) * EXC_TWIPS_PER_INCH / CM_PER_INCH / 10.0 + 0.5))
 
 static const XclPaperSize pPaperSizeTable[] =
 {
@@ -212,7 +214,7 @@ void XclPageData::SetDefaults()
 {
     maHorPageBreaks.clear();
     maVerPageBreaks.clear();
-    mpBrushItem.reset();
+    mxBrushItem.reset();
     maHeader.Erase();
     maFooter.Erase();
     mfLeftMargin    = mfRightMargin    = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_LR );
@@ -258,14 +260,14 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait )
 {
     mbPortrait = bPortrait;
     mnPaperSize = 0;
-    sal_Int32 nWidth = bPortrait ? rSize.Width() : rSize.Height();
-    sal_Int32 nHeight = bPortrait ? rSize.Height() : rSize.Width();
-    sal_Int32 nMaxWDiff = 80;
-    sal_Int32 nMaxHDiff = 50;
+    long nWidth = bPortrait ? rSize.Width() : rSize.Height();
+    long nHeight = bPortrait ? rSize.Height() : rSize.Width();
+    long nMaxWDiff = 80;
+    long nMaxHDiff = 50;
     for( const XclPaperSize* pEntry = pPaperSizeTable; pEntry != STATIC_TABLE_END( pPaperSizeTable ); ++pEntry )
     {
-        sal_Int32 nWDiff = Abs( pEntry->mnWidth - nWidth );
-        sal_Int32 nHDiff = Abs( pEntry->mnHeight - nHeight );
+        long nWDiff = Abs( pEntry->mnWidth - nWidth );
+        long nHDiff = Abs( pEntry->mnHeight - nHeight );
         if( ((nWDiff <= nMaxWDiff) && (nHDiff < nMaxHDiff)) ||
             ((nWDiff < nMaxWDiff) && (nHDiff <= nMaxHDiff)) )
         {
