@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-30 13:16:03 $
+ *  last change: $Author: mba $ $Date: 2000-10-30 13:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef _TOOLS_TEMPFILE_HXX
-#define _TOOLS_TEMPFILE_HXX
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#define _UNOTOOLS_TEMPFILE_HXX
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
