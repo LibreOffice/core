@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,32 @@
 #ifndef _SVX_HYPERLINK_HRC
 #define _SVX_HYPERLINK_HRC
 
-#include <dialogs.hrc>
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+
+#ifndef _SFXSIDS_HRC
+#include <sfx2/sfxsids.hrc>
+#endif
 
 // defines ------------------------------------------------------------------
 
 #define CB_NAME              1
 #define FT_URL               2
 #define CB_URL               3
-#define BTN_LINK             4
-#define BTN_INSERT_BOOKMARK  5
-#define BTN_INET_SEARCH      6
+#define BTN_LINK             SID_HLINKBAR_LINK
+#define BTN_INSERT_BOOKMARK  SID_HLINKBAR_BOOKMARK
+#define BTN_INET_SEARCH      SID_HLINKBAR_SEARCH
 #define TB                   7
 #define MN_FIELD             8
 #define MN_BUTTON            9
+#define BTN_TARGET          SID_HLINKBAR_TARGET
+#define STR_ADDRESS         11
+#define STR_EXPLORER        12
+#define STR_BOOKMARK_SEARCH 13
+
+#define BTN_OPENDIALOG      SID_HYPERLINK_DIALOG
+
 
 #endif
+
