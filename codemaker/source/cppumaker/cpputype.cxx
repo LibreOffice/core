@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:35:00 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,13 @@
 
 #include <stdio.h>
 #include <string.h>
-#ifndef _RTL_ALLOC_H_
-#include    <rtl/alloc.h>
-#endif
 
-#ifndef _RTL_USTRING_HXX_
-#include    <rtl/ustring.hxx>
-#endif
+#include "rtl/alloc.h"
+#include "rtl/ustring.hxx"
+#include "rtl/strbuf.hxx"
 
-#ifndef _RTL_STRBUF_HXX_
-#include    <rtl/strbuf.hxx>
-#endif
-
-#include    "cpputype.hxx"
-#include    "cppuoptions.hxx"
+#include "cpputype.hxx"
+#include "cppuoptions.hxx"
 
 using namespace rtl;
 
@@ -169,92 +162,70 @@ sal_Bool CppuType::dump(CppuOptions* pOptions)
     if (pOptions->isValid("-O"))
         outPath = pOptions->getOption("-O");
 
-    OString tmpFileName;
-    OString hFileName = createFileNameFromType(outPath, m_typeName, ".hdl");
+    return (dumpFile(pOptions, ".hdl", m_typeName, outPath) &&
+            dumpFile(pOptions, ".hpp", m_typeName, outPath));
+}
 
-    sal_Bool bFileExists = sal_False;
+sal_Bool CppuType::dumpFile(CppuOptions* pOptions,
+                            const OString& sExtension,
+                            const OString& sName,
+                            const OString& sOutPath )
+    throw( CannotDumpException )
+{
+    sal_Bool ret = sal_False;
+
+    OString sTmpExt(".tml");
+    sal_Bool bHdl = sal_True;    ;
+    if (sExtension.equals(".hpp")) {
+        sTmpExt = ".tmp";
+        bHdl = sal_False;
+    }
+
+    OString sFileName = createFileNameFromType(sOutPath, sName, sExtension);
+
+    sal_Bool bFileExists = fileExists( sFileName );
     sal_Bool bFileCheck = sal_False;
 
-    if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
-    {
-        bFileExists = fileExists( hFileName );
-        ret = sal_True;
-    }
+    if ( bFileExists && pOptions->isValid("-G") )
+        return sal_True;
 
     if ( bFileExists && pOptions->isValid("-Gc") )
-    {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tml");
         bFileCheck = sal_True;
-    }
 
-    if ( !bFileExists || bFileCheck )
+    OString sTmpDir = getTempDir(sFileName);
+    FileStream oFile;
+    oFile.createTempFile(sTmpDir);
+    OString sTmpFileName;
+
+    if(!oFile.isValid())
     {
-        FileStream hFile;
+        OString message("cannot open ");
+        message += sFileName + " for writing";
+        throw CannotDumpException(message);
+    } else
+        sTmpFileName = oFile.getName();
 
-        if ( bFileCheck )
-            hFile.open(tmpFileName);
-        else
-            hFile.open(hFileName);
+    if (bHdl)
+        ret = dumpHFile(oFile);
+    else
+        ret = dumpHxxFile(oFile);
 
-        if(!hFile.isValid())
-        {
-            OString message("cannot open ");
-            message += hFileName + " for writing";
-            throw CannotDumpException(message);
-        }
+    oFile.close();
 
-        ret = dumpHFile(hFile);
+    if (ret) {
+        ret = makeValidTypeFile(sFileName, sTmpFileName, bFileCheck);
+    } else {
+        // remove existing type file if something goes wrong to ensure consistency
+        if (fileExists(sFileName))
+            removeTypeFile(sFileName);
 
-        hFile.close();
-        if (ret && bFileCheck)
-        {
-            ret = checkFileContent(hFileName, tmpFileName);
-        }
-    }
-
-    bFileExists = sal_False;
-    bFileCheck = sal_False;
-    OString hxxFileName = createFileNameFromType(outPath, m_typeName, ".hpp");
-
-    if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
-    {
-        bFileExists = fileExists( hxxFileName );
-        ret = sal_True;
-    }
-
-    if ( bFileExists && pOptions->isValid("-Gc") )
-    {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tmp");
-        bFileCheck = sal_True;
-    }
-
-    if ( !bFileExists || bFileCheck )
-    {
-        FileStream hxxFile;
-
-        if ( bFileCheck )
-            hxxFile.open(tmpFileName);
-        else
-            hxxFile.open(hxxFileName);
-
-        if(!hxxFile.isValid())
-        {
-            OString message("cannot open ");
-            message += hxxFileName + " for writing";
-            throw CannotDumpException(message);
-        }
-
-        ret = dumpHxxFile(hxxFile);
-
-        hxxFile.close();
-        if (ret && bFileCheck)
-        {
-            ret = checkFileContent(hxxFileName, tmpFileName);
-        }
+        // remove tmp file if something goes wrong
+        removeTypeFile(sTmpFileName);
     }
 
     return ret;
 }
+
 sal_Bool CppuType::dumpDependedTypes(CppuOptions* pOptions)
     throw( CannotDumpException )
 {
@@ -263,6 +234,7 @@ sal_Bool CppuType::dumpDependedTypes(CppuOptions* pOptions)
     TypeUsingSet usingSet(m_dependencies.getDependencies(m_typeName));
 
     TypeUsingSet::const_iterator iter = usingSet.begin();
+
     OString typeName;
     sal_uInt32 index = 0;
     while (iter != usingSet.end())
@@ -326,13 +298,13 @@ OString CppuType::dumpHeaderDefine(FileStream& o, sal_Char* prefix, sal_Bool bEx
 void CppuType::dumpDefaultHIncludes(FileStream& o)
 {
     o << "#ifndef _CPPU_MACROS_HXX_\n"
-      << "#include <cppu/macros.hxx>\n"
+      << "#include \"cppu/macros.hxx\"\n"
       << "#endif\n";
 
     if (m_typeMgr.getTypeClass(m_typeName) == RT_TYPE_INTERFACE)
     {
         o << "#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_\n"
-          << "#include <com/sun/star/uno/Reference.h>\n"
+          << "#include \"com/sun/star/uno/Reference.h\"\n"
           << "#endif\n";
     }
 }
@@ -340,17 +312,17 @@ void CppuType::dumpDefaultHIncludes(FileStream& o)
 void CppuType::dumpDefaultHxxIncludes(FileStream& o)
 {
     o << "#ifndef _OSL_MUTEX_HXX_\n"
-      << "#include <osl/mutex.hxx>\n"
+      << "#include \"osl/mutex.hxx\"\n"
       << "#endif\n\n";
 
     o << "#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_\n"
-      << "#include <com/sun/star/uno/Type.hxx>\n"
+      << "#include \"com/sun/star/uno/Type.hxx\"\n"
       << "#endif\n";
 
     if (m_typeMgr.getTypeClass(m_typeName) == RT_TYPE_INTERFACE)
     {
         o << "#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_\n"
-          << "#include <com/sun/star/uno/Reference.hxx>\n"
+          << "#include \"com/sun/star/uno/Reference.hxx\"\n"
           << "#endif\n";
     }
 }
@@ -391,7 +363,7 @@ void CppuType::dumpInclude(FileStream& o, const OString& typeName, sal_Char* pre
     tmpBuf.append('.');
     tmpBuf.append(prefix);
 
-    o << "#ifndef " << tmp << "\n#include <";
+    o << "#ifndef " << tmp << "\n#include \"";
     if (bCaseSensitive)
     {
         o << tmpBuf.makeStringAndClear();
@@ -399,7 +371,7 @@ void CppuType::dumpInclude(FileStream& o, const OString& typeName, sal_Char* pre
     {
         o << tmpBuf.makeStringAndClear();
     }
-    o << ">\n#endif\n";
+    o << "\"\n#endif\n";
 }
 
 void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char* prefix)
@@ -437,8 +409,8 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
             {
                 bSequenceDumped = sal_True;
                 o << "#ifndef _COM_SUN_STAR_UNO_SEQUENCE_" << defPrefix
-                  << "_\n#include <com/sun/star/uno/Sequence." << defPrefix.toAsciiLowerCase()
-                  << ">\n#endif\n";
+                  << "_\n#include \"com/sun/star/uno/Sequence." << defPrefix.toAsciiLowerCase()
+                  << "\"\n#endif\n";
             }
 
             if (getBaseType(relType).getLength() == 0 &&
@@ -451,7 +423,7 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
                     {
                         bInterfaceDumped = sal_True;
                         o << "#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_\n"
-                          << "#include <com/sun/star/uno/Reference.h>\n"
+                          << "#include \"com/sun/star/uno/Reference.h\"\n"
                           << "#endif\n";
                     }
 
@@ -511,19 +483,19 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
             if (relType == "any")
             {
                 o << "#ifndef _COM_SUN_STAR_UNO_ANY_" << defPrefix
-                  << "_\n#include <com/sun/star/uno/Any." << defPrefix.toAsciiLowerCase()
-                  << ">\n#endif\n";
+                  << "_\n#include \"com/sun/star/uno/Any." << defPrefix.toAsciiLowerCase()
+                  << "\"\n#endif\n";
             } else
             if (relType == "type")
             {
                 o << "#ifndef _COM_SUN_STAR_UNO_TYPE_" << defPrefix
-                  << "_\n#include <com/sun/star/uno/Type." << defPrefix.toAsciiLowerCase()
-                  << ">\n#endif\n";
+                  << "_\n#include \"com/sun/star/uno/Type." << defPrefix.toAsciiLowerCase()
+                  << "\"\n#endif\n";
             } else
             if (relType == "string" && sPrefix.equals("HDL"))
             {
                 o << "#ifndef _RTL_USTRING_HXX_\n"
-                  << "#include <rtl/ustring.hxx>\n"
+                  << "#include \"rtl/ustring.hxx\"\n"
                   << "#endif\n";
             }
         }
@@ -2499,92 +2471,8 @@ sal_Bool ModuleType::dump(CppuOptions* pOptions)
         tmpName += "/" + m_typeName.copy( nPos != -1 ? nPos+1 : 0 );
     }
 
-    OString tmpFileName;
-    OString hFileName = createFileNameFromType(outPath, tmpName, ".hdl");
-
-    sal_Bool bFileExists = sal_False;
-    sal_Bool bFileCheck = sal_False;
-
-    if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
-    {
-        bFileExists = fileExists( hFileName );
-        ret = sal_True;
-    }
-
-    if ( bFileExists && pOptions->isValid("-Gc") )
-    {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tml");
-        bFileCheck = sal_True;
-    }
-
-    if ( !bFileExists || bFileCheck )
-    {
-        FileStream hFile;
-
-        if ( bFileCheck )
-            hFile.open(tmpFileName);
-        else
-            hFile.open(hFileName);
-
-        if(!hFile.isValid())
-        {
-            OString message("cannot open ");
-            message += hFileName + " for writing";
-            throw CannotDumpException(message);
-        }
-
-        ret = dumpHFile(hFile);
-
-        hFile.close();
-        if (ret && bFileCheck)
-        {
-            ret = checkFileContent(hFileName, tmpFileName);
-        }
-    }
-
-    bFileExists = sal_False;
-    bFileCheck = sal_False;
-    OString hxxFileName = createFileNameFromType(outPath, tmpName, ".hpp");
-
-    if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
-    {
-        bFileExists = fileExists( hxxFileName );
-        ret = sal_True;
-    }
-
-    if ( bFileExists && pOptions->isValid("-Gc") )
-    {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tmp");
-        bFileCheck = sal_True;
-    }
-
-
-    if ( !bFileExists || bFileCheck )
-    {
-        FileStream hxxFile;
-
-        if ( bFileCheck )
-            hxxFile.open(tmpFileName);
-        else
-            hxxFile.open(hxxFileName);
-
-        if(!hxxFile.isValid())
-        {
-            OString message("cannot open ");
-            message += hxxFileName + " for writing";
-            throw CannotDumpException(message);
-        }
-
-        ret = dumpHxxFile(hxxFile);
-
-        hxxFile.close();
-        if (ret && bFileCheck)
-        {
-            ret = checkFileContent(hxxFileName, tmpFileName);
-        }
-    }
-
-    return ret;
+    return (dumpFile(pOptions, ".hdl", tmpName, outPath) &&
+            dumpFile(pOptions, ".hpp", tmpName, outPath));
 }
 
 sal_Bool ModuleType::dumpHFile(FileStream& o)
@@ -2708,91 +2596,8 @@ sal_Bool ConstantsType::dump(CppuOptions* pOptions)
     if (pOptions->isValid("-O"))
         outPath = pOptions->getOption("-O");
 
-    OString tmpFileName;
-    OString hFileName = createFileNameFromType(outPath, m_typeName, ".hdl");
-
-    sal_Bool bFileExists = sal_False;
-    sal_Bool bFileCheck = sal_False;
-
-    if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
-    {
-        bFileExists = fileExists( hFileName );
-        ret = sal_True;
-    }
-
-    if ( bFileExists && pOptions->isValid("-Gc") )
-    {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tml");
-        bFileCheck = sal_True;
-    }
-
-    if ( !bFileExists || bFileCheck )
-    {
-        FileStream hFile;
-
-        if ( bFileCheck )
-            hFile.open(tmpFileName);
-        else
-            hFile.open(hFileName);
-
-        if(!hFile.isValid())
-        {
-            OString message("cannot open ");
-            message += hFileName + " for writing";
-            throw CannotDumpException(message);
-        }
-
-        ret = dumpHFile(hFile);
-
-        hFile.close();
-        if (ret && bFileCheck)
-        {
-            ret = checkFileContent(hFileName, tmpFileName);
-        }
-    }
-
-    bFileExists = sal_False;
-    bFileCheck = sal_False;
-    OString hxxFileName = createFileNameFromType(outPath, m_typeName, ".hpp");
-
-    if ( pOptions->isValid("-G") || pOptions->isValid("-Gc") )
-    {
-        bFileExists = fileExists( hxxFileName );
-        ret = sal_True;
-    }
-
-    if ( bFileExists && pOptions->isValid("-Gc") )
-    {
-        tmpFileName  = createFileNameFromType(outPath, m_typeName, ".tmp");
-        bFileCheck = sal_True;
-    }
-
-    if ( !bFileExists || bFileCheck )
-    {
-        FileStream hxxFile;
-
-        if ( bFileCheck )
-            hxxFile.open(tmpFileName);
-        else
-            hxxFile.open(hxxFileName);
-
-        if(!hxxFile.isValid())
-        {
-            OString message("cannot open ");
-            message += hxxFileName + " for writing";
-            throw CannotDumpException(message);
-        }
-
-        ret = dumpHxxFile(hxxFile);
-
-        hxxFile.close();
-        if (ret && bFileCheck)
-        {
-            ret = checkFileContent(hxxFileName, tmpFileName);
-        }
-    }
-
-    return ret;
+    return (dumpFile(pOptions, ".hdl", m_typeName, outPath) &&
+            dumpFile(pOptions, ".hpp", m_typeName, outPath));
 }
 
 //*************************************************************************
@@ -2890,7 +2695,8 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
                 superHasMember = sal_True;
 
             dumpType(o, fieldType, sal_True, sal_True);
-            o << " __" << fieldName;
+//          o << " __" << fieldName;
+            o << " " << fieldName << "_";
         }
         o << ") SAL_THROW( () );\n\n";
     }
@@ -3008,7 +2814,8 @@ sal_Bool StructureType::dumpHxxFile(FileStream& o)
                 superHasMember = sal_True;
 
             dumpType(o, fieldType, sal_True, sal_True);
-            o << " __" << fieldName;
+//          o << " __" << fieldName;
+            o << " " << fieldName << "_";
         }
         o << ") SAL_THROW( () )\n";
 
@@ -3038,7 +2845,8 @@ sal_Bool StructureType::dumpHxxFile(FileStream& o)
             } else
                 o << indent() << ", ";
 
-            o << fieldName << "(__" << fieldName << ")\n";
+//          o << fieldName << "(__" << fieldName << ")\n";
+            o << fieldName << "(" << fieldName << "_)\n";
         }
 
         dec();
@@ -3094,59 +2902,10 @@ sal_Bool StructureType::dumpSuperMember(FileStream& o, const OString& superType,
                     dumpType(o, fieldType, sal_True, sal_True);
                     o << " ";
                 }
-                o << "__" << fieldName;
+//              o << "__" << fieldName;
+                o << fieldName << "_";
             }
         }
-/*
-        RegistryKey     superKey = m_typeMgr.getTypeKey(superType);
-        RegValueType    valueType;
-        sal_uInt32      valueSize;
-
-        if (!superKey.getValueInfo(OUString(), &valueType, &valueSize))
-        {
-            sal_uInt8* pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
-            RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
-
-            if (!superKey.getValue(OUString(), pBuffer) )
-            {
-                TypeReader aSuperReader(rReaderLoader, pBuffer, valueSize, sal_True);
-
-                hasMember = dumpSuperMember(o, aSuperReader.getSuperTypeName(), bWithType);
-
-                sal_uInt32      fieldCount = aSuperReader.getFieldCount();
-                RTFieldAccess   access = RT_ACCESS_INVALID;
-                OString         fieldName;
-                OString         fieldType;
-                for (sal_Int16 i=0; i < fieldCount; i++)
-                {
-                    access = aSuperReader.getFieldAccess(i);
-
-                    if (access == RT_ACCESS_CONST || access == RT_ACCESS_INVALID)
-                        continue;
-
-                    fieldName = aSuperReader.getFieldName(i);
-                    fieldType = aSuperReader.getFieldType(i);
-
-                    if (hasMember)
-                    {
-                        o << ", ";
-                    } else
-                    {
-                        hasMember = (fieldCount > 0);
-                    }
-
-                    if (bWithType)
-                    {
-                        dumpType(o, fieldType, sal_True, sal_True);
-                        o << " ";
-                    }
-                    o << "__" << fieldName;
-                }
-            }
-
-            rtl_freeMemory(pBuffer);
-        }
-*/
     }
 
     return hasMember;
@@ -3242,7 +3001,8 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
                 superHasMember = sal_True;
 
             dumpType(o, fieldType, sal_True, sal_True);
-            o << " __" << fieldName;
+//          o << " __" << fieldName;
+            o << " " << fieldName << "_";
         }
         o << ") SAL_THROW( () );\n\n";
     }
@@ -3365,7 +3125,8 @@ sal_Bool ExceptionType::dumpHxxFile(FileStream& o)
                 superHasMember = sal_True;
 
             dumpType(o, fieldType, sal_True, sal_True);
-            o << " __" << fieldName;
+//          o << " __" << fieldName;
+            o << " " << fieldName << "_";
         }
         o << ") SAL_THROW( () )\n";
 
@@ -3395,7 +3156,8 @@ sal_Bool ExceptionType::dumpHxxFile(FileStream& o)
             } else
                 o << indent() << ", ";
 
-            o << fieldName << "(__" << fieldName << ")\n";
+//          o << fieldName << "(__" << fieldName << ")\n";
+            o << fieldName << "(" << fieldName << "_)\n";
         }
 
         dec();
@@ -3460,59 +3222,10 @@ sal_Bool ExceptionType::dumpSuperMember(FileStream& o, const OString& superType,
                     dumpType(o, fieldType, sal_True, sal_True);
                     o << " ";
                 }
-                o << "__" << fieldName;
+//              o << "__" << fieldName;
+                o << fieldName << "_";
             }
         }
-/*
-        RegistryKey     superKey = m_typeMgr.getTypeKey(superType);
-        RegValueType    valueType;
-        sal_uInt32      valueSize;
-
-        if (!superKey.getValueInfo(OUString(), &valueType, &valueSize))
-        {
-            sal_uInt8* pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
-            RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
-
-            if (!superKey.getValue(OUString(), pBuffer) )
-            {
-                TypeReader aSuperReader(rReaderLoader, pBuffer, valueSize, sal_True);
-
-                hasMember = dumpSuperMember(o, aSuperReader.getSuperTypeName(), bWithType);
-
-                sal_uInt32      fieldCount = aSuperReader.getFieldCount();
-                RTFieldAccess   access = RT_ACCESS_INVALID;
-                OString         fieldName;
-                OString         fieldType;
-                for (sal_uInt16 i=0; i < fieldCount; i++)
-                {
-                    access = aSuperReader.getFieldAccess(i);
-
-                    if (access == RT_ACCESS_CONST || access == RT_ACCESS_INVALID)
-                        continue;
-
-                    fieldName = aSuperReader.getFieldName(i);
-                    fieldType = aSuperReader.getFieldType(i);
-
-                    if (hasMember)
-                    {
-                        o << ", ";
-                    } else
-                    {
-                        hasMember = (fieldCount > 0);
-                    }
-
-                    if (bWithType)
-                    {
-                        dumpType(o, fieldType, sal_True, sal_True);
-                        o << " ";
-                    }
-                    o << "__" << fieldName;
-                }
-            }
-
-            rtl_freeMemory(pBuffer);
-        }
-*/
     }
 
     return hasMember;
