@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.106 $
+#   $Revision: 1.107 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-21 16:24:43 $
+#   last change: $Author: hjs $ $Date: 2002-03-22 10:53:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,9 +85,9 @@ SOLARINC+=$(DB2INC)
 SOLARINC+=$(DAOINC)
 .ENDIF "$(LOCAL_SOLENV)"!=""
 .IF "$(PRJINC)"!=""
-INCLUDE:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCLOCPRJ) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCLOCPRJ) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
-INCLUDE:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ENDIF		# "$(PRJINC)"!=""
 .EXPORT : LIB
 # --- Compiler -----------------------------------------------------
@@ -1902,6 +1902,7 @@ ALLTAR:	\
 
 ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(COMPVERMK) \
+        $(JAVAVERMK) \
         $(target_empty) \
         $(OS2_COPY_MK)		\
         $(SUBDIRS)		\
@@ -2196,6 +2197,15 @@ $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg :
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $@
     
 .ENDIF			# "$(COMPVERMK)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+
+.IF "$(JAVAVERMK)"!=""
+.IF "$(UPDATER)"!=""
+"$(JAVAVERMK)" : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
+    @echo JAVAVER:=$(JAVAVER) > $@
+    @echo JAVANUMVER:=$(JAVANUMVER) >> $@
+    
+.ENDIF			# "$(JAVAVERMK)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 
 
@@ -2949,7 +2959,7 @@ ALLTAR : ALLDEP \
 .IF "$(remote)" == ""
 $(REMOTE_DEPEND):
     @+echo --- REMOTE_DEPEND ---
-    @dmake $(MFLAGS) remote=true depemd=t REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
+    @dmake $(MFLAGS) remote=true depend=t REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
     @+echo --- REMOTE_DEPEND OVER ---
 .ENDIF          # "$(remote)" == ""
 .ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
