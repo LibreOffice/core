@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.9 $
+ #  $Revision: 1.10 $
  #
- #  last change: $Author: fs $ $Date: 2001-01-26 16:14:29 $
+ #  last change: $Author: oj $ $Date: 2001-02-05 09:15:31 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -77,6 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 BMP_IN=$(PRJ)$/res
 
 SRCFILES =	\
+        adtabdlg.src	\
         dlgtext.src		\
         dlgerr.src		\
         dlgsave.src		\
@@ -93,6 +94,7 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/adtabdlg.obj	\
         $(SLO)$/dlgtext.obj		\
         $(SLO)$/dlgerr.obj		\
         $(SLO)$/dlgsave.obj		\
@@ -118,6 +120,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.9  2001/01/26 16:14:29  fs
+ #	+commonpages / +detailpages
+ #	
  #	Revision 1.8  2001/01/09 16:06:51  oj
  #	#81232#
  #	
