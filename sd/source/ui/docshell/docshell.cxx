@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-19 12:04:58 $
+ *  last change: $Author: cl $ $Date: 2002-07-30 14:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@
 #include "fuslshow.hxx"
 #include "preview.hxx"
 #include "drawview.hxx"
+#include "frmview.hxx"
 
 #define POOL_BUFFER_SIZE                (USHORT)32768
 #define BASIC_BUFFER_SIZE               (USHORT)8192
@@ -397,6 +398,81 @@ void SdDrawDocShell::GetState(SfxItemSet &rSet)
         {
             pFrame->GetSlotState(SID_RELOAD,
                                  pFrame->GetInterface(), &rSet);
+        }
+    }
+}
+
+void SdDrawDocShell::InPlaceActivate( BOOL bActive )
+{
+    if( !bActive )
+    {
+        FrameView* pFrameView = NULL;
+        List* pFrameViewList = pDoc->GetFrameViewList();
+
+        DBG_ASSERT( pFrameViewList, "No FrameViewList?" );
+        if( pFrameViewList )
+        {
+            sal_uInt32 i;
+            for ( i = 0; i < pFrameViewList->Count(); i++)
+            {
+                // Ggf. FrameViews loeschen
+                pFrameView = (FrameView*) pFrameViewList->GetObject(i);
+
+                if (pFrameView)
+                    delete pFrameView;
+            }
+
+            pFrameViewList->Clear();
+
+            SdViewShell* pViewSh = NULL;
+            SfxViewShell* pSfxViewSh = NULL;
+            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0, false);
+
+            while (pSfxViewFrame)
+            {
+                // Anzahl FrameViews ermitteln
+                pSfxViewSh = pSfxViewFrame->GetViewShell();
+                pViewSh = PTR_CAST( SdViewShell, pSfxViewSh );
+
+                if ( pViewSh && pViewSh->GetFrameView() )
+                {
+                    pViewSh->WriteFrameViewData();
+                    pFrameViewList->Insert( new FrameView( pDoc, pViewSh->GetFrameView() ) );
+                }
+
+                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, 0, false);
+            }
+        }
+    }
+
+    SfxInPlaceObject::InPlaceActivate( bActive );
+
+    if( bActive )
+    {
+        FrameView* pFrameView = NULL;
+        List* pFrameViewList = pDoc->GetFrameViewList();
+
+        DBG_ASSERT( pFrameViewList, "No FrameViewList?" );
+        if( pFrameViewList )
+        {
+            SdViewShell* pViewSh = NULL;
+            SfxViewShell* pSfxViewSh = NULL;
+            SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0,false);
+
+            sal_uInt32 i;
+            for( i = 0; pSfxViewFrame && (i < pFrameViewList->Count()); i++ )
+            {
+                // Anzahl FrameViews ermitteln
+                pSfxViewSh = pSfxViewFrame->GetViewShell();
+                pViewSh = PTR_CAST( SdViewShell, pSfxViewSh );
+
+                if ( pViewSh )
+                {
+                    pViewSh->ReadFrameViewData( (FrameView*)pFrameViewList->GetObject(i) );
+                }
+
+                pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, 0,false);
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-19 08:35:12 $
+ *  last change: $Author: cl $ $Date: 2002-07-30 14:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@
 #include <unopback.hxx>
 #include <unogstyl.hxx>
 #include <unokywds.hxx>
+#include <frmview.hxx>
 
 #include "viewshel.hxx"
 #include "app.hrc"
@@ -625,6 +626,7 @@ void SdXImpressDocument::SetModified( sal_Bool bModified /* = sal_True */ ) thro
         pDoc->SetChanged( bModified );
 }
 
+// XModel
 void SAL_CALL SdXImpressDocument::lockControllers(  )
     throw(uno::RuntimeException)
 {
@@ -650,6 +652,87 @@ sal_Bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )
     throw(uno::RuntimeException)
 {
     return pDoc && pDoc->isLocked();
+}
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+
+uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewData() throw( uno::RuntimeException )
+{
+    uno::Reference < container::XIndexAccess > xRet( SfxBaseModel::getViewData() );
+
+    if( !xRet.is() )
+    {
+        List* pFrameViewList = pDoc->GetFrameViewList();
+
+        if( pFrameViewList && pFrameViewList->Count() )
+        {
+            xRet = uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues"))));
+
+
+            uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );
+            DBG_ASSERT( xCont.is(), "SdXImpressDocument::getViewData() failed for OLE object" );
+            if( xCont.is() )
+            {
+                sal_uInt32 i;
+                for( i = 0; i < pFrameViewList->Count(); i++ )
+                {
+                    FrameView* pFrameView = (FrameView*) pFrameViewList->GetObject(i);
+
+                    if(pFrameView)
+                    {
+                        uno::Sequence< beans::PropertyValue > aSeq;
+                        pFrameView->WriteUserDataSequence( aSeq );
+                        xCont->insertByIndex( i, uno::makeAny( aSeq ) );
+                    }
+                }
+            }
+        }
+    }
+
+    return xRet;
+}
+
+void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container::XIndexAccess >& xData ) throw(::com::sun::star::uno::RuntimeException)
+{
+    SfxBaseModel::setViewData( xData );
+    if( pDocShell && (pDocShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED) && xData.is() )
+    {
+        const sal_Int32 nCount = xData->getCount();
+
+        List* pFrameViewList = pDoc->GetFrameViewList();
+
+        DBG_ASSERT( pFrameViewList, "No FrameViewList?" );
+        if( pFrameViewList )
+        {
+            FrameView* pFrameView;
+
+            sal_uInt32 i;
+            for ( i = 0; i < pFrameViewList->Count(); i++)
+            {
+                // Ggf. FrameViews loeschen
+                pFrameView = (FrameView*) pFrameViewList->GetObject(i);
+
+                if (pFrameView)
+                    delete pFrameView;
+            }
+
+            pFrameViewList->Clear();
+
+            uno::Sequence< beans::PropertyValue > aSeq;
+            sal_Int32 nIndex;
+            for( nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                if( xData->getByIndex( nIndex ) >>= aSeq )
+                {
+                    pFrameView = new FrameView( pDoc );
+                    pFrameView->ReadUserDataSequence( aSeq );
+                    pFrameViewList->Insert( pFrameView );
+                }
+            }
+        }
+    }
 }
 
 // XDrawPageDuplicator
