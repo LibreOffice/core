@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 13:44:13 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,6 +817,7 @@ public:
     FASTBOOL IsEndPara() const;
     FASTBOOL IsStartOfDoc() const;
     FASTBOOL IsEndOfDoc() const;
+    FASTBOOL IsInFrontOfLabel() const;
     FASTBOOL IsAtLeftMargin()   const       { return IsAtLRMargin( TRUE ); }
     FASTBOOL IsAtRightMargin(BOOL bAPI = FALSE) const   { return IsAtLRMargin( FALSE, bAPI ); }
 
