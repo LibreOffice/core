@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:00:09 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,10 @@ AddonsToolBarManager::AddonsToolBarManager( const Reference< XMultiServiceFactor
                                 ToolBar* pToolBar ) :
     ToolBarManager( rServiceManager, rFrame, rResourceName, pToolBar )
 {
+    // Configuration data is retrieved from non-writable configuration layer. Therefor we
+    // must disable some menu entries.
+    m_bCanBeCustomized = sal_False;
+
     m_pToolBar->SetSelectHdl( LINK( this, AddonsToolBarManager, Select) );
     m_pToolBar->SetActivateHdl( LINK( this, AddonsToolBarManager, Activate) );
     m_pToolBar->SetDeactivateHdl( LINK( this, AddonsToolBarManager, Deactivate) );
@@ -189,19 +193,6 @@ AddonsToolBarManager::AddonsToolBarManager( const Reference< XMultiServiceFactor
 
 AddonsToolBarManager::~AddonsToolBarManager()
 {
-    ResetableGuard aGuard( m_aLock );
-    for ( sal_uInt16 n = 0; n < m_pToolBar->GetItemCount(); n++ )
-    {
-        USHORT nId( m_pToolBar->GetItemId( n ) );
-
-        if ( nId > 0 )
-        {
-            AddonsParams* pRuntimeItemData = (AddonsParams*)m_pToolBar->GetItemData( nId );
-            if ( pRuntimeItemData )
-                delete pRuntimeItemData;
-            m_pToolBar->SetItemData( nId, NULL );
-        }
-    }
 }
 
 static BOOL IsCorrectContext( Reference< com::sun::star::frame::XModel >& rModel, const rtl::OUString& aContextList )
@@ -246,6 +237,32 @@ static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
         aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage, bHiContrast );
 
     return aImage;
+}
+
+// XComponent
+void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException )
+{
+    Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+
+    {
+        // Remove addon specific data from toolbar items.
+        ResetableGuard aGuard( m_aLock );
+        for ( sal_uInt16 n = 0; n < m_pToolBar->GetItemCount(); n++ )
+        {
+            USHORT nId( m_pToolBar->GetItemId( n ) );
+
+            if ( nId > 0 )
+            {
+                AddonsParams* pRuntimeItemData = (AddonsParams*)m_pToolBar->GetItemData( nId );
+                if ( pRuntimeItemData )
+                    delete pRuntimeItemData;
+                m_pToolBar->SetItemData( nId, NULL );
+            }
+        }
+    }
+
+    // Base class will destroy our m_pToolBar member
+    ToolBarManager::dispose();
 }
 
 void AddonsToolBarManager::RefreshImages()
