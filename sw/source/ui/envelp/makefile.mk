@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jp $ $Date: 2001-11-14 16:34:12 $
+#   last change: $Author: jp $ $Date: 2001-11-14 16:35:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,11 +81,12 @@ PROJECTPCHSOURCE=..\ui_1st\ui_pch
 
 CXXFILES = \
         envfmt.cxx \
-        envimg.cxx \
+    envimg.cxx \
         envlop1.cxx \
         envprt.cxx \
         labelcfg.cxx \
         label1.cxx \
+        labelexp.cxx \
         labfmt.cxx \
         labprt.cxx \
         labimg.cxx \
