@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-24 15:53:24 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "~Stampante";
         Text[ danish ] = "~Printer";
         Text[ swedish ] = "S~krivare";
-        Text[ polish ] = "Drukarka";
+        Text[ polish ] = "drukarki";
         Text[ portuguese_brazilian ] = "~Printer";
         Text[ japanese ] = "Ãﬂÿ›¿(~P)";
         Text[ korean ] = "«¡∏∞≈Õ(~P)";
@@ -179,7 +179,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ italian ] = "Stampa nel ~file";
         Text[ danish ] = "Print to ~file";
         Text[ swedish ] = "Skriv ut t~ill fil";
-        Text[ polish ] = "Drukuj do pliku";
+        Text[ polish ] = "drukowania do pliku";
         Text[ portuguese_brazilian ] = "Print to ~file";
         Text[ japanese ] = "Ãß≤ŸÇ…èoóÕ(~F)";
         Text[ korean ] = "∆ƒ¿œ∑Œ ¿Œº‚(~F)";
@@ -340,7 +340,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ turkish ] = "Gradient ~stripes";
         Text[ arabic ] = "Gradient ~stripes";
         Text[ catalan ] = "Gradient ~stripes";
-        Text[ finnish ] = "Farbverlauf~sstreifen";
+        Text[ finnish ] = "Fabverlauf~sstreifen";
     };
     NumericField NF_REDUCEGRADIENTS_STEPCOUNT
     {
@@ -1066,6 +1066,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
     Text[ catalan ] = "Warning";
     Text[ finnish ] = "Varoitus";
 };
+
 
 
 
