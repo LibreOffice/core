@@ -1,0 +1,214 @@
+/*************************************************************************
+ *
+ *  $RCSfile: formlinkdialog.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:02:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
+#include "formresid.hrc"
+#endif
+#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#include "extensio.hrc"
+#endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_FORMLINKDIALOG_HRC
+#include "formlinkdialog.hrc"
+#endif
+
+ModalDialog RID_DLG_FORMLINKS
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 252, 110 ) ;
+
+    Text = "Felder verknüpfen";
+    Text [ english ] = "Link fields";
+    Text [ english_us ] = "Link fields";
+
+    FixedText FT_EXPLANATION
+    {
+        Pos = MAP_APPFONT( 6, 6 );
+        Size = MAP_APPFONT( 187, 24 );
+
+        WordBreak = TRUE;
+
+        Text = "Unterformulare können benutzt werden, um Detaildaten zu dem aktuellen Datensatz des Hauptformulars anzuzeigen. Dazu können Sie festlegen, welche Spalten sich jeweils entsprechen sollen.";
+        Text [ english ] = "Subforms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the subform match which columns in the master form.";
+        Text [ english_us ] = "Subforms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the subform match which columns in the master form.";
+    };
+
+    FixedText FT_DETAIL_LABEL
+    {
+        Pos = MAP_APPFONT( 6, 36 );
+        Size = MAP_APPFONT( 85, 8 );
+    };
+
+    FixedText FT_MASTER_LABEL
+    {
+        Pos = MAP_APPFONT( 102, 36 );
+        Size = MAP_APPFONT( 85, 8 );
+    };
+
+#define ROW( n ) \
+    Window n \
+    { \
+        Pos  = MAP_APPFONT( 6, 47 + 15 * ( n - 1 ) ); \
+        Size = MAP_APPFONT( 181, 13 );                \
+                                                      \
+        Hide          = FALSE;                        \
+        DialogControl = TRUE;                         \
+                                                      \
+        ComboBox 1                                    \
+        {                                             \
+            Pos  = MAP_APPFONT( 0, 0 );               \
+            Size = MAP_APPFONT( 85, 12 );             \
+                                                      \
+            DropDown = TRUE;                          \
+            TabStop  = TRUE;                          \
+                                                      \
+            HelpId   = HID_FIELDLINK_DETAIL_COLUMN;   \
+            UniqueId = UID_FIELDLINK_DETAIL#n;        \
+        };                                            \
+        FixedText 1                                   \
+        {                                             \
+            Pos  = MAP_APPFONT( 85, 0 );              \
+            Size = MAP_APPFONT( 10, 12 );             \
+            Center = TRUE;                            \
+            Text = "=";                               \
+        };                                            \
+        ComboBox 2                                    \
+        {                                             \
+            Pos  = MAP_APPFONT( 95, 0 );              \
+            Size = MAP_APPFONT( 85, 12 );             \
+                                                      \
+            DropDown = TRUE;                          \
+            TabStop  = TRUE;                          \
+                                                      \
+            HelpId   = HID_FIELDLINK_MASTER_COLUMN;   \
+            UniqueId = UID_FIELDLINK_MASTER#n;        \
+        };                                            \
+    }
+
+    ROW( 1 );
+    ROW( 2 );
+    ROW( 3 );
+    ROW( 4 );
+
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT( 199, 6 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop   = TRUE;
+        DefButton = TRUE;
+    };
+
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT( 199, 23 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT( 199, 43 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+
+    PushButton PB_SUGGEST
+    {
+        Pos = MAP_APPFONT( 199, 90 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop =  TRUE;
+        Hide    = FALSE;
+        Disable =  TRUE;
+
+        Text = "Vorschlagen";
+        Text [ english ] = "Suggest";
+        Text [ english_us ] = "Suggest";
+    };
+
+    String STR_DETAIL_FORM
+    {
+        Text = "Unterformular";
+        Text [ english ] = "Subform";
+        Text [ english_us ] = "Subform";
+    };
+
+    String STR_MASTER_FORM
+    {
+        Text = "Hauptformular";
+        Text [ english ] = "Master form";
+        Text [ english_us ] = "Master form";
+    };
+
+    String STR_ERROR_RETRIEVING_MASTER_COLUMNS
+    {
+        Text = "Die Spalten des Hauptformulars konnten nicht ermittelt werden.";
+        Text [ english ] = "The columns of the master form could not be retrieved.";
+        Text [ english_us ] = "The columns of the master form could not be retrieved.";
+    };
+    String STR_ERROR_RETRIEVING_DETAIL_COLUMNS
+    {
+        Text = "Die Spalten des Unterformulars konnten nicht ermittelt werden.";
+        Text [ english ] = "The columns of the sub form could not be retrieved.";
+        Text [ english_us ] = "The columns of the sub form could not be retrieved.";
+    };
+};
