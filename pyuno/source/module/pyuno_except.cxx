@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_except.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-23 12:12:57 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,9 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     PyRef bases;
     if( base.is() )
     {
+        { // for CC, keeping ref-count being 1
         bases = PyRef( PyTuple_New( 1 ), SAL_NO_ACQUIRE );
+        }
         PyTuple_SetItem( bases.get(), 0 , base.getAcquired() );
     }
     else
