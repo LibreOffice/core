@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinguisticExamples.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:39:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -90,11 +90,11 @@ public class LinguisticExamples
     public static void main(String args[])
     {
         String sConnection;
-        // Get the connect string, defaulting to localhost, port 8100
+        // Get the connect string, defaulting to localhost, port 2083
         // if non supplied as command line arguments
         if( args.length == 0 )
         {
-            sConnection = "socket,host=localhost,port=8100";
+            sConnection = "socket,host=localhost,port=2083";
             System.out.println( "Using default connect string: " + sConnection );
         }
         else
