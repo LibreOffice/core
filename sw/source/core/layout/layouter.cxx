@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:47:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,18 @@ void SwLayouter::InsertMovedFwdFrm( const SwDoc& _rDoc,
                                                  _nToPageNum );
 }
 
+// --> OD 2005-01-12 #i40155#
+void SwLayouter::RemoveMovedFwdFrm( const SwDoc& _rDoc,
+                                    const SwTxtFrm& _rTxtFrm )
+{
+    sal_uInt32 nDummy;
+    if ( SwLayouter::FrmMovedFwdByObjPos( _rDoc, _rTxtFrm, nDummy ) )
+    {
+        _rDoc.GetLayouter()->mpMovedFwdFrms->Remove( _rTxtFrm );
+    }
+}
+// <--
+
 bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                       const SwTxtFrm& _rTxtFrm,
                                       sal_uInt32& _ornToPageNum )
@@ -457,5 +469,53 @@ void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
     }
 
     _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
+}
+// <--
+// --> OD 2005-01-12 #i40155#
+void SwLayouter::ClearFrmsNotToWrap( const SwDoc& _rDoc )
+{
+    if ( _rDoc.GetLayouter() )
+    {
+        const_cast<SwDoc&>(_rDoc).GetLayouter()->maFrmsNotToWrap.clear();
+    }
+}
+
+void SwLayouter::InsertFrmNotToWrap( const SwDoc& _rDoc,
+                                             const SwFrm& _rFrm )
+{
+    if ( !_rDoc.GetLayouter() )
+    {
+        const_cast<SwDoc&>(_rDoc).SetLayouter( new SwLayouter() );
+    }
+
+    if ( !SwLayouter::FrmNotToWrap( _rDoc, _rFrm ) )
+    {
+        const_cast<SwDoc&>(_rDoc).GetLayouter()->maFrmsNotToWrap.push_back( &_rFrm );
+    }
+}
+
+bool SwLayouter::FrmNotToWrap( const SwDoc& _rDoc,
+                                       const SwFrm& _rFrm )
+{
+    if ( !_rDoc.GetLayouter() )
+    {
+        return false;
+    }
+    else
+    {
+        bool bFrmNotToWrap( false );
+        std::vector< const SwFrm* >::const_iterator aIter =
+                            _rDoc.GetLayouter()->maFrmsNotToWrap.begin();
+        for ( ; aIter != _rDoc.GetLayouter()->maFrmsNotToWrap.end(); ++aIter )
+        {
+            const SwFrm* pFrm = *(aIter);
+            if ( pFrm == &_rFrm )
+            {
+                bFrmNotToWrap = true;
+                break;
+            }
+        }
+        return bFrmNotToWrap;
+    }
 }
 // <--
