@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-27 11:05:42 $
+ *  last change: $Author: sab $ $Date: 2001-11-15 10:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,13 +720,16 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
 {
     OUStringBuffer sBuffer(sFormula.getLength());
     sal_Bool bInQuotationMarks(sal_False);
+    sal_Bool bInDoubleQuotationMarks(sal_False);
     sal_Int16 nCountBraces(0);
     sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); i++)
     {
         if (sFormula[i] == '\'')
             bInQuotationMarks = !bInQuotationMarks;
-        if (bInQuotationMarks)
+        else if (sFormula[i] == '"')
+            bInDoubleQuotationMarks = !bInDoubleQuotationMarks;
+        if (bInQuotationMarks || bInDoubleQuotationMarks)
             sBuffer.append(sFormula[i]);
         else if (sFormula[i] == '[')
             nCountBraces++;
