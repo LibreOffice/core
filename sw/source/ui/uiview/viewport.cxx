@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-10-30 10:39:56 $
+ *  last change: $Author: os $ $Date: 2002-12-11 09:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,8 @@ extern int bDocSzUpdated;
     if ( bModified )
         SetVisArea( aNewVisArea, FALSE );
 
-    if ( UpdateScrollbars() && !bInOuterResizePixel && !bInInnerResizePixel)
+    if ( UpdateScrollbars() && !bInOuterResizePixel && !bInInnerResizePixel &&
+            !GetDocShell()->GetProtocol().IsInPlaceActive())
         OuterResizePixel( Point(),
                           GetViewFrame()->GetWindow().GetOutputSizePixel() );
 }
