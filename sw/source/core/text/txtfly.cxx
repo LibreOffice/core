@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:09:31 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,11 @@
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
 #endif
+// --> OD 2004-06-16 #i28701#
+#ifndef _SVX_LSPCITEM_HXX
+#include <svx/lspcitem.hxx>
+#endif
+// <--
 #ifndef _TXTFLCNT_HXX //autogen
 #include <txtflcnt.hxx>
 #endif
@@ -157,6 +162,10 @@
 #include "notxtfrm.hxx"
 #include "flyfrms.hxx"
 #include "fmtcnct.hxx"  // SwFmtChain
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 #ifndef PRODUCT
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
@@ -937,21 +946,21 @@ sal_Bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
         aRect = SwRect( pCurrFrm->Frm().Pos() + pCurrFrm->Prt().Pos(),
                         pCurrFrm->Prt().SSize() );
 
-    const SwSortDrawObjs *pSorted = pPage->GetSortedObjs();
+    const SwSortedObjs *pSorted = pPage->GetSortedObjs();
     if( pSorted ) // Eigentlich ist durch bOn sichergestellt, dass es an der
     // Seite Objekte gibt, aber wer weiss, wer inzwischen etwas geloescht hat.
     {
         for ( MSHORT i = 0; i < pSorted->Count(); ++i )
         {
-            const SdrObject *pObj = (*pSorted)[i];
+            const SwAnchoredObject* pObj = (*pSorted)[i];
 
-            const SwRect aBound( GetBoundRect( pObj ) );
+            const SwRect aBound( pObj->GetObjRectWithSpaces() );
 
             // Optimierung
-            if( pObj->GetCurrentBoundRect().Left() > aRect.Right() )
+            if( pObj->GetObjRect().Left() > aRect.Right() )
                 continue;
 
-            if( pCurrFly != pObj && aBound.IsOver( aRect ) )
+            if( pCurrFly != pObj->GetDrawObj() && aBound.IsOver( aRect ) )
                 return sal_True;
         }
     }
@@ -1300,16 +1309,24 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
                     aPos = pNew->GetCurrentBoundRect().TopLeft();
                 pTmp = GetVirtualUpper( pTmp, aPos );
             }
+            // OD 2004-05-13 #i28701# - consider all objects in same context,
+            // if wrapping style is considered on object positioning.
+            // Thus, text will wrap around negative positioned objects.
+            if ( pCurrFrm->GetTxtNode()->GetDoc()->ConsiderWrapOnObjPos() &&
+                 ::FindKontext( pTmp, 0 ) == ::FindKontext( pCurrFrm, 0 ) )
+            {
+                return sal_True;
+            }
 
             const SwFrm* pHeader = 0;
             if ( pCurrFrm->GetNext() != pTmp &&
-                    ( IsFrmInSameKontext( pTmp, pCurrFrm ) ||
-                        // --> #i13832#, #i24135# wrap around objects in page header
-                        ( !pCurrFrm->GetTxtNode()->GetDoc()->IsFormerTextWrapping() &&
-                          0 != ( pHeader = pTmp->FindFooterOrHeader() ) &&
-                          !pHeader->IsFooterFrm() &&
-                          pCurrFrm->IsInDocBody() ) ) )
-                        // <--
+                 ( IsFrmInSameKontext( pTmp, pCurrFrm ) ||
+                   // --> #i13832#, #i24135# wrap around objects in page header
+                   ( !pCurrFrm->GetTxtNode()->GetDoc()->IsFormerTextWrapping() &&
+                     0 != ( pHeader = pTmp->FindFooterOrHeader() ) &&
+                     !pHeader->IsFooterFrm() &&
+                     pCurrFrm->IsInDocBody() ) ) )
+                   // <--
             {
                 if( pHeader || FLY_AT_FLY == rNewA.GetAnchorId() )
                     return sal_True;
@@ -1347,8 +1364,8 @@ SwFlyList *SwTxtFly::InitFlyList()
 
     SWAP_IF_SWAPPED( pCurrFrm )
 
-    const SwSortDrawObjs *pSorted = pPage->GetSortedObjs();
-    const MSHORT nCount = pSorted ? pSorted->Count() : 0;
+    const SwSortedObjs *pSorted = pPage->GetSortedObjs();
+    const sal_uInt32 nCount = pSorted ? pSorted->Count() : 0;
     // --> #108724# Page header/footer content doesn't have to wrap around
     //              floating screen objects
     const bool bFooterHeader = 0 != pCurrFrm->FindFooterOrHeader();
@@ -1363,8 +1380,18 @@ SwFlyList *SwTxtFly::InitFlyList()
     {
         pFlyList = new SwFlyList( 10, 10 );
 
-        SwRect aRect( pCurrFrm->Prt() );
-        aRect += pCurrFrm->Frm().Pos();
+        // --> OD 2004-06-18 #i28701# - consider complete frame area for new
+        // text wrapping
+        SwRect aRect;
+        if ( pDoc->IsFormerTextWrapping() )
+        {
+            aRect = pCurrFrm->Prt();
+            aRect += pCurrFrm->Frm().Pos();
+        }
+        else
+        {
+            aRect = pCurrFrm->Frm();
+        }
         // Wir machen uns etwas kleiner als wir sind,
         // damit Ein-Twip-Ueberlappungen ignoriert werden. (#49532)
         SWRECTFN( pCurrFrm )
@@ -1372,13 +1399,16 @@ SwFlyList *SwTxtFly::InitFlyList()
         const long nLeft = (aRect.*fnRect->fnGetLeft)() + 1;
         const sal_Bool bR2L = pCurrFrm->IsRightToLeft();
 
-        for( MSHORT i = 0; i < nCount; i++ )
+        for( sal_uInt32 i = 0; i < nCount; i++ )
         {
-            SdrObject *pO = (*pSorted)[ i ];
-            const SwRect aBound( GetBoundRect( pO ) );
+            SwAnchoredObject* pAnchoredObj = (*pSorted)[ i ];
+            const SwRect aBound( pAnchoredObj->GetObjRectWithSpaces() );
 
             // OD 2004-01-15 #110582# - do not consider hidden objects
-            if ( !pDoc->IsVisibleLayerId( pO->GetLayer() ) ||
+            // OD 2004-05-13 #i28701# - check, if object has to be considered
+            // for text wrap.
+            if ( !pDoc->IsVisibleLayerId( pAnchoredObj->GetDrawObj()->GetLayer() ) ||
+                 !pAnchoredObj->ConsiderForTextWrap() ||
                  nRight < (aBound.*fnRect->fnGetLeft)() ||
                  (*fnRect->fnYDiff)( (aRect.*fnRect->fnGetTop)(),
                                      (aBound.*fnRect->fnGetBottom)() ) > 0 ||
@@ -1391,7 +1421,7 @@ SwFlyList *SwTxtFly::InitFlyList()
                 continue;
             }
 
-            if( GetTop( pO, pCurrFrm->IsInFtn(), bFooterHeader ) )
+            if( GetTop( pAnchoredObj->GetDrawObj(), pCurrFrm->IsInFtn(), bFooterHeader ) )
             {
                 // OD 11.03.2003 #107862# - adjust insert position:
                 // overlapping objects should be sorted from left to right and
@@ -1441,13 +1471,14 @@ SwFlyList *SwTxtFly::InitFlyList()
                         break;
                     }
                 }
-                pFlyList->C40_INSERT( SdrObject, pO, nPos );
+                SdrObject* pSdrObj = pAnchoredObj->DrawObj();
+                pFlyList->C40_INSERT( SdrObject, pSdrObj, nPos );
 
-                SwContact *pContact = (SwContact*)GetUserCall(pO);
-                const SwFmtSurround &rFlyFmt = pContact->GetFmt()->GetSurround();
-                if( rFlyFmt.IsAnchorOnly() && &lcl_TheAnchor( pO ) == GetMaster() )
+                const SwFmtSurround &rFlyFmt = pAnchoredObj->GetFrmFmt().GetSurround();
+                if( rFlyFmt.IsAnchorOnly() && &lcl_TheAnchor( pSdrObj ) == GetMaster() )
                 {
-                    const SwFmtVertOrient &rTmpFmt = pContact->GetFmt()->GetVertOrient();
+                    const SwFmtVertOrient &rTmpFmt =
+                                    pAnchoredObj->GetFrmFmt().GetVertOrient();
                     if( VERT_BOTTOM != rTmpFmt.GetVertOrient() )
                         nMinBottom = ( bVert && nMinBottom ) ?
                                      Min( nMinBottom, aBound.Left() ) :
@@ -1475,22 +1506,22 @@ SwFlyList *SwTxtFly::InitFlyList()
 SwTwips SwTxtFly::CalcMinBottom() const
 {
     SwTwips nRet = 0;
-    const SwDrawObjs *pDrawObj = GetMaster()->GetDrawObjs();
-    const MSHORT nCount = pDrawObj ? pDrawObj->Count() : 0;
+    const SwSortedObjs *pDrawObj = GetMaster()->GetDrawObjs();
+    const sal_uInt32 nCount = pDrawObj ? pDrawObj->Count() : 0;
     if( nCount )
     {
         SwTwips nEndOfFrm = pCurrFrm->Frm().Bottom();
-        for( MSHORT i = 0; i < nCount; i++ )
+        for( sal_uInt32 i = 0; i < nCount; i++ )
         {
-            SdrObject *pO = (*pDrawObj)[ i ];
-            SwContact *pContact = (SwContact*)GetUserCall(pO);
-            const SwFmtSurround &rFlyFmt = pContact->GetFmt()->GetSurround();
+            SwAnchoredObject* pAnchoredObj = (*pDrawObj)[ i ];
+            const SwFmtSurround &rFlyFmt = pAnchoredObj->GetFrmFmt().GetSurround();
             if( rFlyFmt.IsAnchorOnly() )
             {
-                const SwFmtVertOrient &rTmpFmt = pContact->GetFmt()->GetVertOrient();
+                const SwFmtVertOrient &rTmpFmt =
+                                    pAnchoredObj->GetFrmFmt().GetVertOrient();
                 if( VERT_BOTTOM != rTmpFmt.GetVertOrient() )
                 {
-                    const SwRect aBound( GetBoundRect( pO ) );
+                    const SwRect aBound( pAnchoredObj->GetObjRectWithSpaces() );
                     if( aBound.Top() < nEndOfFrm )
                         nRet = Max( nRet, aBound.Bottom() );
                 }
@@ -2300,12 +2331,12 @@ const SwFrmFmt* SwTxtFrm::IsFirstBullet()
     const SwFrmFmt* pRet = NULL;
 
     SwPageFrm* pPage = FindPageFrm();
-    const SwSortDrawObjs *pSorted = pPage->GetSortedObjs();
+    const SwSortedObjs *pSorted = pPage->GetSortedObjs();
     if( pSorted )
     {
         for ( MSHORT i = 0; i < pSorted->Count(); ++i )
         {
-            const SdrObject *pObj = (*pSorted)[i];
+            const SdrObject* pObj = (*pSorted)[i]->GetDrawObj();
             if( this == &lcl_TheAnchor( pObj ) )
             {
                 SwRect aBound( GetBoundRect( pObj ) );
