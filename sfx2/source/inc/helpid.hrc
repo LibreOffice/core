@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-19 10:46:34 $
+ *  last change: $Author: pb $ $Date: 2001-10-26 05:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,8 +365,9 @@
 #define HID_HELP_BOOKMARKS_DELETE                   (HID_SFX_START + 298)
 #define HID_CLOSE_WARNING                           (HID_SFX_START + 299)
 #define HID_DID_SAVE_PACKED_XML                     (HID_SFX_START + 300)
+#define HID_HELP_TREELISTBOX_CONTENTS               (HID_SFX_START + 301)
 
-#define ACT_SFX_HID_END HID_HELP_TOOLBOXITEM_SEARCHDIALOG
+#define ACT_SFX_HID_END HID_HELP_TREELISTBOX_CONTENTS
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 
