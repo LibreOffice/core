@@ -160,13 +160,10 @@ SHL1SONAME=\"$(SONAME_SWITCH)$(SHL1TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL1RES)"!=""
-SHL1RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL1RES))
 SHL1ALLRES+=$(SHL1RES)
 SHL1LINKRES*=$(MISC)$/$(SHL1TARGET).res
 .ENDIF			# "$(SHL1RES)"!=""
-.ENDIF
 
 .IF "$(SHL1DEFAULTRES)$(use_shl_versions)"!=""
 SHL1DEFAULTRES*=$(MISC)$/$(SHL1TARGET)_def.res
@@ -555,13 +552,10 @@ SHL2SONAME=\"$(SONAME_SWITCH)$(SHL2TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL2RES)"!=""
-SHL2RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL2RES))
 SHL2ALLRES+=$(SHL2RES)
 SHL2LINKRES*=$(MISC)$/$(SHL2TARGET).res
 .ENDIF			# "$(SHL2RES)"!=""
-.ENDIF
 
 .IF "$(SHL2DEFAULTRES)$(use_shl_versions)"!=""
 SHL2DEFAULTRES*=$(MISC)$/$(SHL2TARGET)_def.res
@@ -950,13 +944,10 @@ SHL3SONAME=\"$(SONAME_SWITCH)$(SHL3TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL3RES)"!=""
-SHL3RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL3RES))
 SHL3ALLRES+=$(SHL3RES)
 SHL3LINKRES*=$(MISC)$/$(SHL3TARGET).res
 .ENDIF			# "$(SHL3RES)"!=""
-.ENDIF
 
 .IF "$(SHL3DEFAULTRES)$(use_shl_versions)"!=""
 SHL3DEFAULTRES*=$(MISC)$/$(SHL3TARGET)_def.res
@@ -1345,13 +1336,10 @@ SHL4SONAME=\"$(SONAME_SWITCH)$(SHL4TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL4RES)"!=""
-SHL4RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL4RES))
 SHL4ALLRES+=$(SHL4RES)
 SHL4LINKRES*=$(MISC)$/$(SHL4TARGET).res
 .ENDIF			# "$(SHL4RES)"!=""
-.ENDIF
 
 .IF "$(SHL4DEFAULTRES)$(use_shl_versions)"!=""
 SHL4DEFAULTRES*=$(MISC)$/$(SHL4TARGET)_def.res
@@ -1740,13 +1728,10 @@ SHL5SONAME=\"$(SONAME_SWITCH)$(SHL5TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL5RES)"!=""
-SHL5RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL5RES))
 SHL5ALLRES+=$(SHL5RES)
 SHL5LINKRES*=$(MISC)$/$(SHL5TARGET).res
 .ENDIF			# "$(SHL5RES)"!=""
-.ENDIF
 
 .IF "$(SHL5DEFAULTRES)$(use_shl_versions)"!=""
 SHL5DEFAULTRES*=$(MISC)$/$(SHL5TARGET)_def.res
@@ -2135,13 +2120,10 @@ SHL6SONAME=\"$(SONAME_SWITCH)$(SHL6TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL6RES)"!=""
-SHL6RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL6RES))
 SHL6ALLRES+=$(SHL6RES)
 SHL6LINKRES*=$(MISC)$/$(SHL6TARGET).res
 .ENDIF			# "$(SHL6RES)"!=""
-.ENDIF
 
 .IF "$(SHL6DEFAULTRES)$(use_shl_versions)"!=""
 SHL6DEFAULTRES*=$(MISC)$/$(SHL6TARGET)_def.res
@@ -2530,13 +2512,10 @@ SHL7SONAME=\"$(SONAME_SWITCH)$(SHL7TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL7RES)"!=""
-SHL7RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL7RES))
 SHL7ALLRES+=$(SHL7RES)
 SHL7LINKRES*=$(MISC)$/$(SHL7TARGET).res
 .ENDIF			# "$(SHL7RES)"!=""
-.ENDIF
 
 .IF "$(SHL7DEFAULTRES)$(use_shl_versions)"!=""
 SHL7DEFAULTRES*=$(MISC)$/$(SHL7TARGET)_def.res
@@ -2925,13 +2904,10 @@ SHL8SONAME=\"$(SONAME_SWITCH)$(SHL8TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL8RES)"!=""
-SHL8RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL8RES))
 SHL8ALLRES+=$(SHL8RES)
 SHL8LINKRES*=$(MISC)$/$(SHL8TARGET).res
 .ENDIF			# "$(SHL8RES)"!=""
-.ENDIF
 
 .IF "$(SHL8DEFAULTRES)$(use_shl_versions)"!=""
 SHL8DEFAULTRES*=$(MISC)$/$(SHL8TARGET)_def.res
@@ -3320,13 +3296,10 @@ SHL9SONAME=\"$(SONAME_SWITCH)$(SHL9TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL9RES)"!=""
-SHL9RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL9RES))
 SHL9ALLRES+=$(SHL9RES)
 SHL9LINKRES*=$(MISC)$/$(SHL9TARGET).res
 .ENDIF			# "$(SHL9RES)"!=""
-.ENDIF
 
 .IF "$(SHL9DEFAULTRES)$(use_shl_versions)"!=""
 SHL9DEFAULTRES*=$(MISC)$/$(SHL9TARGET)_def.res
@@ -3715,13 +3688,10 @@ SHL10SONAME=\"$(SONAME_SWITCH)$(SHL10TARGETN:b:b)\"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
-.IF "$(NO_REC_RES)"!=""
 .IF "$(SHL10RES)"!=""
-SHL10RES!:=$(subst,$(RES)$/,$(RES)$/$(defaultlangext)$/ $(SHL10RES))
 SHL10ALLRES+=$(SHL10RES)
 SHL10LINKRES*=$(MISC)$/$(SHL10TARGET).res
 .ENDIF			# "$(SHL10RES)"!=""
-.ENDIF
 
 .IF "$(SHL10DEFAULTRES)$(use_shl_versions)"!=""
 SHL10DEFAULTRES*=$(MISC)$/$(SHL10TARGET)_def.res
