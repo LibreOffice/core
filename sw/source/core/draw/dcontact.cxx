@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:04:59 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ SwFrmFmt *FindFrmFmt( SdrObject *pObj )
 {
     SwFrmFmt* pRetval = 0L;
 
-    if ( pObj->IsWriterFlyFrame() )
+    if ( pObj->ISA(SwVirtFlyDrawObj) )
     {
         pRetval = ((SwVirtFlyDrawObj*)pObj)->GetFmt();
     }
@@ -227,7 +227,7 @@ sal_Bool HasWrap( const SdrObject* pObj )
 
 SwRect GetBoundRect( const SdrObject* pObj )
 {
-    SwRect aRet( pObj->GetBoundRect() );
+    SwRect aRet( pObj->GetCurrentBoundRect() );
     const SwFmt *pFmt = ((SwContact*)GetUserCall(pObj))->GetFmt();
     const SvxULSpaceItem &rUL = pFmt->GetULSpace();
     const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
@@ -248,12 +248,12 @@ SwRect GetBoundRect( const SdrObject* pObj )
 
 void CaptureDrawObj( SdrObject& rObj, const SwRect& rFrm )
 {
-    Rectangle aRect( rObj.GetBoundRect() );
+    Rectangle aRect( rObj.GetCurrentBoundRect() );
     if ( aRect.Right() >= rFrm.Right() + 10 )
     {
         Size aSize( rFrm.Right() - aRect.Right(), 0 );
         rObj.Move( aSize );
-        aRect = rObj.GetBoundRect();
+        aRect = rObj.GetCurrentBoundRect();
     }
 
     if ( aRect.Left() + 10 <= rFrm.Left() )
@@ -586,7 +586,7 @@ void lcl_Notify( SwDrawContact* pThis, const Rectangle* pOldBoundRect )
                 Notify_Background( pThis->GetMaster(),pPage, aOldRect,
                                     PREP_FLY_LEAVE,TRUE);
         }
-        SwRect aRect( pThis->GetMaster()->GetBoundRect() );
+        SwRect aRect( pThis->GetMaster()->GetCurrentBoundRect() );
         if( aRect.HasArea() )
         {
             SwPageFrm *pPg = pThis->FindPage( aRect );
@@ -620,7 +620,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
                     Notify_Background( pDrawVirtObj ,pPage,
                                        aOldRect, PREP_FLY_LEAVE,TRUE);
             }
-            SwRect aRect( pDrawVirtObj->GetBoundRect() );
+            SwRect aRect( pDrawVirtObj->GetCurrentBoundRect() );
             if( aRect.HasArea() )
             {
                 SwPageFrm *pPg = pDrawVirtObj->GetPageFrm();
@@ -808,7 +808,7 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             if( pOldAnch )
             {
                 pPg = pOldAnch->FindPageFrm();
-                aOldRect = SwRect( GetMaster()->GetBoundRect() );
+                aOldRect = SwRect( GetMaster()->GetCurrentBoundRect() );
             }
             ConnectToLayout( pAnch );
             if( pPg && aOldRect.HasArea() )
@@ -819,7 +819,7 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             if(GetMaster())
             {
                 GetMaster()->SetChanged();
-                GetMaster()->SendRepaintBroadcast();
+                GetMaster()->BroadcastObjectChange();
             }
         }
         else
@@ -1104,7 +1104,10 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                                 ClrContourCache( pDrawVirtObj );
                             }
                             pFrm->AppendVirtDrawObj( this, pDrawVirtObj );
-                            pDrawVirtObj->SendRepaintBroadcast();
+
+                            // for repaint, use new ActionChanged()
+                            // pDrawVirtObj->SendRepaintBroadcast();
+                            pDrawVirtObj->ActionChanged();
                         }
 
                         if ( pAnch->GetAnchorId() == FLY_IN_CNTNT )
@@ -1267,7 +1270,7 @@ SwPageFrm* SwDrawContact::FindPage( const SwRect &rRect )
 void SwDrawContact::ChkPage()
 {
     SwPageFrm* pPg = pAnchor && pAnchor->IsPageFrm() ?
-        pPage : FindPage( GetMaster()->GetBoundRect() );
+        pPage : FindPage( GetMaster()->GetCurrentBoundRect() );
     if ( pPage != pPg )
     {
         // OD 27.06.2003 #108784# - if drawing object is anchor in header/footer
@@ -1626,9 +1629,17 @@ void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
 // All overloaded methods which need to use the offset to move
 // the object position virtually.
 
-const Rectangle& SwDrawVirtObj::GetBoundRect() const
+const Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
 {
-    ((SwDrawVirtObj*)this)->aOutRect = rRefObj.GetBoundRect(); // Hier noch optimieren
+    ((SwDrawVirtObj*)this)->aOutRect = rRefObj.GetCurrentBoundRect(); // Hier noch optimieren
+    ((SwDrawVirtObj*)this)->aOutRect += maOffset;
+
+    return aOutRect;
+}
+
+const Rectangle& SwDrawVirtObj::GetLastBoundRect() const
+{
+    ((SwDrawVirtObj*)this)->aOutRect = rRefObj.GetLastBoundRect(); // Hier noch optimieren
     ((SwDrawVirtObj*)this)->aOutRect += maOffset;
 
     return aOutRect;
@@ -1636,11 +1647,11 @@ const Rectangle& SwDrawVirtObj::GetBoundRect() const
 
 void SwDrawVirtObj::RecalcBoundRect()
 {
-    aOutRect = rRefObj.GetBoundRect();
+    aOutRect = rRefObj.GetCurrentBoundRect();
     aOutRect += maOffset;
 }
 
-FASTBOOL SwDrawVirtObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SwDrawVirtObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
     FASTBOOL bRet;
 
@@ -1651,11 +1662,11 @@ FASTBOOL SwDrawVirtObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInf
         SdrPaintInfoRec aCopyInfoRec = rInfoRec;
         aCopyInfoRec.aCheckRect.Move( -maOffset.X(), -maOffset.Y() );
         aCopyInfoRec.aDirtyRect.Move( -maOffset.X(), -maOffset.Y() );
-        bRet = rRefObj.Paint(rOut, aCopyInfoRec);
+        bRet = rRefObj.DoPaintObject(rOut, aCopyInfoRec);
     }
     else
     {
-        bRet = rRefObj.Paint(rOut, rInfoRec);
+        bRet = rRefObj.DoPaintObject(rOut, rInfoRec);
     }
     rOut.SetOffset(aOfs);
 
@@ -1731,7 +1742,7 @@ void SwDrawVirtObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL 
 
 void SwDrawVirtObj::Move(const Size& rSiz)
 {
-    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetBoundRect();
+    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
     rRefObj.Move( rSiz );
     SetRectsDirty();
     SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
@@ -1741,7 +1752,7 @@ void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fract
 {
     if(xFact.GetNumerator() != xFact.GetDenominator() || yFact.GetNumerator() != yFact.GetDenominator())
     {
-        Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetBoundRect();
+        Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Resize(rRef - maOffset, xFact, yFact);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
@@ -1752,7 +1763,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, long nWink, double sn, double cs)
 {
     if(nWink)
     {
-        Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetBoundRect();
+        Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Rotate(rRef - maOffset, nWink, sn, cs);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
@@ -1761,7 +1772,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, long nWink, double sn, double cs)
 
 void SwDrawVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
 {
-    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetBoundRect();
+    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
     rRefObj.Mirror(rRef1 - maOffset, rRef2 - maOffset);
     SetRectsDirty();
     SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
@@ -1771,7 +1782,7 @@ void SwDrawVirtObj::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVS
 {
     if(nWink)
     {
-        Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetBoundRect();
+        Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Shear(rRef - maOffset, nWink, tn, bVShear);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
@@ -1794,7 +1805,7 @@ const Rectangle& SwDrawVirtObj::GetSnapRect() const
 
 void SwDrawVirtObj::SetSnapRect(const Rectangle& rRect)
 {
-    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetBoundRect();
+    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
     Rectangle aR(rRect);
     aR -= maOffset;
     rRefObj.SetSnapRect(aR);
@@ -1820,7 +1831,7 @@ const Rectangle& SwDrawVirtObj::GetLogicRect() const
 
 void SwDrawVirtObj::SetLogicRect(const Rectangle& rRect)
 {
-    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetBoundRect();
+    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
     Rectangle aR(rRect);
     aR -= maOffset;
     rRefObj.SetLogicRect(aR);
