@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:22:24 $
+ *  last change: $Author: cl $ $Date: 2001-02-02 12:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,13 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
         else
         {
             // set objects style sheet on empty outliner
-            pOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)pObj->GetModel()->GetStyleSheetPool() );
-            pOutliner->SetStyleSheet( 0, pObj->GetPage()->GetTextStyleSheetForObject( pObj ) );
+            SfxStyleSheetPool* pPool = (SfxStyleSheetPool*)pObj->GetModel()->GetStyleSheetPool();
+            if( pPool )
+                pOutliner->SetStyleSheetPool( pPool );
+
+            SfxStyleSheet* pStyleSheet = pObj->GetPage()->GetTextStyleSheetForObject( pObj );
+            if( pStyleSheet )
+                pOutliner->SetStyleSheet( 0, pStyleSheet );
         }
 
         bDataValid = TRUE;

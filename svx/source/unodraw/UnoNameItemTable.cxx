@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-31 19:35:22 $
+ *  last change: $Author: cl $ $Date: 2001-02-02 12:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ using namespace ::cppu;
 SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId ) throw()
 : mpModel( pModel ),
   mpModelPool( pModel ? &pModel->GetItemPool() : NULL ),
-  mpStylePool( pModel ? &pModel->GetStyleSheetPool()->GetPool() : NULL ),
+  mpStylePool( ( pModel && pModel->GetStyleSheetPool()) ? &pModel->GetStyleSheetPool()->GetPool() : NULL ),
   mnWhich( nWhich ), mnMemberId( nMemberId )
 {
 }
@@ -121,7 +121,7 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aName, const un
         throw container::ElementExistException();
 
     SfxItemSet* mpInSet1 = new SfxItemSet( *mpModelPool, mnWhich, mnWhich );
-    SfxItemSet* mpInSet2 = new SfxItemSet( *mpStylePool, mnWhich, mnWhich );
+    SfxItemSet* mpInSet2 = mpStylePool ? new SfxItemSet( *mpStylePool, mnWhich, mnWhich ) : NULL;
     maItemSetVector.push_back( std::pair< SfxItemSet*, SfxItemSet*>( mpInSet1, mpInSet2 ) );
 
     NameOrIndex* pNewItem = createItem();
@@ -129,7 +129,8 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aName, const un
     pNewItem->PutValue( aElement, mnMemberId );
 
     mpInSet1->Put( *pNewItem, mnWhich );
-    mpInSet2->Put( *pNewItem, mnWhich );
+    if( mpInSet2 )
+        mpInSet2->Put( *pNewItem, mnWhich );
     delete pNewItem;
 }
 
@@ -182,7 +183,8 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aName, const u
                 throw lang::IllegalArgumentException();
 
             (*aIter).first->Put( *pNewItem );
-            (*aIter).second->Put( *pNewItem );
+            if( (*aIter).second )
+                (*aIter).second->Put( *pNewItem );
             return;
         }
         aIter++;
@@ -198,7 +200,7 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const  OUString& aName )
 {
     uno::Any aAny;
 
-    if( mpModelPool && mpStylePool && aName.getLength() != 0 )
+    if( mpModelPool && aName.getLength() != 0 )
     {
         const String aSearchName( aName );
         NameOrIndex *pItem;

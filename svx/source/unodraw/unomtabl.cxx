@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:24:30 $
+ *  last change: $Author: cl $ $Date: 2001-02-02 12:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ public:
 
 SvxUnoMarkerTable::SvxUnoMarkerTable( SdrModel* pModel ) throw()
 : mpModel( pModel ),
-  mpStylePool( pModel ? &pModel->GetStyleSheetPool()->GetPool() : NULL ),
+  mpStylePool( ( pModel && pModel->GetStyleSheetPool() ) ? &pModel->GetStyleSheetPool()->GetPool() : NULL ),
   mpModelPool( pModel ? &pModel->GetItemPool() : (SfxItemPool*)NULL )
 {
 }
@@ -190,7 +190,7 @@ void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aName, const uno:
         throw container::ElementExistException();
 
     SfxItemSet* mpInSet1 = new SfxItemSet( *mpModelPool, XATTR_LINESTART, XATTR_LINEEND );
-    SfxItemSet* mpInSet2 = new SfxItemSet( *mpStylePool, XATTR_LINESTART, XATTR_LINEEND );
+    SfxItemSet* mpInSet2 = mpStylePool ? new SfxItemSet( *mpStylePool, XATTR_LINESTART, XATTR_LINEEND ) : NULL;
     maItemSetVector.push_back( std::pair< SfxItemSet*, SfxItemSet*>( mpInSet1, mpInSet2 ) );
 
     XLineEndItem aEndMarker;
@@ -198,14 +198,17 @@ void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aName, const uno:
     aEndMarker.PutValue( aElement );
 
     mpInSet1->Put( aEndMarker, XATTR_LINEEND );
-    mpInSet2->Put( aEndMarker, XATTR_LINEEND );
+
+    if( mpInSet2 )
+        mpInSet2->Put( aEndMarker, XATTR_LINEEND );
 
     XLineStartItem aStartMarker;
     aStartMarker.SetName( String( aName ) );
     aStartMarker.PutValue( aElement );
 
     mpInSet1->Put( aStartMarker, XATTR_LINESTART );
-    mpInSet2->Put( aStartMarker, XATTR_LINESTART );
+    if( mpInSet2 )
+        mpInSet2->Put( aStartMarker, XATTR_LINESTART );
 }
 
 void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& Name )
@@ -255,14 +258,16 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aName, const uno
                 throw lang::IllegalArgumentException();
 
             (*aIter).first->Put( aEndMarker, XATTR_LINEEND );
-            (*aIter).second->Put( aEndMarker, XATTR_LINEEND );
+            if( (*aIter).second )
+                (*aIter).second->Put( aEndMarker, XATTR_LINEEND );
 
             XLineStartItem aStartMarker;
             aStartMarker.SetName( aSearchName );
             aStartMarker.PutValue( aElement );
 
             (*aIter).first->Put( aStartMarker, XATTR_LINESTART );
-            (*aIter).second->Put( aStartMarker, XATTR_LINESTART );
+            if( (*aIter).second )
+                (*aIter).second->Put( aStartMarker, XATTR_LINESTART );
             return;
         }
         aIter++;
@@ -296,7 +301,7 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const  OUString& aName )
 {
     uno::Any aAny;
 
-    if( mpModelPool && mpStylePool && aName.getLength() != 0 )
+    if( mpModelPool && aName.getLength() != 0 )
     {
         do
         {
@@ -304,13 +309,13 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const  OUString& aName )
             if( getByNameFromPool( aSearchName, mpModelPool, XATTR_LINESTART, aAny ) )
                 break;
 
-            if( getByNameFromPool( aSearchName, mpStylePool, XATTR_LINESTART, aAny ) )
+            if( mpStylePool && getByNameFromPool( aSearchName, mpStylePool, XATTR_LINESTART, aAny ) )
                 break;
 
             if( getByNameFromPool( aSearchName, mpModelPool, XATTR_LINEEND, aAny ) )
                 break;
 
-            if( getByNameFromPool( aSearchName, mpStylePool, XATTR_LINEEND, aAny ) )
+            if( mpStylePool && getByNameFromPool( aSearchName, mpStylePool, XATTR_LINEEND, aAny ) )
                 break;
 
             throw container::NoSuchElementException();
@@ -370,13 +375,13 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames(  )
         createNamesForPool( mpModelPool, XATTR_LINESTART, nStartCount1, aSeq, pStrings, nCount );
 
         // search style pool for line starts
-        createNamesForPool( mpStylePool, XATTR_LINESTART, nStartCount2, aSeq, pStrings, nCount );
+        if( mpStylePool ) createNamesForPool( mpStylePool, XATTR_LINESTART, nStartCount2, aSeq, pStrings, nCount );
 
         // search model pool for line ends
         createNamesForPool( mpModelPool, XATTR_LINEEND, nEndCount1, aSeq, pStrings, nCount );
 
         // search style pool for line ends
-        createNamesForPool( mpStylePool, XATTR_LINEEND, nEndCount2, aSeq, pStrings, nCount );
+        if( mpStylePool ) createNamesForPool( mpStylePool, XATTR_LINEEND, nEndCount2, aSeq, pStrings, nCount );
 
         DBG_ASSERT( nCount <= aSeq.getLength(), "SvxUnoMarkerTable Overflow!" );
         if( nCount < aSeq.getLength() )
