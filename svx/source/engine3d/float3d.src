@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:35:51 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3276,7 +3276,7 @@ String RID_SVXFLOAT3D_FAVORITE
     Text[ portuguese_brazilian ] = "Favorite";
     Text[ japanese ] = "‚¨‹C‚É“ü‚è";
     Text[ korean ] = "Áñ°ÜÃ£±â";
-    Text[ chinese_simplified ] = "ÊÕ²Ø¼Ð";
+    Text[ chinese_simplified ] = "ÊÕ²Ø";
     Text[ chinese_traditional ] = "§Úªº³Ì·R";
     Text[ turkish ] = "Favorite";
     Text[ arabic ] = "ÇáãÝÖá";
