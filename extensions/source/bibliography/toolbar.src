@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 13:55:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ ToolBox RID_BIB_TOOLBAR
             HelpId = HID_BIB_CHANGESOURCE;
             Text = "Datenquelle" ;
             Text[ English ] = "Data source" ;
-//          Command = ".uno:Bib/sdbsource" ;
+            Command = ".uno:Bib/sdbsource" ;
 //            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Checkable=TRUE;
             Text[ english_us ] = "Data Source";
