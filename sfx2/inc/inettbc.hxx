@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 09:53:19 $
+ *  last change: $Author: dv $ $Date: 2001-07-09 15:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,70 +70,21 @@
 #include <vcl/combobox.hxx>
 #endif
 
-#define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
-
-struct SfxPickEntry_Impl;
-class SfxURLBox : public ComboBox
-{
-friend class SfxMatchContext_Impl;
-friend class SfxURLBox_Impl;
-    Link                            aOpenHdl;
-    String                          aBaseURL;
-    INetProtocol                    eSmartProtocol;
-    SfxMatchContext_Impl*           pCtx;
-    SfxURLBox_Impl*                 pImp;
-    BOOL                            bAutoCompleteMode;
-    BOOL                            bOnlyDirectories;
-    BOOL                            bModified;
-    BOOL                            bTryAutoComplete: 1,
-                                    bCtrlClick: 1,
-                                    bHistoryDisabled : 1;
-
-    BOOL                            ProcessKey( const KeyCode& rCode );
-    void                            TryAutoComplete( BOOL bForward, BOOL bForce );
-    void                            UpdatePicklistForSmartProtocol_Impl();
-    DECL_LINK(                      AutoCompleteHdl_Impl, void* );
-
-protected:
-    virtual long                    Notify( NotifyEvent& rNEvt );
-    virtual void                    Select();
-    virtual void                    Modify();
-#ifndef TF_SVDATA
-    virtual BOOL                    QueryDrop( DropEvent &rEvt );
-    virtual BOOL                    Drop( const DropEvent &rEvt );
-#endif
-    virtual long                    PreNotify( NotifyEvent& rNEvt );
-
-public:
-                                    SfxURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_NOT_VALID );
-                                    SfxURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart = INET_PROT_NOT_VALID );
-                                    ~SfxURLBox();
-
-    void                            OpenURL( const String& rName, BOOL nMod ) const;
-    void                            SetBaseURL( const String& rURL ) { aBaseURL = rURL; }
-    const String&                   GetBaseURL() const { return aBaseURL; }
-    void                            SetOpenHdl( const Link& rLink ) { aOpenHdl = rLink; }
-    const Link&                     GetOpenHdl() const { return aOpenHdl; }
-    void                            SetOnlyDirectories( BOOL bDir = TRUE );
-    INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
-    void                            SetSmartProtocol( INetProtocol eProt );
-    BOOL                            IsCtrlOpen()
-                                    { return bCtrlClick; }
-    String                          GetURL();
-    void                            DisableHistory();
-};
-
 #if _SOLAR__PRIVATE
 
 #include "tbxctrl.hxx"
+class SvtURLBox;
+
 class SfxURLToolBoxControl_Impl : public SfxToolBoxControl
 {
 private:
     SfxStatusForwarder      aURLForwarder;
-    SfxURLBox*              GetURLBox() const;
+    SvtURLBox*              GetURLBox() const;
+    void                    OpenURL( const String& rName, BOOL bNew ) const;
+
     DECL_LINK(              OpenHdl, void* );
     DECL_LINK(              SelectHdl, void* );
+
 public:
 
                             SFX_DECL_TOOLBOX_CONTROL();
