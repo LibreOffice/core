@@ -4,6 +4,7 @@
 rm -f *.cxx *.new *.exp
 
 if ( -e makefile.mk_orig ) then
+   rm -f makefile.mk
    # rename original makefile back
    mv makefile.mk_orig makefile.mk
 endif
