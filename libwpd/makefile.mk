@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-01 17:00:56 $
+#   last change: $Author: hjs $ $Date: 2005-03-03 11:45:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,8 +77,8 @@ TARGET=wpd
 .ENDIF
 
 TARFILE_NAME=libwpd-0.8.0
-#PATCH_FILE_NAME=$(TARFILE_NAME).diff
-BUILD_ACTION=dmake
+PATCH_FILE_NAME=$(TARFILE_NAME).diff
+BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src/lib
 
 # --- Targets ------------------------------------------------------
