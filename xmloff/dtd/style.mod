@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.25 2001-01-30 13:55:21 cl Exp $
+	$Id: style.mod,v 1.26 2001-01-31 10:27:03 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -136,6 +136,7 @@
 <!ATTLIST style:properties text:animation-stop-inside %boolean; #IMPLIED>
 <!ATTLIST style:properties text:animation-repeat %integer; #IMPLIED>
 <!ATTLIST style:properties text:animation-delay %timeDuration; #IMPLIED>
+<!ATTLIST style:properties text:animation-steps %length; #IMPLIED>
 
 <!-- text properties -->
 <!ATTLIST style:properties fo:font-variant (normal|small-caps) #IMPLIED>
