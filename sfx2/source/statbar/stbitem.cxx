@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:27:10 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,7 +540,7 @@ BOOL SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
     Die Defaultimplementierung ist leer und gibt FALSE zur"uck.
 
 
-    [RÅckgabewert]
+    [Rueckgabewert]
 
     BOOL                TRUE
                         das Event wurde bearbeitet und soll nicht an
@@ -569,7 +569,7 @@ BOOL SfxStatusBarControl::MouseMove( const MouseEvent & )
     Die Defaultimplementierung ist leer und gibt FALSE zur"uck.
 
 
-    [RÅckgabewert]
+    [Rueckgabewert]
 
     BOOL                TRUE
                         das Event wurde bearbeitet und soll nicht an
@@ -598,7 +598,7 @@ BOOL SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
     Die Defaultimplementierung ist leer und gibt FALSE zur"uck.
 
 
-    [RÅckgabewert]
+    [Rueckgabewert]
 
     BOOL                TRUE
                         das Event wurde bearbeitet und soll nicht an
