@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,4 +348,23 @@ BOOL WorkWindow::IsMinimized() const
     SalFrameState aState;
     mpFrame->GetWindowState(&aState);
     return (( aState.mnState & SAL_FRAMESTATE_MINIMIZED ) != 0);
+}
+
+// -----------------------------------------------------------------------
+
+BOOL WorkWindow::SetPluginParent( SystemParentData* pParent )
+{
+    DBG_ASSERT( ! mbPresentationMode && ! mbFullScreenMode, "SetPluginParent in fullscreen or presentation mode !" );
+
+    bool bWasDnd = Window::ImplStopDnd();
+
+    BOOL bShown = IsVisible();
+    Show( FALSE );
+    BOOL bRet = mpFrame->SetPluginParent( pParent );
+    Show( bShown );
+
+    if( bWasDnd )
+        Window::ImplStartDnd();
+
+    return bRet;
 }
