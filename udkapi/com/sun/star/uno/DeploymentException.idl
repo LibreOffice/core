@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DeploymentException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:34:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 
     @since #107627#
 */
-exception DeploymentException : com::sun::star::uno::RuntimeException
+published exception DeploymentException : com::sun::star::uno::RuntimeException
 {
 };
 
