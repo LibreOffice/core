@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.28 $
+*  $Revision: 1.29 $
 *
-*  last change: $Author: npower $ $Date: 2003-08-19 09:50:57 $
+*  last change: $Author: npower $ $Date: 2003-10-15 08:31:40 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -299,7 +299,10 @@ throw ( RuntimeException )
                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
 
-    if( displayDialog )
+// np - removed previous scripting framework security handling
+// now handled by modification to existing calls in sfx for basic
+//
+/*    if( displayDialog )
     {
         try
         {
@@ -320,7 +323,7 @@ throw ( RuntimeException )
        OSL_TRACE("No need to security mgr for %s",
            ::rtl::OUStringToOString( stringURI,
                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-    }
+    }*/
     return returnedID;
 }
 
