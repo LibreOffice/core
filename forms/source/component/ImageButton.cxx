@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:53:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ InterfaceRef SAL_CALL OImageButtonModel_CreateInstance(const Reference<XMultiSer
 
 //------------------------------------------------------------------
 OImageButtonModel::OImageButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                    :OImageModel( _rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_CONTROL_IMAGEBUTTON )
+                    :OImageModel( _rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_SUN_CONTROL_IMAGEBUTTON )
                                     // use the old control name for compytibility reasons
 {
     DBG_CTOR(OImageButtonModel, NULL);
