@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:42:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, xub_StrLen nCnt,
 
 // #111827#
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
-    : SwUndo(UNDO_TYPING), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
+    : SwUndo(UNDO_SPLITNODE), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
         bIsWordDelim( FALSE ), bIsAppend( TRUE ), pPos( 0 ), pTxt( 0 ),
         pRedlData( 0 )
 {
