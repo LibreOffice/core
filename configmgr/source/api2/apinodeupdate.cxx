@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 17:54:50 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,9 @@ ISynchronizedData* NodeSetAccess::getDataLock()
 
 configuration::SetElementFactory NodeTreeSetAccess::getElementFactory()
 {
-    configuration::TemplateProvider aProvider = getApiTree().getProvider().getTemplateProvider();
-    return configuration::SetElementFactory(aProvider);
+    using namespace configuration;
+    TemplateProvider aProvider = SetElementFactory::findTemplateProvider(getTree(),getNode());
+    return SetElementFactory(aProvider);
 }
 //-----------------------------------------------------------------------------
 
