@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-16 12:53:05 $
+ *  last change: $Author: pl $ $Date: 2001-11-16 15:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1423,8 +1423,12 @@ static void normPath( ByteString& rPath )
 
 void PrintFontManager::getServerDirectories()
 {
+#ifdef LINUX
+    /*
+     *  chkfontpath exists on some (RH derived) Linux distributions
+     */
     static const char* pCommands[] = {
-        "/usr/sbin/chkfontpath", "chkfontpath"
+        "/usr/sbin/chkfontpath 2>/dev/null", "chkfontpath 2>/dev/null"
     };
     ::std::list< ByteString > aLines;
 
@@ -1460,6 +1464,7 @@ void PrintFontManager::getServerDirectories()
 #endif
         }
     }
+#endif
 }
 
 void PrintFontManager::initialize( void* pInitDisplay )
