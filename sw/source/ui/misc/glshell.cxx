@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glshell.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 14:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,6 @@ SFX_IMPL_INTERFACE( SwGlosDocShell, SwDocShell, SW_RES(0) )
 {
 }
 
-
 SFX_IMPL_INTERFACE( SwWebGlosDocShell, SwWebDocShell, SW_RES(0) )
 {
 }
@@ -198,17 +197,16 @@ BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
 
     SvxMacro aStart(aEmptyStr, aEmptyStr);
     SvxMacro aEnd(aEmptyStr, aEmptyStr);
+    SwGlossaryHdl* pGlosHdl;
 
-    SwGlossaryHdl* pGlosHdl = rSh.GetView().GetGlosHdl();
+    pGlosHdl = rSh.GetView().GetGlosHdl();
     pGlosHdl->GetMacros( rShortNm, aStart, aEnd, pBlock );
-
-
 
     USHORT nRet = rSh.SaveGlossaryDoc( *pBlock, rLongNm, rShortNm,
                                 pCfg->IsSaveRelFile(), pCfg->IsSaveRelNet(),
                                 pBlock->IsOnlyTextBlock( rShortNm ) );
 
-    if(aStart.GetMacName().Len() || aEnd.GetMacName().Len())
+    if(aStart.GetMacName().Len() || aEnd.GetMacName().Len() )
     {
         SvxMacro* pStart = aStart.GetMacName().Len() ? &aStart : 0;
         SvxMacro* pEnd = aEnd.GetMacName().Len() ? &aEnd : 0;
@@ -227,8 +225,9 @@ BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
  --------------------------------------------------------------------*/
 
 
-SwGlosDocShell::SwGlosDocShell()
-    : SwDocShell( SFX_CREATE_MODE_STANDARD )
+SwGlosDocShell::SwGlosDocShell( sal_Bool bNewShow)
+    : bShow ( bNewShow )
+    , SwDocShell( bShow ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
 {
     SetHelpId(SW_GLOSDOCSHELL);
 }
@@ -329,11 +328,12 @@ BOOL SwWebGlosDocShell::Save()
  --------------------------------------------------------------------*/
 
 
-SV_DECL_REF(SwDocShell)
 SV_IMPL_REF(SwDocShell)
 
-void SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName )
+SwDocShellRef* SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName, BOOL bShow )
 {
+    SwDocShellRef *pDocShellRef = new SwDocShellRef();
+    SwDocShellRef &xDocSh = *pDocShellRef;
     SwTextBlocks* pGroup = GetGroupDoc( rGroup );
     if(pGroup->IsOld())
     {
@@ -344,8 +344,6 @@ void SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName 
 
     if( pGroup && pGroup->GetCount() )
     {
-        SwDocShellRef xDocSh;
-
         // erfrage welche View registriert ist. Im WebWriter gibts es keine
         // normale View
         USHORT nViewId = 0 != &SwView::Factory() ? 2 : 6;
@@ -353,20 +351,18 @@ void SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName 
 
         if( 6 == nViewId )
         {
-            xDocSh = new SwWebGlosDocShell();
-            SwWebGlosDocShell* pDocSh = (SwWebGlosDocShell*)&xDocSh;
+            SwWebGlosDocShell* pDocSh = new SwWebGlosDocShell();
+            xDocSh = pDocSh;
             pDocSh->DoInitNew( 0 );
-
             pDocSh->SetLongName( sLongName );
             pDocSh->SetShortName( rShortName);
             pDocSh->SetGroupName( rGroup );
         }
         else
         {
-            xDocSh = new SwGlosDocShell();
-            SwGlosDocShell* pDocSh = (SwGlosDocShell*)&xDocSh;
+            SwGlosDocShell* pDocSh = new SwGlosDocShell(bShow);
+            xDocSh = pDocSh;
             pDocSh->DoInitNew( 0 );
-
             pDocSh->SetLongName( sLongName );
             pDocSh->SetShortName( rShortName );
             pDocSh->SetGroupName( rGroup );
@@ -399,14 +395,21 @@ void SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName 
         xDocSh->SetTitle( aDocTitle );
         xDocSh->GetDoc()->DoUndo( bDoesUndo );
         xDocSh->GetDoc()->ResetModified();
-        pFrame->GetFrame()->Appear();
+        if ( bShow )
+            pFrame->GetFrame()->Appear();
+        xDocSh->GetDoc()->DoUndo ( FALSE );
+
         delete pGroup;
     }
+    return pDocShellRef;
 }
 
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:44  hr
+    initial import
+
     Revision 1.59  2000/09/18 16:05:57  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glshell.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 14:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,20 @@
 
 class SwTextBlocks;
 
+
 class SwGlosDocShell : public SwDocShell
 {
     String          aLongName;
     String          aShortName;
     String          aGroupName;
+    sal_Bool        bShow;
 protected:
     virtual BOOL Save();
 
 public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SW_GLOSDOCSHELL);
-                SwGlosDocShell();
+                SwGlosDocShell( sal_Bool bNewShow = sal_True);
         virtual ~SwGlosDocShell();
 
     void            Execute( SfxRequest& );
