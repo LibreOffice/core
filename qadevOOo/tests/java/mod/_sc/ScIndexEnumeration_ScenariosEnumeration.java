@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_ScenariosEnumeration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-03 13:27:13 $
+ *  last change:$Date: 2003-05-27 13:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XCellRangeAddressable;
@@ -91,7 +92,7 @@ public class ScIndexEnumeration_ScenariosEnumeration extends TestCase {
     */
     public void initialize( TestParameters Param, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");
