@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 14:13:24 $
+#   last change: $Author: rt $ $Date: 2004-10-28 16:29:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 # --- Files --------------------------------------------------------
 
 OBJFILES = \
+        $(OBJ)$/main.obj					\
         $(OBJ)$/app.obj						\
         $(OBJ)$/copyright_ascii_sun.obj		\
         $(OBJ)$/copyright_ascii_ooo.obj		\
