@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imap2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:24:25 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,9 @@ void IMapObject::AppendNCSACoords( const Point& rPoint100, ByteString& rStr ) co
 
 void IMapObject::AppendCERNURL( ByteString& rStr ) const
 {
-    rStr += ByteString( INetURLObject::AbsToRel( aURL,
+    rStr += ByteString( String(INetURLObject::AbsToRel( aURL,
                                                  INetURLObject::WAS_ENCODED,
-                                                 INetURLObject::DECODE_UNAMBIGUOUS ), gsl_getSystemTextEncoding() );
+                                                 INetURLObject::DECODE_UNAMBIGUOUS )), gsl_getSystemTextEncoding() );
 }
 
 
@@ -152,9 +152,9 @@ void IMapObject::AppendCERNURL( ByteString& rStr ) const
 
 void IMapObject::AppendNCSAURL( ByteString& rStr ) const
 {
-    rStr += ByteString( INetURLObject::AbsToRel( aURL,
+    rStr += ByteString( String(INetURLObject::AbsToRel( aURL,
                                                  INetURLObject::WAS_ENCODED,
-                                                 INetURLObject::DECODE_UNAMBIGUOUS ), gsl_getSystemTextEncoding() );
+                                                 INetURLObject::DECODE_UNAMBIGUOUS )), gsl_getSystemTextEncoding() );
     rStr += ' ';
 }
 
