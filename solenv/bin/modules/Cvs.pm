@@ -1,7 +1,7 @@
 #
 # Cvs.pm - package for manipulating CVS archives
 #
-# $Id: Cvs.pm,v 1.2 2001-12-12 13:31:50 vg Exp $
+# $Id: Cvs.pm,v 1.3 2002-01-18 17:51:05 hr Exp $
 
 package Cvs;
 use strict;
@@ -18,7 +18,7 @@ sub new {
     if ($^O eq "MSWin32" || $^O eq "os2" ) {
     $self->{CVS_BINARY} = "cvsclt2.exe";
     } else {
-    $self->{CVS_BINARY} = "cvs.clt";
+    $self->{CVS_BINARY} = "cvs.clt2";
     }
     $self->{REV_DATA} = {};
     $self->{REV_SORTED} = [];
@@ -135,17 +135,39 @@ sub get_head {
     return $self->{HEAD};
 }
 
+sub is_tag {
+    my $self = shift;
+    my $tag  = shift;
+
+    my $tags_ref = $self->get_tags();
+    return exists($$tags_ref{$tag}) ? 1 : 0;
+}
+
+sub get_branch_rev {
+    # check if $label is branch label and returns revision
+    my $self  = shift;
+    my $label = shift;
+
+    my $tags_ref = $self->get_tags();
+    my $rev = $$tags_ref{$label};
+    return 0 if !defined($rev);
+    my @field = split('\.', $rev);
+    # $label is a branch label if rev is of form (...)x.y.0.z
+    return 0 if $field[-2] != 0;
+    $field[-2] = $field[-1];
+    # remove last
+    pop @field;
+    return join('.', @field);
+}
+
+
 #### methods to manipulate archive ####
 sub delete_rev {
     my $self = shift;
     my $rev = shift;
     my $file = $self->name;
-    my $out;
 
-    if ($^O eq "MSWin32") {
-    open (CVSDELETE,
-          "$self->{CVS_BINARY} admin -o$rev $file 2>nul |");
-    } elsif ( $^O eq "os2" ) {
+    if ( $^O eq "MSWin32" || $^O eq 'os2' ) {
     open (CVSDELETE,
           "$self->{CVS_BINARY} admin -o$rev $file 2>nul |");
     } else {
@@ -153,11 +175,79 @@ sub delete_rev {
           "$self->{CVS_BINARY} admin -o$rev $file 2>/dev/null |");
     }
     while(<CVSDELETE>) {
-    /deleting revision $rev/ && return 1;
+        /deleting revision $rev/ && return 1;
     }
     close(CVSDELETE);
     return 0;
 }
+
+sub update {
+    # Update archive with options $options.
+    # Returns 'success' on success or reason of failure.
+    # If no update happens because file was up-to-date
+    # consider operation a success.
+    my $self = shift;
+    my $options = shift;
+
+    my $file = $self->name;
+    if ( $^O eq "MSWin32" || $^O eq 'os2' ) {
+    open (CVSUPDATE,
+          "$self->{CVS_BINARY} update $options $file 2>&1 |");
+    } else {
+    open (CVSUPDATE,
+          "$self->{CVS_BINARY} update $options $file 2>&1 |");
+    }
+    my $conflict = 0;
+    my $notknown = 0;
+    while(<CVSUPDATE>) {
+        /conflicts during merge/ && ++$conflict;
+        /nothing known about/ && ++$notknown;
+    }
+    close(CVSUPDATE);
+    if ( $conflict || $notknown ) {
+        my $failure = 'unkownfailure';
+        $failure = 'conflict' if $conflict;
+        $failure = 'notknown' if $notknown;
+        return $failure
+    }
+    return 'success'
+}
+
+sub commit {
+    # commit $file with option $option
+    # return 'success' or reason for failure
+    my $self = shift;
+    my $options = shift;
+
+    my $file = $self->name;
+    if ( $^O eq "MSWin32" || $^O eq 'os2' ) {
+    open (CVSCOMMIT,
+          "$self->{CVS_BINARY} commit $options $file 2>&1 |");
+    } else {
+    open (CVSCOMMIT,
+          "$self->{CVS_BINARY} commit $options $file 2>&1 |");
+    }
+    my $conflict = 0;
+    my $uptodate = 0;
+    my $notknown = 0;
+    my $success  = 0;
+    while(<CVSCOMMIT>) {
+        /Up-to-date check failed/ && ++$uptodate;
+        /nothing known about/ && ++$notknown;
+        /had a conflict and has not been modified/ && ++$conflict;
+        /new revision:/ && ++$success;
+    }
+    close(CVSCOMMIT);
+    if ( !$success ) {
+        my $failure = 'unkownfailure';
+        $failure = 'conflict' if $conflict;
+        $failure = 'notuptodate' if $uptodate;
+        $failure = 'notknown' if $notknown;
+        return $failure
+    }
+    return 'success'
+}
+
 
 #### private methods ####
 sub parse_log {
