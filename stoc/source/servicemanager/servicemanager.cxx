@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 10:39:59 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,9 @@ static Sequence< OUString > retrieveAsciiValueList(
             }
         }
         catch( InvalidRegistryException & )
+        {
+        }
+        catch (InvalidValueException &)
         {
         }
     }
@@ -932,7 +935,8 @@ OServiceManagerWrapper::OServiceManagerWrapper(
     OSL_ASSERT( xTunnel.is() );
     if (xTunnel.is())
     {
-        m_root = (OServiceManager *)xTunnel->getSomething( smgr_getImplementationId() );
+        m_root = reinterpret_cast< OServiceManager * >(
+            xTunnel->getSomething( smgr_getImplementationId() ) );
         OSL_ASSERT( m_root );
         if (m_root)
         {
@@ -965,7 +969,7 @@ sal_Int64 OServiceManager::getSomething( Sequence< sal_Int8 > const & id )
 {
     check_undisposed();
     if (id == smgr_getImplementationId())
-        return (sal_Int64)this;
+        return reinterpret_cast< sal_Int64 >(this);
     else
         return 0;
 }
@@ -1569,10 +1573,18 @@ sal_Bool OServiceManager::has( const Any & Element )
     check_undisposed();
     if( Element.getValueTypeClass() == TypeClass_INTERFACE )
     {
+        Reference<XInterface > xEle( Element, UNO_QUERY_THROW );
         MutexGuard aGuard( m_mutex );
-        HashSet_Ref::iterator aIt =
-            ((OServiceManager*)this)->m_ImplementationMap.find( *(Reference<XInterface >*)Element.getValue() );
-        return aIt != m_ImplementationMap.end();
+        return m_ImplementationMap.find( xEle ) !=
+            m_ImplementationMap.end();
+    }
+    else if (Element.getValueTypeClass() == TypeClass_STRING)
+    {
+        OUString const & implName =
+            *reinterpret_cast< OUString const * >(Element.getValue());
+        MutexGuard aGuard( m_mutex );
+        return m_ImplementationNameMap.find( implName ) !=
+            m_ImplementationNameMap.end();
     }
     return sal_False;
 }
@@ -1588,7 +1600,7 @@ void OServiceManager::insert( const Any & Element )
             OUString( RTL_CONSTASCII_USTRINGPARAM("no interface given!") ),
             Reference< XInterface >(), 0 );
     }
-    Reference<XInterface > xEle( *(Reference<XInterface >*)Element.getValue(), UNO_QUERY );
+    Reference<XInterface > xEle( Element, UNO_QUERY_THROW );
 
     {
     MutexGuard aGuard( m_mutex );
@@ -1610,13 +1622,9 @@ void OServiceManager::insert( const Any & Element )
         OUString aImplName = xInfo->getImplementationName();
         if( aImplName.getLength() )
             m_ImplementationNameMap[ aImplName ] = xEle;
-    }
 
-    //put into the service map
-    Reference<XServiceInfo > xSF( Reference<XServiceInfo >::query( xEle ) );
-    if( xSF.is() )
-    {
-        Sequence< OUString > aServiceNames = xSF->getSupportedServiceNames();
+        //put into the service map
+        Sequence< OUString > aServiceNames = xInfo->getSupportedServiceNames();
         const OUString * pArray = aServiceNames.getConstArray();
         for( sal_Int32 i = 0; i < aServiceNames.getLength(); i++ )
         {
@@ -1646,13 +1654,33 @@ void OServiceManager::remove( const Any & Element )
     if (is_disposed())
         return;
 
-    if( Element.getValueTypeClass() != TypeClass_INTERFACE )
+    Reference<XInterface > xEle;
+    if (Element.getValueTypeClass() == TypeClass_INTERFACE)
+    {
+        xEle.set( Element, UNO_QUERY_THROW );
+    }
+    else if (Element.getValueTypeClass() == TypeClass_STRING)
+    {
+        OUString const & implName =
+            *reinterpret_cast< OUString const * >(Element.getValue());
+        MutexGuard aGuard( m_mutex );
+        HashMap_OWString_Interface::const_iterator const iFind(
+            m_ImplementationNameMap.find( implName ) );
+        if (iFind == m_ImplementationNameMap.end())
+        {
+            throw NoSuchElementException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("element is not in: ") )
+                + implName, static_cast< OWeakObject * >(this) );
+        }
+        xEle = iFind->second;
+    }
+    else
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no interface given!") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                          "neither interface nor string given!") ),
             Reference< XInterface >(), 0 );
     }
-    Reference<XInterface > xEle( *(Reference<XInterface >*)Element.getValue(), UNO_QUERY );
 
     // remove the disposing listener from the factory
     Reference<XComponent > xComp( Reference<XComponent >::query( xEle ) );
@@ -1665,7 +1693,7 @@ void OServiceManager::remove( const Any & Element )
     {
         throw NoSuchElementException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("element is not in!") ),
-            Reference< XInterface >() );
+            static_cast< OWeakObject * >(this) );
     }
 
     // remove from the implementation map
@@ -1847,10 +1875,12 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
 
         if( xImpKey.is() )
         {
-            ret = createSingleRegistryFactory(
-                Reference< lang::XMultiServiceFactory >(
-                    xContext->getServiceManager(), UNO_QUERY_THROW ),
-                name, xImpKey );
+            Reference< lang::XMultiServiceFactory > xMgr;
+            if (xContext.is())
+                xMgr.set( xContext->getServiceManager(), UNO_QUERY_THROW );
+            else
+                xMgr.set( this );
+            ret = createSingleRegistryFactory( xMgr, name, xImpKey );
             insert( makeAny( ret ) );
             // Remember this factory as loaded in contrast to inserted ( XSet::insert)
             // factories. Those loaded factories in this set are candidates for being
@@ -2125,6 +2155,7 @@ static struct ImplementationEntry g_entries[] =
 
 extern "C"
 {
+
 sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 {
     return g_moduleCount.canUnload( &g_moduleCount , pTime );
@@ -2148,4 +2179,6 @@ void * SAL_CALL component_getFactory(
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
+
 } //extern "C"
+
