@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:45:17 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ TabDialog DLG_DROPCAPS
             };
         };
     };
-    Text[ chinese_simplified ] = "ÆğÊ¼´óĞ´×ÖÄ¸";
+    Text[ chinese_simplified ] = "×ÖÊ×´óĞ´";
     Text[ russian ] = "Èíèöèàëû";
     Text[ polish ] = "Inicja³y";
     Text[ japanese ] = "ÄŞÛ¯Ìß·¬¯Ìß";
@@ -152,7 +152,7 @@ TabPage TP_DROPCAPS
         Text [ danish ] = "Vis initialer" ;
         Text [ portuguese_brazilian ] = "Initialen anzeigen" ;
         Text [ portuguese ] = "Mostrar ~capitulares" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾´óĞ´Ê××ÖÄ¸";
+        Text[ chinese_simplified ] = "ÏÔÊ¾×ÖÊ×´óĞ´";
         Text[ russian ] = "Ïîêàçàòü èíèöèàëû";
         Text[ polish ] = "Po~ka¿ inicja³y";
         Text[ japanese ] = "ÄŞÛ¯Ìß·¬¯Ìß‚Ì•\\¦";
@@ -379,7 +379,7 @@ TabPage TP_DROPCAPS
         Text [ dutch ] = "~Initialentekst" ;
         Text [ spanish ] = "Te~xto" ;
         Text [ english_us ] = "~Text" ;
-        Text[ chinese_simplified ] = "´óĞ´×Ö(~T)";
+        Text[ chinese_simplified ] = "×ÖÊ×´óĞ´(~T)";
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst z inicja³ami";
         Text[ japanese ] = "ÄŞÛ¯Ìß·¬¯Ìß‚ÌÃ·½Ä(~T)";
@@ -468,6 +468,7 @@ TabPage TP_DROPCAPS
     };
 };
  // ********************************************************************** EOF
+
 
 
 
