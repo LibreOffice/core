@@ -2,9 +2,9 @@
 #
 #   $RCSfile: verinfo.rc,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hro $ $Date: 2001-06-18 14:22:59 $
+#   last change: $Author: hjs $ $Date: 2001-07-16 15:28:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,7 +140,7 @@ VS_VERSION_INFO versioninfo
 			{
 				// German StringTable
 				value "CompanyName",		"Sun Microsystems, Inc.\0"
-				value "FileDescription",	"Office Productivity Suite\0"
+				value "FileDescription",	"StarOffice 6.0 / StarSuite 6.0\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	"SOFFICE.EXE\0"
@@ -152,7 +152,7 @@ VS_VERSION_INFO versioninfo
 			{
 				// International StringTable
 				value "CompanyName", 		"Sun Microsystems, Inc.\0"
-				value "FileDescription",	"Office Productivity Suite\0"
+				value "FileDescription",	"StarOffice 6.0 / StarSuite 6.0\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	"SOFFICE.EXE\0"
