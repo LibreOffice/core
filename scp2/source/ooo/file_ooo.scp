@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.11 $
+*  $Revision: 1.12 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 16:51:31 $
+*  last change: $Author: rt $ $Date: 2004-05-21 15:12:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -518,6 +518,13 @@ File gid_File_Html_Thirdpartylicensereadme
     Dir = PREDEFINED_PROGDIR;
     Styles = (WORKSTATION);
     TXT_FILE_BODY;
+End
+
+File gid_File_Images_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images.zip";
+    Styles = (PACKED,SETUPZIP);
 End
 
 File gid_File_Inethist_Dat_Delete_Only
