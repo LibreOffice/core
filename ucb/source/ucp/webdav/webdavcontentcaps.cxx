@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:06:47 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -587,7 +586,52 @@ uno::Sequence< com::sun::star::ucb::CommandInfo > Content::getCommands(
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-       if ( isFolder( xEnv ) )
+    sal_Bool bFolder = sal_False;
+
+    try
+    {
+        bFolder = isFolder( xEnv );
+    }
+    catch ( uno::Exception const & )
+    {
+        static com::sun::star::ucb::CommandInfo aDefaultCommandInfoTable[] =
+        {
+            ///////////////////////////////////////////////////////////////
+            // Just mandatory commands avail.
+            ///////////////////////////////////////////////////////////////
+
+            com::sun::star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                -1,
+                getCppuVoidType()
+            ),
+            com::sun::star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                -1,
+                getCppuVoidType()
+            ),
+            com::sun::star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                -1,
+                getCppuType( static_cast<
+                                uno::Sequence< beans::Property > * >( 0 ) )
+            ),
+            com::sun::star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                -1,
+                getCppuType( static_cast<
+                                uno::Sequence< beans::PropertyValue > * >( 0 ) )
+            )
+        };
+        return uno::Sequence< com::sun::star::ucb::CommandInfo >(
+                                            aDefaultCommandInfoTable, 4 );
+    }
+
+    if ( bFolder )
     {
         //=================================================================
         //
