@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:36:23 $
+ *  last change: $Author: tl $ $Date: 2002-09-10 12:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace drafts::com::sun::star::accessibility;
 
+#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
 
 //////////////////////////////////////////////////////////////////////
 
@@ -796,6 +797,39 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
     }
 
     return bReturn;
+}
+
+OUString SAL_CALL SmGraphicAccessible::getImplementationName()
+    throw (RuntimeException)
+{
+    //vos::OGuard aGuard(Application::GetSolarMutex());
+    return C2U("SmGraphicAccessible");
+}
+
+sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
+        const OUString& rServiceName )
+    throw (RuntimeException)
+{
+    //vos::OGuard aGuard(Application::GetSolarMutex());
+    return  rServiceName == C2U( "drafts::com::sun::star::accessibility::XAccessible" ) ||
+            rServiceName == C2U( "drafts::com::sun::star::accessibility::XAccessibleComponent" ) ||
+            rServiceName == C2U( "drafts::com::sun::star::accessibility::XAccessibleContext" ) ||
+            rServiceName == C2U( "drafts::com::sun::star::accessibility::XAccessibleText" ) ||
+            rServiceName == C2U( "drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster" );
+}
+
+Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
+    throw (RuntimeException)
+{
+    //vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< OUString > aNames(5);
+    OUString *pNames = aNames.getArray();
+    pNames[0] = C2U( "drafts::com::sun::star::accessibility::XAccessible" );
+    pNames[1] = C2U( "drafts::com::sun::star::accessibility::XAccessibleComponent" );
+    pNames[2] = C2U( "drafts::com::sun::star::accessibility::XAccessibleContext" );
+    pNames[3] = C2U( "drafts::com::sun::star::accessibility::XAccessibleText" );
+    pNames[4] = C2U( "drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster" );
+    return aNames;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1765,6 +1799,36 @@ void SAL_CALL SmEditAccessible::removeEventListener( const uno::Reference< XAcce
         pTextHelper->RemoveEventListener( xListener );
 }
 
+OUString SAL_CALL SmEditAccessible::getImplementationName()
+    throw (RuntimeException)
+{
+    //vos::OGuard aGuard(Application::GetSolarMutex());
+    return C2U("SmEditAccessible");
+}
+
+sal_Bool SAL_CALL SmEditAccessible::supportsService(
+        const OUString& rServiceName )
+    throw (RuntimeException)
+{
+    //vos::OGuard aGuard(Application::GetSolarMutex());
+    return  rServiceName == C2U( "drafts::com::sun::star::accessibility::XAccessible" ) ||
+            rServiceName == C2U( "drafts::com::sun::star::accessibility::XAccessibleComponent" ) ||
+            rServiceName == C2U( "drafts::com::sun::star::accessibility::XAccessibleContext" ) ||
+            rServiceName == C2U( "drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster" );
+}
+
+Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
+    throw (RuntimeException)
+{
+    //vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< OUString > aNames(4);
+    OUString *pNames = aNames.getArray();
+    pNames[0] = C2U( "drafts::com::sun::star::accessibility::XAccessible" );
+    pNames[1] = C2U( "drafts::com::sun::star::accessibility::XAccessibleComponent" );
+    pNames[2] = C2U( "drafts::com::sun::star::accessibility::XAccessibleContext" );
+    pNames[3] = C2U( "drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster" );
+    return aNames;
+}
 
 //////////////////////////////////////////////////////////////////////
 
