@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 11:49:42 $
+ *  last change: $Author: oj $ $Date: 2000-12-07 09:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _DBHELPER_DBCHARSET_HXX_
 #include <connectivity/dbcharset.hxx>
 #endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
 
 using namespace connectivity::file;
 using namespace connectivity::dbtools;
@@ -195,6 +198,9 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
                 m_nTextEncoding = (*aLookup).getEncoding();
             else
                 m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+            if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
+                m_nTextEncoding = osl_getThreadTextEncoding();
+
         }
     }
 
