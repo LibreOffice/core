@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 16:31:14 $
+ *  last change: $Author: fs $ $Date: 2001-06-13 17:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ void ODataView::setToolBox(ToolBox* pTB)
     if (m_pToolBox)
     {
         m_pToolBox->SetParent(this);
+        m_pToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
         m_pToolBox->Show();
     }
 
