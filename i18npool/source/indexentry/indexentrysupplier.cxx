@@ -2,37 +2,16 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-01-22 18:01:57 $
+ *  last change: $Author: bustamam $ $Date: 2002-03-26 12:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
- *         - GNU Lesser General Public License Version 2.1
  *         - Sun Industry Standards Source License Version 1.1
  *
  *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
- *
  *
  *  Sun Industry Standards Source License Version 1.1
  *  =================================================
@@ -58,148 +37,144 @@
  *
  *
  ************************************************************************/
-
-#define I18N_CHARACTERCLASSIFICATION_USES_CLASS_INTERNATIONAL
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _TOOLS_INTN_HXX
 #include <tools/intn.hxx>
-#endif
-#ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
-#endif
-#ifndef _I18N_INDEXENTRYSUPPLIER_HXX_
 #include <indexentrysupplier.hxx>
-#endif
 
-using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::rtl;
 
-#define STR_I18N_PATH       "com.sun.star.i18n."
-#define STR_I18N_UNICODE    "Unicode"
-#define STR_I18N_INSTANCE   "_IndexEntrySupplier"
+namespace com { namespace sun { namespace star { namespace i18n {
 
-::rtl::OUString SAL_CALL IndexEntrySupplier::getIndexCharacter(
-                            const ::rtl::OUString& rIndexEntry,
-                            const ::com::sun::star::lang::Locale& rLocale,
-                            const ::rtl::OUString& rSortAlgorithm )
-                                throw (::com::sun::star::uno::RuntimeException)
+IndexEntrySupplier::IndexEntrySupplier( const Reference < XMultiServiceFactory >& rxMSF ) : xMSF( rxMSF )
 {
-    ::rtl::OUString aRet;
-    // take the max count of all length
-    ::rtl::OUStringBuffer aBuf( sizeof( STR_I18N_PATH ) +
-                                ( rLocale.Country.getLength() +
-                                  rLocale.Variant.getLength() +
-                                  rSortAlgorithm.getLength() + 3 ) +
-                                sizeof( STR_I18N_UNICODE ) +
-                                sizeof( STR_I18N_INSTANCE ) );
-
-    aBuf.appendAscii( STR_I18N_PATH, sizeof( STR_I18N_PATH ) - 1  );
-
-    if( rLocale.Language.getLength() )
-    {
-        aBuf.append( rLocale.Language );
-        if ( rLocale.Country.getLength() )
-            aBuf.append( (sal_Unicode)'_' ).append( rLocale.Country );
-        if ( rLocale.Variant.getLength() )
-            aBuf.append( (sal_Unicode)'_' ).append( rLocale.Variant );
-        if ( rSortAlgorithm.getLength() )
-            aBuf.append( (sal_Unicode)'_' ).append( rSortAlgorithm );
-    }
-    else // if not locale specified, use default Unicode service.
-        aBuf.appendAscii( STR_I18N_UNICODE, sizeof( STR_I18N_UNICODE ) - 1  );
-    aBuf.appendAscii( STR_I18N_INSTANCE, sizeof( STR_I18N_INSTANCE ) - 1  );
-
-    ::rtl::OUString rServiceName( aBuf );
-
-    if ( (!rServiceName.equals(aServiceName) || (!xIES.is())) && xMSF.is() ) {
-
-        aServiceName = rServiceName;
-
-        ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >
-            xI = xMSF->createInstance( aServiceName );
-        ::com::sun::star::uno::Any x;
-        if( xI.is() ) {
-        x = xI->queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::i18n::XIndexEntrySupplier>*)0) );
-            x >>= xIES;
-        } else {
-        // For the locale the service does not exist, call default Unicode service,
-        // if Unicode service does not exist also, throw an error.
-        xI = xMSF->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.i18n.Unicode_IndexEntrySupplier" ));
-        if ( xI.is() ) {
-            x = xI->queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::i18n::XIndexEntrySupplier>*)0) );
-            x >>= xIES;
-        } else
-            throw ::com::sun::star::uno::RuntimeException();
-
-        }
-    }
-
-    if( xIES.is() )
-        aRet = xIES->getIndexCharacter( rIndexEntry, rLocale, rSortAlgorithm );
-    else if( rIndexEntry.getLength() )
-        aRet = ::rtl::OUString( rIndexEntry.getStr(), 1 );
-    return aRet;
+    implementationName = "com.sun.star.i18n.IndexEntrySupplier";
 }
 
-::rtl::OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord(
-                            sal_Bool bMorePages,
-                            const ::com::sun::star::lang::Locale& rLocale )
-                                throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexEntry,
+    const Locale& rLocale, const OUString& rSortAlgorithm )
+    throw (RuntimeException)
+{
+    return getLocaleSpecificIndexEntrySupplier(rLocale, rSortAlgorithm)->
+            getIndexCharacter( rIndexEntry, rLocale, rSortAlgorithm );
+}
+
+static inline sal_Bool operator == (const Locale& l1, const Locale& l2) {
+    return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
+}
+
+sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( RuntimeException )
+{
+    Reference < XInterface > xI = xMSF->createInstance(
+        OUString::createFromAscii("com.sun.star.i18n.IndexEntrySupplier_") + name);
+
+    if ( xI.is() ) {
+        xI->queryInterface( ::getCppuType((const Reference< XIndexEntrySupplier>*)0) ) >>= xIES;
+        return xIES.is();
+    }
+    return sal_False;
+}
+
+Reference < XIndexEntrySupplier > SAL_CALL
+IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, const OUString& rSortAlgorithm) throw (RuntimeException)
+{
+    if (xIES.is() && rLocale == aLocale && rSortAlgorithm == aSortAlgorithm)
+        return xIES;
+    else if (xMSF.is()) {
+        aLocale = rLocale;
+        aSortAlgorithm = rSortAlgorithm;
+
+        static sal_Unicode under = (sal_Unicode)'_';
+        static OUString tw(OUString::createFromAscii("TW"));
+        static OUString unicode(OUString::createFromAscii("Unicode"));
+
+        sal_Int32 l = rLocale.Language.getLength();
+        sal_Int32 c = rLocale.Country.getLength();
+        sal_Int32 v = rLocale.Variant.getLength();
+        sal_Int32 a = rSortAlgorithm.getLength();
+        OUStringBuffer aBuf(l+c+v+a+4);
+
+        if ((l > 0 && c > 0 && v > 0 && a > 0 &&
+            // load service with name <base>_<lang>_<country>_<varian>_<algorithm>
+            createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
+                    rLocale.Country).append(under).append(rLocale.Variant).append(under).append(
+                    rSortAlgorithm).makeStringAndClear())) ||
+        (l > 0 && c > 0 && a > 0 &&
+            // load service with name <base>_<lang>_<country>_<algorithm>
+            createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
+                    rLocale.Country).append(under).append(rSortAlgorithm).makeStringAndClear())) ||
+        (l > 0 && c > 0 && a > 0 && rLocale.Language.compareToAscii("zh") == 0 &&
+                        (rLocale.Country.compareToAscii("HK") == 0 ||
+                        rLocale.Country.compareToAscii("MO") == 0) &&
+            // if the country code is HK or MO, one more step to try TW.
+            createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
+                    tw).append(under).append(rSortAlgorithm).makeStringAndClear())) ||
+        (l > 0 && a > 0 &&
+            // load service with name <base>_<lang>_<algorithm>
+            createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
+                    rSortAlgorithm).makeStringAndClear())) ||
+            // load service with name <algorithm>
+        (a > 0 &&
+            createLocaleSpecificIndexEntrySupplier(rSortAlgorithm)) ||
+            // load default service with name <base>_Unicode
+            createLocaleSpecificIndexEntrySupplier(unicode)) {
+        return xIES;
+        }
+    }
+    throw RuntimeException();
+}
+
+OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePages,
+    const Locale& rLocale ) throw (RuntimeException)
 {
     static const struct {
         const sal_Char *pLang, *pFollowPage, *pFollowPages;
     } aFollowPageArr[] = {
-        { "en",     "p.",       "pp." },
-        { "de",     "f.",       "ff." },
-        { "es",     " s.",      " ss." },
-        { "it",     " e seg.",  " e segg." },
-        { "fr",     " sv",      " sv" },
-        { "sv",     "f.",       "ff." },
-        { "zh",     "",         "" },
-        { "ja",     "p.",       "pp." },
-        { "ko",     "",         "" },
+        { "en", "p.", "pp." },
+        { "de", "f.", "ff." },
+        { "es", " s.", " ss." },
+        { "it", " e seg.", " e segg." },
+        { "fr", " sv", " sv" },
+        { "sv", "f.", "ff." },
+        { "zh", "", "" },
+        { "ja", "p.", "pp." },
+        { "ko", "", "" },
         { 0, 0, 0 }
     };
 
     int n;
     for( n = 0; aFollowPageArr[ n ].pLang; ++n )
         if( 0 == rLocale.Language.compareToAscii( aFollowPageArr[ n ].pLang ))
-            break;
+        break;
 
     if( !aFollowPageArr[ n ].pLang )
         n = 0;      //the default for unknow languages
 
-    return ::rtl::OUString::createFromAscii( bMorePages
-                                ? aFollowPageArr[ n ].pFollowPages
-                                : aFollowPageArr[ n ].pFollowPage );
+    return OUString::createFromAscii( bMorePages ? aFollowPageArr[ n ].pFollowPages
+                            : aFollowPageArr[ n ].pFollowPage );
 }
 
-::rtl::OUString SAL_CALL
-IndexEntrySupplier::getImplementationName(void)
-                throw( ::com::sun::star::uno::RuntimeException )
+OUString SAL_CALL
+IndexEntrySupplier::getImplementationName() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii( implementationName );
+    return OUString::createFromAscii( implementationName );
 }
 
 sal_Bool SAL_CALL
-IndexEntrySupplier::supportsService(const rtl::OUString& rServiceName)
-                throw( ::com::sun::star::uno::RuntimeException )
+IndexEntrySupplier::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return rServiceName.compareToAscii(implementationName) == 0;
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-IndexEntrySupplier::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
+Sequence< OUString > SAL_CALL
+IndexEntrySupplier::getSupportedServiceNames() throw( RuntimeException )
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString::createFromAscii( implementationName );
+    Sequence< OUString > aRet(1);
+    aRet[0] = OUString::createFromAscii( implementationName );
     return aRet;
 }
 
+} } } }
