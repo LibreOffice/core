@@ -1,0 +1,5 @@
+-o sfx.AppDispatchProvider
+-o sfx.DocumentTemplates
+-o sfx.FrameLoader
+-o sfx.SfxMacroLoader
+-o sfx.StandaloneDocumentInfo
