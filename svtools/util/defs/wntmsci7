@@ -7015,3 +7015,11 @@ _real@8@4008fa00000000000000
 ?StripNewCurrencyDelimiters@SvNumberformat@@SA?AVString@@ABV2@E@Z
 ?SwitchToGregorianCalendar@SvNumberformat@@AAEXABVString@@N@Z
 ?sGregorian@SvNumberformat@@0VOUString@rtl@@A
+?GetLocale@SvtHelpOptions@@QBE?AVString@@XZ
+?GetSystem@SvtHelpOptions@@QBE?AVString@@XZ
+??0IMPL_TTabPageData@@QAE@XZ
+??0tIMPL_RecoveryEntry@@QAE@ABU0@@Z
+??1tIMPL_RecoveryEntry@@QAE@XZ
+?IsRecoveryListEmpty@SvtInternalOptions@@QBEEXZ
+?PopRecoveryItem@SvtInternalOptions@@QAEXAAVOUString@rtl@@00@Z
+?PushRecoveryItem@SvtInternalOptions@@QAEXABVOUString@rtl@@00@Z
