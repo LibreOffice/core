@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlundo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 11:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,99 +125,7 @@ void OutlinerUndoCheckPara::Repeat()
     DBG_ERROR( "Repeat not implemented!" );
 }
 
-
-OutlinerUndoMoveParagraphs::OutlinerUndoMoveParagraphs( Outliner* pOutliner, USHORT nStartPara, USHORT nEndPara, short nDiff )
-    : OutlinerUndoBase( OLUNDO_MOVEPARAGRAPHS, pOutliner )
-{
-    mnStartPara = nStartPara;
-    mnEndPara = nEndPara;
-    mnDiff = nDiff;
-}
-
-void OutlinerUndoMoveParagraphs::Undo()
-{
-    // ...
-}
-
-void OutlinerUndoMoveParagraphs::Redo()
-{
-    // ...
-}
-
-void OutlinerUndoMoveParagraphs::Repeat()
-{
-    DBG_ERROR( "Repeat not implemented!" );
-}
-
-
-
-
-DBG_NAME(OLUndoHeight);
-
-
-OLUndoHeight::OLUndoHeight( Outliner* pOut, USHORT nId )
-    : EditUndo( nId, 0 )
-{
-    DBG_CTOR(OLUndoHeight,0);
-    DBG_ASSERT(pOut,"Undo:No Outliner");
-    pOutliner = pOut;
-    ppBulletTexts = 0;
-    pDepths = 0;
-    nAbsCount = 0;
-}
-
-
-OLUndoHeight::~OLUndoHeight()
-{
-    DBG_DTOR(OLUndoHeight,0);
-    Outliner::ImpDeleteBulletArray( ppBulletTexts, nAbsCount );
-    delete pDepths;
-}
-
-
-void OLUndoHeight::Restore( BOOL bUndo )
-{
-    DBG_CHKTHIS(OLUndoHeight,0);
-    DBG_ASSERT(pOutliner,"Undo:No Outliner");
-    DBG_ASSERT(pOutliner->pEditEngine,"Outliner already deleted");
-
-    // Bullets restaurieren & Undo->Redo bzw. Redo->Undo vorbereiten
-    XubString** ppNewBulletArray = pOutliner->ImpCreateBulletArray();
-    USHORT* pNewDepths = pOutliner->ImpCreateDepthArray();
-
-    pOutliner->ImpSetBulletArray( ppBulletTexts );
-    Outliner::ImpDeleteBulletArray( ppBulletTexts, nAbsCount );
-    ppBulletTexts = ppNewBulletArray;
-
-    pOutliner->ImpSetDepthArray( pDepths );
-    delete pDepths;
-    pDepths = pNewDepths;
-}
-
-
-
-void OLUndoHeight::Undo()
-{
-    DBG_CHKTHIS(OLUndoHeight,0);
-    Restore( TRUE );
-}
-
-
-void OLUndoHeight::Redo()
-{
-    DBG_CHKTHIS(OLUndoHeight,0);
-    Restore( FALSE );
-}
-
-
-void OLUndoHeight::Repeat()
-{
-    DBG_CHKTHIS(OLUndoHeight,0);
-    DBG_ERROR("Not implemented");
-}
-
 DBG_NAME(OLUndoExpand);
-
 
 OLUndoExpand::OLUndoExpand(Outliner* pOut, USHORT nId )
     : EditUndo( nId, 0 )

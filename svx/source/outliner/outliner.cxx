@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-17 10:54:10 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 11:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,13 +762,6 @@ void Outliner::SetStyleSheet( ULONG nPara, SfxStyleSheet* pStyle )
     pPara->nFlags |= PARAFLAG_SETBULLETTEXT;
 
     ImplCheckNumBulletItem( (USHORT) nPara );
-}
-
-void Outliner::ImpDeleteBulletArray( XubString** pTexts, ULONG nCount )
-{
-    for( ULONG nAbsPos = 0; nAbsPos < nCount; nAbsPos++ )
-        delete pTexts[ nAbsPos ];
-    delete pTexts;
 }
 
 void Outliner::SetVisible( Paragraph* pPara, BOOL bVisible )

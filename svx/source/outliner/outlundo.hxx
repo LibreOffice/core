@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlundo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 11:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,21 +98,6 @@ public:
     virtual void    Repeat();
 };
 
-class OutlinerUndoMoveParagraphs : public OutlinerUndoBase
-{
-private:
-    USHORT          mnStartPara;
-    USHORT          mnEndPara;
-    short           mnDiff;
-
-public:
-                    OutlinerUndoMoveParagraphs( Outliner* pOutliner, USHORT nStartPara, USHORT nEndPara, short nDiff );
-
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat();
-};
-
 // Hilfs-Undo: Wenn es fuer eine Aktion keine OutlinerUndoAction gibst, weil
 // die EditEngine das handelt, aber z.B. noch das Bullet neu berechnet werden muss.
 
@@ -133,22 +118,6 @@ public:
 
 // -------------------------------------
 
-
-class OLUndoHeight : public EditUndo
-{
-    void Restore( BOOL bUndo );
-public:
-    OLUndoHeight( Outliner* pOut, USHORT nId = OLUNDO_HEIGHT );
-    ~OLUndoHeight();
-    virtual void Undo();
-    virtual void Redo();
-    virtual void Repeat();
-
-    Outliner* pOutliner;
-    String **ppBulletTexts;
-    USHORT *pDepths;
-    USHORT  nAbsCount;
-};
 
 class OLUndoExpand : public EditUndo
 {

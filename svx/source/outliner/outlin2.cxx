@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:31 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 11:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,60 +687,4 @@ USHORT Outliner::GetScriptType( const ESelection& rSelection ) const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetScriptType( rSelection );
-}
-
-
-// Hilfsfunktionen fuers Undo
-
-XubString** Outliner::ImpCreateBulletArray()
-{
-    DBG_CHKTHIS(Outliner,0);
-    ULONG nCount = pParaList->GetParagraphCount();
-    XubString** ppBulletTexts = new XubString*[ nCount ];
-    for( ULONG nAbsPos = 0; nAbsPos < nCount; nAbsPos++ )
-    {
-        Paragraph* pPara = pParaList->GetParagraph( nAbsPos );
-        ppBulletTexts[ nAbsPos ] = new XubString( pPara->GetText() );
-    }
-    return ppBulletTexts;
-}
-
-
-void Outliner::ImpSetBulletArray( XubString** ppBullets )
-{
-    DBG_CHKTHIS(Outliner,0);
-    ULONG nCount = pParaList->GetParagraphCount();
-    for( ULONG nAbsPos = 0; nAbsPos < nCount; nAbsPos++ )
-    {
-        Paragraph* pPara = pParaList->GetParagraph( nAbsPos );
-        XubString aStr( *(ppBullets[nAbsPos]) );
-        pPara->SetText( aStr );
-    }
-}
-
-USHORT* Outliner::ImpCreateDepthArray()
-{
-    DBG_CHKTHIS(Outliner,0);
-    ULONG nCount = pParaList->GetParagraphCount();
-    DBG_ASSERT(nCount,"Bad paralist");
-    USHORT* pDepths = new USHORT[ nCount ];
-    USHORT* pCur = pDepths;
-    for( ULONG nAbsPos = 0; nAbsPos < nCount; nAbsPos++, pCur++ )
-    {
-        Paragraph* pPara = pParaList->GetParagraph( nAbsPos );
-        *pCur = pPara->GetDepth();
-    }
-    return pDepths;
-}
-
-
-void Outliner::ImpSetDepthArray( USHORT* pDepths )
-{
-    DBG_CHKTHIS(Outliner,0);
-    ULONG nCount = pParaList->GetParagraphCount();
-    for( ULONG nAbsPos = 0; nAbsPos < nCount; nAbsPos++, pDepths++ )
-    {
-        Paragraph* pPara = pParaList->GetParagraph( nAbsPos );
-        pPara->SetDepth( *pDepths );
-    }
 }
