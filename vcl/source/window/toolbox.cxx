@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-16 11:22:58 $
+ *  last change: $Author: ssa $ $Date: 2002-05-16 12:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4828,10 +4828,10 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
+    mnKeyModifier = 0;
+
     if( bForwardKey )
         DockingWindow::KeyInput( rKEvt );
-
-    mnKeyModifier = 0;
 }
 
 // -----------------------------------------------------------------------
