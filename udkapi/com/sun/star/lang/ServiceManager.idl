@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceManager.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ module com {  module sun {  module star {  module lang {
 
     @see com::sun::star::uno::XComponentContext
 */
-service ServiceManager
+published service ServiceManager
 {
     /** This is a derived MultiServiceFactory service.
     */
