@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 11:44:03 $
+ *  last change: $Author: os $ $Date: 2002-06-21 14:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 
 #include <cppuhelper/factory.hxx>
 #include <uno/lbnames.h>
+#ifndef _SWXFILTEROPTIONS_HXX
+#include <swxfilteroptions.hxx>
+#endif
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -184,6 +187,10 @@ sal_Bool SAL_CALL component_writeInfo(
                                SwXAutoTextContainer_getSupportedServiceNames() );
             lcl_uno_writeInfo( pKey, SwXModule_getImplementationName(),
                                SwXModule_getSupportedServiceNames() );
+            //Filter options
+            lcl_uno_writeInfo( pKey, SwXFilterOptions::getImplementationName_Static(),
+                               SwXFilterOptions::getSupportedServiceNames_Static() );
+
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -302,6 +309,15 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName,
                 SwXModule_createInstance,
                 SwXModule_getSupportedServiceNames() );
         }
+        else if( SwXFilterOptions::getImplementationName_Static().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwXFilterOptions::getImplementationName_Static(),
+                SwXFilterOptions_createInstance,
+                SwXFilterOptions::getSupportedServiceNames_Static() );
+        }
+
         if( xFactory.is())
         {
             xFactory->acquire();

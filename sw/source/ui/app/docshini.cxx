@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-14 14:25:43 $
+ *  last change: $Author: os $ $Date: 2002-06-21 14:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,6 +468,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
 void  SwDocShell::Init_Impl()
 {
     SetShell(this);
+    SetPool(&SW_MOD()->GetPool());
     SetBaseModel(new SwXTextDocument(this));
     // wir als BroadCaster werden auch unser eigener Listener
     // (fuer DocInfo/FileNamen/....)

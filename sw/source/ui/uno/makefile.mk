@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2001-07-30 14:09:47 $
+#   last change: $Author: os $ $Date: 2002-06-21 14:21:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ SLOFILES =  \
         $(SLO)$/unofreg.obj \
         $(SLO)$/SwXDocumentSettings.obj \
         $(SLO)$/SwXPrintPreviewSettings.obj \
+        $(SLO)$/SwXFilterOptions.obj\
         $(SLO)$/RefreshListenerContainer.obj
 
 EXCEPTIONSFILES= \
@@ -101,6 +102,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/unotxvw.obj \
         $(SLO)$/unofreg.obj \
         $(SLO)$/SwXPrintPreviewSettings.obj \
+        $(SLO)$/SwXFilterOptions.obj\
         $(SLO)$/SwXDocumentSettings.obj
 
 

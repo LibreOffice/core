@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-25 15:25:31 $
+ *  last change: $Author: os $ $Date: 2002-06-21 14:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
-
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -230,7 +229,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
 
         {
             BOOL bDelPrinter = FALSE;
-            SfxPrinter* pPrt = rDocSh.GetDoc()->GetPrt();
+            SfxPrinter* pPrt = rDocSh.GetDoc() ? rDocSh.GetDoc()->GetPrt() : 0;
             if( !pPrt )
             {
                 SfxItemSet* pSet = new SfxItemSet( rDocSh.GetPool(),
@@ -529,6 +528,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/07/25 15:25:31  fme
+      Fix #90247#: Size of ASCII Filter Options dialog too small
+
       Revision 1.6  2001/06/01 10:46:20  fme
       Fix #86988#: Redesign of dialogs
 

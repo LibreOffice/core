@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-14 14:25:43 $
+ *  last change: $Author: os $ $Date: 2002-06-21 14:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,9 +248,6 @@
 #ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
 #endif
-#ifndef _ASCFLDLG_HXX
-#include <ascfldlg.hxx>
-#endif
 
 #ifndef _SWSWERROR_H
 #include <swerror.h>        // Fehlermeldungen
@@ -434,21 +431,6 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         if( 0 != ( pSet = rMedium.GetItemSet() ) && SFX_ITEM_SET ==
             pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
             aOpt.ReadUserData( ((const SfxStringItem*)pItem)->GetValue() );
-        else if(!bAPICall)
-        {
-            SwAsciiFilterDlg* pDlg = new SwAsciiFilterDlg( 0, *this,
-                                                    rMedium.GetInStream() );
-
-            if( RET_OK == pDlg->Execute() )
-                // get the options and put it to the reader
-                pDlg->FillOptions( aOpt );
-            else
-            {
-                pRead = 0;
-                SetError( ERRCODE_IO_ABORT );   // silent abort
-            }
-            delete pDlg;
-        }
 
         if( pRead )
             pRead->GetReaderOpt().SetASCIIOpts( aOpt );
@@ -862,7 +844,6 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     {
         SwAsciiOptions aOpt;
         String sItemOpt;
-        BOOL bShowDlg = FALSE;
         const SfxItemSet* pSet;
         const SfxPoolItem* pItem;
         if( 0 != ( pSet = rMedium.GetItemSet() ) )
@@ -870,29 +851,8 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
             if( SFX_ITEM_SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS,
                                                     TRUE, &pItem ) )
                 sItemOpt = ((const SfxStringItem*)pItem)->GetValue();
-            if( SFX_ITEM_SET == pSet->GetItemState( SID_USE_FILTEROPTIONS,
-                                                    TRUE, &pItem ) )
-                bShowDlg = ((const SfxBoolItem*)pItem)->GetValue();
         }
-
-        if( bShowDlg || !sItemOpt.Len() )
-        {
-            SwAsciiFilterDlg* pDlg = new SwAsciiFilterDlg( 0, *this, 0 );
-            int nDlg = pDlg->Execute();
-
-            if( RET_OK == nDlg )
-                // get the options for the writer
-                pDlg->FillOptions( aOpt );
-
-            delete pDlg;
-
-            if( RET_OK != nDlg )
-            {
-                SetError( ERRCODE_IO_ABORT );   // silent abort
-                return FALSE;
-            }
-        }
-        else
+        if(sItemOpt.Len())
             aOpt.ReadUserData( sItemOpt );
 
         xWriter->SetAsciiOptions( aOpt );
