@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docoptio.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-02 19:10:56 $
+ *  last change: $Author: er $ $Date: 2001-05-15 18:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ class ScDocOptions
     BOOL   bMatchWholeCell;         // Suchkriterien muessen ganze Zelle matchen
     BOOL   bDoAutoSpell;            // Auto-Spelling
     BOOL   bLookUpColRowNames;      // Spalten-/Zeilenbeschriftungen automagisch suchen
+    BOOL   bFormulaRegexEnabled;    // regular expressions in formulas enabled
 
 public:
                 ScDocOptions();
@@ -138,6 +139,9 @@ public:
 
     void    SetYear2000( USHORT nVal )  { nYear2000 = nVal; }
     USHORT  GetYear2000() const         { return nYear2000; }
+
+    void    SetFormulaRegexEnabled( BOOL bVal ) { bFormulaRegexEnabled = bVal; }
+    BOOL    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
 };
 
 
@@ -157,6 +161,7 @@ inline void ScDocOptions::CopyTo(ScDocOptions& rOpt)
     rOpt.bMatchWholeCell        = bMatchWholeCell;
     rOpt.bDoAutoSpell           = bDoAutoSpell;
     rOpt.bLookUpColRowNames     = bLookUpColRowNames;
+    rOpt.bFormulaRegexEnabled   = bFormulaRegexEnabled;
 }
 
 inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
@@ -175,6 +180,7 @@ inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
     bMatchWholeCell     = rCpy.bMatchWholeCell;
     bDoAutoSpell        = rCpy.bDoAutoSpell;
     bLookUpColRowNames  = rCpy.bLookUpColRowNames;
+    bFormulaRegexEnabled= rCpy.bFormulaRegexEnabled;
 
     return *this;
 }
@@ -196,6 +202,7 @@ inline int ScDocOptions::operator==( const ScDocOptions& rOpt ) const
             &&  rOpt.bMatchWholeCell        == bMatchWholeCell
             &&  rOpt.bDoAutoSpell           == bDoAutoSpell
             &&  rOpt.bLookUpColRowNames     == bLookUpColRowNames
+            &&  rOpt.bFormulaRegexEnabled   == bFormulaRegexEnabled
             );
 }
 
