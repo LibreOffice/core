@@ -8,6 +8,8 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\%__SRC%\bin\transex3 %_DEST%\bin%_EXT%\transex3
 ..\%__SRC%\bin\lngex.exe %_DEST%\bin%_EXT%\lngex.exe
 ..\%__SRC%\bin\lngex %_DEST%\bin%_EXT%\lngex
+..\%__SRC%\bin\localize.exe %_DEST%\bin%_EXT%\localize.exe
+..\%__SRC%\bin\localize %_DEST%\bin%_EXT%\localize
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
