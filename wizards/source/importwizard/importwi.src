@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 12:58:31 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,21 +1036,21 @@ String sOverwriteallFiles
 {
     Text = "M�chten Sie, dass Dokumente ohne Abfrage �berschrieben werden?";
     Text[English] = "Do you want to overwrite documents without query";
-    Text[ English_us ] = "Do you want to overwrite documents without query";
+    Text[ English_us ] = "Do you want to overwrite documents without being asked?";
     Text[ portuguese ] = "Do you want to overwrite documents without query";
     Text[ russian ] = "Do you want to overwrite documents without query";
     Text[ greek ] = "Do you want to overwrite documents without query";
     Text[ dutch ] = "Do you want to overwrite documents without query";
     Text[ french ] = "Do you want to overwrite documents without query";
-    Text[ spanish ] = "Do you want to overwrite documents without query";
+    Text[ spanish ] = "�Desea sobrescribir documentos sin consulta?";
     Text[ finnish ] = "Do you want to overwrite documents without query";
     Text[ italian ] = "Do you want to overwrite documents without query";
     Text[ danish ] = "Do you want to overwrite documents without query";
     Text[ swedish ] = "Do you want to overwrite documents without query";
     Text[ polish ] = "Do you want to overwrite documents without query";
     Text[ portuguese_brazilian ] = "Do you want to overwrite documents without query";
-    Text[ japanese ] = "Do you want to overwrite documents without query";
-    Text[ korean ] = "Do you want to overwrite documents without query";
+    Text[ japanese ] = "確認なしでドキュメントに上書きしますか。";
+    Text[ korean ] = "문서를 의문없이 겹쳐쓰시겠습니까?";
     Text[ chinese_simplified ] = "您要省去询问而直接改写文档？";
     Text[ chinese_traditional ] = "您要省略詢問而直接復寫文件？";
     Text[ turkish ] = "Do you want to overwrite documents without query";
@@ -1064,7 +1064,7 @@ String sreeditMacro
 {
     Text = "Dokumentenmakro muss �berarbeitet werden";
     Text[English] = "Document macro has to be revised";
-    Text[ English_us ] = "Document macro has to be revised";
+    Text[ English_us ] = "Document macro has to be revised.";
     Text[ portuguese ] = "Document macro has to be revised";
     Text[ russian ] = "Document macro has to be revised";
     Text[ greek ] = "Document macro has to be revised";
@@ -1077,8 +1077,8 @@ String sreeditMacro
     Text[ swedish ] = "Document macro has to be revised";
     Text[ polish ] = "Document macro has to be revised";
     Text[ portuguese_brazilian ] = "Document macro has to be revised";
-    Text[ japanese ] = "Document macro has to be revised";
-    Text[ korean ] = "Document macro has to be revised";
+    Text[ japanese ] = "ドキュメントマクロを編集しなおす必要があります。";
+    Text[ korean ] = "문서 macro는 교정을 필요로 합니다.";
     Text[ chinese_simplified ] = "必须重新编辑文档宏";
     Text[ chinese_traditional ] = "必須重新編輯巨集。";
     Text[ turkish ] = "Document macro has to be revised";
@@ -1091,21 +1091,21 @@ String scouldNotsaveDocument
 {
     Text = "Dokument '<1>' konnte nicht gespeichert werden";
     Text[English] = "Document '<1>' could not be saved";
-    Text[ English_us ] = "Document '<1>' could not be saved";
+    Text[ English_us ] = "Document '<1>' could not be saved.";
     Text[ portuguese ] = "Document '<1>' could not be saved";
     Text[ russian ] = "Document '<1>' could not be saved";
     Text[ greek ] = "Document '<1>' could not be saved";
     Text[ dutch ] = "Document '<1>' could not be saved";
     Text[ french ] = "Document '<1>' could not be saved";
-    Text[ spanish ] = "Document '<1>' could not be saved";
+    Text[ spanish ] = "El documento '<1>' no se pudo guardar";
     Text[ finnish ] = "Document '<1>' could not be saved";
     Text[ italian ] = "Document '<1>' could not be saved";
     Text[ danish ] = "Document '<1>' could not be saved";
     Text[ swedish ] = "Document '<1>' could not be saved";
     Text[ polish ] = "Document '<1>' could not be saved";
     Text[ portuguese_brazilian ] = "Document '<1>' could not be saved";
-    Text[ japanese ] = "Document '<1>' could not be saved";
-    Text[ korean ] = "Document '<1>' could not be saved";
+    Text[ japanese ] = "ドキュメント '<1>' は保存できませんでした。";
+    Text[ korean ] = "문서 '<1>' 을 저장하지 못했습니다.";
     Text[ chinese_simplified ] = "无法存盘文档 '<1>' ";
     Text[ chinese_traditional ] = "無法儲存文件 '<1>'";
     Text[ turkish ] = "Document '<1>' could not be saved";
@@ -1119,7 +1119,7 @@ String scouldNotopenDocument
 {
     Text = "Dokument '<1>' konnte nicht ge�ffnet werden";
     Text[English] = "Document '<1>' could not be opened";
-    Text[ English_us ] = "Document '<1>' could not be opened";
+    Text[ English_us ] = "Document '<1>' could not be opened.";
     Text[ portuguese ] = "Document '<1>' could not be opened";
     Text[ russian ] = "Document '<1>' could not be opened";
     Text[ greek ] = "Document '<1>' could not be opened";
@@ -1132,8 +1132,8 @@ String scouldNotopenDocument
     Text[ swedish ] = "Document '<1>' could not be opened";
     Text[ polish ] = "Document '<1>' could not be opened";
     Text[ portuguese_brazilian ] = "Document '<1>' could not be opened";
-    Text[ japanese ] = "Document '<1>' could not be opened";
-    Text[ korean ] = "Document '<1>' could not be opened";
+    Text[ japanese ] = "ドキュメント '<1>' を開くことができません。";
+    Text[ korean ] = "문서'<1>'을 열 수 없었습니다.";
     Text[ chinese_simplified ] = "无法打开文档 '<1>' ";
     Text[ chinese_traditional ] = "無法開啟文件 '<1>'";
     Text[ turkish ] = "Document '<1>' could not be opened";
@@ -1910,7 +1910,7 @@ String sshowLogfile
 {
     Text = "Logdatei anzeigen";
     Text[English] = "Show Logfile";
-    Text[ English_us ] = "Show Logfile";
+    Text[ English_us ] = "Show log file";
     Text[ portuguese ] = "Show Logfile";
     Text[ russian ] = "Show Logfile";
     Text[ greek ] = "Show Logfile";
@@ -1923,8 +1923,8 @@ String sshowLogfile
     Text[ swedish ] = "Show Logfile";
     Text[ polish ] = "Show Logfile";
     Text[ portuguese_brazilian ] = "Show Logfile";
-    Text[ japanese ] = "Show Logfile";
-    Text[ korean ] = "Show Logfile";
+    Text[ japanese ] = "Log file の表示";
+    Text[ korean ] = "로그 파일 표시";
     Text[ chinese_simplified ] = "显示日志文件";
     Text[ chinese_traditional ] = "顯示日誌檔案";
     Text[ turkish ] = "Show Logfile";
