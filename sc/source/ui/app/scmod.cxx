@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:08:38 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
 //------------------------------------------------------------------
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
-    ScModuleDummy( SFX_APP()->CreateResManager( "sc" ), FALSE, pFact ),
+    SfxModule( SFX_APP()->CreateResManager( "sc" ), FALSE, pFact, NULL ),
     bIsWaterCan( FALSE ),
     bIsInEditCommand( FALSE ),
     pSelTransfer( NULL ),
@@ -388,18 +388,6 @@ void ScModule::DeleteCfg()
         EndListening(*pCTLOptions);
         DELETEZ( pCTLOptions );
     }
-}
-
-//------------------------------------------------------------------
-
-SfxModule* ScModule::Load()
-{
-    return this;                    // ist schon geladen
-}
-
-SfxModule* ScModuleDummy::Load()
-{
-    return NULL;                    // Dummy zum Linken der DLL, wird nicht gerufen
 }
 
 //------------------------------------------------------------------
