@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 14:07:22 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,9 +359,9 @@ class FmXFormShell : public FmXFormShell_BASE,
         // und das ist ebenfalls fuer's 'gefunden' : Beim Finden in GridControls brauche ich die Spalte, bekomme aber
         // nur die Nummer des Feldes, die entspricht der Nummer der Spalte + <offset>, wobei der Offset von der Position
         // des GridControls im Formular abhaengt. Also hier eine Umrechnung.
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> m_aLastGridFound;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>         m_aLastGridFound;
         // we want to be a DispatchInterceptor within our frame
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>                      m_xAttachedFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>              m_xAttachedFrame;
         // Administration of external form views (see the SID_FM_VIEW_AS_GRID-slot)
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>         m_xExternalViewController;      // the controller for the external form view
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>      m_xExtViewTriggerController;    // the nav controller at the time the external display was triggered

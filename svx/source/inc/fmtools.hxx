@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:19:53 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,9 @@
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
+#endif
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -545,10 +548,10 @@ public:
 //------------------------------------------------------------------------
 //- FmXDispatchInterceptorImpl
 //------------------------------------------------------------------------
-class FmXDispatchInterceptorImpl
-    :public ::com::sun::star::frame::XDispatchProviderInterceptor
-    ,public ::com::sun::star::lang::XEventListener
-    ,public ::cppu::OComponentHelper
+typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::frame::XDispatchProviderInterceptor,
+                                            ::com::sun::star::lang::XEventListener > FmXDispatchInterceptorImpl_BASE;
+
+class FmXDispatchInterceptorImpl : public FmXDispatchInterceptorImpl_BASE
 
 {
     ::osl::Mutex                    m_aFallback;
@@ -574,10 +577,10 @@ public:
     FmXDispatchInterceptorImpl(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _rToIntercept, FmDispatchInterceptor* _pMaster, sal_Int16 _nId);
 
     // StarOne
-    DECLARE_UNO3_DEFAULTS(FmXDispatchInterceptorImpl, OComponentHelper);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
+    DECLARE_UNO3_DEFAULTS(FmXDispatchInterceptorImpl, FmXDispatchInterceptorImpl_BASE);
+    //  virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    //  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
 
     // ::com::sun::star::frame::XDispatchProvider
