@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:39:00 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,7 +774,7 @@ Menu MN_READONLY_POPUP
             Text [ english_us ] = "Plug-Ins Off" ;
             Text [ italian ] = "Disattiva i PlugIn" ;
             Text [ spanish ] = "Desactivar ~Plug-ins" ;
-            Text [ french ] = "Désactiver les ~Plug-Ins" ;
+            Text [ french ] = "Désactiver les ~Plug-ins" ;
             Text [ dutch ] = "~PlugIns uitschakelen" ;
             Text [ swedish ] = "Stäng av ~plug-ins" ;
             Text [ danish ] = "Sluk ~PlugIns" ;
@@ -1204,7 +1204,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ portuguese_brazilian ] = "Readonly content may not be changed.";
     MESSAGE[ japanese ] = "‚±‚Ì”ÍˆÍ‚Í“Ç‚İæ‚èê—p‚Å‚·B“à—e‚Ì•ÏX‚Í‚Å‚«‚Ü‚¹‚ñB";
     MESSAGE[ chinese_simplified ] = "ÊäÈë¹â±ê»òÑ¡ÖĞµÈÄÚÈİÊÇÒ»¸öÊÜ±£»¤µÄ¡£\nÎŞ·¨¸ü¸Ä·À¸²Ğ´µÄÄÚÈİ¡£";
-    MESSAGE[ chinese_traditional ] = "¿é¤J¥ú¼Ğ©Î¿ï¨úªº¦ì¸m¬O¨ü«OÅ@ªº¡C\nµLªk­×§ï¨¾ÂĞ¼gªº¤º®e¡C";
+    MESSAGE[ chinese_traditional ] = "¿é¤J¥ú¼Ğ©Î¿ï¨úªº¦ì¸m¬O¨ü«OÅ@ªº¡C\nµLªk­×§ï°ßÅªªº¤º®e¡C";
     MESSAGE[ arabic ] = "ÊŞÚ ÚáÇãÉ ÇáßÊÇÈÉ Ãæ ÇáÊÍÏíÏ İí ãæÖÚ ãÍãí ÖÏ ÇáßÊÇÈÉ.\náåĞÇ áÇ íãßä ŞÈæá ÃíÉ ÊÛííÑÇÊ.";
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
     MESSAGE[ chinese_simplified ] = "ÊäÈë¹â±ê»òÑ¡ÖĞµÈÄÚÈİÊÇÒ»¸öÊÜ±£»¤µÄ¡£\nÎŞ·¨¸ü¸Ä·À¸²Ğ´µÄÄÚÈİ¡£";
