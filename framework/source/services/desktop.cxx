@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-23 14:52:10 $
+ *  last change: $Author: as $ $Date: 2000-12-08 11:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,6 +646,7 @@ Reference< XComponent > SAL_CALL Desktop::loadComponentFromURL( const   OUString
         if( m_eLoadState == SUCCESSFUL && m_xLastFrame.is() )
         {
             xReturn = impl_getFrameComponent( m_xLastFrame );
+            m_xLastFrame = Reference< XFrame >(); // Don't hold last frame for ever - or he can't die!
         }
         // We have all informations about result state of loading document.
         // We can remove us as listener.
@@ -1328,6 +1329,7 @@ void SAL_CALL Desktop::dispose() throw( RuntimeException )
     m_aChildTaskContainer.clear();
 
     // Release some other references.
+    m_xLastFrame        = Reference< XFrame >();
     m_xFactory          = Reference< XMultiServiceFactory >();
     m_xFramesHelper     = Reference< XFrames >();
     m_xDispatchHelper   = Reference< XDispatch >();
