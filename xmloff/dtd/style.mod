@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.52 2002-04-10 17:49:05 dvo Exp $
+	$Id: style.mod,v 1.53 2002-04-23 08:40:06 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -438,7 +438,9 @@
 
 <!ENTITY % hd-ft-content "( %headerText; | (style:region-left?, style:region-center?, style:region-right?) )">
 <!ELEMENT style:header %hd-ft-content;>
+<!ATTLIST style:header style:display %boolean; "true">
 <!ELEMENT style:footer %hd-ft-content;>
+<!ATTLIST style:footer style:display %boolean; "true">
 <!ELEMENT style:header-left %hd-ft-content;>
 <!ATTLIST style:header-left style:display %boolean; "true">
 <!ELEMENT style:footer-left %hd-ft-content;>
