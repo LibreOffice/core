@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:52 $
+ *  last change: $Author: mtg $ $Date: 2000-11-24 11:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,8 +468,8 @@ sal_Bool ZipPackage::isZipFile(com::sun::star::package::ZipEntry &rEntry)
 Reference < XInterface >SAL_CALL ZipPackage_create(
     const Reference< XMultiServiceFactory > & xMgr )
 {
-    //return Reference< XInterface >( *new ZipPackage( ) );
-    return Reference < XInterface > (NULL);
+    return Reference< XInterface >( *new ZipPackage( ) );
+    //return Reference < XInterface > (NULL);
 }
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
@@ -528,7 +528,7 @@ extern "C" void * SAL_CALL component_getFactory(
 {
     void * pRet = 0;
     // which implementation is demanded?
-    if (pServiceManager && rtl_str_compare( pImplName, "com.sun.star.package.Package" ))
+    if (pServiceManager && !rtl_str_compare( pImplName, "com.sun.star.package.Package" ))
     {
         OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.package.Package") );
         Reference< XSingleServiceFactory > xFactory(
