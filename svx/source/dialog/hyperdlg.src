@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:56:42 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ portuguese_brazilian ] = "~FTP";
         Text[ japanese ] = "FTP(~F)";
         Text[ korean ] = "FTP";
-        Text[ chinese_simplified ] = "FTP(~F)";
+        Text[ chinese_simplified ] = "~FTP";
         Text[ chinese_traditional ] = "~FTP";
         Text[ arabic ] = "FT~P";
         Text[ turkish ] = "~FTP";
@@ -181,7 +181,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ portuguese_brazilian ] = "~Telnet";
         Text[ japanese ] = "Telnet(~T)";
         Text[ korean ] = "Telnet(~T)";
-        Text[ chinese_simplified ] = "Telnet(~T)";
+        Text[ chinese_simplified ] = "~Telnet";
         Text[ chinese_traditional ] = "~Telnet";
         Text[ arabic ] = "T~elnet";
         Text[ turkish ] = "~Telnet";
@@ -327,7 +327,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ polish ] = "Przegl¹darka WWW";
         QuickHelpText[ portuguese_brazilian ] = "Browse";
         QuickHelpText[ japanese ] = "WWWÌŞ×³»Ş";
-        QuickHelpText[ korean ] = "Browse";
+        QuickHelpText[ korean ] = "ºê¶ó¿ìÁî!";
         QuickHelpText[ chinese_simplified ] = "ÍòÎ¬Íøä¯ÀÀÆ÷";
         QuickHelpText[ chinese_traditional ] = "WWW ÂsÄı¾¹";
         QuickHelpText[ arabic ] = "ãÊÕİÍ æíÈ";
@@ -358,7 +358,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ polish ] = "Cel w dokumencie";
         QuickHelpText[ portuguese_brazilian ] = "Target";
         QuickHelpText[ japanese ] = "ÄŞ·­ÒİÄ‚É‚ ‚éÀ°¹Ş¯Ä";
-        QuickHelpText[ korean ] = "Target";
+        QuickHelpText[ korean ] = "¹®¼­³»¡¡´ë»ó!";
         QuickHelpText[ chinese_simplified ] = "Ä¿±ê";
         QuickHelpText[ chinese_traditional ] = "¤å¥ó¤ºªº¥Ø¼Ğ";
         QuickHelpText[ arabic ] = "ÇáåÏİ İí ÇáãÓÊäÏ";
@@ -669,7 +669,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "²ÍŞİÄ";
-        QuickHelpText[ korean ] = "Script";
+        QuickHelpText[ korean ] = "ÀÌº¥Æ®t!";
         QuickHelpText[ chinese_simplified ] = "ÊÂ¼ş";
         QuickHelpText[ chinese_traditional ] = "¨Æ¥ó";
         QuickHelpText[ arabic ] = "ÃÍÏÇË";
@@ -816,7 +816,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ polish ] = "Dotyczy";
         Text[ portuguese_brazilian ] = "~Subject";
         Text[ japanese ] = "Œ–¼(~S)";
-        Text[ korean ] = "ÁÖÁ¦(~S)";
+        Text[ korean ] = "Á¦¸ñ(~S)";
         Text[ chinese_simplified ] = "ÊÂÓÉ(~S)";
         Text[ chinese_traditional ] = "¥D¦®(~S)";
         Text[ arabic ] = "ÇáãæÖæÚ";
@@ -853,7 +853,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ polish ] = "Ksi¹¿ka adresowa";
         QuickHelpText[ portuguese_brazilian ] = "Adressbook";
         QuickHelpText[ japanese ] = "±ÄŞÚ½’£";
-        QuickHelpText[ korean ] = "Adressbook";
+        QuickHelpText[ korean ] = "ÁÖ¼Ò·Ï!";
         QuickHelpText[ chinese_simplified ] = "Í¨Ñ¶²¾";
         QuickHelpText[ chinese_traditional ] = "³q°T¿ı";
         QuickHelpText[ arabic ] = "ÏİÊÑ ÇáÚäÇæíä";
@@ -1146,7 +1146,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "²ÍŞİÄ";
-        QuickHelpText[ korean ] = "Script";
+        QuickHelpText[ korean ] = "ÀÌº¥Æ®!";
         QuickHelpText[ chinese_simplified ] = "ÊÂ¼ş";
         QuickHelpText[ chinese_traditional ] = "¨Æ¥ó";
         QuickHelpText[ arabic ] = "ÃÍÏÇË";
@@ -1265,7 +1265,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ polish ] = "Otwórz plik";
         QuickHelpText[ portuguese_brazilian ] = "Fileopen";
         QuickHelpText[ japanese ] = "Ì§²Ù‚ğŠJ‚¯‚é";
-        QuickHelpText[ korean ] = "Fileopen";
+        QuickHelpText[ korean ] = "ÆÄÀÏ¿­±â!";
         QuickHelpText[ chinese_simplified ] = "´ò¿ªÎÄ¼ş";
         QuickHelpText[ chinese_traditional ] = "¶}±ÒÂÂÀÉ";
         QuickHelpText[ arabic ] = "İÊÍ Çáãáİ";
@@ -1406,7 +1406,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ polish ] = "Cel w dokumencie";
         QuickHelpText[ portuguese_brazilian ] = "Target in document";
         QuickHelpText[ japanese ] = "ÄŞ·­ÒİÄ‚É‚ ‚éÀ°¹Ş¯Ä";
-        QuickHelpText[ korean ] = "Target in document";
+        QuickHelpText[ korean ] = " ¹®¼­³» ´ë»ó!";
         QuickHelpText[ chinese_simplified ] = "ÎÄµµÄÚµÄÄ¿±ê";
         QuickHelpText[ chinese_traditional ] = "¤å¥ó¤§¤ºªº¥Ø¼Ğ";
         QuickHelpText[ arabic ] = "ÇáåÏİ İí ÇáãÓÊäÏ";
@@ -1699,7 +1699,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "²ÍŞİÄ";
-        QuickHelpText[ korean ] = "Script";
+        QuickHelpText[ korean ] = "ÀÌº¥Æ®!";
         QuickHelpText[ chinese_simplified ] = "ÊÂ¼ş";
         QuickHelpText[ chinese_traditional ] = "¨Æ¥ó";
         QuickHelpText[ arabic ] = "ÃÍÏÇË";
@@ -1868,7 +1868,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ polish ] = "Typ pliku";
         Text[ portuguese_brazilian ] = "File~typ";
         Text[ japanese ] = "Ì§²Ù‚Ìí—Ş(~T)";
-        Text[ korean ] = "ÆÄÀÏ Çü½Ä(~T)";
+        Text[ korean ] = "ÆÄÀÏ À¯Çü(~T)";
         Text[ chinese_simplified ] = "ÎÄ¼şÀàĞÍ(~T)";
         Text[ chinese_traditional ] = "ÀÉ®×Ãş«¬(~T)";
         Text[ arabic ] = "äæÚ Çáãáİ";
@@ -1909,7 +1909,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ polish ] = "Wybierz œcie¿kê";
         QuickHelpText[ portuguese_brazilian ] = "Create";
         QuickHelpText[ japanese ] = "Êß½‚Ì‘I‘ğ";
-        QuickHelpText[ korean ] = "Create";
+        QuickHelpText[ korean ] = "»ı¼º!";
         QuickHelpText[ chinese_simplified ] = "Ñ¡ÔñÂ·¾¶";
         QuickHelpText[ chinese_traditional ] = "¿ï¾Ü¸ô®|";
         QuickHelpText[ arabic ] = "ÇÎÊíÇÑ ÇáãÓÇÑ";
@@ -1995,8 +1995,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ portuguese_brazilian ] = "F~orm";
         Text[ japanese ] = "Ì«°Ñ(~O)";
         Text[ korean ] = "Æû(~O)";
-        Text[ chinese_simplified ] = "·½Ê½(~O)";
-        Text[ chinese_traditional ] = "¤è¦¡(~O)";
+        Text[ chinese_simplified ] = "±íµ¥(~O)";
+        Text[ chinese_traditional ] = "ªí³æ(~O)";
         Text[ arabic ] = "ÇáÔßá";
         Text[ turkish ] = "F~orm";
     };
@@ -2202,7 +2202,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ polish ] = "Wydarzenia";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "²ÍŞİÄ";
-        QuickHelpText[ korean ] = "Script";
+        QuickHelpText[ korean ] = "Script!";
         QuickHelpText[ chinese_simplified ] = "ÊÂ¼ş";
         QuickHelpText[ chinese_traditional ] = "¨Æ¥ó";
         QuickHelpText[ arabic ] = "ÃÍÏÇË";
