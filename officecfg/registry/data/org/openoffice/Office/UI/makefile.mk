@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 14:24:48 $
+#   last change: $Author: hr $ $Date: 2004-08-02 14:07:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,8 @@ XCUFILES= \
     WriterWindowState.xcu \
     WriterGlobalWindowState.xcu \
     WriterWebWindowState.xcu \
-     WriterCommands.xcu
+     WriterCommands.xcu\
+     Effects.xcu
 
 LOCALIZEDFILES= \
     BasicIDECommands.xcu \
@@ -112,7 +113,8 @@ LOCALIZEDFILES= \
     WriterWindowState.xcu \
     WriterGlobalWindowState.xcu \
     WriterWebWindowState.xcu \
-    WriterCommands.xcu
+    WriterCommands.xcu\
+    Effects.xcu
 
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/registry$/data$/localtarget.mk
