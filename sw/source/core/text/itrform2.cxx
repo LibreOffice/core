@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:19:49 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1810,9 +1810,26 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
     rInf.SetRoot( pCurr );
     rInf.SetLineStart( nStart );
     rInf.SetIdx( nStart );
-    rInf.Left( KSHORT(Left()) );
-    rInf.Right( KSHORT(Right()) );
-    rInf.First( short(FirstLeft()) );
+
+    // Handle overflows:
+    SwTwips nTmpLeft = Left();
+    SwTwips nTmpRight = Right();
+    SwTwips nTmpFirst = FirstLeft();
+
+    if ( nTmpLeft > USHRT_MAX ||
+         nTmpRight > USHRT_MAX ||
+         nTmpFirst > USHRT_MAX )
+    {
+        SWRECTFN( rInf.GetTxtFrm() )
+        nTmpLeft = (rInf.GetTxtFrm()->Frm().*fnRect->fnGetLeft)();
+        nTmpRight = (rInf.GetTxtFrm()->Frm().*fnRect->fnGetRight)();
+        nTmpFirst = nTmpLeft;
+    }
+
+    rInf.Left(  KSHORT( nTmpLeft  ) );
+    rInf.Right( KSHORT( nTmpRight ) );
+    rInf.First( KSHORT( nTmpFirst ) );
+
     rInf.RealWidth( KSHORT(rInf.Right()) - KSHORT(GetLeftMargin()) );
     rInf.Width( rInf.RealWidth() );
     if( ((SwTxtFormatter*)this)->GetRedln() )
