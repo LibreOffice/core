@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 14:31:10 $
+#   last change: $Author: rt $ $Date: 2004-11-26 16:23:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -158,6 +158,7 @@ IDLFILES=\
     XStatusbarController.idl\
     XStorable.idl\
     XSubToolbarController.idl\
+    XStorable2.idl\
     XSynchronousDispatch.idl\
     XSynchronousFrameLoader.idl\
     XTask.idl\
