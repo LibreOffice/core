@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:25:43 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ void ImportExcel8:: WinProtection( void )
 {
     if( aIn.ReaduInt16() )
     {
-        pExcRoot->pExtDocOpt->SetWinProtection( true );
+        GetExtDocOptions().SetWinProtection( true );
     }
 }
 
@@ -238,22 +238,23 @@ void ImportExcel8::Note( void )
 
     aIn >> nRow >> nCol >> nFlags >> nId;
 
+    USHORT nScTab = GetCurrScTab();
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
         if( nId )
         {
-            if( const XclImpEscherNote* pNoteObj = GetObjectManager().GetEscherNote( GetScTab(), nId ) )
+            if( const XclImpEscherNote* pNoteObj = GetObjectManager().GetEscherNote( nScTab, nId ) )
             {
                 if( const XclImpString* pString = pNoteObj->GetString() )
                 {
                     bool bVisible = ::get_flag( nFlags, EXC_NOTE_VISIBLE );
                     ScPostIt aNote( pString->GetText() );
                     aNote.SetShown( bVisible );
-                    GetDoc().SetNote( nCol, nRow, GetScTab(), aNote );
+                    GetDoc().SetNote( nCol, nRow, nScTab, aNote );
                     if( bVisible )
                     {
                         ScDocument* pDoc = GetDocPtr();
-                        ScDetectiveFunc( pDoc, GetScTab() ).ShowComment( nCol, nRow, TRUE );
+                        ScDetectiveFunc( pDoc, nScTab ).ShowComment( nCol, nRow, TRUE );
                     }
                 }
             }
@@ -262,7 +263,7 @@ void ImportExcel8::Note( void )
     else
     {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+            GetTracer().TraceInvalidRow( nScTab, nRow, MAXROW );
         }
 
     pLastFormCell = NULL;
@@ -373,9 +374,9 @@ void ImportExcel8::Cellmerging( void )
             nCol2 = Min( nCol2, static_cast< UINT16 >( MAXCOL ) );
             GetXFIndexBuffer().SetMerge( nCol1, nRow1, nCol2, nRow2 );
         }
-    else
-            GetTracer().TraceInvalidRow(GetScTab(), nRow1 > MAXROW ? nRow1 : nRow2, MAXROW);
-        }
+        else
+            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow1 > MAXROW ? nRow1 : nRow2, MAXROW);
+    }
 }
 
 
@@ -410,15 +411,15 @@ void ImportExcel8::Labelsst( void )
 
         ScBaseCell* pCell = GetSst().CreateCell( nSst, nXF );
         if( pCell )
-            GetDoc().PutCell( nCol, nRow, GetScTab(), pCell );
+            GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
 
         pColRowBuff->Used( nCol, nRow );
     }
     else
     {
         bTabTruncated = TRUE;
-                GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
-        }
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
+    }
 
     pLastFormCell = NULL;
 }
@@ -440,14 +441,14 @@ void ImportExcel8::Rstring( void )
 
         ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXF );
         if( pCell )
-            GetDoc().PutCell( nCol, nRow, GetScTab(), pCell );
+            GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
 
         pColRowBuff->Used( nCol, nRow );
     }
     else
     {
         bTabTruncated = TRUE;
-        GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
     }
 
     pLastFormCell = NULL;
@@ -466,7 +467,7 @@ void ImportExcel8::Label( void )
         XclImpString aString( maStrm );
         ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXF );
         if( pCell )
-            GetDoc().PutCell( nCol, nRow, GetScTab(), pCell );
+            GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
 
         pColRowBuff->Used( nCol, nRow );
 
@@ -474,7 +475,7 @@ void ImportExcel8::Label( void )
     else
     {
         bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetScTab(), nRow, MAXROW);
+            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
     }
 
 
@@ -494,12 +495,10 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
     {
         String aName( aIn.ReadUniString() );
 
-        DBG_ASSERT( pExcRoot->pExtDocOpt, "-ImportExcel8::Codename(): nothing there to store!" );
-
         if( bWorkbookGlobals )
-            pExcRoot->pExtDocOpt->SetCodename( aName );
+            GetExtDocOptions().SetCodename( aName );
         else
-            pExcRoot->pExtDocOpt->AddCodename( aName );
+            GetExtDocOptions().AddCodename( aName );
     }
 }
 
@@ -521,7 +520,7 @@ void ImportExcel8::Dimensions( void )
         nColFirst = nColLast;
 
     pColRowBuff->SetDimension(
-        ScRange( nColFirst, ( UINT16 ) nRowFirst, GetScTab(), nColLast, ( UINT16 ) nRowLast, GetScTab() ) );
+        ScRange( nColFirst, ( UINT16 ) nRowFirst, GetCurrScTab(), nColLast, ( UINT16 ) nRowLast, GetCurrScTab() ) );
 }
 
 
@@ -646,7 +645,7 @@ void ImportExcel8::EndAllChartObjects( void )
 
 void ImportExcel8::SXView( void )
 {
-    pCurrPivTab = new XclImpPivotTable( aIn, pExcRoot, (UINT8)GetScTab() );
+    pCurrPivTab = new XclImpPivotTable( aIn, pExcRoot, (UINT8)GetCurrScTab() );
     aPivotTabList.Append( pCurrPivTab );
 }
 
@@ -766,7 +765,7 @@ void ImportExcel8::FilterMode( void )
 
     pExcRoot->pAutoFilterBuffer->IncrementActiveAF();
 
-    XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetScTab() );
+    XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetCurrScTab() );
     if( pData )
         pData->SetAutoOrAdvanced();
 }
@@ -775,7 +774,7 @@ void ImportExcel8::AutoFilterInfo( void )
 {
     if( !pExcRoot->pAutoFilterBuffer ) return;
 
-    XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetScTab() );
+    XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetCurrScTab() );
     if( pData )
     {
         pData->SetAdvancedRange( NULL );
@@ -787,7 +786,7 @@ void ImportExcel8::AutoFilter( void )
 {
     if( !pExcRoot->pAutoFilterBuffer ) return;
 
-    XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetScTab() );
+    XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetCurrScTab() );
     if( pData )
         pData->ReadAutoFilter( aIn );
 }
