@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mh $ $Date: 2003-03-31 14:07:18 $
+#   last change: $Author: khendricks $ $Date: 2003-05-18 13:30:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,13 +71,14 @@ TARGET=so_python
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=Python-$(PYVERSION)
+PATCH_FILE_NAME=Python-$(PYVERSION).patch
 
 CONFIGURE_DIR=
 
 BUILD_DIR=
 
 .IF "$(GUI)" == "UNX"
-CONFIGURE_ACTION=./configure --prefix=../python-inst
+CONFIGURE_ACTION= ./configure --prefix=../python-inst
 BUILD_ACTION=make ; make install
 PYTHONCORESHL=$(OUT)$/lib$/libpython.so.$(PYVERSION)
 PYTHONCORELINK1=$(OUT)$/lib$/libpython.so.$(PYMAJOR)
@@ -119,7 +120,7 @@ $(MISC)$/build$/pyconfig.h :$(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h $(PA
 
 .IF "$(GUI)" == "UNX"
 $(PYTHONCORESHL) : $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a makefile.mk $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
-    ld -shared -o $@ -lm -ldl -lutil -lc -lpthread --whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -soname libpython.so.$(PYMAJOR)
+    ld -shared -o $@ --whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a --no-whole-archive -soname libpython.so.$(PYMAJOR)  -lm -ldl -lutil -lc -lpthread
 
 $(PYTHONCORELINK1) : makefile.mk
     -rm -f $@
