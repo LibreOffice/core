@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:12:34 $
+ *  last change: $Author: fs $ $Date: 2001-04-06 09:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ void OQueryDescriptor::registerProperties()
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor()
     :ODataSettings(m_aBHelper)
-    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>())
+    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this)
 {
     registerProperties();
 }
@@ -148,7 +148,7 @@ OQueryDescriptor::OQueryDescriptor()
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XPropertySet >& _rxCommandDefinition)
     :ODataSettings(m_aBHelper)
-    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>())
+    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this)
 {
     registerProperties();
 
@@ -173,7 +173,7 @@ OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XProp
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
     :ODataSettings(_rSource, m_aBHelper)
-    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>())
+    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this)
 {
     registerProperties();
 
@@ -379,7 +379,7 @@ void OQueryDescriptor::readColumnSettings(const OConfigurationNode& _rConfigLoca
     OConfigurationNode aColumnsNode = _rConfigLocation.openNode(CONFIGKEY_QRYDESCR_COLUMNS);
     m_aColumns.clearColumns();
     if (aColumnsNode.isValid())
-        m_aColumns.loadSettings(aColumnsNode, this);
+        m_aColumns.loadSettings(aColumnsNode);
 }
 // -----------------------------------------------------------------------------
 //==========================================================================
