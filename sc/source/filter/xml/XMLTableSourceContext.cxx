@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ void ScXMLTableSourceContext::EndElement()
 
                 aFileString = ScGlobal::GetAbsDocName( aFileString, pDoc->GetDocumentShell() );
                 if ( !aFilterString.Len() )
-                    ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString );
+                    ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, FALSE );
 
                 BYTE nLinkMode = SC_LINK_NONE;
                 if ( nMode == sheet::SheetLinkMode_NORMAL )
