@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:35:25 $
+ *  last change: $Author: oj $ $Date: 2002-03-19 07:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ namespace dbaui
         virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const;
         virtual sal_Bool SeekRow(long nRow);
         virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
+        virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
 
         ::svt::CellController*  GetController(long _nRow, sal_uInt16 _nColumnId);
         void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId);
@@ -143,6 +144,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/06/29 08:35:25  fs
+ *  #86721# DbBrowseBox replaced by svt::EditBrowseBox
+ *
  *  Revision 1.3  2001/05/02 11:47:20  fs
  *  #86464# +IsModified
  *

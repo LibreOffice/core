@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 07:44:33 $
+ *  last change: $Author: oj $ $Date: 2002-03-19 07:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,6 +520,12 @@ namespace dbaui
         }
         return String();
     }
+    //------------------------------------------------------------------
+    sal_Bool IndexFieldsControl::IsTabAllowed(sal_Bool bForward) const
+    {
+        return sal_False;
+    }
+    //------------------------------------------------------------------
 
 //......................................................................
 }   // namespace dbaui
@@ -528,6 +534,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/08/06 07:44:33  fs
+ *  #90529# help ids
+ *
  *  Revision 1.6  2001/06/29 08:38:00  fs
  *  #86721# DbBrowseBox replaced by svt::EditBrowseBox
  *
