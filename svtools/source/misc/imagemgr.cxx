@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:14 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,7 @@ USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
     }
 #endif
 
-    if ( nImage == IMG_FILE )
+    if ( nImage == IMG_FILE && sURL.Len() )
     {
         if ( bDetectFolder && CONTENT_HELPER::IsFolder( sURL ) )
             nImage = GetFolderImageId_Impl( sURL );
@@ -513,19 +513,19 @@ USHORT GetDescriptionId_Impl( const String& rExtension, sal_Bool& rbShowExt )
 String GetDescriptionByFactory_Impl( const String& rFactory )
 {
     USHORT nResId = 0;
-    if ( rFactory.EqualsIgnoreCaseAscii( "swriter" ) )
+    if ( rFactory.EqualsIgnoreCaseAscii( "swriter", 0, 7 ) )
         nResId = STR_DESCRIPTION_FACTORY_WRITER;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "scalc" ) )
+    else if ( rFactory.EqualsIgnoreCaseAscii( "scalc", 0, 5 ) )
         nResId = STR_DESCRIPTION_FACTORY_CALC;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "simpress" ) )
+    else if ( rFactory.EqualsIgnoreCaseAscii( "simpress", 0, 8 ) )
         nResId = STR_DESCRIPTION_FACTORY_IMPRESS;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "sdraw" ) )
+    else if ( rFactory.EqualsIgnoreCaseAscii( "sdraw", 0, 5 ) )
         nResId = STR_DESCRIPTION_FACTORY_DRAW;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "swriter/web" ) )
+    else if ( rFactory.EqualsIgnoreCaseAscii( "swriter/web", 0, 11 ) )
         nResId = STR_DESCRIPTION_FACTORY_WRITERWEB;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "swriter/globaldocument" ) )
+    else if ( rFactory.EqualsIgnoreCaseAscii( "swriter/globaldocument", 0, 22 ) )
         nResId = STR_DESCRIPTION_FACTORY_GLOBALDOC;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "smath" ) )
+    else if ( rFactory.EqualsIgnoreCaseAscii( "smath", 0, 5 ) )
         nResId = STR_DESCRIPTION_FACTORY_MATH;
 
     String aRet;
@@ -695,20 +695,6 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
     sal_Bool bFolder = bDetectFolder ? CONTENT_HELPER::IsFolder( sURL ) : sal_False;
     if ( !bFolder )
     {
-#if defined( OS2 ) || defined( MAC )
-        // FileType via EAs
-        SvEaMgr aMgr( sMainURL );
-        String aType;
-        if ( aMgr.GetFileType( aType ) )
-        {
-            for( USHORT nIndex = 0; !bDetected && Mappings[ nIndex ]._pExt; nIndex++ )
-                if ( Mappings[ nIndex ]._pExt == aType )
-                {
-                    sDescription = SfxResId( Mappings[ nIndex ]._nStrId );
-                    bDetected = sal_True;
-                }
-        }
-#endif
         if ( !bDetected )
         {
             if ( rObject.GetProtocol() == INET_PROT_PRIVATE )
