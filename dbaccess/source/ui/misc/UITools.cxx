@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:07 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 07:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@
 #ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
+#include <com/sun/star/util/URL.hpp>
+#endif
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
@@ -222,7 +225,18 @@
 #ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
 #endif
-
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
+#include <svtools/helpopt.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 // .........................................................................
 namespace dbaui
 {
@@ -1162,6 +1176,88 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
         Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
         fillAutoIncrementValue(xProp,_rAutoIncrementValueEnabled,_rsAutoIncrementValue);
     }
+}
+// -----------------------------------------------------------------------------
+namespace
+{
+    void AppendConfigToken_Impl( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
+    {
+        // this completes a help url with the system parameters "Language" and "System"
+        // detect installed locale
+        Any aLocale =
+            ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+        ::rtl::OUString sLocaleStr;
+        if ( !( aLocale >>= sLocaleStr ) )
+            // fallback is english
+            sLocaleStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+
+        // query part exists?
+        if ( _bQuestionMark )
+            // no, so start with '?'
+            _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
+        else
+            // yes, so only append with '&'
+            _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
+
+        // set parameters
+        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Language="));
+        _rURL += sLocaleStr;
+        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&System="));
+        _rURL += SvtHelpOptions().GetSystem();
+    }
+
+    // -----------------------------------------------------------------------
+
+    sal_Bool GetHelpAnchor_Impl( const ::rtl::OUString& _rURL, ::rtl::OUString& _rAnchor )
+    {
+        sal_Bool bRet = sal_False;
+        ::rtl::OUString sAnchor;
+
+        try
+        {
+            ::ucb::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
+                                 Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+            if ( ( aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "AnchorName" ) ) >>= sAnchor ) )
+            {
+
+                if ( sAnchor.getLength() > 0 )
+                {
+                    _rAnchor = sAnchor;
+                    bRet = sal_True;
+                }
+            }
+            else
+            {
+                DBG_ERRORFILE( "Property 'AnchorName' is missing" );
+            }
+        }
+        catch( ::com::sun::star::uno::Exception& )
+        {
+        }
+
+        return bRet;
+    }
+}
+// -----------------------------------------------------------------------------
+URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId)
+{
+    URL aURL;
+    aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
+    aURL.Complete += _sModuleName;
+    aURL.Complete += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+    aURL.Complete += ::rtl::OUString::valueOf(_nHelpId);
+
+    ::rtl::OUString sAnchor;
+    ::rtl::OUString sTempURL = aURL.Complete;
+    AppendConfigToken_Impl( sTempURL, sal_True );
+    sal_Bool bHasAnchor = GetHelpAnchor_Impl( sTempURL, sAnchor );
+    AppendConfigToken_Impl(aURL.Complete,sal_True);
+    if ( bHasAnchor )
+    {
+        aURL.Complete += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#"));
+        aURL.Complete += sAnchor;
+    }
+    return aURL;
 }
 // .........................................................................
 }

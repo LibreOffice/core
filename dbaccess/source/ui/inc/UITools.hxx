@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:55:23 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 07:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@ namespace com { namespace sun { namespace star {
     {
         class XDatabaseMetaData;
         class XConnection;
+    }
+    namespace util
+    {
+        struct URL;
     }
 
 }}}
@@ -292,6 +296,14 @@ namespace dbaui
     void fillAutoIncrementValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                                 ,sal_Bool& _rAutoIncrementValueEnabled
                                 ,::rtl::OUString& _rsAutoIncrementValue);
+
+    /** creates the URL or the help agent
+        @param  _sModuleName
+        @param  _nHelpId
+        @return
+            The URL for the help agent to dispatch.
+    */
+    ::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId);
 
 // .........................................................................
 }
