@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodPanel.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:31 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-04 13:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,9 @@ import java.net.URLClassLoader;
 import java.net.MalformedURLException;
 
 import org.openoffice.idesupport.ScriptEntry;
-import org.openoffice.idesupport.SVersionRCFile;
-import org.openoffice.idesupport.zip.ParcelZipper;
+import org.openoffice.idesupport.MethodFinder;
+import org.openoffice.idesupport.BeanShellFinder;
+import org.openoffice.idesupport.JavaFinder;
 
 public class MethodPanel extends JPanel {
 
@@ -93,7 +94,7 @@ public class MethodPanel extends JPanel {
     // private JTable table;
     // private MethodTableModel model;
     private JList list;
-    private Vector values = new Vector(11);
+    private ScriptEntry[] values;
 
     public MethodPanel(File basedir, Vector classpath, String language) {
         this.basedir = basedir;
@@ -107,9 +108,7 @@ public class MethodPanel extends JPanel {
         this.basedir = basedir;
         this.classpath = classpath;
 
-    values.removeAllElements();
         initValues(language);
-
         list.setListData(values);
     }
 
@@ -141,156 +140,16 @@ public class MethodPanel extends JPanel {
     }
 
     private void initValues(String language) {
-        String parcelName;
-
-        if (basedir == null || basedir.exists() == false ||
-            basedir.isDirectory() == false)
-            return;
-
-        parcelName = basedir.getName();
-        if (parcelName.equals(ParcelZipper.CONTENTS_DIRNAME))
-            parcelName = basedir.getParentFile().getName();
+        MethodFinder finder;
 
         if (language == null)
-            initJavaValues(parcelName);
+            finder = JavaFinder.getInstance(classpath);
         else if (language.toLowerCase().equals("beanshell"))
-            initBeanShellValues(parcelName);
+            finder = BeanShellFinder.getInstance();
         else
-            initJavaValues(parcelName);
-    }
+            finder = JavaFinder.getInstance(classpath);
 
-    private void initJavaValues(String parcelName) {
-        String[] classNames;
-
-        classNames = findClassNames();
-        if (classNames != null && classNames.length != 0) {
-
-            ClassLoader classloader = getClassLoader();
-
-            for (int i = 0; i < classNames.length; i++)
-            {
-                try
-                {
-                    Class clazz = classloader.loadClass(classNames[i]);
-                    Method[] methods = clazz.getDeclaredMethods();
-                    for (int k = 0; k < methods.length; k++)
-                    {
-                        if (Modifier.isPublic(methods[k].getModifiers()))
-                        {
-                            Class[] params = methods[k].getParameterTypes();
-                            if(params.length > 0)
-                            {
-                                if(params[0].getName().equals(FIRST_PARAM))
-                                {
-                                    ScriptEntry entry =
-                                        new ScriptEntry(classNames[i] + "." +
-                                            methods[k].getName(), parcelName);
-                                    values.addElement(entry);
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (ClassNotFoundException e)
-                {
-                    System.err.println("Class Not Found Exception...");
-                    continue;
-                }
-                catch (NoClassDefFoundError nc)
-                {
-                    System.err.println("No Class Definition Found...");
-                    continue;
-                }
-            }
-        }
-    }
-
-    private ClassLoader getClassLoader() {
-
-        int len = classpath.size();
-        ArrayList urls = new ArrayList(len);
-
-        for (int i = 0; i < len; i++) {
-            try {
-                String s = (String)classpath.elementAt(i);
-                s = SVersionRCFile.toFileURL(s);
-
-                if (s != null)
-                    urls.add(new URL(s));
-            }
-            catch (MalformedURLException mue) {
-            }
-        }
-
-        return new URLClassLoader((URL[])urls.toArray(new URL[0]));
-    }
-
-    private void initBeanShellValues(String parcelName) {
-
-        ArrayList bshFiles = findFiles(basedir, ".bsh");
-
-        if (bshFiles != null) {
-            for (int i = 0; i < bshFiles.size(); i++) {
-                File f = (File)bshFiles.get(i);
-                values.addElement(new ScriptEntry("BeanShell", f.getName(),
-                    f.getName(), parcelName));
-            }
-        }
-    }
-
-    private ArrayList findFiles(File basedir, String suffix) {
-        ArrayList result = new ArrayList();
-        File[] children = basedir.listFiles();
-
-        for (int i = 0; i < children.length; i++) {
-            if (children[i].isDirectory())
-                result.addAll(findFiles(children[i], suffix));
-            else if (children[i].getName().endsWith(suffix))
-                    result.add(children[i]);
-        }
-        return result;
-    }
-
-    private String[] findClassNames()
-    {
-        ArrayList classFiles = findFiles(basedir, ".class");
-        if(classFiles == null || classFiles.size() == 0)
-            return null;
-
-        ArrayList javaFiles = findFiles(basedir, ".java");
-        if(javaFiles == null || javaFiles.size() == 0)
-            return null;
-
-        ArrayList result = new ArrayList();
-        for (int i = 0; i < classFiles.size(); i++)
-        {
-            File classFile = (File)classFiles.get(i);
-            String className = classFile.getName();
-            className = className.substring(0, className.lastIndexOf(".class"));
-            boolean finished = false;
-
-
-            for (int j = 0; j < javaFiles.size() && finished == false; j++)
-            {
-                File javaFile = (File)javaFiles.get(j);
-                String javaName = javaFile.getName();
-                javaName = javaName.substring(0, javaName.lastIndexOf(".java"));
-
-
-                if (javaName.equals(className))
-                {
-                    String path = classFile.getAbsolutePath();
-                    path = path.substring(basedir.getAbsolutePath().length() + 1);
-                    path = path.replace(File.separatorChar, '.');
-                    path = path.substring(0, path.lastIndexOf(".class"));
-
-                    result.add(path);
-                    javaFiles.remove(j);
-                    finished = true;
-                }
-            }
-        }
-        return (String[])result.toArray(new String[0]);
+        values = finder.findMethods(basedir);
     }
 
     /*

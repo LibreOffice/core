@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Manifest.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:17 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-04 13:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public class Manifest {
             root.appendChild(el);
         }
         catch (Exception e) {
-            System.out.println("Error adding entry: " + e.getMessage());
+            System.err.println("Error adding entry: " + e.getMessage());
         }
     }
 
@@ -148,7 +148,7 @@ public class Manifest {
             // System.out.println("and after root is: " + root.toString());
         }
         catch (Exception e) {
-            System.out.println("Error removing entry: " + e.getMessage());
+            System.err.println("Error removing entry: " + e.getMessage());
         }
     }
 
