@@ -12,8 +12,8 @@
 -o sw.SwAccessibleTextFrameView
 -o sw.SwAccessibleTextGraphicObject
 -o sw.SwXAutoTextContainer
-#i26146#-o sw.SwXAutoTextEntry
-#i26146#-o sw.SwXAutoTextGroup
+-o sw.SwXAutoTextEntry
+-o sw.SwXAutoTextGroup
 -o sw.SwXBodyText
 -o sw.SwXBookmark
 -o sw.SwXBookmarks
