@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-22 06:10:19 $
+ *  last change: $Author: cd $ $Date: 2001-08-16 07:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bo
         {
             if ( pBmkMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
             {
-                BmkMenu::Attributes* pBmkAttributes = (BmkMenu::Attributes *)(pBmkMenu->GetUserValue( nItemId ));
+                MenuConfiguration::Attributes* pBmkAttributes = (MenuConfiguration::Attributes *)(pBmkMenu->GetUserValue( nItemId ));
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, NULL, REFERENCE< XDISPATCH >() );
 
                 if ( pBmkAttributes )

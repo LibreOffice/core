@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-11 13:17:24 $
+ *  last change: $Author: cd $ $Date: 2001-08-16 07:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,6 @@ class BmkMenu_Impl;
 class BmkMenu : public PopupMenu
 {
     public:
-                        struct Attributes
-                        {
-                            ::rtl::OUString aTargetFrame;
-                        };
-
                         enum BmkMenuType
                         {
                             BMK_NEWMENU,

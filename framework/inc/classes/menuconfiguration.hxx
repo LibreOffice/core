@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-07-20 08:07:09 $
+ *  last change: $Author: cd $ $Date: 2001-08-16 07:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,11 @@ namespace framework
 class MenuConfiguration
 {
     public:
+        struct Attributes
+        {
+            ::rtl::OUString aTargetFrame;
+        };
+
         MenuConfiguration(
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
 

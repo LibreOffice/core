@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-15 09:23:49 $
+ *  last change: $Author: cd $ $Date: 2001-08-16 07:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 
 #ifndef __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
 #include <helper/imageproducer.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_MENUCONFIGURATION_HXX_
+#include <classes/menuconfiguration.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -203,7 +207,7 @@ BmkMenu::~BmkMenu()
         {
             // delete user attributes created with new!
             USHORT nId = GetItemId( i );
-            BmkMenu::Attributes* pUserAttributes = (BmkMenu::Attributes*)GetUserValue( nId );
+            MenuConfiguration::Attributes* pUserAttributes = (MenuConfiguration::Attributes*)GetUserValue( nId );
             delete pUserAttributes;
         }
     }
@@ -262,7 +266,7 @@ void BmkMenu::Initialize()
                     InsertItem( nId, aTitle, aImage );
             }
 
-            BmkMenu::Attributes* pUserAttributes = new BmkMenu::Attributes;
+            MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes;
             pUserAttributes->aTargetFrame = aTargetFrame;
             SetUserValue( nId, (ULONG)pUserAttributes );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-10 11:39:05 $
+ *  last change: $Author: cd $ $Date: 2001-08-16 07:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,10 +998,21 @@ long Select_Impl( void* pHdl, void* pVoid )
     Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
     Reference < ::com::sun::star::frame::XDispatch > xDisp;
     if ( xProv.is() )
+    {
         if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
             xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         else
-            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
+        {
+            ::rtl::OUString aTargetFrame( ::rtl::OUString::createFromAscii("_blank") );
+            ::framework::MenuConfiguration::Attributes* pMenuAttributes =
+                (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
+
+            if ( pMenuAttributes )
+                aTargetFrame = pMenuAttributes->aTargetFrame;
+
+            xDisp = xProv->queryDispatch( aTargetURL, aTargetFrame , 0 );
+        }
+    }
     if ( xDisp.is() )
     {
         Sequence<PropertyValue> aArgs(1);
