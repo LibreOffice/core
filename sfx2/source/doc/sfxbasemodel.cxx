@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:24:57 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,10 +799,12 @@ REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getParent() throw( RUNTIMEEXCEPTI
 void SAL_CALL SfxBaseModel::setParent(const REFERENCE< XINTERFACE >& Parent) throw(NOSUPPORTEXCEPTION, RUNTIMEEXCEPTION)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( Parent.is() && getParent().is() )
-        // only set parent when no parent is available
-        throw NOSUPPORTEXCEPTION();
 
+    //if ( Parent.is() && getParent().is() )
+    //    // only set parent when no parent is available
+    //    throw NOSUPPORTEXCEPTION();
+
+    //DBG_ASSERT( !Parent.is() || !getParent().is(), "Changing parent directly is not allowed!" );
     m_pData->m_xParent = Parent;
 }
 
