@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-17 11:04:52 $
+ *  last change: $Author: mba $ $Date: 2000-11-20 13:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3401,6 +3401,660 @@ String IDS_SBERR_STOREREF
     Text[ korean ] = "ÂüÁ¶°¡ ÀúÀåµÇÁö ¾ÊÀ»°Í ÀÔ´Ï´Ù: ";
     Text[ turkish ] = "Referans kaydedilmeyecek: ";
 };
+
+String STR_KEY_CONFIG_DIR
+{
+    Text = "Konfiguration" ;
+    Text [ English ] = "Configuration" ;
+    Text [ norwegian ] = "Konfigurasjoner" ;
+    Text [ italian ] = "Configurazione" ;
+    Text [ portuguese_brazilian ] = "Configurações" ;
+    Text [ portuguese ] = "Configuração" ;
+    Text [ finnish ] = "Määritykset" ;
+    Text [ danish ] = "Konfiguration" ;
+    Text [ french ] = "Configuration" ;
+    Text [ swedish ] = "Konfiguration" ;
+    Text [ dutch ] = "Configuraties" ;
+    Text [ spanish ] = "Configuración" ;
+    Text [ english_us ] = "Configuration" ;
+    Text[ chinese_simplified ] = "ÅäÖÃ";
+    Text[ russian ] = "Êîíôèãóğàöèÿ";
+    Text[ polish ] = "Ustawienia";
+    Text[ japanese ] = "İ’è";
+    Text[ chinese_traditional ] = "°t¸m";
+    Text[ arabic ] = "Êßæíä";
+    Text[ dutch ] = "Configuraties";
+    Text[ chinese_simplified ] = "ÅäÖÃ";
+    Text[ greek ] = "ĞáñÜìåôñïé";
+    Text[ korean ] = "¼³Á¤";
+    Text[ turkish ] = "Konfigürasyon";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_WORK_PATH
+{
+    Text = "Arbeitsverzeichnis" ;
+    Text [ English ] = "Working path" ;
+    Text [ norwegian ] = "Arbeidsbane" ;
+    Text [ italian ] = "Cartella di lavoro" ;
+    Text [ portuguese_brazilian ] = "Caminho de trabalho" ;
+    Text [ portuguese ] = "Pasta de trabalho" ;
+    Text [ finnish ] = "Työhakemisto" ;
+    Text [ danish ] = "Arbejdsmappe" ;
+    Text [ french ] = "Dossier de travail" ;
+    Text [ swedish ] = "Arbetsmapp" ;
+    Text [ dutch ] = "Werkmap" ;
+    Text [ spanish ] = "Directorio de trabajo" ;
+    Text [ english_us ] = "My Documents" ;
+    Text[ chinese_simplified ] = "¹¤×÷Ä¿Â¼";
+    Text[ russian ] = "Ğàáî÷àÿ ïàïêà";
+    Text[ polish ] = "Folder roboczy";
+    Text[ japanese ] = "Ü°·İ¸ŞÃŞ¨Ú¸ÄØ";
+    Text[ chinese_traditional ] = "¤u§@¥Ø¿ı";
+    Text[ arabic ] = "ãÓÊäÏÇÊí";
+    Text[ dutch ] = "Werkmap";
+    Text[ chinese_simplified ] = "¹¤×÷Ä¿Â¼";
+    Text[ greek ] = "ÊáôÜëïãïò åñãáóßáò";
+    Text[ korean ] = "³» ¹®¼­";
+    Text[ turkish ] = "Çalışma dizini";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_GRAPHICS_PATH
+{
+    Text = "Grafiken" ;
+    Text [ English ] = "Grafics" ;
+    Text [ norwegian ] = "Grafikk" ;
+    Text [ italian ] = "Immagini" ;
+    Text [ portuguese_brazilian ] = "Gráficos" ;
+    Text [ portuguese ] = "Imagens" ;
+    Text [ finnish ] = "Grafiikka" ;
+    Text [ danish ] = "Grafik" ;
+    Text [ french ] = "Images" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ dutch ] = "Afbeeldingen" ;
+    Text [ spanish ] = "Imágenes" ;
+    Text [ english_us ] = "Graphics" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ russian ] = "Ãğàôèêè";
+    Text[ polish ] = "Grafiki";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸½";
+    Text[ chinese_traditional ] = "¹Ï§Î";
+    Text[ arabic ] = "ÕæÑ";
+    Text[ dutch ] = "Afbeeldingen";
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ greek ] = "ÃñáöéêÜ";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ turkish ] = "Grafik";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_BITMAP_PATH
+{
+    Text = "Symbole" ;
+    Text [ English ] = "Symbols" ;
+    Text [ english_us ] = "Icons" ;
+    Text [ italian ] = "Simboli" ;
+    Text [ spanish ] = "Símbolos" ;
+    Text [ french ] = "Icônes" ;
+    Text [ dutch ] = "Symbolen" ;
+    Text [ swedish ] = "Symboler" ;
+    Text [ danish ] = "Symboler" ;
+    Text [ portuguese ] = "Símbolos" ;
+    Text [ portuguese_brazilian ] = "Symbole" ;
+    Text[ chinese_simplified ] = "Í¼±ê";
+    Text[ russian ] = "Ñèìâîëû";
+    Text[ polish ] = "Symbole";
+    Text[ japanese ] = "¼İÎŞÙ";
+    Text[ chinese_traditional ] = "¹Ï¥Ü";
+    Text[ arabic ] = "ÑãæÒ";
+    Text[ dutch ] = "Symbolen";
+    Text[ chinese_simplified ] = "Í¼±ê";
+    Text[ greek ] = "Óıìâïëá";
+    Text[ korean ] = "±âÈ£";
+    Text[ language_user1 ] = "BLG 18.01.00 : Ds la liste des chemin \"Outils - Options - Chemins\"";
+    Text[ turkish ] = "Simgeler";
+};
+String STR_KEY_BASIC_PATH
+{
+    Text = "BASIC" ;
+};
+String STR_KEY_DATABASE_PATH
+{
+    Text = "Datenbankanfragen" ;
+    Text [ English ] = "Database queries" ;
+    Text [ norwegian ] = "Database" ;
+    Text [ italian ] = "Ricerca database" ;
+    Text [ portuguese_brazilian ] = "Base de Dados" ;
+    Text [ portuguese ] = "Consultas à base de dados" ;
+    Text [ finnish ] = "Tietokanta" ;
+    Text [ danish ] = "Databaseforespørgsler" ;
+    Text [ french ] = "Interrogations de B.D." ;
+    Text [ swedish ] = "Databasförfrågningar" ;
+    Text [ dutch ] = "Database query's" ;
+    Text [ spanish ] = "Consulta de base de datos" ;
+    Text [ english_us ] = "Database Queries" ;
+    Text[ chinese_simplified ] = "²éÑ¯Êı¾İ¿â";
+    Text[ russian ] = "Çàïğîñû áàçû äàííûõ";
+    Text[ polish ] = "Kwerendy bazy danych";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½¸´Ø°";
+    Text[ chinese_traditional ] = "¬d¸ß¸ê®Æ®w";
+    Text[ arabic ] = "ÇÓÊÚáÇãÇÊ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
+    Text[ dutch ] = "Database query's";
+    Text[ chinese_simplified ] = "²éÑ¯Êı¾İ¿â";
+    Text[ greek ] = "ÅñùôŞìáôá âÜóçò äåäïìİíùí";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÁúÀÇ";
+    Text[ turkish ] = "Veritabanı sorguları";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_PALETTE_PATH
+{
+    Text = "Paletten" ;
+    Text [ English ] = "Pallets" ;
+    Text [ norwegian ] = "Palletter" ;
+    Text [ italian ] = "Tavolozze" ;
+    Text [ portuguese_brazilian ] = "Paletas" ;
+    Text [ portuguese ] = "Paletas" ;
+    Text [ finnish ] = "Paletit" ;
+    Text [ danish ] = "Paletter" ;
+    Text [ french ] = "Palettes" ;
+    Text [ swedish ] = "Paletter" ;
+    Text [ dutch ] = "Paletten" ;
+    Text [ spanish ] = "Paletas" ;
+    Text [ english_us ] = "Palettes" ;
+    Text[ chinese_simplified ] = "µ÷É«°å";
+    Text[ russian ] = "Ïàëèòğà";
+    Text[ polish ] = "Paleta";
+    Text[ japanese ] = "ÊßÚ¯Ä";
+    Text[ chinese_traditional ] = "¦âªO";
+    Text[ arabic ] = "áæÍÇÊ ÃáæÇä ÑÓã";
+    Text[ dutch ] = "Paletten";
+    Text[ chinese_simplified ] = "µ÷É«°å";
+    Text[ greek ] = "Ğáëİôåò";
+    Text[ korean ] = "ÆÄ·¹Æ®";
+    Text[ turkish ] = "Paletler";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_BACKUP_PATH
+{
+    Text = "Sicherungskopien" ;
+    Text [ English ] = "Backup" ;
+    Text [ norwegian ] = "Sikkerhetskopi" ;
+    Text [ italian ] = "Backup" ;
+    Text [ portuguese_brazilian ] = "Backup" ;
+    Text [ portuguese ] = "Cópias de segurança" ;
+    Text [ finnish ] = "Varmistus" ;
+    Text [ danish ] = "Sikkerhedskopier" ;
+    Text [ french ] = "Copies de sauvegarde" ;
+    Text [ swedish ] = "Säkerhetskopior" ;
+    Text [ dutch ] = "Reservekopieën" ;
+    Text [ spanish ] = "Copias de seguridad" ;
+    Text [ english_us ] = "Backup Copies" ;
+    Text[ chinese_simplified ] = "°²È«±¸¼ş";
+    Text[ russian ] = "Ğåçåğâíûå êîïèè";
+    Text[ polish ] = "Kopie zapasowe";
+    Text[ japanese ] = "ÊŞ¯¸±¯Ìß ºËß°";
+    Text[ chinese_traditional ] = "¦w¥ş³Æ¥ó";
+    Text[ arabic ] = "äÓÎ ÇÍÊíÇØíÉ";
+    Text[ dutch ] = "Reservekopieën";
+    Text[ chinese_simplified ] = "°²È«±¸¼ş";
+    Text[ greek ] = "Áíôßãñáöá áóöáëåßáò";
+    Text[ korean ] = "¹é¾÷ º¹»ç";
+    Text[ turkish ] = "Yedekleme kopyaları";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_MODULES_PATH
+{
+    Text = "Module" ;
+    Text [ English ] = "Modules" ;
+    Text [ norwegian ] = "Moduler" ;
+    Text [ italian ] = "Moduli" ;
+    Text [ portuguese_brazilian ] = "Módulos" ;
+    Text [ portuguese ] = "Módulos" ;
+    Text [ finnish ] = "Moduulit" ;
+    Text [ danish ] = "Moduler" ;
+    Text [ french ] = "Modules" ;
+    Text [ swedish ] = "Moduler" ;
+    Text [ dutch ] = "Modules" ;
+    Text [ spanish ] = "Módulos" ;
+    Text [ english_us ] = "Modules" ;
+    Text[ chinese_simplified ] = "Ä£¿é";
+    Text[ russian ] = "Ìîäóëè";
+    Text[ polish ] = "Modu³y";
+    Text[ japanese ] = "Ó¼Ş­°Ù";
+    Text[ chinese_traditional ] = "¼Ò¶ô";
+    Text[ arabic ] = "æÍÏÇÊ äãØíÉ";
+    Text[ dutch ] = "Modules";
+    Text[ chinese_simplified ] = "Ä£¿é";
+    Text[ greek ] = "Ëåéôïõñãéêİò ìïíÜäåò";
+    Text[ korean ] = "¸ğµâ";
+    Text[ turkish ] = "Modüller";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_TEMPLATE_PATH
+{
+    Text = "Dokumentvorlagen" ;
+    Text [ English ] = "Dokument templates" ;
+    Text [ norwegian ] = "Dokumentmaler" ;
+    Text [ italian ] = "Modelli" ;
+    Text [ portuguese_brazilian ] = "Modelos de documento" ;
+    Text [ portuguese ] = "Modelos de documentos" ;
+    Text [ finnish ] = "Asiakirjamallit" ;
+    Text [ danish ] = "Dokumentskabeloner" ;
+    Text [ french ] = "Modèles de document" ;
+    Text [ swedish ] = "Dokumentmallar" ;
+    Text [ dutch ] = "Sjablonen" ;
+    Text [ spanish ] = "Plantilla de documento" ;
+    Text [ english_us ] = "Templates" ;
+    Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
+    Text[ russian ] = "Øàáëîíû äîêóìåíòà";
+    Text[ polish ] = "Szablony dokumentu";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÌÃİÌßÚ°Ä";
+    Text[ chinese_traditional ] = "¤å¥ó¼Ë¦¡";
+    Text[ arabic ] = "ŞæÇáÈ ãÓÊäÏ";
+    Text[ dutch ] = "Sjablonen";
+    Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
+    Text[ greek ] = "Ğñüôõğá åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ÅÛÇÃ¸®Æ®";
+    Text[ turkish ] = "Belge şablonları";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_GLOSSARY_PATH
+{
+    Text = "AutoText" ;
+    Text [ English ] = "AutoText";
+    Text[ english_us ] = "AutoText";
+    Text[ portuguese ] = "AutoTexto";
+    Text[ russian ] = "Àâòîòåêñò";
+    Text[ greek ] = "ÁõôïÊåßìåíï";
+    Text[ dutch ] = "AutoTekst";
+    Text[ french ] = "AutoTexte";
+    Text[ spanish ] = "AutoTexto";
+    Text[ italian ] = "Testo automatico";
+    Text[ danish ] = "AutoTekst";
+    Text[ swedish ] = "AutoText";
+    Text[ polish ] = "Autotekst";
+    Text[ portuguese_brazilian ] = "AutoText";
+    Text[ japanese ] = "“ü—Íx‰‡";
+    Text[ korean ] = "AutoText";
+    Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯";
+    Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°";
+    Text[ turkish ] = "AutoText";
+    Text[ arabic ] = "äÕ ÊáŞÇÆí";
+};
+String STR_KEY_DICTIONARY_PATH
+{
+    Text = "Wörterbücher" ;
+    Text [ English ] = "Dictionaries" ;
+    Text [ norwegian ] = "Ordlister" ;
+    Text [ italian ] = "Dizionari" ;
+    Text [ portuguese_brazilian ] = "Dicionários" ;
+    Text [ portuguese ] = "Dicionários" ;
+    Text [ french ] = "Dictionnaires" ;
+    Text [ dutch ] = "Woordenboeken" ;
+    Text [ spanish ] = "Diccionarios" ;
+    Text [ danish ] = "Ordbøger" ;
+    Text [ swedish ] = "Ordböcker" ;
+    Text [ finnish ] = "Dictionaries" ;
+    Text [ english_us ] = "Dictionaries" ;
+    Text[ chinese_simplified ] = "×Öµä";
+    Text[ russian ] = "Ñëîâàğè";
+    Text[ polish ] = "S³owniki";
+    Text[ japanese ] = "«‘";
+    Text[ chinese_traditional ] = "¦r¨å";
+    Text[ arabic ] = "ÇáŞæÇãíÓ";
+    Text[ dutch ] = "Woordenboeken";
+    Text[ chinese_simplified ] = "×Öµä";
+    Text[ greek ] = "ËåîéêÜ";
+    Text[ korean ] = "»çÀü";
+    Text[ turkish ] = "Sözlükler";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_HELP_DIR
+{
+    Text = "Hilfedateien" ;
+    Text [ English ] = "Helpfiles" ;
+    Text [ english_us ] = "Help" ;
+    Text [ italian ] = "File della Guida" ;
+    Text [ spanish ] = "Archivos de ayuda" ;
+    Text [ french ] = "Fichiers d'aide" ;
+    Text [ dutch ] = "Help-bestanden" ;
+    Text [ swedish ] = "Hjälpfiler" ;
+    Text [ danish ] = "Hjælp-filer" ;
+    Text [ portuguese ] = "Ficheiros de ajuda" ;
+    Text [ portuguese_brazilian ] = "Hilfedateien" ;
+    Text[ chinese_simplified ] = "°ïÖúÎÄ¼ş";
+    Text[ russian ] = "Ôàéëû ñïğàâêè";
+    Text[ polish ] = "Pliki pomocy";
+    Text[ japanese ] = "ÍÙÌßÌ§²Ù";
+    Text[ chinese_traditional ] = "»¡©úÀÉ®×";
+    Text[ arabic ] = "ãáİÇÊ ÇáãÓÇÚÏÉ";
+    Text[ dutch ] = "Help-bestanden";
+    Text[ chinese_simplified ] = "°ïÖúÎÄ¼ş";
+    Text[ greek ] = "Áñ÷åßá âïŞèåéáò";
+    Text[ korean ] = "µµ¿ò¸» ÆÄÀÏ";
+    Text[ turkish ] = "Yardım dosyaları";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_GALLERY_DIR
+{
+    Text = "Gallery" ;
+    Text [ English ] = "Gallery" ;
+    Text [ dutch ] = "Gallery" ;
+    Text [ english_us ] = "Gallery" ;
+    Text [ italian ] = "Gallery" ;
+    Text [ spanish ] = "Gallery" ;
+    Text [ french ] = "Gallery" ;
+    Text [ swedish ] = "Gallery" ;
+    Text [ danish ] = "Gallery" ;
+    Text [ portuguese ] = "Gallery" ;
+    Text [ portuguese_brazilian ] = "Gallery" ;
+    Text[ chinese_simplified ] = "»­ÀÈ";
+    Text[ russian ] = "Ãàëåğåÿ";
+    Text[ polish ] = "Galeria";
+    Text[ japanese ] = "·Ş¬×Ø";
+    Text[ chinese_traditional ] = "µe´Y";
+    Text[ arabic ] = "ÇáÌÇáíÑí";
+    Text[ dutch ] = "Gallery";
+    Text[ chinese_simplified ] = "»­ÀÈ";
+    Text[ greek ] = "Gallery";
+    Text[ korean ] = "°¶·¯¸®";
+    Text[ turkish ] = "Galeri";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_NEW_DIR
+{
+    Text = "Standardvorlagen" ;
+    Text [ English ] = "standard templates" ;
+    Text [ dutch ] = "Standaardsjablonen" ;
+    Text [ english_us ] = "Default Templates" ;
+    Text [ swedish ] = "Standardmallar" ;
+    Text [ danish ] = "Standardskabeloner" ;
+    Text [ italian ] = "Modelli standard" ;
+    Text [ spanish ] = "Plantillas predeterminadas" ;
+    Text [ french ] = "Modèles par défaut" ;
+    Text [ portuguese ] = "Modelos-padrão" ;
+    Text [ portuguese_brazilian ] = "Standardvorlagen" ;
+    Text[ chinese_simplified ] = "±ê×¼ÑùÊ½";
+    Text[ russian ] = "Ñòàíäàğòíûå øàáëîíû";
+    Text[ polish ] = "Szablony standardowe";
+    Text[ japanese ] = "•W€½À²Ù";
+    Text[ chinese_traditional ] = "¼Ğ·Ç¼Ë¦¡";
+    Text[ arabic ] = "ŞæÇáÈ ŞíÇÓíÉ";
+    Text[ dutch ] = "Standaardsjablonen";
+    Text[ chinese_simplified ] = "±ê×¼ÑùÊ½";
+    Text[ greek ] = "Ğñüôõğá ğñïåğéëïãŞò";
+    Text[ korean ] = "±âº» ÅÛÇÃ¸®Æ®";
+    Text[ turkish ] = "Standart şablonlar";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_TRASH_DIR
+{
+    Text = "Papierkorb" ;
+    Text [ English ] = "Trash" ;
+    Text [ English_US ] = "Recycle Bin" ;
+    Text [ portuguese ] = "Reciclagem" ;
+    Text [ portuguese_brazilian ] = "Mülleimer" ;
+    Text [ swedish ] = "Papperskorg" ;
+    Text [ danish ] = "Papirkurv" ;
+    Text [ italian ] = "Cestino" ;
+    Text [ spanish ] = "Papelera" ;
+    Text [ french ] = "Corbeille" ;
+    Text [ dutch ] = "Prullenbak" ;
+    Text[ chinese_simplified ] = "»ØÊÕÕ¾";
+    Text[ russian ] = "Êîğçèíà";
+    Text[ polish ] = "Kosz";
+    Text[ japanese ] = "‚²‚İ” ";
+    Text[ chinese_traditional ] = "¸ê·½¦^¦¬µ©";
+    Text[ arabic ] = "ÓáÉ ÇáãÍĞæİÇÊ";
+    Text[ dutch ] = "Prullenbak";
+    Text[ chinese_simplified ] = "»ØÊÕÕ¾";
+    Text[ greek ] = "ÊÜäïò áíáêıêëùóçò";
+    Text[ korean ] = "ÈŞÁöÅë";
+    Text[ turkish ] = "Çöp kutusu";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_STORAGE_DIR
+{
+    Text = "Nachrichtenspeicher" ;
+    Text [ English ] = "Mail Storages" ;
+    Text [ portuguese ] = "Memória de mensagens" ;
+    Text [ english_us ] = "Mail/News Storage" ;
+    Text [ portuguese_brazilian ] = "Nachrichtenspeicher" ;
+    Text [ swedish ] = "Meddelandelager" ;
+    Text [ danish ] = "Meddelelseslager" ;
+    Text [ italian ] = "Memoria messaggi" ;
+    Text [ spanish ] = "Memoria de mensajes" ;
+    Text [ french ] = "Mémoire pour messages" ;
+    Text [ dutch ] = "Geheugen voor berichten" ;
+    Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş/ĞÂÎÅ´¢´æÌå";
+    Text[ russian ] = "Íàêîïèòåëü ñîîáùåíèé";
+    Text[ polish ] = "Pamiêæ wiadomoœci";
+    Text[ japanese ] = "Ò¯¾°¼Ş—pÒÓØ";
+    Text[ chinese_traditional ] = "¹q¤l¶l¥ó/·s»DÀx¦sÅé";
+    Text[ arabic ] = "ÍİÙ ÇáÃÎÈÇÑ";
+    Text[ dutch ] = "Geheugen voor berichten";
+    Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş/ĞÂÎÅ´¢´æÌå";
+    Text[ greek ] = "ÁğïèŞêåõóç ìçíõìÜôùí";
+    Text[ korean ] = "¿ìÆí/´º½º ÀúÀå¼Ò";
+    Text[ turkish ] = "İleti depolama alanı";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_AUTOPILOT_DIR
+{
+    Text = "Autopiloten" ;
+    Text [ English ] = "Autopilots" ;
+    Text [ portuguese ] = "AutoPilotos" ;
+    Text [ english_us ] = "AutoPilots" ;
+    Text [ portuguese_brazilian ] = "Autopiloten" ;
+    Text [ swedish ] = "Autopiloter" ;
+    Text [ danish ] = "AutoPiloter" ;
+    Text [ italian ] = "Piloti automatici" ;
+    Text [ spanish ] = "AutoPilotos" ;
+    Text [ french ] = "AutoPilotes" ;
+    Text [ dutch ] = "AutoPiloot" ;
+    Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí";
+    Text[ russian ] = "Àâòîïèëîòû";
+    Text[ polish ] = "Autopiloci";
+    Text[ japanese ] = "µ°ÄÊß²Û¯Ä";
+    Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z";
+    Text[ arabic ] = "ãÑÔÏæä Âáíæä";
+    Text[ dutch ] = "AutoPiloot";
+    Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí";
+    Text[ greek ] = "AutoPilots";
+    Text[ korean ] = "ÀÚµ¿ ÆÄÀÏ·µ";
+    Text[ turkish ] = "Otopilot";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_PLUGINS_PATH
+{
+    Text = "Plugins-Verzeichnis" ;
+    Text [ English ] = "Plugins directory" ;
+    Text[ english_us ] = "Plug-Ins";
+    Text[ portuguese ] = "Directório de plug-ins";
+    Text[ russian ] = "Êàòàëîã Plugins";
+    Text[ dutch ] = "Plugins directory";
+    Text[ french ] = "Répertoire de Plug-Ins";
+    Text[ spanish ] = "Directorio de Plug-ins";
+    Text[ italian ] = "Cartella plugin";
+    Text[ danish ] = "PlugIn-bibliotek";
+    Text[ swedish ] = "Plugins-mapp";
+    Text[ polish ] = "Katalog dodatków Plugin";
+    Text[ portuguese_brazilian ] = "Plugins directory";
+    Text[ japanese ] = "Ìß×¸Ş²İ ÃŞ¨Ú¸ÄØ";
+    Text[ chinese_simplified ] = "Plug-In Ä¿Â¼";
+    Text[ chinese_traditional ] = "Plugins ¥Ø¿ı";
+    Text[ arabic ] = "Ïáíá Plugins";
+    Text[ dutch ] = "Plugins directory";
+    Text[ chinese_simplified ] = "Plug-In Ä¿Â¼";
+    Text[ greek ] = "ÊáôÜëïãïò óõíäåüìåíùí õğïìïíÜäùí";
+    Text[ korean ] = "ÇÃ·¯±× ÀÎ µğ·ºÅä¸®";
+    Text[ turkish ] = "Plug-In dizini";
+};
+String STR_KEY_FAVORITES_DIR
+{
+    Text[ language_user1 ] = " ";
+    Text = "Ordner-Bookmarks" ;
+    Text [ English ] = "Folder Bookmarks" ;
+    Text[ english_us ] = "Folder Bookmarks";
+    Text[ portuguese ] = "Pastas correntes";
+    Text[ greek ] = "Óåëéäïäåßêôåò êáôáëüãùí";
+    Text[ dutch ] = "Bookmarks voor mappen";
+    Text[ french ] = "Répertoires courants";
+    Text[ spanish ] = "Marcadores de carpetas";
+    Text[ swedish ] = "Mappbokmärken";
+    Text[ russian ] = "Çàêëàäêè ê ïàïêå";
+    Text[ italian ] = "Bookmark della cartella";
+    Text[ danish ] = "Mappe-bogmærker";
+    Text[ polish ] = "Zak³adki folderu";
+    Text[ portuguese_brazilian ] = "User directories";
+    Text[ japanese ] = "Ì«ÙÀŞ‚ÌÌŞ¯¸Ï°¸";
+    Text[ korean ] = "Æú´õ Ã¥°¥ÇÇ";
+    Text[ chinese_simplified ] = "ÎÄ¼ş¼ĞÊéÇ©";
+    Text[ chinese_traditional ] = "¸ê®Æ§¨®ÑÅÒ";
+    Text[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ áãÌáÏÇÊ";
+    Text[ turkish ] = "Yer işareti klasörü";
+};
+String STR_KEY_FILTER_PATH
+{
+    Text = "Filter" ;
+    Text [ English ] = "Filter" ;
+    Text[ english_us ] = "Filters";
+    Text[ portuguese ] = "Filtros";
+    Text[ greek ] = "Ößëôñï";
+    Text[ dutch ] = "Filter";
+    Text[ french ] = "Filtre";
+    Text[ spanish ] = "Filtros";
+    Text[ swedish ] = "Filter";
+    Text[ russian ] = "Ôèëüòğ";
+    Text[ italian ] = "Filtro";
+    Text[ danish ] = "Filtre";
+    Text[ polish ] = "Filtr";
+    Text[ portuguese_brazilian ] = "Filter";
+    Text[ japanese ] = "Ì¨ÙÀ";
+    Text[ korean ] = "ÇÊÅÍ";
+    Text[ chinese_simplified ] = "É¸Ñ¡";
+    Text[ chinese_traditional ] = "¹LÂo¾¹";
+    Text[ arabic ] = "İáÊÑ";
+    Text[ turkish ] = "Filtre";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_ADDINS_PATH
+{
+    Text = "AddIns" ;
+    Text [ English ] = "AddIns" ;
+    Text[ english_us ] = "Add-Ins";
+    Text[ portuguese ] = "AddIns";
+    Text[ greek ] = "AddIns";
+    Text[ dutch ] = "AddIns";
+    Text[ french ] = "Add-Ins";
+    Text[ spanish ] = "AddIns";
+    Text[ swedish ] = "AddIns";
+    Text[ russian ] = "AddIns";
+    Text[ italian ] = "AddIns";
+    Text[ danish ] = "Add-Ins";
+    Text[ polish ] = "AddIns";
+    Text[ portuguese_brazilian ] = "AddIns";
+    Text[ japanese ] = "±ÄŞ²İ";
+    Text[ korean ] = "¾ÖµåÀÎ";
+    Text[ chinese_simplified ] = "AddIns";
+    Text[ chinese_traditional ] = "AddIns";
+    Text[ arabic ] = "AddIns";
+    Text[ turkish ] = "Add-In";
+};
+String STR_KEY_USERCONFIG_PATH
+{
+    Text = "Benutzer Konfiguration" ;
+    Text [ English ] = "User Settings" ;
+    Text[ english_us ] = "User Configuration";
+    Text[ portuguese ] = "Configuração personalizada";
+    Text[ greek ] = "Äéáìüñöùóç ôïõ ÷ñŞóôç";
+    Text[ dutch ] = "Gebruikerscofiguratie";
+    Text[ french ] = "Configuration d'utilisateur";
+    Text[ spanish ] = "Configuración de usuario";
+    Text[ swedish ] = "Användarkonfiguration";
+    Text[ russian ] = "Êîíôèãóğàöèÿ ïîëüçîâàòåëÿ";
+    Text[ italian ] = "Configurazione utente";
+    Text[ danish ] = "Brugerkonfigurationer";
+    Text[ polish ] = "Konfiguracje u¿ytkownika";
+    Text[ portuguese_brazilian ] = "User Settings";
+    Text[ japanese ] = "Õ°»Ş°İ’è";
+    Text[ korean ] = "»ç¿ëÀÚ ¼³Á¤";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÅäÖÃ";
+    Text[ chinese_traditional ] = "¨Ï¥ÎªÌ³]©w";
+    Text[ arabic ] = "Êßæíä ÇáãÓÊÎÏã";
+    Text[ turkish ] = "Kullanıcı konfigürasyonu";
+    Text[ language_user1 ] = " ";
+};
+String STR_KEY_USERDICTIONARY_DIR
+{
+    Text = "Benutzerwörterbücher" ;
+    Text [ English ] = "User Dictionaries" ;
+    Text[ english_us ] = "User Dictionaries";
+    Text[ portuguese ] = "Dicionários personalizados";
+    Text[ russian ] = "Ñëîâàğè ïîëüçîâàòåëÿ";
+    Text[ greek ] = "ËåîéêÜ ÷ñŞóôç";
+    Text[ dutch ] = "Gebruikerswoordenboek";
+    Text[ french ] = "Dictionnaires de l'utilisateur";
+    Text[ spanish ] = "Diccionarios de usuario";
+    Text[ italian ] = "Dizionari utente";
+    Text[ danish ] = "Brugerordbøger";
+    Text[ swedish ] = "Användarordböcker";
+    Text[ polish ] = "S³owniki u¿ytkownika";
+    Text[ portuguese_brazilian ] = "User Dictionaries";
+    Text[ japanese ] = "Õ°»Ş°«‘";
+    Text[ korean ] = "»ç¿ëÀÚ »çÀü";
+    Text[ chinese_simplified ] = "ÓÃ»§×Öµä";
+    Text[ chinese_traditional ] = "¦Û­q¦r¨å";
+    Text[ arabic ] = "ŞæÇãíÓ ÇáãÓÊÎÏã";
+    Text[ turkish ] = "Kullanıcı sözlükleri";
+};
+String STR_KEY_AUTOCORRECT_DIR
+{
+    Text = "AutoKorrektur" ;
+    Text [ English ] = "AutoCorrect" ;
+    Text[ english_us ] = "AutoCorrect";
+    Text[ portuguese ] = "AutoCorrecção";
+    Text[ russian ] = "Àâòîçàìåíà";
+    Text[ greek ] = "ÁõôïÄéüñèùóç";
+    Text[ dutch ] = "AutoCorrectie";
+    Text[ french ] = "AutoCorrection";
+    Text[ spanish ] = "AutoCorrección";
+    Text[ italian ] = "Correzione automatica";
+    Text[ danish ] = "AutoKorrektur";
+    Text[ swedish ] = "AutoKorrigering";
+    Text[ polish ] = "Autokorekta";
+    Text[ portuguese_brazilian ] = "AutoCorrect";
+    Text[ japanese ] = "µ°ÄºÚ¸Ä";
+    Text[ korean ] = "ÀÚµ¿ °íÄ§";
+    Text[ chinese_simplified ] = "×Ô¶¯¸üÕı";
+    Text[ chinese_traditional ] = "¦Û°Ê§ó¥¿";
+    Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
+    Text[ turkish ] = "Otomatik düzeltme";
+};
+#if defined STR_KEY_LINGUISTIC_DIR
+String STR_KEY_LINGUISTIC_DIR
+{
+    Text = "Linguistik" ;
+    Text [ English ] = "Linguistic" ;
+    Text[ english_us ] = "Language";
+    Text[ portuguese ] = "Linguística";
+    Text[ russian ] = "Ëèíãâèñòèêà";
+    Text[ greek ] = "Ãëşóóá";
+    Text[ dutch ] = "Linguïstiek";
+    Text[ french ] = "Linguistique";
+    Text[ spanish ] = "Lingüística";
+    Text[ italian ] = "Linguistica";
+    Text[ danish ] = "Lingvistik";
+    Text[ swedish ] = "Lingvistik";
+    Text[ polish ] = "Lingwistyka";
+    Text[ portuguese_brazilian ] = "Linguistic";
+    Text[ japanese ] = "Œ¾Œê";
+    Text[ korean ] = "¾ğ¾î";
+    Text[ chinese_simplified ] = "ÓïÑÔ";
+    Text[ chinese_traditional ] = "»y¨¥";
+    Text[ arabic ] = "ÇááÛÉ";
+    Text[ turkish ] = "Dil";
+};
+#endif // STR_KEY_LINGUISTIC_DIR
+
 
  // ********************************************************************** EOF
 

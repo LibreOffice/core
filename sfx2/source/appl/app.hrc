@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-20 12:58:09 $
+ *  last change: $Author: mba $ $Date: 2000-11-20 13:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,36 @@
 #define STR_OPENOBJECT                      (RID_SFX_APP_START+93)
 #define STR_CORRUPT_INSTALLATION            (RID_SFX_APP_START+94)
 #define IDS_SBERR_STOREREF                  (RID_SFX_APP_START+97)
+
+#define CONFIG_PATH_START               (RID_SFX_APP_START+98)
+
+#define STR_KEY_ADDINS_PATH             (CONFIG_PATH_START)
+#define STR_KEY_AUTOCORRECT_DIR         (CONFIG_PATH_START+1)
+#define STR_KEY_AUTOPILOT_DIR           (CONFIG_PATH_START+2)
+#define STR_KEY_GLOSSARY_PATH           (CONFIG_PATH_START+3)
+#define STR_KEY_BACKUP_PATH             (CONFIG_PATH_START+4)
+#define STR_KEY_BASIC_PATH              (CONFIG_PATH_START+5)
+#define STR_KEY_BITMAP_PATH             (CONFIG_PATH_START+6)
+#define STR_KEY_CONFIG_DIR              (CONFIG_PATH_START+7)
+#define STR_KEY_DATABASE_PATH           (CONFIG_PATH_START+8)
+#define STR_KEY_DICTIONARY_PATH         (CONFIG_PATH_START+9)
+#define STR_KEY_FAVORITES_DIR           (CONFIG_PATH_START+10)
+#define STR_KEY_FILTER_PATH             (CONFIG_PATH_START+11)
+#define STR_KEY_GALLERY_DIR             (CONFIG_PATH_START+12)
+#define STR_KEY_GRAPHICS_PATH           (CONFIG_PATH_START+13)
+#define STR_KEY_HELP_DIR                (CONFIG_PATH_START+14)
+#define STR_KEY_LINGUISTIC_DIR          (CONFIG_PATH_START+15)
+#define STR_KEY_MODULES_PATH            (CONFIG_PATH_START+16)
+#define STR_KEY_NEW_DIR                 (CONFIG_PATH_START+17)
+#define STR_KEY_PALETTE_PATH            (CONFIG_PATH_START+18)
+#define STR_KEY_PLUGINS_PATH            (CONFIG_PATH_START+19)
+#define STR_KEY_STORAGE_DIR             (CONFIG_PATH_START+20)
+#define STR_KEY_TEMP_PATH               (CONFIG_PATH_START+21)
+#define STR_KEY_TEMPLATE_PATH           (CONFIG_PATH_START+22)
+#define STR_KEY_TRASH_DIR               (CONFIG_PATH_START+23)
+#define STR_KEY_USERCONFIG_PATH         (CONFIG_PATH_START+24)
+#define STR_KEY_USERDICTIONARY_DIR      (CONFIG_PATH_START+25)
+#define STR_KEY_WORK_PATH               (CONFIG_PATH_START+26)
 
 #define WIN_HELP_INDEX                          (RID_SFX_APP_START+99)
 #define FT_ACTIVE                               10
