@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 10:20:47 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
