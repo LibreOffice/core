@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 18:14:08 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 07:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ String STR_SVT_FONTMAP_PRINTERONLY
     TEXT[ chinese_traditional ] = "¦C¦L¦r«¬‘CΏΓΉυΕγ₯ά¦r«¬₯i―ΰ²€·L¦³¨Η°Ύ®t‘C";
     TEXT[ arabic ] = "εΠΗ ΞΨ ΗαΨΗΘΪΙ. ήΟ νΞΚαέ ΗαγΩεΡ Ϊαμ ΗαΤΗΤΙ ΘΪΦ ΗαΤΖ.";
     TEXT[ greek ] = "Γραμματοσειρά εκτυπωτή. Η εμφάνιση της στην οθόνη είναι δυνατόν να διαφέρει.";
-    TEXT[ korean ] = "ΐΜ°ΝΐΊ ΐΞΌβ ±Ϋ²ΓΐΤ΄Ο΄Ω. Θ­ΈιΐΗ ΐΜΉΜΑφΏΝ΄Β ΄ΩΈ¦°Ν ΐΤ΄Ο΄Ω.";
+    TEXT[ korean ] = "ΐΜ°ΝΐΊ ΗΑΈ°ΕΝ ±Ϋ²ΓΐΤ΄Ο΄Ω. Θ­Έι ΐΜΉΜΑφ΄Β ΐΟΊΞ ΄ΩΈ¦ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     TEXT[ turkish ] = "Yazύcύ yazύtipi. Ekrandaki gφrόntό biraz farklύ olabilir.";
 };
 
@@ -347,7 +347,7 @@ String STR_SVT_FONTMAP_SCREENONLY
     TEXT[ chinese_traditional ] = "ΏΓΉυ¦r«¬‘C¦C¦L₯X₯i―ΰ·|¦³€@¨Η°Ύ®t‘C";
     TEXT[ arabic ] = "εΠΗ ΞΨ ΤΗΤΙ. ήΟ νΞΚαέ ΗαγΩεΡ Ϊαμ ΗαζΡή ΗαγΨΘζΪ ΘΪΦ ΗαΤΖ.";
     TEXT[ greek ] = "Γραμματοσειρά οθόνης. Η εμφάνιση της στην εκτύπωση είναι δυνατόν να διαφέρει.";
-    TEXT[ korean ] = "ΐΜ°ΝΐΊ Θ­Έι ΖωΖ® ΐΤ΄Ο΄Ω. ΐΞΌβ ΐΜΉΜΑφΏΝ΄Β ΄ΩΈ¦ °Ν ΐΤ΄Ο΄Ω.";
+    TEXT[ korean ] = "ΐΜ°ΝΐΊ Θ­Έι ±Ϋ²Γ ΐΤ΄Ο΄Ω. ΗΑΈ°ΕΝ ΐΜΉΜΑφ΄Β ΐΟΊΞ ΄ΩΈ¦ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     TEXT[ turkish ] = "Ekran yazύtipi. Yazdύrma biraz farklύ olabilir.";
 };
 
