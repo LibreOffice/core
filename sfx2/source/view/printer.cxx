@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:26:31 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ SfxFontSizeInfo::SfxFontSizeInfo( const SfxFont &rFont,
         else
         {
             // statische Font-Sizes verwenden
-            __DELETE(nSizeCount) pSizes;
+            delete [] pSizes;
             nSizes = 0;
         }
         rDev.SetMapMode(aOldMapMode);
@@ -222,7 +222,7 @@ SfxFontSizeInfo::SfxFontSizeInfo( const SfxFont &rFont,
 
 SfxFontSizeInfo::~SfxFontSizeInfo()
 {
-    __DELETE(nSizes) pSizes;
+    delete [] pSizes;
 }
 
 //--------------------------------------------------------------------
