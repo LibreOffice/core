@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2000-10-19 09:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
             return FALSE;
     }
 
-    SfxMedium* pDstMed = new SfxMedium( rPath, STREAM_STD_READWRITE, TRUE );
 
     const SfxFilter* pFilter;
     switch( eDocType )
@@ -225,25 +224,18 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     case SPLITDOC_TO_HTML:
         pFilter = SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( "HTML" )));
-        if( pFilter )
-            pDstMed->GetOutStream();
         break;
 
     default:
 //  case SPLITDOC_TO_GLOBALDOC:
         pFilter = SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(
                                                     FILTER_SW5 ));
-        if( pFilter )
-            pDstMed->GetStorage();
         eDocType = SPLITDOC_TO_GLOBALDOC;
         break;
     }
 
     if( !pFilter )
-    {
-        delete pDstMed;
         return FALSE;
-    }
 
     // Undo/Redline aufjedenfall abschalten
     DoUndo( FALSE );
@@ -252,6 +244,8 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     String sExt( pFilter->GetSuffixes().GetToken(0, ',') );
     if( !sExt.Len() )
         sExt.AssignAscii( "sdw" );
+    if( '.' != sExt.GetChar( 0 ) )
+        sExt.Insert( '.', 0 );
 
     INetURLObject aEntry(rPath);
     String sLeading(aEntry.GetBase());
@@ -371,14 +365,13 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                     // ?????
 
                     INetURLObject aEntry2(rPath);
-                    String sLeading(aEntry2.GetBase());
                     aEntry2.removeSegment();
                     String sPath = aEntry2.GetMainURL();
                     TempFile aTempFile2(sLeading,&sExt,&sPath );
                     sFileName = aTempFile2.GetName();
-                    SfxMedium* pDstMed = new SfxMedium( sFileName,
+                    SfxMedium* pTmpMed = new SfxMedium( sFileName,
                                                 STREAM_STD_READWRITE, TRUE );
-                    pDstMed->SetFilter( pFilter );
+                    pTmpMed->SetFilter( pFilter );
 
                     // fuer den HTML-Filter mussen wir aber ein Layout
                     // haben, damit Textrahmen/Controls/OLE-Objecte korrekt
@@ -389,8 +382,8 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         /* SfxViewFrame* pFrame = */
                             SFX_APP()->CreateViewFrame( *xDocSh, 0, TRUE );
                     }
-                    xDocSh->DoSaveAs( *pDstMed );
-                    xDocSh->DoSaveCompleted( pDstMed );
+                    xDocSh->DoSaveAs( *pTmpMed );
+                    xDocSh->DoSaveCompleted( pTmpMed );
 
                     // beim Fehler wird keine FileLinkSection eingefuegt
                     if( xDocSh->GetError() )
@@ -543,6 +536,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
             DelSectionFmt( GetSections()[ 0 ] );
     }
 
+    SfxMedium* pDstMed = new SfxMedium( rPath, STREAM_STD_READWRITE, TRUE );
     pDstMed->SetFilter( pFilter );
     GetDocShell()->DoSaveAs( *pDstMed );
     GetDocShell()->DoSaveCompleted( pDstMed );
