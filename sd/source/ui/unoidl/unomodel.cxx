@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:38:13 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,18 @@
 #include "ViewShell.hxx"
 #endif
 #include "app.hrc"
+
+#ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
+#include <svx/sdr/contact/viewcontact.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
+#include <svx/sdr/contact/displayinfo.hxx>
+#endif
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -567,9 +579,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
     {
         // Hier wird die Seite ermittelt, hinter der eingefuegt werden soll
         SdPage* pPreviousStandardPage = pDoc->GetSdPage( Min( (sal_uInt16)(nPageCount - 1), nPage ), PK_STANDARD );
-
-        sal_uInt16 nPos = 0;
-        SetOfByte aVisibleLayers = pPreviousStandardPage->GetMasterPageVisibleLayers( nPos );
+        SetOfByte aVisibleLayers = pPreviousStandardPage->TRG_GetMasterPageVisibleLayers();
         sal_Bool bIsPageBack = aVisibleLayers.IsSet( aBckgrnd );
         sal_Bool bIsPageObj = aVisibleLayers.IsSet( aBckgrndObj );
 
@@ -610,8 +620,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         if( !bDuplicate )
         {
             // MasterPage der aktuellen Seite verwenden
-            sal_uInt16 nPgNum = pPreviousStandardPage->GetMasterPageNum(nPos=0);
-            pStandardPage->InsertMasterPage(nPgNum);
+            pStandardPage->TRG_SetMasterPage(pPreviousStandardPage->TRG_GetMasterPage());
             pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
             pStandardPage->SetAutoLayout(AUTOLAYOUT_NONE, sal_True );
         }
@@ -620,7 +629,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
         aVisibleLayers.Set(aBckgrnd, bIsPageBack);
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
-        pStandardPage->SetMasterPageVisibleLayers(aVisibleLayers, nPos=0);
+        pStandardPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
         /**************************************************************
         * Notizseite
@@ -647,8 +656,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         if( !bDuplicate )
         {
             // MasterPage der aktuellen Seite verwenden
-            sal_uInt16 nPgNum = pPreviousNotesPage->GetMasterPageNum(nPos=0);
-            pNotesPage->InsertMasterPage(nPgNum);
+            pNotesPage->TRG_SetMasterPage(pPreviousNotesPage->TRG_GetMasterPage());
             pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
             pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True );
         }
@@ -1559,21 +1567,60 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
     return aRenderer;
 }
 
-struct ImplRenderPaintProc
+class ImplRenderPaintProc : public ::sdr::contact::ViewObjectContactRedirector
 {
     const SdrLayerAdmin& rLayerAdmin;
     SdrPageView* pSdrPageView;
 
+public:
     sal_Bool IsVisible  ( const SdrObject* pObj ) const;
     sal_Bool IsPrintable( const SdrObject* pObj ) const;
 
-    ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView ) :
-        rLayerAdmin     ( rLA ),
-        pSdrPageView    ( pView )
-    {}
+    ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView );
+    virtual ~ImplRenderPaintProc();
 
-    DECL_LINK(_ImplRenderPaintProc, SdrPaintProcRec*);
+    // all default implementations just call the same methods at the original. To do something
+    // different, overload the method and at least do what the method does.
+    virtual void PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo);
 };
+
+ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView )
+:   ViewObjectContactRedirector(),
+    rLayerAdmin     ( rLA ),
+    pSdrPageView    ( pView )
+{
+}
+
+ImplRenderPaintProc::~ImplRenderPaintProc()
+{
+}
+
+// all default implementations just call the same methods at the original. To do something
+// different, overload the method and at least do what the method does.
+void ImplRenderPaintProc::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo)
+{
+    SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
+
+    if(pObject)
+    {
+        if(pObject->GetPage())
+        {
+            if(pObject->GetPage()->checkVisibility(rOriginal, rDisplayInfo, false))
+            {
+                if(IsVisible(pObject) && IsPrintable(pObject))
+                {
+                    rOriginal.PaintObject(rDisplayInfo);
+                }
+            }
+        }
+    }
+    else
+    {
+        // not an object, maybe a page
+        rOriginal.PaintObject(rDisplayInfo);
+    }
+}
+
 sal_Bool ImplRenderPaintProc::IsVisible( const SdrObject* pObj ) const
 {
     sal_Bool bVisible = sal_True;
@@ -1605,20 +1652,6 @@ sal_Bool ImplRenderPaintProc::IsPrintable( const SdrObject* pObj ) const
     return bPrintable;
 
 }
-IMPL_LINK( ImplRenderPaintProc, _ImplRenderPaintProc, SdrPaintProcRec*, pRecord )
-{
-    SdrObject* pObj = pRecord->pObj;
-    if( (pObj->GetPage() == NULL) || !pObj->GetPage()->checkVisibility( pRecord, false ) )
-        return 0;
-
-    if( IsVisible( pObj ) && IsPrintable( pObj ) )
-    {
-        // #i29486# use DoPaintObject instead of SingleObjectPainter in PaintProc recalls
-        pObj->DoPaintObject( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
-    }
-    return 0;
-}
-
 void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& rSelection,
                                           const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -1655,7 +1688,6 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : NULL;
                 ImplRenderPaintProc aImplRenderPaintProc( pDoc->GetLayerAdmin(),
                     pOldSdView ? pOldSdView->GetPageViewPvNum( 0 ) : NULL );
-                const Link aRenderPaintProc( LINK( &aImplRenderPaintProc, ImplRenderPaintProc, _ImplRenderPaintProc ) );
 
                 pView->SetHlplVisible( sal_False );
                 pView->SetGridVisible( sal_False );
@@ -1674,7 +1706,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                     pView->ShowPage( pDoc->GetSdPage(
                         (USHORT)nPageNumber - 1, PK_STANDARD ), aOrigin );
                     SdrPageView* pPV = pView->GetPageViewPvNum( 0 );
-                    pPV->InitRedraw( pOut, aRegion, 0, &aRenderPaintProc );
+                    pPV->CompleteRedraw( pOut, aRegion, 0, &aImplRenderPaintProc );
                 }
                 else
                 {
