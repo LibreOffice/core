@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:30:46 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,8 @@
     Text[ greek ] = "ÑïÞ êåéìÝíïõ"; \
     Text[ korean ] = "ÅØ½ºÆ® Èå¸§"; \
     Text[ turkish ] = "Metin akýþý";    \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "Flujo del texto";
 
 /**************************************************************************/
 /*                                                                        */
@@ -142,6 +143,7 @@ TabDialog DLG_FORMAT_TABLE
                 Text[ korean ] = "Ç¥";
                 Text[ turkish ] = "Tablo";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Tabla";
             };
             PageItem
             {
@@ -175,6 +177,7 @@ TabDialog DLG_FORMAT_TABLE
                 Text[ korean ] = "¿­";
                 Text[ turkish ] = "Sütun";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Columnas";
             };
             PageItem
             {
@@ -203,6 +206,7 @@ TabDialog DLG_FORMAT_TABLE
                 Text[ korean ] = "Å×µÎ¸®";
                 Text[ turkish ] = "Kenarlýk";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Borde";
             };
             PageItem
             {
@@ -231,6 +235,7 @@ TabDialog DLG_FORMAT_TABLE
                 Text[ korean ] = "¹è°æ";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fondo";
             };
         };
     };
@@ -244,6 +249,7 @@ TabDialog DLG_FORMAT_TABLE
     Text[ korean ] = "Ç¥ ¼­½Ä";
     Text[ turkish ] = "Tablo formatý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formato de tabla";
 };
 /**************************************************************************/
 /*                                                                        */
@@ -281,6 +287,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nombre";
     };
     Edit ED_NAME
     {
@@ -316,6 +323,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "³Êºñ(~I)";
         Text[ turkish ] = "G~eniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField ED_WIDTH
     {
@@ -361,6 +369,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "ºñ·Ê(~V)";
         Text[ turkish ] = "Göreceli";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Relati~vo";
     };
     GroupBox GB_OPTIONS
     {
@@ -389,6 +398,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "Æ¯¼º";
         Text[ turkish ] = "Özellikler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Propiedades";
     };
     RadioButton RB_FULL
     {
@@ -417,6 +427,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "ÀÚµ¿(~U)";
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Au~tomática";
     };
     RadioButton RB_LEFT
     {
@@ -446,6 +457,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "¿ÞÂÊ(~L)";
         Text[ turkish ] = "S~ola";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Izquierda";
     };
     RadioButton RB_FROM_LEFT
     {
@@ -472,6 +484,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_traditional ] = "±q¥ª(~F)";
         Text[ arabic ] = "ãä ÇáíÓÇÑ";
         Text[ turkish ] = "S~oldan";
+        Text[ catalan ] = "De iz~quierda";
     };
     RadioButton RB_RIGHT
     {
@@ -501,6 +514,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "¿À¸¥ÂÊ(~I)";
         Text[ turkish ] = "Sa~ða";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Derecha";
     };
     RadioButton RB_CENTER
     {
@@ -530,6 +544,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "°¡¿îµ¥(~C)";
         Text[ turkish ] = "~Ortala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Centrado";
     };
     RadioButton RB_FREE
     {
@@ -557,6 +572,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "¼öµ¿(~M)";
         Text[ turkish ] = "~Manüel";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Manual";
     };
     GroupBox GB_POS
     {
@@ -585,6 +601,7 @@ TabPage TP_FORMAT_TABLE
         Text[ greek ] = "Óôïß÷éóç";
         Text[ korean ] = "¸ÂÃã";
         Text[ turkish ] = "Hizalama";
+        Text[ catalan ] = "Alineación";
     };
     GroupBox GB_DIST
     {
@@ -613,6 +630,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "°£°Ý";
         Text[ turkish ] = "Aralýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Espacios";
     };
     FixedText FT_LEFT_DIST
     {
@@ -641,6 +659,7 @@ TabPage TP_FORMAT_TABLE
         Text[ greek ] = "Ðñïò ôá áñéóôåñÜ";
         Text[ korean ] = "¿ÞÂÊ(~T)";
         Text[ turkish ] = "S~ola";
+        Text[ catalan ] = "Hacia la i~zda.";
     };
     MetricField ED_LEFT_DIST
     {
@@ -686,6 +705,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "¿À¸¥ÂÊ(~G)";
         Text[ turkish ] = "Sa~ða";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hacia la d~cha.";
     };
 
     MetricField ED_RIGHT_DIST
@@ -732,6 +752,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "À§(~A)";
         Text[ turkish ] = "Ön~ce";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hacia ~arriba";
     };
     MetricField ED_TOP_DIST
     {
@@ -777,6 +798,7 @@ TabPage TP_FORMAT_TABLE
         Text[ korean ] = "¾Æ·¡(~B)";
         Text[ turkish ] = "So~nra";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hacia a~bajo";
     };
     MetricField ED_BOTTOM_DIST
     {
@@ -821,7 +843,7 @@ TabPage TP_TABLE_COLUMN
         Text [ swedish ] = "Anpassa ~tabellbredd" ;
         Text [ danish ] = "Tilpas tabelbredde" ;
         Text [ portuguese_brazilian ] = "Tabellenbreite anpassen" ;
-        Text [ portuguese ] = "Ajustar largura da tabela" ;
+        Text [ portuguese ] = "A~justar largura da tabela" ;
         Text[ chinese_simplified ] = "µ÷Õû±í¸ñ¿í¶È(~W)";
         Text[ russian ] = "Ñîãëàñîâàòü øèðèíó òàáëèöû";
         Text[ polish ] = "Dopasuj szerokoœæ tabeli";
@@ -832,6 +854,7 @@ TabPage TP_TABLE_COLUMN
         Text[ korean ] = "Ç¥ ³Êºñ ¸ÂÃã(~W)";
         Text[ turkish ] = "Tablo geniþliðine göre ayarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ajustar ancho de la tabla";
     };
     CheckBox CB_PROP
     {
@@ -848,7 +871,7 @@ TabPage TP_TABLE_COLUMN
         Text [ spanish ] = "~Modificar columnas proporcionalmente" ;
         Text [ french ] = "Modifier les colonnes ~proportionnellement" ;
         Text [ dutch ] = "~Kolommen gelijkmatig wijzigen" ;
-        Text [ portuguese ] = "Ajustar colunas proporcionalmente" ;
+        Text [ portuguese ] = "Ajustar colunas ~proporcionalmente" ;
         Text[ chinese_simplified ] = "¶Ô³ÆµØµ÷ÕûÁÐ¿í(~J)";
         Text[ russian ] = "Èçìåíèòü ðàâíîìåðíî ñòîëáöû";
         Text[ polish ] = "Z~modyfikuj równomiernie kolumny";
@@ -859,6 +882,7 @@ TabPage TP_TABLE_COLUMN
         Text[ korean ] = " ¿­ ÀÏÁ¤ÇÏ°Ô¡¡º¯°æ(~J)";
         Text[ turkish ] = "Sütunlarý orantýlý deðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Modificar columnas proporcionalmente";
     };
     FixedText FT_SPACE
     {
@@ -885,6 +909,7 @@ TabPage TP_TABLE_COLUMN
         Text[ korean ] = "¾ÆÁ÷¡¡»ç¿ë°¡´ÉÇÑ¡¡°ø°£";
         Text[ turkish ] = "Kalan boþluk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Espacio disponible";
     };
     MetricField ED_SPACE
     {
@@ -1108,6 +1133,7 @@ TabPage TP_TABLE_COLUMN
         Text[ korean ] = "¿­ ³Êºñ";
         Text[ turkish ] = "Sütun geniþliði";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ancho de columna";
     };
 };
 /**************************************************************************/
@@ -1157,6 +1183,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "³ª´©±â(~B)";
         Text[ turkish ] = "Kesme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Salto";
     };
     RadioButton RB_BREAKPAGE
     {
@@ -1187,6 +1214,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "ÂÊ(~P)";
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Página";
     };
     RadioButton RB_BREAKCOLUMN
     {
@@ -1217,6 +1245,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "¿­(~U)";
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Columna";
     };
     RadioButton RB_PAGEBREAKBEFORE
     {
@@ -1248,6 +1277,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "Àü¿¡(~F)";
         Text[ turkish ] = "Ön~ce";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "delan~te";
     };
     RadioButton RB_PAGEBREAKAFTER
     {
@@ -1277,6 +1307,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "ÈÄ¿¡(~A)";
         Text[ turkish ] = "Son~ra";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~detrás";
     };
     CheckBox CB_PAGECOLL
     {
@@ -1308,6 +1339,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "ÂÊ À¯Çü°ú ÇÔ²²(~Y)";
         Text[ turkish ] = "Sayfa düzeni ile";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+        Text[ catalan ] = "C~on estilo de página";
     };
     ListBox LB_PAGECOLL
     {
@@ -1341,6 +1373,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "ÂÊ ¹øÈ£(~N)";
         Text[ turkish ] = "Sayfa ~numaralarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nú~mero de página";
     };
     NumericField NF_PAGENUM
     {
@@ -1383,6 +1416,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "Ç¥ ³ª´©Áö ¾ÊÀ½.(~D)";
         Text[ turkish ] = "Tabloyu ayýrma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~No dividir tabla";
     };
     CheckBox CB_KEEP
     {
@@ -1410,6 +1444,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "´ÙÀ½ ´Ü¶ôÀ» °°Àº ÂÊ¿¡(~K)";
         Text[ turkish ] = "Alttaki paragraf ile birlikte tut";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mantener ~junto al párrafo siguiente";
     };
     CheckBox CB_HEADLINE
     {
@@ -1439,6 +1474,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "Ç¥Á¦ ¹Ýº¹(~E)";
         Text[ turkish ] = "Baþlýðý yinele";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Repet~ir encabezado";
     };
     GroupBox GB_VERT_ORIENT
     {
@@ -1465,6 +1501,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "¼öÁ÷ ¸ÂÃã";
         Text[ turkish ] = "Dikey hizalama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Alineación vertical";
     };
     RadioButton RB_VERT_TOP
     {
@@ -1491,6 +1528,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "À§(~O)";
         Text[ turkish ] = "Orta";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Arriba";
     };
     RadioButton RB_VERT_CENTER
     {
@@ -1506,7 +1544,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ french ] = "~Milieu" ;
         Text [ dutch ] = "~Midden" ;
         Text [ portuguese_brazilian ] = "Mitte" ;
-        Text [ portuguese ] = "Centro" ;
+        Text [ portuguese ] = "~Centro" ;
         Text[ chinese_simplified ] = "ÖÐ(~R)";
         Text[ russian ] = "Ïî ñåðåäèíå";
         Text[ polish ] = "Poœrodku";
@@ -1517,6 +1555,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "°¡¿îµ¥(~R)";
         Text[ turkish ] = "Aþaðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Centro";
     };
     RadioButton RB_VERT_BOTTOM
     {
@@ -1532,7 +1571,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ french ] = "En ~bas" ;
         Text [ dutch ] = "~Beneden" ;
         Text [ portuguese_brazilian ] = "Unten" ;
-        Text [ portuguese ] = "Em baixo" ;
+        Text [ portuguese ] = "Em ~baixo" ;
         Text[ chinese_simplified ] = "ÏÂ";
         Text[ russian ] = "Âíèçó";
         Text[ polish ] = "Na dole";
@@ -1543,6 +1582,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ korean ] = "¾Æ·¡";
         Text[ turkish ] = "Yukarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~bajo";
     };
 };
 InfoBox MSG_WRONG_TABLENAME
@@ -1568,4 +1608,5 @@ InfoBox MSG_WRONG_TABLENAME
     Message[ korean ] = "Ç¥ ÀÌ¸§¿¡´Â °ø¹éÀÌ Æ÷ÇÔµÇ¾î¼­´Â ¾ÈµË´Ï´Ù.";
     Message[ turkish ] = "Tablo adýnda boþluk bulunmamalýdýr.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El nombre de la tabla no debe contener espacios.";
 };
