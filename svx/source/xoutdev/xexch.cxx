@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexch.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:28 $
+ *  last change: $Author: ka $ $Date: 2001-03-20 20:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 // include ---------------------------------------------------------------
 
+#include <sot/formats.hxx>
+#include <tools/vcompat.hxx>
+
 #ifndef _CLIP_HXX
 #include <vcl/clip.hxx>
 #endif
@@ -75,6 +78,9 @@
 #endif
 #ifndef _SFXIPOOL_HXX
 #include <svtools/itempool.hxx>
+#endif
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
 #endif
 #ifndef _SFXIPOOL_HXX
 #include <svtools/itempool.hxx>
@@ -95,8 +101,8 @@ TYPEINIT1_AUTOFACTORY( XFillExchangeData, SvDataCopyStream );
 |*
 *************************************************************************/
 XFillExchangeData::XFillExchangeData() :
-    pPool(NULL),
-    pXFillAttrSetItem(NULL)
+    pPool( NULL ),
+    pXFillAttrSetItem( NULL )
 {
 }
 
@@ -106,15 +112,10 @@ XFillExchangeData::XFillExchangeData() :
 |* Ctor
 |*
 *************************************************************************/
-XFillExchangeData::XFillExchangeData(const XFillAttrSetItem rXFillAttrSetItem) :
-    pPool(NULL),
-    pXFillAttrSetItem(NULL)
+XFillExchangeData::XFillExchangeData( const XFillAttrSetItem rXFillAttrSetItem ) :
+    pPool( rXFillAttrSetItem.GetItemSet().GetPool() ),
+    pXFillAttrSetItem( (XFillAttrSetItem*) rXFillAttrSetItem.Clone( rXFillAttrSetItem.GetItemSet().GetPool() ) )
 {
-    const SfxItemSet& rSet = rXFillAttrSetItem.GetItemSet();
-    const XFillStyleItem& rItem = (const XFillStyleItem&) rSet.Get(XATTR_FILLSTYLE);
-    pPool = rSet.GetPool();
-
-    pXFillAttrSetItem = (XFillAttrSetItem*) rXFillAttrSetItem.Clone(pPool);
 }
 
 
@@ -169,17 +170,8 @@ void XFillExchangeData::Assign( const SvDataCopyStream& rCopyStream )
 *************************************************************************/
 ULONG XFillExchangeData::RegisterClipboardFormatName()
 {
-     static ULONG nFormat = 0;
-
-     if ( !nFormat )
-     {
-         String aName("XFA (XOutDev FillAttr)", gsl_getSystemTextEncoding());
-         nFormat = Clipboard::RegisterFormatName( aName );
-     }
-
-     return nFormat;
+    return( SOT_FORMATSTR_ID_XFA );
 }
-
 
 /******************************************************************************
 |*
@@ -189,8 +181,39 @@ ULONG XFillExchangeData::RegisterClipboardFormatName()
 
 SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
 {
-    USHORT nItemVersion = rData.pXFillAttrSetItem->GetVersion( (USHORT) rOStm.GetVersion() );
-    rData.pXFillAttrSetItem->Store( rOStm, nItemVersion );
+    if( rData.pXFillAttrSetItem )
+    {
+        USHORT nItemVersion = rData.pXFillAttrSetItem->GetVersion( (USHORT) rOStm.GetVersion() );
+
+        SfxWhichIter        aIter( rData.pXFillAttrSetItem->GetItemSet() );
+        USHORT              nWhich = aIter.FirstWhich();
+        const SfxPoolItem*  pItem;
+        ULONG               nItemCount = 0, nFirstPos = rOStm.Tell();
+
+        rOStm << nItemCount;
+
+        while( nWhich )
+        {
+            if( SFX_ITEM_SET == rData.pXFillAttrSetItem->GetItemSet().GetItemState( nWhich, FALSE, &pItem ) )
+            {
+                VersionCompat   aCompat( rOStm, STREAM_WRITE );
+                const USHORT    nItemVersion = pItem->GetVersion( (USHORT) rOStm.GetVersion() );
+
+                rOStm << nWhich << nItemVersion;
+                pItem->Store( rOStm, nItemVersion );
+
+                nItemCount++;
+            }
+
+            nWhich = aIter.NextWhich();
+        }
+
+        const ULONG nLastPos = rOStm.Tell();
+        rOStm.Seek( nFirstPos );
+        rOStm << nItemCount;
+        rOStm.Seek( nLastPos );
+    }
+
     return rOStm;
 }
 
@@ -203,15 +226,42 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
 
 SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
 {
-    SfxItemSet* pSet = new SfxItemSet(*rData.pPool,
-                                      XATTR_FILL_FIRST, XATTR_FILL_LAST);
-    pSet->Load( rIStm );
+    DBG_ASSERT( rData.pPool, "XFillExchangeData has no pool" );
+
+    SfxItemSet*     pSet = new SfxItemSet ( *rData.pPool, XATTR_FILL_FIRST, XATTR_FILL_LAST );
+    SfxPoolItem*    pNewItem;
+    ULONG           nItemCount = 0;
+    USHORT          nWhich, nItemVersion;
+
+    rIStm >> nItemCount;
+
+    if( nItemCount > ( XATTR_FILL_LAST - XATTR_FILL_FIRST + 1 ) )
+        nItemCount = ( XATTR_FILL_LAST - XATTR_FILL_FIRST + 1 );
+
+    for( ULONG i = 0; i < nItemCount; i++ )
+    {
+        VersionCompat aCompat( rIStm, STREAM_READ );
+
+        rIStm >> nWhich >> nItemVersion;
+
+        if( nWhich )
+        {
+            pNewItem = rData.pPool->GetDefaultItem( nWhich ).Create( rIStm, nItemVersion );
+
+            if( pNewItem )
+            {
+                pSet->Put( *pNewItem );
+                delete pNewItem;
+            }
+        }
+    }
+
+    delete rData.pXFillAttrSetItem;
     rData.pXFillAttrSetItem = new XFillAttrSetItem( pSet );
+    rData.pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool();
 
     return rIStm;
 }
-
-
 
 /*************************************************************************
 |*
@@ -221,9 +271,15 @@ SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
 
 XFillExchangeData& XFillExchangeData::operator=( const XFillExchangeData& rData )
 {
-    pXFillAttrSetItem = (XFillAttrSetItem*) rData.pXFillAttrSetItem->Clone(pPool);
+    delete pXFillAttrSetItem;
+
+    if( rData.pXFillAttrSetItem )
+        pXFillAttrSetItem = (XFillAttrSetItem*) rData.pXFillAttrSetItem->Clone( pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool() );
+    else
+    {
+        pPool = NULL;
+        pXFillAttrSetItem = NULL;
+    }
 
     return( *this );
 }
-
-
