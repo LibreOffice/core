@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-31 11:17:28 $
+ *  last change: $Author: ka $ $Date: 2002-06-06 15:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
                 const Size aSize( aBmp.GetSizePixel() );
 
                 if( !aSize.Width() || !aSize.Height() )
-                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "WARNING: Bitmap is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
+                    Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Bitmap is missing: " ) ).Append( aString ), EXIT_MISSING_BITMAP );
                 else
                 {
                     if( aTotalBmp.IsEmpty() )
