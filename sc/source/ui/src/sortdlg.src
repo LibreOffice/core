@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:13:19 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ czech ] = "Vzestupně";
         Text[ hebrew ] = "A~ufsteigend";
         Text[ hindi ] = "~अरोहण क्रम";
+        Text[ slovak ] = "Vzostupn~e";
     };
     RadioButton BTN_DOWN1
     {
@@ -141,6 +142,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ czech ] = "Sestupně";
         Text[ hebrew ] = "A~bsteigend";
         Text[ hindi ] = "~अवरोहण क्रम";
+        Text[ slovak ] = "Z~ostupne";
     };
     FixedLine FL_SORT1
     {
@@ -174,6 +176,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ czech ] = "Seřadit podle";
         Text[ hebrew ] = "~Sortieren nach";
         Text[ hindi ] = "~से सोर्ट करो";
+        Text[ slovak ] = "Zor~adiť podľa";
     };
     ListBox LB_SORT2
     {
@@ -216,6 +219,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ czech ] = "Vzestupně";
         Text[ hebrew ] = "Au~fsteigend";
         Text[ hindi ] = "अ~रोहण क्रम";
+        Text[ slovak ] = "Vzo~stupne";
     };
     RadioButton BTN_DOWN2
     {
@@ -250,6 +254,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ czech ] = "Sestupně";
         Text[ hebrew ] = "Abstei~gend";
         Text[ hindi ] = "अ~वरोहण क्रम";
+        Text[ slovak ] = "Zostupn~e";
     };
     FixedLine FL_SORT2
     {
@@ -283,6 +288,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ czech ] = "Potom podle";
         Text[ hebrew ] = "~Anschließend nach";
         Text[ hindi ] = "और ~से";
+        Text[ slovak ] = "Potom po~dľa";
     };
     ListBox LB_SORT3
     {
@@ -325,6 +331,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ czech ] = "Vzestupně";
         Text[ hebrew ] = "Aufs~teigend";
         Text[ hindi ] = "अरो~हण क्रम";
+        Text[ slovak ] = "Vzostupn~e";
     };
     RadioButton BTN_DOWN3
     {
@@ -359,6 +366,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ czech ] = "Sestupně";
         Text[ hebrew ] = "Absteigen~d";
         Text[ hindi ] = "अवरोह~ण क्रम";
+        Text[ slovak ] = "Zostup~ne";
     };
     FixedLine FL_SORT3
     {
@@ -392,6 +400,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ czech ] = "Potom podle";
         Text[ hebrew ] = "A~nschließend nach";
         Text[ hindi ] = "औ~र से";
+        Text[ slovak ] = "~Potom podľa";
     };
 };
 TabPage RID_SCPAGE_SORT_OPTIONS
@@ -434,6 +443,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Rozlišovat malá/velká písmena";
         Text[ hebrew ] = "~Groß-/Kleinschreibung beachten";
         Text[ hindi ] = "केस ~सचेतन";
+        Text[ slovak ] = "Rozlišovať malé/veľké pí~smená";
     };
     CheckBox BTN_LABEL
     {
@@ -471,13 +481,14 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Oblast obsahuje záhlaví sloupců";
         Text[ hebrew ] = "Bereich ~enthält Spaltenbeschriftungen";
         Text[ hindi ] = "फैलाव में स्तंभ ~शीर्षकें है";
+        Text[ slovak ] = "Oblasť obsahuje zá~hlavia stĺpcov";
     };
     String STR_ROW_LABEL
     {
         Text = "Bereich ~enth�lt Zeilenbeschriftungen" ;
         Text [ ENGLISH ] = "Source with ~row headers" ;
         Text [ norwegian ] = "Kilde med rad topptekst" ;
-        Text [ italian ] = "Origine con intestazioni ~riga" ;
+        Text [ italian ] = "L'intervallo contiene diciture di riga" ;
         Text [ portuguese_brazilian ] = "Intervalo cont�m ~cabe�alhos de linhas" ;
         Text [ portuguese ] = "�rea cont�m ~cabe�alhos de linhas" ;
         Text [ finnish ] = "Alue sis�lt�� ~riviotsikoita" ;
@@ -502,6 +513,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Oblast obsahuje záhlaví řádků";
         Text[ hebrew ] = "Bereich ~enthält Zeilenbeschriftungen";
         Text[ hindi ] = "फैलाव में ~पंक्ति शीर्षकें है";
+        Text[ slovak ] = "Oblasť obsahuje záhlavia ~riadkov";
     };
     CheckBox BTN_FORMATS
     {
@@ -536,6 +548,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Zahrnout formát";
         Text[ hebrew ] = "~Formate einschließen";
         Text[ hindi ] = "~रचनों को सम्मिलित करो";
+        Text[ slovak ] = "Zahrnúť ~formáty";
     };
     CheckBox BTN_COPYRESULT
     {
@@ -570,6 +583,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Kopírovat výsledky řazení do:";
         Text[ hebrew ] = "Sortierergebnis ~ausgeben nach";
         Text[ hindi ] = "में सोर्ट नतीजों का ~प्रतिलिपि बनाओ :";
+        Text[ slovak ] = "~Kopírovať triedené výsledky do:";
     };
     ListBox LB_OUTAREA
     {
@@ -620,6 +634,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Vlastní pořadí řazení";
         Text[ hebrew ] = "~Benutzerdefinierte Sortierreihenfolge";
         Text[ hindi ] = "सोर्ट ~क्रम को व्यवस्था करो";
+        Text[ slovak ] = "Vlastné p~oradie triedenia";
     };
     ListBox LB_SORT_USER
     {
@@ -660,6 +675,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Jazyk";
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
+        Text[ slovak ] = "~Jazyk";
     };
     ListBox LB_LANGUAGE
     {
@@ -700,6 +716,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Možnosti";
         Text[ hebrew ] = "Op~tionen";
         Text[ hindi ] = "वि~कल्प";
+        Text[ slovak ] = "Možno~sti";
     };
     ListBox LB_ALGORITHM
     {
@@ -741,6 +758,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Směr";
         Text[ hebrew ] = "Richtung";
         Text[ hindi ] = "दिशा";
+        Text[ slovak ] = "Smer";
     };
     RadioButton BTN_TOP_DOWN
     {
@@ -775,6 +793,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Shora dolů (seřadit řádky)";
         Text[ hebrew ] = "Von ~oben nach unten (Zeilen sortieren)";
         Text[ hindi ] = "~ऊपर से नीचे तक (पंक्तियों को सोर्ट करो)";
+        Text[ slovak ] = "Zvrchu nadol (~triediť riadky)";
     };
     RadioButton BTN_LEFT_RIGHT
     {
@@ -809,6 +828,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Zleva doprava (seřadit sloupce)";
         Text[ hebrew ] = "Von ~links nach rechts (Spalten sortieren)";
         Text[ hindi ] = "बा~याँ ओर से दाहिनी ओर (स्तंभों को सोर्ट करो)";
+        Text[ slovak ] = "Zľava do prava (tri~ediť stĺpce)";
     };
     FixedText FT_AREA_LABEL
     {
@@ -842,6 +862,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ czech ] = "Oblast dat:";
         Text[ hebrew ] = "Datenbereich:";
         Text[ hindi ] = "ड़ॉटा विस्तीर्ण:";
+        Text[ slovak ] = "Oblasť dát:";
     };
 };
 TabDialog RID_SCDLG_SORT
@@ -903,6 +924,7 @@ TabDialog RID_SCDLG_SORT
                 Text[ czech ] = "Seřadit podle";
                 Text[ hebrew ] = "Sortierkriterien";
                 Text[ hindi ] = "सोर्ट सिद्धान्त";
+                Text[ slovak ] = "Zoradiť podľa";
             };
             PageItem
             {
@@ -936,6 +958,7 @@ TabDialog RID_SCDLG_SORT
                 Text[ czech ] = "Volby";
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
+                Text[ slovak ] = "Nastavenia";
             };
         };
     };
@@ -979,7 +1002,10 @@ TabDialog RID_SCDLG_SORT
     Text[ czech ] = "Řadit";
     Text[ hebrew ] = "‮מיון‬";
     Text[ hindi ] = "सोर्ट";
+    Text[ slovak ] = "Zoradiť";
 };
+
+
 
 
 
