@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2000-10-06 14:25:14 $
+#   last change: $Author: dbo $ $Date: 2000-11-13 10:50:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -226,7 +226,7 @@ TESTPROXYFAC:=com.sun.star.util.XProxyFactory
 $(BIN)$/stoctest.rdb: $(ALLIDLFILES)
     +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
-    +regmerge $@ / $(SOLARBINDIR)$/applicat.rdb
+    +regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
     touch $@
 
 unoheader: $(BIN)$/stoctest.rdb

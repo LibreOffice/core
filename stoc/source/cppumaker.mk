@@ -2,9 +2,9 @@
 #
 #   $RCSfile: cppumaker.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:29:33 $
+#   last change: $Author: dbo $ $Date: 2000-11-13 10:50:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,8 +59,8 @@
 #
 #
 #*************************************************************************
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 CPPUMAKERFLAGS =
 
