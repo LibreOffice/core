@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:04:31 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,14 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _SVTOOLS_LOGINDLG_HXX_
+#include <svtools/logindlg.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
 #endif
 #ifndef _DBASHARED_STRINGCONSTANTS_HRC_
 #include "stringconstants.hrc"
@@ -118,6 +124,7 @@ namespace dbaui
 using namespace dbaccess;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
@@ -142,10 +149,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     SetViewAlign(WINDOWALIGN_LEFT);
 
     // do some knittings
-    m_aSelector.m_aDatasourceList.SetSelectHdl(LINK(this, ODbAdminDialog, OnDatasourceSelected));
-
-    // concretize some items in our set which are independent of a concret selected datasource
-//  GetInputSetImpl()->Put(DbuTypeCollectionItem(DSID_TYPECOLLECTION, m_pCollection));
+    m_aSelector.setSelectHandler(LINK(this, ODbAdminDialog, OnDatasourceSelected));
 
     // create the DatabaseContext service
     DBG_ASSERT(m_xORB.is(), "ODbAdminDialog::ODbAdminDialog : need a service factory !");
@@ -169,11 +173,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
         Sequence< ::rtl::OUString > aDatasources = m_xDatabaseContext->getElementNames();
         const ::rtl::OUString* pDatasources = aDatasources.getConstArray();
         for (sal_Int32 i=0; i<aDatasources.getLength(); ++i, ++pDatasources)
-        {
-            sal_Int16 nPos = m_aSelector.m_aDatasourceList.InsertEntry(*pDatasources);
-            m_aSelector.m_aDatasourceList.SetEntryData(nPos, reinterpret_cast<void*>(sal_False));
-                // the entry data is the modified flags
-        }
+            m_aSelector.insert(*pDatasources);
 
         if (!aDatasources.getLength())
         {
@@ -195,16 +195,124 @@ ODbAdminDialog::~ODbAdminDialog()
 }
 
 //-------------------------------------------------------------------------
-Sequence< PropertyValue > ODbAdminDialog::toDriverParams(const SfxItemSet& _rSet)
+short ODbAdminDialog::Execute()
 {
-    // TODO
-    return Sequence< PropertyValue >();
+    short nResult = SfxTabDialog::Execute();
+
+    // within it's dtor, the SfxTabDialog saves (amongst others) the currently selected tab page and
+    // reads it upon the next Execute (dependent on the resource id, which thus has to be globally unique,
+    // though our's isn't)
+    // As this is not wanted if e.g. the table subscription page is selected, we show the GeneralPage here
+    ShowPage(PAGE_GENERAL);
+
+    // clear the temporary SfxItemSets we created
+    m_aSelector.clearAllModified();
+
+    return nResult;
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::toDialogItems(const Sequence< PropertyValue >& _rProperties, SfxItemSet& _rOutSet)
+sal_Bool ODbAdminDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverParam)
 {
-    // TODO
+    DBG_ASSERT(GetExampleSet(), "ODbAdminDialog::getCurrentSettings : not to be called without an example set!");
+    if (!GetExampleSet())
+        return sal_False;
+
+    ::std::vector< PropertyValue > aReturn;
+        // collecting this in a vector because it has a push_back, in opposite to sequences
+
+    // user: DSID_USER -> "user"
+    SFX_ITEMSET_GET(*GetExampleSet(), pUser, SfxStringItem, DSID_USER, sal_True);
+    if (pUser)
+        aReturn.push_back(
+            PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), 0,
+                            makeAny(::rtl::OUString(pUser->GetValue())), PropertyState_DIRECT_VALUE));
+
+    // password: DSID_PASSWORD -> "password"
+    SFX_ITEMSET_GET(*GetExampleSet(), pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
+    String sPassword = pPassword ? pPassword->GetValue() : String();
+    SFX_ITEMSET_GET(*GetExampleSet(), pPasswordRequired, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
+    // if the set does not contain a password, but the item set says it requires one, ask the user
+    if ((!pPassword || !pPassword->GetValue().Len()) && (pPasswordRequired && pPasswordRequired->GetValue()))
+    {
+        SFX_ITEMSET_GET(*GetExampleSet(), pName, SfxStringItem, DSID_NAME, sal_True);
+
+        ::svt::LoginDialog aDlg(this,
+            LF_NO_PATH | LF_NO_ACCOUNT | LF_NO_ERRORTEXT | LF_USERNAME_READONLY,
+            String(), NULL);
+
+        aDlg.SetName(pUser ? pUser->GetValue() : String());
+        aDlg.ClearPassword();  // this will give the password field the focus
+
+        String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
+        sLoginRequest.SearchAndReplaceAscii("$name$", pName ? pName->GetValue() : String()),
+        aDlg.SetLoginRequestText(sLoginRequest);
+
+        sal_uInt16 nResult = aDlg.Execute();
+        if (nResult != RET_OK)
+            return sal_False;
+
+        sPassword = aDlg.GetPassword();
+        if (aDlg.IsSavePassword())
+            pExampleSet->Put(SfxStringItem(DSID_PASSWORD, sPassword));
+    }
+
+    if (sPassword.Len())
+        aReturn.push_back(
+            PropertyValue(  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password")), 0,
+                            makeAny(::rtl::OUString(sPassword)), PropertyState_DIRECT_VALUE));
+
+    // TODO: all the other stuff (charset etc.)
+
+    _rDriverParam = Sequence< PropertyValue >(aReturn.begin(), aReturn.size());
+    return sal_True;
+}
+
+//-------------------------------------------------------------------------
+short ODbAdminDialog::Ok()
+{
+    short nResult = SfxTabDialog::Ok();
+    if (RET_OK == nResult)
+    {
+        // save the settings for the currently selected data source
+        sal_Int32 nCurrentlySelected = m_aSelector.getSelected();
+        if (m_aSelector.isModified(nCurrentlySelected))
+            m_aSelector.update(nCurrentlySelected, *GetExampleSet());
+
+        // propagate all the settings made to the appropriate data source
+        for (sal_Int32 i=0; i<m_aSelector.getCount(); ++i)
+        {
+            // nothing to do if no modifications were done
+            if (m_aSelector.isModified(i))
+            {
+                String sDSName = m_aSelector.getOriginalName(i);
+                Reference< XPropertySet > xDatasource = getDatasource(sDSName);
+                if (xDatasource.is())
+                {
+                    // put the remembered settings into the property set
+                    translateProperties(*m_aSelector.getItems(i), xDatasource);
+                    // flush the data source
+                    Reference< XFlushable > xFlushDatasource(xDatasource, UNO_QUERY);
+                    if (!xFlushDatasource.is())
+                    {
+                        DBG_ERROR("ODbAdminDialog::Ok: the datasource should be flushable!");
+                        continue;
+                    }
+
+                    try
+                    {
+                        xFlushDatasource->flush();
+                    }
+                    catch(RuntimeException&)
+                    {
+                        DBG_ERROR("ODbAdminDialog::Ok: caught an exception whild flushing the data source's data!");
+                    }
+                }
+            }
+        }
+    }
+
+    return nResult;
 }
 
 //-------------------------------------------------------------------------
@@ -221,6 +329,7 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
             break;
         case PAGE_TABLESUBSCRIPTION:
             static_cast<OTableSubscriptionPage&>(_rPage).setServiceFactory(m_xORB);
+            static_cast<OTableSubscriptionPage&>(_rPage).SetAdminDialog(this);
             break;
     }
 
@@ -239,8 +348,9 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     _rppDefaults = new SfxPoolItem*[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1];
     SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
     *pCounter++ = new SfxStringItem(DSID_NAME, String());
+    *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, String());
     *pCounter++ = new SfxStringItem(DSID_CONNECTURL, String());
-    *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< ::rtl::OUString >());
+    *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< ::rtl::OUString >(&::rtl::OUString("%", 1, RTL_TEXTENCODING_ASCII_US), 1));
     *pCounter++ = new DbuTypeCollectionItem(DSID_TYPECOLLECTION, _pTypeCollection);
     *pCounter++ = new SfxBoolItem(DSID_INVALID_SELECTION, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_READONLY, sal_False);
@@ -248,7 +358,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxStringItem(DSID_PASSWORD, String());
     *pCounter++ = new SfxStringItem(DSID_ADDITIONALOPTIONS, String());
     *pCounter++ = new SfxStringItem(DSID_CHARSET, String());
-    *pCounter++ = new SfxBoolItem(DSID_ASKFOREMPTYPWD, sal_False);
+    *pCounter++ = new SfxBoolItem(DSID_PASSWORDREQUIRED, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_SHOWDELETEDROWS, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_ALLOWLONGTABLENAMES, sal_False);
     *pCounter++ = new SfxStringItem(DSID_JDBCDRIVERCLASS, String());
@@ -262,6 +372,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
@@ -321,16 +432,25 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
 //-------------------------------------------------------------------------
 IMPL_LINK(ODbAdminDialog, OnDatasourceSelected, ListBox*, _pBox)
 {
-    sal_Int16 nSelected = _pBox->GetSelectEntryPos();
-    sal_Bool bModified = reinterpret_cast<sal_Bool>(_pBox->GetEntryData(nSelected));
+    // first ask the current page if it is allowed to leave
+    if (!PrepareLeaveCurrentPage())
+    {   // the page did not allow us to leave -> restore the old selection
+        m_aSelector.select(m_sCurrentDatasource);
+        return 1L;
+    }
 
-    // if the entry is modified, we have to remove the modified marker to get the correct name
-    String sSelected = _pBox->GetEntry(nSelected);
+    // TODO: additionally, check if the name (which may have been modified by the user) is unique within the data source
+    // collection
 
-    if (bModified)
-        implSelectDatasource(sSelected.Copy(0, sSelected.Len() - (sizeof(MODIFIED_MARKER) - 1)));
-    else
-        implSelectDatasource(sSelected);
+    // remember the settings for this data source
+    sal_Int32 nOldPos = m_aSelector.getPos(m_sCurrentDatasource);
+    if (m_aSelector.isModified(nOldPos))
+        m_aSelector.update(nOldPos, *GetExampleSet());
+
+    sal_Int32 nNewPos = m_aSelector.getSelected();
+    // switch the content of the pages
+    implSelectDatasource(m_aSelector.getOriginalName(nNewPos));
+
     return 0L;
 }
 
@@ -338,24 +458,13 @@ IMPL_LINK(ODbAdminDialog, OnDatasourceSelected, ListBox*, _pBox)
 IMPL_LINK(ODbAdminDialog, OnDatasourceModifed, SfxTabPage*, _pTabPage)
 {
     // check if the currently selected entry is already marked as modified
-    sal_Int16 nSelected = m_aSelector.m_aDatasourceList.GetSelectEntryPos();
-    sal_Bool bModified = reinterpret_cast<sal_Bool>(m_aSelector.m_aDatasourceList.GetEntryData(nSelected));
-    if (bModified)
+    sal_Int16 nSelected = m_aSelector.getSelected();
+    if (m_aSelector.isModified(nSelected))
         // yes -> nothing to do
         return 0L;
 
     // no -> append the modified marker to the text
-    // (unfortunally the ListBox does not have an operation such as SetEntryText ...)
-    m_aSelector.m_aDatasourceList.SetUpdateMode(sal_False);
-    String sText = m_aSelector.m_aDatasourceList.GetEntry(nSelected);
-    m_aSelector.m_aDatasourceList.RemoveEntry(nSelected);
-    sText.AppendAscii(MODIFIED_MARKER);
-    nSelected = m_aSelector.m_aDatasourceList.InsertEntry(sText, nSelected);
-    m_aSelector.m_aDatasourceList.SelectEntryPos (nSelected, sal_True);
-    m_aSelector.m_aDatasourceList.SetUpdateMode(sal_True);
-
-    // mark it as modified
-    m_aSelector.m_aDatasourceList.SetEntryData(nSelected, reinterpret_cast<void*>(sal_True));
+    m_aSelector.modified(nSelected, GetExampleSet() ? *GetExampleSet() : *GetInputSetImpl());
 
     return 0L;
 }
@@ -402,29 +511,36 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::implSelectDatasource(const ::rtl::OUString& _rRegisteredName)
+Reference< XPropertySet > ODbAdminDialog::getDatasource(const ::rtl::OUString& _rName)
 {
-    DBG_ASSERT(m_xDatabaseContext.is(), "ODbAdminDialog::implSelectDatasource : have no database context!");
+    DBG_ASSERT(m_xDatabaseContext.is(), "ODbAdminDialog::getDatasource : have no database context!");
     Reference< XPropertySet > xDatasource;
     try
     {
-        if (m_xDatabaseContext.is() && _rRegisteredName.getLength())
-            ::cppu::extractInterface(xDatasource, m_xDatabaseContext->getByName(_rRegisteredName));
+        if (m_xDatabaseContext.is() && _rName.getLength())
+            ::cppu::extractInterface(xDatasource, m_xDatabaseContext->getByName(_rName));
     }
     catch(NoSuchElementException&)
     {
-        DBG_ERROR("ODbAdminDialog::implSelectDatasource : did not find the element with the given name!");
+        DBG_ERROR("ODbAdminDialog::getDatasource : did not find the element with the given name!");
     }
     catch(WrappedTargetException&)
     {
-        DBG_ERROR("ODbAdminDialog::implSelectDatasource : caught a WrappedTargetException!");
+        DBG_ERROR("ODbAdminDialog::getDatasource : caught a WrappedTargetException!");
     }
+    return xDatasource;
+}
+
+//-------------------------------------------------------------------------
+void ODbAdminDialog::implSelectDatasource(const ::rtl::OUString& _rRegisteredName)
+{
+    Reference< XPropertySet > xDatasource = getDatasource(_rRegisteredName);
     if (!xDatasource.is())
-    {
-        m_aSelector.m_aDatasourceList.SelectEntryPos(m_aSelector.m_aDatasourceList.GetSelectEntryPos(), sal_False);
-    }
+        m_aSelector.select(m_aSelector.getSelected(), sal_False);
     else
-        m_aSelector.m_aDatasourceList.SelectEntry(_rRegisteredName);
+        m_aSelector.select(_rRegisteredName);
+
+    m_sCurrentDatasource = _rRegisteredName;
 
     // the selection is valid if and only if we have a datasource now
     GetInputSetImpl()->Put(SfxBoolItem(DSID_INVALID_SELECTION, !xDatasource.is()));
@@ -432,12 +548,10 @@ void ODbAdminDialog::implSelectDatasource(const ::rtl::OUString& _rRegisteredNam
         // from "just set them to readonly")
 
     // reset the pages
-    resetPages(xDatasource);
-}
 
-//-------------------------------------------------------------------------
-void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource)
-{
+    // prevent flicker
+    SetUpdateMode(sal_False);
+
     // remove all tab pages (except the general one)
     // remove all current detail pages
     while (m_aCurrentDetailPages.size())
@@ -448,23 +562,11 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource)
     // remove the table/query tab pages
     RemoveTabPage(PAGE_TABLESUBSCRIPTION);
 
-    // extract all relevant data from the property set
-    ::rtl::OUString sNewConnectURL, sName;
-    try
-    {
-        if (_rxDatasource.is())
-        {
-            _rxDatasource->getPropertyValue(PROPERTY_URL) >>= sNewConnectURL;
-            _rxDatasource->getPropertyValue(PROPERTY_NAME) >>= sName;
-        }
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("ODbAdminDialog::toDialogItems : could not extract all the relevant datasource properties!");
-    }
+    // extract all relevant data from the property set of the data source
+    translateProperties(xDatasource, *GetInputSetImpl());
 
-    GetInputSetImpl()->Put(SfxStringItem(DSID_CONNECTURL, sNewConnectURL));
-    GetInputSetImpl()->Put(SfxStringItem(DSID_NAME, sName));
+    // fill in the remembered settings for the data source
+    m_aSelector.getSettings(m_aSelector.getSelected(), *GetInputSetImpl());
 
     // propagate this set as our new input set and reset the example set
     SetInputSet(GetInputSetImpl());
@@ -477,6 +579,9 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource)
         AddTabPage(PAGE_TABLESUBSCRIPTION, String(ResId(STR_PAGETITLE_TABLESUBSCRIPTION)), OTableSubscriptionPage::Create, NULL);
     }
 
+    ShowPage(PAGE_GENERAL);
+    SetUpdateMode(sal_True);
+
     // propagate the new data to the general tab page the general tab page
     SfxTabPage* pGeneralPage = GetTabPage(PAGE_GENERAL);
     if (pGeneralPage)
@@ -485,14 +590,86 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource)
     // dialog was displayed (probably from inside the ctor)
 }
 
+//-------------------------------------------------------------------------
+void ODbAdminDialog::translateProperties(const Reference< XPropertySet >& _rxSource, SfxItemSet& _rDest)
+{
+    ::rtl::OUString sNewConnectURL, sName, sUid, sPwd;
+    Sequence< ::rtl::OUString > aTableFitler;
+    sal_Bool bPasswordRequired = sal_False;
+    sal_Bool bReadOnly = sal_True;
+    try
+    {
+        if (_rxSource.is())
+        {
+            _rxSource->getPropertyValue(PROPERTY_URL) >>= sNewConnectURL;
+            _rxSource->getPropertyValue(PROPERTY_NAME) >>= sName;
+            _rxSource->getPropertyValue(PROPERTY_USER) >>= sUid;
+            _rxSource->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
+            _rxSource->getPropertyValue(PROPERTY_TABLEFILTER) >>= aTableFitler;
+            _rxSource->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED) >>= bPasswordRequired;
+            _rxSource->getPropertyValue(PROPERTY_ISREADONLY) >>= bReadOnly;
+        }
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("ODbAdminDialog::translateProperties : could not extract all the relevant datasource properties!");
+    }
+
+    _rDest.Put(SfxStringItem(DSID_CONNECTURL, sNewConnectURL));
+    _rDest.Put(SfxStringItem(DSID_NAME, sName));
+    _rDest.Put(SfxStringItem(DSID_USER, sUid));
+    _rDest.Put(SfxStringItem(DSID_PASSWORD, sPwd));
+    _rDest.Put(OStringListItem(DSID_TABLEFILTER, aTableFitler));
+    _rDest.Put(SfxBoolItem(DSID_PASSWORDREQUIRED, bPasswordRequired));
+    _rDest.Put(SfxBoolItem(DSID_READONLY, bReadOnly));
+}
+
+//-------------------------------------------------------------------------
+void ODbAdminDialog::translateProperties(const SfxItemSet& _rSource, const Reference< XPropertySet >& _rxDest)
+{
+    DBG_ASSERT(_rxDest.is(), "ODbAdminDialog::translateProperties : invalid property set!");
+    if (!_rxDest.is())
+        return;
+
+    // get the items
+    SFX_ITEMSET_GET(_rSource, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True);
+    SFX_ITEMSET_GET(_rSource, pName, SfxStringItem, DSID_NAME, sal_True);
+    SFX_ITEMSET_GET(_rSource, pUser, SfxStringItem, DSID_USER, sal_True);
+    SFX_ITEMSET_GET(_rSource, pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
+    SFX_ITEMSET_GET(_rSource, pTableFilter, OStringListItem, DSID_TABLEFILTER, sal_True);
+    SFX_ITEMSET_GET(_rSource, pPasswordRequired, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
+
+    // set the values
+    try
+    {
+        if (pConnectURL)
+            _rxDest->setPropertyValue(PROPERTY_URL, makeAny(::rtl::OUString(pConnectURL->GetValue().GetBuffer())));
+        if (pUser)
+            _rxDest->setPropertyValue(PROPERTY_USER, makeAny(::rtl::OUString(pUser->GetValue().GetBuffer())));
+        if (pPassword)
+            _rxDest->setPropertyValue(PROPERTY_PASSWORD, makeAny(::rtl::OUString(pPassword->GetValue().GetBuffer())));
+        if (pTableFilter)
+            _rxDest->setPropertyValue(PROPERTY_TABLEFILTER, makeAny(pTableFilter->getList()));
+        if (pPasswordRequired)
+            _rxDest->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED, makeAny(pPasswordRequired->GetValue()));
+
+//      if (pName)
+//          _rxDest->setPropertyValue(PROPERTY_NAME, makeAny(::rtl::OUString(pName->GetValue().GetBuffer())));
+        // TODO: a changed name requires an removeByName and insertByName
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("ODbAdminDialog::translateProperties : could not set all the relevant datasource properties!");
+    }
+}
+
 //=========================================================================
 //= ODatasourceSelector
 //=========================================================================
 //-------------------------------------------------------------------------
 ODatasourceSelector::ODatasourceSelector(Window* _pParent, const ResId& _rResId)
     :Window(_pParent, _rResId)
-    ,m_aBorderWindow    (this, ResId(WND_SELECTORBORDER))
-    ,m_aTitle           (this, ResId(FT_SELECTOR_TITLE))
+    ,m_aNewDatasource   (this, ResId(PB_NEW_DATASOURCE))
     ,m_aDatasourceList  (this, ResId(LB_DATASOURCES))
 {
     FreeResource();
@@ -500,7 +677,6 @@ ODatasourceSelector::ODatasourceSelector(Window* _pParent, const ResId& _rResId)
     m_aDatasourceList.SetZOrder(NULL, WINDOW_ZORDER_FIRST);
 
     m_aDatasourceList.EnableClipSiblings(sal_True);
-     m_aBorderWindow.EnableClipSiblings(sal_True);
 }
 
 //-------------------------------------------------------------------------
@@ -509,22 +685,114 @@ ODatasourceSelector::~ODatasourceSelector()
 }
 
 //-------------------------------------------------------------------------
+sal_Bool ODatasourceSelector::isModified(sal_Int32 _nPos) const
+{
+    return NULL != m_aDatasourceList.GetEntryData(_nPos);
+}
+
+//-------------------------------------------------------------------------
+void ODatasourceSelector::clearAllModified()
+{
+    // delete all SfxItemSets which are bound to the entries
+    for (sal_Int32 nLoop = 0; nLoop < m_aDatasourceList.GetEntryCount(); ++nLoop)
+    {
+        SfxItemSet* pItems = reinterpret_cast<SfxItemSet*>(m_aDatasourceList.GetEntryData(nLoop));
+        if (pItems)
+        {
+            delete pItems;
+            m_aDatasourceList.SetEntryData(nLoop, reinterpret_cast<SfxItemSet*>(NULL));
+        }
+    }
+}
+
+//-------------------------------------------------------------------------
+void ODatasourceSelector::modified(sal_Int32 _nPos, const SfxItemSet& _rSet)
+{
+    SfxItemSet* pItems = reinterpret_cast<SfxItemSet*>(m_aDatasourceList.GetEntryData(_nPos));
+    if (pItems)
+        pItems->Put(_rSet);
+    else
+    {
+        pItems = new SfxItemSet(_rSet);
+        // the entry was not modified before. Add the modified marker
+        // (unfortunately the ListBox does not have an operation such as SetEntryText ...)
+        m_aDatasourceList.SetUpdateMode(sal_False);
+        String sText = m_aDatasourceList.GetEntry(_nPos);
+        // remember the original name
+        pItems->Put(SfxStringItem(DSID_ORIGINALNAME, sText));
+
+        m_aDatasourceList.RemoveEntry(_nPos);
+        sText.AppendAscii(MODIFIED_MARKER);
+        _nPos = m_aDatasourceList.InsertEntry(sText, _nPos);
+        m_aDatasourceList.SelectEntryPos (_nPos, sal_True);
+        m_aDatasourceList.SetUpdateMode(sal_True);
+    }
+
+    m_aDatasourceList.SetEntryData(_nPos, reinterpret_cast<void*>(pItems));
+}
+
+//-------------------------------------------------------------------------
+void ODatasourceSelector::getSettings(sal_Int32 _nPos, SfxItemSet& _rSet)
+{
+    SfxItemSet* pItems = reinterpret_cast<SfxItemSet*>(m_aDatasourceList.GetEntryData(_nPos));
+    if (pItems)
+        _rSet.Put(*pItems);
+}
+
+//-------------------------------------------------------------------------
+sal_Int32 ODatasourceSelector::getPos(const String& _rName) const
+{
+    sal_uInt16 nPos = m_aDatasourceList.GetEntryPos(_rName);
+    if ((sal_uInt16)-1 == nPos)
+        nPos = m_aDatasourceList.GetEntryPos(String(_rName).AppendAscii(MODIFIED_MARKER));
+    if ((sal_uInt16)-1 == nPos)
+        nPos = -1;
+
+    return nPos;
+}
+
+//-------------------------------------------------------------------------
+String ODatasourceSelector::getOriginalName(sal_Int32 _nPos) const
+{
+    // calc the name of the newly selected data source (we may have to cut the modified marker)
+    String sText = m_aDatasourceList.GetEntry(_nPos);
+    if (!isModified(_nPos))
+        return sText;
+
+    const SfxItemSet* pItems = getItems(_nPos);
+    DBG_ASSERT(pItems, "ODatasourceSelector::getOriginalName: not modified, but no items?");
+    SFX_ITEMSET_GET(*pItems, pOriginal, SfxStringItem, DSID_ORIGINALNAME, sal_True);
+    DBG_ASSERT(pOriginal, "ODatasourceSelector::getOriginalName: a modified set should always have an OriginalName entry!");
+    return pOriginal->GetValue();
+}
+
+//-------------------------------------------------------------------------
+const SfxItemSet* ODatasourceSelector::getItems(sal_Int32 _nPos) const
+{
+    return reinterpret_cast<const SfxItemSet*>(m_aDatasourceList.GetEntryData(_nPos));
+}
+
+//-------------------------------------------------------------------------
+sal_Int32 ODatasourceSelector::insert(const String& _rName)
+{
+    sal_Int16 nPos = m_aDatasourceList.InsertEntry(_rName);
+    m_aDatasourceList.SetEntryData(nPos, reinterpret_cast<void*>(NULL));
+    return nPos;
+}
+
+//-------------------------------------------------------------------------
 void ODatasourceSelector::Resize()
 {
     Window::Resize();
-    // set the border window to the same size weself have
     Size aSize = GetSizePixel();
-    m_aBorderWindow.SetSizePixel(aSize);
 
-    // resize the text field
-    sal_Int32 nTextHeight = LogicToPixel(Size(0, GetTextHeight())).Height();
-    nTextHeight += 4;   // leave a margin
-    m_aTitle.SetPosPixel(Point(2, 2 + 2));
-    m_aTitle.SetSizePixel(Size(aSize.Width() - 4, nTextHeight));
+    // adjust the width of the button
+    sal_Int32 nButtonHeight = m_aNewDatasource.GetSizePixel().Height();
+    m_aNewDatasource.SetSizePixel(Size(aSize.Width(), nButtonHeight));
 
-    // resize the listbox accordingly
-    m_aDatasourceList.SetPosPixel(Point(2, 4 + nTextHeight));
-    m_aDatasourceList.SetSizePixel(Size(aSize.Width() - 4, aSize.Height() - 4 - nTextHeight));
+    // adjust width/height of the listbox
+    m_aDatasourceList.SetPosPixel(Point(0, nButtonHeight));
+    m_aDatasourceList.SetSizePixel(Size(aSize.Width(), aSize.Height() - nButtonHeight));
 }
 
 //.........................................................................
@@ -534,6 +802,9 @@ void ODatasourceSelector::Resize()
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:04:31  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 20.09.00 10:55:58  fs
  ************************************************************************/

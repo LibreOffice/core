@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:05:55 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,26 +65,27 @@
 //========================================================================
 //= item ids for the data source administration dialog
 
-#define DSID_NAME                   1
-#define DSID_CONNECTURL             2
-#define DSID_TABLEFILTER            3
-#define DSID_TYPECOLLECTION         4
-#define DSID_INVALID_SELECTION      5
-#define DSID_READONLY               6
-#define DSID_USER                   7
-#define DSID_PASSWORD               8
-#define DSID_ADDITIONALOPTIONS      9
-#define DSID_CHARSET                10
-#define DSID_ASKFOREMPTYPWD         11
-#define DSID_SHOWDELETEDROWS        12
-#define DSID_ALLOWLONGTABLENAMES    13
-#define DSID_JDBCDRIVERCLASS        14
-#define DSID_FIELDDELIMITER         15
-#define DSID_TEXTDELIMITER          16
-#define DSID_DECIMALDELIMITER       17
-#define DSID_THOUSANDSDELIMITER     18
-#define DSID_TEXTFILEEXTENSION      19
-#define DSID_TEXTFILEHEADER         20
+#define DSID_NAME                   1           // name of a data source, SfxStringItem
+#define DSID_ORIGINALNAME           2           // orginal name, internal, SfxStringItem
+#define DSID_CONNECTURL             3           // connection URL, SfxStringItem
+#define DSID_TABLEFILTER            4           // table filter, OStringListItem
+#define DSID_TYPECOLLECTION         5           // collection of data source types, ODsnTypeCollection
+#define DSID_INVALID_SELECTION      6           // is the selection (thus the set data) invalid?, SfxBoolItem
+#define DSID_READONLY               7           // is the selection (thus the set data) readonly?, SfxBoolItem
+#define DSID_USER                   8           // the user name used for logon, SfxStringItem
+#define DSID_PASSWORD               9           // the password used for logon, SfxStringItem
+#define DSID_ADDITIONALOPTIONS      10          // additional options used for connecting, SfxStringItem
+#define DSID_CHARSET                11          // character set to use, SfxStringItem by now
+#define DSID_PASSWORDREQUIRED       12          // is the password required to connect?, SfxBoolItem
+#define DSID_SHOWDELETEDROWS        13          // show deleted rows?, SfxBoolItem
+#define DSID_ALLOWLONGTABLENAMES    14          // allow tables names longer than 8.3?, SfxBoolItem
+#define DSID_JDBCDRIVERCLASS        15          // JDBC driver class, SfxStringItem
+#define DSID_FIELDDELIMITER         16          // field delimiter, SfxUInt16Item
+#define DSID_TEXTDELIMITER          17          // text delimiter, SfxUInt16Item
+#define DSID_DECIMALDELIMITER       18          // decimal delimiter, SfxUInt16Item
+#define DSID_THOUSANDSDELIMITER     19          // thousands delimiter, SfxUInt16Item
+#define DSID_TEXTFILEEXTENSION      20          // extension for text files, SfxStringItem
+#define DSID_TEXTFILEHEADER         21          // the text file contains a header?, SfxBoolItem
 
 //========================================================================
 //= item range. Adjust this if you introduce new items above
@@ -97,6 +98,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:05:55  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 22.09.00 08:10:45  fs
  ************************************************************************/

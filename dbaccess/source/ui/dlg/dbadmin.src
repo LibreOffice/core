@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:05:05 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     Window WND_DATASOURCESELECTOR
     {
         Pos = MAP_APPFONT ( 0, 0 ) ;
-        Size = MAP_APPFONT ( 80, 200 ) ;
+        Size = MAP_APPFONT ( 60, 200 ) ;
         ClipChildren = TRUE;
 
         // the following window is just to have a border. In a tab dialog, we can't use a window with border
@@ -87,23 +87,26 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Window WND_SELECTORBORDER
         {
             Pos = MAP_APPFONT ( 0, 0 ) ;
-            Size = MAP_APPFONT ( 80, 200 ) ;
+            Size = MAP_APPFONT ( 60, 200 ) ;
             Border = TRUE;
         };
-        FixedText FT_SELECTOR_TITLE
+        PushButton PB_NEW_DATASOURCE
         {
-            Pos = MAP_APPFONT ( 2, 2 ) ;
-            Size = MAP_APPFONT ( 76, 20 ) ;
-            Center = TRUE;
+            Pos = MAP_APPFONT ( 0, 0 ) ;
+            Size = MAP_APPFONT ( 56, 14 ) ;
+            Border = TRUE;
+            SVLook = TRUE;
 
-            Text = "Datenquellen";
-            Text [ english ] = "Data sources";
+            Text = "Neue Datenquelle";
+            Text [ english ] = "New data source";
+            Text [ english_us ] = "New data source";
         };
         ListBox LB_DATASOURCES
         {
+            Border = TRUE;
             SVLook = TRUE;
             Pos = MAP_APPFONT ( 2, 22 ) ;
-            Size = MAP_APPFONT ( 76, 196 ) ;
+            Size = MAP_APPFONT ( 56, 196 ) ;
         };
     };
 
@@ -687,7 +690,7 @@ TabPage PAGE_JDBC
         TabStop = TRUE ;
         PassWord = TRUE ;
     };
-    CheckBox CB_ASK_WHEN_EMPTY_PWD
+    CheckBox CB_PASSWORD_REQUIRED
     {
         Pos = MAP_APPFONT ( 90 , 66 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
@@ -799,10 +802,23 @@ TabPage PAGE_ODBC
         Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
     };
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 6 , 21 ) ;
+        Size = MAP_APPFONT ( 248 , 1 ) ;
+    };
+    CheckBox CB_PASSWORD_REQUIRED
+    {
+        Pos = MAP_APPFONT ( 6 , 27 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text = "Passwort erforderlich";
+        Text [ english ] = "Password required";
+        Text [ english_us ] = "Password required";
+    };
     FixedText FT_PASSWORD
     {
-        Pos = MAP_APPFONT ( 6 , 22 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Size = MAP_APPFONT ( 94 , 10 ) ;
         Text = "~Passwort" ;
         Text [ ENGLISH ] = "~Password" ;
         Text [ NORWEGIAN ] = "~Passord" ;
@@ -830,45 +846,19 @@ TabPage PAGE_ODBC
     Edit ET_PASSWORD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 110 , 21 ) ;
+        Pos = MAP_APPFONT ( 110 , 40 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
         PassWord = TRUE ;
     };
-    CheckBox CB_ASK_WHEN_EMPTY_PWD
-    {
-        Pos = MAP_APPFONT ( 110 , 36 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text = "beim ÷ffnen ~fragen";
-        Text [ ENGLISH ] = "beim ÷ffnen ~fragen";
-        Text[ italian ] = "Chiedi all'apertura";
-        Text[ portuguese_brazilian ] = "beim ÷ffnen ~fragen";
-        Text[ portuguese ] = "~Perguntar ao abrir";
-        Text[ danish ] = "sp¯rg ved Âbning";
-        Text[ french ] = "~RequÍte ‡ l'ouverture";
-        Text[ swedish ] = "~frÂga vid ˆppnandet";
-        Text[ dutch ] = "bij openen ~vragen";
-        Text[ spanish ] = "preguntar al ~abrir";
-        Text[ english_us ] = "Request when opened";
-        Text[ chinese_simplified ] = "‘⁄¥Úø™ ±—ØŒ ";
-        Text[ russian ] = "«‡Ô‡¯Ë‚‡Ú¸ ÔË ÓÚÍ˚‚‡ÌËË";
-        Text[ polish ] = "Pytaj przy otwieraniu";
-        Text[ japanese ] = "äJÇ≠ç€Ç…êqÇÀÇÈ";
-        Text[ chinese_traditional ] = "¶b∂}±“Æ…∏ﬂ∞›";
-        Text[ arabic ] = "«·«” ›”«— ⁄‰œ «·› Õ";
-        Text[ greek ] = "≈Ò˛ÙÁÛÁ ÏÂ ÙÔ ‹ÌÔÈ„Ï·";
-        Text[ korean ] = "ø≠ ∂ß ø‰√ª";
-        Text[ turkish ] = "AÁarken sor";
-        Text[ language_user1 ] = " ";
-    };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 6 , 49 ) ;
+        Pos = MAP_APPFONT ( 6 , 55 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 55 ) ;
+        Pos = MAP_APPFONT ( 6 , 61 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Treibereinstellungen" ;
         Text [ ENGLISH ] = "ODBC ~options" ;
@@ -897,13 +887,13 @@ TabPage PAGE_ODBC
     Edit ET_OPTIONS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 110 , 54 ) ;
+        Pos = MAP_APPFONT ( 110 , 60 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_CHARSET
     {
-        Pos = MAP_APPFONT ( 6 , 70 ) ;
+        Pos = MAP_APPFONT ( 6 , 76 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Zeichensatz" ;
         Text [ ENGLISH ] = "~Character set" ;
@@ -932,7 +922,7 @@ TabPage PAGE_ODBC
     ListBox LB_CHARSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 110 , 69 ) ;
+        Pos = MAP_APPFONT ( 110 , 75 ) ;
         Size = MAP_APPFONT ( 105 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1355,66 +1345,38 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ turkish ] = "Gˆr¸nt¸lenecek tablolar˝ seÁin:";
         Text[ language_user1 ] = " ";
     };
-    Control CTL_TABLESUBSCRIPTION
+    RadioButton RB_INCLUDEALL
     {
         Pos     = MAP_APPFONT ( 6 , 20 ) ;
-        Size    = MAP_APPFONT ( 192 , 109 ) ;
+        Size    = MAP_APPFONT ( 60 , 12 ) ;
+        Group   = TRUE;
+        Text = "~Alle";
+        Text [ english ] = "~All";
+        Text [ english_us ] = "~All";
+    };
+    RadioButton RB_INCLUDENONE
+    {
+        Pos     = MAP_APPFONT ( 6 , 35 ) ;
+        Size    = MAP_APPFONT ( 60 , 12 ) ;
+        Text = "~Keine";
+        Text [ english ] = "~None";
+        Text [ english_us ] = "~None";
+    };
+    RadioButton RB_INCLUDESPECIFIC
+    {
+        Pos     = MAP_APPFONT ( 6 , 50 ) ;
+        Size    = MAP_APPFONT ( 60 , 12 ) ;
+        Text = "Aus~wahl";
+        Text [ english ] = "~Selection";
+        Text [ english_us ] = "~Selection";
+    };
+    Control CTL_TABLESUBSCRIPTION
+    {
+        Group   = TRUE;
+        Pos     = MAP_APPFONT ( 69 , 20 ) ;
+        Size    = MAP_APPFONT ( 185 , 109 ) ;
         Border  = TRUE ;
         TabStop = TRUE ;
-    };
-    PushButton PB_ADDALLTABLES
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 204 , 20 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    String STR_CHECK_ALL
-    {
-        Text = "~Alle" ;
-        Text [ English ] = "All" ;
-        Text [ portuguese ] = "~Todas" ;
-        Text [ english_us ] = "~All" ;
-        Text [ portuguese_brazilian ] = "Alle" ;
-        Text [ swedish ] = "~Alla" ;
-        Text [ danish ] = "Alle" ;
-        Text [ italian ] = "Tutte" ;
-        Text [ spanish ] = "To~das" ;
-        Text [ french ] = "Toutes" ;
-        Text [ dutch ] = "~Alle" ;
-        Text[ chinese_simplified ] = "»´≤ø(~A)";
-        Text[ russian ] = "¬ÒÂ";
-        Text[ polish ] = "Wszystkie";
-        Text[ japanese ] = "Ç∑Ç◊Çƒ(~A)";
-        Text[ chinese_traditional ] = "•˛≥°(~A)";
-        Text[ arabic ] = "«·ﬂ·";
-        Text[ greek ] = "ºÎ·";
-        Text[ korean ] = "¿¸√º(~A)";
-        Text[ turkish ] = "T¸m¸";
-        Text[ language_user1 ] = " ";
-    };
-    String STR_CHECK_NONE
-    {
-        Text = "~Keine" ;
-        Text [ English ] = "None" ;
-        Text [ portuguese ] = "~Nenhuma" ;
-        Text [ english_us ] = "~None" ;
-        Text [ portuguese_brazilian ] = "Keine" ;
-        Text [ swedish ] = "In~ga" ;
-        Text [ danish ] = "Ingen" ;
-        Text [ italian ] = "Nessuna" ;
-        Text [ spanish ] = "~Ninguna" ;
-        Text [ french ] = "Aucune" ;
-        Text [ dutch ] = "~Geen" ;
-        Text[ chinese_simplified ] = "Œﬁ(~N)";
-        Text[ russian ] = "ÕÂÚ";
-        Text[ polish ] = "Brak";
-        Text[ japanese ] = "Ç»Çµ(~N)";
-        Text[ chinese_traditional ] = "µL(~N)";
-        Text[ arabic ] = "»œÊ‰";
-        Text[ greek ] = " ·Ì›Ì·";
-        Text[ korean ] = "æ¯¿Ω(~N)";
-        Text[ turkish ] = "HiÁbiri";
-        Text[ language_user1 ] = " ";
     };
 };
 
@@ -1426,9 +1388,19 @@ WarningBox ERR_NOREGISTEREDDATASOURCES
     Message [ english_us ] = "Currently, there are no registered data sources.";
 };
 
+String STR_ENTER_CONNECTION_PASSWORD
+{
+    Text = "Die Verbindung zur Datenquelle \"$name$\" erfordert die Eingabe eines Passwortes.";
+    Text [ english ] = "Connecting to data source \"$name$\" requires you to enter a password.";
+    Text [ english_us ] = "Connecting to data source \"$name$\" requires you to enter a password.";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:05:05  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/

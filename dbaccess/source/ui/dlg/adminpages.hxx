@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:04:22 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@ protected:
         is modified. The implementation just calls callModifiedHdl.
     */
     DECL_LINK(OnControlModified, Control*);
+
+    /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
+    Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
 };
 
 //=========================================================================
@@ -216,7 +219,7 @@ protected:
     Edit*               m_pUserName;
     FixedText*          m_pPasswordLabel;
     Edit*               m_pPassword;
-    CheckBox*           m_pAskIfEmptyPwd;
+    CheckBox*           m_pPasswordRequired;
 
     FixedText*          m_pOptionsLabel;
     Edit*               m_pOptions;
@@ -238,7 +241,7 @@ protected:
     virtual ~OCommonBehaviourTabPage();
 
 private:
-    DECL_LINK(OnPasswordModified, Control*);
+    DECL_LINK(OnPasswordRequired, Control*);
 };
 
 //========================================================================
@@ -300,6 +303,7 @@ public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
 private:
+    FixedLine           m_aSeparator2;
     FixedLine           m_aSeparator1;
 
     OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
@@ -314,6 +318,7 @@ public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
 private:
+    FixedLine           m_aSeparator2;
     FixedLine           m_aSeparator1;
 
     OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
@@ -359,30 +364,58 @@ private:
 //========================================================================
 //= OTableSubscriptionPage
 //========================================================================
+class ODbAdminDialog;
 class OTableSubscriptionPage : public OGenericAdministrationPage
 {
+    friend class ODbAdminDialog;
+
 private:
+    RadioButton             m_aIncludeAll;
+    RadioButton             m_aIncludeNone;
+    RadioButton             m_aIncludeSelected;
     OTableTreeListBox       m_aTablesList;
     FixedText               m_aTablesListLabel;
-    PushButton              m_aIncludeAllTables;
     sal_Bool                m_bCheckedAll : 1;
     sal_Bool                m_bCatalogAtStart : 1;
     ::rtl::OUString         m_sCatalogSeparator;
+    ODbAdminDialog*         m_pAdminDialog;     /** needed for translating an SfxItemSet into Sequence< PropertyValue >
+                                                    (for building an XConnection)
+                                                */
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                            m_xCurrentConnection;   /// valid as long as the page is active
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                            m_aLastDetailedSelection;
+    RadioButton*            m_pLastCheckedButton;
 
 public:
     static  SfxTabPage* Create( Window* _pParent, const SfxItemSet& _rAttrSet);
     virtual BOOL        FillItemSet(SfxItemSet& _rCoreAttrs);
+    virtual void        ActivatePage(const SfxItemSet& _rSet);
+    virtual int         DeactivatePage(SfxItemSet* _pSet);
 
     void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
         { m_aTablesList.setServiceFactory(_rxORB); }
+
+protected:
+    void SetAdminDialog(ODbAdminDialog* _pDialog) { m_pAdminDialog = _pDialog; }
 
 private:
     OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     ~OTableSubscriptionPage();
 
+    /** check the tables in <member>m_aTablesList</member> according to <arg>_rTables</arg>
+    */
+    void implCheckTables(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTables);
+
+    /** return the current selection in <member>m_aTablesList</member>
+    */
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > collectDetailedSelection() const;
+
     void CheckAll( BOOL bCheck=TRUE );
     DECL_LINK( AddAllClickHdl, PushButton* );
-    // plausibility check
+
+    DECL_LINK( OnRadioButtonClicked, Button* );
 
     virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 };
@@ -396,6 +429,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:04:22  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 26.09.00 11:46:15  fs
  ************************************************************************/

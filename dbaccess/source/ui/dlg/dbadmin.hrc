@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:04:46 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,18 @@
 
 #define FT_DATATYPE             1
 #define FT_CONNECTURL           2
-#define FT_SELECTOR_TITLE       3
-#define FT_DATASOURCENAME       4
-#define FT_USERNAME             5
-#define FT_PASSWORD             6
-#define FT_OPTIONS              7
-#define FT_CHARSET              8
-#define FT_JDBCDRIVERCLASS      9
-#define FT_FIELDSEPARATOR       10
-#define FT_TEXTSEPARATOR        11
-#define FT_DECIMALSEPARATOR     12
-#define FT_THOUSANDSSEPARATOR   13
-#define FT_EXTENSION            14
-#define FT_TABLESUBSCRIPTION    15
+#define FT_DATASOURCENAME       3
+#define FT_USERNAME             4
+#define FT_PASSWORD             5
+#define FT_OPTIONS              6
+#define FT_CHARSET              7
+#define FT_JDBCDRIVERCLASS      8
+#define FT_FIELDSEPARATOR       9
+#define FT_TEXTSEPARATOR        10
+#define FT_DECIMALSEPARATOR     11
+#define FT_THOUSANDSSEPARATOR   12
+#define FT_EXTENSION            13
+#define FT_TABLESUBSCRIPTION    14
 
 #define LB_DATATYPE             1
 #define LB_DATASOURCES          2
@@ -95,16 +94,18 @@
 #define PB_BROWSECONNECTION     1
 #define PB_INDICIES             2
 #define PB_ADDALLTABLES         3
+#define PB_NEW_DATASOURCE       4
 
 #define GB_CONNECTION           1
 #define GB_DBASE_MAIN           2
 
-#define CB_ASK_WHEN_EMPTY_PWD   1
+#define CB_PASSWORD_REQUIRED    1
 #define CB_SHOWDELETEDROWS      2
 #define CB_ALLOWLONGNAMES       3
 #define CB_HEADER               4
 
 #define FL_SEPARATOR1           1
+#define FL_SEPARATOR2           2
 
 #define CM_FIELDSEPARATOR       1
 #define CM_TEXTSEPARATOR        2
@@ -116,6 +117,10 @@
 #define WND_SELECTORBORDER      2
 
 #define CTL_TABLESUBSCRIPTION   1
+
+#define RB_INCLUDEALL           1
+#define RB_INCLUDENONE          2
+#define RB_INCLUDESPECIFIC      3
 
 //========================================================================
 // string ids (relative to other resources, that's why not necessarily unique)
@@ -132,14 +137,15 @@
 #define STR_DELIMITER_MISSING           10
 #define STR_DELIMITER_MUST_DIFFER       11
 #define STR_NO_WILDCARDS                12
-#define STR_CHECK_ALL                   13
-#define STR_CHECK_NONE                  14
 
 #endif // _DBAUI_DBADMIN_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:04:46  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 20.09.00 11:42:05  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:04:12 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,15 @@
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 using namespace ::dbtools;
 
 //.........................................................................
@@ -225,8 +229,8 @@ OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
 
     // do some knittings
     m_aDatasourceType.SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
-    m_aName.SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aConnection.SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+    m_aName.SetModifyHdl(getControlModifiedLink());
+    m_aConnection.SetModifyHdl(getControlModifiedLink());
 }
 
 //-------------------------------------------------------------------------
@@ -394,7 +398,7 @@ OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nRe
     ,m_pUserName(NULL)
     ,m_pPasswordLabel(NULL)
     ,m_pPassword(NULL)
-    ,m_pAskIfEmptyPwd(NULL)
+    ,m_pPasswordRequired(NULL)
     ,m_pOptionsLabel(NULL)
     ,m_pOptions(NULL)
     ,m_pCharsetLabel(NULL)
@@ -405,27 +409,28 @@ OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nRe
     {
         m_pUserNameLabel = new FixedText(this, ResId(FT_USERNAME));
         m_pUserName = new Edit(this, ResId(ET_USERNAME));
-        m_pUserName->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pUserName->SetModifyHdl(getControlModifiedLink());
+
+        m_pPasswordRequired = new CheckBox(this, ResId(CB_PASSWORD_REQUIRED));
+        m_pPasswordRequired->SetClickHdl(LINK(this, OCommonBehaviourTabPage, OnPasswordRequired));
+
         m_pPasswordLabel = new FixedText(this, ResId(FT_PASSWORD));
         m_pPassword = new Edit(this, ResId(ET_PASSWORD));
-        m_pPassword->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-
-        m_pAskIfEmptyPwd = new CheckBox(this, ResId(CB_ASK_WHEN_EMPTY_PWD));
-        m_pAskIfEmptyPwd->SetClickHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pPassword->SetModifyHdl(getControlModifiedLink());
     }
 
     if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
     {
         m_pOptionsLabel = new FixedText(this, ResId(FT_OPTIONS));
         m_pOptions = new Edit(this, ResId(ET_OPTIONS));
-        m_pOptions->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pOptions->SetModifyHdl(getControlModifiedLink());
     }
 
     if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
     {
         m_pCharsetLabel = new FixedText(this, ResId(FT_CHARSET));
         m_pCharset = new ListBox(this, ResId(LB_CHARSET));
-        m_pCharset->SetSelectHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+        m_pCharset->SetSelectHdl(getControlModifiedLink());
 
         OCharsetCollection::CharsetIterator aLoop = m_aCharsets.begin();
         while (aLoop != m_aCharsets.end())
@@ -443,7 +448,7 @@ OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
     DELETEZ(m_pUserName);
     DELETEZ(m_pPasswordLabel);
     DELETEZ(m_pPassword);
-    DELETEZ(m_pAskIfEmptyPwd);
+    DELETEZ(m_pPasswordRequired);
 
     DELETEZ(m_pOptionsLabel);
     DELETEZ(m_pOptions);
@@ -464,7 +469,7 @@ void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool
     SFX_ITEMSET_GET(_rSet, pPwdItem, SfxStringItem, DSID_PASSWORD, sal_True);
     SFX_ITEMSET_GET(_rSet, pOptionsItem, SfxStringItem, DSID_ADDITIONALOPTIONS, sal_True);
     SFX_ITEMSET_GET(_rSet, pCharsetItem, SfxStringItem, DSID_CHARSET, sal_True);
-    SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_ASKFOREMPTYPWD, sal_True);
+    SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
 
     // forward the values to the controls
     if (bValid)
@@ -473,7 +478,7 @@ void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool
         {
             m_pUserName->SetText(pUidItem->GetValue());
             m_pPassword->SetText(pPwdItem->GetValue());
-            m_pAskIfEmptyPwd->Check(pAllowEmptyPwd->GetValue());
+            m_pPasswordRequired->Check(pAllowEmptyPwd->GetValue());
 
             m_pUserName->ClearModifyFlag();
             m_pPassword->ClearModifyFlag();
@@ -482,12 +487,10 @@ void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool
             {
                 m_pUserName->SaveValue();
                 m_pPassword->SaveValue();
-                m_pAskIfEmptyPwd->SaveValue();
+                m_pPasswordRequired->SaveValue();
             }
 
-            m_pUserName->SetModifyHdl(LINK(this, OCommonBehaviourTabPage, OnPasswordModified));
-            m_pPassword->SetModifyHdl(LINK(this, OCommonBehaviourTabPage, OnPasswordModified));
-            LINK(this, OCommonBehaviourTabPage, OnPasswordModified).Call(m_pAskIfEmptyPwd);
+            LINK(this, OCommonBehaviourTabPage, OnPasswordRequired).Call(NULL);
                 // for the initial state
         }
 
@@ -515,7 +518,7 @@ void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool
             m_pUserName->Disable();
             m_pPasswordLabel->Disable();
             m_pPassword->Disable();
-            m_pAskIfEmptyPwd->Disable();
+            m_pPasswordRequired->Disable();
         }
 
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
@@ -540,28 +543,28 @@ sal_Bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
     {
         if (m_pUserName->GetText() != m_pUserName->GetSavedValue())
         {
-            String strUserId(m_pUserName->GetText());
-            _rSet.Put(SfxStringItem(DSID_USER, strUserId));
+            _rSet.Put(SfxStringItem(DSID_USER, m_pUserName->GetText()));
             bChangedSomething = sal_True;
         }
 
         if (m_pPassword->GetText() != m_pPassword->GetSavedValue())
         {
-            String strPassword(m_pPassword->GetText());
-            _rSet.Put(SfxStringItem(DSID_PASSWORD, strPassword));
+            _rSet.Put(SfxStringItem(DSID_PASSWORD, m_pPassword->GetText()));
             bChangedSomething = sal_True;
         }
 
-        if (m_pAskIfEmptyPwd->IsChecked() != m_pAskIfEmptyPwd->GetSavedValue())
-            _rSet.Put(SfxBoolItem(DSID_ASKFOREMPTYPWD, m_pAskIfEmptyPwd->IsChecked()));
+        if (m_pPasswordRequired->IsChecked() != m_pPasswordRequired->GetSavedValue())
+        {
+            _rSet.Put(SfxBoolItem(DSID_PASSWORDREQUIRED, m_pPasswordRequired->IsChecked()));
+            bChangedSomething = sal_True;
+        }
     }
 
     if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
     {
         if( m_pOptions->GetText() != m_pOptions->GetSavedValue() )
         {
-            String strOptions = m_pOptions->GetText();
-            _rSet.Put(SfxStringItem(DSID_ADDITIONALOPTIONS, strOptions));
+            _rSet.Put(SfxStringItem(DSID_ADDITIONALOPTIONS, m_pOptions->GetText()));
             bChangedSomething = sal_True;
         }
     }
@@ -579,11 +582,16 @@ sal_Bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK( OCommonBehaviourTabPage, OnPasswordModified, Control*, pControl)
+IMPL_LINK( OCommonBehaviourTabPage, OnPasswordRequired, Control*, pControl)
 {
-    DBG_ASSERT((m_nControlFlags & CBTP_USE_UIDPWD) == CBTP_USE_UIDPWD, "OCommonBehaviourTabPage::OnPasswordModified : wrong mode, will probably crash!");
+    DBG_ASSERT((m_nControlFlags & CBTP_USE_UIDPWD) == CBTP_USE_UIDPWD, "OCommonBehaviourTabPage::OnPasswordRequired : wrong mode, will probably crash!");
 
-    m_pAskIfEmptyPwd->Enable((m_pUserName->GetText().Len() > 0) && (m_pPassword->GetText().Len() == 0));
+    m_pPassword->Enable(m_pPasswordRequired->IsChecked());
+    m_pPasswordLabel->Enable(m_pPasswordRequired->IsChecked());
+
+    if (pControl)
+        // it really came from the control, it was no implicit call
+        callModifiedHdl();
     return 0L;
 }
 
@@ -708,13 +716,13 @@ OJdbcDetailsPage::OJdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAtt
     ,m_aJdbcUrl         (this, ResId(ET_CONNECTURL))
     ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
 {
-    m_aDriver.SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aJdbcUrl.SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+    m_aDriver.SetModifyHdl(getControlModifiedLink());
+    m_aJdbcUrl.SetModifyHdl(getControlModifiedLink());
 
     m_pUserName->SetZOrder(&m_aJdbcUrl, WINDOW_ZORDER_BEHIND);
     m_pPassword->SetZOrder(m_pUserName, WINDOW_ZORDER_BEHIND);
-    m_pAskIfEmptyPwd->SetZOrder(m_pPassword, WINDOW_ZORDER_BEHIND);
-    m_pCharset->SetZOrder(m_pAskIfEmptyPwd, WINDOW_ZORDER_BEHIND);
+    m_pPasswordRequired->SetZOrder(m_pPassword, WINDOW_ZORDER_BEHIND);
+    m_pCharset->SetZOrder(m_pPasswordRequired, WINDOW_ZORDER_BEHIND);
 
     FreeResource();
 }
@@ -785,6 +793,7 @@ sal_Bool OJdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
 //========================================================================
 OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
     :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS)
+    ,m_aSeparator2  (this, ResId(FL_SEPARATOR2))
     ,m_aSeparator1  (this, ResId(FL_SEPARATOR1))
 {
     FreeResource();
@@ -803,6 +812,7 @@ OAdabasDetailsPage::OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCor
     :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET)
         // Yes, we're using the resource for the ODBC page here. It contains two controls which we don't use
         // and except that it's excatly what we need here.
+    ,m_aSeparator2  (this, ResId(FL_SEPARATOR2))
     ,m_aSeparator1  (this, ResId(FL_SEPARATOR1))
 {
     // move the charset related control some pixel up (as they are positioned as if above them there are the option
@@ -854,18 +864,18 @@ OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAtt
         m_aTextSeparator.InsertEntry( m_aTextSeparatorList.GetToken( i, '\t' ) );
 
     // set the modify handlers
-    m_aHeader.SetClickHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aFieldSeparator.SetUpdateDataHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aFieldSeparator.SetSelectHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aTextSeparator.SetUpdateDataHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aTextSeparator.SetSelectHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aExtension.SetSelectHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+    m_aHeader.SetClickHdl(getControlModifiedLink());
+    m_aFieldSeparator.SetUpdateDataHdl(getControlModifiedLink());
+    m_aFieldSeparator.SetSelectHdl(getControlModifiedLink());
+    m_aTextSeparator.SetUpdateDataHdl(getControlModifiedLink());
+    m_aTextSeparator.SetSelectHdl(getControlModifiedLink());
+    m_aExtension.SetSelectHdl(getControlModifiedLink());
 
-    m_aFieldSeparator.SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aTextSeparator.SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aDecimalSeparator.SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aThousandsSeparator.SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
-    m_aExtension.SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+    m_aFieldSeparator.SetModifyHdl(getControlModifiedLink());
+    m_aTextSeparator.SetModifyHdl(getControlModifiedLink());
+    m_aDecimalSeparator.SetModifyHdl(getControlModifiedLink());
+    m_aThousandsSeparator.SetModifyHdl(getControlModifiedLink());
+    m_aExtension.SetModifyHdl(getControlModifiedLink());
 
 
     m_pCharset->SetZOrder(&m_aExtension, WINDOW_ZORDER_BEHIND);
@@ -1105,13 +1115,19 @@ void OTextDetailsPage::SetSeparator( ComboBox& rBox, const String& rList, sal_uI
 //------------------------------------------------------------------------
 OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
     :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
+    ,m_aIncludeAll          (this, ResId(RB_INCLUDEALL))
+    ,m_aIncludeNone         (this, ResId(RB_INCLUDENONE))
+    ,m_aIncludeSelected     (this, ResId(RB_INCLUDESPECIFIC))
     ,m_aTablesListLabel     (this, ResId(FT_TABLESUBSCRIPTION))
     ,m_aTablesList          (this, ResId(CTL_TABLESUBSCRIPTION))
-    ,m_aIncludeAllTables    (this, ResId(PB_ADDALLTABLES))
     ,m_bCheckedAll          (sal_True)
+    ,m_pLastCheckedButton   (NULL)
+    ,m_pAdminDialog         (NULL)
 {
-    m_aIncludeAllTables.SetClickHdl( LINK(this, OTableSubscriptionPage, AddAllClickHdl) );
-    m_aIncludeAllTables.SetText( ResId(STR_CHECK_ALL) );
+    m_aIncludeAll.SetClickHdl(LINK(this, OTableSubscriptionPage, OnRadioButtonClicked));
+    m_aIncludeNone.SetClickHdl(LINK(this, OTableSubscriptionPage, OnRadioButtonClicked));
+    m_aIncludeSelected.SetClickHdl(LINK(this, OTableSubscriptionPage, OnRadioButtonClicked));
+    m_aTablesList.SetCheckHandler(getControlModifiedLink());
 
     // initialize the TabListBox
     m_aTablesList.SetSelectionMode( MULTIPLE_SELECTION );
@@ -1123,7 +1139,7 @@ OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSe
 
     FreeResource();
 
-    m_aTablesList.SetCheckButtonHdl(LINK(this, OGenericAdministrationPage, OnControlModified));
+    m_aTablesList.SetCheckButtonHdl(getControlModifiedLink());
 }
 
 //------------------------------------------------------------------------
@@ -1138,64 +1154,68 @@ SfxTabPage* OTableSubscriptionPage::Create( Window* pParent, const SfxItemSet& r
 }
 
 //------------------------------------------------------------------------
+void OTableSubscriptionPage::implCheckTables(const Sequence< ::rtl::OUString >& _rTables)
+{
+    // the meta data for the current connection, used for splitting up table names
+    Reference< XDatabaseMetaData > xMeta;
+    try
+    {
+        if (m_xCurrentConnection.is())
+            xMeta = m_xCurrentConnection->getMetaData();
+    }
+    catch(SQLException&)
+    {
+        DBG_ERROR("OTableSubscriptionPage::implCheckTables : could not retrieve the current connection's meta data!");
+    }
+
+    // uncheck all
+    SvLBoxEntry* pUncheckLoop = m_aTablesList.First();
+    while (pUncheckLoop)
+    {
+        m_aTablesList.SetCheckButtonState(pUncheckLoop, SV_BUTTON_UNCHECKED);
+        pUncheckLoop = m_aTablesList.Next(pUncheckLoop);
+    }
+
+    // check the ones which are in the list
+    String aListBoxTable;
+    ::rtl::OUString aCatalog,aSchema,aName;
+
+    const ::rtl::OUString* pIncludeTable = _rTables.getConstArray();
+    for (sal_Int32 i=0; i<_rTables.getLength(); ++i, ++pIncludeTable)
+    {
+        if (xMeta.is())
+            qualifiedNameComponents(xMeta, pIncludeTable->getStr(), aCatalog, aSchema, aName);
+        else
+            aName = pIncludeTable->getStr();
+
+        SvLBoxEntry* pCatalog = m_aTablesList.GetEntryPosByName(aCatalog);
+        SvLBoxEntry* pSchema = m_aTablesList.GetEntryPosByName(aSchema,pCatalog);
+        SvLBoxEntry* pEntry = m_aTablesList.GetEntryPosByName(aName,pSchema);
+
+        if(pEntry)
+            m_aTablesList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
+    }
+    m_aTablesList.CheckButtons();
+    m_bCheckedAll = sal_False;
+
+    m_aLastDetailedSelection = _rTables;
+}
+
+//------------------------------------------------------------------------
 void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
 {
     // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
     sal_Bool bValid, bReadonly;
     getFlags(_rSet, bValid, bReadonly);
 
+    bValid = bValid && m_xCurrentConnection.is();
+    bReadonly = bReadonly || !bValid;
+
     m_aTablesList.Enable(!bReadonly);
     m_aTablesListLabel.Enable(!bReadonly);
-    m_aIncludeAllTables.Enable(!bReadonly);
-
-    // the PropertyValues for the current dialog settings
-    Sequence< PropertyValue > aConnectionParams = ODbAdminDialog::toDriverParams(_rSet);
-    // the current DSN
-    String sURL;
-    SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-    if (bValid)
-        sURL = pUrlItem->GetValue();
-
-    // fill the table list with this connection information
-    Reference< XConnection > xConn;
-    Reference< XDatabaseMetaData > xMeta;
-    SQLExceptionInfo aErrorInfo;
-    try
-    {
-        xConn = m_aTablesList.UpdateTableList(sURL, aConnectionParams);
-    }
-    catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
-    catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
-    catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
-
-    if (aErrorInfo.isValid())
-    {
-        // establishing the connection failed. Show an error window and exit.
-        OSQLMessageBox(GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error).Execute();
-        m_aTablesList.Enable(sal_False);
-        m_aTablesListLabel.Enable(sal_False);
-        m_aIncludeAllTables.Enable(sal_False);
-        m_aTablesList.Clear();
-        return;
-    }
-
-    // in addition, we need some infos about the connection used
-    m_sCatalogSeparator = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));    // (default)
-    m_bCatalogAtStart = sal_True;   // (default)
-    try
-    {
-        if (xConn.is())
-            xMeta = xConn->getMetaData();
-        if (xMeta.is())
-        {
-            m_sCatalogSeparator = xMeta->getCatalogSeparator();
-            m_bCatalogAtStart = xMeta->isCatalogAtStart();
-        }
-    }
-    catch(SQLException&)
-    {
-        DBG_ERROR("OTableSubscriptionPage::implInitControls : could not retrieve the qualifier separator for the used connection !");
-    }
+    m_aIncludeAll.Enable(!bReadonly);
+    m_aIncludeNone.Enable(!bReadonly);
+    m_aIncludeSelected.Enable(!bReadonly);
 
     m_bCheckedAll = sal_True;
     // get the current table filter
@@ -1205,35 +1225,33 @@ void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool 
         aTableFilter = pTableFilter->getList();
 
     if (!aTableFilter.getLength())
-    {   // unfortunally, we don't know what this means: It could be that the user unchecked _all_ the tables,
-        // because he/she does not want to see any of them, or the user did _check_ all of them.
-        CheckAll();
+    {   // no tables visible
+        CheckAll(sal_False);
+        m_aIncludeNone.Check();
+        LINK(this, OTableSubscriptionPage, OnRadioButtonClicked).Call(&m_aIncludeNone);
     }
     else
-    {   // check the ones which are in the list
-        String aListBoxTable;
-        ::rtl::OUString aCatalog,aSchema,aName;
-
-        const ::rtl::OUString* pIncludeTable = aTableFilter.getConstArray();
-        for (sal_Int32 i=0; i<aTableFilter.getLength(); ++i, ++pIncludeTable)
-        {
-            if (xMeta.is())
-                qualifiedNameComponents(xMeta, pIncludeTable->getStr(), aCatalog, aSchema, aName);
-            else
-                aName = pIncludeTable->getStr();
-
-            SvLBoxEntry* pCatalog = m_aTablesList.GetEntryPosByName(aCatalog);
-            SvLBoxEntry* pSchema = m_aTablesList.GetEntryPosByName(aSchema,pCatalog);
-            SvLBoxEntry* pEntry = m_aTablesList.GetEntryPosByName(aName,pSchema);
-
-            if(pEntry)
-                m_aTablesList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
+    {
+        if ((1 == aTableFilter.getLength()) && aTableFilter[0].equalsAsciiL("%", 1))
+        {   // all tables visible
+            CheckAll(sal_True);
+            m_aIncludeAll.Check();
+            LINK(this, OTableSubscriptionPage, OnRadioButtonClicked).Call(&m_aIncludeAll);
         }
-        m_aTablesList.CheckButtons();
-        m_bCheckedAll = sal_False;
+        else
+        {
+            m_aLastDetailedSelection = aTableFilter;
+            m_aIncludeSelected.Check();
+            LINK(this, OTableSubscriptionPage, OnRadioButtonClicked).Call(&m_aIncludeSelected);
+        }
     }
 
-    m_aIncludeAllTables.Enable(0 != m_aTablesList.GetEntryCount());
+    if (!bValid)
+    {
+        if (m_pLastCheckedButton)
+            m_pLastCheckedButton->Check(sal_False);
+        m_pLastCheckedButton = NULL;
+    }
 }
 
 //------------------------------------------------------------------------
@@ -1247,22 +1265,97 @@ void OTableSubscriptionPage::CheckAll( sal_Bool bCheck )
         pEntry = m_aTablesList.GetModel()->Next(pEntry);
     }
 
-    {
-        OLocalResourceAccess aStringResAccess(PAGE_TABLESUBSCRIPTION, RSC_TABPAGE);
-        m_aIncludeAllTables.SetText(bCheck ? ResId(STR_CHECK_NONE) : ResId(STR_CHECK_ALL));
-    }
-
     m_bCheckedAll = bCheck;
 }
 
 //------------------------------------------------------------------------
-sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
+int OTableSubscriptionPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    /////////////////////////////////////////////////////////////////////////
-    // create the output string which contains all the table names
-    sal_uInt16 nEntryCount = 0;
-    sal_uInt16 nChecked = 0;
+    int nResult = OGenericAdministrationPage::DeactivatePage(_pSet);
 
+    // dispose the connection, we don't need it anymore, so we're not wasting resources
+    Reference< XComponent > xComp(m_xCurrentConnection, UNO_QUERY);
+    if (xComp.is())
+        try { xComp->dispose(); } catch (RuntimeException&) { }
+    m_xCurrentConnection = NULL;
+
+    return nResult;
+}
+
+//------------------------------------------------------------------------
+void OTableSubscriptionPage::ActivatePage(const SfxItemSet& _rSet)
+{
+    DBG_ASSERT(!m_xCurrentConnection.is(), "OTableSubscriptionPage::ActivatePage: already have an active connection! ");
+
+    // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+    sal_Bool bValid, bReadonly;
+    getFlags(_rSet, bValid, bReadonly);
+
+    // get the current table list from the connection for the current settings
+
+    // the PropertyValues for the current dialog settings
+    Sequence< PropertyValue > aConnectionParams;
+    DBG_ASSERT(m_pAdminDialog, "OTableSubscriptionPage::ActivatePage : need a parent dialog doing the translation!");
+    if (m_pAdminDialog)
+        if (!m_pAdminDialog->getCurrentSettings(aConnectionParams))
+        {
+            OGenericAdministrationPage::ActivatePage(_rSet);
+            return;
+        }
+
+    // the current DSN
+    String sURL;
+    SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+    if (bValid)
+        sURL = pUrlItem->GetValue();
+
+    // fill the table list with this connection information
+    SQLExceptionInfo aErrorInfo;
+    try
+    {
+        m_xCurrentConnection = m_aTablesList.UpdateTableList(sURL, aConnectionParams);
+    }
+    catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
+    catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
+    catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
+
+    if (aErrorInfo.isValid())
+    {
+        // establishing the connection failed. Show an error window and exit.
+        OSQLMessageBox(GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error).Execute();
+        m_aTablesList.Enable(sal_False);
+        m_aTablesListLabel.Enable(sal_False);
+        m_aTablesList.Clear();
+    }
+    else
+    {
+        // in addition, we need some infos about the connection used
+        m_sCatalogSeparator = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));    // (default)
+        m_bCatalogAtStart = sal_True;   // (default)
+        try
+        {
+            Reference< XDatabaseMetaData > xMeta;
+            if (m_xCurrentConnection.is())
+                xMeta = m_xCurrentConnection->getMetaData();
+            if (xMeta.is())
+            {
+                m_sCatalogSeparator = xMeta->getCatalogSeparator();
+                m_bCatalogAtStart = xMeta->isCatalogAtStart();
+            }
+        }
+        catch(SQLException&)
+        {
+            DBG_ERROR("OTableSubscriptionPage::ActivatePage : could not retrieve the qualifier separator for the used connection !");
+        }
+    }
+
+    m_pLastCheckedButton = NULL;
+    OGenericAdministrationPage::ActivatePage(_rSet);
+}
+
+//------------------------------------------------------------------------
+Sequence< ::rtl::OUString > OTableSubscriptionPage::collectDetailedSelection() const
+{
     Sequence< ::rtl::OUString > aTableFilter;
     static const ::rtl::OUString sDot(RTL_CONSTASCII_USTRINGPARAM("."));
 
@@ -1304,23 +1397,62 @@ sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
             aTableFilter[nOldLen] = sComposedName;
             // reset the composed name
             sComposedName = String();
-
-            nChecked++;
         }
 
-        if(!m_aTablesList.GetModel()->HasChilds(pEntry))
-            nEntryCount++;
         pEntry = m_aTablesList.GetModel()->Next(pEntry);
     }
 
-    if (nChecked == nEntryCount)
-        aTableFilter.realloc(0);
-        // TODO : have no possibility to distinguish between "all" and "none"
+    return aTableFilter;
+}
+
+//------------------------------------------------------------------------
+sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
+{
+    /////////////////////////////////////////////////////////////////////////
+    // create the output string which contains all the table names
+    Sequence< ::rtl::OUString > aTableFilter;
+    if (m_aIncludeAll.IsChecked())
+    {
+        aTableFilter.realloc(1);
+        aTableFilter[0] = ::rtl::OUString("%", 1, RTL_TEXTENCODING_ASCII_US);
+    }
+    else if (m_aIncludeNone.IsChecked())
+    {
+        // nothing to do: the sequence is already empty, which means "no tables"
+    }
+    else
+    {
+        aTableFilter = collectDetailedSelection();
+    }
 
     //////////////////////////////////////////////////////////////////////
     // put this string into the set
     _rCoreAttrs.Put( OStringListItem(DSID_TABLEFILTER, aTableFilter) );
     return sal_True;
+}
+
+//------------------------------------------------------------------------
+IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
+{
+    if (&m_aIncludeSelected == m_pLastCheckedButton)
+        m_aLastDetailedSelection = collectDetailedSelection();
+    m_pLastCheckedButton = static_cast<RadioButton*>(pButton);
+
+    if (m_aIncludeAll.IsChecked() || m_aIncludeNone.IsChecked())
+    {
+        m_aTablesList.Enable(sal_False);
+        CheckAll(m_aIncludeAll.IsChecked());
+    }
+    else
+    {
+        m_aTablesList.Enable(sal_True);
+        implCheckTables(m_aLastDetailedSelection);
+    }
+    // as the enable state has been changed, invalidate the control
+    m_aTablesList.Invalidate();
+
+    callModifiedHdl();
+    return 0L;
 }
 
 //------------------------------------------------------------------------
@@ -1338,6 +1470,9 @@ IMPL_LINK( OTableSubscriptionPage, AddAllClickHdl, PushButton*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:04:12  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 26.09.00 11:47:18  fs
  ************************************************************************/

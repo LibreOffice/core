@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:06:44 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,9 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const ::com::sun::
     DBG_ASSERT(aInfo.isValid(), "OExceptionChainDialog::OExceptionChainDialog : invalid chain start !");
     SQLExceptionIteratorHelper aIter(( const ::com::sun::star::sdbc::SQLException*)aInfo);
 
-    Image   aErrorImage(BMP_EXCEPTION_ERROR),
-            aWarningImage(BMP_EXCEPTION_WARNING),
-            m_aInfoImage(BMP_EXCEPTION_INFO);
+    Image   aErrorImage(ModuleRes(BMP_EXCEPTION_ERROR)),
+            aWarningImage(ModuleRes(BMP_EXCEPTION_WARNING)),
+            m_aInfoImage(ModuleRes(BMP_EXCEPTION_INFO));
 
     while (aIter.hasMoreElements())
     {
@@ -193,7 +193,7 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const ::com::sun::
                     {
                         UniString sTitle(sErrorCodeLabel);
                         sTitle.AppendAscii(" : ");
-                        sTitle += pUserData->ErrorCode;
+                        sTitle += String::CreateFromInt32(pUserData->ErrorCode);
                         SvLBoxEntry* pErrorCodeEntry = m_aExceptionList.InsertEntry(sTitle, aErrorImage, aErrorImage, pListEntry);
                         pErrorCodeEntry->SetUserData(pUserData);
                         m_aExceptionList.Expand(pListEntry);
@@ -508,6 +508,7 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rExcep
       ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
       ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
       ,m_pInfoButton(NULL)
+      ,m_aNextChainElement(_rException.get())
 {
     Construct(_rException, _nStyle, _eImage);
 }
@@ -546,6 +547,9 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:06:44  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 02.10.00 12:37:20  fs
  ************************************************************************/
