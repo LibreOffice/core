@@ -6,6 +6,7 @@ mkdir: %_DEST%\inc%_EXT%\configmgr
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
+..\%__SRC%\misc\configimport.sh %_DEST%\bin%_EXT%\configimport
 
 ..\%__SRC%\misc\configmgr2.uno.xml %_DEST%\xml%_EXT%\configmgr2.uno.xml
 
