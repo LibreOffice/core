@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:25:05 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3275,17 +3275,7 @@ static UINT ImplStrToNum( const sal_Char* pStr )
 
 // -----------------------------------------------------------------------
 
-LanguageType WinSalFrame::GetInputLanguage()
-{
-    if( !mnInputLang )
-        return LANGUAGE_DONTKNOW;
-    else
-        return (LanguageType) mnInputLang;
-}
-
-// -----------------------------------------------------------------------
-
-static sal_Unicode ImplGetCharCode( WinSalFrame* pFrame, WPARAM nCharCode )
+static void ImplUpdateInputLang( WinSalFrame* pFrame )
 {
     BOOL bLanguageChange = FALSE;
     UINT nLang = LOWORD( GetKeyboardLayout( 0 ) );
@@ -3298,8 +3288,9 @@ static sal_Unicode ImplGetCharCode( WinSalFrame* pFrame, WPARAM nCharCode )
 
     // If we are on Windows NT we use Unicode FrameProcs and so we
     // get Unicode charcodes directly from Windows
+    // no need to set up a code page
     if ( aSalShlData.mbWNT )
-        return (sal_Unicode)nCharCode;
+        return;
 
     if ( !nLang )
     {
@@ -3319,6 +3310,17 @@ static sal_Unicode ImplGetCharCode( WinSalFrame* pFrame, WPARAM nCharCode )
         else
             pFrame->mnInputCodePage = GetACP();
     }
+}
+
+
+static sal_Unicode ImplGetCharCode( WinSalFrame* pFrame, WPARAM nCharCode )
+{
+    ImplUpdateInputLang( pFrame );
+
+    // If we are on Windows NT we use Unicode FrameProcs and so we
+    // get Unicode charcodes directly from Windows
+    if ( aSalShlData.mbWNT )
+        return (sal_Unicode)nCharCode;
 
     sal_Char    aCharBuf[2];
     int         nCharLen;
@@ -3340,6 +3342,19 @@ static sal_Unicode ImplGetCharCode( WinSalFrame* pFrame, WPARAM nCharCode )
         return (sal_Unicode)c;
     else
         return (sal_Unicode)nCharCode;
+}
+
+// -----------------------------------------------------------------------
+
+LanguageType WinSalFrame::GetInputLanguage()
+{
+    if( !mnInputLang )
+        ImplUpdateInputLang( this );
+
+    if( !mnInputLang )
+        return LANGUAGE_DONTKNOW;
+    else
+        return (LanguageType) mnInputLang;
 }
 
 // -----------------------------------------------------------------------
@@ -4927,6 +4942,9 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM wParam, LPARAM lParam )
         pFrame->mbAtCursorIME = (nImeProps & IME_PROP_AT_CARET) != 0;
         pFrame->mbHandleIME = !pFrame->mbSpezIME;
     }
+
+    // trigger input language and codepage update
+    ImplUpdateInputLang( pFrame );
 
     ImplSalYieldMutexRelease();
 }
