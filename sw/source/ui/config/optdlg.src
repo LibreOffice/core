@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ TabPage TP_CONTENT_OPT
     FixedLine FL_LINE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
         Text = "Hilfslinien" ;
         Text [ ENGLISH ] = "Visual aids" ;
         Group = TRUE ;
@@ -463,7 +463,7 @@ TabPage TP_CONTENT_OPT
     FixedLine FL_DISP
     {
         Pos = MAP_APPFONT ( 6 , 95 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
         Text = "Anzeigen" ;
         Text [ ENGLISH ] = "Display" ;
         Text [ norwegian ] = "Display" ;
@@ -1061,8 +1061,9 @@ TabPage TP_OPTPRINT_PAGE
     };
     FixedLine FL_SEP_PRT_LEFT
     {
-        Pos = MAP_APPFONT ( 85 , 10 ) ;
-        Size = MAP_APPFONT ( 4 , 82 ) ;
+        Pos = MAP_APPFONT ( 85 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 78 ) ;
+        Vert = TRUE;
     };
     FixedLine FL_2
     {
@@ -1331,8 +1332,9 @@ TabPage TP_OPTPRINT_PAGE
     };
     FixedLine FL_SEP_PRT_RIGHT
     {
-        Pos = MAP_APPFONT ( 169 , 10 ) ;
-        Size = MAP_APPFONT ( 4 , 82 ) ;
+        Pos = MAP_APPFONT ( 169 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 78 ) ;
+        Vert = TRUE;
     };
     FixedLine FL_3
     {
@@ -1858,7 +1860,7 @@ TabPage TP_OPTTABLE_PAGE
     FixedLine FL_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
         Text = "Standard" ;
         Text [ English ] = "Defaults" ;
         Text[ english_us ] = "Default";
@@ -2000,8 +2002,9 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedLine FL_TABLE_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 126 , 10 ) ;
-        Size = MAP_APPFONT ( 4 , 56 ) ;
+        Pos = MAP_APPFONT ( 125 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 52 ) ;
+        Vert = TRUE;
     };
     FixedLine FL_TABLE_INSERT
     {
@@ -3029,8 +3032,9 @@ TabPage TP_OPTSHDWCRSR
     };
     FixedLine FL_SEPARATOR_SHDW
     {
-        Pos = MAP_APPFONT ( 125 , 10 ) ;
-        Size = MAP_APPFONT ( 4 , 97 ) ;
+        Pos = MAP_APPFONT ( 125 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 93 ) ;
+        Vert = TRUE;
     };
     FixedLine FL_SHDWCRSFLAG
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,8 +458,6 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
 {
     Init();
     FreeResource();
-    aSeparatorLFL.SetStyle( aSeparatorLFL.GetStyle() | WB_VERT );
-    aSeparatorRFL.SetStyle( aSeparatorRFL.GetStyle() | WB_VERT );
     Link aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
     aGrfCB.SetClickHdl( aLk );
     aRightPageCB.SetClickHdl( aLk );
@@ -983,7 +981,6 @@ SwTableOptionsTabPage::SwTableOptionsTabPage( Window* pParent, const SfxItemSet&
     bHTMLMode(FALSE)
 {
     FreeResource();
-    aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
 
     Link aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
     aNumFormattingCB.SetClickHdl(aLnk);
@@ -1375,7 +1372,6 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     aHiddenParaCB ( this,   ResId( CB_HIDDEN_PARA ) )
 {
     FreeResource();
-    aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
     const SfxPoolItem* pItem = 0;
     SwShadowCursorItem aOpt;
 

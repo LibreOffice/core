@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-01 19:37:52 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,8 +433,9 @@ ModalDialog MD_EDIT_REGION
     FixedLine FL_SEP
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 11 ) ;
-        Size = MAP_APPFONT ( 4 , 171 ) ;
+        Pos = MAP_APPFONT ( 87 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 168 ) ;
+        Vert = TRUE;
     };
     FixedLine FL_LINK
     {
@@ -1053,8 +1054,9 @@ TabPage TP_INSERT_SECTION
     FixedLine FL_SEP
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 84 , 11 ) ;
-        Size = MAP_APPFONT ( 4 , 143 ) ;
+        Pos = MAP_APPFONT ( 84 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 140 ) ;
+        Vert = TRUE;
     };
     FixedLine FL_LINK
     {

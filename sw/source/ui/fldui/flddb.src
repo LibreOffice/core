@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:37:36 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,8 +329,9 @@ TabPage TP_FLD_DB
     };
     FixedLine FL_DBFORMAT_VERT
     {
-        Pos = MAP_APPFONT ( 87 , 148 ) ;
-        Size = MAP_APPFONT ( 4 , 31 ) ;
+        Pos = MAP_APPFONT ( 87 , 152 ) ;
+        Size = MAP_APPFONT ( 4 , 28 ) ;
+        Vert = TRUE;
     };
     Text [ english_us ] = "Database" ;
     Text [ portuguese_brazilian ] = "Datenbank" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:38:18 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,8 +184,6 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
 {
     FreeResource();
     SetExchangeSupport();
-
-    aOptionsSepFL.SetStyle( aOptionsSepFL.GetStyle() | WB_VERT );
 
     Link aLk = LINK(this, SwWrapTabPage, RangeModifyHdl);
     aLeftMarginED.SetUpHdl(aLk);
@@ -784,6 +782,9 @@ USHORT* SwWrapTabPage::GetRanges()
 /*--------------------------------------------------------------------
 
    $Log: not supported by cvs2svn $
+   Revision 1.2  2001/05/30 16:38:18  fme
+   Fix #86988#: Redesign of dialogs
+
    Revision 1.1.1.1  2000/09/18 17:14:38  hr
    initial import
 

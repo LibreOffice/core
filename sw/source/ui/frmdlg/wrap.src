@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:38:19 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,8 +392,9 @@ TabPage TP_FRM_WRAP
     };
     FixedLine FL_OPTION_SEP
     {
-        Pos = MAP_APPFONT ( 128 , 61 ) ;
-        Size = MAP_APPFONT ( 4 , 64 ) ;
+        Pos = MAP_APPFONT ( 128 , 65 ) ;
+        Size = MAP_APPFONT ( 4 , 60 ) ;
+        Vert = TRUE;
     };
     FixedText FT_LEFT_MARGIN
     {

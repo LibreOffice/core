@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 14:40:31 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,6 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aFormatVertFL   (this, SW_RES(FL_DBFORMAT_VERT))
 {
     FreeResource();
-
-    aFormatVertFL.SetStyle( aFormatVertFL.GetStyle() | WB_VERT );
 
     aOldNumSelectHdl = aNumFormatLB.GetSelectHdl();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-05-30 07:35:37 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,6 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     bDontCheckPasswd(sal_True)
 {
     FreeResource();
-    aSepFL.SetStyle(aSepFL.GetStyle()|WB_VERT);
 
     bWeb = 0 != PTR_CAST( SwWebDocShell, rSh.GetView().GetDocShell() );
 
@@ -1717,7 +1716,6 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     pWrtSh(0)
 {
     FreeResource();
-    aSepFL.SetStyle(aSepFL.GetStyle()|WB_VERT);
 
     aProtectCB.SetClickHdl  ( LINK( this, SwInsertSectionTabPage, ChangeProtectHdl));
     aPasswdCB.SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
@@ -2369,6 +2367,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.10  2001/05/30 07:35:37  os
+    #87559# password handling corrected
+
     Revision 1.9  2001/05/16 08:31:52  os
     #86819# invalid assertion removed
 
