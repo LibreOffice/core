@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:13:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #endif
 
 #ifndef _XPOLY_HXX
@@ -236,6 +239,9 @@ class HtmlExport
     bool    CreatePERLScripts();
     bool    CreateImageFileList();
     bool    CreateImageNumberFile();
+
+    bool    checkForExistingFiles();
+    bool    checkFileExists( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xFileAccess, String const & aFileName );
 
     ULONG   CreateBitmap( ULONG nThemeId, INT16 nImage, const String& aName ) const;
     void    SmoothBitmap( BitmapEx& aBmp, Color aBackCol ) const;
