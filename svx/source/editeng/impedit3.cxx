@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-27 09:22:27 $
+ *  last change: $Author: mt $ $Date: 2001-07-20 12:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,177 +1590,187 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     sal_uInt16 nMax = nBreakInLine + pPortion->GetLen();
     while ( ( nBreakInLine < nMax ) && ( pLine->GetCharPosArray()[nBreakInLine] < nRemainingWidth ) )
         nBreakInLine++;
+
     sal_uInt16 nMaxBreakPos = nBreakInLine + pLine->GetStart();
+       sal_uInt16 nBreakPos = 0xFFFF;
 
-    sal_uInt16 nMinBreakPos = 0;
-    USHORT nAttrs = pNode->GetCharAttribs().GetAttribs().Count();
-    for ( USHORT nAttr = nAttrs; nAttr; )
-    {
-        EditCharAttrib* pAttr = pNode->GetCharAttribs().GetAttribs()[--nAttr];
-        if ( pAttr->IsFeature() && ( pAttr->GetEnd() <= nMaxBreakPos ) )
-        {
-            nMinBreakPos = pAttr->GetEnd();
-            break;
-        }
-    }
-
-    lang::Locale aLocale = GetLocale( EditPaM( pNode, nMaxBreakPos ) );
-
-    Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-    OUString aText( *pNode );
-    Reference< XHyphenator > xHyph;
-    if ( bCanHyphenate )
-        xHyph = GetHyphenator();
-    i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, Sequence< PropertyValue >(), 1 );
-    i18n::LineBreakUserOptions aUserOptions;
-
-    const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( SvxLocaleToLanguage( aLocale ), TRUE );
-    aUserOptions.forbiddenBeginCharacters = pForbidden->beginLine;
-    aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
-    aUserOptions.applyForbiddenRules = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
-    aUserOptions.allowPunctuationOutsideMargin = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
-    aUserOptions.allowHyphenateEnglish = FALSE;
-
-    i18n::LineBreakResults aLBR = xBI->getLineBreak( *pNode, nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
-    sal_uInt16 nBreakPos = (USHORT)aLBR.breakIndex;
-
-    // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
-    if ( nBreakPos < nMinBreakPos )
-        nBreakPos = nMinBreakPos;
-
-    // BUG in I18N - the japanese dot is in the next line!
-    // !!!  Testen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if ( (nBreakPos + ( aUserOptions.allowPunctuationOutsideMargin ? 0 : 1 ) ) <= nMaxBreakPos )
-    {
-        sal_Unicode cFirstInNextLine = ( (nBreakPos+1) < pNode->Len() ) ? pNode->GetChar( nBreakPos ) : 0;
-        if ( cFirstInNextLine == 12290 )
-            nBreakPos++;
-    }
-
-    sal_Bool bHangingPunctuation = ( nBreakPos > nMaxBreakPos ) ? sal_True : sal_False;
-    pLine->SetHangingPunctuation( bHangingPunctuation );
-
+    sal_Bool bCompressBlank = sal_False;
     sal_Bool bHyphenated = sal_False;
+    sal_Bool bHangingPunctuation = sal_False;
     sal_Unicode cAlternateReplChar = 0;
     sal_Unicode cAlternateExtraChar = 0;
-    sal_Bool bBlankSeparator = ( ( nBreakPos >= pLine->GetStart() ) &&
-                        ( pNode->GetChar( nBreakPos ) == ' ' ) ) ? sal_True : sal_False;
 
-#ifndef SVX_LIGHT
-    // Egal ob Trenner oder nicht: Das Wort nach dem Trenner durch
-    // die Silbentrennung jagen...
-    // nMaxBreakPos ist das letzte Zeichen was in die Zeile passt,
-    // nBreakPos ist der Wort-Anfang
-    // Ein Problem gibt es, wenn das Dok so schmal ist, dass ein Wort
-    // auf mehr als Zwei Zeilen gebrochen wird...
-    if ( !bHangingPunctuation && bCanHyphenate && GetHyphenator().is() )
+    if ( pNode->GetChar( nMaxBreakPos ) == ' ' )
     {
-        // MT: I18N Umstellen auf getWordBoundary !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        sal_uInt16 nWordStart = nBreakPos;
-        sal_uInt16 nWordEnd = nBreakPos;
-        while ( ( nWordEnd < pNode->Len() ) &&
-                    ( pNode->GetChar( nWordEnd ) != ' ' ) &&
-                    ( !pNode->IsFeature( nWordEnd ) ) )
+        // Break behind the blank, blank will be compressed...
+        nBreakPos = nMaxBreakPos + 1;
+        bCompressBlank = sal_True;
+    }
+    else
+    {
+        sal_uInt16 nMinBreakPos = 0;
+        USHORT nAttrs = pNode->GetCharAttribs().GetAttribs().Count();
+        for ( USHORT nAttr = nAttrs; nAttr; )
         {
-            nWordEnd++;
-        }
-        String aWord( *pNode, nWordStart, nWordEnd - nWordStart );
-        if ( aWord.Len() > 3 )
-        {
-            DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
-            sal_uInt16 nMinTrail = nWordEnd-nMaxBreakPos+1;     //+1: Vor dem angeknacksten Buchstaben
-            Reference< XHyphenatedWord > xHyphWord;
-            if (xHyphenator.is())
-                xHyphWord = xHyphenator->hyphenate( aWord, aLocale, aWord.Len() - nMinTrail, Sequence< PropertyValue >() );
-            if (xHyphWord.is())
+            EditCharAttrib* pAttr = pNode->GetCharAttribs().GetAttribs()[--nAttr];
+            if ( pAttr->IsFeature() && ( pAttr->GetEnd() <= nMaxBreakPos ) )
             {
-                sal_Bool bAlternate = xHyphWord->isAlternativeSpelling();
-                sal_uInt16 nWordLen = 1 + xHyphWord->getHyphenPos();
+                nMinBreakPos = pAttr->GetEnd();
+                break;
+            }
+        }
 
-                if ( ( nWordLen >= 2 ) && ( (nWordStart+nWordLen) >= (pLine->GetStart() + 2 ) ) )
+        lang::Locale aLocale = GetLocale( EditPaM( pNode, nMaxBreakPos ) );
+
+        Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+        OUString aText( *pNode );
+        Reference< XHyphenator > xHyph;
+        if ( bCanHyphenate )
+            xHyph = GetHyphenator();
+        i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, Sequence< PropertyValue >(), 1 );
+        i18n::LineBreakUserOptions aUserOptions;
+
+        const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( SvxLocaleToLanguage( aLocale ), TRUE );
+        aUserOptions.forbiddenBeginCharacters = pForbidden->beginLine;
+        aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
+        aUserOptions.applyForbiddenRules = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
+        aUserOptions.allowPunctuationOutsideMargin = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
+        aUserOptions.allowHyphenateEnglish = FALSE;
+
+        i18n::LineBreakResults aLBR = xBI->getLineBreak( *pNode, nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
+        nBreakPos = (USHORT)aLBR.breakIndex;
+
+        // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
+        if ( nBreakPos < nMinBreakPos )
+            nBreakPos = nMinBreakPos;
+
+        // BUG in I18N - the japanese dot is in the next line!
+        // !!!  Testen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if ( (nBreakPos + ( aUserOptions.allowPunctuationOutsideMargin ? 0 : 1 ) ) <= nMaxBreakPos )
+        {
+            sal_Unicode cFirstInNextLine = ( (nBreakPos+1) < pNode->Len() ) ? pNode->GetChar( nBreakPos ) : 0;
+            if ( cFirstInNextLine == 12290 )
+                nBreakPos++;
+        }
+
+        bHangingPunctuation = ( nBreakPos > nMaxBreakPos ) ? sal_True : sal_False;
+        pLine->SetHangingPunctuation( bHangingPunctuation );
+
+    #ifndef SVX_LIGHT
+        // Egal ob Trenner oder nicht: Das Wort nach dem Trenner durch
+        // die Silbentrennung jagen...
+        // nMaxBreakPos ist das letzte Zeichen was in die Zeile passt,
+        // nBreakPos ist der Wort-Anfang
+        // Ein Problem gibt es, wenn das Dok so schmal ist, dass ein Wort
+        // auf mehr als Zwei Zeilen gebrochen wird...
+        if ( !bHangingPunctuation && bCanHyphenate && GetHyphenator().is() )
+        {
+            // MT: I18N Umstellen auf getWordBoundary !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            sal_uInt16 nWordStart = nBreakPos;
+            sal_uInt16 nWordEnd = nBreakPos;
+            while ( ( nWordEnd < pNode->Len() ) &&
+                        ( pNode->GetChar( nWordEnd ) != ' ' ) &&
+                        ( !pNode->IsFeature( nWordEnd ) ) )
+            {
+                nWordEnd++;
+            }
+            String aWord( *pNode, nWordStart, nWordEnd - nWordStart );
+            if ( aWord.Len() > 3 )
+            {
+                DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
+                sal_uInt16 nMinTrail = nWordEnd-nMaxBreakPos+1;     //+1: Vor dem angeknacksten Buchstaben
+                Reference< XHyphenatedWord > xHyphWord;
+                if (xHyphenator.is())
+                    xHyphWord = xHyphenator->hyphenate( aWord, aLocale, aWord.Len() - nMinTrail, Sequence< PropertyValue >() );
+                if (xHyphWord.is())
                 {
-                    if ( !bAlternate )
+                    sal_Bool bAlternate = xHyphWord->isAlternativeSpelling();
+                    sal_uInt16 nWordLen = 1 + xHyphWord->getHyphenPos();
+
+                    if ( ( nWordLen >= 2 ) && ( (nWordStart+nWordLen) >= (pLine->GetStart() + 2 ) ) )
                     {
-                        bHyphenated = sal_True;
-                        bBlankSeparator = sal_False;
-                        nBreakPos = nWordStart + nWordLen;
-                    }
-                    else
-                    {
-                        String aAlt( xHyphWord->getHyphenatedWord() );
-
-                        // Wir gehen von zwei Faellen aus, die nun
-                        // vorliegen koennen:
-                        // 1) packen wird zu pak-ken
-                        // 2) Schiffahrt wird zu Schiff-fahrt
-                        // In Fall 1 muss ein Zeichen ersetzt werden,
-                        // in Fall 2 wird ein Zeichen hinzugefuegt.
-                        // Die Identifikation wird erschwert durch Worte wie
-                        // "Schiffahrtsbrennesseln", da der Hyphenator alle
-                        // Position des Wortes auftrennt und "Schifffahrtsbrennnesseln"
-                        // ermittelt. Wir koennen also eigentlich nicht unmittelbar vom
-                        // Index des AlternativWord auf aWord schliessen.
-
-                        // Das ganze geraffel wird durch eine Funktion am
-                        // Hyphenator vereinfacht werden, sobald AMA sie einbaut...
-                        sal_uInt16 nAltStart = nWordLen - 1;
-                        sal_uInt16 nTxtStart = nAltStart - (aAlt.Len() - aWord.Len());
-                        sal_uInt16 nTxtEnd = nTxtStart;
-                        sal_uInt16 nAltEnd = nAltStart;
-
-                        // Die Bereiche zwischen den nStart und nEnd ist
-                        // die Differenz zwischen Alternativ- und OriginalString.
-                        while( nTxtEnd < aWord.Len() && nAltEnd < aAlt.Len() &&
-                               aWord.GetChar(nTxtEnd) != aAlt.GetChar(nAltEnd) )
+                        if ( !bAlternate )
                         {
-                            ++nTxtEnd;
-                            ++nAltEnd;
+                            bHyphenated = sal_True;
+                            nBreakPos = nWordStart + nWordLen;
                         }
-
-                        // Wenn ein Zeichen hinzugekommen ist, dann bemerken wir es jetzt:
-                        if( nAltEnd > nTxtEnd && nAltStart == nAltEnd &&
-                            aWord.GetChar( nTxtEnd ) == aAlt.GetChar(nAltEnd) )
-                        {
-                            ++nAltEnd;
-                            ++nTxtStart;
-                            ++nTxtEnd;
-                        }
-
-                        DBG_ASSERT( ( nAltEnd - nAltStart ) == 1, "Alternate: Falsche Annahme!" );
-
-                        if ( nTxtEnd > nTxtStart )
-                            cAlternateReplChar = aAlt.GetChar( nAltStart );
                         else
-                            cAlternateExtraChar = aAlt.GetChar( nAltStart );
+                        {
+                            String aAlt( xHyphWord->getHyphenatedWord() );
 
-                        bHyphenated = sal_True;
-                        bBlankSeparator = sal_False;
-                        nBreakPos = nWordStart + nTxtStart;
-                        if ( cAlternateReplChar )
-                            nBreakPos++;
+                            // Wir gehen von zwei Faellen aus, die nun
+                            // vorliegen koennen:
+                            // 1) packen wird zu pak-ken
+                            // 2) Schiffahrt wird zu Schiff-fahrt
+                            // In Fall 1 muss ein Zeichen ersetzt werden,
+                            // in Fall 2 wird ein Zeichen hinzugefuegt.
+                            // Die Identifikation wird erschwert durch Worte wie
+                            // "Schiffahrtsbrennesseln", da der Hyphenator alle
+                            // Position des Wortes auftrennt und "Schifffahrtsbrennnesseln"
+                            // ermittelt. Wir koennen also eigentlich nicht unmittelbar vom
+                            // Index des AlternativWord auf aWord schliessen.
+
+                            // Das ganze geraffel wird durch eine Funktion am
+                            // Hyphenator vereinfacht werden, sobald AMA sie einbaut...
+                            sal_uInt16 nAltStart = nWordLen - 1;
+                            sal_uInt16 nTxtStart = nAltStart - (aAlt.Len() - aWord.Len());
+                            sal_uInt16 nTxtEnd = nTxtStart;
+                            sal_uInt16 nAltEnd = nAltStart;
+
+                            // Die Bereiche zwischen den nStart und nEnd ist
+                            // die Differenz zwischen Alternativ- und OriginalString.
+                            while( nTxtEnd < aWord.Len() && nAltEnd < aAlt.Len() &&
+                                   aWord.GetChar(nTxtEnd) != aAlt.GetChar(nAltEnd) )
+                            {
+                                ++nTxtEnd;
+                                ++nAltEnd;
+                            }
+
+                            // Wenn ein Zeichen hinzugekommen ist, dann bemerken wir es jetzt:
+                            if( nAltEnd > nTxtEnd && nAltStart == nAltEnd &&
+                                aWord.GetChar( nTxtEnd ) == aAlt.GetChar(nAltEnd) )
+                            {
+                                ++nAltEnd;
+                                ++nTxtStart;
+                                ++nTxtEnd;
+                            }
+
+                            DBG_ASSERT( ( nAltEnd - nAltStart ) == 1, "Alternate: Falsche Annahme!" );
+
+                            if ( nTxtEnd > nTxtStart )
+                                cAlternateReplChar = aAlt.GetChar( nAltStart );
+                            else
+                                cAlternateExtraChar = aAlt.GetChar( nAltStart );
+
+                            bHyphenated = sal_True;
+                            nBreakPos = nWordStart + nTxtStart;
+                            if ( cAlternateReplChar )
+                                nBreakPos++;
+                        }
                     }
                 }
             }
         }
-    }
 
-#endif // !SVX_LIGHT
+    #endif // !SVX_LIGHT
 
-    if ( nBreakPos <= pLine->GetStart() )
-    {
-        // keine Trenner in Zeile => abhacken !
-        nBreakPos = nMaxBreakPos;
-        // MT: I18N nextCharacters !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if ( nBreakPos <= pLine->GetStart() )
-            nBreakPos = pLine->GetStart() + 1;  // Sonst Endlosschleife!
+        {
+            // keine Trenner in Zeile => abhacken !
+            nBreakPos = nMaxBreakPos;
+            // MT: I18N nextCharacters !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if ( nBreakPos <= pLine->GetStart() )
+                nBreakPos = pLine->GetStart() + 1;  // Sonst Endlosschleife!
+        }
     }
 
     // die angeknackste Portion ist die End-Portion
     pLine->SetEnd( nBreakPos );
+
     sal_uInt16 nEndPortion = SplitTextPortion( pParaPortion, nBreakPos, pLine );
-    if ( bBlankSeparator || bHangingPunctuation )
+
+    if ( bCompressBlank || bHangingPunctuation )
     {
-        // Blanks am Zeilenende generell unterdruecken...
         TextPortion* pTP = pParaPortion->GetTextPortions().GetObject( nEndPortion );
         DBG_ASSERT( pTP->GetKind() == PORTIONKIND_TEXT, "BlankRubber: Keine TextPortion!" );
         DBG_ASSERT( nBreakPos > pLine->GetStart(), "SplitTextPortion am Anfang der Zeile?" );
