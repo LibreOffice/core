@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2003-04-08 17:25:59 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,7 @@
             SID_CUT;\
             SID_COPY;\
             SID_PASTE;\
-            SID_ATTR_CHAR_POSTURE;\
-            SID_ATTR_CHAR_WEIGHT;\
             SID_ATTR_CHAR_CONTOUR;\
-            SID_ATTR_CHAR_UNDERLINE;\
             SID_ATTR_PARA_ADJUST_LEFT;\
             SID_ATTR_PARA_ADJUST_RIGHT;\
             SID_ATTR_PARA_ADJUST_CENTER;\
@@ -301,10 +298,8 @@
             SID_DRAW_MEASURELINE;\
             SID_INSERT_VSCROLLBAR;\
             SID_INSERT_HSCROLLBAR;\
-            SID_INSERT_URLBUTTON;\
             SID_INSERT_SPINBUTTON;\
             SID_INSERT_EDIT;\
-            SID_INSERT_PREVIEW;\
             SID_POSITION;\
             SID_MOREFRONT;\
             SID_MOREBACK;\
@@ -402,7 +397,7 @@
             SID_AUTOSPELL_CHECK;\
     };\
     IdCount = {\
-        290;\
+        285;\
     };
 
 
@@ -430,6 +425,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File[ chinese_traditional ] = "sc_out88.bmp" ;
         File[ japanese ] = "sc_out81.bmp" ;
         File[ korean ] = "sc_out82.bmp" ;
+        File[ arabic ] = "sc_out96.bmp" ;
 
     };
     MaskColor = IMAGE_MASK_STDCOLOR ;
@@ -460,6 +456,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File[ chinese_traditional ] = "lc_out88.bmp" ;
         File[ japanese ] = "lc_out81.bmp" ;
         File[ korean ] = "lc_out82.bmp" ;
+        File[ arabic ] = "lc_out96.bmp" ;
     };
     MaskColor = IMAGE_MASK_STDCOLOR;
     IMAGE_ID_LIST
@@ -489,6 +486,7 @@ ImageList RID_DEFAULTIMAGELIST_SCH
         File[ chinese_traditional ] = "sch_out88.bmp" ;
         File[ japanese ] = "sch_out81.bmp" ;
         File[ korean ] = "sch_out82.bmp" ;
+        File[ arabic ] = "sch_out96.bmp" ;
 
     };
     MaskColor = IMAGE_MASK_STDCOLOR_HC ;
@@ -519,6 +517,7 @@ ImageList RID_DEFAULTIMAGELIST_LCH
         File[ chinese_traditional ] = "lch_out88.bmp" ;
         File[ japanese ] = "lch_out81.bmp" ;
         File[ korean ] = "lch_out82.bmp" ;
+        File[ arabic ] = "lch_out96.bmp" ;
     };
     MaskColor = IMAGE_MASK_STDCOLOR_HC;
     IMAGE_ID_LIST
