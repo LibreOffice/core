@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:31:52 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include "excform.hxx"
 #include "flttools.hxx"
 
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 
 const UINT16 ExcelToSc::nRowMask = 0x3FFF;
 const UINT16 ExcelToSc::nLastInd = 399;
@@ -120,7 +123,7 @@ void ImportExcel::Formula25()
 
     nLastXF = nXF;
 
-    Formula( nCol, nRow, GetScTab(), nXF, nFormLen, fCurVal, nFlag0, bShrFmla );
+    Formula( nCol, nRow, GetCurrScTab(), nXF, nFormLen, fCurVal, nFlag0, bShrFmla );
 }
 
 
@@ -142,7 +145,7 @@ void ImportExcel::Formula4()
 
     nLastXF = nXF;
 
-    Formula( nCol, nRow, GetScTab(), nXF, nFormLen, fCurVal, nFlag0, FALSE );
+    Formula( nCol, nRow, GetCurrScTab(), nXF, nFormLen, fCurVal, nFlag0, FALSE );
 }
 
 
@@ -422,6 +425,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x16: // Missing Argument                      [314 266]
                 aPool << ocMissing;
                 aPool >> aStack;
+                pExcRoot->pIR->GetTracer().TraceFormulaMissingArg();
                 break;
             case 0x17: // String Constant                       [314 266]
                 aIn >> nLen;
@@ -2369,7 +2373,7 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
         // T A B
         // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = pExcRoot->pIR->GetScTab();
+            rSRD.nTab = pExcRoot->pIR->GetCurrScTab();
     }
     else
     {
@@ -2389,7 +2393,7 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
         // T A B
         // #i10184# abs needed if rel in shared formula for ScCompiler UpdateNameReference
         if ( rSRD.IsTabRel() && !rSRD.IsFlag3D() )
-            rSRD.nTab = pExcRoot->pIR->GetScTab() + rSRD.nRelTab;
+            rSRD.nTab = pExcRoot->pIR->GetCurrScTab() + rSRD.nRelTab;
     }
 }
 
@@ -2458,7 +2462,7 @@ BOOL ExcelToSc::GetShrFmla( const ScTokenArray*& rpErgebnis, UINT32 nFormulaLen 
             aIn >> nRow >> nCol;
 
             aStack << aPool.Store( pExcRoot->pShrfmlaBuff->Find(
-                ScAddress( nCol, nRow, pExcRoot->pIR->GetScTab() ) ) );
+                ScAddress( nCol, nRow, pExcRoot->pIR->GetCurrScTab() ) ) );
 
             bRet = TRUE;
         }
