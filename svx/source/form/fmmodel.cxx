@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 16:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SvPersist* pPers)
             ,pObjShell(0)
             ,bStreamingOldVersion(sal_False)
             ,m_pImpl(NULL)
-            ,bOpenInDesignMode(sal_True)
+            ,m_bOpenInDesignMode(sal_True)
+            ,m_bAutoControlFocus(sal_False)
 {
 #ifndef SVX_LIGHT
     m_pImpl = new FmFormModelImplData;
@@ -129,7 +130,8 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SvPersist* 
             ,pObjShell(0)
             ,bStreamingOldVersion(sal_False)
             ,m_pImpl(NULL)
-            ,bOpenInDesignMode(sal_True)
+            ,m_bOpenInDesignMode(sal_True)
+            ,m_bAutoControlFocus(sal_False)
 {
 #ifndef SVX_LIGHT
     m_pImpl = new FmFormModelImplData;
@@ -170,7 +172,8 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SvPersist* 
             :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
             ,pObjShell(0)
             ,bStreamingOldVersion(sal_False)
-            ,bOpenInDesignMode(sal_True)
+            ,m_bOpenInDesignMode(sal_True)
+            ,m_bAutoControlFocus(sal_False)
 {
 #ifndef SVX_LIGHT
     m_pImpl = new FmFormModelImplData;
@@ -248,6 +251,7 @@ SdrPage* FmFormModel::AllocPage(FASTBOOL bMasterPage)
 |* WriteData
 |*
 \************************************************************************/
+
 void FmFormModel::WriteData(SvStream& rOut) const
 {
 #ifndef SVX_LIGHT
@@ -262,7 +266,12 @@ void FmFormModel::WriteData(SvStream& rOut) const
     if (!bStreamingOldVersion)
     {
         SdrDownCompat aModelFormatCompat(rOut,STREAM_WRITE);
-        rOut << bOpenInDesignMode;
+
+        sal_uInt8 nTemp = m_bOpenInDesignMode;
+        rOut << nTemp;
+
+        nTemp = m_bAutoControlFocus;
+        rOut << nTemp;
     }
 
     ((FmFormModel*)this)->bStreamingOldVersion = sal_False;
@@ -288,7 +297,15 @@ void FmFormModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
     if (!bStreamingOldVersion)
     {
         SdrDownCompat aCompat(rIn,STREAM_READ);
-        rIn>> bOpenInDesignMode;
+        sal_uInt8 nTemp = 0;
+        rIn >> nTemp;
+        m_bOpenInDesignMode = nTemp ? sal_True : sal_False;
+
+        if (aCompat.GetBytesLeft())
+        {   // it is a version which already wrote the AutoControlFocus flag
+            rIn >> nTemp;
+            m_bAutoControlFocus = nTemp ? sal_True : sal_False;
+        }
     }
 
     ((FmFormModel*)this)->bStreamingOldVersion = sal_False;
@@ -381,9 +398,21 @@ SdrLayerID FmFormModel::GetControlExportLayerId( const SdrObject& rObj ) const
 void FmFormModel::SetOpenInDesignMode( sal_Bool bOpenDesignMode )
 {
 #ifndef SVX_LIGHT
-    if( bOpenDesignMode != bOpenInDesignMode )
+    if( bOpenDesignMode != m_bOpenInDesignMode )
     {
-        bOpenInDesignMode = bOpenDesignMode;
+        m_bOpenInDesignMode = bOpenDesignMode;
+        pObjShell->SetModified( sal_True );
+    }
+#endif
+}
+
+//------------------------------------------------------------------------
+void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
+{
+#ifndef SVX_LIGHT
+    if( _bAutoControlFocus != m_bAutoControlFocus )
+    {
+        m_bAutoControlFocus = _bAutoControlFocus;
         pObjShell->SetModified( sal_True );
     }
 #endif
