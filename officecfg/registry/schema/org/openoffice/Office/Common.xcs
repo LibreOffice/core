@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:40:50 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4702,7 +4702,7 @@
 						<desc>Specifies default settings of PDF export dialog.</desc>
 					</info>
 					<prop oor:name="CompressMode" oor:type="xs:int">
-						<info>						
+						<info>
 							<deprecated>Use following properties instead: UseLosslessCompression, Quality, UseResolutionReduction, ResolutionReduction</deprecated>
 							<author>SJ</author>
 							<desc>Deprecated.</desc>
@@ -4795,7 +4795,7 @@
 							<desc>Specifies if notes pages are exported to PDF. (Notes pages are available in Impress documents only).</desc>
 						</info>
 						<value>false</value>
-					</prop>				
+					</prop>
 					<prop oor:name="UseTransitionEffects" oor:type="xs:boolean">
 						<info>
 							<author>SJ</author>
