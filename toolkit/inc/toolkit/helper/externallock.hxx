@@ -2,9 +2,9 @@
  *
  *  $RCSfile: externallock.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-30 13:09:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _TOOLKIT_HELPER_EXTERNALLOCK_HXX_
 #define _TOOLKIT_HELPER_EXTERNALLOCK_HXX_
 
+#ifndef TOOLKIT_DLLAPI_H
+#include <toolkit/dllapi.h>
+#endif
+
 #ifndef COMPHELPER_ACCESSIBLE_CONTEXT_HELPER_HXX
 #include <comphelper/accessiblecontexthelper.hxx>
 #endif
@@ -69,7 +73,7 @@
 //  class VCLExternalSolarLock
 // -----------------------------------------------------------------------------
 
-class VCLExternalSolarLock : public ::comphelper::IMutex
+class TOOLKIT_DLLPUBLIC VCLExternalSolarLock : public ::comphelper::IMutex
 {
 public:
     virtual void acquire();
