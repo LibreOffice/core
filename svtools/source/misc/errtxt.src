@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-19 14:56:08 $
+ *  last change: $Author: kso $ $Date: 2001-07-20 12:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2059,12 +2059,12 @@ Resource RID_ERRHDL
     String ERRCODE_INET_READ
     {
         Text = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
-        Text [ ENGLISH ] = "Error reading from the internet\n.Server error message: $(ARG1)" ;
-        Text [ english_us ] = "Error reading data from the Internet\n.Server error message: $(ARG1)" ;
+        Text [ ENGLISH ] = "Error reading from the internet.\nServer error message: $(ARG1)" ;
+        Text [ english_us ] = "Error reading data from the Internet.\nServer error message: $(ARG1)" ;
         Text [ italian ] = "Non è stato possibile leggere i dati da Internet.\nMessaggio di errore del server: $(ARG1)" ;
         Text [ spanish ] = "Los datos no se pudieron leer a través de Internet.\nMensaje de error del servidor: $(ARG1)" ;
         Text [ french ] = "Erreur de lecture des données à partir de l'Internet.\nMessage d'erreur du serveur : $(ARG1)" ;
-        Text [ dutch ] = "Fout bij lezen van gegevens uit internet\n.Foutmelding van server: $(ARG1)" ;
+        Text [ dutch ] = "Fout bij lezen van gegevens uit internet.\nFoutmelding van server: $(ARG1)" ;
         Text [ swedish ] = "Det gick inte att läsa data via Internet.\nServerfelmeddelande: $(ARG1)" ;
         Text [ danish ] = "Det var ikke muligt at læses dataene over Internettet\nServerfejlmelding: $(ARG1)" ;
         Text [ portuguese ] = "Foi impossível ler os dados via Internet.\nMensagem de erro do servidor: $(ARG1)" ;
@@ -2075,7 +2075,7 @@ Resource RID_ERRHDL
         Text[ japanese ] = "ÃŞ°À‚Í²İÀ°È¯Ä‚Å“Ç‚İæ‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B\n»°ÊŞ° ´×° Ò¯¾°¼Ş: $(ARG1)";
         Text[ chinese_traditional ] = "µLªk³z¹L Internet Åª¨ú¸ê®Æ¡C\n¦øªA¾¹³ø§i¡G$(ARG1)";
         Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ÇáÈíÇäÇÊ ÚÈÑ ÇáÅäÊÑäÊ.\nÑÓÇáÉ ÎØÃ ãä ÇáãÒæøÏ: $(ARG1)";
-        Text[ dutch ] = "Fout bij lezen van gegevens uit internet\n.Foutmelding van server: $(ARG1)";
+        Text[ dutch ] = "Fout bij lezen van gegevens uit internet.\nFoutmelding van server: $(ARG1)";
         Text[ chinese_simplified ] = "ÎŞ·¨Í¨¹ı¹ú¼Ê»¥ÁªÍø¶ÁÈ¡Êı¾İ¡£\n·şÎñÆ÷±¨¸æ´íÎó£º$(ARG1)";
         Text[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç äåäïìİíùí áğü ôï Internet.\nÌŞíõìá óöÜëìáôïò ôïõ äéáêïìéóôŞ: $(ARG1)";
         Text[ korean ] = "µ¥ÀÌÅÍ¸¦ ÀÎÅÍ³İ¿¡¼­ ÀĞÁö ¸øÇß½À´Ï´Ù.\n¼­¹ö ¿À·ù ¸Ş½ÃÁö: $(ARG1)";
@@ -2087,7 +2087,7 @@ Resource RID_ERRHDL
     String ERRCODE_INET_WRITE
     {
         Text = "Daten konnten nicht ins Internet übertragen werden.\nServerfehlermeldung: $(ARG1)" ;
-        Text [ ENGLISH ] = "Error writing to the internet.Server error message: $(ARG1)" ;
+        Text [ ENGLISH ] = "Error writing to the internet.\nServer error message: $(ARG1)" ;
         Text [ english_us ] = "Error transferring data to the Internet.\nServer error message: $(ARG1)" ;
         Text [ italian ] = "Non è stato possibile trasferire i dati in Internet.\nMessaggio di errore del server: $(ARG1)" ;
         Text [ spanish ] = "No se pudieron transferir los datos a Internet.\nMensaje de error del servidor: $(ARG1)" ;
