@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:22:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,16 +309,15 @@ void ScDrawView::SetMarkedOriginalSize()
         Size aOriginalSize;
         if (nIdent == OBJ_OLE2)
         {
+            // TODO/LEAN: working with visual area needs running state
             uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( xObj.is() )
-            {
-                MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
-                awt::Size aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
-                aOriginalSize = OutputDevice::LogicToLogic(
-                                        Size( aSz.Width, aSz.Height ),
-                                        aUnit, MAP_100TH_MM );
-                bDo = TRUE;
-            }
+            svt::EmbeddedObjectRef::TryRunningState( xObj );
+            MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
+            awt::Size aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
+            aOriginalSize = OutputDevice::LogicToLogic(
+                                    Size( aSz.Width, aSz.Height ),
+                                    aUnit, MAP_100TH_MM );
+            bDo = TRUE;
         }
         else if (nIdent == OBJ_GRAF)
         {
