@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:56:44 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2733,7 +2733,10 @@ void ScOutputData::PrintNoteMarks( const List& rPosList )
                 ScBaseCell* pCell = pInfo->pCell;
                 if ( pCell && pCell->GetNotePtr() )     // auch verdeckte wegen der Numerierung
                 {
-                    aStr = lcl_FindInList( rPosList, ScTripel( nX, pThisRowInfo->nRowNo, nTab ) );
+                    aStr = String::CreateFromInt32(
+                        lcl_FindInList(
+                            rPosList,
+                            ScTripel( nX, pThisRowInfo->nRowNo, nTab ) ) );
                     long nMarkX = nPosX + pRowInfo[0].pCellInfo[nX+1].nWidth - 2 -
                                     pDev->GetTextWidth(aStr);
                     pDev->DrawText( Point( nMarkX,nPosY ), aStr );
