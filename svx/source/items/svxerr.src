@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 16:33:43 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ Resource RID_SVXERRCODE
         Text[ dutch ] = "$(ARG1) voor de controle is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
         Text[ chinese_simplified ] = "$(ARG1)²»´æÔÚ¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒªÇë°²×°ËùĞèµÄÓïÑÔ°æ±¾¡£";
         Text[ greek ] = "$(ARG1) äåí åßíáé äéáèİóéìï ãéá ôïí ïñèïãñáöéêü İëåã÷ï.\nĞáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé åãêáôáóôŞóôå áí ÷ñåéáóôåß ôçí ãëşóóá ğïõ åğéèõìåßôáé.";
-        Text[ korean ] = "$(ARG1)´Â ¸ÂÃã¹ı °Ë»ç¿¡ »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.\n¼³Ä¡ÇÑ °ÍÀ» °ËÅäÇÏ°í ÇÊ¿äÇÏ¸é ¿øÇÏ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
+        Text[ korean ] = "$(ARG1)À»(¸¦) ¸ÂÃã¹ı °Ë»ç¿¡ »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.\n »ç¿ëÀÚÀÇ ¼³Ä¡¸¦ Á¡°ËÇÑ ´ÙÀ½, ÇÊ¿ä½Ã ¿ä±¸µÇ´Â  ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "$(ARG1) yazım denetiminde kullanılamıyor.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
     };
@@ -611,7 +611,7 @@ Resource RID_SVXERRCODE
         TEXT[ polish ] = "Wszelkie modyfikacje dotycz¹ce Basic Code dokumentu bêd¹ anulowane. Zapisany zostanie za to oryginalny kod makro VBA.";
         TEXT[ portuguese_brazilian ] = "The Basic-Code is modified and so it can not be saved as original.";
         TEXT[ japanese ] = "Basic Code ÄŞ·­ÒİÄ‚Ì‚·‚×‚Ä‚Ì•ÏX‚Í¸‚í‚ê‚Ü‚µ‚½BµØ¼ŞÅÙ‚Ì VBA Makrocode‚ª‚»‚Ì‘ã‚è‚É•Û‘¶‚³‚ê‚Ü‚·B";
-        TEXT[ korean ] = "Basic-Code°¡ º¯°æµÇ¾î ÀÌÁ¦´Â ¿øº»À¸·Î ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.";
+        TEXT[ korean ] = "Basic-Code¿¡ ´ëÇÑ ¸ğµç º¯°æ»çÇ×Àº »ó½ÇµË´Ï´Ù.  ´ë½Å VBA ¸ÅÅ©·ÎÄÚµå°¡ ÀúÀåµË´Ï´Ù.";
         TEXT[ chinese_simplified ] = "¶ªÊ§ÁË¶ÔBasic CodeÎÄµµ½øĞĞµÄ¸ü¸Ä¡£´æÅÌµÄÖ»ÊÇÔ´VBAºêÂë¡£";
         TEXT[ chinese_traditional ] = "¤å¥óªº Basic ½X©Ò¦³ÅÜ§ó¤w¸g¬y¥¢¡C¤w¸gÀx¦s·½ VBA ¥¨¶°¡C";
         TEXT[ turkish ] = "Basic Code belgesindeki tüm değişiklikler kaybolacak. Bunun yerine orjinal VBA Macrocode kaydedilecek.";
@@ -635,7 +635,7 @@ Resource RID_SVXERRCODE
         TEXT[ polish ] = "Zawarty w dokumencie oryginalny VBA Basic Code nie zostanie zapisany.";
         TEXT[ portuguese_brazilian ] = "The original VBA basic code contained in the document will no be saved.";
         TEXT[ japanese ] = "ÄŞ·­ÒİÄ‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éµØ¼ŞÅÙ‚Ì VBA Basic Code ‚Í•Û‘¶‚³‚ê‚Ü‚¹‚ñB";
-        TEXT[ korean ] = "The original VBA basic code contained in the document will no be saved.";
+        TEXT[ korean ] = "¹®¼­¿¡ Æ÷ÇÔµÇ¾î ÀÖ´Â ¿ø·¡ VBA basic code  ÀúÀåµÇÁö ¾Ê½À´Ï´Ù.";
         TEXT[ chinese_simplified ] = "²»»á´æÅÌÎÄµµÖĞº¬ÓĞµÄÔ´VBA Basic Code¡£";
         TEXT[ chinese_traditional ] = "¤å¥ó§t¦³ªº·½ VBA basic ½X¤£·|³QÀx¦s¡C";
         TEXT[ turkish ] = "Belgede bulunan ilk VBA basic kodu kaydedilmeyecek.";
