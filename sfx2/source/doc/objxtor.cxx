@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:18:31 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,9 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
@@ -222,10 +224,10 @@ SfxObjectShell::SfxObjectShell
 */
 
 :   pImp( new SfxObjectShell_Impl ),
-    _pFactory( 0 ),
-    eCreateMode(eMode),
+    pMedium(0),
     pStyleSheetPool(0),
-    pMedium(0)
+    eCreateMode(eMode),
+    _pFactory( 0 )
 {
     DBG_CTOR(SfxObjectShell, 0);
 
