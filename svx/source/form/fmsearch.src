@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:39:22 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ japanese ] = "υπ";
         Text[ korean ] = "Γ£ΐ» ΄λ»σ";
         Text[ chinese_simplified ] = "ΛΡΡ°";
-        Text[ chinese_traditional ] = "΄M§δ¤Ί®e";
+        Text[ chinese_traditional ] = "·j΄M¤Ί®e";
         Text[ arabic ] = "ΗαΘΝΛ Ϊδ";
         Text[ turkish ] = "Ara:";
     };
@@ -421,7 +421,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ russian ] = "Òξχνϋι οξθρκ";
         Text[ polish ] = "Dok³adne wyszukiwanie";
         Text[ japanese ] = "®‘S‚Ι“―κ‚Θ‚ΰ‚Μ‚Μυ";
-        Text[ chinese_traditional ] = "Ίλ½T΄M§δ";
+        Text[ chinese_traditional ] = "Ίλ½T·j΄M";
         Text[ arabic ] = "ΘΝΛ Οήνή";
         Text[ greek ] = "Ακριβής αναζήτηση";
         Text[ korean ] = "»σΌΌΗΟ°Τ Γ£±β";
@@ -449,7 +449,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ russian ] = "Ξαπΰςνϋι οξθρκ";
         Text[ polish ] = "Szukaj wstecz";
         Text[ japanese ] = "γ–ί‚θ‚µ‚Δυ";
-        Text[ chinese_traditional ] = "¦V«α΄M§δ";
+        Text[ chinese_traditional ] = "¦V«α·j΄M";
         Text[ arabic ] = "ΘΝΛ ααΞαέ";
         Text[ greek ] = "Ανα~ζήτηση πίσω";
         Text[ korean ] = "µΪ·Ξ Γ£±β";
@@ -682,7 +682,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ russian ] = "Νΰιςθ";
         Text[ polish ] = "Szukaj";
         Text[ japanese ] = "υ";
-        Text[ chinese_traditional ] = "΄M§δ";
+        Text[ chinese_traditional ] = "·j΄M";
         Text[ arabic ] = "ΘΝΛ";
         Text[ greek ] = "Aναζήτηση";
         Text[ korean ] = "Γ£±β";
@@ -756,7 +756,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     Text[ portuguese_brazilian ] = "Data record search";
     Text[ japanese ] = "Γή°ΐ ΪΊ°Δή‚Μυ";
     Text[ chinese_simplified ] = "ΛΡΡ°ΚύΎέΧι";
-    Text[ chinese_traditional ] = "΄M§δΌΖΥu¶µ¥Ψ";
+    Text[ chinese_traditional ] = "·j΄MΌΖΎΪ¶µ¥Ψ";
     Text[ arabic ] = "ΗαΘΝΛ Ϊδ ΣΜα";
     Text[ greek ] = "Αναζήτηση εγγραφής";
     Text[ korean ] = "µ¥ΐΜΕΝ ·ΉΔΪµε Γ£±β";
@@ -807,7 +807,7 @@ String RID_STR_RECORDSEARCH_BUTTONS
     Text[ russian ] = "ρ νΰχΰλΰ;~ρ κξνφΰ;~Νΰιςθ;~Ξςμενθςό";
     Text[ polish ] = "od koρca;od poczΉtku;Szukaj;Anuluj";
     Text[ japanese ] = "Ε‰‚©‚η;Εγ‚©‚η;υ;·¬έΎΩ";
-    Text[ chinese_traditional ] = "±q°_©l΅F±qµ²§ΐ΅F΄M§δ΅F¨ϊ®ψ";
+    Text[ chinese_traditional ] = "±q°_©l΅F±qµ²§ΐ΅F·j΄M΅F¨ϊ®ψ";
     Text[ arabic ] = "γδ ΗαΘΟΗνΙΊ γδ ΗαδεΗνΙΊ ΘΝΛΊ ΕαΫΗΑ";
     Text[ greek ] = "Από την αρχή;Από το τέλος;Αναζήτη~ση;~Ακύρωση";
     Text[ korean ] = "Γ³ΐ½ΊΞΕΝ;³΅Ώ΅Ό­ ΊΞΕΝ;Γ£±β;ΓλΌÒ";
@@ -859,7 +859,7 @@ ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
     Message[ portuguese_brazilian ] = "Es trat ein nicht nδher bekannter Fehler auf. Die Suche konnte nicht beendet werden !";
     Message[ japanese ] = "‚ζ‚­‚ν‚©‚η‚Θ‚Ά΄Χ°‚ª¶‚¶‚ά‚µ‚½Bυ‚πI—Ή‚Ε‚«‚ά‚Ή‚ρ!";
     Message[ chinese_simplified ] = "³φΟΦÒ»Έφ²»ΓχµΔ΄νΞσ΅£Ξή·¨½αΚψΛΡΡ°ΓόΑξ£΅";
-    Message[ chinese_traditional ] = "¥X²{¤@­Σ¤£©ϊªΊΏω»~΅CµLªkµ²§τ΄M§δ©R¥O΅I";
+    Message[ chinese_traditional ] = "¥X²{¤@­Σ¤£©ϊªΊΏω»~΅CµLªkµ²§τ·j΄M΅I";
     Message[ arabic ] = "ΝΟΛ ΞΨΓ ΫνΡ γΪΡζέ. ΚΪΠΡ ΕδεΗΑ ΗαΘΝΛ !";
     Message[ greek ] = "Παρουσιάστηκε άγνωστο σφάλμα. Η αναζήτηση δεν ήταν δυνατόν να ολοκληρωθεί!";
     Message[ korean ] = "ΎΛ·ΑΑφΑφ ΎΚΐΊ Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω. Γ£±βΈ¦ ΑΎ·αΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω!";
@@ -885,7 +885,7 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ russian ] = "Οεπεοξλνενθε, Οξθρκ οπξδξλζεν β νΰχΰλε;Οεπεοξλνενθε, Οξθρκ οπξδξλζεν β κξνφε";
     Text[ polish ] = "Przepe³nienie, Kontynuuj wyszukiwanie na poczΉtku;Przepe³nienie, Kontynuuj wyszukiwanie na koρcu";
     Text[ japanese ] = "µ°Κή°ΜΫ°Aυ‚ΝΕ‰‚Ε‘±s;µ°Κή°ΜΫ°Aυ‚ΝΕγ‚Ε‘±s";
-    Text[ chinese_traditional ] = "·Έ­Θ΅A΄M§δ±q°_©l¦μΈmΔ~Δς΅F·Έ­Θ΅A΄M§δ±qµ²§ΐ¦μΈmΔ~Δς";
+    Text[ chinese_traditional ] = "·Έ­Θ΅A·j΄M±q°_©l¦μΈmΔ~Δς΅F·Έ­Θ΅A·j΄M±qµ²§ΐ¦μΈmΔ~Δς";
     Text[ arabic ] = "έΗΖΦ΅ Κγ γζΗΥαΙ ΗαΘΝΛ ΪδΟ ΗαΘΟΗνΙ; έΗΖΦ΅ Κγ γζΗΥαΙ ΗαΘΝΛ ΪδΟ ΗαδεΗνΙ";
     Text[ greek ] = "Υπερχείλιση, Η αναζήτηση συνεχίστηκε από την αρχή,Υπερχείλιση, Η αναζήτηση συνεχίστηκε από το τέλος";
     Text[ korean ] = "ΏΐΉφΗΓ·Ξ- Γ£±β΄Β Γ³ΐ½ΊΞΕΝ °θΌΣµΗΎϊΐ½;ΏΐΉφΗΓ·Ξ-Γ£±β΄Β ³΅Ώ΅Ό­ ΊΞΕΝ °θΌΣµΗΎϊΐ½";
@@ -909,7 +909,7 @@ String RID_STR_SEARCH_COUNTING
     Text[ russian ] = "Οξδρχες ηΰοθρει";
     Text[ polish ] = "Licz rekordy";
     Text[ japanese ] = "ΪΊ°Δή‚π”‚¦‚ι";
-    Text[ chinese_traditional ] = "·Έ­Θ΅A΄M§δ±q­ΊΊέΔ~Δς΅F·Έ­Θ΅A΄M§δ±q§ΐΊέΔ~Δς";
+    Text[ chinese_traditional ] = "·Έ­Θ΅A·j΄M±q­ΊΊέΔ~Δς΅F·Έ­Θ΅A·j΄M±q§ΐΊέΔ~Δς";
     Text[ arabic ] = "ΪΟ ΣΜαΗΚ ΗαΘνΗδΗΚ";
     Text[ greek ] = "αρίθμηση εγγραφών";
     Text[ korean ] = "·ΉΔΪµε Όφ ΌΌ±β";
