@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 16:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,10 @@
 
 #include "apitreeaccess.hxx"
 
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+
 #include "anynoderef.hxx"
 #include "valueref.hxx"
 
