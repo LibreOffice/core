@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:07:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1342,7 +1342,7 @@ BOOL Ww1Manager::IsValidFib(const BYTE*p, USHORT size)
     return ((
         ((W1_FIB*)p)->wIdentGet() == 42396
          && ((W1_FIB*)p)->nFibGet() == 33 // ww1
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
      || ((W1_FIB*)p)->wIdentGet() == 42459
          && ((W1_FIB*)p)->nFibGet() == 45 // ww2b
 #endif
