@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:35 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1818,10 +1818,10 @@ void AssistentDlgImpl::DeletePassords()
 
 BOOL AssistentDlgImpl::IsOwnFormat( const String& rPath )
 {
-    INetURLObject aURL;
-    aURL.SetSmartURL( rPath );
+    INetURLObject   aURL( rPath );
+    String          aExt( aURL.GetFileExtension() );
 
-    String aExt( aURL.GetFileExtension() );
+    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     return !aExt.EqualsIgnoreCaseAscii( "ppt" );
 }

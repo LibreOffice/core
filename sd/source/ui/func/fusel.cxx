@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:28:08 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,13 +1326,11 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                     // Execute application
                     String aStrApplication = pInfo->aBookmark;
-                    INetURLObject aURLObj( ::URIHelper::SmartRelToAbs( aStrApplication, FALSE,
-                                                                       INetURLObject::WAS_ENCODED,
-                                                                       INetURLObject::DECODE_UNAMBIGUOUS ) );
-                    aStrApplication = aURLObj.PathToFileName();
-
-                    NAMESPACE_VOS(OProcess) aApp( aStrApplication);
-                    NAMESPACE_VOS(OArgumentList) aParameters;
+                    INetURLObject aURL( ::URIHelper::SmartRelToAbs( aStrApplication, FALSE,
+                                                                    INetURLObject::WAS_ENCODED,
+                                                                    INetURLObject::DECODE_UNAMBIGUOUS ) );
+                    NAMESPACE_VOS(OProcess)         aApp( aURL.GetMainURL() );
+                    NAMESPACE_VOS(OArgumentList)    aParameters;
 
                     aApp.execute( (NAMESPACE_VOS(OProcess)::TProcessOption)
                                   (NAMESPACE_VOS(OProcess)::TOption_SearchPath |

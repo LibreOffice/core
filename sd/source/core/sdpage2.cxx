@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ void __EXPORT SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
         INetURLObject aURLObj(::URIHelper::SmartRelToAbs(aSoundFileRel, FALSE,
                                                          INetURLObject::WAS_ENCODED,
                                                          INetURLObject::DECODE_UNAMBIGUOUS));
-        aSoundFile = aURLObj.PathToFileName();
+        aSoundFile = aURLObj.GetMainURL();
     }
 
     // ab hier werden Daten der Versionen >=4 eingelesen

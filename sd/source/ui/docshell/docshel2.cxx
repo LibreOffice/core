@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,20 +152,25 @@ void __EXPORT SdDrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
 
     delete pView;
 
-//    Fuer Testzwecke: Bitte nicht entfernen!
+//  Fuer Testzwecke: Bitte nicht entfernen!
 //
-//    GDIMetaFile* pMtf = pOut->GetConnectMetaFile();
+//  GDIMetaFile* pMtf = pOut->GetConnectMetaFile();
 //
-//    if (pMtf)
-//    {
-//        String aFile("d:\\sd\\winmsci.pro\\bin\\gdi.mtf");
-//        SvFileStream aFStream(aFile, STREAM_WRITE);
+//  if( pMtf )
+//  {
+//      String aURLStr;
 //
-//        pMtf->WindStart();
-//        aFStream << *pMtf;
+//      if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( String( RTL_CONSTASCII_USTRINGPARAM( "d:\\gdi.mtf" ) ), aURLStr ) )
+//      {
+//          SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE | STREAM_TRUNC );
 //
-//        aFStream.Close();
-//    }
+//          if( pOStm )
+//          {
+//              *pOStm << *pMtf;
+//              delete pOStm;
+//          }
+//      }
+//  }
 }
 
 /*************************************************************************

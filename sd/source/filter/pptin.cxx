@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-30 12:41:29 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <svx/numitem.hxx>
 
+#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
@@ -142,10 +145,6 @@
 
 #ifndef _SVX_TSPTITEM_HXX
 #include <svx/tstpitem.hxx>
-#endif
-
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
 #endif
 
 #pragma hdrstop
@@ -1496,10 +1495,10 @@ String SdPPTImport::ReadSound(UINT32 nSoundRef) const
 
                     for( ULONG n = 0; ( n < pSoundList->Count() ) && !bSoundExists; n++ )
                     {
-                        INetURLObject aURL;
-                        aURL.SetSmartURL( *(String*)pSoundList->GetObject( n ) );
-                        String aSoundName( aURL.GetName() );
-                        if ( aSoundName == aRetval )
+                        INetURLObject   aURL( *(String*)pSoundList->GetObject( n ) );
+                        String          aSoundName( aURL.GetName() );
+
+                        if( aSoundName == aRetval )
                         {
                             aRetval = *(String*)pSoundList->GetObject( n );
                             bSoundExists = TRUE;
@@ -1517,24 +1516,30 @@ String SdPPTImport::ReadSound(UINT32 nSoundRef) const
                         DffRecordHeader aSoundDataRecHd;
                         if ( SeekToRec( rStCtrl, PPT_PST_SoundData, nStrLen, &aSoundDataRecHd, 0 ) )
                         {
-                            String          aGalleryDir( SFX_INIMANAGER()->Get( SFX_KEY_GALLERY_DIR ) );
-                            INetURLObject   aGalleryUserSound;
-                            aGalleryUserSound.SetSmartURL( aGalleryDir.GetToken( aGalleryDir.GetTokenCount( ';' ) - 1 ) );
+                            String          aGalleryDir( SvtPathOptions().GetGalleryPath() );
+                            INetURLObject   aGalleryUserSound( aGalleryDir.GetToken( aGalleryDir.GetTokenCount( ';' ) - 1 ) );
+
                             aGalleryUserSound.Append( aRetval );
                             UINT32 nSoundLen = aSoundDataRecHd.nRecLen;
                             UINT8* pBuf = new UINT8[ nSoundLen ];
+
                             rStCtrl.Read( pBuf, nSoundLen );
-                            SvFileStream aOStm( aGalleryUserSound.PathToFileName(), STREAM_WRITE | STREAM_TRUNC );
-                            aOStm.Write( pBuf, nSoundLen );
-                            UINT32 nFileError = aOStm.GetError();
-                            aOStm.Close();
-                            delete[] pBuf;
-                            // Hat das Schreiben in die Gallery geklappt?
-                            if ( nFileError == ERRCODE_NONE )
+                            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
+
+                            if( pOStm )
                             {
-                                GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aGalleryUserSound.PathToFileName() );
-                                aRetval = aGalleryUserSound.GetFull();
+                                pOStm->Write( pBuf, nSoundLen );
+
+                                if( pOStm->GetError() == ERRCODE_NONE )
+                                {
+                                    GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aGalleryUserSound.GetMainURL() );
+                                    aRetval = aGalleryUserSound.GetMainURL();
+                                }
+
+                                delete pOStm;
                             }
+
+                            delete[] pBuf;
                         }
                     }
                 }

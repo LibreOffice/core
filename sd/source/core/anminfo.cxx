@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anminfo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ void SdAnimationInfo::ReadData(SvStream& rIn)
         INetURLObject aURLObj(::URIHelper::SmartRelToAbs( aSoundFileRel, FALSE,
                                                           INetURLObject::WAS_ENCODED,
                                                           INetURLObject::DECODE_UNAMBIGUOUS ));
-        aSoundFile = aURLObj.PathToFileName();
+        aSoundFile = aURLObj.GetMainURL();
     }
 
     // ab hier werden Daten der Versionen > 1 eingelesen
@@ -363,10 +363,7 @@ void SdAnimationInfo::ReadData(SvStream& rIn)
             INetURLObject aURLObj(::URIHelper::SmartRelToAbs(aBookmarkRel, FALSE,
                                                              INetURLObject::WAS_ENCODED,
                                                              INetURLObject::DECODE_UNAMBIGUOUS));
-            if (eClickAction == presentation::ClickAction_DOCUMENT || eClickAction == presentation::ClickAction_PROGRAM)
-                aBookmark = aURLObj.GetMainURL();
-            else
-                aBookmark = aURLObj.PathToFileName();
+            aBookmark = aURLObj.GetMainURL();
         }
         else
             rIn.ReadByteString( aBookmark, eTextEnc );
@@ -376,7 +373,7 @@ void SdAnimationInfo::ReadData(SvStream& rIn)
         INetURLObject aURLObjSound(::URIHelper::SmartRelToAbs(aSecondSoundFileRel, FALSE,
                                                               INetURLObject::WAS_ENCODED,
                                                               INetURLObject::DECODE_UNAMBIGUOUS));
-        aSecondSoundFile = aURLObjSound.PathToFileName();
+        aSecondSoundFile = aURLObjSound.GetMainURL();
 
         rIn >> nTemp; bInvisibleInPresentation = (BOOL)nTemp;
         rIn >> nTemp; nVerb = (USHORT)nTemp;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,9 @@
 #ifndef _SV_EXCHANGE_HXX //autogen
 #include <vcl/exchange.hxx>
 #endif
-
-
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _EDITDATA_HXX
 #include <svx/editdata.hxx>
 #endif
@@ -119,9 +120,6 @@
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
 #endif
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
@@ -491,8 +489,7 @@ BOOL SdView::InsertData(SvDataObjectRef pDataObject, const Point& rPos,
             if ( aData.GetData(xStream) )       // Setzt auch die BufferSize
             {
                 xStream->SetVersion(SOFFICE_FILEFORMAT_NOW);
-                FmFormModel* pModel = new FmFormModel(SFX_APP()->GetAppIniManager()
-                                      ->Get(SFX_KEY_PALETTE_PATH), NULL, pDocSh);
+                FmFormModel* pModel = new FmFormModel( SvtPathOptions().GetPalettePath(), NULL, pDocSh );
                 xStream->Seek(0);
                 pModel->SetStreamingSdrModel(TRUE);
                 pModel->GetItemPool().Load(*xStream);

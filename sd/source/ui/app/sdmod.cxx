@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 17:59:52 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -357,11 +363,14 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
 
         if( !xOptionStorage.Is() )
         {
-            INetURLObject aURL;
+            INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
 
-            aURL.SetSmartURL( SFX_APP()->GetAppIniManager()->Get( SFX_KEY_USERCONFIG_PATH ) );
             aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "drawing.cfg" ) ) );
-            xOptionStorage = new SvStorage( aURL.PathToFileName() );
+
+            SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READWRITE );
+
+            if( pStm )
+                xOptionStorage = new SvStorage( pStm, TRUE );
         }
 
         if( DOCUMENT_TYPE_DRAW == eType )

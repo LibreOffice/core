@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-09 12:18:45 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 
+#include <string>
 #include <algorithm>
 
 using namespace ::com::sun::star;

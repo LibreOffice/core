@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-25 15:44:37 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,16 +64,12 @@
 #endif
 
 #define ITEMID_FIELD    EE_FEATURE_FIELD
+
 #ifndef _SVX_FLDITEM_HXX //autogen
 #include <svx/flditem.hxx>
 #endif
-
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
 #endif
 #ifndef _INETHIST_HXX //autogen
 #include <svtools/inethist.hxx>
@@ -103,6 +99,7 @@
 #include <sfx2/request.hxx>
 #endif
 
+#include <sfx2/inimgr.hxx>
 #include <svx/svdfield.hxx>
 
 #define ITEMID_SPELLCHECK   0

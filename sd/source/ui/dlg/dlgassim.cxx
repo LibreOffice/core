@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgassim.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-13 11:33:20 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,9 @@
  *
  ************************************************************************/
 
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
-#endif
-
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -348,16 +343,11 @@ void TemplateCache::Clear()
 
 void TemplateCache::Load()
 {
-    INetURLObject aURL;
-
-    aURL.SetSmartURL( SFX_APP()->GetAppIniManager()->Get( SFX_KEY_USERCONFIG_PATH ) );
-    aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "template.sod" ) ) );
-
-    SfxMedium aMedium( aURL.GetMainURL(),
-                    STREAM_READ | STREAM_NOCREATE,
-                    TRUE );               // Download
-
+    INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
+    aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "template.sod" ) ) );
+    SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE ); // Download
     SvStream* pStream = aMedium.GetInStream();
+
     if( !pStream )
         return;
 
@@ -397,16 +387,11 @@ void TemplateCache::Load()
 
 void TemplateCache::Save()
 {
-    INetURLObject aURL;
-
-    aURL.SetSmartURL( SFX_APP()->GetAppIniManager()->Get( SFX_KEY_USERCONFIG_PATH ) );
-    aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "template.sod" ) ) );
-
-    SfxMedium aMedium( aURL.GetMainURL(),
-                    STREAM_WRITE | STREAM_TRUNC,
-                    FALSE );              // Download
-
+    INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
+    aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "template.sod" ) ) );
+    SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, FALSE ); // Download
     SvStream* pStream = aMedium.GetInStream();
+
     if( !pStream )
         return;
 
@@ -451,11 +436,14 @@ TemplateCacheDirEntry* TemplateCache::GetDirEntry( const String& rPath )
 
 TemplateCacheInfo* TemplateCache::GetFileInfo( const String& rPath )
 {
-    INetURLObject   aUrl; aUrl.SetSmartURL( rPath );
+    INetURLObject   aUrl( rPath );
     String          aPath( aUrl.GetPath() );
     String          aName( aUrl.GetName( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
+    DBG_ASSERT( aUrl.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
     TemplateCacheDirEntry* pDir = GetDirEntry( aPath );
+
     if( NULL != pDir )
     {
         for( TemplateCacheInfo* pEntry = pDir->m_aFiles.First(); pEntry; pEntry = pDir->m_aFiles.Next() )
@@ -470,9 +458,11 @@ TemplateCacheInfo* TemplateCache::GetFileInfo( const String& rPath )
 
 TemplateCacheInfo* TemplateCache::AddFileInfo( const String& rPath )
 {
-    INetURLObject aUrl; aUrl.SetSmartURL( rPath );
-    String aPath( aUrl.GetPath() );
-    String aName( aUrl.GetName( INetURLObject::DECODE_UNAMBIGUOUS ) );
+    INetURLObject   aUrl( rPath );
+    String          aPath( aUrl.GetPath() );
+    String          aName( aUrl.GetName( INetURLObject::DECODE_UNAMBIGUOUS ) );
+
+    DBG_ASSERT( aUrl.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     TemplateCacheDirEntry* pDir = GetDirEntry( aPath );
     TemplateCacheInfo* pEntry  = NULL;

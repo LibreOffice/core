@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,14 @@
 #endif
 
 #include <so3/plugin.hxx>
-
 #include <svx/pfiledlg.hxx>
-
 #include <svx/impgrf.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/linkmgr.hxx>
 #include <svx/svdetc.hxx>
+#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 #ifndef _SV_CLIP_HXX //autogen
 #include <vcl/clip.hxx>
 #endif
@@ -176,23 +177,26 @@ FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
     {
         case RET_OK:
         {
-            USHORT nError = 0;
-            Graphic aGraphic;
-            Graphic* pGraphic = pDlg->GetGraphic();
-            String aPath = pDlg->GetPath();
+            USHORT      nError = 0;
+            Graphic     aGraphic;
+            Graphic*    pGraphic = pDlg->GetGraphic();
+            String      aPath( pDlg->GetPath() );
 
-            if (pGraphic)
+            if( pGraphic )
             {
                 aGraphic = *pGraphic;
             }
             else
             {
-                // Graphik noch nicht ueber Preview vorhanden: also laden
                 GraphicFilter&  rFilter = pDlg->GetFilter();
-                FilterProgress  aFilterProgress(&rFilter, pViewSh->GetDocSh());
-                SvFileStream    aIStm( aPath, STREAM_READ | STREAM_SHARE_DENYNONE );
+                FilterProgress  aFilterProgress( &rFilter, pViewSh->GetDocSh() );
+                SvStream*       pIStm = ::utl::UcbStreamHelper::CreateStream( aPath, STREAM_READ | STREAM_SHARE_DENYNONE );
 
-                nError = rFilter.ImportGraphic( aGraphic, aPath, aIStm );
+                if( pIStm )
+                {
+                    nError = rFilter.ImportGraphic( aGraphic, aPath, *pIStm );
+                    delete pIStm;
+                }
             }
 
             if ( nError == 0 && pViewSh->ISA(SdDrawViewShell) )
@@ -545,17 +549,16 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                                                       INetURLObject::WAS_ENCODED,
                                                       INetURLObject::DECODE_UNAMBIGUOUS );
 
-                INetURLObject* pURL = new INetURLObject();
-                pURL->SetSmartProtocol( INET_PROT_FILE );
+                INetURLObject aURL( aStrURL );
 
-                if ( pURL->SetURL( aStrURL ) )
+                if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
                 {
                     // create plugin, initialize, etc.
                     SvFactory * pPlugIn = SvFactory::GetDefaultPlugInFactory();
                     SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
                     SvPlugInObjectRef xObj = &pPlugIn->CreateAndInit( *pPlugIn, aStor );
                     xObj->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
-                    xObj->SetURL( *pURL );
+                    xObj->SetURL( aURL );
                     aIPObj = (SvInPlaceObject*)&xObj;
                 }
                 else

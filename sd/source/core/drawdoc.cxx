@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-25 10:32:36 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
 #endif
 #ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
@@ -215,7 +212,7 @@ SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     FmFormModel(
 #ifndef SVX_LIGHT
-    SFX_APP()->GetAppIniManager()->Get( SFX_KEY_PALETTE_PATH ),
+    SvtPathOptions().GetPalettePath(),
 #else
     String(),
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-30 12:51:38 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,14 +81,14 @@
 
 #include <sfx2/app.hxx>
 #include <tools/urlobj.hxx>
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
 #endif
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
@@ -705,8 +705,7 @@ void SdTPAction::OpenFileDialog()
 
         if( bSound )
         {
-            pFileDialog = new SfxSimpleFileDialog ( this, WB_OPEN | WB_3DLOOK | WB_STDMODAL );
-
+            pFileDialog = new SfxFileDialog ( this, WB_OPEN | WB_3DLOOK | WB_STDMODAL );
             pBtnPreview = new PushButton( pFileDialog, SdResId( RID_PREVIEW_BUTTON ) );
             pBtnPreview->SetClickHdl( LINK( this, SdTPAnimation, ClickPreviewHdl ) );
             pBtnPreview->Show();
@@ -732,9 +731,8 @@ void SdTPAction::OpenFileDialog()
 #endif
 
             if( !aFile.Len() )
-            {
-                aFile = SFX_APP()->GetAppIniManager()->Get( SFX_KEY_GRAPHICS_PATH );
-            }
+                aFile = SvtPathOptions().GetGraphicPath();
+
             pFileDialog->SetPath( aFile );
 
             if ( pFileDialog->Execute() )
@@ -785,9 +783,7 @@ void SdTPAction::OpenFileDialog()
             SfxFileDialog* pSfxFileDlg = new SfxFileDialog ( this, WB_OPEN | WB_3DLOOK | WB_STDMODAL );
 
             if (bDocument && !aFile.Len())
-            {
-                aFile = SFX_APP()->GetAppIniManager()->Get( SFX_KEY_WORK_PATH );
-            }
+                aFile = SvtPathOptions().GetWorkPath();
 
             pSfxFileDlg->SetPath( aFile );
 

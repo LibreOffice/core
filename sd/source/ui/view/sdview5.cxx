@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,16 +334,16 @@ IMPL_LINK_INLINE_START( SdView, DropInsertFileHdl, Timer*, pTimer )
     BOOL bOK = FALSE;
     const SfxFilter* pFilter = NULL;
 
-    SfxMedium aSfxMedium(aDropFile, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE);
+    SfxMedium aSfxMedium( aDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
     ErrCode nErr = SFX_APP()->GetFilterMatcher().
                               GuessFilter(aSfxMedium, &pFilter, SFX_FILTER_IMPORT,
                                           SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
     if (pFilter && !nErr)
     {
-        GraphicFilter* pGraphicFilter = GetGrfFilter();
-        String aFilterName = pFilter->GetFilterName();
-        USHORT nFormat = pGraphicFilter->GetImportFormatNumber(aFilterName);
+        GraphicFilter*  pGraphicFilter = GetGrfFilter();
+        String          aFilterName( pFilter->GetFilterName() );
+        USHORT          nFormat = pGraphicFilter->GetImportFormatNumber(aFilterName);
 
         if (aFilterName.EqualsAscii( "Text" )               ||
             aFilterName.EqualsAscii( "Rich Text Format" )   ||
@@ -365,28 +365,27 @@ IMPL_LINK_INLINE_START( SdView, DropInsertFileHdl, Timer*, pTimer )
                                                    pDoc, aReq);
             delete pFunc;
         }
-        else if (nFormat != GRFILTER_FORMAT_DONTKNOW)
+        else if( nFormat != GRFILTER_FORMAT_DONTKNOW )
         {
             /******************************************************************
             * Graphik-Format
             ******************************************************************/
             FilterProgress  aFilterProgress(pGraphicFilter, pViewSh->GetDocSh());
-            Graphic aGraphic;
+            Graphic         aGraphic;
 
             // keine native Tempdatei anlegen (DummyLink setzen)
             aGraphic.SetLink( GfxLink() );
 
-            SvFileStream aIStm( aDropFile, STREAM_READ | STREAM_SHARE_DENYNONE );
+            SvStream* pIStm = aSfxMedium.GetInStream();
 
-            if( !pGraphicFilter->ImportGraphic(aGraphic, aDropFile, aIStm, nFormat ) )
+            if( pIStm && !pGraphicFilter->ImportGraphic( aGraphic, aDropFile, *pIStm, nFormat ) )
             {
                 bOK = TRUE;
+
                 SdrGrafObj* pGrafObj = InsertGraphic(aGraphic, eAction, aDropPos, NULL, NULL);
 
-                if (pGrafObj)
-                {
-                    pGrafObj->SetGraphicLink(aDropFile, aFilterName);
-                }
+                if( pGrafObj )
+                    pGrafObj->SetGraphicLink( aDropFile, aFilterName );
             }
         }
     }

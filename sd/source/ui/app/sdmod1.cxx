@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-11 08:29:45 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#include <svtools/iniman.hxx>
 #include <svtools/lckbitem.hxx>
 #ifndef _SFXFRAME_HXX //autogen
 #include <sfx2/frame.hxx>
@@ -82,9 +81,6 @@
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
 #endif
 #ifndef _SVX_SVXENUM_HXX //autogen
 #include <svx/svxenum.hxx>

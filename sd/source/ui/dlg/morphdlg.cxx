@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:41:01 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,34 +67,24 @@
 #include "morphdlg.hxx"
 #include "morphdlg.hrc"
 
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
-#endif
-
 #ifndef _SV_CONFIG_HXX //autogen
 #include <vcl/config.hxx>
 #endif
-
 #ifndef SVX_XFILLIT0_HXX //autogen
 #include <svx/xfillit0.hxx>
 #endif
-
 #ifndef _SVX_XLINEIT0_HXX //autogen
 #include <svx/xlineit0.hxx>
 #endif
-
 #ifndef _XENUM_HXX //autogen
 #include <svx/xenum.hxx>
 #endif
-
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
 #endif
-
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
 #endif
-
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif

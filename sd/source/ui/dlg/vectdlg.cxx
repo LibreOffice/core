@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 16:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #include "vectdlg.hxx"
 #include "vectdlg.hrc"
 
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
-#endif
 #ifndef _SV_CONFIG_HXX //autogen
 #include <vcl/config.hxx>
 #endif
