@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 11:08:24 $
+ *  last change: $Author: mib $ $Date: 2000-10-11 07:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,7 @@ XML_CONSTASCII_ACTION( sXML_font_style_name, "font-style-name" );
 XML_CONSTASCII_ACTION( sXML_font_variant, "font-variant" );
 XML_CONSTASCII_ACTION( sXML_font_weight, "font-weight" );
 XML_CONSTASCII_ACTION( sXML_footer, "footer" );
+XML_CONSTASCII_ACTION( sXML_footer_left, "footer-left" );
 XML_CONSTASCII_ACTION( sXML_footnote, "footnote" );
 XML_CONSTASCII_ACTION( sXML_footnote_body, "footnote-body" );
 XML_CONSTASCII_ACTION( sXML_footnote_citation, "footnote-citation" );
@@ -502,6 +503,7 @@ XML_CONSTASCII_ACTION( sXML_hatchstyle_double, "double" );
 XML_CONSTASCII_ACTION( sXML_hatchstyle_single, "single" );
 XML_CONSTASCII_ACTION( sXML_hatchstyle_triple, "triple" );
 XML_CONSTASCII_ACTION( sXML_header, "header" );
+XML_CONSTASCII_ACTION( sXML_header_left, "header-left" );
 XML_CONSTASCII_ACTION( sXML_height, "height" );
 XML_CONSTASCII_ACTION( sXML_help_file_name, "help-file-name" );
 XML_CONSTASCII_ACTION( sXML_help_id, "help-id" );

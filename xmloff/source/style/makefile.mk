@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: bm $ $Date: 2000-09-27 13:57:18 $
+#   last change: $Author: mib $ $Date: 2000-10-11 07:49:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,130 +77,131 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
-        xmlastpl.cxx	\
-        xmlexpit.cxx	\
-        xmlimpit.cxx	\
-        xmlitem.cxx		\
-        xmlitmpr.cxx	\
-        xmlnumfe.cxx	\
-        xmlnumfi.cxx	\
-        xmlstyle.cxx	\
-        xmltabi.cxx		\
-        xmlnumi.cxx		\
-        xmlnume.cxx		\
-        xmltabe.cxx		\
-        xmlaustp.cxx	\
+        adjushdl.cxx	\
+        backhdl.cxx		\
+        bordrhdl.cxx	\
+        breakhdl.cxx	\
+        cdouthdl.cxx	\
+        chrhghdl.cxx	\
+        chrlohdl.cxx	\
+        csmaphdl.cxx	\
+        escphdl.cxx		\
+        fonthdl.cxx		\
         impastp1.cxx    \
         impastp2.cxx    \
         impastp3.cxx    \
         impastp4.cxx    \
-        xmlprmap.cxx	\
-        xmlexppr.cxx	\
-        xmlimppr.cxx	\
-        xmlprcon.cxx	\
-        prhdlfac.cxx	\
-        xmlprhdl.cxx	\
-        xmlbahdl.cxx	\
-        uniref.cxx		\
-        shadwhdl.cxx	\
-        splithdl.cxx	\
-        shdwdhdl.cxx	\
         kernihdl.cxx	\
+        lspachdl.cxx	\
+        numehelp.cxx	\
         opaquhdl.cxx	\
-        adjushdl.cxx	\
-        backhdl.cxx		\
-        breakhdl.cxx	\
-        cdouthdl.cxx	\
-        csmaphdl.cxx	\
-        fonthdl.cxx		\
         postuhdl.cxx	\
+        prhdlfac.cxx	\
+        prstylei.cxx	\
+        shadwhdl.cxx	\
+        shdwdhdl.cxx	\
+        styleexp.cxx	\
+        splithdl.cxx	\
         tabsthdl.cxx	\
         undlihdl.cxx	\
+        uniref.cxx		\
         weighhdl.cxx	\
-        prstylei.cxx	\
-        styleexp.cxx	\
-        escphdl.cxx		\
-        chrhghdl.cxx	\
-        chrlohdl.cxx	\
-        lspachdl.cxx	\
-        bordrhdl.cxx	\
+        xmlastpl.cxx	\
+        xmlaustp.cxx	\
+        xmlbahdl.cxx	\
+        xmlexpit.cxx	\
+        xmlexppr.cxx	\
+        xmlimpit.cxx	\
+        xmlimppr.cxx	\
+        xmlitem.cxx		\
+        xmlitmpr.cxx	\
+        xmlnume.cxx		\
+        xmlnumfe.cxx	\
+        xmlnumfi.cxx	\
+        xmlnumi.cxx		\
+        xmlprcon.cxx	\
+        xmlprhdl.cxx	\
+        xmlprmap.cxx	\
+        xmlstyle.cxx	\
+        xmltabe.cxx		\
+        xmltabi.cxx		\
+        DashStyle.cxx					\
         EnumPropertyHdl.cxx				\
-        NamedBoolPropertyHdl.cxx		\
-        bordrhdl.cxx	\
-        numehelp.cxx	\
         FillStyleContext.cxx			\
         GradientStyle.cxx				\
         HatchStyle.cxx					\
         ImageStyle.cxx					\
-        TransGradientStyle.cxx			\
         MarkerStyle.cxx					\
-        DashStyle.cxx					\
-        XMLElementPropertyContext.cxx	\
+        NamedBoolPropertyHdl.cxx		\
+        TransGradientStyle.cxx			\
+        XMLClipPropertyHandler.cxx		\
         XMLConstantsPropertyHandler.cxx	\
-        XMLClipPropertyHandler.cxx
+        XMLElementPropertyContext.cxx	\
+        XMLPageExport.cxx
 
 
 SLOFILES =	\
-        $(SLO)$/xmlastpl.obj	\
-        $(SLO)$/xmlexpit.obj	\
-        $(SLO)$/xmlimpit.obj	\
-        $(SLO)$/xmlitem.obj		\
-        $(SLO)$/xmlitmpr.obj	\
-        $(SLO)$/xmlnumfe.obj	\
-        $(SLO)$/xmlnumfi.obj	\
-        $(SLO)$/xmlstyle.obj	\
-        $(SLO)$/xmltabi.obj		\
-        $(SLO)$/xmlnumi.obj		\
-        $(SLO)$/xmlnume.obj		\
-        $(SLO)$/xmltabe.obj		\
-        $(SLO)$/xmlaustp.obj	\
-        $(SLO)$/impastp1.obj	\
-        $(SLO)$/impastp2.obj	\
-        $(SLO)$/impastp3.obj	\
-        $(SLO)$/impastp4.obj	\
-        $(SLO)$/xmlprmap.obj	\
-        $(SLO)$/xmlexppr.obj	\
-        $(SLO)$/xmlimppr.obj	\
-        $(SLO)$/xmlprcon.obj	\
-        $(SLO)$/prhdlfac.obj	\
-        $(SLO)$/xmlprhdl.obj	\
-        $(SLO)$/xmlbahdl.obj	\
-        $(SLO)$/uniref.obj		\
-        $(SLO)$/shadwhdl.obj	\
-        $(SLO)$/splithdl.obj	\
-        $(SLO)$/shdwdhdl.obj	\
-        $(SLO)$/kernihdl.obj	\
-        $(SLO)$/opaquhdl.obj	\
         $(SLO)$/adjushdl.obj	\
         $(SLO)$/backhdl.obj		\
+        $(SLO)$/bordrhdl.obj	\
         $(SLO)$/breakhdl.obj	\
         $(SLO)$/cdouthdl.obj	\
-        $(SLO)$/csmaphdl.obj	\
-        $(SLO)$/fonthdl.obj		\
-        $(SLO)$/postuhdl.obj	\
-        $(SLO)$/tabsthdl.obj	\
-        $(SLO)$/undlihdl.obj	\
-        $(SLO)$/weighhdl.obj	\
-        $(SLO)$/prstylei.obj	\
-        $(SLO)$/styleexp.obj	\
-        $(SLO)$/escphdl.obj		\
         $(SLO)$/chrhghdl.obj	\
         $(SLO)$/chrlohdl.obj	\
+        $(SLO)$/csmaphdl.obj	\
+        $(SLO)$/escphdl.obj		\
+        $(SLO)$/fonthdl.obj		\
+        $(SLO)$/impastp1.obj    \
+        $(SLO)$/impastp2.obj    \
+        $(SLO)$/impastp3.obj    \
+        $(SLO)$/impastp4.obj    \
+        $(SLO)$/kernihdl.obj	\
         $(SLO)$/lspachdl.obj	\
-        $(SLO)$/bordrhdl.obj	\
-        $(SLO)$/EnumPropertyHdl.obj				\
-        $(SLO)$/NamedBoolPropertyHdl.obj		\
         $(SLO)$/numehelp.obj	\
+        $(SLO)$/opaquhdl.obj	\
+        $(SLO)$/postuhdl.obj	\
+        $(SLO)$/prhdlfac.obj	\
+        $(SLO)$/prstylei.obj	\
+        $(SLO)$/shadwhdl.obj	\
+        $(SLO)$/shdwdhdl.obj	\
+        $(SLO)$/styleexp.obj	\
+        $(SLO)$/splithdl.obj	\
+        $(SLO)$/tabsthdl.obj	\
+        $(SLO)$/undlihdl.obj	\
+        $(SLO)$/uniref.obj		\
+        $(SLO)$/weighhdl.obj	\
+        $(SLO)$/xmlastpl.obj	\
+        $(SLO)$/xmlaustp.obj	\
+        $(SLO)$/xmlbahdl.obj	\
+        $(SLO)$/xmlexpit.obj	\
+        $(SLO)$/xmlexppr.obj	\
+        $(SLO)$/xmlimpit.obj	\
+        $(SLO)$/xmlimppr.obj	\
+        $(SLO)$/xmlitem.obj		\
+        $(SLO)$/xmlitmpr.obj	\
+        $(SLO)$/xmlnume.obj		\
+        $(SLO)$/xmlnumfe.obj	\
+        $(SLO)$/xmlnumfi.obj	\
+        $(SLO)$/xmlnumi.obj		\
+        $(SLO)$/xmlprcon.obj	\
+        $(SLO)$/xmlprhdl.obj	\
+        $(SLO)$/xmlprmap.obj	\
+        $(SLO)$/xmlstyle.obj	\
+        $(SLO)$/xmltabe.obj		\
+        $(SLO)$/xmltabi.obj		\
+        $(SLO)$/DashStyle.obj					\
+        $(SLO)$/EnumPropertyHdl.obj				\
         $(SLO)$/FillStyleContext.obj			\
         $(SLO)$/GradientStyle.obj				\
         $(SLO)$/HatchStyle.obj					\
         $(SLO)$/ImageStyle.obj					\
-        $(SLO)$/TransGradientStyle.obj			\
         $(SLO)$/MarkerStyle.obj					\
-        $(SLO)$/DashStyle.obj					\
-        $(SLO)$/XMLElementPropertyContext.obj	\
+        $(SLO)$/NamedBoolPropertyHdl.obj		\
+        $(SLO)$/TransGradientStyle.obj			\
+        $(SLO)$/XMLClipPropertyHandler.obj		\
         $(SLO)$/XMLConstantsPropertyHandler.obj	\
-        $(SLO)$/XMLClipPropertyHandler.obj
+        $(SLO)$/XMLElementPropertyContext.obj	\
+        $(SLO)$/XMLPageExport.obj
 
 # --- Tagets -------------------------------------------------------
 
