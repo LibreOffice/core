@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2utf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:21:30 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
             }
             else
             {
-                int nStop  = str.indexOf( "\"" , nStart +1);
+                nStop  = str.indexOf( "\"" , nStart +1);
             }
 
             if( nStart >= 0 && nStop >= 0 && nStart+1 < nStop )
@@ -290,7 +290,7 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
             }
             else
             {
-                int nStop  = str.indexOf( "\"" , nStart +1);
+                nStop  = str.indexOf( "\"" , nStart +1);
             }
             if( nStart >= 0 && nStop >= 0 && nStart+1 < nStop )
             {
