@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:55:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ namespace connectivity
         {
         private:
             OColumnAlias    m_aColumnAlias;
-            sal_Bool        m_bFixedLength;         // row of fixed length
             sal_Bool        m_bHeaderLine;          // column names in first row
             sal_Unicode     m_cFieldDelimiter;      // look at the name
             sal_Unicode     m_cStringDelimiter;     // delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
@@ -96,7 +95,6 @@ namespace connectivity
 
             // own methods
             inline const OEvoabDriver*  getDriver()             const { return static_cast< const OEvoabDriver* >( m_pDriver );         }
-            inline sal_Bool         isFixedLength()             const { return m_bFixedLength;      }
             inline sal_Bool         isHeaderLine()              const { return m_bHeaderLine;       }
             inline sal_Unicode      getFieldDelimiter()         const { return m_cFieldDelimiter;   }
             inline sal_Unicode      getStringDelimiter()            const { return m_cStringDelimiter;  }
