@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-19 13:04:06 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 15:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,9 +618,8 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
 }
 
 //==================================================================================================
-static bool perform_test(
-    Reference< XLanguageBindingTest > const & xObj,
-    Reference< XInterface > const & xDummy )
+static void checkInvalidInterfaceQuery(
+    Reference< XInterface > const & xObj )
 {
     try
     {
@@ -630,6 +629,14 @@ static bool perform_test(
     catch (RuntimeException &)
     {
     }
+}
+
+//==================================================================================================
+static bool perform_test(
+    Reference< XLanguageBindingTest > const & xObj,
+    Reference< XInterface > const & xDummy )
+{
+    checkInvalidInterfaceQuery( xObj );
 
     if (performTest( xObj, xDummy ))
     {
@@ -644,10 +651,8 @@ static bool perform_test(
             ::fprintf( stderr, "> exception test failed!\n" );
         }
     }
-    else
-    {
-        ::fprintf( stderr, "> dynamic invocation test failed!\n" );
-    }
+
+    ::fprintf( stderr, "> dynamic invocation test failed!\n" );
     return false;
 }
 
@@ -661,6 +666,7 @@ void test_CppBridge(void)
     {
         Test_Impl * p = new Test_Impl();
         Reference< XLanguageBindingTest > xOriginal( p );
+        checkInvalidInterfaceQuery( xOriginal );
         {
             const char * pExtraMapping = "";
 
@@ -727,6 +733,7 @@ void test_CBridge(void)
     {
         Test_Impl * p = new Test_Impl();
         Reference< XLanguageBindingTest > xOriginal( p );
+        checkInvalidInterfaceQuery( xOriginal );
         {
             Reference< XLanguageBindingTest > xMapped;
             {
