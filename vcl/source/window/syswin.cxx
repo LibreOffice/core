@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:14:24 $
+ *  last change: $Author: kz $ $Date: 2004-12-03 14:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,8 +692,11 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         mpFrame->SetWindowState( &aState );
 
         // do a synchronous resize for layout reasons
-        if( rData.GetMask() & (WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
-            ImplHandleResize( pWindow, rData.GetWidth(), rData.GetHeight() );
+        //  but use rData only when the window is not to be maximized (#i38089#)
+        //  otherwise we have no useful size information
+        if( !( (rData.GetMask() & WINDOWSTATE_MASK_STATE) && (nState & WINDOWSTATE_STATE_MAXIMIZED) ) )
+            if( rData.GetMask() & (WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
+                ImplHandleResize( pWindow, rData.GetWidth(), rData.GetHeight() );
     }
     else
     {
