@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:13:43 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2681,16 +2681,17 @@ SdrObject* SdrObject::Clone() const
     return pObj;
 }
 
-SdrObject* SdrObject::Clone(SdrPage* pNewPage, SdrModel* pNewModel) const
-{
-    SdrObject* pObj=SdrObjFactory::MakeNewObject(GetObjInventor(),GetObjIdentifier(),NULL);
-    if (pObj!=NULL) {
-        pObj->pModel=pNewModel;
-        pObj->pPage=pNewPage;
-        *pObj=*this;
-    }
-    return pObj;
-}
+// #116235#
+//SdrObject* SdrObject::Clone(SdrPage* pNewPage, SdrModel* pNewModel) const
+//{
+//  SdrObject* pObj=SdrObjFactory::MakeNewObject(GetObjInventor(),GetObjIdentifier(),NULL);
+//  if (pObj!=NULL) {
+//      pObj->pModel=pNewModel;
+//      pObj->pPage=pNewPage;
+//      *pObj=*this;
+//  }
+//  return pObj;
+//}
 
 void SdrObject::operator=(const SdrObject& rObj)
 {
@@ -5007,6 +5008,15 @@ sal_Bool SdrObject::IsMasterPageBackgroundObject() const
         return sal_True;
     }
 
+    return sal_False;
+}
+
+// #116168#
+// Give info if object is in destruction
+sal_Bool SdrObject::IsInDestruction() const
+{
+    if(pModel)
+        return pModel->IsInDestruction();
     return sal_False;
 }
 
