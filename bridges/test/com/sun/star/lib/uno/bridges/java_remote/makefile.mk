@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 03:05:03 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:49:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,6 @@ JAVATESTFILES := \
 IDLTESTFILES := \
     Bug98508_Test.idl \
     PolyStructTest.idl
-JARFILES := juh.jar jurt.jar ridl.jar sandbox.jar
+JARFILES := juh.jar jurt.jar ridl.jar
 
 .INCLUDE: javaunittest.mk
