@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 11:19:35 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 11:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1555,7 +1555,7 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
     Point aDropPos = rEvt.maPosPixel;
     SvLBoxEntry* pDropTarget = GetEntry( aDropPos );
     if (!pDropTarget)
-        return DND_ACTION_COPY;
+        return DND_ACTION_NONE;
 
     // search the container where to add the items
     FmFilterData*   pData = (FmFilterData*)pDropTarget->GetUserData();
@@ -1566,7 +1566,7 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
     Select(pEntry, sal_True);
     SetCurEntry(pEntry);
 
-    sal_Bool bCopy = rEvt.mnAction == DND_ACTION_COPY;
+    sal_Bool bCopy = DND_ACTION_COPY == rEvt.mnAction;
     ::std::vector<FmFilterItem*> aItemList = m_aControlExchange->getDraggedEntries();
 
     for (::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin(); i != aItemList.end(); i++)
