@@ -337,7 +337,7 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     if( !SUCCEEDED( hr ) ) return hr;
 
     // create frame
-    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.frame.Task" ), 1, mpDispFrame );
+    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.frame.Frame" ), 1, mpDispFrame );
     if( !SUCCEEDED( hr ) ) return hr;
 
     // initialize frame
