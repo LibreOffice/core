@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 10:45:55 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:36:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,16 +70,13 @@ NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-.INCLUDE :  ../static.mk
 
 # --- Files --------------------------------------------------------
 
 APP3TARGET=	mkunroll
 APP3OBJS=   $(OBJ)$/mkfilt.obj
-APP3STDLIBS=$(STATIC_LIBS) 
+APP3STDLIBS=$(TOOLSLIB) 
 .IF "$(OS)"=="LINUX"
 APP3STDLIBS+=-lpthread
 .ENDIF
