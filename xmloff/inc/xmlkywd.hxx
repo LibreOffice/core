@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:49 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,6 +1150,7 @@ XML_CONSTASCII_ACTION( sXML_shadow_offset_x , "shadow-offset-x" );
 XML_CONSTASCII_ACTION( sXML_shadow_offset_y , "shadow-offset-y" );
 XML_CONSTASCII_ACTION( sXML_shadow_transparency , "shadow-transparency" );
 XML_CONSTASCII_ACTION( sXML_shape, "shape" );
+XML_CONSTASCII_ACTION( sXML_shapes, "shapes" );
 XML_CONSTASCII_ACTION( sXML_sheet_name, "sheet-name" );
 XML_CONSTASCII_ACTION( sXML_short, "short" );
 XML_CONSTASCII_ACTION( sXML_show, "show" );
