@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-07-06 09:54:20 $
+ *  last change: $Author: jbu $ $Date: 2001-07-09 14:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,13 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include<rtl/logfile.h>
+#include <rtl/logfile.h>
 
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
+#endif
+#ifndef _OSL_FILE_H_
+#include <osl/time.h>
 #endif
 #ifndef _OSL_TIME_H_
 #include <osl/time.h>
@@ -79,15 +82,25 @@
 #include <rtl/ustring.hxx>
 #endif
 #ifndef _RTL_STRBUF_HXX_
-#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #endif
+#ifndef _RTL_ALLOC_H_
+#include <rtl/alloc.h>
+#endif
+
+#ifdef _MSC_VER
+#define vsnprintf _vsnprintf
+#endif
+
 
 using namespace osl;
 
 namespace rtl
 {
-static FILE *g_pFile = 0;
+static oslFileHandle g_aFile = 0;
 static sal_Bool g_bHasBeenCalled = sal_False;
+static const sal_Int32 g_BUFFERSIZE = 4096;
+static sal_Char *g_buffer = 0;
 
 class   LoggerGuard
 {
@@ -97,11 +110,17 @@ public:
 
 LoggerGuard::~LoggerGuard()
 {
-    if( g_pFile )
+    if( g_buffer )
     {
-        fprintf( g_pFile, "closing log file at %06lu", osl_getGlobalTimer() );
-        fclose( g_pFile );
-        g_pFile = 0;
+        sal_Int64 nWritten, nConverted =
+            sprintf( g_buffer, "closing log file at %06lu", osl_getGlobalTimer() );
+        if( nConverted > 0 )
+            osl_writeFile( g_aFile, g_buffer, nConverted, (sal_uInt64 *)&nWritten );
+        osl_closeFile( g_aFile );
+        g_aFile = 0;
+
+        rtl_freeMemory( g_buffer );
+        g_buffer = 0;
         g_bHasBeenCalled = sal_False;
     }
 }
@@ -110,7 +129,7 @@ static LoggerGuard guard;
 }
 using namespace rtl;
 
-static Mutex & getInitMutex()
+static Mutex & getLogMutex()
 {
     static Mutex *pMutex = 0;
     if( !pMutex )
@@ -125,11 +144,23 @@ static Mutex & getInitMutex()
     return *pMutex;
 }
 
+static OUString getFileUrl( const OUString &name )
+{
+    OUString aRet;
+    OSL_VERIFY( osl_getFileURLFromSystemPath( name.pData, &aRet.pData ) == osl_File_E_None );
+
+    OUString aWorkingDirectory;
+    osl_getProcessWorkingDir( &(aWorkingDirectory.pData) );
+    osl_getAbsoluteFileURL( aWorkingDirectory.pData, aRet.pData, &(aRet.pData) );
+
+    return aRet;
+}
+
 extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
 {
     if( !g_bHasBeenCalled )
     {
-        MutexGuard guard( getInitMutex() );
+        MutexGuard guard( getLogMutex() );
         if( ! g_bHasBeenCalled )
         {
             OUString name( RTL_CONSTASCII_USTRINGPARAM( "RTL_LOGFILE" ) );
@@ -144,39 +175,61 @@ extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
                     aProcessId = info.Ident;
 
                 //  Construct name of log file and open the file.
-                OStringBuffer buf( 128 );
-                buf.append( OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ) );
-                buf.append( "_" );
+                OUStringBuffer buf( 128 );
+                buf.append( value );
+                buf.appendAscii( "_" );
                 buf.append( (sal_Int32) aProcessId );
-                buf.append( ".log" );
-                OString o = buf.makeStringAndClear();
+                buf.appendAscii( ".log" );
 
-                g_pFile = fopen( o.getStr() , "w" );
-                if( g_pFile )
+                OUString o = getFileUrl( buf.makeStringAndClear() );
+                oslFileError e = osl_openFile(
+                    o.pData, &g_aFile, osl_File_OpenFlag_Write|osl_File_OpenFlag_Create);
+
+                if( osl_File_E_None == e )
                 {
-                    setvbuf( g_pFile, 0 , _IOLBF , 0 );  // set line buffering
                     TimeValue aCurrentTime;
+                    g_buffer = ( sal_Char * ) rtl_allocateMemory( g_BUFFERSIZE );
+                    sal_Int64 nConverted = 0;
+                    sal_Int64 nWritten = 0;
                     if (osl_getSystemTime (&aCurrentTime))
-                        fprintf (g_pFile, "opening log file %f seconds past January 1st 1970\n"
-                                 "corresponding to %lu ms after timer start\n",
-                                 aCurrentTime.Seconds + 1e-9 * aCurrentTime.Nanosec,
-                                 osl_getGlobalTimer());
-                    fprintf (g_pFile, "Process id is %lu\n", aProcessId);
+                    {
+                        nConverted = (sal_Int64 ) sprintf (
+                                g_buffer,
+                                "opening log file %f seconds past January 1st 1970\n"
+                                "corresponding to %lu ms after timer start\n",
+                                aCurrentTime.Seconds + 1e-9 * aCurrentTime.Nanosec,
+                                osl_getGlobalTimer());
+
+                        sal_Int64 nWritten;
+                        if( nConverted > 0 )
+                            osl_writeFile( g_aFile, g_buffer, nConverted , (sal_uInt64 *)&nWritten );
+                    }
+
+                    nConverted = sprintf (g_buffer, "Process id is %lu\n", aProcessId);
+                    if( nConverted )
+                        osl_writeFile( g_aFile, g_buffer, nConverted, (sal_uInt64 *)&nWritten );
                 }
                 else
                 {
-                    OSL_TRACE( "Couldn't open logfile %s" , o.getStr() );
+                    OSL_TRACE( "Couldn't open logfile %s(%d)" , o.getStr(), e );
                 }
             }
             g_bHasBeenCalled = sal_True;
         }
     }
 
-    if( g_pFile )
+    if( g_buffer )
     {
         va_list args;
         va_start(args, pszFormat);
-        vfprintf(g_pFile,pszFormat, args);
+        {
+            sal_Int64 nConverted, nWritten;
+            MutexGuard guard( getLogMutex() );
+            nConverted = vsnprintf( g_buffer , g_BUFFERSIZE, pszFormat, args );
+            nConverted = (nConverted > g_BUFFERSIZE, g_BUFFERSIZE, nConverted );
+            if( nConverted > 0 )
+                osl_writeFile( g_aFile, g_buffer, nConverted, (sal_uInt64*)&nWritten );
+        }
         va_end(args);
     }
 }
