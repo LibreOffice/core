@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:15:40 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
 
 #ifndef _VOS_MUTEX_HXX_
@@ -140,7 +143,8 @@
 #include "cfgmgr.hxx"
 #include "dispatch.hxx"
 #include "viewsh.hxx"
-#include "interno.hxx"
+#include "viewfrm.hxx"
+//#include "interno.hxx"
 #include "sfxresid.hxx"
 #include "objshimp.hxx"
 #include "appbas.hxx"
@@ -161,7 +165,7 @@
 #include "tbxconf.hxx"
 #include "accmgr.hxx"
 #include "helpid.hrc"
-
+#include "msg.hxx"
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
@@ -226,8 +230,7 @@ SfxObjectShell::SfxObjectShell
 :   pImp( new SfxObjectShell_Impl ),
     pMedium(0),
     pStyleSheetPool(0),
-    eCreateMode(eMode),
-    _pFactory( 0 )
+    eCreateMode(eMode)
 {
     DBG_CTOR(SfxObjectShell, 0);
 
@@ -244,7 +247,7 @@ SfxObjectShell::SfxObjectShell
     rArr.C40_INSERT( SfxObjectShell, pThis, rArr.Count() );
     pImp->bInList = sal_True;
     pImp->nLoadedFlags = SFX_LOADED_ALL;
-    SetObjectShell( TRUE );
+//REMOVE        SetObjectShell( TRUE );
 }
 
 //--------------------------------------------------------------------
@@ -263,10 +266,6 @@ SfxObjectShell::~SfxObjectShell()
     // erlaubt
     SfxObjectShell::Close();
     pImp->xModel = NULL;
-
-    String aPhysName;
-    if ( pMedium )
-        aPhysName = pMedium->GetPhysicalName();
 
     DELETEX(pImp->pEventConfig);
     DELETEX(pImp->pImageManager);
@@ -294,19 +293,25 @@ SfxObjectShell::~SfxObjectShell()
     if ( pImp->xModel.is() )
         pImp->xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > ();
 
-    if ( pMedium && pMedium->IsTemporary() )
-        HandsOff();
+//REMOVE        if ( pMedium && pMedium->IsTemporary() )
+//REMOVE            HandsOff();
+
+    if ( pMedium->HasStorage_Impl() && pMedium->GetStorage() == GetStorage() )
+        pMedium->DontDisposeStorage_Impl();
 
     DELETEX( pMedium );
 
     if ( pImp->aTempName.Len() )
     {
-        if ( aPhysName == pImp->aTempName && !IsHandsOff() )
-            HandsOff();
+//REMOVE            if ( aPhysName == pImp->aTempName && !IsHandsOff() )
+//REMOVE                HandsOff();
         String aTmp;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->aTempName, aTmp );
         ::utl::UCBContentHelper::Kill( aTmp );
     }
+
+    if ( pImp->bOwnsStorage && pImp->m_xDocStorage.is() )
+        pImp->m_xDocStorage->dispose();
 
     delete pImp;
 }
@@ -327,22 +332,14 @@ sal_Bool SfxObjectShell::Stamp_GetPrintCancelState() const
 
 //--------------------------------------------------------------------
 
-SfxObjectFactory& SfxObjectShell::GetFactory() const
-{
-    return *_pFactory;
-}
-//--------------------------------------------------------------------
-
 void SfxObjectShell::ViewAssigned()
 
 /*  [Beschreibung]
 
-    Diese Methode wird gerufen, wenn eine ::com::sun::star::sdbcx::View zugewiesen wird.
+    Diese Methode wird gerufen, wenn eine View zugewiesen wird.
 */
 
 {
-    // Spaetestens jetzt die Factory initialisieren (wegen HelpFileName)
-    GetFactory().DoInitFactory();
 }
 
 //--------------------------------------------------------------------
@@ -524,7 +521,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
         }
     }
 
-    if( GetInPlaceObject() && GetInPlaceObject()->GetClient())
+    if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
         pImp->bPreparedForClose = sal_True;
         return sal_True;
@@ -622,16 +619,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
         if( pIgnoreInformationLost && pIgnoreInformationLost->GetValue() )
             bUI = sal_False;
     }
-    if ( bUI && !bClose && IsInformationLost() )
-    {
-        // minimierte restoren
-        SfxFrame* pTop = pFrame->GetTopFrame();
-        pSfxApp->SetViewFrame( pTop->GetCurrentViewFrame() );
-        pFrame->GetFrame()->Appear();
-        QueryBox aBox( &pFrame->GetWindow(), SfxResId(MSG_CONFIRM_FILTER));
-        if ( RET_NO == aBox.Execute() )
-            return sal_False;
-    }
 
     pImp->bPreparedForClose = sal_True;
     return sal_True;
@@ -649,7 +636,7 @@ sal_Bool SfxObjectShell::HasBasic() const
     if ( !pImp->bBasicInitialized )
     {
         String aName( GetMedium()->GetName() );
-        ((SfxObjectShell*)this)->InitBasicManager_Impl( GetStorage(), aName.Len() ? &aName : NULL );
+        ((SfxObjectShell*)this)->InitBasicManager_Impl( ((SfxObjectShell*)this)->GetStorage(), aName.Len() ? &aName : NULL );
     }
     return pImp->pBasicMgr != NULL;
 }
@@ -687,7 +674,8 @@ StarBASIC* SfxObjectShell::GetBasic() const
 
 void SfxObjectShell::InitBasicManager_Impl
 (
-    SvStorage*  pStor       /* Storage, aus dem das Dokument geladen wird
+    const uno::Reference< embed::XStorage >& xDocStorage
+                            /* Storage, aus dem das Dokument geladen wird
                                (aus <SvPersist::Load()>) bzw. 0, falls es
                                sich um ein neues Dokument handelt
                                (aus <SvPersist::InitNew()>). */
@@ -695,7 +683,7 @@ void SfxObjectShell::InitBasicManager_Impl
 )
 /*  [Beschreibung]
 
-    Erzeugt einen Dokument-BasicManager und l"adt diesen ggf. (pStor != 0)
+    Erzeugt einen Dokument-BasicManager und l"adt diesen ggf. (xDocStorage != 0)
     aus dem Storage.
 
 
@@ -712,7 +700,8 @@ void SfxObjectShell::InitBasicManager_Impl
 
     pImp->bBasicInitialized = TRUE;
     BasicManager* pBasicManager;
-    if ( pStor )
+    uno::Reference< embed::XStorage > xStorage = xDocStorage;
+    if ( xStorage.is() )
     {
         String aOldURL = INetURLObject::GetBaseURL();
         String aNewURL;
@@ -734,7 +723,10 @@ void SfxObjectShell::InitBasicManager_Impl
 #else
         String aAppBasicDir = SvtPathOptions().GetBasicPath();
 #endif
-        pImp->pBasicMgr = pBasicManager = new BasicManager( *pStor, pAppBasic, &aAppBasicDir );
+        SotStorageRef xDummyStor = new SotStorage( ::rtl::OUString() );
+        pImp->pBasicMgr = pBasicManager = new BasicManager( *xDummyStor /* TODO/LATER: xStorage */,
+                                                            pAppBasic,
+                                                            &aAppBasicDir );
         if ( pImp->pBasicMgr->HasErrors() )
         {
             // handle errors
@@ -747,7 +739,7 @@ void SfxObjectShell::InitBasicManager_Impl
                 {
                     // user wants to break loading of BASIC-manager
                     delete pImp->pBasicMgr;
-                    pStor = 0;
+                    xStorage = uno::Reference< embed::XStorage >();
                     break;
                 }
                 pErr = pImp->pBasicMgr->GetNextError();
@@ -758,7 +750,7 @@ void SfxObjectShell::InitBasicManager_Impl
     }
 
     // not loaded?
-    if ( !pStor )
+    if ( !xStorage.is() )
     {
         // create new BASIC-manager
         StarBASIC *pBas = new StarBASIC(pAppBasic);
@@ -768,13 +760,13 @@ void SfxObjectShell::InitBasicManager_Impl
 
     // Basic container
     SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
-        ( DEFINE_CONST_UNICODE( "StarBasic" ), pBasicManager, pStor );
+        ( DEFINE_CONST_UNICODE( "StarBasic" ), pBasicManager, xStorage );
     pBasicCont->acquire();  // Hold via UNO
     Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
     pImp->pBasicLibContainer = pBasicCont;
 
     // Dialog container
-    SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( pStor );
+    SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( xStorage );
     pDialogCont->acquire(); // Hold via UNO
     Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
     pImp->pDialogLibContainer = pDialogCont;
@@ -1008,11 +1000,11 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
     {
         aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
     }
-    else if ( aFact.EqualsAscii("swriter/web") )
+    else if ( aFact.EqualsAscii("sweb") || aFact.EqualsAscii("swriter/web") )
     {
         aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument");
     }
-    else if ( aFact.EqualsAscii("swriter/globaldocument") )
+    else if ( aFact.EqualsAscii("sglobal") || aFact.EqualsAscii("swriter/globaldocument") )
     {
         aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument");
     }
@@ -1059,7 +1051,7 @@ SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObj
         if ( xDoc.is() )
         {
             ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xObj( xDoc, UNO_QUERY );
-            ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( (sal_Int8*) SvGlobalName( SFX_GLOBAL_CLASSID ).GetBytes(), 16 );
+            ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
             sal_Int64 nHandle = xObj->getSomething( aSeq );
             if ( nHandle )
                 return (SfxObjectShell*) (sal_Int32*) nHandle;
@@ -1067,5 +1059,39 @@ SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObj
     }
 
     return 0;
+}
+
+SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, SfxFrame* pFrame )
+{
+    uno::Sequence < beans::PropertyValue > aProps;
+    TransformItems( SID_OPENDOC, rSet, aProps );
+    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE);
+    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, FALSE);
+    ::rtl::OUString aURL;
+    ::rtl::OUString aTarget = rtl::OUString::createFromAscii("_blank");
+    if ( pFileNameItem )
+        aURL = pFileNameItem->GetValue();
+    if ( pTargetItem )
+        aTarget = pTargetItem->GetValue();
+
+    uno::Reference < frame::XComponentLoader > xLoader;
+    if ( pFrame )
+    {
+        xLoader = uno::Reference < frame::XComponentLoader >( pFrame->GetFrameInterface(), uno::UNO_QUERY );
+    }
+    else
+        xLoader = uno::Reference < frame::XComponentLoader >( comphelper::getProcessServiceFactory()->createInstance(
+            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop") ), uno::UNO_QUERY );
+
+    uno::Reference < lang::XUnoTunnel > xObj( xLoader->loadComponentFromURL( aURL, aTarget, 0, aProps ), uno::UNO_QUERY );
+    if ( xObj.is() )
+    {
+        ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+        sal_Int64 nHandle = xObj->getSomething( aSeq );
+        if ( nHandle )
+            return (SfxObjectShell*) (sal_Int32*) nHandle;
+    }
+
+    return NULL;
 }
 
