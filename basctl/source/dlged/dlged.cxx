@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:01:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,6 +636,11 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
             }
         }
     }
+
+    // #i43005# repaint problems when deleting controls
+    Wallpaper aWallpaper( Color( COL_WHITE ) );
+    if ( pWindow )
+        pWindow->DrawWallpaper( aPaintRect, aWallpaper );
 
     // #114282# unbuffered paint
     SdrPageView* pPgView = pDlgEdView->GetPageViewPvNum(0);
