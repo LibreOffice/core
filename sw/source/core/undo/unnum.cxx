@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unnum.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: jp $ $Date: 2001-08-14 18:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,13 +329,13 @@ void SwUndoMoveNum::Undo( SwUndoIter& rUndoIter )
 {
     ULONG nTmpStt = nSttNode, nTmpEnd = nEndNode;
 
-    if( !nEndNode && USHRT_MAX == nEndCntnt )       // kein Bereich !
-        nEndNode = nSttNode;
-
-    if( nNewStt < nSttNode )        // nach vorne verschoben
-        nEndNode = nEndNode - ( nSttNode - nNewStt );
-    else
-        nEndNode = nEndNode + ( nNewStt - nSttNode );
+    if( nEndNode || USHRT_MAX != nEndCntnt )        // Bereich ?
+    {
+        if( nNewStt < nSttNode )        // nach vorne verschoben
+            nEndNode = nEndNode - ( nSttNode - nNewStt );
+        else
+            nEndNode = nEndNode + ( nNewStt - nSttNode );
+    }
     nSttNode = nNewStt;
 
 //JP 22.06.95: wird wollen die Bookmarks/Verzeichnisse behalten, oder?
@@ -487,11 +487,14 @@ void SwUndoNumRuleStart::Repeat( SwUndoIter& rUndoIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unnum.cxx,v 1.1.1.1 2000-09-19 00:08:28 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unnum.cxx,v 1.2 2001-08-14 18:12:40 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:28  hr
+      initial import
+
       Revision 1.29  2000/09/18 16:04:29  willem.vandorp
       OpenOffice header added.
 
