@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 13:36:44 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:09:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,9 @@ APP1TARGET=	$(TARGET)
 APP1STACK=	1000000
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COMEX)"!="10"
 APP1STDLIBS= MSVCIRT.LIB
+.ENDIF
 .ENDIF
 
 
