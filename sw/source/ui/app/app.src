@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 20:02:21 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2546,7 +2546,7 @@ String STR_STATSTR_HYPHEN
     Text [ dutch ] = "Woordafbreking..." ;
     Text [ italian ] = "Sillabazione..." ;
     Text [ spanish ] = "Separación silábica..." ;
-    Text [ french ] = "Coupure de mots..." ;
+    Text [ french ] = "Coupure des mots..." ;
     Text [ swedish ] = "Avstavning..." ;
     Text [ danish ] = "Orddeling..." ;
     Text [ portuguese_brazilian ] = "Silbentrennung..." ;
