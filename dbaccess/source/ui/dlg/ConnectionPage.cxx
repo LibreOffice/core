@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:19:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ namespace dbaui
         m_aUserName.SetModifyHdl(getControlModifiedLink());
         m_aPasswordRequired.SetClickHdl(getControlModifiedLink());
 
-        m_aTestConnection.SetClickHdl(LINK(this,OConnectionTabPage,OnTestConnectionClickHdl));
+        m_aTestConnection.SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
         m_aTestJavaDriver.SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
 
         // extract the datasource type collection from the item set
@@ -420,44 +420,6 @@ namespace dbaui
         fillString(_rSet,&m_aET_Connection, DSID_CONNECTURL, bChangedSomething);
 
         return bChangedSomething;
-    }
-
-    // -----------------------------------------------------------------------
-    IMPL_LINK(OConnectionTabPage, OnTestConnectionClickHdl, PushButton*, _pButton)
-    {
-        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bSuccess = sal_False;
-        if ( m_pAdminDialog )
-        {
-            m_pAdminDialog->saveDatasource();
-            OGenericAdministrationPage::implInitControls(*m_pItemSetHelper->getOutputSet(), sal_True);
-            try
-            {
-                Reference< XConnection > xConnection = m_pAdminDialog->createConnection();
-                bSuccess = xConnection.is();
-                ::comphelper::disposeComponent(xConnection);
-            }
-            catch(Exception&)
-            {
-            }
-
-            OSQLMessageBox::MessageType eImage = OSQLMessageBox::Info;
-            String aMessage,sTitle;
-            sTitle = String (ModuleRes(STR_CONNECTION_TEST));
-            if ( bSuccess )
-            {
-                aMessage = String(ModuleRes(STR_CONNECTION_SUCCESS));
-            }
-            else
-            {
-                eImage = OSQLMessageBox::Error;
-                aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));
-                m_pAdminDialog->clearPassword();
-            }
-            OSQLMessageBox aMsg(this,sTitle,aMessage);
-            aMsg.Execute();
-        }
-        return 0L;
     }
     // -----------------------------------------------------------------------
     IMPL_LINK(OConnectionTabPage, OnTestJavaClickHdl, PushButton*, _pButton)
