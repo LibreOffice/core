@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:38 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 11:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,9 +892,9 @@ void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2, BOOL bRedimp )
             implCopyDimArray_DCREATE( pArray, pOldArray, nDims - 1,
                 0, pActualIndices, pLowerBounds, pUpperBounds );
         }
-        delete pUpperBounds;
-        delete pLowerBounds;
-        delete pActualIndices;
+        delete [] pUpperBounds;
+        delete [] pLowerBounds;
+        delete [] pActualIndices;
         refRedimpArray = NULL;
     }
 }
