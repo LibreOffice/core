@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ namespace configmgr
         {
             bIntrinsicNeedProfile = false;
             rtl::OUString sDefaultLocale = _rSettings.getLocale();
-            m_aDefaultOptions.setLocale(sDefaultLocale);
+            m_aDefaultOptions.setIsoLocale(sDefaultLocale);
         }
         else if (_rSettings.isAdminService())
         {
@@ -360,7 +360,7 @@ namespace configmgr
                     rtl::OUString sDefaultLocale;
                     if (aValue.getValue() >>= sDefaultLocale)
                     {
-                        m_aDefaultOptions.setLocale(sDefaultLocale);
+                        m_aDefaultOptions.setIsoLocale(sDefaultLocale);
                     }
                     else
                         OSL_ENSURE(false, "Could not extract locale parameter into string");
@@ -370,6 +370,17 @@ namespace configmgr
 
     // call the template method
         this->initFromProfile(aProfile);
+
+        // last fallback, if there is no locale - even in ooLocale
+        m_aDefaultOptions.ensureLocaleSet();
+    }
+
+    //-----------------------------------------------------------------------------
+    void OProviderImpl::setDefaultLocale( RequestOptions::Locale const & aLocale )
+    {
+        m_aDefaultOptions.setLocale( aLocale );
+        // ensure that the locale is never cleared to 'empty'
+        m_aDefaultOptions.ensureLocaleSet();
     }
 
     //-----------------------------------------------------------------------------
@@ -694,20 +705,6 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------------
-
-    static OUString makeLocaleString(lang::Locale const & aLocale)
-    {
-        const sal_Unicode sep = '-';
-
-        rtl::OUStringBuffer aBuf(aLocale.Language);
-
-        if (aLocale.Country.getLength())
-            aBuf.append(sep). append(aLocale.Country);
-
-        return aBuf.makeStringAndClear();
-    }
-
-    //-----------------------------------------------------------------------------------
     bool OProviderImpl::FactoryArguments::extractOneArgument(
                             OUString const& aName, uno::Any const& aValue,
                             OUString&   /* [out] */ _rNodeAccessor,
@@ -753,14 +750,14 @@ namespace configmgr
                 OUString    sStringVal;
                 if (aValue >>= sStringVal)
                 {
-                    _rOptions.setLocale(sStringVal);
+                    _rOptions.setIsoLocale(sStringVal);
                     break;
                 }
 
                 lang::Locale aLocale;
                 if (aValue >>= aLocale)
                 {
-                    _rOptions.setLocale(makeLocaleString(aLocale));
+                    _rOptions.setLocale(aLocale);
                     break;
                 }
 
