@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-15 11:50:06 $
+ *  last change: $Author: ka $ $Date: 2001-03-02 12:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,11 +201,12 @@ public:
 
     const GraphicID&    GetID() const { return maID; }
 
-    BOOL                AddGraphicObjectReference( const GraphicObject& rObj, Graphic& rSubstitute, BOOL bFillIdObject );
+    void                AddGraphicObjectReference( const GraphicObject& rObj, Graphic& rSubstitute );
     BOOL                ReleaseGraphicObjectReference( const GraphicObject& rObj );
     ULONG               GetGraphicObjectReferenceCount() { return maGraphicObjectList.Count(); }
     BOOL                HasGraphicObjectReference( const GraphicObject& rObj );
 
+    void                TryToSwapIn();
     void                GraphicObjectWasSwappedOut( const GraphicObject& rObj );
     BOOL                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
     void                GraphicObjectWasSwappedIn( const GraphicObject& rObj );
@@ -332,50 +333,13 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Graphic& rSubstitute, BOOL bFillIdObject )
+void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Graphic& rSubstitute )
 {
-    BOOL bRet = FALSE;
+    if( mbSwappedAll )
+        mbSwappedAll = !( mbInitialized = ImplInit( rObj ) );
 
-    if( !rObj.IsSwappedOut() || bFillIdObject )
-    {
-        if( mbSwappedAll )
-        {
-            if( bFillIdObject )
-            {
-                for( void* pObj = maGraphicObjectList.First(); mbSwappedAll && pObj; pObj = maGraphicObjectList.Next() )
-                {
-                    GraphicObject&  rTestObj = *(GraphicObject*) pObj;
-                    const BOOL      bOldInitState = mbInitialized;
-
-                    // set mbInitialized=TRUE to avoid, that this object is destroyed
-                    // and reinserted in GraphicCache::GraphicObjectWasSwappedIn
-                    mbInitialized = TRUE;
-                    rTestObj.FireSwapInRequest();
-
-                    if( !mbSwappedAll )
-                        rSubstitute = rTestObj.GetGraphic();
-                    else
-                        mbInitialized = bOldInitState;
-                }
-
-                DBG_ASSERT( !mbSwappedAll, "GraphicCacheEntry::AddGraphicObjectReference: Graphic object could not be swapped in" );
-            }
-            else
-            {
-                ImplInit( rObj );
-                mbSwappedAll = FALSE;
-            }
-        }
-
-        if( !mbSwappedAll )
-        {
-            ImplFillSubstitute( rSubstitute );
-            maGraphicObjectList.Insert( (void*) &rObj, LIST_APPEND );
-            bRet = TRUE;
-        }
-    }
-
-    return bRet;
+    ImplFillSubstitute( rSubstitute );
+    maGraphicObjectList.Insert( (void*) &rObj, LIST_APPEND );
 }
 
 // -----------------------------------------------------------------------------
@@ -407,6 +371,14 @@ BOOL GraphicCacheEntry::HasGraphicObjectReference( const GraphicObject& rObj )
             bRet = TRUE;
 
     return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+void GraphicCacheEntry::TryToSwapIn()
+{
+    if( mbSwappedAll && maGraphicObjectList.Count() )
+        ( (GraphicObject*) maGraphicObjectList.First() )->FireSwapInRequest();
 }
 
 // -----------------------------------------------------------------------------
@@ -619,15 +591,38 @@ void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubsti
             if( pID )
             {
                 if( rID.GetIDString() == *pID )
-                    bInserted = pEntry->AddGraphicObjectReference( rObj, rSubstitute, TRUE );
+                {
+                    pEntry->TryToSwapIn();
+
+                    // since pEntry->TryToSwapIn can modify our current list, we have to
+                    // iterate from beginning to add a reference to the appropriate
+                    // CacheEntry object; after this, quickly jump out of the outer iteration
+                    for( pEntry = (GraphicCacheEntry*) maGraphicCache.First(); !bInserted && pEntry; pEntry = (GraphicCacheEntry*) maGraphicCache.Next() )
+                    {
+                        const GraphicID& rID = pEntry->GetID();
+
+                        if( rID.GetIDString() == *pID )
+                        {
+                            pEntry->AddGraphicObjectReference( rObj, rSubstitute );
+                            bInserted = TRUE;
+                        }
+                    }
+
+                    if( !bInserted )
+                    {
+                        maGraphicCache.Insert( new GraphicCacheEntry( rObj ), LIST_APPEND );
+                        bInserted = TRUE;
+                    }
+                }
             }
-            else
+            else if( rID == aID )
             {
-                if( pEntry->GetID() == aID )
-                    bInserted = pEntry->AddGraphicObjectReference( rObj, rSubstitute, FALSE );
+                pEntry->AddGraphicObjectReference( rObj, rSubstitute );
+                bInserted = TRUE;
             }
 
-            pEntry = (GraphicCacheEntry*) maGraphicCache.Next();
+            if( !bInserted )
+                pEntry = (GraphicCacheEntry*) maGraphicCache.Next();
         }
     }
 
