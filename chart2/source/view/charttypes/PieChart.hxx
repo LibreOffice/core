@@ -16,7 +16,8 @@ class PieChart : public VSeriesPlotter
     // public methods
     //-------------------------------------------------------------------------
 public:
-    PieChart( sal_Int32 nDimension );
+    PieChart( const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel );
     virtual ~PieChart();
 
     //-------------------------------------------------------------------------

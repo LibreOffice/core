@@ -119,10 +119,15 @@ bool VDataSeriesGroup::getSums( double& rfPositiveSum, double& rfNegativeSum ) c
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-VSeriesPlotter::VSeriesPlotter( sal_Int32 nDimension )
-        : PlotterBase( nDimension )
+VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeModel )
+        : PlotterBase(2)
+        , m_xChartTypeModel(xChartTypeModel)
+        , m_xChartTypeModelProps( uno::Reference< beans::XPropertySet >::query( xChartTypeModel ))
         , m_aXSlots()
 {
+    DBG_ASSERT(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
+    if(m_xChartTypeModelProps.is() )
+        m_xChartTypeModelProps->getPropertyValue( C2U( "Dimension" ) ) >>= m_nDimension;
 }
 
 VSeriesPlotter::~VSeriesPlotter()
@@ -508,26 +513,27 @@ bool VDataSeriesGroup::calculateYMinAndMaxForCategoryRange(
 }
 
 //static
-VSeriesPlotter* VSeriesPlotter::createSeriesPlotter( const rtl::OUString& rChartType, sal_Int32 nDimension )
+VSeriesPlotter* VSeriesPlotter::createSeriesPlotter( const uno::Reference<XChartType>& xChartTypeModel )
 {
+    rtl::OUString aChartType = xChartTypeModel->getChartType();
+
     //@todo: in future the plotter should be instanciated via service factory
     VSeriesPlotter* pRet=NULL;
-    if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.BarChart")) )
-        pRet = new BarChart(nDimension);
-    else if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.AreaChart")) )
-        pRet = new AreaChart(nDimension,true,false,false);
-    else if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.LineChart")) )
-        pRet = new AreaChart(nDimension,false,true,true);
-    else if( rChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.PieChart")) )
-        pRet = new PieChart(nDimension);
+    if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.BarChart")) )
+        pRet = new BarChart(xChartTypeModel);
+    else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.AreaChart")) )
+        pRet = new AreaChart(xChartTypeModel);
+    else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.LineChart")) )
+        pRet = new AreaChart(xChartTypeModel,true);
+    else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.PieChart")) )
+        pRet = new PieChart(xChartTypeModel);
     else
     {
         //@todo create other charttypes
         //com.sun.star.chart2.NetChart?
         //com.sun.star.chart2.ScatterChart?
-        pRet = new BarChart(nDimension);
+        pRet = new BarChart(xChartTypeModel);
     }
-
     return pRet;
 }
 

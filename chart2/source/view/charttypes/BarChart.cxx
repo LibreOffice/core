@@ -148,8 +148,8 @@ uno::Reference< XTransformation > BarPositionHelper::getTransformationLogicToSce
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-BarChart::BarChart( sal_Int32 nDimension )
-        : VSeriesPlotter( nDimension )
+BarChart::BarChart( const uno::Reference<XChartType>& xChartTypeModel )
+        : VSeriesPlotter( xChartTypeModel )
         , m_pPosHelper( new BarPositionHelper() )
 {
     PlotterBase::m_pPosHelper = m_pPosHelper;

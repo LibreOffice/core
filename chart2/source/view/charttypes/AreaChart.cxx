@@ -10,6 +10,7 @@
 #include "chartview/ObjectIdentifier.hxx"
 #include "Clipping.hxx"
 #include "Splines.hxx"
+#include "ChartTypeHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
 #include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
@@ -149,13 +150,23 @@ double AreaPositionHelper::getLogicGrounding() const
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-AreaChart::AreaChart( sal_Int32 nDimension, sal_Bool bArea, sal_Bool bLine, sal_Bool bSymbol )
-        : VSeriesPlotter( nDimension )
+AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bNoArea )
+        : VSeriesPlotter( xChartTypeModel )
         , m_pPosHelper( new AreaPositionHelper() )
-        , m_bArea(bArea)
-        , m_bLine(bLine)
-        , m_bSymbol(bSymbol)
+        , m_bArea(!bNoArea)
+        , m_bLine(bNoArea)
+        , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel) )
+        , m_eCurveStyle(CurveStyle_LINES)
 {
+    try
+    {
+        if( m_xChartTypeModelProps.is() )
+            m_xChartTypeModelProps->getPropertyValue( C2U( "CurveStyle" ) ) >>= m_eCurveStyle;
+    }
+    catch( uno::Exception& e )
+    {
+        e;
+    }
     PlotterBase::m_pPosHelper = m_pPosHelper;
 }
 
@@ -311,13 +322,6 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-enum SplineMode
-{
-    NO_SPLINE,
-    CUBIC_SPLINE,
-    B_SPLINE
-};
-
 bool AreaChart::impl_createLine( VDataSeries* pSeries
                 , drawing::PolyPolygonShape3D* pSeriesPoly )
 {
@@ -325,16 +329,15 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xLogicTarget);
 
     m_pPosHelper->getTransformedClipRect();
-    SplineMode eSplineMode(B_SPLINE);//@todo get from model
     drawing::PolyPolygonShape3D aPoly;
-    if(CUBIC_SPLINE==eSplineMode)
+    if(CurveStyle_CUBIC_SPLINES==m_eCurveStyle)
     {
         sal_Int32 nGranularity = 20;//@todo get from model
         drawing::PolyPolygonShape3D aSplinePoly;
         SplineCalculater::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, nGranularity );
         Clipping::clipPolygonAtRectangle( aSplinePoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
     }
-    else if(B_SPLINE==eSplineMode)
+    else if(CurveStyle_B_SPLINES==m_eCurveStyle)
     {
         sal_Int32 nGranularity = 20;//@todo get from model
         sal_Int32 nSplineDepth = 3;//@todo get from model

@@ -191,8 +191,8 @@ DataPointGeometry PiePositionHelper::transformLogicGeom( const DataPointGeometry
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-PieChart::PieChart( sal_Int32 nDimension )
-        : VSeriesPlotter( nDimension )
+PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel )
+        : VSeriesPlotter( xChartTypeModel )
         , m_pPosHelper( new PiePositionHelper() )
 {
     PlotterBase::m_pPosHelper = m_pPosHelper;

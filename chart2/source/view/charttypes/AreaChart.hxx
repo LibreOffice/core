@@ -3,6 +3,10 @@
 
 #include "VSeriesPlotter.hxx"
 
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
+#include <drafts/com/sun/star/chart2/CurveStyle.hpp>
+#endif
+
 //.............................................................................
 namespace chart
 {
@@ -15,7 +19,9 @@ class AreaChart : public VSeriesPlotter
     // public methods
     //-------------------------------------------------------------------------
 public:
-    AreaChart( sal_Int32 nDimension, sal_Bool bArea, sal_Bool bLine, sal_Bool bSymbol );
+    AreaChart( const ::com::sun::star::uno::Reference<
+             ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel
+             , bool bNoArea=false );
     virtual ~AreaChart();
 
     //-------------------------------------------------------------------------
@@ -56,6 +62,7 @@ private: //member
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
     bool                                m_bSymbol;
+    ::drafts::com::sun::star::chart2::CurveStyle  m_eCurveStyle;
 };
 //.............................................................................
 } //namespace chart

@@ -22,7 +22,8 @@ class BarChart : public VSeriesPlotter
     // public methods
     //-------------------------------------------------------------------------
 public:
-    BarChart( sal_Int32 nDimension );
+    BarChart( const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel );
     virtual ~BarChart();
 
     //-------------------------------------------------------------------------

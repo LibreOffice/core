@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 15:27:46 $
+ *  last change: $Author: iha $ $Date: 2003-11-19 19:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #include "PlotterBase.hxx"
 #include "VDataSeries.hxx"
 #include "PropertyMapper.hxx"
+
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
+#include <drafts/com/sun/star/chart2/XChartType.hpp>
+#endif
 
 //.............................................................................
 namespace chart
@@ -130,7 +134,8 @@ class VSeriesPlotter : public PlotterBase, public MinimumAndMaximumSupplier
     // public methods
     //-------------------------------------------------------------------------
 public:
-    VSeriesPlotter( sal_Int32 nDimension );
+    VSeriesPlotter( const ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel );
     virtual ~VSeriesPlotter();
 
     /*
@@ -169,7 +174,8 @@ public:
     static sal_Int32    getPointCount( const VDataSeriesGroup& rSeriesGroup );
     static sal_Int32    getPointCount( const ::std::vector< VDataSeriesGroup >& rSlots );
 
-    static VSeriesPlotter* createSeriesPlotter( const rtl::OUString& rChartType, sal_Int32 nDimension );
+    static VSeriesPlotter* createSeriesPlotter( const ::com::sun::star::uno::Reference<
+                                ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel );
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -217,6 +223,11 @@ protected: //methods
         , const tPropertyNameMap& rMap );
 
 protected: //member
+    ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XChartType >    m_xChartTypeModel;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >           m_xChartTypeModelProps;
+
     ::std::vector< VDataSeriesGroup >   m_aXSlots;
     static tMakePropertyNameMap         m_aShapePropertyMapForArea;
 };

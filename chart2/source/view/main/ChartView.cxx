@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-19 16:40:47 $
+ *  last change: $Author: iha $ $Date: 2003-11-19 19:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
         DBG_ASSERT(xChartTypeGroup.is(),"First node at the diagram tree needs to be a ChartTypeGroup");
         if( !xChartTypeGroup.is() )
             continue;
-        ::std::auto_ptr< VSeriesPlotter > apPlotter( VSeriesPlotter::createSeriesPlotter( xChartTypeGroup->getChartType()->getChartType(), nDimension ) );
+        ::std::auto_ptr< VSeriesPlotter > apPlotter( VSeriesPlotter::createSeriesPlotter( xChartTypeGroup->getChartType() ) );
 
         //------------ add series to plotter and thus prepare him for providing minimum and maximum values
 
