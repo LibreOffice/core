@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergechildwindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:12:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,24 +86,12 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-//#ifndef _COM_SUN_STAR_MAIL_XMAILSERVER_HPP_
-//#include "com/sun/star/mail/XMailServer.hpp"
-//#endif
 #ifndef _COM_SUN_STAR_MAIL_XSMTPSERVICE_HPP_
 #include "com/sun/star/mail/XSmtpService.hpp"
 #endif
 #ifndef _COM_SUN_STAR_MAIL_MAILSERVICETYPE_HPP_
 #include "com/sun/star/mail/MailServiceType.hpp"
 #endif
-#ifndef _COM_SUN_STAR_MAIL_MAILSERVICEPROVIDER_HPP_
-#include "com/sun/star/mail/MailServiceProvider.hpp"
-#endif
-#ifndef _COM_SUN_STAR_MAIL_XMAILSERVICEPROVIDER_HPP_
-#include "com/sun/star/mail/XMailServiceProvider.hpp"
-#endif
-//#ifndef _COM_SUN_STAR_MAIL_MAILSERVER_HPP_
-//#include "com/sun/star/mail/MailServer.hpp"
-//#endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
@@ -629,168 +617,101 @@ void  SwSendMailDialog::SendMails()
     }
     long nSent = 0;
     String sErrorMessage;
-    //get a mail server connection
-    uno::Reference< lang::XMultiServiceFactory> rMgr = ::comphelper::getProcessServiceFactory();
     bool bIsLoggedIn = false;
-    bool bIsServer = false;
-    if (rMgr.is())
+    EnterWait();
+    //get a mail server connection
+    uno::Reference< mail::XSmtpService > xSmtpServer =
+                SwMailMergeHelper::ConnectToSmtpServer( *m_pConfigItem,
+                                            m_pImpl->xConnectedInMailService,
+                                            aEmptyStr, aEmptyStr, this );
+    bIsLoggedIn = xSmtpServer.is() && xSmtpServer->isConnected();
+    LeaveWait();
+    if(!bIsLoggedIn)
     {
-        EnterWait();
-        uno::Reference< mail::XSmtpService > xSmtpServer;
-        try
+        DBG_ERROR("create error message")
+        return;
+    }
+    m_pImpl->xMailDispatcher.set( new MailDispatcher(xSmtpServer));
+    ::std::vector< SwMailDescriptor >::iterator aCurrentMailDescriptor;
+    for( aCurrentMailDescriptor = m_pImpl->aDescriptors.begin();
+            aCurrentMailDescriptor != m_pImpl->aDescriptors.end();
+                    ++aCurrentMailDescriptor)
+    {
+        if(!SwMailMergeHelper::CheckMailAddress( aCurrentMailDescriptor->sEMail ))
         {
-            uno::Reference< mail::XMailServiceProvider > xMailServiceProvider =
-                    mail::MailServiceProvider::create(getCurrentCmpCtx(rMgr));
-            xSmtpServer = uno::Reference< mail::XSmtpService > (
-                            xMailServiceProvider->create(
-                            mail::MailServiceType_SMTP
-                            ), uno::UNO_QUERY);
+            ImageList& rImgLst = GetSettings().GetStyleSettings().GetWindowColor().IsDark() ?
+                                        m_aImageListHC : m_aImageList;
+            Image aInsertImg =   rImgLst.GetImage( FN_FORMULA_CANCEL );
 
-            uno::Reference< mail::XConnectionListener> xConnectionListener(new SwConnectionListener());
-
-            if(m_pConfigItem->IsAuthentication() && m_pConfigItem->IsSMTPAfterPOP())
-            {
-                uno::Reference< mail::XMailService > xInMailService =
-                        xMailServiceProvider->create(
-                        m_pConfigItem->IsInServerPOP() ?
-                            mail::MailServiceType_POP3 : mail::MailServiceType_IMAP);
-                //authenticate at the POP or IMAP server first
-                uno::Reference<mail::XAuthenticator> xAuthenticator =
-                    new SwAuthenticator(
-                        m_pConfigItem->GetInServerUserName(),
-                        m_pConfigItem->GetInServerPassword(),
-                        this);
-
-                xInMailService->addConnectionListener(xConnectionListener);
-                //check connection
-                uno::Reference< uno::XCurrentContext> xConnectionContext =
-                        new SwConnectionContext(
-                            m_pConfigItem->GetInServerName(),
-                            m_pConfigItem->GetInServerPort(),
-                            ::rtl::OUString::createFromAscii( "Insecure" ));
-                xInMailService->connect(xConnectionContext, xAuthenticator);
-                m_pImpl->xConnectedInMailService = xInMailService;
-            }
-            uno::Reference< mail::XAuthenticator> xAuthenticator;
-            if(m_pConfigItem->IsAuthentication() &&
-                    !m_pConfigItem->IsSMTPAfterPOP() &&
-                    m_pConfigItem->GetMailUserName().getLength())
-                xAuthenticator =
-                    new SwAuthenticator(m_pConfigItem->GetMailUserName(),
-                                        m_pConfigItem->GetMailPassword(),
-                                        this);
-            else
-                xAuthenticator =  new SwAuthenticator();
-            //just to check if the server exists
-            xSmtpServer->getSupportedConnectionTypes();
-            bIsServer = true;
-            //check connection
-
-            uno::Reference< uno::XCurrentContext> xConnectionContext =
-                    new SwConnectionContext(
-                        m_pConfigItem->GetMailServer(),
-                        m_pConfigItem->GetMailPort(),
-                        ::rtl::OUString::createFromAscii( m_pConfigItem->IsSecureConnection() ? "Ssl" : "Insecure"));
-            xSmtpServer->connect(xConnectionContext, xAuthenticator);
-            m_pImpl->xConnectedMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
-
-            bIsLoggedIn = xSmtpServer->isConnected();
+            String sMessage = m_sSendingTo;
+            String sTmp(aCurrentMailDescriptor->sEMail);
+            sTmp += '\t';
+            sTmp += m_sFailed;
+            sMessage.SearchAndReplaceAscii("%1", sTmp);
+            m_aStatusLB.InsertEntry( sMessage, aInsertImg, aInsertImg);
+            ++m_nSendCount;
+            ++m_nErrorCount;
+            UpdateTransferStatus( );
+            continue;
         }
-        catch(uno::Exception& rEx)
+        SwMailMessage* pMessage = 0;
+        uno::Reference< mail::XMailMessage > xMessage = pMessage = new SwMailMessage;
+        if(m_pConfigItem->IsMailReplyTo())
+            pMessage->setReplyToAddress(m_pConfigItem->GetMailReplyTo());
+        pMessage->addRecipient( aCurrentMailDescriptor->sEMail );
+        pMessage->SetSenderAddress( m_pConfigItem->GetMailAddress() );
+        if(aCurrentMailDescriptor->sAttachmentURL.getLength())
         {
-            sErrorMessage = rEx.Message;
-            DBG_ERROR("exception caught")
+            mail::MailAttachment aAttach;
+            aAttach.Data =
+                    new SwMailTransferable(
+                        aCurrentMailDescriptor->sAttachmentURL,
+                        aCurrentMailDescriptor->sAttachmentName,
+                        aCurrentMailDescriptor->sMimeType );
+            aAttach.ReadableName = aCurrentMailDescriptor->sAttachmentName;
+            pMessage->addAttachment( aAttach );
         }
-        LeaveWait();
-        if(!bIsLoggedIn)
-        {
-            //error message??
-            //sErrorMessage
-            DBG_ERROR("create error message")
-            return;
-        }
-        m_pImpl->xMailDispatcher.set( new MailDispatcher(xSmtpServer));
-        ::std::vector< SwMailDescriptor >::iterator aCurrentMailDescriptor;
-        for( aCurrentMailDescriptor = m_pImpl->aDescriptors.begin();
-                aCurrentMailDescriptor != m_pImpl->aDescriptors.end();
-                        ++aCurrentMailDescriptor)
-        {
-            if(!SwMailMergeHelper::CheckMailAddress( aCurrentMailDescriptor->sEMail ))
-            {
-                ImageList& rImgLst = GetSettings().GetStyleSettings().GetWindowColor().IsDark() ?
-                                            m_aImageListHC : m_aImageList;
-                Image aInsertImg =   rImgLst.GetImage( FN_FORMULA_CANCEL );
+        pMessage->setSubject( aCurrentMailDescriptor->sSubject );
+        uno::Reference< datatransfer::XTransferable> xBody =
+                    new SwMailTransferable(
+                        aCurrentMailDescriptor->sBodyContent,
+                        aCurrentMailDescriptor->sBodyMimeType);
+        pMessage->setBody( xBody );
 
-                String sMessage = m_sSendingTo;
-                String sTmp(aCurrentMailDescriptor->sEMail);
-                sTmp += '\t';
-                sTmp += m_sFailed;
-                sMessage.SearchAndReplaceAscii("%1", sTmp);
-                m_aStatusLB.InsertEntry( sMessage, aInsertImg, aInsertImg);
-                ++m_nSendCount;
-                ++m_nErrorCount;
-                UpdateTransferStatus( );
-                continue;
-            }
-            SwMailMessage* pMessage = 0;
-            uno::Reference< mail::XMailMessage > xMessage = pMessage = new SwMailMessage;
-            if(m_pConfigItem->IsMailReplyTo())
-                pMessage->setReplyToAddress(m_pConfigItem->GetMailReplyTo());
-            pMessage->addRecipient( aCurrentMailDescriptor->sEMail );
-            pMessage->SetSenderAddress( m_pConfigItem->GetMailAddress() );
-            if(aCurrentMailDescriptor->sAttachmentURL.getLength())
-            {
-                mail::MailAttachment aAttach;
-                aAttach.Data =
-                        new SwMailTransferable(
-                            aCurrentMailDescriptor->sAttachmentURL,
-                            aCurrentMailDescriptor->sAttachmentName,
-                            aCurrentMailDescriptor->sMimeType );
-                aAttach.ReadableName = aCurrentMailDescriptor->sAttachmentName;
-                pMessage->addAttachment( aAttach );
-            }
-            pMessage->setSubject( aCurrentMailDescriptor->sSubject );
-            uno::Reference< datatransfer::XTransferable> xBody =
-                        new SwMailTransferable(
-                            aCurrentMailDescriptor->sBodyContent,
-                            aCurrentMailDescriptor->sBodyMimeType);
-            pMessage->setBody( xBody );
-
-            //CC and BCC are tokenized by ';'
-            if(aCurrentMailDescriptor->sCC.getLength())
-            {
-                String sTokens( aCurrentMailDescriptor->sCC );
-                sal_uInt16 nTokens = sTokens.GetTokenCount( ';' );
-                xub_StrLen nPos = 0;
-                for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
-                {
-                    String sTmp = sTokens.GetToken( 0, ';', nPos);
-                    if( sTmp.Len() )
-                        pMessage->addCcRecipient( sTmp );
-                }
-            }
-            if(aCurrentMailDescriptor->sBCC.getLength())
-            {
-                String sTokens( aCurrentMailDescriptor->sBCC );
-                sal_uInt16 nTokens = sTokens.GetTokenCount( ';' );
-                xub_StrLen nPos = 0;
-                for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
-                {
-                    String sTmp = sTokens.GetToken( 0, ';', nPos);
-                    if( sTmp.Len() )
-                        pMessage->addBccRecipient( sTmp );
-                }
-            }
-            m_pImpl->xMailDispatcher->enqueueMailMessage( xMessage );
-        }
-        m_pImpl->aDescriptors.clear();
-        UpdateTransferStatus();
-        m_pImpl->xMailListener = new SwMailDispatcherListener_Impl(*this);
-        m_pImpl->xMailDispatcher->addListener(m_pImpl->xMailListener);
-        if(!m_bCancel)
+        //CC and BCC are tokenized by ';'
+        if(aCurrentMailDescriptor->sCC.getLength())
         {
-            m_pImpl->xMailDispatcher->start();
+            String sTokens( aCurrentMailDescriptor->sCC );
+            sal_uInt16 nTokens = sTokens.GetTokenCount( ';' );
+            xub_StrLen nPos = 0;
+            for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
+            {
+                String sTmp = sTokens.GetToken( 0, ';', nPos);
+                if( sTmp.Len() )
+                    pMessage->addCcRecipient( sTmp );
+            }
         }
+        if(aCurrentMailDescriptor->sBCC.getLength())
+        {
+            String sTokens( aCurrentMailDescriptor->sBCC );
+            sal_uInt16 nTokens = sTokens.GetTokenCount( ';' );
+            xub_StrLen nPos = 0;
+            for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
+            {
+                String sTmp = sTokens.GetToken( 0, ';', nPos);
+                if( sTmp.Len() )
+                    pMessage->addBccRecipient( sTmp );
+            }
+        }
+        m_pImpl->xMailDispatcher->enqueueMailMessage( xMessage );
+    }
+    m_pImpl->aDescriptors.clear();
+    UpdateTransferStatus();
+    m_pImpl->xMailListener = new SwMailDispatcherListener_Impl(*this);
+    m_pImpl->xMailDispatcher->addListener(m_pImpl->xMailListener);
+    if(!m_bCancel)
+    {
+        m_pImpl->xMailDispatcher->start();
     }
 }
 /*-- 27.08.2004 10:50:17---------------------------------------------------
