@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-05 10:14:01 $
+ *  last change: $Author: jl $ $Date: 2004-05-13 11:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,13 @@ public:
         Default is true;
      */
     bool bNil;
+    /** contains the value of the /java/javaInfo@autoSelect attribute.
+        Default is true. If it is false then the user has modified the JRE
+        selection by actively choosing a JRE from the options dialog. That is,
+        the function jfw_setSelectedJRE was called. Contrary, the function
+        jfw_findAndSelectJRE sets the attribute to true.
+     */
+    bool bAutoSelect;
     rtl::OUString sVendor;
     rtl::OUString sLocation;
     rtl::OUString sVersion;
@@ -276,8 +283,11 @@ public:
      */
     rtl::OUString const & getUserClassPath() const;
     /** sets m_aInfo. Analog to setEnabled.
+        @param bAutoSelect
+        true- called by jfw_setSelectedJRE
+        false called by jfw_findAndSelectJRE
      */
-    void setJavaInfo(const JavaInfo * pInfo);
+    void setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect);
     /** returns a JavaInfo structure representing the node
         /java/javaInfo
         If both, user and share settings are nil, then NULL is returned.
@@ -286,6 +296,14 @@ public:
     /** returns the value of the attribute /java/javaInfo[@vendorUpdate].
      */
     rtl::OString const & getJavaInfoAttrVendorUpdate() const;
+
+    /** returns the javaInfo@autoSelect attribute.
+        Before calling this function loadFromSettings must be called.
+        It uses the javaInfo@autoSelect attribute  to determine
+        the return value;
+     */
+    bool getJavaInfoAttrAutoSelect() const;
+
     /** sets the /java/vmParameters/param elements.
         The values are kept in a vector m_arVmParameters. When this method is
         called then the vector is cleared and the new values are inserted.
@@ -330,6 +348,7 @@ public:
     /** writes the data to user settings.
      */
     javaFrameworkError writeSettings() const;
+
 
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-12 13:42:15 $
+ *  last change: $Author: jl $ $Date: 2004-05-13 11:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifdef WNT
+#include <windows.h>
+#endif
 
 #include "libxmlutil.hxx"
 #include "osl/mutex.hxx"
@@ -82,7 +85,6 @@
 
 #define JAVASETTINGS "javasettings"
 #define VENDORSETTINGS "javavendors.xml"
-#define USE_ACCESSIBILITY_FILE "useatjava.txt"
 /** The vector contains on return file urls to the plugins.
  */
 namespace jfw
@@ -439,23 +441,45 @@ bool isAccessibilitySupportDesired()
 {
     bool retVal = false;
 #ifdef WNT
-    rtl::OUString usInstallDir;
-    rtl::Bootstrap::get(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseInstallation")),
-        usInstallDir,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("${$SYSBINDIR/"
-            SAL_CONFIGFILE("bootstrap") ":BaseInstallation}")));
-
-    rtl::OUString urlrcPath= usInstallDir +
-    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                      "/share/config/" USE_ACCESSIBILITY_FILE));
-
-    osl::DirectoryItem testFileItem;
-    if (osl::DirectoryItem::get(urlrcPath, testFileItem)
-        == osl::FileBase::E_None)
+    HKEY    hKey = 0;
+    if (RegOpenKeyEx(HKEY_CURRENT_USER,
+                     "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
+                     0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
-        retVal = true;
+        DWORD   dwType = 0;
+        DWORD   dwLen = 16;
+        unsigned char arData[16];
+        if( RegQueryValueEx(hKey, "SupportAssistiveTechnology", NULL, &dwType, arData,
+                            & dwLen)== ERROR_SUCCESS)
+        {
+            if (dwType == REG_SZ)
+            {
+                if (strcmp((char*) arData, "true") == 0
+                    || strcmp((char*) arData, "1") == 0)
+                    retVal = true;
+                else if (strcmp((char*) arData, "false") == 0
+                         || strcmp((char*) arData, "0") == 0)
+                    retVal = false;
+#if OSL_DEBUG_LEVER > 1
+                else
+                    OSL_ASSERT(0);
+#endif
+            }
+            else if (dwType == REG_DWORD)
+            {
+                if (arData[0] == 1)
+                    retVal = true;
+                else if (arData[0] == 0)
+                    retVal = false;
+#if OSL_DEBUG_LEVER > 1
+                else
+                    OSL_ASSERT(0);
+#endif
+            }
+        }
     }
+    RegCloseKey(hKey);
+
 #elif UNX
     char buf[16];
     // use 2 shells to suppress the eventual "gcontool-2 not found" message

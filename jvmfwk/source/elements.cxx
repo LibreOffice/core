@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-13 08:10:46 $
+ *  last change: $Author: jl $ $Date: 2004-05-13 11:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,12 +284,13 @@ javaFrameworkError createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
 
-    //<javaInfo xsi:nil="true">
+    //<javaInfo xsi:nil="true"  autoSelect="true">
     xmlNode  * nodeJava = xmlNewTextChild(
         root,NULL, (xmlChar*) "javaInfo", (xmlChar*) "");
     if (nodeJava == NULL)
         return JFW_E_ERROR;
     xmlSetNsProp(nodeJava,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
+//    xmlSetProp(nodeJava,(xmlChar*) "autoSelect",(xmlChar*) "true");
     //add a new line
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
@@ -863,10 +864,10 @@ rtl::OUString const &  CNodeJava::getUserClassPath() const
     return m_sUserClassPath;
 }
 
-void CNodeJava::setJavaInfo(const JavaInfo * pInfo)
+void CNodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
 
 {
-
+    m_aInfo.bAutoSelect = bAutoSelect;
     m_aInfo.bNil = false;
 //    m_aInfo.sAttrVendorUpdate = sVendorUpdate;
 
@@ -1020,9 +1021,14 @@ void CNodeJava::getJRELocations(
     *size = m_arJRELocations.size();
 }
 
+bool CNodeJava::getJavaInfoAttrAutoSelect() const
+{
+    return m_aInfo.bAutoSelect;
+}
 //=====================================================================
 CNodeJavaInfo::CNodeJavaInfo() :
-    nFeatures(0), nRequirements(0), bNil(true), m_bEmptyNode(false)
+    nFeatures(0), nRequirements(0), bNil(true),
+    bAutoSelect(true), m_bEmptyNode(false)
 {
 }
 
@@ -1056,6 +1062,7 @@ javaFrameworkError CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInf
         pJavaInfo, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
     if ( ! sNil)
         return JFW_E_FORMAT_STORE;
+
     if (xmlStrcmp(sNil, (xmlChar*) "true") == 0)
         bNil = true;
     else if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
@@ -1064,6 +1071,20 @@ javaFrameworkError CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInf
         return JFW_E_FORMAT_STORE;
     if (bNil == true)
         return JFW_E_NONE;
+
+    //Get javaInfo@manuallySelected attribute
+    CXmlCharPtr sAutoSelect;
+    sAutoSelect = xmlGetProp(
+        pJavaInfo, (xmlChar*) "autoSelect");
+    if ( ! sAutoSelect)
+        return JFW_E_FORMAT_STORE;
+
+    if (xmlStrcmp(sAutoSelect, (xmlChar*) "true") == 0)
+        bAutoSelect = true;
+    else if (xmlStrcmp(sAutoSelect, (xmlChar*) "false") == 0)
+        bAutoSelect = false;
+    else
+        return JFW_E_FORMAT_STORE;
 
     xmlNode * cur = pJavaInfo->children;
 
@@ -1145,13 +1166,18 @@ javaFrameworkError CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     javaFrameworkError errcode = JFW_E_NONE;
     //write the attribute vendorSettings
 
+    //javaInfo@vendorUpdate
     //creates the attribute if necessary
     rtl::OString sUpdated;
     errcode = getElementUpdated(sUpdated);
     if (errcode != JFW_E_NONE)
         return errcode;
     xmlSetProp(pJavaInfoNode, (xmlChar*)"vendorUpdate",
-                   (xmlChar*) sUpdated.getStr());
+               (xmlChar*) sUpdated.getStr());
+
+    //javaInfo@autoSelect
+    xmlSetProp(pJavaInfoNode, (xmlChar*)"autoSelect",
+               (xmlChar*) (bAutoSelect == true ? "true" : "false"));
 
     //Set xsi:nil in javaInfo element to false
     //the xmlNs pointer must not be destroyed

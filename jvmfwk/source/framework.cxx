@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-12 10:33:33 $
+ *  last change: $Author: jl $ $Date: 2004-05-13 11:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,8 +299,37 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         return JFW_E_RUNNING_JVM;
     if (ppVM == NULL)
         return JFW_E_INVALID_ARG;
-
-
+#ifdef WNT
+    //Because on Windows there is no system setting that we can use to determine
+    //if Assistive Technology Tool support is needed, we ship a .reg file that the
+    //user can use to create a registry setting. When the user forgets to set
+    //the key before he starts the office then a JRE may be selected without access bridge.
+    //When he later sets the key then we select a JRE with accessibility support but
+    //only if the user has not manually changed the selected JRE in the options dialog.
+    if (jfw::isAccessibilitySupportDesired())
+    {
+        jfw::CJavaInfo info = NULL;
+        javaFrameworkError err = JFW_E_NONE;
+        if ((err = jfw_getSelectedJRE( & info)) != JFW_E_NONE)
+            return err;
+        // If no JRE has been selected then we do no select one. This function shall then
+        //return JFW_E_NO_SELECT
+        if (info != NULL &&
+            (info->nFeatures & JFW_FEATURE_ACCESSBRIDGE) == 0)
+        {
+            //has the user manually selected a JRE?
+            jfw::CNodeJava settings;
+            if ((errcode = settings.loadFromSettings()) != JFW_E_NONE)
+                return errcode;
+            if (settings.getJavaInfoAttrAutoSelect() == true)
+            {
+                //The currently selected JRE has no access bridge
+                if ((err = jfw_findAndSelectJRE(NULL)) != JFW_E_NONE)
+                    return err;
+            }
+        }
+    }
+#endif
     jfw::CNodeJava javaSettings;
     if ((errcode = javaSettings.loadFromSettings()) != JFW_E_NONE)
         return errcode;
@@ -631,7 +660,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
     if ((JavaInfo*) aCurrentInfo)
     {
         jfw::CNodeJava javaNode;
-        javaNode.setJavaInfo(aCurrentInfo);
+        javaNode.setJavaInfo(aCurrentInfo,true);
         errcode = javaNode.writeSettings();
 
         if (errcode == JFW_E_NONE && pInfo !=NULL)
@@ -823,7 +852,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
     if (jfw_areEqualJavaInfo(currentInfo, pInfo) == sal_False)
     {
         jfw::CNodeJava node;
-        node.setJavaInfo(pInfo);
+        node.setJavaInfo(pInfo, false);
         errcode = node.writeSettings();
         if (errcode != JFW_E_NONE)
             return errcode;

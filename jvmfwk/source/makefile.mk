@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jl $ $Date: 2004-04-28 10:13:23 $
+#   last change: $Author: jl $ $Date: 2004-05-13 11:15:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,10 @@ SHL1DEPN=
 SHL1IMPLIB = i$(FRAMEWORKLIB)
 SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB) $(XML2LIB)
+
+.IF "$(OS)" == "WNT"
+SHL1STDLIBS += advapi32.lib
+.ENDIF # WNT
 
 SHL1VERSIONMAP = framework.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
