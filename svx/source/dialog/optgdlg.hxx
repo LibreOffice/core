@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:15:30 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,45 +235,6 @@ class OfaLanguagesTabPage : public SfxTabPage
 public:
     OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet );
     ~OfaLanguagesTabPage();
-
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-};
-/* -----------------------------20.06.01 16:32--------------------------------
-
- ---------------------------------------------------------------------------*/
-#ifdef WNT
-#else
-#define HELPER_PAGE_COMPLETE
-#endif
-
-struct OfaHelperProgramsTabPage_Impl;
-class OfaHelperProgramsTabPage : public SfxTabPage
-{
-    FixedText       aHelpFI;
-
-    FixedLine       aMailFL;
-    ReadOnlyImage      aProgramFI;
-    FixedText       aProgramFT;
-    FixedText       aAdditionalMailFT;
-    ListBox         aProfilesLB;
-    Edit            aMailerURLED;
-    PushButton      aMailerURLPB;
-
-    String          m_sMozilla;
-    String          m_sNetscape;
-    String          m_sDefaultFilterName;
-
-    OfaHelperProgramsTabPage_Impl* pImpl;
-
-    DECL_LINK(  FileDialogHdl_Impl, PushButton* ) ;
-    DECL_LINK(  ProfileHdl_Impl, ListBox* ) ;
-
-public:
-    OfaHelperProgramsTabPage( Window* pParent, const SfxItemSet& rSet );
-    ~OfaHelperProgramsTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 

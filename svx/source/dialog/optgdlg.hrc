@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-12 11:58:49 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,19 +206,6 @@
 #define FT_HELPAGENT_TIME_UNIT      58
 #define FL_DOCSTATUS                59
 #define CB_DOCSTATUS                60
-
-//tab page helper programs
-#define FI_HELP                     1
-#define FL_MAIL                     2
-#define STR_MOZILLA_PROGRAM_NAME    3
-#define STR_NETSCAPE_PROGRAM_NAME   4
-#define FT_PROGRAM                  5
-#define FT_ADD_MAIL                 6
-#define LB_PROFILES                 7
-#define ED_MAILERURL                8
-#define PB_MAILERURL                9
-#define STR_DEFAULT_FILENAME       10
-#define FI_PROGRAM                 11
 #endif // #ifndef _OFA_OPTGDLG_HRC
 
 // ******************************************************************* EOF
