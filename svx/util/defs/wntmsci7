@@ -18629,3 +18629,4 @@ _real@8@40088f3d4c83f2e79800
 ?hasByName@SvXMLEmbeddedObjectHelper@@UAAEABVOUString@rtl@@@Z
 ?hasElements@SvXMLEmbeddedObjectHelper@@UAAEXZ
 ?SetReadOnlyMode@SvxHpLinkDlg@@QAEXE@Z
+?SetFillAttribute@SvxShape@@SAEJABVOUString@rtl@@AAVSfxItemSet@@PAVSdrModel@@@Z
