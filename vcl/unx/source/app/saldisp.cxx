@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:39:22 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2199,6 +2199,31 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
         case POINTER_TEXT_VERTICAL:
             MAKE_CURSOR( vertcurs_ );
             break;
+
+        // --> FME 2004-07-30 #i32329# Enhanced table selection
+        case POINTER_TAB_SELECT_S:
+            MAKE_CURSOR( tblsels_ );
+            break;
+        case POINTER_TAB_SELECT_E:
+            MAKE_CURSOR( tblsele_ );
+            break;
+        case POINTER_TAB_SELECT_SE:
+            MAKE_CURSOR( tblselse_ );
+            break;
+        case POINTER_TAB_SELECT_W:
+            MAKE_CURSOR( tblselw_ );
+            break;
+        case POINTER_TAB_SELECT_SW:
+            MAKE_CURSOR( tblselsw_ );
+            break;
+        // <--
+
+        // --> FME 2004-08-16 #i20119# Paintbrush tool
+        case POINTER_PAINTBRUSH :
+            MAKE_CURSOR( paintbrush_ );
+            break;
+        // <--
+
         default:
             DBG_ERROR("pointer not implemented");
             aCur = XCreateFontCursor( pDisp_, XC_arrow );
