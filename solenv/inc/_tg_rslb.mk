@@ -13,7 +13,7 @@ $(RSC_MULTI1) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -25,7 +25,7 @@ $(RSC_MULTI1) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB1NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -46,9 +46,9 @@ $(RESLIB1TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -64,9 +64,9 @@ $(RESLIB1TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -80,9 +80,9 @@ $(RESLIB1TARGETN): \
     @+-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -99,9 +99,9 @@ $(RESLIB1TARGETN): \
     @+-$(RM) $(RSC_MULTI1) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB1NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB1NAME)$(RESLIB1VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \
@@ -131,7 +131,7 @@ $(RSC_MULTI2) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -143,7 +143,7 @@ $(RSC_MULTI2) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB2NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -164,9 +164,9 @@ $(RESLIB2TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -182,9 +182,9 @@ $(RESLIB2TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -198,9 +198,9 @@ $(RESLIB2TARGETN): \
     @+-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -217,9 +217,9 @@ $(RESLIB2TARGETN): \
     @+-$(RM) $(RSC_MULTI2) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB2NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB2NAME)$(RESLIB2VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \
@@ -249,7 +249,7 @@ $(RSC_MULTI3) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -261,7 +261,7 @@ $(RSC_MULTI3) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB3NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -282,9 +282,9 @@ $(RESLIB3TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -300,9 +300,9 @@ $(RESLIB3TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -316,9 +316,9 @@ $(RESLIB3TARGETN): \
     @+-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -335,9 +335,9 @@ $(RESLIB3TARGETN): \
     @+-$(RM) $(RSC_MULTI3) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB3NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB3NAME)$(RESLIB3VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \
@@ -367,7 +367,7 @@ $(RSC_MULTI4) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -379,7 +379,7 @@ $(RSC_MULTI4) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB4NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -400,9 +400,9 @@ $(RESLIB4TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -418,9 +418,9 @@ $(RESLIB4TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -434,9 +434,9 @@ $(RESLIB4TARGETN): \
     @+-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -453,9 +453,9 @@ $(RESLIB4TARGETN): \
     @+-$(RM) $(RSC_MULTI4) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB4NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB4NAME)$(RESLIB4VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \
@@ -485,7 +485,7 @@ $(RSC_MULTI5) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -497,7 +497,7 @@ $(RSC_MULTI5) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB5NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -518,9 +518,9 @@ $(RESLIB5TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -536,9 +536,9 @@ $(RESLIB5TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -552,9 +552,9 @@ $(RESLIB5TARGETN): \
     @+-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -571,9 +571,9 @@ $(RESLIB5TARGETN): \
     @+-$(RM) $(RSC_MULTI5) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB5NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB5NAME)$(RESLIB5VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \
@@ -603,7 +603,7 @@ $(RSC_MULTI6) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -615,7 +615,7 @@ $(RSC_MULTI6) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB6NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -636,9 +636,9 @@ $(RESLIB6TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -654,9 +654,9 @@ $(RESLIB6TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -670,9 +670,9 @@ $(RESLIB6TARGETN): \
     @+-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -689,9 +689,9 @@ $(RESLIB6TARGETN): \
     @+-$(RM) $(RSC_MULTI6) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB6NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB6NAME)$(RESLIB6VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \
@@ -721,7 +721,7 @@ $(RSC_MULTI7) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -733,7 +733,7 @@ $(RSC_MULTI7) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB7NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -754,9 +754,9 @@ $(RESLIB7TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -772,9 +772,9 @@ $(RESLIB7TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -788,9 +788,9 @@ $(RESLIB7TARGETN): \
     @+-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -807,9 +807,9 @@ $(RESLIB7TARGETN): \
     @+-$(RM) $(RSC_MULTI7) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB7NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB7NAME)$(RESLIB7VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \
@@ -839,7 +839,7 @@ $(RSC_MULTI8) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -851,7 +851,7 @@ $(RSC_MULTI8) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB8NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -872,9 +872,9 @@ $(RESLIB8TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -890,9 +890,9 @@ $(RESLIB8TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -906,9 +906,9 @@ $(RESLIB8TARGETN): \
     @+-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -925,9 +925,9 @@ $(RESLIB8TARGETN): \
     @+-$(RM) $(RSC_MULTI8) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB8NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB8NAME)$(RESLIB8VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \
@@ -957,7 +957,7 @@ $(RSC_MULTI9) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -969,7 +969,7 @@ $(RSC_MULTI9) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB9NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -990,9 +990,9 @@ $(RESLIB9TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -1008,9 +1008,9 @@ $(RESLIB9TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -1024,9 +1024,9 @@ $(RESLIB9TARGETN): \
     @+-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -1043,9 +1043,9 @@ $(RESLIB9TARGETN): \
     @+-$(RM) $(RSC_MULTI9) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB9NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB9NAME)$(RESLIB9VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \
@@ -1075,7 +1075,7 @@ $(RSC_MULTI10) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -1087,7 +1087,7 @@ $(RSC_MULTI10) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB10NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -1108,9 +1108,9 @@ $(RESLIB10TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -1126,9 +1126,9 @@ $(RESLIB10TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -1142,9 +1142,9 @@ $(RESLIB10TARGETN): \
     @+-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -1161,9 +1161,9 @@ $(RESLIB10TARGETN): \
     @+-$(RM) $(RSC_MULTI10) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB10NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB10NAME)$(RESLIB10VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-07 14:28:33 $
+#   last change: $Author: hjs $ $Date: 2002-01-09 17:19:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,7 @@ $(RSC_MULTI$(TNR)) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(UPD)$i.res} \
+    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
     -lip{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
@@ -125,7 +125,7 @@ $(RSC_MULTI$(TNR)) : \
     -r -p \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
-    -fs{$(BIN)$/$(RESLIB$(TNR)NAME)$(UPD)$i.res} \
+    -fs{$(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
     -lip{$(RES)}$/$(langext_{$(i)}) ) \
     -ft$@ \
     -I{$(RES)}$/$(defaultlangext) \
@@ -146,9 +146,9 @@ $(RESLIB$(TNR)TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -164,9 +164,9 @@ $(RESLIB$(TNR)TARGETN): \
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
     -r \
-    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
     -fs$@ \
     -I$(PRJ)$/$(INPATH)$/res$/$(defaultlangext) \
     -I$(PRJ)$/$(GUIBASE)$/res -I$(PRJ)$/res -I$(PRJ)$/win$/res -I$(PRJ)$/..$/res -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
@@ -180,9 +180,9 @@ $(RESLIB$(TNR)TARGETN): \
     @+-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
-    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
+    -I{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))}$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
     -fs{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} \
     -r -p \
     -I$(RES) \
@@ -199,9 +199,9 @@ $(RESLIB$(TNR)TARGETN): \
     @+-$(RM) $(RSC_MULTI$(TNR)) >& $(NULLDEV)
 .ELSE           # "$(rsc_once)"!=""
     $(RSC) -presponse @$(mktmp \
-    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
-    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
-    -I$(RES)$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(UPD), $(@:b))}) \
+    $(rsclang_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
+    $(rescharset_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
+    -I$(RES)$/$(langext_{$(subst,$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION), $(@:b))}) \
     -fs$@ \
     -r -p \
     -I$(RES) \
