@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 16:15:54 $
+ *  last change: $Author: os $ $Date: 2002-02-27 13:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,18 +101,18 @@ SvxPageWindow::SvxPageWindow( Window* pParent, const ResId& rId ) :
     nBottom     ( 0 ),
     nLeft       ( 0 ),
     nRight      ( 0 ),
-    aColor      ( COL_WHITE ),
+    aColor      ( COL_TRANSPARENT ),
     nHdLeft     ( 0 ),
     nHdRight    ( 0 ),
     nHdDist     ( 0 ),
     nHdHeight   ( 0 ),
-    aHdColor    ( COL_WHITE ),
+    aHdColor    ( COL_TRANSPARENT ),
     pHdBorder   ( 0 ),
     nFtLeft     ( 0 ),
     nFtRight    ( 0 ),
     nFtDist     ( 0 ),
     nFtHeight   ( 0 ),
-    aFtColor    ( COL_WHITE ),
+    aFtColor    ( COL_TRANSPARENT ),
     pFtBorder   ( 0 ),
     bFooter     ( FALSE ),
     bHeader     ( FALSE ),
@@ -131,14 +131,6 @@ SvxPageWindow::SvxPageWindow( Window* pParent, const ResId& rId ) :
     aWinSize.Width() -= 4;
 
     aWinSize = PixelToLogic( aWinSize );
-
-    aSolidLineColor = Color( COL_BLACK );
-    aDotLineColor   = Color( COL_BLACK );
-    aGrayLineColor  = Color( COL_GRAY );
-
-    aNormalFillColor   = GetFillColor();
-    aDisabledFillColor = Color( COL_GRAY );
-    aGrayFillColor     = Color( COL_LIGHTGRAY );
 }
 
 // -----------------------------------------------------------------------
@@ -208,28 +200,31 @@ void __EXPORT SvxPageWindow::Paint( const Rectangle& rRect )
 
 void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL bEnabled )
 {
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const Color& rFieldColor = rStyleSettings.GetFieldColor();
+    const Color& rFieldTextColor = rStyleSettings.GetFieldTextColor();
+    const Color& rDisableColor = rStyleSettings.GetDisableColor();
+    const Color& rDlgColor = rStyleSettings.GetDialogColor();
+
+    // background
+    if(!bSecond)
+    {
+        SetLineColor( Color(COL_TRANSPARENT) );
+        SetFillColor( rDlgColor );
+        Size aWinSize(GetOutputSize());
+        DrawRect( Rectangle( Point(0,0), aWinSize ) );
+    }
+    SetLineColor( rFieldTextColor );
     // Schatten
     Size aTempSize = aSize;
-//    if ( aTempSize.Height() > aTempSize.Width() )
-//        // Beim Hochformat die H"ohe etwas verkleinern, damit der Schatten passt.
-//        aTempSize.Height() -= PixelToLogic( Size( 0, 2 ) ).Height();
-//    Point aShadowPt( rOrg );
-//    aShadowPt += PixelToLogic( Point( 2, 2 ) );
-//    SetLineColor( Color( COL_GRAY ) );
-//    SetFillColor( Color( COL_GRAY ) );
-//    DrawRect( Rectangle( aShadowPt, aTempSize ) );
-
     // Seite
-    SetLineColor( Color( COL_BLACK ) );
-
     if ( !bEnabled )
     {
-        SetFillColor( Color( COL_GRAY ) );
+        SetFillColor( rDisableColor );
         DrawRect( Rectangle( rOrg, aTempSize ) );
         return;
     }
-
-    SetFillColor( Color( COL_WHITE ) );
+    SetFillColor( rFieldColor );
     DrawRect( Rectangle( rOrg, aTempSize ) );
 
     // Border Top Bottom Left Right
@@ -359,5 +354,4 @@ void SvxPageWindow::SetFtBorder( const SvxBoxItem& rNew )
     delete pFtBorder;
     pFtBorder = new SvxBoxItem( rNew );
 }
-
 
