@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:56:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,7 @@ String STR_INPUTFLD
     TEXT = "Eingabefeld" ;
     TEXT [ English ] = "Input field" ;
     TEXT [ norwegian ] = "Input field" ;
-    TEXT [ italian ] = "Campo di digitazione" ;
+    TEXT [ italian ] = "Campo di inserimento" ;
     TEXT [ portuguese_brazilian ] = "Campo de entrada" ;
     TEXT [ portuguese ] = "Campo de entrada" ;
     TEXT [ finnish ] = "Syφttφkenttδ" ;
@@ -563,7 +563,7 @@ String STR_SETINPUTFLD
     TEXT = "Eingabefeld (Variable)" ;
     TEXT [ English ] = "Input field (Variable)" ;
     Text [ english_us ] = "Input field (variable)" ;
-    Text [ italian ] = "Campo di digitazione (variabile)" ;
+    Text [ italian ] = "Campo di inserimento (variabile)" ;
     Text [ spanish ] = "Campo de entrada (variable)" ;
     Text [ french ] = "Champ de saisie (pour variables)" ;
     Text [ dutch ] = "Invoerveld (variabele)" ;
@@ -595,7 +595,7 @@ String STR_USRINPUTFLD
     TEXT [ English ] = "Input field (User)" ;
     Text [ dutch ] = "Invoerveld (gebruiker)" ;
     Text [ english_us ] = "Input field (user)" ;
-    Text [ italian ] = "Campo di digitazione (utente)" ;
+    Text [ italian ] = "Campo di inserimento (utente)" ;
     Text [ spanish ] = "Campo de entrada (Usuario)" ;
     Text [ french ] = "Champ de saisie (utilisateur)" ;
     Text [ swedish ] = "Inmatningsfδlt (anvδndare)" ;
@@ -860,7 +860,7 @@ String STR_JUMPEDITFLD
     Text[ japanese ] = "γƒ—γƒ¬γƒΌγ‚Ήγƒ›γƒ«γƒ€";
     Text[ chinese_traditional ] = "θ¬η”¨ε­—ε…ƒ";
     Text[ arabic ] = "ΪδΥΡ δΗΖΘ";
-    Text[ greek ] = "Σύμβολα κράτησης θέσης";
+    Text[ greek ] = "Πλαίσιο δείκτης τοποθέτησης";
     Text[ korean ] = "ν”λ μ΄μ¤ν™€λ”";
     Text[ turkish ] = "Genel arama  karakteri";
     Text[ language_user1 ] = " ";
@@ -906,6 +906,29 @@ String STR_DROPDOWN
 {
     TEXT = "Eingabeliste" ;
     TEXT[ english_us ] = "Input list" ;
+    TEXT[ portuguese ] = "Input list";
+    TEXT[ russian ] = "Input list";
+    TEXT[ greek ] = "Input list";
+    TEXT[ dutch ] = "Input list";
+    TEXT[ french ] = "Liste de saisie";
+    TEXT[ spanish ] = "Lista de entrada";
+    TEXT[ finnish ] = "Input list";
+    TEXT[ italian ] = "Elenco inserimenti";
+    TEXT[ czech ] = "Input list";
+    TEXT[ slovak ] = "Input list";
+    TEXT[ danish ] = "Input list";
+    TEXT[ swedish ] = "Inmatningslista";
+    TEXT[ polish ] = "Input list";
+    TEXT[ portuguese_brazilian ] = "Input list";
+    TEXT[ japanese ] = "ε…¥ε›ι …η›®";
+    TEXT[ korean ] = "μ…λ ¥ λª©λ΅";
+    TEXT[ chinese_simplified ] = "θΎ“ε…¥ε—ε•";
+    TEXT[ chinese_traditional ] = "θΌΈε…¥ζΈ…ε–®";
+    TEXT[ turkish ] = "Input list";
+    TEXT[ arabic ] = "Input list";
+    TEXT[ hebrew ] = "Input list";
+    TEXT[ catalan ] = "Input list";
+    TEXT[ thai ] = "Input list";
 };
  //
  // Bereich Referenzen
@@ -931,7 +954,7 @@ String STR_SETREFFLD
     TEXT[ japanese ] = "ε‚η…§γ®θ¨­ε®";
     TEXT[ chinese_traditional ] = "θ¨­ε®εƒη…§";
     TEXT[ arabic ] = "ΚΪννδ γΡΜΪ";
-    TEXT[ greek ] = "Ορισμός αναφοράς";
+    TEXT[ greek ] = "Ορισμός παραπομπής";
     TEXT[ korean ] = "μ°Έμ΅° μ„¤μ •";
     TEXT[ turkish ] = "Referans tanύmla";
     TEXT[ language_user1 ] = " ";
@@ -963,7 +986,7 @@ String STR_GETREFFLD
     TEXT[ japanese ] = "ε‚η…§γ®ζΏε…¥";
     TEXT[ chinese_traditional ] = "ζ’ε…¥εƒη…§";
     TEXT[ arabic ] = "ΕΟΡΗΜ γΡΜΪ";
-    TEXT[ greek ] = "Εισαγωγή αναφοράς";
+    TEXT[ greek ] = "Εισαγωγή παραπομπής";
     TEXT[ korean ] = "μ°Έμ΅° μ‚½μ…";
     TEXT[ turkish ] = "Referans ekle";
     TEXT[ language_user1 ] = " ";
@@ -1286,7 +1309,7 @@ String STR_SCRIPTFLD
     Text[ japanese ] = "γ‚Ήγ‚―γƒªγƒ—γƒ";
     Text[ chinese_traditional ] = "η¨‹εΌζª”";
     Text[ arabic ] = "δΥ ΘΡγΜν";
-    Text[ greek ] = "Script";
+    Text[ greek ] = "Δέσμη ενεργειών";
     Text[ korean ] = "μ¤ν¬λ¦½νΈ";
     Text[ turkish ] = "Betik";
     Text[ language_user1 ] = " ";
@@ -3276,7 +3299,7 @@ String FMT_REF_TEXT
     TEXT[ japanese ] = "ε‚η…§γƒ†γ‚­γ‚Ήγƒ";
     TEXT[ chinese_traditional ] = "εƒη…§ζ–‡";
     TEXT[ arabic ] = "δΥ γΡΜΪν";
-    TEXT[ greek ] = "Κείμενο αναφοράς";
+    TEXT[ greek ] = "Κείμενο παραπομπής";
     TEXT[ korean ] = "μ°Έμ΅°";
     TEXT[ turkish ] = "Referans metni";
     TEXT[ language_user1 ] = " ";
@@ -3464,7 +3487,7 @@ String FMT_REF_ONLYCAPTION
     Text[ japanese ] = "ε›³θ΅¨η•ªε·γƒ†γ‚­γ‚Ήγƒ";
     Text[ chinese_traditional ] = "ζ¨™η±¤ζ–‡";
     Text[ arabic ] = "δΥ ΗαΚΣγνΙ ΗαΚζΦνΝνΙ";
-    Text[ greek ] = "Κείμενο επιγραφής";
+    Text[ greek ] = "Κείμενο λεζάντας";
     Text[ korean ] = "μΊ΅μ… ν…μ¤νΈ";
     Text[ turkish ] = "Altyazύ metni";
     Text[ language_user1 ] = " ";
@@ -3594,7 +3617,7 @@ String FMT_MARK_FRAME
     Text[ japanese ] = "ζ ";
     Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε΅";
     Text[ arabic ] = "ίΗΟΡ";
-    Text[ greek ] = "Περίγραμμα";
+    Text[ greek ] = "Πλαίσιο";
     Text[ korean ] = "ν”„λ μ„";
     Text[ turkish ] = "Ηerηeve";
     Text[ language_user1 ] = " ";
@@ -3861,7 +3884,7 @@ String STR_INSTEXT
     TEXT[ portuguese_brazilian ] = "Inserir ~texto";
     TEXT[ japanese ] = "ι γ—γƒ†γ‚­γ‚Ήγƒ(~E)";
     TEXT[ korean ] = "μ¨κ²¨μ§„ ν…μ¤νΈ(~E)";
-    TEXT[ chinese_simplified ] = "ιθ—η„ζ–‡ε­—";
+    TEXT[ chinese_simplified ] = "ιθ—η„ζ–‡ε­—(~E)";
     TEXT[ chinese_traditional ] = "ι±θ—η„ζ–‡ε­—(~E)";
     TEXT[ turkish ] = "Met~ni sakla";
     TEXT[ arabic ] = "ΕΟΡΗΜ δΥ";
@@ -3925,7 +3948,7 @@ String STR_PROMPT
     TEXT[ japanese ] = "γƒ’γƒ³γƒ(~R)";
     TEXT[ chinese_traditional ] = "ζη¤Ί(~R)";
     TEXT[ arabic ] = "γαΗΝΩΙ";
-    TEXT[ greek ] = "Συμβουλή";
+    TEXT[ greek ] = "Παραπομπή";
     TEXT[ korean ] = "μ°Έμ΅°(~R)";
     TEXT[ turkish ] = "Bilgi";
     TEXT[ language_user1 ] = " ";
@@ -4239,6 +4262,7 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ hindi ] = "ΰ¤Έΰ¤‚ΰ¤ªΰ¤Ύΰ¤¦ΰ¤¨";
     Text[ slovak ] = "UpraviΕ¥";
 };
+
 
 
 
