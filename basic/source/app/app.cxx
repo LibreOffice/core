@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 17:17:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,22 +291,22 @@ static const char * const components[] =
     SAL_MODULENAME( "ucb1" )    // KSO, ABI
     , SAL_MODULENAME( "ucpfile1" )
     , SAL_MODULENAME( "cfgmgr2" )
-    , SAL_MODULENAME( "sax" )
-    , SAL_MODULENAME( "tcv" )
+    , "sax.uno" SAL_DLLEXTENSION
+    , "typeconverter.uno" SAL_DLLEXTENSION
     , SAL_MODULENAME( "fileacc" )
     , SAL_MODULENAME( "mcnttype" )          //Clipboard   Ask Oliver Braun
     , SVLIBRARY( "i18n" )
     , SVLIBRARY( "i18npool" )
         // Reading of files in specific encodings like UTF-8 using
         // createUnoService( "com.sun.star.io.TextInputStream" ) and such
-    , SAL_MODULENAME( "tinstrm" )
-    , SAL_MODULENAME( "toutstrm" )
-    , SAL_MODULENAME( "insp" )
-    , SAL_MODULENAME( "corefl" )
+    , "textinstream.uno" SAL_DLLEXTENSION
+    , "textoutstream.uno" SAL_DLLEXTENSION
+    , "introspection.uno" SAL_DLLEXTENSION
+    , "corereflection.uno" SAL_DLLEXTENSION
         // RemoteUno
-    , SAL_MODULENAME( "connectr" )
-    , SAL_MODULENAME( "brdgfctr" )
-    , SAL_MODULENAME( "remotebridge" )
+    , "connector.uno" SAL_DLLEXTENSION
+    , "bridgefac.uno" SAL_DLLEXTENSION
+    , "remotebridge.uno" SAL_DLLEXTENSION
 #ifdef SAL_UNX
     , SVLIBRARY( "dtransX11" )        // OBR
 #endif
