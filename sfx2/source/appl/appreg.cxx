@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:41:47 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 
 #include <app.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "appdata.hxx"
 #include "arrdecl.hxx"
