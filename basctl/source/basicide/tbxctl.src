@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 23:16:29 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 23:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Pulsante" ;
             Text [ spanish ] = "Botón" ;
             Text [ french ] = "Bouton" ;
-            Text [ dutch ] = "Button" ;
+            Text [ dutch ] = "Knop" ;
             Text [ swedish ] = "Kommandoknapp" ;
             Text [ danish ] = "Kommandoknap" ;
             Text [ portuguese ] = "Botão" ;
@@ -167,7 +167,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Casella di controllo" ;
             Text [ spanish ] = "Casilla de verificación" ;
             Text [ french ] = "Case à cocher" ;
-            Text [ dutch ] = "CheckBox" ;
+            Text [ dutch ] = "Markeerveld" ;
             Text [ swedish ] = "Kryssruta" ;
             Text [ danish ] = "Afkrydsningsfelt" ;
             Text [ portuguese ] = "Caixa de verificação" ;
@@ -197,7 +197,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Testo fisso" ;
             Text [ spanish ] = "Etiqueta" ;
             Text [ french ] = "Champ d'étiquette" ;
-            Text [ dutch ] = "FixedText" ;
+            Text [ dutch ] = "Titelveld" ;
             Text [ swedish ] = "Etikettfält" ;
             Text [ danish ] = "Etiket" ;
             Text [ portuguese ] = "Etiqueta" ;
@@ -227,7 +227,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Casella di riepilogo" ;
             Text [ spanish ] = "Listado" ;
             Text [ french ] = "Zone de liste" ;
-            Text [ dutch ] = "ListBox" ;
+            Text [ dutch ] = "Keuzelijst" ;
             Text [ swedish ] = "Listruta" ;
             Text [ danish ] = "Liste" ;
             Text [ portuguese ] = "Caixa de listagem" ;
@@ -254,7 +254,7 @@ ToolBox RID_TOOLBOX
             Text = "Horizontale Bildlaufleiste" ;
             Text [ english ] = "Horizontal ScrollBar" ;
             Text [ english_us ] = "Horizontal Scroll Bar" ;
-            Text [ dutch ] = "HScrollBar" ;
+            Text [ dutch ] = "Horizontale beeldschuifbalk" ;
             Text [ italian ] = "Barra di scorrimento oriz." ;
             Text [ spanish ] = "Barra de desplazamiento horizontal" ;
             Text [ french ] = "Barre de défilement horizontale" ;
@@ -284,7 +284,7 @@ ToolBox RID_TOOLBOX
             Text = "Gruppierungsrahmen" ;
             Text [ english ] = "FrameControl" ;
             Text [ english_us ] = "Group Box" ;
-            Text [ dutch ] = "GroupBox" ;
+            Text [ dutch ] = "Groepskader" ;
             Text [ italian ] = "Cornice del gruppo" ;
             Text [ spanish ] = "Marco de grupo" ;
             Text [ french ] = "Zone de groupe" ;
@@ -317,7 +317,7 @@ ToolBox RID_TOOLBOX
             Text[ portuguese ] = "Linha horizontal";
             Text[ russian ] = "Ãîðèçîíòàëüíàÿ ëèíèÿ";
             Text[ greek ] = "Ïñéæüíôéá ãñáììÞ";
-            Text[ dutch ] = "HFixedLine";
+            Text[ dutch ] = "Horizontale lijn";
             Text[ french ] = "Ligne horizontale";
             Text[ spanish ] = "Línea horizontal";
             Text[ finnish ] = "HFixedLine";
@@ -377,7 +377,7 @@ ToolBox RID_TOOLBOX
             Text[ portuguese ] = "Controlo gráfico";
             Text[ russian ] = "Ãðàôè÷åñêèé ýëåìåíò óïðàâëåíèÿ";
             Text[ greek ] = "Ãñáöéêü ðåäßï åëÝã÷ïõ";
-            Text[ dutch ] = "ImageControl";
+            Text[ dutch ] = "Grafisch controleveld";
             Text[ french ] = "Contrôle picto";
             Text[ spanish ] = "Campo gráfico de control";
             Text[ finnish ] = "ImageControl";
@@ -402,7 +402,7 @@ ToolBox RID_TOOLBOX
             Text = "Optionsfeld" ;
             Text [ english ] = "OptionButton" ;
             Text [ english_us ] = "Option Button" ;
-            Text [ dutch ] = "RadioButton" ;
+            Text [ dutch ] = "Optieveld" ;
             Text [ italian ] = "Pulsante di scelta" ;
             Text [ spanish ] = "Campo de opción" ;
             Text [ french ] = "Bouton radio" ;
@@ -432,7 +432,7 @@ ToolBox RID_TOOLBOX
             Text = "Textfeld" ;
             Text [ english ] = "TextField" ;
             Text [ english_us ] = "Text Box" ;
-            Text [ dutch ] = "Edit" ;
+            Text [ dutch ] = "Tekstveld" ;
             Text [ italian ] = "Casella di testo" ;
             Text [ spanish ] = "Campo de texto" ;
             Text [ french ] = "Zone de texte" ;
@@ -462,7 +462,7 @@ ToolBox RID_TOOLBOX
             Text = "Kombinationsfeld" ;
             Text [ english ] = "ComboBox" ;
             Text [ english_us ] = "Combo Box" ;
-            Text [ dutch ] = "ComboBox" ;
+            Text [ dutch ] = "Combinatieveld" ;
             Text [ italian ] = "Casella combinata" ;
             Text [ spanish ] = "Cuadro combinado" ;
             Text [ french ] = "Zone combinée" ;
@@ -495,7 +495,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Barra di scorrimento vert." ;
             Text [ spanish ] = "Barra de desplazamiento vertical" ;
             Text [ french ] = "Barre de défilement verticale" ;
-            Text [ dutch ] = "VScrollBar" ;
+            Text [ dutch ] = "Verticale beeldschuifbalk" ;
             Text [ swedish ] = "Vertikal rullningslist" ;
             Text [ danish ] = "Lodret rullepanel" ;
             Text [ portuguese ] = "Barra de deslocamento vert." ;
@@ -525,7 +525,7 @@ ToolBox RID_TOOLBOX
             Text[ portuguese ] = "Barra de progressão";
             Text[ russian ] = "Èíäèêàòîð ñîñòîÿíèÿ";
             Text[ greek ] = "ÃñáììÞ ðñïüäïõ";
-            Text[ dutch ] = "ProgressBar";
+            Text[ dutch ] = "Voortgangsindicator";
             Text[ french ] = "Barre de progression";
             Text[ spanish ] = "Barra de progreso";
             Text[ finnish ] = "ProgressBar";
@@ -553,7 +553,7 @@ ToolBox RID_TOOLBOX
             Text[ portuguese ] = "Linha vertical";
             Text[ russian ] = "Âåðòèêàëüíàÿ ëèíèÿ";
             Text[ greek ] = "Êáôáêüñõöç ãñáììÞ";
-            Text[ dutch ] = "VFixedLine";
+            Text[ dutch ] = "Verticale lijn";
             Text[ french ] = "Ligne verticale";
             Text[ spanish ] = "Línea vertical";
             Text[ finnish ] = "VFixedLine";
@@ -632,4 +632,5 @@ ToolBox RID_TOOLBOX
         };
     };
 };
+
 
