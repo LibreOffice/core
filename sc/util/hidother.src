@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:54:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ hidspecial HID_SC_DPLAY_SELECT   { HelpId = HID_SC_DPLAY_SELECT; };
 
 hidspecial HID_SC_DRAW_RENAME    { HelpId = HID_SC_DRAW_RENAME; };
 hidspecial HID_SC_DPSUBT_HIDE    { HelpId = HID_SC_DPSUBT_HIDE; };
+hidspecial HID_SC_DPDATEGROUP_LB { HelpId = HID_SC_DPDATEGROUP_LB; };
 
 
 //  2. Seite Funktionsautopilot: nur als Unique-IDs
