@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:20:07 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
             Text[ arabic ] = "ÅÏÑÇÌ";\
             Text[ turkish ] = "Ekle";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Insertar";\
         };                                                          \
         CancelButton BT_CANCEL                                      \
         {                                                           \
@@ -122,6 +123,7 @@
             Text[ arabic ] = "ÅÛáÇŞ";\
             Text[ turkish ] = "Kapat";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Cerrar";\
         };                                                          \
         HelpButton BT_HELP                                          \
         {                                                           \
@@ -156,6 +158,7 @@
             Text[ korean ] = "»èÁ¦(~D)";\
             Text[ turkish ] = "~Sil";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "~Eliminar";\
         };                                                          \
         ListBox DCB_INDEX                                           \
         {                                                           \
@@ -188,6 +191,7 @@
             QuickHelpText[ chinese_traditional ] = "·s¼W¨Ï¥ÎªÌ¦Û­q¥Ø¿ı!";\
             QuickHelpText[ arabic ] = "İåÑÓ ÌÏíÏ ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";\
             QuickHelpText[ turkish ] = "Neues benutzerdefiniertes Verzeichnis";\
+            QuickHelpText[ catalan ] = "Nuevo índice definido por usuario";\
         };                                                          \
         ImageButton BT_PREVSAME                                     \
         {                                                           \
@@ -248,6 +252,7 @@
             Text[ korean ] = "¸¶Å·";\
             Text[ turkish ] = "Seçim";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Marca";\
         };                                                          \
         FixedText LBL_INDEX                                         \
         {                                                           \
@@ -277,6 +282,7 @@
             Text[ korean ] = "»öÀÎ(~I)";\
             Text[ language_user1 ] = " ";\
             Text[ turkish ] = "~Dizin";\
+            Text[ catalan ] = "Ín~dice";\
         };                                                          \
         Edit SL_ENTRY                                               \
         {                                                           \
@@ -314,6 +320,7 @@
             Text[ korean ] = "Ç×¸ñ(~E)";\
             Text[ turkish ] = "~Giriş";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "~Entrada";\
         };                                                          \
         FixedText LBL_KEY                                           \
         {                                                           \
@@ -344,6 +351,7 @@
             Text[ korean ] = "1¹øÂ° Å°";\
             Text[ turkish ] = "~1. Anahtar";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "~1ra clave";\
         };                                                          \
         ComboBox DCB_KEY                                            \
         {                                                           \
@@ -382,6 +390,7 @@
             Text[ korean ] = "2¹øÂ° Å°";\
             Text[ turkish ] = "~2. Anahtar";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "~2da clave";\
         };                                                          \
         ComboBox DCB_KEY2                                           \
         {                                                           \
@@ -419,6 +428,7 @@
             Text[ korean ] = "¼öÁØ(~L)";\
             Text[ turkish ] = "D~üzey";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "~Nivel";\
         };                                                          \
         NumericField SL_LEVEL                                       \
         {                                                           \
@@ -460,6 +470,7 @@
             Text[ arabic ] = "ÅÏÎÇá ÑÆíÓí";\
             Text[ turkish ] = "A~na giriş";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "~Entrada principal";\
         };                                                                      \
         CheckBox CB_APPLY_TO_ALL                                                \
         {                                                                       \
@@ -487,6 +498,7 @@
             Text[ korean ] = "¸ğµç¡¡°°Àº ÅØ½ºÆ®¿¡ Àû¿ë(~A)";\
             Text[ turkish ] = "~Tüm eş metinlere uygula.";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "~Aplicar a todos los textos iguales.";\
         };                                                                      \
         CheckBox CB_CASESENSITIVE                                                \
         {                                                                       \
@@ -513,6 +525,7 @@
             Text[ chinese_traditional ] = "ºëÚÌ·j´M(~T)";\
             Text[ arabic ] = "ÈÍË ÏŞíŞ";\
             Text[ turkish ] = "BÜYÜK/küçük ~harf duyarlı";\
+            Text[ catalan ] = "Coincidencia e~xacta";\
         };                                                                      \
         CheckBox CB_WORDONLY                                                \
         {                                                                       \
@@ -539,6 +552,7 @@
             Text[ chinese_traditional ] = "¥u¬O¾ã­Ó¦r(~W)";\
             Text[ arabic ] = "ßáãÇÊ ßÇãáÉ İŞØ";\
             Text[ turkish ] = "Yalnızca ~tam sözcükler bul";\
+            Text[ catalan ] = "Solo palabras e~nteras";\
         };                                                                      \
     };
 
@@ -626,6 +640,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ arabic ] = "İåÑÓ ÌÏíÏ ááãÓÊÎÏã";
         Text[ turkish ] = "Yeni kullanıcı dizini";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nuevo índice de usuario";
     };
     FixedText FT_NAME
     {
@@ -653,6 +668,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ arabic ] = "ÇáÇÓã";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nombre";
     };
     Edit ED_NAME
     {
@@ -681,6 +697,7 @@ ModalDialog DLG_NEW_USER_IDX
     Text[ arabic ] = "ÅäÔÇÁ İåÑÓ ÌÏíÏ ãõÚóÑøóİ ãä ŞÈá ÇáãÓÊÎÏã";
     Text[ turkish ] = "Yeni kullanıcı tanımlı dizin oluştur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Crear nuevo índice de usuario";
 };
 
 String STR_IDXMRK_EDIT
@@ -701,13 +718,14 @@ String STR_IDXMRK_EDIT
     Text[ chinese_simplified ] = "±à¼­Ä¿Â¼ÌõÄ¿";
     Text[ russian ] = "Ïğàâêà ıëåìåíòà óêàçàòåëÿ";
     Text[ polish ] = "Edytuj wpis do indeksu";
-    Text[ japanese ] = "–ÚŸ¥õˆø€–Ú‚Ì•ÒW";
+    Text[ japanese ] = "–ÚŸ‚Æõˆø‚Ì€–Ú•ÒW";
     Text[ chinese_traditional ] = "½s¿è¥Ø¿ı¶µ¥Ø";
     Text[ arabic ] = "ÊÍÑíÑ ÅÏÎÇá İåÑÓí";
     Text[ greek ] = "Åğåîåñãáóßá êáôá÷şñéóçò åõñåôçñßïõ";
     Text[ korean ] = "»öÀÎ Ç×¸ñ ÆíÁı";
     Text[ turkish ] = "Dizin girişini düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar entrada de índice";
 };
 String STR_IDXMRK_INSERT
 {
@@ -728,13 +746,14 @@ String STR_IDXMRK_INSERT
     Text[ chinese_simplified ] = "²åÈëË÷ÒıÌõÄ¿";
     Text[ russian ] = "Âñòàâèòü ıëåìåíò óêàçàòåëÿ";
     Text[ polish ] = "Wstaw wpis do indeksu";
-    Text[ japanese ] = "–ÚŸ¥õˆø€–Ú‚Ì“o˜^";
+    Text[ japanese ] = "–ÚŸ‚Æõˆø‚Ì€–Ú“o˜^";
     Text[ chinese_traditional ] = "´¡¤J¥Ø¿ı±ø¥Ø";
     Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İåÑÓí";
     Text[ greek ] = "ÅéóáãùãŞ êáôá÷şñéóçò åõñåôçñßïõ";
     Text[ korean ] = "»öÀÎ Ç×¸ñ »ğÀÔ";
     Text[ turkish ] = "Dizin girişi ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar una entrada de índice";
 };
 
 #define     AUTH_DIALOG_WINDOW  \
@@ -766,6 +785,7 @@ String STR_IDXMRK_INSERT
             Text[ chinese_traditional ] = "±q¤åÄm¸ê®Æ®w(~D)";\
             Text[ arabic ] = "ãä ŞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";\
             Text[ turkish ] = "Kaynakça veritabanından";\
+            Text[ catalan ] = "De la base de datos ~bibliográfica";\
         };                                                          \
         RadioButton RB_FROMDOCCONTENT                               \
         {                                                           \
@@ -791,6 +811,7 @@ String STR_IDXMRK_INSERT
             Text[ chinese_traditional ] = "±q¤å¥ó¤º®e(~F)";\
             Text[ arabic ] = "ãä ãÍÊæíÇÊ ÇáãÓÊäÏ";\
             Text[ turkish ] = "~Belge içeriğinden";\
+            Text[ catalan ] = "~Del contenido del documento";\
         };                                                          \
         FixedText FT_ENTRY                              \
         {                                               \
@@ -817,6 +838,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ÇáÇÓã ÇáãÎÊÕÑ";\
             Text[ turkish ] = "K~ısaltma";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Abre~viatura";\
         };                                              \
         Edit ED_ENTRY                                   \
         {                                               \
@@ -859,6 +881,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ÇáãÄáİ";\
             Text[ turkish ] = "Yazan";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Autor";\
         };                                              \
         FixedText   FI_AUTHOR                           \
         {                                               \
@@ -891,6 +914,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ÇáÚäæÇä";\
             Text[ turkish ] = "Başlık";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Título";\
         };                                              \
         FixedText   FI_TITLE                            \
         {                                               \
@@ -923,6 +947,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ÅÏÎÇá";\
             Text[ turkish ] = "Giriş";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Entrada";\
         };                                              \
         OKButton PB_OK                                  \
         {                                               \
@@ -951,6 +976,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ÅÏÑÇÌ";\
             Text[ turkish ] = "Ekle";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Insertar";\
         };                                              \
         CancelButton PB_CANCEL                          \
         {                                               \
@@ -977,6 +1003,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ÅÛáÇŞ";\
             Text[ turkish ] = "Kapat";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Cerrar";\
         };                                              \
         HelpButton PB_HELP                              \
         {                                               \
@@ -1008,6 +1035,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ÌÏíÏ";\
             Text[ turkish ] = "~Yeni";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "N~uevo";\
         };                                              \
         PushButton PB_EDITENTRY                       \
         {                                               \
@@ -1033,6 +1061,7 @@ String STR_IDXMRK_INSERT
             Text[ chinese_traditional ] = "½s¿è";\
             Text[ arabic ] = "ÊÍÑíÑ";\
             Text[ turkish ] = "D~üzenle";\
+            Text[ catalan ] = "~Editar";\
         };                                              \
         String ST_CHANGE                                \
         {                                               \
@@ -1057,6 +1086,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ÊØÈíŞ";\
             Text[ turkish ] = "Değiştir";\
             Text[ language_user1 ] = " ";\
+            Text[ catalan ] = "Modificar";\
         };                                              \
     };
 
@@ -1137,6 +1167,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Text[ arabic ] = "ÈíÇäÇÊ ÇáÅÏÎÇá";
         Text[ turkish ] = "Giriş verileri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Datos de la entrada";
     };
     Text[ english_us ] = "Define Bibliography Entry";
     Text[ portuguese ] = "Definir entrada bibliográfica";
@@ -1156,6 +1187,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     Text[ chinese_traditional ] = "©w¸q°Ñ¦Ò¤åÄm±ø¥Ø";
     Text[ arabic ] = "ÊÚÑíİ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça girişini tanımla";
+    Text[ catalan ] = "Definir entrada de bibliografía";
 };
 String STR_AUTHMRK_EDIT
 {
@@ -1181,6 +1213,7 @@ String STR_AUTHMRK_EDIT
     Text[ arabic ] = "ÊÍÑíÑ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça dizini girişini düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar entrada de bibliografía";
 };
 String STR_AUTHMRK_INSERT
 {
@@ -1206,6 +1239,7 @@ String STR_AUTHMRK_INSERT
     Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça dizini girişi ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar entrada de bibliografía";
 };
 QueryBox DLG_CHANGE_AUTH_ENTRY
 {
@@ -1214,7 +1248,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. Möchten sie die bereits enthaltenen Einträge anpassen?" ;
     MESSAGE [ English ] = "The bibliography entry is already contained in the document with different data. Do you want to adjust the existing bibliography entries?" ;
     MESSAGE[ english_us ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
-    MESSAGE[ portuguese ] = "A entrada bibliográfica já existe no documento com dados diferentes. ";
+    MESSAGE[ portuguese ] = "A entrada bibliográfica já existe no documento com dados diferentes. Ajustar as entradas existentes?";
     MESSAGE[ russian ] = "İòà çàïèñü áèáëèîãğàôèè ñ íåêîòîğûìè îòëè÷íûìè äàííûìè óæå ñîäåğæèòñÿ â äîêóìåíòå. Âû õîòèòå ñîãëàñîâàòü ñîäåğæàùèåñÿ çàïèñè?";
     MESSAGE[ greek ] = "Ç êáôá÷şñéóç âéâëéïèŞêçò õğÜñ÷åé Şäç óôï İããñáöï ìå äéáöïñåôéêÜ äåäïìİíá. Èİëåôå íá åöáñìïóôïıí ôá íİá äåäïìİíá;";
     MESSAGE[ dutch ] = "Het bibliografie-item bevindt zich reeds met andere gegevens in het document. Wilt u de bestaande items aanpassen?";
@@ -1231,5 +1265,6 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ chinese_traditional ] = "¤å¥ó¤º¤w¸g§t¦³ªş±a¤£¦P¸ê®Æªº¥Ø¿ı±ø¥Ø¡C­n½Õ¾ã¤w¸g¦s¦bªº±ø¥Ø¡H";
     MESSAGE[ arabic ] = "ÅÏÎÇá ÇáãÑÌÚ ãæÌæÏ ÈÇáİÚá İí ÇáãÓÊäÏ ÈÈíÇäÇÊ ãÎÊáİÉ. åá ÊÑíÏ ãáÇÁãÉ ÇáÅÏÎÇáÇÊ ÇáãæÌæÏÉ¿";
     MESSAGE[ turkish ] = "Kaynakça girişi, farklı veriler ile belgede mevcut.";
+    MESSAGE[ catalan ] = "La entrada bibliográfica existe ya con datos diferentes en el documento. ¿Desea ajustar las entradas ya existentes?";
 };
 
