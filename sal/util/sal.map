@@ -95,7 +95,6 @@ UDK_2_0_0 {
         osl_getUserName;
         osl_getVolumeInformation;
         osl_incrementInterlockedCount;
-        osl_initModuleLogging;
         osl_isAdministrator;
         osl_isEqualSocketAddr;
         osl_isExceptionPending;
@@ -154,7 +153,6 @@ UDK_2_0_0 {
         osl_trace;
         osl_tryToAcquireMutex;
         osl_tryToAcquireSemaphore;
-        osl_unloadLoggedModules;
         osl_unloadModule;
         osl_waitCondition;
         osl_waitThread;
