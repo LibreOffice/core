@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
+ *  last change: $Author: oj $ $Date: 2000-11-08 14:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,8 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 {
-
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
-    m_pTable->getSchema(),m_pTable->getName(),_rName);
+    m_pTable->getSchema(),m_pTable->getTableName(),_rName);
 
     Reference< XNamed > xRet = NULL;
     if(xResult.is())
@@ -154,7 +153,7 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getName() + aQuote;
+        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
         aSql = aSql + ::rtl::OUString::createFromAscii(" ADD ");
         aSql = aSql + aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote;
         aSql = aSql + ::rtl::OUString::createFromAscii(" ");
@@ -211,7 +210,7 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getName() + aQuote;
+        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
         aSql = aSql + ::rtl::OUString::createFromAscii(" DROP ");
         aSql = aSql + aQuote + elementName + aQuote;
 
@@ -234,7 +233,7 @@ void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, Index
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getName() + aQuote;
+        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
         aSql = aSql + ::rtl::OUString::createFromAscii(" DROP ");
         aSql = aSql + aQuote + m_aElements[index]->first + aQuote;
 

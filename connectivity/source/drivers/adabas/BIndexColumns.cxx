@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexColumns.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
+ *  last change: $Author: oj $ $Date: 2000-11-08 14:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
 {
 
         Reference< XResultSet > xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getIndexInfo(Any(),
-        m_pIndex->getTable()->getSchema(),m_pIndex->getTable()->getName(),sal_False,sal_False);
+        m_pIndex->getTable()->getSchema(),m_pIndex->getTable()->getTableName(),sal_False,sal_False);
 
     sal_Bool bAsc = sal_True;
     if(xResult.is())
@@ -109,7 +109,7 @@ Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
     }
 
          xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getColumns(Any(),
-        m_pIndex->getTable()->getSchema(),m_pIndex->getTable()->getName(),_rName);
+        m_pIndex->getTable()->getSchema(),m_pIndex->getTable()->getTableName(),_rName);
 
         Reference< XNamed > xRet = NULL;
     if(xResult.is())

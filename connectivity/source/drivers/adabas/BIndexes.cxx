@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
+ *  last change: $Author: oj $ $Date: 2000-11-08 14:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
 
 
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getIndexInfo(Any(),
-        m_pTable->getSchema(),m_pTable->getName(),sal_False,sal_False);
+        m_pTable->getSchema(),m_pTable->getTableName(),sal_False,sal_False);
 
     Reference< XNamed > xRet = NULL;
     if(xResult.is())
@@ -164,7 +164,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
             aSql = aSql + aQuote + aName + aQuote
                         + ::rtl::OUString::createFromAscii(" ON ")
                         + aQuote + m_pTable->getSchema() + aQuote + aDot
-                        + aQuote + m_pTable->getName() + aQuote
+                        + aQuote + m_pTable->getTableName() + aQuote
                         + ::rtl::OUString::createFromAscii(" ( ");
 
             Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
@@ -185,7 +185,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
         }
         else
         {
-            aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getName() + aQuote;
+            aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
 
             Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
             Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
@@ -224,7 +224,7 @@ void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(S
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
         aSql = aSql + aQuote + aSchema + aQuote + aDot + aQuote + aName + ::rtl::OUString::createFromAscii(" ON ")
-                    + aQuote + m_pTable->getSchema() + aQuote + m_pTable->getName() + aQuote;
+                    + aQuote + m_pTable->getSchema() + aQuote + m_pTable->getTableName() + aQuote;
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
+ *  last change: $Author: oj $ $Date: 2000-11-08 14:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ void OAdabasIndex::refreshColumns()
 
     ::std::vector< ::rtl::OUString> aVector;
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getIndexInfo(Any(),
-    m_pTable->getSchema(),m_pTable->getName(),sal_False,sal_False);
+    m_pTable->getSchema(),m_pTable->getTableName(),sal_False,sal_False);
 
     if(xResult.is())
     {

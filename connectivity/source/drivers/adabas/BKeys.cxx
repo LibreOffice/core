@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
+ *  last change: $Author: oj $ $Date: 2000-11-08 14:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
     if(_rName.getLength())
     {
         Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getExportedKeys(Any(),
-            m_pTable->getSchema(),m_pTable->getName());
+            m_pTable->getSchema(),m_pTable->getTableName());
 
         if(xResult.is())
         {
@@ -185,7 +185,7 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getName() + aQuote;
+        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
         if(nKeyType == KeyType::PRIMARY)
         {
             aSql = aSql + ::rtl::OUString::createFromAscii(" ALTER PRIMARY KEY (");
@@ -266,7 +266,7 @@ void SAL_CALL OKeys::dropByName( const ::rtl::OUString& elementName ) throw(SQLE
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + m_pTable->getName() + aQuote
+        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + m_pTable->getTableName() + aQuote
                     + ::rtl::OUString::createFromAscii(" DROP PRIMARY KEY");
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
