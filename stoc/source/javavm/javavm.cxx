@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: jl $ $Date: 2002-08-08 10:39:53 $
+ *  last change: $Author: jl $ $Date: 2002-08-08 12:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,7 +1326,7 @@ static void initVMConfiguration(JVM * pjvm,
         OUString usUserClasspath= jvm.getUserClasspath();
         OUString usSystemClasspath= jvm.getSystemClasspath();
         if( usRuntimeLib.getLength() == 0
-            || (usUserClasspath.getLength == 0 && usSystemClasspath.getLength() == 0))
+            || (usUserClasspath.getLength() == 0 && usSystemClasspath.getLength() == 0))
         {
             if (bPropsFail)
                 throw confexc;
