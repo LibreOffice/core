@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 14:19:22 $
+ *  last change: $Author: dr $ $Date: 2001-07-30 11:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,49 +129,6 @@ class ExcArray;
 class ExcArrays;
 class ExcShrdFmla;
 class ExcUPN;
-
-//-------------------------------------------------- class XclExpTabNumBuffer -
-// - stores the correct Excel table number for each Calc table
-
-class XclExpTabNumBuffer : private UINT16List
-{
-private:
-    UINT32*                     pBuffer;
-
-    UINT16                      nScCnt;
-    UINT16                      nExcCnt;
-    UINT16                      nExtCnt;
-    UINT16                      nCodeCnt;
-
-    BOOL                        bEnableLog;
-
-    void                        ApplyBuffer();
-
-protected:
-public:
-                                XclExpTabNumBuffer( ScDocument& rDoc );
-                                ~XclExpTabNumBuffer();
-
-    BOOL                        IsExternal( UINT16 nScTab ) const;
-    BOOL                        IsExportTable( UINT16 nScTab ) const;
-    UINT16                      GetExcTable( UINT16 nScTab ) const;
-    inline UINT16               GetScTabCount() const       { return nScCnt; }
-    inline UINT16               GetExcTabCount() const      { return nExcCnt; }
-    inline UINT16               GetExternTabCount() const   { return nExtCnt; }
-    inline UINT16               GetCodenameCount() const    { return nCodeCnt; }
-    inline UINT16               GetMaxScTabCount() const    { return Max( nScCnt, nCodeCnt ); }
-
-// for change tracking:
-                                // append table number pair, called by formula compiler
-    void                        AppendTabRef( UINT16 nExcFirst, UINT16 nExcLast );
-                                // enables logging of excel table nums in every 3D-ref
-    inline void                 StartRefLog()       { UINT16List::Clear(); bEnableLog = TRUE; }
-                                // disables logging
-    inline void                 EndRefLog()         { bEnableLog = FALSE; }
-                                // returns the index list
-    inline const UINT16List&    GetRefLog() const   { return *this; }
-};
-
 
 //----------------------------------------------------------- class ExcRecord -
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:47:49 $
+ *  last change: $Author: dr $ $Date: 2001-07-30 11:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,16 @@
 #define EXC_MAXRECLEN_BIFF8         8224
 
 //_________________________________________________________
+// cached values list (EXTERNNAME, ptgArray, ...)
+
+#define EXC_CACHEDVAL_DOUBLE        0x01
+#define EXC_CACHEDVAL_STRING        0x02
+
+//_________________________________________________________
 // Supbooks, ExcETabNumBuffer
 
-#define EXC_TAB_INVALID             0xFFFF
+#define EXC_TAB_INVALID             0xFFFF      // Deleted refs
+#define EXC_TAB_EXTERNAL            0xFFFE      // Addins, DDE, OLE
 #define EXC_TABBUF_INVALID          0xFFFF
 #define EXC_TABBUF_MASKTAB          0x0000FFFF
 #define EXC_TABBUF_MASKFLAGS        0xFFFF0000

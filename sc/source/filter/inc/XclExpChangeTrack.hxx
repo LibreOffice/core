@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:56:51 $
+ *  last change: $Author: dr $ $Date: 2001-07-30 11:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,11 @@
 #include "chgtrack.hxx"
 #endif
 
-#ifndef _EXCDOC_HXX
-#include "excdoc.hxx"
-#endif
 #ifndef _EXCRECDS_HXX
 #include "excrecds.hxx"
+#endif
+#ifndef _SC_XCLEXPEXTERNSHEET_HXX
+#include "XclExpExternsheet.hxx"
 #endif
 
 //___________________________________________________________________

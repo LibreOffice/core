@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-20 10:16:53 $
+ *  last change: $Author: dr $ $Date: 2001-07-30 11:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,281 +84,6 @@ public:
 
     virtual void                Save( XclExpStream& rStrm );
 };
-
-
-// --- class XclCrn --------------------------------------------------
-
-class XclCrn : public ExcRecord
-{
-private:
-    UINT16                      nCol;
-    UINT16                      nRow;
-    UINT8                       nId;
-
-protected:
-    virtual void                SaveCont( XclExpStream& rStrm );
-    virtual void                SaveDiff( XclExpStream& rStrm ) = 0;
-    virtual ULONG               GetDiffLen() const = 0;
-
-public:
-    inline                      XclCrn( UINT16 nC, UINT16 nR, UINT8 nI ) :
-                                    nCol( nC ), nRow( nR ), nId( nI )   {}
-
-    inline BOOL                 IsAddress( UINT16 nC, UINT16 nR )
-                                    { return (nC == nCol) && (nR == nRow); }
-
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
-};
-
-
-// --- class XclCrnDouble ---------------------------------------------
-
-class XclCrnDouble : public XclCrn
-{
-private:
-    double                      fVal;
-    virtual void                SaveDiff( XclExpStream& rStrm );
-    virtual ULONG               GetDiffLen() const;
-
-protected:
-public:
-                                XclCrnDouble( UINT16 nC, UINT16 nR, double fV );
-};
-
-
-// --- class XclCrnString ---------------------------------------------
-
-class XclCrnString : public XclCrn
-{
-private:
-    XclExpUniString             sText;
-    virtual void                SaveDiff( XclExpStream& rStrm );
-    virtual ULONG               GetDiffLen() const;
-
-protected:
-public:
-                                XclCrnString( UINT16 nC, UINT16 nR, const String& rTxt );
-};
-
-
-// --- class XclCrnBool -----------------------------------------------
-
-class XclCrnBool : public XclCrn
-{
-private:
-    UINT16                      nBool;
-    virtual void                SaveDiff( XclExpStream& rStrm );
-    virtual ULONG               GetDiffLen() const;
-
-protected:
-public:
-                                XclCrnBool( UINT16 nC, UINT16 nR, BOOL b );
-};
-
-
-// --- class XclXct --------------------------------------------------
-
-class XclXct : public ExcRecord, private List
-{
-private:
-    XclExpUniString             sTable;
-    UINT16                      nTabNum;
-
-    inline XclCrn*              _First()    { return (XclCrn*) List::First(); }
-    inline XclCrn*              _Next()     { return (XclCrn*) List::Next(); }
-
-    BOOL                        Exists( UINT16 nCol, UINT16 nRow );
-    inline void                 Append( XclCrn* pCrn )
-                                    { List::Insert( pCrn, LIST_APPEND ); }
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
-protected:
-public:
-    inline                      XclXct( const String& rTab ) :
-                                    sTable( rTab )  {   }
-    virtual                     ~XclXct();
-
-    inline UINT16               GetTableBytes() const   { return ( UINT16 ) sTable.GetByteCount(); }
-    inline const XclExpUniString& GetTableName() const  { return sTable; }
-
-    inline void                 SetTableNum( UINT16 nTab )  { nTabNum = nTab; }
-    void                        StoreCellRange( RootData& rRoot, const ScRange& rRange );
-
-    virtual void                Save( XclExpStream& rStrm );
-
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
-};
-
-
-// --- class XclSupbook ----------------------------------------------
-
-class XclExternNameList;
-
-class XclSupbook : public ExcRecord, private List
-{
-private:
-    enum Type   { SB_Addin, SB_Self, SB_Ext };
-
-    UINT16                      nTables;
-    String                      sDocName;
-    XclExpUniString             sEncoded;
-    ULONG                       nLen;
-    Type                        eType;
-    XclExternNameList*          pExtNameList;
-
-    inline XclXct*              _First()    { return (XclXct*) List::First(); }
-    inline XclXct*              _Next()     { return (XclXct*) List::Next(); }
-    inline XclXct*              _Get( UINT16 nTab ) const
-                                            { return (XclXct*) List::GetObject( nTab ); }
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
-public:
-                                XclSupbook( void );                     // Addins
-                                XclSupbook( UINT16 nTabs );             // own book
-                                XclSupbook( const String& rDocName );   // ext book
-    virtual                     ~XclSupbook();
-
-    inline const String&        GetName() const         { return sDocName; }
-    inline const XclExpUniString& GetEncName() const    { return sEncoded; }
-    const XclExpUniString*      GetTableName( UINT16 nIndex ) const;
-
-    UINT16                      AddTableName( const String& rTabName );
-    void                        StoreCellRange( RootData& rRoot, const ScRange& rRange,
-                                                UINT16 nXct );
-
-    virtual void                Save( XclExpStream& rStrm );
-
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
-
-    UINT16                      GetAddinIndex( const String& rName );
-
-    inline BOOL                 IsSelf( void ) const    { return eType == SB_Self; }
-    inline BOOL                 IsAddin( void ) const   { return eType == SB_Addin; }
-};
-
-
-// --- class XclSupbookList ------------------------------------------
-
-class XclSupbookList : public ExcEmptyRec, public ExcRoot, private List
-{
-private:
-    UINT16*                     pSupbookBuffer; // supbook number for every xcl table
-    UINT16*                     pTableBuffer;   // table numbers in supbook
-    UINT16                      nRefdCnt;       // array size for p***Buffer
-
-    inline XclSupbook*          _First()    { return (XclSupbook*) List::First(); }
-    inline XclSupbook*          _Next()     { return (XclSupbook*) List::Next(); }
-    inline XclSupbook*          _Get( ULONG nInd )
-                                            { return (XclSupbook*) List::GetObject( nInd ); }
-
-    inline XclSupbook*          GetSupbook( UINT16 nExcTab ) const;
-
-    ULONG                       Append( XclSupbook* pBook );
-    void                        AddExt( UINT16 nScTab );
-
-public:
-                                XclSupbookList( RootData* pRoot );
-    virtual                     ~XclSupbookList();
-
-                                // get external document name - expects Excel tabnums
-    const XclExpUniString*      GetDocumentName( UINT16 nExcTab );
-                                // get external table name - expects Excel tabnums
-    const XclExpUniString*      GetTableName( UINT16 nExcTab );
-
-    void                        StoreCellRange( const ScRange& rRange );
-
-    void                        WriteXtiInfo( XclExpStream& rStrm, UINT16 nTabFirst, UINT16 nTabLast );
-    virtual void                Save( XclExpStream& rStrm );
-
-    inline UINT16               GetAddinIndex( const String& rName );   // by default tab 0!
-};
-
-inline XclSupbook* XclSupbookList::GetSupbook( UINT16 nExcTab ) const
-{
-    return (XclSupbook*) List::GetObject( pSupbookBuffer[ nExcTab ] );
-}
-
-inline UINT16 XclSupbookList::GetAddinIndex( const String& rName )
-{
-    DBG_ASSERT( _Get( 0 ), "-XclSupbookList::GetAddinIndex(): no. 0 is wech!" );
-    DBG_ASSERT( _Get( 0 )->IsAddin(), "*XclSupbookList::GetAddinIndex(): no. 0 should be for Addins!" );
-
-    return _Get( 0 )->GetAddinIndex( rName );
-}
-
-// --- class XclXti --------------------------------------------------
-
-class XclXti
-{
-private:
-    UINT16                      nTabFirst;
-    UINT16                      nTabLast;
-
-public:
-    inline                      XclXti( UINT16 nFirst, UINT16 nLast ) :
-                                    nTabFirst( nFirst ), nTabLast( nLast )  {}
-
-    static inline UINT16        GetSize()           { return 6; }
-    inline UINT16               GetTabFirst() const { return nTabFirst; }
-    inline UINT16               GetTabLast() const  { return nTabLast; }
-};
-
-
-// --- class XclExternsheetList --------------------------------------
-
-class XclExternsheetList : public ExcRecord, ExcRoot, private List
-{
-private:
-    XclSupbookList              aSupbookList;
-
-    inline XclXti*              _First()    { return (XclXti*) List::First(); }
-    inline XclXti*              _Next()     { return (XclXti*) List::Next(); }
-
-    static inline UINT16        GetVal16( UINT32 nVal )
-                                    { return (nVal <= 0xFFFF) ? (UINT16) nVal : 0xFFFF; }
-
-    inline void                 WriteXtiInfo( XclExpStream& rStrm, XclXti& rXti );
-    virtual void                SaveCont( XclExpStream& rStrm );
-public:
-                                XclExternsheetList( RootData* pRoot );
-    virtual                     ~XclExternsheetList();
-
-                                // Xcl design error
-    inline UINT16               GetCount16() const  { return GetVal16( List::Count() ); }
-
-    UINT16                      Add( XclXti* pXti );
-
-                                // add new XclXti if not found - expects Excel tabnums
-    UINT16                      Find( UINT16 nTabFirst, UINT16 nTabLast );
-                                // get external document name - expects Excel tabnums
-    inline const XclExpUniString* GetDocumentName( UINT16 nExcTab )
-                                    { return aSupbookList.GetDocumentName( nExcTab ); }
-                                // get external table name - expects Excel tabnums
-    inline const XclExpUniString* GetTableName( UINT16 nExcTab )
-                                    { return aSupbookList.GetTableName( nExcTab ); }
-
-                                // cell contents -> CRN - expects SC tabnums
-    void                        StoreCellCont( const SingleRefData& rRef );
-    void                        StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 );
-
-    virtual void                Save( XclExpStream& rStrm );
-
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
-
-    inline UINT16               GetAddinIndex( const String& rName )
-                                        { return aSupbookList.GetAddinIndex( rName ); }
-};
-
-inline void XclExternsheetList::WriteXtiInfo( XclExpStream& rStrm, XclXti& rXti )
-{
-    aSupbookList.WriteXtiInfo( rStrm, rXti.GetTabFirst(), rXti.GetTabLast() );
-}
 
 
 // --- class XclMsodrawing_Base --------------------------------------
@@ -1261,39 +986,6 @@ public:
 };
 
 
-// ---- class XclExternName ------------------------------------------
-
-class XclExternName : public ExcRecord
-{
-private:
-    String                      aName;
-    XclExpUniString*            pExpStr;
-    virtual void                SaveCont( XclExpStream& rStrm );
-public:
-                                XclExternName( const String& );
-
-    virtual UINT16              GetNum() const;
-    virtual ULONG               GetLen() const;
-
-    inline BOOL                 operator ==( const String& rRef ) const
-                                    { return aName == rRef; }
-};
-
-
-class XclExternNameList : protected List
-{
-private:
-    inline XclExternName*       First( void )   { return ( XclExternName* ) List::First(); }
-    inline XclExternName*       Next( void )    { return ( XclExternName* ) List::Next(); }
-public:
-    virtual                     ~XclExternNameList();
-
-    UINT16                      GetIndex( const String& rName );
-
-    void                        Save( XclExpStream& rStrm );
-};
-
-
 // ---- class XclExpWebQuery -----------------------------------------
 
 class XclExpWebQuery : public ExcEmptyRec
@@ -1321,6 +1013,7 @@ public:
 };
 
 
+// -------------------------------------------------------------------
 
 
 class XclCalccount : public ExcRecord
@@ -1367,8 +1060,6 @@ public:
     virtual UINT16              GetNum() const;
     virtual ULONG               GetLen() const;
 };
-
-
 
 
 #endif // _XCL97REC_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-13 12:38:01 $
+ *  last change: $Author: dr $ $Date: 2001-07-30 11:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,22 +99,23 @@ class ScExtDocOptions;
 class ScEditEngineDefaulter;
 class XF_Buffer;
 class FilterProgressBar;
-class XclImpPivotCacheList;
 
 class XclImpExternsheetBuffer;
 class XclImpTabIdBuffer;
+class XclImpPivotCacheList;
 
 class XclExpTabNumBuffer;
+class XclExpExternsheetList;
 class XclExpChTrTabId;
 class XclExpUserBViewList;
 class XclExpCellMerging;
+
 class ExcNameList;
 class ExcPalette2;
 class UsedFontList;
 class UsedFormList;
 class UsedAttrList;
 class XclSstList;
-class XclExternsheetList;
 class XclObjList;
 class XclNoteList;
 class XclEscher;
@@ -181,10 +182,12 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     XclAddInNameTranslator* pAddInNameTranslator;
 
     // Erweiterungen fuer Export
-    XclExpTabNumBuffer* pTabBuffer;
-    XclExpChTrTabId*    pTabId;             // pointer to rec list, do not destroy
-    XclExpUserBViewList* pUserBViewList;    // pointer to rec list, do not destroy
-    XclExpCellMerging*  pCellMerging;       // pointer to rec list, do not destroy
+    XclExpTabNumBuffer*     pTabBuffer;
+    XclExpExternsheetList*  pExternsheetRecs;   // pointer to rec list, do not destroy
+    XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
+    XclExpUserBViewList*    pUserBViewList;     // pointer to rec list, do not destroy
+    XclExpCellMerging*      pCellMerging;       // pointer to rec list, do not destroy
+
     ExcNameList*        pNameList;
     ScRangeName*        pScNameList;        // stores range names and DB ranges
     ExcPalette2*        pPalette2;
@@ -196,7 +199,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     UINT16              nRowMax;
     // Biff8
     XclSstList*         pSstRecs;
-    XclExternsheetList* pExternsheetRecs;
     XclObjList*         pObjRecs;
     XclNoteList*        pNoteRecs;
     String              sAddNoteText;       // text to append at current note (multiple hyperlinks)
