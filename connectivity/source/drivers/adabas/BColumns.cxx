@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-29 11:19:23 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 08:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,14 @@
 #ifndef _CONNECTIVITY_ADABAS_TABLE_HXX_
 #include "adabas/BTable.hxx"
 #endif
+#ifndef _CONNECTIVITY_ADABAS_TABLES_HXX_
+#include "adabas/BTables.hxx"
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
 #endif
 
 using namespace ::comphelper;
@@ -145,64 +151,46 @@ void OColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
 {
-    OColumn* pNew = new OColumn(sal_True);
-    Reference< XPropertySet > xRet = pNew;
-    return xRet;
+    return new OColumn(sal_True);
 }
 // -------------------------------------------------------------------------
 // XAppend
 void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    if(!m_pTable->isNew())
+    OSL_ENSURE(m_pTable,"OColumns::appendByDescriptor: Table is null!");
+    OSL_ENSURE(descriptor.is(),"OColumns::appendByDescriptor: descriptor is null!");
+
+    if(descriptor.is() && !m_pTable->isNew())
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
-        aSql = aSql + ::rtl::OUString::createFromAscii(" ADD ");
-        aSql = aSql + aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
-        aSql = aSql + ::rtl::OUString::createFromAscii(" ");
-
-        Any aTypeName = descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
-        if(aTypeName.hasValue() && getString(aTypeName).getLength())
-            aSql = aSql + getString(aTypeName);
-        else
-            aSql = aSql + getTypeString(descriptor) + ::rtl::OUString::createFromAscii(" ");
-
-        //  aSql = aSql + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
-
-        switch(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
+        m_pTable->beginTransAction();
+        try
         {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-                aSql = aSql + ::rtl::OUString::createFromAscii("(")
-                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
-                            + ::rtl::OUString::createFromAscii(")");
-                break;
+            ::rtl::OUString sColumnName;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sColumnName;
+            aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + aDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
+            aSql += ::rtl::OUString::createFromAscii(" ADD (");
+            aSql += ::dbtools::quoteName(sQuote,sColumnName);
+            aSql += ::rtl::OUString::createFromAscii(" ");
+            aSql += OTables::getColumnSqlType(descriptor);
+            aSql += ::rtl::OUString::createFromAscii(" )");
 
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-                aSql = aSql + ::rtl::OUString::createFromAscii("(")
-                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
-                            + ::rtl::OUString::createFromAscii(",")
-                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))))
-                            + ::rtl::OUString::createFromAscii(")");
-                break;
+            Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement();
+            xStmt->execute(aSql);
+            ::comphelper::disposeComponent(xStmt);
+
+            m_pTable->alterNotNullValue(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))),sColumnName);
         }
-        ::rtl::OUString aDefault = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
-        if(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
+        catch(const Exception&)
         {
-            aSql = aSql + ::rtl::OUString::createFromAscii(" NOT NULL");
-            if(aDefault.getLength())
-                aSql = aSql + ::rtl::OUString::createFromAscii(" WITH DEFAULT");
+            m_pTable->rollbackTransAction();
+            throw;
         }
-        else if(aDefault.getLength())
-            aSql = aSql + ::rtl::OUString::createFromAscii(" DEFAULT ") + aDefault;
-
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        xStmt->execute(aSql);
+        m_pTable->endTransAction();
     }
     OCollection_TYPE::appendByDescriptor(descriptor);
 }
@@ -211,15 +199,16 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
 void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
+    OSL_ENSURE(m_pTable,"OColumns::dropByName: Table is null!");
     if(!m_pTable->isNew())
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
-        aSql = aSql + ::rtl::OUString::createFromAscii(" DROP ");
-        aSql = aSql + aQuote + elementName + aQuote;
+        aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + aDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
+        aSql += ::rtl::OUString::createFromAscii(" DROP ");
+        aSql += ::dbtools::quoteName(sQuote,elementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
@@ -234,20 +223,23 @@ void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, Index
     if (index < 0 || index >= getCount())
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
+    OSL_ENSURE(m_pTable,"OColumns::dropByIndex: Table is null!");
     if(!m_pTable->isNew())
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString sQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
-        aSql = aSql + ::rtl::OUString::createFromAscii(" DROP ");
-        aSql = aSql + aQuote + m_aElements[index]->first + aQuote;
+        aSql += ::dbtools::quoteName(sQuote,m_pTable->getSchema()) + aDot + ::dbtools::quoteName(sQuote,m_pTable->getTableName());
+        aSql += ::rtl::OUString::createFromAscii(" DROP ");
+        aSql += ::dbtools::quoteName(sQuote,m_aElements[index]->first);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
     }
     OCollection_TYPE::dropByIndex(index);
 }
+// -----------------------------------------------------------------------------
+
 
 

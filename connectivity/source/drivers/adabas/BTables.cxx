@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 11:03:56 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 08:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,11 +296,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
         aSql += ::dbtools::quoteName(aQuote, sSchema) + aDot;
     else
         descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),makeAny(static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getUserName().
-#if SUPD > 631
                     toAsciiUpperCase()
-#else
-                    toUpperCase()
-#endif
                     ));
 
     aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))))
@@ -324,66 +320,8 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
             aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
 
             aSql += ::rtl::OUString::createFromAscii(" ");
-
-            aTypeName = xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
-
-            sal_Int32 nDataType = 0;
-            xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nDataType;
-
-            switch(nDataType)
-            {
-                case DataType::VARBINARY:
-                    aSql += ::rtl::OUString::createFromAscii("VAR");
-                    /* run through*/
-                case DataType::BINARY:
-                    aSql += ::rtl::OUString::createFromAscii("CHAR");
-                    break;
-                default:
-                    if(aTypeName.hasValue() && getString(aTypeName).getLength())
-                        aSql += getString(aTypeName);
-                    else
-                        aSql += getTypeString(xColProp) + ::rtl::OUString::createFromAscii(" ");
-            }
-
-            switch(nDataType)
-            {
-                case DataType::CHAR:
-                case DataType::VARCHAR:
-                case DataType::FLOAT:
-                case DataType::REAL:
-                    aSql += ::rtl::OUString::createFromAscii("(")
-                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
-                                + ::rtl::OUString::createFromAscii(")");
-                    break;
-
-                case DataType::DECIMAL:
-                case DataType::NUMERIC:
-                    aSql += ::rtl::OUString::createFromAscii("(")
-                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
-                                + ::rtl::OUString::createFromAscii(",")
-                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))))
-                                + ::rtl::OUString::createFromAscii(")");
-                    break;
-                case DataType::BINARY:
-                case DataType::VARBINARY:
-                    aSql += ::rtl::OUString::createFromAscii("(")
-                                + ::rtl::OUString::valueOf(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
-                                + ::rtl::OUString::createFromAscii(") BYTE");
-                    break;
-            }
-            ::rtl::OUString aDefault = getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
-            if(getINT32(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
-            {
-                aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
-                if(aDefault.getLength())
-                    aSql += ::rtl::OUString::createFromAscii(" WITH DEFAULT");
-            }
-            else if(aDefault.getLength())
-            {
-                aSql +=::rtl::OUString::createFromAscii(" DEFAULT '") + aDefault;
-                aSql += ::rtl::OUString::createFromAscii("'");
-            }
-
+            aSql += OTables::getColumnSqlType(xColProp);
+            aSql += OTables::getColumnSqlNotNullDefault(xColProp);
             aSql += ::rtl::OUString::createFromAscii(",");
         }
     }
@@ -514,5 +452,138 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
         static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
 }
 // -----------------------------------------------------------------------------
+::rtl::OUString OTables::getColumnSqlType(const Reference<XPropertySet>& _rxColProp)
+{
+    ::rtl::OUString sSql;
+    sal_Int32 nDataType = 0;
+    _rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nDataType;
+    switch(nDataType)
+    {
+        case DataType::VARBINARY:
+            sSql += ::rtl::OUString::createFromAscii("VAR");
+            /* run through*/
+        case DataType::BINARY:
+            sSql += ::rtl::OUString::createFromAscii("CHAR");
+            break;
+        default:
+            {
+                Any aTypeName = _rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME));
+                if(aTypeName.hasValue() && getString(aTypeName).getLength())
+                    sSql += getString(aTypeName);
+                else
+                    sSql += OTables::getTypeString(_rxColProp) + ::rtl::OUString::createFromAscii(" ");
+            }
+    }
 
+    switch(nDataType)
+    {
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+        case DataType::FLOAT:
+        case DataType::REAL:
+            sSql += ::rtl::OUString::createFromAscii("(")
+                        + ::rtl::OUString::valueOf(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
+                        + ::rtl::OUString::createFromAscii(")");
+            break;
+
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+            sSql += ::rtl::OUString::createFromAscii("(")
+                        + ::rtl::OUString::valueOf(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
+                        + ::rtl::OUString::createFromAscii(",")
+                        + ::rtl::OUString::valueOf(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))))
+                        + ::rtl::OUString::createFromAscii(")");
+            break;
+        case DataType::BINARY:
+        case DataType::VARBINARY:
+            sSql += ::rtl::OUString::createFromAscii("(")
+                        + ::rtl::OUString::valueOf(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
+                        + ::rtl::OUString::createFromAscii(") BYTE");
+            break;
+    }
+    return sSql;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OTables::getColumnSqlNotNullDefault(const Reference<XPropertySet>& _rxColProp)
+{
+    OSL_ENSURE(_rxColProp.is(),"OTables::getColumnSqlNotNullDefault: Column is null!");
+    ::rtl::OUString sSql;
+    ::rtl::OUString aDefault = getString(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
+    if(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
+    {
+        sSql += ::rtl::OUString::createFromAscii(" NOT NULL");
+        if(aDefault.getLength())
+            sSql += ::rtl::OUString::createFromAscii(" WITH DEFAULT");
+    }
+    else if(aDefault.getLength())
+    {
+        sSql +=::rtl::OUString::createFromAscii(" DEFAULT '") + aDefault;
+        sSql += ::rtl::OUString::createFromAscii("'");
+    }
+    return sSql;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OTables::getTypeString(const Reference< XPropertySet >& _rxColProp)
+{
+    ::rtl::OUString aValue;
+    switch(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
+    {
+        case DataType::BIT:
+            aValue = ::rtl::OUString::createFromAscii("BOOLEAN");
+            break;
+        case DataType::TINYINT:
+            aValue = ::rtl::OUString::createFromAscii("SMALLINT");
+            break;
+        case DataType::SMALLINT:
+            aValue = ::rtl::OUString::createFromAscii("SMALLINT");
+            break;
+        case DataType::INTEGER:
+            aValue = ::rtl::OUString::createFromAscii("INT");
+            break;
+        case DataType::FLOAT:
+            aValue = ::rtl::OUString::createFromAscii("FLOAT");
+            break;
+        case DataType::REAL:
+            aValue = ::rtl::OUString::createFromAscii("REAL");
+            break;
+        case DataType::DOUBLE:
+            aValue = ::rtl::OUString::createFromAscii("DOUBLE");
+            break;
+        case DataType::NUMERIC:
+            aValue = ::rtl::OUString::createFromAscii("DECIMAL");
+            break;
+        case DataType::DECIMAL:
+            aValue = ::rtl::OUString::createFromAscii("DECIMAL");
+            break;
+        case DataType::CHAR:
+            aValue = ::rtl::OUString::createFromAscii("CHAR");
+            break;
+        case DataType::VARCHAR:
+            aValue = ::rtl::OUString::createFromAscii("VARCHAR");
+            break;
+        case DataType::LONGVARCHAR:
+            aValue = ::rtl::OUString::createFromAscii("LONG VARCHAR");
+            break;
+        case DataType::DATE:
+            aValue = ::rtl::OUString::createFromAscii("DATE");
+            break;
+        case DataType::TIME:
+            aValue = ::rtl::OUString::createFromAscii("TIME");
+            break;
+        case DataType::TIMESTAMP:
+            aValue = ::rtl::OUString::createFromAscii("TIMESTAMP");
+            break;
+        case DataType::BINARY:
+            aValue = ::rtl::OUString::createFromAscii("CHAR () BYTE");
+            break;
+        case DataType::VARBINARY:
+            aValue = ::rtl::OUString::createFromAscii("VARCHAR () BYTE");
+            break;
+        case DataType::LONGVARBINARY:
+            aValue = ::rtl::OUString::createFromAscii("LONG BYTE");
+            break;
+    }
+    return aValue;
+}
+// -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:54 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 08:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,20 @@ namespace connectivity
             virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
             void appendNew(const ::rtl::OUString& _rsNewTable);
+            // some helper functions
+            /**
+                returns a sql string which contains the column definition part for create or alter statements
+            */
+            static ::rtl::OUString getColumnSqlType(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
+            /**
+                returns the "not null" part or the default part of the table statement
+            */
+            static ::rtl::OUString getColumnSqlNotNullDefault(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
+            /**
+                returns the corresponding typename
+                can contain () which have to filled with values
+            */
+            static ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
         };
     }
 }
