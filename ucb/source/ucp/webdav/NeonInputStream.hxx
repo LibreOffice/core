@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonInputStream.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-10 14:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
 
 
 namespace webdav_ucp
@@ -76,12 +79,13 @@ namespace webdav_ucp
 // by the DAVSession::GET method.
 // -------------------------------------------------------------------
 class NeonInputStream : public ::com::sun::star::io::XInputStream,
+                        public ::com::sun::star::io::XSeekable,
                         public ::cppu::OWeakObject
 {
     private:
-        ::rtl::OUString mInputBuffer;
-        sal_Int32       mLen;
-        sal_Int32       mPos;
+        com::sun::star::uno::Sequence< sal_Int8 > mInputBuffer;
+        sal_Int64 mLen;
+        sal_Int64 mPos;
 
     public:
                  NeonInputStream( void );
@@ -135,8 +139,21 @@ class NeonInputStream : public ::com::sun::star::io::XInputStream,
     virtual void SAL_CALL closeInput( void )
                 throw( ::com::sun::star::io::NotConnectedException,
                           ::com::sun::star::io::IOException,
-                          ::com::sun::star::uno::RuntimeException )
-                    {};
+                          ::com::sun::star::uno::RuntimeException );
+
+    // XSeekable
+    virtual void SAL_CALL seek( sal_Int64 location )
+        throw( ::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::io::IOException,
+               ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Int64 SAL_CALL getPosition()
+        throw( ::com::sun::star::io::IOException,
+               ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Int64 SAL_CALL getLength()
+        throw( ::com::sun::star::io::IOException,
+               ::com::sun::star::uno::RuntimeException );
 };
 
 }; // namespace webdav_ucp

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonInputStream.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-10 14:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,9 @@ using namespace webdav_ucp;
 // Constructor
 // -------------------------------------------------------------------
 NeonInputStream::NeonInputStream( void )
+: mLen( 0 ),
+  mPos( 0 )
 {
-    mLen = 0;
-    mPos = 0;
 }
 
 // -------------------------------------------------------------------
@@ -89,9 +89,17 @@ NeonInputStream::~NeonInputStream( void )
 // -------------------------------------------------------------------
 void NeonInputStream::AddToStream( const char * inBuf, sal_Int32 inLen )
 {
-    mInputBuffer    += OStringToOUString( OString( inBuf, inLen ),
-                                          RTL_TEXTENCODING_UTF8 );
-    mLen            += inLen;
+    sal_Int32 nOldLen = mLen;
+    mLen += inLen;
+
+    mInputBuffer.realloc( mLen );
+    for ( sal_Int32 n = nOldLen; n < mLen; ++n )
+    {
+        mInputBuffer[ n ] = *inBuf;
+        inBuf++;
+    }
+
+
 }
 
 // -------------------------------------------------------------------
@@ -101,14 +109,14 @@ Any NeonInputStream::queryInterface( const Type &type )
                         throw( RuntimeException )
 {
     Any aRet = ::cppu::queryInterface( type,
-                            SAL_STATIC_CAST( XInputStream*, this ) );
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( type ));
+                                       static_cast< XInputStream * >( this ),
+                                       static_cast< XSeekable * >( this ) );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( type );
 }
 
 // -------------------------------------------------------------------
 // readBytes
-// "Reads" the specified number of bytes from the stream and stores
-// them in the provided Sequence
+// "Reads" the specified number of bytes from the stream
 // -------------------------------------------------------------------
 sal_Int32 SAL_CALL NeonInputStream::readBytes(
   ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
@@ -123,15 +131,14 @@ sal_Int32 SAL_CALL NeonInputStream::readBytes(
     if ( theBytes2Read > theBytesLeft )
         theBytes2Read = theBytesLeft;
 
-    // Verify the provided buffer is large enough
-    sal_Int8 *  theBuffer = aData.getArray();
-    sal_Int32   theBufferSize = aData.getLength();
-    if ( theBytes2Read > theBufferSize )
-        throw ::com::sun::star::io::BufferSizeExceededException() ;
+    // Realloc buffer.
+    aData.realloc( theBytes2Read );
+
+    sal_Int8 * theBuffer = aData.getArray();
 
     // Write the data
     for ( sal_Int32 theIndex = 0; theIndex < theBytes2Read; theIndex ++ )
-        theBuffer[ theIndex ] = sal_Int8 ( mInputBuffer[ mPos + theIndex ] );
+        theBuffer[ theIndex ] = mInputBuffer[ mPos + theIndex ];
 
     // Update our stream position for next time
     mPos += theBytes2Read;
@@ -178,4 +185,51 @@ sal_Int32 SAL_CALL NeonInputStream::available(  )
                ::com::sun::star::uno::RuntimeException )
 {
     return mLen - mPos;
+}
+
+// -------------------------------------------------------------------
+// closeInput
+// -------------------------------------------------------------------
+void SAL_CALL NeonInputStream::closeInput( void )
+         throw( ::com::sun::star::io::NotConnectedException,
+                  ::com::sun::star::io::IOException,
+                  ::com::sun::star::uno::RuntimeException )
+{
+}
+
+// -------------------------------------------------------------------
+// seek
+// -------------------------------------------------------------------
+void SAL_CALL NeonInputStream::seek( sal_Int64 location )
+        throw( ::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::io::IOException,
+               ::com::sun::star::uno::RuntimeException )
+{
+    if ( location < 0 )
+        throw ::com::sun::star::lang::IllegalArgumentException();
+
+    if ( location >= mLen )
+        throw IOException();
+
+    mPos = location;
+}
+
+// -------------------------------------------------------------------
+// getPosition
+// -------------------------------------------------------------------
+sal_Int64 SAL_CALL NeonInputStream::getPosition()
+        throw( ::com::sun::star::io::IOException,
+               ::com::sun::star::uno::RuntimeException )
+{
+    return mPos;
+}
+
+// -------------------------------------------------------------------
+// getLength
+// -------------------------------------------------------------------
+sal_Int64 SAL_CALL NeonInputStream::getLength()
+        throw( ::com::sun::star::io::IOException,
+               ::com::sun::star::uno::RuntimeException )
+{
+    return mLen;
 }
