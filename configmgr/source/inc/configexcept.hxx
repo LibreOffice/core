@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configexcept.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:56 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ namespace configmgr
             Exception();
             Exception(char const* sAsciiMessage);
             Exception(rtl::OString const& sAsciiMessage);
+            virtual ~Exception() {}
 
             virtual OUString message() const;
             virtual char const* what() const;
