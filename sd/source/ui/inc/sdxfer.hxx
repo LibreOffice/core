@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:26:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 // ------------------
 
 class SdDrawDocument;
+class SdrObject;
 class INetBookmark;
 class ImageMap;
 class VirtualDevice;
