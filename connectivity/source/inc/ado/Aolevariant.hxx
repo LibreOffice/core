@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 14:54:47 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 11:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _CONNECTIVITY_DATECONVERSION_HXX_
 #include "connectivity/DateConversion.hxx"
 #endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include "connectivity/dbconversion.hxx"
+#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
@@ -98,17 +101,17 @@ namespace connectivity
             OLEVariant(const ::com::sun::star::util::Date& x )
             {
                 VariantInit(this);  vt = VT_R8;
-                dblVal      = DateConversion::toDouble(x);
+                dblVal      = ::dbtools::DBTypeConversion::toDouble(x);
             }
             OLEVariant(const ::com::sun::star::util::Time& x )
             {
                 VariantInit(this);  vt = VT_R8;
-                dblVal      = DateConversion::toDouble(x);
+                dblVal      = ::dbtools::DBTypeConversion::toDouble(x);
             }
             OLEVariant(const ::com::sun::star::util::DateTime& x )
             {
                 VariantInit(this);  vt = VT_R8;
-                dblVal      = DateConversion::toDouble(x);
+                dblVal      = ::dbtools::DBTypeConversion::toDouble(x);
             }
             OLEVariant(IDispatch* pDispInterface)
             {   VariantInit(this); vt = VT_DISPATCH; pdispVal = pDispInterface;}
