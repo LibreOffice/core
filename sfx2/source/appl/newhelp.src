@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-14 12:38:41 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,26 @@ Window WIN_HELP_INDEX
                 Identifier = HELP_INDEX_PAGE_BOOKMARKS ;
                 Text = "Lesezeichen" ;
                 Text [ ENGLISH ] = "Bookmarks" ;
+                Text[ english_us ] = "Bookmarks";
+                Text[ portuguese ] = "Marcadores";
+                Text[ russian ] = "Çàêëàäêè";
+                Text[ greek ] = "Bookmarks";
+                Text[ dutch ] = "Bladwijzers";
+                Text[ french ] = "Signets";
+                Text[ spanish ] = "Marcadores";
+                Text[ finnish ] = "Bookmarks";
+                Text[ italian ] = "Segnalibro";
+                Text[ danish ] = "Bookmarks";
+                Text[ swedish ] = "Bokmärken";
+                Text[ polish ] = "Zak³adki";
+                Text[ portuguese_brazilian ] = "Bookmarks";
+                Text[ japanese ] = "ÌŞ¯¸Ï°¸";
+                Text[ korean ] = "Bookmarks";
+                Text[ chinese_simplified ] = "ÊéÇ©";
+                Text[ chinese_traditional ] = "®ÑÅÒ";
+                Text[ turkish ] = "Bookmarks";
+                Text[ arabic ] = "Bookmarks";
+                Text[ catalan ] = "Bookmarks";
             };
         };
     };
@@ -260,7 +280,7 @@ TabPage TP_HELP_SEARCH
         Text[ polish ] = "Szukane has³o";
         Text[ portuguese_brazilian ] = "~Suchbegriff";
         Text[ japanese ] = "ŒŸõ·°(~E)";
-        Text[ korean ] = "~°Ë»ö ¿ë¾î";
+        Text[ korean ] = "°Ë»ö ¿ë¾î(~E)";
         Text[ chinese_simplified ] = "ËÑÑ°×Ö´Ê(~E)";
         Text[ chinese_traditional ] = "·j´M¶µ¥Ø(~E)";
         Text[ turkish ] = "~Suchbegriff";
@@ -310,7 +330,7 @@ TabPage TP_HELP_SEARCH
         Text[ portuguese ] = "~Procurar só em títulos";
         Text[ russian ] = "~Èñêàòü òîëüêî â çàãîëîâêàõ";
         Text[ greek ] = "~Search headings only";
-        Text[ dutch ] = "~Alleen titels zoeken";
+        Text[ dutch ] = "~Alleen in titels zoeken";
         Text[ french ] = "~Recherche uniquement dans les titres";
         Text[ spanish ] = "~Buscar sólo en títulos";
         Text[ italian ] = "~Cerca solo intestazioni";
@@ -318,10 +338,10 @@ TabPage TP_HELP_SEARCH
         Text[ swedish ] = "Sök bara i ~rubriker";
         Text[ polish ] = "Przeszukaj tylko tytu³y";
         Text[ portuguese_brazilian ] = "~Search headings only";
-        Text[ japanese ] = "À²ÄÙ‚Ì‚İ‚ÅŒŸõ";
-        Text[ korean ] = "~Search headings only";
-        Text[ chinese_simplified ] = "½ö´ó±êÌâ·¶Î§ÄÚËÑÑ°";
-        Text[ chinese_traditional ] = "¶È¦b¤j¼ĞÃD½d³ò?·j´M";
+        Text[ japanese ] = "À²ÄÙ‚Ì‚İ‚ÅŒŸõ(~H)";
+        Text[ korean ] = "Á¦¸ñ¿¡¼­¸¸ Ã£±â(~H)";
+        Text[ chinese_simplified ] = "½ö´ó±êÌâ·¶Î§ÄÚËÑÑ°(~H)";
+        Text[ chinese_traditional ] = "¶È¦b¤j¼ĞÃD½d³ò?·j´M(~H)";
         Text[ turkish ] = "~Search headings only";
         Text[ arabic ] = "~Search headings only";
         Text[ catalan ] = "~Search headings only";
@@ -344,7 +364,7 @@ TabPage TP_HELP_SEARCH
         Text[ russian ] = "~Ïîêàçàòü";
         Text[ greek ] = "ĞñïâïëŞ";
         Text[ dutch ] = "~Weergeven";
-        Text[ french ] = "~Affichage";
+        Text[ french ] = "Afficher";
         Text[ spanish ] = "~Mostrar";
         Text[ italian ] = "~Mostra";
         Text[ danish ] = "~Display";
@@ -372,7 +392,26 @@ TabPage TP_HELP_BOOKMARKS
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Lesezeichen" ;
-        Text [ english_us ] = "Bookmarks" ;
+        Text [ english_us ] = "~Bookmarks" ;
+        Text[ portuguese ] = "~Marcadores";
+        Text[ russian ] = "Çàêëàäêè";
+        Text[ greek ] = "Bookmarks";
+        Text[ dutch ] = "~Bladwijzers";
+        Text[ french ] = "Signets";
+        Text[ spanish ] = "Marcadores";
+        Text[ finnish ] = "Bookmarks";
+        Text[ italian ] = "~Segnalibro";
+        Text[ danish ] = "Bookmarks";
+        Text[ swedish ] = "~Bokmärken";
+        Text[ polish ] = "Zak³adki";
+        Text[ portuguese_brazilian ] = "Bookmarks";
+        Text[ japanese ] = "ÌŞ¯¸Ï°¸(~B)";
+        Text[ korean ] = "~Bookmarks";
+        Text[ chinese_simplified ] = "ÊéÇ©(~B)";
+        Text[ chinese_traditional ] = "®ÑÅÒ(~B)";
+        Text[ turkish ] = "Bookmarks";
+        Text[ arabic ] = "Bookmarks";
+        Text[ catalan ] = "Bookmarks";
     };
     ListBox LB_BOOKMARKS
     {
@@ -390,7 +429,7 @@ TabPage TP_HELP_BOOKMARKS
         Text[ russian ] = "~Ïîêàçàòü";
         Text[ greek ] = "ÅìöÜíéóç";
         Text[ dutch ] = "~Weergeven";
-        Text[ french ] = "~Affichage";
+        Text[ french ] = "Afficher";
         Text[ spanish ] = "~Visualizar";
         Text[ italian ] = "~Mostra";
         Text[ danish ] = "~Display";
@@ -520,7 +559,7 @@ String STR_HELP_BUTTON_INDEX_OFF
 String STR_HELP_BUTTON_START
 {
     Text = "Startseite";
-    Text [ english_us ] = "First page";
+    Text [ english_us ] = "First Page";
     Text[ portuguese ] = "Página inicial";
     Text[ russian ] = "Ïåğâàÿ ñòğàíèöà";
     Text[ greek ] = "Áñ÷éêŞ óåëßäá";
@@ -533,7 +572,7 @@ String STR_HELP_BUTTON_START
     Text[ polish ] = "Strona startowa";
     Text[ portuguese_brazilian ] = "Start page";
     Text[ japanese ] = "ŠJnÍß°¼Ş";
-    Text[ korean ] = "½ÃÀÛÂÊ";
+    Text[ korean ] = "½ÃÀÛ ÆäÀÌÁö";
     Text[ chinese_simplified ] = "Ê×Ò³";
     Text[ chinese_traditional ] = "­º­¶";
     Text[ turkish ] = "Start page";
@@ -544,7 +583,7 @@ String STR_HELP_BUTTON_START
 String STR_HELP_BUTTON_PREV
 {
     Text = "Vorherige Seite";
-    Text [ english_us ] = "Previous page";
+    Text [ english_us ] = "Previous Page";
     Text[ portuguese ] = "Página anterior";
     Text[ russian ] = "Ïğåäûäóùàÿ ñòğàíèöà";
     Text[ greek ] = "Ğñïçãïıìåíç óåëßäá";
@@ -557,7 +596,7 @@ String STR_HELP_BUTTON_PREV
     Text[ polish ] = "Poprzednia strona";
     Text[ portuguese_brazilian ] = "Backward";
     Text[ japanese ] = "‘OÍß°¼Ş";
-    Text[ korean ] = "ÀÌÀü¡¡ÂÊ";
+    Text[ korean ] = "ÀÌÀü ÆäÀÌÁö";
     Text[ chinese_simplified ] = "ÉÏÒ»Ò³";
     Text[ chinese_traditional ] = "¤W¤@­¶";
     Text[ turkish ] = "Backward";
@@ -568,7 +607,7 @@ String STR_HELP_BUTTON_PREV
 String STR_HELP_BUTTON_NEXT
 {
     Text = "Nächste Seite";
-    Text [ english_us ] = "Next page";
+    Text [ english_us ] = "Next Page";
     Text[ portuguese ] = "Página seguinte";
     Text[ russian ] = "Ñëåäóşùàÿ ñòğàíèöà";
     Text[ greek ] = "Åğüìåíç óåëßäá";
@@ -581,7 +620,7 @@ String STR_HELP_BUTTON_NEXT
     Text[ polish ] = "Nastêpna strona";
     Text[ portuguese_brazilian ] = "Forward";
     Text[ japanese ] = "ŸÍß°¼Ş";
-    Text[ korean ] = "´ÙÀ½¡¡ÂÊ";
+    Text[ korean ] = "´ÙÀ½ ÆäÀÌÁö";
     Text[ chinese_simplified ] = "ÏÂÒ»Ò³";
     Text[ chinese_traditional ] = "¤U¤@­¶";
     Text[ turkish ] = "Forward";
@@ -616,7 +655,26 @@ String STR_HELP_BUTTON_PRINT
 String STR_HELP_BUTTON_ADDBOOKMARK
 {
     Text = "Lesezeichen hinzufügen";
-    Text [ english_us ] = "Add to bookmarks";
+    Text [ english_us ] = "Add to Bookmarks";
+    Text[ portuguese ] = "Adicionar marcador";
+    Text[ russian ] = "Äîáàâèòü çàêëàäêó";
+    Text[ greek ] = "Add to bookmarks";
+    Text[ dutch ] = "Bladwijzers toevoegen";
+    Text[ french ] = "Ajouter un signet";
+    Text[ spanish ] = "Añadir marcador";
+    Text[ finnish ] = "Add to bookmarks";
+    Text[ italian ] = "Aggiungi segnalibro";
+    Text[ danish ] = "Add to bookmarks";
+    Text[ swedish ] = "Lägg till bokmärke";
+    Text[ polish ] = "Dodaj zak³adkê";
+    Text[ portuguese_brazilian ] = "Add to bookmarks";
+    Text[ japanese ] = "ÌŞ¯¸Ï°¸‚Ì’Ç‰Á";
+    Text[ korean ] = "Add to bookmarks";
+    Text[ chinese_simplified ] = "¼ÓÈëÊéÇ©";
+    Text[ chinese_traditional ] = "¥[¤J®ÑÅÒ";
+    Text[ turkish ] = "Add to bookmarks";
+    Text[ arabic ] = "Add to bookmarks";
+    Text[ catalan ] = "Add to bookmarks";
 };
 
 String STR_HELP_BUTTON_SOURCEVIEW
@@ -640,7 +698,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ dutch ] = "HTLM-brontekst";
     Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
     Text[ greek ] = "Êåßìåíï ğñïİëåõóçò HTML";
-    Text[ korean ] = "HTML ¼Ò½ºÅØ½ºÆ®";
+    Text[ korean ] = "HTML-¼Ò½ºÅØ½ºÆ®";
     Text[ turkish ] = "HTML kaynak kodu";
     Text[ catalan ] = "HTML Source";
     Text[ finnish ] = "HTML-lähde";
@@ -662,7 +720,7 @@ String STR_HELP_FIRST_MESSAGE
     Text[ polish ] = "Uruchamianie Pomocy...";
     Text[ portuguese_brazilian ] = "Help is started...";
     Text[ japanese ] = "ÍÙÌß‚ğŠJn‚µ‚Ä‚¢‚Ü‚·...";
-    Text[ korean ] = "Help is started...";
+    Text[ korean ] = "µµ¿ò¸»À»¤© ½ÃÀÛÇÕ´Ï´Ù...";
     Text[ chinese_simplified ] = "ÕıÔÚÆô¶¯°ïÖú¹¦ÄÜ...";
     Text[ chinese_traditional ] = "¥¿¦b±Ò°Ê»¡©ú¥\\¯à...";
     Text[ turkish ] = "Help is started...";
@@ -704,7 +762,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ chinese_simplified ] = "ÊéÇ©£º";
         TEXT[ russian ] = "Çàêëàäêà:";
         TEXT[ polish ] = "Zak³adka:";
-        TEXT[ japanese ] = "‚µ‚¨‚è:";
+        TEXT[ japanese ] = "ÌŞ¯¸Ï°¸:";
         TEXT[ chinese_traditional ] = "®ÑÅÒ¡G";
         TEXT[ arabic ] = ":ÅÔÇÑÉ ãÑÌÚíÉ";
         TEXT[ greek ] = "Óåëéäïäåßêôçò:";
@@ -714,6 +772,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TABSTOP = FALSE ;
         GROUP = TRUE ;
         LEFT = TRUE ;
+        TEXT[ catalan ] = "Bookmark:";
     };
     Edit ED_BOOKMARK_TITLE
     {
@@ -747,7 +806,47 @@ ModalDialog DLG_HELP_ADDBOOKMARK
     {
         TEXT = "Lesezeichen umbenennen" ;
         TEXT [ ENGLISH ] = "Rename bookmark" ;
+        TEXT[ english_us ] = "Rename Bookmark";
+        TEXT[ portuguese ] = "Mudar nome ao marcador";
+        TEXT[ russian ] = "Ïåğåèìåíîâàòü çàêëàäêó";
+        TEXT[ greek ] = "Rename bookmark";
+        TEXT[ dutch ] = "Bladwijzer nieuwe naam geven";
+        TEXT[ french ] = "Renommer le signet";
+        TEXT[ spanish ] = "Cambiar nombre a marcador";
+        TEXT[ finnish ] = "Rename bookmark";
+        TEXT[ italian ] = "Rinomina segnalibro";
+        TEXT[ danish ] = "Rename bookmark";
+        TEXT[ swedish ] = "Byt namn på bokmärke";
+        TEXT[ polish ] = "Zmieñ nazwê zak³adki";
+        TEXT[ portuguese_brazilian ] = "Rename bookmark";
+        TEXT[ japanese ] = "ÌŞ¯¸Ï°¸‚Ì–¼‘O‚Ì•ÏX";
+        TEXT[ korean ] = "Rename bookmark";
+        TEXT[ chinese_simplified ] = "ÖØĞÂÃüÃûÊéÇ©";
+        TEXT[ chinese_traditional ] = "­«©R¦W®ÑÅÒ";
+        TEXT[ turkish ] = "Rename bookmark";
+        TEXT[ arabic ] = "Rename bookmark";
+        TEXT[ catalan ] = "Rename bookmark";
     };
+    TEXT[ english_us ] = "Add to Bookmarks";
+    TEXT[ portuguese ] = "Adicionar marcador";
+    TEXT[ russian ] = "Äîáàâèòü çàêëàäêó";
+    TEXT[ greek ] = "Add to Bookmarks";
+    TEXT[ dutch ] = "Bladwijzers toevoegen";
+    TEXT[ french ] = "Ajouter un signet";
+    TEXT[ spanish ] = "Añadir marcador";
+    TEXT[ finnish ] = "Add to Bookmarks";
+    TEXT[ italian ] = "Aggiungi segnalibro";
+    TEXT[ danish ] = "Add to Bookmarks";
+    TEXT[ swedish ] = "Lägg till bokmärke";
+    TEXT[ polish ] = "Dodaj zak³adkê";
+    TEXT[ portuguese_brazilian ] = "Add to Bookmarks";
+    TEXT[ japanese ] = "ÌŞ¯¸Ï°¸‚Ì’Ç‰Á";
+    TEXT[ korean ] = "Add to Bookmarks";
+    TEXT[ chinese_simplified ] = "¼ÓÈëÊéÇ©";
+    TEXT[ chinese_traditional ] = "¥[¤J®ÑÅÒ";
+    TEXT[ turkish ] = "Add to Bookmarks";
+    TEXT[ arabic ] = "Add to Bookmarks";
+    TEXT[ catalan ] = "Add to Bookmarks";
 };
 
 Menu MENU_HELP_BOOKMARKS
@@ -759,6 +858,26 @@ Menu MENU_HELP_BOOKMARKS
             Identifier = MID_OPEN ;
             Text = "Anzeigen" ;
             Text [ English ] = "New..." ;
+            Text[ english_us ] = "Display";
+            Text[ portuguese ] = "Mostrar";
+            Text[ russian ] = "Ïîêàçàòü";
+            Text[ greek ] = "New...";
+            Text[ dutch ] = "Weergeven";
+            Text[ french ] = "Afficher";
+            Text[ spanish ] = "Mostrar";
+            Text[ finnish ] = "New...";
+            Text[ italian ] = "Mostra";
+            Text[ danish ] = "New...";
+            Text[ swedish ] = "Visa";
+            Text[ polish ] = "Poka¿";
+            Text[ portuguese_brazilian ] = "New...";
+            Text[ japanese ] = "•\\¦";
+            Text[ korean ] = "New...";
+            Text[ chinese_simplified ] = "ÏÔÊ¾";
+            Text[ chinese_traditional ] = "Åã¥Ü";
+            Text[ turkish ] = "New...";
+            Text[ arabic ] = "New...";
+            Text[ catalan ] = "New...";
         };
         MenuItem
         {
@@ -769,14 +888,55 @@ Menu MENU_HELP_BOOKMARKS
             Identifier = MID_RENAME ;
             Text = "Umbenennen..." ;
             Text [ English ] = "Rename..." ;
+            Text[ english_us ] = "Rename...";
+            Text[ portuguese ] = "Mudar nome...";
+            Text[ russian ] = "Ïåğåèìåíîâàòü...";
+            Text[ greek ] = "Rename...";
+            Text[ dutch ] = "Nieuwe naam geven...";
+            Text[ french ] = "Renommer...";
+            Text[ spanish ] = "Cambiar nombre...";
+            Text[ finnish ] = "Rename...";
+            Text[ italian ] = "Rinomina...";
+            Text[ danish ] = "Rename...";
+            Text[ swedish ] = "Byt namn...";
+            Text[ polish ] = "Zmieñ nazwê...";
+            Text[ portuguese_brazilian ] = "Rename...";
+            Text[ japanese ] = "–¼‘O‚Ì•ÏX...";
+            Text[ korean ] = "Rename...";
+            Text[ chinese_simplified ] = "ÖØĞÂÃüÃû...";
+            Text[ chinese_traditional ] = "­«©R¦W...";
+            Text[ turkish ] = "Rename...";
+            Text[ arabic ] = "Rename...";
+            Text[ catalan ] = "Rename...";
         };
         MenuItem
         {
             Identifier = MID_DELETE ;
             Text = "Löschen" ;
             Text [ English ] = "Delete" ;
+            Text[ english_us ] = "Delete";
+            Text[ portuguese ] = "Eliminar";
+            Text[ russian ] = "Óäàëèòü";
+            Text[ greek ] = "Delete";
+            Text[ dutch ] = "Wissen";
+            Text[ french ] = "Supprimer";
+            Text[ spanish ] = "Eliminar";
+            Text[ finnish ] = "Delete";
+            Text[ italian ] = "Elimina";
+            Text[ danish ] = "Delete";
+            Text[ swedish ] = "Radera";
+            Text[ polish ] = "Usuñ";
+            Text[ portuguese_brazilian ] = "Delete";
+            Text[ japanese ] = "íœ";
+            Text[ korean ] = "Delete";
+            Text[ chinese_simplified ] = "É¾³ı";
+            Text[ chinese_traditional ] = "§R°£";
+            Text[ turkish ] = "Delete";
+            Text[ arabic ] = "Delete";
+            Text[ catalan ] = "Delete";
         };
     };
 };
+
 
 
