@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 09:01:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,8 +750,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
         if( bSetValue )
         {
             // nothing special to be done here for the properties
-            // UNO_NAME_DATA_BASE_NAME, UNO_NAME_DATA_BASE_URL and
-            // UNO_NAME_DATA_BASE_RESOURCE.
+            // UNO_NAME_DATA_BASE_NAME and UNO_NAME_DATA_BASE_URL.
             // We just call PutValue (empty string is allowed).
             // Thus the last property set will be used as Data Source.
 
@@ -855,10 +854,8 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                 rValue >>= nParam2;
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
                 ::GetString( rValue, sParam5 );
-            if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE)))
-                ::GetString( rValue, sParam6 );
 
-            if((sParam1.Len() || sParam5.Len() || sParam6.Len())
+            if((sParam1.Len() || sParam5.Len())
                     && sParam2.Len() && sParam3.Len())
                 GetFldType();
             break;
@@ -908,10 +905,7 @@ SwFieldType* SwXFieldMaster::GetFldType(sal_Bool bDontCreate) const
             aAcc[ svx::daDataSource ]       <<= OUString(sParam1); // DataBaseName
         else if( sParam5.Len() > 0 )
             aAcc[ svx::daDatabaseLocation]  <<= OUString(sParam5); // DataBaseURL
-        String aDataSrc( aAcc.getDataSource() );
-        if (aDataSrc.Len() == 0)
-            aDataSrc = sParam6; // DataBaseResource
-        aData.sDataSource = aDataSrc;
+        aData.sDataSource = aAcc.getDataSource();
 
         aData.sCommand = sParam2;
         aData.nCommandType = nParam2;
@@ -997,8 +991,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                 pType->QueryValue( aRet, nMId );
 
                 if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
-                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL))  ||
-                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE)))
+                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
                 {
                     OUString aDataSource;
                     aRet >>= aDataSource;
@@ -1006,22 +999,14 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
 
                     OUString *pStr = 0;     // only one of this properties will return
                                             // a non-empty string.
-                    Reference< XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
-                    Reference< XInterface > xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ) );
-                    Reference< XNameAccess > xDBContext( xInstance, UNO_QUERY ) ;
-                    if ( xDBContext->hasByName( aDataSource ) &&
-                         rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) )
-                        pStr = &aDataSource;            // DataBaseName
-                    else
-                    {
-                        INetURLObject aObj;
-                        aObj.SetURL( aDataSource );
-                        BOOL bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
-                        if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
-                            pStr = &aDataSource;        // DataBaseURL
-                        else if (!bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE)))
-                            pStr = &aDataSource;        // DataBaseResource
-                    }
+                    INetURLObject aObj;
+                    aObj.SetURL( aDataSource );
+                    BOOL bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                    if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+                        pStr = &aDataSource;        // DataBaseURL
+                    else if (!bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
+                        pStr = &aDataSource;        // DataBaseName
+
                     if (pStr)
                         aRet <<= *pStr;
                 }
@@ -1060,27 +1045,17 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                 break;
             case RES_DBFLD:
                 if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
-                   rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL))  ||
-                   rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE)))
+                   rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
                 {
                     pStr = 0;   // only one of this properties will return
                                 // a non-empty string.
-                    Reference< XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
-                    Reference< XInterface > xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ) );
-                    Reference< XNameAccess > xDBContext( xInstance, UNO_QUERY ) ;
-                    if ( xDBContext->hasByName( sParam1 ) &&
-                         rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
+                    INetURLObject aObj;
+                    aObj.SetURL( sParam5 );  // SetSmartURL
+                    BOOL bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                    if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+                        pStr = &sParam5;        // DataBaseURL
+                    else if ( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
                         pStr = &sParam1;            // DataBaseName
-                    else
-                    {
-                        INetURLObject aObj;
-                        aObj.SetURL( sParam5 );  // SetSmartURL
-                        BOOL bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
-                        if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
-                            pStr = &sParam5;        // DataBaseURL
-                        else if (!bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE)))
-                            pStr = &sParam6;        // DataBaseResource
-                    }
                 }
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
                     pStr = &sParam2;
@@ -2096,7 +2071,6 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         if( RES_DBFLD == nWhich &&
             (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL))||
-            rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_RESOURCE))||
             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME))||
             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME))))
         {
