@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbarmanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:58:32 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,11 @@
 #ifndef _COM_SUN_STAR_UTIL_XUPDATABLE_HPP_
 #include <com/sun/star/util/XUpdatable.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMSTYLE_HPP_
-#include <drafts/com/sun/star/ui/ItemStyle.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMSTYLE_HPP_
+#include <com/sun/star/ui/ItemStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
-#include <drafts/com/sun/star/ui/ItemType.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
+#include <com/sun/star/ui/ItemType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -141,11 +141,11 @@
 #include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star;
-#ifndef dcss
-#define dcss ::drafts::com::sun::star
+#ifndef css
+#define css ::com::sun::star
 #endif
-#ifndef dcss_ui
-#define dcss_ui ::drafts::com::sun::star::ui
+#ifndef css_ui
+#define css_ui ::com::sun::star::ui
 #endif
 
 const sal_Int32  HELPID_PREFIX_LENGTH    = 7;
@@ -166,23 +166,23 @@ static USHORT impl_convertItemStyleToItemBits( sal_Int16 nStyle )
 {
     USHORT nItemBits( 0 );
 
-    if (( nStyle & dcss_ui::ItemStyle::ALIGN_RIGHT ) == dcss_ui::ItemStyle::ALIGN_RIGHT )
+    if (( nStyle & css_ui::ItemStyle::ALIGN_RIGHT ) == css_ui::ItemStyle::ALIGN_RIGHT )
         nItemBits |= SIB_RIGHT;
-    else if ( nStyle & dcss_ui::ItemStyle::ALIGN_LEFT )
+    else if ( nStyle & css_ui::ItemStyle::ALIGN_LEFT )
         nItemBits |= SIB_LEFT;
     else
         nItemBits |= SIB_CENTER;
 
-    if (( nStyle & dcss_ui::ItemStyle::DRAW_FLAT ) == dcss_ui::ItemStyle::DRAW_FLAT )
+    if (( nStyle & css_ui::ItemStyle::DRAW_FLAT ) == css_ui::ItemStyle::DRAW_FLAT )
         nItemBits |= SIB_FLAT;
-    else if ( nStyle & dcss_ui::ItemStyle::DRAW_OUT3D )
+    else if ( nStyle & css_ui::ItemStyle::DRAW_OUT3D )
         nItemBits |= SIB_OUT;
     else
         nItemBits |= SIB_IN;
 
-    if (( nStyle & dcss_ui::ItemStyle::AUTO_SIZE ) == dcss_ui::ItemStyle::AUTO_SIZE )
+    if (( nStyle & css_ui::ItemStyle::AUTO_SIZE ) == css_ui::ItemStyle::AUTO_SIZE )
         nItemBits |= SIB_AUTOSIZE;
-    if ( nStyle & dcss_ui::ItemStyle::OWNER_DRAW )
+    if ( nStyle & css_ui::ItemStyle::OWNER_DRAW )
         nItemBits |= SIB_USERDRAW;
 
     return nItemBits;
@@ -196,14 +196,14 @@ DEFINE_XINTERFACE_5                     (   StatusBarManager                    
                                             DIRECT_INTERFACE( lang::XTypeProvider                                   ),
                                             DIRECT_INTERFACE( lang::XComponent                                      ),
                                             DIRECT_INTERFACE( frame::XFrameActionListener                           ),
-                                            DIRECT_INTERFACE( dcss::ui::XUIConfigurationListener                    ),
+                                            DIRECT_INTERFACE( css::ui::XUIConfigurationListener                    ),
                                             DERIVED_INTERFACE( lang::XEventListener, frame::XFrameActionListener    )
                                         )
 
 DEFINE_XTYPEPROVIDER_5                  (   StatusBarManager                    ,
                                             lang::XTypeProvider                 ,
                                             lang::XComponent                    ,
-                                            dcss::ui::XUIConfigurationListener  ,
+                                            css::ui::XUIConfigurationListener  ,
                                             frame::XFrameActionListener         ,
                                             lang::XEventListener
                                         )
@@ -227,7 +227,7 @@ StatusBarManager::StatusBarManager(
 {
 
     if ( m_xServiceManager.is() )
-        m_xStatusbarControllerRegistration = uno::Reference< dcss::frame::XUIControllerRegistration >(
+        m_xStatusbarControllerRegistration = uno::Reference< css::frame::XUIControllerRegistration >(
                                                     m_xServiceManager->createInstance( SERVICENAME_STATUSBARCONTROLLERFACTORY ),
                                                     uno::UNO_QUERY );
 
@@ -330,7 +330,7 @@ void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang:
 }
 
 // XUIConfigurationListener
-void SAL_CALL StatusBarManager::elementInserted( const dcss::ui::ConfigurationEvent& Event ) throw ( uno::RuntimeException )
+void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEvent& Event ) throw ( uno::RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -339,7 +339,7 @@ void SAL_CALL StatusBarManager::elementInserted( const dcss::ui::ConfigurationEv
         return;
 }
 
-void SAL_CALL StatusBarManager::elementRemoved( const dcss::ui::ConfigurationEvent& Event ) throw ( uno::RuntimeException )
+void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event ) throw ( uno::RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -348,7 +348,7 @@ void SAL_CALL StatusBarManager::elementRemoved( const dcss::ui::ConfigurationEve
         return;
 }
 
-void SAL_CALL StatusBarManager::elementReplaced( const dcss::ui::ConfigurationEvent& Event ) throw ( uno::RuntimeException )
+void SAL_CALL StatusBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event ) throw ( uno::RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -409,7 +409,7 @@ rtl::OUString StatusBarManager::RetrieveLabelFromCommand( const rtl::OUString& a
     // Retrieve short bubble help
     if ( !m_bModuleIdentified )
     {
-        uno::Reference< dcss::frame::XModuleManager > xModuleManager(
+        uno::Reference< css::frame::XModuleManager > xModuleManager(
             m_xServiceManager->createInstance(
                 SERVICENAME_MODULEMANAGER ), uno::UNO_QUERY_THROW );
         uno::Reference< uno::XInterface > xIfac( m_xFrame, uno::UNO_QUERY );
@@ -598,7 +598,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
         sal_Int16                               nOffset( 0 );
         sal_Int16                               nStyle( 0 );
         sal_Int16                               nWidth( 0 );
-        sal_uInt16                              nType( dcss_ui::ItemType::DEFAULT );
+        sal_uInt16                              nType( css_ui::ItemType::DEFAULT );
 
         try
         {
@@ -632,7 +632,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                     }
                 }
 
-                if (( nType == drafts::com::sun::star::ui::ItemType::DEFAULT ) && ( aCommandURL.getLength() > 0 ))
+                if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && ( aCommandURL.getLength() > 0 ))
                 {
                     rtl::OUString aString( RetrieveLabelFromCommand( aCommandURL ));
                     USHORT        nItemBits( impl_convertItemStyleToItemBits( nStyle ));
