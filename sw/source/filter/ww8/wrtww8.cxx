@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2128,9 +2128,9 @@ ULONG SwWW8Writer::StoreDoc()
     if( bWrtWW8 )
     {
         pFib->fWhichTblStm = 1;
-        xTableStrm = pStg->OpenStream(String::CreateFromAscii(SL::p1Table),
+        xTableStrm = pStg->OpenStream(CREATE_CONST_ASC(SL::a1Table),
             STREAM_STD_WRITE );
-        xDataStrm = pStg->OpenStream(String::CreateFromAscii(SL::pData),
+        xDataStrm = pStg->OpenStream(CREATE_CONST_ASC(SL::aData),
             STREAM_STD_WRITE );
 
         xDataStrm->SetBufferSize( 32768 );  // fuer Grafiken
@@ -2291,7 +2291,7 @@ ULONG SwWW8Writer::StoreDoc()
         {
             xDataStrm.Clear();
             pDataStrm = 0;
-            pStg->Remove(String::CreateFromAscii(SL::pData));
+            pStg->Remove(CREATE_CONST_ASC(SL::aData));
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2491,13 +2491,13 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             }
 
             xTableStream = pStg->OpenStream( String::CreateFromAscii(
-                pWwFib->fWhichTblStm ? SL::p1Table : SL::p0Table),
+                pWwFib->fWhichTblStm ? SL::a1Table : SL::a0Table),
                 STREAM_STD_READ );
 
             pTableStream = &xTableStream;
             pTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-            xDataStream = pStg->OpenStream(String::CreateFromAscii(SL::pData),
+            xDataStream = pStg->OpenStream(CREATE_CONST_ASC(SL::aData),
                 STREAM_STD_READ | STREAM_NOCREATE );
 
             if( xDataStream.Is() && SVSTREAM_OK == xDataStream->GetError() )
@@ -3261,8 +3261,8 @@ BOOL SwMSDffManager::GetOLEStorageName( long nOLEId, String& rStorageName,
     {
         rStorageName = '_';
         rStorageName += String::CreateFromInt32( nPictureId );
-        rSrcStorage = rReader.pStg->OpenStorage(String::CreateFromAscii(
-            SL::pObjectPool));
+        rSrcStorage = rReader.pStg->OpenStorage(CREATE_CONST_ASC(
+            SL::aObjectPool));
         SwDocShell *pDocShell = rReader.rDoc.GetDocShell();
         if (pDocShell == 0)
             bRet=FALSE;

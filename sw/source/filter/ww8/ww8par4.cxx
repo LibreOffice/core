@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,8 +430,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph, BOOL bTstOCX,
         // ergibt Name "_4711"
         aSrcStgName += String::CreateFromInt32( nObjLocFc );
 
-        SvStorageRef xSrc0 = pStg->OpenStorage(String::CreateFromAscii(
-            SL::pObjectPool));
+        SvStorageRef xSrc0 = pStg->OpenStorage(CREATE_CONST_ASC(
+            SL::aObjectPool));
 
         if( pGrf )
         {

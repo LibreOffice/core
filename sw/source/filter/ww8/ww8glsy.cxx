@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm,BYTE nVersion,
     WW8Fib aWwFib( *refStrm, nVersion );
 
     xTableStream = pStg->OpenStream( String::CreateFromAscii(
-        aWwFib.fWhichTblStm ? SL::p1Table : SL::p0Table), STREAM_STD_READ );
+        aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ );
 
     xTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     pGlossary = new WW8GlossaryFib( *refStrm, nVersion,*xTableStream, aWwFib );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1430,7 +1430,12 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
 
         BOOL bFixRowHeight = FALSE;
         USHORT nRealColCnt = 0;
-        for( nColCnt = 0, nBox = 0; nBox < rCells.Count(); ++nColCnt )
+        USHORT nTotal = rCells.Count();
+        ASSERT(nTotal <= rCols.Count(),
+            "oh oh!,row has more cells than table is wide!");
+        if (nTotal > rCols.Count())
+            nTotal = rCols.Count();
+        for( nColCnt = 0, nBox = 0; nBox < nTotal; ++nColCnt )
         {
             if( !pRowSpans[ nColCnt ] )
             {

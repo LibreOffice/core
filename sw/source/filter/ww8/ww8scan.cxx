@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-20 16:17:09 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,17 @@
 #include <ww8scan.hxx>
 #endif
 
-const char* SL::pObjectPool = "ObjectPool";
-const char* SL::p1Table = "1Table";
-const char* SL::p0Table = "0Table";
-const char* SL::pData = "Data";
+namespace SL
+{
+#   define IMPLCONSTSTRINGARRAY(X) const char a##X[] = "" #X ""
+    IMPLCONSTSTRINGARRAY(ObjectPool);
+    IMPLCONSTSTRINGARRAY(1Table);
+    IMPLCONSTSTRINGARRAY(0Table);
+    IMPLCONSTSTRINGARRAY(Data);
+    IMPLCONSTSTRINGARRAY(CheckBox);
+    IMPLCONSTSTRINGARRAY(TextBox);
+    IMPLCONSTSTRINGARRAY(TextField);
+}
 
 WW8SprmIter::WW8SprmIter(const BYTE* pSprms_, long nLen_, BYTE nVersion_ )
     :  pSprms( pSprms_), nRemLen( nLen_), nVersion( nVersion_),

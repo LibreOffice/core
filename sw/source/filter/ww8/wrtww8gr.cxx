@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-04 13:39:26 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
         SwOLENode *pOLENd = rNode.GetOLENode();
 
         SvStorageRef xObjStg = rWW8Wrt.GetStorage().OpenStorage(
-            String::CreateFromAscii(SL::pObjectPool), STREAM_READWRITE |
+            CREATE_CONST_ASC(SL::aObjectPool), STREAM_READWRITE |
             STREAM_SHARE_DENYALL );
 
         if( xObjStg.Is()  )

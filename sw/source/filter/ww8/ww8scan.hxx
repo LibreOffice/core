@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,19 @@
 #define CREATE_CONST_ASC(s) String::CreateFromAscii( \
     RTL_CONSTASCII_STRINGPARAM(s))
 
+//Commonly used string literals for stream and storage names in word docs
+namespace SL
+{
+#   define DEFCONSTSTRINGARRAY(X) extern const char a##X[sizeof("" #X "")]
+    DEFCONSTSTRINGARRAY(ObjectPool);
+    DEFCONSTSTRINGARRAY(1Table);
+    DEFCONSTSTRINGARRAY(0Table);
+    DEFCONSTSTRINGARRAY(Data);
+    DEFCONSTSTRINGARRAY(CheckBox);
+    DEFCONSTSTRINGARRAY(TextBox);
+    DEFCONSTSTRINGARRAY(TextField);
+}
+
 class  UShortStk;
 class  WW8Fib;
 class  WW8ScannerBase;
@@ -98,15 +111,6 @@ class  WW8PLCFspecial;
 struct WW8PLCFxDesc;
 class  WW8PLCFx_PCD;
 class  SvUShortsSort;
-
-//Commonly used string literals for stream and storage names in word docs
-struct SL
-{
-    static const char* pObjectPool;
-    static const char* p1Table;
-    static const char* p0Table;
-    static const char* pData;
-};
 
 String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
     BOOL bAtEndSeekRel1 = TRUE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1339,7 +1339,7 @@ void SwEscherEx::FinishEscher()
      work from then on. Tricky to track down, some sort of late binding
      trickery in MS where solely for first time initialization the existence
      of an ObjectPool dir is necessary for triggering some magic. cmc*/
-    rWrt.GetStorage().OpenStorage(String::CreateFromAscii(SL::pObjectPool),
+    rWrt.GetStorage().OpenStorage(CREATE_CONST_ASC(SL::aObjectPool),
         STREAM_READWRITE | STREAM_SHARE_DENYALL);
 }
 
@@ -2473,8 +2473,10 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
     aSize.Height = TWIPS_TO_MM(aTempSize.B());
 
     //Open the ObjectPool
-    SvStorageRef xObjPool = rWW8Wrt.GetStorage().OpenStorage(CREATE_CONST_ASC(
-        SL::pObjectPool), STREAM_READWRITE|STREAM_SHARE_DENYALL);
+    SvStorageRef xObjPool = rWW8Wrt.GetStorage().OpenStorage(
+        CREATE_CONST_ASC(SL::aObjectPool), STREAM_READWRITE |
+        STREAM_SHARE_DENYALL);
+
     //Create a destination storage for the microsoft control
     String sStorageName('_');
     sStorageName += String::CreateFromInt32((UINT32)pObj);
