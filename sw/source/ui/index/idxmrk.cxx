@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-09-05 09:46:40 $
+ *  last change: $Author: os $ $Date: 2002-09-11 09:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,9 +1260,6 @@ SfxChildWinInfo SwInsertIdxMarkWrapper::GetInfo() const
  --------------------------------------------------*/
 class SwCreateAuthEntryDlg_Impl : public ModalDialog
 {
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
 
     FixedLine       aEntriesFL;
 
@@ -1270,6 +1267,10 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
     ListBox*        pTypeListBox;
     ComboBox*       pIdentifierBox;
     Edit*           pEdits[AUTH_FIELD_END];
+
+    OKButton        aOKBT;
+    CancelButton    aCancelBT;
+    HelpButton      aHelpBT;
 
     Link            aShortNameCheckLink;
 
@@ -1817,11 +1818,18 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
 
     sal_uInt16 nOffset = aTmpSz.Width() * 3 / 2;
     sal_Bool bLeft = sal_True;
+    Window* pRefWindow = 0;
     for(sal_uInt16 nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
 
         pFixedTexts[nIndex] = new FixedText(this);
+        if(nIndex)
+            pFixedTexts[nIndex]->SetZOrder( pRefWindow, WINDOW_ZORDER_BEHIND );
+        else
+            pFixedTexts[nIndex]->SetZOrder( 0, WINDOW_ZORDER_FIRST );
+
+        pRefWindow = pFixedTexts[nIndex];
 
         pFixedTexts[nIndex]->SetSizePixel(aFixedTextSize);
         pFixedTexts[nIndex]->SetPosPixel(bLeft ? aTL1 : aTL2);
@@ -1831,6 +1839,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
             pTypeListBox = new ListBox(this, WB_DROPDOWN|WB_BORDER);
+            pTypeListBox->SetZOrder( pRefWindow, WINDOW_ZORDER_BEHIND );
+            pRefWindow = pTypeListBox;
             for(sal_uInt16 j = 0; j < AUTH_TYPE_END; j++)
                 pTypeListBox->InsertEntry(String(SW_RES(STR_AUTH_TYPE_START + j)));
             if(pFields[aCurInfo.nToxField].Len())
@@ -1850,6 +1860,9 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
         {
             pIdentifierBox = new ComboBox(this, WB_BORDER|WB_DROPDOWN);
+            pIdentifierBox->SetZOrder( pRefWindow, WINDOW_ZORDER_BEHIND );
+            pRefWindow = pIdentifierBox;
+
             pIdentifierBox->SetSelectHdl(LINK(this,
                                     SwCreateAuthEntryDlg_Impl, IdentifierHdl));
 
@@ -1874,6 +1887,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         else
         {
             pEdits[nIndex] = new Edit(this, WB_BORDER);
+            pEdits[nIndex]->SetZOrder( pRefWindow, WINDOW_ZORDER_BEHIND );
+            pRefWindow = pEdits[nIndex];
             pEdits[nIndex]->SetSizePixel(aEditSize);
             pEdits[nIndex]->SetPosPixel(bLeft ? aTR1 : aTR2);
             pEdits[nIndex]->SetText(pFields[aCurInfo.nToxField]);
