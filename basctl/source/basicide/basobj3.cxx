@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:23:51 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 
 #ifndef _BASCTL_DLGED_HXX
 #include "dlged.hxx"
+#endif
+#ifndef _BASCTL_DLGEDDEF_HXX
+#include <dlgeddef.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -458,7 +461,7 @@ Reference< io::XInputStreamProvider > BasicIDE::CreateDialog( SfxObjectShell* pS
         Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
         Any aName;
         aName <<= aOUDlgName;
-        xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aName );
+        xDlgPSet->setPropertyValue( DLGED_PROP_NAME, aName );
 
         // export dialog model
         Reference< XComponentContext > xContext;
@@ -533,7 +536,7 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
             Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
             Any aName;
             aName <<= aOUNewName;
-            xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aName );
+            xDlgPSet->setPropertyValue( DLGED_PROP_NAME, aName );
 
             // export dialog model
             xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
@@ -566,7 +569,7 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
                 Reference< beans::XPropertySet > xPSet( xDlgModel, UNO_QUERY );
                 Any aName;
                 aName <<= aOUNewName;
-                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aName );
+                xPSet->setPropertyValue( DLGED_PROP_NAME, aName );
             }
 
             // update property browser
