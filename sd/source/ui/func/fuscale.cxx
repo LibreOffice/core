@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuscale.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:11:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,11 +186,6 @@ FuScale::FuScale (
         pZoomItem->SetValueSet( nZoomValues );
         aNewAttr.Put( *pZoomItem );
 
-<<<<<<< fuscale.cxx
-        SvxZoomDialog* pDlg = new SvxZoomDialog( NULL, aNewAttr );
-        pDlg->SetLimits((USHORT)pWin->GetMinZoom(),
-            (USHORT)pWin->GetMaxZoom() );
-=======
         //CHINA001 SvxZoomDialog* pDlg = new SvxZoomDialog( NULL, aNewAttr );
         AbstractSvxZoomDialog* pDlg=NULL;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -200,7 +195,6 @@ FuScale::FuScale (
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         }
         pDlg->SetLimits( pWin->GetMinZoom(), pWin->GetMaxZoom() );
->>>>>>> 1.2.316.1
         USHORT nResult = pDlg->Execute();
         switch( nResult )
         {
