@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-16 13:59:47 $
+ *  last change: $Author: aw $ $Date: 2001-09-27 10:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,10 @@ public:
     BOOL GetOnlineSpell() const { return bOnlineSpell; }
     void StopOnlineSpelling();
     void StartOnlineSpelling(BOOL bForceSpelling=TRUE);
-    DECL_LINK(OnlineSpellCallback, SpellCallbackInfo*);
+
+// #91457# removed link and replaced with Imp method
+//  DECL_LINK(OnlineSpellCallback, SpellCallbackInfo*);
+    void ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl);
 
     void InsertObject(SdrObject* pObj, SdPage* pPage);
     void RemoveObject(SdrObject* pObj, SdPage* pPage);
