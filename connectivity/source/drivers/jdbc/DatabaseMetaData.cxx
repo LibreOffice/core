@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:12:16 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
             sal_Int32 len = types.getLength();
             if(len)
             {
-                jobjectArray pObjArray = t.pEnv->NewObjectArray((jsize) len, java_lang_String::getMyClass(), 0);
+                jobjectArray pObjArray = static_cast<jobjectArray>(t.pEnv->NewObjectArray((jsize) len, java_lang_String::getMyClass(), 0));
                 sal_Bool bExcepOccured = isExceptionOccured(t.pEnv,sal_True); OSL_ENSURE(!bExcepOccured,"Exception occured!");
 
                 const ::rtl::OUString* pBegin = types.getConstArray();
