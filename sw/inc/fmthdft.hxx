@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmthdft.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:57:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,6 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -131,8 +129,6 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
