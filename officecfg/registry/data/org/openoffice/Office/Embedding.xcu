@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Embedding.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-02-14 11:40:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@
         <node oor:name="Chart" oor:op="replace" install:module="chart">
             <prop oor:name="ObjectUIName">
                 <value xml:lang="de">%PRODUCTNAME %PRODUCTVERSION Diagramm</value>
-                 <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION chart</value>
+                 <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Chart</value>
             </prop>
             <prop oor:name="ClassID">
                 <value>12DCAE26-281F-416F-A234-C3086127382E</value>
