@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:46:49 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,8 +258,13 @@ void X11GlyphPeer::RemovingFont( ServerFont& rServerFont )
 
 // ---------------------------------------------------------------------------
 
+// notification to clean up GlyphPeer resources for this glyph
 void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData, int nGlyphIndex )
 {
+    // nothing to do if the GlyphPeer hasn't allocated resources for the glyph
+    if( rGlyphData.GetExtInfo() == EMPTY_KIND )
+        return;
+
     const GlyphMetric& rGM = rGlyphData.GetMetric();
     const int nWidth = rGM.GetSize().Width();
     const int nHeight = rGM.GetSize().Height();
@@ -291,8 +296,7 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
 
         case XRENDER_KIND:
             {
-                GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
-                Glyph nGlyphId = GetGlyphId( rServerFont, nGlyphIndex );
+                Glyph nGlyphId = (Glyph)rGlyphData.GetExtPointer();
                 // XRenderFreeGlyphs not implemented yet for version<=0.2
                 // #108209# disabled because of crash potential,
                 // the glyph leak is not too bad because they will
