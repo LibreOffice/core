@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-18 15:16:25 $
+ *  last change: $Author: mt $ $Date: 2001-07-20 07:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
         memcpy( aSeq.getArray(), GetStream().GetData(), nLen );
         aAny <<= aSeq;
     }
-    else if ( ( nT == SOT_FORMAT_RTF ) || ( nT == MySOT_FORMAT_XML ) )
+    else if ( ( nT == SOT_FORMAT_RTF ) /* || ( nT == SOT_FORMAT_XML ) */ )
     {
         vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
@@ -146,7 +146,6 @@ uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors
     SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EDITENGINE, aDataFlavors.getArray()[0] );
     SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aDataFlavors.getArray()[1] );
     SotExchange::GetFormatDataFlavor( SOT_FORMAT_RTF, aDataFlavors.getArray()[2] );
-//  SotExchange::GetFormatDataFlavor( MySOT_FORMAT_XML, aDataFlavors.getArray()[3] );
 
     return aDataFlavors;
 }
@@ -156,7 +155,7 @@ sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& 
     sal_Bool bSupported = sal_False;
 
     ULONG nT = SotExchange::GetFormat( rFlavor );
-    if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) || ( nT == MySOT_FORMAT_XML ) || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
+    if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) /* || ( nT == SOT_FORMAT_XML ) */ || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
         bSupported = sal_True;
 
     return bSupported;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-18 15:16:25 $
+ *  last change: $Author: mt $ $Date: 2001-07-20 07:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2881,19 +2881,8 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
             }
             if ( !bDone )
             {
-                // XML
-//              SotExchange::GetFormatDataFlavor( MySOT_FORMAT_XML, aFlavor );
-//              if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
-//              {
-//                  uno::Any aData = rxDataObj->getTransferData( aFlavor );
-//                  uno::Sequence< sal_Int8 > aSeq;
-//                  aData >>= aSeq;
-//                  {
-//                      SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
-//                      aNewSelection = Read( aRTFStream, EE_FORMAT_XML, rPaM );
-//                  }
-//                  bDone = TRUE;
-//              }
+                // XML ?
+                // Currently, there is nothing like "The" XML format, StarOffice doesn't offer plain XML in Clipboard...
             }
         }
         if ( !bDone )
