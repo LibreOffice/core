@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-06 11:00:52 $
+ *  last change: $Author: kz $ $Date: 2000-12-07 15:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "Level ~1";
         Text[ chinese_simplified ] = "Ό¶±π ~1";
         Text[ greek ] = "Επίπεδο ~1";
-        Text[ korean ] = "·ΉΊ§ ~1";
+        Text[ korean ] = "·ΉΊ§ 1";
         Text[ turkish ] = "Dόzey ~1";
     };
     RadioButton RB_LEVEL2
