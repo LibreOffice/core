@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:49:18 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
 #ifdef SQL_TEST_PARSETREEITERATOR
-#include <iostream.h>
+#include <iostream>
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
