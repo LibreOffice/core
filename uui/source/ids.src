@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:11:17 $
+ *  last change: $Author: vg $ $Date: 2001-07-20 20:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: kz $ $Date: 2001-07-17 20:11:17 $ $Revision: 1.15 $
+// $Author: vg $ $Date: 2001-07-20 20:12:51 $ $Revision: 1.16 $
 //============================================================================
 
 #define __RSC
@@ -192,11 +192,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The operation executed on $(ARG1) was aborted";
         Text[ dutch ] = "The operation executed on $(ARG1) was aborted";
         Text[ french ] = "The operation executed on $(ARG1) was aborted";
-        Text[ spanish ] = "The operation executed on $(ARG1) was aborted";
+        Text[ spanish ] = "Se ha interrumpido la accion ejecutada en $(ARG1).";
         Text[ finnish ] = "The operation executed on $(ARG1) was aborted";
         Text[ italian ] = "The operation executed on $(ARG1) was aborted";
         Text[ danish ] = "The operation executed on $(ARG1) was aborted";
-        Text[ swedish ] = "The operation executed on $(ARG1) was aborted";
+        Text[ swedish ] = "≈tg‰rden som utfˆrdes pÂ $(ARG1) avbrˆts";
         Text[ polish ] = "The operation executed on $(ARG1) was aborted";
         Text[ portuguese_brazilian ] = "The operation executed on $(ARG1) was aborted";
         Text[ japanese ] = "$(ARG1) Ç≈é¿çsÇµÇΩ±∏ºÆ›ÇÕíÜé~Ç≥ÇÍÇ‹ÇµÇΩÅB";
@@ -218,7 +218,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The access to $(ARG1) was denied";
         Text[ dutch ] = "The access to $(ARG1) was denied";
         Text[ french ] = "The access to $(ARG1) was denied";
-        Text[ spanish ] = "The access to $(ARG1) was denied";
+        Text[ spanish ] = "Denegado el acceso a $(ARG1)";
         Text[ finnish ] = "The access to $(ARG1) was denied";
         Text[ italian ] = "The access to $(ARG1) was denied";
         Text[ danish ] = "The access to $(ARG1) was denied";
@@ -244,7 +244,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) does already exist";
         Text[ dutch ] = "$(ARG1) does already exist";
         Text[ french ] = "$(ARG1) does already exist";
-        Text[ spanish ] = "$(ARG1) does already exist";
+        Text[ spanish ] = "Ya existe la carpeta $(ARG1)";
         Text[ finnish ] = "$(ARG1) does already exist";
         Text[ italian ] = "$(ARG1) does already exist";
         Text[ danish ] = "$(ARG1) does already exist";
@@ -270,11 +270,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ dutch ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ french ] = "The data of $(ARG1) have an incorrect checksum";
-        Text[ spanish ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ spanish ] = "Los datos de $(ARG1) tienen una suma incorrecta de comprobaciÛn.";
         Text[ finnish ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ italian ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ danish ] = "The data of $(ARG1) have an incorrect checksum";
-        Text[ swedish ] = "The data of $(ARG1) have an incorrect checksum";
+        Text[ swedish ] = "Data frÂn $(ARG1) har en felaktig kontrollsumma";
         Text[ polish ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ portuguese_brazilian ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ japanese ] = "$(ARG1) ÇÃ√ﬁ∞¿ÇÕ¡™Ø∏ª—Ç™ê≥ÇµÇ≠Ç†ÇËÇ‹ÇπÇÒÅB";
@@ -297,7 +297,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ dutch ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ french ] = "The object $(ARG1) could not be created in directory $(ARG2)";
-        Text[ spanish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
+        Text[ spanish ] = "No se puede crear el objeto $(ARG1) en el directorio $(ARG2).";
         Text[ finnish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ italian ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ danish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
@@ -323,7 +323,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "Data of $(ARG1) could not be read";
         Text[ dutch ] = "Data of $(ARG1) could not be read";
         Text[ french ] = "Data of $(ARG1) could not be read";
-        Text[ spanish ] = "Data of $(ARG1) could not be read";
+        Text[ spanish ] = "No se pudieron leer los datos de $(ARG1).";
         Text[ finnish ] = "Data of $(ARG1) could not be read";
         Text[ italian ] = "Data of $(ARG1) could not be read";
         Text[ danish ] = "Data of $(ARG1) could not be read";
@@ -349,11 +349,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The seek operation on $(ARG1) could not be completed";
         Text[ dutch ] = "The seek operation on $(ARG1) could not be completed";
         Text[ french ] = "The seek operation on $(ARG1) could not be completed";
-        Text[ spanish ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ spanish ] = "No se pudo ejecutar la operaciÛn de b˙squeda en $(ARG1).";
         Text[ finnish ] = "The seek operation on $(ARG1) could not be completed";
         Text[ italian ] = "The seek operation on $(ARG1) could not be completed";
         Text[ danish ] = "The seek operation on $(ARG1) could not be completed";
-        Text[ swedish ] = "The seek operation on $(ARG1) could not be completed";
+        Text[ swedish ] = "Det gick inte att utfˆra seek-operationen $(ARG1)";
         Text[ polish ] = "The seek operation on $(ARG1) could not be completed";
         Text[ portuguese_brazilian ] = "The seek operation on $(ARG1) could not be completed";
         Text[ japanese ] = "$(ARG1) Ç÷ÇÃ seek ëÄçÏÇÕé¿çsÇ≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
@@ -375,11 +375,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The tell operation on $(ARG1) could not be completed";
         Text[ dutch ] = "The tell operation on $(ARG1) could not be completed";
         Text[ french ] = "The tell operation on $(ARG1) could not be completed";
-        Text[ spanish ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ spanish ] = "No se pudo ejecutar la operaciÛn tell en $(ARG1).";
         Text[ finnish ] = "The tell operation on $(ARG1) could not be completed";
         Text[ italian ] = "The tell operation on $(ARG1) could not be completed";
         Text[ danish ] = "The tell operation on $(ARG1) could not be completed";
-        Text[ swedish ] = "The tell operation on $(ARG1) could not be completed";
+        Text[ swedish ] = "Det gick inte att utfˆra telloperationen pÂ $(ARG1)";
         Text[ polish ] = "The tell operation on $(ARG1) could not be completed";
         Text[ portuguese_brazilian ] = "The tell operation on $(ARG1) could not be completed";
         Text[ japanese ] = "$(ARG1) Ç÷ÇÃ tell ëÄçÏÇÕé¿çsÇ≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
@@ -401,11 +401,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "Data for $(ARG1) could not be written";
         Text[ dutch ] = "Data for $(ARG1) could not be written";
         Text[ french ] = "Data for $(ARG1) could not be written";
-        Text[ spanish ] = "Data for $(ARG1) could not be written";
+        Text[ spanish ] = "No se pudieron guardar los datos para $(ARG1).";
         Text[ finnish ] = "Data for $(ARG1) could not be written";
         Text[ italian ] = "Data for $(ARG1) could not be written";
         Text[ danish ] = "Data for $(ARG1) could not be written";
-        Text[ swedish ] = "Data for $(ARG1) could not be written";
+        Text[ swedish ] = "Det gick inte att skriva data fˆr $(ARG1)";
         Text[ polish ] = "Data for $(ARG1) could not be written";
         Text[ portuguese_brazilian ] = "Data for $(ARG1) could not be written";
         Text[ japanese ] = "$(ARG1) ÇÃ√ﬁ∞¿ÇÕèëÇ´çûÇ›Ç≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
@@ -427,11 +427,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ dutch ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ french ] = "Action not allowed: $(ARG1) is the current directory";
-        Text[ spanish ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ spanish ] = "En el directorio actual no es posible realizar la acciÛn $(ARG1)";
         Text[ finnish ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ italian ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ danish ] = "Action not allowed: $(ARG1) is the current directory";
-        Text[ swedish ] = "Action not allowed: $(ARG1) is the current directory";
+        Text[ swedish ] = "≈tg‰rd omˆjlig: $(ARG1) ‰r den aktuella katalogen";
         Text[ polish ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ portuguese_brazilian ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ japanese ] = "±∏ºÆ›Ç≈Ç´Ç‹ÇπÇÒ: $(ARG1) ÇÕåªç›ÇÃ√ﬁ®⁄∏ƒÿÇ≈Ç∑ÅB";
@@ -453,11 +453,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The Device (drive) $(ARG1) is not ready";
         Text[ dutch ] = "The Device (drive) $(ARG1) is not ready";
         Text[ french ] = "The Device (drive) $(ARG1) is not ready";
-        Text[ spanish ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ spanish ] = "El dispositivo (Unidad) $(ARG1) no est· preparado";
         Text[ finnish ] = "The Device (drive) $(ARG1) is not ready";
         Text[ italian ] = "The Device (drive) $(ARG1) is not ready";
         Text[ danish ] = "The Device (drive) $(ARG1) is not ready";
-        Text[ swedish ] = "The Device (drive) $(ARG1) is not ready";
+        Text[ swedish ] = "Enheten $(ARG1) ‰r inte redo";
         Text[ polish ] = "The Device (drive) $(ARG1) is not ready";
         Text[ portuguese_brazilian ] = "The Device (drive) $(ARG1) is not ready";
         Text[ japanese ] = "√ﬁ ﬁ≤Ω(ƒﬁ◊≤Ãﬁ) $(ARG1) ÇÃèÄîıÇ™Ç≈Ç´ÇƒÇ¢Ç‹ÇπÇÒÅB";
@@ -479,11 +479,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ dutch ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ french ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
-        Text[ spanish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ spanish ] = "No es posible la acciÛn: $(ARG1) y $(ARG2) son dispositivos (unidades) diferentes.";
         Text[ finnish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ italian ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ danish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
-        Text[ swedish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
+        Text[ swedish ] = "≈tg‰rd omˆjlig: $(ARG1) och $(ARG2) ‰r olika enheter";
         Text[ polish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ portuguese_brazilian ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ japanese ] = "±∏ºÆ›Ç≈Ç´Ç‹ÇπÇÒ: $(ARG1) Ç∆ $(ARG2) ÇÕàŸÇ»Ç¡ÇΩ√ﬁ ﬁ≤Ω(ƒﬁ◊≤Ãﬁ)Ç≈Ç∑ÅB";
@@ -505,7 +505,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "General input/output error while accessing $(ARG1)";
         Text[ dutch ] = "General input/output error while accessing $(ARG1)";
         Text[ french ] = "General input/output error while accessing $(ARG1)";
-        Text[ spanish ] = "General input/output error while accessing $(ARG1)";
+        Text[ spanish ] = "Error general de entrada/salida al acceder a $(ARG1).";
         Text[ finnish ] = "General input/output error while accessing $(ARG1)";
         Text[ italian ] = "General input/output error while accessing $(ARG1)";
         Text[ danish ] = "General input/output error while accessing $(ARG1)";
@@ -531,11 +531,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "An invalid attempt was made to access $(ARG1)";
         Text[ dutch ] = "An invalid attempt was made to access $(ARG1)";
         Text[ french ] = "An invalid attempt was made to access $(ARG1)";
-        Text[ spanish ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ spanish ] = "Se intentÛ acceder a $(ARG1) en una forma errÛnea.";
         Text[ finnish ] = "An invalid attempt was made to access $(ARG1)";
         Text[ italian ] = "An invalid attempt was made to access $(ARG1)";
         Text[ danish ] = "An invalid attempt was made to access $(ARG1)";
-        Text[ swedish ] = "An invalid attempt was made to access $(ARG1)";
+        Text[ swedish ] = "Ett fˆrsˆk gjordes att fÂ Âtkomst till $(ARG1) pÂ ett ogiltigt s‰tt";
         Text[ polish ] = "An invalid attempt was made to access $(ARG1)";
         Text[ portuguese_brazilian ] = "An invalid attempt was made to access $(ARG1)";
         Text[ japanese ] = "$(ARG1) Ç÷ÇÃñ≥å¯Ç»±∏æΩÇ™ééÇ›ÇÁÇÍÇ‹ÇµÇΩÅB";
@@ -557,11 +557,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) contains invalid characters";
         Text[ dutch ] = "$(ARG1) contains invalid characters";
         Text[ french ] = "$(ARG1) contains invalid characters";
-        Text[ spanish ] = "$(ARG1) contains invalid characters";
+        Text[ spanish ] = "$(ARG1) contiene caracteres no permitidos";
         Text[ finnish ] = "$(ARG1) contains invalid characters";
         Text[ italian ] = "$(ARG1) contains invalid characters";
         Text[ danish ] = "$(ARG1) contains invalid characters";
-        Text[ swedish ] = "$(ARG1) contains invalid characters";
+        Text[ swedish ] = "$(ARG1) innehÂller otillÂtna tecken";
         Text[ polish ] = "$(ARG1) contains invalid characters";
         Text[ portuguese_brazilian ] = "$(ARG1) contains invalid characters";
         Text[ japanese ] = "$(ARG1) Ç…ñ≥å¯Ç»ï∂éöÇ™ä‹Ç‹ÇÍÇƒÇ¢Ç‹Ç∑ÅB";
@@ -583,11 +583,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The device (drive) $(ARG1) is invalid";
         Text[ dutch ] = "The device (drive) $(ARG1) is invalid";
         Text[ french ] = "The device (drive) $(ARG1) is invalid";
-        Text[ spanish ] = "The device (drive) $(ARG1) is invalid";
+        Text[ spanish ] = "El dispositivo (Unidad) $(ARG1) no es v·lido";
         Text[ finnish ] = "The device (drive) $(ARG1) is invalid";
         Text[ italian ] = "The device (drive) $(ARG1) is invalid";
         Text[ danish ] = "The device (drive) $(ARG1) is invalid";
-        Text[ swedish ] = "The device (drive) $(ARG1) is invalid";
+        Text[ swedish ] = "Enheten $(ARG1) ‰r ogiltig";
         Text[ polish ] = "The device (drive) $(ARG1) is invalid";
         Text[ portuguese_brazilian ] = "The device (drive) $(ARG1) is invalid";
         Text[ japanese ] = "√ﬁ ﬁ≤Ω(ƒﬁ◊≤Ãﬁ) $(ARG1) ÇÕñ≥å¯Ç≈Ç∑ÅB";
@@ -609,11 +609,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The data of $(ARG1) have an invalid length";
         Text[ dutch ] = "The data of $(ARG1) have an invalid length";
         Text[ french ] = "The data of $(ARG1) have an invalid length";
-        Text[ spanish ] = "The data of $(ARG1) have an invalid length";
+        Text[ spanish ] = "Los datos de $(ARG1) poseen una longitud no permitida";
         Text[ finnish ] = "The data of $(ARG1) have an invalid length";
         Text[ italian ] = "The data of $(ARG1) have an invalid length";
         Text[ danish ] = "The data of $(ARG1) have an invalid length";
-        Text[ swedish ] = "The data of $(ARG1) have an invalid length";
+        Text[ swedish ] = "Data frÂn $(ARG1) har en ogiltig l‰ngd";
         Text[ polish ] = "The data of $(ARG1) have an invalid length";
         Text[ portuguese_brazilian ] = "The data of $(ARG1) have an invalid length";
         Text[ japanese ] = "The data of $(ARG1) have an invalid length";
@@ -635,11 +635,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ dutch ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ french ] = "The operation on $(ARG1) was started with an invalid parameter";
-        Text[ spanish ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ spanish ] = "La operaciÛn en $(ARG1) se iniciÛ con un par·metro no permitido";
         Text[ finnish ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ italian ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ danish ] = "The operation on $(ARG1) was started with an invalid parameter";
-        Text[ swedish ] = "The operation on $(ARG1) was started with an invalid parameter";
+        Text[ swedish ] = "Operationen pÂ $(ARG1) startades med en ogiltig parameter";
         Text[ polish ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ japanese ] = "The operation on $(ARG1) was started with an invalid parameter";
@@ -661,11 +661,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ dutch ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ french ] = "The operation cannot be run, because $(ARG1) contains wildcards";
-        Text[ spanish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ spanish ] = "No se puede ejecutar la operaciÛn porque $(ARG1) contiene comodines.";
         Text[ finnish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ italian ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ danish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
-        Text[ swedish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
+        Text[ swedish ] = "Det gÂr inte att utfˆra operationen eftersom $(ARG1) innehÂller jokertecken";
         Text[ polish ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ portuguese_brazilian ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ japanese ] = "The operation cannot be run, because $(ARG1) contains wildcards";
@@ -687,7 +687,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "Sharing violation while accessing $(ARG1)";
         Text[ dutch ] = "Sharing violation while accessing $(ARG1)";
         Text[ french ] = "Sharing violation while accessing $(ARG1)";
-        Text[ spanish ] = "Sharing violation while accessing $(ARG1)";
+        Text[ spanish ] = "Error durante el acceso compartido al archivo $(ARG1).";
         Text[ finnish ] = "Sharing violation while accessing $(ARG1)";
         Text[ italian ] = "Sharing violation while accessing $(ARG1)";
         Text[ danish ] = "Sharing violation while accessing $(ARG1)";
@@ -713,11 +713,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) contains misplaced characters";
         Text[ dutch ] = "$(ARG1) contains misplaced characters";
         Text[ french ] = "$(ARG1) contains misplaced characters";
-        Text[ spanish ] = "$(ARG1) contains misplaced characters";
+        Text[ spanish ] = "$(ARG1) contiene caracteres en posiciones donde no est·n permitidos.";
         Text[ finnish ] = "$(ARG1) contains misplaced characters";
         Text[ italian ] = "$(ARG1) contains misplaced characters";
         Text[ danish ] = "$(ARG1) contains misplaced characters";
-        Text[ swedish ] = "$(ARG1) contains misplaced characters";
+        Text[ swedish ] = "$(ARG1) innehÂller tecken som har en otillÂten placering";
         Text[ polish ] = "$(ARG1) contains misplaced characters";
         Text[ portuguese_brazilian ] = "$(ARG1) contains misplaced characters";
         Text[ japanese ] = "$(ARG1) contains misplaced characters";
@@ -739,11 +739,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The name $(ARG1) contains to many characters";
         Text[ dutch ] = "The name $(ARG1) contains to many characters";
         Text[ french ] = "The name $(ARG1) contains to many characters";
-        Text[ spanish ] = "The name $(ARG1) contains to many characters";
+        Text[ spanish ] = "El nombre $(ARG1) contiene demasiados caracteres";
         Text[ finnish ] = "The name $(ARG1) contains to many characters";
         Text[ italian ] = "The name $(ARG1) contains to many characters";
         Text[ danish ] = "The name $(ARG1) contains to many characters";
-        Text[ swedish ] = "The name $(ARG1) contains to many characters";
+        Text[ swedish ] = "Namnet $(ARG1) innehÂller fˆr mÂnga tecken";
         Text[ polish ] = "The name $(ARG1) contains to many characters";
         Text[ portuguese_brazilian ] = "The name $(ARG1) contains to many characters";
         Text[ japanese ] = "The name $(ARG1) contains to many characters";
@@ -765,7 +765,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) does not exist";
         Text[ dutch ] = "$(ARG1) does not exist";
         Text[ french ] = "$(ARG1) does not exist";
-        Text[ spanish ] = "$(ARG1) does not exist";
+        Text[ spanish ] = "$(ARG1) no existe";
         Text[ finnish ] = "$(ARG1) does not exist";
         Text[ italian ] = "$(ARG1) does not exist";
         Text[ danish ] = "$(ARG1) does not exist";
@@ -791,7 +791,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The path $(ARG1) does not exist";
         Text[ dutch ] = "The path $(ARG1) does not exist";
         Text[ french ] = "The path $(ARG1) does not exist";
-        Text[ spanish ] = "The path $(ARG1) does not exist";
+        Text[ spanish ] = "No existe la ruta $(ARG1)";
         Text[ finnish ] = "The path $(ARG1) does not exist";
         Text[ italian ] = "The path $(ARG1) does not exist";
         Text[ danish ] = "The path $(ARG1) does not exist";
@@ -817,11 +817,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ dutch ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ french ] = "The operation on $(ARG1) is not supported on this operating system";
-        Text[ spanish ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ spanish ] = "En el sistema operativo actual no se apoya la operaciÛn a $(ARG1).";
         Text[ finnish ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ italian ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ danish ] = "The operation on $(ARG1) is not supported on this operating system";
-        Text[ swedish ] = "The operation on $(ARG1) is not supported on this operating system";
+        Text[ swedish ] = "Operationen pÂ $(ARG1) understˆds inte pÂ operativsystemet";
         Text[ polish ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ japanese ] = "The operation on $(ARG1) is not supported on this operating system";
@@ -843,7 +843,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) is not a directory";
         Text[ dutch ] = "$(ARG1) is not a directory";
         Text[ french ] = "$(ARG1) is not a directory";
-        Text[ spanish ] = "$(ARG1) is not a directory";
+        Text[ spanish ] = "$(ARG1) no es un directorio";
         Text[ finnish ] = "$(ARG1) is not a directory";
         Text[ italian ] = "$(ARG1) is not a directory";
         Text[ danish ] = "$(ARG1) is not a directory";
@@ -869,7 +869,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) is not a file";
         Text[ dutch ] = "$(ARG1) is not a file";
         Text[ french ] = "$(ARG1) is not a file";
-        Text[ spanish ] = "$(ARG1) is not a file";
+        Text[ spanish ] = "$(ARG1) no es un archivo";
         Text[ finnish ] = "$(ARG1) is not a file";
         Text[ italian ] = "$(ARG1) is not a file";
         Text[ danish ] = "$(ARG1) is not a file";
@@ -895,11 +895,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "There was no space left on device $(ARG1)";
         Text[ dutch ] = "There was no space left on device $(ARG1)";
         Text[ french ] = "There was no space left on device $(ARG1)";
-        Text[ spanish ] = "There was no space left on device $(ARG1)";
+        Text[ spanish ] = "No existe m·s espacio en el dispositivo $(ARG1)";
         Text[ finnish ] = "There was no space left on device $(ARG1)";
         Text[ italian ] = "There was no space left on device $(ARG1)";
         Text[ danish ] = "There was no space left on device $(ARG1)";
-        Text[ swedish ] = "There was no space left on device $(ARG1)";
+        Text[ swedish ] = "Det finns ingen plats kvar pÂ enheten $(ARG1)";
         Text[ polish ] = "There was no space left on device $(ARG1)";
         Text[ portuguese_brazilian ] = "There was no space left on device $(ARG1)";
         Text[ japanese ] = "There was no space left on device $(ARG1)";
@@ -921,11 +921,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ dutch ] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ french ] = "The operation on $(ARG1) can't be completed because there are too many open files";
-        Text[ spanish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ spanish ] = "No se puede ejecutar la operaciÛn en $(ARG1) porque ya existen demasiados archivos abiertos.";
         Text[ finnish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ italian ] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ danish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
-        Text[ swedish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
+        Text[ swedish ] = "Det gÂr inte att utfˆra operationen pÂ $(ARG1) eftersom fˆr mÂnga filer redan ‰r ˆppna";
         Text[ polish ] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ japanese ] = "The operation on $(ARG1) can't be completed because there are too many open files";
@@ -947,11 +947,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ dutch ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ french ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
-        Text[ spanish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ spanish ] = "No se puede ejecutar la operaciÛn en $(ARG1) por falta de espacio.";
         Text[ finnish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ italian ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ danish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
-        Text[ swedish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
+        Text[ swedish ] = "Det gÂr inte att utfˆra operationen pÂ $(ARG1) eftersom inget mer minne ‰r tillg‰ngligt";
         Text[ polish ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ japanese ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
@@ -973,7 +973,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "The operation on $(ARG1) cannot continue, because there are pending data";
         Text[ dutch ] = "The operation on $(ARG1) cannot continue, because there are pending data";
         Text[ french ] = "The operation on $(ARG1) cannot continue, because there are pending data";
-        Text[ spanish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
+        Text[ spanish ] = "No se pudo completar la operaciÛn en $(ARG1) porque se esperan m·s datos.";
         Text[ finnish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
         Text[ italian ] = "The operation on $(ARG1) cannot continue, because there are pending data";
         Text[ danish ] = "The operation on $(ARG1) cannot continue, because there are pending data";
@@ -999,7 +999,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) cannot be copied into itself";
         Text[ dutch ] = "$(ARG1) cannot be copied into itself";
         Text[ french ] = "$(ARG1) cannot be copied into itself";
-        Text[ spanish ] = "$(ARG1) cannot be copied into itself";
+        Text[ spanish ] = "$(ARG1) no se puede copiar en sÌ mismo.";
         Text[ finnish ] = "$(ARG1) cannot be copied into itself";
         Text[ italian ] = "$(ARG1) cannot be copied into itself";
         Text[ danish ] = "$(ARG1) cannot be copied into itself";
@@ -1025,7 +1025,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ dutch ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ french ] = "Unknown input/output error while accessing $(ARG1)";
-        Text[ spanish ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ spanish ] = "Error de entrada/salida desconocido al acceder a $(ARG1)";
         Text[ finnish ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ italian ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ danish ] = "Unknown input/output error while accessing $(ARG1)";
@@ -1051,11 +1051,11 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) is write protected";
         Text[ dutch ] = "$(ARG1) is write protected";
         Text[ french ] = "$(ARG1) is write protected";
-        Text[ spanish ] = "$(ARG1) is write protected";
+        Text[ spanish ] = "$(ARG1) es de sÛlo lectura";
         Text[ finnish ] = "$(ARG1) is write protected";
         Text[ italian ] = "$(ARG1) is write protected";
         Text[ danish ] = "$(ARG1) is write protected";
-        Text[ swedish ] = "$(ARG1) is write protected";
+        Text[ swedish ] = "$(ARG1) ‰r skrivskyddad";
         Text[ polish ] = "$(ARG1) is write protected";
         Text[ portuguese_brazilian ] = "$(ARG1) is write protected";
         Text[ japanese ] = "$(ARG1) is write protected";
@@ -1077,7 +1077,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) has an incorrect format";
         Text[ dutch ] = "$(ARG1) has an incorrect format";
         Text[ french ] = "$(ARG1) has an incorrect format";
-        Text[ spanish ] = "$(ARG1) has an incorrect format";
+        Text[ spanish ] = "$(ARG1) tiene un formato falso";
         Text[ finnish ] = "$(ARG1) has an incorrect format";
         Text[ italian ] = "$(ARG1) has an incorrect format";
         Text[ danish ] = "$(ARG1) has an incorrect format";
@@ -1103,7 +1103,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) has an incorrect version";
         Text[ dutch ] = "$(ARG1) has an incorrect version";
         Text[ french ] = "$(ARG1) has an incorrect version";
-        Text[ spanish ] = "$(ARG1) has an incorrect version";
+        Text[ spanish ] = "$(ARG1) no es la versiÛn correcta.";
         Text[ finnish ] = "$(ARG1) has an incorrect version";
         Text[ italian ] = "$(ARG1) has an incorrect version";
         Text[ danish ] = "$(ARG1) has an incorrect version";
@@ -1119,4 +1119,5 @@ Resource RID_UUI_ERRHDL
         Text[ catalan ] = "$(ARG1) has an incorrect version";
     };
 };
+
 
