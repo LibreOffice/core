@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-28 17:54:17 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 15:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
     {
         try
         {
+            sal_Int32 nInd = 0;
             uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
 
             uno::Reference< registry::XRegistryKey >  xNewKey;
@@ -133,8 +134,8 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
 
             uno::Sequence< ::rtl::OUString > rServices = OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames();
-            for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
-                xNewKey->createKey( rServices.getConstArray()[ind] );
+            for( nInd = 0; nInd < rServices.getLength(); nInd++ )
+                xNewKey->createKey( rServices.getConstArray()[nInd] );
 
 
             xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
@@ -142,8 +143,8 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
 
             rServices = UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames();
-            for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
-                xNewKey->createKey( rServices.getConstArray()[ind] );
+            for( nInd = 0; nInd < rServices.getLength(); nInd++ )
+                xNewKey->createKey( rServices.getConstArray()[nInd] );
 
             return sal_True;
         }
