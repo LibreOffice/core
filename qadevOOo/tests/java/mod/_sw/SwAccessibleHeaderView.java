@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleHeaderView.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Date: 2004-11-02 12:10:37 $
+ *  last change: $Date: 2005-03-01 20:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ import com.sun.star.uno.XInterface;
 * Test of accessible object for a header of a text document.<p>
 * Object implements the following interfaces :
 * <ul>
-*  <li> <code>drafts::com::sun::star::accessibility::XAccessible</code></li>
+*  <li> <code>::com::sun::star::accessibility::XAccessible</code></li>
 * </ul>
 * @see com.sun.star.accessibility.XAccessible
 */
