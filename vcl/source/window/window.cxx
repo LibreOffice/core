@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-18 12:56:55 $
+ *  last change: $Author: ssa $ $Date: 2002-11-18 17:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6206,6 +6206,7 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
+    BOOL bNotify = (bEnable != mbInputDisabled);
     if ( mpBorderWindow )
     {
         mpBorderWindow->EnableInput( bEnable, FALSE );
@@ -6250,6 +6251,13 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild )
 
     if ( IsReallyVisible() )
         ImplGenerateMouseMove();
+
+    // #104827# notify parent
+    if ( bNotify && GetParent() )
+    {
+        NotifyEvent aNEvt( bEnable ? EVENT_INPUTENABLE : EVENT_INPUTDISABLE, this );
+        GetParent()->Notify( aNEvt );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -6264,7 +6272,8 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild, BOOL bSysWin,
     {
         // pExculeWindow is the first Overlap-Frame --> if this
         // shouldn't be the case, than this must be changed in dialog.cxx
-        pExcludeWindow = pExcludeWindow->ImplGetFirstOverlapWindow();
+        if( pExcludeWindow )
+            pExcludeWindow = pExcludeWindow->ImplGetFirstOverlapWindow();
         Window* pSysWin = mpFrameWindow->mpFrameData->mpFirstOverlap;
         while ( pSysWin )
         {
@@ -6273,7 +6282,7 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild, BOOL bSysWin,
             {
                 // Is Window not in the exclude window path or not the
                 // exclude window, than change the status
-                if ( !pExcludeWindow->ImplIsWindowOrChild( pSysWin, TRUE ) )
+                if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( pSysWin, TRUE ) )
                     pSysWin->EnableInput( bEnable, bChild );
             }
             pSysWin = pSysWin->mpNextOverlap;
@@ -6290,7 +6299,7 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild, BOOL bSysWin,
                 {
                     // Is Window not in the exclude window path or not the
                     // exclude window, than change the status
-                    if ( !pExcludeWindow->ImplIsWindowOrChild( pFrameWin, TRUE ) )
+                    if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( pFrameWin, TRUE ) )
                         pFrameWin->EnableInput( bEnable, bChild );
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-14 09:46:35 $
+ *  last change: $Author: ssa $ $Date: 2002-11-18 17:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4791,10 +4791,25 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
         case WM_ENABLE:
             // #95133# a system dialog is opened/closed, using our app window as parent
-            if( !wParam )
-                ImplGetSVData()->maAppData.mnModalMode++;
-            else
-                ImplGetSVData()->maAppData.mnModalMode--;
+            {
+                SalFrame* pFrame = GetWindowPtr( hWnd );
+                Window *pWin = NULL;
+                if( pFrame )
+                    pWin = ((Window*)pFrame->maFrameData.mpInst);
+
+                if( !wParam )
+                {
+                    ImplGetSVData()->maAppData.mnModalMode++;
+                    if( pWin )
+                        pWin->EnableInput( FALSE, TRUE, TRUE, NULL );
+                }
+                else
+                {
+                    ImplGetSVData()->maAppData.mnModalMode--;
+                    if( pWin )
+                        pWin->EnableInput( TRUE, TRUE, TRUE, NULL );
+                }
+            }
             break;
 
         case WM_KILLFOCUS:
