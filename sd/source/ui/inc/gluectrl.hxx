@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluectrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,11 @@
 \************************************************************************/
 class GlueEscDirLB : public ListBox
 {
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 public:
-                 GlueEscDirLB( Window* pParent );
+                GlueEscDirLB( Window* pParent,
+                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                  ~GlueEscDirLB();
 
     virtual void Select();
@@ -103,7 +106,7 @@ public:
 
             SFX_DECL_TOOLBOX_CONTROL();
 
-            SdTbxCtlGlueEscDir( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+            SdTbxCtlGlueEscDir( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
             ~SdTbxCtlGlueEscDir() {}
 };
 
