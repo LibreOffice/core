@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:46:00 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,8 @@ FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRe
 
     if (pControlRec && pControlRec->GetControl().is())
     {
+        SdrUnoControlPaintGuard aLockForPaint( *const_cast< SdrUnoControlRec* >( pControlRec ) );
+
         uno::Reference< awt::XControl > xUnoControl = pControlRec->GetControl();
 
         uno::Reference< awt::XView > xView(xUnoControl, uno::UNO_QUERY);
