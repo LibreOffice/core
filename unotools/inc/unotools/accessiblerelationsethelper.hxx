@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblerelationsethelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 12:44:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #define _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESSTATESET_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESSTATESET_HPP_
+#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
@@ -106,7 +106,7 @@ namespace utl
 */
 class AccessibleRelationSetHelper
     :   public cppu::WeakImplHelper1<
-        ::drafts::com::sun::star::accessibility::XAccessibleRelationSet
+        ::com::sun::star::accessibility::XAccessibleRelationSet
         >
 {
 public:
@@ -140,7 +140,7 @@ public:
             has the type INVALID.
 
     */
-    virtual ::drafts::com::sun::star::accessibility::AccessibleRelation SAL_CALL
+    virtual ::com::sun::star::accessibility::AccessibleRelation SAL_CALL
         getRelation( sal_Int32 nIndex )
             throw (::com::sun::star::lang::IndexOutOfBoundsException,
                     ::com::sun::star::uno::RuntimeException);
@@ -171,12 +171,12 @@ public:
             of) this relation is returned.  Otherwise a relation with the
             type INVALID is returned.
     */
-    virtual ::drafts::com::sun::star::accessibility::AccessibleRelation SAL_CALL
+    virtual ::com::sun::star::accessibility::AccessibleRelation SAL_CALL
         getRelationByType( sal_Int16 aRelationType )
             throw (::com::sun::star::uno::RuntimeException);
 
     void AddRelation(
-        const ::drafts::com::sun::star::accessibility::AccessibleRelation& rRelation)
+        const ::com::sun::star::accessibility::AccessibleRelation& rRelation)
             throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XTypeProvider  ===================================================
