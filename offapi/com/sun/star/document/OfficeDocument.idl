@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:55:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ module com {   module sun {   module star {   module document {
 
     @see com::sun::star::frame::Controller
  */
-service OfficeDocument
+published service OfficeDocument
 {
     //-------------------------------------------------------------------------
     /** represents a component which is created from an URL and arguments
