@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-17 16:28:26 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,8 @@
 #include <svx/outlobj.hxx>
 #endif
 
-#ifndef _SD_SPOUTLINER_HXX
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
 #endif
 
 #ifndef _SDRESID_HXX
@@ -149,16 +149,19 @@
 #include "unomodel.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "unokywds.hxx"
 #include "unostyls.hxx"
 #include "unopsfm.hxx"
 #include "unogsfm.hxx"
 #include "unopstyl.hxx"
 #include "unopage.hxx"
-#include "viewshel.hxx"
 #ifndef SVX_LIGHT
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 #endif
 #include "helpids.h"
 #include "glob.hxx"
@@ -975,7 +978,7 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
                 if( pDoc == NULL)
                     break;
 
-                SdOutliner* pOutliner = pDoc->GetInternalOutliner();
+                ::sd::Outliner* pOutliner = pDoc->GetInternalOutliner();
                 DBG_ASSERT( pOutliner, "no outliner?" );
                 if( pOutliner == NULL )
                     break;
@@ -1178,8 +1181,8 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumen
 #ifndef SVX_LIGHT
     if( pDoc )
     {
-        SdDrawDocShell* pDocSh = pDoc->GetDocSh();
-        SdViewShell*    pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
+        ::sd::DrawDocShell* pDocSh = pDoc->GetDocSh();
+        ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
 
         if( pViewSh )
             pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
