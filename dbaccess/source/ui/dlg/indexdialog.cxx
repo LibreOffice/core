@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 14:19:42 $
+ *  last change: $Author: fs $ $Date: 2001-05-02 11:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,13 +162,22 @@ namespace dbaui
                 return sal_False;
         }
 
-        sal_Bool bReturn = SvTreeListBox::EditedEntry(_pEntry, _rNewText);
+        if (!SvTreeListBox::EditedEntry(_pEntry, _rNewText))
+            return sal_False;
+
+        String sOldText = GetEntryText(_pEntry);
         SvTreeListBox::SetEntryText(_pEntry, _rNewText);
 
+        sal_Bool bValid = sal_True;
         if (m_aEndEditHdl.IsSet())
-            m_aEndEditHdl.Call(_pEntry);
+            bValid = (0 != m_aEndEditHdl.Call(_pEntry));
 
-        return bReturn;
+        if (bValid)
+            return sal_True;
+
+        SvTreeListBox::SetEntryText(_pEntry, sOldText);
+
+        return sal_False;
     }
 
     //------------------------------------------------------------------
@@ -633,20 +642,42 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
+    IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, SvLBoxEntry*, _pEntry )
+    {
+        m_aIndexes.EditEntry(_pEntry);
+        return 0L;
+    }
+
+    //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvLBoxEntry*, _pEntry )
     {
         OIndexCollection::iterator aPosition = static_cast< OIndexCollection::iterator >(_pEntry->GetUserData());
         DBG_ASSERT(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
             "DbaIndexDialog::OnEntryEdited: invalid entry!");
 
-        aPosition->sName = m_aIndexes.GetEntryText(_pEntry);
+        String sNewName = m_aIndexes.GetEntryText(_pEntry);
+
+        OIndexCollection::const_iterator aSameName = m_pIndexes->find(sNewName);
+        if (aSameName != aPosition)
+        {
+            String sError(ModuleRes(STR_INDEX_NAME_ALREADY_USED));
+            sError.SearchAndReplaceAscii("$name$", sNewName);
+            ErrorBox aError(this, WB_OK, sError);
+            aError.Execute();
+
+            updateToolbox();
+            PostUserEvent(LINK(this, DbaIndexDialog,OnEditIndexAgain), _pEntry);
+            return 0L;
+        }
+
+        aPosition->sName = sNewName;
 
         // rename can be done by a drop/insert combination only
         if (aPosition->isNew())
         {
             updateToolbox();
             // no commitment needed here ....
-            return 0L;
+            return 1L;
         }
 
         if (aPosition->sName != aPosition->getOriginalName())
@@ -830,6 +861,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/04/27 14:19:42  fs
+ *  #86464# IsModified before SaveModified
+ *
  *  Revision 1.6  2001/04/02 12:05:06  fs
  *  #85275# added a help button
  *
