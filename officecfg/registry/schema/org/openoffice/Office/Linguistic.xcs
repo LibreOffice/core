@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Linguistic.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-20 17:03:39 $
+ *  last change: $Author: tl $ $Date: 2002-12-04 12:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,21 @@
 					<desc xml:lang="en-US">Contains a list of languages and hyphenation-service pairs. Only languages listed will be supported.</desc>
 				</info>
 			</group>
+            <group oor:name="LastFoundSpellCheckers" oor:extensible="true">
+                <info>
+                    <desc xml:lang="en-US">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
+                </info>
+            </group>
+            <group oor:name="LastFoundThesauri" oor:extensible="true">
+                <info>
+                    <desc xml:lang="en-US">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
+                </info>
+            </group>
+            <group oor:name="LastFoundHyphenators" oor:extensible="true">
+                <info>
+                    <desc xml:lang="en-US">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
+                </info>
+            </group>
 		</group>
 	</component>
 </oor:component-schema>
