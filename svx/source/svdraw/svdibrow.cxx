@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdibrow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:52:47 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,7 +612,7 @@ FASTBOOL _SdrItemBrowserControl::BegChangeEntry(ULONG nPos)
     ImpItemListRow* pEntry=ImpGetEntry(nPos);
     if (pEntry!=NULL && !pEntry->bComment) {
         SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
-        pEditControl=new ImpItemEdit(&GetDataWindow(),this,0/*|WB_BORDER|WB_SVLOOK*/);
+        pEditControl=new ImpItemEdit(&GetDataWindow(),this,0/*|WB_BORDER|WB_3DLOOK*/);
         Rectangle aRect(GetFieldRectPixel(nPos,ITEMBROWSER_VALUECOL_ID,FALSE));
         aRect.Left()+=2; // Kleiner Offset fuer's Edit, damit's pixelgenau stimmt
         aRect.Right()--;
