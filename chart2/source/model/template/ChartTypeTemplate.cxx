@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:49 $
+ *  last change: $Author: rt $ $Date: 2004-06-14 13:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,8 +608,9 @@ void lcl_ShowTree( const Reference< chart2::XDataSeriesTreeParent > & xParent, s
     {
 //        char aIndent[ nLevel * 4  + 1];
         char aIndent[ 200 ];
+        int j;
         // avoids including any C-headers
-        for( int j = 0; j < nLevel * 4; ++j )
+        for( j = 0; j < nLevel * 4; ++j )
             aIndent[j] = ' ';
         aIndent[j] = '\0';
 
