@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 09:21:59 $
+ *  last change: $Author: kz $ $Date: 2002-08-13 13:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,17 @@ namespace dbaccess
         It owns the master connections which will be disposed when the last connection proxy is gone.
     */
     typedef ::cppu::WeakImplHelper1< XEventListener > OConnectionHelper_BASE;
+    // need to hold the digest
+    struct TDigestHolder
+    {
+        sal_uInt8 m_pBuffer[RTL_DIGEST_LENGTH_SHA1];
+        TDigestHolder()
+        {
+            m_pBuffer[0] = 0;
+        }
+
+    };
+
     class OSharedConnectionManager : public OConnectionHelper_BASE
     {
 
@@ -318,17 +329,6 @@ namespace dbaccess
             Reference< XConnection >    xMasterConnection;
             oslInterlockedCount         nALiveCount;
         } TConnectionHolder;
-
-        // need to hold the digest
-        struct TDigestHolder
-        {
-            sal_uInt8 m_pBuffer[RTL_DIGEST_LENGTH_SHA1];
-            TDigestHolder()
-            {
-                m_pBuffer[0] = 0;
-            }
-
-        };
 
         // the less-compare functor, used for the stl::map
         struct TDigestLess : public ::std::binary_function< TDigestHolder, TDigestHolder, bool>
