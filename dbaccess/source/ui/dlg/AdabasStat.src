@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:59:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,6 +649,8 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text[ hindi ] = "सिस्टम सारणी केलिए प्रवेश अधिकार न होने के कारण कोई जानकारी को नहीं दिखा सकते है ।";
     Text[ slovak ] = "Nebola zobrazená žiadna informácia, pretože neexistujú prístupové práva k požadovaným systémovým tabuľkám.";
 };
+
+
 
 
 
