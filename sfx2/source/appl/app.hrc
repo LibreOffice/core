@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-07 17:38:43 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 08:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,15 @@
 #define RID_IMAGE_SPECIAL                       19
 
 #define STR_HELP_WINDOW_TITLE                   (RID_SFX_APP_START+125)
+#define STR_HELP_BUTTON_INDEX                   (RID_SFX_APP_START+126)
+#define STR_HELP_BUTTON_START                   (RID_SFX_APP_START+127)
+#define STR_HELP_BUTTON_PREV                    (RID_SFX_APP_START+128)
+#define STR_HELP_BUTTON_NEXT                    (RID_SFX_APP_START+129)
+#define STR_HELP_BUTTON_PRINT                   (RID_SFX_APP_START+130)
+
+#define HELP_INDEX_PAGE_CONTENTS                1
+#define HELP_INDEX_PAGE_INDEX                   2
+#define HELP_INDEX_PAGE_SEARCH                  3
 
 #endif // #ifndef _SFX_APP_HRC
 
