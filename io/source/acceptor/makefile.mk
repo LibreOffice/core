@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2002-09-05 16:09:43 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:21:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,16 +63,17 @@
 PRJ=..$/..
 
 PRJNAME=io
-TARGET=acceptor
+TARGET = acceptor.uno
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = acceptor
 COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+DLLPRE =
 # ------------------------------------------------------------------
 
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
@@ -87,7 +88,7 @@ SLOFILES= \
         $(SLO)$/acc_socket.obj
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP=	$(TARGET).map
+SHL1VERSIONMAP = acceptor.map
 
 SHL1STDLIBS= \
         $(SALLIB)	\
