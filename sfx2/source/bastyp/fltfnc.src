@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:02:26 $
+ *  last change: $Author: kz $ $Date: 2001-07-04 14:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,12 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text [ dutch ] = "Dit abonnement moet in offline modus worden gelezen.\n\n%PRODUCTNAME bevindt zich echter in de online-modus. Wilt u omschakelen naar offline-modus?" ;
     Text [ portuguese ] = "Esta subscriηγo foi definida para ser lida em offline.\n\nDe momento o %PRODUCTNAME encontra-se no modo online. Deseja passar ao modo offline? " ;
     Text[ chinese_simplified ] = "°΄ΥΥΙθ¶¨ΣΓ»§ΚΉΣΓΝΡ»ϊΤΔ¶ΑΔ£Κ½΅£\n\n%PRODUCTNAME ΟΦΤΪ΄¦ΣΪΑª»ϊΧ΄Μ¬΅£ΔϊÒªΘΓ %PRODUCTNAME Χªµ½ΝΡ»ϊΔ£Κ½£Ώ";
-    Text[ russian ] = "έςΰ οξδοθρκΰ δξλζνΰ χθςΰςόρÿ, ρξγλΰρνξ σρςΰνξβκε, β πεζθμε Offline.\n\n%PRODUCTNAME νΰυξδθςρÿ β πεζθμε Online. Βϋ υξςθςε οεπεκλώχθςό ρειχΰρ %PRODUCTNAME β πεζ";
+    Text[ russian ] = "έςΰ οξδοθρκΰ δξλζνΰ χθςΰςόρÿ, ρξγλΰρνξ σρςΰνξβκε, β πεζθμε Offline.\n\n%PRODUCTNAME νΰυξδθςρÿ β πεζθμε Online. Βϋ υξςθςε οεπεκλώχθςό ρειχΰρ %PRODUCTNAME β πεζθμ Offline?";
     Text[ polish ] = "Wed³ug ustawieρ ta subskrypcja ma zostaζ odczytana w trybie offline.\n\n %PRODUCTNAME znajduje siκ w trybie online. Czy prze³Ήczyζ na tryb offline?";
     Text[ japanese ] = "‚±‚Μw“Η‚ΝµΜΧ²έ Σ°Δή‚Ε‚Μέ’θ‚Ι]‚Α‚Δ“Η‚έζ‚η‚κ‚ά‚·B\n\n%PRODUCTNAME‚Ν »έµέΧ²έ Σ°Δή‚Ι‚Θ‚Α‚Δ‚Ά‚ά‚·B%PRODUCTNAME‚π΅ µΜΧ²έ Σ°Δή‚ΙΨ‚θ·‚¦‚ά‚·‚©?";
     Text[ chinese_traditional ] = "«φ·Σ³]©w¨Ο¥ΞªΜ¨Ο¥Ξ³s½uΎ\\ΕªΌÒ¦΅΅C\n\n%PRODUCTNAME ²{¦b³B©σ½u¤Wª¬ΊA΅C±z­nΕύ %PRODUCTNAME Βΰ¨μ³s½uΌÒ¦΅΅H";
     Text[ arabic ] = "νΜΘ Γδ νήΡΓ εΠΗ ΗαΗΤΚΡΗί΅ ΝΣΘ ΗαΕΪΟΗΟΗΚ΅ έν ζΦΪ ΗαΗδέΥΗα.\n\n%PRODUCTNAMEΝΗανΗπ έν ζΦΪ ΗαΗΚΥΗα. εα ΚΡνΟ ΚΫννΡ %PRODUCTNAME ΗαΒδ Εαμ ζΦΪ ΗαΗδέΥΗαΏ";
-    Text[ greek ] = "Η ανάγνωση αυτής της συνδρομής θα πρέπει να γίνει, βάσει των ρυθμίσεων, σε κατάσταση 'Χωρίς σύνδεση'.\n\nΤο %PRODUCTNAME βρίσκεται όμως σε κατάστασ";
+    Text[ greek ] = "Η ανάγνωση αυτής της συνδρομής θα πρέπει να γίνει, βάσει των ρυθμίσεων, σε κατάσταση 'Χωρίς σύνδεση'.\n\nΤο %PRODUCTNAME βρίσκεται όμως σε κατάσταση ";
     Text[ korean ] = "°΅ΐΤΐΊ Ό³Α¤Ώ΅ µϋ¶σ  ΏΐΗΑ¶σΐΞ ΈπµεΏ΅Ό­ ΐΠΎξΎί ΗΥ΄Ο΄Ω.\n\n%PRODUCTNAME ΐΊ(΄Β) Ηφΐη ΏΒ¶σΐΞ ΈπµεΏ΅ ΐΦ½ΐ΄Ο΄Ω. Αφ±έ ΏΐΗΑ¶σΐΞ Έπµε·Ξ ΐόΘ―ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Bu όyelik, ηevrimdύώύ kipte okunmak όzere ayarlanmύώtύr.\n\n%PRODUCTNAME ώu an ηevrimiηi kipinde. %PRODUCTNAME, ηevrimdύώύ kipe geηsin mi?";
     Text[ language_user1 ] = " ";
@@ -194,6 +194,7 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ catalan ] = "El filtro seleccionado $(FILTER) no estα incluido en su ediciσn.\nEn nuestra pαgina de Internet encontrarα las informaciones para poder pedirlos.";
     Text[ finnish ] = "Valittu suodatin $(FILTER) ei sisδlly laitokseen.\nTilausohjeet ovat kotisivullamme.";
 };
+
 
 
 
