@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:28:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,7 @@
 #include <sfx2/topfrm.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/svxmsbas.hxx>
-#include <offmgr/app.hxx>
-#include <offmgr/fltrcfg.hxx>
+#include <svtools/fltrcfg.hxx>
 #include <so3/clsids.hxx>
 #include <unotools/charclass.hxx>
 #ifndef _SV_VIRDEV_HXX
@@ -209,7 +208,9 @@ static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCal
 
 
 SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
-{}
+{
+    SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
+}
 
 //  GlobalName der aktuellen Version:
 SFX_IMPL_OBJECTFACTORY( ScDocShell, SFXOBJECTSHELL_STD_NORMAL, scalc, SvGlobalName(SO3_SC_CLASSID) )
@@ -506,7 +507,7 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
             }
             else if ( aDocStm->GetErrorCode() && !pStor->GetErrorCode() )
                 pStor->SetError(aDocStm->GetErrorCode());
-            else if ( OFF_APP()->GetFilterOptions()->IsLoadExcelBasicStorage() )
+            else if ( SvtFilterOptions::Get()->IsLoadExcelBasicStorage() )
             {
                 //  #75497# warning if MS VBA macros are lost
                 //  GetSaveWarningOfMSVBAStorage checks if sub-storage with VBA macros is present
