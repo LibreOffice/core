@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 23:19:59 $
+ *  last change: $Author: ka $ $Date: 2002-07-30 13:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#include "helpids.h"
 #include "inspagob.hrc"
+
 ModalDialog DLG_INSERT_PAGES_OBJS
 {
     HelpID = DLG_INSERT_PAGES_OBJS ;
@@ -106,6 +108,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     };
     Control LB_TREE
     {
+        HelpId = HID_SD_PAGEOBJSTLB;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 132 , 88 ) ;
