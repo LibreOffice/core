@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headerfooterdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:04:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,7 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
         maCBNotOnTitle( this, SdResId( CB_NOTONTITLE ) ),
         maCTPreview( this, SdResId( CT_PREVIEW ),
             pActualPage ?
-                (pActualPage->IsMasterPage() ? pActualPage : (SdPage*)pActualPage->GetMasterPage(0)) :
+                (pActualPage->IsMasterPage() ? pActualPage : (SdPage*)(&(pActualPage->TRG_GetMasterPage()))) :
                 (pDoc->GetMasterSdPage( 0, bHandoutMode ? PK_NOTES : PK_STANDARD )) ),
         mpCurrentPage(pActualPage),
         mpDoc(pDoc),
