@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-30 18:55:47 $
+ *  last change: $Author: er $ $Date: 2000-11-03 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ class LocaleDataWrapper
     ::com::sun::star::i18n::LocaleDataItem  aLocaleDataItem;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aReservedWordSeq;
     // cached items
-    String                      aLocaleItem[::com::sun::star::i18n::LocaleItem_LocaleItemTotalCount];
+    String                      aLocaleItem[::com::sun::star::i18n::LocaleItem::COUNT];
     String                      aReservedWord[::com::sun::star::i18n::reservedWords::COUNT];
     String                      aCurrSymbol;
     String                      aCurrBankSymbol;
@@ -110,8 +110,8 @@ class LocaleDataWrapper
                                 // whenever Locale changes
             void                invalidateData();
 
-            void                getOneLocaleItemImpl( ::com::sun::star::i18n::LocaleItem eItem );
-            const String&       getOneLocaleItem( ::com::sun::star::i18n::LocaleItem eItem ) const;
+            void                getOneLocaleItemImpl( sal_Int16 nItem );
+            const String&       getOneLocaleItem( sal_Int16 nItem ) const;
 
             void                getOneReservedWordImpl( sal_Int16 nWord );
             const String&       getOneReservedWord( sal_Int16 nWord ) const;
@@ -155,33 +155,33 @@ public:
     // Functionality of class International methods, LocaleItem
 
     inline  const String&       getDateSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_DateSeparator ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DATE_SEPARATOR ); }
     inline  const String&       getNumThousandSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_ThousandSeparator ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::THOUSAND_SEPARATOR ); }
     inline  const String&       getNumDecimalSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_DecimalSeparator ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DECIMAL_SEPARATOR ); }
     inline  const String&       getTimeSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_TimeSeparator ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_SEPARATOR ); }
     inline  const String&       getTime100SecSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_Time100SecSeparator ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_100SEC_SEPARATOR ); }
     inline  const String&       getListSep() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_ListSeparator ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LIST_SEPARATOR ); }
     inline  const String&       getQuotationMarkStart() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_QuotationStart ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::SINGLE_QUOTATION_START ); }
     inline  const String&       getQuotationMarkEnd() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_QuotationEnd ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::SINGLE_QUOTATION_END ); }
     inline  const String&       getDoubleQuotationMarkStart() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_DoubleQuotationStart ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DOUBLE_QUOTATION_START ); }
     inline  const String&       getDoubleQuotationMarkEnd() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_DoubleQuotationEnd ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DOUBLE_QUOTATION_END ); }
     inline  const String&       getMeasurementSystem() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_MeasurementSystem ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::MEASUREMENT_SYSTEM ); }
     inline  MeasurementSystem   getMeasurementSystemEnum() const
-                                    { return mapMeasurementStringToEnum( getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_MeasurementSystem ) ); }
+                                    { return mapMeasurementStringToEnum( getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::MEASUREMENT_SYSTEM ) ); }
     inline  const String&       getTimeAM() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_TimeAM ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_AM ); }
     inline  const String&       getTimePM() const
-                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem_TimePM ); }
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_PM ); }
 
             const String&       getCurrSymbol() const;
             const String&       getCurrBankSymbol() const;

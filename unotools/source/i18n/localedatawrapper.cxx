@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-30 18:59:42 $
+ *  last change: $Author: er $ $Date: 2000-11-03 16:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ void LocaleDataWrapper::invalidateData()
     nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatInvalid;
     if ( bLocaleDataItemValid )
     {
-        for ( sal_Int32 j=0; j<LocaleItem_LocaleItemTotalCount; j++ )
+        for ( sal_Int32 j=0; j<LocaleItem::COUNT; j++ )
         {
             aLocaleItem[j].Erase();
         }
@@ -319,68 +319,68 @@ void LocaleDataWrapper::invalidateData()
 
 // --- Impl and helpers ----------------------------------------------------
 
-const String& LocaleDataWrapper::getOneLocaleItem( LocaleItem eItem ) const
+const String& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
 {
-    if ( eItem >= LocaleItem_LocaleItemTotalCount )
+    if ( nItem >= LocaleItem::COUNT )
     {
         DBG_ERRORFILE( "getOneLocaleItem: bounds" );
         return aLocaleItem[0];
     }
-    if ( aLocaleItem[eItem].Len() == 0 )
+    if ( aLocaleItem[nItem].Len() == 0 )
     {   // no cached content
-        ((LocaleDataWrapper*)this)->getOneLocaleItemImpl( eItem );
+        ((LocaleDataWrapper*)this)->getOneLocaleItemImpl( nItem );
     }
-    return aLocaleItem[eItem];
+    return aLocaleItem[nItem];
 }
 
 
-void LocaleDataWrapper::getOneLocaleItemImpl( LocaleItem eItem )
+void LocaleDataWrapper::getOneLocaleItemImpl( sal_Int16 nItem )
 {
     if ( !bLocaleDataItemValid )
     {
         aLocaleDataItem = getLocaleItem();
         bLocaleDataItemValid = TRUE;
     }
-    switch ( eItem )
+    switch ( nItem )
     {
-        case LocaleItem_DateSeparator :
-            aLocaleItem[eItem] = aLocaleDataItem.dateSeparator;
+        case LocaleItem::DATE_SEPARATOR :
+            aLocaleItem[nItem] = aLocaleDataItem.dateSeparator;
         break;
-        case LocaleItem_ThousandSeparator :
-            aLocaleItem[eItem] = aLocaleDataItem.thousandSeparator;
+        case LocaleItem::THOUSAND_SEPARATOR :
+            aLocaleItem[nItem] = aLocaleDataItem.thousandSeparator;
         break;
-        case LocaleItem_DecimalSeparator :
-            aLocaleItem[eItem] = aLocaleDataItem.decimalSeparator;
+        case LocaleItem::DECIMAL_SEPARATOR :
+            aLocaleItem[nItem] = aLocaleDataItem.decimalSeparator;
         break;
-        case LocaleItem_TimeSeparator :
-            aLocaleItem[eItem] = aLocaleDataItem.timeSeparator;
+        case LocaleItem::TIME_SEPARATOR :
+            aLocaleItem[nItem] = aLocaleDataItem.timeSeparator;
         break;
-        case LocaleItem_Time100SecSeparator :
-            aLocaleItem[eItem] = aLocaleDataItem.time100SecSeparator;
+        case LocaleItem::TIME_100SEC_SEPARATOR :
+            aLocaleItem[nItem] = aLocaleDataItem.time100SecSeparator;
         break;
-        case LocaleItem_ListSeparator :
-            aLocaleItem[eItem] = aLocaleDataItem.listSeparator;
+        case LocaleItem::LIST_SEPARATOR :
+            aLocaleItem[nItem] = aLocaleDataItem.listSeparator;
         break;
-        case LocaleItem_QuotationStart :
-            aLocaleItem[eItem] = aLocaleDataItem.quotationStart;
+        case LocaleItem::SINGLE_QUOTATION_START :
+            aLocaleItem[nItem] = aLocaleDataItem.quotationStart;
         break;
-        case LocaleItem_QuotationEnd :
-            aLocaleItem[eItem] = aLocaleDataItem.quotationEnd;
+        case LocaleItem::SINGLE_QUOTATION_END :
+            aLocaleItem[nItem] = aLocaleDataItem.quotationEnd;
         break;
-        case LocaleItem_DoubleQuotationStart :
-            aLocaleItem[eItem] = aLocaleDataItem.doubleQuotationStart;
+        case LocaleItem::DOUBLE_QUOTATION_START :
+            aLocaleItem[nItem] = aLocaleDataItem.doubleQuotationStart;
         break;
-        case LocaleItem_DoubleQuotationEnd :
-            aLocaleItem[eItem] = aLocaleDataItem.doubleQuotationEnd;
+        case LocaleItem::DOUBLE_QUOTATION_END :
+            aLocaleItem[nItem] = aLocaleDataItem.doubleQuotationEnd;
         break;
-        case LocaleItem_MeasurementSystem :
-            aLocaleItem[eItem] = aLocaleDataItem.measurementSystem;
+        case LocaleItem::MEASUREMENT_SYSTEM :
+            aLocaleItem[nItem] = aLocaleDataItem.measurementSystem;
         break;
-        case LocaleItem_TimeAM :
-            aLocaleItem[eItem] = aLocaleDataItem.timeAM;
+        case LocaleItem::TIME_AM :
+            aLocaleItem[nItem] = aLocaleDataItem.timeAM;
         break;
-        case LocaleItem_TimePM :
-            aLocaleItem[eItem] = aLocaleDataItem.timePM;
+        case LocaleItem::TIME_PM :
+            aLocaleItem[nItem] = aLocaleDataItem.timePM;
         break;
         default:
             DBG_ERRORFILE( "getOneLocaleItemImpl: which one?" );
