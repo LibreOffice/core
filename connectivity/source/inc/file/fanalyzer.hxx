@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 14:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ namespace connectivity
 
         public:
             OSQLAnalyzer();
+            ~OSQLAnalyzer();
 
             void describeParam(::vos::ORef<OSQLColumns> rParameterColumns); // genauere Beschreibung der Parameter
             ::std::vector<sal_Int32>* bindResultRow(OValueRow _pRow);                   // Anbinden einer Ergebniszeile an die Restrictions
