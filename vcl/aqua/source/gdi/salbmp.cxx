@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pluby $ $Date: 2001-01-06 18:11:35 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-24 03:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,125 +94,171 @@ SalBitmap::~SalBitmap()
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal )
+BOOL SalBitmap::Create( const Size&           rSize,
+                        USHORT                nBitCount,
+                        const BitmapPalette&  rPal
+                      )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    BOOL bRet = FALSE;
+    ImplSVData  *pSVData           = ImplGetSVData();
+    BOOL         bSalBitmapCreated = FALSE;
 
-    Destroy();
-
-    if ( rSize.Width() && rSize.Height() )
+    if ( pSVData != NULL )
     {
-        // Create a SalVirtualDevice
-        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice( NULL,
-            rSize.Width(), rSize.Height(), nBitCount );
+        long nHeight = rSize.Height();
+        long nWidth  = rSize.Width();
 
-        if ( mpVirDev )
+        Destroy();
+
+        if ( ( nHeight > 0 ) && ( nWidth > 0 ) )
         {
-            // Get the SalGraphics which contains the GWorld we will draw to
-            SalGraphics *pGraphics = GetGraphics();
+            // Create a SalVirtualDevice
 
-            if ( pGraphics && pGraphics->maGraphicsData.mpCGrafPort )
+            mpVirDev
+                = pSVData->mpDefInst->CreateVirtualDevice( NULL,
+                                                           nWidth,
+                                                           nHeight,
+                                                           nBitCount
+                                                         );
+
+            if ( mpVirDev != NULL )
             {
-                mhPixMap = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
+                // Get the SalGraphics which contains the
+                // GWorld we will draw to
 
-                if ( mhPixMap )
+                SalGraphics *pGraphics = GetGraphics();
+
+                if (    ( pGraphics                             != NULL )
+                     && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
+                   )
                 {
-                    mnBitCount = (**mhPixMap).pixelSize;
-                    maSize = rSize;
-                    bRet = TRUE;
-                }
-            }
+                    mhPixMap
+                        = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
 
-            // Release the SalGraphics so that others can get a handle to it
-            // in future GetGraphics() calls
-            ReleaseGraphics( pGraphics );
-        }
-    }
+                    if ( mhPixMap != NULL )
+                    {
+                        mnBitCount = GetPixDepth( mhPixMap);
+                        maSize     = rSize;
 
-    return bRet;
-}
+                        bSalBitmapCreated = TRUE;
+                    } // if
+                } // if
+
+                // Release the SalGraphics so that others can get a
+                // handle to it in future GetGraphics() calls
+
+                ReleaseGraphics( pGraphics );
+            } // if
+        } // if
+    } // if
+
+    return bSalBitmapCreated;
+} // SalBitmap::Create
 
 // ------------------------------------------------------------------
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBmp )
 {
     return Create( rSalBmp, rSalBmp.GetBitCount() );
-}
+} // SalBitmap::Create
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
+BOOL SalBitmap::Create( const SalBitmap& rSalBmp,
+                        SalGraphics*     pGraphics
+                      )
 {
     USHORT nBitCount = 0;
 
-    if ( pGraphics && pGraphics->maGraphicsData.mpCGrafPort )
+    if (    ( pGraphics                             != NULL )
+         && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
+       )
     {
         mhPixMap = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
 
-        if ( mhPixMap )
-            nBitCount = (**mhPixMap).pixelSize;
-    }
+        if ( mhPixMap != NULL )
+        {
+            nBitCount = GetPixDepth( mhPixMap );
+        } // if
+    } // if
 
-    if ( !nBitCount )
+    if ( nBitCount == 0 )
+    {
         nBitCount = rSalBmp.GetBitCount();
+    } // if
 
     return Create( rSalBmp, nBitCount );
-}
+} // SalBitmap::Create
 
 // ------------------------------------------------------------------
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
 {
-    BOOL bRet = FALSE;
+    BOOL bSalBitmapCreated = FALSE;
 
     if ( Create( rSalBmp.maSize, nNewBitCount, BitmapPalette() ) )
     {
         // Copy pixels from rSalBmp.mpVirDev to mpVirDev
+
         SalGraphics *pDstGraphics = GetGraphics();
 
-        if ( pDstGraphics )
+        if ( pDstGraphics != NULL )
         {
             SalGraphics *pSrcGraphics = rSalBmp.GetGraphics();
 
-            if ( pSrcGraphics && pSrcGraphics->maGraphicsData.mpCGrafPort )
+            if (    ( pSrcGraphics                             != NULL )
+                 && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
+               )
             {
-                SalTwoRect aTwoRect;
+                long        nWidth  = rSalBmp.GetSize().Width();
+                long        nHeight = rSalBmp.GetSize().Height();
+                SalTwoRect  aTwoRect;
 
                 // Get size of graphics to copy from
-                aTwoRect.mnSrcX = aTwoRect.mnDestX = 0;
-                aTwoRect.mnSrcY = aTwoRect.mnDestY = 0;
-                aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = rSalBmp.GetSize().Width();
-                aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = rSalBmp.GetSize().Height();
+
+                aTwoRect.mnSrcX  = 0;
+                aTwoRect.mnDestX = 0;
+                aTwoRect.mnSrcY  = 0;
+                aTwoRect.mnDestY = 0;
+
+                aTwoRect.mnSrcWidth   = nWidth;
+                aTwoRect.mnDestWidth  = nWidth;
+                aTwoRect.mnSrcHeight  = nHeight;
+                aTwoRect.mnDestHeight = nHeight;
 
                 // Copy bits from source graphics
+
                 pDstGraphics->CopyBits( &aTwoRect, pSrcGraphics );
 
                 rSalBmp.ReleaseGraphics( pSrcGraphics );
 
-                bRet = TRUE;
-            }
+                bSalBitmapCreated = TRUE;
+            } // if
 
             ReleaseGraphics( pDstGraphics );
-        }
-    }
+        } // if
+    } // if
 
-    return bRet;
-}
+    return bSalBitmapCreated;
+} // SalBitmap::Create
 
 // ------------------------------------------------------------------
 
 void SalBitmap::Destroy()
 {
-    ImplSVData* pSVData = ImplGetSVData();
+    ImplSVData *pSVData = ImplGetSVData();
 
-    if ( mpVirDev )
-        pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
+    if ( pSVData != NULL )
+    {
+        if ( mpVirDev != NULL )
+        {
+            pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
+        } // if
 
-    mhPixMap = NULL;
-    maSize = Size();
-    mnBitCount = 0;
-}
+        mhPixMap   = NULL;
+        maSize     = Size();
+        mnBitCount = 0;
+    } // if
+} // SalBitmap::Destroy
 
 // ------------------------------------------------------------------
 
@@ -220,133 +266,198 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 {
     BitmapBuffer *pBuffer = NULL;
 
-    if ( mpVirDev )
+    if ( mpVirDev != NULL )
     {
         // Get the SalGraphics which contains the GWorld we will draw to
+
         SalGraphics *pGraphics = GetGraphics();
 
-        if ( pGraphics && pGraphics->maGraphicsData.mpCGrafPort )
+        if (    ( pGraphics                             != NULL )
+             && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
+           )
         {
-            if ( mhPixMap )
+            if ( mhPixMap != NULL )
             {
-                USHORT nBits = (**mhPixMap).pixelSize;
-                pBuffer = new BitmapBuffer();
+                // Lock the GWorld so that the calling functions
+                // can write to this buffer
 
-                // Lock the GWorld so that the calling functions can write to
-                // this buffer
-                LockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
+                pGraphics->maGraphicsData.mnOSStatus
+                    = LockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
 
-                pBuffer->mnFormat = BMP_FORMAT_TOP_DOWN;
-                pBuffer->mnBitCount = nBits;
-
-                switch ( nBits )
+                if ( pGraphics->maGraphicsData.mnOSStatus == noErr )
                 {
-                    case 1:
-                        pBuffer->mnFormat |= BMP_FORMAT_1BIT_MSB_PAL;
-                        break;
-                    case 4:
-                        pBuffer->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL;
-                        break;
-                    case 8:
-                        pBuffer->mnFormat |= BMP_FORMAT_8BIT_PAL;
-                        break;
-                    case 16:
-                        pBuffer->mnFormat |= BMP_FORMAT_16BIT_TC_MASK;
-                        pBuffer->maColorMask = ColorMask( 0x7b00, 0x03e0, 0x001f);
-                        break;
-                    case 32:
-                        pBuffer->mnFormat |= BMP_FORMAT_32BIT_TC_ARGB;
-                        break;
-                    default:
-                        break;
-                }
+                    ULONG nBMPScanlineFormat = 0;
 
-                if ( BMP_SCANLINE_FORMAT( pBuffer->mnFormat ) )
-                {
-                    pBuffer->mnWidth = mpVirDev->maVirDevData.mnWidth;
-                    pBuffer->mnHeight = mpVirDev->maVirDevData.mnHeight;
-                    pBuffer->mnScanlineSize = GetPixRowBytes( mhPixMap );
-                    pBuffer->mpBits = (BYTE *)GetPixBaseAddr( mhPixMap );
+                    pBuffer = new BitmapBuffer();
 
-                    // If the pixel depth is <= 8, we need to map QuickDraw's
-                    // internal color table to the platform independent
-                    // BitmapPalette color table
-                    if ( nBits <= 8 )
+                    if ( pBuffer != NULL )
                     {
-                        CTabHandle hCTab = (**mhPixMap).pmTable;
-                        USHORT nColors = (**hCTab).ctSize + 1;
-                        BitmapPalette& rPal = pBuffer->maPalette;
+                        pBuffer->mnFormat   = BMP_FORMAT_TOP_DOWN;
+                        pBuffer->mnBitCount = GetPixDepth( mhPixMap);
 
-                        rPal.SetEntryCount( nColors );
-
-                        // Map each color in the QuickDraw color table to a
-                        // BitmapColor
-                        for ( USHORT i = 0; i < nColors; i++ )
+                        switch ( pBuffer->mnBitCount )
                         {
-                            BitmapColor& rCol = rPal[i];
-                            ColorSpec aColSpec = (**hCTab).ctTable[i];
-                            rCol.SetRed( (BYTE)( aColSpec.rgb.red >> 8 ) );
-                            rCol.SetGreen( (BYTE) ( aColSpec.rgb.green >> 8 ) );
-                            rCol.SetBlue( (BYTE) ( aColSpec.rgb.blue >> 8 ) );
-                        }
-                    }
-                }
-                else
-                {
-                    ReleaseBuffer( pBuffer, TRUE );
-                }
-            }
+                            case kBlackAndWhite:
+                                pBuffer->mnFormat |= BMP_FORMAT_1BIT_MSB_PAL;
+                                break;
+                            case kFourBitColor:
+                                pBuffer->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL;
+                                break;
+                            case kEightBitColor:
+                                pBuffer->mnFormat |= BMP_FORMAT_8BIT_PAL;
+                                break;
+                            case kThousandsColor:
+                                pBuffer->mnFormat    |= BMP_FORMAT_16BIT_TC_MASK;
+                                pBuffer->maColorMask  = ColorMask( 0x7b00, 0x03e0, 0x001f);
+                                break;
+                            case kTrueColor:
+                                pBuffer->mnFormat |= BMP_FORMAT_32BIT_TC_ARGB;
+                                break;
+                            default:
+                                break;
+                        } // switch
 
-            // Release the SalGraphics so that others can get a handle to it
-            // in future GetGraphics() calls
+                        nBMPScanlineFormat = BMP_SCANLINE_FORMAT( pBuffer->mnFormat );
+
+                        if ( nBMPScanlineFormat )
+                        {
+                            GWorldFlags  nGWorldFlags = noErr;
+
+                            pBuffer->mnWidth  = mpVirDev->maVirDevData.mnWidth;
+                            pBuffer->mnHeight = mpVirDev->maVirDevData.mnHeight;
+
+                            nGWorldFlags = GetPixelsState( mhPixMap );
+
+                            if ( nGWorldFlags == noErr )
+                            {
+                                LockPixels( mhPixMap );
+
+                                pBuffer->mnScanlineSize = GetPixRowBytes( mhPixMap );
+                                pBuffer->mpBits = (BYTE *)GetPixBaseAddr( mhPixMap );
+
+                                // If the pixel depth is <= 8, we need to map QD's
+                                // internal color table to the platform independent
+                                // BitmapPalette color table
+
+                                if ( pBuffer->mnBitCount <= 8 )
+                                {
+                                    CTabHandle hCTab = (**mhPixMap).pmTable;
+
+                                    if ( ( hCTab != NULL ) && ( *hCTab != NULL ) )
+                                    {
+                                        USHORT          nColors    = (**hCTab).ctSize + 1;
+                                        BitmapPalette  &rPal       = pBuffer->maPalette;
+                                        SInt8           nCTabFlags = noErr;
+
+                                        rPal.SetEntryCount( nColors );
+
+                                        // Map each color in the QuickDraw color
+                                        // table to a BitmapColor
+
+                                        nCTabFlags = HGetState( (Handle)hCTab );
+
+                                        if ( nCTabFlags == noErr )
+                                        {
+                                            USHORT  i;
+
+                                            HLock( (Handle)hCTab );
+
+                                            for ( i = 0; i < nColors; i++ )
+                                            {
+                                                BitmapColor &rCol     = rPal[i];
+                                                ColorSpec    aColSpec = (**hCTab).ctTable[i];
+
+                                                rCol.SetRed   ( (BYTE)( aColSpec.rgb.red   >> 8 ) );
+                                                rCol.SetGreen ( (BYTE)( aColSpec.rgb.green >> 8 ) );
+                                                rCol.SetBlue  ( (BYTE)( aColSpec.rgb.blue  >> 8 ) );
+                                            } // for
+
+                                            HSetState( (Handle)hCTab, nCTabFlags );
+                                        } // if
+                                    } // if
+                                } // if
+
+                                SetPixelsState( mhPixMap, nGWorldFlags );
+                            } // if
+                        } // if
+                        else
+                        {
+                            UnlockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
+
+                            ReleaseBuffer( pBuffer, TRUE );
+                        } // else
+                    } // if
+
+                    if ( nBMPScanlineFormat )
+                    {
+                        UnlockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
+                    } // if
+                } // if
+            } // if
+
+            // Release the SalGraphics so that others can get a
+            // handle to it in future GetGraphics() calls
+
             ReleaseGraphics( pGraphics );
-        }
-    }
+        } // if
+    } // if
 
     return pBuffer;
-}
+} // SalBitmap::AcquireBuffer
 
 // ------------------------------------------------------------------
 
 void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
 {
-    SalGraphics *pGraphics = NULL;
-
-    if ( mpVirDev )
+    if ( mpVirDev != NULL )
     {
-        // Get the SalGraphics which contains the GWorld we used as the buffer
+        // Get the SalGraphics which contains the GWorld
+        // we used as the buffer
+
         SalGraphics *pGraphics = GetGraphics();
 
-        if ( pGraphics && pGraphics->maGraphicsData.mpCGrafPort )
+        if (    ( pGraphics                             != NULL )
+             && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
+           )
         {
-            // Unlock the GWorld so that this GWorld can be reused
-            UnlockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
+            // Release the SalGraphics so that others can get a
+            // handle to it in future GetGraphics() calls
 
-            // Release the SalGraphics so that others can get a handle to it
-            // in future GetGraphics() calls
             ReleaseGraphics( pGraphics );
-        }
-    }
 
-    if ( pBuffer )
+            pGraphics = NULL;
+        } // if
+    } // if
+
+    if ( pBuffer != NULL )
+    {
         delete pBuffer;
-}
+
+        pBuffer = NULL;
+    } // if
+} // SalBitmap::ReleaseBuffer
 
 // ------------------------------------------------------------------
 
 SalGraphics* SalBitmap::GetGraphics()
 {
-    if ( mpVirDev )
+    if ( mpVirDev != NULL )
+    {
         return mpVirDev->GetGraphics();
+    } // if
     else
+    {
         return NULL;
-}
+    } // else
+} // SalBitmap::GetGraphics
 
 // ------------------------------------------------------------------
 
 void SalBitmap::ReleaseGraphics( SalGraphics* pGraphics )
 {
-    if ( mpVirDev )
+    if ( mpVirDev != NULL )
+    {
         mpVirDev->ReleaseGraphics( pGraphics );
-}
+    } // if
+} // SalBitmap::ReleaseGraphics
 
