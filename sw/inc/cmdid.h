@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-30 11:58:30 $
+ *  last change: $Author: os $ $Date: 2002-09-18 07:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,17 +888,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 /*--------------------------------------------------------------------
     Bereich: Hilfe
  --------------------------------------------------------------------*/
-
-
-#define FN_LAUNCH_HELP              (FN_HELP + 1)    /* Hilfe */
-#define FN_SHOW_HELP_INDEX          (FN_HELP + 2)    /* Hilfeindex */
-#define FN_SHOW_KEYBOARD_HELP       (FN_HELP + 3)    /* Hilfe */
-#define FN_SHOW_HELP_MANUAL         (FN_HELP + 4)    /* Hilfe */
-#define FN_SHOW_UPDATE_HELP         (FN_HELP + 5)    /* Hilfe */
-
-#define FN_BALLOON_HELP             (FN_HELP + 7)    /* Toggle Balloon Help */
-#define FN_HELP_POPUP               (FN_HELP + 8)    /* Popup Help */
-
 
 /*--------------------------------------------------------------------
     Bereich: Traveling & Selektion
