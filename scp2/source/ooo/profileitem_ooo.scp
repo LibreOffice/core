@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profileitem_ooo.scp,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-20 12:43:36 $
+*  last change: $Author: kz $ $Date: 2004-06-11 11:58:19 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -441,11 +441,7 @@ ProfileItem gid_Profileitem_Uno_Pkg_SharedUnoFile
     Section = "Bootstrap";
     Order = 5;
     Key = "PKG_SharedUnoFile";
-#if defined UNX
     Value = "$UNO_SHARED_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
-#else
-    Value = "$UNO_SHARED_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/uno.ini";
-#endif
 End
 
 ProfileItem gid_Profileitem_Uno_Pkg_UserUnoFile
@@ -454,11 +450,7 @@ ProfileItem gid_Profileitem_Uno_Pkg_UserUnoFile
     Section = "Bootstrap";
     Order = 6;
     Key = "PKG_UserUnoFile";
-#if defined UNX
     Value = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
-#else
-    Value = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/uno.ini";
-#endif
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Types
