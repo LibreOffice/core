@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:25:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,9 @@ ScEEImport::~ScEEImport()
 }
 
 
-ULONG ScEEImport::Read( SvStream& rStream )
+ULONG ScEEImport::Read( SvStream& rStream, const String& rBaseURL )
 {
-    ULONG nErr = pParser->Read( rStream );
+    ULONG nErr = pParser->Read( rStream, rBaseURL );
 
     SCCOL nEndCol;
     SCROW nEndRow;
