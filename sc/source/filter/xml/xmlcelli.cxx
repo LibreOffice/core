@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
+ *  last change: $Author: sab $ $Date: 2000-11-30 14:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,40 +342,43 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
             pContext = new ScXMLContentContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList, sOUCurrentText );*/
             bIsEmpty = sal_False;
-            ScXMLImport& rXMLImport = GetScImport();
-            if (bIsFirstTextImport)
+            if (nCellType == util::NumberFormat::TEXT)
             {
-                com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
-                uno::Reference<sheet::XSpreadsheet> xTable = rXMLImport.GetTables().GetCurrentXSheet();
-                if (xTable.is())
+                ScXMLImport& rXMLImport = GetScImport();
+                if (bIsFirstTextImport)
                 {
-                    uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
-                    if (xCellRange.is())
+                    com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
+                    uno::Reference<sheet::XSpreadsheet> xTable = rXMLImport.GetTables().GetCurrentXSheet();
+                    if (xTable.is())
                     {
-                        if (aCellPos.Column > MAXCOL)
-                            aCellPos.Column = MAXCOL;
-                        if (aCellPos.Row > MAXROW)
-                            aCellPos.Row = MAXROW;
-                        uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
-                        if (xCell.is())
+                        uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
+                        if (xCellRange.is())
                         {
-                            uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
-                            if (xText.is())
+                            if (aCellPos.Column > MAXCOL)
+                                aCellPos.Column = MAXCOL;
+                            if (aCellPos.Row > MAXROW)
+                                aCellPos.Row = MAXROW;
+                            uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+                            if (xCell.is())
                             {
-                                uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
-                                rXMLImport.GetTextImport()->SetCursor(xTextCursor);
-                                bIsFirstTextImport = sal_False;
-                                bHasTextImport = sal_True;
-                                pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
-                                    GetScImport(), nPrefix, rLName, xAttrList);
+                                uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
+                                if (xText.is())
+                                {
+                                    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+                                    rXMLImport.GetTextImport()->SetCursor(xTextCursor);
+                                    bIsFirstTextImport = sal_False;
+                                    bHasTextImport = sal_True;
+                                    pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
+                                        GetScImport(), nPrefix, rLName, xAttrList);
+                                }
                             }
                         }
                     }
                 }
+                else
+                    pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
+                        GetScImport(), nPrefix, rLName, xAttrList);
             }
-            else
-                pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
-                    GetScImport(), nPrefix, rLName, xAttrList);
         }
         break;
     case XML_TOK_TABLE_ROW_CELL_SUBTABLE:
