@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdsp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-16 10:47:15 $
+ *  last change: $Author: tl $ $Date: 2001-06-13 10:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ Sequence< Locale > SAL_CALL
     for (ULONG i = 0;  i < nCnt;  i++)
     {
         DBG_ASSERT( pEntry, "lng : pEntry is NULL pointer" );
-        pItem[i] = CreateLocale( aSvcList.GetKey( pEntry ) );
+        pItem[i] = CreateLocale( (LanguageType) aSvcList.GetKey( pEntry ) );
         pEntry = aSvcList.Next();
     }
     return aLocales;
@@ -227,7 +227,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
             while (i <= pEntry->aFlags.nLastTriedSvcIndex
                    &&  aMeanings.getLength() == 0)
             {
-                if (pRef[i].is())
+                if (pRef[i].is()  &&  pRef[i]->hasLocale( rLocale ))
                     aMeanings = pRef[i]->queryMeanings( aChkWord, rLocale, rProperties );
                 ++i;
             }
@@ -256,10 +256,10 @@ Sequence< Reference< XMeaning > > SAL_CALL
                             UNO_QUERY );
                     pRef[i] = xThes;
 
-                    if (xThes.is())
+                    if (xThes.is()  &&  xThes->hasLocale( rLocale ))
                         aMeanings = xThes->queryMeanings( aChkWord, rLocale, rProperties );
 
-                    pEntry->aFlags.nLastTriedSvcIndex = i;
+                    pEntry->aFlags.nLastTriedSvcIndex = (INT16) i;
                     ++i;
                 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-07 15:33:07 $
+ *  last change: $Author: tl $ $Date: 2001-06-13 10:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,7 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
     else
     {
         OUString aChkWord( rWord );
+        Locale aLocale( CreateLocale( nLanguage ) );
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             RemoveControlChars( aChkWord );
@@ -341,15 +342,14 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
                    &&  (!bTmpResValid  ||  FALSE == bTmpRes))
             {
                 bTmpResValid = TRUE;
-                if (pRef1[i].is())
+                if (pRef1[i].is()  &&  pRef1[i]->hasLanguage( nLanguage ))
                     bTmpRes = pRef1[i]->isValid( aChkWord, nLanguage, rProperties );
-                else if (pRef[i].is())
+                else if (pRef[i].is()  &&  pRef[i]->hasLocale( aLocale ))
                 {
                     bTmpRes = GetExtCache().CheckWord( aChkWord, nLanguage, FALSE );
                     if (!bTmpRes)
                     {
-                        bTmpRes = pRef[i]->isValid( aChkWord,
-                                CreateLocale( nLanguage ), rProperties );
+                        bTmpRes = pRef[i]->isValid( aChkWord, aLocale, rProperties );
 
                         // Add correct words to the cache.
                         // But not those that are correct only because of
@@ -403,15 +403,14 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
                         rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
                     bTmpResValid = TRUE;
-                    if (xSpell1.is())
+                    if (xSpell1.is()  &&  xSpell1->hasLanguage( nLanguage ))
                         bTmpRes = xSpell1->isValid( aChkWord, nLanguage, rProperties );
-                    else if (xSpell.is())
+                    else if (xSpell.is()  &&  xSpell->hasLocale( aLocale ))
                     {
                         bTmpRes = GetExtCache().CheckWord( aChkWord, nLanguage, FALSE );
                         if (!bTmpRes)
                         {
-                            bTmpRes = xSpell->isValid( aChkWord,
-                                    CreateLocale( nLanguage ), rProperties );
+                            bTmpRes = xSpell->isValid( aChkWord, aLocale, rProperties );
 
                             // Add correct words to the cache.
                             // But not those that are correct only because of
@@ -557,6 +556,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
     else
     {
         OUString aChkWord( rWord );
+        Locale aLocale( CreateLocale( nLanguage ) );
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             RemoveControlChars( aChkWord );
@@ -581,17 +581,16 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                    &&  (!bTmpResValid || xTmpRes.is()) )
             {
                 bTmpResValid = TRUE;
-                if (pRef1[i].is())
+                if (pRef1[i].is()  &&  pRef1[i]->hasLanguage( nLanguage ))
                     xTmpRes = pRef1[i]->spell( aChkWord, nLanguage, rProperties );
-                else if (pRef[i].is())
+                else if (pRef[i].is()  &&  pRef[i]->hasLocale( aLocale ))
                 {
                     BOOL bOK = GetExtCache().CheckWord( aChkWord, nLanguage, FALSE );
                     if (bOK)
                         xTmpRes = NULL;
                     else
                     {
-                        xTmpRes = pRef[i]->spell( aChkWord,
-                                CreateLocale( nLanguage ), rProperties );
+                        xTmpRes = pRef[i]->spell( aChkWord, aLocale, rProperties );
 
                         // Add correct words to the cache.
                         // But not those that are correct only because of
@@ -646,17 +645,16 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                         rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
                     bTmpResValid = TRUE;
-                    if (xSpell1.is())
+                    if (xSpell1.is()  &&  xSpell1->hasLanguage( nLanguage ))
                         xTmpRes = xSpell1->spell( aChkWord, nLanguage, rProperties );
-                    else if (xSpell.is())
+                    else if (xSpell.is()  &&  xSpell->hasLocale( aLocale ))
                     {
                         BOOL bOK = GetExtCache().CheckWord( aChkWord, nLanguage, FALSE );
                         if (bOK)
                             xTmpRes = NULL;
                         else
                         {
-                            xTmpRes = xSpell->spell( aChkWord,
-                                    CreateLocale( nLanguage ), rProperties );
+                            xTmpRes = xSpell->spell( aChkWord, aLocale, rProperties );
 
                             // Add correct words to the cache.
                             // But not those that are correct only because of

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-16 10:44:54 $
+ *  last change: $Author: tl $ $Date: 2001-06-13 10:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                     if (!bSkip  &&  nHyphIdx >= 0)
                     {
                         if (nLeading <= nMaxLeading)
-                            nHyphenationPos = nHyphIdx;
+                            nHyphenationPos = (INT16) nHyphIdx;
                     }
                     bSkip = TRUE;   //! multiple '=' should count as one only
                 }
@@ -239,7 +239,7 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
                 else
                 {
                     if (!bSkip  &&  nHyphIdx >= 0)
-                        pPos[ nHyphCount++ ] = nHyphIdx;
+                        pPos[ nHyphCount++ ] = (INT16) nHyphIdx;
                     bSkip = TRUE;   //! multiple '=' should count as one only
                 }
             }
@@ -276,7 +276,7 @@ Sequence< Locale > SAL_CALL HyphenatorDispatcher::getLocales()
     for (ULONG i = 0;  i < nCnt;  i++)
     {
         DBG_ASSERT( pEntry, "lng : pEntry is NULL pointer" );
-        pItem[i] = CreateLocale( aSvcList.GetKey( pEntry ) );
+        pItem[i] = CreateLocale( (LanguageType) aSvcList.GetKey( pEntry ) );
         pEntry = aSvcList.Next();
     }
     return aLocales;
@@ -321,7 +321,7 @@ Reference< XHyphenatedWord > SAL_CALL
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             bWordModified |= RemoveControlChars( aChkWord );
-        INT16 nChkMaxLeading = GetPosInWordToCheck( rWord, nMaxLeading );
+        INT16 nChkMaxLeading = (INT16) GetPosInWordToCheck( rWord, nMaxLeading );
 
         // check for results from (positive) dictionaries which have precedence!
         Reference< XDictionaryEntry > xEntry;
@@ -348,7 +348,7 @@ Reference< XHyphenatedWord > SAL_CALL
             // try already instantiated service
             if (i <= pEntry->aFlags.nLastTriedSvcIndex)
             {
-                if (rHyph.is())
+                if (rHyph.is()  &&  rHyph->hasLocale( rLocale ))
                     xRes = rHyph->hyphenate( aChkWord, rLocale, nChkMaxLeading,
                                             rProperties );
                 ++i;
@@ -378,11 +378,11 @@ Reference< XHyphenatedWord > SAL_CALL
                     if (xBroadcaster.is())
                         rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
-                    if (rHyph.is())
+                    if (rHyph.is()  &&  rHyph->hasLocale( rLocale ))
                         xRes = rHyph->hyphenate( aChkWord, rLocale, nChkMaxLeading,
                                                 rProperties );
 
-                    pEntry->aFlags.nLastTriedSvcIndex = i;
+                    pEntry->aFlags.nLastTriedSvcIndex = (INT16) i;
                     ++i;
 
                     // if language is not supported by the services
@@ -431,7 +431,7 @@ Reference< XHyphenatedWord > SAL_CALL
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             bWordModified |= RemoveControlChars( aChkWord );
-        INT16 nChkIndex = GetPosInWordToCheck( rWord, nIndex );
+        INT16 nChkIndex = (INT16) GetPosInWordToCheck( rWord, nIndex );
 
         // check for results from (positive) dictionaries which have precedence!
         Reference< XDictionaryEntry > xEntry;
@@ -458,7 +458,7 @@ Reference< XHyphenatedWord > SAL_CALL
             // try already instantiated service
             if (i <= pEntry->aFlags.nLastTriedSvcIndex)
             {
-                if (rHyph.is())
+                if (rHyph.is()  &&  rHyph->hasLocale( rLocale ))
                     xRes = rHyph->queryAlternativeSpelling( aChkWord, rLocale,
                                 nChkIndex, rProperties );
                 ++i;
@@ -488,11 +488,11 @@ Reference< XHyphenatedWord > SAL_CALL
                     if (xBroadcaster.is())
                         rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
-                    if (rHyph.is())
+                    if (rHyph.is()  &&  rHyph->hasLocale( rLocale ))
                         xRes = rHyph->queryAlternativeSpelling( aChkWord, rLocale,
                                     nChkIndex, rProperties );
 
-                    pEntry->aFlags.nLastTriedSvcIndex = i;
+                    pEntry->aFlags.nLastTriedSvcIndex = (INT16) i;
                     ++i;
 
                     // if language is not supported by the services
@@ -566,7 +566,7 @@ Reference< XPossibleHyphens > SAL_CALL
             // try already instantiated service
             if (i <= pEntry->aFlags.nLastTriedSvcIndex)
             {
-                if (rHyph.is())
+                if (rHyph.is()  &&  rHyph->hasLocale( rLocale ))
                     xRes = rHyph->createPossibleHyphens( aChkWord, rLocale,
                                 rProperties );
                 ++i;
@@ -596,11 +596,11 @@ Reference< XPossibleHyphens > SAL_CALL
                     if (xBroadcaster.is())
                         rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
-                    if (rHyph.is())
+                    if (rHyph.is()  &&  rHyph->hasLocale( rLocale ))
                     xRes = rHyph->createPossibleHyphens( aChkWord, rLocale,
                                 rProperties );
 
-                    pEntry->aFlags.nLastTriedSvcIndex = i;
+                    pEntry->aFlags.nLastTriedSvcIndex = (INT16) i;
                     ++i;
 
                     // if language is not supported by the services
