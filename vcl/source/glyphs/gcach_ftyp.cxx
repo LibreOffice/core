@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.67 $
- *  last change: $Author: hdu $ $Date: 2001-12-04 18:31:53 $
+ *  $Revision: 1.68 $
+ *  last change: $Author: hdu $ $Date: 2001-12-21 16:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
 
     bool bStretched = false;
 
-    switch( nGlyphFlags & (GF_ROTMASK | GF_GSUB) )
+    switch( nGlyphFlags & GF_ROTMASK )
     {
     default:    // straight
         aVector.x = 0;
@@ -712,9 +712,10 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
     case GF_ROTR:    // right
         nAngle -= 900;
         bStretched = (mfStretch != 1.0);
-        aVector.x = -rMetrics.descender * mfStretch;
+        aVector.x = -maFaceFT->glyph->metrics.horiAdvance;
         aVector.y = 0;
-        aVector.x -= maFaceFT->glyph->metrics.horiAdvance;
+        aVector.x += (rMetrics.descender * nSin/65536.0);
+        aVector.y = -(rMetrics.descender * mfStretch * nCos/65536.0);
         aMatrix.xx = +nSin / mfStretch;
         aMatrix.yy = +nSin * mfStretch;
         aMatrix.xy = +nCos * mfStretch;
@@ -796,6 +797,7 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
         nGlyphIndex = (*it).second;
         nGlyphFlags |= GF_GSUB;
     }
+/*###*/if(aChar>=0x3000&&aChar<0xF000)fprintf(stderr,"FTgsub[%04X] = %d\n",aChar,!!(nGlyphFlags&GF_GSUB));
 
     // CJK vertical writing needs special treatment
     if( GetFontSelData().mbVertical )
