@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-08-01 07:54:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,7 +1184,7 @@ Reference< XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OU
     }
     else
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         switch (aDescendant.getValueType().getTypeClass())
         {
             case TypeClass_STRING:
