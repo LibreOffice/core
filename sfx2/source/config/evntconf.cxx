@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 17:26:20 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,10 @@ int SfxEventConfigItem_Impl::Load(SvStream& rStream)
 BOOL SfxEventConfigItem_Impl::LoadXML( SvStream& rInStream )
 {
     ::framework::EventsConfig aCfg;
-    if ( ::framework::EventsConfiguration::LoadEventsConfig( rInStream, aCfg ) )
+
+    // #110897#
+    // if ( ::framework::EventsConfiguration::LoadEventsConfig( rInStream, aCfg ) )
+    if ( ::framework::EventsConfiguration::LoadEventsConfig( ::comphelper::getProcessServiceFactory(), rInStream, aCfg ) )
     {
         long nCount = aCfg.aEventNames.getLength();
         for ( long i=0; i<nCount; i++ )
@@ -603,7 +606,9 @@ BOOL SfxEventConfigItem_Impl::StoreXML( SvStream& rOutStream )
     aCfg.aEventNames = aSequence;
     aCfg.aEventsProperties = aData;
 
-    return ::framework::EventsConfiguration::StoreEventsConfig( rOutStream, aCfg );
+    // #110897#
+    // return ::framework::EventsConfiguration::StoreEventsConfig( rOutStream, aCfg );
+    return ::framework::EventsConfiguration::StoreEventsConfig( ::comphelper::getProcessServiceFactory(), rOutStream, aCfg );
 }
 
 //==========================================================================
