@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 15:23:43 $
+ *  last change: $Author: jp $ $Date: 2001-02-28 15:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,17 +650,18 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
     {
     case SWTRANSFER_OBJECTTYPE_DRAWMODEL:
         {
+            //JP 28.02.2001: dont change the sequence of commands - Bug 8
             SdrModel *pModel = (SdrModel*)pObject;
             pModel->SetStreamingSdrModel( TRUE );
             xStream->SetBufferSize( 16348 );
             xStream->SetVersion( SOFFICE_FILEFORMAT_50 );
             pModel->GetItemPool().SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );
-            pModel->GetItemPool().GetSecondaryPool()->Store( *xStream );
             pModel->PreSave();
+            pModel->GetItemPool().GetSecondaryPool()->Store( *xStream );
             *xStream << *pModel;
-            pModel->PostSave();
             xStream->Commit();
             pModel->SetStreamingSdrModel( FALSE );
+            pModel->PostSave();
 
             bRet = ERRCODE_NONE == xStream->GetError();
         }
