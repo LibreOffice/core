@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:22:26 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2112,6 +2112,12 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
                 // end point is start point for closed contour
                 // disabled, because Polygon class closes the contour itself
                 // pPoints[nPnt++] = pPoints[0];
+                // #i35928#
+                // Added again, but add only when not yet closed
+                if(pPoints[nPnt - 1] != pPoints[0])
+                {
+                    pPoints[nPnt++] = pPoints[0];
+                }
 
                 // convert y-coordinates W32 -> VCL
                 for( int i = 0; i < nPnt; ++i )
