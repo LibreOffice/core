@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelBrowseNode.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:09 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 12:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,7 @@ import java.util.*;
 
 public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
 
-    private ParcelDescriptor pd;
-    private File dir;
     private String name;
-    private String location;
     private Collection browsenodes;
     private XComponentContext m_XCtx;
     public boolean deletable = true;
@@ -90,26 +87,11 @@ public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
             (short)0, "editable");
     }
 
-    public ParcelBrowseNode(XComponentContext ctx, File dir) {
-        this(dir.getName());
-        this.dir = dir;
-        this.m_XCtx = ctx;
-        this.location = PathUtils.toScriptLocation(  m_XCtx, dir.getAbsolutePath() );
-        this.pd = ParcelDescriptor.getParcelDescriptor(dir);
-        this.deletable = true;
-    }
-
-    public ParcelBrowseNode(XComponentContext ctx,InputStream is, String name) {
+    public ParcelBrowseNode(XComponentContext ctx, Collection scripts, String name ) {
         this(name);
         this.m_XCtx = ctx;
-        this.location = "document";
-
-        try {
-            this.pd = new ParcelDescriptor(is);
-        }
-        catch (IOException ioe) {
-            this.pd = null;
-        }
+        this.deletable = true;
+        loadScripts( scripts );
     }
 
     public String getName() {
@@ -119,7 +101,7 @@ public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
     public XBrowseNode[] getChildNodes() {
         if (browsenodes == null)
         {
-            loadScripts();
+            return new XBrowseNode[0];
         }
         return (XBrowseNode[])browsenodes.toArray(new XBrowseNode[0]);
     }
@@ -127,7 +109,7 @@ public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
     public boolean hasChildNodes() {
         if (browsenodes == null)
         {
-            loadScripts();
+            return false;
         }
         return browsenodes.size() > 0;
     }
@@ -140,24 +122,14 @@ public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
         return getName();
     }
 
-    private void loadScripts() {
-        browsenodes = new ArrayList();
-
-        if (pd != null) {
-            ScriptEntry[] entries = pd.getScriptEntries();
-
-            if (entries != null) {
-                for (int i = 0; i < entries.length; i++) {
-                    ScriptBrowseNode sbn;
-                    if (dir != null) {
-                        sbn = new ScriptBrowseNode(entries[i], location, dir);
-                    }
-                    else {
-                        sbn = new ScriptBrowseNode(entries[i], location);
-                    }
-                    browsenodes.add(sbn);
-                }
-            }
+    private void loadScripts(Collection scripts ) {
+        browsenodes = new ArrayList( scripts.size() );
+        Iterator iter = scripts.iterator();
+        while ( iter.hasNext() )
+        {
+            ScriptMetaData script = (ScriptMetaData)iter.next();
+            ScriptBrowseNode sbn = new ScriptBrowseNode(script);
+            browsenodes.add(sbn);
         }
     }
 }
