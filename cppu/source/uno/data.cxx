@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-12 15:43:49 $
+ *  last change: $Author: dbo $ $Date: 2001-10-12 16:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,27 +308,21 @@ sal_Bool SAL_CALL uno_assignData(
 
 #define OFFSET_OF( s, m ) ((sal_Size)((char *)&((s *)16)->m -16))
 
-#if ( __GNUC__ == 3 && __GNUC_MINOR__ == 0 )
-#define CPPU_ALIGN( x ) __attribute__ ((aligned (x)))
-#else
-#define CPPU_ALIGN( x )
-#endif
-
 struct C
 {
     sal_Int16 d;
 };
 struct C2 : public C
 {
-    sal_Int32 e CPPU_ALIGN(2);
+    sal_Int32 e CPPU_GNU3_ALIGN(2);
 };
 struct C3 : public C2
 {
-    double d CPPU_ALIGN(4);
+    double d CPPU_GNU3_ALIGN(4);
 };
 struct C4 : public C3
 {
-    C3 c3 CPPU_ALIGN(8);
+    C3 c3 CPPU_GNU3_ALIGN(8);
     sal_Bool b;
 };
 struct C5
@@ -359,7 +353,7 @@ struct M
 
 struct N : public M
 {
-    sal_Int16   p CPPU_ALIGN(4);
+    sal_Int16   p CPPU_GNU3_ALIGN(4);
 };
 struct N2
 {
@@ -369,12 +363,16 @@ struct N2
 
 struct O : public M
 {
-    double  p CPPU_ALIGN(4);
+    double  p CPPU_GNU3_ALIGN(4);
+};
+struct O2 : public O
+{
+    double  p CPPU_GNU3_ALIGN(8);
 };
 
 struct P : public N
 {
-    double  p CPPU_ALIGN(4);
+    double  p CPPU_GNU3_ALIGN(4);
 };
 
 struct empty
@@ -385,6 +383,12 @@ struct second : public empty
     int a;
 };
 
+struct AlignSize_Impl
+{
+    sal_Int16   nInt16;
+    double      dDouble;
+};
+
 class BinaryCompatible_Impl
 {
 public:
@@ -392,6 +396,10 @@ public:
 };
 BinaryCompatible_Impl::BinaryCompatible_Impl()
 {
+#ifdef DEBUG
+    fprintf( stderr, "> nMaxAlignment = %d\n", OFFSET_OF( AlignSize_Impl, dDouble ) );
+#endif
+
     // sequence
     BINTEST_VERIFY( (SAL_SEQUENCE_HEADER_SIZE % 8) == 0 );
     // enum
@@ -432,6 +440,9 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     BINTEST_VERIFYSIZE( C5, 48 );
     BINTEST_VERIFY( OFFSET_OF( C5, c4 ) == 0 );
     BINTEST_VERIFY( OFFSET_OF( C5, b ) == 40 );
+
+    BINTEST_VERIFYSIZE( O2, 24 );
+    BINTEST_VERIFY( OFFSET_OF( O2, p ) == 16 );
 
 #ifdef SAL_W32
     BINTEST_VERIFYSIZE( P, 24 );
