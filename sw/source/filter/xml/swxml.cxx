@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:07:35 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,8 +754,9 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
         if( xXMLParser.is() )
         {
             // get filter
-            Reference< xml::sax::XDocumentHandler > xFilter =
-                                        new SwXMLSectionList( rStrings );
+            // #110680#
+            // Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( rStrings );
+            Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
 
             // connect parser and filter
             Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
