@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-03 14:39:07 $
+ *  last change: $Author: ka $ $Date: 2001-08-09 14:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,11 +396,8 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
         }
         else
         {
-            // internal paste
-            const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
-            SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
-                                                pWorkModel->GetSdPage( 0, PK_STANDARD ) :
-                                                pWorkModel->GetPage( 0 ) );
+            SdDrawDocument* pWorkModel = (SdDrawDocument*) pOwnData->GetWorkDocument();
+            SdPage*         pWorkPage = (SdPage*) pWorkModel->GetSdPage( 0, PK_STANDARD );
 
             pWorkPage->SetRectsDirty();
 
@@ -409,13 +406,22 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
             aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
             aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
 
+            // delete pages, that are not of any interest for us
+            for( long i = ( pWorkModel->GetPageCount() - 1 ); i >= 0; i-- )
+            {
+                SdPage* pPage = (SdPage*) pWorkModel->GetPage( (USHORT) i );
+
+                if( pPage->GetPageKind() != PK_STANDARD )
+                    pWorkModel->DeletePage( (USHORT) i );
+            }
+
             bReturn = Paste( *pWorkModel, aDropPos, pPage, nPasteOptions );
 
             if( !pPage )
                 pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
 
-            String aLayout( pPage->GetLayoutName() );
-            aLayout.Erase( aLayout.SearchAscii( SD_LT_SEPARATOR ) );
+            String aLayout(pPage->GetLayoutName());
+            aLayout.Erase(aLayout.SearchAscii(SD_LT_SEPARATOR));
             pPage->SetPresentationLayout( aLayout, FALSE, FALSE );
        }
     }

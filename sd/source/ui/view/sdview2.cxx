@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-26 09:43:39 $
+ *  last change: $Author: ka $ $Date: 2001-08-09 14:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ void __EXPORT SdView::DoPaste( Window* pWindow )
             SdDrawDocShell*     pDataDocSh = (SdDrawDocShell*) pObj;
             SdDrawDocument*     pDataDoc = pDataDocSh->GetDoc();
 
-            if( pDataDoc && pDataDoc->GetPageCount() > 1 )
+            if( pDataDoc && pDataDoc->GetSdPageCount( PK_STANDARD ) > 1 )
             {
                 // Dokument hat mehrere Seiten -> Seiten einfuegen
                 bPagesInserted = TRUE;
