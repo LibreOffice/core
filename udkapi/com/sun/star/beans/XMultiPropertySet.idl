@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiPropertySet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-15 16:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module beans {
+module com {  module sun {  module star {  module beans {
 
 //=============================================================================
 
@@ -120,9 +120,25 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
         events are fired. The values of the constrained properties
         should change after the vetoable events are fired and after if no
         exception occur Unknown properties are ignored.  </p>
+
+        @param aPropertyNames
+            specifies the names of the properties. All names must be unique.
+            This sequence must be alphabetically sorted.
+
+        @param aValues
+            contains the new values of the properties. The order is the same
+            as in <var>aPropertyNames</var>.
+
+        @throws IllegalArgumentException
+            if one of th enew values cannot be converted to the type
+            of the unterlying property by an identity or widening conversion.
+
+        @throws com::sun::star::lang:WrappedTargetException
+            if the implementation has an internal reason for the exception.
+            In this case the original exception is wrapped.
      */
-    void setPropertyValues( [in] sequence<string> PropertyNames,
-             [in] sequence<any> Values )
+    void setPropertyValues( [in] sequence<string> aPropertyNames,
+             [in] sequence<any> aValues )
             raises( com::sun::star::beans::PropertyVetoException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::WrappedTargetException );
@@ -135,6 +151,10 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
         <p>The order of the values in the returned sequence will be the same
         as the order of the names in the argument. </p>
+
+        @param aPropertyNames
+            specifies the names of the properties.
+            This sequence must be alphabetically sorted.
      */
     [const] sequence<any> getPropertyValues( [in] sequence<string> aPropertyNames );
 
@@ -146,6 +166,12 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
         <p>The implementation can ignore the names of the properties
         and fire the event on all properties. </p>
+
+        @param aPropertyNames
+            specifies the names of the properties.
+
+        @param xListener
+            contains the listener for the property change events.
 
         @see removePropertiesChangeListener
      */
@@ -159,15 +185,24 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
         <p>It is a "noop" if the listener is not registered.  </p>
 
+        @param
+            contains th elistener to be removed.
+
         @see addPropertiesChangeListener
      */
-    [oneway] void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener Listener );
+    [oneway] void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener xListener );
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::beans::XMultiPropertySet::firePropertiesChangeEvent
     /** fires a sequence of <type>PropertyChangeEvent</type>s to the specified
         listener.
+
+        @param aPropertynames
+            specifies the sorted names of the properties.
+
+        @param xListener
+            contains the listener for the property change events.
      */
     [oneway] void firePropertiesChangeEvent( [in] sequence<string> aPropertyNames,
              [in] com::sun::star::beans::XPropertiesChangeListener xListener );
@@ -181,6 +216,9 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:35  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:20  mi
     moved from api
 

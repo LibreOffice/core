@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertiesChangeListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-15 16:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module beans {
+module com {  module sun {  module star {  module beans {
 
 //=============================================================================
 
@@ -86,8 +86,13 @@ interface XPropertiesChangeListener: com::sun::star::lang::XEventListener
 
     // DocMerge from xml: method com::sun::star::beans::XPropertiesChangeListener::propertiesChange
     /** gets called when bound properties are changed.
+
+        @param aEvent
+            constains a sequence of <type>PropertiesChangeEvent</type> objects
+            which describe the event source and the properites wich have
+            changed.
      */
-    void propertiesChange( [in] sequence<com::sun::star::beans::PropertyChangeEvent> evt );
+    void propertiesChange( [in] sequence<com::sun::star::beans::PropertyChangeEvent> aEvent );
 
 };
 
@@ -98,6 +103,9 @@ interface XPropertiesChangeListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:20  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:56  hjs
     initial import
 

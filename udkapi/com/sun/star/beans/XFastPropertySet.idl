@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFastPropertySet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:35 $
+ *  last change: $Author: mi $ $Date: 2000-12-15 16:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module beans {
+module com {  module sun {  module star {  module beans {
 
 //=============================================================================
 
@@ -102,6 +102,30 @@ interface XFastPropertySet: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::beans::XFastPropertySet::setFastPropertyValue
     /** sets the value to the property with the specified name.
+
+        @param nHandle
+            constains the implementation handle of the
+            implementation for the property.
+
+        @param aValue
+            constains the new value of the property.
+
+        @throws UnknownPropertyException
+            if the property does not exist.
+
+        @throws PropertyVetoException
+            if a vetoable listener does not approve the change of
+            a property value.
+
+        @throws IllegalArgumentException
+            if the new value cannot be converted to the type of the
+            underlying property by an identity or widening conversion.
+
+        @throws  stardiv::uno::lang::WrappedTargetException
+            if the implementation has an internal reason for the exception.
+            In this case the original exception is wrapped into this
+            <type scope="com::sun::star::lang">WrappedTargetException</type>.
+
      */
     void setFastPropertyValue( [in] long nHandle,
              [in] any aValue )
@@ -140,6 +164,9 @@ interface XFastPropertySet: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/11 16:09:35  mi
+    documentation syntax fixed and some minor semantic documentation fixes
+
     Revision 1.4  2000/11/08 12:28:20  mi
     moved from api
 
