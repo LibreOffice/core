@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormControlArranger.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 13:56:38 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,17 +134,17 @@ public class FormControlArranger {
 
     // Note: on all Controls except for the checkbox the Label has to be set
     // a bit under the DBControl because its Height is also smaller
-    private int getLabelDiffHeight(){
+    private int getLabelDiffHeight(int _index){
         if (curDBControl != null){
             if (curDBControl.getControlType() == FormHandler.SOCHECKBOX)
-                return 0;
+                return getCheckBoxDiffHeight(_index);
         }
         return oFormHandler.getBasicLabelDiffHeight();
     }
 
 
     private int getCheckBoxDiffHeight(int LastIndex){
-        if ((LastIndex > 0) && (LastIndex < DBControlList.length)){
+        if ((LastIndex < DBControlList.length)){
             if (DBControlList[LastIndex].getControlType() == FormHandler.SOCHECKBOX){
                 return (int)((oFormHandler.getDBRefHeight() - DBControlList[LastIndex].getDBHeight())/2);
             }
@@ -276,22 +276,28 @@ public class FormControlArranger {
                 curLabelControl.setPosition( new Point(iLocTCPosX, curLabelControl.getPosition().Y));
                 curDBControl.setPosition( new Point(iLocTCPosX, curLabelControl.getPosition().Y + nTCHeight));
             }
-            if (((curLabelControl.getSize().Width > curLabelControl.getSize().Width)) && (WidthFactor > 0))
+            if (((curLabelControl.getSize().Width > curDBControl.getSize().Width)) && (WidthFactor > 0))
                 nControlBaseWidth = curLabelControl.getSize().Width;
             else
                 nControlBaseWidth = curDBControl.getSize().Width;
             if (FieldColumns[i].FieldType == DataType.TIMESTAMP){
                 TimeStampControl oDBTimeStampControl = (TimeStampControl) curDBControl;
                 nControlBaseWidth = oDBTimeStampControl.getSize().Width;
-                oDBTimeStampControl.setSize( new Size(nControlBaseWidth + WidthFactor * CorrWidth, oDBTimeStampControl.getSize().Height));
+                if (this.isReducable(i) || WidthFactor > 0)
+                    oDBTimeStampControl.setSize( new Size(nControlBaseWidth + WidthFactor * CorrWidth, oDBTimeStampControl.getSize().Height));
             }
-            else
-                curDBControl.setSize( new Size(nControlBaseWidth + WidthFactor * CorrWidth, curDBControl.getSize().Height));
+            else{
+                if (this.isReducable(i) || WidthFactor > 0)
+                    curDBControl.setSize( new Size(nControlBaseWidth + WidthFactor * CorrWidth, curDBControl.getSize().Height));
+            }
             iLocTCPosX = curDBControl.getPosition().X + curDBControl.getSize().Width + cHoriDistance;
             if (curLabelControl.getSize().Width > curDBControl.getSize().Width)
                 iLocTCPosX = curLabelControl.getPosition().X + curLabelControl.getSize().Width + cHoriDistance;
         }
-        iReduceWidth = 0;
+        if (WidthFactor > 0)
+            iReduceWidth = 1;
+        else
+            iReduceWidth = 0;
     }
 
 
@@ -387,7 +393,7 @@ public class FormControlArranger {
                 else{
                     a = a + 1;
                 }
-                nYTCPos = nYDBPos + this.getLabelDiffHeight() + getCheckBoxDiffHeight(LastIndex);
+                nYTCPos = nYDBPos + this.getLabelDiffHeight(LastIndex);
                 if ((nYRefPos + nDBHeight)  > nMaxDBYPos)
                     nMaxDBYPos = nYRefPos + nDBHeight;
 
@@ -460,7 +466,7 @@ public class FormControlArranger {
         nTCHeight = oFormHandler.getLabelHeight();
         iReduceWidth = 0;
         if (icurArrangement == FormWizard.SOCOLUMNARLEFT){
-            nYTCPos = cYOffset + this.getLabelDiffHeight();
+            nYTCPos = cYOffset + this.getLabelDiffHeight(0);
             nXDBPos = cXOffset + 3050;
             nYDBPos = cYOffset;
         }
@@ -516,7 +522,6 @@ public class FormControlArranger {
 //      if (CurHelpText != ""){
 //          oModel.HelpText = CurHelptext;
 //      }
-
     } catch (Exception e) {
         e.printStackTrace(System.out);
     }}
