@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
+#   last change: $Author: dr $ $Date: 2001-11-13 12:13:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,8 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 SLOFILES =	\
         $(SLO)$/FilterTools.obj				\
         $(SLO)$/FilterProgressBar.obj		\
+        $(SLO)$/FilterApiHelper.obj			\
+        $(SLO)$/XclChartsApiHelper.obj		\
         $(SLO)$/XclImpStream.obj			\
         $(SLO)$/XclImpHelper.obj			\
         $(SLO)$/XclImpExternsheet.obj		\
@@ -117,6 +119,7 @@ SLOFILES =	\
         $(SLO)$/biffdump.obj
 
 EXCEPTIONSFILES = \
+        $(SLO)$/FilterApiHelper.obj			\
         $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclExpCharts.obj
 

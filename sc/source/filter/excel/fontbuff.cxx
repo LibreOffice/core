@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontbuff.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
+ *  last change: $Author: dr $ $Date: 2001-11-13 12:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ const UINT16 FontBuffer::nDefaultMasterHeight = 200;
 FontBuffer::FontBuffer( RootData* pRD ) : ExcRoot( pRD )
 {
     aDefaultFont.bItalic = aDefaultFont.bStrikeout = aDefaultFont.bOutline = aDefaultFont.bShadow = FALSE;
-    aDefaultFont.eUnderline = ExcUndNone;
+    aDefaultFont.eUnderline = xlUnderlNone;
     aDefaultFont.nWeight = 400; // NORMAL
     aDefaultFont.nColor = 0xFFFF;
 }
@@ -361,11 +361,8 @@ void FontBuffer::NewFont( UINT16 nHeight, BYTE nAttr0, UINT16 nIndexCol, const S
     BYTE    nUnderline;
     UINT16  nBoldness;
 
-    if( nAttr0 & 0x04 )
-        // underline
-        nUnderline = ( BYTE ) ExcUndSingle;
-    else
-        nUnderline = ( BYTE ) ExcUndNone;
+    // underline
+    nUnderline = static_cast< BYTE >( (nAttr0 & 0x04) ? xlUnderlSingle : xlUnderlNone );
 
     if( nAttr0 & 0x01 )
         // bold
@@ -442,11 +439,11 @@ void FontBuffer::NewFont( UINT16 nHeight, BYTE nAttr0, UINT16 nScript, BYTE nUnd
 
     DBG_ASSERT( nHeight <  32767, "+FontList::NewFont(): Height >= 32767 - Pech..." );
 
-    ScExcFont*      pScExcFont = new ScExcFont( *pSvxFont, *( new SvxFontHeightItem( ( ULONG ) nHeight ) ) );
+    ScExcFont*      pScExcFont = new ScExcFont( pSvxFont, new SvxFontHeightItem( ( ULONG ) nHeight ) );
 
     pScExcFont->nColor = nIndexCol;
     pScExcFont->nScript = ( UINT8 ) nScript;
-    pScExcFont->eUnderline = ( ExcUnderlineType ) nUnderline;
+    pScExcFont->eUnderline = static_cast< XclUnderline >( nUnderline );
     pScExcFont->nWeight = nBoldness;
     pScExcFont->bItalic = nAttr0 & 0x02;    // italic
     pScExcFont->bStrikeout = nAttr0 &0x08;  // strikeout
@@ -536,11 +533,11 @@ void FontBuffer::Fill( const UINT16 nIndex, SfxItemSet& rItemSet, const BOOL bOw
 
     switch( pFont->eUnderline )
     {
-        case ExcUndSingle:
-        case ExcUndSingleAcc:   nUnderline = UNDERLINE_SINGLE; break;
-        case ExcUndDouble:
-        case ExcUndDoubleAcc:   nUnderline = UNDERLINE_DOUBLE; break;
-        default:                nUnderline = UNDERLINE_NONE;
+        case xlUnderlSingle:
+        case xlUnderlSingleAcc:     nUnderline = UNDERLINE_SINGLE; break;
+        case xlUnderlDouble:
+        case xlUnderlDoubleAcc:     nUnderline = UNDERLINE_DOUBLE; break;
+        default:                    nUnderline = UNDERLINE_NONE;
     }
 
     SvxUnderlineItem    aUndItem( ( FontUnderline ) nUnderline );

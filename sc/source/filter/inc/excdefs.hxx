@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
+ *  last change: $Author: dr $ $Date: 2001-11-13 12:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 //___________________________________________________________________
 // Style info
 
+/// Horizontal alignment of cell contents.
 enum XclHorAlign
 {
     xlHAlignGeneral                 = 0x00,
@@ -117,6 +118,7 @@ enum XclHorAlign
     xlHAlignParent                  = 0xFF
 };
 
+/// Vertical alignment of cell contents.
 enum XclVerAlign
 {
     xlVAlignTop                     = 0x00,
@@ -126,6 +128,7 @@ enum XclVerAlign
     xlVAlignParent                  = 0xFF
 };
 
+/// Text orientation.
 enum XclTextOrient
 {
     xlTextOrientNoRot               = 0x00,
@@ -136,6 +139,7 @@ enum XclTextOrient
     xlTextOrientParent              = 0xFF
 };
 
+/// Text wrap (automatic line break).
 enum XclTextWrap
 {
     xlTextWrapNo                    = 0x00,
@@ -144,6 +148,17 @@ enum XclTextWrap
 };
 
 #define EXC_ROT_STACKED             0xFF
+
+/// Text underline mode.
+enum XclUnderline
+{
+    xlUnderlNone                    = 0x00,
+    xlUnderlSingle                  = 0x01,
+    xlUnderlDouble                  = 0x02,
+    xlUnderlSingleAcc               = 0x21,
+    xlUnderlDoubleAcc               = 0x22
+};
+
 
 //___________________________________________________________________
 // (0x0018, 0x0218) NAME
