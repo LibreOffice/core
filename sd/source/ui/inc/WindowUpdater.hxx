@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowUpdater.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:21:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,11 +99,8 @@ class ViewShell;
     members directly and thus is declared as its friend.</p>
 
     <p>Windows that are to be kept up-to-date have to be registered via the
-    <member>RegisterWindow()</member> method.  After setting a view shell
-    with the <member>SetViewShell()</type> method you can use the
-    convenience method <member>RegisterPreview()</member> to register the
-    preview of the view shell.  When a document is given then this document
-    is reformatted when the monitored option changes.</p>
+    <member>RegisterWindow()</member> method.  When a document is given then
+    this document is reformatted when the monitored option changes.</p>
 */
 class SD_DLLPUBLIC WindowUpdater
     : public SfxListener
@@ -129,9 +126,8 @@ public:
     void UnregisterWindow (::Window* pWindow);
 
     /** Set the view shell whose output devices shall be kept up to date.
-        It is used to access the preview windows and to clear the master
-        page cache so that a redraw affects the master page content as
-        well.
+        It is used to clear the master page cache so that a redraw affects
+        the master page content as well.
     */
     void SetViewShell (ViewShell& rViewShell);
 
@@ -142,17 +138,6 @@ public:
             place in the future.
     */
     void SetDocument (SdDrawDocument* pDocument);
-
-    /** Convenience method that retrieves the output device of the preview
-        window of the view shell and then registers this device to be
-        updated.
-    */
-    void RegisterPreview (void);
-
-    /** Convenience method that retrieves the output device of the preview
-        window of the view shell and then un-registers this device.
-    */
-    void UnregisterPreview (void);
 
     /** Update the given output device and update all text objects of the
         view shell if not told otherwise.
@@ -201,15 +186,6 @@ private:
             is ignored.
     */
     SD_DLLPRIVATE void UpdateWindow (OutputDevice* pDevice) const;
-
-    /** Used by <member>RegisterPreview()</member> and
-        <member>UnregisterPreview()</member> this method returns the output
-        device of the current preview window of the view shell.
-        @return
-            Returns <null/> when there is no preview window or no view shell
-            has been set from which the preview can be retrieved.
-    */
-    SD_DLLPRIVATE ::Window* GetPreviewWindow (void) const;
 };
 
 } // end of namespace sd
