@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_testtool.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:10:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 08:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,7 @@
 #include "macros.inc"
 
 Module gid_Module_Optional_Testtool
-    Name = "Testtool";
-    Description = "Testtool";
+    MOD_NAME_DESC ( MODULE_OPTIONAL_TESTTOOL );
     ParentID = gid_Module_Optional;
     Default = NO;
     Files = (gid_File_Bin_Testtool, gid_File_Res_Stt, gid_File_Hid_Testtool);
