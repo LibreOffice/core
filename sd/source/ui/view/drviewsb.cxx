@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:15:15 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,33 +666,32 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                     SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField(), pOLV->GetAttribs() );
                     if( aDlg.Execute() == RET_OK )
                     {
+                        // #108538#
+                        // To make a correct SetAttribs() call at the utlinerView
+                        // it is necessary to split the actions here
                         SvxFieldData* pField = aDlg.GetField();
+                        ESelection aSel = pOLV->GetSelection();
+                        sal_Bool bSelectionWasModified(sal_False);
+
                         if( pField )
                         {
                             SvxFieldItem aFieldItem( *pField );
-                            //pOLV->DeleteSelected(); <-- fehlt leider !
-                            // Feld selektieren, so dass es beim Insert geloescht wird
-                            ESelection aSel = pOLV->GetSelection();
-                            BOOL bSel = TRUE;
+
                             if( aSel.nStartPos == aSel.nEndPos )
                             {
-                                bSel = FALSE;
+                                bSelectionWasModified = sal_True;
                                 aSel.nEndPos++;
+                                pOLV->SetSelection( aSel );
                             }
-                            pOLV->SetSelection( aSel );
 
                             pOLV->InsertField( aFieldItem );
 
-                            // Selektion wird wieder in den Ursprungszustand gebracht
-                            if( !bSel )
-                                aSel.nEndPos--;
-
+                            // #108538# select again for eventual SetAttribs call
                             pOLV->SetSelection( aSel );
-
-                            delete pField;
                         }
 
                         SfxItemSet aSet( aDlg.GetItemSet() );
+
                         if( aSet.Count() )
                         {
                             pOLV->SetAttribs( aSet );
@@ -700,6 +699,18 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                             Outliner* pOutliner = pOLV->GetOutliner();
                             if( pOutliner )
                                 pOutliner->UpdateFields();
+                        }
+
+                        if(pField)
+                        {
+                            // #108538# restore selection to original
+                            if(bSelectionWasModified)
+                            {
+                                aSel.nEndPos--;
+                                pOLV->SetSelection( aSel );
+                            }
+
+                            delete pField;
                         }
                     }
                 }
