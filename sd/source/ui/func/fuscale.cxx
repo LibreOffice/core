@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuscale.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:13:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ FuScale::FuScale (
         {
             SdrPageView* pPageView = pView->GetPageViewPvNum( 0 );
             if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
-                // || ( pView->GetMarkList().GetMarkCount() == 0 ) )
+                // || ( pView->GetMarkedObjectList().GetMarkCount() == 0 ) )
             {
                 nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
             }
