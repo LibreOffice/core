@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-23 12:58:06 $
+ *  last change: $Author: sb $ $Date: 2002-08-27 07:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,8 +321,9 @@ void TextView::SetSelection( const TextSelection& rTextSel, BOOL bGotoCursor )
     mpTextEngine->CheckIdleFormatter();
 
     HideSelection();
-    ImpSetSelection( rTextSel );
-    mpTextEngine->ValidateSelection( maSelection );
+    TextSelection aNewSel( rTextSel );
+    mpTextEngine->ValidateSelection( aNewSel );
+    ImpSetSelection( aNewSel );
     ShowSelection();
     ShowCursor( bGotoCursor );
 }
