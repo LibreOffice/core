@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:18:49 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,15 +207,13 @@ void OTreeDisposeScheduler::onTimerShot()
             aNextTime = aNextDisposeTime;
     }
 
-    catch (uno::Exception& ue)
+    catch (uno::Exception& )
     {
         OSL_ENSURE(false, "ERROR: UNO Exception left a disposer");
-        ue;
     }
-    catch (configuration::Exception& ce)
+    catch (configuration::Exception& )
     {
         OSL_ENSURE(false, "ERROR: configuration::Exception left a disposer");
-        ce;
     }
     catch (...)
     {
