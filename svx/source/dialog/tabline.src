@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:04:01 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,49 @@ TabPage RID_SVXPAGE_LINE
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
     };
+
+    //////////////////////////////////////////////////////////////////////////////
+    // #116827#
+
+    FixedLine FL_EDGE_STYLE
+    {
+        Pos = MAP_APPFONT ( 124 , 3 + (16 * 6) - 4 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
+        Text = "Eckenstil" ;
+        Text [ ENGLISH ] = "Corner style" ;
+    };
+    FixedText FT_EDGE_STYLE
+    {
+        Pos = MAP_APPFONT ( 130 , 14 + (16 * 6) - 4 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text = "Sti~l" ;
+        Text [ ENGLISH ] = "Sty~le" ;
+    };
+    ListBox LB_EDGE_STYLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 130 , 25 + (16 * 6) - 4 ) ;
+        Size = MAP_APPFONT ( 57 , 99 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Abgerundet" ; Default ; > ;
+            < "- kein -" ; > ;
+            < "Gehrung" ; > ;
+            < "Abgeschrägt" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Rounded" ; Default ; > ;
+            < "- none -" ; > ;
+            < "Mitered" ; > ;
+            < "Beveled" ; > ;
+        };
+    };
+
+    //////////////////////////////////////////////////////////////////////////////
+
     Control CTL_PREVIEW
     {
         Border = TRUE ;
