@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:42:09 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ russian ] = "Ïîìîùü ââîäà";
                 Text[ polish ] = "Pomoc przy wprow.";
                 Text[ japanese ] = "“ü—ÍÒ¯¾°¼Ş";
-                Text[ chinese_traditional ] = "¿é¤JÀ°§U";
+                Text[ chinese_traditional ] = "¿é¤J»¡©ú";
                 Text[ arabic ] = "ãÓÇÚÏÉ ÇáÅÏÎÇá";
                 Text[ greek ] = "ÂïŞèåéá åéóáãùãŞò";
                 Text[ korean ] = "µµ¿ò¸» »ğÀÔ";
@@ -830,7 +830,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text [ spanish ] = "~Mostrar Ayuda de entrada al seleccionar una celda" ;
         Text [ french ] = "~Aide à la saisie lors de la sélection de cellules" ;
         Text [ portuguese_brazilian ] = "E~ingabehilfen bei Selektion einer Zelle anbieten" ;
-        Text [ portuguese ] = "~Mostrar ajuda de digitação quando seleccionar célula" ;
+        Text [ portuguese ] = "~Mostrar ajuda de entrada quando seleccionar célula" ;
         Text[ chinese_simplified ] = "ÔÚÑ¡¶¨µ¥Ôª¸ñÊ±ÏÔÊ¾ÊäÈë°ïÖú(~S)";
         Text[ russian ] = "Ïğåäëàãàòü ïîìîùü ââîäà ïğè âûäåëåíèè ÿ÷åéêè";
         Text[ polish ] = "Z~aproponuj pomoc przy wprowadzaniu w przypadku zaznaczonej komórki";
@@ -910,7 +910,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ russian ] = "Ïîìîùü ââîäà";
         Text[ polish ] = "Pomoc przy wprow.";
         Text[ japanese ] = "“ü—ÍÒ¯¾°¼Ş(~I)";
-        Text[ chinese_traditional ] = "¿é¤JÀ°§U(~I)";
+        Text[ chinese_traditional ] = "¿é¤J»¡©ú(~I)";
         Text[ arabic ] = "ãÓÇÚÏÉ ÇáÅÏÎÇá";
         Text[ greek ] = "ÂïŞèåéá ~åéóáãùãŞò";
         Text[ korean ] = "µµ¿ò¸» »ğÀÔ(~I)";
@@ -1078,7 +1078,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ russian ] = "Äåéñòâèå";
         Text[ polish ] = "Akcja";
         Text[ japanese ] = "±¸¼®İ(~A)";
-        Text[ chinese_traditional ] = "¾Ş§@(~A)";
+        Text[ chinese_traditional ] = "°Ê§@(~A)";
         Text[ arabic ] = "ÅÌÑÇÁ";
         Text[ greek ] = "~Åíİñãåéá";
         Text[ korean ] = "µ¿ÀÛ(~A)";
