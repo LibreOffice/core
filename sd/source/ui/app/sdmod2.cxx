@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:25:56 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,15 @@
 static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, bool& bMasterView )
 {
     bMasterView = false;
-    SdPage* pPage = NULL;
+    SdPage* pPage = (SdPage*)pInfo->GetSdrPage();
+
+    // special case, someone already set the current page on the EditFieldInfo
+    // This is used from the svx::UnoGraphicsExporter f.e.
+    if( pPage )
+    {
+        bMasterView = false;
+        return pPage;
+    }
 
     // first try to check if we are inside the outline view
     sd::OutlineView* pSdView = NULL;
