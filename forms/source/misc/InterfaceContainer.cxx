@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 15:41:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
     while (getCount())
         removeByIndex(0);
 
-    // Schreibt nur in Abhaengigkeit der Länge
+    // Schreibt nur in Abhaengigkeit der Laenge
     sal_Int32 nLen = _rxInStream->readLong();
 
     if (nLen)
