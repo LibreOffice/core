@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 15:16:21 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,8 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ japanese ] = "‚Π‚Ζ‚Ζ‚¨‚θΐs:";
         Text[ chinese_traditional ] = "ΉLµ{΅G";
         Text[ arabic ] = "ΪΘΡ:";
-        Text[ greek ] = "Δια μέσου:";
-        Text[ korean ] = "Ελ°ϊ:";
+        Text[ greek ] = "Αριθμός διαδρομών:";
+        Text[ korean ] = "ΌψΘ―:";
         Text[ turkish ] = "Pass count:";
         Text[ language_user1 ] = " ";
     };
