@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-12 21:04:18 $
+ *  last change: $Author: nn $ $Date: 2001-12-19 19:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,9 +274,7 @@ USHORT ScDocShell::GetSaveTab()
 
 BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
 {
-    BOOL bWarningEnabled = SvtSecurityOptions().IsWarningEnabled() || SvtSecurityOptions().IsConfirmationEnabled();
-    if (bWarningEnabled)
-        aDocument.SetMacroCallMode(SC_MACROCALL_ASK);   // ask before executing
+    //  MacroCallMode is no longer needed, state is kept in SfxObjectShell now
 
     BOOL bRet = TRUE;
 
@@ -432,17 +430,11 @@ BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
 
     if ( eShellMode == SFX_CREATE_MODE_STANDARD && bRet )
     {
-        if ( bWarningEnabled )
-        {
-            //  If the document contains macro calls, ask now
-            //  otherwise set to ALLOWED (for entering new formulas).
-            //  (If document is loaded invisibly, ASK state is kept)
+        //  If the document contains macro calls, call AdjustMacroMode now,
+        //  which will warn about macros if configured that way.
 
-            if ( aDocument.HasMacroCallsAfterLoad() )
-                aDocument.CheckMacroWarn();
-            else
-                aDocument.SetMacroCallMode(SC_MACROCALL_ALLOWED);
-        }
+        if ( aDocument.HasMacroCallsAfterLoad() )
+            AdjustMacroMode( String::CreateFromAscii("StarBasic") );
     }
 
     return bRet;
@@ -520,10 +512,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::LoadXML" );
 
-    // handling of macro warnings as in LoadCalc
-    BOOL bWarningEnabled = SvtSecurityOptions().IsWarningEnabled() || SvtSecurityOptions().IsConfirmationEnabled();
-    if (bWarningEnabled)
-        aDocument.SetMacroCallMode(SC_MACROCALL_ASK);   // ask before executing
+    //  MacroCallMode is no longer needed, state is kept in SfxObjectShell now
 
     // prevent unnecessary broadcasts and updates
     ScDocShellModificator aModificator( *this );
@@ -616,17 +605,8 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     // handling of macro warnings as in LoadCalc
     if ( eShellMode == SFX_CREATE_MODE_STANDARD && bRet )
     {
-        if ( bWarningEnabled )
-        {
-            //  If the document contains macro calls, ask now
-            //  otherwise set to ALLOWED (for entering new formulas).
-            //  (If document is loaded invisibly, ASK state is kept)
-
-            if ( aDocument.HasMacroCallsAfterLoad() )
-                aDocument.CheckMacroWarn();
-            else
-                aDocument.SetMacroCallMode(SC_MACROCALL_ALLOWED);
-        }
+        if ( aDocument.HasMacroCallsAfterLoad() )
+            AdjustMacroMode( String::CreateFromAscii("StarBasic") );
     }
 
     return bRet;
