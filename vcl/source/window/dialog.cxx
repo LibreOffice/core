@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-05 13:52:42 $
+ *  last change: $Author: th $ $Date: 2001-08-07 11:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
         {
             mbFrame         = TRUE;
             mbOverlapWin    = TRUE;
-            SystemWindow::ImplInit( pParent, nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE), NULL );
+            SystemWindow::ImplInit( pParent, nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE) | WB_CLOSEABLE, NULL );
             // Jetzt alle StyleBits setzen
             mnStyle = nStyle;
         }
@@ -518,12 +518,6 @@ void Dialog::StateChanged( StateChangedType nType )
             {
                 if ( ImplGetBorderWindow() )
                     ((ImplBorderWindow*)ImplGetBorderWindow())->SetCloser();
-                else
-                {
-                    // ... missing implementation, if we are a frame window,
-                    // because it is currently impossible to implement.
-                    SetStyle( GetStyle() | WB_CLOSEABLE );
-                }
             }
         }
 
@@ -565,6 +559,7 @@ BOOL Dialog::Close()
 
     if ( !(GetStyle() & WB_CLOSEABLE) )
     {
+        BOOL bRet = TRUE;
         ImplDelData aDelData;
         ImplAddDel( &aDelData );
         PushButton* pButton = ImplGetCancelButton( this );
@@ -575,10 +570,13 @@ BOOL Dialog::Close()
             pButton = ImplGetOKButton( this );
             if ( pButton )
                 pButton->Click();
+            else
+                bRet = FALSE;
         }
         if ( aDelData.IsDelete() )
             return TRUE;
         ImplRemoveDel( &aDelData );
+        return bRet;
     }
 
     if ( IsInExecute() )
