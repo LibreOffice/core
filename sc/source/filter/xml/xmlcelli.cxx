@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-15 15:51:22 $
+ *  last change: $Author: sab $ $Date: 2001-05-15 17:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,86 +532,89 @@ void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress&
 
 void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet)
 {
-    if (sContentValidationName.getLength())
+    ScMyImportValidation aValidation;
+    if (GetScImport().GetValidation(sContentValidationName, aValidation))
     {
-        ScMyImportValidation aValidation;
-        if (GetScImport().GetValidation(sContentValidationName, aValidation))
+        uno::Any aAny = xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)));
+        uno::Reference<beans::XPropertySet> xPropertySet;
+        if (aAny >>= xPropertySet)
         {
-            uno::Any aAny = xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)));
-            uno::Reference<beans::XPropertySet> xPropertySet;
-            if (aAny >>= xPropertySet)
+            if (aValidation.sErrorMessage.getLength())
             {
-                if (aValidation.sErrorMessage.getLength())
-                {
-                    aAny <<= aValidation.sErrorMessage;
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)), aAny);
-                }
-                if (aValidation.sErrorTitle.getLength())
-                {
-                    aAny <<= aValidation.sErrorTitle;
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)), aAny);
-                }
-                if (aValidation.sImputMessage.getLength())
-                {
-                    aAny <<= aValidation.sImputMessage;
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)), aAny);
-                }
-                if (aValidation.sImputTitle.getLength())
-                {
-                    aAny <<= aValidation.sImputTitle;
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)), aAny);
-                }
-                aAny = ::cppu::bool2any(aValidation.bShowErrorMessage);
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)), aAny);
-                aAny = ::cppu::bool2any(aValidation.bShowImputMessage);
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)), aAny);
-                aAny <<= aValidation.aValidationType;
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)), aAny);
-                aAny = ::cppu::bool2any(aValidation.bIgnoreBlanks);
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)), aAny);
-                aAny <<= aValidation.aAlertStyle;
-                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)), aAny);
-                uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
-                if (xCondition.is())
-                {
-                     xCondition->setFormula1(aValidation.sFormula1);
-                     xCondition->setFormula2(aValidation.sFormula2);
-                     xCondition->setOperator(aValidation.aOperator);
-                     xCondition->setSourcePosition(aValidation.aBaseCellAddress);
-                }
+                aAny <<= aValidation.sErrorMessage;
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)), aAny);
             }
-            aAny <<= xPropertySet;
-            xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)), aAny);
+            if (aValidation.sErrorTitle.getLength())
+            {
+                aAny <<= aValidation.sErrorTitle;
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)), aAny);
+            }
+            if (aValidation.sImputMessage.getLength())
+            {
+                aAny <<= aValidation.sImputMessage;
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)), aAny);
+            }
+            if (aValidation.sImputTitle.getLength())
+            {
+                aAny <<= aValidation.sImputTitle;
+                xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)), aAny);
+            }
+            aAny = ::cppu::bool2any(aValidation.bShowErrorMessage);
+            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)), aAny);
+            aAny = ::cppu::bool2any(aValidation.bShowImputMessage);
+            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)), aAny);
+            aAny <<= aValidation.aValidationType;
+            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)), aAny);
+            aAny = ::cppu::bool2any(aValidation.bIgnoreBlanks);
+            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)), aAny);
+            aAny <<= aValidation.aAlertStyle;
+            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)), aAny);
+            uno::Reference<sheet::XSheetCondition> xCondition(xPropertySet, uno::UNO_QUERY);
+            if (xCondition.is())
+            {
+                    xCondition->setFormula1(aValidation.sFormula1);
+                    xCondition->setFormula2(aValidation.sFormula2);
+                    xCondition->setOperator(aValidation.aOperator);
+                    xCondition->setSourcePosition(aValidation.aBaseCellAddress);
+            }
         }
+        aAny <<= xPropertySet;
+        xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)), aAny);
     }
 }
 
 void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCellRange>& xCellRange,
                                                 const table::CellAddress& aCellAddress)
 {
-    ScXMLImport& rXMLImport = GetScImport();
-    sal_Int32 nBottom = aCellAddress.Row + nRepeatedRows - 1;
-    sal_Int32 nRight = aCellAddress.Column + nCellsRepeated - 1;
-    if (nBottom > MAXROW)
-        nBottom = MAXROW;
-    if (nRight > MAXCOL)
-        nRight = MAXCOL;
-    uno::Reference <table::XCellRange> xPropCellRange = xCellRange->getCellRangeByPosition(aCellAddress.Column, aCellAddress.Row,
-        nRight, nBottom);
-    if (xPropCellRange.is())
+    if (sContentValidationName.getLength())
     {
-        uno::Reference <beans::XPropertySet> xProperties (xPropCellRange, uno::UNO_QUERY);
-        if (xProperties.is())
-            SetContentValidation(xProperties);
+        ScXMLImport& rXMLImport = GetScImport();
+        sal_Int32 nBottom = aCellAddress.Row + nRepeatedRows - 1;
+        sal_Int32 nRight = aCellAddress.Column + nCellsRepeated - 1;
+        if (nBottom > MAXROW)
+            nBottom = MAXROW;
+        if (nRight > MAXCOL)
+            nRight = MAXCOL;
+        uno::Reference <table::XCellRange> xPropCellRange = xCellRange->getCellRangeByPosition(aCellAddress.Column, aCellAddress.Row,
+            nRight, nBottom);
+        if (xPropCellRange.is())
+        {
+            uno::Reference <beans::XPropertySet> xProperties (xPropCellRange, uno::UNO_QUERY);
+            if (xProperties.is())
+                SetContentValidation(xProperties);
+        }
     }
 }
 
 void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCell>& xCell)
 {
-    ScXMLImport& rXMLImport = GetScImport();
-    uno::Reference <beans::XPropertySet> xProperties (xCell, uno::UNO_QUERY);
-    if (xProperties.is())
-        SetContentValidation(xProperties);
+    if (sContentValidationName.getLength())
+    {
+        ScXMLImport& rXMLImport = GetScImport();
+        uno::Reference <beans::XPropertySet> xProperties (xCell, uno::UNO_QUERY);
+        if (xProperties.is())
+            SetContentValidation(xProperties);
+    }
 }
 
 void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>& xCell)
