@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-08 12:12:18 $
+ *  last change: $Author: cl $ $Date: 2002-11-25 13:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,23 +622,14 @@ void SdXMLShapeContext::SetStyle()
 
                         if( XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily )
                         {
-                            sal_Int32 nPos = -1;
-                            OUString aFamily;
-
-                            do
+                            sal_Int32 nPos = aStyleName.lastIndexOf( sal_Unicode('-') );
+                            if( -1 != nPos )
                             {
-                                nPos++;
-                                nPos = aStyleName.lastIndexOf( sal_Unicode('-'), nPos );
-                                if( -1 != nPos )
-                                    aFamily = aStyleName.copy( 0, nPos );
+                                OUString aFamily( aStyleName.copy( 0, nPos ) );
 
-                            } while( -1 != nPos && !xFamilies->hasByName( aFamily ) );
-
-                            if( -1 == nPos )
-                                break;
-
-                            xFamilies->getByName( aFamily ) >>= xFamily;
-                            aStyleName = aStyleName.copy( nPos + 1 );
+                                xFamilies->getByName( aFamily ) >>= xFamily;
+                                aStyleName = aStyleName.copy( nPos + 1 );
+                            }
                         }
                         else
                         {
