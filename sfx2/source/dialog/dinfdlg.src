@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:28:37 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ TabPage TP_DOCINFODESC
         Text [ italian ] = "~Titolo" ;
         Text [ portuguese_brazilian ] = "~T¡tulo" ;
         Text [ portuguese ] = "~Título" ;
-        Text [ finnish ] = "~Arvo" ;
+        Text [ finnish ] = "~Otsikko" ;
         Text [ danish ] = "Titel" ;
         Text [ french ] = "~Titre" ;
         Text [ swedish ] = "~Rubrik" ;
@@ -161,7 +161,7 @@ TabPage TP_DOCINFODESC
         Text [ italian ] = "~Parole chiave" ;
         Text [ portuguese_brazilian ] = "~Palavras-chave" ;
         Text [ portuguese ] = "~Palavras-chave" ;
-        Text [ finnish ] = "A~vainsanat" ;
+        Text [ finnish ] = "~Avainsanat" ;
         Text [ danish ] = "Nøgleord" ;
         Text [ french ] = "~Mots-clés" ;
         Text [ swedish ] = "~Nyckelord" ;
@@ -200,7 +200,7 @@ TabPage TP_DOCINFODESC
         Text [ italian ] = "~Descrizione" ;
         Text [ portuguese_brazilian ] = "~DescriçÆo" ;
         Text [ portuguese ] = "~Descrição" ;
-        Text [ finnish ] = "~Kuvaus" ;
+        Text [ finnish ] = "~Huomautus" ;
         Text [ danish ] = "Beskrivelse" ;
         Text [ french ] = "~Description" ;
         Text [ swedish ] = "~Beskrivning" ;
@@ -280,6 +280,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "Tip:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo:";
+        Text[ finnish ] = "Tyyppi";
     };
     FixedText FT_FILE_SHOW_TYP
     {
@@ -312,6 +313,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "S~alt okunur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Solo lectura";
+        Text[ finnish ] = "~Vain luku";
     };
     FixedText FT_FILE
     {
@@ -339,6 +341,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "Yer:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ubicación:";
+        Text[ finnish ] = "Sijainti:";
     };
     FixedText FT_FILE_VAL
     {
@@ -371,6 +374,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "Büyüklük:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tamaño:";
+        Text[ finnish ] = "Koko:";
     };
     FixedText FT_FILE_SHOW_SIZE
     {
@@ -408,6 +412,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "Oluþturma tarihi:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Creado el:";
+        Text[ finnish ] = "Luotu:";
     };
     FixedText FT_CREATE_VAL
     {
@@ -429,7 +434,7 @@ TabPage TP_DOCINFODOC
         Text [ spanish ] = "Abierto desde :" ;
         Text [ danish ] = "Redigeret:" ;
         Text [ swedish ] = "Redigeringstid:" ;
-        Text [ finnish ] = "Edit time:" ;
+        Text [ finnish ] = "Avattu:" ;
         Text [ english_us ] = "Edited:" ;
         Text[ chinese_simplified ] = "±à¼­µÄÊ±¼ä£º";
         Text[ russian ] = "Îòðåäàêòèðîâàí:";
@@ -474,6 +479,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "Deðiþtirme tarihi:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modificado el:";
+        Text[ finnish ] = "Muokattu:";
     };
     FixedText FT_CHANGE_VAL
     {
@@ -506,6 +512,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "Sürüm:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Versión:";
+        Text[ finnish ] = "Versio:";
     };
     FixedText FT_DOCNO_VAL
     {
@@ -538,6 +545,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "Yazdýrma tarihi:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Impreso el:";
+        Text[ finnish ] = "Tulostettu";
     };
     FixedText FT_PRINT_VAL
     {
@@ -570,6 +578,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "ÍÐÝ";
         Text[ turkish ] = "~Sil";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     CheckBox CB_USE_USERDATA
     {
@@ -598,6 +607,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "~Kullanýcý verilerini kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Utilice los ~datos del usuario";
+        Text[ finnish ] = "~Käytä käyttäjätietoja";
     };
     FixedLine FL_FILE_3
     {
@@ -662,6 +672,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "bilinmiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "desconocido";
+        Text[ finnish ] = "tuntematon";
     };
 };
 
@@ -742,7 +753,7 @@ TabPage TP_DOCINFOUSER
         Text [ italian ] = "Campi info..." ;
         Text [ portuguese_brazilian ] = "Camos de Info..." ;
         Text [ portuguese ] = "~Campos de informação" ;
-        Text [ finnish ] = "Tietokentät..." ;
+        Text [ finnish ] = "~Tietokentät" ;
         Text [ danish ] = "Infofelter..." ;
         Text [ french ] = "~Champs d'information..." ;
         Text [ swedish ] = "~Infofält..." ;
@@ -797,6 +808,7 @@ TabPage TP_DOCINFORELOAD
         Text[ turkish ] = "~Otm. yeniden yükleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Autorecargar cada";
+        Text[ finnish ] = "~Automaattinen uudelleenlatausväli";
     };
     NumericField ED_SECONDS
     {
@@ -837,6 +849,7 @@ TabPage TP_DOCINFORELOAD
         Text[ turkish ] = "~saniyede bir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Segundos";
+        Text[ finnish ] = "~sekuntia";
     };
     FixedText FT_URL
     {
@@ -864,6 +877,7 @@ TabPage TP_DOCINFORELOAD
         Text[ turkish ] = "~URL";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~URL";
+        Text[ finnish ] = "~URL-osoite";
     };
     Edit ED_URL
     {
@@ -897,6 +911,7 @@ TabPage TP_DOCINFORELOAD
         Text[ turkish ] = "~Frame";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Frame";
+        Text[ finnish ] = "Kehys";
     };
     ComboBox LB_DEFAULT
     {
@@ -959,6 +974,7 @@ TabDialog SID_DOCINFO
                 Text[ turkish ] = "Genel";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "General";
+                Text[ finnish ] = "Yleistä";
             };
             PageItem
             {
@@ -985,6 +1001,7 @@ TabDialog SID_DOCINFO
                 Text[ turkish ] = "Taným";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Descripción";
+                Text[ finnish ] = "Kuvaus";
             };
             PageItem
             {
@@ -995,7 +1012,7 @@ TabDialog SID_DOCINFO
                 Text [ italian ] = "Utente" ;
                 Text [ portuguese_brazilian ] = "Usu rio" ;
                 Text [ portuguese ] = "Utilizador" ;
-                Text [ finnish ] = "Käyttäjä" ;
+                Text [ finnish ] = "Käyttäjän määrittämä" ;
                 Text [ danish ] = "Bruger" ;
                 Text [ french ] = "Utilisateur" ;
                 Text [ swedish ] = "Användare" ;
@@ -1039,6 +1056,7 @@ TabDialog SID_DOCINFO
                 Text[ turkish ] = "Internet";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Internet";
+                Text[ finnish ] = "Internet";
             };
         };
     };
@@ -1048,6 +1066,7 @@ TabDialog SID_DOCINFO
     Text[ turkish ] = "Özellikler ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propiedades de  ";
+    Text[ finnish ] = "Ominaisuudet:";
 };
 
  // ********************************************************************** EOF
