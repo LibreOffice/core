@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:27:28 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,10 +278,12 @@ public:
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex)const;
-    void setNumberingRuleByIndex(SwNumRule& rNumRule,
-                                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties, sal_Int32 nIndex)
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+    ::com::sun::star::uno::Sequence<
+        ::com::sun::star::beans::PropertyValue>
+            GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex)const;
+    void    SetNumberingRuleByIndex(SwNumRule& rNumRule,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties, sal_Int32 nIndex)
+                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
     //SwClient
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
