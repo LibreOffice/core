@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-30 13:56:29 $
+ *  last change: $Author: mt $ $Date: 2001-12-06 16:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,40 +602,6 @@ void UnoDialogControl::ImplSetPosSize( uno::Reference< awt::XControl >& rxCtrl )
     uno::Reference < awt::XWindow > xW( rxCtrl, uno::UNO_QUERY );
     xW->setPosSize( nX, nY, nWidth, nHeight, awt::PosSize::POSSIZE );
 }
-
-void UnoDialogControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
-{
-    UnoControl::ImplSetPeerProperty( rPropName, rVal );
-
-    sal_uInt16 nType = GetPropertyId( rPropName );
-    if ( nType == BASEPROPERTY_ENABLED )
-    {
-        // #95241# Enable is recursive on all children.
-        // Wenn a control is disabled, but now enabled because of Dialog::Enable(),
-        // it's not possible to disable the control again, because
-        // the property will not change on second call "enabled = false".
-
-        // => set Property to all children
-
-        uno::Reference< container::XNameAccess > xNA( getModel(), uno::UNO_QUERY );
-        if ( xNA.is() )
-        {
-            uno::Sequence< ::rtl::OUString > aNames = xNA->getElementNames();
-            const ::rtl::OUString* pNames = aNames.getConstArray();
-            sal_uInt32 nCtrls = aNames.getLength();
-
-            for( sal_uInt32 n = 0; n < nCtrls; n++ )
-            {
-                uno::Any aA = xNA->getByName( pNames[n] );
-                uno::Reference< beans::XPropertySet > xPSet;
-                aA >>= xPSet;
-                if ( xPSet.is() )
-                    xPSet->setPropertyValue( rPropName, rVal );
-            }
-        }
-    }
-}
-
 
 void UnoDialogControl::dispose() throw(uno::RuntimeException)
 {
