@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:46:13 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ Resource RID_WRNHDLSC
         Text[ japanese ] = "ηΎε¨γ®θ΅¨γ γ‘γδΏε­γ•γ‚γΎγ—γγ€‚";
         Text[ chinese_traditional ] = "εªε„²ε­δΊ†η›®ε‰η„θ΅¨ζ Όγ€‚";
         Text[ arabic ] = "Κγ ΝέΩ ΗαΜΟζα ΗαΝΗαν έήΨ.";
-        Text[ greek ] = "Αποθηκεύτηκε μόνο ο τρέχων πίνακας.";
+        Text[ greek ] = "Αποθηκεύτηκε μόνο το τρέχον φύλλο.";
         Text[ korean ] = "ν™μ„±ν™”λ μ‹νΈλ§μ΄ μ €μ¥λμ—μµλ‹λ‹¤.";
         Text[ turkish ] = "Yalnύzca yόrόrlόkteki tablo kaydedildi.";
         Text[ language_user1 ] = " ";
@@ -139,6 +139,7 @@ Resource RID_WRNHDLSC
         };
 */
 };
+
 
 
 
