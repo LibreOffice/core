@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 13:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ FontNameDlg::FontNameDlg( Window *pParent ) :
     m_aRemoveButton.SetClickHdl( LINK( this, FontNameDlg, ClickBtnHdl ) );
     m_aImportButton.SetClickHdl( LINK( this, FontNameDlg, ClickBtnHdl ) );
     m_aFontBox.setDelPressedLink( LINK( this, FontNameDlg, DelPressedHdl ) );
+    m_aFontBox.SetSelectHdl( LINK( this, FontNameDlg, SelectHdl ) );
 
     init();
 }
@@ -313,6 +314,8 @@ void FontNameDlg::init()
     ::std::list< fontID > aFonts;
     m_rFontManager.getFontList( aFonts );
     m_aFontBox.Clear();
+    m_aRemoveButton.Enable( FALSE );
+    m_aRenameButton.Enable( FALSE );
 
     ::std::hash_map< OUString, int, OUStringHash > aFamilies;
     ::std::list< fontID >::iterator font_it;
@@ -361,6 +364,17 @@ void FontNameDlg::init()
     }
 }
 
+IMPL_LINK( FontNameDlg, SelectHdl, ListBox*, pBox )
+{
+    if( pBox == &m_aFontBox )
+    {
+        BOOL bEnable = m_aFontBox.GetSelectEntryCount() ? TRUE : FALSE;
+        m_aRemoveButton.Enable( bEnable );
+        m_aRenameButton.Enable( bEnable );
+    }
+    return 0;
+}
+
 IMPL_LINK( FontNameDlg, DelPressedHdl, ListBox*, pBox )
 {
     if( pBox == &m_aFontBox && m_aRemoveButton.IsEnabled() )
@@ -379,7 +393,7 @@ IMPL_LINK( FontNameDlg, ClickBtnHdl, Button*, pButton )
     {
         EndDialog();
     }
-    else if( pButton == &m_aRemoveButton && AreYouSure( this, RID_QUERY_REMOVEFONTFROMLIST ) )
+    else if( pButton == &m_aRemoveButton && AreYouSure( this, RID_QUERY_REMOVEFONTFROMLIST ) && m_aFontBox.GetSelectEntryCount() )
     {
         ::std::list< fontID > aRemoveIDs;
         for( i = 0; i < m_aFontBox.GetSelectEntryCount(); i++ )
@@ -396,7 +410,7 @@ IMPL_LINK( FontNameDlg, ClickBtnHdl, Button*, pButton )
         aDialog.Execute();
         init();
     }
-    else if( pButton == &m_aRenameButton )
+    else if( pButton == &m_aRenameButton && m_aFontBox.GetSelectEntryCount() )
     {
         for( i = 0; i < m_aFontBox.GetSelectEntryCount(); i++ )
         {
@@ -425,6 +439,7 @@ IMPL_LINK( FontNameDlg, ClickBtnHdl, Button*, pButton )
                     aQueryTxt.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%d1" ) ), String::CreateFromInt32( n+1 ) );
                     aQueryTxt.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%d2" ) ), String::CreateFromInt32( nFonts ) );
                 }
+                aQueryTxt.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), aFamily );
                 QueryString aQuery( this, aQueryTxt, aFamily, aChoices );
                 if( aQuery.Execute() )
                 {

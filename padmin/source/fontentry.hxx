@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 13:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ namespace padmin {
 
         DECL_LINK( ClickBtnHdl, Button* );
         DECL_LINK( DelPressedHdl, ListBox* );
+        DECL_LINK( SelectHdl, ListBox* );
 
         static String fillFontEntry( ::psp::FastPrintFontInfo& rInfo, const String& rFile, bool bAddRegular );
         static String fillFontEntry( const ::std::list< ::psp::FastPrintFontInfo >& rInfos, const String& rFile );
