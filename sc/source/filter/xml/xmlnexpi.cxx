@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-06 18:39:05 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,39 @@ void ScXMLNamedExpressionsContext::EndElement()
                     sal_Int32 nOffset(0);
                     if (ScXMLConverter::GetAddressFromString(
                         aCellAddress, (*aItr)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
-                        xNamedRanges->addNewByName((*aItr)->sName, sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+                    {
+                        try
+                        {
+                            xNamedRanges->addNewByName((*aItr)->sName, sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+                        }
+                        catch( uno::RuntimeException& r )
+                        {
+                            DBG_ERROR("here are some Named Ranges with the same name");
+                            uno::Reference < container::XIndexAccess > xIndex(xNamedRanges, uno::UNO_QUERY);
+                            if (xIndex.is())
+                            {
+                                sal_Int32 nMax(xIndex->getCount());
+                                sal_Bool bInserted(sal_False);
+                                sal_Int32 nCount(1);
+                                rtl::OUStringBuffer sName((*aItr)->sName);
+                                sName.append(sal_Unicode('_'));
+                                while (!bInserted && nCount <= nMax)
+                                {
+                                    rtl::OUStringBuffer sTemp(sName);
+                                    sTemp.append(rtl::OUString::valueOf(nCount));
+                                    try
+                                    {
+                                        xNamedRanges->addNewByName(sTemp.makeStringAndClear(), sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+                                        bInserted = sal_True;
+                                    }
+                                    catch( uno::RuntimeException& rE )
+                                    {
+                                        ++nCount;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     aItr++;
                 }
                 aItr = pNamedExpressions->begin();
