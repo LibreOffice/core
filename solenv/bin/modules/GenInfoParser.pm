@@ -2,9 +2,9 @@
 #
 #   $RCSfile: GenInfoParser.pm,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2001-09-24 13:48:40 $
+#   last change: $Author: hr $ $Date: 2001-09-26 09:50:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,7 +141,9 @@ sub get_value
     my ($key, $value, $sub_data_ref) = $self->walk_accesspath($access_path);
     return undef if !$key;
     $value = "" if !defined($value);
-    # trim trailing whitespaces
+    # trim line ends
+    $value =~ tr/\r\n//d;
+    # trim trailing whitespace
     $value =~ s/\s+$//;
     return $value;
 }
@@ -177,12 +179,15 @@ sub parse_block
     my $current_key = 0;
     my $line;
     while( $line = <$glob_ref> ) {
-        chomp $line;
-        $line =~ s/^\s+//;      # trim leading whitespace
-        next if $line =~ /^$/;  # skip empty lines
-        next if $line =~ /^#/;  # skip comment lines
-        last if $line =~ /^\}/; # return from block;
-        if ( $line =~ /^\{/ ) {
+        # this is the inner loop, any additional pattern matching will
+        # have a notable affect on runtime behavior
+        # clean up of $value is done in get_value()
+        my ($key, $value) = split(' ', $line, 2);
+        next if !$key;                  # skip empty lines
+        my $chr = substr($key, 0, 1);
+        next if $chr eq '#';            # skip comment lines
+        last if $chr eq '}';            # return from block;
+        if ( $chr eq '{' ) {
             if ( !$current_key ) {
                 croak("unexpected block start");
             }
@@ -193,9 +198,8 @@ sub parse_block
                 next;
             }
         }
-        my ($key, $value) = split(' ', $line, 2);
+        # sanity check
         croak("key $key is not well formed") if $key =~ /\//;
-        $value = undef if !$value;
         # normalize key for hash lookup
         $current_key = lc($key);
         # but we have to keep the original - not normalized - key, too
