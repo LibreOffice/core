@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbitmapcanvas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <basegfx/tools/canvastools.hxx>
 #endif
 
-#include "implbitmapcanvas.hxx"
+#include <implbitmapcanvas.hxx>
 
 
 using namespace ::drafts::com::sun::star;
@@ -104,7 +104,7 @@ namespace cppcanvas
             return ::basegfx::unotools::b2ISizeFromIntegerSize2D( mxBitmap->getSize() );
         }
 
-        BitmapCanvasSharedPtr ImplBitmapCanvas::cloneBitmapCanvas() const
+        CanvasSharedPtr ImplBitmapCanvas::clone() const
         {
             return BitmapCanvasSharedPtr( new ImplBitmapCanvas( *this ) );
         }

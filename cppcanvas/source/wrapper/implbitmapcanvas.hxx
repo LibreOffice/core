@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbitmapcanvas.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:59:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 #include <cppcanvas/bitmapcanvas.hxx>
 #endif
 
-#include "implcanvas.hxx"
+#include <implcanvas.hxx>
 
 
 namespace cppcanvas
@@ -98,7 +98,7 @@ namespace cppcanvas
 
             virtual ::basegfx::B2ISize      getSize() const;
 
-            virtual BitmapCanvasSharedPtr   cloneBitmapCanvas() const;
+            virtual CanvasSharedPtr         clone() const;
 
             // take compiler-provided default copy constructor
             //ImplBitmapCanvas(const ImplBitmapCanvas&);
