@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:31:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,8 @@ namespace
             /*128 SOT_FORMATSTR_ID_STARIMPRESS_8*/         { "application/x-vnd.oasis.openoffice.presentation", "Impress 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*129 SOT_FORMATSTR_ID_STARCALC_8*/            { "application/x-vnd.oasis.openoffice.spreadsheet", "Calc 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*130 SOT_FORMATSTR_ID_STARCHART_8*/           { "application/x-vnd.oasis.openoffice.chart", "Chart 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*131 SOT_FORMATSTR_ID_STARMATH_8*/            { "application/x-vnd.oasis.openoffice.formula", "Math 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+            /*131 SOT_FORMATSTR_ID_STARMATH_8*/            { "application/x-vnd.oasis.openoffice.math", "Math 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*132 SOT_FORMATSTR_ID_XFORMS */                { "application/x-openoffice-xforms;windows_formatname=\"??? Format\"", "???", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
             };
         return &aInstance[0];
         }
