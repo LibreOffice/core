@@ -155,7 +155,7 @@ public class XAccessibleEventLog implements XAccessibleEventListener {
                 logMessage(o, s + javax.accessibility.AccessibleState.SELECTED);
                 break;
             case AccessibleStateType.SHOWING:
-                logMessage(o, s + javax.accessibility.AccessibleState.SELECTED);
+                logMessage(o, s + javax.accessibility.AccessibleState.SHOWING);
                 break;
             case AccessibleStateType.VISIBLE:
                 logMessage(o, s + javax.accessibility.AccessibleState.VISIBLE);
