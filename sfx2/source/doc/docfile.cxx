@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:13:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2687,23 +2687,11 @@ const SfxVersionTableDtor* SfxMedium::GetVersionList()
 
         try
         {
-            uno::Reference < io::XStream > xStream = GetStorage()->openStreamElement( DEFINE_CONST_UNICODE( "VersionList" ),
-                    embed::ElementModes::READ );
-            if ( xStream.is() )
-            {
-                SvStream* pStr = utl::UcbStreamHelper::CreateStream( xStream );
-                pImp->pVersions = new SfxVersionTableDtor;
-                pImp->pVersions->Read( *pStr );
-                delete pStr;
-            }
+            SfxVersionTableDtor *pList = new SfxVersionTableDtor;
+            if ( SfxXMLVersList_Impl::ReadInfo( GetStorage(), pList ) )
+                pImp->pVersions = pList;
             else
-            {
-                SfxVersionTableDtor *pList = new SfxVersionTableDtor;
-                if ( SfxXMLVersList_Impl::ReadInfo( GetStorage(), pList ) )
-                    pImp->pVersions = pList;
-                else
-                    delete pList;
-            }
+                delete pList;
         }
         catch ( uno::Exception& )
         {
@@ -2719,23 +2707,11 @@ SfxVersionTableDtor* SfxMedium::GetVersionList( const uno::Reference < embed::XS
     SfxVersionTableDtor* pVersions = NULL;
     if( xStor.is() )
     {
-        uno::Reference < io::XStream > xStream = xStor->openStreamElement( DEFINE_CONST_UNICODE( "VersionList" ),
-                embed::ElementModes::READ );
-        if ( xStream.is() )
-        {
-            SvStream* pStr = utl::UcbStreamHelper::CreateStream( xStream );
-            pVersions = new SfxVersionTableDtor;
-            pVersions->Read( *pStr );
-            delete pStr;
-        }
+        SfxVersionTableDtor *pList = new SfxVersionTableDtor;
+        if ( SfxXMLVersList_Impl::ReadInfo( xStor, pList ) )
+            pVersions = pList;
         else
-        {
-            SfxVersionTableDtor *pList = new SfxVersionTableDtor;
-            if ( SfxXMLVersList_Impl::ReadInfo( xStor, pList ) )
-                pVersions = pList;
-            else
-                delete pList;
-        }
+            delete pList;
     }
 
     return pVersions;
