@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:09:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,60 @@ void ScMyShapesContainer::SetCellData( ScMyCell& rMyCell )
 void ScMyShapesContainer::Sort()
 {
     aShapeList.sort();
+}
+
+sal_Bool ScMyNoteShape::operator<(const ScMyNoteShape& aNote) const
+{
+    if( aPos.Tab() != aNote.aPos.Tab() )
+        return (aPos.Tab() < aNote.aPos.Tab());
+    else if( aPos.Row() != aNote.aPos.Row() )
+        return (aPos.Row() < aNote.aPos.Row());
+    else
+        return (aPos.Col() < aNote.aPos.Col());
+}
+
+ScMyNoteShapesContainer::ScMyNoteShapesContainer()
+    : aNoteShapeList()
+{
+}
+
+ScMyNoteShapesContainer::~ScMyNoteShapesContainer()
+{
+}
+
+void ScMyNoteShapesContainer::AddNewNote( const ScMyNoteShape& aNote )
+{
+    aNoteShapeList.push_back(aNote);
+}
+
+sal_Bool ScMyNoteShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
+{
+    sal_Int16 nTable = rCellAddress.Sheet;
+    if( !aNoteShapeList.empty() )
+    {
+        ScUnoConversion::FillApiAddress( rCellAddress, aNoteShapeList.begin()->aPos );
+        return (nTable == rCellAddress.Sheet);
+    }
+    return sal_False;
+}
+
+void ScMyNoteShapesContainer::SetCellData( ScMyCell& rMyCell )
+{
+    rMyCell.xNoteShape.clear();
+    ScAddress aAddress;
+    ScUnoConversion::FillScAddress( aAddress, rMyCell.aCellAddress );
+
+    ScMyNoteShapeList::iterator aItr = aNoteShapeList.begin();
+    while( (aItr != aNoteShapeList.end()) && (aItr->aPos == aAddress) )
+    {
+        rMyCell.xNoteShape = aItr->xShape;
+        aItr = aNoteShapeList.erase(aItr);
+    }
+}
+
+void ScMyNoteShapesContainer::Sort()
+{
+    aNoteShapeList.sort();
 }
 
 //==============================================================================
@@ -599,6 +653,7 @@ ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport
     : rExport(rTempXMLExport),
     pCellItr(NULL),
     pShapes(NULL),
+    pNoteShapes(NULL),
     pMergedRanges(NULL),
     pAreaLinks(NULL),
     pEmptyDatabaseRanges(NULL),
@@ -624,6 +679,7 @@ void ScMyNotEmptyCellsIterator::Clear()
     }
     pCellItr = NULL;
     pShapes = NULL;
+    pNoteShapes = NULL;
     pMergedRanges = NULL;
     pAreaLinks = NULL;
     pEmptyDatabaseRanges = NULL;
@@ -744,6 +800,8 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles
     UpdateAddress( aAddress );
     if( pShapes )
         pShapes->UpdateAddress( aAddress );
+    if( pNoteShapes )
+        pNoteShapes->UpdateAddress( aAddress );
     if( pEmptyDatabaseRanges )
         pEmptyDatabaseRanges->UpdateAddress( aAddress );
     if( pMergedRanges )
@@ -761,6 +819,8 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles
         SetCellData( aCell, aAddress );
         if( pShapes )
             pShapes->SetCellData( aCell );
+        if( pNoteShapes )
+            pNoteShapes->SetCellData( aCell );
         if( pEmptyDatabaseRanges )
             pEmptyDatabaseRanges->SetCellData( aCell );
         if( pMergedRanges )
