@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:55:45 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDOBJECTCLIPBOARDCREATOR_HPP_
+#include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
+#endif
 
 #ifdef PCH
 #include "ui_pch.hxx"
@@ -235,23 +239,41 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             uno::Reference < io::XInputStream > xStm;
             TransferableObjectDescriptor    aObjDesc;
 
-            //TODO/MBA: testing
-            if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) &&
-                ( aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ||
-                aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) ) )
+            if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) )
             {
                 ::rtl::OUString aName;
-                uno::Reference < embed::XEmbeddedObject > xObj = GetViewData()->GetDocShell()->
-                        GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
-/*
-            if( aDataHelper.GetTransferableObjectDescriptor(
-                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ))
-            {
-                UniString aEmptyStr;
-                SotStorage* xStore = new SotStorage( aEmptyStr, STREAM_STD_READWRITE );
-                SvInPlaceObjectRef xIPObj= &((SvFactory*)SvInPlaceObject::ClassFactory())
-                    ->CreateAndInit( rxTransferable, xStore);
-                if ( xIPObj.Is() )*/
+                uno::Reference < embed::XEmbeddedObject > xObj;
+
+                if ( aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm )
+                  || aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) )
+                {
+                    xObj = GetViewData()->GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
+                }
+                else
+                {
+                    try
+                    {
+                        uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                        uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
+                            ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(
+                                            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEObjectSystemCreator") ) ),
+                            uno::UNO_QUERY_THROW );
+
+                        embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
+                                                            xTmpStor,
+                                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DummyName" ) ),
+                                                            uno::Sequence< beans::PropertyValue >() );
+
+                        // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
+                        // for example whether the object should be an iconified one
+                        xObj = aInfo.Object;
+                        if ( xObj.is() )
+                            GetViewData()->GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                    }
+                    catch( uno::Exception& )
+                    {}
+                }
+
                 if ( xObj.is() )
                 {
                     PasteObject( aPos, xObj, &aObjDesc.maSize );
