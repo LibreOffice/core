@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: vg $ $Date: 2002-01-29 17:12:33 $
+#   last change: $Author: vg $ $Date: 2002-02-25 17:36:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.45 $ ';
+$id_str = ' $Revision: 1.46 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -109,10 +109,14 @@ $StandDir = &get_stand_dir();
 $build_from = '';
 $build_from_opt = '';
 $build_since = '';
+$dlv_switch = '';
+
 &get_options;
+
+$deliver_commando = $ENV{DELIVER};
+$deliver_commando .= ' '. $dlv_switch;
 $ENV{mk_tmp}++;
 %prj_platform = ();
-#@dirs_to_make = '';
 $check_error_string = '';
 $dmake = '';
 $echo = '';
@@ -234,9 +238,9 @@ sub BuildAll {
             cwd();
             &BuildPrj($PrjDir) if (!$deliver);
             if ($cmd_file) {
-                print "deliver\n";
+                print "$deliver_commando\n";
             } else {
-                system ("$ENV{DELIVER}") if (!$show);
+                system ("$deliver_commando") if (!$show);
             };
             print $check_error_string;
             &RemoveFromDependencies($Prj, \%ParentDepsHash);
@@ -670,7 +674,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:   build [-help|-all|-from|-from_opt|since prj_name|-file file_name] \n";
+    print STDERR "Syntax:   build [--help|-all|-from|-from_opt|since prj_name|-file file_name|-dlv[_switch] dlvswitch] \n";
     print STDERR "Example:  build -from sfx2\n";
     print STDERR "              - build all projects including current one from sfx2\n";
     print STDERR "Example:  build -from_opt sfx2\n";
@@ -682,6 +686,7 @@ sub usage {
     print STDERR "      -show       - show what is going to be built\n";
     print STDERR "      -file       - generate command file file_name\n";
     print STDERR "      -deliver    - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
+    print STDERR "      -dlv_switch - use deliver with the switch specified\n";
     print STDERR "      -help       - print help info\n";
     print STDERR "Default:          - build current project\n";
     print STDERR "Keys that are not listed above would be passed to dmake\n";
@@ -699,15 +704,17 @@ sub get_options {
         $arg =~ /^-all$/        and $BuildAllParents = 1            and next;
         $arg =~ /^-show$/       and $show = 1                       and next;
         $arg =~ /^-deliver$/    and $deliver = 1                    and next;
+        $arg =~ /^-dlv_switch$/ and $dlv_switch = &get_switch_options   and next;
+        $arg =~ /^-dlv$/        and $dlv_switch = &get_switch_options   and next;
         $arg =~ /^-file$/       and $cmd_file = shift @ARGV         and next;
         $arg =~ /^-from$/       and $BuildAllParents = 1
                                 and $build_from = shift @ARGV       and next;
         $arg =~ /^-from_opt$/   and $BuildAllParents = 1
                                 and $build_from_opt = shift @ARGV   and next;
 
-        $arg =~ /^-since$/  and $BuildAllParents = 1
+        $arg =~ /^-since$/      and $BuildAllParents = 1
                                 and $build_since = shift @ARGV      and next;
-        $arg =~ /^-help$/       and &usage                          and exit(0);
+        $arg =~ /^--help$/      and &usage                          and exit(0);
         push (@dmake_args, $arg);
     };
     if ($build_from && $build_from_opt) {
@@ -717,7 +724,25 @@ sub get_options {
     if ($build_from && $build_since) {
         &print_error('Switches -from an -since collision');
     };
-    #&print_error ('No file name supplied') if (!$cmd_file);
     @ARGV = @dmake_args;
     $cmd_file = '' if ($show);
+};
+
+#
+# get all options without '-'
+#
+sub get_switch_options {
+    my $string = '';
+    my $option = '';
+    while ($option = shift @ARGV) {
+        if (!($option =~ /^-/)) {
+            $string .= $option;
+            $string .= ' ';
+        } else {
+            unshift(@ARGV, $option);
+            last;
+        };
+    };
+    $string =~ s/\s$//;
+    return $string;
 };
