@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-03-01 19:32:55 $
+ *  last change: $Author: er $ $Date: 2001-03-01 19:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2366,6 +2366,15 @@ void ScCompiler::Factor()
         }
         else if ( eOp == ocClose )
         {
+            SetError( errParameterExpected );
+        }
+        else if ( eOp == ocMissing )
+        {   // #84460# May occur if imported from Xcl.
+            // The real value for missing parameters depends on the function
+            // where it is used, interpreter would have to handle this.
+            // If it does remove this error case here, that could also be the
+            // time to generate ocMissing in between subsequent ocSep.
+            // Xcl import should map missings to values if possible.
             SetError( errParameterExpected );
         }
         else
