@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtopt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: os $ $Date: 2000-10-10 08:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@ class SwPrintOptions : public utl::ConfigItem
          bPrintSingleJobs    :1,
 
          bPaperFromSetup     :1;
+
+         sal_Bool           bIsWeb;
 
     sal_uInt32  nPrintPostIts;
     rtl::OUString       sFaxName;
