@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:45:04 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
@@ -941,7 +940,8 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
     (
         SfxStyleSheetBase*      pSrcStyle,
         SfxStyleSheetBasePool*  pSrcPool,
-        SfxStyleSheetBasePool*  pDestPool
+        SfxStyleSheetBasePool*  pDestPool,
+        const SvULONGTable*     pFormatExchangeList
     )
 {
     if ( !pSrcStyle || !pDestPool || !pSrcPool )
@@ -959,9 +959,24 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
     if ( !pDestStyle )
     {
         const String  aStrParent = pSrcStyle->GetParent();
+        const SfxItemSet& rSrcSet = pSrcStyle->GetItemSet();
 
         pDestStyle = &pDestPool->Make( aStrSrcStyle, eFamily, SFXSTYLEBIT_USERDEF );
-        pDestStyle->GetItemSet().Put( pSrcStyle->GetItemSet() );
+        SfxItemSet& rDestSet = pDestStyle->GetItemSet();
+        rDestSet.Put( rSrcSet );
+
+        // #b5017505# number format exchange list has to be handled here, too
+        // (only called for cell styles)
+
+        const SfxPoolItem* pSrcItem;
+        if ( pFormatExchangeList &&
+             rSrcSet.GetItemState( ATTR_VALUE_FORMAT, FALSE, &pSrcItem ) == SFX_ITEM_SET )
+        {
+            ULONG nOldFormat = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
+            ULONG* pNewFormat = static_cast<ULONG*>(pFormatExchangeList->Get( nOldFormat ));
+            if (pNewFormat)
+                rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, *pNewFormat ) );
+        }
 
         // ggF. abgeleitete Styles erzeugen, wenn nicht vorhanden:
 
@@ -970,7 +985,7 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
              !pDestPool->Find( aStrParent, eFamily ) )
         {
             lcl_CopyStyleToPool( pSrcPool->Find( aStrParent, eFamily ),
-                                 pSrcPool, pDestPool );
+                                 pSrcPool, pDestPool, pFormatExchangeList );
         }
 
         pDestStyle->SetParent( aStrParent );
@@ -997,7 +1012,8 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
         SfxStyleSheetBase* pStyleCpy = lcl_CopyStyleToPool( pStyle,
                                                             pSrcDoc->GetStyleSheetPool(),
-                                                            pDestDoc->GetStyleSheetPool() );
+                                                            pDestDoc->GetStyleSheetPool(),
+                                                            pDestDoc->GetFormatExchangeList() );
 
         pDestPattern->SetStyleSheet( (ScStyleSheet*)pStyleCpy );
     }
@@ -1029,13 +1045,14 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
                         ScStyleSheetPool* pSrcSPool = pSrcDoc->GetStyleSheetPool();
                         ScStyleSheetPool* pDestSPool = pDestDoc->GetStyleSheetPool();
+                        const SvULONGTable* pFormatExchangeList = pDestDoc->GetFormatExchangeList();
                         USHORT nStlCnt = pOldData->Count();
                         for (USHORT i=0; i<nStlCnt; i++)
                         {
                             String aName = pOldData->GetEntry(i)->GetStyle();
                             SfxStyleSheetBase* pSrcStl =
                                 pSrcDoc->GetStyleSheetPool()->Find(aName, SFX_STYLE_FAMILY_PARA);
-                            lcl_CopyStyleToPool( pSrcStl, pSrcSPool, pDestSPool );
+                            lcl_CopyStyleToPool( pSrcStl, pSrcSPool, pDestSPool, pFormatExchangeList );
                         }
                     }
                 }
