@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fairrwlock.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:51 $
+ *  last change: $Author: as $ $Date: 2001-05-04 13:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 
 #ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
+#include <macros/debug.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
