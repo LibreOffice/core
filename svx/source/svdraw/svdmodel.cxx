@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:03:07 $
+ *  last change: $Author: dl $ $Date: 2000-11-16 14:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,10 +846,27 @@ void SdrModel::DisposeLoadedModels()
 void SdrModel::SetTextDefaults() const
 {
     pItemPool->SetPoolDefaultItem( SvxFontItem(SdrEngineDefaults::GetFontFamily(),
-                                   SdrEngineDefaults::GetFontName(), String(),
-                                   PITCH_DONTKNOW, gsl_getSystemTextEncoding()));
+                                   SdrEngineDefaults::GetFontName(),
+                                   String(),
+                                   PITCH_DONTKNOW,
+                                   gsl_getSystemTextEncoding(),
+                                   EE_CHAR_FONTINFO ));
+    pItemPool->SetPoolDefaultItem( SvxFontItem(SdrEngineDefaults::GetFontFamily(),
+                                   UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "MS Mincho" ) ),
+                                   String(),
+                                   PITCH_DONTKNOW,
+                                   gsl_getSystemTextEncoding(),
+                                   EE_CHAR_FONTINFO_CJK ));
+    pItemPool->SetPoolDefaultItem( SvxFontItem(SdrEngineDefaults::GetFontFamily(),
+                                   SdrEngineDefaults::GetFontName(),
+                                   String(),
+                                   PITCH_DONTKNOW,
+                                   gsl_getSystemTextEncoding(),
+                                   EE_CHAR_FONTINFO_CTL ));
+    pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT ) );
+    pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+    pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt, 100, EE_CHAR_FONTHEIGHT_CTL ) );
     pItemPool->SetPoolDefaultItem( SvxColorItem(SdrEngineDefaults::GetFontColor()) );
-    pItemPool->SetPoolDefaultItem( SvxFontHeightItem(nDefTextHgt) );
 }
 
 SdrOutliner& SdrModel::GetDrawOutliner(const SdrTextObj* pObj) const
