@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:46:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             pOlView->PrepareClose();
 
             SFX_REQUEST_ARG( rReq, pFullScreen, SfxBoolItem, ATTR_PRESENT_FULLSCREEN, FALSE );
-            const BOOL bFullScreen = pFullScreen ? pFullScreen->GetValue() : GetDoc()->GetPresFullScreen();
+            const BOOL bFullScreen = pFullScreen ? pFullScreen->GetValue() : GetDoc()->getPresentationSettings().mbFullScreen;
 
             if( bFullScreen )
             {
