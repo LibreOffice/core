@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:43:16 $
+ *  last change: $Author: mib $ $Date: 2001-02-09 13:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ void __EXPORT SwGlobalDocShell::FillRegInfo( SvEmbeddedRegistryInfo * pInfo)
 {
     SfxInPlaceObject::FillRegInfo( pInfo );
     pInfo->aObjName = String::CreateFromAscii("StarWriterGlobalDocument");
-    pInfo->nMajorVers = 5;
+    pInfo->nMajorVers = 6;
     pInfo->nMinorVers = 0;
     pInfo->aHumanShortTypeName = SW_RESSTR(STR_HUMAN_SWGLOBDOC_NAME);
     pInfo->nIconResId =
@@ -154,6 +154,9 @@ void __EXPORT SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/02/06 15:43:16  mib
+    real 6.0 file format
+
     Revision 1.1.1.1  2000/09/18 17:14:38  hr
     initial import
 
