@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:12:03 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
  // include ---------------------------------------------------------------
 
 #include "dialogs.hrc"
@@ -362,6 +361,22 @@ TabPage OFA_TP_VIEW
         Size = MAP_APPFONT ( 118 , 8 ) ;
         Text [ de ] = "Benutzte S~chriftarten anzeigen" ;
         Text [ en-US ] = "Show font h~istory" ;
+    };
+
+    FixedLine FL_RENDERING
+    {
+        Pos = MAP_APPFONT ( 6 , ROW_FL_REDERING ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text [ de ] = "Grafikausgabe" ;
+        Text [ en-US ] = "Graphics output";
+    };
+
+    CheckBox CB_USE_HARDACCELL
+    {
+        Pos = MAP_APPFONT ( 12, ROW_CB_USE_HARDACCELL ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text [ de ] = "Hardwarebeschleunigung verwenden" ;
+        Text [ en-US ] = "Use hardware acceleration" ;
     };
 
     FixedLine FL_WORKINGSET
