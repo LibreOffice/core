@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:14:54 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,10 +179,13 @@ public:
 
         OD 02.12.2002 #103492#
         paint of preview is prepared for a new zoom factor
+        OD 24.09.2003 #i19975# - zoom type has also been considered.
+        Thus, add new parameter <_eZoomType>
 
         @author OD
     */
-    void AdjustPreviewToNewZoom( const sal_uInt16 nZoomFactor );
+    void AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
+                                 const SvxZoomType _eZoomType );
 
     const Rectangle&           GetPaintedPreviewDocRect() const
                                     { return maPaintedPreviewDocRect;}
