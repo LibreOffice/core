@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuicfgsupplier.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 11:51:16 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::embed;
-using namespace drafts::com::sun::star::ui;
-using namespace drafts::com::sun::star::frame;
+using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::frame;
 
 namespace framework
 {
@@ -176,14 +176,14 @@ DEFINE_XINTERFACE_4                    (    ModuleUIConfigurationManagerSupplier
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                          ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                                           ),
                                             DIRECT_INTERFACE( css::lang::XComponent                                             ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XModuleUIConfigurationManagerSupplier )
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier )
                                         )
 
 DEFINE_XTYPEPROVIDER_4                  (   ModuleUIConfigurationManagerSupplier                                ,
                                             css::lang::XTypeProvider                                            ,
                                             css::lang::XServiceInfo                                             ,
                                             css::lang::XComponent                                               ,
-                                            drafts::com::sun::star::ui::XModuleUIConfigurationManagerSupplier
+                                            ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier
                                         )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ModuleUIConfigurationManagerSupplier                    ,
