@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 18:15:37 $
+ *  last change: $Author: nn $ $Date: 2001-10-05 14:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,10 @@ public:
 
     void            SetPageSize( USHORT nPageNo, const Size& rSize );
     ULONG           GetDefTextHeight() const;
+
+                    //  GetVisibleName: name for navigator etc: GetPersistName or GetName
+                    //  (ChartListenerCollection etc. must use GetPersistName directly)
+    static String   GetVisibleName( SdrObject* pObj );
 
     SdrObject*      GetNamedObject( const String& rName, USHORT nId, USHORT& rFoundTab ) const;
     String          GetNewGraphicName() const;

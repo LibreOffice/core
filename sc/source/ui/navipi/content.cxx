@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-26 15:31:31 $
+ *  last change: $Author: nn $ $Date: 2001-10-05 14:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,7 +810,7 @@ void ScContentTree::GetDrawNames( USHORT nType, USHORT nId )
                 {
                     if ( pObject->GetObjIdentifier() == nId )
                     {
-                        String aName = pObject->GetName();
+                        String aName = ScDrawLayer::GetVisibleName( pObject );
                         if (aName.Len())
                             InsertContent( nType, aName );
                     }
@@ -1022,7 +1022,7 @@ BOOL ScContentTree::DrawNamesChanged( USHORT nType, USHORT nId )
                             bEqual = FALSE;
                         else
                         {
-                            if ( pObject->GetName() != GetEntryText(pEntry) )
+                            if ( ScDrawLayer::GetVisibleName( pObject ) != GetEntryText(pEntry) )
                                 bEqual = FALSE;
 
                             pEntry = NextSibling( pEntry );

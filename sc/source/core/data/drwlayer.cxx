@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 18:16:16 $
+ *  last change: $Author: nn $ $Date: 2001-10-05 14:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1328,6 +1328,22 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
         }
 }
 
+// static
+String ScDrawLayer::GetVisibleName( SdrObject* pObj )
+{
+    if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
+    {
+        //  For OLE, always use persist name as long as the visible name
+        //  isn't accessible to change (preserve old behavior, otherwise
+        //  there could be duplicate names that can't be changed).
+        //  All OLE objects should appear in Navigator etc.,
+        //  so persist name must at least be used if no name is set.
+
+        return static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
+    }
+    return pObj->GetName();
+}
+
 SdrObject* ScDrawLayer::GetNamedObject( const String& rName, USHORT nId, USHORT& rFoundTab ) const
 {
     USHORT nTabCount = GetPageCount();
@@ -1342,7 +1358,7 @@ SdrObject* ScDrawLayer::GetNamedObject( const String& rName, USHORT nId, USHORT&
             while (pObject)
             {
                 if ( nId == 0 || pObject->GetObjIdentifier() == nId )
-                    if ( pObject->GetName() == rName )
+                    if ( GetVisibleName( pObject ) == rName )
                     {
                         rFoundTab = nTab;
                         return pObject;
