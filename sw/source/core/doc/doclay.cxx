@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:34:38 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 10:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1604,6 +1604,12 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     // dem Object (Grafik/Ole) absatzgebunden in den neuen Rahmen,
     // Frames erzeugen.
 
+    // OD 27.11.2003 #112045# - Keep layer ID of drawing object before removing
+    // its frames.
+    // Note: The layer ID is passed to the undo and have to be the correct value.
+    //       Removing the frames of the drawing object changes its layer.
+    const SdrLayerID nLayerId = rSdrObj.GetLayer();
+
     pOldFmt->DelFrms();
 
     //Bei InCntnt's wird es spannend: Das TxtAttribut muss
@@ -1626,7 +1632,6 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_SURROUND );
 
     // Den Rahmen ggf. in den Hintergrund schicken.
-    sal_Int8 nLayerId = rSdrObj.GetLayer();
     // OD 02.07.2003 #108784# - consider 'invisible' hell layer.
     if ( GetHellId() != nLayerId &&
          GetInvisibleHellId() != nLayerId )
