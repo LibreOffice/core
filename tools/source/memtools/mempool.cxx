@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mempool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2002-05-21 20:30:47 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 
 // -----------------------------------------------------------------------
 
-#if ( __ALIGNMENT8 > 4 )
-#define MEMPOOL_ALIGNMENT    __ALIGNMENT8
+#if ( SAL_TYPES_ALIGNMENT8 > 4 )
+#define MEMPOOL_ALIGNMENT    SAL_TYPES_ALIGNMENT8
 #else
 #define MEMPOOL_ALIGNMENT    4
 #endif
@@ -87,7 +87,7 @@ struct FixedMemBlock
     USHORT          nFirst;
     USHORT          nDummyAlign1;
     FixedMemBlock*  pNext;
-#if (__SIZEOFPOINTER == 4) && (__ALIGNMENT8 == 8)
+#if (SAL_TYPES_SIZEOFPOINTER == 4) && (SAL_TYPES_ALIGNMENT8 == 8)
     void*           pDummyAlign2;
 #endif
     char            aData[1];
