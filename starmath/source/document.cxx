@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 10:25:21 $
+ *  last change: $Author: tl $ $Date: 2001-03-23 08:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+
+#include <vcl/mapunit.hxx>
+#include <vcl/mapmod.hxx>
+
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -188,6 +192,9 @@
 #endif
 #ifndef VIEW_HXX
 #include <view.hxx>
+#endif
+#ifndef UTILITY_HXX
+#include <utility.hxx>
 #endif
 #ifndef FORMAT_HXX
 #include <format.hxx>
@@ -393,21 +400,20 @@ EditEngine& SmDocShell::GetEditEngine()
 
         Font aFont( Application::GetSettings().GetStyleSettings().GetAppFont() );
 
-        Size aFntSize( /*Application::GetDefaultDevice()->PixelToLogic( */
-                            aFont.GetSize()/*, MapMode( MAP_100MM ) )*/);
-
-        long nFntHeight = aFntSize.Height();
-
         pEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                     aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
                     EE_CHAR_FONTINFO ) );
-        pEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT ) );
-        pEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
-        pEditEngineItemPool->SetPoolDefaultItem(
-                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+
+        SvxFontHeightItem aFontHeigt(
+                        Application::GetDefaultDevice()->LogicToPixel(
+                        Size( 0, 10 ), MapMode( MAP_POINT ) ).Height(), 100,
+                        EE_CHAR_FONTHEIGHT );
+        pEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
+        aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CJK );
+        pEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
+        aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CTL );
+        pEditEngineItemPool->SetPoolDefaultItem( aFontHeigt );
 
         pEditEngine = new EditEngine( pEditEngineItemPool );
 
@@ -428,7 +434,8 @@ EditEngine& SmDocShell::GetEditEngine()
         pEditEngine->EraseVirtualDevice();
         pEditEngine->ClearModifyFlag();
 
-        // forces new settings to be used
+        // forces new settings to be used if the itempool was modified
+        // after cthe creation of the EditEngine
         //pEditEngine->Clear(); //#77957 incorrect font size
     }
     return *pEditEngine;
