@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+#   last change: $Author: cl $ $Date: 2000-09-28 12:43:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,8 @@ CXXFILES =				\
         unobtabl.cxx	\
         unottabl.cxx	\
         unomtabl.cxx	\
-        unodtabl.cxx
+        unodtabl.cxx	\
+        unontabl.cxx
 
 SLOFILES =	\
         $(SLO)$/unoshape.obj	\
@@ -115,7 +116,8 @@ SLOFILES =	\
         $(SLO)$/unobtabl.obj	\
         $(SLO)$/unottabl.obj	\
         $(SLO)$/unomtabl.obj	\
-        $(SLO)$/unodtabl.obj
+        $(SLO)$/unodtabl.obj	\
+        $(SLO)$/unontabl.obj
 
 SRSNAME=unodraw
 SRCFILES =  \

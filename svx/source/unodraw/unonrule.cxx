@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: cl $ $Date: 2000-09-28 12:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,24 +143,32 @@ using namespace ::vos;
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoNumberingRules );
 
 SvxUnoNumberingRules::SvxUnoNumberingRules( SdrModel* pModel ) throw() :
-    pNumRule(0)
+    mpBulletItem(0)
 {
     if( pModel )
     {
         SvxNumRule* pDefaultRule = ((SvxNumBulletItem*) pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule();
         DBG_ASSERT( pDefaultRule, "No default SvxNumRule!" );
-        pNumRule = new SvxNumRule( *pDefaultRule );
+        DBG_ASSERT( pDefaultRule, "No default SvxNumRule!" );
+        if( pDefaultRule )
+        {
+            mpBulletItem = new SvxNumBulletItem( *pDefaultRule );
+            mbOwnRule = sal_True;
+        }
     }
 }
 
-SvxUnoNumberingRules::SvxUnoNumberingRules(const SvxNumRule& rRule) throw() :
-    pNumRule(new SvxNumRule(rRule))
+SvxUnoNumberingRules::SvxUnoNumberingRules(SvxNumBulletItem* pBulletItem) throw() :
+    mpBulletItem(pBulletItem), mbOwnRule(sal_False)
 {
 }
 
 SvxUnoNumberingRules::~SvxUnoNumberingRules() throw()
 {
-    delete pNumRule;
+    // if where not inserted yet, we have to clean up
+    // ourself
+    if( mbOwnRule )
+        delete mpBulletItem;
 }
 
 
@@ -170,6 +178,7 @@ void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    SvxNumRule* pNumRule = GetNumRule();
     if(pNumRule == NULL)
         throw uno::RuntimeException();
 
@@ -191,6 +200,7 @@ sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( uno::RuntimeException
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    SvxNumRule* pNumRule = GetNumRule();
     if(pNumRule == NULL)
         throw uno::RuntimeException();
 
@@ -206,6 +216,7 @@ uno::Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    SvxNumRule* pNumRule = GetNumRule();
     if(pNumRule->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
         Index++;
 
@@ -225,11 +236,12 @@ uno::Type SAL_CALL SvxUnoNumberingRules::getElementType()
 
 sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( uno::RuntimeException )
 {
-    return pNumRule != NULL;
+    return mpBulletItem != NULL;
 }
 
 uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sal_Int32 nIndex) const throw()
 {
+    SvxNumRule* pNumRule = GetNumRule();
     if(pNumRule == NULL)
         return uno::Sequence< beans::PropertyValue >(0);
 
@@ -339,6 +351,7 @@ uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByInde
 void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex)
     throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
+    SvxNumRule* pNumRule = GetNumRule();
     if(pNumRule == NULL)
         throw uno::RuntimeException();
 
@@ -500,4 +513,17 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
     }
 }
 
+// XNamed
+OUString SAL_CALL SvxUnoNumberingRules::getName() throw(uno::RuntimeException)
+{
+    OUString aName;
+    if( mpBulletItem )
+        aName = mpBulletItem->getName();
+    return aName;
+}
 
+void SAL_CALL SvxUnoNumberingRules::setName( const OUString& aName ) throw(uno::RuntimeException)
+{
+    if( mpBulletItem )
+        mpBulletItem->setName( aName );
+}
