@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiPropertySet.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ module com {  module sun {  module star {  module beans {
 
 /** provides access to multiple properties with a single call.
  */
-interface XMultiPropertySet: com::sun::star::uno::XInterface
+published interface XMultiPropertySet: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
