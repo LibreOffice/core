@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-19 18:08:48 $
+ *  last change: $Author: ssa $ $Date: 2002-11-20 12:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,7 +1455,7 @@ int Printer::GetPaperInfoCount() const
     if( ! mpInfoPrinter )
         return 0;
     if( ! mpInfoPrinter->m_bPapersInit )
-        mpInfoPrinter->InitPaperFormats();
+        mpInfoPrinter->InitPaperFormats( maJobSetup.ImplGetConstData() );
     return mpInfoPrinter->m_aPaperFormats.size();
 }
 
@@ -1466,7 +1466,7 @@ const vcl::PaperInfo& Printer::GetPaperInfo( int nPaper ) const
     if( ! mpInfoPrinter )
         return ImplGetEmptyPaper();
     if( ! mpInfoPrinter->m_bPapersInit )
-        mpInfoPrinter->InitPaperFormats();
+        mpInfoPrinter->InitPaperFormats( maJobSetup.ImplGetConstData() );
     if( mpInfoPrinter->m_aPaperFormats.empty() || nPaper < 0 || nPaper >= mpInfoPrinter->m_aPaperFormats.size() )
         return ImplGetEmptyPaper();
     return mpInfoPrinter->m_aPaperFormats[nPaper];
@@ -1487,7 +1487,7 @@ BOOL Printer::SetPaperFromInfo( const vcl::PaperInfo& rInfo )
 
 int Printer::GetLandscapeAngle() const
 {
-    return mpInfoPrinter ? mpInfoPrinter->GetLandscapeAngle() : 900;
+    return mpInfoPrinter ? mpInfoPrinter->GetLandscapeAngle( maJobSetup.ImplGetConstData() ) : 900;
 }
 
 // -----------------------------------------------------------------------
@@ -1497,7 +1497,7 @@ const vcl::PaperInfo& Printer::GetCurrentPaperInfo() const
     if( ! mpInfoPrinter )
         return ImplGetEmptyPaper();
     if( ! mpInfoPrinter->m_bPapersInit )
-        mpInfoPrinter->InitPaperFormats();
+        mpInfoPrinter->InitPaperFormats( maJobSetup.ImplGetConstData() );
     if( mpInfoPrinter->m_aPaperFormats.empty() )
         return ImplGetEmptyPaper();
 
