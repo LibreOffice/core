@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:35:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,15 +122,13 @@ SFX_IMPL_XINTERFACE_2( BindDispatch_Impl, OWeakObject, ::com::sun::star::frame::
 SFX_IMPL_XTYPEPROVIDER_2( BindDispatch_Impl, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
 
 //-----------------------------------------------------------------------------
-BindDispatch_Impl::BindDispatch_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > & rDisp, const ::com::sun::star::util::URL& rURL, SfxStateCache *pStateCache )
+BindDispatch_Impl::BindDispatch_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > & rDisp, const ::com::sun::star::util::URL& rURL, SfxStateCache *pStateCache, const SfxSlot* pS )
     : xDisp( rDisp )
     , aURL( rURL )
     , pCache( pStateCache )
-    , pSlot( pCache->aSlotServ.GetSlot() )
+    , pSlot( pS )
 {
-    if ( !pSlot )
-        pSlot = SFX_SLOTPOOL().GetSlot( pCache->GetId() );
-    DBG_ASSERT( pSlot, "Unknown slot!");
+    DBG_ASSERT( pCache && pSlot, "Invalid BindDispatch!");
     aStatus.IsEnabled = sal_True;
 }
 
@@ -154,16 +152,19 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
         pCache->Invalidate( sal_True );
     else
     {
-        pCache->Invalidate( sal_False );
+        SfxPoolItem *pItem=NULL;
+        sal_uInt16 nId = pCache->GetId();
+        SfxItemState eState = eState = SFX_ITEM_DISABLED;
+        // pCache->Invalidate( sal_False );
         if ( !aStatus.IsEnabled )
-            pCache->SetState_Impl( SFX_ITEM_DISABLED, NULL );
+        {
+            // default
+        }
         else if (aStatus.State.hasValue())
         {
-            sal_uInt16 nId = pCache->GetId();
-            SfxItemState eState = SFX_ITEM_AVAILABLE;
+            eState = SFX_ITEM_AVAILABLE;
             ::com::sun::star::uno::Any aAny = aStatus.State;
 
-            SfxPoolItem *pItem=NULL;
             ::com::sun::star::uno::Type pType = aAny.getValueType();
             if ( pType == ::getBooleanCppuType() )
             {
@@ -201,16 +202,20 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
                 else
                     pItem = new SfxVoidItem( nId );
             }
-
-            pCache->SetState_Impl( eState, pItem );
-            delete pItem;
         }
         else
         {
             // DONTCARE status
-            SfxVoidItem aVoid(0);
-            pCache->SetState_Impl( SFX_ITEM_UNKNOWN, &aVoid );
+            pItem = new SfxVoidItem(0);
+            eState = SFX_ITEM_UNKNOWN;
         }
+
+        for ( SfxControllerItem *pCtrl = pCache->GetItemLink();
+            pCtrl;
+            pCtrl = pCtrl->GetItemLink() )
+            pCtrl->StateChanged( nId, eState, pItem );
+
+       delete pItem;
     }
 }
 
@@ -252,6 +257,7 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
     pDispatch( 0 ),
     nId(nFuncId),
     pController(0),
+    pInternalController(0),
     pLastItem( 0 ),
     eLastState( 0 ),
     bItemVisible( sal_True )
@@ -273,7 +279,7 @@ SfxStateCache::~SfxStateCache()
 {
     DBG_MEMTEST();
     DBG_DTOR(SfxStateCache, 0);
-    DBG_ASSERT( pController == 0, "es sind noch Controller angemeldet" );
+    DBG_ASSERT( pController == 0 && pInternalController == 0, "es sind noch Controller angemeldet" );
     if ( !IsInvalidItem(pLastItem) )
         delete pLastItem;
     if ( pDispatch )
@@ -309,30 +315,28 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
 
-
     if ( bSlotDirty )
     {
-        if ( xProv.is() )
-        {
-            DBG_ASSERT( !pDispatch, "Altes Dispatch nicht entfernt!" );
+        // get the SlotServer; we need it for internal controllers anyway, but also in most cases
+        rDispat._FindServer( nId, aSlotServ, sal_False );
 
-            // get the slot - even if it is disabled on the dispatcher
-            const SfxSlot* pSlot = SFX_APP()->GetSlotPool( rDispat.GetFrame() ).GetSlot( nId );
+        DBG_ASSERT( !pDispatch, "Old Dispatch not removed!" );
+
+        // we don't need to check the dispatch provider if we only have an internal controller
+        if ( pController && xProv.is() )
+        {
+            const SfxSlot* pSlot = aSlotServ.GetSlot();
+            if ( !pSlot )
+                // get the slot - even if it is disabled on the dispatcher
+                pSlot = SFX_APP()->GetSlotPool( rDispat.GetFrame() ).GetSlot( nId );
+
+            if ( !pSlot || !pSlot->pUnoName )
+                return aSlotServ.GetSlot()? &aSlotServ: 0;
 
             // create the dispatch name from the slot data
             ::com::sun::star::util::URL aURL;
-            String aName( pSlot && pSlot->pUnoName ? String::CreateFromAscii(pSlot->GetUnoName()) : String() );
-            String aCmd;
-            if ( aName.Len() )
-            {
-                aCmd = DEFINE_CONST_UNICODE(".uno:");
-                aCmd += aName;
-            }
-            else
-            {
-                aCmd = DEFINE_CONST_UNICODE("slot:");
-                aCmd += String::CreateFromInt32( nId );
-            }
+            ::rtl::OUString aCmd = DEFINE_CONST_UNICODE(".uno:");
+            aCmd += ::rtl::OUString::createFromAscii( pSlot->GetUnoName() );
 
             // try to get a dispatch object for this command
             aURL.Complete = aCmd;
@@ -353,37 +357,27 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 if ( pDisp )
                 {
                     // The intercepting object is an SFX component
-                    // If it's not using the wanted dispatcher or the AppDispatcher, it's treated like any other UNO component
+                    // If this dispatch object does not use the wanted dispatcher or the AppDispatcher, it's treated like any other UNO component
+                    // (intercepting by internal dispatches)
                     SfxDispatcher *pDispatcher = pDisp->GetDispatcher_Impl();
                     if ( pDispatcher == &rDispat || pDispatcher == SFX_APP()->GetAppDispatcher_Impl() )
                     {
-                        // so we can use this shell direct without StarONE connection
-                        rDispat._FindServer( nId, aSlotServ, sal_False );
+                        // so we can use it directly
                         bSlotDirty = sal_False;
                         bCtrlDirty = sal_True;
-
-                        //MI: wozu das? bItemDirty = sal_True;
                         return aSlotServ.GetSlot()? &aSlotServ: 0;
                     }
                 }
 
-                // here we are if the dispatch object isn't a SfxDispatcher wrapper or if the wrapper uses another
-                // dispatcher, but not rDispat
-                // first we need the SlotServer temporarily, because the BindDispatch will need it to access the slot
-                rDispat._FindServer( nId, aSlotServ, sal_False );
-                pDispatch = new BindDispatch_Impl( xDisp, aURL, this );
+                // so the dispatch object isn't a SfxDispatcher wrapper or it is one, but it uses another dispatcher, but not rDispat
+                pDispatch = new BindDispatch_Impl( xDisp, aURL, this, pSlot );
                 pDispatch->acquire();
 
                 // flags must be set before adding StatusListener because the dispatch object will set the state
                 bSlotDirty = sal_False;
                 bCtrlDirty = sal_True;
                 xDisp->addStatusListener( pDispatch, aURL );
-
-                // now we must forget the SlotServer
-                aSlotServ.SetSlot(0);
-                return NULL;
             }
-
             else if ( rDispat.GetFrame() )
             {
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchProvider > xFrameProv(
@@ -392,19 +386,13 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                     return GetSlotServer( rDispat, xFrameProv );
             }
         }
-        else
-        {
-            // Without a dispatch provider we are on our own!
-            // Don't find a server for the case "Dispatch Provider, but no dispatch".
-            // We have a configuration file that can disable specified commands. See bug #98419#
-            rDispat._FindServer(nId, aSlotServ, sal_False);
-        }
 
         bSlotDirty = sal_False;
         bCtrlDirty = sal_True;
-        //MI: wozu das? bItemDirty = sal_True;
     }
 
+    // we *always* return a SlotServer (if there is one); but in case of an external dispatch we might not use it
+    // for the "real" (non internal) controllers
     return aSlotServ.GetSlot()? &aSlotServ: 0;
 }
 
@@ -430,8 +418,8 @@ void SfxStateCache::SetState
 */
 
 {
-    if ( pDispatch )
-        return;
+//    if ( pDispatch )
+//        return;
     SetState_Impl( eState, pState, bMaybeDirty );
 }
 
@@ -467,10 +455,16 @@ void SfxStateCache::SetVisibleState( BOOL bShow )
         }
 
         // Controller updaten
-        for ( SfxControllerItem *pCtrl = pController;
-                pCtrl;
-                pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eState, pState );
+        if ( !pDispatch && pController )
+        {
+            for ( SfxControllerItem *pCtrl = pController;
+                    pCtrl;
+                    pCtrl = pCtrl->GetItemLink() )
+                pCtrl->StateChanged( nId, eState, pState );
+        }
+
+        if ( pInternalController )
+            pInternalController->StateChanged( nId, eState, pState );
 
         if ( !bDeleteItem )
             delete pState;
@@ -491,15 +485,13 @@ void SfxStateCache::SetState_Impl
 
     // wenn zwischen Enter- und LeaveRegistrations ein hartes Update kommt
     // k"onnen zwischenzeitlich auch Cached ohne Controller exisitieren
-    if ( !pController )
+    if ( !pController && !pInternalController )
         return;
 
-    DBG_ASSERT( pController->GetId()==nId, "Cache mit falschem ControllerItem" );
     DBG_ASSERT( bMaybeDirty || !bSlotDirty, "setting state of dirty message" );
 //  DBG_ASSERT( bCtrlDirty || ( aSlotServ.GetSlot() && aSlotServ.GetSlot()->IsMode(SFX_SLOT_VOLATILE) ), ! Discussed with MBA
 //              "setting state of non dirty controller" );
-    DBG_ASSERT( SfxControllerItem::GetItemState(pState) == eState,
-                "invalid SfxItemState" );
+    DBG_ASSERT( SfxControllerItem::GetItemState(pState) == eState, "invalid SfxItemState" );
     DBG_PROFSTART(SfxStateCacheSetState);
 
     // m"ussen die Controller "uberhaupt benachrichtigt werden?
@@ -519,10 +511,16 @@ void SfxStateCache::SetState_Impl
     if ( bNotify )
     {
         // Controller updaten
-        for ( SfxControllerItem *pCtrl = pController;
-              pCtrl;
-              pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eState, pState );
+        if ( !pDispatch && pController )
+        {
+            for ( SfxControllerItem *pCtrl = pController;
+                pCtrl;
+                pCtrl = pCtrl->GetItemLink() )
+                pCtrl->StateChanged( nId, eState, pState );
+        }
+
+        if ( pInternalController )
+            pInternalController->StateChanged( nId, eState, pState );
 
         // neuen Wert merken
         if ( !IsInvalidItem(pLastItem) )
@@ -557,10 +555,16 @@ void SfxStateCache::SetCachedState( BOOL bAlways )
     if ( bAlways || ( !bItemDirty && !bSlotDirty ) )
     {
         // Controller updaten
-        for ( SfxControllerItem *pCtrl = pController;
-              pCtrl;
-              pCtrl = pCtrl->GetItemLink() )
-            pCtrl->StateChanged( nId, eLastState, pLastItem );
+        if ( !pDispatch && pController )
+        {
+            for ( SfxControllerItem *pCtrl = pController;
+                pCtrl;
+                pCtrl = pCtrl->GetItemLink() )
+                pCtrl->StateChanged( nId, eLastState, pLastItem );
+        }
+
+        if ( pInternalController )
+            pInternalController->StateChanged( nId, eLastState, pLastItem );
 
         // Controller sind jetzt ok
         bCtrlDirty = sal_True;
