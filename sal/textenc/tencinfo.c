@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:42:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 14:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
     return nEncoding > RTL_TEXTENCODING_DONTKNOW
-           && nEncoding <= RTL_TEXTENCODING_ADOBE_SYMBOL
+           && nEncoding <= RTL_TEXTENCODING_PT154
                /* always update this! */
            && nEncoding != 9; /* RTL_TEXTENCODING_SYSTEM */
 }
@@ -761,6 +761,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "l4", RTL_TEXTENCODING_ISO_8859_4 },
         { "csisolatin4", RTL_TEXTENCODING_ISO_8859_4 },
         { "isoir144", RTL_TEXTENCODING_ISO_8859_5 },
+        { "cyrillicasian", RTL_TEXTENCODING_PT154 },
         { "cyrillic", RTL_TEXTENCODING_ISO_8859_5 },
         { "csisolatincyrillic", RTL_TEXTENCODING_ISO_8859_5 },
         { "isoir127", RTL_TEXTENCODING_ISO_8859_6 },
@@ -921,6 +922,10 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "csadobestandardencoding", RTL_TEXTENCODING_ADOBE_STANDARD },
         { "adobesymbolencoding", RTL_TEXTENCODING_ADOBE_SYMBOL },
         { "cshppsmath", RTL_TEXTENCODING_ADOBE_SYMBOL },
+        { "ptcp154", RTL_TEXTENCODING_PT154 },
+        { "csptcp154", RTL_TEXTENCODING_PT154 },
+        { "pt154", RTL_TEXTENCODING_PT154 },
+        { "cp154", RTL_TEXTENCODING_PT154 },
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
