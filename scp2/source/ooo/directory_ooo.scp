@@ -2,9 +2,9 @@
 *
 *  $RCSfile: directory_ooo.scp,v $
 *
-*  $Revision: 1.11 $
+*  $Revision: 1.12 $
 *
-*  last change: $Author: obo $ $Date: 2004-07-05 13:17:10 $
+*  last change: $Author: rt $ $Date: 2004-07-23 11:32:33 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1213,11 +1213,6 @@ End
 Directory gid_Dir_Samples_Texts_Kapitel
     ParentID = gid_Dir_Samples_Texts;
     ALL_LANG(DosName, STR_DIR_KAPITEL);
-End
-
-Directory gid_Dir_Samples_Texts_Homepage
-    ParentID = gid_Dir_Samples_Texts;
-    ALL_LANG(DosName, STR_DIR_HOMEPAGE);
 End
 
 Directory gid_Dir_Samples_Databases
