@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTableColumns.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:56 $
+ *  last change:$Date: 2003-09-08 11:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,15 @@
 
 package ifc.table;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
 import com.sun.star.table.XTableColumns;
 import com.sun.star.text.XSimpleText;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.table.XTableColumns</code>
@@ -362,13 +363,13 @@ public class _XTableColumns extends MultiMethodTest {
             throws com.sun.star.lang.IndexOutOfBoundsException {
 
         for (int i = 0; i <= lastColumn && i < 3; i++) {
-            setCellText(xCellRange.getCellByPosition(i, 0), "" + i + "a");
-            setCellText(xCellRange.getCellByPosition(i, 1), "" + i + "b");
+            setCellText(xRange.getCellByPosition(i, 0), "" + i + "a");
+            setCellText(xRange.getCellByPosition(i, 1), "" + i + "b");
         }
 
         for (int i = 3; i <= lastColumn && i < 10; i++) {
-            setCellText(xCellRange.getCellByPosition(i, 0), "");
-            setCellText(xCellRange.getCellByPosition(i, 1), "");
+            setCellText(xRange.getCellByPosition(i, 0), "");
+            setCellText(xRange.getCellByPosition(i, 1), "");
         }
     }
 
