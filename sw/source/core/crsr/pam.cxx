@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:00:56 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,13 +435,13 @@ SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, FASTBOOL bChk )
 *************************************************************************/
 
 SwPaM::SwPaM( const SwPosition& rPos, SwPaM* pRing )
-    : aBound1( rPos ), aBound2( rPos ), bIsInFrontOfLabel(FALSE), Ring( pRing )
+    : Ring( pRing ), aBound1( rPos ), aBound2( rPos ), bIsInFrontOfLabel(FALSE)
 {
     pPoint = pMark = &aBound1;
 }
 
 SwPaM::SwPaM( const SwPosition& rMk, const SwPosition& rPt, SwPaM* pRing )
-    : aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE), Ring( pRing )
+    : Ring( pRing ), aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE)
 {
     pMark = &aBound1;
     pPoint = &aBound2;
@@ -449,7 +449,7 @@ SwPaM::SwPaM( const SwPosition& rMk, const SwPosition& rPt, SwPaM* pRing )
 
 SwPaM::SwPaM( const SwNodeIndex& rMk, const SwNodeIndex& rPt,
                 long nMkOffset, long nPtOffset, SwPaM* pRing )
-    : aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE), Ring( pRing )
+    : Ring( pRing ), aBound1( rMk ), aBound2( rPt ), IsInFrontOfLabel(FALSE)
 {
     if( nMkOffset )
         aBound1.nNode += nMkOffset;
@@ -464,7 +464,7 @@ SwPaM::SwPaM( const SwNodeIndex& rMk, const SwNodeIndex& rPt,
 
 SwPaM::SwPaM( const SwNode& rMk, const SwNode& rPt,
                 long nMkOffset, long nPtOffset, SwPaM* pRing )
-    : aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE), Ring( pRing )
+    : Ring( pRing ), aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE)
 {
     if( nMkOffset )
         aBound1.nNode += nMkOffset;
@@ -479,7 +479,7 @@ SwPaM::SwPaM( const SwNode& rMk, const SwNode& rPt,
 
 SwPaM::SwPaM( const SwNodeIndex& rMk, xub_StrLen nMkCntnt,
               const SwNodeIndex& rPt, xub_StrLen nPtCntnt, SwPaM* pRing )
-    : aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE), Ring( pRing )
+    : Ring( pRing ), aBound1( rMk ), aBound2( rPt ),  bIsInFrontOfLabel(FALSE)
 {
     aBound1.nContent.Assign( rMk.GetNode().GetCntntNode(), nMkCntnt );
     aBound2.nContent.Assign( rPt.GetNode().GetCntntNode(), nPtCntnt );
@@ -489,7 +489,7 @@ SwPaM::SwPaM( const SwNodeIndex& rMk, xub_StrLen nMkCntnt,
 
 SwPaM::SwPaM( const SwNode& rMk, xub_StrLen nMkCntnt,
               const SwNode& rPt, xub_StrLen nPtCntnt, SwPaM* pRing )
-    : aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE), Ring( pRing )
+    : Ring( pRing ), aBound1( rMk ), aBound2( rPt ), bIsInFrontOfLabel(FALSE)
 {
     aBound1.nContent.Assign( aBound1.nNode.GetNode().GetCntntNode(), nMkCntnt );
     aBound2.nContent.Assign( aBound2.nNode.GetNode().GetCntntNode(), nPtCntnt );
@@ -498,15 +498,14 @@ SwPaM::SwPaM( const SwNode& rMk, xub_StrLen nMkCntnt,
 }
 
 SwPaM::SwPaM( SwPaM &rPam )
-    : aBound1( *(rPam.pPoint) ), aBound2( *(rPam.pMark) ),
-      bIsInFrontOfLabel(FALSE), Ring( &rPam )
+    : Ring( &rPam ), aBound1( *(rPam.pPoint) ), aBound2( *(rPam.pMark) ), bIsInFrontOfLabel(FALSE)
 {
     pPoint = &aBound1;
     pMark  = rPam.HasMark() ? &aBound2 : pPoint;
 }
 
 SwPaM::SwPaM( const SwNode& rNd, xub_StrLen nCntnt, SwPaM* pRing )
-    : aBound1( rNd ), aBound2( rNd ), bIsInFrontOfLabel(FALSE), Ring( pRing )
+    : Ring( pRing ), aBound1( rNd ), aBound2( rNd ), bIsInFrontOfLabel(FALSE)
 {
     aBound1.nContent.Assign( aBound1.nNode.GetNode().GetCntntNode(), nCntnt );
     aBound2.nContent = aBound1.nContent;
@@ -514,7 +513,7 @@ SwPaM::SwPaM( const SwNode& rNd, xub_StrLen nCntnt, SwPaM* pRing )
 }
 
 SwPaM::SwPaM( const SwNodeIndex& rNd, xub_StrLen nCntnt, SwPaM* pRing )
-    : aBound1( rNd ), aBound2( rNd ), bIsInFrontOfLabel(FALSE), Ring( pRing )
+    : Ring( pRing ), aBound1( rNd ), aBound2( rNd ), bIsInFrontOfLabel(FALSE)
 {
     aBound1.nContent.Assign( rNd.GetNode().GetCntntNode(), nCntnt );
     aBound2.nContent = aBound1.nContent;
