@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futxtatt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:18:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <sfx2/request.hxx>
 #endif
 
-#include <svx/textattr.hxx>
+//CHINA001 #include <svx/textattr.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
