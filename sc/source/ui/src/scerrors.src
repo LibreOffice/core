@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 00:37:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 23:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "µLªk¶}±Ò³o­ΣΐΙ®Χ΅C";
         Text[ arabic ] = "ΚΪΠΡ έΚΝ Ηαγαέ.";
         Text[ greek ] = "Δεν ήταν δυνατόν να ανοιχθεί το αρχείο.";
-        Text[ korean ] = "ΖΔΐΟΐ»΅΅Ώ­Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΐ» Ώ­Αφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya aηύlamadύ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo abrir el archivo.";
@@ -355,7 +355,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "³o­ΣΐΙ®Χ¨ό¨μ±K½X«OΕ@΅C";
         Text[ arabic ] = "εΠΗ Ηαγαέ γΝγν ΘίαγΙ ΣΡ.";
         Text[ greek ] = "Το αρχείο προστατεύεται με κωδικό πρόσβασης.";
-        Text[ korean ] = "ΖΔΐΟΐΊ ΖΠ½ΊΏφµε·Ξ ΊΈΘ£µΗΎξΐΦ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΐΊ ΖΠ½ΊΏφµε·Ξ ΊΈΘ£µΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya ώifre ile korunuyor.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El archivo estα protegido con una palabra clave.";
@@ -435,7 +435,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "µLªk³sµ²ΐΙ®Χ΅C";
         Text[ arabic ] = "ΚΪΠΡ ΗαΗΚΥΗα ΘΗαγαέ.";
         Text[ greek ] = "Δεν ήταν δυνατόν να γίνει σύνδεση με το αρχείο.";
-        Text[ korean ] = "ΖΔΐΟΏ΅ ΄λΗΡ΅΅Ώ¬°αΐ» ±ΈΓΰΗΟΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΏ΅ ΄λΗΡ Ώ¬°αΐ» ±ΈΓΰΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya ile baπlantύ oluώturulamadύ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo establecer conexiσn con el archivo.";
@@ -461,7 +461,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "µLªkΌg¤JΐΙ®Χ®ζ¦΅΅C";
         Text[ arabic ] = "ΚΪΠΡ ίΚΗΘΙ ΚδΣνή Ηαγαέ.";
         Text[ greek ] = "Δεν ήταν δυνατόν να γίνει εγγραφή της μορφής αρχείου..";
-        Text[ korean ] = "ΖΔΐΟ Ό­½Δΐ»΅΅ΎµΌφ΅΅ΎψΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟ Ό­½Δΐ» Ύµ Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya formatύ yazύlamadύ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo guardar el formato del archivo.";
@@ -487,7 +487,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "µLªkΌg¤JΌΖΎΪ΅C";
         Text[ arabic ] = "ΚΪΠΡ ίΚΗΘΙ ΗαΘνΗδΗΚ.";
         Text[ greek ] = "Δεν ήταν δυνατή η εγγραφή των δεδομένων.";
-        Text[ korean ] = "µ¥ΐΜΕΝΈ¦ ΎµΌφ΅΅ΎψΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "µ¥ΐΜΕΝΈ¦ Ύµ Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Veriler yazύlamadύ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudieron guardar los datos.";
@@ -543,7 +543,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "¶WΉL¦CΌΖ³Μ°ª­­«Χ΅C¶WΉLªΊ¦C¤£·|³Q¶Χ¤J΅I";
         Text[ arabic ] = "Κγ ΚΞΨν ΗαΪΟΟ ΗαΓήΥμ ααΥέζέ. αεΠΗ αγ νΚγ ΗΣΚνΡΗΟ ΗαΥέζέ ΗαÒΗΖΟΙ!";
         Text[ greek ] = "Έγινε υπέρβαση του μέγιστου αριθμού γραμμών. Δεν θα γίνει εισαγωγή των γραμμών που ξεπερνούν το όριο!";
-        Text[ korean ] = "ΗΰΐΗ ΓΦ΄λΌφΈ¦ ΓΚ°ϊΗί½ΐ΄Ο΄Ω. ΓΚ°ϊµΘ ΗΰΐΊ ΗΤ²²΅΅µιΏ©ΏΝΑφΑφ΅΅ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΗΰΐΗ ΓΦ΄λΌφΈ¦ ΓΚ°ϊΗί½ΐ΄Ο΄Ω. ΓΚ°ϊµΘ ΗΰΐΊ ΗΤ²² µιΏ©ΏΝΑφΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Azami satύr sayύsύ aώύldύ. Fazla satύrlar iηe aktarύlmadύ!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Se ha excedido la cantidad mαxima de filas. ΅Las filas adicionales no se importaron!";
@@ -570,7 +570,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "µLªk¶}±Ò±qΔέªΊ FM3-ΐΙ®Χ΅C";
         Text[ arabic ] = "ΚΪΠΡ έΚΝ Ηαγαέ FM3 ΗαγΡΚΘΨ.";
         Text[ greek ] = "Δεν ήταν δυνατόν να ανοιχθεί το αντίστοιχο αρχείο FM3.";
-        Text[ korean ] = "ΗΨ΄η΅΅FM3-ΖΔΐΟΐ» Ώ­Όφ ΎψΎϊ½ΐ΄Ο΄Ω..";
+        Text[ korean ] = "ΗΨ΄η FM3-ΖΔΐΟΐ» Ώ­Όφ ΎψΎϊ½ΐ΄Ο΄Ω..";
         Text[ turkish ] = "έlgili FM3 dosyasύ aηlamadύ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo abrir el archivo correspondiente FM3.";
@@ -597,7 +597,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "±qΔέªΊ FM3-ΐΙ®ΧªΊΐΙ®Χµ²Ίc§t¦³Ώω»~΅C";
         Text[ arabic ] = "ΞΨΓ έν ΘδνΙ Ηαγαέ έν Ηαγαέ FM3 ΗαγΡΚΘΨ.";
         Text[ greek ] = "Σφάλμα στη δομή αρχείου του αντίστοιχου αρχείου FM3.";
-        Text[ korean ] = "ΗΨ΄η΅΅FM3-ΖΔΐΟΐΗ ΖΔΐΟ ±ΈΑ¶Ώ΅ Ώΐ·ω.";
+        Text[ korean ] = "ΗΨ΄η FM3-ΖΔΐΟΐΗ ΖΔΐΟ ±ΈΑ¶Ώ΅ Ώΐ·ω.";
         Text[ turkish ] = "έlgili FM3 dosyasύnύn dosya yapύsύnda hata.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error en la estructura del archivo FM3 correspondiente.";
@@ -704,13 +704,14 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "µLªk¥Ξ«ό©wªΊ®ζ¦΅ΐx¦s¥ώ³΅ªΊΐx¦s®ζ¤Ί®e΅C";
         Text[ arabic ] = "ΚΪΠΡ ΝέΩ ία γΝΚζνΗΚ ΗαΞαΗνΗ έν ΗαΚδΣνή ΗαγΝΟΟ.";
         Text[ greek ] = "Δεν ήταν δυνατόν να αποθηκευτούν όλα τα περιεχόμενα κελιών στη δεδομένη μορφή.";
-        Text[ korean ] = "ΌΏΐΗ Έπµη΅΅³»Ώλΐ» ΑφΑ¤µΘ Ό­½ΔΐΈ·Ξ ΐϊΐεΗΟΑφ΄Β΅΅ΈψΗί½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΌΏΐΗ Έπµη ³»Ώλΐ» ΑφΑ¤µΘ Ό­½ΔΐΈ·Ξ ΐϊΐεΗΟΑφ΄Β ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Tόm hόcre iηerikleri belirtilen formatta kaydedilemedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudieron guardar todos los contenidos de las celdas en el formato especificado.";
         Text[ finnish ] = "Kaikkia solujen sisδltφjδ ei voitu tallentaa mδδritetyssδ muodossa.";
     };
 };
+
 
 
 
