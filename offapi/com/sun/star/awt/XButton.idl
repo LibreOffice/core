@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XButton.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 /** makes it possible to set the label of a button and to register for action events.
  */
-interface XButton: com::sun::star::uno::XInterface
+published interface XButton: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
