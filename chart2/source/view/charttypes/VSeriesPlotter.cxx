@@ -371,9 +371,9 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
     //HorizontalAdjustment
     {
         drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
-        if( LABEL_ALIGN_RIGHT==eAlignment  )
+        if( LABEL_ALIGN_RIGHT==eAlignment || LABEL_ALIGN_RIGHT_TOP==eAlignment || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment )
             eHorizontalAdjust = drawing::TextHorizontalAdjust_LEFT;
-        else if( LABEL_ALIGN_LEFT==eAlignment )
+        else if( LABEL_ALIGN_LEFT==eAlignment || LABEL_ALIGN_LEFT_TOP==eAlignment || LABEL_ALIGN_LEFT_BOTTOM==eAlignment )
             eHorizontalAdjust = drawing::TextHorizontalAdjust_RIGHT;
         uno::Any* pHorizontalAdjustAny = PropertyMapper::getValuePointer(*pPropValues,*pPropNames,C2U("TextHorizontalAdjust"));
         if(pHorizontalAdjustAny)
@@ -383,9 +383,9 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
     //VerticalAdjustment
     {
         drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
-        if( LABEL_ALIGN_TOP==eAlignment  )
+        if( LABEL_ALIGN_TOP==eAlignment || LABEL_ALIGN_RIGHT_TOP==eAlignment || LABEL_ALIGN_LEFT_TOP==eAlignment )
             eVerticalAdjust = drawing::TextVerticalAdjust_BOTTOM;
-        else if( LABEL_ALIGN_BOTTOM==eAlignment )
+        else if( LABEL_ALIGN_BOTTOM==eAlignment || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment || LABEL_ALIGN_LEFT_BOTTOM==eAlignment )
             eVerticalAdjust = drawing::TextVerticalAdjust_TOP;
         uno::Any* pVerticalAdjustAny = PropertyMapper::getValuePointer(*pPropValues,*pPropNames,C2U("TextVerticalAdjust"));
         if(pVerticalAdjustAny)

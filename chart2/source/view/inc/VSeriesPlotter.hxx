@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-17 15:50:49 $
+ *  last change: $Author: iha $ $Date: 2004-01-05 20:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ private:
     sal_Int32   m_nMaxPointCount;
 };
 
-enum LabelAlignment { LABEL_ALIGN_CENTER, LABEL_ALIGN_LEFT, LABEL_ALIGN_TOP, LABEL_ALIGN_RIGHT, LABEL_ALIGN_BOTTOM };
+enum LabelAlignment { LABEL_ALIGN_CENTER, LABEL_ALIGN_LEFT, LABEL_ALIGN_TOP, LABEL_ALIGN_RIGHT, LABEL_ALIGN_BOTTOM, LABEL_ALIGN_LEFT_TOP, LABEL_ALIGN_LEFT_BOTTOM, LABEL_ALIGN_RIGHT_TOP, LABEL_ALIGN_RIGHT_BOTTOM };
 
 class VSeriesPlotter : public PlotterBase, public MinimumAndMaximumSupplier
 {
