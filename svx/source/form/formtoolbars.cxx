@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formtoolbars.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:22:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,26 +148,11 @@ namespace svxform
         OSL_ENSURE( ( _nSlotId == SID_FM_MORE_CONTROLS ) || ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ) || ( _nSlotId == SID_FM_CONFIG ),
             "FormToolboxes::getToolboxResourceName: unsupported slot!" );
 
-        const sal_Char* pNames[3][3] = {
-            { "formcontrols", "xformcontrols", "databasecontrols" },
-            { "moreformcontrols", "morexformcontrols", "moredatabasecontrols" },
-            { "formdesign", "xformdesign", "databaseformdesign" }
-        };
-        sal_Int32 nDocIndex = 0, nToolbarIndex = 0;
-        switch ( m_eDocumentType )
-        {
-        case ::svxform::eEnhancedForm:      nDocIndex = 1; break;
-        case ::svxform::eDatabaseForm:      nDocIndex = 2; break;
-        default:                            nDocIndex = 0; break;
-        }
-        switch ( _nSlotId )
-        {
-        case SID_FM_MORE_CONTROLS:      nToolbarIndex = 1; break;
-        case SID_FM_FORM_DESIGN_TOOLS:  nToolbarIndex = 2; break;
-        default:                        nToolbarIndex = 0; break;
-        }
-
-        const sal_Char* pToolBarName = pNames[nToolbarIndex][nDocIndex];
+        const sal_Char* pToolBarName = "formcontrols";
+        if ( _nSlotId == SID_FM_MORE_CONTROLS )
+            pToolBarName = "moreformcontrols";
+        else if ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS )
+            pToolBarName = "formdesign";
 
         ::rtl::OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
         aToolBarResStr += ::rtl::OUString::createFromAscii( pToolBarName );
