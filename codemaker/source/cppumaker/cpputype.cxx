@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 11:35:11 $
+ *  last change: $Author: jsc $ $Date: 2002-06-18 17:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1428,11 +1428,29 @@ void CppuType::dumpConstantValue(FileStream& o, sal_uInt16 index)
         case RT_TYPE_UINT32:
             o << "(sal_uInt32)" << constValue.m_value.aULong;
             break;
+        case RT_TYPE_INT64:
+            {
+                ::rtl::OString tmp( OString::valueOf(constValue.m_value.aHyper) );
+                o << "(sal_Int64)" << tmp.getStr() << "L";
+            }
+            break;
+        case RT_TYPE_UINT64:
+            {
+                ::rtl::OString tmp( OString::valueOf((sal_Int64)constValue.m_value.aUHyper) );
+                o << "(sal_uInt64)" << tmp.getStr() << "L";
+            }
+            break;
         case RT_TYPE_FLOAT:
-            o << "(float)" << constValue.m_value.aFloat;
+            {
+                ::rtl::OString tmp( OString::valueOf(constValue.m_value.aFloat) );
+                o << "(float)" << tmp.getStr();
+            }
             break;
         case RT_TYPE_DOUBLE:
-            o << "(double)" << constValue.m_value.aDouble;
+            {
+                ::rtl::OString tmp( OString::valueOf(constValue.m_value.aDouble) );
+                o << "(double)" << tmp.getStr();
+            }
             break;
         case RT_TYPE_STRING:
             {

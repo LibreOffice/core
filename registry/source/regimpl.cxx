@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jsc $ $Date: 2001-11-09 10:51:38 $
+ *  last change: $Author: jsc $ $Date: 2002-06-18 17:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,16 +283,28 @@ static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
                         fprintf(stdout, "%u", constVal.m_value.aULong);
                         break;
                     case RT_TYPE_INT64:
-                        fprintf(stdout, "%d", constVal.m_value.aHyper);
+                        {
+                            ::rtl::OString tmp( OString::valueOf(constVal.m_value.aHyper) );
+                            fprintf(stdout, "%s", tmp.getStr());
+                        }
                         break;
                     case RT_TYPE_UINT64:
-                        fprintf(stdout, "%u", constVal.m_value.aUHyper);
+                        {
+                            OString tmp( OString::valueOf((sal_Int64)constVal.m_value.aUHyper) );
+                            fprintf(stdout, "%s", tmp.getStr());
+                        }
                         break;
                     case RT_TYPE_FLOAT:
-                        fprintf(stdout, "%f", constVal.m_value.aFloat);
+                        {
+                            ::rtl::OString tmp( OString::valueOf(constVal.m_value.aFloat) );
+                            fprintf(stdout, "%s", tmp.getStr());
+                        }
                         break;
                     case RT_TYPE_DOUBLE:
-                        fprintf(stdout, "%f", constVal.m_value.aDouble);
+                        {
+                            ::rtl::OString tmp( OString::valueOf(constVal.m_value.aDouble) );
+                            fprintf(stdout, "%s", tmp.getStr());
+                        }
                         break;
                     case RT_TYPE_STRING:
                         fprintf(stdout, "%s", OUStringToOString(constVal.m_value.aString, RTL_TEXTENCODING_UTF8).getStr());
