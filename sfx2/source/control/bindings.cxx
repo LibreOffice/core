@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.40 $
- *  last change: $Author: obo $ $Date: 2005-03-15 09:37:42 $
+ *  $Revision: 1.41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1687,6 +1687,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
 void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell* pShell )
 {
     SfxItemPool &rPool = pShell->GetPool();
+
     if ( SFX_KIND_ENUM == pSlot->GetKind() )
     {
         // bei Enum-Slots muss der Master mit dem Wert des Enums executet werden
@@ -2128,6 +2129,12 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
  */
 
 {
+#ifdef DBG_UTIL
+    // on Windows very often C++ Exceptions (GPF etc.) are caught by MSVCRT or another MS library
+    // try to get them here
+    try
+    {
+#endif
     const long MAX_INPUT_DELAY = 200;
 
     DBG_MEMTEST();
@@ -2250,6 +2257,16 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     Broadcast(SfxSimpleHint(SFX_HINT_UPDATEDONE));
     DBG_PROFSTOP(SfxBindingsNextJob_Impl);
     return sal_True;
+#ifdef DBG_UTIL
+    }
+    catch (...)
+    {
+        DBG_ERROR("C++ exception caught!");
+        pImp->bInNextJob = sal_False;
+    }
+
+    return sal_False;
+#endif
 }
 
 //--------------------------------------------------------------------
