@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:08:05 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,16 +120,21 @@
 #include <svx/scripttypeitem.hxx>
 #endif
 
+#ifndef SD_DRAW_DOC_SHELL_HXX
 #ifdef MAC
-#include "::ui:inc:docshell.hxx"
+#include "::ui:inc:DrawDocShell.hxx"
 #else
 #ifdef UNX
-#include "../ui/inc/docshell.hxx"
+#include "../ui/inc/DrawDocShell.hxx"
 #else
-#include "..\ui\inc\docshell.hxx"
+#include "..\ui\inc\DrawDocShell.hxx"
 #endif
 #endif
-#include "sdoutl.hxx"
+#endif
+
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 
 #include "misc.hxx"
 #include "eetext.hxx"
@@ -2506,7 +2511,7 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     if (!pSubtitle->IsEmptyPresObj())
                     {
                         // Text umsetzen
-                        SdOutliner* pOutl = ( (SdDrawDocument*) pModel )->GetInternalOutliner( TRUE );
+                        ::sd::Outliner* pOutl = ( (SdDrawDocument*) pModel )->GetInternalOutliner( TRUE );
                         pOutl->Clear();
                         pOutl->SetText( *pOutlParaObj );
                         pOutl->SetMinDepth(1, TRUE);
@@ -2572,7 +2577,7 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     if (!pOutlineObj->IsEmptyPresObj())
                     {
                         // Text umsetzen
-                        SdOutliner* pOutl = ( (SdDrawDocument*) pModel )->GetInternalOutliner();
+                        ::sd::Outliner* pOutl = ( (SdDrawDocument*) pModel )->GetInternalOutliner();
                         pOutl->Clear();
                         pOutl->SetText( *pOutlParaObj );
                         pOutl->SetMinDepth(0, TRUE);
@@ -2702,7 +2707,8 @@ PresObjKind SdPage::GetPresObjKind(SdrObject* pObj)
 
 void SdPage::RequestBasic()
 {
-    SdDrawDocShell* pDocShell = ( (SdDrawDocument*) GetModel() )->GetDocSh();
+    ::sd::DrawDocShell* pDocShell =
+          static_cast<SdDrawDocument*>(GetModel())->GetDocSh();
 
     if (pDocShell)
     {
