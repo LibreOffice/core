@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-15 09:36:15 $
+ *  last change: $Author: fs $ $Date: 2001-01-16 13:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,7 +677,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt)
         )
     {   // -> the current field isn't modified anymore, too
         m_bCurrentlyModified = sal_False;
-        InvalidateFeature(::rtl::OUString::createFromAscii(".uno:Save"));
+        InvalidateFeature(::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord"));
         InvalidateFeature(ID_BROWSER_UNDO);
     }
 
@@ -727,7 +727,7 @@ void SbaXDataBrowserController::modified(const ::com::sun::star::lang::EventObje
 {
     m_bCurrentlyModified = sal_True;
     // das muss vom ::com::sun::star::form::GridControl kommen
-    InvalidateFeature(::rtl::OUString::createFromAscii(".uno:Save"));
+    InvalidateFeature(::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord"));
     InvalidateFeature(ID_BROWSER_UNDO);
 }
 
@@ -1658,7 +1658,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             }
 
             m_bCurrentlyModified = sal_False;
-            InvalidateFeature(::rtl::OUString::createFromAscii(".uno:Save"));
+            InvalidateFeature(::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord"));
             InvalidateFeature(ID_BROWSER_UNDO);
         }
     }
