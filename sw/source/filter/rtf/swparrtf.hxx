@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:39:55 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,7 @@ class SwRTFParser : public SvxRTFParser
     void ReadListLevel( SwNumRule& rRule, BYTE nLvl );
     void SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine);
     void ReadListTable();
+    void ReadShpRslt();
     void ReadListOverrideTable();
     SwNumRule *ReadNumSecLevel( int nToken );
     SwNumRule* GetNumRuleOfListNo( long nListNo,
