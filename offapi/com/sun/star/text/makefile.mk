@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: os $ $Date: 2002-11-13 12:45:20 $
+#   last change: $Author: bm $ $Date: 2002-11-29 11:57:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -252,7 +252,8 @@ IDLFILES=\
     DateDisplayFormat.idl\
     TimeDisplayFormat.idl\
     WritingMode2.idl\
-    TextGridMode.idl
+    TextGridMode.idl \
+    TextDocumentSettings.idl
 
 # ------------------------------------------------------------------
 
