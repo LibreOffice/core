@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-07-06 16:19:26 $
+ *  last change: $Author: er $ $Date: 2001-07-10 13:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,28 +1019,22 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
                             case DMY:
                                 pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                                 pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
-#if 0
-//! TODO: howto with an XCalendar?
-                                if (!aDt.IsValid())             // 2nd try
+                                if ( !pCal->isValid() )             // 2nd try
                                 {
                                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
                                     pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
                                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
                                 }
-#endif
                                 break;
                             case YMD:
                                 pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
                                 pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
-#if 0
-//! TODO: howto with an XCalendar?
-                                if (!aDt.IsValid())             // 2nd try
+                                if ( !pCal->isValid() )             // 2nd try
                                 {
                                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
                                     pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(1) );
                                     pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 }
-#endif
                                 break;
                             default:
                                 res = FALSE;
@@ -1164,13 +1158,15 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
                 break;
         }   // switch (nAnzNums)
 
-        aDt = pCal->getGregorianDateTime();
-        if ( nTryOrder < nFormatOrder )
+        if ( res && pCal->isValid() )
         {
-            if ( res && aDt.IsValid() )
-                nTryOrder = nFormatOrder;   // break for
-            else
-                aDt = Date();               // next try
+            aDt = pCal->getGregorianDateTime();
+            nTryOrder = nFormatOrder;   // break for
+        }
+        else
+        {
+            res = FALSE;
+            aDt = Date();               // next try
         }
     }
 
@@ -2260,13 +2256,11 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                 Date aDt;                                   // heute
                 USHORT nCounter = 0;                        // hier dummy
                 res = GetDateRef(aDt, nCounter, pFormat);   // Datum->aDt
-                if (aDt.IsValid())
+                if ( res )
                 {
                     long nDate = (long) (aDt - *pNullDate); // erst nach long!!
                     fOutNumber = (double) nDate;            // vorsichtshalber
                 }
-                else
-                    res = FALSE;
             }
             break;
 
@@ -2277,13 +2271,11 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                 res = GetDateRef(aDt, nCounter, pFormat);   // Datum->aDt
                 double fTime;
                 GetTimeRef(fTime, nCounter, nAnzNums-nCounter);
-                if (aDt.IsValid())
+                if ( res )
                 {
                     long nDate = (long) (aDt - *pNullDate);
                     fOutNumber = (double) nDate + fTime;
                 }
-                else
-                    res = FALSE;
             }
             break;
 
