@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:38:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ void OJoinTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJo
     modified();
     if ( m_pAccessible )
         m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                makeAny(_pConn->getAccessible()),
+                                                makeAny(_pConn->GetAccessible()),
                                                 Any());
     if ( _bDelete )
     {
@@ -1744,7 +1744,7 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAdd
     if ( m_pAccessible )
         m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
                                                 Any(),
-                                                makeAny(_pConnection->getAccessible()));
+                                                makeAny(_pConnection->GetAccessible()));
 }
 // -----------------------------------------------------------------------------
 
