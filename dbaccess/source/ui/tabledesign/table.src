@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:03:46 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2637,6 +2637,12 @@ String STR_NO_TYPE_INFO_AVAILABLE
     Text[ hindi ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
     Text[ slovak ] = "Z databázy nemohla byť získaná informácia o type.\nMód návrhu tabuľku nieje dostupný pre tento zdroj dát.";
 };
+
+
+
+
+
+
 
 
 
