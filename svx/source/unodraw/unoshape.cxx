@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 10:06:24 $
+ *  last change: $Author: thb $ $Date: 2001-05-04 14:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,8 +1414,8 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                     xInplace->SetVisArea( aTmpArea );
                     return;
                 }
-#endif
             }
+#endif
             break;
         }
         case XATTR_FILLBITMAP:
