@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tlx $ $Date: 2000-12-07 12:14:58 $
+ *  last change: $Author: dg $ $Date: 2000-12-07 15:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ namespace configmgr
         sal_Bool            hasServer() const;
         sal_Bool            hasPort() const;
         sal_Bool            hasTimeout() const;
+        sal_Bool            hasService() const;
 
         sal_Bool            isValidSourcePath() const;
         sal_Bool            isValidUpdatePath() const;
@@ -175,11 +176,14 @@ namespace configmgr
         ::rtl::OUString     getSourcePath() const;
         ::rtl::OUString     getUpdatePath() const;
         ::rtl::OUString     getServer() const;
+        ::rtl::OUString     getService() const;
         sal_Int32           getPort() const;
         sal_Int32           getTimeout() const;
 
         // set a new session type. Must be one of the *_SESSION_IDENTIFIER defines
         void                setSessionType(const ::rtl::OUString& _rSessionIdentifier);
+        // set a desired service, only necessary in remote environments
+        void                setService(const ::rtl::OUString& _rService);
 
 
         IConfigSession* ConnectionSettings::createConnection(
