@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-10 11:12:16 $
+ *  last change: $Author: fs $ $Date: 2002-08-02 14:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,10 @@ namespace utl
             sal_Bool                IsInValueChange() const;
 
             sal_Int16               GetMode() const;
+
+            /** checks if the configuration manager used by this item is valid.
+            */
+            sal_Bool                IsValidConfigMgr() const;
     };
 }//namespace utl
 #endif //_UTL_CONFIGITEM_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2001-09-13 10:26:26 $
+ *  last change: $Author: fs $ $Date: 2002-08-02 14:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,13 @@ ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTr
     pImpl->nMode = CONFIG_MODE_IMMEDIATE_UPDATE;
     m_xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
 }
+//---------------------------------------------------------------------
+//--- 02.08.2002 16:33:23 -----------------------------------------------
+sal_Bool ConfigItem::IsValidConfigMgr() const
+{
+    return ( pImpl->pManager && pImpl->pManager->GetConfigurationProvider().is() );
+}
+
 /* -----------------------------29.08.00 12:52--------------------------------
 
  ---------------------------------------------------------------------------*/
