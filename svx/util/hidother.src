@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:21:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-30 08:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,3 +403,19 @@ hidspecial HID_GALLERY_NEWTHEME_ADDFILES        { HelpID = HID_GALLERY_NEWTHEME_
 hidspecial HID_NUMBERINGOPT_SEL_GRF_FROM_FILE   { HelpID = HID_NUMBERINGOPT_SEL_GRF_FROM_FILE; };
 hidspecial HID_REDLINING_VIEW_DG_VIEW_TABLE     { HelpID = HID_REDLINING_VIEW_DG_VIEW_TABLE ; };
 hidspecial HID_REDLINING_VIEW_DG_VIEW_HEADER    { HelpID = HID_REDLINING_VIEW_DG_VIEW_HEADER; };
+
+hidspecial HID_SPLDLG_BUTTON_CLOSE              { HelpID =  HID_SPLDLG_BUTTON_CLOSE       ; };
+hidspecial HID_SPLDLG_BUTTON_IGNORE             { HelpID =  HID_SPLDLG_BUTTON_IGNORE      ; };
+hidspecial HID_SPLDLG_BUTTON_IGNOREALL          { HelpID =  HID_SPLDLG_BUTTON_IGNOREALL   ; };
+hidspecial HID_SPLDLG_BUTTON_CHANGE             { HelpID =  HID_SPLDLG_BUTTON_CHANGE      ; };
+hidspecial HID_SPLDLG_BUTTON_CHANGEALL          { HelpID =  HID_SPLDLG_BUTTON_CHANGEALL   ; };
+hidspecial HID_HANGULDLG_BUTTON_CLOSE           { HelpID =  HID_HANGULDLG_BUTTON_CLOSE    ; };
+hidspecial HID_HANGULDLG_BUTTON_IGNORE          { HelpID =  HID_HANGULDLG_BUTTON_IGNORE   ; };
+hidspecial HID_HANGULDLG_BUTTON_IGNOREALL       { HelpID =  HID_HANGULDLG_BUTTON_IGNOREALL; };
+hidspecial HID_HANGULDLG_BUTTON_CHANGE          { HelpID =  HID_HANGULDLG_BUTTON_CHANGE   ; };
+hidspecial HID_HANGULDLG_BUTTON_CHANGEALL       { HelpID =  HID_HANGULDLG_BUTTON_CHANGEALL; };
+
+hidspecial HID_SPLDLG_EDIT_NEWWORD          { HelpID =  HID_SPLDLG_EDIT_NEWWORD    ; };
+hidspecial HID_HANGULDLG_EDIT_NEWWORD       { HelpID =  HID_HANGULDLG_EDIT_NEWWORD ; };
+
+
