@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-09 14:50:57 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2305,9 +2305,9 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                 String sDesc;
                 SwTransferable::_CheckForURLOrLNKFile( rData, sTxt, &sDesc );
 
-                INetURLObject aTemp( sTxt );
                 aBkmk = INetBookmark(
-                    aTemp.GetMainURL(INetURLObject::NO_DECODE), sDesc );
+                        URIHelper::SmartRel2Abs(INetURLObject(), sTxt, Link(), false ),
+                        sDesc );
                 bCheckForGrf = TRUE;
                 bCheckForImageMap = SW_PASTESDR_REPLACE == nAction;
             }
@@ -2530,8 +2530,10 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                 BOOL bIsURLFile = SwTransferable::_CheckForURLOrLNKFile( rData, sFile, &sDesc );
 
                 //Eigenes FileFormat? -->Einfuegen, nicht fuer StarWriter/Web
+                String sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link(), false );
                 const SfxFilter* pFlt = SW_PASTESDR_SETATTR == nAction
-                        ? 0 : SwIoSystem::GetFileFilter( sFile, aEmptyStr );
+                        ? 0 : SwIoSystem::GetFileFilter(
+                        sFileURL, aEmptyStr );
                 if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell)
     /*
     JP 02.07.98: warum nur fuer die Formate ??
@@ -2545,8 +2547,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
     // und dann per PostUser Event den Bereich-Einfuegen-Dialog hochreissen
                     SwSection* pSect = new SwSection( FILE_LINK_SECTION,
                                     rSh.GetDoc()->GetUniqueSectionName() );
-                    INetURLObject aTemp( sFile );
-                    pSect->SetLinkFileName( aTemp.GetMainURL(INetURLObject::NO_DECODE) );
+                    pSect->SetLinkFileName( sFileURL );
                     pSect->SetProtect( TRUE );
 
                     Application::PostUserEvent( STATIC_LINK( &rSh, SwWrtShell,
