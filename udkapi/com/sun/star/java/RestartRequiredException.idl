@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RestartRequiredException.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 09:08:14 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com { module sun { module star { module java {
 
 /** indicates that the office must be restarted before a JRE can be used.
 
-    @since #i20052#
+    @since OOo2.0.0
  */
 exception RestartRequiredException: JavaInitializationException
 {
