@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 15:00:53 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,7 @@ String STR_PAGE_COUNT_MACRO
         FN_END_OF_DOCUMENT              ;\
         FN_SHOW_TWO_PAGES               ;\
         FN_SHOW_MULTIPLE_PAGES              ;\
+        FN_SHOW_BOOKVIEW                ;\
         FN_PRINT_PAGEPREVIEW            ;\
         FN_FAX                          ;\
         FN_QRY_MERGE                    ;\
@@ -342,7 +343,7 @@ String STR_PAGE_COUNT_MACRO
                                         \
         };                              \
     IdCount = {                         \
-        173;                            \
+        174;                            \
     };
 
 
