@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:09:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,9 +399,36 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 
             @param      rDescriptor
                         reference to the MediaDescriptor (represented by an easy-to-use
-                        stl interface!), which should be pacthed.
+                        stl interface!), which should be patched.
          */
         void impl_removeTypeFilterFromDescriptor(::comphelper::MediaDescriptor& rDescriptor);
+
+        //---------------------------------------
+
+        /** @short      search the best suitable filter for the given type
+                        and add it into the media descriptor.
+
+            @descr      Normaly this is a type detection only ...
+                        but for some special features we need the information,
+                        which application will load this new document.
+                        e.g. PersistentWindowStates rely on that.
+
+                        And here we have all needed informations at a central place.
+                        So we can do this search in a performant way.
+
+                        Note: If the descriptor already include a filter
+                        (may be selected by a FilterSelect interaction or preselected
+                        by the user itself) ... we dont change that here.
+
+            @param      rDescriptor
+                        reference to the MediaDescriptor (represented by an easy-to-use
+                        stl interface!), which should be patched.
+
+            @param      sType
+                        the internal type name, where we search a filter for.
+         */
+        void impl_addBestFilter(      ::comphelper::MediaDescriptor& rDescriptor,
+                                const ::rtl::OUString&               sType      );
 
     //-------------------------------------------
     // uno interface
