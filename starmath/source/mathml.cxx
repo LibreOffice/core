@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-25 10:16:15 $
+ *  last change: $Author: cmc $ $Date: 2001-10-12 11:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,7 +859,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
                     "com.sun.star.comp.Math.XMLExporter");
         }
 
-        if( bRet && !bEmbedded )
+        if( bRet )
         {
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue(nSteps++);
