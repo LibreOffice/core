@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:52:44 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 
+#include <hash_map>
+
 USHORT SwNumRule::nRefCount = 0;
 SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
     0, 0, 0, 0, 0,
@@ -175,6 +177,15 @@ const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
     ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
     return aFmts[ i ];
 }
+
+void SwNumRule::SetList(SwTxtNodeTable * _pList)
+{
+    if (pList)
+        delete pList;
+
+    pList = _pList;
+}
+
 const Font& SwNumRule::GetDefBulletFont()
 {
     if( !pDefBulletFont )
@@ -550,6 +561,7 @@ BOOL SwNodeNum::operator==( const SwNodeNum& rNum ) const
 SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
     : eRuleType( eType ),
     sName( rNm ),
+      pList(0),
       aMarkedLevels( MAXLEVEL ), // #i27615#
     bAutoRuleFlag( bAutoFlg ),
     bInvalidRuleFlag( TRUE ),
@@ -597,6 +609,7 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
     : eRuleType( rNumRule.eRuleType ),
     sName( rNumRule.sName ),
+      pList(0),
     aMarkedLevels( MAXLEVEL ), // #i27615#
     bAutoRuleFlag( rNumRule.bAutoRuleFlag ),
     bInvalidRuleFlag( TRUE ),
@@ -889,6 +902,16 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
     return aRule;
 }
 
+void SwNumRule::SetInvalidRule(BOOL bFlag)
+{
+    if (bFlag && pList)
+    {
+        delete pList;
+        pList = 0;
+    }
+
+    bInvalidRuleFlag = bFlag;
+}
 
 /* #109308# */
 void SwNumRule::SetNumAdjust(SvxAdjust eNumAdjust)
