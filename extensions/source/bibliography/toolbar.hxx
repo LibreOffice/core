@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-05-07 13:49:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,8 @@ class BibToolBar:   public ToolBox
         Timer                   aMenuTimer;
         ImageList               aImgLst;
         ImageList               aImgLstHC;
+        ImageList               aBigImgLst;
+        ImageList               aBigImgLstHC;
         FixedText               aFtSource;
         ListBox                 aLBSource;
         FixedText               aFtQuery;
@@ -192,13 +194,20 @@ class BibToolBar:   public ToolBox
         sal_uInt16              nMenuId;
         sal_uInt16              nSelMenuItem;
         rtl::OUString           aQueryField;
+        Link                    aLayoutManager;
+        sal_Int16               nSymbolSet;
+        sal_Int16               nOutStyle;
 
         BibDataManager*         pDatMan;
         DECL_LINK( SelHdl, ListBox* );
         DECL_LINK( SendSelHdl, Timer* );
         DECL_LINK( MenuHdl, Timer* );
+        DECL_LINK( OptionsChanged_Impl, void* );
+        DECL_LINK( SettingsChanged_Impl, void* );
 
         void                    ApplyImageList();
+        void                    RebuildToolbar();
+
     protected:
 
         void                    DataChanged( const DataChangedEvent& rDCEvt );
@@ -207,11 +216,12 @@ class BibToolBar:   public ToolBox
         virtual void            Click();
         void                    SendDispatch(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs);
         long                    PreNotify( NotifyEvent& rNEvt );
+        sal_Int16               GetCurrentSymbolSet();
 
 
     public:
 
-        BibToolBar(Window* pParent, WinBits nStyle = WB_3DLOOK );
+        BibToolBar(Window* pParent, Link aLink, WinBits nStyle = WB_3DLOOK );
         ~BibToolBar();
 
         void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
@@ -224,6 +234,7 @@ class BibToolBar:   public ToolBox
 
         void    EnableQuery(sal_Bool bFlag=sal_True);
         void    SetQueryString(const XubString& );
+        void    AdjustToolBox();
 
         void    ClearFilterMenu();
         sal_uInt16  InsertFilterItem(const XubString& );
