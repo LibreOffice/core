@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:08:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,24 +147,6 @@ public:
                                 pInfo->aImageMap = aImageMap;
                                 return pInfo;
                             }
-
-    //BFS01virtual void         ReadData( SvStream& rIStm )
-    //BFS01                     {
-    //BFS01                         SdrObjUserData::ReadData( rIStm );
-    //BFS01                         SdrDownCompat   aIO( rIStm, STREAM_READ, TRUE );
-    //BFS01                         UINT16          nVer;
-    //BFS01                         rIStm >> nVer;
-    //BFS01                         rIStm >> aImageMap;
-    //BFS01                     }
-
-    //BFS01virtual void         WriteData( SvStream& rOStm )
-    //BFS01                     {
-    //BFS01                         SdrObjUserData::WriteData( rOStm );
-    //BFS01                         SdrDownCompat   aIO( rOStm, STREAM_WRITE, TRUE );
-    //BFS01                         const UINT16    nVer = 1;
-    //BFS01                         rOStm << nVer;
-    //BFS01                         rOStm << aImageMap;
-    //BFS01                     }
 
     const ImageMap&         GetImageMap() const { return aImageMap; }
 };
