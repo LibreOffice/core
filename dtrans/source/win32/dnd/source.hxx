@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:10:26 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include "../../inc/DtObjFactory.hxx"
 #include "globals.hxx"
 #include <oleidl.h>
-#include <comdef.h>
 
+#include <systools/win32/comtools.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
