@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:25:26 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1924,7 +1924,7 @@ void SwHTMLParser::InsertLink()
                     sRel = pOption->GetString();
                     break;
                 case HTML_O_HREF:
-                    sHRef = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), pOption->GetString() );
+                    sHRef = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), pOption->GetString(), Link(), false );
                     break;
                 case HTML_O_TYPE:
                     sType = pOption->GetString();
