@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:39:19 $
+ *  last change: $Author: fs $ $Date: 2001-01-25 10:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,19 +459,16 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             void describeParameter();
         };
         // -------------------------------------------------------------------------
-        inline sal_Int32 OResultSet::mapColumn (sal_Int32   column)
+        inline sal_Int32 OResultSet::mapColumn(sal_Int32 column)
         {
-            return column;
-//          sal_Int32   map = column;
-//
-//          if (m_aColMapping.size())
-//          {
-//              // Validate column number
-//              OSL_ENSHURE(column>0,"OResultSet::mapColumn column <= 0");
-//              map = m_aColMapping[column];
-//          }
-//
-//          return map;
+            sal_Int32   map = column;
+
+            OSL_ENSURE(column > 0, "file::OResultSet::mapColumn: invalid column index!");
+                // the first column (index 0) is for convenience only. The first real select column is no 1.
+            if ((column > 0) && (column < m_aColMapping.size()))
+                map = m_aColMapping[column];
+
+            return map;
         }
     }
 }
