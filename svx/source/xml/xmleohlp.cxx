@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $
+ *  last change: $Author: cl $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,18 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
 {
 }
 
+SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( SvPersist& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
+    WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
+    maDefaultContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
+    mpRootStorage( 0 ),
+    mpDocPersist( 0 ),
+    mpStreamMap( 0 ),
+    meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ )
+{
+    Init( 0, rDocPersist, eCreateMode );
+}
+
+
 // -----------------------------------------------------------------------------
 
 SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
@@ -323,6 +335,13 @@ SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
             }
         }
     }
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SvXMLEmbeddedObjectHelper::disposing()
+{
+    Flush();
 }
 
 // -----------------------------------------------------------------------------
@@ -665,7 +684,7 @@ void SvXMLEmbeddedObjectHelper::Destroy(
 {
     if( pSvXMLEmbeddedObjectHelper )
     {
-        pSvXMLEmbeddedObjectHelper->Flush();
+        pSvXMLEmbeddedObjectHelper->dispose();
         pSvXMLEmbeddedObjectHelper->release();
     }
 }

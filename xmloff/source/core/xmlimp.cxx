@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-30 15:59:24 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 08:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #include "xmlerror.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
@@ -169,6 +172,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_np__office[] = "_office";
@@ -239,7 +243,10 @@ public:
     FontToSubsFontConverter hBatsFontConv;
     FontToSubsFontConverter hMathFontConv;
 
-    SvXMLImport_Impl() : hBatsFontConv( 0 ), hMathFontConv( 0 ) {}
+    bool mbOwnGraphicResolver;
+    bool mbOwnEmbeddedResolver;
+
+    SvXMLImport_Impl() : hBatsFontConv( 0 ), hMathFontConv( 0 ), mbOwnGraphicResolver( false ), mbOwnEmbeddedResolver( false ) {}
     ~SvXMLImport_Impl()
     {
         if( hBatsFontConv )
@@ -350,7 +357,7 @@ void SvXMLImport::_InitCtor()
 }
 
 SvXMLImport::SvXMLImport( sal_uInt16 nImportFlags ) throw () :
-    pImpl( 0 ),
+    pImpl( new SvXMLImport_Impl() ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     pContexts( new SvXMLImportContexts_Impl ),
@@ -366,7 +373,7 @@ SvXMLImport::SvXMLImport( sal_uInt16 nImportFlags ) throw () :
 }
 
 SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
-    pImpl( 0 ),
+    pImpl( new SvXMLImport_Impl() ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     pContexts( new SvXMLImportContexts_Impl ),
@@ -385,7 +392,7 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
 
 SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & rGraphicObjects ) throw () :
-    pImpl( 0 ),
+    pImpl( new SvXMLImport_Impl() ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     pContexts( new SvXMLImportContexts_Impl ),
@@ -456,10 +463,9 @@ SvXMLImport::~SvXMLImport() throw ()
 
     xmloff::token::ResetTokens();
 
-#ifdef CONV_STAR_FONTS
     if( pImpl )
         delete pImpl;
-#endif
+
     if (pEventListener && xModel.is())
         xModel->removeEventListener(pEventListener);
 }
@@ -506,12 +512,55 @@ void SAL_CALL SvXMLImport::startDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
     RTL_LOGFILE_TRACE_AUTHOR( "xmloff", LOGFILE_AUTHOR, "{ SvXMLImport::startDocument" );
+
+    if( !xGraphicResolver.is() || !xEmbeddedResolver.is() )
+    {
+        Reference< lang::XMultiServiceFactory > xFactory( xModel,   UNO_QUERY );
+        if( xFactory.is() )
+        {
+            try
+            {
+                if( !xGraphicResolver.is() )
+                {
+                    xGraphicResolver = Reference< XGraphicObjectResolver >::query(
+                        xFactory->createInstance(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.document.ExportGraphicObjectResolver"))));
+                    pImpl->mbOwnGraphicResolver = xGraphicResolver.is;
+                }
+
+                if( !xEmbeddedResolver.is() )
+                {
+                    xEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
+                        xFactory->createInstance(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.document.ExportEmbeddedObjectResolver"))));
+                    pImpl->mbOwnEmbeddedResolver = xEmbeddedResolver.is;
+                }
+            }
+            catch( com::sun::star::uno::Exception& )
+            {
+            }
+        }
+    }
 }
 
 void SAL_CALL SvXMLImport::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException)
 {
     RTL_LOGFILE_TRACE_AUTHOR( "xmloff", LOGFILE_AUTHOR, "} SvXMLImport::startDocument" );
+
+    if( pImpl->mbOwnGraphicResolver )
+    {
+        Reference< lang::XComponent > xComp( xGraphicResolver, UNO_QUERY );
+        xComp->dispose();
+    }
+
+    if( pImpl->mbOwnEmbeddedResolver )
+    {
+        Reference< lang::XComponent > xComp( xEmbeddedResolver, UNO_QUERY );
+        xComp->dispose();
+    }
 
     if ( pXMLErrors != NULL )
     {
@@ -1267,11 +1316,8 @@ void SvXMLImport::_CreateDataStylesImport()
 sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
 {
     sal_Unicode cNew = c;
-    if( !pImpl || !pImpl->hBatsFontConv )
+    if( !pImpl->hBatsFontConv )
     {
-        if( !pImpl )
-            pImpl = new SvXMLImport_Impl;
-
         OUString sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) );
         pImpl->hBatsFontConv = CreateFontToSubsFontConverter( sStarBats,
                  FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
@@ -1288,10 +1334,8 @@ sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
 sal_Unicode SvXMLImport::ConvStarMathCharToStarSymbol( sal_Unicode c )
 {
     sal_Unicode cNew = c;
-    if( !pImpl || !pImpl->hMathFontConv )
+    if( !pImpl->hMathFontConv )
     {
-        if( !pImpl )
-            pImpl = new SvXMLImport_Impl;
         OUString sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) );
         pImpl->hMathFontConv = CreateFontToSubsFontConverter( sStarMath,
                  FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );

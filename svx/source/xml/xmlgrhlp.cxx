@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $
+ *  last change: $Author: cl $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,13 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 // - SvXMLGraphicHelper -
 // ----------------------
 
+SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
+    ::cppu::WeakComponentImplHelper2< ::com::sun::star::document::XGraphicObjectResolver,
+                                      ::com::sun::star::document::XBinaryStreamResolver >( maMutex )
+{
+    Init( NULL, eCreateMode, sal_False );
+}
+
 SvXMLGraphicHelper::SvXMLGraphicHelper() :
     ::cppu::WeakComponentImplHelper2< ::com::sun::star::document::XGraphicObjectResolver,
                                       ::com::sun::star::document::XBinaryStreamResolver >( maMutex )
@@ -358,6 +365,13 @@ SvXMLGraphicHelper::SvXMLGraphicHelper() :
 
 SvXMLGraphicHelper::~SvXMLGraphicHelper()
 {
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SvXMLGraphicHelper::disposing()
+{
+    Flush();
 }
 
 // -----------------------------------------------------------------------------
@@ -690,7 +704,7 @@ void SvXMLGraphicHelper::Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper )
 {
     if( pSvXMLGraphicHelper )
     {
-        pSvXMLGraphicHelper->Flush();
+        pSvXMLGraphicHelper->dispose();
         pSvXMLGraphicHelper->release();
     }
 }
@@ -726,6 +740,8 @@ void SvXMLGraphicHelper::Flush()
 
             aSetIter++;
         }
+
+        mbDirect = sal_True;
     }
     if( GRAPHICHELPER_MODE_WRITE == meCreateMode )
     {

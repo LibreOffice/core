@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $
+ *  last change: $Author: cl $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,15 +148,16 @@ private:
     void                        ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos );
 
 protected:
-
-
                                 SvXMLGraphicHelper();
                                 ~SvXMLGraphicHelper();
     void                        Init( SotStorage* pXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
                                       BOOL bDirect );
 
+    virtual void SAL_CALL       disposing();
+
 public:
+                                SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );
 
     static SvXMLGraphicHelper*  Create( SotStorage& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,

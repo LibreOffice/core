@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-26 07:58:54 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 08:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -937,6 +937,41 @@ void SvXMLExport::SetBodyAttributes()
 
 sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {
+    bool bOwnGraphicResolver = false;
+    bool bOwnEmbeddedResolver = false;
+
+    if( !xGraphicResolver.is() || !xEmbeddedResolver.is() )
+    {
+        Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY );
+        if( xFactory.is() )
+        {
+            try
+            {
+                if( !xGraphicResolver.is() )
+                {
+                    xGraphicResolver = Reference< XGraphicObjectResolver >::query(
+                        xFactory->createInstance(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.document.ExportGraphicObjectResolver"))));
+                    bOwnGraphicResolver = xGraphicResolver.is;
+                }
+
+                if( !xEmbeddedResolver.is() )
+                {
+                    xEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
+                        xFactory->createInstance(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.document.ExportEmbeddedObjectResolver"))));
+                    bOwnEmbeddedResolver = xEmbeddedResolver.is;
+                }
+            }
+            catch( com::sun::star::uno::Exception& )
+            {
+            }
+        }
+    }
+
+
     xHandler->startDocument();
 
     // <?xml version="1.0" encoding="UTF-8"?>
@@ -1047,6 +1082,18 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
 
     xHandler->endDocument();
+
+    if( bOwnGraphicResolver )
+    {
+        Reference< XComponent > xComp( xGraphicResolver, UNO_QUERY );
+        xComp->dispose();
+    }
+
+    if( bOwnEmbeddedResolver )
+    {
+        Reference< XComponent > xComp( xEmbeddedResolver, UNO_QUERY );
+        xComp->dispose();
+    }
 
     return 0;
 }

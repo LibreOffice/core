@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-17 15:51:30 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 08:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2500,7 +2500,7 @@ OUString SAL_CALL SdImpressXMLExport_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SdXMLExport( sal_False );
+    return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
 }
 
 uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_getSupportedServiceNames() throw()
@@ -2517,7 +2517,7 @@ OUString SAL_CALL SdDrawXMLExport_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SdXMLExport( sal_True );
+    return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
 }
 
 //////////////////////////////////////////////////////////////////////////////
