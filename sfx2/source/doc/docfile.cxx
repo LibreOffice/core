@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-19 17:01:52 $
+ *  last change: $Author: mav $ $Date: 2002-02-20 08:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,9 +1420,12 @@ void SfxMedium::Transfer_Impl()
         // source is the temp file written so far
         INetURLObject aSource( pImp->pTempFile->GetURL() );
 
+
+#ifdef UNX
+    // the following fix ( file streaming instead of copiing )
+    // is required only for unix
     Reference< XOutputStream > aDestStream;
     Reference< XSimpleFileAccess > aSimpleAccess;
-
     ::ucb::Content aOriginalContent;
         if ( ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aOriginalContent ) )
     {
@@ -1479,6 +1482,7 @@ void SfxMedium::Transfer_Impl()
                 }
         }
     }
+#endif
 
         if ( aDest.removeSegment() )
         {
