@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-07-26 13:23:07 $
+ *  last change: $Author: os $ $Date: 2001-08-06 12:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XDEFAULTNUMBERINGPROVIDER_HPP_
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+#include <com/sun/star/style/NumberingType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -114,6 +117,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::style;
 
 sal_Int32 SvxNumberType::nRefCount = 0;
 com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> SvxNumberType::xFormatter = 0;
@@ -178,19 +182,29 @@ String  SvxNumberType::GetNumStr( ULONG nNo, const Locale& rLocale ) const
 
     if(bShowSymbol)
     {
-        Sequence< PropertyValue > aProperties(2);
-        PropertyValue* pValues = aProperties.getArray();
-        pValues[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
-        pValues[0].Value <<= nNumType;
-        pValues[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
-        pValues[1].Value <<= (sal_Int32)nNo;
+        switch(nNumType)
+        {
+            case NumberingType::CHAR_SPECIAL:
+            case NumberingType::BITMAP:
+            break;
+            default:
+                {
 
-        try
-        {
-            aTmpStr = xFormatter->makeNumberingString( aProperties, rLocale );
-        }
-        catch(Exception&)
-        {
+                    Sequence< PropertyValue > aProperties(2);
+                    PropertyValue* pValues = aProperties.getArray();
+                    pValues[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
+                    pValues[0].Value <<= nNumType;
+                    pValues[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+                    pValues[1].Value <<= (sal_Int32)nNo;
+
+                    try
+                    {
+                        aTmpStr = xFormatter->makeNumberingString( aProperties, rLocale );
+                    }
+                    catch(Exception&)
+                    {
+                    }
+                }
         }
     }
     return aTmpStr;
@@ -925,11 +939,17 @@ String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) c
                     continue;
                 }
 
+                sal_Bool bDot = sal_True;
                 if( rNum.GetLevelVal()[ i ] )
-                    aStr += rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], aLocale );
+                {
+                    if(SVX_NUM_BITMAP != rNFmt.GetNumberingType())
+                        aStr += rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], aLocale );
+                    else
+                        bDot = sal_False;
+                }
                 else
                     aStr += sal_Unicode('0');       // alle 0-Level sind eine 0
-                if( i != rNum.GetLevel() )
+                if( i != rNum.GetLevel() && bDot)
                     aStr += sal_Unicode('.');
             }
         }
