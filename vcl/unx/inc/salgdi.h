@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-18 16:48:26 $
+ *  last change: $Author: hdu $ $Date: 2001-02-15 15:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.4 $  $Author: pl $  $Date: 2000-11-18 16:48:26 $   //
+// $Revision: 1.5 $  $Author: hdu $  $Date: 2001-02-15 15:12:46 $   //
 //                                                                            //
 // $Workfile:   salgdi.h  $                                                   //
 //  $Modtime:   10 Sep 1997 11:55:36  $                                       //
@@ -138,6 +138,7 @@ class SalGraphicsData
 
             GC              pFontGC_;           // Font attributes
             ExtendedFontStructRef       xFont_;
+            const class ServerFont* mpServerSideFont;
             Fraction        aScale_;
             SalColor        nTextColor_;
             Pixel           nTextPixel_;
