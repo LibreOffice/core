@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkbar.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:19:55 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@ ToolBox RID_SVX_FONTWORK_BAR
         };
         ToolBoxItem
         {
-            Identifier = SID_FONTWORK_SHAPE_TYPES ;
-            HelpID = SID_FONTWORK_SHAPE_TYPES ;
+            Identifier = SID_FONTWORK_SHAPE_TYPE ;
+            HelpID = SID_FONTWORK_SHAPE_TYPE ;
         };
         ToolBoxItem
         {
