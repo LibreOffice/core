@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 16:49:46 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1287,7 +1287,7 @@ Menu RID_COMMANDMENU
             Text[ dutch ] = "~Unaire/binaire operatoren";
             Text[ chinese_simplified ] = "Ò»Ôª/¶şÔªÔËËã·û";
             Text[ greek ] = "Åíá~äéêïß/Äõáäéêïß ôåëåóôİò";
-            Text[ korean ] = "ÀÏÁø/ÀÌÁø ¿¬»êÀÚ";
+            Text[ korean ] = "´ÜÇ×/ÀÌÇ× ¿¬»êÀÚ";
             Text[ arabic ] = "ÚæÇãá ÊÔÛíá ÃÍÇÏíÉ/ËäÇÆíÉ";
             Text[ turkish ] = "Birli/ikili işleçler";
             Text[ language_user1 ] = " ";
@@ -1629,7 +1629,7 @@ Menu RID_COMMANDMENU
             Text[ dutch ] = "~Definities";
             Text[ chinese_simplified ] = "ÊıÁ¿¼ÆËã";
             Text[ greek ] = "~ĞñÜîåéò óõíüëùí";
-            Text[ korean ] = "¿¬»êÀÚ ¼³Á¤";
+            Text[ korean ] = "ÁıÇÕ¡¡¿¬»ê";
             Text[ arabic ] = "ãÌãæÚÉ ÚãáíÇÊ";
             Text[ turkish ] = "Küme işlemleri";
             Text[ language_user1 ] = " ";
@@ -1971,7 +1971,7 @@ Menu RID_COMMANDMENU
             Text[ dutch ] = "O~peratoren";
             Text[ chinese_simplified ] = "ÔËËã·û";
             Text[ greek ] = "~Ôåëåóôİò";
-            Text[ korean ] = "¿¬»êÀÚ";
+            Text[ korean ] = "¿¬»ê";
             Text[ arabic ] = "ÚæÇãá ÇáÊÔÛíá";
             Text[ turkish ] = "İşleçler";
             Text[ language_user1 ] = " ";
@@ -2422,7 +2422,7 @@ Menu RID_COMMANDMENU
                         Text[ dutch ] = "nieuwe regel";
                         Text[ chinese_simplified ] = "»»ĞĞ";
                         Text[ greek ] = "Íİá ãñáììŞ";
-                        Text[ korean ] = "»õ ÁÙ";
+                        Text[ korean ] = "»õ Çà";
                         Text[ arabic ] = "ÎØ ÌÏíÏ";
                         Text[ turkish ] = "Yeni satır";
                         Text[ language_user1 ] = " ";
@@ -2533,7 +2533,7 @@ Menu RID_COMMANDMENU
             Text[ dutch ] = "~Opmaak";
             Text[ chinese_simplified ] = "¸ñÊ½(~O)";
             Text[ greek ] = "Ìïñ~öïğïéŞóåéò";
-            Text[ korean ] = "¼­½Ä(~O)";
+            Text[ korean ] = "Æ÷¸ËÆÃ";
             Text[ arabic ] = "ÊäÓíŞ";
             Text[ turkish ] = "Format";
             Text[ language_user1 ] = " ";
@@ -2689,7 +2689,7 @@ Menu RID_COMMANDMENU
             Text[ dutch ] = "D~iversen";
             Text[ chinese_simplified ] = "ÆäËû";
             Text[ greek ] = "~ÄéÜöïñá";
-            Text[ korean ] = "±âÅ¸(~O)";
+            Text[ korean ] = "±âÅ¸";
             Text[ arabic ] = "ãÇ ÚÏì Ğáß";
             Text[ turkish ] = "Diğer";
             Text[ language_user1 ] = " ";
