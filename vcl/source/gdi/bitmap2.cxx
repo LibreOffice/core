@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:17:58 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef WIN
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#endif
-
-#define _SV_BITMAP_CXX
 
 #include <tools/zcodec.hxx>
 #ifndef _TOOLS_NEW_HXX
@@ -196,8 +188,6 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
 {
     DIBInfoHeader   aHeader;
     const ULONG     nStmPos = rIStm.Tell();
-    BitmapPalette*  pPalette = NULL;
-    BOOL            bHeaderRead = FALSE;
     BOOL            bRet = FALSE;
 
     if( ImplReadDIBInfoHeader( rIStm, aHeader ) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount )
@@ -665,7 +655,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
 
 BOOL Bitmap::Write( SvStream& rOStm, BOOL bCompressed, BOOL bFileHeader ) const
 {
-    BMP_ASSERT( mpImpBmp, "Empty Bitmaps can't be saved" );
+    DBG_ASSERT( mpImpBmp, "Empty Bitmaps can't be saved" );
 
     const Size  aSizePix( GetSizePixel() );
     BOOL        bRet = FALSE;
