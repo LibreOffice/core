@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 21:49:23 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ ModalDialog DLG_LOGIN
         Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ οξλόηξβΰςελÿ θ οΰπξλό δλÿ %1.";
         Text[ polish ] = "NaleΏy wpisaζ nazwκ uΏytkownika i has³o dla %1.";
         Text[ japanese ] = "‚±‚±‚Ι %1 ‚ΜΥ°»ή°–Ό‚ΖΚί½ά°Δή‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
-        Text[ chinese_traditional ] = "½Π¬° %1 Ώι¤J¨Ο¥Ξ¦W©M±K½X΅C";
+        Text[ chinese_traditional ] = "½Π¬° %1 Ώι¤J¨Ο¥ΞªΜ¦WΊΩ©M±K½X΅C";
         Text[ greek ] = "Παρακαλώ εισάγετε εδώ το όνομα του χρήστη και τον κωδικό πρόσβασης για το %1.";
         Text[ korean ] = "Ώ©±βΏ΅ %1ΐΗ ΖΠ½ΊΏφµεΏΝ »ηΏλΐΪ ΐΜΈ§ΐ» ΐΤ·ΒΗΟ½Κ½ΓΏΐ.";
         Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΗαγΣΚΞΟγ ζίαγΙ ΗαΣΡ αά %1.";
@@ -202,7 +202,7 @@ ModalDialog DLG_LOGIN
         Text[ russian ] = "Θμÿ οξλόηξβΰςελÿ";
         Text[ polish ] = "Nazwa uΏytkownika";
         Text[ japanese ] = "Υ°»ή°–Ό(~U)";
-        Text[ chinese_traditional ] = "¨Ο¥Ξ¦W(~U)";
+        Text[ chinese_traditional ] = "¨Ο¥ΞªΜ¦WΊΩ(~U)";
         Text[ greek ] = "Όνομα χρήστη";
         Text[ korean ] = "»ηΏλΐΪ ΐΜΈ§(~U)";
         Text[ arabic ] = "ΗΣγ ΗαγΣΚΞΟγ";
@@ -398,7 +398,7 @@ ModalDialog DLG_LOGIN
     Text[ russian ] = "Νεξαυξδθμϋ θμÿ οξλόηξβΰςελÿ θ οΰπξλό";
     Text[ polish ] = "NaleΏy wpisaζ nazwκ uΏytkownika i has³o";
     Text[ japanese ] = "Υ°»ή°–Ό‚ΖΚί½ά°Δή‚ª•K—v";
-    Text[ chinese_traditional ] = "¥²¶·Ώι¤J¨Ο¥Ξ¦W©M±K½X";
+    Text[ chinese_traditional ] = "¥²¶·Ώι¤J¨Ο¥ΞªΜ¦WΊΩ©M±K½X";
     Text[ greek ] = "Απαιτείται το όνομα του χρήστη και ο κωδικός πρόσβασης";
     Text[ korean ] = "»ηΏλΐΪ ΐΜΈ§°ϊ ΖΠ½ΊΏφµε°΅ ΗΚΏδΗΥ΄Ο΄Ω.";
     Text[ arabic ] = "γΨαζΘ ΕΟΞΗα ΗΣγ ΗαγΣΚΞΟγ ζίαγΙ ΗαΣΡ";
@@ -406,6 +406,7 @@ ModalDialog DLG_LOGIN
     Text[ catalan ] = "Se requieren el nombre de usuario y la contraseρa";
     Text[ finnish ] = "Kδyttδjδtunnus ja salasana pakolliset";
 };
+
 
 
 
