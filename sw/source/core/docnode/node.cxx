@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:14:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,8 +1096,12 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     {
         if( sNumRule.Len() )
         {
-            if( !((SwTxtNode*)this)->GetNum() )
-                ((SwTxtNode*)this)->UpdateNum( SwNodeNum(0) );
+            // --> FME 2005-02-21 #i42912#
+            // UpdateNum should be called if pNodeNum is 0:
+            if( !static_cast<SwTxtNode*>(this)->_GetNodeNum() )
+                 static_cast<SwTxtNode*>(this)->UpdateNum( SwNodeNum(0) );
+            // <--
+
 #ifndef NUM_RELSPACE
             SetNumLSpace( TRUE );
 #endif
