@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-27 09:09:12 $
+ *  last change: $Author: bm $ $Date: 2000-11-27 12:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
     // stroke attributes
     { "LineStyle",      XML_NAMESPACE_DRAW, sXML_stroke,                XML_SCH_TYPE_STROKE, 0 },
-    { "LineDashName",   XML_NAMESPACE_DRAW, sXML_stroke_dasharray,      XML_TYPE_STRING, 0 },
+    { "LineDashName",   XML_NAMESPACE_DRAW, sXML_stroke_dash,           XML_TYPE_STRING, 0 },
     { "LineWidth",      XML_NAMESPACE_SVG,  sXML_stroke_width,          XML_TYPE_MEASURE, 0 },
     { "LineColor",      XML_NAMESPACE_SVG,  sXML_stroke_color,          XML_TYPE_COLOR, 0 },
     { "LineStartName",  XML_NAMESPACE_DRAW, sXML_marker_start,          XML_TYPE_STRING, 0 },
@@ -233,33 +233,27 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     { "LineEndName",    XML_NAMESPACE_DRAW, sXML_marker_end,            XML_TYPE_STRING, 0 },
     { "LineEndWidth",   XML_NAMESPACE_DRAW, sXML_marker_end_width,      XML_TYPE_MEASURE, 0 },
     { "LineEndCenter",  XML_NAMESPACE_DRAW, sXML_marker_end_center,     XML_TYPE_BOOL, 0 },
-//  { "LineTransparence", XML_NAMESPACE_SVG,sXML_stroke_opacity,        XML_SD_TYPE_OPACITY, 0 },
     { "LineJoint",      XML_NAMESPACE_SVG,  sXML_stroke_linejoin,       XML_SCH_TYPE_LINEJOIN, 0 },
 
     // fill attributes
-    { "FillStyle",      XML_NAMESPACE_DRAW, sXML_fill,                  XML_SCH_TYPE_FILLSTYLE, 0 },
-    { "FillColor",      XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
-    { "FillGradientName",   XML_NAMESPACE_DRAW, sXML_fill_gradient_name,XML_TYPE_STRING, 0 },
-    { "FillHatchName",  XML_NAMESPACE_DRAW, sXML_fill_hatch_name,   XML_TYPE_STRING, 0 },
-    { "FillBitmapName", XML_NAMESPACE_DRAW, sXML_fill_image_name,   XML_TYPE_STRING, 0 },
+    { "FillStyle",      XML_NAMESPACE_DRAW, sXML_fill,                      XML_SCH_TYPE_FILLSTYLE, 0 },
+    { "FillColor",      XML_NAMESPACE_DRAW, sXML_fill_color,                XML_TYPE_COLOR, 0 },
+    { "FillGradientName",   XML_NAMESPACE_DRAW, sXML_fill_gradient_name,    XML_TYPE_STRING, 0 },
+    { "FillHatchName",  XML_NAMESPACE_DRAW, sXML_fill_hatch_name,           XML_TYPE_STRING, 0 },
+    { "FillBitmapName", XML_NAMESPACE_DRAW, sXML_fill_image_name,           XML_TYPE_STRING, 0 },
     { "FillTransparenceName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
 
     // text attributes
 
     { "CharColor",      XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
     { "CharCrossedOut", XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_TYPE_BOOL,  0},
-//  { "CharEscapement",      XML_NAMESPACE_STYLE, sXML_text_position,   XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE, 0 }, BugID #76842#
-//  { "CharEscapementHeight", XML_NAMESPACE_STYLE, sXML_text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE, 0 },
-/// { "CharFontName",   XML_NAMESPACE_FO,       sXML_font_family,       XML_TYPE_TEXT_FONTFAMILYNAME, 0 },
-    { "CharFontStyleName",XML_NAMESPACE_STYLE,  sXML_font_style_name,   XML_TYPE_STRING, 0 },
-    { "CharFontFamily", XML_NAMESPACE_STYLE,    sXML_font_family_generic,XML_TYPE_TEXT_FONTFAMILY, 0 },
-    { "CharFontCharSet",XML_NAMESPACE_STYLE,    sXML_font_charset,      XML_TYPE_TEXT_FONTENCODING, 0 },
-    { "CharHeight",     XML_NAMESPACE_FO,   sXML_font_size,         XML_TYPE_CHAR_HEIGHT },
-//  { "CharLocale",     XML_NAMESPACE_FO,       sXML_language,          XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 }, not supported yet
-//  { "CharLocale",     XML_NAMESPACE_FO,       sXML_country,           XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 }, not supported yet
+    { "CharFontStyleName",XML_NAMESPACE_STYLE,  sXML_font_style_name,       XML_TYPE_STRING, 0 },
+    { "CharFontFamily", XML_NAMESPACE_STYLE,    sXML_font_family_generic,   XML_TYPE_TEXT_FONTFAMILY, 0 },
+    { "CharFontCharSet",XML_NAMESPACE_STYLE,    sXML_font_charset,          XML_TYPE_TEXT_FONTENCODING, 0 },
+    { "CharHeight",     XML_NAMESPACE_FO,       sXML_font_size,             XML_TYPE_CHAR_HEIGHT },
     { "CharPosture",    XML_NAMESPACE_FO,       sXML_font_style,            XML_TYPE_TEXT_POSTURE, 0 },
     { "CharUnderline",  XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
-    { "CharWeight",     XML_NAMESPACE_FO,       sXML_font_weight,       XML_TYPE_TEXT_WEIGHT, 0 },
+    { "CharWeight",     XML_NAMESPACE_FO,       sXML_font_weight,           XML_TYPE_TEXT_WEIGHT, 0 },
 
     MAP_ENTRY_END
 };
