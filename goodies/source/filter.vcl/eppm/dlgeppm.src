@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeppm.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:54:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,8 @@ ModalDialog DLG_EXPORT_EPPM
     Text[ hindi ] = "PPM विकल्प";
     Text[ slovak ] = "Nastavenia pre PPM formát";
 };
+
+
 
 
 
