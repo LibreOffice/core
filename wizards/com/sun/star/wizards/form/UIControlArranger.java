@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UIControlArranger.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 13:57:38 $
+ *  last change: $Author: vg $  $Date: 2005-03-08 15:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ public class UIControlArranger {
             ilLayouts.setGap(new Size(3,3));
             ilLayouts.scaleImages = Boolean.FALSE;
             ilLayouts.tabIndex = (int) curtabindex++;
-            ilLayouts.helpURL = 34453 + formindex;  // + ((formindex+1) * 4));
+            ilLayouts.helpURL = 34453 + (formindex * 4);
 
             ilLayouts.setListModel(model);
             ilLayouts.create(CurUnoDialog);
