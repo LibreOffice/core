@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:39:01 $
+ *  last change: $Author: fs $ $Date: 2002-05-22 14:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,12 +233,14 @@ namespace dbaui
         // position the tool box
         if ( getToolBox() )
         {
-            getToolBox()->SetPosPixel( aPlayground.TopLeft() );
+            ::Point aToolboxPos( aPlayground.TopLeft() );
+            aToolboxPos.Y() += 2;
+            getToolBox()->SetPosPixel( aToolboxPos );
 
-            Size aToolboxSize( aPlayground.GetSize().Width(), getToolBox()->GetSizePixel().Height() );
+            ::Size aToolboxSize( aPlayground.GetSize().Width(), getToolBox()->GetSizePixel().Height() );
             getToolBox()->SetSizePixel( aToolboxSize );
 
-            aPlayground.Top() += aToolboxSize.Height();
+            aPlayground.Top() += aToolboxSize.Height() + 4;
         }
 
         // position the controls of the document's view
