@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:52 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 14:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 
 #include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 
 #include "MasterScriptProvider.hxx"
 #include "ActiveMSPList.hxx"
@@ -154,19 +155,19 @@ DocBrowseNodeImpl( const Reference< provider::XScriptProvider >& msp,
 
 {
     OSL_TRACE("DocBrowseNodeImpl() ctor");
-    m_sNodeName = parseLocationName( getDocNameOrURLFromModel( m_xModel ) );
+    m_sNodeName = parseLocationName( getTitleFromModel( m_xModel ) );
     m_xSP = msp;
 }
 
 virtual ::rtl::OUString SAL_CALL
 getName() throw ( RuntimeException )
 {
-    OSL_TRACE("DocBrowseNodeImpl::getName() have to change name");
-    if ( m_xModel->getURL().getLength() > 0 )
+     if ( m_xModel->getURL().getLength() > 0 )
     {
-        ::rtl::OUString docName = parseLocationName( m_xModel->getURL() );
+        ::rtl::OUString docName = getTitleFromModel( m_xModel );
         if ( !m_sNodeName.equals( docName ) )
         {
+            OSL_TRACE("DocBrowseNodeImpl::getName() have to change name");
             m_sNodeName =  docName;
         }
     }
@@ -176,7 +177,8 @@ getName() throw ( RuntimeException )
 private:
     Reference< frame::XModel > m_xModel;
 ::rtl::OUString
-getDocNameOrURLFromModel( const Reference< frame::XModel >& xModel  )
+getTitleFromModel( const Reference< frame::XModel >& xModel  )
+{
 {
     // Set a default name, this should never be seen.
     ::rtl::OUString docNameOrURL;
@@ -184,23 +186,16 @@ getDocNameOrURLFromModel( const Reference< frame::XModel >& xModel  )
     docNameOrURL = ::rtl::OUString::createFromAscii("Unknown");
     if ( xModel.is() )
     {
-        if ( xModel->getURL().getLength() != 0)
+        ::rtl::OUString tempName;
+        try
         {
-            docNameOrURL =  xModel->getURL();
-            OSL_TRACE("DocBrowseNodeImpl::getDocNameOrURLFromModel() url for document %s.",
-                     ::rtl::OUStringToOString( docNameOrURL,
-                                                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        }
-        else
-        // Untitled document
-        {
-            ::rtl::OUString tempName;
-            try
+            Reference< beans::XPropertySet > propSet( xModel->getCurrentController()->getFrame(), UNO_QUERY );
+            if ( propSet.is() )
             {
-                Reference< beans::XPropertySet > propSet( xModel->getCurrentController()->getFrame(), UNO_QUERY );
-                if ( propSet.is() )
+                if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
                 {
-                    if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
+                    docNameOrURL = tempName;
+                    if ( xModel->getURL().getLength() == 0 )
                     {
                         // process "UntitledX - YYYYYYYY"
                         // to get UntitledX
@@ -208,27 +203,37 @@ getDocNameOrURLFromModel( const Reference< frame::XModel >& xModel  )
                         docNameOrURL = tempName.getToken(0,' ',pos);
                         OSL_TRACE("DocBrowseNodeImpl::getDocNameOrURLFromModel() Title for document is %s.",
                             ::rtl::OUStringToOString( docNameOrURL,
-                                                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                    }
+                    else
+                    {
+                        Reference< document::XDocumentInfoSupplier >  xDIS( xModel, UNO_QUERY_THROW );
+                        Reference< beans::XPropertySet > xProp (xDIS->getDocumentInfo(),  UNO_QUERY_THROW );
+                        Any aTitle = xProp->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) );
+
+                        aTitle >>= docNameOrURL;
+                        if ( docNameOrURL.getLength() == 0 )
+                        {
+                            docNameOrURL =  parseLocationName( xModel->getURL() );
+                        }
                     }
                 }
-                else
-                {
-                    OSL_TRACE("DocBrowseNodeImpl::getDocNameOrURLFromModel() doc model invalid" );
-                }
-            }
-            catch ( Exception& e )
-            {
-                OSL_TRACE("DocBrowseNodeImpl::getDocNameOrURLFromModel() exception thrown: ",
-                    ::rtl::OUStringToOString( e.Message,
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             }
         }
+        catch ( Exception& e )
+        {
+            OSL_TRACE("DocBrowseNodeImpl::getDocNameOrURLFromModel() exception thrown: !!! %s",
+                ::rtl::OUStringToOString( e.Message,
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        }
+
     }
     else
     {
         OSL_TRACE("DocBrowseNodeImpl::getDocNameOrURLFromModel() doc model is null" );
     }
     return docNameOrURL;
+}
 }
 };
 ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext ) : m_xContext( xContext )
@@ -262,7 +267,9 @@ void
 ActiveMSPList::addActiveMSP( const Reference< frame::XModel >& xModel,
                const Reference< provider::XScriptProvider >& msp )
 {
-
+    OSL_TRACE("ActiveMSPList::addActiveMSP() for %s",
+                ::rtl::OUStringToOString( xModel->getURL(),
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     ::osl::MutexGuard guard( m_mutex );
     Model_map::const_iterator itr = m_mModels.find( xModel );
     if ( itr == m_mModels.end() )
