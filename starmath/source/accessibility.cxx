@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-27 13:45:16 $
+ *  last change: $Author: vg $ $Date: 2002-07-05 09:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,10 +488,11 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
     return 0;
 }
 
-void SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
+sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     // nothing to be done
+    return sal_False;
 }
 
 sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
