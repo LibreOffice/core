@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:03:17 $
+ *  last change: $Author: os $ $Date: 2001-02-02 12:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ ModalDialog RID_SVXDLG_POSTIT
     FixedText FT_EDIT
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 18 , 8 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "~Text" ;
         Text [ English ] = "~Text" ;
         Text [ norwegian ] = "~Text" ;
