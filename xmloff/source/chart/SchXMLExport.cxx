@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: bm $ $Date: 2002-05-06 07:24:33 $
+ *  last change: $Author: bm $ $Date: 2002-05-06 10:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,6 +873,7 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                 // write one empty cell (the cell A1 is never used)
                 {
                     SvXMLElementExport aEmptyCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
+                    SvXMLElementExport aEmptyParagraph( mrExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_True );
                 }
                 for( nSeries = 0; nSeries < nSeriesLablesLength; nSeries++ )
                 {
