@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:09:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ struct WW8FlyPara
                                 // enthaltene Grafik anders als zeichengebunden
                                 // zu positionieren
     bool mbVertSet;             // true if vertical positioning has been set
+    BYTE nOrigSp29;
 
     WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = 0);
     bool operator==(const WW8FlyPara& rSrc) const;
