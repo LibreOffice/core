@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcs,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-06 18:52:03 $
+ *  last change: $Author: dg $ $Date: 2002-05-19 23:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,8 @@
  *
  *
  ************************************************************************ -->
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="VCL" oor:package="org.openoffice" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../component-schema.xsd">
+<!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
+<oor:component-schema oor:name="VCL" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
   <templates>
     <group oor:name="LFonts">
       <prop oor:name="SubstFonts" oor:type="xs:string"/>

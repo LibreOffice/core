@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-17 06:08:38 $
+ *  last change: $Author: dg $ $Date: 2002-05-19 23:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,8 @@
  *
  *
  ************************************************************************ -->
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Common" oor:package="org.openoffice.Office" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../../component-schema.xsd" xml:lang="en-US">
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema oor:name="Common" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
   <templates>
     <group oor:name="Passwordstorage">
       <prop oor:name="Password" oor:type="xs:string" oor:localized="false">

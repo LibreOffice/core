@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: dg $ $Date: 2002-05-16 17:49:13 $
+#   last change: $Author: dg $ $Date: 2002-05-19 22:54:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,24 +71,28 @@ $(MISC)$/xcdformat$/%.xcd : %.xcs
     -$(MKDIR) -p $(@:d)
     java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/rschema.xsl $(MISC)$/xcdformat$/$(<:d)$(<:b).xcd xcu=$(PRJ)$/registry$/data$/$(<:d)$(<:b).xcu schemaRoot=$(PRJ)$/registry$/schema 
 
-# stripping schema files 
+# stripping and validating schema files 
 $(MISC)$/registry$/schema$/%.xcs : %.xcs
     -$(MKDIR) -p $(@:d)
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_val.xsl $(@:d)$(<:b).val file=$(<:d)$(<:b) pathSeparator=$/	
     java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_trim.xsl $(@:d)$(<:b).tmp
     java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcs
     +$(RM) $(@:d)$(<:b).tmp
+    +$(RM) $(@:d)$(<:b).val
     
-# creating a locale independent file 
+# validating and creating a locale independent file 
 $(MISC)$/registry$/data$/%.xcu : %.xcu
     -$(MKDIR) -p $(@:d) 
-    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/data_val.xsl $(@:d)$(<:b).val xcs=$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp file=$(<:d)$(<:b) pathSeparator=$/
     java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
     +$(RM) $(@:d)$(<:b).tmp
+    +$(RM) $(@:d)$(<:b).val
     
 # creating locale dependent entries
 $(MISC)$/registry$/res$/{$(alliso)}$/%.xcu :| %.xcu
     -$(MKDIR) -p $(@:d)
-    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $@))}	
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp file=$(<:d)$(<:b) pathSeparator=$/ locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $@))}	
     java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
     +$(RM) $(@:d)$(<:b).tmp
     

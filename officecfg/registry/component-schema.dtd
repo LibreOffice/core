@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT oor:component-schema (info*, import*, uses*, templates?, component)>
+<!ATTLIST oor:component-schema
+	oor:name NMTOKEN #REQUIRED
+	oor:package NMTOKEN #REQUIRED
+	xml:lang CDATA #IMPLIED
+	xmlns:oor CDATA #FIXED "http://openoffice.org/2001/registry"
+	xmlns:xs  CDATA #FIXED "http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi CDATA #FIXED "http://www.w3.org/2001/XMLSchema-instance"
+>
+
+<!ELEMENT info (desc?, label?)>
+
+<!ELEMENT import EMPTY>
+<!ATTLIST import
+	oor:component CDATA #REQUIRED
+>
+
+<!ELEMENT uses EMPTY>
+<!ATTLIST uses
+	oor:component CDATA #REQUIRED
+>
+
+<!ELEMENT templates (((group | set)*))>
+<!ELEMENT component (info*, (node-ref | ((group | set)*))*)>
+
+<!ELEMENT desc (#PCDATA)>
+<!ATTLIST desc
+	xml:lang CDATA #IMPLIED
+>
+
+<!ELEMENT label (#PCDATA)>
+<!ATTLIST label
+	xml:lang CDATA #IMPLIED
+>
+
+<!ELEMENT group ((prop*), (info*, (node-ref | ((group | set)*))*))>
+<!ATTLIST group
+	oor:name CDATA #REQUIRED
+	oor:extensible (true|false) #IMPLIED
+	oor:component CDATA #IMPLIED
+>
+
+<!ELEMENT set ((prop*), (info*, item*))>
+<!ATTLIST set
+	oor:name CDATA #REQUIRED
+	oor:node-type NMTOKEN #REQUIRED
+	oor:extensible (true|false) #IMPLIED
+	oor:component CDATA #IMPLIED	
+>
+
+<!ELEMENT node-ref (info*)>
+<!ATTLIST node-ref
+	oor:name CDATA #REQUIRED
+	oor:node-type NMTOKEN #REQUIRED
+	oor:component CDATA #IMPLIED
+>
+
+<!ELEMENT prop ((value*), (info*, constraints?))>
+<!ATTLIST prop
+	oor:name CDATA #REQUIRED
+	oor:type (xs:boolean | xs:short | xs:int | xs:long | xs:double | xs:string | xs:hexBinary | oor:any | oor:boolean-list | oor:short-list | oor:int-list | oor:long-list | oor:double-list | oor:string-list | oor:hexBinary-list) #REQUIRED
+	oor:localized (true|false) #IMPLIED
+	oor:nillable (true|false) #IMPLIED
+>
+
+<!ELEMENT item EMPTY>
+<!ATTLIST item
+	oor:node-type NMTOKEN #REQUIRED
+	oor:component CDATA #IMPLIED
+>
+
+<!ELEMENT value (#PCDATA)>
+<!ATTLIST value
+	xsi:nil (true|false) #IMPLIED
+	oor:separator CDATA #IMPLIED
+>
+
+<!ELEMENT constraints (enumeration*, length?, minLength?, maxLength?, minInclusive?, maxInclusive?, minExclusive?, maxExclusive?, whiteSpace?)>
+
+<!ELEMENT enumeration (info*)>
+<!ATTLIST enumeration
+	oor:value CDATA #REQUIRED
+>
+
+<!ELEMENT length (info*)>
+<!ATTLIST length
+	oor:value CDATA #REQUIRED
+>
+
+<!ELEMENT minLength (info*)>
+<!ATTLIST minLength
+	oor:value CDATA #REQUIRED
+>
+
+<!ELEMENT maxLength (info*)>
+<!ATTLIST maxLength
+	oor:value CDATA #REQUIRED
+>
+
+<!ELEMENT minInclusive (info*)>
+<!ATTLIST minInclusive
+	oor:value CDATA #REQUIRED
+>
+
+<!ELEMENT maxInclusive (info*)>
+<!ATTLIST maxInclusive
+	oor:value CDATA #REQUIRED
+>
+
+<!ELEMENT minExclusive (info*)>
+<!ATTLIST minExclusive
+	oor:value CDATA #REQUIRED
+>
+
+<!ELEMENT maxExclusive (info*)>
+<!ATTLIST maxExclusive
+	oor:value CDATA #REQUIRED
+>
+
+<!ELEMENT whiteSpace (info*)>
+<!ATTLIST whiteSpace
+	oor:value CDATA #REQUIRED
+>

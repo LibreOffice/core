@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-06 18:57:16 $
+ *  last change: $Author: dg $ $Date: 2002-05-19 23:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,8 @@
  *
  *
  ************************************************************************ -->
-<oor:node xmlns:oor="http://openoffice.org/2001/registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="TypeDetection" oor:context="org.openoffice.Office" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../../component-update.xsd">
+<!DOCTYPE oor:node SYSTEM "../../../../component-update.dtd">
+<oor:node oor:name="TypeDetection" oor:context="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Types">
     <node oor:name="graphic_HTML" oor:op="replace">
       <prop oor:name="UIName">

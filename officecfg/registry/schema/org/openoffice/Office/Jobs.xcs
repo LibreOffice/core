@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Jobs.xcs,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-06 18:52:50 $
+ *  last change: $Author: dg $ $Date: 2002-05-19 23:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,8 @@
  *
  *
  ************************************************************************ -->
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Jobs" oor:package="org.openoffice.Office" xsi:schemaLocation="http://openoffice.org/2001/registry ../../../../component-schema.xsd" xml:lang="en-US">
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema oor:name="Jobs" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
   <templates>
     <group oor:name="Job">
       <prop oor:name="AdminTime" oor:type="xs:string">
