@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:25:09 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ spanish ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple." ;
         Text [ french ] = "Cette boîte de dialogue vous permet d'échanger les bases de données auxquelles vous accédez dans vos documents par des champs de formulaire. Vous pouvez exécuter une seule modification par saisie. La liste de gauche permet une sélection multiple." ;
         Text [ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk." ;
-        Text [ swedish ] = "I denna dialog kan du byta ut databaser, som du kan nå via databasfältet i ditt dokument, mot andra databaser. Du kan bara göra en ändring åt gången. I den vänstra listan går det att göra multipel markering." ;
+        Text [ swedish ] = "I denna dialog kan du byta ut databaser, som du kan nå via databasfältet i ditt dokument, mot andra databaser. Du kan bara göra en ändring åt gången. I den vänstra listan går det att göra multimarkering." ;
         Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til via databasefelter. Du kan kun udføre en ændring ad gangen. I listen til venstre er der mulighed for multimarkering." ;
         Text [ portuguese_brazilian ] = "In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich." ;
         Text [ portuguese ] = "Nesta caixa de diálogo poderá substituir bases de dados por outras, tendo acesso a elas no seu documento através dos campos da base de dados. É apenas possível uma alteração por cada operação. Na lista da esquerda poderá seleccionar várias opções." ;
@@ -310,7 +310,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ arabic ] = "ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ";
         Text[ dutch ] = "Database wisselen";
         Text[ chinese_simplified ] = "¸ü»»Êı¾İ¿â";
-        Text[ greek ] = "ÁíôáëëáãŞ âÜóåùí äåäïìİíùí";
+        Text[ greek ] = "ÁëëáãŞ âÜóçò äåäïìİíùí";
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ±³È¯";
         Text[ turkish ] = "Veritabanının değiştirilmesi";
         Text[ language_user1 ] = " ";
@@ -405,7 +405,7 @@ ModalDialog DLG_CHANGE_DB
     Text[ arabic ] = "ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ";
     Text[ dutch ] = "Database wisselen";
     Text[ chinese_simplified ] = "¸ü»»Êı¾İ¿â";
-    Text[ greek ] = "ÁíôáëëáãŞ âÜóåùí äåäïìİíùí";
+    Text[ greek ] = "ÁëëáãŞ âÜóçò äåäïìİíùí";
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ±³È¯";
     Text[ turkish ] = "Veritabanının değiştirilmesi";
     Text[ language_user1 ] = " ";
