@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 21:11:43 $
+ *  last change: $Author: os $ $Date: 2001-01-11 12:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,11 @@
 #ifndef _UNOPORT_HXX
 #include <unoport.hxx>
 #endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
 
+class SwRedline;
 /* -----------------------------19.12.00 11:35--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -132,5 +136,9 @@ public:
     //XPropertySet
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > CreateRedlineProperties( const SwRedline& rRedline ) throw();
+
 };
+
+
 #endif

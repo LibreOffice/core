@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 13:00:02 $
+ *  last change: $Author: os $ $Date: 2001-01-11 12:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,6 +875,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_SKIP_HIDDEN_TEXT                 (FN_EXTRA2 + 72)
 #define FN_SKIP_PROTECTED_TEXT              (FN_EXTRA2 + 73)
 #define FN_UNO_Z_ORDER                      (FN_EXTRA2 + 74)
+#define FN_UNO_REDLINE_NODE_START           (FN_EXTRA2 + 75)
+#define FN_UNO_REDLINE_NODE_END             (FN_EXTRA2 + 76)
 /*--------------------------------------------------------------------
     Bereich: Fenster
  --------------------------------------------------------------------*/

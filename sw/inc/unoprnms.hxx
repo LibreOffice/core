@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 21:11:43 $
+ *  last change: $Author: os $ $Date: 2001-01-11 12:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,6 +643,8 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_TYPE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_SUCCESSOR_DATA;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_IDENTIFIER;
 
+extern const SwPropNameLen __FAR_DATA UNO_NAME_START_REDLINE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_END_REDLINE;
 #endif
 
 
