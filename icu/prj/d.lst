@@ -1,0 +1,22 @@
+mkdir: %_DEST%\inc%_EXT%\icu
+mkdir: %_DEST%\inc%_EXT%\external\layout
+mkdir: %_DEST%\inc%_EXT%\external\unicode
+
+..\%__SRC%\misc\build\icu\source\layout\*.h %_DEST%\inc%_EXT%\external\layout\*.h
+..\%__SRC%\misc\build\icu\source\common\unicode\*.h %_DEST%\inc%_EXT%\external\unicode\*.h
+..\%__SRC%\misc\build\icu\source\i18n\unicode\*.h %_DEST%\inc%_EXT%\external\unicode\*.h
+
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+
+..\%__SRC%\lib\libicudt*.*      %_DEST%\lib%_EXT%\libicudt*.*
+..\%__SRC%\lib\libicui18n.*     %_DEST%\lib%_EXT%\libicui18n.*
+..\%__SRC%\lib\libicule.*       %_DEST%\lib%_EXT%\libicule.*
+..\%__SRC%\lib\libicuuc.*       %_DEST%\lib%_EXT%\libicuuc.*
+
+linklib: libicui18n.so.*.*
+linklib: libicule.so.*.*
+linklib: libicuuc.so.*.*
