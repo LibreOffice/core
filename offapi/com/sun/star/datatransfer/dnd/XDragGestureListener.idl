@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragGestureListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 */
 
-interface XDragGestureListener: com::sun::star::lang::XEventListener
+published interface XDragGestureListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
     /** A <type>XDragGestureRecognizer</type> has detected a platform-dependent
