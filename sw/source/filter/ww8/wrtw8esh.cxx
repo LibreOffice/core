@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:49 $
+ *  last change: $Author: cmc $ $Date: 2001-11-06 16:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1250,10 +1250,14 @@ SwEscherEx::~SwEscherEx()
 
 void SwEscherEx::Init()
 {
-    SdrModel& rModel = *rWrt.pDoc->GetDrawModel();
-    // PPT arbeitet nur mit Einheiten zu 576DPI
-    // WW hingegen verwendet twips, dh. 1440DPI.
-    MapUnit eMap = rModel.GetScaleUnit();
+    MapUnit eMap = MAP_TWIP;
+    SdrModel *pModel = rWrt.pDoc->GetDrawModel();
+    if (pModel)
+    {
+        // PPT arbeitet nur mit Einheiten zu 576DPI
+        // WW hingegen verwendet twips, dh. 1440DPI.
+        eMap = pModel->GetScaleUnit();
+    }
 
 //  Fraction aFact( nAppScale );
 //  aFact /= GetMapFactor( MAP_INCH, eMap ).X();
