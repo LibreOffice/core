@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-14 11:15:25 $
+ *  last change: $Author: ssa $ $Date: 2001-11-14 19:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2490,6 +2490,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             // Test for MouseLeave
             if ( pSalData->mhWantLeaveMsg && (pSalData->mhWantLeaveMsg != hWnd) )
                 ImplSendMessage( pSalData->mhWantLeaveMsg, SAL_MSG_MOUSELEAVE, 0, GetMessagePos() );
+
             pSalData->mhWantLeaveMsg = hWnd;
             // Start MouseLeave-Timer
             if ( !pSalData->mpMouseLeaveTimer )
@@ -2562,6 +2563,11 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             nEvent = SALEVENT_MOUSEBUTTONUP;
             break;
     }
+
+    // check if this window was destroyed - this might happen if we are the help window
+    // and sent a mouse leave message to the application which killed the help window, ie ourself
+    if( !IsWindow( hWnd ) )
+        return 0;
 
     if ( bCall )
     {
