@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:57:39 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 16:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2071,7 +2071,7 @@ void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
                         {
                             Reference< ::com::sun::star::beans::XPropertySet> xQuery;
                             xQueries->getByName(aCommand) >>= xQuery;
-                            OSL_ENSHURE(xQuery.is(),"xQuery is null!");
+                            OSL_ENSURE(xQuery.is(),"xQuery is null!");
                             aReturn= ::comphelper::getString(xQuery->getPropertyValue(FM_PROP_COMMAND));
                             bEscapeProcessing = ::comphelper::getBOOL(xQuery->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
                         }

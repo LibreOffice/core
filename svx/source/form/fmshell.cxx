@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 14:17:44 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 16:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1342,7 +1342,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                     }
                 }
                 Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSup(xSet,UNO_QUERY);
-                OSL_ENSHURE(xSup.is(),"no columnssupplier!");
+                OSL_ENSURE(xSup.is(),"no columnssupplier!");
                 Sequence<Any> aInit(3);
                 aInit[0] <<= xParser;
                 aInit[1] <<= xParser;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 08:11:35 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 16:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::FindForm(const Refer
     }
     catch(Exception&)
     {
-        OSL_ENSHURE(0,"Exception occured!");
+        OSL_ENSURE(0,"Exception occured!");
     }
 
     Reference< XDataSource >  xDB;
