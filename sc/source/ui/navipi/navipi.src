@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:01:36 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ polish ] = "Wiersz";
         Text[ japanese ] = "s";
         Text[ chinese_traditional ] = "¦C";
-        Text[ arabic ] = "ÓØÑ";
+        Text[ arabic ] = "Õİ";
         Text[ dutch ] = "Rij";
         Text[ chinese_simplified ] = "ĞĞ";
         Text[ greek ] = "ÃñáììŞ";
@@ -162,7 +162,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ dutch ] = "Rij";
         QuickHelpText[ chinese_simplified ] = "ĞĞ";
         QuickHelpText[ greek ] = "ÃñáììŞ";
-        QuickHelpText[ korean ] = "Row";
+        QuickHelpText[ korean ] = "Çà!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -231,7 +231,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ dutch ] = "Kolom";
         QuickHelpText[ chinese_simplified ] = "ÁĞ";
         QuickHelpText[ greek ] = "ÓôŞëç";
-        QuickHelpText[ korean ] = "Column";
+        QuickHelpText[ korean ] = "´Ü!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -276,7 +276,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ dutch ] = "Document";
         QuickHelpText[ chinese_simplified ] = "ÎÄµµ";
         QuickHelpText[ greek ] = "¸ããñáöï";
-        QuickHelpText[ korean ] = "Document";
+        QuickHelpText[ korean ] = "¹®¼­!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -393,7 +393,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text[ dutch ] = "Einde";
                 Text[ chinese_simplified ] = "½áÊø";
                 Text[ greek ] = "Ôİëïò";
-                Text[ korean ] = "Á¾·á";
+                Text[ korean ] = "³¡";
                 Text[ turkish ] = "Son";
                 Text[ language_user1 ] = " ";
             };
@@ -503,14 +503,14 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ danish ] = "Trækmodus" ;
                 Text [ portuguese ] = "Modo Arrastar" ;
                 Text [ portuguese_brazilian ] = "Dragmodus" ;
-                Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
+                Text[ chinese_simplified ] = "ÍÏÒ·Ä£Ê½";
                 Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
                 Text[ polish ] = "Tryb przeci¹gania";
                 Text[ japanese ] = "ÄŞ×¯¸ŞÓ°ÄŞ";
                 Text[ chinese_traditional ] = "©ì¦²¼Ò¦¡";
                 Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
                 Text[ dutch ] = "Dragmodus";
-                Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
+                Text[ chinese_simplified ] = "ÍÏÒ·Ä£Ê½";
                 Text[ greek ] = "ÊáôÜóôáóç ìåôáêßíçóçò";
                 Text[ korean ] = "µå·¡±× ¸ğµå";
                 Text[ turkish ] = "Sürükleme kipi";
@@ -531,14 +531,14 @@ Window RID_SCDLG_NAVIGATOR
         Text [ danish ] = "Trækmodus" ;
         Text [ portuguese ] = "Modo Arrastar" ;
         Text [ portuguese_brazilian ] = "Dragmodus" ;
-        Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
+        Text[ chinese_simplified ] = "ÍÏÒ·Ä£Ê½";
         Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
         Text[ polish ] = "Tryb przeci¹gania";
         Text[ japanese ] = "ÄŞ×¯¸ŞÓ°ÄŞ";
         Text[ chinese_traditional ] = "©ì¦²¼Ò¦¡";
         Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
         Text[ dutch ] = "Dragmodus";
-        Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
+        Text[ chinese_simplified ] = "ÍÏÒ·Ä£Ê½";
         Text[ greek ] = "ÊáôÜóôáóç ìåôáêßíçóçò";
         Text[ korean ] = "µå·¡±× ¸ğµå";
         Text[ turkish ] = "Sürükleme kipi";
@@ -587,12 +587,12 @@ Window RID_SCDLG_NAVIGATOR
         Text[ russian ] = "àêòèâíûé";
         Text[ polish ] = "aktywny";
         Text[ japanese ] = "±¸Ã¨ÌŞ";
-        Text[ chinese_traditional ] = "¿E¬¡ªº";
+        Text[ chinese_traditional ] = "¨Ï¥Î¤¤";
         Text[ arabic ] = "äÔØ";
         Text[ dutch ] = "actief";
         Text[ chinese_simplified ] = "¼¤»îµÄ";
         Text[ greek ] = "ÅíåñãÜ";
-        Text[ korean ] = "ÀÛµ¿";
+        Text[ korean ] = "È°¼º";
         Text[ turkish ] = "Etkin";
         Text[ language_user1 ] = " ";
     };
@@ -613,7 +613,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ russian ] = "íåàêòèâíûé";
         Text[ polish ] = "nieaktywny";
         Text[ japanese ] = "”ñ±¸Ã¨ÌŞ";
-        Text[ chinese_traditional ] = "¥¢¬¡";
+        Text[ chinese_traditional ] = "Ãö³¬ªº";
         Text[ arabic ] = "ÛíÑ äÔØ";
         Text[ dutch ] = "inactief";
         Text[ chinese_simplified ] = "Ê§»î";
@@ -665,7 +665,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ russian ] = "Àêòèâíîå îêíî";
         Text[ polish ] = "Aktywne okno";
         Text[ japanese ] = "±¸Ã¨ÌŞ‚È³¨İÄŞ³";
-        Text[ chinese_traditional ] = "·í«eªºµøµ¡";
+        Text[ chinese_traditional ] = "¨Ï¥Î¤¤ªºµøµ¡";
         Text[ arabic ] = "ÇáäÇİĞÉ ÇáäÔØÉ";
         Text[ dutch ] = "Actief venster";
         Text[ chinese_simplified ] = "µ±Ç°µÄÊÓ´°";
@@ -719,7 +719,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ russian ] = "Êîììåíòàğèé";
         Text[ polish ] = "Komentarz";
         Text[ japanese ] = "ºÒİÄ";
-        Text[ chinese_traditional ] = "ª`¸Ñ";
+        Text[ chinese_traditional ] = "µù¸Ñ";
         Text[ arabic ] = "ÊÚáíŞ";
         Text[ dutch ] = "Commentaar";
         Text[ chinese_simplified ] = "×¢½â";
@@ -807,7 +807,7 @@ String SCSTR_CONTENT_ROOT
     Text[ dutch ] = "Inhoud";
     Text[ chinese_simplified ] = "ÄÚÈİ";
     Text[ greek ] = "Ğåñéå÷üìåíá";
-    Text[ korean ] = "±¸¼º";
+    Text[ korean ] = "³»¿ë";
     Text[ turkish ] = "İçerikler";
     Text[ language_user1 ] = " ";
 };
@@ -990,7 +990,7 @@ String SCSTR_CONTENT_AREALINK
     Text[ dutch ] = "Gekoppelde bereiken";
     Text[ chinese_simplified ] = "Á´½ÓµÄÇøÓò";
     Text[ greek ] = "Óõíäåäåìİíåò ğåñéï÷İò";
-    Text[ korean ] = "¸µÅ©µÈ ¿µ¿ª.";
+    Text[ korean ] = "¸µÅ©µÈ ¿µ¿ª";
     Text[ turkish ] = "Bağlantılı alanlar";
     Text[ language_user1 ] = " ";
 };
@@ -1024,7 +1024,7 @@ Menu RID_POPUP_DROPMODE
             Text[ dutch ] = "Als Hyperlink invoegen";
             Text[ chinese_simplified ] = "µ±×÷³¬Á´½Ó²åÈë";
             Text[ greek ] = "ÅéóáãùãŞ ùò õğåñ-óıíäåóç";
-            Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©¸¦ »ğÀÔ";
+            Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©·Î¼­ »ğÀÔ";
             Text[ turkish ] = "Hyperlink olarak ekle";
             Text[ language_user1 ] = " ";
         };
@@ -1083,7 +1083,7 @@ Menu RID_POPUP_DROPMODE
             Text[ dutch ] = "Als kopie invoegen";
             Text[ chinese_simplified ] = "µ±×÷¸´ÖÆ¼ş²åÈë";
             Text[ greek ] = "ÅéóáãùãŞ ùò áíôßãñáöï";
-            Text[ korean ] = "º¹»çº»À» »ğÀÔ";
+            Text[ korean ] = "º¹»çº»À¸·Î »ğÀÔ";
             Text[ turkish ] = "Kopya olarak ekle";
             Text[ language_user1 ] = " ";
         };
