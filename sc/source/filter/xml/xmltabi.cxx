@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 15:09:00 $
+ *  last change: $Author: sab $ $Date: 2001-06-20 14:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _SC_XMLTABLESOURCECONTEXT_HXX
 #include "XMLTableSourceContext.hxx"
+#endif
+#ifndef _SC_XMLSTYLESIMPORTHELPER_HXX
+#include "XMLStylesImportHelper.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -240,6 +243,7 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLTableContext::EndElement()
 {
+    GetScImport().GetStylesImportHelper()->EndTable();
     ScDocument* pDoc = GetScImport().GetDocument();
     if (sPrintRanges.getLength())
     {

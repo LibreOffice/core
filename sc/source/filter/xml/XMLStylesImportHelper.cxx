@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-11 05:48:08 $
+ *  last change: $Author: sab $ $Date: 2001-06-20 14:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,11 +289,11 @@ void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString& rStyleName, ScXMLIm
 
 //----------------------------------------------------------------------------
 
-ScMyStylesImportHelper::ScMyStylesImportHelper(const rtl::OUString& rPrefix)
+ScMyStylesImportHelper::ScMyStylesImportHelper()
     :
     aCellStyles(),
     aColDefaultStyles(),
-    sPrefix(rPrefix)
+    bPrevRangeAdded(sal_True)
 {
     aRowDefaultStyle = aCellStyles.end();
 }
@@ -304,6 +304,9 @@ ScMyStylesImportHelper::~ScMyStylesImportHelper()
 
 void ScMyStylesImportHelper::ResetAttributes()
 {
+    sPrevStyleName = sStyleName;
+    sPrevCurrency = sCurrency;
+    nPrevCellType = nCellType;
     sStyleName = sEmpty;
     sCurrency = sEmpty;
     nCellType = 0;
@@ -345,7 +348,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
                 ScRange aRange(rRange);
                 aRange.aStart.SetCol(static_cast<sal_uInt16>(nStartCol));
                 aRange.aEnd.SetCol(i - 1);
-                sStyleName = aPrevItr->sStyleName;
+                sPrevStyleName = aPrevItr->sStyleName;
                 AddSingleRange(aRange);
                 nStartCol = i;
                 aPrevItr = aColDefaultStyles[i];
@@ -354,26 +357,35 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
         DBG_ASSERT(aPrevItr != aCellStyles.end(), "no column default style")
         ScRange aRange(rRange);
         aRange.aStart.SetCol(static_cast<sal_uInt16>(nStartCol));
-        sStyleName = aPrevItr->sStyleName;
+        sPrevStyleName = aPrevItr->sStyleName;
         AddSingleRange(aRange);
     }
     else
     {
-        sStyleName = aRowDefaultStyle->sStyleName;
+        sPrevStyleName = aRowDefaultStyle->sStyleName;
         AddSingleRange(rRange);
     }
 }
 
 void ScMyStylesImportHelper::AddSingleRange(const ScRange& rRange)
 {
-    ScMyStylesSet::iterator aItr = GetIterator(sStyleName);
+    ScMyStylesSet::iterator aItr = GetIterator(sPrevStyleName);
     if (aItr != aCellStyles.end())
     {
-        if (nCellType != util::NumberFormat::CURRENCY)
-            aItr->xRanges->AddRange(rRange, nCellType);
+        if (nPrevCellType != util::NumberFormat::CURRENCY)
+            aItr->xRanges->AddRange(rRange, nPrevCellType);
         else
-            aItr->xRanges->AddCurrencyRange(rRange, sCurrency);
+            aItr->xRanges->AddCurrencyRange(rRange, sPrevCurrency);
     }
+}
+
+void ScMyStylesImportHelper::AddRange()
+{
+    if (sPrevStyleName.getLength())
+        AddSingleRange(aPrevRange);
+    else
+        AddDefaultRange(aPrevRange);
+    ResetAttributes();
 }
 
 void ScMyStylesImportHelper::AddColumnStyle(const rtl::OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
@@ -400,11 +412,51 @@ void ScMyStylesImportHelper::SetAttributes(const rtl::OUString& sStyleName,
 
 void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
 {
-    if (sStyleName.getLength())
-        AddSingleRange(rRange);
+    if (!bPrevRangeAdded)
+    {
+        sal_Bool bAddRange(sal_False);
+        if (nCellType == nPrevCellType &&
+            sStyleName.equals(sPrevStyleName) &&
+            sCurrency.equals(sPrevCurrency))
+        {
+            if (rRange.aStart.Row() == aPrevRange.aStart.Row())
+            {
+                if (rRange.aEnd.Row() == aPrevRange.aEnd.Row())
+                {
+                    DBG_ASSERT(aPrevRange.aEnd.Col() + 1 == rRange.aStart.Col(), "something wents wrong");
+                    aPrevRange.aEnd.SetCol(rRange.aEnd.Col());
+                }
+                else
+                    bAddRange = sal_True;
+            }
+            else
+            {
+                if (rRange.aStart.Col() == aPrevRange.aStart.Col() &&
+                    rRange.aEnd.Col() == aPrevRange.aEnd.Col())
+                {
+                    DBG_ASSERT(aPrevRange.aEnd.Row() + 1 == rRange.aStart.Row(), "something wents wrong");
+                    aPrevRange.aEnd.SetRow(rRange.aEnd.Row());
+                }
+                else
+                    bAddRange = sal_True;
+            }
+        }
+        else
+            bAddRange = sal_True;
+        if (bAddRange)
+        {
+            AddRange();
+            aPrevRange = rRange;
+        }
+    }
     else
-        AddDefaultRange(rRange);
-    ResetAttributes();
+    {
+        aPrevRange = rRange;
+        sPrevStyleName = sStyleName;
+        sPrevCurrency = sCurrency;
+        nPrevCellType = nCellType;
+        bPrevRangeAdded = sal_False;
+    }
 }
 
 void ScMyStylesImportHelper::AddRange(const com::sun::star::table::CellRangeAddress& rRange)
@@ -444,6 +496,15 @@ void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTa
     {
         aItr->xRanges->InsertCol(nCol, nTab, pDoc);
         aItr++;
+    }
+}
+
+void ScMyStylesImportHelper::EndTable()
+{
+    if (!bPrevRangeAdded)
+    {
+        AddRange();
+        bPrevRangeAdded = sal_True;
     }
 }
 

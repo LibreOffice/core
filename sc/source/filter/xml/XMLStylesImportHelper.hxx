@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-11 05:48:08 $
+ *  last change: $Author: sab $ $Date: 2001-06-20 14:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,18 +190,23 @@ class ScMyStylesImportHelper
     ScMyStylesSet       aCellStyles;
     ScMyStyles          aColDefaultStyles;
     ScMyStylesSet::iterator aRowDefaultStyle;
-    rtl::OUString       sPrefix;
     rtl::OUString       sStyleName;
+    rtl::OUString       sPrevStyleName;
     rtl::OUString       sCurrency;
+    rtl::OUString       sPrevCurrency;
     rtl::OUString       sEmpty;
+    ScRange             aPrevRange;
     sal_Int16           nCellType;
+    sal_Int16           nPrevCellType;
+    sal_Bool            bPrevRangeAdded;
 
     void ResetAttributes();
     ScMyStylesSet::iterator GetIterator(const rtl::OUString& sStyleName);
     void AddDefaultRange(const ScRange& rRange);
     void AddSingleRange(const ScRange& rRange);
+    void AddRange();
 public:
-    ScMyStylesImportHelper(const rtl::OUString& rPrefix);
+    ScMyStylesImportHelper();
     ~ScMyStylesImportHelper();
     void AddColumnStyle(const rtl::OUString& rStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat);
     void SetRowStyle(const rtl::OUString& rStyleName);
@@ -213,6 +218,7 @@ public:
     void AddCell(const com::sun::star::table::CellAddress& rAddress);
     void InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc); // a row is inserted before nRow
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc); // a col is inserted before nCol
+    void EndTable();
     void SetStylesToRanges(ScXMLImport& rImport);
 };
 
