@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:25:01 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ dutch ] = "Uitvergroting" ;
         Text [ spanish ] = "Escala" ;
         Text [ english_us ] = "Zoom to" ;
-        Text[ chinese_simplified ] = "刻度";
+        Text[ chinese_simplified ] = "显示比列";
         Text[ russian ] = "逾咫梓屙桢";
         Text[ polish ] = "Skalowanie";
         Text[ japanese ] = "攞棪";
