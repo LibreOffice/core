@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-27 13:59:13 $
+ *  last change: $Author: bm $ $Date: 2003-12-04 14:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
 #include <drafts/com/sun/star/chart2/LegendExpansion.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOINT_HPP_
-#include <drafts/com/sun/star/layout/RelativePoint.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <drafts/com/sun/star/layout/RelativePosition.hpp>
 #endif
 
 #include <algorithm>
@@ -150,7 +150,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "RelativePosition" ),
                   PROP_LEGEND_REL_POS,
-                  ::getCppuType( reinterpret_cast< const layout::RelativePoint * >(0)),
+                  ::getCppuType( reinterpret_cast< const layout::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-27 14:00:35 $
+ *  last change: $Author: bm $ $Date: 2003-12-04 14:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_ANCHORPOINT_HPP_
 #include <drafts/com/sun/star/layout/AnchorPoint.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOINT_HPP_
-#include <drafts/com/sun/star/layout/RelativePoint.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <drafts/com/sun/star/layout/RelativePosition.hpp>
 #endif
 
 // header for class Matrix3D
@@ -790,8 +790,9 @@ void VLegend::changePosition(
 
         layout::AnchorPoint aAnchor = lcl_getAnchorByAutoPos( ePos );
         // shift legend about 2% into the primary direction
-        layout::RelativePoint aOffset( 0.02, 0.0 );
+        layout::RelativePosition aOffset( 0.02, 0.0 );
 
+        // rotate aOffset (out-param)
         helper::LayoutHelper::rotatePoint( aAnchor.EscapeDirection, aOffset.Primary, aOffset.Secondary );
 
         sal_Int32 nOffsetX = static_cast< sal_Int32 >(

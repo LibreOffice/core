@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Title.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 16:32:17 $
+ *  last change: $Author: bm $ $Date: 2003-12-04 14:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOINT_HPP_
-#include <drafts/com/sun/star/layout/RelativePoint.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <drafts/com/sun/star/layout/RelativePosition.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -191,7 +191,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "RelativePosition" ),
                   PROP_TITLE_REL_POS,
-                  ::getCppuType( reinterpret_cast< const layout::RelativePoint * >(0)),
+                  ::getCppuType( reinterpret_cast< const layout::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
