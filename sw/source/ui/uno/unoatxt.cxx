@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 12:26:59 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 15:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,16 +64,46 @@
 #endif
 
 #pragma hdrstop
-#include <swtypes.hxx>
-#ifndef _GLOSDOC_HXX //autogen
-#include <glosdoc.hxx>
+
+#define _SVSTDARR_STRINGS
+
+#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _VOS_MUTEX_HXX_ //autogen
+#include <vos/mutex.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+#include <svtools/svstdarr.hxx>
+#ifndef _SVTOOLS_UNOEVENT_HXX_
+#include <svtools/unoevent.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
+#ifndef _OFF_APP_HXX //autogen
+#include <offmgr/app.hxx>
+#endif
+#ifndef _OFAACCFG_HXX //autogen
+#include <offmgr/ofaaccfg.hxx>
 #endif
 
-#ifndef _SHELLIO_HXX //autogen
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _GLOSDOC_HXX
+#include <glosdoc.hxx>
+#endif
+#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
 #ifndef _INITUI_HXX
-#include "initui.hxx"
+#include <initui.hxx>
 #endif
 #ifndef _GLOSLST_HXX
 #include <gloslst.hxx>
@@ -87,33 +117,11 @@
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
-#ifndef _SVTOOLS_UNOEVENT_HXX_
-#include <svtools/unoevent.hxx>
-#endif
 #ifndef _SWEVENT_HXX
-#include "swevent.hxx"
-#endif
-#ifndef _VOS_MUTEX_HXX_ //autogen
-#include <vos/mutex.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
+#include <swevent.hxx>
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OFAACCFG_HXX //autogen
-#include <offmgr/ofaaccfg.hxx>
-#endif
-#ifndef SVTOOLS_URIHELPER_HXX
-#include <svtools/urihelper.hxx>
 #endif
 #ifndef _UNOCRSR_HXX //autogen
 #include <unocrsr.hxx>
@@ -123,9 +131,6 @@
 #endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
