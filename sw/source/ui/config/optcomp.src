@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcomp.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:27:57 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,12 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     {
         Text = "Absatz- und Tabellenabstände am Ende von Tabellenzellen hinzufügen";
         Text[ english_us ] = "Add paragraph and table spacing at bottom of table cells";
+    };
+    String STR_USE_OBJPOSITIONING
+    {
+        Text[ language_user1 ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
+        Text = "%FORMATNAME %FORMATVERSION Positionierung von Objekten verwenden";
+        Text[ english_us ] = "Use %FORMATNAME %FORMATVERSION object positioning";
     };
 };
 
