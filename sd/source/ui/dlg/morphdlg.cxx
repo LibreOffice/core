@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:17:20 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* 
     FreeResource();
     LoadSettings();
 
-    SfxItemPool*    pPool = (SfxItemPool*) pObj1->GetItemPool();
+    SfxItemPool*    pPool = (SfxItemPool*) pObj1->GetObjectItemPool();
     SfxItemSet      aSet1( *pPool );
     SfxItemSet      aSet2( *pPool );
 
