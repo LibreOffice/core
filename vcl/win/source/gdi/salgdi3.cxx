@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-20 16:08:04 $
+ *  last change: $Author: hdu $ $Date: 2002-07-26 16:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,31 +1698,35 @@ static BOOL ImplGetGlyphChar( SalGraphicsData* pData, sal_Unicode c,
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool bIsGlyphIndex, Rectangle& rRect )
 {
     HDC hDC = maGraphicsData.mhDC;
 
+/* TODO: remove
     long nAscent;
     BYTE nPitchAndFamily;
     ImplGetFamilyAndAscents( hDC, nPitchAndFamily, nAscent );
     if ( !(nPitchAndFamily & TMPF_TRUETYPE) )
         return FALSE;
+*/
 
     // use unity matrix
-    MAT2            aMat;
+    MAT2 aMat;
     aMat.eM11 = FixedFromDouble( 1.0 );
     aMat.eM12 = FixedFromDouble( 0.0 );
     aMat.eM21 = FixedFromDouble( 0.0 );
     aMat.eM22 = FixedFromDouble( 1.0 );
 
+    UINT nGGOFlags = GGO_METRICS;
+    if( bIsGlyphIndex )
+        nGGOFlags |= GGO_GLYPH_INDEX;
+
     GLYPHMETRICS aGM;
-    DWORD nSize;
+    DWORD nSize = 0;
     if ( aSalShlData.mbWNT )
-        nSize = ::GetGlyphOutlineW( hDC, nGlyphIndex, GGO_METRICS | GGO_GLYPH_INDEX,
-            &aGM, 0, NULL, &aMat );
-    else
-        nSize = ::GetGlyphOutlineA( hDC, nGlyphIndex, GGO_METRICS | GGO_GLYPH_INDEX,
-            &aGM, 0, NULL, &aMat );
+        nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
+    else if( bIsGlyphIndex || (nIndex <= 255) )
+        nSize = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
 
     if( !nSize )    // blank glyphs are ok
         rRect.SetEmpty();
@@ -1737,16 +1741,18 @@ BOOL SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
+BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon& rPolyPoly )
 {
     BOOL bRet = FALSE;
+    HDC  hDC = maGraphicsData.mhDC;
 
-    HDC     hDC = maGraphicsData.mhDC;
-    BYTE    nPitchAndFamily;
-    long    nAscent;
+/* TODO: remove
+    BYTE nPitchAndFamily;
+    long nAscent;
     ImplGetFamilyAndAscents( hDC, nPitchAndFamily, nAscent );
     if( !(nPitchAndFamily & TMPF_TRUETYPE) )
         return FALSE;
+*/
 
     // use unity matrix
     MAT2 aMat;
@@ -1755,14 +1761,16 @@ BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
     aMat.eM21 = FixedFromDouble( 0.0 );
     aMat.eM22 = FixedFromDouble( 1.0 );
 
+    UINT nGGOFlags = GGO_METRICS;
+    if( bIsGlyphIndex )
+        nGGOFlags |= GGO_GLYPH_INDEX;
+
     GLYPHMETRICS aGlyphMetrics;
-    DWORD nSize1;
+    DWORD nSize1 = 0;
     if ( aSalShlData.mbWNT )
-        nSize1 = ::GetGlyphOutlineW( hDC, nGlyphIndex, GGO_NATIVE | GGO_GLYPH_INDEX,
-            &aGlyphMetrics, 0, NULL, &aMat );
-    else
-        nSize1 = ::GetGlyphOutlineA( hDC, nGlyphIndex, GGO_NATIVE | GGO_GLYPH_INDEX,
-            &aGlyphMetrics, 0, NULL, &aMat );
+        nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
+    else if( bIsGlyphIndex || (nIndex <= 255) )
+        nSize1 = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
 
     if( !nSize1 )       // blank glyphs are ok
         bRet = TRUE;
@@ -1772,10 +1780,10 @@ BOOL SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
         ULONG   nTotalCount = 0;
         DWORD   nSize2;
         if ( aSalShlData.mbWNT )
-            nSize2 = ::GetGlyphOutlineW( hDC, nGlyphIndex, GGO_NATIVE | GGO_GLYPH_INDEX,
+            nSize2 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags,
                 &aGlyphMetrics, nSize1, pData, &aMat );
         else
-            nSize2 = ::GetGlyphOutlineA( hDC, nGlyphIndex, GGO_NATIVE | GGO_GLYPH_INDEX,
+            nSize2 = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags,
                 &aGlyphMetrics, nSize1, pData, &aMat );
 
         if( nSize1 == nSize2 )

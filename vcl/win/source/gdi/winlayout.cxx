@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-26 12:32:18 $
+ *  last change: $Author: hdu $ $Date: 2002-07-26 16:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ bool SimpleWinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyP
     {
         // get outline of individual glyph
         PolyPolygon aGlyphOutline;
-        if( rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], aGlyphOutline ) )
+        if( rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], mbEnableGlyphs, aGlyphOutline ) )
             bRet = true;
 
         // insert outline at correct position
@@ -1161,7 +1161,7 @@ bool UniscribeLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyP
         {
             // get outline of individual glyph
             PolyPolygon aGlyphOutline;
-            if( !rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], aGlyphOutline ) )
+            if( !rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], true, aGlyphOutline ) )
                 return false;
 
             // insert outline at correct position
