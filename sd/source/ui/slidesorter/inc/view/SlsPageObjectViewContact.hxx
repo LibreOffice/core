@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewContact.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:23:23 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef SD_SLIDESORTER_PAGE_OBJECT_VIEW_CONTACT_HXX
 #define SD_SLIDESORTER_PAGE_OBJECT_VIEW_CONTACT_HXX
 
+#include <svx/sdtakitm.hxx>
 #include <svx/sdr/contact/viewcontactofpageobj.hxx>
 
 class SdrPageObj;
