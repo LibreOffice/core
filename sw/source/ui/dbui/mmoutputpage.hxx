@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmoutputpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:18:32 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 10:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _MAILMERGEHELPER_HXX
-#include <mailmergehelper.hxx>
-#endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
@@ -98,6 +95,12 @@
 #include <svtools/prgsbar.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _MAILMERGEHELPER_HXX
+#include "mailmergehelper.hxx"
+#endif
 
 class SwMailMergeWizard;
 class SfxPrinter;
@@ -219,8 +222,7 @@ struct SwMailDescriptor
 struct SwSendMailDialog_Impl;
 class MailProgressBar_Impl;
 class SwMailMergeConfigItem;
-//class SwSendMailDialog : public SfxFloatingWindow
-class SwSendMailDialog : public SfxModalDialog
+class SW_DLLPUBLIC SwSendMailDialog : public SfxModalDialog
 {
     FixedLine               m_aStatusFL;
     FixedText               m_aStatusFT;
@@ -263,26 +265,19 @@ class SwSendMailDialog : public SfxModalDialog
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;
 
-    DECL_LINK( DetailsHdl_Impl, PushButton* );
-    DECL_LINK( StopHdl_Impl, PushButton* );
-    DECL_LINK( CloseHdl_Impl, PushButton* );
-    DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog* );
-    DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog* );
+    SW_DLLPRIVATE DECL_LINK( DetailsHdl_Impl, PushButton* );
+    SW_DLLPRIVATE DECL_LINK( StopHdl_Impl, PushButton* );
+    SW_DLLPRIVATE DECL_LINK( CloseHdl_Impl, PushButton* );
+    SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog* );
+    SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog* );
 
-    void        SendMails();
-    void        UpdateTransferStatus();
+    SW_DLLPRIVATE void        SendMails();
+    SW_DLLPRIVATE void        UpdateTransferStatus();
 public:
-//    SwSendMailDialog(SfxBindings*, SfxChildWindow*, Window *pParent);
     SwSendMailDialog( Window* pParent, SwMailMergeConfigItem& );
     ~SwSendMailDialog();
 
-//    virtual void        FillInfo(SfxChildWinInfo&) const;
-
-//    void                SetConfigItem( SwMailMergeConfigItem& rConfigItem )
-//                            {m_pConfigItem = &rConfigItem;}
-
     void                AddDocument( SwMailDescriptor& rDesc );
-//    void                Start();
     virtual short       Execute();
 
     void                DocumentSent( ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage>,
@@ -290,7 +285,6 @@ public:
                                         const ::rtl::OUString* pError );
     void                AllMailsSent();
 
-//    sal_Bool            QueryTermination();
 };
 #endif
 
