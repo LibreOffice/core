@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:14:58 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7288,7 +7288,7 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
             USHORT nCount = pLinkManager->GetLinks().Count();
             for ( USHORT i=0; i<nCount; i++ )
             {
-                ::so3::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+                ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
                 if (pBase->ISA(ScTableLink))
                 {
                     ScTableLink* pTabLink = (ScTableLink*)pBase;
