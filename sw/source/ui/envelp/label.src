@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:55:41 $
+ *  last change: $Author: kz $ $Date: 2001-10-02 21:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,7 @@ TabPage TP_LAB_LAB
         Text [ danish ] = "Etikettekst" ;
         Text [ french ] = "Inscription" ;
         Text [ swedish ] = "P�skrift" ;
-        Text [ dutch ] = "Tekst" ;
+        Text [ dutch ] = "Opschrift" ;
         Text [ spanish ] = "Texto de etiqueta" ;
         Text [ english_us ] = "Inscription" ;
         Text[ chinese_simplified ] = "标签";
@@ -1650,6 +1650,7 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
 
 
 
