@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:32:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@
 #include "prevloc.hxx"
 #include "scmod.hxx"
 #include "drwlayer.hxx"
+#include "fillinfo.hxx"
 
 
 
@@ -416,11 +417,11 @@ void ScPrintFunc::SetDrawView( FmFormView* pNew )
     pDrawView = pNew;
 }
 
-void lcl_HidePrint( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 )
+void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
 {
-    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+    for (SCSIZE nArrY=1; nArrY+1<rTabInfo.mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &rTabInfo.mpRowInfo[nArrY];
         for (SCCOL nX=nX1; nX<=nX2; nX++)
         {
             const CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nX+1];
@@ -540,10 +541,10 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
 
     //  Daten zusammenstellen
 
-    RowInfo* pRowInfo = new RowInfo[ROWINFO_MAX];
-    SCSIZE nArrCount = pDoc->FillInfo( pRowInfo, nX1, nY1, nX2, nY2, nTab,
+    ScTableInfo aTabInfo;
+    pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
                                         nScaleX, nScaleY, FALSE, bFormula );
-    lcl_HidePrint( pRowInfo, nArrCount, nX1, nX2 );
+    lcl_HidePrint( aTabInfo, nX1, nX2 );
 
     if (bEmbed)
         pDoc->SetEmbedded(aERange);
@@ -561,7 +562,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
     long nAddY = (long)( aLines.Top() * nScaleY );
     nScrY += ( nAddY ? nAddY : 1 );
 
-    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, pRowInfo, nArrCount, pDoc, nTab,
+    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nScaleX, nScaleY );
     aOutputData.SetMetaFileMode(bMetaFile);
     aOutputData.SetShowNullValues(bNullVal);
@@ -657,10 +658,6 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
     aOutputData.DrawingLayer(SC_LAYER_INTERN, nAllPaintMode, nLogStX, nLogStY);
     //aOutputData.DrawingLayer(SC_LAYER_FRONT,SC_OBJECTS_ALL,nLogStX,nLogStY);
     //aOutputData.DrawingLayer(SC_LAYER_INTERN,SC_OBJECTS_ALL,nLogStX,nLogStY);
-
-    for (SCSIZE k=0; k<nArrCount; k++)
-        delete[] pRowInfo[k].pCellInfo;
-    delete[] pRowInfo;
 
     // #114135#
     delete pDrawView;
@@ -1401,16 +1398,16 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
         if (pBorderData)
             pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
 
-        RowInfo* pRowInfo = new RowInfo[ROWINFO_MAX];
-        SCSIZE nArrCount = pBorderDoc->FillInfo( pRowInfo, 0,0, 0,0, 0,
+        ScTableInfo aTabInfo;
+        pBorderDoc->FillInfo( aTabInfo, 0,0, 0,0, 0,
                                             nScaleX, nScaleY, FALSE, FALSE );
-        DBG_ASSERT(nArrCount,"nArrCount == 0");
+        DBG_ASSERT(aTabInfo.mnArrCount,"nArrCount == 0");
 
-        pRowInfo[1].nHeight = (USHORT) nEffHeight;
-        pRowInfo[0].pCellInfo[1].nWidth =
-            pRowInfo[1].pCellInfo[1].nWidth = (USHORT) nEffWidth;
+        aTabInfo.mpRowInfo[1].nHeight = (USHORT) nEffHeight;
+        aTabInfo.mpRowInfo[0].pCellInfo[1].nWidth =
+            aTabInfo.mpRowInfo[1].pCellInfo[1].nWidth = (USHORT) nEffWidth;
 
-        ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, pRowInfo, nArrCount, pBorderDoc, 0,
+        ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pBorderDoc, 0,
                                     nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );
         aOutputData.SetUseStyleColor( bUseStyleColor );
 
@@ -1418,10 +1415,6 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
         if (pBorderData)
             aOutputData.DrawFrame();
-
-        for (SCSIZE i=0; i<nArrCount; i++)
-            delete[] pRowInfo[i].pCellInfo;
-        delete[] pRowInfo;
 
         delete pBorderDoc;
     }
@@ -1633,15 +1626,15 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
                     //  Daten zusammenstellen
 
-    RowInfo* pRowInfo = new RowInfo[ROWINFO_MAX];
-    SCSIZE nArrCount = pDoc->FillInfo( pRowInfo, nX1, nY1, nX2, nY2, nPrintTab,
+    ScTableInfo aTabInfo;
+    pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nPrintTab,
                                         nScaleX, nScaleY, TRUE, aTableParam.bFormulas );
-    lcl_HidePrint( pRowInfo, nArrCount, nX1, nX2 );
+    lcl_HidePrint( aTabInfo, nX1, nX2 );
 
     if (bEmbed)
         pDoc->SetEmbedded(aERange);
 
-    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, pRowInfo, nArrCount, pDoc, nPrintTab,
+    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pDoc, nPrintTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nScaleX, nScaleY );
 
     // #114135#
@@ -1755,10 +1748,6 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
             pDev->SetClipRegion();
         }
     }
-
-    for (SCSIZE i=0; i<nArrCount; i++)
-        delete[] pRowInfo[i].pCellInfo;
-    delete[] pRowInfo;
 }
 
 BOOL ScPrintFunc::IsMirror( long nPageNo )          // Raender spiegeln ?
