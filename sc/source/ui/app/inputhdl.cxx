@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-27 18:12:12 $
+ *  last change: $Author: nn $ $Date: 2001-08-06 17:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1805,14 +1805,13 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
 
     if (eMode==SC_INPUT_TOP || eMode==SC_INPUT_TABLE)
     {
-        if (!bModified)
+        if (eOldMode == SC_INPUT_NONE)      // not when switching between modes
         {
             if (StartTable(0))      // 0 = im Dokument schauen, ob Zahl oder Text
             {
                 if (pActiveViewSh)
                     pActiveViewSh->GetViewData()->GetDocShell()->PostEditView( pEngine, aCursorPos );
             }
-//          bModified = TRUE;       //???
         }
 
         USHORT nPara    = pEngine->GetParagraphCount()-1;
@@ -1934,6 +1933,11 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     {
         //  Test, ob Zahl, dann Fehler ignorieren
     }
+
+    //  After RemoveAdjust, the EditView must not be repainted (has wrong font size etc).
+    //  SetUpdateMode must come after CompleteOnlineSpelling.
+    //  The view is hidden in any case below (Broadcast).
+    pEngine->SetUpdateMode( FALSE );
 
     if ( bModified && !bForget )            // was wird eingeben (Text/Objekt) ?
     {
