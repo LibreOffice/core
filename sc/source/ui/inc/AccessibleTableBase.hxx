@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:16:05 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        selectAllAccessible(  )
+        selectAllAccessibleChildren(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL
