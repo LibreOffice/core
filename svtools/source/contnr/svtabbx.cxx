@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:06:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ SvTabListBox::SvTabListBox( Window* pParent, const ResId& rResId )
 SvTabListBox::~SvTabListBox()
 {
     // array-delete
-    __DELETE(nTabCount) pTabList;
+    delete [] pTabList;
 #ifdef DBG_UTIL
     pTabList = 0;
     nTabCount = 0;
@@ -199,7 +199,7 @@ void SvTabListBox::SetTabs( long* pTabs, MapUnit eMapUnit )
     if( !pTabs )
         return;
 
-    __DELETE(nTabCount) pTabList;
+    delete [] pTabList;
     USHORT nCount = (USHORT)(*pTabs);
     pTabList = new SvLBoxTab[ nCount ];
     nTabCount = nCount;
