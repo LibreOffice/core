@@ -2,9 +2,9 @@
  *
  *  $RCSfile: deferredview.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ namespace configmgr
             virtual void doInsertElement(SetNode const& _aNode, Name const& aName, configuration::SetEntry const& aNewEntry);
             virtual void doRemoveElement(SetNode const& _aNode, Name const& aName);
 
+            virtual void doReleaseDataSegment() { m_pSegment = NULL; }
             virtual memory::Segment const * doGetDataSegment() const { return m_pSegment; }
 
             virtual NodeFactory& doGetNodeFactory();
