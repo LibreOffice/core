@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:43 $
+ *  last change: $Author: kr $ $Date: 2000-11-09 17:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <vector>
+
 #include <cppuhelper/servicefactory.hxx>
 
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
@@ -78,9 +80,9 @@ static void usingRegisterImpl()
                     "                               If the bootstrap registry have the same name as the registration registry\n"
                     "                               the -r option is optional.\n");
     fprintf(stderr, "      -r registryfile        = the name of the registry (will be created if not exists).\n");
-    fprintf(stderr, "      -c locationUrls        = the location of a component (DLL, Class name or an url of a jar file)\n"
-                    "                               or a list of urls seperated by ';'. Note if a list of urls is specified, the\n"
-                    "                               components must all need the same loader.\n");
+    fprintf(stderr, "      -c locationUrls        = the location of a component (DLL, Class name, url of a jar file, ...)\n"
+                    "                               or a list of urls seperated by ';' or ' '. Note if a list of urls is specified, the\n"
+                    "                               components must all need the same loader (quoting is possible with \\ or \"\").\n");
     fprintf(stderr, "      -l componentLoaderUrl  = the name of the needed loader, if no loader is specified\n"
                     "                               the 'com.sun.star.loader.SharedLibrary' is used.\n"
                     "                               loaders: com.sun.star.loader.SharedLibrary | com.sun.star.loader.Java2\n\n");
@@ -93,6 +95,7 @@ using namespace ::com::sun::star::registry;
 
 using namespace cppu;
 using namespace rtl;
+using namespace std;
 
 class IllegalArgument
 {
@@ -299,6 +302,94 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
     return ret;
 }
 
+
+struct DoIt
+{
+    sal_Bool                               _bRegister;
+    sal_Bool                               _bRevoke;
+    OString                                _sRegName;
+    OUString                               _sLoaderName;
+    Reference<XImplementationRegistration> _xImplRegistration;
+    Reference<XSimpleRegistry>             _xReg;
+    sal_uInt32                           * _exitCode;
+
+    DoIt(sal_Bool bRegister,
+         sal_Bool bRevoke,
+         const Reference<XSimpleRegistry> & xReg,
+         const OString & sRegName,
+         const Reference<XImplementationRegistration> & xImplRegistration,
+         const OUString & sLoaderName,
+         sal_uInt32 * exitCode)
+        throw();
+
+    void operator()(const OUString & url) throw();
+};
+
+DoIt::DoIt(sal_Bool bRegister,
+           sal_Bool bRevoke,
+           const Reference<XSimpleRegistry> & xReg,
+           const OString & sRegName,
+           const Reference<XImplementationRegistration> & xImplRegistration,
+           const OUString & sLoaderName,
+           sal_uInt32 * exitCode) throw()
+    : _bRegister(bRegister),
+      _bRevoke(bRevoke),
+      _xReg(xReg),
+      _sRegName(sRegName),
+      _xImplRegistration(xImplRegistration),
+      _sLoaderName(sLoaderName),
+      _exitCode(exitCode)
+{}
+
+void DoIt::operator() (const OUString & url) throw()
+{
+    OString sUrl = OUStringToOString(url, RTL_TEXTENCODING_ASCII_US);
+
+    if (_bRegister)
+    {
+        OSL_TRACE("regcomp - registering: %s in %s", sUrl.getStr(), _sRegName.getStr());
+        try
+        {
+            _xImplRegistration->registerImplementation(_sLoaderName, url, _xReg);
+
+            fprintf(stderr, "\nregister component \"%s\" in registry \"%s\" succesful!\n", sUrl.getStr(), _sRegName.getStr());
+        }
+        catch(CannotRegisterImplementationException & cannotRegisterImplementationException) {
+            OString aMessage(OUStringToOString(cannotRegisterImplementationException.Message, RTL_TEXTENCODING_ASCII_US));
+            fprintf(stderr, "\nregister component \"%s\" in registry \"%s\" failed!\n", sUrl.getStr(), _sRegName.getStr());
+            fprintf(stderr, "\nERROR: %s\n", aMessage.getStr());
+
+            ++ (*_exitCode);
+        }
+    }
+    else if(_bRevoke)
+    {
+        OSL_TRACE("regcomp - revoking: %s from %s", sUrl.getStr(), _sRegName.getStr());
+
+        try
+        {
+            sal_Bool bRet = _xImplRegistration->revokeImplementation(url, _xReg);
+
+            if (bRet)
+                fprintf(stderr, "\nrevoke component \"%s\" from registry \"%s\" succesful!\n", sUrl.getStr(), _sRegName.getStr());
+            else
+            {
+                fprintf(stderr, "\nrevoke component \"%s\" from registry \"%s\" failed!\n", sUrl.getStr(), _sRegName.getStr());
+
+                  ++ (*_exitCode);
+            }
+        }
+        catch( CannotRegisterImplementationException& e )
+        {
+            OString aMessage( OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US) );
+            fprintf(stderr, "\nrevoke component \"%s\" from registry \"%s\" failed!\n", sUrl.getStr(), _sRegName.getStr());
+            fprintf(stderr, "\nERROR: %s\n", aMessage.getStr() );
+
+              ++ (*_exitCode);
+        }
+    }
+}
+
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
 #else
@@ -355,6 +446,10 @@ void _cdecl main( int argc, char * argv[] )
     }
 
 
+    OString tmp = OUStringToOString(aOptions.sComponentUrls, RTL_TEXTENCODING_ASCII_US);
+    OSL_TRACE("regcomp - aOptions.sComponentUrls: %s", tmp.getStr());
+
+
     if ( aOptions.sComponentUrls.getLength() == 0 )
     {
         fprintf(stderr, "ERROR: no component url is specified!\n");
@@ -384,73 +479,68 @@ void _cdecl main( int argc, char * argv[] )
         }
     }
 
-    Reference< XImplementationRegistration > xImplRegistration( xSMgr->createInstance(rtl::OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration")), UNO_QUERY);
+    Reference<XImplementationRegistration> xImplRegistration(xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))),
+                                                             UNO_QUERY);
 
     if (xImplRegistration.is())
     {
-        if ( aOptions.bRegister && aOptions.sComponentUrls.getLength() )
-        {
-            OUString    urls( aOptions.sComponentUrls );
-            OUString    url;
-            OString     sUrl;
-            sal_Int32   count = urls.getTokenCount(';');
+        const OUString bSlash(OUString(RTL_CONSTASCII_USTRINGPARAM("\\")));
+        const OUString tuedle(OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
+        const OUString semikolon(OUString(RTL_CONSTASCII_USTRINGPARAM(";")));
+        const OUString emptyString(OUString(RTL_CONSTASCII_USTRINGPARAM("")));
+        const OUString space(OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
 
-            for (sal_Int32 i=0; i < count; i++)
+        sal_Int32 index = 0;
+        sal_Bool  quote = sal_False;
+        sal_Bool  inString = sal_False;
+
+        const sal_Unicode * raw_urls = aOptions.sComponentUrls.getStr();
+
+        OUString tmp_url;
+
+        vector<OUString> urls;
+
+        // go over the string and parse it, chars can be quoted in strings or with back slash
+        while(index < aOptions.sComponentUrls.getLength())
+        {
+            if((raw_urls[index] == semikolon.getStr()[0] || raw_urls[index] == space.getStr()[0]) && !quote && !inString) // a semikolon or space?
             {
-                try
-                {
-                    url = urls.getToken(i, ';');
-                    sUrl = OUStringToOString(url, RTL_TEXTENCODING_ASCII_US);
-                    xImplRegistration->registerImplementation(aOptions.sLoaderName, url, xReg);
+                tmp_url = tmp_url.trim();
+                if(tmp_url.getLength())
+                    urls.push_back(tmp_url);
 
-                    fprintf(stderr, "\nregister component \"%s\" in registry \"%s\" succesful!\n", sUrl.getStr(), sRegName.getStr());
-                }
-                catch( CannotRegisterImplementationException& e)
-                {
-                    OString aMessage( OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US) );
-                    fprintf(stderr, "\nregister component \"%s\" in registry \"%s\" failed!\n", sUrl.getStr(), sRegName.getStr());
-                    fprintf(stderr, "\nERROR: %s\n", aMessage.getStr() );
-                    exitCode++;
-                }
+                tmp_url = emptyString;
             }
-        } else
-        if ( aOptions.bRevoke && aOptions.sComponentUrls.getLength() )
-        {
-            OUString    urls( aOptions.sComponentUrls );
-            OUString    url;
-            OString     sUrl;
-            sal_Int32   count = urls.getTokenCount(';');
-
-            for (sal_Int32 i=0; i < count; i++)
+            else if(raw_urls[index] == bSlash.getStr()[0] && !quote) // a back slash?
             {
-                try
-                {
-                    url = urls.getToken(i, ';');
-                    sUrl = OUStringToOString(url, RTL_TEXTENCODING_ASCII_US);
-                    bRet = xImplRegistration->revokeImplementation(url, xReg);
-
-                    if (bRet)
-                        fprintf(stderr, "\nrevoke component \"%s\" from registry \"%s\" succesful!\n", sUrl.getStr(), sRegName.getStr());
-                    else
-                    {
-                        fprintf(stderr, "\nrevoke component \"%s\" from registry \"%s\" failed!\n", sUrl.getStr(), sRegName.getStr());
-                        exitCode++;
-                    }
-                }
-                catch( CannotRegisterImplementationException& e )
-                {
-                    OString aMessage( OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US) );
-                    fprintf(stderr, "\nrevoke component \"%s\" from registry \"%s\" failed!\n", sUrl.getStr(), sRegName.getStr());
-                    fprintf(stderr, "\nERROR: %s\n", aMessage.getStr() );
-                    exitCode++;
-                }
+                quote = sal_True;
             }
-        } else
-        {
-            usingRegisterImpl();
-            exitCode++;
+            else if(raw_urls[index] == tuedle.getStr()[0] && !quote) // begin or end of string?
+                inString = !inString;
+
+            else // no special handling
+            {
+                tmp_url += OUString(raw_urls + index, 1);
+                quote = sal_False;
+            }
+
+            ++ index;
         }
-    } else
+
+        tmp_url = tmp_url.trim();
+        if(tmp_url.getLength())
+            urls.push_back(tmp_url);
+
+        if(aOptions.bRegister || aOptions.bRevoke)
+            for_each(urls.begin(), urls.end(), DoIt(aOptions.bRegister, aOptions.bRevoke, xReg, sRegName, xImplRegistration, aOptions.sLoaderName, &exitCode));
+
+        else
+        {
+            ++ exitCode;
+             usingRegisterImpl();
+        }
+    }
+    else
     {
         fprintf(stderr, "\nComponent registration service could not be loaded!\n");
         exitCode++;
