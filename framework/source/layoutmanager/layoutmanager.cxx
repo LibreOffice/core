@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:37:34 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2779,6 +2779,11 @@ void LayoutManager::implts_renumberRowColumnData(
         if (( pIter->m_aDockedData.m_nDockedArea == sal_Int16( eDockingArea )) &&
             ( pIter->m_aName != rUIElement.m_aName ))
         {
+            // Don't change toolbars without a valid docking position!
+            if (( pIter->m_aDockedData.m_aPos.X() == LONG_MAX ) &&
+                ( pIter->m_aDockedData.m_aPos.Y() == LONG_MAX ))
+                continue;
+
             sal_Int32 nWindowRowCol = ( bHorzDockingArea ) ?
                 pIter->m_aDockedData.m_aPos.Y() : pIter->m_aDockedData.m_aPos.X();
             if ( nWindowRowCol >= nRowCol )
@@ -2816,6 +2821,10 @@ void LayoutManager::implts_renumberRowColumnData(
                             else if ( aPropValueSeq[j].Name == m_aPropDockPos )
                                 aPropValueSeq[j].Value >>= aDockedPos;
                         }
+
+                        // Don't change toolbars without a valid docking position!
+                        if (( aDockedPos.X == LONG_MAX ) && ( aDockedPos.Y == LONG_MAX ))
+                            continue;
 
                         sal_Int32 nWindowRowCol = ( bHorzDockingArea ) ? aDockedPos.Y : aDockedPos.X;
                         if (( nDockedArea == eDockingArea ) && ( nWindowRowCol >= nRowCol ))
