@@ -91,6 +91,7 @@ SfxInt32Item ObjectHeight SID_OBJECT_HEIGHT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -142,6 +143,7 @@ SfxInt32Item ObjectLeft SID_OBJECT_LEFT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -318,6 +320,7 @@ SfxUInt16Item ColumnWidth FID_COL_WIDTH
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -919,6 +922,7 @@ SfxStringItem NumberFormat SID_NUMBER_FORMAT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1020,6 +1024,7 @@ SvxHorJustifyItem HorizontalAlignment SID_H_ALIGNCELL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1196,6 +1201,7 @@ SfxObjectItem Tables SID_TABLES_GET
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1222,6 +1228,7 @@ SfxUInt16Item TableCount SID_TABLES_COUNT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1273,6 +1280,7 @@ SfxUInt16Item InsObjCtrl SID_TBXCTL_INSOBJ
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1299,6 +1307,7 @@ SfxUInt16Item InsertCtrl SID_TBXCTL_INSERT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1375,6 +1384,7 @@ SfxStringItem StatusPageStyle SID_STATUS_PAGESTYLE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1426,6 +1436,7 @@ SfxStringItem StatusFunction SID_STATUS_SUM
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1452,6 +1463,7 @@ SfxUInt16Item StatusSelectionModeNorm SID_STATUS_SELMODE_NORM
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1478,6 +1490,7 @@ SfxUInt16Item StatusSelectionMode SID_STATUS_SELMODE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1729,6 +1742,7 @@ SfxBoolItem UnderlineSingle SID_ULINE_VAL_SINGLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1755,6 +1769,7 @@ SfxBoolItem UnderlineDotted SID_ULINE_VAL_DOTTED
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1806,6 +1821,7 @@ SvxVerJustifyItem VerticalAlignment SID_V_ALIGNCELL
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1882,6 +1898,7 @@ SfxStringItem NoteText SID_RANGE_NOTETEXT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1908,6 +1925,7 @@ SfxStringItem Address SID_RANGE_ADDRESS
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1934,6 +1952,7 @@ SfxUInt16Item StatusBarFunc SID_PSZ_FUNCTION
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1960,6 +1979,7 @@ SfxStringItem TextValue SID_RANGE_TEXTVALUE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1986,6 +2006,7 @@ SfxObjectItem CurrentRegion SID_RANGE_REGION
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2287,6 +2308,7 @@ SfxStringItem Title SID_SC_NAME_TITLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2359,7 +2381,7 @@ SfxVoidItem ToolsOptions SID_SCOPTIONS
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     /* config: */
@@ -2463,6 +2485,7 @@ ScDoubleItem Value SID_RANGE_VALUE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2514,6 +2537,7 @@ SfxObjectItem ActiveTable SID_SC_ACTIVETAB
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2668,6 +2692,7 @@ SfxBoolItem FunctionBox FID_FUNCTION_BOX
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2769,6 +2794,7 @@ SfxInt32Item ObjectWidth SID_OBJECT_WIDTH
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3045,6 +3071,7 @@ SfxBoolItem PagebreakMode FID_PAGEBREAKMODE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3221,6 +3248,7 @@ SfxBoolItem AutoRefreshArrows SID_DETECTIVE_AUTO
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3422,6 +3450,7 @@ SfxUInt16Item Column SID_RANGE_COL
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3548,6 +3577,7 @@ SfxObjectItem ActiveCell SID_SC_ACTIVECELL
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3599,6 +3629,7 @@ SfxUInt16Item StatusSelectionModeExt SID_STATUS_SELMODE_ERW
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -3646,7 +3677,7 @@ SfxVoidItem FormatCellDialog FID_CELL_FORMAT
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordPerItem;
     Synchron;
 
     /* config: */
@@ -3675,6 +3706,7 @@ SfxBoolItem AutoComplete FID_AUTOCOMPLETE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3751,6 +3783,7 @@ SfxBoolItem TraceChangeMode FID_CHG_RECORD
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4277,6 +4310,7 @@ SfxBoolItem WrapText SID_ATTR_ALIGN_LINEBREAK
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4678,6 +4712,7 @@ SfxStringItem Name FID_TAB_RENAME
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4879,6 +4914,7 @@ SfxUInt16Item RowHeight FID_ROW_HEIGHT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5105,6 +5141,7 @@ SfxStringItem SelectedObjectName SID_ACTIVE_OBJ_NAME
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5156,6 +5193,7 @@ SfxObjectItem SelectedObject SID_SC_ACTIVEOBJECT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5232,6 +5270,7 @@ SfxBoolItem Visible FID_TABLE_VISIBLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5958,6 +5997,7 @@ SfxBoolItem UnderlineDouble SID_ULINE_VAL_DOUBLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6159,6 +6199,7 @@ SfxUInt16Item InsCellsCtrl SID_TBXCTL_INSCELLS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6185,6 +6226,7 @@ SfxInt32Item ObjectTop SID_OBJECT_TOP
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6261,6 +6303,7 @@ SfxObjectItem OleObject SID_OLE_OBJECT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6437,6 +6480,7 @@ SfxUInt16Item Table SID_RANGE_TABLE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6538,6 +6582,7 @@ SfxObjectItem Selection SID_SC_SELECTION
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6589,6 +6634,7 @@ SfxBoolItem AutomaticCalculation FID_AUTO_CALC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6640,6 +6686,7 @@ SfxBoolItem NoteVisible FID_NOTE_VISIBLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6691,6 +6738,7 @@ SfxObjectItem DataPilotTables SID_PIVOT_GET
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6717,6 +6765,7 @@ SfxStringItem StatusDocPos SID_STATUS_DOCPOS
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6868,6 +6917,7 @@ SfxStringItem Formula SID_RANGE_FORMULA
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6944,6 +6994,7 @@ SfxUInt16Item Row SID_RANGE_ROW
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7020,6 +7071,7 @@ SfxBoolItem UnderlineNone SID_ULINE_VAL_NONE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7096,6 +7148,7 @@ SfxUInt16Item StatusSelectionModeExp SID_STATUS_SELMODE_ERG
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = FALSE,
