@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 20:06:59 $
+ *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ Control CTRL_FILEVIEW
 String STR_SVT_NEWDOC
 {
     Text = "Neues Dokument";
-    Text [ english_us ] = "New Document";
+    Text [ english_us ] = "~New Document";
     Text[ portuguese ] = "Novo documento";
     Text[ russian ] = "Новый документ";
     Text[ greek ] = "New Document";
@@ -110,7 +110,7 @@ Image IMG_SVT_NEWDOC
 String STR_SVT_MYDOCS
 {
     Text = "Eigene Dateien";
-    Text [ english_us ] = "My Documents";
+    Text [ english_us ] = "~My Documents";
     Text[ portuguese ] = "Meus documentos";
     Text[ russian ] = "Мои документы";
     Text[ greek ] = "My Documents";
@@ -142,7 +142,7 @@ Image IMG_SVT_MYDOCS
 String STR_SVT_TEMPLATES
 {
     Text = "Vorlagen";
-    Text [ english_us ] = "Templates";
+    Text [ english_us ] = "~Templates";
     Text[ portuguese ] = "Modelos";
     Text[ russian ] = "Шаблоны";
     Text[ greek ] = "Templates";
@@ -174,7 +174,7 @@ Image IMG_SVT_TEMPLATES
 String STR_SVT_SAMPLES
 {
     Text = "Beispiele";
-    Text [ english_us ] = "Samples";
+    Text [ english_us ] = "~Samples";
     Text[ portuguese ] = "Exemplos";
     Text[ russian ] = "Образцы";
     Text[ greek ] = "Samples";

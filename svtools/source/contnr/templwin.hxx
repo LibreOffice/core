@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-25 13:00:34 $
+ *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,14 @@ public:
     sal_Bool            IsRootURL( const String& rURL ) const;
     ULONG               GetRootPos( const String& rURL ) const;
 
+    inline sal_Bool         ProcessKeyEvent( const KeyEvent& rKEvt );
     inline const String&    GetSamplesFolderURL() const;
 };
+
+inline sal_Bool SvtIconWindow_Impl::ProcessKeyEvent( const KeyEvent& rKEvt )
+{
+    return ( rKEvt.GetKeyCode().IsMod2() ? aIconCtrl.DoKeyInput( rKEvt ) : sal_False );
+}
 
 inline const String& SvtIconWindow_Impl::GetSamplesFolderURL() const
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-12 09:05:03 $
+ *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _SV_LINEINFO_HXX
 #include <vcl/lineinfo.hxx>
 #endif
+#ifndef _VCL_I18NHELP_HXX
+#include <vcl/i18nhelp.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -97,8 +100,9 @@
 #define IMPICNVIEW_ACC_RETURN 1
 #define IMPICNVIEW_ACC_ESCAPE 2
 
-#define DRAWTEXT_FLAGS_ICON (TEXT_DRAW_CENTER|TEXT_DRAW_TOP|TEXT_DRAW_ENDELLIPSIS|\
-                            TEXT_DRAW_CLIP|TEXT_DRAW_MULTILINE|TEXT_DRAW_WORDBREAK)
+#define DRAWTEXT_FLAGS_ICON \
+    ( TEXT_DRAW_CENTER | TEXT_DRAW_TOP | TEXT_DRAW_ENDELLIPSIS | \
+      TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MNEMONIC )
 
 #define DRAWTEXT_FLAGS_SMALLICON (TEXT_DRAW_LEFT|TEXT_DRAW_ENDELLIPSIS|TEXT_DRAW_CLIP)
 
@@ -1187,7 +1191,22 @@ void SvxIconChoiceCtrl_Impl::SetCursor_Impl( SvxIconChoiceCtrlEntry* pOldCursor,
 BOOL SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 {
     StopEditTimer();
-    if( rKEvt.GetKeyCode().IsMod2() )
+
+    BOOL bMod2 = rKEvt.GetKeyCode().IsMod2();
+    sal_Unicode cChar = rKEvt.GetCharCode();
+    ULONG nPos = (ULONG)-1;
+    if ( bMod2 && cChar > 0 && IsMnemonicChar( cChar, nPos ) )
+    {
+        // shortcut is clicked
+        SvxIconChoiceCtrlEntry* pNewCursor = GetEntry( nPos );
+        SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
+        if ( pNewCursor != pOldCursor )
+            SetCursor_Impl( pOldCursor, pNewCursor, FALSE, FALSE, FALSE );
+        return TRUE;
+    }
+
+    if ( bMod2 )
+        // no actions with <ALT>
         return FALSE;
 
     BOOL bKeyUsed = TRUE;
@@ -1477,10 +1496,10 @@ void SvxIconChoiceCtrl_Impl::AdjustScrollBars( BOOL bVirtSizeGrowedOnly )
     else
         nVisibleHeight = nRealHeight;
 
-    int bVerSBar = nWinBits & WB_VSCROLL;
-    int bHorSBar = nWinBits & WB_HSCROLL;
-    int bNoVerSBar = nWinBits & WB_NOVSCROLL;
-    int bNoHorSBar = nWinBits & WB_NOHSCROLL;
+    sal_Bool bVerSBar = ( nWinBits & WB_VSCROLL ) != 0;
+    sal_Bool bHorSBar = ( nWinBits & WB_HSCROLL ) != 0;
+    sal_Bool bNoVerSBar = ( nWinBits & WB_NOVSCROLL ) != 0;
+    sal_Bool bNoHorSBar = ( nWinBits & WB_NOHSCROLL ) != 0;
 
     USHORT nResult = 0;
     if( nVirtHeight )
@@ -3617,6 +3636,25 @@ void SvxIconChoiceCtrl_Impl::DrawFocusRect ( OutputDevice* pOut )
 
     pOut->DrawPolyLine ( aPolygon, aLineInfo );
 }
+
+sal_Bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, ULONG& rPos ) const
+{
+    sal_Bool bRet = sal_False;
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+    for ( ULONG i = 0; i < GetEntryCount(); i++ )
+    {
+        SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
+        if ( rI18nHelper.MatchMnemonic( pEntry->GetText(), cChar ) )
+        {
+            bRet = sal_True;
+            rPos = i;
+            break;
+        }
+    }
+
+    return bRet;
+}
+
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -4457,8 +4495,8 @@ const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetItemColumn( USHORT
     return pCol;
 }
 
-void SvxIconChoiceCtrl_Impl::DrawHighlightFrame( OutputDevice* pOut,
-    const Rectangle& rBmpRect, BOOL bHide )
+void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(
+    OutputDevice* pOut, const Rectangle& rBmpRect, BOOL bHide )
 {
     Rectangle aBmpRect( rBmpRect );
     long nBorder = 2;
@@ -4469,13 +4507,13 @@ void SvxIconChoiceCtrl_Impl::DrawHighlightFrame( OutputDevice* pOut,
     aBmpRect.Bottom() += nBorder;
     aBmpRect.Top() -= nBorder;
 
-    if( bHide )
+    if ( bHide )
         pView->Invalidate( aBmpRect );
     else
     {
         DecorationView aDecoView( pOut );
         USHORT nFlags;
-        if( bHighlightFramePressed )
+        if ( bHighlightFramePressed )
             nFlags = FRAME_HIGHLIGHT_TESTBACKGROUND | FRAME_HIGHLIGHT_IN;
         else
             nFlags = FRAME_HIGHLIGHT_TESTBACKGROUND | FRAME_HIGHLIGHT_OUT;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-25 13:00:34 $
+ *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,8 +317,8 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     Window( pParent, WB_DIALOGCONTROL | WB_BORDER | WB_3DLOOK ),
 
     aDummyHeaderBar( this ),
-    aIconCtrl( this, WB_ICON | WB_NOCOLUMNHEADER |
-                     WB_HIGHLIGHTFRAME | WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP ),
+    aIconCtrl( this, WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
+                     WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN ),
     nMaxTextLength( 0 ),
     aNewDocumentRootURL( ASCII_STR("private:newdoc") ),
     aMyDocumentsRootURL( SvtPathOptions().GetWorkPath() ),
@@ -328,10 +328,9 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 {
     aDummyHeaderBar.Show();
 
-    aIconCtrl.SetStyle( WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
-                        WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
       aIconCtrl.SetHelpId( HID_TEMPLATEDLG_ICONCTRL );
     aIconCtrl.SetChoiceWithCursor( TRUE );
+    aIconCtrl.SetSelectionMode( SINGLE_SELECTION );
     aIconCtrl.Show();
 
     // detect the root URL of templates
@@ -459,6 +458,7 @@ String SvtIconWindow_Impl::GetSelectedIconText() const
 {
     ULONG nPos;
     String aText = aIconCtrl.GetSelectedEntry( nPos )->GetText();
+    aText.EraseAllChars( '~' );
     return aText;
 }
 
@@ -467,7 +467,10 @@ String SvtIconWindow_Impl::GetIconText( const String& rURL ) const
     String aText;
     SvxIconChoiceCtrlEntry* pEntry = GetEntry( rURL );
     if ( pEntry )
+    {
         aText = pEntry->GetText();
+        aText.EraseAllChars( '~' );
+    }
     return aText;
 }
 
@@ -1226,11 +1229,21 @@ void SvtTemplateWindow::PrintFile( const String& rURL )
 
 void SvtTemplateWindow::AppendHistoryURL( const String& rURL, ULONG nGroup )
 {
+    sal_Bool bInsert = sal_True;
     if ( !pHistoryList )
         pHistoryList = new HistoryList_Impl;
-    FolderHistory* pEntry = new FolderHistory( rURL, nGroup );
-    pHistoryList->Insert( pEntry, LIST_APPEND );
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, pHistoryList->Count() > 1 );
+    else if ( pHistoryList->Count() > 0 )
+    {
+        FolderHistory* pLastEntry = pHistoryList->GetObject( pHistoryList->Count() - 1 );
+        bInsert = ( rURL != pLastEntry->m_sURL);
+    }
+
+    if ( bInsert )
+    {
+        FolderHistory* pEntry = new FolderHistory( rURL, nGroup );
+        pHistoryList->Insert( pEntry, LIST_APPEND );
+        aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, pHistoryList->Count() > 1 );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1340,6 +1353,10 @@ long SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
         if ( KEY_BACKSPACE == nCode && !rKeyCode.GetModifier() && pFileWin->HasChildPathFocus() )
         {
             DoAction( TI_DOCTEMPLATE_BACK );
+            nRet = 1;
+        }
+        else if ( pIconWin->ProcessKeyEvent( *rNEvt.GetKeyEvent() ) )
+        {
             nRet = 1;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-10 09:23:12 $
+ *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,15 @@ void SvxIconChoiceCtrlEntry::LockPos( BOOL bLock )
         nFlags &= ~ICNVIEW_FLAG_POS_LOCKED;
 }
 
+sal_Unicode SvxIconChoiceCtrlEntry::GetMnemonicChar() const
+{
+    sal_Unicode cChar = 0;
+    xub_StrLen nPos = aText.Search( '~' );
+    if ( nPos != STRING_NOTFOUND && nPos < ( aText.Len() ) - 1 )
+        cChar = aText.GetChar( nPos + 1 );
+    return cChar;
+}
+
 // ----------------------------------------------------------------------------
 
 SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& rInfo )
@@ -128,28 +137,35 @@ SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtr
 |
 \*****************************************************************************/
 
-SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle )
-:   Control( pParent, nWinStyle | WB_CLIPCHILDREN ) // WB_CLIPCHILDREN an, da ScrollBars auf dem Fenster liegen!
-{
-    bAutoFontColor=FALSE;
-    _pImp = new SvxIconChoiceCtrl_Impl( this, nWinStyle );
-    SetLineColor();
-    _pImp->SetGrid( Size(100,70) );
-    _pImp->InitSettings();
+SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle ) :
 
-    _pImp->SetPositionMode (IcnViewPositionModeAutoArrange);
+     // WB_CLIPCHILDREN an, da ScrollBars auf dem Fenster liegen!
+    Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
+
+    _pCurKeyEvent   ( NULL ),
+    _pImp           ( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) ),
+    _bAutoFontColor ( FALSE )
+
+{
+    SetLineColor();
+    _pImp->SetGrid( Size( 100, 70 ) );
+    _pImp->InitSettings();
+    _pImp->SetPositionMode( IcnViewPositionModeAutoArrange );
 }
 
 SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId )
-{
-    bAutoFontColor=FALSE;
-    _pImp = new SvxIconChoiceCtrl_Impl( this, WB_BORDER );
-    SetLineColor();
-    _pImp->SetGrid( Size(100,70) );
-    _pImp->InitSettings();
 
-    _pImp->SetPositionMode (IcnViewPositionModeAutoArrange);
+    Control( pParent, rResId ),
+
+    _pCurKeyEvent   ( NULL ),
+    _pImp           ( new SvxIconChoiceCtrl_Impl( this, WB_BORDER ) ),
+    _bAutoFontColor ( FALSE )
+
+{
+    SetLineColor();
+    _pImp->SetGrid( Size( 100, 70 ) );
+    _pImp->InitSettings();
+    _pImp->SetPositionMode( IcnViewPositionModeAutoArrange );
 }
 
 SvtIconChoiceCtrl::~SvtIconChoiceCtrl()
@@ -411,6 +427,7 @@ BOOL SvtIconChoiceCtrl::SetChoiceWithCursor ( BOOL bDo )
 {
     return _pImp->SetChoiceWithCursor (bDo);
 }
+
 void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
 {
     BOOL bKeyUsed = DoKeyInput( rKEvt );
@@ -418,7 +435,7 @@ void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
     {
         _pCurKeyEvent = (KeyEvent*)&rKEvt;
         Control::KeyInput( rKEvt );
-        _pCurKeyEvent = 0;
+        _pCurKeyEvent = NULL;
     }
 }
 BOOL SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
@@ -428,7 +445,7 @@ BOOL SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
         return TRUE;
     _pCurKeyEvent = (KeyEvent*)&rKEvt;
     BOOL bHandled = _pImp->KeyInput( rKEvt );
-    _pCurKeyEvent = 0;
+    _pCurKeyEvent = NULL;
     return bHandled;
 }
 ULONG SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
@@ -519,13 +536,20 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
         Invalidate(INVALIDATE_NOCHILDREN);
     }
 }
+
 void SvtIconChoiceCtrl::Flush()
 {
     _pImp->Flush();
 }
+
 void SvtIconChoiceCtrl::RequestHelp( const HelpEvent& rHEvt )
 {
-    if( !_pImp->RequestHelp( rHEvt ) )
+    if ( !_pImp->RequestHelp( rHEvt ) )
         Control::RequestHelp( rHEvt );
+}
+
+void SvtIconChoiceCtrl::SetSelectionMode( SelectionMode eMode )
+{
+    _pImp->SetSelectionMode( eMode );
 }
 

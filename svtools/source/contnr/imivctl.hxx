@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 11:30:19 $
+ *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,8 @@ class SvxIconChoiceCtrl_Impl
     void HideFocus ();
     void DrawFocusRect ( OutputDevice* pOut );
 
+    BOOL            IsMnemonicChar( sal_Unicode cChar, ULONG& rPos ) const;
+
 public:
 
     long            nGridDX,
@@ -518,7 +520,7 @@ public:
     void            StopEntryEditing( BOOL bCancel );
     void            LockEntryPos( SvxIconChoiceCtrlEntry* pEntry, BOOL bLock );
     ULONG           GetEntryCount() const { return aEntries.Count(); }
-    SvxIconChoiceCtrlEntry* GetEntry( ULONG nPos ) { return (SvxIconChoiceCtrlEntry*)aEntries.GetObject(nPos); }
+    SvxIconChoiceCtrlEntry* GetEntry( ULONG nPos ) const { return (SvxIconChoiceCtrlEntry*)aEntries.GetObject(nPos); }
     SvxIconChoiceCtrlEntry* GetFirstSelectedEntry( ULONG& ) const;
     SvxIconChoiceCtrlEntry* GetNextSelectedEntry( ULONG& ) const;
     SvxIconChoiceCtrlEntry* GetHdlEntry() const { return pHdlEntry; }
