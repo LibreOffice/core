@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-02-11 12:30:58 $
+ *  last change: $Author: os $ $Date: 2002-04-10 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #ifndef _SVX_BOXITEM_HXX
 #include <svx/boxitem.hxx>
 #endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 #ifndef _PGGRID_HXX
 #include <pggrid.hxx>
 #endif
@@ -134,7 +137,10 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     aPrintCB                (this, ResId(CB_PRINT           )),
     aColorFT                (this, ResId(FT_COLOR           )),
     aColorLB                (this, ResId(LB_COLOR           )),
-    nPageWidth(MM50)
+    m_nRubyUserValue(0),
+    m_bRubyUserValue(sal_False),
+    m_nPageWidth(MM50),
+    m_bVertical(sal_False)
 {
     FreeResource();
 
@@ -217,7 +223,9 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
             default:                aCharsGridRB.Check();
         }
         aLinesPerPageNF.SetValue(rGridItem.GetLines());
-        aTextSizeMF.SetValue(aTextSizeMF.Normalize(rGridItem.GetBaseHeight()), FUNIT_TWIP);
+        m_nRubyUserValue = rGridItem.GetBaseHeight();
+        m_bRubyUserValue = sal_True;
+        aTextSizeMF.SetValue(aTextSizeMF.Normalize(m_nRubyUserValue), FUNIT_TWIP);
         aRubySizeMF.SetValue(aRubySizeMF.Normalize(rGridItem.GetRubyHeight()), FUNIT_TWIP);
         aRubyBelowCB.Check(rGridItem.IsRubyTextBelow());
         aDisplayCB.Check(rGridItem.IsDisplayGrid());
@@ -265,7 +273,9 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
         aGridItem.SetGridType(aNoGridRB.IsChecked() ? GRID_NONE :
             aLinesGridRB.IsChecked() ? GRID_LINES_ONLY : GRID_LINES_CHARS );
         aGridItem.SetLines(aLinesPerPageNF.GetValue());
-        aGridItem.SetBaseHeight(aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)));
+        aGridItem.SetBaseHeight(
+            m_bRubyUserValue ? m_nRubyUserValue :
+                aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)));
         aGridItem.SetRubyHeight(aRubySizeMF.Denormalize(aRubySizeMF.GetValue(FUNIT_TWIP)));
         aGridItem.SetRubyTextBelow(aRubyBelowCB.IsChecked());
         aGridItem.SetDisplayGrid(aDisplayCB.IsChecked());
@@ -278,6 +288,14 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
  ---------------------------------------------------------------------------*/
 void SwTextGridPage::UpdatePageWidth(const SfxItemSet& rSet)
 {
+    if( SFX_ITEM_UNKNOWN !=  rSet.GetItemState( RES_FRAMEDIR, TRUE ))
+    {
+        const SvxFrameDirectionItem& rDirItem =
+                    (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);
+        m_bVertical = rDirItem.GetValue() == FRMDIR_VERT_TOP_RIGHT||
+                    rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
+    }
+
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
     {
         const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get(
@@ -285,10 +303,21 @@ void SwTextGridPage::UpdatePageWidth(const SfxItemSet& rSet)
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get(
                                                             RES_LR_SPACE );
         const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
-        nPageWidth = rSize.GetSize().Width()
-                        - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetDistance();
-        sal_Int32 nTextSize = aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP));
-        aCharsPerLineNF.SetValue(nPageWidth / nTextSize);
+        sal_Int32 nDistance = rLRSpace.GetLeft() + rLRSpace.GetRight();
+
+        if(m_bVertical)
+            m_nPageWidth = rSize.GetSize().Height() - nDistance -
+                rBox.GetDistance(BOX_LINE_TOP) -
+                                    rBox.GetDistance(BOX_LINE_BOTTOM);
+        else
+            m_nPageWidth = rSize.GetSize().Width() - nDistance -
+                rBox.GetDistance(BOX_LINE_LEFT) -
+                                    rBox.GetDistance(BOX_LINE_RIGHT);
+
+        sal_Int32 nTextSize = m_bRubyUserValue ?
+                    m_nRubyUserValue :
+                        aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP));
+        aCharsPerLineNF.SetValue(m_nPageWidth / nTextSize);
     }
 }
 /* -----------------------------06.02.2002 15:24------------------------------
@@ -308,13 +337,17 @@ IMPL_LINK(SwTextGridPage, CharSizeChangedHdl, SpinField*, pField)
 {
     if(&aCharsPerLineNF == pField)
     {
-        long nWidth = nPageWidth / aCharsPerLineNF.GetValue();
+        long nWidth = m_nPageWidth / aCharsPerLineNF.GetValue();
         aTextSizeMF.SetValue(aTextSizeMF.Normalize(nWidth), FUNIT_TWIP);
+        //prevent rounding errors in the MetricField by saving the used value
+        m_nRubyUserValue = nWidth;
+        m_bRubyUserValue = sal_True;
     }
     else
     {
         sal_Int32 nTextSize = aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP));
-        aCharsPerLineNF.SetValue(nPageWidth / nTextSize);
+        aCharsPerLineNF.SetValue(m_nPageWidth / nTextSize);
+        m_bRubyUserValue = sal_False;
     }
     GridModifyHdl(0);
     return 0;

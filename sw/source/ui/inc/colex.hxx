@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-02-11 12:30:58 $
+ *  last change: $Author: os $ $Date: 2002-04-10 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ class SwTextGridItem;
 class SwPageGridExample : public SwPageExample
 {
     SwTextGridItem*     pGridItem;
+    sal_Bool            m_bVertical;
 protected:
     virtual void DrawPage( const Point& rPoint,
                            const BOOL bSecond,
@@ -99,7 +100,8 @@ protected:
 public:
     SwPageGridExample(Window* pPar, const ResId& rResId ) :
                                 SwPageExample(pPar, rResId ),
-                                pGridItem(0){}
+                                pGridItem(0),
+                                m_bVertical(sal_False){}
     ~SwPageGridExample();
     void UpdateExample( const SfxItemSet& rSet );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-02-11 12:30:58 $
+ *  last change: $Author: os $ $Date: 2002-04-10 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,10 @@ class SwTextGridPage: public SfxTabPage
     FixedText       aColorFT;
     ColorListBox    aColorLB;
 
-    sal_Int32       nPageWidth;
+    sal_Int32       m_nRubyUserValue;
+    sal_Bool        m_bRubyUserValue;
+    sal_Int32       m_nPageWidth;
+    sal_Bool        m_bVertical;
 
     SwTextGridPage(Window *pParent, const SfxItemSet &rSet);
     ~SwTextGridPage();
