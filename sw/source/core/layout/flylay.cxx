@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:54:56 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,16 @@ SwFlyFreeFrm::~SwFlyFreeFrm()
     {
         if( GetFmt()->GetDoc()->IsInDtor() )
         {
-            if ( IsFlyAtCntFrm() && GetPage()->GetSortedObjs() )
+            // --> OD 2004-06-04 #i29879# - remove also to-frame anchored Writer
+            // fly frame from page.
+            const bool bRemoveFromPage =
+                    GetPage()->GetSortedObjs() &&
+                    ( IsFlyAtCntFrm() ||
+                      ( GetAnchor() && GetAnchor()->IsFlyFrm() ) );
+            if ( bRemoveFromPage )
+            {
                 GetPage()->GetSortedObjs()->Remove( GetVirtDrawObj() );
+            }
         }
         else
         {
