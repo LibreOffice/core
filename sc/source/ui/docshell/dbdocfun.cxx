@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 10:32:39 $
+ *  last change: $Author: nn $ $Date: 2000-10-18 16:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1194,6 +1194,12 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
             }
             if ( pDestObj )
             {
+                // #78541# create new database connection for "refresh"
+                // (and re-read column entry collections)
+                // so all changes take effect
+                if ( pNewObj == pOldObj && pDestObj->IsImportData() )
+                    pDestObj->InvalidateSource();
+
                 pDestObj->InvalidateData();             // before getting the new output area
 
                 //  make sure the table has a name (not set by dialog)
