@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:08:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ namespace xmloff
         switch (_nId)
         {
             case CCA_NAME:              return "name";
-            case CCA_SERVICE_NAME:      return "service-name";
+            case CCA_SERVICE_NAME:      return "control-implementation";
             case CCA_BUTTON_TYPE:       return "button-type";
             case CCA_CONTROL_ID:        return "id";
             case CCA_CURRENT_SELECTED:  return "current-selected";
@@ -236,7 +236,7 @@ namespace xmloff
             case SCA_CURRENT_STATE:         return "current-state";
             case SCA_IS_TRISTATE:           return "is-tristate";
             case SCA_STATE:                 return "state";
-            case SCA_COLUMN_STYLE_NAME:     return "column-style-name";
+            case SCA_COLUMN_STYLE_NAME:     return "text-style-name";
             case SCA_STEP_SIZE:             return "step-size";
             case SCA_PAGE_STEP_SIZE:        return "page-step-size";
             case SCA_REPEAT_DELAY:          return "delay-for-repeat";
