@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-03 15:26:06 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,6 +587,9 @@
 
 // #101160# Replace cell contents warning
 #define SID_SC_INPUT_REPLCELLSWARN      (SC_VIEW_START + 92)
+
+// additional IDs for list/range validity
+#define FID_VALID_LISTTYPE              (SC_VIEW_START + 93)
 
 // Nachrichten -------------------------------------------------------------
 
@@ -1369,9 +1372,11 @@
 #define SCSTR_QHELP_BTNEQUAL    (STR_START + 313)
 
 // Validator
-#define SCSTR_MINIMUM           (STR_START + 314)
-#define SCSTR_MAXIMUM           (STR_START + 315)
-#define SCSTR_VALUE             (STR_START + 316)
+#define SCSTR_VALID_MINIMUM     (STR_START + 314)
+#define SCSTR_VALID_MAXIMUM     (STR_START + 315)
+#define SCSTR_VALID_VALUE       (STR_START + 316)
+#define SCSTR_VALID_RANGE       (STR_START + 317)
+#define SCSTR_VALID_LIST        (STR_START + 318)
 
 // Formulator
 #define SCSTR_FUDB              (STR_START + 389)
