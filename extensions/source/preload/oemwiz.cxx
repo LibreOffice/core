@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-12-17 08:33:04 $
+ *  last change: $Author: kz $ $Date: 2002-03-27 17:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,11 @@ namespace preload
             return;
         aLicenseML.SetLeftMargin( 5 );
         String sLicense;
+#ifdef UNX
+        OEMPreloadDialog::LoadFromLocalFile(String::CreateFromAscii("LICENSE"), sLicense);
+#else
         OEMPreloadDialog::LoadFromLocalFile(String::CreateFromAscii("license.txt"), sLicense);
+#endif
         aLicenseML.SetText( sLicense );
     }
 
