@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 12:32:33 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 16:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,26 @@ String STR_MENU_ADDONS
     TEXT = "~Add-Ons" ;
     TEXT [ English ] = "~Add-Ons" ;
     TEXT [ english_us ] = "~Add-Ons" ;
+    TEXT[ portuguese ] = "~Add-Ons";
+    TEXT[ russian ] = "~Add-Ons";
+    TEXT[ greek ] = "~Add-Ons";
+    TEXT[ dutch ] = "~Add-Ons";
+    TEXT[ french ] = "~Add-Ons";
+    TEXT[ spanish ] = "~Add-Ons";
+    TEXT[ finnish ] = "~Add-Ons";
+    TEXT[ italian ] = "~Add-Ons";
+    TEXT[ danish ] = "~Add-Ons";
+    TEXT[ swedish ] = "~Add-Ons";
+    TEXT[ polish ] = "~Add-Ons";
+    TEXT[ portuguese_brazilian ] = "~Add-Ons";
+    TEXT[ japanese ] = "~Add-Ons";
+    TEXT[ korean ] = "~Add-Ons";
+    TEXT[ chinese_simplified ] = "~Add-Ons";
+    TEXT[ chinese_traditional ] = "~Add-Ons";
+    TEXT[ turkish ] = "~Add-Ons";
+    TEXT[ arabic ] = "~Add-Ons";
+    TEXT[ catalan ] = "~Add-Ons";
+    TEXT[ thai ] = "~Add-Ons";
 };
 
 Menu MN_CLIPBOARDFUNCS
@@ -359,6 +379,27 @@ String SID_WIN_FULLSCREEN
 {
     Text = "Vollbildschirm-Modus verlassen" ;
     Text [ English ] = "Leave Full-Screen Mode" ;
+    Text[ english_us ] = "Leave Full-Screen Mode";
+    Text[ portuguese ] = "Leave Full-Screen Mode";
+    Text[ russian ] = "Leave Full-Screen Mode";
+    Text[ greek ] = "Leave Full-Screen Mode";
+    Text[ dutch ] = "Leave Full-Screen Mode";
+    Text[ french ] = "Leave Full-Screen Mode";
+    Text[ spanish ] = "Leave Full-Screen Mode";
+    Text[ finnish ] = "Leave Full-Screen Mode";
+    Text[ italian ] = "Leave Full-Screen Mode";
+    Text[ danish ] = "Leave Full-Screen Mode";
+    Text[ swedish ] = "Leave Full-Screen Mode";
+    Text[ polish ] = "Leave Full-Screen Mode";
+    Text[ portuguese_brazilian ] = "Leave Full-Screen Mode";
+    Text[ japanese ] = "Leave Full-Screen Mode";
+    Text[ korean ] = "Leave Full-Screen Mode";
+    Text[ chinese_simplified ] = "Leave Full-Screen Mode";
+    Text[ chinese_traditional ] = "Leave Full-Screen Mode";
+    Text[ turkish ] = "Leave Full-Screen Mode";
+    Text[ arabic ] = "Leave Full-Screen Mode";
+    Text[ catalan ] = "Leave Full-Screen Mode";
+    Text[ thai ] = "Leave Full-Screen Mode";
 };
 
 // ******************************************************************* EOF
