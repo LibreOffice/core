@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
+#   last change: $Author: mtg $ $Date: 2001-05-31 10:28:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,13 +76,15 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-        $(SLO)$/ZipPackage.obj	\
+        $(SLO)$/ZipPackage.obj			\
         $(SLO)$/ZipPackageBuffer.obj	\
-        $(SLO)$/ZipPackageEntry.obj	\
+        $(SLO)$/ZipPackageEntry.obj		\
         $(SLO)$/ZipPackageFolder.obj	\
         $(SLO)$/ZipPackageFolderEnumeration.obj	\
-        $(SLO)$/ZipPackageSink.obj	\
-        $(SLO)$/ZipPackageStream.obj
+        $(SLO)$/ZipPackageSink.obj		\
+        $(SLO)$/ZipPackageStream.obj 	\
+        $(SLO)$/OutputThread.obj		\
+        $(SLO)$/ThreadedBuffer.obj
 
 # --- UNO stuff ---------------------------------------------------
 
