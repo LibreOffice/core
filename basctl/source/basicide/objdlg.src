@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:46:03 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,31 +85,6 @@ FloatingWindow RID_BASICIDE_OBJCAT
         Size = MAP_APPFONT ( 185 , 126 ) ;
         TabStop = TRUE ;
     };
-    /*
-    PushButton RID_PB_SHOW
-    {
-        Pos = MAP_APPFONT ( 3, 6 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text [ de ] = "Zeigen" ;
-        Text [ en-US ] = "Show" ;
-        TabStop = TRUE ;
-    };
-    PushButton RID_PB_OPTIONS
-    {
-        Pos = MAP_APPFONT ( 56, 6 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text = "Beschreibung..." ;
-        TabStop = TRUE ;
-    };
-    PushButton RID_PB_LITTLEHELP
-    {
-        Pos = MAP_APPFONT ( 109 , 6 ) ;
-        Size = MAP_APPFONT ( 14 , 12 ) ;
-        Text [ de ] = "?" ;
-        Text [ en-US ] = "?" ;
-        TabStop = TRUE ;
-    };
-*/
     ToolBox RID_TB_TOOLBOX
     {
         HelpId = HID_BASICIDE_OBJECTS ;
@@ -123,8 +98,6 @@ FloatingWindow RID_BASICIDE_OBJCAT
             IdList =
             {
                 TBITEM_SHOW ;
-                //TBITEM_PROPS ;
-                //TBITEM_HELP ;
             };
         };
         ItemList =
@@ -136,22 +109,6 @@ FloatingWindow RID_BASICIDE_OBJCAT
                 Text [ de ]= "Zeigen" ;
                 Text [ en-US ] = "Show" ;
             };
-            /*
-            ToolBoxItem
-            {
-                Identifier = TBITEM_PROPS ;
-                HelpId = HID_BASICIDE_OBJCAT_PROPS ;
-                Text [ de ] = "Beschreibung" ;
-                Text [ en-US ] = "Description" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = TBITEM_HELP ;
-                HelpId = HID_BASICIDE_OBJCAT_HELP ;
-                Text [ de ] = "Hilfe" ;
-                Text [ en-US ] = "Help" ;
-            };
-            */
         };
     };
     ImageList RID_IMGLST_TB_HC
@@ -170,21 +127,3 @@ FloatingWindow RID_BASICIDE_OBJCAT
         Size = MAP_APPFONT ( 185 , 18 ) ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
