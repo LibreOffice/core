@@ -2,9 +2,9 @@
  *
  *  $RCSfile: str_types.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:46:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ class CharOrder_Table
 
 inline int
 CharOrder_Table::operator()( char i_c ) const
-    { return cWeights[i_c]; }
+    { return cWeights[ UINT8(i_c) ]; }
 
 
 
