@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:02:32 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,7 @@ ModalDialog DLG_ROW_HEIGHT
     Text[ hindi ] = "पंक्ति ऊँचाई";
     Text[ slovak ] = "Výška riadku";
 };
+
 
 
 
