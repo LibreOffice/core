@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:04:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 
 #ifdef DBG_UTIL
 
-#define _SV_DBGGUI_CXX
-
 #include "svdata.hxx"
 #include <stdio.h>
 #include <string.h>
@@ -107,9 +105,6 @@
 #endif
 #ifndef _SV_WRKWIN_HXX
 #include <wrkwin.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX
-#include <system.hxx>
 #endif
 #ifndef _SV_SOUND_HXX
 #include <sound.hxx>
@@ -170,7 +165,6 @@ static sal_Char* pDbgHelpText[] =
 "\n",
 "Damit die Makros Wirkung haben, muss DBG_UTIL defniert sein.\n",
 "\n",
-#ifndef CFRONT
 "--- Optionen ---\n",
 "This\n",
 "Es wird auf gueltigen This-Pointer getestet. Dadurch kann man erreichen, "
@@ -510,7 +504,6 @@ static sal_Char* pDbgHelpText[] =
 "    //...\n",
 "}",
 "\n",
-#endif
 NULL
 };
 
@@ -684,7 +677,7 @@ void DbgWindow::InsertLine( const XubString& rLine )
 // =======================================================================
 
 DbgDialog::DbgDialog() :
-    ModalDialog( Application::GetAppWindow(), WB_STDMODAL | WB_SYSTEMWINDOW ),
+    ModalDialog( NULL, WB_STDMODAL | WB_SYSTEMWINDOW ),
     maXtorThis( this ),
     maXtorFunc( this ),
     maXtorExit( this ),
@@ -1794,7 +1787,7 @@ void DbgPrintMsgBox( const char* pLine )
 #else
     USHORT nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
-    ErrorBox aBox( Application::GetAppWindow(), WB_YES_NO_CANCEL | WB_DEF_NO,
+    ErrorBox aBox( NULL, WB_YES_NO_CANCEL | WB_DEF_NO,
                    UniString( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
     aBox.SetText( String( RTL_CONSTASCII_USTRINGPARAM("Debug Output") ) );
     Application::SetSystemWindowMode( nOldMode );
@@ -1860,7 +1853,7 @@ void DbgPrintShell( const char* pLine )
 
 // =======================================================================
 
-#if defined( WNT ) || defined( OS2 )
+#ifdef WNT
 void ImplDbgTestSolarMutex();
 #endif
 
@@ -1871,7 +1864,7 @@ void DbgGUIInit()
     DbgSetPrintMsgBox( DbgPrintMsgBox );
     DbgSetPrintWindow( DbgPrintWindow );
     DbgSetPrintShell( DbgPrintShell );
-#if defined( WNT ) || defined( OS2 )
+#ifdef WNT
     DbgSetTestSolarMutex( ImplDbgTestSolarMutex );
 #endif
 }
@@ -1883,7 +1876,7 @@ void DbgGUIDeInit()
     DbgSetPrintMsgBox( NULL );
     DbgSetPrintWindow( NULL );
     DbgSetPrintShell( NULL );
-#if defined( WNT ) || defined( OS2 )
+#ifdef WNT
     DbgSetTestSolarMutex( NULL );
 #endif
 
