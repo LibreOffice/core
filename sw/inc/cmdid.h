@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-08 13:02:52 $
+ *  last change: $Author: mtg $ $Date: 2001-10-09 15:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,16 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_QUERY2               (SID_SW_START + 2000)
 #define FN_EXTRA2               (SID_SW_START + 2200)
 #define FN_PARAM2               (SID_SW_START + 2400)
+
+ /* More accurately, this range should be from FN_EXTRA2 to FN_PARAM2-1, but
+ * FN_NUMBER_NEWSTART comes from FN_FORMAT2, and FN_PARAM_LINK_DISPLAY_NAME
+ * comes from FN_PARAM2 so we need to include FORMAT2,
+ * EDIT2 and QUERY2 and PARAM2 in the range...hopefully this will be fixed
+ * soon */
+
+#define FN_UNO_RANGE_BEGIN      FN_FORMAT2
+#define FN_UNO_RANGE_END        (FN_PARAM2 + 199)
+
 
 #define HELP_OFFSET                 1100
 #define CMD_STR_OFFSET              2200
