@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 13:14:07 $
+ *  last change: $Author: mba $ $Date: 2002-07-24 17:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,15 +553,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             switch ( rReq.GetSlot() )
             {
-                case SID_CONFIG:
-                {
-                    // Soll ein Macro vorselektiert werden ?
-                    SFX_REQUEST_ARG( rReq, pMacroItem, SfxMacroInfoItem, SID_MACROINFO, FALSE );
-                    if ( pMacroItem )
-                        pDlg->ActivateMacroConfig( pMacroItem );
-                    break;
-                }
-
                 case SID_TOOLBOXOPTIONS:
                 {
                     // Versuche, eine "ubergebene ConfigID zu holen
@@ -574,7 +565,16 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                             // Es soll eine Objektleiste vorselektiert werden
                             pDlg->ActivateToolBoxConfig(nId);
                     }
+                    break;
+                }
 
+                default:
+                {
+                    // Soll ein Macro vorselektiert werden ?
+                    SFX_REQUEST_ARG( rReq, pMacroItem, SfxMacroInfoItem, SID_MACROINFO, FALSE );
+                    if ( pMacroItem )
+                        pDlg->ActivateMacroConfig( pMacroItem );
+                    pDlg->ActivateTabPage( rReq.GetSlot() );
                     break;
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cd $ $Date: 2002-06-19 11:56:00 $
+ *  last change: $Author: mba $ $Date: 2002-07-24 17:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,10 +895,31 @@ void SfxConfigDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
 
 void SfxConfigDialog::ActivateMacroConfig(const SfxMacroInfoItem *pInfo)
 {
-    // Bei Aufruf "uber die Basic-IDE soll defaultm"a\sig die Tastaturkonfiguration
-    // angeboten werden
-    SetCurPageId( TP_CONFIG_ACCEL );
     pMacroInfo = pInfo;
+}
+
+void SfxConfigDialog::ActivateTabPage( USHORT nSlotId )
+{
+    switch ( nSlotId )
+    {
+        case SID_CONFIG:
+            break;
+        case SID_TOOLBOXOPTIONS:
+            SetCurPageId( TP_CONFIG_OBJECTBAR );
+            break;
+        case SID_CONFIGSTATUSBAR:
+            SetCurPageId( TP_CONFIG_STATBAR );
+            break;
+        case SID_CONFIGMENU:
+            SetCurPageId( TP_CONFIG_MENU );
+            break;
+        case SID_CONFIGACCEL:
+            SetCurPageId( TP_CONFIG_ACCEL );
+            break;
+        case SID_CONFIGEVENT:
+            SetCurPageId( TP_CONFIG_EVENT );
+            break;
+    }
 }
 
 SfxTabPage *CreateMenuConfigPage( Window *pParent, const SfxItemSet& rSet )

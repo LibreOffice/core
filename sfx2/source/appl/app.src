@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-23 14:07:55 $
+ *  last change: $Author: mba $ $Date: 2002-07-24 17:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3300,7 +3300,7 @@ ToolBox RID_ENVTOOLBOX
         };
         ToolBoxItem
         {
-            Identifier = SID_RECORDING_FLOATWINDOW;
+            Identifier = SID_RECORDMACRO;
             Hide = TRUE;
         };
         ToolBoxItem

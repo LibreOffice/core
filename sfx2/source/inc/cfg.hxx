@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cd $ $Date: 2002-06-19 11:57:02 $
+ *  last change: $Author: mba $ $Date: 2002-07-24 18:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,7 @@ public:
 
     void                        ActivateToolBoxConfig( USHORT nId );
     void                        ActivateMacroConfig( const SfxMacroInfoItem* );
+    void                        ActivateTabPage( USHORT );
 
     virtual void                PageCreated( USHORT nId, SfxTabPage &rPage );
     virtual short               Ok();

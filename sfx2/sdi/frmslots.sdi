@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-07-18 07:07:08 $ $Revision: 1.14 $
+    $Author: mba $ $Date: 2002-07-24 17:56:44 $ $Revision: 1.15 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -158,6 +158,7 @@ interface Window : Object
     SID_STOP_RECORDING // ole(no) api(final/play/norec)
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
 
     SID_STYLE_DESIGNER // ole(no) api(final/play/rec)

@@ -1814,7 +1814,7 @@ SfxBoolItem CommonTaskBarVisible SID_TOGGLECOMMONTASKBAR
 
 //--------------------------------------------------------------------------
 SfxInt32Item CompareDocuments SID_DOCUMENT_COMPARE
-(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_PASSWORD, SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_PASSWORD, SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4971,7 +4971,7 @@ SfxBoolItem MenuBarVisible SID_TOGGLE_MENUBAR
 
 //--------------------------------------------------------------------------
 SfxInt32Item MergeDocuments SID_DOCUMENT_MERGE
-(SfxStringItem FileName SID_FILE_NAME,SfxInt16Item Version SID_VERSION)
+(SfxStringItem URL SID_FILE_NAME,SfxInt16Item Version SID_VERSION)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5868,7 +5868,7 @@ SfxStringItem OnStart SID_ON_STARTAPP
 
 //--------------------------------------------------------------------------
 SfxObjectItem Open SID_OPENDOC
-(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem PassWord SID_PASSWORD, SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem PassWord SID_PASSWORD, SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6972,7 +6972,7 @@ SfxBoolItem SaveAll SID_SAVEDOCS
 
 //--------------------------------------------------------------------------
 SfxBoolItem SaveAs SID_SAVEASDOC
-(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -7025,7 +7025,7 @@ SfxBoolItem SaveAsTemplate SID_DOCTEMPLATE
 
 //--------------------------------------------------------------------------
 SfxBoolItem SaveAsUrl SID_SAVEASURL
-(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_DOC_READONLY,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem PassWord SID_DOC_READONLY,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8766,7 +8766,7 @@ TbxImageItem ZoomToolBox SID_ZOOM_TOOLBOX
 
 //--------------------------------------------------------------------------
 SfxBoolItem ExportTo SID_EXPORTDOC
-(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME)
 [
     /* flags: */
     AutoUpdate = FALSE,

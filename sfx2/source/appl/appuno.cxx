@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-22 07:24:20 $
+ *  last change: $Author: mba $ $Date: 2002-07-24 17:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ static const String sViewId         = String::CreateFromAscii( "ViewId"         
 static const String sPluginMode     = String::CreateFromAscii( "PluginMode"     );
 static const String sReadOnly       = String::CreateFromAscii( "ReadOnly"       );
 static const String sFrameName      = String::CreateFromAscii( "FrameName"      );
-static const String sContentType    = String::CreateFromAscii( "ContentType"    );
+static const String sMediaType      = String::CreateFromAscii( "MediaType"    );
 static const String sPostData       = String::CreateFromAscii( "PostData"       );
 static const String sPosSize        = String::CreateFromAscii( "PosSize"        );
 static const String sCharacterSet   = String::CreateFromAscii( "CharacterSet"   );
@@ -246,7 +246,7 @@ static const String sHidden         = String::CreateFromAscii( "Hidden"         
 static const String sPreview        = String::CreateFromAscii( "Preview"        );
 static const String sSilent         = String::CreateFromAscii( "Silent"         );
 static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
-static const String sURL            = String::CreateFromAscii( "URL"            );
+static const String sFileName       = String::CreateFromAscii( "FileName"       );
 static const String sOrigURL        = String::CreateFromAscii( "OriginalURL"    );
 static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
 static const String sStatusInd      = String::CreateFromAscii( "StatusIndicator" );
@@ -258,6 +258,7 @@ static const String sSelectionOnly  = String::CreateFromAscii( "SelectionOnly" )
 static const String sFilterFlags    = String::CreateFromAscii( "FilterFlags" );
 static const String sMacroExecMode  = String::CreateFromAscii( "MacroExecutionMode" );
 static const String sUpdateDocMode  = String::CreateFromAscii( "UpdateDocMode" );
+static const String sMinimized      = String::CreateFromAscii( "Minimized" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -542,19 +543,21 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     rSet.Put( SfxBoolItem( SID_SELECTION, *((sal_Bool*)rProp.Value.getValue()) ) );
                 else if ( aName == sHidden && rProp.Value.getValueType() == ::getBooleanCppuType() )
                     rSet.Put( SfxBoolItem( SID_HIDDEN, *((sal_Bool*)rProp.Value.getValue()) ) );
+                else if ( aName == sMinimized && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                    rSet.Put( SfxBoolItem( SID_MINIMIZEWINS, *((sal_Bool*)rProp.Value.getValue()) ) );
                 else if ( aName == sSilent && rProp.Value.getValueType() == ::getBooleanCppuType() )
                     rSet.Put( SfxBoolItem( SID_SILENT, *((sal_Bool*)rProp.Value.getValue()) ) );
                 else if ( aName == sPreview && rProp.Value.getValueType() == ::getBooleanCppuType() )
                     rSet.Put( SfxBoolItem( SID_PREVIEW, *((sal_Bool*)rProp.Value.getValue()) ) );
-                else if ( aName == sURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
-                    rSet.Put( SfxStringItem( SID_OPENURL, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sFileName && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_FILE_NAME, *((::rtl::OUString*)rProp.Value.getValue()) ) );
                 else if ( aName == sOrigURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                     rSet.Put( SfxStringItem( SID_ORIGURL, *((::rtl::OUString*)rProp.Value.getValue()) ) );
                 else if ( aName == sSalvageURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                     rSet.Put( SfxStringItem( SID_DOC_SALVAGE, *((::rtl::OUString*)rProp.Value.getValue()) ) );
                 else if ( aName == sFrameName && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                     rSet.Put( SfxStringItem( SID_TARGETNAME, *((::rtl::OUString*)rProp.Value.getValue()) ) );
-                else if ( aName == sContentType && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                else if ( aName == sMediaType && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                     rSet.Put( SfxStringItem( SID_CONTENTTYPE, *((::rtl::OUString*)rProp.Value.getValue()) ) );
                 else if ( aName == sTemplateName && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                     rSet.Put( SfxStringItem( SID_TEMPLATE_NAME, *((::rtl::OUString*)rProp.Value.getValue()) ) );
@@ -682,8 +685,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             sal_Int32 nAdditional=0;
             if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL ) == SFX_ITEM_SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_OPENURL ) == SFX_ITEM_SET )
-                nAdditional++;
             if ( rSet.GetItemState( SID_ORIGURL ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_SALVAGE ) == SFX_ITEM_SET )
@@ -723,6 +724,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_TEMPLATE_REGIONNAME ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_HIDDEN ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_MINIMIZEWINS ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_PREVIEW ) == SFX_ITEM_SET )
                 nAdditional++;
@@ -810,6 +813,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         continue;
                     if ( nId == SID_HIDDEN )
                         continue;
+                    if ( nId == SID_MINIMIZEWINS )
+                        continue;
                     if ( nId == SID_SILENT )
                         continue;
                     if ( nId == SID_PREVIEW )
@@ -827,8 +832,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_TEMPLATE_REGIONNAME )
                         continue;
                     if ( nId == SID_JUMPMARK )
-                        continue;
-                    if ( nId == SID_OPENURL )
                         continue;
                     if ( nId == SID_CHARSET )
                         continue;
@@ -1025,6 +1028,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nProps].Name = sHidden;
                 pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
+            if ( rSet.GetItemState( SID_MINIMIZEWINS, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sMinimized;
+                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
             if ( rSet.GetItemState( SID_SILENT, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nProps].Name = sSilent;
@@ -1052,7 +1060,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             }
             if ( rSet.GetItemState( SID_CONTENTTYPE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sContentType;
+                pValue[nProps].Name = sMediaType;
                 pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
             if ( rSet.GetItemState( SID_TEMPLATE_NAME, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -1068,11 +1076,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_JUMPMARK, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nProps].Name = sJumpMark;
-                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
-            }
-            if ( rSet.GetItemState( SID_OPENURL, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nProps].Name = sURL;
                 pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
 
