@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-06 11:06:27 $
+ *  last change: $Author: vg $ $Date: 2001-11-08 21:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ swedish ] = "Storleksoptimering f�r XML-format (utan pretty printing)";
         Text[ polish ] = "Size optimization for XML files (no pretty printing)";
         Text[ portuguese_brazilian ] = "Size optimization for XML files (no pretty printing)";
-        Text[ japanese ] = "XML ﾌｧｲﾙｻｲｽﾞの最適化(pretty printing なし)";
+        Text[ japanese ] = "XML 形式をｻｲｽﾞで最適化する(pretty printing なし)";
         Text[ korean ] = "Size optimization for XML files (no pretty printing)";
         Text[ chinese_simplified ] = "最佳化 XML 文件(无 Pretty Printing)";
         Text[ chinese_traditional ] = "最佳化 XML 檔案(無友善列印)";
@@ -819,6 +819,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
 
 
 
