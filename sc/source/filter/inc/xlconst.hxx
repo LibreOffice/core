@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:06:49 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,20 @@
 #endif
 
 // Common =====================================================================
+
+// BIFF versions --------------------------------------------------------------
+
+/** An enumeration for all Excel file format types (BIFF types). */
+enum XclBiff
+{
+    xlBiff2 = 0,                /// MS Excel 2.1
+    xlBiff3,                    /// MS Excel 3.0
+    xlBiff4,                    /// MS Excel 4.0
+    xlBiff5,                    /// MS Excel 5.0
+    xlBiff7,                    /// MS Excel 7.0 (95)
+    xlBiff8,                    /// MS Excel 8.0 (97), 9.0 (2000), 10.0 (XP), 11.0 (2003)
+    xlBiffUnknown               /// Unknown BIFF version.
+};
 
 // Excel sheet dimensions -----------------------------------------------------
 
@@ -179,6 +193,16 @@ const sal_Int32 EXC_TWIPS_PER_INCH          = EXC_POINTS_PER_INCH * 20;
 // (0x0007, 0x0207) STRING ----------------------------------------------------
 
 const sal_uInt16 EXC_ID_STRING              = 0x0207;
+
+// (0x0009, 0x0209, 0x0409, 0x0809) BOF ---------------------------------------
+
+const sal_uInt16 EXC_ID2_BOF                = 0x0009;
+const sal_uInt16 EXC_ID3_BOF                = 0x0209;
+const sal_uInt16 EXC_ID4_BOF                = 0x0409;
+const sal_uInt16 EXC_ID5_BOF                = 0x0809;
+
+const sal_uInt16 EXC_BOF_BIFF5              = 0x0500;
+const sal_uInt16 EXC_BOF_BIFF8              = 0x0600;
 
 // (0x000A) EOF ---------------------------------------------------------------
 
