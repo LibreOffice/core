@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:44:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,13 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_HELP_URL,
     HANDLE_VIEWSET_VRULER_RIGHT,
     HANDLE_VIEWSET_SHOW_RULER,
-    HANDLE_VIEWSET_EXEC_HYPERLINKS
+    HANDLE_VIEWSET_EXEC_HYPERLINKS,
+    HANDLE_VIEWSET_IS_RASTER_VISIBLE,
+    HANDLE_VIEWSET_IS_SNAP_TO_RASTER,
+    HANDLE_VIEWSET_RASTER_RESOLUTION_X,
+    HANDLE_VIEWSET_RASTER_RESOLUTION_Y,
+    HANDLE_VIEWSET_RASTER_SUBDIVISION_X,
+    HANDLE_VIEWSET_RASTER_SUBDIVISION_Y
 };
 enum SwPrintSettingsPropertyHandles
 {
@@ -200,8 +206,14 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
     {
         { RTL_CONSTASCII_STRINGPARAM ( "HelpURL" ),             HANDLE_VIEWSET_HELP_URL             , CPPUTYPE_OUSTRING,    PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "IsExecuteHyperlinks" ), HANDLE_VIEWSET_EXEC_HYPERLINKS      , CPPUTYPE_BOOLEAN,    PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "IsRasterVisible"),      HANDLE_VIEWSET_IS_RASTER_VISIBLE,       CPPUTYPE_BOOLEAN,   PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "IsSnapToRaster"),       HANDLE_VIEWSET_IS_SNAP_TO_RASTER,       CPPUTYPE_BOOLEAN,   PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "IsVertRulerRightAligned"),HANDLE_VIEWSET_VRULER_RIGHT         , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "PreventHelpTips" ),     HANDLE_VIEWSET_PREVENT_TIPS         , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "RasterResolutionX"),    HANDLE_VIEWSET_RASTER_RESOLUTION_X,     CPPUTYPE_INT32,     PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "RasterResolutionY"),    HANDLE_VIEWSET_RASTER_RESOLUTION_Y,     CPPUTYPE_INT32,     PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "RasterSubdivisionX"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_X,    CPPUTYPE_INT32,     PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "RasterSubdivisionY"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_Y,    CPPUTYPE_INT32,     PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowAnnotations" ),     HANDLE_VIEWSET_ANNOTATIONS          , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowBreaks"),           HANDLE_VIEWSET_BREAKS               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowDrawings"),         HANDLE_VIEWSET_DRAWINGS             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
@@ -718,6 +730,43 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(bVal); break;
         case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   mpViewOption->SetSolidMarkHdl(bVal); break;
         case  HANDLE_VIEWSET_PREVENT_TIPS :            mpViewOption->SetPreventTips(bVal); break;
+        case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : mpViewOption->SetGridVisible(bVal); break;
+        case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : mpViewOption->SetSnap(bVal); break;
+        case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
+        {
+            sal_Int32 nTmp;
+            if(!(rValue >>= nTmp)  ||  nTmp < 10)
+                throw IllegalArgumentException();
+            Size aSize( mpViewOption->GetSnapSize() );
+            aSize.Width() = MM100_TO_TWIP( nTmp );
+            mpViewOption->SetSnapSize( aSize );
+        }
+        break;
+        case  HANDLE_VIEWSET_RASTER_RESOLUTION_Y   :
+        {
+            sal_Int32 nTmp;
+            if(!(rValue >>= nTmp)  ||  nTmp < 10)
+                throw IllegalArgumentException();
+            Size aSize( mpViewOption->GetSnapSize() );
+            aSize.Height() = MM100_TO_TWIP( nTmp );
+            mpViewOption->SetSnapSize( aSize );
+        }
+        break;
+        case  HANDLE_VIEWSET_RASTER_SUBDIVISION_X  :
+        {
+            sal_Int32 nTmp;
+            if(!(rValue >>= nTmp)  ||  !(0 <= nTmp  &&  nTmp < 100))
+                throw IllegalArgumentException();
+            mpViewOption->SetDivisionX( (short) nTmp );
+        }
+        break;
+        case  HANDLE_VIEWSET_RASTER_SUBDIVISION_Y  :
+        {
+            sal_Int32 nTmp;
+            if(!(rValue >>= nTmp)  ||  !(0 <= nTmp  &&  nTmp < 100))
+                throw IllegalArgumentException();
+            mpViewOption->SetDivisionY( (short) nTmp );
+        }
         break;
         case  HANDLE_VIEWSET_ZOOM                   :
         {
@@ -851,6 +900,24 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, :
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = mpConstViewOption->IsSmoothScroll();  break;
         case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   bBoolVal = mpConstViewOption->IsSolidMarkHdl();  break;
         case  HANDLE_VIEWSET_PREVENT_TIPS :            bBoolVal = mpConstViewOption->IsPreventTips(); break;
+        case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : bBoolVal = mpConstViewOption->IsGridVisible(); break;
+        case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : bBoolVal = mpConstViewOption->IsSnap(); break;
+        case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
+            bBool = FALSE;
+            rValue <<= (sal_Int32) TWIP_TO_MM100(mpConstViewOption->GetSnapSize().Width());
+        break;
+        case  HANDLE_VIEWSET_RASTER_RESOLUTION_Y   :
+            bBool = FALSE;
+            rValue <<= (sal_Int32) TWIP_TO_MM100(mpConstViewOption->GetSnapSize().Height());
+        break;
+        case  HANDLE_VIEWSET_RASTER_SUBDIVISION_X  :
+            bBool = FALSE;
+            rValue <<= (sal_Int32) mpConstViewOption->GetDivisionX();
+        break;
+        case  HANDLE_VIEWSET_RASTER_SUBDIVISION_Y  :
+            bBool = FALSE;
+            rValue <<= (sal_Int32) mpConstViewOption->GetDivisionY();
+        break;
         case  HANDLE_VIEWSET_ZOOM                   :
                 bBool = FALSE;
                 rValue <<= (sal_Int16)mpConstViewOption->GetZoom();
