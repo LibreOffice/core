@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_String_Const.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lwang $ $Date: 2003-01-10 02:12:51 $
+ *  last change: $Author: lwang $ $Date: 2003-01-13 01:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,24 +264,24 @@ static const sal_Char *kTestStr150 = "Java TechnologySun Microsystems ";
 static const sal_Char *kTestStr151 = "Sun MicrosystemsJava Technology";
 static const sal_Char *kTestStr152 = "Java Sun MicrosystemsTechnology";
 static const sal_Char *kTestStr153 = "Java TechnologySun Microsystems";
-static const sal_Char *kTestStr154 = "Sun Sun Microsystems Java Technology"
-static const sal_Char *kTestStr155 = "Sun Sun Microsystems Java Technology"
-static const sal_Char *kTestStr156 = "Sun Microsystems Java TechnologySun "
-static const sal_Char *kTestStr157 = "Sun Microsystems Sun Microsystems Java Technology"
-static const sal_Char *kTestStr158 = "Sun Sun Microsystems Microsystems Java Technology"
-static const sal_Char *kTestStr159 = "Sun Microsystems Java TechnologySun Microsystems "
-static const sal_Char *kTestStr160 = "Sun MicrosystemsSun Microsystems Java Technology"
-static const sal_Char *kTestStr161 = "Sun Sun MicrosystemsMicrosystems Java Technology"
-static const sal_Char *kTestStr162 = "Sun Microsystems Java TechnologySun Microsystems"
-static const sal_Char *kTestStr163 = "Sun \50\3\5\7\11\13\15\17sun"
-static const sal_Char *kTestStr164 = "\50\3\5\7Sun \11\13\15\17sun"
-static const sal_Char *kTestStr165 = "\50\3\5\7\11\13\15\17sunSun "
-static const sal_Char *kTestStr166 = "Sun Microsystems \50\3\5\7\11\13\15\17sun"
-static const sal_Char *kTestStr167 = "\50\3\5\7\Sun Microsystems 11\13\15\17sun"
-static const sal_Char *kTestStr168 = "\50\3\5\7\11\13\15\17sunSun Microsystems "
-static const sal_Char *kTestStr169 = "Sun Microsystems\50\3\5\7\11\13\15\17sun"
-static const sal_Char *kTestStr170 = "\50\3\5\7Sun Microsystems\11\13\15\17sun"
-static const sal_Char *kTestStr171 = "\50\3\5\7\11\13\15\17sunSun Microsystems"
+static const sal_Char *kTestStr154 = "Sun Sun Microsystems Java Technology";
+static const sal_Char *kTestStr155 = "Sun Sun Microsystems Java Technology";
+static const sal_Char *kTestStr156 = "Sun Microsystems Java TechnologySun ";
+static const sal_Char *kTestStr157 = "Sun Microsystems Sun Microsystems Java Technology";
+static const sal_Char *kTestStr158 = "Sun Sun Microsystems Microsystems Java Technology";
+static const sal_Char *kTestStr159 = "Sun Microsystems Java TechnologySun Microsystems ";
+static const sal_Char *kTestStr160 = "Sun MicrosystemsSun Microsystems Java Technology";
+static const sal_Char *kTestStr161 = "Sun Sun MicrosystemsMicrosystems Java Technology";
+static const sal_Char *kTestStr162 = "Sun Microsystems Java TechnologySun Microsystems";
+static const sal_Char *kTestStr163 = "Sun \50\3\5\7\11\13\15\17sun";
+static const sal_Char *kTestStr164 = "\50\3\5\7Sun \11\13\15\17sun";
+static const sal_Char *kTestStr165 = "\50\3\5\7\11\13\15\17sunSun ";
+static const sal_Char *kTestStr166 = "Sun Microsystems \50\3\5\7\11\13\15\17sun";
+static const sal_Char *kTestStr167 = "\50\3\5\7Sun Microsystems \11\13\15\17sun";
+static const sal_Char *kTestStr168 = "\50\3\5\7\11\13\15\17sunSun Microsystems ";
+static const sal_Char *kTestStr169 = "Sun Microsystems\50\3\5\7\11\13\15\17sun";
+static const sal_Char *kTestStr170 = "\50\3\5\7Sun Microsystems\11\13\15\17sun";
+static const sal_Char *kTestStr171 = "\50\3\5\7\11\13\15\17sunSun Microsystems";
 static const sal_Char *kTestStr1PlusStr6  = "Sun Microsystems" "Java Technology";
 
 
