@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:57:37 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,12 @@
 #ifndef _FMTFLD_HXX
 #define _FMTFLD_HXX
 
-
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 #ifndef _CALBCK_HXX //autogen
 #include <calbck.hxx>
@@ -72,23 +75,30 @@
 class SwField;
 // ATT_FLD ***********************************
 
-class SwFmtFld : public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient
 {
     friend class SwTxtFld;
     friend void _InitCore();
 
     SwField *pField;
     SwTxtFld* pTxtAttr;     // mein TextAttribut
+
     SwFmtFld();             // das default-Attibut
 
     // geschuetzter CopyCtor
+    // @@@ copy construction allowed, but copy assignment is not? @@@
     SwFmtFld& operator=(const SwFmtFld& rFld);
+
 public:
     TYPEINFO();
 
-    SwFmtFld( const SwField &rFld );
+    // single argument constructors shall be explicit.
+    explicit SwFmtFld( const SwField &rFld );
+
+    // @@@ copy construction allowed, but copy assignment is not? @@@
     SwFmtFld( const SwFmtFld& rAttr );
-    ~SwFmtFld();
+
+    virtual ~SwFmtFld();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
