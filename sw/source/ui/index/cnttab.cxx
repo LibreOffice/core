@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-01-25 16:27:51 $
+ *  last change: $Author: os $ $Date: 2001-02-06 08:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4704,8 +4704,6 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
     FreeResource();
     aOKPB.SetClickHdl(LINK(this, SwAutoMarkDlg_Impl, OkHdl));
 
-    INetURLObject aURLObj( sAutoMarkURL );
-    sAutoMarkURL = aURLObj.PathToFileName();
     String sTitle = GetText();
     sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM(": "));
     sTitle += sAutoMarkURL;
@@ -4716,7 +4714,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
     else
     {
         SfxMedium aMed( sAutoMarkURL, STREAM_STD_READ, FALSE );
-        if( !aMed.GetInStream()->GetError() )
+        if( aMed.GetInStream() && !aMed.GetInStream()->GetError() )
             aEntriesBB.ReadEntries( *aMed.GetInStream() );
         else
             bError = sal_True;
