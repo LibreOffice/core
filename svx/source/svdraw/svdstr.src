@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:36:16 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3193,14 +3193,14 @@ String STR_ObjNameSingulPAGE
     Text [ dutch ] = "Afdrukvoorbeeld van object" ;
     Text [ spanish ] = "Objeto de presentación de página" ;
     Text [ english_us ] = "Preview object" ;
-    Text[ chinese_simplified ] = "Ô¤ÊÓ¶ÔÏó";
+    Text[ chinese_simplified ] = "Ò³ÃæÔ¤ÀÀ¶ÔÏó";
     Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ îáúåêòà";
     Text[ polish ] = "Obiekty prezentacji stron";
     Text[ japanese ] = "ÌßÚËŞ­° µÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "¹wÄıª«¥ó";
     Text[ arabic ] = "ßÇÆä ÚÑÖ ÇáÕİÍÇÊ";
     Text[ dutch ] = "Afdrukvoorbeeld van object";
-    Text[ chinese_simplified ] = "Ô¤ÊÓ¶ÔÏó";
+    Text[ chinese_simplified ] = "Ò³ÃæÔ¤ÀÀ¶ÔÏó";
     Text[ greek ] = "Áíôéêåßìåíï ğáñïõóßáóçò óåëßäáò";
     Text[ korean ] = "ÆäÀÌÁö ¸ğ¾ç °³Ã¼";
     Text[ turkish ] = "Önizleme nesnesi";
@@ -3221,14 +3221,14 @@ String STR_ObjNamePluralPAGE
     Text [ dutch ] = "Afdrukvoorbeeld van objecten" ;
     Text [ spanish ] = "Objetos para presentaciones de páginas" ;
     Text [ english_us ] = "Preview objects" ;
-    Text[ chinese_simplified ] = "Ô¤ÊÓ¶ÔÏó";
+    Text[ chinese_simplified ] = "Ò³ÃæÔ¤ÀÀ¶ÔÏó";
     Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ îáúåêòîâ";
     Text[ polish ] = "Obiekty prezentacji stron";
     Text[ japanese ] = "ÌßÚËŞ­° µÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "¹wÄıª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ÚÑÖ ÇáÕİÍÇÊ";
     Text[ dutch ] = "Afdrukvoorbeeld van objecten";
-    Text[ chinese_simplified ] = "Ô¤ÊÓ¶ÔÏó";
+    Text[ chinese_simplified ] = "Ò³ÃæÔ¤ÀÀ¶ÔÏó";
     Text[ greek ] = "Áíôéêåßìåíá ğáñïõóßáóçò óåëßäáò";
     Text[ korean ] = "ÆäÀÌÁö ¸ğ¾ç °³Ã¼";
     Text[ turkish ] = "Önizleme nesneleri";
@@ -3909,14 +3909,14 @@ String STR_EditMovToTop
     Text [ dutch ] = "%O verder naar voren plaatsen" ;
     Text [ spanish ] = "Desplazar %O hacia adelante" ;
     Text [ english_us ] = "Move %O forward" ;
-    Text[ chinese_simplified ] = "%O ÔÙÇ°ÖÃ";
+    Text[ chinese_simplified ] = "%O ÉÏÒÆÒ»²ã";
     Text[ russian ] = "Ïåğåìåñòèòü %O âïåğåä";
     Text[ polish ] = "Przenieœ %O do przodu";
     Text[ japanese ] = "%O‚ğ‚¸‚Á‚Æ‘O•û‚ÖˆÚ“®";
-    Text[ chinese_traditional ] = "%O ¦A«e¸m";
+    Text[ chinese_traditional ] = "%O ¤W²¾¤@¼h";
     Text[ arabic ] = "ÅÒÇÍÉ %O ÈÕæÑÉ ÃßÈÑ Åáì ÇáÃãÇã";
     Text[ dutch ] = "%O verder naar voren plaatsen";
-    Text[ chinese_simplified ] = "%O ÔÙÇ°ÖÃ";
+    Text[ chinese_simplified ] = "%O ÉÏÒÆÒ»²ã";
     Text[ greek ] = "Ìåôáêßíçóç %O ğñïò ôá åìğñüò";
     Text[ korean ] = "%O °è¼ÓÇØ¼­ ¾ÕÀ¸·Î ÀÌµ¿";
     Text[ turkish ] = "Bir öne getir: %O";
@@ -3937,14 +3937,14 @@ String STR_EditMovToBtm
     Text [ dutch ] = "%O verder naar achteren plaatsen" ;
     Text [ spanish ] = "Desplazar %O hacia atrás" ;
     Text [ english_us ] = "Move %O further back" ;
-    Text[ chinese_simplified ] = "%O ÔÙºóÖÃ";
+    Text[ chinese_simplified ] = "%O ÏÂÒÆÒ»²ã";
     Text[ russian ] = "Ïåğåìåñòèòü %O íàçàä";
     Text[ polish ] = "Przenieœ %O do ty³u";
     Text[ japanese ] = "%O‚ğ‚¸‚Á‚ÆŒã•û‚ÖˆÚ“®";
-    Text[ chinese_traditional ] = "%O ¦A«á¸m";
+    Text[ chinese_traditional ] = "%O ¤U²¾¤@¼h";
     Text[ arabic ] = "ÅÒÇÍÉ %O ÈÕæÑÉ ÃßÈÑ Åáì ÇáÎáİ";
     Text[ dutch ] = "%O verder naar achteren plaatsen";
-    Text[ chinese_simplified ] = "%O ÔÙºóÖÃ";
+    Text[ chinese_simplified ] = "%O ÏÂÒÆÒ»²ã";
     Text[ greek ] = "Ìåôáêßíçóç %O ğñïò ôá ğßóù";
     Text[ korean ] = "%O °è¼ÓÇØ¼­ µÚ·Î ÀÌµ¿";
     Text[ turkish ] = "Bir alta gönder: %O";
@@ -4133,14 +4133,14 @@ String STR_EditMirrorHori
     Text [ dutch ] = "%O horizontaal spiegelen" ;
     Text [ spanish ] = "Reflejar %O horizontalmente" ;
     Text [ english_us ] = "Flip %O horizontal" ;
-    Text[ chinese_simplified ] = "%O Ë®Æ½·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "%O Ë®Æ½·­×ª";
     Text[ russian ] = "Îòğàçèòü %O ïî ãîğèçîíòàëè";
     Text[ polish ] = "Przerzuæ %O w poziomie";
     Text[ japanese ] = "%O‚ğ¶‰E‚É”½“]";
-    Text[ chinese_traditional ] = "%O ¤ô¥­¤Ï¬M";
+    Text[ chinese_traditional ] = "%O ¤ô¥­Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ %O ÃİŞíÇğ";
     Text[ dutch ] = "%O horizontaal spiegelen";
-    Text[ chinese_simplified ] = "%O Ë®Æ½·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "%O Ë®Æ½·­×ª";
     Text[ greek ] = "ÁíáóôñïöŞ %O ïñéæïíôßùò";
     Text[ korean ] = "%O ¼öÆòÀ¸·Î ´ëÄª";
     Text[ turkish ] = "Yatay yansıt: %O";
@@ -4161,14 +4161,14 @@ String STR_EditMirrorVert
     Text [ dutch ] = "%O verticaal spiegelen" ;
     Text [ spanish ] = "Reflejar %O verticalmente" ;
     Text [ english_us ] = "Flip %O vertical" ;
-    Text[ chinese_simplified ] = "%O ´¹Ö±·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "%O ´¹Ö±·­×ª";
     Text[ russian ] = "Îòğàçèòü %O ïî âåğòèêàëè";
     Text[ polish ] = "Przerzuæ %O w pionie";
     Text[ japanese ] = "%O‚ğã‰º‚É”½“]";
-    Text[ chinese_traditional ] = "%O ««ª½¤Ï¬M";
+    Text[ chinese_traditional ] = "%O ««ª½Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ %O ÑÃÓíÇğ";
     Text[ dutch ] = "%O verticaal spiegelen";
-    Text[ chinese_simplified ] = "%O ´¹Ö±·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "%O ´¹Ö±·­×ª";
     Text[ greek ] = "ÁíáóôñïöŞ %O êáôáêüñõöá";
     Text[ korean ] = "%O ¼öÁ÷À¸·Î ´ëÄª";
     Text[ turkish ] = "Dikey yansıt: %O";
@@ -4189,14 +4189,14 @@ String STR_EditMirrorDiag
     Text [ dutch ] = "%O diagonaal spiegelen" ;
     Text [ spanish ] = "Reflejar %O diagonalmente" ;
     Text [ english_us ] = "Flip %O diagonal" ;
-    Text[ chinese_simplified ] = "%O ¶Ô½Ç·´Ó³";
+    Text[ chinese_simplified ] = "%O ¶Ô½Ç·­×ª";
     Text[ russian ] = "Îòğàçèòü %O ïî äèàãîíàëè";
     Text[ polish ] = "Przerzuæ %O po przek¹tnej";
     Text[ japanese ] = "%O‚ğÎ‚ß‚É”½“]";
-    Text[ chinese_traditional ] = "%O ¹ï¨¤¤Ï¬M";
+    Text[ chinese_traditional ] = "%O ¹ï¨¤Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ %O ŞØÑíÇğ";
     Text[ dutch ] = "%O diagonaal spiegelen";
-    Text[ chinese_simplified ] = "%O ¶Ô½Ç·´Ó³";
+    Text[ chinese_simplified ] = "%O ¶Ô½Ç·­×ª";
     Text[ greek ] = "ÁíáóôñïöŞ %O äéáãùíßùò";
     Text[ korean ] = "%O ´ë°¢¼±À¸·Î ´ëÄª";
     Text[ turkish ] = "Diyagonal yansıt: %O";
@@ -4217,14 +4217,14 @@ String STR_EditMirrorFree
     Text [ dutch ] = "%O vrij spiegelen" ;
     Text [ spanish ] = "Reflejar %O libremente" ;
     Text [ english_us ] = "Flip %O freehand" ;
-    Text[ chinese_simplified ] = "%O ×ÔÓÉ·´Ó³";
+    Text[ chinese_simplified ] = "%O ×ÔÓÉ·­×ª";
     Text[ russian ] = "Ñâîáîäíîå îòğàæåíèå %O";
     Text[ polish ] = "Przerzuæ %O dowolnie";
     Text[ japanese ] = "%O‚ğ©—R‚É”½“]";
-    Text[ chinese_traditional ] = "%O ¦Û¥Ñ¤Ï¬M";
+    Text[ chinese_traditional ] = "%O ¦Û¥ÑÂ½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ %O ÈÔßá ÍÑ";
     Text[ dutch ] = "%O vrij spiegelen";
-    Text[ chinese_simplified ] = "%O ×ÔÓÉ·´Ó³";
+    Text[ chinese_simplified ] = "%O ×ÔÓÉ·­×ª";
     Text[ greek ] = "ÁíáóôñïöŞ %O åëåıèåñá";
     Text[ korean ] = "%O ÀÓÀÇ´ë·Î ´ëÄª";
     Text[ turkish ] = "Serbest yansıt: %O";
@@ -5696,14 +5696,14 @@ String STR_DragMethMirrorHori
     Text [ dutch ] = "%O horizontaal spiegelen" ;
     Text [ spanish ] = "Reflejar %O horizontalmente" ;
     Text [ english_us ] = "Flip %O horizontal" ;
-    Text[ chinese_simplified ] = "%O Ë®Æ½·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "%O Ë®Æ½·­×ª";
     Text[ russian ] = "Îòğàçèòü %O ïî ãîğèçîíòàëè";
     Text[ polish ] = "Przerzuæ %O w poziomie";
     Text[ japanese ] = "%O‚ğ¶‰E‚É”½“]";
-    Text[ chinese_traditional ] = "%O ¤ô¥­¤Ï¬M";
+    Text[ chinese_traditional ] = "%O ¤ô¥­Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ %O ÃİŞíÇğ";
     Text[ dutch ] = "%O horizontaal spiegelen";
-    Text[ chinese_simplified ] = "%O Ë®Æ½·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "%O Ë®Æ½·­×ª";
     Text[ greek ] = "Êáôüğôñéóç %O ïñéæïíôßùò";
     Text[ korean ] = "%OÀ» ¼öÆòÀ¸·Î ´ëÄª";
     Text[ turkish ] = "Yatay yansıt: %O";
@@ -5724,14 +5724,14 @@ String STR_DragMethMirrorVert
     Text [ dutch ] = "%O verticaal spiegelen" ;
     Text [ spanish ] = "Reflejar %O verticalmente" ;
     Text [ english_us ] = "Flip %O vertical" ;
-    Text[ chinese_simplified ] = "%O ´¹Ö±·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "%O ´¹Ö±·­×ª";
     Text[ russian ] = "Îòğàçèòü %O ïî âåğòèêàëè";
     Text[ polish ] = "Przerzuæ %O w pionie";
     Text[ japanese ] = "%O‚ğã‰º‚É”½“]";
-    Text[ chinese_traditional ] = "%O ««ª½¤Ï¬M";
+    Text[ chinese_traditional ] = "%O ««ª½Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ %O ÑÃÓíÇğ";
     Text[ dutch ] = "%O verticaal spiegelen";
-    Text[ chinese_simplified ] = "%O ´¹Ö±·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "%O ´¹Ö±·­×ª";
     Text[ greek ] = "Êáôüğôñéóç %O êáôáêüñõöá";
     Text[ korean ] = "%OÀ» ¼öÁ÷À¸·Î ´ëÄª";
     Text[ turkish ] = "Dikey yansıt: %O";
@@ -5752,14 +5752,14 @@ String STR_DragMethMirrorDiag
     Text [ dutch ] = "%O diagonaal spiegelen" ;
     Text [ spanish ] = "Reflejar %O diagonalmente" ;
     Text [ english_us ] = "Flip %O diagonal" ;
-    Text[ chinese_simplified ] = "%O ¶Ô½Ç·´Ó³";
+    Text[ chinese_simplified ] = "%O ¶Ô½Ç·­×ª";
     Text[ russian ] = "Îòğàçèòü  %O ïî äèàãîíàëè";
     Text[ polish ] = "Przerzuæ %O po przek¹tnej";
     Text[ japanese ] = "%O‚ğÎ‚ß‚É”½“]";
-    Text[ chinese_traditional ] = "%O ¹ï¨¤¤Ï¬M";
+    Text[ chinese_traditional ] = "%O ¹ï¨¤Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ %O ŞØÑíÇğ";
     Text[ dutch ] = "%O diagonaal spiegelen";
-    Text[ chinese_simplified ] = "%O ¶Ô½Ç·´Ó³";
+    Text[ chinese_simplified ] = "%O ¶Ô½Ç·­×ª";
     Text[ greek ] = "Êáôüğôñéóç %O äéáãùíßùò";
     Text[ korean ] = "%OÀ» ´ë°¢¼±À¸·Î ´ëÄª";
     Text[ turkish ] = "Diyagonal yansıt: %O";
@@ -5780,14 +5780,14 @@ String STR_DragMethMirrorFree
     Text [ dutch ] = "%O vrij spiegelen" ;
     Text [ spanish ] = "Reflejar libremente %O" ;
     Text [ english_us ] = "Flip %O freehand" ;
-    Text[ chinese_simplified ] = "%O ×ÔÓÉ·´Ó³";
+    Text[ chinese_simplified ] = "%O ×ÔÓÉ·­×ª";
     Text[ russian ] = "Ñâîáîäíîå îòğàæåíèå %O";
     Text[ polish ] = "Przerzuæ %O dowolnie";
     Text[ japanese ] = "%O‚ğ©—R‚É”½“]";
-    Text[ chinese_traditional ] = "%O ¦Û¥Ñ¤Ï¬M";
+    Text[ chinese_traditional ] = "%O ¦Û¥ÑÂ½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ %O ÈÔßá ÍÑ";
     Text[ dutch ] = "%O vrij spiegelen";
-    Text[ chinese_simplified ] = "%O ×ÔÓÉ·´Ó³";
+    Text[ chinese_simplified ] = "%O ×ÔÓÉ·­×ª";
     Text[ greek ] = "Êáôüğôñéóç %O åëåıèåñá";
     Text[ korean ] = "%OÀ» ÀÓÀÇ´ë·Î ´ëÄª";
     Text[ turkish ] = "Serbest yansıt: %O";
@@ -11303,7 +11303,7 @@ String SIP_XA_FORMTXTMIRROR
     Text[ portuguese_brazilian ] = "Fontwork mirror";
     Text[ japanese ] = "Ì«İÄÜ°¸‚Ì‚Ğ‚¾‚è•¶š";
     Text[ chinese_simplified ] = "ÃÀ¹¤×ÖÌå·´Ó³";
-    Text[ chinese_traditional ] = "¬ü³N¦r«¬¤Ï¬M";
+    Text[ chinese_traditional ] = "¬ü³N¦r«¬Â½Âà";
     Text[ arabic ] = "ÇáßÊÇÈÉ ÇáãäÚßÓÉ áÜ Fontwork";
     Text[ dutch ] = "Fontwork spiegelschrift";
     Text[ chinese_simplified ] = "ÃÀ¹¤×ÖÌå·´Ó³";
