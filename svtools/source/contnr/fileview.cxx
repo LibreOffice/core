@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-19 13:59:02 $
+ *  last change: $Author: gt $ $Date: 2001-10-29 12:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,8 +210,11 @@ DECLARE_LIST( StringList_Impl, OUString* );
 struct SortingData_Impl
 {
     DateTime    maModDate;
-    OUString    maTitle;
+private:
+    OUString    maFilename;     // only filename in upper case - for compare purposes
+    OUString    maTitle;        //  -> be carefull when changing maTitle to update maFilename only when new
     OUString    maLowerTitle;
+public:
     OUString    maType;
     OUString    maTargetURL;
     OUString    maImageURL;
@@ -219,7 +222,47 @@ struct SortingData_Impl
     Image       maImage;
     sal_Int64   maSize;
     sal_Bool    mbIsFolder;
+
+    inline const OUString&  GetTitle() const;
+    inline const OUString&  GetLowerTitle() const;
+    inline const OUString&  GetFileName() const;
+    inline void             SetNewTitle( const OUString& rNewTitle );       // new maTitle is set -> maFilename is set to same!
+    inline void             ChangeTitle( const OUString& rChangedTitle );   // maTitle is changed, maFilename is unchanged!
+private:
+    void                    SetTitles( const OUString& rNewTitle );
 };
+
+inline const OUString& SortingData_Impl::GetTitle() const
+{
+    return maTitle;
+}
+
+inline const OUString& SortingData_Impl::GetLowerTitle() const
+{
+    return maLowerTitle;
+}
+
+inline const OUString& SortingData_Impl::GetFileName() const
+{
+    return maFilename;
+}
+
+inline void SortingData_Impl::SetNewTitle( const OUString& rNewTitle )
+{
+    SetTitles( rNewTitle );
+    maFilename = rNewTitle.toAsciiUpperCase();
+}
+
+inline void SortingData_Impl::ChangeTitle( const OUString& rChangedTitle )
+{
+    SetTitles( rChangedTitle );
+}
+
+void SortingData_Impl::SetTitles( const OUString& rNewTitle )
+{
+    maTitle = rNewTitle;
+    maLowerTitle = rNewTitle.toAsciiLowerCase();
+}
 
 // class ViewTabListBox_Impl ---------------------------------------------
 
@@ -451,6 +494,7 @@ protected:
     HashedEntry             maHashedURL;    // for future purposes when dealing with a set of cached
                                             //  NameTranslationLists
 private:
+    const String            maTransFileName;
     void                    Init();         // reads the translation file and fills the (internal) list
 
 public:
@@ -465,7 +509,15 @@ public:
                                             // returns NULL, if rName can't be found
 
     inline void             Update();       // clears list and init
+
+    inline const String&    GetTransTableFileName() const;
+                                            // returns the name for the file, which contains the translation strings
 };
+
+inline const String& NameTranslationList::GetTransTableFileName() const
+{
+    return maTransFileName;
+}
 
 void NameTranslationList::Init()
 {
@@ -497,9 +549,10 @@ void NameTranslationList::Init()
 
 NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
     maTransFile( rBaseURL ),
-    maHashedURL( rBaseURL )
+    maHashedURL( rBaseURL ),
+    maTransFileName( String::CreateFromAscii( ".nametranslation.table" ) )
 {
-    maTransFile.insertName( OUString::createFromAscii( ".nametranslation.table" ) );
+    maTransFile.insertName( maTransFileName );
     Init();
 }
 
@@ -544,6 +597,8 @@ public:
     void                    SetActualFolder( const INetURLObject& rActualFolder );
     sal_Bool                GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const;
                                 // does nothing with rTranslatedName, when translation is not possible
+    const String*           GetTransTableFileName() const;
+                                            // returns the name for the file, which contains the translation strings
 };
 
 // class SvtFileView_Impl ---------------------------------------------
@@ -1565,6 +1620,11 @@ sal_Bool NameTranslator_Impl::GetTranslation( const OUString& rOrg, OUString& rT
     return bRet;
 }
 
+const String* NameTranslator_Impl::GetTransTableFileName() const
+{
+    return mpActFolder? &mpActFolder->GetTransTableFileName() : NULL;
+}
+
 // class SvtFileView_Impl ---------------------------------------------
 SvtFileView_Impl::SvtFileView_Impl( Window* pParent,
                                     sal_Int16 nFlags,
@@ -1669,7 +1729,7 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                     sal_Bool bTarget = aTargetURL.getLength() > 0;
 
                     pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
-                    pData->maTitle    = xRow->getString( ROW_TITLE );
+                    pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
 
                     pData->maSize     = xRow->getLong( ROW_SIZE );
 
@@ -1695,12 +1755,15 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                     // replace names on demand
                     if( mbReplaceNames )
                     {
+                        OUString aNewTitle;
+
                         if( pData->mbIsFolder )
-                            GetTranslatedName( pData->maTitle, pData->maTitle );
+                            GetTranslatedName( pData->GetTitle(), aNewTitle );
                         else
-                            GetDocTitle( pData->maTargetURL, pData->maTitle );
+                            GetDocTitle( pData->maTargetURL, aNewTitle );
+
+                        pData->ChangeTitle( aNewTitle );
                     }
-                    pData->maLowerTitle = pData->maTitle.toAsciiLowerCase();
 
                     maContent.push_back( pData );
                 }
@@ -1744,8 +1807,24 @@ namespace
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 {
-    if ( !rFilter.getLength() ||
-         ( rFilter.compareToAscii( ALL_FILES_FILTER ) == COMPARE_EQUAL ) )
+    sal_Bool bHideTransFile = mbReplaceNames && mpNameTrans;
+
+    String sHideEntry;
+    if( bHideTransFile )
+    {
+        const String* pTransTableFileName = mpNameTrans->GetTransTableFileName();
+        if( pTransTableFileName )
+        {
+            sHideEntry = *pTransTableFileName;
+            sHideEntry.ToUpperAscii();
+        }
+        else
+            bHideTransFile = sal_False;
+    }
+
+    if ( !bHideTransFile &&
+        ( !rFilter.getLength() || ( rFilter.compareToAscii( ALL_FILES_FILTER ) == COMPARE_EQUAL ) ) )
+        // when replacing names, there is always something to filter (no view of ".nametranslation.table")
         return;
 
     ::osl::MutexGuard aGuard( maMutex );
@@ -1763,22 +1842,27 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 
     // collect the filter tokens
     ::std::vector< WildCard > aFilters;
-    aFilters.reserve( nTokens );
-    sal_Int32 nIndex = 0;
-    ::rtl::OUString sToken;
-    do
-    {
-        sToken = rFilter.getToken( 0, ';', nIndex );
-        if ( sToken.getLength() )
+    if( rFilter.getLength() )
+    {// filter is given
+        aFilters.reserve( nTokens );
+        sal_Int32 nIndex = 0;
+        OUString sToken;
+        do
         {
-            aFilters.push_back( WildCard( sToken.toAsciiUpperCase() ) );
+            sToken = rFilter.getToken( 0, ';', nIndex );
+            if ( sToken.getLength() )
+            {
+                aFilters.push_back( WildCard( sToken.toAsciiUpperCase() ) );
+            }
         }
+        while ( nIndex >= 0 );
     }
-    while ( nIndex >= 0 );
+    else
+        // no filter is given -> match all
+        aFilters.push_back( WildCard( String::CreateFromAscii( "*" ) ) );
 
     // do the filtering
     ::std::vector< SortingData_Impl* >::iterator aContentLoop = maContent.begin();
-    sal_Bool bDeleteThisOne = sal_True;
     String sCompareString;
     do
     {
@@ -1788,16 +1872,25 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
         {
             // normalize the content title (we always match case-insensitive)
             // 91872 - 11.09.2001 - frank.schoenheit@sun.com
-            sCompareString = (*aContentLoop)->maTitle.toAsciiUpperCase();
+            sCompareString = (*aContentLoop)->GetFileName();    // filter works on file name, not on title!
+            sal_Bool bDelete;
 
-            // search for the first filter which matches
-            ::std::vector< WildCard >::const_iterator pMatchingFilter =
-                ::std::find_if(
-                    aFilters.begin(),
-                    aFilters.end(),
-                    FilterMatch( sCompareString )
-                );
-            if ( aFilters.end() == pMatchingFilter )
+            if( bHideTransFile && sCompareString == sHideEntry )
+                bDelete = sal_True;
+            else
+            {
+                // search for the first filter which matches
+                ::std::vector< WildCard >::const_iterator pMatchingFilter =
+                    ::std::find_if(
+                        aFilters.begin(),
+                        aFilters.end(),
+                        FilterMatch( sCompareString )
+                    );
+
+                bDelete = aFilters.end() == pMatchingFilter;
+            }
+
+            if( bDelete )
             {
                 // none of the filters did match
                 delete (*aContentLoop);
@@ -1872,7 +1965,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
     for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
     {
         // title, type, size, date
-        aValue = (*aIt)->maTitle;
+        aValue = (*aIt)->GetTitle();
         aValue += aTab;
         aValue += (*aIt)->maType;
         aValue += aTab;
@@ -1920,9 +2013,8 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         sal_Int32           nIndex = 0;
 
         // get the title
-        pEntry->maTitle = aValue.getToken( 0, '\t', nIndex );
-        pEntry->maLowerTitle = pEntry->maTitle.toAsciiLowerCase();
-        aDisplayText = pEntry->maTitle;
+        pEntry->SetNewTitle( aValue.getToken( 0, '\t', nIndex ) );
+        aDisplayText = pEntry->GetTitle();
         aDisplayText += aTab;
 
         // get the type
@@ -2048,10 +2140,10 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne,
         {
         case COLUMN_TITLE:
             // compare case insensitiv first
-            nComp = aOne->maLowerTitle.compareTo( aTwo->maLowerTitle );
+            nComp = aOne->GetLowerTitle().compareTo( aTwo->GetLowerTitle() );
 
             if ( nComp == 0 )
-                nComp = aOne->maTitle.compareTo( aTwo->maTitle );
+                nComp = aOne->GetTitle().compareTo( aTwo->GetTitle() );
 
             if ( nComp < 0 )
                 bRet = sal_True;
@@ -2146,8 +2238,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
     {
         if ( (*aIt)->maTargetURL == rURL )
         {
-            (*aIt)->maTitle = rTitle;
-            (*aIt)->maLowerTitle = (*aIt)->maTitle.toAsciiLowerCase();
+            (*aIt)->SetNewTitle( rTitle );
             OUString aDisplayText = (*aIt)->maDisplayText;
             sal_Int32 nIndex = aDisplayText.indexOf( '\t' );
 
@@ -2173,8 +2264,7 @@ void SvtFileView_Impl::FolderInserted( const OUString& rURL,
 
     SortingData_Impl* pData = new SortingData_Impl;
 
-    pData->maTitle    = rTitle;
-    pData->maLowerTitle = pData->maTitle.toAsciiLowerCase();
+    pData->SetNewTitle( rTitle );
     pData->maSize     = 0;
     pData->mbIsFolder = sal_True;
     pData->maTargetURL   = rURL;
@@ -2192,7 +2282,7 @@ void SvtFileView_Impl::FolderInserted( const OUString& rURL,
     OUString aDateSep = OUString::createFromAscii( ", " );
 
     // title, type, size, date
-    aValue = pData->maTitle;
+    aValue = pData->GetTitle();
     aValue += aTab;
     aValue += pData->maType;
     aValue += aTab;
@@ -2239,7 +2329,7 @@ sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32 &nIndex,
     while ( nIndex < nEnd )
     {
         SortingData_Impl* pData = maContent[ nIndex ];
-        if ( rTitle.compareTo( pData->maLowerTitle, rTitle.getLength() ) == 0 )
+        if ( rTitle.compareTo( pData->GetLowerTitle(), rTitle.getLength() ) == 0 )
             return sal_True;
         nIndex += 1;
     }
@@ -2250,7 +2340,7 @@ sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32 &nIndex,
         while ( nIndex <= nStart )
         {
             SortingData_Impl* pData = maContent[ nIndex ];
-            if ( rTitle.compareTo( pData->maLowerTitle, rTitle.getLength() ) == 0 )
+            if ( rTitle.compareTo( pData->GetLowerTitle(), rTitle.getLength() ) == 0 )
                 return sal_True;
             nIndex += 1;
         }
