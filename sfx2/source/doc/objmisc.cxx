@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:30:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,12 @@ sal_Bool SfxObjectShell::IsModified()
 {
     if ( pImp->m_bIsModified )
         return sal_True;
+
+    if ( !pImp->m_xDocStorage.is() )
+    {
+        // if the document still has no storage and is not set to be modified explicitly it is not modified
+        return sal_False;
+    }
 
     uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
     for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
@@ -1847,7 +1853,7 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
         if ( xSignatures.is() && pImp->nMacroMode != MacroExecMode::FROM_LIST )
         {
             ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aScriptingSignatureInformations;
-            uno::Reference < embed::XStorage > xStore;
+            uno::Reference < embed::XStorage > xStore = GetMedium()->GetStorage();
             sal_uInt16 nSignatureState = GetScriptingSignatureState();
             if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
             {
@@ -1858,11 +1864,8 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
                     return;
                 }
             }
-            else if ( nSignatureState == SIGNATURESTATE_SIGNATURES_OK )
-            {
-                if ( GetMedium()->GetStorage().is() )
-                       aScriptingSignatureInformations = xSignatures->VerifyScriptingContentSignatures( GetMedium()->GetStorage() );
-            }
+            else if ( nSignatureState == SIGNATURESTATE_SIGNATURES_OK && xStore.is() )
+                aScriptingSignatureInformations = xSignatures->VerifyScriptingContentSignatures( xStore );
 
             sal_Int32 nNumOfInfos = aScriptingSignatureInformations.getLength();
 
@@ -1895,7 +1898,6 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
                     USHORT nRet = aDlg.Execute();
                     pImp->nMacroMode = ( nRet == RET_OK ) ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
                     return;
-
                 }
             }
             else if( pImp->nMacroMode == MacroExecMode::USE_CONFIG )
