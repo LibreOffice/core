@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:20:52 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ String RID_SVXTBX_FORM_FILTER
     Text[ hebrew ] = "‮סרגל מסננים‬";
     Text[ hindi ] = "फिल्टर पट्टी";
     Text[ slovak ] = "Panel filtra";
+    Text[ hungarian ] = "Szűrő eszköztár";
+    Text[ slovenian ] = "Vrstica za filtre";
 };
 
  //------------------------------------------------------------------------
@@ -161,6 +163,8 @@ ToolBox RID_SVXTBX_FORM_FILTER
     Text[ hebrew ] = "‮סרגל מסננים‬";
     Text[ hindi ] = "फिल्टर पट्टी";
     Text[ slovak ] = "Panel filtra";
+    Text[ hungarian ] = "Szűrő eszköztár";
+    Text[ slovenian ] = "Vrstica za filtre";
 };
 
 String RID_SVXTBX_FORM_NAVIGATION
@@ -193,6 +197,8 @@ String RID_SVXTBX_FORM_NAVIGATION
     Text[ hebrew ] = "‮סרגל מסד נתונים‬";
     Text[ hindi ] = "लेखासंचय पट्टी";
     Text[ slovak ] = "Panel databázy";
+    Text[ hungarian ] = "Adatbázis eszköztár";
+    Text[ slovenian ] = "Vrstica za zbirke podatkov";
 };
 
  //------------------------------------------------------------------------
@@ -353,6 +359,8 @@ ToolBox RID_SVXTBX_FORM_NAVIGATION
     Text[ hebrew ] = "‮סרגל מסד נתונים‬";
     Text[ hindi ] = "लेखासंचय पट्टी";
     Text[ slovak ] = "Panel databázy";
+    Text[ hungarian ] = "Adatbázis eszköztár";
+    Text[ slovenian ] = "Vrstica za zbirke podatkov";
 };
 
  //------------------------------------------------------------------------
@@ -593,6 +601,8 @@ FloatingWindow RID_SVXTBX_FORM
     Text[ hebrew ] = "‮פונקציות טופס‬";
     Text[ hindi ] = "फॉर्म् फंक्शन्स";
     Text[ slovak ] = "Funkcie formulára";
+    Text[ hungarian ] = "Űrlapelemek";
+    Text[ slovenian ] = "Funkcije obrazca";
 };
 
 ModalDialog RID_SVX_DLG_INPUTRECORDNO
@@ -649,6 +659,8 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
         Text[ hebrew ] = "‮מעבר לרשומה‬";
         Text[ hindi ] = "लेखा में जाओ";
         Text[ slovak ] = "prejsť na záznam";
+        Text[ hungarian ] = "ugrás a rekordhoz";
+        Text[ slovenian ] = "pojdi na zapis";
     };
     NumericField 1
     {
@@ -682,7 +694,10 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     Text[ hebrew ] = "‮מספר רשומה‬";
     Text[ hindi ] = "लेखा संख्या";
     Text[ slovak ] = "Číslo záznamu";
+    Text[ hungarian ] = "Rekordszám";
+    Text[ slovenian ] = "Številka zapisa";
 };
+
 
 
 
