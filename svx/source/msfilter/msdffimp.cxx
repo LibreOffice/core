@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-05 17:57:54 $
+ *  last change: $Author: jp $ $Date: 2000-12-15 17:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4857,6 +4857,7 @@ const GDIMetaFile* SvxMSDffManager::lcl_GetMetaFileFromGrf_Impl( const Graphic& 
     return pMtf;
 }
 
+
 #ifndef SVX_LIGHT
 const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConvertFlags,
                         SvStorage& rSrcStg, SvStorage& rDestStorage )
@@ -4928,13 +4929,16 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                             String aDstStgName( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "MSO_OLE_Obj" )));
 
+                            static sal_uInt32 nMSOleObjCntr = 0;
+                            aDstStgName += String::CreateFromInt32( ++nMSOleObjCntr );
+
                             SvStorageRef xObjStor( rDestStorage.OpenStorage(
                                                     aDstStgName,
                                     STREAM_READWRITE| STREAM_SHARE_DENYALL ));
 
                             xDoc->DoLoad( pMed );
                             xDoc->DoSaveAs( xObjStor );
-                            xDoc->DoSaveCompleted( /*xObjStor*/ );
+                            xDoc->DoSaveCompleted( xObjStor );
                             pMed = 0;
                         }
                     }
@@ -4966,6 +4970,9 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         BOOL bValidStorage = FALSE;
         String aDstStgName( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "MSO_OLE_Obj" )));
+
+        static sal_uInt32 nMSOleObjCntr = 0;
+        aDstStgName += String::CreateFromInt32( ++nMSOleObjCntr );
         SvStorageRef xObjStor;
 
         {
