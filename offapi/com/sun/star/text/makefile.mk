@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: tl $ $Date: 2002-06-24 12:31:30 $
+#   last change: $Author: tl $ $Date: 2002-08-15 14:08:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ IDLFILES=\
     ContentIndex.idl\
     ContentIndexMark.idl\
     ControlCharacter.idl\
+        Defaults.idl\
     DefaultNumberingProvider.idl\
     DependentTextField.idl\
     DocumentIndex.idl\
