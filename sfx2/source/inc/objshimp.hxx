@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:28:11 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 12:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include "objsh.hxx"
 #include "bitset.hxx"
 
-class AsynchronLink;
+namespace svtools { class AsynchronLink; }
 
 //====================================================================
 
@@ -149,16 +149,16 @@ struct SfxObjectShell_Impl
     sal_Bool                bModalMode;
     sal_Bool                bReloadAvailable;
     sal_uInt16              nAutoLoadLocks;
-    SfxModule*          pModule;
-    SfxFrame* pFrame;
-    SfxImageManager* pImageManager;
-    SfxToolBoxConfig*   pTbxConfig;
+    SfxModule*              pModule;
+    SfxFrame*               pFrame;
+    SfxImageManager*        pImageManager;
+    SfxToolBoxConfig*       pTbxConfig;
     SfxEventConfigItem_Impl* pEventConfig;
-    SfxObjectShellFlags eFlags;
-    AsynchronLink*      pCloser;
-    String              aBaseURL;
+    SfxObjectShellFlags     eFlags;
+    svtools::AsynchronLink* pCloser;
+    String                  aBaseURL;
     sal_Bool                bReadOnlyUI;
-    SvRefBaseRef        xHeaderAttributes;
+    SvRefBaseRef            xHeaderAttributes;
     sal_Bool                bHiddenLockedByAPI;
     sal_Bool                bInCloseEvent;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             xModel;

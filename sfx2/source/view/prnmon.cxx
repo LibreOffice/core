@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:36 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 12:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,11 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+
+#ifndef   SVTOOLS_ASYNCLINK_HXX
+#include <svtools/asynclink.hxx>
+#endif
+
 #pragma hdrstop
 
 #include "prnmon.hxx"
@@ -112,7 +117,7 @@ struct SfxPrintProgress_Impl
     BOOL                    bShow;
     BOOL                    bCallbacks;
     BOOL                    bOldEnablePrintFile;
-    AsynchronLink           aDeleteLink;
+    svtools::AsynchronLink  aDeleteLink;
 
 private:
     DECL_LINK( CancelHdl, Button * );

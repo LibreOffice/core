@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:35:08 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 12:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include <svtools/itemdel.hxx>
 #endif
 
+#ifndef   SVTOOLS_ASYNCLINK_HXX
+#include <svtools/asynclink.hxx>
+#endif
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
@@ -129,8 +132,8 @@ struct SfxShell_Impl: public SfxBroadcaster
     BOOL                        bActive;
     ULONG                       nDisableFlags;
     ULONG                       nHelpId;
-    AsynchronLink*              pExecuter;
-    AsynchronLink*              pUpdater;
+    svtools::AsynchronLink*     pExecuter;
+    svtools::AsynchronLink*     pUpdater;
     SfxShell_Impl()  : pExecuter( 0 ), pUpdater( 0 ) {}
     ~SfxShell_Impl() { delete pExecuter; delete pUpdater;}
 };
@@ -1139,7 +1142,7 @@ const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, BOOL bAsync )
     else
     {
         if( !pImp->pExecuter )
-            pImp->pExecuter = new AsynchronLink(
+            pImp->pExecuter = new svtools::AsynchronLink(
                 Link( this, ShellCall_Impl ) );
         pImp->pExecuter->Call( new SfxRequest( rReq ) );
         return 0;
@@ -1490,7 +1493,7 @@ void SfxShell::UIFeatureChanged()
         // sonst bleibt evtl. irgendwas in den gebunkerten Tools stecken.
         // Asynchron aufrufen, um Rekursionen zu vermeiden
         if ( !pImp->pUpdater )
-            pImp->pUpdater = new AsynchronLink( Link( this, DispatcherUpdate_Impl ) );
+            pImp->pUpdater = new svtools::AsynchronLink( Link( this, DispatcherUpdate_Impl ) );
 
         // Mehrfachaufrufe gestattet
         pImp->pUpdater->Call( pFrame->GetDispatcher(), TRUE );

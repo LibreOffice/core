@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-02 08:19:15 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 12:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ using namespace ::com::sun::star::io;
 #include <tools/urlobj.hxx>
 #include <unotools/ucblockbytes.hxx>
 #include <svtools/pathoptions.hxx>
+#include <svtools/asynclink.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -180,7 +181,6 @@ using namespace ::com::sun::star::io;
 #include "app.hxx"          // GetFilterMatcher
 #include "frame.hxx"        // LoadTargetFrame
 #include "fltfnc.hxx"       // SfxFilterMatcher
-#include "sfxtypes.hxx"     // AsynchronLink
 #include "docfilt.hxx"      // SfxFilter
 #include "objsh.hxx"        // CheckOpenMode
 #include "docfac.hxx"       // GetFilterContainer
@@ -574,8 +574,8 @@ public:
     LoadEnvironment_Impl* pLoadEnv;
     SvKeyValueIteratorRef xAttributes;
 
-    AsynchronLink       aDoneLink;
-    AsynchronLink       aAvailableLink;
+    svtools::AsynchronLink  aDoneLink;
+    svtools::AsynchronLink  aAvailableLink;
     SfxLockBytesHandler_ImplRef  aHandler;
 
     SfxVersionTableDtor*    pVersions;

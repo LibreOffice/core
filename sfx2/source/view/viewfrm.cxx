@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-29 11:31:12 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 12:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ struct SfxViewFrame_Impl
     String              aActualPresentationURL;
     SfxFrame*           pFrame;
     SfxCancelManager*   pCancelMgr;
-    AsynchronLink*      pReloader;
+    svtools::AsynchronLink* pReloader;
     SfxInPlaceFrame*    pIPFrame;
     Window*             pWindow;
     SfxViewFrame*       pActiveChild;
@@ -328,7 +328,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq, sal_Bool bAsync )
     if( bAsync )
     {
         if( !pImp->pReloader )
-            pImp->pReloader = new AsynchronLink(
+            pImp->pReloader = new svtools::AsynchronLink(
                 Link( this, ReloadDecouple_Impl ) );
         pImp->pReloader->Call( new SfxRequest( rReq ) );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-02 16:25:44 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 12:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #endif
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
+#endif
+
+#ifndef SVTOOLS_ASYNCLINK_HXX
+#include <svtools/asynclink.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -653,7 +657,7 @@ long SfxAppFocusChanged_Impl( void* pObj, void* pArg )
 
 void SfxApplication::FocusChanged()
 {
-    static AsynchronLink *pFocusCallback = new AsynchronLink( Link( 0, SfxAppFocusChanged_Impl ) );
+    static svtools::AsynchronLink *pFocusCallback = new svtools::AsynchronLink( Link( 0, SfxAppFocusChanged_Impl ) );
     pFocusCallback->Call( this, sal_True );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-29 11:29:48 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 12:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
+#endif
+#ifndef   SVTOOLS_ASYNCLINK_HXX
+#include <svtools/asynclink.hxx>
 #endif
 #ifndef _IPENV_HXX //autogen
 #include <so3/ipenv.hxx>
@@ -308,7 +311,7 @@ public:
                         {}
 };
 
-static AsynchronLink* pPendingCloser = 0;
+static svtools::AsynchronLink* pPendingCloser = 0;
 
 SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHidden, const SfxItemSet* pSet )
 {
@@ -1032,7 +1035,7 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                         {
                             if ( pPendingCloser )
                                 pPendingCloser->ForcePendingCall();
-                            pCloser = new AsynchronLink(
+                            pCloser = new svtools::AsynchronLink(
                                 Link( 0, SfxViewFrameClose_Impl ) );
                             pCloser->Call( this );
                             pPendingCloser = pCloser;

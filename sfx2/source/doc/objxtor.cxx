@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-28 15:56:34 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 12:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
 
 #include <svtools/urihelper.hxx>
 #include <svtools/pathoptions.hxx>
+#include <svtools/asynclink.hxx>
 
 #include "picklist.hxx"
 #include "docfac.hxx"
@@ -156,7 +157,7 @@ DBG_NAME(SfxObjectShell);
 #define DocumentInfo
 #include "sfxslots.hxx"
 
-extern AsynchronLink* pPendingCloser;
+extern svtools::AsynchronLink* pPendingCloser;
 
 //=========================================================================
 

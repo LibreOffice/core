@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:46:19 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 12:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #include <svtools/sbx.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/useroptions.hxx>
+#include <svtools/asynclink.hxx>
 
 #pragma hdrstop
 
@@ -128,7 +129,7 @@ BOOL ShallSetBaseURL_Impl( SfxMedium &rMed );
 #define SfxObjectShell
 #include "sfxslots.hxx"
 
-AsynchronLink* pPendingCloser = 0;
+svtools::AsynchronLink* pPendingCloser = 0;
 
 //=========================================================================
 
@@ -622,7 +623,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                     if ( pPendingCloser )
                         pPendingCloser->ForcePendingCall();
-                    pImp->pCloser = new AsynchronLink(
+                    pImp->pCloser = new svtools::AsynchronLink(
                         Link( 0, SfxObjectShellClose_Impl ) );
                     pImp->pCloser->Call( this );
                     pPendingCloser = pImp->pCloser;
