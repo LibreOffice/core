@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 13:09:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@ public:
     virtual void Deactivate();                      // Function deaktivieren
 
     virtual void CreateDefaultObject();
+
+    // #i33136#
+    virtual bool doConstructOrthogonal() const;
 };
 
 
