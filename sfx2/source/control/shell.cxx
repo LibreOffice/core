@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:03:22 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@
 
 #include <svtools/undoopt.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "shell.hxx"
 #include "bindings.hxx"
@@ -181,9 +183,9 @@ SfxShell::SfxShell()
     Daher ist das Anlegen einer SfxShell Instanz sehr billig.
 */
 
-:   pPool(0),
-    pUndoMgr(0),
-    pImp(0)
+:   pImp(0),
+    pPool(0),
+    pUndoMgr(0)
 {
     DBG_CTOR(SfxShell, 0);
     pImp = new SfxShell_Impl;
@@ -208,9 +210,9 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
     Daher ist das Anlegen einer SfxShell Instanz sehr billig.
 */
 
-:   pPool(0),
-    pUndoMgr(0),
-    pImp(0)
+:   pImp(0),
+    pPool(0),
+    pUndoMgr(0)
 {
     DBG_CTOR(SfxShell, 0);
     pImp = new SfxShell_Impl;
