@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendfactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-12 16:43:30 $
+ *  last change: $Author: jb $ $Date: 2002-10-24 15:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
 #endif
+#include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
 
 namespace configmgr
 {
@@ -93,11 +94,20 @@ namespace configmgr
             typedef com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter >
                 TypeConverterRef;
 
+            typedef com::sun::star::uno::Reference< drafts::com::sun::star::configuration::backend::XBackend >
+                UnoBackend;
+
             rtl::Reference<IMergedDataProvider>
                 createBackend(ConnectionSettings const & _aSettings, CreationContext const & _xCtx);
 
             rtl::Reference<IMergedDataProvider>
                 createSessionBackend(IConfigSession * pSession, TypeConverterRef const & _xTCV);
+
+            static UnoBackend
+                createDefaultUnoBackend(CreationContext const & _xCtx);
+
+            static UnoBackend
+                createUnoBackend(ConnectionSettings const & _aSettings, CreationContext const & _xCtx);
 
             static BackendFactory & instance();
         };

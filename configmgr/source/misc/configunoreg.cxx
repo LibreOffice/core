@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:34:46 $
+ *  last change: $Author: jb $ $Date: 2002-10-24 15:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,15 +84,6 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::configmgr::ServiceInfo;
 using ::configmgr::AsciiServiceName;
 
-#if SUPD<633
-typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
-        (
-            const Reference< XMultiServiceFactory > & rServiceManager,
-            const OUString & rComponentName,
-            ::cppu::ComponentInstantiation pCreateFunction,
-            const Sequence< OUString > & rServiceNames
-        );
-#else
 typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
         (
             const Reference< XMultiServiceFactory > & rServiceManager,
@@ -101,7 +92,6 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
             const Sequence< OUString > & rServiceNames,
             rtl_ModuleCount*
         );
-#endif
 
 typedef Reference< XSingleServiceFactory > (SAL_CALL * createProviderFactoryFunc)
         (
@@ -212,7 +202,7 @@ struct ServiceImplementationRequest
     }
 
     //-------------------------------------------------------------------------
-    void* getProvider() const
+    void* getService() const
     {
         // we want to transport the interface pointer as flat C void pointer, so this prevents deletion
         if (xRet.is())
@@ -243,31 +233,31 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     {
         Reference< XRegistryKey > xKey(reinterpret_cast<XRegistryKey*>(pRegistryKey));
 
+        // configuration access entry points: configuration provider
         RegisterService(configmgr::getConfigurationProviderServices(), xKey);
         RegisterService(configmgr::getAdminProviderServices(), xKey);
 
+        // registry wrapper (deprecated)
         RegisterService(configmgr::getConfigurationRegistryServiceInfo(), xKey);
 
+        // updating
         RegisterService(configmgr::backend::getUpdateMergerServiceInfo(), xKey);
 
+        // xml handling
         RegisterService(configmgr::xml::getSchemaParserServiceInfo(), xKey);
         RegisterService(configmgr::xml::getLayerParserServiceInfo(), xKey);
         RegisterService(configmgr::xml::getLayerWriterServiceInfo(), xKey);
-        RegisterService(configmgr::localbe::getLocalBackendServiceInfo(),
-                        xKey) ;
-        RegisterService(
-                configmgr::backend::getSingleBackendAdapterServiceInfo(),
-                xKey) ;
+        // backends
+        RegisterService(configmgr::localbe::getLocalBackendServiceInfo(), xKey) ;
+        RegisterService(configmgr::backend::getSingleBackendAdapterServiceInfo(), xKey) ;
         // im/export
-#if 0
-        RegisterService(configmgr::getDataExportServiceInfo(), xKey);
-        RegisterService(configmgr::getDataImportServiceInfo(), xKey);
-#endif
+        RegisterService(configmgr::backend::getImportMergerServiceInfo(), xKey);
+
         return sal_True;
     }
     catch (::com::sun::star::registry::InvalidRegistryException& )
     {
-        OSL_ENSURE(sal_False, "SBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+        OSL_ENSURE(sal_False, "configmgr: component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
     }
 
     return sal_False;
@@ -284,6 +274,7 @@ extern "C" void* SAL_CALL component_getFactory(
     {
         ServiceImplementationRequest aReq(pServiceManager,pImplementationName);
 
+        // configuration access entry points: configuration provider
         aReq.CreateProvider(
             configmgr::getConfigurationProviderServices(),
             &configmgr::instantiateConfigProvider,
@@ -299,16 +290,19 @@ extern "C" void* SAL_CALL component_getFactory(
             &configmgr::instantiateUserAdminProvider,
             ::configmgr::createProviderFactory)
         ||
+        // registry wrapper (deprecated)
         aReq.CreateService(
             configmgr::getConfigurationRegistryServiceInfo(),
             &configmgr::instantiateConfigRegistry,
             ::cppu::createSingleFactory)
         ||
+        // updating
         aReq.CreateService(
             configmgr::backend::getUpdateMergerServiceInfo(),
             &configmgr::backend::instantiateUpdateMerger,
             ::cppu::createSingleFactory)
         ||
+        // xml handling
         aReq.CreateService(
             configmgr::xml::getSchemaParserServiceInfo(),
             &configmgr::xml::instantiateSchemaParser,
@@ -324,6 +318,7 @@ extern "C" void* SAL_CALL component_getFactory(
             &configmgr::xml::instantiateLayerWriter,
             ::cppu::createSingleFactory)
         ||
+        // backends
         aReq.CreateService(
                 configmgr::localbe::getLocalBackendServiceInfo(),
                 configmgr::localbe::instantiateLocalBackend,
@@ -334,9 +329,15 @@ extern "C" void* SAL_CALL component_getFactory(
                 configmgr::backend::instantiateSingleBackendAdapter,
                 cppu::createSingleFactory)
         ||
+        // im/export
+        aReq.CreateService(
+            configmgr::backend::getImportMergerServiceInfo(),
+            &configmgr::backend::instantiateImportMerger,
+            ::cppu::createSingleFactory)
+        ||
         false;
 
-        pRet = aReq.getProvider();
+        pRet = aReq.getService();
     }
 
     return pRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:30:04 $
+ *  last change: $Author: jb $ $Date: 2002-10-24 15:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,20 +156,24 @@ namespace configmgr
     }
     namespace backend
     {
-        uno::Reference< uno::XInterface > SAL_CALL instantiateUpdateMerger
-        ( CreationContext const& rServiceManager );
-        uno::Reference<uno::XInterface> SAL_CALL
-            instantiateSingleBackendAdapter(
-                    const CreationContext& aServiceManager) ;
+        uno::Reference< uno::XInterface > SAL_CALL
+            instantiateUpdateMerger( CreationContext const& rServiceManager );
 
-        const ServiceInfo* getUpdateMergerServiceInfo();
-        const ServiceInfo *getSingleBackendAdapterServiceInfo(void) ;
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateSingleBackendAdapter(const CreationContext& aServiceManager) ;
+
+        uno::Reference< uno::XInterface > SAL_CALL
+            instantiateImportMerger( CreationContext const& rServiceManager );
+
+        const ServiceInfo * getUpdateMergerServiceInfo();
+        const ServiceInfo * getSingleBackendAdapterServiceInfo() ;
+        const ServiceInfo * getImportMergerServiceInfo();
     }
     namespace localbe {
-        uno::Reference<uno::XInterface> SAL_CALL instantiateLocalBackend(
-                const CreationContext& aServiceManager) ;
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateLocalBackend(const CreationContext& aServiceManager) ;
 
-        const ServiceInfo *getLocalBackendServiceInfo(void) ;
+        const ServiceInfo * getLocalBackendServiceInfo() ;
     } // localbe
 } //  namespace configmgr
 
