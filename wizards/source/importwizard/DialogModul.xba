@@ -256,7 +256,7 @@ Dim sAddText as String
 				sTmpText = sTmpText &amp; sSumInclusiveSubDir &amp; sCRLF
 			End If
 			sTmpText = sTmpText &amp; sSumSaveDocuments &amp; sCRLF
-			sTmpText = sTmpText &amp; Applications(i,SBTEMPLTARGET) &amp; sCRLF
+			sTmpText = sTmpText &amp; ConvertFromUrl(Applications(i,SBTEMPLTARGET)) &amp; sCRLF
 			sTmpText = sTmpText &amp; sCRLF
 		End If
 
@@ -275,7 +275,7 @@ Dim sAddText as String
 			End If
 
 			sTmpText = sTmpText &amp; sSumSaveDocuments &amp; sCRLF
-			sTmpText = sTmpText &amp; Applications(i,SBDOCTARGET) &amp; sCRLF
+			sTmpText = sTmpText &amp; ConvertFromUrl(Applications(i,SBDOCTARGET)) &amp; sCRLF
 			sTmpText = sTmpText &amp; sCRLF
 		End If
 	Next i
