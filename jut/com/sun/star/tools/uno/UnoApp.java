@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-19 15:31:11 $
+ *  last change: $Author: kr $ $Date: 2000-10-27 08:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ import com.sun.star.uno.Type;
  * <p>
  */
 public class UnoApp {
-    static public final boolean DEBUG = true;
+    static public final boolean DEBUG = false;
 
     /**
      * Bootstraps a servicemanager with some base components registered.
@@ -422,7 +422,7 @@ public class UnoApp {
             unoApp._context = RegistryServiceFactory.create(args[index[0] ++]);
             unoApp._creator = this;
 
-            System.err.println("got RegistryServiceFactory:" + unoApp._context);
+            if(DEBUG) System.err.println("##### " + getClass().getName() + " - got RegistryServiceFactory:" + unoApp._context);
         }
 
         Object create(UnoApp unoApp) throws Exception {
@@ -672,7 +672,7 @@ public class UnoApp {
         if(unoApp._uno_url != null) // see, if we have to export the object
             export(unoApp._xMultiServiceFactory, unoApp._uno_url, object);
         else
-            System.err.println("result: " + object);
+            System.out.println("result: " + object);
     }
 
 
