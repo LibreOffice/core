@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-19 11:16:28 $
+ *  last change: $Author: os $ $Date: 2002-08-09 15:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,7 +927,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         break;
         case FN_CONVERT_TEXT_TABLE:
         {
-            char cDelim = 0;
+            sal_Unicode cDelim = 0;
             USHORT nInsTblFlags = ALL_TBL_INS_ATTR;
             SwTableAutoFmt* pTAFmt = 0;
             SwConvertTableDlg *pDlg = new SwConvertTableDlg( GetView() );

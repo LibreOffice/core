@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: os $ $Date: 2002-08-09 15:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@
 #include "convert.hrc"
 
 
-void SwConvertTableDlg::GetValues(  char& rDelim,
+void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
                                     USHORT& rInsTblFlags,
                                     SwTableAutoFmt *& prTAFmt )
 {
@@ -237,98 +237,5 @@ IMPL_LINK(SwConvertTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
 
     return 0;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:47  hr
-    initial import
-
-    Revision 1.39  2000/09/18 16:06:07  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.38  2000/02/11 14:58:29  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.37  1999/05/03 09:03:16  OS
-    #65612# Einfuegeoptionen nur in einer Richtung anzeigen
-
-
-      Rev 1.36   03 May 1999 11:03:16   OS
-   #65612# Einfuegeoptionen nur in einer Richtung anzeigen
-
-      Rev 1.35   17 Feb 1999 08:39:46   OS
-   #58158# Einfuegen TabPage auch in HTML-Docs
-
-      Rev 1.34   02 Dec 1998 15:29:58   OM
-   #59770# Tabellenueberschrift nur auf erster Seite
-
-      Rev 1.33   30 Nov 1998 17:33:40   OM
-   #59770# Tabellenoptionen: Ueberschrift nur auf erster Seite
-
-      Rev 1.32   11 Nov 1998 16:51:58   OM
-   #58158# Einfuegeoptionen fuer Tabellen
-
-      Rev 1.31   09 Jul 1998 22:44:00   JP
-   Bug #52543#: SaveState am KeepButton im CTOR immer rufen
-
-      Rev 1.30   22 Jun 1998 12:54:30   JP
-   Bug #51412#: CTOR TabelleToText - KeepButton checken
-
-      Rev 1.29   15 Jun 1998 20:33:16   JP
-   TextToTable: KommaBtn gegen AndereBtn und -Edit ausgetauscht, OptionCheckBox fuer TabBtnt
-
-      Rev 1.28   29 May 1998 18:55:32   JP
-   SS vom TableAutoFormatDialog hat sich geaendert
-
-      Rev 1.27   13 May 1998 16:00:50   OS
-   HelpButton
-
-      Rev 1.26   12 May 1998 23:42:42   JP
-   neu: InserTable/TextToTable mit optionalen AutoFormat
-
-      Rev 1.25   24 Nov 1997 15:52:22   MA
-   includes
-
-      Rev 1.24   03 Nov 1997 13:56:52   MA
-   precomp entfernt
-
-      Rev 1.23   11 Nov 1996 11:20:02   MA
-   ResMgr
-
-      Rev 1.22   28 Aug 1996 14:33:14   OS
-   includes
-
-      Rev 1.21   26 Jun 1996 15:25:34   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.20   22 Mar 1996 14:16:30   HJS
-   umstellung 311
-
-      Rev 1.19   24 Nov 1995 16:58:56   OM
-   PCH->PRECOMPILED
-
-      Rev 1.18   10 Nov 1995 15:26:44   OS
-   Execute mit 0L abschliessen
-
-      Rev 1.17   07 Nov 1995 07:27:04   OS
-   include tablemgr muss bleiben
-
-      Rev 1.16   06 Nov 1995 17:14:14   OS
-   ConvertDlg ohne TableMgr und RecordFlag
-
-      Rev 1.15   30 Aug 1995 14:02:32   MA
-   fix: sexport'iert
-
-      Rev 1.14   24 Aug 1995 14:33:32   MA
-   swstddlg -> svxstandarddialog
-
-      Rev 1.13   25 Oct 1994 18:52:30   ER
-   add: PCH
-
-      Rev 1.12   26 Feb 1994 02:37:52   ER
-   virt. dtor mit export
-
-------------------------------------------------------------------------*/
 
 

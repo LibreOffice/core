@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: os $ $Date: 2002-08-09 15:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ public:
     SwConvertTableDlg( SwView& rView );
     ~SwConvertTableDlg();
 
-    void GetValues( char& rDelim,
+    void GetValues( sal_Unicode& rDelim,
                     USHORT& rInsTblFlags,
                     SwTableAutoFmt *& prTAFmt );
 };
