@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:38:52 $
+ *  last change: $Author: hjs $ $Date: 2001-09-13 11:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ public:
                                 }
 
     // XExactName
-    OUString  SAL_CALL          getExactName( const OUString & ApproximateName );
+    OUString  SAL_CALL          getExactName( const OUString & ApproximateName ) throw(RuntimeException);
 
     // XInvokation
     Reference< XIntrospectionAccess >  SAL_CALL getIntrospection(void)  throw(RuntimeException);
@@ -292,7 +292,7 @@ Reference< XInvocation > ResourceService::getDefaultInvocation() const
 }
 
 // XExactName
-OUString    SAL_CALL ResourceService::getExactName( const OUString & ApproximateName )
+OUString    SAL_CALL ResourceService::getExactName( const OUString & ApproximateName ) throw(RuntimeException)
 {
     OUString aName( ApproximateName );
     aName = aName.toAsciiLowerCase();
