@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-27 06:59:38 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-10-02 12:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,12 +1595,17 @@ BOOL SwFrm::IsProtected() const
     {
         if ( pFrm->IsCntntFrm() )
         {
-            if ( ((SwCntntFrm*)pFrm)->GetNode()->IsInProtectSect() )
+            if ( ((SwCntntFrm*)pFrm)->GetNode() &&
+                 ((SwCntntFrm*)pFrm)->GetNode()->IsInProtectSect() )
                 return TRUE;
         }
-        else if ( ((SwLayoutFrm*)pFrm)->GetFmt()->GetProtect().IsCntntProtected() )
+        else
+        {
+            if ( ((SwLayoutFrm*)pFrm)->GetFmt() &&
+                 ((SwLayoutFrm*)pFrm)->GetFmt()->
+                 GetProtect().IsCntntProtected() )
             return TRUE;
-
+        }
         if ( pFrm->IsFlyFrm() )
         {
             //Der Schutz des Inhaltes kann bei Verkettung vom Master der Kette
