@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-02 12:35:45 $
+ *  last change: $Author: obr $ $Date: 2001-05-15 15:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
     bias = pLocalTime->tm_isdst > 0 ? timezone - 3600 : timezone;
 #endif
 
-    if ( (sal_Int64) pSystemTimeVal->Seconds + bias > 0 )
+    if ( (sal_Int64) pLocalTimeVal->Seconds + bias > 0 )
     {
         pSystemTimeVal->Seconds = pLocalTimeVal->Seconds + bias;
         pSystemTimeVal->Nanosec = pLocalTimeVal->Nanosec;
