@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:54:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,7 @@ protected:
     inline void         Read( UINT16& nUINT16 );
     inline void         Read( INT16& nINT16 );
     inline void         Read( double& fDouble );
+        inline void                     Read( UINT32& nUINT32 );
 
                         LotusConverterBase( SvStream& rStr, UINT16 nNewBuffer );
     virtual             ~LotusConverterBase();
@@ -332,6 +333,12 @@ inline void LotusConverterBase::Read( double& fDouble )
 {
     aIn >> fDouble;
     nBytesLeft -= 8;
+}
+
+inline void LotusConverterBase::Read( UINT32& nUINT32 )
+{
+    aIn >> nUINT32;
+    nBytesLeft -= 4;
 }
 
 #endif
