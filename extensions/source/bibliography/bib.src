@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:43:04 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ String RID_BIB_STR_FIELDSELECTION
     Text[ czech ] = "Výběr polí:";
     Text[ hebrew ] = "Feldauswahl:";
     Text[ hindi ] = "क्षेत्र चुनाव:";
+    Text[ slovak ] = "Výber poľa:";
 };
 
 String RID_BIB_STR_TABWIN_PREFIX
@@ -119,6 +120,7 @@ String RID_BIB_STR_TABWIN_PREFIX
     Text[ czech ] = "Tabulka;Dotaz;Sql;Sql [Nativní]";
     Text[ hebrew ] = "Tabelle;Abfrage;Sql;Sql [Native]";
     Text[ hindi ] = "सारणी;जानकारी;Sql;Sql [Native]";
+    Text[ slovak ] = "Tabuľka;Dotaz;Sql;Sql [Natívne]";
 };
 String RID_BIB_STR_FRAME_TITLE
 {
@@ -148,6 +150,7 @@ String RID_BIB_STR_FRAME_TITLE
     Text[ czech ] = "Seznam použité literatury";
     Text[ hebrew ] = "Literaturdatenbank";
     Text[ hindi ] = "ग्रन्थ-सूची लेखासंचय";
+    Text[ slovak ] = "Zoznam použitej literatúry";
 };
 String RID_MAP_QUESTION
 {
@@ -177,7 +180,10 @@ String RID_MAP_QUESTION
     Text[ czech ] = "Přejete si upravit uspořádání sloupců?";
     Text[ hebrew ] = "Möchten Sie die Spaltenzuordnung bearbeiten?";
     Text[ hindi ] = "आप स्तंभ विन्यास को संपादन करना चाहते है?";
+    Text[ slovak ] = "Chcete zmeniť usporiadanie polí?";
 };
+
+
 
 
 
