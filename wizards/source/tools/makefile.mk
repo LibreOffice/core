@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tv $ $Date: 2001-11-09 14:05:36 $
+#   last change: $Author: bc $ $Date: 2002-10-15 14:43:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,10 @@ TARGET=tools
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
 # --- Files --------------------------------------------------------
+SRS2NAME =              common
+SRC2FILES=		common.src
+RESLIB2SRSFILES= $(SRS)$/common.srs
+RESLIB2NAME=	com
 
 ZIP1TARGET      = $(TOOLS_ALL_TARGET)
 ZIP1LIST        = *.xdl *.xba *.xlb
