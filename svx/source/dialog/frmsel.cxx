@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-02-13 14:23:35 $
+ *  last change: $Author: os $ $Date: 2002-02-18 08:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,16 +327,17 @@ sal_Int32 SvxFrameSelectorAccessible_Impl::getAccessibleIndexInParent(  )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IsValid();
+    USHORT nIdx = 0;
     if(eWhichChild == SVX_FRMSELLINE_NONE)
     {
         Window* pTabPage = pFrameSel->GetParent();
         USHORT nChildren = pTabPage->GetChildCount();
-        for(USHORT nIdx = 0; nIdx < nChildren; nIdx++)
+        for(nIdx = 0; nIdx < nChildren; nIdx++)
             if(pTabPage->GetChild( nIdx ) == pFrameSel)
                 break;
     }
     else
-        return nIdx = eWhichChild - 1;
+        nIdx = eWhichChild - 1;
     return nIdx;
 }
 /*-- 04.02.2002 14:11:57---------------------------------------------------
