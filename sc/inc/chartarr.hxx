@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-12-08 13:43:52 $
+ *  last change: $Author: er $ $Date: 2001-05-18 12:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ public:
     BOOL    operator==(const ScChartArray& rCmp) const;
 
     SchMemChart* CreateMemChart();
-    void        SetExtraStrings( SchMemChart& rMem, BOOL bDontCreateSeriesRanges = FALSE );
+    void        SetExtraStrings( SchMemChart& rMem );
 
     void                    InvalidateGlue()
                                 {

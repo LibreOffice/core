@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-04-25 18:07:31 $
+ *  last change: $Author: er $ $Date: 2001-05-18 12:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,16 +81,6 @@
 #include "cell.hxx"
 #include "docoptio.hxx"
 
-#ifndef _COM_SUN_STAR_CHART_CHARTSERIESADDRESS_HPP_
-#include <com/sun/star/chart/ChartSeriesAddress.hpp>
-#endif
-
-//! #85286# Hidden cols/rows result in splitted series ranges and there is
-//! no way in the current chart implementation to get the original range back.
-//! Therefore we ignore any hidden flags until the new chart data source and
-//! filters will be implemented.
-#undef CR_HIDDEN
-#define CR_HIDDEN 0
 
 // -----------------------------------------------------------------------
 
@@ -198,30 +188,24 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const SchMemChart& rData ) :
         pPositionMap( NULL )
 {
     BOOL bInitOk = bValid = FALSE;
-    com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress >
-        aSeriesSeq = ((SchMemChart&)rData).GetSeriesAddresses();
-    sal_Int32 nColCount = aSeriesSeq.getLength();
-    if ( nColCount )
+    const SchChartRange& rChartRange = rData.GetChartRange();
+    ::std::vector< SchCellRangeAddress >::const_iterator iRange =
+        rChartRange.maRanges.begin();
+    if ( iRange != rChartRange.maRanges.end() )
     {   // new SO6 chart format
         bValid = TRUE;
-        bColHeaders = bRowHeaders = FALSE;
+        bColHeaders = rChartRange.mbFirstRowContainsLabels;
+        bRowHeaders = rChartRange.mbFirstColumnContainsLabels;
         aRangeListRef = new ScRangeList;
-        for ( sal_Int32 nCol=0; nCol < nColCount; nCol++ )
+        for ( ; iRange != rChartRange.maRanges.end(); ++iRange )
         {
-            if ( aSeriesSeq[nCol].LabelAddress.getLength() )
-            {
-                bColHeaders = TRUE;
-                ScAddress aLabelAddr;
-                aLabelAddr.Parse( aSeriesSeq[nCol].LabelAddress, pDocument );
-                aRangeListRef->Append( aLabelAddr );
-            }
-            aRangeListRef->Parse( aSeriesSeq[nCol].DataRangeAddress, pDocument, SCR_ABS_3D );
-        }
-        String aCategories( ((SchMemChart&)rData).GetCategoriesRangeAddress() );
-        if ( aCategories.Len() )
-        {
-            bRowHeaders = TRUE;
-            aRangeListRef->Parse( aCategories, pDocument, SCR_ABS_3D );
+            const SchSingleCell& rAddr1 = (*iRange).maUpperLeft.maCells[0];
+            const SchSingleCell& rAddr2 = (*iRange).maLowerRight.maCells[0];
+            USHORT nTab = (USHORT) (*iRange).mnTableNumber;
+            ScRange aRange(
+                (USHORT) rAddr1.mnColumn, (USHORT) rAddr1.mnRow, nTab,
+                (USHORT) rAddr2.mnColumn, (USHORT) rAddr2.mnRow, nTab );
+            aRangeListRef->Append( aRange );
         }
     }
     else
@@ -715,22 +699,16 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
     SchMemChart* pMemChart = SchDLL::NewMemChart( nColCount, nRowCount );
     if (pMemChart)
     {
-        ScRangeListRef xRL = new ScRangeList;
         SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
         pMemChart->SetNumberFormatter( pFormatter );
         if ( bValidData )
         {
-            com::sun::star::uno::Sequence<
-                com::sun::star::chart::ChartSeriesAddress > aSeriesSeq( nColCount );
             BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
             ScBaseCell* pCell;
             for (nCol=0; nCol<nColCount; nCol++)
             {
-                xRL->RemoveAll();
                 for (nRow=0; nRow<nRowCount; nRow++)
                 {
-                    xRL->Join( ScAddress( pCols[nCol], pRows[nRow], nTab1 ) );
-
                     double nVal = DBL_MIN;      // Hack fuer Chart, um leere Zellen zu erkennen
 
                     pDocument->GetCell( pCols[nCol], pRows[nRow], nTab1, pCell );
@@ -757,19 +735,7 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
                     }
                     pMemChart->SetData(nCol, nRow, nVal);
                 }
-                com::sun::star::chart::ChartSeriesAddress aSeries;
-                String aStr;
-                xRL->Format( aStr, SCR_ABS_3D, pDocument );
-                aSeries.DataRangeAddress = aStr;
-                if ( bColHeaders )
-                {
-                    ScAddress aAddr( pCols[nCol], nStrRow, nTab1 );
-                    aAddr.Format( aStr, SCR_ABS_3D, pDocument );
-                    aSeries.LabelAddress = aStr;
-                }
-                aSeriesSeq[nCol] = aSeries;
             }
-            pMemChart->SetSeriesAddresses( aSeriesSeq );
         }
         else
         {
@@ -806,14 +772,12 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
         //  Zeilen-Header
         //
 
-        xRL->RemoveAll();
         for (nRow=0; nRow<nRowCount; nRow++)
         {
             String aString;
             if (bRowHeaders)
             {
                 ScAddress aAddr( nStrCol, pRows[nRow], nTab1 );
-                xRL->Join( aAddr );
                 pDocument->GetString( nStrCol, pRows[nRow], nTab1, aString );
             }
             if ( !aString.Len() )
@@ -828,9 +792,6 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
                                             nCol1, pRows[nRow], nTab1 ) );
             pMemChart->SetNumFormatIdRow( nRow, nNumberAttr );
         }
-        String aCategoriesStr;
-        xRL->Format( aCategoriesStr, SCR_ABS_3D, pDocument );
-        pMemChart->SetCategoriesRangeAddress( aCategoriesStr );
 
         //
         //  Titel
@@ -855,7 +816,7 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
         //  Parameter-Strings
         //
 
-        SetExtraStrings( *pMemChart, TRUE );
+        SetExtraStrings( *pMemChart );
     }
     else
         DBG_ERROR("SchDLL::NewMemChart gibt 0 zurueck!");
@@ -883,22 +844,17 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
     SchMemChart* pMemChart = SchDLL::NewMemChart( nColCount, nRowCount );
     if (pMemChart)
     {
-        ScRangeListRef xRL = new ScRangeList;
-        com::sun::star::uno::Sequence<
-            com::sun::star::chart::ChartSeriesAddress > aSeriesSeq( nColCount );
         pMemChart->SetNumberFormatter( pDocument->GetFormatTable() );
         BOOL bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
         ULONG nIndex = 0;
         for ( nCol = 0; nCol < nColCount; nCol++ )
         {
-            xRL->RemoveAll();
             for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
             {
                 double nVal = DBL_MIN;      // Hack fuer Chart, um leere Zellen zu erkennen
                 const ScAddress* pPos = pPositionMap->GetPosition( nIndex );
                 if ( pPos )
                 {   // sonst: Luecke
-                    xRL->Join( *pPos );
                     ScBaseCell* pCell = pDocument->GetCell( *pPos );
                     if (pCell)
                     {
@@ -922,22 +878,7 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
                 }
                 pMemChart->SetData(nCol, nRow, nVal);
             }
-            com::sun::star::chart::ChartSeriesAddress aSeries;
-            String aStr;
-            xRL->Format( aStr, SCR_ABS_3D, pDocument );
-            aSeries.DataRangeAddress = aStr;
-            if ( bColHeaders )
-            {
-                const ScAddress* pPos = pPositionMap->GetColHeaderPosition( nCol );
-                if ( pPos )
-                {
-                    pPos->Format( aStr, SCR_ABS_3D, pDocument );
-                    aSeries.LabelAddress = aStr;
-                }
-            }
-            aSeriesSeq[nCol] = aSeries;
         }
-        pMemChart->SetSeriesAddresses( aSeriesSeq );
 
 //2do: Beschriftung bei Luecken
 
@@ -976,7 +917,6 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
         //  Zeilen-Header
         //
 
-        xRL->RemoveAll();
         USHORT nPosRow = 0;
         for ( nRow = 0; nRow < nRowCount; nRow++ )
         {
@@ -984,7 +924,6 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
             const ScAddress* pPos = pPositionMap->GetRowHeaderPosition( nRow );
             if ( bRowHeaders && pPos )
             {
-                xRL->Join( *pPos );
                 pDocument->GetString(
                     pPos->Col(), pPos->Row(), pPos->Tab(), aString );
             }
@@ -1006,9 +945,6 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
                 nNumberAttr = pDocument->GetNumberFormat( *pPos );
             pMemChart->SetNumFormatIdRow( nRow, nNumberAttr );
         }
-        String aCategoriesStr;
-        xRL->Format( aCategoriesStr, SCR_ABS_3D, pDocument );
-        pMemChart->SetCategoriesRangeAddress( aCategoriesStr );
 
         //
         //  Titel
@@ -1042,7 +978,7 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
         //  Parameter-Strings
         //
 
-        SetExtraStrings( *pMemChart, TRUE );
+        SetExtraStrings( *pMemChart );
     }
     else
         DBG_ERROR("SchDLL::NewMemChart gibt 0 zurueck!");
@@ -1050,18 +986,18 @@ SchMemChart* ScChartArray::CreateMemChartMulti()
     return pMemChart;
 }
 
-void ScChartArray::SetExtraStrings( SchMemChart& rMem, BOOL bDontCreateSeriesRanges )
+void ScChartArray::SetExtraStrings( SchMemChart& rMem )
 {
+    ScRangePtr pR;
+    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+#if 0
+/* now this is done in SchMemChart::ConvertChartRangeForCalc() for SO5 file format
     const sal_Unicode cTok = ';';
     String aRef;
-    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
-    BOOL bFirst = TRUE;
-    for ( ScRangePtr pR = aRangeListRef->First(); pR; pR = aRangeListRef->Next() )
+    for ( pR = aRangeListRef->First(); pR; pR = aRangeListRef->Next() )
     {
         pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        if ( bFirst )
-            bFirst = FALSE;
-        else
+        if ( aRef.Len() )
             aRef += cTok;
         aRef += String::CreateFromInt32( nTab1 );
         // hier ',' als TokenSep damit alte Versionen (<341/342) das ueberlesen
@@ -1084,58 +1020,34 @@ void ScChartArray::SetExtraStrings( SchMemChart& rMem, BOOL bDontCreateSeriesRan
 
     rMem.SomeData1() = aRef;
     rMem.SomeData2() = aFlags;
+*/
+#endif
 
-    if ( !bDontCreateSeriesRanges )
+    SchChartRange aChartRange;
+    aChartRange.mbFirstColumnContainsLabels = bRowHeaders;
+    aChartRange.mbFirstRowContainsLabels = bColHeaders;
+    aChartRange.mbKeepCopyOfData = sal_False;
+    for ( pR = aRangeListRef->First(); pR; pR = aRangeListRef->Next() )
     {
-        CreatePositionMap();
-        USHORT nColCount = pPositionMap->GetColCount();
-        USHORT nRowCount = pPositionMap->GetRowCount();
-        USHORT nCol, nRow;
-
-        ScRangeListRef xRL = new ScRangeList;
-        com::sun::star::uno::Sequence<
-            com::sun::star::chart::ChartSeriesAddress > aSeriesSeq( nColCount );
-        ULONG nIndex = 0;
-        for ( nCol = 0; nCol < nColCount; nCol++ )
+        pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+        for ( USHORT nTab = nTab1; nTab <= nTab2; ++nTab )
         {
-            xRL->RemoveAll();
-            for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
-            {
-                const ScAddress* pPos = pPositionMap->GetPosition( nIndex );
-                if ( pPos )
-                    xRL->Join( *pPos );
-            }
-            com::sun::star::chart::ChartSeriesAddress aSeries;
-            String aStr;
-            xRL->Format( aStr, SCR_ABS_3D, pDocument );
-            aSeries.DataRangeAddress = aStr;
-            if ( bColHeaders )
-            {
-                const ScAddress* pPos = pPositionMap->GetColHeaderPosition( nCol );
-                if ( pPos )
-                {
-                    pPos->Format( aStr, SCR_ABS_3D, pDocument );
-                    aSeries.LabelAddress = aStr;
-                }
-            }
-            aSeriesSeq[nCol] = aSeries;
+            SchCellRangeAddress aCellRangeAddress;
+            SchSingleCell aCell;
+            aCell.mnColumn = nCol1;
+            aCell.mnRow = nRow1;
+            aCellRangeAddress.maUpperLeft.maCells.push_back( aCell );
+            aCell.mnColumn = nCol2;
+            aCell.mnRow = nRow2;
+            aCellRangeAddress.maLowerRight.maCells.push_back( aCell );
+            aCellRangeAddress.mnTableNumber = nTab;
+            String aName;
+            pDocument->GetName( nTab, aName );
+            aCellRangeAddress.msTableName = aName;
+            aChartRange.maRanges.push_back( aCellRangeAddress );
         }
-        rMem.SetSeriesAddresses( aSeriesSeq );
-
-        xRL->RemoveAll();
-        if ( bRowHeaders )
-        {
-            for ( nRow = 0; nRow < nRowCount; nRow++ )
-            {
-                const ScAddress* pPos = pPositionMap->GetRowHeaderPosition( nRow );
-                if ( pPos )
-                    xRL->Join( *pPos );
-            }
-        }
-        String aCategoriesStr;
-        xRL->Format( aCategoriesStr, SCR_ABS_3D, pDocument );
-        rMem.SetCategoriesRangeAddress( aCategoriesStr );
     }
+    rMem.SetChartRange( aChartRange );
 
     rMem.SetReadOnly( TRUE );   // Daten nicht im Chart per Daten-Fenster veraendern
 }

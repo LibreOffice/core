@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:41:16 $
+ *  last change: $Author: er $ $Date: 2001-05-18 12:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,7 @@ void ScDocument::UpdateChartListenerCollection()
                                 // < SO6: if no SomeData set
                                 if ( pChartData &&
                                     ((!bSO6 && pChartData->SomeData1().Len()) ||
-                                    (bSO6 && pChartData->GetSeriesAddresses().getLength())) )
+                                    (bSO6 && pChartData->GetChartRange().maRanges.size())) )
                                 {
                                     bIsChart = TRUE;
 
