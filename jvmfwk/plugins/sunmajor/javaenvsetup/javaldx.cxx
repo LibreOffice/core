@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaldx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:24:18 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,21 +94,22 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         fprintf(stdout, HELP_TEXT);// default
         return 0;
     }
+    javaFrameworkError errcode = JFW_E_NONE;
     sal_Bool bEnabled = sal_False;
-    if (jfw_getEnabled( & bEnabled) != JFW_E_NONE)
+    errcode = jfw_getEnabled( & bEnabled);
+    if (errcode == JFW_E_NONE && bEnabled == sal_False)
+    {
+            //Do not do any preparation because that may only slow startup time.
+        return 0;
+    }
+    else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
     {
         fprintf(stderr,"javaldx failed! \n");
         return -1;
     }
 
-    if (bEnabled == sal_False)
-    {
-        //Do not do any preparation because that may only slow startup time.
-        return 0;
-    }
 
     JavaInfo * pInfo = NULL;
-    javaFrameworkError errcode = JFW_E_NONE;
     errcode = jfw_getSelectedJRE( & pInfo);
 
     if (errcode == JFW_E_INVALID_SETTINGS)
@@ -130,7 +131,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             fprintf(stderr,"javaldx: Could not find a Java Runtime Environment! \n");
             return 0;
         }
-        else if (errcode != JFW_E_NONE)
+        else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
         {
             fprintf(stderr,"javaldx failed!\n");
             return -1;
