@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 18:31:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2060,13 +2060,28 @@ void SdXMLExport::_ExportContent()
             exportFormsElement( xDrawPage );
 
             UniReference< xmloff::AnimationsExporter >  xAnimationsExporter;
-            uno::Reference< ::com::sun::star::animations::XAnimationNodeSupplier > xAnimNodeSupplier( xDrawPage, UNO_QUERY );
+            uno::Reference< ::com::sun::star::animations::XAnimationNodeSupplier > xAnimNodeSupplier;
 
-            // prepare animations exporter if impress
-            if(xAnimNodeSupplier.is())
+            if(IsImpress())
             {
-                xAnimationsExporter = new xmloff::AnimationsExporter( *this );
-                xAnimationsExporter->prepare( xAnimNodeSupplier->getAnimationNode() );
+                if( getExportFlags() & EXPORT_OASIS )
+                {
+                    // export new animations for oasis format
+                    xAnimNodeSupplier.set( xDrawPage, UNO_QUERY );
+
+                    // prepare animations exporter if impress
+                    if(xAnimNodeSupplier.is())
+                    {
+                        xAnimationsExporter = new xmloff::AnimationsExporter( *this );
+                        xAnimationsExporter->prepare( xAnimNodeSupplier->getAnimationNode() );
+                    }
+                }
+                else
+                {
+                    // export old animations for ooo format
+                    UniReference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
+                    GetShapeExport()->setAnimationsExporter( xAnimExport );
+                }
             }
 
             // write graphic objects on this page (if any)
@@ -2081,9 +2096,16 @@ void SdXMLExport::_ExportContent()
                 {
                     xAnimationsExporter->exportAnimations( xAnimNodeSupplier->getAnimationNode() );
                 }
+                else
+                {
+                    // animations
+                    UniReference< XMLAnimationsExporter > xAnimExport( GetShapeExport()->getAnimationsExporter() );
+                    if( xAnimExport.is() )
+                        xAnimExport->exportAnimations( *this );
 
-                UniReference< XMLAnimationsExporter > xAnimExport;
-                GetShapeExport()->setAnimationsExporter( xAnimExport );
+                    xAnimExport = NULL;
+                    GetShapeExport()->setAnimationsExporter( xAnimExport );
+                }
 
                 // presentations
                 Reference< presentation::XPresentationPage > xPresPage(xDrawPage, UNO_QUERY);
@@ -2454,7 +2476,7 @@ void SdXMLExport::_ExportAutoStyles()
     if( getExportFlags() & EXPORT_CONTENT )
     {
         // prepare animations exporter if impress
-        if(IsImpress())
+        if(IsImpress() && ((getExportFlags() & EXPORT_OASIS) == 0) )
         {
             UniReference< XMLAnimationsExporter > xAnimExport = new XMLAnimationsExporter( GetShapeExport().get() );
             GetShapeExport()->setAnimationsExporter( xAnimExport );
