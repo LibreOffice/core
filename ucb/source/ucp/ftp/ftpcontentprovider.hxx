@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:17 $
+ *  last change: $Author: abi $ $Date: 2002-10-23 08:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,15 @@
 #include <osl/mutex.hxx>
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/providerhelper.hxx>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
+#include <com/sun/star/ucb/XContentProviderManager.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include "ftphandleprovider.hxx"
-
+#include "ftpurl.hxx"
 
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
@@ -93,6 +100,8 @@ namespace ftp {
 
     class FTPContentProvider:
         public ::ucb::ContentProviderImplHelper,
+        public ::com::sun::star::container::XContainerListener,
+        public ::com::sun::star::lang::XComponent,
         public FTPHandleProvider
     {
     public:
@@ -115,6 +124,59 @@ namespace ftp {
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier )
             throw( com::sun::star::ucb::IllegalIdentifierException,
                    com::sun::star::uno::RuntimeException );
+
+        // XComponent
+
+        virtual void SAL_CALL
+        dispose(  )
+            throw (::com::sun::star::uno::RuntimeException)
+        {
+            if(m_xContainer.is())
+            {
+                m_xContainer->removeContainerListener(this);
+                m_xContainer =
+                    com::sun::star::uno::Reference<
+                    com::sun::star::container::XContainer>(0);
+            }
+        }
+
+        virtual void SAL_CALL
+        addEventListener(
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XEventListener >& xListener )
+            throw (::com::sun::star::uno::RuntimeException) { }
+
+        virtual void SAL_CALL
+        removeEventListener(
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XEventListener >& aListener )
+            throw (::com::sun::star::uno::RuntimeException) { }
+
+        // XConainerListener ( deriver from XEventListener )
+
+        virtual void SAL_CALL
+        disposing( const ::com::sun::star::lang::EventObject& Source )
+            throw (::com::sun::star::uno::RuntimeException)
+        {
+            m_xContainer =
+                com::sun::star::uno::Reference<
+                com::sun::star::container::XContainer>(0);
+        }
+
+        virtual void SAL_CALL
+        elementInserted(
+            const ::com::sun::star::container::ContainerEvent& Event )
+            throw (::com::sun::star::uno::RuntimeException) { }
+
+        virtual void SAL_CALL
+        elementRemoved(
+            const ::com::sun::star::container::ContainerEvent& Event )
+            throw (::com::sun::star::uno::RuntimeException)  { }
+
+        virtual void SAL_CALL
+        elementReplaced(
+            const ::com::sun::star::container::ContainerEvent& Event )
+            throw (::com::sun::star::uno::RuntimeException);
 
 
         /** FTPHandleProvider.
@@ -147,9 +209,51 @@ namespace ftp {
 
         osl::Mutex m_aMutex;
         FTPLoaderThread *m_ftpLoaderThread;
-        void init();
+
+        sal_Int32     m_eType;
+        rtl::OUString m_aFtpProxy;
+        rtl::OUString m_aNoProxyList;
+
+        // used for access to ftp-proxy
+        com::sun::star::uno::Reference<
+        com::sun::star::ucb::XContentProviderManager > m_xManager;
+
+        com::sun::star::uno::Reference<
+        com::sun::star::container::XContainer> m_xContainer;
 
         std::vector<ServerInfo> m_ServerInfo;
+
+        void init();
+
+        com::sun::star::uno::Reference<
+        com::sun::star::lang::XMultiServiceFactory >
+        getConfiguration() const;
+
+        com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess >
+        getHierAccess(
+            const com::sun::star::uno::Reference<
+            com::sun::star::lang::XMultiServiceFactory >& sProvider,
+            const char* file ) const;
+
+        rtl::OUString
+        getKey(
+            const com::sun::star::uno::Reference<
+            com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
+            const char* key) const;
+
+        sal_Int32
+        getIntKey(
+            const com::sun::star::uno::Reference<
+            com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
+            const char* key) const;
+
+        com::sun::star::uno::Reference<com::sun::star::ucb::XContentProvider>
+        getHttpProvider()
+            throw(com::sun::star::uno::RuntimeException);
+
+        bool ShouldUseFtpProxy(const FTPURL& aURL) const;
+
     };  // end class FTPContentProvider
 
 }       // end namespace ftp

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-21 13:12:59 $
+ *  last change: $Author: abi $ $Date: 2002-10-23 08:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,20 @@ FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
       m_bTitleSet(false)
 {
 }
+
+
+FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
+                        FTPContentProvider* pProvider,
+                        const Reference< XContentIdentifier >& Identifier,
+                        const FTPURL& aFTPURL)
+    : ContentImplHelper(rxSMgr,pProvider,Identifier),
+      m_pFCP(pProvider),
+      m_aFTPURL(aFTPURL),
+      m_bInserted(false),
+      m_bTitleSet(false)
+{
+}
+
 
 
 FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,

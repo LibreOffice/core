@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-21 13:13:00 $
+ *  last change: $Author: abi $ $Date: 2002-10-23 08:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,13 @@ namespace ftp
                     FTPContentProvider* pProvider,
                     const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XContentIdentifier >& Identifier);
+
+        FTPContent( const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                    FTPContentProvider* pProvider,
+                    const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XContentIdentifier >& Identifier,
+                    const FTPURL& FtpUrl);
 
         FTPContent( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,

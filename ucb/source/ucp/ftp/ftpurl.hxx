@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-21 13:13:00 $
+ *  last change: $Author: abi $ $Date: 2002-10-23 08:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ namespace ftp {
                 malformed_exception
             );
 
+        FTPURL(const FTPURL& r);
 
         ~FTPURL();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-21 13:13:00 $
+ *  last change: $Author: abi $ $Date: 2002-10-23 08:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,17 @@ extern "C" {
 
 }
 
+
+FTPURL::FTPURL(const FTPURL& r)
+    : m_pFCP(r.m_pFCP),
+      m_aUsername(r.m_aUsername),
+      m_bShowPassword(r.m_bShowPassword),
+      m_aHost(r.m_aHost),
+      m_aPort(r.m_aPort),
+      m_aPathSegmentVec(r.m_aPathSegmentVec),
+      m_mutex()
+{
+}
 
 
 FTPURL::FTPURL(const rtl::OUString& url,
