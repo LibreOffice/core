@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: th $ $Date: 2001-08-13 11:03:07 $
+ *  last change: $Author: th $ $Date: 2001-08-13 11:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,6 +426,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth ) const
     Size aSize( GetCtrlTextWidth( pItem->maFormatText ), GetTextHeight() );
     aSize.Width()  += TAB_TABOFFSET_X*2;
     aSize.Height() += TAB_TABOFFSET_Y*2;
+    // For systems without synthetic bold support
     if ( mbExtraSpace )
         aSize.Width() += TAB_EXTRASPACE_X;
     // For languages with short names (e.g. Chinese), because the space is
@@ -503,6 +504,11 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
         aFont.SetWeight( WEIGHT_BOLD );
         aLightFont.SetTransparent( TRUE );
         aLightFont.SetWeight( WEIGHT_LIGHT );
+
+        // If Bold and none Bold strings have the same width, we
+        // add in the calcultion extra space, so that the tabs
+        // looks better. The could be the case on systems without
+        // an bold UI font and without synthetic bold support
         XubString aTestStr( RTL_CONSTASCII_USTRINGPARAM( "Abc." ) );
         SetFont( aLightFont );
         long nTextWidth1 = GetTextWidth( aTestStr );
