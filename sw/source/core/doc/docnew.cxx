@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:24:27 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,8 @@ SwDoc::SwDoc() :
     pOutlineRule = new SwNumRule( String::CreateFromAscii(
                                         SwNumRule::GetOutlineRuleName() ),
                                     OUTLINE_RULE );
+    // #115901#
+    pNumRuleTbl->Insert(pOutlineRule, pNumRuleTbl->Count());
 
     new SwTxtNode( SwNodeIndex( aUndoNodes.GetEndOfContent() ), pDfltTxtFmtColl );
     new SwTxtNode( SwNodeIndex( aNodes.GetEndOfContent() ),
@@ -521,7 +523,6 @@ SwDoc::~SwDoc()
     bDtor = TRUE;
 
     DELETEZ( pLayout );
-    DELETEZ( pOutlineRule );
 
     delete pRedlineTbl;
     delete pUnoCrsrTbl;
