@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-30 11:31:46 $
+ *  last change: $Author: ka $ $Date: 2001-05-03 08:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2540,6 +2540,25 @@ vos::ORef<SvxForbiddenCharactersTable> SdrModel::GetForbiddenCharsTable() const
 void SdrModel::ReformatAllTextObjects()
 {
     ImpReformatAllTextObjects();
+}
+
+FASTBOOL SdrModel::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
+{
+    FASTBOOL    bRet = FALSE;
+    USHORT      n, nCount;
+
+    for( n = 0, nCount = GetMasterPageCount(); ( n < nCount ) && !bRet; n++ )
+        if( GetMasterPage( n )->HasTransparentObjects( bCheckForAlphaChannel ) )
+            bRet = TRUE;
+
+    if( !bRet )
+    {
+        for( n = 0, nCount = GetPageCount(); ( n < nCount ) && !bRet; n++ )
+            if( GetPage( n )->HasTransparentObjects( bCheckForAlphaChannel ) )
+                bRet = TRUE;
+    }
+
+    return bRet;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-12 11:50:41 $
+ *  last change: $Author: ka $ $Date: 2001-05-03 08:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@
 #include "svditer.hxx"
 #include "xlntrit.hxx"
 #include "xfltrit.hxx"
+#include "xfltrit.hxx"
+#include "xflftrit.hxx"
 #include "xlinjoit.hxx"
 #include "unopage.hxx"
 #include "eeitem.hxx"
@@ -4291,6 +4293,66 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
 void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
 {
     // Hier passiert erst was in SdrAttrObj und in SdrObjGroup
+}
+
+FASTBOOL SdrObject::IsTransparent( BOOL bCheckForAlphaChannel ) const
+{
+    FASTBOOL bRet = FALSE;
+
+    if( IsGroupObject() )
+    {
+        SdrObjListIter aIter( *GetSubList(), IM_DEEPNOGROUPS );
+
+        for( SdrObject* pO = aIter.Next(); pO && !bRet; pO = aIter.Next() )
+        {
+            SfxItemSet aAttr( pO->GetItemSet() );
+
+            if( ( ( (const XFillTransparenceItem&) aAttr.Get( XATTR_FILLTRANSPARENCE ) ).GetValue() ||
+                  ( (const XLineTransparenceItem&) aAttr.Get( XATTR_LINETRANSPARENCE ) ).GetValue() ) ||
+                ( ( aAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET ) &&
+                  ( (const XFillFloatTransparenceItem&) aAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled() ) )
+            {
+                bRet = TRUE;
+            }
+/*
+            else if( pO->ISA( SdrGrafObj ) )
+            {
+                SdrGrafObj* pGrafObj = (SdrGrafObj*) pO;
+                if( ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) ||
+                    ( (const SdrGrafTransparenceItem&) aAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() )
+                {
+                    bRet = TRUE;
+                }
+            }
+*/
+        }
+    }
+    else
+    {
+        SfxItemSet aAttr( GetItemSet() );
+
+        if( ( ( (const XFillTransparenceItem&) aAttr.Get( XATTR_FILLTRANSPARENCE ) ).GetValue() ||
+              ( (const XLineTransparenceItem&) aAttr.Get( XATTR_LINETRANSPARENCE ) ).GetValue() ) ||
+            ( ( aAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET ) &&
+              ( (const XFillFloatTransparenceItem&) aAttr.Get( XATTR_FILLFLOATTRANSPARENCE ) ).IsEnabled() ) )
+        {
+            bRet = TRUE;
+        }
+/*
+        else if( pObject->ISA( SdrGrafObj ) )
+        {
+            SdrGrafObj* pGrafObj = (SdrGrafObj*) pObject;
+
+            if( ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) ||
+                ( (const SdrGrafTransparenceItem&) aAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() )
+            {
+                bRet = TRUE;
+            }
+        }
+*/
+    }
+
+    return bRet;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SdrObject::getUnoShape()

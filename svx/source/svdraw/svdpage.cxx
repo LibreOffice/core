@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-25 10:49:19 $
+ *  last change: $Author: ka $ $Date: 2001-05-03 08:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1916,9 +1916,20 @@ SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
     return pObj->GetStyleSheet();
 }
 
+FASTBOOL SdrPage::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
+{
+    FASTBOOL bRet = FALSE;
+
+    for( ULONG n = 0, nCount = GetObjCount(); ( n < nCount ) && !bRet; n++ )
+        if( GetObj( n )->IsTransparent( bCheckForAlphaChannel ) )
+            bRet = TRUE;
+
+    return bRet;
+}
+
+
 #ifdef GCC
 // Dummy-Implementationen fuer Deklarationen in svdpage.hxx
 Bitmap      SdrPage::GetBitmap(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders=TRUE) const {}
 GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders=TRUE) {}
 #endif
-
