@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 06:39:44 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabDialog TAB_PAGE
     Text [ ENGLISH ] = "Page Setup" ;
     Text [ norwegian ] = "Side Oppsett" ;
     Text [ italian ] = "Impostazione pagina" ;
-    Text [ portuguese_brazilian ] = "Configuração da Página" ;
+    Text [ portuguese_brazilian ] = "Configura??o da P?gina" ;
     Text [ portuguese ] = "Configurar página" ;
     Text [ finnish ] = "Sivun asetukset" ;
     Text [ danish ] = "Sideopsætning" ;
@@ -95,7 +95,7 @@ TabDialog TAB_PAGE
                 Text [ ENGLISH ] = "Page" ;
                 Text [ norwegian ] = "Page" ;
                 Text [ italian ] = "Pagina" ;
-                Text [ portuguese_brazilian ] = "Página" ;
+                Text [ portuguese_brazilian ] = "P?gina" ;
                 Text [ portuguese ] = "Página" ;
                 Text [ finnish ] = "Sivu " ;
                 Text [ danish ] = "Side" ;
