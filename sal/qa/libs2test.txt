@@ -1,6 +1,6 @@
 # This file contain a list of todos for testshl2 automated tests.
 # 
-# $Id: libs2test.txt,v 1.6 2003-09-08 13:19:58 rt Exp $
+# $Id: libs2test.txt,v 1.7 2003-10-06 13:39:31 vg Exp $
 #
 # Legend:
 # there exist 2 formats
@@ -13,7 +13,9 @@
 #
 
 
-ByteSequence
+# LLA: marked as deprecated by Stephan Bergmann
+# ByteSequence
+
 OStringBuffer   ; OStringBuffer
 
 rtl_strings ; rtl_OUString
@@ -28,6 +30,7 @@ osl/pipe      ; Pipe
 osl/semaphore ; Semaphore
 osl/condition ; Condition
 osl/module    ; Module
+osl/security  ; Security
 
 rtl/math ; rtl_math
 
