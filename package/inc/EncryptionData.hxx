@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EncryptionData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 13:46:25 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ public:
     // On export aKey holds the derived key
     // On import aKey holds the hash of the user enterred key
     com::sun::star::uno::Sequence < sal_Int8 > aKey;
-    com::sun::star::uno::Sequence < sal_uInt8 > aSalt, aInitVector;
+    com::sun::star::uno::Sequence < sal_uInt8 > aSalt, aInitVector, aDigest;
     sal_Int32 nIterationCount;
     EncryptionData(): nIterationCount ( 0 ){}
 };
