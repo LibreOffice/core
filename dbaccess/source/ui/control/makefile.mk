@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: oj $ $Date: 2002-02-06 07:11:24 $
+#   last change: $Author: oj $ $Date: 2002-03-26 09:20:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ EXCEPTIONSFILES=\
 
 SLOFILES=	\
         $(EXCEPTIONSFILES)				\
+        $(SLO)$/ScrollHelper.obj		\
         $(SLO)$/urlcontrol.obj			\
         $(SLO)$/SqlNameEdit.obj			\
         $(SLO)$/listviewitems.obj		\
