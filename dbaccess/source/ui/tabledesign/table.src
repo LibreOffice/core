@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:19:48 $
+ *  last change: $Author: kz $ $Date: 2002-08-06 20:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ String STR_TABPAGE_GENERAL
     Text[ korean ] = "일반";
     Text[ turkish ] = "Genel";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Continguts";
+    Text[ catalan ] = "General";
     Text[ finnish ] = "Yleist�";
     Text[ thai ] = "ทั่วไป";
 };
@@ -1625,7 +1625,7 @@ PushButton PB_FORMAT
     Text[ chinese_traditional ] = "~...";
     Text[ turkish ] = "...";
     Text[ arabic ] = "...";
-    Text[ catalan ] = "~...";
+    Text[ catalan ] = "...";
     Text[ thai ] = "...";
 };
 String STR_TABLEDESIGN_DUPLICATE_NAME
@@ -1725,7 +1725,7 @@ String STR_COLUMN_NAME
     Text[ chinese_traditional ] = "欄位";
     Text[ arabic ] = "����";
     Text[ turkish ] = "S�tun";
-    Text[ catalan ] = "COLUMN";
+    Text[ catalan ] = "Columna";
     Text[ finnish ] = "Sarake";
     Text[ thai ] = "คอลัมน์";
 };
@@ -2247,7 +2247,7 @@ Menu RID_TABLE_DESIGN_MAIN_MENU
             Text[ arabic ] = "�~����";
             Text[ turkish ] = "~Ara�lar";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "E~ines";
+            Text[ catalan ] = "Ei~nes";
             Text[ thai ] = "เ~ครื่องมือ";
         };
         GLOBLMN_WINMN
