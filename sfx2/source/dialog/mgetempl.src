@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:44:59 $
+ *  last change: $Author: kz $ $Date: 2001-08-30 20:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ TabPage TP_MANAGE_STYLES
     };
 };
  // ********************************************************************** EOF
+
 
 
 
