@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:37:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ String STR_MENU_CFGITEM
     TEXT [ English ] = "Menu" ;
     TEXT [ norwegian ] = "Konfigurasjonsmeny" ;
     TEXT [ italian ] = "Menu" ;
-    TEXT [ portuguese_brazilian ] = "Menu de Configura??o" ;
+    TEXT [ portuguese_brazilian ] = "Menu de Configura��o" ;
     TEXT [ portuguese ] = "Menu de configura��o" ;
     TEXT [ finnish ] = "Kokoonpanovalikko" ;
     TEXT [ danish ] = "Menu" ;
@@ -79,7 +79,7 @@ String STR_MENU_CFGITEM
     TEXT [ english_us ] = "Configuration Menu" ;
     TEXT[ chinese_simplified ] = "菜单";
     TEXT[ russian ] = "���� ������������";
-    TEXT[ polish ] = "Menu";
+    TEXT[ polish ] = "Menu konfiguracyjne";
     TEXT[ japanese ] = "メニュー";
     TEXT[ chinese_traditional ] = "功能表";
     TEXT[ arabic ] = "�������";
@@ -87,9 +87,12 @@ String STR_MENU_CFGITEM
     TEXT[ chinese_simplified ] = "菜单";
     TEXT[ greek ] = "�����";
     TEXT[ korean ] = "메뉴";
-    TEXT[ turkish ] = "M�n�";
+    TEXT[ turkish ] = "Yap�land�rma Men�s�";
     TEXT[ catalan ] = "Men�";
     TEXT[ thai ] = "เมนูโครงแบบ";
+    TEXT[ czech ] = "Konfigurační menu";
+    TEXT[ hebrew ] = "‮תפריט תצורה‬";
+    TEXT[ hindi ] = "रूप-रेखा मेनु";
 };
 
 String STR_MENU_ADDONS
@@ -102,7 +105,7 @@ String STR_MENU_ADDONS
     TEXT[ greek ] = "~Add-Ons";
     TEXT[ dutch ] = "~Add-Ons";
     TEXT[ french ] = "Add-ons";
-    TEXT[ spanish ] = "~Add-ons";
+    TEXT[ spanish ] = "~Complementos (add-ons)";
     TEXT[ finnish ] = "~Add-Ons";
     TEXT[ italian ] = "~Complementari";
     TEXT[ danish ] = "~Add-Ons";
@@ -113,10 +116,13 @@ String STR_MENU_ADDONS
     TEXT[ korean ] = "~Add-Ons";
     TEXT[ chinese_simplified ] = "~Add-Ons";
     TEXT[ chinese_traditional ] = "附加元件(~A)";
-    TEXT[ turkish ] = "~Add-Ons";
+    TEXT[ turkish ] = "~Eklentiler";
     TEXT[ arabic ] = "~Add-Ons";
     TEXT[ catalan ] = "~Add-Ons";
     TEXT[ thai ] = "~Add-Ons";
+    TEXT[ czech ] = "~Add-Ons";
+    TEXT[ hebrew ] = "~Add-Ons";
+    TEXT[ hindi ] = "~Add-Ons";
 };
 
 Menu MN_CLIPBOARDFUNCS
@@ -142,7 +148,7 @@ Menu MN_CLIPBOARDFUNCS
             Text [ english_us ] = "Cu~t" ;
             Text[ chinese_simplified ] = "剪切(~T)";
             Text[ russian ] = "��������";
-            Text[ polish ] = "~Wytnij";
+            Text[ polish ] = "Wy~tnij";
             Text[ japanese ] = "切り取り(~T)";
             Text[ chinese_traditional ] = "剪下(~T)";
             Text[ arabic ] = "��";
@@ -150,9 +156,12 @@ Menu MN_CLIPBOARDFUNCS
             Text[ chinese_simplified ] = "剪切(~T)";
             Text[ greek ] = "~�������";
             Text[ korean ] = "잘라내기(~T)";
-            Text[ turkish ] = "Kes";
+            Text[ turkish ] = "Ke~s";
             Text[ catalan ] = "Re~talla";
             Text[ thai ] = "ตั~ด";
+            Text[ czech ] = "Vyjmout";
+            Text[ hebrew ] = "‮גזירה‬";
+            Text[ hindi ] = "काटो";
         };
         MenuItem
         {
@@ -181,9 +190,12 @@ Menu MN_CLIPBOARDFUNCS
             Text[ chinese_simplified ] = "复制(~C)";
             Text[ greek ] = "����~�����";
             Text[ korean ] = "복사(~C)";
-            Text[ turkish ] = "Kopyala";
+            Text[ turkish ] = "~Kopyala";
             Text[ catalan ] = "~Copia";
             Text[ thai ] = "~คัดลอก";
+            Text[ czech ] = "Kopírovat";
+            Text[ hebrew ] = "‮העתקה‬";
+            Text[ hindi ] = "~प्रतिलिपि";
         };
         MenuItem
         {
@@ -203,7 +215,7 @@ Menu MN_CLIPBOARDFUNCS
             Text [ spanish ] = "~Pegar" ;
             Text [ english_us ] = "~Paste" ;
             Text[ russian ] = "��������";
-            Text[ polish ] = "~Wklej";
+            Text[ polish ] = "Wkle~j";
             Text[ japanese ] = "貼り付け(~P)";
             Text[ chinese_simplified ] = "粘贴(~P)";
             Text[ chinese_traditional ] = "貼上(~P)";
@@ -212,9 +224,12 @@ Menu MN_CLIPBOARDFUNCS
             Text[ chinese_simplified ] = "粘贴(~P)";
             Text[ greek ] = "��~��������";
             Text[ korean ] = "붙여넣기(~P)";
-            Text[ turkish ] = "Yap��t�r";
+            Text[ turkish ] = "~Yap��t�r";
             Text[ catalan ] = "~Enganxa";
             Text[ thai ] = "~วาง";
+            Text[ czech ] = "Vložit";
+            Text[ hebrew ] = "‮הדבקה‬";
+            Text[ hindi ] = "~छिपकाओ";
         };
     };
 };
@@ -396,16 +411,28 @@ String SID_WIN_FULLSCREEN
     Text[ korean ] = "전체 화면 모드 마침";
     Text[ chinese_simplified ] = "离开全屏幕模式";
     Text[ chinese_traditional ] = "離開全螢幕模式";
-    Text[ turkish ] = "Leave Full-Screen Mode";
+    Text[ turkish ] = "Tam Ekran Kipinden ��k";
     Text[ arabic ] = "Leave Full-Screen Mode";
-    Text[ catalan ] = "Leave Full-Screen Mode";
+    Text[ catalan ] = "Pantalla completa";
     Text[ thai ] = "Leave Full-Screen Mode";
+    Text[ czech ] = "Opustit celoobrazovkový režim";
+    Text[ hebrew ] = "‮עזיבת מצב חלון מלא‬";
+    Text[ hindi ] = "Leave Full-Screen Mode";
 };
 
 String STR_MENU_ADDONHELP
 {
     TEXT = "Add-~On-Hilfe" ;
     TEXT [ english_us ] = "Add-~On Help" ;
+    TEXT[ french ] = "Aide de l'add-on";
+    TEXT[ spanish ] = "~Complemento (add-on) - Ayuda";
+    TEXT[ italian ] = "Guida all'add-~on";
+    TEXT[ swedish ] = "Till�ggs~hj�lp";
+    TEXT[ japanese ] = "アドオンヘルプ";
+    TEXT[ korean ] = "추가 기능(Add-On) 도움말";
+    TEXT[ chinese_simplified ] = "Add-~On 帮助";
+    TEXT[ chinese_traditional ] = "Add-~On 說明";
 };
 
 // ******************************************************************* EOF
+
