@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_import.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-10-25 15:05:11 $
+ *  last change: $Author: ab $ $Date: 2001-11-07 18:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,10 +202,21 @@ Reference< xml::XImportContext > LibraryImport::createRootContext(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
             Reference< XInterface >(), Any() );
     }
-    // window
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("libraries") ))
+    else if (mpLibArray && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("libraries") ))
     {
         return new LibrariesElement( rLocalName, xAttributes, 0, this );
+    }
+    else if (mpLibDesc && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("library") ))
+    {
+        LibDescriptor& aDesc = *mpLibDesc;
+        aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = sal_False;
+
+        aDesc.aName = xAttributes->getValueByUidName(
+            XMLNS_LIBRARY_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) );
+        getBoolAttr( &aDesc.bReadOnly, OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ), xAttributes );
+        getBoolAttr( &aDesc.bPasswordProtected, OUString( RTL_CONSTASCII_USTRINGPARAM("passwordprotected") ), xAttributes );
+
+        return new LibraryElement( rLocalName, xAttributes, 0, this );
     }
     else
     {
@@ -317,9 +328,10 @@ void LibraryElement::endElement()
     for( sal_Int32 i = 0 ; i < nElementCount ; i++ )
         pElementNames[i] = mElements[i];
 
-    LibDescriptor& rLib =
-        static_cast< LibrariesElement* >( _pParent )->mLibDescriptors.back();
-    rLib.aElementNames = aElementNames;
+    LibDescriptor* pLib = _pImport->mpLibDesc;
+    if( !pLib )
+        pLib = &static_cast< LibrariesElement* >( _pParent )->mLibDescriptors.back();
+    pLib->aElementNames = aElementNames;
 }
 
 
@@ -338,6 +350,22 @@ SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
         arNamespaceUids, sizeof(arNamespaceUids) / sizeof(NameSpaceUid),
         -1 /* unknown namespace id */,
         static_cast< xml::XImporter * >( new LibraryImport( pLibArray ) ) );
+}
+
+//##################################################################################################
+
+SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+SAL_CALL importLibrary( LibDescriptor& rLib )
+        SAL_THROW( (::com::sun::star::uno::Exception) )
+{
+    NameSpaceUid arNamespaceUids[] = {
+        NameSpaceUid( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_URI) ), XMLNS_LIBRARY_UID ),
+    };
+
+    return ::xmlscript::createDocumentHandler(
+        arNamespaceUids, sizeof(arNamespaceUids) / sizeof(NameSpaceUid),
+        -1 /* unknown namespace id */,
+        static_cast< xml::XImporter * >( new LibraryImport( &rLib ) ) );
 }
 
 
