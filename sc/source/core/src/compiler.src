@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:47:40 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2964,7 +2964,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "NPV" ;
         Text [ danish ] = "NUTIDSVÆRDI" ;
         Text [ french ] = "VAN" ;
-        Text [ swedish ] = "NETNUVÄRDE" ;
+        Text [ swedish ] = "NNV" ;
         Text [ dutch ] = "NHW" ;
         Text [ spanish ] = "VNA" ;
         Text [ english_us ] = "NPV" ;
@@ -3469,7 +3469,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "PV" ;
         Text [ danish ] = "NV" ;
         Text [ french ] = "VA" ;
-        Text [ swedish ] = "NUVÄRDE" ;
+        Text [ swedish ] = "NV" ;
         Text [ dutch ] = "HW" ;
         Text [ spanish ] = "VA" ;
         Text [ english_us ] = "PV" ;
@@ -3581,7 +3581,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "VDB" ;
         Text [ danish ] = "VSA" ;
         Text [ french ] = "VDB" ;
-        Text [ swedish ] = "VDEGAVSKR" ;
+        Text [ swedish ] = "VDB" ;
         Text [ dutch ] = "VDB" ;
         Text [ spanish ] = "DVS" ;
         Text [ english_us ] = "VDB" ;
@@ -3637,7 +3637,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "SLN" ;
         Text [ danish ] = "LA" ;
         Text [ french ] = "AMORLIN" ;
-        Text [ swedish ] = "LINAVSKR" ;
+        Text [ swedish ] = "LA" ;
         Text [ dutch ] = "LIN.AFSCHR" ;
         Text [ spanish ] = "SLN" ;
         Text [ english_us ] = "SLN" ;
@@ -3665,7 +3665,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "PMT" ;
         Text [ danish ] = "YDELSE" ;
         Text [ french ] = "VPM" ;
-        Text [ swedish ] = "BETALNING" ;
+        Text [ swedish ] = "RBB" ;
         Text [ dutch ] = "RMB" ;
         Text [ spanish ] = "PAGO" ;
         Text [ english_us ] = "PMT" ;
@@ -3853,7 +3853,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese ] = "ZGZ" ;
         Text [ english_us ] = "RRI" ;
         Text [ portuguese_brazilian ] = "ZGZ" ;
-        Text [ swedish ] = "ZGZ" ;
+        Text [ swedish ] = "RRI" ;
         Text [ danish ] = "RRI" ;
         Text [ italian ] = "ZGZ" ;
         Text [ spanish ] = "INT.RENDIMIENTO" ;
@@ -3883,7 +3883,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "FV" ;
         Text [ danish ] = "FV" ;
         Text [ french ] = "VC" ;
-        Text [ swedish ] = "SLUTVÄRDE" ;
+        Text [ swedish ] = "FV" ;
         Text [ dutch ] = "TW" ;
         Text [ spanish ] = "VF" ;
         Text [ english_us ] = "FV" ;
@@ -3911,7 +3911,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "NPER" ;
         Text [ danish ] = "NPER" ;
         Text [ french ] = "NPM" ;
-        Text [ swedish ] = "PERIODER" ;
+        Text [ swedish ] = "BPER" ;
         Text [ dutch ] = "NPER" ;
         Text [ spanish ] = "NPER" ;
         Text [ english_us ] = "NPER" ;
