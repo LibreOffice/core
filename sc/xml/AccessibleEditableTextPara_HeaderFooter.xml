@@ -9,12 +9,12 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.text.AccessibleParagraphView</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleContext</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleComponent</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleEditableText</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster</type>
+        <supported-service>com.sun.star.text.AccessibleParagraphView</supported-service>
+        <type>com.sun.star.accessibility.XAccessibleContext</type>
+        <type>com.sun.star.accessibility.XAccessibleComponent</type>
+        <type>com.sun.star.accessibility.XAccessibleText</type>
+        <type>com.sun.star.accessibility.XAccessibleEditableText</type>
+        <type>com.sun.star.accessibility.XAccessibleEventBroadcaster</type>
     <project-build-dependency>cppu</project-build-dependency>
     <project-build-dependency>cppuhelper</project-build-dependency>
     <project-build-dependency>osl</project-build-dependency>
