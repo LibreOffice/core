@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-03 09:11:54 $
+ *  last change: $Author: mba $ $Date: 2002-06-20 07:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,7 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
     }
 
     // Download anstossen (Achtung: Kann auch synchron sein).
-    if ( pMedium->GetDoneLink() == Link() )
+    if ( TRUE /*pMedium->GetDoneLink() == Link()*/ )
         pDLMedium->DownLoad();
     else
     {
