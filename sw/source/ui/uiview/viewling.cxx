@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 16:17:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -270,7 +273,35 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             Font aTargetFont = GetEditWin().GetDefaultFont( DEFAULTFONT_CJK_TEXT,
                                                     nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 
+                            // disallow formatting, updating the view, ... while
+                            // converting the document. (saves time)
+                            // Also remember the current view and cursor position for later
+                            pWrtShell->StartAction();
+
+                            // remember cursor position data for later restoration of the cursor
+                            const SwPosition *pPoint = pWrtShell->GetCrsr()->GetPoint();
+                            const SwNodeIndex aPointNodeIndex  = pPoint->nNode;
+                            xub_StrLen nPointIndex = pPoint->nContent.GetIndex();
+
+                            // since this conversion is not interactive the whole converted
+                            // document should be undone in a single undo step.
+                            pWrtShell->StartUndo( UNDO_OVERWRITE );
+
                             StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, sal_False );
+
+                            pWrtShell->EndUndo( UNDO_OVERWRITE );
+
+                            SwTxtNode *pTxtNode = aPointNodeIndex.GetNode().GetTxtNode();
+                            // check for unexpected error case
+                            DBG_ASSERT( pTxtNode && pTxtNode->GetTxt().Len() >= nPointIndex,
+                                "text missing: corrupted node?" );
+                            if (!pTxtNode || pTxtNode->GetTxt().Len() < nPointIndex)
+                                nPointIndex = 0;
+                            // restore cursor to its original position
+                            pWrtShell->GetCrsr()->GetPoint()->nContent.Assign( pTxtNode, nPointIndex );
+
+                            // enable all, restore view and cursor position
+                            pWrtShell->EndAction();
                         }
                     }
                     Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );
@@ -361,24 +392,7 @@ void SwView::StartTextConversion(
                                 bStart, bOther, bSelection );
             SwCrsrShell *pCrsrSh = ((SwCrsrShell*) pWrtShell);
 
-            //SwViewOption* pVOpt = (SwViewOption*)pWrtShell->GetViewOptions();
-            //sal_Bool bOldIdle = pVOpt->IsIdle();
-            BOOL bOldLockedState = pCrsrSh->IsViewLocked();
-            if (bIsInteractive)
-            {
-                // TBD: show wait cursor...
-                //SwWait aWait( *GetDocShell(), TRUE );
-                //pVOpt->SetIdle( sal_False );
-                pCrsrSh->LockView( TRUE );
-            }
-
             aWrap.Convert();
-
-            if (bIsInteractive)
-            {
-                pCrsrSh->LockView( bOldLockedState );
-                //pVOpt->SetIdle( bOldIdle );
-            }
         }
     }
 
