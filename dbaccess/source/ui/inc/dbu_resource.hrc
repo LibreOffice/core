@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 07:35:54 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 07:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,9 +510,8 @@
 #define STR_QRY_JOIN_COLUMN_COMPARE         RID_STRING_START + 207
 #define STR_QRY_LIKE_LEFT_NO_COLUMN         RID_STRING_START + 208
 #define STR_QRY_CHECK_CASESENSITIVE         RID_STRING_START + 209
-#define STR_ERR_LIKE_COLUMN                 RID_STRING_START + 210
-#define STR_AUTOINCREMENT_VALUE             RID_STRING_START + 211
-#define STR_HELP_AUTOINCREMENT_VALUE        RID_STRING_START + 212
+#define STR_AUTOINCREMENT_VALUE             RID_STRING_START + 210
+#define STR_HELP_AUTOINCREMENT_VALUE        RID_STRING_START + 211
 
 
 //========================================================================
@@ -534,6 +533,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.77  2002/07/22 07:35:54  oj
+ *  #101514# remove resource entries for PLUS and MINUS
+ *
  *  Revision 1.76  2002/05/24 12:38:09  fs
  *  #99226# separated menus which were misused way too often
  *

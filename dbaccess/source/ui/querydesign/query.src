@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 06:51:07 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 07:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2340,12 +2340,6 @@ String STR_QRY_COLUMN_NOT_FOUND
 {
     Text = "Die Spalte '$name$' ist unbekannt!";
     Text [ ENGLISH ] = "The column '$name$' is unknown!";
-};
-
-String STR_ERR_LIKE_COLUMN
-{
-    Text = "Der WIE Konstrukt ist falsch. Auf der linken Seite muﬂ ein Spaltenname stehen.";
-    Text [ ENGLISH ] = "The LIKE construct is wrong. On the left side must be a column name.";
 };
 
 String STR_QRY_JOIN_COLUMN_COMPARE
