@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-19 15:38:43 $
+ *  last change: $Author: hdu $ $Date: 2001-02-20 11:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay )
     pXRenderFreePicture             = (void(*)(Display*,Picture))pFunc;
 
     // needed to initialize libXrender internals, we already know its there
-    XRenderQueryExtension( mpDisplay, &nDummy, &nDummy );
+    (*pXRenderQueryExtension)( mpDisplay, &nDummy, &nDummy );
 
     int nMajor, nMinor;
     (*pXRenderQueryVersion)( mpDisplay, &nMajor, &nMinor );
