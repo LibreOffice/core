@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-11 13:26:19 $
+ *  last change: $Author: jb $ $Date: 2002-11-08 16:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:node SYSTEM "../../../component-update.dtd">
-<oor:node oor:name="VCL" oor:context="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:node oor:name="VCL" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Settings">
     <node oor:name="Accessibility" oor:op="replace">
       <prop oor:name="EnableATToolSupport" oor:type="xs:string" oor:op="replace">

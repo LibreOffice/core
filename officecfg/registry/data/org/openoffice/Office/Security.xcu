@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Security.xcu,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:33:52 $
+ *  last change: $Author: jb $ $Date: 2002-11-08 16:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:node SYSTEM "../../../../component-update.dtd">
-<oor:node oor:name="Security" oor:context="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:node oor:name="Security" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="SecureExtensions">
         <node oor:name="m1" oor:op="replace">
             <prop oor:name="Extension" oor:type="xs:string">
