@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-12 14:38:20 $
+ *  last change: $Author: pb $ $Date: 2001-11-22 14:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1268,15 +1268,8 @@ void SvtFileView::OpenFolder( const Sequence< OUString >& aContents )
         aNewRow += aDate;
         // detect image
         sal_Bool bDoInsert = sal_True;
-        Image aImage;
-
-        if ( bIsFolder )
-            aImage = mpImp->maFolderImage;
-        else
-        {
-            INetURLObject aObj( aImageURL.Len() > 0 ? aImageURL : aURL );
-            aImage = SvFileInformationManager::GetImage( aObj, FALSE );
-        }
+        INetURLObject aObj( aImageURL.Len() > 0 ? aImageURL : aURL );
+        Image aImage = SvFileInformationManager::GetImage( aObj, FALSE );
 
         if ( bDoInsert )
         {
@@ -1761,24 +1754,24 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 
             try
             {
+                ::com::sun::star::util::DateTime aDT;
+
                 while ( xResultSet->next() )
                 {
                     pData = new SortingData_Impl;
 
-                    ::com::sun::star::util::DateTime aDT = xRow->getTimestamp( ROW_DATE_MOD );
+                    aDT = xRow->getTimestamp( ROW_DATE_MOD );
                     if ( xRow->wasNull() )
                         aDT = xRow->getTimestamp( ROW_DATE_CREATE );
 
                     OUString aContentURL = xContentAccess->queryContentIdentifierString();
                     OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
-                    sal_Bool bTarget = aTargetURL.getLength() > 0;
-
+                    sal_Bool bHasTargetURL = aTargetURL.getLength() > 0;
                     pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
                     pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
+                    pData->maSize = xRow->getLong( ROW_SIZE );
 
-                    pData->maSize     = xRow->getLong( ROW_SIZE );
-
-                    if ( bTarget &&
+                    if ( bHasTargetURL &&
                          INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
                     {
                         Content aCnt( aTargetURL, Reference< XCommandEnvironment > () );
@@ -1788,14 +1781,13 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 
                     CONVERT_DATETIME( aDT, pData->maModDate );
 
-                    if ( aTargetURL.getLength() )
-                        pData->maTargetURL   = aTargetURL;
+                    if ( bHasTargetURL )
+                        pData->maTargetURL = aTargetURL;
                     else
-                        pData->maTargetURL   = aContentURL;
+                        pData->maTargetURL = aContentURL;
 
-                    INetURLObject aURLObj( pData->maTargetURL );
-
-                    pData->maType = SvFileInformationManager::GetDescription( aURLObj );
+                    pData->maType =
+                        SvFileInformationManager::GetDescription( INetURLObject( pData->maTargetURL ) );
 
                     // replace names on demand
                     if( mbReplaceNames )
@@ -2020,22 +2012,21 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
         if ( ! (*aIt)->mbIsFolder )
             aValue += CreateExactSizeText_Impl( (*aIt)->maSize );
         aValue += aTab;
-        // set the date
-        aValue += aLocaleWrapper.getDate( (*aIt)->maModDate );
-        aValue += aDateSep;
-        aValue += aLocaleWrapper.getTime( (*aIt)->maModDate );
-
+        // set the date, but volumes have no date
+        sal_Bool bIsVolume = sal_False;
+        ::utl::UCBContentHelper::GetProperty(
+            (*aIt)->maTargetURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsVolume") ) ) >>= bIsVolume;
+        if ( ! (*aIt)->mbIsFolder || !bIsVolume )
+        {
+            aValue += aLocaleWrapper.getDate( (*aIt)->maModDate );
+            aValue += aDateSep;
+            aValue += aLocaleWrapper.getTime( (*aIt)->maModDate );
+        }
         (*aIt)->maDisplayText = aValue;
 
         // detect image
-
-        if ( (*aIt)->mbIsFolder )
-            (*aIt)->maImage = maFolderImage;
-        else
-        {
-            INetURLObject aObj( (*aIt)->maTargetURL );
-            (*aIt)->maImage = SvFileInformationManager::GetImage( aObj, FALSE );
-        }
+        INetURLObject aObj( (*aIt)->maTargetURL );
+        (*aIt)->maImage = SvFileInformationManager::GetImage( aObj, FALSE );
     }
 }
 
@@ -2117,13 +2108,8 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         pEntry->maDisplayText = aDisplayText;
 
         // detect the image
-        if ( pEntry->mbIsFolder )
-            pEntry->maImage = maFolderImage;
-        else
-        {
-            INetURLObject aObj( pEntry->maImageURL.getLength() ? pEntry->maImageURL : pEntry->maTargetURL );
-            pEntry->maImage = SvFileInformationManager::GetImage( aObj, FALSE );
-        }
+        INetURLObject aObj( pEntry->maImageURL.getLength() ? pEntry->maImageURL : pEntry->maTargetURL );
+        pEntry->maImage = SvFileInformationManager::GetImage( aObj, FALSE );
 
         maContent.push_back( pEntry );
     }
@@ -2319,7 +2305,7 @@ void SvtFileView_Impl::FolderInserted( const OUString& rURL,
     INetURLObject aURLObj( rURL );
 
     pData->maType = SvFileInformationManager::GetDescription( aURLObj );
-    pData->maImage = maFolderImage;
+    pData->maImage = SvFileInformationManager::GetImage( aURLObj, FALSE );
 
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(),
                                       Application::GetSettings().GetLocale() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 12:40:26 $
+ *  last change: $Author: pb $ $Date: 2001-11-22 14:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#include <com/sun/star/uno/Reference.h>
+//#include <com/sun/star/uno/Reference.h>
 
 #include "svtools.hrc"
 #include "imagemgr.hrc"
@@ -114,7 +114,9 @@
 
 // globals *******************************************************************
 
-#define NO_INDEX    ((USHORT)0xFFFF)
+#define NO_INDEX        ((USHORT)0xFFFF)
+#define CONTENT_HELPER  ::utl::UCBContentHelper
+#define ASCII_STRING(s) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 
 static ImageList* _pSmallImageList = NULL;
 static ImageList* _pBigImageList = NULL;
@@ -131,16 +133,12 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
 {
     "awk",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
     "bas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-#ifndef WNT
     "bat",   TRUE,  STR_DESCRIPTION_BATCHFILE,             IMG_APP,
-#endif
     "bmk",   FALSE, STR_DESCRIPTION_BOOKMARKFILE,          0,
     "bmp",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_BITMAP,
     "c",     TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
     "cfg",   FALSE, STR_DESCRIPTION_CFGFILE,               0,
-#ifndef WNT
     "cmd",   TRUE,  STR_DESCRIPTION_BATCHFILE,             IMG_APP,
-#endif
     "cob",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
     "com",   TRUE,  STR_DESCRIPTION_APPLICATION,           IMG_APP,
     "cxx",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
@@ -149,9 +147,7 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     "dll",   TRUE,  STR_DESCRIPTION_SYSFILE,               0,
     "doc",   FALSE, STR_DESCRIPTION_WORD_DOC,              IMG_WORD,
     "dxf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_DXF,
-#ifndef WNT
     "exe",   TRUE,  STR_DESCRIPTION_APPLICATION,           IMG_APP,
-#endif
     "gif",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_GIF,
     "h",     TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
     "hlp",   FALSE, STR_DESCRIPTION_HELP_DOC,              IMG_HELP,
@@ -300,7 +296,7 @@ String GetImageExtensionByFactory_Impl( const String& rURL )
         // get the TypeDetection service to access all registered types
         ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >  xFac = ::comphelper::getProcessServiceFactory();
         ::com::sun::star::uno::Reference < ::com::sun::star::document::XTypeDetection > xTypeDetector(
-            xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection") ) ), ::com::sun::star::uno::UNO_QUERY );
+            xFac->createInstance( ASCII_STRING("com.sun.star.document.TypeDetection") ), ::com::sun::star::uno::UNO_QUERY );
 
         ::rtl::OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
         ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xAccess( xTypeDetector, ::com::sun::star::uno::UNO_QUERY );
@@ -372,28 +368,61 @@ USHORT GetImageId_Impl( const String& rExtension )
     return nImage;
 }
 
+sal_Bool GetVolumeProperties_Impl( const String& rURL,
+                                   sal_Bool& rIsVolume, sal_Bool& rIsRemote, sal_Bool& rIsRemoveable )
+{
+    sal_Bool bRet = sal_False;
+
+    try
+    {
+        bRet = ( ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsVolume") ) >>= rIsVolume ) &&
+                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsRemote") ) >>= rIsRemote ) &&
+                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsRemoveable") ) >>= rIsRemoveable ) );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        // type detection failed -> no extension
+    }
+
+    return bRet;
+}
+
+USHORT GetFolderImageId_Impl( const String& rURL )
+{
+    USHORT nRet = IMG_FOLDER;
+    sal_Bool bIsVolume = sal_False, bIsRemote = sal_False, bIsRemoveable = sal_False;
+    if ( GetVolumeProperties_Impl( rURL, bIsVolume, bIsRemote, bIsRemoveable ) )
+    {
+        if ( bIsRemote )
+            nRet = IMG_NETWORKDEV;
+        else if ( bIsRemoveable )
+            nRet = IMG_REMOVEABLEDEV;
+        else if ( bIsVolume )
+            nRet = IMG_FIXEDDEV;
+    }
+    return nRet;
+}
+
 USHORT GetImageId_Impl( const INetURLObject& rObject )
 {
-    String aExt;
+    String aExt, sURL = rObject.GetMainURL( INetURLObject::NO_DECODE );
     USHORT nImage = IMG_FILE;
 
     if ( rObject.GetProtocol() == INET_PROT_PRIVATE )
     {
-        String aURLPath = rObject.GetMainURL().Erase( 0, URL_PREFIX_PRIV_SOFFICE_LEN );
+        String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
         String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
         if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
-            aExt = GetImageExtensionByFactory_Impl( rObject.GetMainURL() );
+            aExt = GetImageExtensionByFactory_Impl( sURL );
         else if ( aType == String( RTL_CONSTASCII_STRINGPARAM("image") ) )
-        {
             nImage = (USHORT)aURLPath.GetToken( 1, INET_PATH_TOKEN ).ToInt32();
-        }
     }
     else
     {
         aExt = rObject.getExtension();
         if ( aExt.EqualsAscii( "vor" ) )
         {
-            SotStorageRef aStorage = new SotStorage( rObject.GetMainURL(), STREAM_STD_READ );
+            SotStorageRef aStorage = new SotStorage( sURL, STREAM_STD_READ );
             USHORT nId = IMG_WRITERTEMPLATE;
             if ( !aStorage->GetError() )
             {
@@ -416,9 +445,9 @@ USHORT GetImageId_Impl( const INetURLObject& rObject )
 #if defined( OS2 ) || defined( MAC )
     if ( nImage == IMG_FILE )
     {
-        SvEaMgr aMgr( rObject.GetMainURL() );
+        SvEaMgr aMgr( sURL );
         String aType;
-        if( aMgr.GetFileType( aType ) )
+            if( aMgr.GetFileType( aType ) )
         {
             for( USHORT nIndex = 0; Mappings[ nIndex ]._pExt; nIndex++ )
                 if ( Mappings[ nIndex ]._pExt == aType )
@@ -428,7 +457,12 @@ USHORT GetImageId_Impl( const INetURLObject& rObject )
 #endif
 
     if ( nImage == IMG_FILE )
-        nImage = GetImageId_Impl( aExt );
+    {
+        if ( ::utl::UCBContentHelper::IsFolder( sURL ) )
+            nImage = GetFolderImageId_Impl( sURL );
+        else if ( aExt.Len() > 0 )
+            nImage = GetImageId_Impl( aExt );
+    }
     return nImage;
 }
 
@@ -476,6 +510,20 @@ String GetDescriptionByFactory_Impl( const String& rFactory )
     return aRet;
 }
 
+USHORT GetFolderDescriptionId_Impl( const String& rURL )
+{
+    USHORT nRet = STR_DESCRIPTION_FOLDER;
+    sal_Bool bIsVolume = sal_False, bIsRemote = sal_False, bIsRemoveable = sal_False;
+    if ( GetVolumeProperties_Impl( rURL, bIsVolume, bIsRemote, bIsRemoveable ) )
+    {
+        if ( bIsRemote )
+            nRet = STR_DESCRIPTION_REMOTE_VOLUME;
+        else if ( bIsRemoveable || bIsVolume )
+            nRet = STR_DESCRIPTION_LOCALE_VOLUME;
+    }
+    return nRet;
+}
+
 //****************************************************************************
 
 
@@ -509,6 +557,10 @@ Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBi
     USHORT nImage = GetImageId_Impl( rObject );
     DBG_ASSERT( nImage, "invalid ImageId" );
 
+    if ( !bBig && IMG_FOLDER == nImage )
+        // return our new small folder image (256 colors)
+        return Image( SvtResId( IMG_SVT_FOLDER ) );
+
     ImageList* pList = NULL;
     if ( bBig )
     {
@@ -534,26 +586,23 @@ Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBi
 
 String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
 {
-    String aDescription;
-    {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        aDescription = String( SvtResId( STR_DESCRIPTION_FOLDER ) );
-    }
-    sal_Bool bShowExt = sal_False;
-    sal_Bool bDetected = sal_False;
-    sal_Bool bFolder = ::utl::UCBContentHelper::IsFolder( rObject.GetMainURL() );
+    String sDescription;
+    String sExtension( rObject.getExtension() ), sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
+    USHORT nResId = 0;
+    sal_Bool bShowExt = sal_False, bDetected = sal_False, bOnlyFile = sal_False;
+    sal_Bool bFolder = ::utl::UCBContentHelper::IsFolder( sURL );
     if ( !bFolder )
     {
 #if defined( OS2 ) || defined( MAC )
         // FileType via EAs
-        SvEaMgr aMgr( rObject.GetMainURL() );
+        SvEaMgr aMgr( sMainURL );
         String aType;
         if ( aMgr.GetFileType( aType ) )
         {
             for( USHORT nIndex = 0; !bDetected && Mappings[ nIndex ]._pExt; nIndex++ )
                 if ( Mappings[ nIndex ]._pExt == aType )
                 {
-                    aDescription = SfxResId( Mappings[ nIndex ]._nStrId );
+                    sDescription = SfxResId( Mappings[ nIndex ]._nStrId );
                     bDetected = sal_True;
                 }
         }
@@ -562,43 +611,57 @@ String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
         {
             if ( rObject.GetProtocol() == INET_PROT_PRIVATE )
             {
-                String aURLPath = rObject.GetMainURL().Erase( 0, URL_PREFIX_PRIV_SOFFICE_LEN );
+                String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
                 String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
                 if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
                 {
-                    aDescription = GetDescriptionByFactory_Impl( aURLPath.Copy( aURLPath.Search( INET_PATH_TOKEN ) + 1 ) );
+                    sDescription = GetDescriptionByFactory_Impl( aURLPath.Copy( aURLPath.Search( INET_PATH_TOKEN ) + 1 ) );
                     bDetected = sal_True;
                 }
             }
 
             if ( !bDetected )
             {
-                // Bestimmung der Dateiendung
-                String aExtension( rObject.getExtension() );
-                aExtension.ToLowerAscii();
-
-                // Iteration ueber alle Zuordnungen
-                USHORT nResId = 0;
-                if ( aExtension.Len() )
-                    nResId = GetDescriptionId_Impl( aExtension, bShowExt );
+                // search a description by extension
+                sal_Bool bExt = ( sExtension.Len() > 0 );
+                if ( bExt )
+                {
+                    sExtension.ToLowerAscii();
+                    nResId = GetDescriptionId_Impl( sExtension, bShowExt );
+                }
                 if ( !nResId )
+                {
                     nResId = STR_DESCRIPTION_FILE;
-
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
-                aDescription = String( SvtResId( nResId ) );
+                    bOnlyFile = bExt;
+                }
             }
-
-            DBG_ASSERT( aDescription.Len() > 0, "file without description" );
         }
     }
+    else
+        nResId = GetFolderDescriptionId_Impl( sURL );
+
+    if ( nResId > 0 )
+    {
+        if ( bOnlyFile )
+        {
+            bShowExt = sal_False;
+            sExtension.ToUpperAscii();
+            sDescription = sExtension;
+            sDescription += '-';
+        }
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        sDescription += String( SvtResId( nResId ) );
+    }
+
+    DBG_ASSERT( sDescription.Len() > 0, "file without description" );
 
     if ( bShowExt )
     {
-        aDescription += String( RTL_CONSTASCII_STRINGPARAM(" (") );
-        aDescription += rObject.getExtension().ToLowerAscii();
-        aDescription += ')';
+        sDescription += String( RTL_CONSTASCII_STRINGPARAM(" (") );
+        sDescription += sExtension;
+        sDescription += ')';
     }
 
-    return aDescription;
+    return sDescription;
 }
 
