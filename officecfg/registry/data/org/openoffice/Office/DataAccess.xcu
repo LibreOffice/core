@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcu,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:47:44 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,6 +497,64 @@
   </node>
   <node oor:name="DriverSettings">
     <node oor:name="com.sun.star.comp.sdbc.MozabDriver">
+      <node oor:name="MozillaPreferences">
+        <prop oor:name="PabDescription" >
+          <value xml:lang="de">Persönliches Adreßbuch</value>
+          <value xml:lang="en-US">Personal Address book</value>
+          <value xml:lang="el">Personal Address book</value>
+          <value xml:lang="nl">Personal Address book</value>
+          <value xml:lang="fr">Personal Address book</value>
+          <value xml:lang="fi">Personal Address book</value>
+          <value xml:lang="cs">Personal Address book</value>
+          <value xml:lang="da">Personal Address book</value>
+          <value xml:lang="zh-CN">个人通讯簿</value>
+          <value xml:lang="zh-TW">Personal Address book</value>
+          <value xml:lang="ar">Personal Address book</value>
+          <value xml:lang="he">Personal Address book</value>
+          <value xml:lang="ca">Personal Address book</value>
+          <value xml:lang="pt">Personal Address book</value>
+          <value xml:lang="ru">Personal Address book</value>
+          <value xml:lang="es">Personal Address book</value>
+          <value xml:lang="it">Personal Address book</value>
+          <value xml:lang="sv">Personal Address book</value>
+          <value xml:lang="pl">Personal Address book</value>
+          <value xml:lang="pt-BR">Personal Address book</value>
+          <value xml:lang="ja">Personal Address book</value>
+          <value xml:lang="ko">Personal Address book</value>
+          <value xml:lang="tr">Personal Address book</value>
+          <value xml:lang="th">Personal Address book</value>
+          <value xml:lang="hi-IN">Personal Address book</value>
+          <value xml:lang="x-comment">Personal Address book</value>
+    </prop>
+        <prop oor:name="HisDescription">
+          <value xml:lang="de">Gesammelte Adressen</value>
+          <value xml:lang="en-US">Collected Addresses</value>
+          <value xml:lang="el">Collected Addresses</value>
+          <value xml:lang="nl">Collected Addresses</value>
+          <value xml:lang="fr">Collected Addresses</value>
+          <value xml:lang="fi">Collected Addresses</value>
+          <value xml:lang="cs">Collected Addresses</value>
+          <value xml:lang="da">Collected Addresses</value>
+          <value xml:lang="zh-CN">集合通讯簿</value>
+          <value xml:lang="zh-TW">Collected Addresses</value>
+          <value xml:lang="ar">Collected Addresses</value>
+          <value xml:lang="he">Collected Addresses</value>
+          <value xml:lang="ca">Collected Addresses</value>
+          <value xml:lang="pt">Collected Addresses</value>
+          <value xml:lang="ru">Collected Addresses</value>
+          <value xml:lang="es">Collected Addresses</value>
+          <value xml:lang="it">Collected Addresses</value>
+          <value xml:lang="sv">Collected Addresses</value>
+          <value xml:lang="pl">Collected Addresses</value>
+          <value xml:lang="pt-BR">Collected Addresses</value>
+          <value xml:lang="ja">Collected Addresses</value>
+          <value xml:lang="ko">Collected Addresses</value>
+          <value xml:lang="tr">Collected Addresses</value>
+          <value xml:lang="th">Collected Addresses</value>
+          <value xml:lang="hi-IN">Collected Addresses</value>
+          <value xml:lang="x-comment">Collected Addresses</value>
+           </prop>
+      </node>
       <node oor:name="ColumnAliases">
         <prop oor:name="FirstName">
           <value xml:lang="de">Vorname</value>
