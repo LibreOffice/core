@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-19 15:05:53 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ public:
 
     void            CutToClip( ScDocument* pClipDoc = NULL, BOOL bIncludeObjects = FALSE );
     BOOL            CopyToClip( ScDocument* pClipDoc = NULL, BOOL bCut = FALSE, BOOL bApi = FALSE,
-                                BOOL bIncludeObjects = FALSE );
+                                BOOL bIncludeObjects = FALSE, BOOL bStopEdit = TRUE );
     BOOL            PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                                     USHORT nFunction = PASTE_NOFUNC, BOOL bSkipEmpty = FALSE,
                                     BOOL bTranspose = FALSE, BOOL bAsLink = FALSE,
