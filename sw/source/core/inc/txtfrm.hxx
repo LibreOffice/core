@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-06 10:59:46 $
+ *  last change: $Author: fme $ $Date: 2001-12-17 12:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,30 +90,6 @@ class SwTestFormat;
 class SwStripes;
 struct SwCrsrMoveState;
 struct SwFillData;
-
-#ifdef VERTICAL_LAYOUT
-
-#define SWAP_IF_SWAPPED( pFrm )\
-    sal_Bool bUndoSwap = sal_False;   \
-    if ( pFrm->IsVertical() && pFrm->IsSwapped() )\
-    {                                 \
-        bUndoSwap = sal_True;         \
-        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();         \
-    }
-
-#define SWAP_IF_NOT_SWAPPED( pFrm )\
-    sal_Bool bUndoSwap = sal_False;     \
-    if ( pFrm->IsVertical() && ! pFrm->IsSwapped() )\
-    {                                   \
-        bUndoSwap = sal_True;           \
-        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();         \
-    }
-
-#define UNDO_SWAP( pFrm )\
-    if ( pFrm->IsVertical() && bUndoSwap )\
-        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
-
-#endif
 
 class SwTxtFrm: public SwCntntFrm
 {
@@ -688,6 +664,41 @@ public:
 extern SwLinguStatistik aSwLinguStat;
 
 #define SW_LING(nWhich,nInc) (aSwLinguStat.nWhich) += nInc;
+
+#endif
+
+#ifdef VERTICAL_LAYOUT
+
+#define SWAP_IF_SWAPPED( pFrm )\
+    sal_Bool bUndoSwap = sal_False;   \
+    if ( pFrm->IsVertical() && pFrm->IsSwapped() )\
+    {                                 \
+        bUndoSwap = sal_True;         \
+        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();         \
+    }
+
+#define SWAP_IF_NOT_SWAPPED( pFrm )\
+    sal_Bool bUndoSwap = sal_False;     \
+    if ( pFrm->IsVertical() && ! pFrm->IsSwapped() )\
+    {                                   \
+        bUndoSwap = sal_True;           \
+        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();         \
+    }
+
+#define UNDO_SWAP( pFrm )\
+    if ( bUndoSwap )\
+        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
+
+// Helper class which can be used instead of the macros if a function
+// has too many returns
+class SwFrmSwapper
+{
+    const SwTxtFrm* pFrm;
+    sal_Bool bUndo;
+public:
+    SwFrmSwapper( const SwTxtFrm* pFrm, sal_Bool bSwapIfNotSwapped );
+    ~SwFrmSwapper();
+};
 
 #endif
 
