@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-12 11:39:55 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1700,3 +1700,153 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
     else
         return( String( rFlavor1.MimeType ).GetToken( 0, ';' ) == String( rFlavor2.MimeType ).GetToken( 0, ';' ) );
 }
+
+
+
+// -----------------------------------------------------------------------------
+// TransferDataContainer
+// -----------------------------------------------------------------------------
+struct TDataCntnrEntry_Impl
+{
+    ::com::sun::star::uno::Any aAny;
+    SotFormatStringId nId;
+};
+
+typedef ::std::list< TDataCntnrEntry_Impl > TDataCntnrEntryList;
+
+struct TransferDataContainer_Impl
+{
+    TDataCntnrEntryList aFmtList;
+    Link aFinshedLnk;
+    INetBookmark* pBookmk;
+
+    TransferDataContainer_Impl()
+        : pBookmk( 0 )
+    {
+    }
+
+    ~TransferDataContainer_Impl()
+    {
+        delete pBookmk;
+    }
+};
+
+TransferDataContainer::TransferDataContainer()
+    : pImpl( new TransferDataContainer_Impl )
+{
+}
+
+TransferDataContainer::~TransferDataContainer()
+{
+    delete pImpl;
+}
+
+void TransferDataContainer::AddSupportedFormats()
+{
+}
+
+sal_Bool TransferDataContainer::GetData( const
+            ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    TDataCntnrEntryList::iterator   aIter( pImpl->aFmtList.begin() ),
+                                    aEnd( pImpl->aFmtList.end() );
+    sal_Bool bFnd = sal_False;
+    ULONG nFmtId = SotExchange::GetFormat( rFlavor );
+
+    // test first the list
+    for( ; aIter != aEnd; ++aIter )
+    {
+        TDataCntnrEntry_Impl& rEntry = (TDataCntnrEntry_Impl&)*aIter;
+        if( nFmtId == rEntry.nId )
+        {
+            bFnd = SetAny( rEntry.aAny, rFlavor );
+            break;
+        }
+    }
+
+    // test second the bookmark pointer
+    if( !bFnd && pImpl->pBookmk )
+        switch( nFmtId )
+        {
+         case FORMAT_STRING:
+         case SOT_FORMATSTR_ID_SOLK:
+         case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
+         case SOT_FORMATSTR_ID_FILECONTENT:
+         case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
+         case SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR:
+            bFnd = SetINetBookmark( *pImpl->pBookmk, rFlavor );
+            break;
+        }
+
+    return bFnd;
+}
+
+void TransferDataContainer::ClearData()
+{
+    delete pImpl;
+    pImpl = new TransferDataContainer_Impl;
+    ClearFormats();
+}
+
+void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
+{
+    if( !pImpl->pBookmk )
+        pImpl->pBookmk = new INetBookmark( rBkmk );
+    else
+        *pImpl->pBookmk = rBkmk;
+
+     AddFormat( FORMAT_STRING );
+     AddFormat( SOT_FORMATSTR_ID_SOLK );
+     AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
+     AddFormat( SOT_FORMATSTR_ID_FILECONTENT );
+     AddFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR );
+     AddFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR );
+}
+
+void TransferDataContainer::CopyAnyData( ULONG nFormatId,
+                                        const sal_Char* pData, ULONG nLen )
+{
+    TDataCntnrEntry_Impl aEntry;
+    aEntry.nId = nFormatId;
+
+    Sequence< sal_Int8 > aSeq( nLen  );
+    memcpy( aSeq.getArray(), pData, nLen );
+    aEntry.aAny <<= aSeq;
+    pImpl->aFmtList.push_back( aEntry );
+     AddFormat( nFormatId );
+}
+
+void TransferDataContainer::CopyByteString( ULONG nFormatId,
+                                            const ByteString& rStr )
+{
+    TDataCntnrEntry_Impl aEntry;
+    aEntry.nId = nFormatId;
+
+    Sequence< sal_Int8 > aSeq( rStr.Len() );
+    memcpy( aSeq.getArray(), rStr.GetBuffer(), rStr.Len() );
+    aEntry.aAny <<= aSeq;
+    pImpl->aFmtList.push_back( aEntry );
+     AddFormat( nFormatId );
+}
+
+sal_Bool TransferDataContainer::HasAnyData() const
+{
+    return pImpl->aFmtList.begin() != pImpl->aFmtList.end() ||
+            0 != pImpl->pBookmk;
+}
+
+void TransferDataContainer::StartDrag(
+        Window* pWindow, sal_Int8 nDragSourceActions,
+        const Link& rLnk, sal_Int32 nDragPointer, sal_Int32 nDragImage )
+{
+    pImpl->aFinshedLnk = rLnk;
+    TransferableHelper::StartDrag( pWindow, nDragSourceActions,
+                                    nDragPointer, nDragImage );
+}
+
+void TransferDataContainer::DragFinished( sal_Int8 nDropAction )
+{
+    if( pImpl->aFinshedLnk.IsSet() )
+        pImpl->aFinshedLnk.Call( &nDropAction );
+}
+
