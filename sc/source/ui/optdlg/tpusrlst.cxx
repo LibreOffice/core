@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpusrlst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:04:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,12 +175,12 @@ void ScTpUserLists::Init()
 
     if ( pViewSh )
     {
-        USHORT  nStartTab   = 0;
-        USHORT  nEndTab     = 0;
-        USHORT  nStartCol   = 0;
-        USHORT  nStartRow   = 0;
-        USHORT  nEndCol     = 0;
-        USHORT  nEndRow     = 0;
+        SCTAB   nStartTab   = 0;
+        SCTAB   nEndTab     = 0;
+        SCCOL   nStartCol   = 0;
+        SCROW   nStartRow   = 0;
+        SCCOL   nEndCol     = 0;
+        SCROW   nEndRow     = 0;
 
         pViewData = pViewSh->GetViewData();
         pDoc = pViewData->GetDocument();
@@ -456,18 +456,18 @@ void ScTpUserLists::AddNewList( const String& rEntriesStr )
 
 // -----------------------------------------------------------------------
 
-void ScTpUserLists::CopyListFromArea( const ScRefTripel& rStartPos,
-                                      const ScRefTripel& rEndPos )
+void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
+                                      const ScRefAddress& rEndPos )
 {
     if ( bCopyDone ) return;
 
     //----------------------------------------------------------
 
-    USHORT  nTab            = rStartPos.GetTab();
-    USHORT  nStartCol       = rStartPos.GetCol();
-    USHORT  nStartRow       = rStartPos.GetRow();
-    USHORT  nEndCol         = rEndPos.GetCol();
-    USHORT  nEndRow         = rEndPos.GetRow();
+    SCTAB   nTab            = rStartPos.Tab();
+    SCCOL   nStartCol       = rStartPos.Col();
+    SCROW   nStartRow       = rStartPos.Row();
+    SCCOL   nEndCol         = rEndPos.Col();
+    SCROW   nEndRow         = rEndPos.Row();
     USHORT  nCellDir        = SCRET_COLS;
     BOOL    bValueIgnored   = FALSE;
 
@@ -494,9 +494,9 @@ void ScTpUserLists::CopyListFromArea( const ScRefTripel& rStartPos,
 
         if ( nCellDir == SCRET_COLS )
         {
-            for ( USHORT col=nStartCol; col<=nEndCol; col++ )
+            for ( SCCOL col=nStartCol; col<=nEndCol; col++ )
             {
-                for ( USHORT row=nStartRow; row<=nEndRow; row++ )
+                for ( SCROW row=nStartRow; row<=nEndRow; row++ )
                 {
                     if ( pDoc->HasStringData( col, row, nTab ) )
                     {
@@ -518,9 +518,9 @@ void ScTpUserLists::CopyListFromArea( const ScRefTripel& rStartPos,
         }
         else
         {
-            for ( USHORT row=nStartRow; row<=nEndRow; row++ )
+            for ( SCROW row=nStartRow; row<=nEndRow; row++ )
             {
-                for ( USHORT col=nStartCol; col<=nEndCol; col++ )
+                for ( SCCOL col=nStartCol; col<=nEndCol; col++ )
                 {
                     if ( pDoc->HasStringData( col, row, nTab ) )
                     {
@@ -775,8 +775,8 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
 
         //-----------------------------------------------------------
 
-        ScRefTripel theStartPos;
-        ScRefTripel theEndPos;
+        ScRefAddress theStartPos;
+        ScRefAddress theEndPos;
         String      theAreaStr( aEdCopyFrom.GetText() );
         BOOL        bAreaOk = FALSE;
 
