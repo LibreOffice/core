@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:34:35 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef DBACORE_SDBCORETOOLS_HXX
+#include "sdbcoretools.hxx"
+#endif
+
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -100,6 +104,8 @@ using namespace dbaccess;
 //============================================================
 //= OTableColumnDescriptor
 //============================================================
+IMPLEMENT_FORWARD_XINTERFACE2(OTableColumnDescriptor,OColumn,TXChild)
+
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OTableColumnDescriptor::getImplementationId() throw (RuntimeException)
@@ -138,22 +144,22 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptor::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_HELPER(20)
-        DECL_PROP1(ALIGN,               sal_Int32,          MAYBEVOID);
+        DECL_PROP2(ALIGN,                   sal_Int32,          BOUND,MAYBEVOID);
         DECL_PROP1(AUTOINCREMENTCREATION,::rtl::OUString,   MAYBEVOID);
-        DECL_PROP1(CONTROLDEFAULT,      ::rtl::OUString,    MAYBEVOID);
-        DECL_PROP0_IFACE(CONTROLMODEL,  XPropertySet        );
+        DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
+        DECL_PROP1_IFACE(CONTROLMODEL,      XPropertySet,       BOUND       );
         DECL_PROP0(DEFAULTVALUE,        ::rtl::OUString     );
         DECL_PROP0(DESCRIPTION,         ::rtl::OUString     );
-        DECL_PROP1(NUMBERFORMAT,        sal_Int32           ,MAYBEVOID);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    MAYBEVOID);
-        DECL_PROP0_BOOL(HIDDEN                              );
+        DECL_PROP2(NUMBERFORMAT,            sal_Int32,          BOUND,MAYBEVOID);
+        DECL_PROP2(HELPTEXT,            ::rtl::OUString,    BOUND,MAYBEVOID);
+        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
         DECL_PROP0_BOOL(ISAUTOINCREMENT                     );
         DECL_PROP0_BOOL(ISCURRENCY                      );
         DECL_PROP0(ISNULLABLE,          sal_Int32           );
         DECL_PROP0_BOOL(ISROWVERSION                        );
         DECL_PROP0(NAME,                ::rtl::OUString     );
         DECL_PROP0(PRECISION,           sal_Int32           );
-        DECL_PROP1(RELATIVEPOSITION,    sal_Int32,          MAYBEVOID);
+        DECL_PROP2(RELATIVEPOSITION,    sal_Int32,          BOUND, MAYBEVOID);
         DECL_PROP0(SCALE,               sal_Int32           );
         DECL_PROP0(TYPE,                sal_Int32           );
         DECL_PROP0(TYPENAME,            ::rtl::OUString     );
@@ -343,8 +349,20 @@ void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(
         default:
             OColumnSettings::setFastPropertyValue_NoBroadcast( nHandle, rValue );
     }
+    ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
 }
-
+// -----------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL OTableColumnDescriptor::getParent(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_xParent;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    m_xParent = _xParent;
+}
 //============================================================
 //= OTableColumn
 //============================================================
@@ -421,12 +439,12 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
 {
     BEGIN_PROPERTY_HELPER(19)
         DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1(CONTROLDEFAULT,          ::rtl::OUString,    MAYBEVOID);
+        DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
         DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
         DECL_PROP1(DEFAULTVALUE,        ::rtl::OUString,    READONLY);
         DECL_PROP1(DESCRIPTION,         ::rtl::OUString,    READONLY);
         DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    MAYBEVOID);
+        DECL_PROP2(HELPTEXT,            ::rtl::OUString,    BOUND,MAYBEVOID);
         DECL_PROP1_BOOL(HIDDEN,                             BOUND);
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
         DECL_PROP1_BOOL(ISCURRENCY,                 READONLY);
@@ -532,7 +550,7 @@ void OColumnWrapper::setFastPropertyValue_NoBroadcast(
     OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 // -----------------------------------------------------------------------------
-sal_Int64 SAL_CALL OColumnWrapper::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int64 SAL_CALL OColumnWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
 {
     sal_Int64 nRet = OColumn::getSomething(aIdentifier);
     if(!nRet)
@@ -588,20 +606,31 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     // How many properties do we have?
     // Which optional properties are contained?
     if (nId & HAS_DESCRIPTION)
-        nPropertyCount++;
+        ++nPropertyCount;
     if (nId & HAS_DEFAULTVALUE)
-        nPropertyCount++;
+        ++nPropertyCount;
     if (nId & HAS_ROWVERSION)
-        nPropertyCount++;
+        ++nPropertyCount;
+
+    sal_Bool bAutoIncrement = sal_False;
+    if ( m_xAggregate.is() && m_xAggregate->getPropertySetInfo().is() && m_xAggregate->getPropertySetInfo()->hasPropertyByName( PROPERTY_AUTOINCREMENTCREATION) )
+    {
+        bAutoIncrement = sal_True;
+        ++nPropertyCount;
+    }
 
     Sequence< Property> aDescriptor(nPropertyCount);
     Property* pDesc = aDescriptor.getArray();
     sal_Int32 nPos = 0;
 
     //      Description, Defaultvalue, IsRowVersion
-        DECL_PROP1(ALIGN,               sal_Int32,          MAYBEVOID);
-        DECL_PROP1(CONTROLDEFAULT,      ::rtl::OUString,    MAYBEVOID);
-        DECL_PROP0_IFACE(CONTROLMODEL,  XPropertySet        );
+        DECL_PROP2(ALIGN,                   sal_Int32,          BOUND,MAYBEVOID);
+        if ( bAutoIncrement )
+        {
+            DECL_PROP1(AUTOINCREMENTCREATION,::rtl::OUString,   MAYBEVOID);
+        }
+        DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
+        DECL_PROP1_IFACE(CONTROLMODEL,      XPropertySet,       BOUND       );
         if (nId & HAS_DEFAULTVALUE)
         {
             DECL_PROP0(DEFAULTVALUE,    ::rtl::OUString );
@@ -612,9 +641,9 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
             DECL_PROP0(DESCRIPTION,     ::rtl::OUString );
         }
 
-        DECL_PROP1(NUMBERFORMAT,        sal_Int32,          MAYBEVOID);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    MAYBEVOID);
-        DECL_PROP0_BOOL(HIDDEN                              );
+        DECL_PROP2(NUMBERFORMAT,            sal_Int32,          BOUND,MAYBEVOID);
+        DECL_PROP2(HELPTEXT,            ::rtl::OUString,    BOUND,MAYBEVOID);
+        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
         DECL_PROP0_BOOL(ISAUTOINCREMENT                     );
         DECL_PROP0_BOOL(ISCURRENCY                          );
         DECL_PROP0(ISNULLABLE,          sal_Int32           );
@@ -626,7 +655,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
 
         DECL_PROP0(NAME,                ::rtl::OUString     );
         DECL_PROP0(PRECISION,           sal_Int32           );
-        DECL_PROP1(RELATIVEPOSITION,    sal_Int32,          MAYBEVOID);
+        DECL_PROP2(RELATIVEPOSITION,    sal_Int32,          BOUND, MAYBEVOID);
         DECL_PROP0(SCALE,               sal_Int32           );
         DECL_PROP0(TYPE,                sal_Int32           );
         DECL_PROP0(TYPENAME,            ::rtl::OUString     );
@@ -644,29 +673,44 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
 //------------------------------------------------------------------------------
 void OTableColumnDescriptorWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
-    switch (nHandle)
+    if ( m_bPureWrap )
     {
-        case PROPERTY_ID_ALIGN:
-        case PROPERTY_ID_NUMBERFORMAT:
-        case PROPERTY_ID_RELATIVEPOSITION:
-        case PROPERTY_ID_WIDTH:
-        case PROPERTY_ID_HIDDEN:
-        case PROPERTY_ID_CONTROLMODEL:
-        case PROPERTY_ID_HELPTEXT:
-        case PROPERTY_ID_CONTROLDEFAULT:
-            OColumnSettings::getFastPropertyValue( rValue, nHandle );
-            break;
-        default:
-        {
-            // get the property name
-            ::rtl::OUString aPropName;
-            sal_Int16 nAttributes;
-            const_cast<OTableColumnDescriptorWrapper*>(this)->getInfoHelper().
-                fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-            OSL_ENSURE(aPropName.getLength(), "property not found?");
+        // get the property name
+        ::rtl::OUString aPropName;
+        sal_Int16 nAttributes;
+        const_cast<OTableColumnDescriptorWrapper*>(this)->getInfoHelper().
+            fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
+        OSL_ENSURE(aPropName.getLength(), "property not found?");
 
-            // now read the value
-            rValue = m_xAggregate->getPropertyValue(aPropName);
+        // now read the value
+        rValue = m_xAggregate->getPropertyValue(aPropName);
+    }
+    else
+    {
+        switch (nHandle)
+        {
+            case PROPERTY_ID_ALIGN:
+            case PROPERTY_ID_NUMBERFORMAT:
+            case PROPERTY_ID_RELATIVEPOSITION:
+            case PROPERTY_ID_WIDTH:
+            case PROPERTY_ID_HIDDEN:
+            case PROPERTY_ID_CONTROLMODEL:
+            case PROPERTY_ID_HELPTEXT:
+            case PROPERTY_ID_CONTROLDEFAULT:
+                OColumnSettings::getFastPropertyValue( rValue, nHandle );
+                break;
+            default:
+            {
+                // get the property name
+                ::rtl::OUString aPropName;
+                sal_Int16 nAttributes;
+                const_cast<OTableColumnDescriptorWrapper*>(this)->getInfoHelper().
+                    fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
+                OSL_ENSURE(aPropName.getLength(), "property not found?");
+
+                // now read the value
+                rValue = m_xAggregate->getPropertyValue(aPropName);
+            }
         }
     }
 }
@@ -680,20 +724,25 @@ sal_Bool OTableColumnDescriptorWrapper::convertFastPropertyValue(
                                 throw (IllegalArgumentException)
 {
     sal_Bool bModified(sal_False);
-    switch (nHandle)
+    if ( m_bPureWrap )
+        bModified = OColumnWrapper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
+    else
     {
-        case PROPERTY_ID_ALIGN:
-        case PROPERTY_ID_NUMBERFORMAT:
-        case PROPERTY_ID_RELATIVEPOSITION:
-        case PROPERTY_ID_WIDTH:
-        case PROPERTY_ID_HIDDEN:
-        case PROPERTY_ID_CONTROLMODEL:
-        case PROPERTY_ID_HELPTEXT:
-        case PROPERTY_ID_CONTROLDEFAULT:
-            bModified = OColumnSettings::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
-            break;
-        default:
-            bModified = OColumnWrapper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
+        switch (nHandle)
+        {
+            case PROPERTY_ID_ALIGN:
+            case PROPERTY_ID_NUMBERFORMAT:
+            case PROPERTY_ID_RELATIVEPOSITION:
+            case PROPERTY_ID_WIDTH:
+            case PROPERTY_ID_HIDDEN:
+            case PROPERTY_ID_CONTROLMODEL:
+            case PROPERTY_ID_HELPTEXT:
+            case PROPERTY_ID_CONTROLDEFAULT:
+                bModified = OColumnSettings::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
+                break;
+            default:
+                bModified = OColumnWrapper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
+        }
     }
     return bModified;
 }
@@ -705,26 +754,43 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
                                                  )
                                                  throw (Exception)
 {
-    switch (nHandle)
+    if ( m_bPureWrap )
+        OColumnWrapper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+    else
     {
-        case PROPERTY_ID_ALIGN:
-        case PROPERTY_ID_NUMBERFORMAT:
-        case PROPERTY_ID_RELATIVEPOSITION:
-        case PROPERTY_ID_WIDTH:
-        case PROPERTY_ID_HIDDEN:
-        case PROPERTY_ID_CONTROLMODEL:
-        case PROPERTY_ID_HELPTEXT:
-        case PROPERTY_ID_CONTROLDEFAULT:
-            OColumnSettings::setFastPropertyValue_NoBroadcast( nHandle, rValue );
-            break;
-        default:
-            OColumnWrapper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+        switch (nHandle)
+        {
+            case PROPERTY_ID_ALIGN:
+            case PROPERTY_ID_NUMBERFORMAT:
+            case PROPERTY_ID_RELATIVEPOSITION:
+            case PROPERTY_ID_WIDTH:
+            case PROPERTY_ID_HIDDEN:
+            case PROPERTY_ID_CONTROLMODEL:
+            case PROPERTY_ID_HELPTEXT:
+            case PROPERTY_ID_CONTROLDEFAULT:
+                OColumnSettings::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+                break;
+            default:
+                OColumnWrapper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+        }
     }
 }
 
 //============================================================
 //= OTableColumnWrapper
 //============================================================
+OTableColumnWrapper::OTableColumnWrapper(const Reference< XPropertySet >& rCol
+                                        ,const Reference< XPropertySet >& _xColDefintion
+                                        ,sal_Bool _bPureWrap)
+    :OTableColumnDescriptorWrapper(rCol,_bPureWrap)
+{
+    osl_incrementInterlockedCount(&m_refCount);
+    if ( _xColDefintion.is() )
+    {
+        ::comphelper::copyProperties(_xColDefintion,this);
+    }
+    osl_decrementInterlockedCount(&m_refCount);
+}
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OTableColumnWrapper::getImplementationId() throw (RuntimeException)
@@ -784,7 +850,7 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
 
     //      Description, Defaultvalue, IsRowVersion
         DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1(CONTROLDEFAULT,      ::rtl::OUString,    MAYBEVOID);
+        DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
         DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet ,      BOUND);
         if (nId & HAS_DEFAULTVALUE)
         {
@@ -797,7 +863,7 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
         }
 
         DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    MAYBEVOID);
+        DECL_PROP2(HELPTEXT,            ::rtl::OUString,    BOUND,MAYBEVOID);
         DECL_PROP1_BOOL(HIDDEN,                             BOUND);
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
         DECL_PROP1_BOOL(ISCURRENCY,                         READONLY);
