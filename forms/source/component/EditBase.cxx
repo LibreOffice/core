@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:57:18 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
+#endif
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
 #endif
@@ -106,8 +109,8 @@ const sal_uInt16 FILTERPROPOSAL  =  0x0004;
 DBG_NAME( OEditBaseModel )
 //------------------------------------------------------------------
 OEditBaseModel::OEditBaseModel( const Reference< XMultiServiceFactory >& _rxFactory, const ::rtl::OUString& rUnoControlModelName,
-        const ::rtl::OUString& rDefault, const sal_Bool _bSupportExternalBinding )
-    :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSupportExternalBinding )
+        const ::rtl::OUString& rDefault, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
+    :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSupportExternalBinding, _bSupportsValidation )
     ,m_bFilterProposal(sal_False)
     ,m_bEmptyIsNull(sal_True)
     ,m_nLastReadVersion(0)
