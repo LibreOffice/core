@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:54:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,11 @@ class SwAnchoredObject
             the given anchored object is.
 
             OD 2004-07-02 #i28701#
+            OD 2004-09-23 #i33751#, #i34060#
+            Adjust meaning of method and thus its name: If the anchored object
+            or its anchor isn't correctly inserted in the layout, no page frame
+            can be found. Thus, the return type changed to be a pointer and can
+            be NULL.
 
             @author OD
 
@@ -264,7 +269,7 @@ class SwAnchoredObject
             @return SwPageFrm&
             page frame, the 'anchor' of the given anchored object is on
         */
-        SwPageFrm& GetPageFrmOfAnchor();
+        SwPageFrm* FindPageFrmOfAnchor();
 
         // accessors to data of position calculation:
         // frame vertical position is orient at
