@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2001-10-31 13:08:14 $
+ *  last change: $Author: abi $ $Date: 2002-05-31 10:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,15 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
+#include <com/sun/star/container/XNameReplace.hpp>
+#endif
 
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
@@ -137,10 +146,12 @@ ContentProvider::~ContentProvider()
 //
 //=========================================================================
 
-XINTERFACE_IMPL_3( ContentProvider,
+XINTERFACE_IMPL_5( ContentProvider,
                    XTypeProvider,
                    XServiceInfo,
-                   XContentProvider );
+                   XContentProvider,
+                   XComponent,
+                   XContainerListener);
 
 //=========================================================================
 //
@@ -148,10 +159,12 @@ XINTERFACE_IMPL_3( ContentProvider,
 //
 //=========================================================================
 
-XTYPEPROVIDER_IMPL_3( ContentProvider,
+XTYPEPROVIDER_IMPL_5( ContentProvider,
                          XTypeProvider,
                          XServiceInfo,
-                         XContentProvider );
+                         XContentProvider,
+                      XComponent,
+                      XContainerListener);
 
 //=========================================================================
 //
@@ -218,6 +231,41 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< X
     return xContent;
 }
 
+void SAL_CALL
+ContentProvider::dispose()
+{
+    if(m_xContainer.is())
+    {
+        m_xContainer->removeContainerListener(this);
+        m_xContainer = Reference<XContainer>(0);
+    }
+}
+
+
+#include <provider/debughelper.hxx>
+
+void SAL_CALL
+ContentProvider::elementReplaced(const ContainerEvent& Event)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    if(!m_pDatabases)
+        return;
+
+    rtl::OUString accessor;
+    Event.Accessor >>= accessor;
+    if(accessor.compareToAscii("HelpStyleSheet"))
+        return;
+
+    rtl::OUString replacedElement,element;
+    Event.ReplacedElement >>= replacedElement;
+    Event.Element >>= element;
+
+    if(replacedElement == element)
+        return;
+
+    m_pDatabases->changeCSS(element);
+}
+
 
 void ContentProvider::init()
 {
@@ -232,9 +280,21 @@ void ContentProvider::init()
     if( ! instPath.getLength() )
         // try to determine path from default
         instPath = rtl::OUString::createFromAscii( "$(instpath)/help" );
-
     // replace anything like $(instpath);
     subst( instPath );
+
+
+    rtl::OUString stylesheet(getKey(xHierAccess,"Help/HelpStyleSheet"));
+    try {
+        // now adding as configuration change listener for the stylesheet
+        Reference<XNameAccess> xAccess(xHierAccess,UNO_QUERY);
+        Any aAny =
+            xAccess->getByName(rtl::OUString::createFromAscii("Help"));
+        aAny >>= m_xContainer;
+        if(m_xContainer.is())
+            m_xContainer->addContainerListener(this);
+    } catch(const com::sun::star::uno::Exception& e) {
+    }
 
     /**
      *  now determing
@@ -273,7 +333,15 @@ void ContentProvider::init()
                                   vendorname,
                                   vendorversion,
                                   vendorshort,
+                                  stylesheet,
                                   m_xSMgr );
+
+//      rtl::OUString newVal = rtl::OUString::createFromAscii("high_contrast");
+//      Any bla;
+//      bla <<= newVal;
+//      Reference<XNameReplace> rep(m_xContainer,UNO_QUERY);
+//      rep->replaceByName(rtl::OUString::createFromAscii("HelpStyleSheet"),
+//                         bla);
 }
 
 
