@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:06:41 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,8 @@ enum ScIterFunc {
     ifMAX                               // Maximum
 };
 
+typedef ::std::map< const ScToken*, ScTokenRef> ScTokenMatrixMap;
+
 class ScInterpreter
 {
     // distibution function objects need the GetxxxDist methods
@@ -177,6 +179,7 @@ private:
     double      nResult;
     ScMatrixRef pResult;
     ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
+    ScTokenMatrixMap* pTokenMatrixMap;  // map ScToken* to ScTokenRef if in array condition
     ScFormulaCell* pMyFormulaCell;      // die Zelle mit der Formel
     SvNumberFormatter* pFormatter;
     StackVar    eResult;
@@ -282,10 +285,6 @@ StackVar GetStackType();
 // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
 StackVar GetStackType( BYTE nParam );
 BYTE GetByte() { return cPar; }
-/*
-short GetShort();
-double GetLong();
-*/
 // generiert aus DoubleRef positionsabhaengige SingleRef
 BOOL DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
 double GetDouble();
@@ -293,9 +292,11 @@ BOOL GetBool() { return GetDouble() != 0.0; }
 const String& GetString();
 // pop matrix and obtain one element, upper left or according to jump matrix
 ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, String& rString );
-ScMatrixRef CreateMatrixFromDoubleRef(
+ScMatrixRef CreateMatrixFromDoubleRef( const ScToken* pToken,
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         SCCOL nCol2, SCROW nRow2, SCTAB nTab2 );
+inline ScTokenMatrixMap& GetTokenMatrixMap();
+ScTokenMatrixMap* CreateTokenMatrixMap();
 ScMatrixRef GetMatrix();
 void ScTableOp();                                       // Mehrfachoperationen
 void ScErrCell();                                       // Sonderbehandlung
@@ -711,7 +712,10 @@ public:
 inline void ScInterpreter::MatrixDoubleRefToMatrix()
 {
     if ( bMatrixFormula && GetStackType() == svDoubleRef )
+    {
+        GetTokenMatrixMap();    // make sure it exists, create if not.
         PopDoubleRefPushMatrix();
+    }
 }
 
 
@@ -720,6 +724,14 @@ inline bool ScInterpreter::MatrixParameterConversion()
     if ( (bMatrixFormula || pCur->HasForceArray()) && !pJumpMatrix && sp > 0 )
         return ConvertMatrixParameters();
     return false;
+}
+
+
+inline ScTokenMatrixMap& ScInterpreter::GetTokenMatrixMap()
+{
+    if (!pTokenMatrixMap)
+        pTokenMatrixMap = CreateTokenMatrixMap();
+    return *pTokenMatrixMap;
 }
 
 
