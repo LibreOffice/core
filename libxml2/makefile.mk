@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-21 09:15:57 $
+#   last change: $Author: rt $ $Date: 2004-09-24 07:54:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,12 @@ TARGET=so_libxml2
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+.IF "$(SYSTEM_LIBXML)" == "YES"
+all:
+    @echo "An already available installation of libxml should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
