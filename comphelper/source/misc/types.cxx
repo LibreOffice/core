@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
+#include <typelib/typedescription.hxx>
+#endif
 
 #include <memory.h>
 
@@ -100,10 +103,13 @@ namespace comphelper
 {
 //.........................................................................
 
-//  namespace starutil  = ::com::sun::star::util;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
 
 //------------------------------------------------------------------------------
-sal_Int32 getINT32(const staruno::Any& _rAny)
+sal_Int32 getINT32(const Any& _rAny)
 {
     sal_Int32 nReturn;
     _rAny >>= nReturn;
@@ -111,7 +117,7 @@ sal_Int32 getINT32(const staruno::Any& _rAny)
 }
 
 //------------------------------------------------------------------------------
-sal_Int16 getINT16(const staruno::Any& _rAny)
+sal_Int16 getINT16(const Any& _rAny)
 {
     sal_Int16 nReturn;
     _rAny >>= nReturn;
@@ -119,7 +125,7 @@ sal_Int16 getINT16(const staruno::Any& _rAny)
 }
 
 //------------------------------------------------------------------------------
-double getDouble(const staruno::Any& _rAny)
+double getDouble(const Any& _rAny)
 {
     double nReturn;
     _rAny >>= nReturn;
@@ -127,7 +133,7 @@ double getDouble(const staruno::Any& _rAny)
 }
 
 //------------------------------------------------------------------------------
-float getFloat(const staruno::Any& _rAny)
+float getFloat(const Any& _rAny)
 {
     float nReturn;
     _rAny >>= nReturn;
@@ -135,7 +141,7 @@ float getFloat(const staruno::Any& _rAny)
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString getString(const staruno::Any& _rAny)
+::rtl::OUString getString(const Any& _rAny)
 {
     ::rtl::OUString nReturn;
     _rAny >>= nReturn;
@@ -143,7 +149,7 @@ float getFloat(const staruno::Any& _rAny)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool getBOOL(const staruno::Any& _rAny)
+sal_Bool getBOOL(const Any& _rAny)
 {
     sal_Bool nReturn = sal_False;
     if (_rAny.getValueType() == ::getCppuBooleanType())
@@ -154,26 +160,26 @@ sal_Bool getBOOL(const staruno::Any& _rAny)
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 getEnumAsINT32(const staruno::Any& _rAny) throw(starlang::IllegalArgumentException)
+sal_Int32 getEnumAsINT32(const Any& _rAny) throw(IllegalArgumentException)
 {
     sal_Int32 nReturn;
     if (! ::cppu::enum2int(nReturn,_rAny) )
-        throw starlang::IllegalArgumentException();
+        throw IllegalArgumentException();
     return nReturn;
 }
 
 //------------------------------------------------------------------------------
-starawt::FontDescriptor getDefaultFont()
+FontDescriptor  getDefaultFont()
 {
-    starawt::FontDescriptor aReturn;
-    aReturn.Slant = starawt::FontSlant_DONTKNOW;
-    aReturn.Underline = starawt::FontUnderline::DONTKNOW;
-    aReturn.Strikeout = starawt::FontStrikeout::DONTKNOW;
+    FontDescriptor aReturn;
+    aReturn.Slant = FontSlant_DONTKNOW;
+    aReturn.Underline = FontUnderline::DONTKNOW;
+    aReturn.Strikeout = FontStrikeout::DONTKNOW;
     return aReturn;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool isAssignableFrom(const staruno::Type& _rAssignable, const staruno::Type& _rFrom)
+sal_Bool isAssignableFrom(const Type& _rAssignable, const Type& _rFrom)
 {
     // getthe type lib descriptions
     typelib_TypeDescription* pAssignable = NULL;
@@ -188,7 +194,7 @@ sal_Bool isAssignableFrom(const staruno::Type& _rAssignable, const staruno::Type
 
 //------------------------------------------------------------------
 template<class TYPE>
-sal_Bool tryCompare(const void* _pData, const staruno::Any& _rValue, sal_Bool& _bIdentical, TYPE& _rOut)
+sal_Bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, TYPE& _rOut)
 {
     sal_Bool bSuccess = _rValue >>= _rOut;
     _bIdentical = bSuccess && (_rOut == *reinterpret_cast<const TYPE*>(_pData));
@@ -196,7 +202,7 @@ sal_Bool tryCompare(const void* _pData, const staruno::Any& _rValue, sal_Bool& _
 }
 
 //------------------------------------------------------------------
-sal_Bool tryCompare(const void* _pData, const staruno::Any& _rValue, sal_Bool& _bIdentical, sal_Char& _rOut)
+sal_Bool tryCompare(const void* _pData, const Any& _rValue, sal_Bool& _bIdentical, sal_Char& _rOut)
 {
     sal_Int8 nDummy;
     sal_Bool bSuccess = _rValue >>= nDummy;
@@ -206,26 +212,26 @@ sal_Bool tryCompare(const void* _pData, const staruno::Any& _rValue, sal_Bool& _
 }
 
 //------------------------------------------------------------------
-sal_Bool compare_impl(const staruno::Type& _rType, const void* pData, const staruno::Any& _rValue)
+sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
 {
     sal_Bool bRes = sal_True;
 
-    if (_rType.getTypeClass() == staruno::TypeClass_ANY)
+    if (_rType.getTypeClass() == TypeClass_ANY)
     {
         // beides AnyWerte
-        if (_rValue.getValueType().getTypeClass() == staruno::TypeClass_ANY)
+        if (_rValue.getValueType().getTypeClass() == TypeClass_ANY)
             bRes = compare_impl(
-                reinterpret_cast<const staruno::Any*>(pData)->getValueType(),
-                reinterpret_cast<const staruno::Any*>(pData)->getValue(),
-                *reinterpret_cast<const staruno::Any*>(_rValue.getValue()));
+                reinterpret_cast<const Any*>(pData)->getValueType(),
+                reinterpret_cast<const Any*>(pData)->getValue(),
+                *reinterpret_cast<const Any*>(_rValue.getValue()));
         else
             bRes = compare_impl(
-                reinterpret_cast<const staruno::Any*>(pData)->getValueType(),
-                reinterpret_cast<const staruno::Any*>(pData)->getValue(),
+                reinterpret_cast<const Any*>(pData)->getValueType(),
+                reinterpret_cast<const Any*>(pData)->getValue(),
                 _rValue);
     }
-    else if (   (_rType.getTypeClass() == staruno::TypeClass_VOID)
-            ||  (_rValue.getValueType().getTypeClass() == staruno::TypeClass_VOID)
+    else if (   (_rType.getTypeClass() == TypeClass_VOID)
+            ||  (_rValue.getValueType().getTypeClass() == TypeClass_VOID)
             )
     {
         bRes = _rType.getTypeClass() == _rValue.getValueType().getTypeClass();
@@ -235,196 +241,196 @@ sal_Bool compare_impl(const staruno::Type& _rType, const void* pData, const star
         sal_Bool bConversionSuccess = sal_False;
         switch (_rType.getTypeClass())
         {
-            case staruno::TypeClass_VOID:
+            case TypeClass_VOID:
                 bConversionSuccess = sal_True;
-                bRes = _rValue.getValueType().getTypeClass() == staruno::TypeClass_VOID;
+                bRes = _rValue.getValueType().getTypeClass() == TypeClass_VOID;
                 break;
-            case staruno::TypeClass_BOOLEAN:
+            case TypeClass_BOOLEAN:
             {
                 sal_Bool aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_CHAR:
+            case TypeClass_CHAR:
             {
                 sal_Char aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_STRING:
+            case TypeClass_STRING:
             {
                 ::rtl::OUString aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_FLOAT:
+            case TypeClass_FLOAT:
             {
                 float aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_DOUBLE:
+            case TypeClass_DOUBLE:
             {
                 double aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_BYTE:
+            case TypeClass_BYTE:
             {
                 sal_Int8 aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_SHORT:
+            case TypeClass_SHORT:
             {
                 sal_Int16 aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_ENUM:
+            case TypeClass_ENUM:
             {
                 sal_Int32 nAsInt32;
                 bConversionSuccess = ::cppu::enum2int(nAsInt32, _rValue);
                 bRes = bConversionSuccess && (nAsInt32== *reinterpret_cast<const sal_Int32*>(pData));
                 break;
             }
-            case staruno::TypeClass_LONG:
+            case TypeClass_LONG:
             {
                 sal_Int32 aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_UNSIGNED_SHORT:
+            case TypeClass_UNSIGNED_SHORT:
             {
                 sal_uInt16 aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_UNSIGNED_LONG:
+            case TypeClass_UNSIGNED_LONG:
             {
                 sal_uInt32 aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_INTERFACE:
+            case TypeClass_INTERFACE:
             {
                 InterfaceRef aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
-            case staruno::TypeClass_STRUCT:
-                if (isA(_rType, static_cast<starawt::FontDescriptor*>(NULL)))
+            case TypeClass_STRUCT:
+                if (isA(_rType, static_cast<FontDescriptor*>(NULL)))
                 {
-                    starawt::FontDescriptor aTemp;
+                    FontDescriptor aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        bRes = *(starawt::FontDescriptor*)pData == aTemp;
+                        bRes = *(FontDescriptor*)pData == aTemp;
                     }
                     else
                         bRes = sal_False;
                     break;
                 }
-                if (isA(_rType, static_cast<starutil::Date*>(NULL)))
+                if (isA(_rType, static_cast<Date*>(NULL)))
                 {
-                    starutil::Date aDummy;
+                    Date aDummy;
                     bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                     break;
                 }
-                if (isA(_rType, static_cast<starutil::Time*>(NULL)))
+                if (isA(_rType, static_cast<Time*>(NULL)))
                 {
-                    starutil::Time aDummy;
+                    Time aDummy;
                     bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                     break;
                 }
-                if (isA(_rType, static_cast<starutil::DateTime*>(NULL)))
+                if (isA(_rType, static_cast<DateTime*>(NULL)))
                 {
-                    starutil::DateTime aDummy;
+                    DateTime aDummy;
                     bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                     break;
                 }
                 break;
-            case staruno::TypeClass_SEQUENCE:
-                if (isA(_rType, static_cast< staruno::Sequence<sal_Int8>* >(NULL)))
+            case TypeClass_SEQUENCE:
+                if (isA(_rType, static_cast< Sequence<sal_Int8>* >(NULL)))
                 {
-                    staruno::Sequence<sal_Int8> aTemp;
+                    Sequence<sal_Int8> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const staruno::Sequence<sal_Int8>& rLeftSeq = *reinterpret_cast<const staruno::Sequence<sal_Int8>*>(pData);
-                        const staruno::Sequence<sal_Int8>& rRightSeq = aTemp;
+                        const Sequence<sal_Int8>& rLeftSeq = *reinterpret_cast<const Sequence<sal_Int8>*>(pData);
+                        const Sequence<sal_Int8>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< staruno::Sequence<sal_uInt8>* >(NULL)))
+                else if (isA(_rType, static_cast< Sequence<sal_uInt8>* >(NULL)))
                 {
-                    staruno::Sequence<sal_uInt8> aTemp;
+                    Sequence<sal_uInt8> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const staruno::Sequence<sal_uInt8>& rLeftSeq = *reinterpret_cast<const staruno::Sequence<sal_uInt8>*>(pData);
-                        const staruno::Sequence<sal_uInt8>& rRightSeq = aTemp;
+                        const Sequence<sal_uInt8>& rLeftSeq = *reinterpret_cast<const Sequence<sal_uInt8>*>(pData);
+                        const Sequence<sal_uInt8>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< staruno::Sequence<sal_Int16>* >(NULL)))
+                else if (isA(_rType, static_cast< Sequence<sal_Int16>* >(NULL)))
                 {
-                    staruno::Sequence<sal_Int16> aTemp;
+                    Sequence<sal_Int16> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const staruno::Sequence<sal_Int16>& rLeftSeq = *reinterpret_cast<const staruno::Sequence<sal_Int16>*>(pData);
-                        const staruno::Sequence<sal_Int16>& rRightSeq = aTemp;
+                        const Sequence<sal_Int16>& rLeftSeq = *reinterpret_cast<const Sequence<sal_Int16>*>(pData);
+                        const Sequence<sal_Int16>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_Int16)) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< staruno::Sequence<sal_uInt16>* >(NULL)))
+                else if (isA(_rType, static_cast< Sequence<sal_uInt16>* >(NULL)))
                 {
-                    staruno::Sequence<sal_uInt16> aTemp;
+                    Sequence<sal_uInt16> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const staruno::Sequence<sal_uInt16>& rLeftSeq = *reinterpret_cast<const staruno::Sequence<sal_uInt16>*>(pData);
-                        const staruno::Sequence<sal_uInt16>& rRightSeq = aTemp;
+                        const Sequence<sal_uInt16>& rLeftSeq = *reinterpret_cast<const Sequence<sal_uInt16>*>(pData);
+                        const Sequence<sal_uInt16>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_uInt16)) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< staruno::Sequence<sal_Int32>* >(NULL)))
+                else if (isA(_rType, static_cast< Sequence<sal_Int32>* >(NULL)))
                 {
-                    staruno::Sequence<sal_Int32> aTemp;
+                    Sequence<sal_Int32> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const staruno::Sequence<sal_Int32>& rLeftSeq = *reinterpret_cast<const staruno::Sequence<sal_Int32>*>(pData);
-                        const staruno::Sequence<sal_Int32>& rRightSeq = aTemp;
+                        const Sequence<sal_Int32>& rLeftSeq = *reinterpret_cast<const Sequence<sal_Int32>*>(pData);
+                        const Sequence<sal_Int32>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_Int32)) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< staruno::Sequence<sal_uInt32>* >(NULL)))
+                else if (isA(_rType, static_cast< Sequence<sal_uInt32>* >(NULL)))
                 {
-                    staruno::Sequence<sal_uInt32> aTemp;
+                    Sequence<sal_uInt32> aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const staruno::Sequence<sal_uInt32>& rLeftSeq = *reinterpret_cast<const staruno::Sequence<sal_uInt32>*>(pData);
-                        const staruno::Sequence<sal_uInt32>& rRightSeq = aTemp;
+                        const Sequence<sal_uInt32>& rLeftSeq = *reinterpret_cast<const Sequence<sal_uInt32>*>(pData);
+                        const Sequence<sal_uInt32>& rRightSeq = aTemp;
                         bRes = rLeftSeq.getLength() == rRightSeq.getLength() &&
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_uInt32)) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< staruno::Sequence< ::rtl::OUString >* >(NULL)))
+                else if (isA(_rType, static_cast< Sequence< ::rtl::OUString >* >(NULL)))
                 {
-                    staruno::Sequence< ::rtl::OUString > aTemp;
+                    Sequence< ::rtl::OUString > aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const staruno::Sequence< ::rtl::OUString >& rLeftSeq = *reinterpret_cast<const staruno::Sequence< ::rtl::OUString>*>(pData);
-                        const staruno::Sequence< ::rtl::OUString >& rRightSeq = aTemp;
+                        const Sequence< ::rtl::OUString >& rLeftSeq = *reinterpret_cast<const Sequence< ::rtl::OUString>*>(pData);
+                        const Sequence< ::rtl::OUString >& rRightSeq = aTemp;
                         sal_uInt32 nSeqLen = rLeftSeq.getLength();
                         bRes = ( nSeqLen == rRightSeq.getLength() );
                         for ( sal_uInt32 n = 0; bRes && ( n < nSeqLen ); n++ )
@@ -446,13 +452,13 @@ sal_Bool compare_impl(const staruno::Type& _rType, const void* pData, const star
 }
 
 //------------------------------------------------------------------------------
-sal_Bool compare(const staruno::Any& rLeft, const staruno::Any& rRight)
+sal_Bool compare(const Any& rLeft, const Any& rRight)
 {
     return compare_impl(rLeft.getValueType(), rLeft.getValue(), rRight);
 }
 
 //-------------------------------------------------------------------------
-sal_Bool    operator ==(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight)
+sal_Bool    operator ==(const FontDescriptor& _rLeft, const FontDescriptor& _rRight)
 {
     return ( _rLeft.Name.equals( _rRight.Name ) ) &&
     ( _rLeft.Height == _rRight.Height ) &&
@@ -472,6 +478,27 @@ sal_Bool    operator ==(const starawt::FontDescriptor& _rLeft, const starawt::Fo
     ( _rLeft.Type == _rRight.Type ) ;
 }
 
+//-------------------------------------------------------------------------
+Type getSequenceElementType(const Type& _rSequenceType)
+{
+    OSL_ENSHURE(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE,
+                "getSequenceElementType: must be called with a  sequence type!");
+
+    if (!(_rSequenceType.getTypeClass() == TypeClass_SEQUENCE))
+        return Type();
+
+    TypeDescription aTD(_rSequenceType);
+    typelib_IndirectTypeDescription* pSequenceTD =
+        reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
+
+    OSL_ASSERT(pSequenceTD);
+    OSL_ASSERT(pSequenceTD->pType);
+
+    if (pSequenceTD && pSequenceTD->pType)
+        return Type(pSequenceTD->pType);
+
+    return Type();
+}
 //.........................................................................
 }   // namespace comphelper
 //.........................................................................

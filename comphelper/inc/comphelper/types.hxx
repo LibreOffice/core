@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 13:57:12 $
+ *  last change: $Author: fs $ $Date: 2000-11-19 15:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,10 @@ namespace comphelper
         via the default constructor)
     */
     starawt::FontDescriptor getDefaultFont();
+
+    /** examine a sequence for the <type scope="com.sun.star.uno">Type</type> of it's elements.
+    */
+    ::com::sun::star::uno::Type getSequenceElementType(const ::com::sun::star::uno::Type& _rSequenceType);
 
 //=========================================================================
 //= replacement of the former UsrAny.getXXX methods
