@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-13 13:50:55 $
+ *  last change: $Author: ka $ $Date: 2001-09-04 12:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,7 +873,7 @@ BOOL GalleryTheme::GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress )
                         aView.SetMarkHdlHidden( TRUE );
                         aView.ShowPagePgNum( 0, Point() );
                         aView.MarkAll();
-                        rGraphic = aView.GetAllMarkedMetaFile();
+                        rGraphic = aView.GetAllMarkedGraphic();
                         bRet = TRUE;
                     }
                 }
@@ -887,7 +887,6 @@ BOOL GalleryTheme::GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress )
                 if( pObj )
                 {
                     Bitmap aBmp( pObj->GetThumbBmp() );
-
                     aBmp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
                     rGraphic = aBmp;
                     ReleaseObject( pObj );

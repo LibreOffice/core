@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:07:02 $
+ *  last change: $Author: ka $ $Date: 2001-09-04 12:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,23 +448,18 @@ BOOL SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
         aView.SetMarkHdlHidden( TRUE );
         aView.ShowPagePgNum( 0, Point() );
         aView.MarkAll();
-        aThumbMtf = aView.GetAllMarkedMetaFile();
 
-        const Graphic   aGraphic( aThumbMtf );
+        const Graphic   aGraphic( aView.GetAllMarkedGraphic() );
         const Size      aMtfSize( aGraphic.GetPrefSize() );
-        Point           aVPos;
-        Size            aLogSize;
         const double    fFactor  = (double) aMtfSize.Width() / aMtfSize.Height();
-        Size            aNewSize( (USHORT) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB ),
-                                  (USHORT) (fFactor < 1. ? S_THUMB : S_THUMB / fFactor ) );
 
-        aThumbMtf = GDIMetaFile();
-        aVDev.SetOutputSizePixel( aNewSize );
-        aVDev.SetMapMode( MapMode() );
-        aGraphic.Draw( &aVDev, aVPos, aNewSize );
-        aThumbBmp = aVDev.GetBitmap( aVPos, aNewSize );
-        aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
-        bRet = TRUE;
+        if( fFactor != 0.0 )
+        {
+            const Size aNewSize( fFactor < 1. ? S_THUMB * fFactor : S_THUMB, fFactor < 1. ? S_THUMB : S_THUMB / fFactor );
+            aThumbBmp = aGraphic.GetBitmap( &aNewSize );
+            aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
+            bRet = TRUE;
+        }
     }
 
     return bRet;
