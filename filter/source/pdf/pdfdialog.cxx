@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 11:43:30 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 14:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
         {
             try
             {
+              /*
                 for( sal_Int32 i = 0, nPageCount = xRenderable->getRendererCount(); ( i < nPageCount ) && !bSelection; ++i )
                 {
                     Sequence< PropertyValue > aRenderer( xRenderable->getRenderer( i ) );
@@ -223,6 +224,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
                             aRenderer[ nProperty].Value >>= bSelection;
                     }
                 }
+              */
             }
             catch( RuntimeException )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 13:57:32 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 14:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
         if( xRenderable.is() )
         {
             PDFWriter*  pPDFWriter = NULL;
-            sal_Int32   nPageCount = xRenderable->getRendererCount();
+            sal_Int32   nPageCount = 0;//xRenderable->getRendererCount();
 
             if( nPageCount )
             {
@@ -169,10 +169,11 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                     for( sal_Int32 nSel = aSel.FirstSelected(); nSel != SFX_ENDOFSELECTION; nSel = aSel.NextSelected() )
                     {
-                        Sequence< PropertyValue >   aRenderer( xRenderable->getRenderer( nSel - 1 ) );
+                      Sequence< PropertyValue >   aRenderer( /*xRenderable->getRenderer( nSel - 1 )*/ );
                         awt::Size                   aPageSize;
                         sal_Bool                    bProcess = sal_True;
 
+                        /*
                         for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
                         {
                             if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )
@@ -180,6 +181,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                             else if( bSelectionOnly && aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Selected" ) ) )
                                 aRenderer[ nProperty].Value >>= bProcess;
                         }
+                        */
 
                         if( bProcess && ( aPageSize.Width > 0 ) && ( aPageSize.Height > 0 ) )
                         {
@@ -208,7 +210,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                                 aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
                                 aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
 
-                                xRenderable->render( nSel - 1, aRenderOptions );
+                                // xRenderable->render( nSel - 1, aRenderOptions );
 
                                 aMtf.Stop();
                                 aMtf.WindStart();
