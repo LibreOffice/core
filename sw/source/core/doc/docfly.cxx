@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:43:17 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,8 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
                     }
             }
             break;
+        default:
+            break;
         }
     return aRet;
 }
@@ -476,6 +478,8 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             }
         }
         break;
+    default:
+        break;
     }
 
     if( bNewFrms )
@@ -628,13 +632,10 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     //JP 09.06.98: beim Update der RahmenVorlage sollte der Fly NICHT
     //              seine Orientierng verlieren (diese wird nicht geupdatet!)
     //OS: #96584# HORI_NONE and VERT_NONE are allowed now
-    if( !bKeepOrient )
+    if (!bKeepOrient)
     {
-        const SwFmtVertOrient &rVert = rNewFmt.GetVertOrient();
-        rFmt.ResetAttr( RES_VERT_ORIENT );
-
-        const SwFmtHoriOrient &rHori = rNewFmt.GetHoriOrient();
-        rFmt.ResetAttr( RES_HORI_ORIENT );
+        rFmt.ResetAttr(RES_VERT_ORIENT);
+        rFmt.ResetAttr(RES_HORI_ORIENT);
     }
 
     rFmt.ResetAttr( RES_PRINT, RES_SURROUND );
@@ -722,7 +723,7 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
 
             BOOL bChanges = TRUE;
             xub_StrLen nIndx = STRING_NOTFOUND;
-            SwTxtNode *pTxtNode;
+            SwTxtNode *pTxtNode(0);
             int nOld = pContact->GetFmt()->GetAnchor().GetAnchorId();
             if( !bSameOnly && FLY_IN_CNTNT == nOld )
             {
@@ -1078,7 +1079,6 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
         StartUndo( UNDO_CHAINE );
 
         SwFlyFrmFmt& rDestFmt = (SwFlyFrmFmt&)rDest;
-        SwFlyFrm* pFly = rDestFmt.GetFrm();
 
         //Follow an den Master haengen.
         SwFmtChain aChain = rDestFmt.GetChain();
