@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:34:30 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,15 @@ private:
             main view.
     */
     void SetCurrentPageAndSwitchView (model::PageDescriptor& rDescriptor);
+
+    /** Make the slide nOffset slides away of the current one the new
+        current slide.  When the new index is outside the range of valid
+        page numbers it is clipped to that range.
+        @param nOffset
+            When nOffset is negative then go back.  When nOffset if positive go
+            forward.  When it is zero then ignore the call.
+    */
+    void GotoNextPage (int nOffset);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
