@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-12-20 13:17:12 $
+ *  last change: $Author: jb $ $Date: 2002-07-14 19:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ static const sal_Char*      s_pProviderService  =   "com.sun.star.configuration.
 static const sal_Char*      s_pSourcePath   =   "../share/config/registry";
 static const sal_Char*      s_pUpdatePath   =   "../user/config/registry";
 static const sal_Char*      s_pRootNode     =   "org.openoffice.Office.Common";
-static const sal_Char*      s_pServerType   =   "local";
+static const sal_Char*      s_pServerType   =   "uno";
 static const sal_Char*      s_pLocale       =   "en-US";
 static const sal_Char*      s_pServer       =   "lautrec:48205";
 static const sal_Char*      s_pUser         =   "nobody";
@@ -436,56 +436,60 @@ int _cdecl main( int argc, char * argv[] )
 
         rtl::OUString sUser;
 
+        bool bUno   = sServerType.trim().getLength() == 0 || sServerType.equalsIgnoreAsciiCase(ASCII("uno"));
         bool bLocal = sServerType.equalsIgnoreAsciiCase(ASCII("local")) || sServerType.equalsIgnoreAsciiCase(ASCII("setup"));
-        if (!bLocal)
+        if (!bUno)
         {
-            rtl::OUString sServer;
-            sServer =           enterValue("server  : ", s_pServer,false);
-            cout << endl;
-
-            sUser =             enterValue("user    : ", s_pUser, false);
-            cout << endl;
-
-            OUString sPasswd =  enterValue("password: ", s_pPassword, true);
-            cout << endl;
-
-            aCPArgs = createSequence(sUser, sPasswd);
-
-            if (sServer.getLength())
+            if (!bLocal)
             {
-                sal_Int32 nPortPos = sServer.lastIndexOf(':');
-                sal_Int16 nPort = (nPortPos > 0) ? sServer.copy(nPortPos+1).toInt32() : 0;
-                if (nPort != 0)
+                rtl::OUString sServer;
+                sServer =           enterValue("server  : ", s_pServer,false);
+                cout << endl;
+
+                sUser =             enterValue("user    : ", s_pUser, false);
+                cout << endl;
+
+                OUString sPasswd =  enterValue("password: ", s_pPassword, true);
+                cout << endl;
+
+                aCPArgs = createSequence(sUser, sPasswd);
+
+                if (sServer.getLength())
                 {
+                    sal_Int32 nPortPos = sServer.lastIndexOf(':');
+                    sal_Int16 nPort = (nPortPos > 0) ? sServer.copy(nPortPos+1).toInt32() : 0;
+                    if (nPort != 0)
+                    {
+                        aCPArgs.realloc(aCPArgs.getLength() + 1);
+                        aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("port"), nPort);
+                        sServer = sServer.copy(0,nPortPos);
+                    }
                     aCPArgs.realloc(aCPArgs.getLength() + 1);
-                    aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("port"), nPort);
-                    sServer = sServer.copy(0,nPortPos);
+                    aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("server"), sServer);
                 }
+
+                OUString sTimeout = ASCII("10000");
                 aCPArgs.realloc(aCPArgs.getLength() + 1);
-                aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("server"), sServer);
+                aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("timeout"), sTimeout);
+
+            }
+            else
+            {
+                rtl::OUString sSharePath, sUserPath;
+                sSharePath =        enterValue("share path: ", s_pSourcePath, false);
+                cout << endl;
+                sUserPath =         enterValue("user path : ", s_pUpdatePath, false);
+                cout << endl;
+
+                aCPArgs.realloc(aCPArgs.getLength() + 1);
+                sal_Int32 nCount = aCPArgs.getLength() - 1;
+                Any *pAny = &aCPArgs[nCount];
+                *pAny <<= configmgr::createPropertyValue(ASCII("sourcepath"), sSharePath);
+                aCPArgs.realloc(aCPArgs.getLength() + 1);
+                aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("updatepath"), sUserPath);
             }
 
-            OUString sTimeout = ASCII("10000");
-            aCPArgs.realloc(aCPArgs.getLength() + 1);
-            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("timeout"), sTimeout);
-
         }
-        else
-        {
-            rtl::OUString sSharePath, sUserPath;
-            sSharePath =        enterValue("share path: ", s_pSourcePath, false);
-            cout << endl;
-            sUserPath =         enterValue("user path : ", s_pUpdatePath, false);
-            cout << endl;
-
-            aCPArgs.realloc(aCPArgs.getLength() + 1);
-            sal_Int32 nCount = aCPArgs.getLength() - 1;
-            Any *pAny = &aCPArgs[nCount];
-            *pAny <<= configmgr::createPropertyValue(ASCII("sourcepath"), sSharePath);
-            aCPArgs.realloc(aCPArgs.getLength() + 1);
-            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("updatepath"), sUserPath);
-        }
-
         aCPArgs.realloc(aCPArgs.getLength() + 1);
         aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("servertype"), sServerType);
 
@@ -958,10 +962,13 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
 
                     case move:
                         {
-                            if (aElement >>= xNext)
-                                cout << "Got an Interface for '" << aName << "'" << endl;
-                            else
-                                cout << "Error: Cannot get an Interface for '" << aName << "'" << endl;
+                            if (!bValue)
+                            {
+                                if (aElement >>= xNext)
+                                    cout << "Got an Interface for '" << aName << "'" << endl;
+                                else
+                                    cout << "Error: Cannot get an Interface for '" << aName << "'" << endl;
+                            }
                         } break;
                     }
                     if (move != eToDo)
