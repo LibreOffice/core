@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleTableCellView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,27 +60,28 @@
  ************************************************************************/
 package mod._sw;
 
-import lib.TestCase;
-import com.sun.star.lang.XMultiServiceFactory;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
-import com.sun.star.uno.XInterface;
-import util.SOfficeFactory;
+
 import lib.StatusException;
-import com.sun.star.text.XTextDocument;
-import util.WriterTools;
-import com.sun.star.frame.XController;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
 import util.AccessibilityTools;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.frame.XModel;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.awt.XWindow;
-import com.sun.star.accessibility.XAccessible;
+import util.SOfficeFactory;
+import util.WriterTools;
 import util.utils;
-import com.sun.star.drawing.XDrawPageSupplier;
-import com.sun.star.drawing.XDrawPage;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleSelection;
+import com.sun.star.awt.XWindow;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextTable;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+
 
 /**
 * Test of accessible object for the table cell of a text document.<p>
@@ -91,7 +92,6 @@ import com.sun.star.text.XTextTable;
 * @see com.sun.star.accessibility.XAccessible
 */
 public class SwAccessibleTableCellView extends TestCase {
-
     XTextDocument xTextDoc = null;
 
     /**
@@ -106,35 +106,35 @@ public class SwAccessibleTableCellView extends TestCase {
     * @see TestEnvironment
     * @see #getTestEnvironment()
     */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
         XTextTable oTable = null;
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
+
         try {
-            oTable = SOF.createTextTable( xTextDoc );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
+            oTable = SOF.createTextTable(xTextDoc);
+        } catch (com.sun.star.uno.Exception e) {
+            e.printStackTrace(log);
             throw new StatusException("Couldn't create TextTable : " +
-                e.getMessage(), e);
+                                      e.getMessage(), e);
         }
 
         try {
-            SOF.insertTextContent(xTextDoc, oTable );
-        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            e.printStackTrace( log );
-            throw new StatusException("Couldn't insert text content :"
-                + e.getMessage(), e);
+            SOF.insertTextContent(xTextDoc, oTable);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't insert text content :" +
+                                      e.getMessage(), e);
         }
 
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                           xTextDoc);
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL);
@@ -142,12 +142,22 @@ public class SwAccessibleTableCellView extends TestCase {
         oObj = at.SearchedContext;
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-        at.printAccessibleTree(log, xRoot);
 
+        //at.printAccessibleTree(log, xRoot);
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        return tEnv;
+        final XAccessibleSelection accSel = (XAccessibleSelection) UnoRuntime.queryInterface(
+                                                    XAccessibleSelection.class,
+                                                    at.SearchedContext.getAccessibleParent());
 
+        tEnv.addObjRelation("EventProducer",
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                accSel.selectAllAccessibleChildren();
+            }
+        });
+
+        return tEnv;
     }
 
     /**
@@ -157,7 +167,7 @@ public class SwAccessibleTableCellView extends TestCase {
     * @param tEnv the environment to cleanup
     * @param log writer to log information while testing
     */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("dispose text document");
         xTextDoc.dispose();
     }
@@ -172,8 +182,7 @@ public class SwAccessibleTableCellView extends TestCase {
      * @see #initializeTestCase()
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
+        log.println("creating a text document");
+        xTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory) Param.getMSF());
     }
 }
-
