@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:25:17 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 12:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1172,8 +1172,9 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             sal_uInt32 nMax = xMetaData.is() ? xMetaData->getMaxColumnNameLength() : EDIT_NOLIMIT;
             m_pColumnNameText = new FixedText( this );
             m_pColumnNameText->SetText( ModuleRes(STR_TAB_FIELD_NAME) );
+            ::rtl::OUString aTmpString( xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString() );
             m_pColumnName = new OPropColumnEditCtrl( this,
-                            xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString(),
+                                                    aTmpString,
                                                     STR_HELP_DEFAULT_VALUE,
                                                     FIELD_PRPOERTY_COLUMNNAME,
                                                     WB_BORDER );
