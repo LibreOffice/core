@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:01:06 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,6 @@ class X11SalFrame : public SalFrame
     friend class vcl_sal::GnomeWMAdaptor;
 
     static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
-    STDAPI( X11SalFrame );
 
     static X11SalFrame* s_pSaveYourselfFrame;
 
