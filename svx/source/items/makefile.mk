@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mib $ $Date: 2001-07-04 14:11:05 $
+#   last change: $Author: hjs $ $Date: 2001-11-21 18:50:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,10 +114,14 @@ SLOFILES=	\
 
 EXCEPTIONSFILES= \
         $(SLO)$/paraitem.obj \
-        $(OBJ)$/sxl_paraitem.obj\
         $(SLO)$/numitem.obj\
-        $(OBJ)$/sxl_numitem.obj \
         $(SLO)$/xmlcnitm.obj
+
+.IF "$(SVXLIGHT)"!=""
+EXCEPTIONSFILES+= \
+        $(OBJ)$/sxl_paraitem.obj\
+        $(OBJ)$/sxl_numitem.obj
+.ENDIF          # "$(SVXLIGHT)"!=""
 
 SVXLIGHTOBJFILES=	\
         $(OBJ)$/frmitems.obj \
