@@ -30,6 +30,7 @@ extern GetError();
 extern SetError();
 extern char *GetOutputFile( int argc, char* argv[]);
 extern FILE *GetCfgFile();
+extern isQuiet();
 
 /* forwards */
 void YYWarning();
@@ -156,11 +157,13 @@ main( int argc, char* argv[])
 	char *pOutput;
 	FILE *pFile;
 
-	fprintf( stdout, "\nCfgEx 0.9 Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.\n" );
-	fprintf( stdout, "======================================================================\n" );
-
 	pOutput = GetOutputFile( argc, argv );
-	if ( !pOutput ) {
+	if( !isQuiet() ){
+        fprintf( stdout, "\nCfgEx 0.9 Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.\n" );
+	    fprintf( stdout, "======================================================================\n" );
+    }
+
+    if ( !pOutput ) {
 		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-f][-d DoneFile][-g[:dtd] ][-NOUTF8][-L l1,l2,...][-ISO99 IsoCode]\n" );
 		fprintf( stdout, " Prj:      Project\n" );
 		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
@@ -199,8 +202,9 @@ main( int argc, char* argv[])
 	nRetValue = GetError();
 	EndCfgExport();
 
-	fprintf( stdout, "\n===================================\n\n" );
-
+	if( !isQuiet() ){
+        fprintf( stdout, "\n===================================\n\n" );
+    }
 	/* return error level */
 	return nRetValue;
 }
