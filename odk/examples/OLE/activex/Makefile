@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.8 $
+#  $Revision: 1.9 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:49:24 $
+#  last change: $Author: kz $ $Date: 2003-08-27 16:46:11 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -74,9 +74,10 @@ include $(SETTINGS)/stdtarget.mk
 # Attention: so_activex.idl is no UNOIDL file!
 $(OUT_COMP_INC)/so_activex.h : so_activex.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
+	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
 	midl.exe /tlb $(OUT_COMP_GEN)/so_activex.tlb /h $(OUT_COMP_INC)/so_activex.h \
-	/iid $(OUT_COMP_INC)/so_activex_i.c /proxy $(OUT_COMP_INC)/so_activex_p.c /dlldata \
-	$(OUT_COMP_INC)/dlldata.c /Oicf $<
+	/iid $(OUT_COMP_INC)/so_activex_i.c /proxy $(OUT_COMP_INC)/so_activex_p.c \
+	/dlldata $(OUT_COMP_INC)/dlldata.c /Oicf $<
 
 $(OUT_COMP_GEN)/so_activex.res : so_activex.rc $(OUT_COMP_INC)/so_activex.h
 	-$(MKDIR) $(subst /,$(PS),$(@D))
@@ -86,20 +87,32 @@ $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cpp
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
+
+# Note: If you don't use the MS Visual Studio .Net, please comment out the next line.
+CL_NEW_LIB=atls.lib
+
 $(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN)/so_activex.res so_activex.def
 	-$(MKDIR) $(subst /,$(PS),$(@D))
+	-$(MKDIR) $(subst /,$(PS),$(OUT_LIB))
+	@echo .
+	@echo -----------------------------------------------------------------------------------
+	@echo ATTENTION: If you have problems with linking the library and if you do not use the
+	@echo MS .Net compiler please check the makefile and comment out the variable CL_NEW_LIB.
+	@echo -----------------------------------------------------------------------------------
+	@echo .
 	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) \
 	/DEF:so_activex.def /IMPLIB:$(OUT_LIB)/iso_activex.lib $(SLOFILES) \
 	msvcrt.lib kernel32.lib user32.lib uuid.lib advapi32.lib ole32.lib oleaut32.lib gdi32.lib \
-	urlmon.lib Shlwapi.lib oldnames.lib $(OUT_COMP_GEN)/so_activex.res
+	urlmon.lib Shlwapi.lib oldnames.lib $(CL_NEW_LIB) $(OUT_COMP_GEN)/so_activex.res
 
-OleActvieXComponentExample : $(COMPONENT_IMPL)
 ifeq "$(OS)" "WIN"
+OleActvieXComponentExample : $(COMPONENT_IMPL)
 	@echo --------------------------------------------------------------------------------
 	@echo The activex control was created, please load the "$(QM)example.html$(QM)" file
 	@echo in your InternetExplorer to use the activex control.
 	@echo --------------------------------------------------------------------------------
 else
+OleActvieXComponentExample :
 	@echo --------------------------------------------------------------------------------
 	@echo This example works only under Windows!
 	@echo --------------------------------------------------------------------------------
