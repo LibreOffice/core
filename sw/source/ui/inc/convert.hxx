@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-08-09 15:12:23 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@ class SwConvertTableDlg: public SfxModalDialog
 
     CheckBox        aHeaderCB;
     CheckBox        aRepeatHeaderCB;
+    FixedText       aRepeatHeaderFT;
+    NumericField    aRepeatHeaderNF;
     CheckBox        aDontSplitCB;
     CheckBox        aBorderCB;
     FixedLine       aOptionsFL;
@@ -106,13 +108,14 @@ class SwConvertTableDlg: public SfxModalDialog
     DECL_LINK( AutoFmtHdl, PushButton* );
     DECL_LINK( BtnHdl, Button* );
     DECL_LINK( CheckBoxHdl, CheckBox *pCB = 0 );
+    DECL_LINK( ReapeatHeaderCheckBoxHdl, void* p = 0 );
 
 public:
     SwConvertTableDlg( SwView& rView );
     ~SwConvertTableDlg();
 
     void GetValues( sal_Unicode& rDelim,
-                    USHORT& rInsTblFlags,
+                    SwInsertTableOptions& rInsTblOpts,
                     SwTableAutoFmt *& prTAFmt );
 };
 
