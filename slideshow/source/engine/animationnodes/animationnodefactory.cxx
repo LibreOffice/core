@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationnodefactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:49:44 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <animationtransformnode.hxx>
 #include <animationtransitionfilternode.hxx>
 #include <animationaudionode.hxx>
+#include <animationcommandnode.hxx>
 #include <nodetools.hxx>
 #include <tools.hxx>
 
@@ -559,6 +560,10 @@ namespace presentation
 
                     case animations::AnimationNodeType::AUDIO:
                         pCreatedNode.reset( new AnimationAudioNode( xNode, rParent, rContext ) );
+                        break;
+
+                    case animations::AnimationNodeType::COMMAND:
+                        pCreatedNode.reset( new AnimationCommandNode( xNode, rParent, rContext ) );
                         break;
 
                     default:
