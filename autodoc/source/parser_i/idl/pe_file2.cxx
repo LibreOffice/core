@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_file2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:40:47 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@ namespace uidl
 {
 
 
-PE_File::PE_File( TokenDistributor & i_rTokenAdmin )
+PE_File::PE_File( TokenDistributor & i_rTokenAdmin,
+                  const ParserInfo & i_parseInfo )
     :   pTokenAdmin(&i_rTokenAdmin),
         pPE_Service(new PE_Service),
         pPE_Singleton(new PE_Singleton),
@@ -101,6 +102,7 @@ PE_File::PE_File( TokenDistributor & i_rTokenAdmin )
         pPE_Enum(new PE_Enum),
         pPE_Typedef(new PE_Typedef),
         pCurNamespace(0),
+        pParseInfo(&i_parseInfo),
         eState(e_none),
         nBracketCount_inDefMode(0)
 {
@@ -310,6 +312,13 @@ PE_File::CurNamespace() const
 {
     csv_assert(pCurNamespace);
     return *pCurNamespace;
+}
+
+const ParserInfo &
+PE_File::ParseInfo() const
+{
+    csv_assert(pParseInfo);
+    return *pParseInfo;
 }
 
 void
