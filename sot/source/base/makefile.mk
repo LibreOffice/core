@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ka $ $Date: 2001-01-30 15:04:10 $
+#   last change: $Author: mm $ $Date: 2001-02-07 09:59:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,8 +68,11 @@ TARGET=base
 
 .IF "$(COM)"=="GCC"
 NOOPTFILES=\
-    $(SLO)$/dtrans.obj\
     $(SLO)$/exchange.obj
+
+.IF "$(TF_SVDATA)"==""
+NOOPTFILES+=$(SLO)$/dtrans.obj
+.ENDIF
 .ENDIF
 
 # --- Settings -----------------------------------------------------
@@ -80,21 +83,16 @@ NOOPTFILES=\
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=      factory.cxx                                          \
-               object.cxx                                           \
-               dtrans.cxx                                           \
-               exchange.cxx                                         \
-               filelist.cxx                                         \
-           formats.cxx											\
-               $(PROJECTPCHSOURCE).cxx
-
 SLOFILES=                                                           \
                         $(SLO)$/factory.obj                          \
                         $(SLO)$/object.obj							\
-                        $(SLO)$/dtrans.obj							\
                         $(SLO)$/exchange.obj                		\
                         $(SLO)$/filelist.obj                		\
                         $(SLO)$/formats.obj
+
+.IF "$(TF_SVDATA)"==""
+SLOFILES+=$(SLO)$/dtrans.obj
+.ENDIF
 
 .IF "$(OS)"=="NETBSD"
 SLOFILES	+= $(SLO)$/netbsd.obj

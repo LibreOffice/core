@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 17:51:43 $
+ *  last change: $Author: mm $ $Date: 2001-02-07 09:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,7 +1279,7 @@ static SotDestinationEntry_Impl __READONLY_DATA aDestinationArray[] =     \
 // ---------------------------------
 // - old style GetExchange methods -
 // ---------------------------------
-
+#ifndef TF_SVDATA
 static BOOL CheckContext_Impl( const SotDataObject& rData,
                                 const SotAction_Impl& rEntry )
 {
@@ -1317,7 +1317,9 @@ static BOOL CheckContext_Impl( const SotDataObject& rData,
     }
     return bRet;
 }
+#endif
 
+#ifndef TF_SVDATA
 static USHORT GetAction_Impl(const SotDataObject& rData,const SotAction_Impl* pArray,
                             ULONG& rFormat )
 {
@@ -1363,7 +1365,9 @@ static USHORT GetAction_Impl(const SotDataObject& rData,const SotAction_Impl* pA
     }
     return EXCHG_INOUT_ACTION_NONE;
 }
+#endif
 
+#ifndef TF_SVDATA
 USHORT SotExchange::GetExchangeAction(
     const SotDataObject& rData, USHORT nDestination, USHORT nSourceOptions,
     USHORT nUserAction, ULONG& rFormat, USHORT& rDefaultAction )
@@ -1444,6 +1448,7 @@ USHORT SotExchange::GetExchangeAction(
     }
     return nUserAction;
 }
+#endif
 
 // ---------------------------------
 // - new style GetExchange methods -

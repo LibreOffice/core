@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-17 15:20:25 $
+ *  last change: $Author: mm $ $Date: 2001-02-07 09:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,11 @@ SotData_Impl::SotData_Impl()
     , pSotObjectFactory( NULL )
     , pSotStorageStreamFactory( NULL )
     , pSotStorageFactory( NULL )
+#ifndef TF_SVDATA
     , pSotDataObjectFactory( NULL )
     , pEmptyList( NULL )
     , pSotDataMemberObjectFactory( NULL )
+#endif
     , pDataFlavorList( NULL )
 {
 }
@@ -164,8 +166,10 @@ void SotFactory::DeInit()
 
     delete pSotData->pObjectList;
     pSotData->pObjectList = NULL;
+#ifndef TF_SVDATA
     delete pSotData->pEmptyList;
     pSotData->pEmptyList = NULL;
+#endif
     if( pSotData->pDataFlavorList )
     {
 
