@@ -176,6 +176,7 @@ hedabu: ..\inc\opaqitem.hxx %_DEST%\inc%_EXT%\svx\opaqitem.hxx
 hedabu: ..\inc\optasian.hxx %_DEST%\inc%_EXT%\svx\optasian.hxx
 hedabu: ..\inc\optgenrl.hxx %_DEST%\inc%_EXT%\svx\optgenrl.hxx
 hedabu: ..\inc\optitems.hxx %_DEST%\inc%_EXT%\svx\optitems.hxx
+hedabu: ..\inc\optjsearch.hxx %_DEST%\inc%_EXT%\svx\optjsearch.hxx
 hedabu: ..\inc\optlingu.hxx %_DEST%\inc%_EXT%\svx\optlingu.hxx
 hedabu: ..\inc\optpath.hxx %_DEST%\inc%_EXT%\svx\optpath.hxx
 hedabu: ..\inc\optsave.hxx %_DEST%\inc%_EXT%\svx\optsave.hxx
