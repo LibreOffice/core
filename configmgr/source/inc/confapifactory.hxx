@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:57:04 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,13 +182,25 @@ namespace configmgr
             instantiateLocalSchemaSupplier( CreationContext const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalSingleStratum( CreationContext const& xContext );
+            instantiateLocalLegacyStratum( CreationContext const& xContext );
+
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateLocalDataStratum( CreationContext const& xContext );
+
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateLocalReadonlyStratum( CreationContext const& xContext );
+
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateLocalResourceStratum( CreationContext const& xContext );
 
         const ServiceRegistrationInfo * getLocalBackendServiceInfo();
         const ServiceRegistrationInfo * getLocalDataImportServiceInfo();
         const ServiceRegistrationInfo * getLocalHierarchyBrowserServiceInfo();
         const ServiceRegistrationInfo * getLocalSchemaSupplierServiceInfo();
-        const ServiceRegistrationInfo * getLocalSingleStratumServiceInfo();
+        const ServiceRegistrationInfo * getLocalLegacyStratumServiceInfo();
+        const ServiceRegistrationInfo * getLocalDataStratumServiceInfo();
+        const ServiceRegistrationInfo * getLocalReadonlyStratumServiceInfo();
+        const ServiceRegistrationInfo * getLocalResourceStratumServiceInfo();
     } // localbe
 
 } //  namespace configmgr
