@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:46:09 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,8 @@ String STR_FILE_NOT_FOUND
     Text[ portuguese_brazilian ] = "The file \"%1\" could not be found.";
     Text[ japanese ] = "Ì§²Ùu%1v‚ÍÊß½u%2v‚ÉŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "\"%1\" ÆÄÀÏÀ»\"%2\" °æ·Î¿¡¼­ Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÔÚÂ·¾¶ \"%2\" ÖĞÎŞ·¨ÕÒµ½ÎÄ¼ş \"%1\" ¡£";
-    Text[ chinese_traditional ] = "µLªk¦b¸ô®|?%2?¤º§ä¨ìÀÉ®×?%1?¡C";
+    Text[ chinese_simplified ] = "ÔÚÂ·¾¶\"%2\"ÖĞÎŞ·¨ÕÒµ½ÎÄ¼ş\"%1\"¡£";
+    Text[ chinese_traditional ] = "µLªk¦b¸ô®|\"%2\"¤º§ä¨ìÀÉ®×\"%1\"¡C";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì Çáãáİ \"%1\" İí ÇáãÓÇÑ \"%2\".";
     Text[ turkish ] = "Dosya \"%1\" \"%2\" veri yolunda bulunamadı.";
     Text[ catalan ] = "No se pudo encontrar el archivo \"%1\" en la ruta \"%2\".";
@@ -351,7 +351,7 @@ TabDialog DLG_MULTI_TOX
         Text[ italian ] = "Indice personalizzato";
         Text[ danish ] = "Brugerdefineret indeks";
         Text[ swedish ] = "Användardefinierad förteckning";
-        Text[ polish ] = "Indeks u¿ytkownika";
+        Text[ polish ] = "Indeks indywidualny";
         Text[ portuguese_brazilian ] = "User-define index";
         Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìõˆø";
         Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »öÀÎ";
@@ -368,7 +368,7 @@ TabDialog DLG_MULTI_TOX
         Text = "~Vorschau" ;
         Text [ ENGLISH ] = "Show ~preview" ;
         Text[ english_us ] = "Preview";
-        Text[ portuguese ] = "~Mostrar Previsualizar";
+        Text[ portuguese ] = "~Previsualizar";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ greek ] = "~Ğñïåğéóêüğçóç";
         Text[ dutch ] = "~Voorbeeld weergeven";
@@ -381,7 +381,7 @@ TabDialog DLG_MULTI_TOX
         Text[ polish ] = "Podgl¹d";
         Text[ portuguese_brazilian ] = "Show ~preview";
         Text[ japanese ] = "ÌßÚËŞ­°‚Ì•\\¦(~W)";
-        Text[ korean ] = "¹Ì¸®º¸±â ³ªÅ¸³»±â(~W)";
+        Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ chinese_traditional ] = "¹wÄı";
         Text[ turkish ] = "Önizlemeyi görüntüle";
@@ -666,7 +666,7 @@ TabPage TP_TOX_SELECT
         < "Skorowidz" ;     TO_INDEX        ;> ;
         < "Spis obrazów" ; TO_ILLUSTRATION ;> ;
         < "Spis tabel" ;    TO_TABLE        ;> ;
-        < "Zdefiniowane przez u¿ytkownika" ;    TO_USER         ;> ;
+        < "Ustawienia indywidualne" ;   TO_USER         ;> ;
         < "Spis obiektów" ;     TO_OBJECT       ;> ;
         < "Bibliografia" ;  TO_AUTHORITIES  ;> ;
     };
@@ -693,12 +693,12 @@ TabPage TP_TOX_SELECT
     StringList [ korean ] =
     {
             < "¸ñÂ÷" ;  TO_CONTENT      ;> ;
-        < "Å°¿öµå¡¡»öÀÎ" ;  TO_INDEX        ;> ;
+        < "Å°¿öµå »öÀÎ" ;   TO_INDEX        ;> ;
         < "»ğÈ­ »öÀÎ" ; TO_ILLUSTRATION ;> ;
         < "Ç¥ »öÀÎ" ;   TO_TABLE        ;> ;
         < "»ç¿ëÀÚ Á¤ÀÇ" ;   TO_USER         ;> ;
         < "°³Ã¼ »öÀÎ" ;     TO_OBJECT       ;> ;
-        < "Âü°í¹®Çå¡¡»öÀÎ" ;    TO_AUTHORITIES  ;> ;
+        < "Âü°í¹®Çå »öÀÎ" ; TO_AUTHORITIES  ;> ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -797,7 +797,7 @@ TabPage TP_TOX_SELECT
         Text = "~Verzeichnis erstellen" ;
         Text [ ENGLISH ] = "Create index of" ;
         Text[ english_us ] = "Create index";
-        Text[ portuguese ] = "Create index of";
+        Text[ portuguese ] = "Criar ín~dice";
         Text[ russian ] = "Ñîçäàòü óêàçàòåëü";
         Text[ greek ] = "Äçìéï~õñãßá åõñåôçñßïõ";
         Text[ dutch ] = "Create index of";
@@ -810,7 +810,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Utwórz indeks";
         Text[ portuguese_brazilian ] = "Create index of";
         Text[ japanese ] = "–ÚŸ‚Æõˆø‚Ìì¬";
-        Text[ korean ] = "Create index of";
+        Text[ korean ] = "ÀÎµ¦½º ¸¸µé±â";
         Text[ chinese_simplified ] = "ĞÂÔöÄ¿Â¼";
         Text[ chinese_traditional ] = "·s¼W¥Ø¿ı";
         Text[ turkish ] = "Create index of";
@@ -824,7 +824,7 @@ TabPage TP_TOX_SELECT
         Text = "Für" ;
         Text [ ENGLISH ] = "Type" ;
         Text[ english_us ] = "for";
-        Text[ portuguese ] = "Type";
+        Text[ portuguese ] = "Tipo";
         Text[ russian ] = "Äëÿ";
         Text[ greek ] = "Ãéá";
         Text[ dutch ] = "Type";
@@ -837,7 +837,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Dotyczy";
         Text[ portuguese_brazilian ] = "Type";
         Text[ japanese ] = "‘ÎÛ";
-        Text[ korean ] = "Type";
+        Text[ korean ] = "Å¸ÀÔ";
         Text[ chinese_simplified ] = "ÓÃÓÚ";
         Text[ chinese_traditional ] = "¥Î©ó";
         Text[ turkish ] = "Type";
@@ -977,7 +977,7 @@ TabPage TP_TOX_SELECT
         Text[ russian ] = "Îöåíèòü äî óğîâíÿ";
         Text[ greek ] = "Áğïôßìçóç åğéğİäùí";
         Text[ dutch ] = "~Aantal niveaus";
-        Text[ french ] = "Évaluation des niveaux";
+        Text[ french ] = "Évaluation jusqu'au niveau";
         Text[ spanish ] = "Evaluar hasta nivel";
         Text[ finnish ] = "Arviointitaso";
         Text[ italian ] = "Val~uta fino a livello";
@@ -986,12 +986,13 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Ewaluuj do poziomu";
         Text[ portuguese_brazilian ] = "Evaluation level";
         Text[ japanese ] = "Ÿ‚ÌÚÍŞÙ‚Ü‚Å“K—p";
-        Text[ korean ] = "Æò°¡£¬°èÃş±îÁö";
+        Text[ korean ] = "Æò°¡ ´Ü°è";
         Text[ chinese_simplified ] = "°üÀ¨¼¶±ğ";
         Text[ chinese_traditional ] = "¥]¬A¯Å§O";
         Text[ turkish ] = "Şu düzeye kadar:";
         Text[ arabic ] = "ÊŞííã ÍÊì ÇáãÓÊæì";
         Text[ catalan ] = "E~valuar hasta nivel";
+        Text[ language_user1 ] = " ";
     };
     NumericField    NF_LEVEL
     {
@@ -1443,7 +1444,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Sc~al takie same wpisy";
         Text[ portuguese_brazilian ] = "Combine identical entries";
         Text[ japanese ] = "“¯‚¶€–Ú‚ğ‚Ü‚Æ‚ß‚Ä•\\¦";
-        Text[ korean ] = "µ¿ÀÏÇ×¸ñ  ÇÏ³ª·Î ¹­À½";
+        Text[ korean ] = "µ¿ÀÏÇ×¸ñ ÇÏ³ª·Î ¹­À½";
         Text[ chinese_simplified ] = "ºÏ²¢ÏàÍ¬µÄÌõÄ¿";
         Text[ chinese_traditional ] = "¦X¨Ö¦P¤@±ø¥Ø";
         Text[ arabic ] = "ÊáÎíÕ ÇáÅÏÎÇáÇÊ ÇáãÊãÇËáÉ";
@@ -1470,7 +1471,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Streœæ za pomoc¹ s lub ss";
         Text[ portuguese_brazilian ] = "Combine identical entries with ~pp.";
         Text[ japanese ] = "‘±‚«Íß°¼Ş‚ğ ~p ‚Ü‚½‚Í pp ‚Å•\\¦";
-        Text[ korean ] = "~f ¶Ç´Â ff µ¿ÀÏÇ×¸ñÀ» ÇÏ³ª·Î ¹­À½";
+        Text[ korean ] = "f ¶Ç´Â ff µ¿ÀÏÇ×¸ñÀ» ÇÏ³ª·Î ¹­À½(~P)";
         Text[ chinese_simplified ] = "ºÏ²¢´ø f »ò ff µÄÌõÄ¿(~P)";
         Text[ chinese_traditional ] = "¦X¨Ö¥Î f ©Î ff(~P)";
         Text[ arabic ] = "ÊáÎíÕ ÈÇÓÊÎÏÇã p.  Ãæ  pp";
@@ -1552,7 +1553,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Zaczynaj wpisy autom. od wielkiej litery";
         Text[ portuguese_brazilian ] = "Capitalize entries";
         Text[ japanese ] = "Œê“ª‚ğ©“®“I‚É‘å•¶š‚É‚·‚é";
-        Text[ korean ] = "ÀÔ·Â¡¡ÀÚµ¿À¸·Î¡¡´ë¹®ÀÚ";
+        Text[ korean ] = "ÀÔ·Â ÀÚµ¿À¸·Î ´ë¹®ÀÚ";
         Text[ chinese_simplified ] = "×Ô¶¯×ª»»³É´óĞ´ÌõÄ¿";
         Text[ chinese_traditional ] = "Âà°ÊÂà´«¦¨¤j¼g¦r¥À";
         Text[ arabic ] = "ÈÏÁ ÇáÅÏÎÇáÇÊ ÈÃÍÑİ ßÈíÑÉ ÊáŞÇÆíÇğ";
@@ -1933,10 +1934,11 @@ TabPage TP_TOX_SELECT
         {
             < " " ;                 1;> ;
             < " " ;             2;> ;
-            < " " ;                 8;> ;
-            < " " ;     16;> ;
+            < "TSM: 23.10.00 En is correct D is wrong." ;               8;> ;
+            < "TSM 23.10.00 En is correct / D is wrong" ;   16;> ;
             < " ";  128;> ;
-        };
+            < " ";  128;> ;
+            };
         ItemList [ english_us ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -1944,7 +1946,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Other OLE Objects";  128;> ;
-        };
+            < "Other OLE objects";  128;> ;
+            };
         ItemList [ portuguese ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -1952,7 +1955,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Outros objectos OLE";    128;> ;
-        };
+            < "Outros obejctos OLE";    128;> ;
+            };
         ItemList [ russian ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -1960,7 +1964,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Äğóãèå îáúåêòû OLE";     128;> ;
-        };
+            < "Äğóãèå îáúêòû OLE";  128;> ;
+            };
         ItemList [ greek ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -1968,7 +1973,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "¢ëëá áíôéêåßìåíá OLE";   128;> ;
-        };
+            < "¢ëëá áíôéêåßìåíá OLE";   128;> ;
+            };
         ItemList [ dutch ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -1976,7 +1982,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Andere OLE-objecten";    128;> ;
-        };
+            < "Andere OLE-objecten";    128;> ;
+            };
         ItemList [ french ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -1984,7 +1991,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Autres objets OLE";  128;> ;
-        };
+            < "Autres objets OLE";  128;> ;
+            };
         ItemList [ spanish ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -1992,7 +2000,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Otros objetos OLE";  128;> ;
-        };
+            < "Otros objetos OLE";  128;> ;
+            };
         ItemList [ italian ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2000,7 +2009,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Altri oggetti OLE";  128;> ;
-        };
+            < "Altri oggetti OLE";  128;> ;
+            };
         ItemList [ danish ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2008,7 +2018,8 @@ TabPage TP_TOX_SELECT
             < "StarCalc" ;              8;> ;
             < "StarDraw/StarImpress" ;  16;> ;
             < "Andre OLE-objekter";     128;> ;
-        };
+            < "Andre OLE-objekter";     128;> ;
+            };
         ItemList [ swedish ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2016,7 +2027,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Andra OLE-objekt";   128;> ;
-        };
+            < "Andra OLE-objekt";   128;> ;
+            };
         ItemList [ polish ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2024,7 +2036,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Inne obiekty OLE";   128;> ;
-        };
+            < "Inne obiekty OLE";   128;> ;
+            };
         ItemList [ portuguese_brazilian ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2032,7 +2045,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Image" ;                8;> ;
             < "%PRODUCTNAME Calc" ;     16;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
-        };
+            < "Andere OLE-Objekte";     128;> ;
+            };
         ItemList [ japanese ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2040,7 +2054,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "‚»‚Ì‚Ù‚©‚Ì OLE µÌŞ¼Şª¸Ä";    128;> ;
-        };
+            < "????? OLE ??????";   128;> ;
+            };
         ItemList [ korean ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2048,7 +2063,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "´Ù¸¥ OLE °³Ã¼";  128;> ;
-        };
+            < "±âÅ¸ OLE °³Ã¼";  128;> ;
+            };
         ItemList [ chinese_simplified ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2056,7 +2072,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "ÆäËû OLE ¶ÔÏó";  128;> ;
-        };
+            < "ÆäËü OLE ¶ÔÏó";  128;> ;
+            };
         ItemList [ chinese_traditional ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2064,7 +2081,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "¨ä¥¦ªº OLE ª«¥ó";    128;> ;
-        };
+            < "¨ä¥L OLE ª«¥ó";  128;> ;
+            };
         ItemList [ arabic ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2072,7 +2090,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "ßÇÆäÇÊ OLE ÃÎÑì";    128;> ;
-        };
+            < "ßÇÆäÇÊ OLE ÃÎÑì";    128;> ;
+            };
         ItemList [ turkish ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2080,7 +2099,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Image" ;                8;> ;
             < "%PRODUCTNAME Calc" ;     16;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
-        };
+            < "Diğer OLE nesneleri";    128;> ;
+            };
         ItemList [ catalan ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2088,7 +2108,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Otros objetos OLE";  128;> ;
-        };
+            < "Otros objetos OLE";  128;> ;
+            };
         ItemList [ finnish ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
@@ -2096,7 +2117,8 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME! Calc" ;                8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Muut OLE-objekti";   128;> ;
-        };
+            < "Other OLE objects";  128;> ;
+            };
     };
     };
     FixedLine FL_FROMOBJ
@@ -2146,7 +2168,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Numeruj wpisy";
         Text[ portuguese_brazilian ] = "Number entries";
         Text[ japanese ] = "€–Ú‚É”Ô†‚ğ•t‚¯‚é(~N)";
-        Text[ korean ] = "Ç×¸ñ¡¡¹øÈ£¸Å±â±â(~N)";
+        Text[ korean ] = "Ç×¸ñ ¹øÈ£¸Å±â±â(~N)";
         Text[ chinese_simplified ] = "±àÅÅÌõÄ¿(~N)";
         Text[ chinese_traditional ] = "±ø¥Ø½s¸¹(~N)";
         Text[ arabic ] = "ÊÑŞíã ÇáÅÏÎÇáÇÊ";
@@ -2257,11 +2279,11 @@ TabPage TP_TOX_SELECT
         Text = "Sortieren";
         Text[English] = "Sort";
         Text[ english_us ] = "Sort";
-        Text[ portuguese ] = "Sort";
+        Text[ portuguese ] = "Ordenar";
         Text[ russian ] = "Ñîğòèğîâàòü";
         Text[ greek ] = "Sort";
         Text[ dutch ] = "Sort";
-        Text[ french ] = "Sort";
+        Text[ french ] = "Trier";
         Text[ spanish ] = "Ordenar";
         Text[ finnish ] = "Sort";
         Text[ italian ] = "Ordina";
@@ -2270,7 +2292,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Sortuj";
         Text[ portuguese_brazilian ] = "Sort";
         Text[ japanese ] = "•À‚×‘Ö‚¦";
-        Text[ korean ] = "Sort";
+        Text[ korean ] = "Á¤·Ä";
         Text[ chinese_simplified ] = "ÅÅĞò";
         Text[ chinese_traditional ] = "±Æ§Ç";
         Text[ turkish ] = "Sort";
@@ -2284,11 +2306,11 @@ TabPage TP_TOX_SELECT
         Text = "Sprache";
         Text[English] = "Language";
         Text[ english_us ] = "Language";
-        Text[ portuguese ] = "Language";
+        Text[ portuguese ] = "Língua";
         Text[ russian ] = "ßçûê";
         Text[ greek ] = "Language";
         Text[ dutch ] = "Language";
-        Text[ french ] = "Language";
+        Text[ french ] = "Langue";
         Text[ spanish ] = "Idioma";
         Text[ finnish ] = "Language";
         Text[ italian ] = "Lingua";
@@ -2297,7 +2319,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Jêzyk";
         Text[ portuguese_brazilian ] = "Language";
         Text[ japanese ] = "Œ¾Œê";
-        Text[ korean ] = "Language";
+        Text[ korean ] = "¾ğ¾î";
         Text[ chinese_simplified ] = "ÓïÑÔ";
         Text[ chinese_traditional ] = "»y¨¥";
         Text[ turkish ] = "Language";
@@ -2318,11 +2340,11 @@ TabPage TP_TOX_SELECT
         Text = "Schlüsseltyp";
         Text[English] = "Key type";
         Text[ english_us ] = "Key type";
-        Text[ portuguese ] = "Key type";
+        Text[ portuguese ] = "Tipo de chave";
         Text[ russian ] = "Òèï êëş÷à";
         Text[ greek ] = "Key type";
         Text[ dutch ] = "Key type";
-        Text[ french ] = "Key type";
+        Text[ french ] = "Type de critère";
         Text[ spanish ] = "Tipo de clave";
         Text[ finnish ] = "Key type";
         Text[ italian ] = "Tipo chiave";
@@ -2331,7 +2353,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Typ klucza";
         Text[ portuguese_brazilian ] = "Key type";
         Text[ japanese ] = "·°‚Ìí—Ş";
-        Text[ korean ] = "Key type";
+        Text[ korean ] = "Å° À¯Çü";
         Text[ chinese_simplified ] = "¹Ø¼ü×ÖÀàĞÍ";
         Text[ chinese_traditional ] = "ÃöÁä¦rÃş«¬";
         Text[ turkish ] = "Key type";
@@ -2977,7 +2999,7 @@ TabPage TP_TOX_ENTRY
         Text[ japanese ] = "€–ÚÃ·½Ä";
         Text[ korean ] = "Ç×¸ñ ÅØ½ºÆ®";
         Text[ chinese_simplified ] = "ÌõÄ¿ÎÄ×Ö";
-        Text[ chinese_traditional ] = "¶µ¥Ø¤å¦r";
+        Text[ chinese_traditional ] = "±ø¥Ø¤å¦r";
         Text[ arabic ] = "äÕ ÇáÅÏÎÇá";
         Text[ turkish ] = "Giriş metni";
         Text[ language_user1 ] = " ";
@@ -3086,10 +3108,10 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "H~yperlänk";
         Text[ polish ] = "Hiper³¹cze";
         Text[ portuguese_brazilian ] = "Hyperlink";
-        Text[ japanese ] = "Ê²Êß°Øİ¸(~H)";
-        Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©(~H)";
-        Text[ chinese_simplified ] = "³¬Á´½Ó(~H)";
-        Text[ chinese_traditional ] = "¶W³sµ²(~H)";
+        Text[ japanese ] = "Ê²Êß°Øİ¸(~Y)";
+        Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©(~Y)";
+        Text[ chinese_simplified ] = "³¬Á´½Ó(~Y)";
+        Text[ chinese_traditional ] = "¶W³sµ²(~Y)";
         Text[ arabic ] = "ÇÑÊÈÇØ ÊÔÚÈí";
         Text[ turkish ] = "Hyperlink";
         Text[ language_user1 ] = " ";
@@ -3239,7 +3261,7 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Caratteri riempitivi";
         Text[ danish ] = "Fyldtegn";
         Text[ swedish ] = "Ut~fyllnadstecken";
-        Text[ polish ] = "Symbol wieloznaczny";
+        Text[ polish ] = "Wype³niacze";
         Text[ portuguese_brazilian ] = "Fill character";
         Text[ japanese ] = "Ø°ÀŞ°";
         Text[ korean ] = "Ã¤¿ò¡¡¹®ÀÚ";
@@ -3484,7 +3506,7 @@ TabPage TP_TOX_ENTRY
         Text = "Rechtsbündig" ;
         Text [ ENGLISH ] = "Right border" ;
         Text[ english_us ] = "Align right";
-        Text[ portuguese ] = "Na margem ~direita";
+        Text[ portuguese ] = "Alinhar à direita";
         Text[ russian ] = "Ñïğàâà";
         Text[ greek ] = "Óôïß÷éóç äåîéÜ";
         Text[ dutch ] = "Aan rechter ~marge";
@@ -3497,12 +3519,13 @@ TabPage TP_TOX_ENTRY
         Text[ polish ] = "Z prawej";
         Text[ portuguese_brazilian ] = "Right border";
         Text[ japanese ] = "‰E‘µ‚¦(~O)";
-        Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é(~O)";
+        Text[ korean ] = "¿À¸¥ÂÊ ¸ÂÃã";
         Text[ chinese_simplified ] = "ÓÒ¶ÔÆë";
         Text[ chinese_traditional ] = "¾a¥k¹ï»ô";
         Text[ turkish ] = "Sağ kenar";
         Text[ arabic ] = "Úáì ÇáåÇãÔ ÇáÃíãä";
         Text[ catalan ] = "Al bor~de derecho";
+        Text[ language_user1 ] = " ";
     };
     FixedLine FL_ENTRY
     {
@@ -3798,10 +3821,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
-        QuickHelpText[ polish ] = "Rosn¹co!";
+        QuickHelpText[ polish ] = "Rosn¹co";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
-        QuickHelpText[ japanese ] = "¸‡!";
-        QuickHelpText[ korean ] = "¿À¸§Â÷¼ø!";
+        QuickHelpText[ japanese ] = "¸‡";
+        QuickHelpText[ korean ] = "¿À¸§Â÷¼ø";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "¦V¤W";
         QuickHelpText[ arabic ] = "ÊÕÇÚÏí";
@@ -3810,7 +3833,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
-        QuickHelpText[ finnish ] = "Nouseva!";
+        QuickHelpText[ finnish ] = "Nouseva";
     };
     ImageRadioButton RB_SORTDOWN1
     {
@@ -3833,10 +3856,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
-        QuickHelpText[ polish ] = "Malej¹co!";
+        QuickHelpText[ polish ] = "Malej¹co";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
-        QuickHelpText[ japanese ] = "~‡!";
-        QuickHelpText[ korean ] = "³»¸²Â÷¼ø!";
+        QuickHelpText[ japanese ] = "~‡";
+        QuickHelpText[ korean ] = "³»¸²Â÷¼ø";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "¦V¤U";
         QuickHelpText[ arabic ] = "ÊäÇÒáí";
@@ -3845,7 +3868,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
-        QuickHelpText[ finnish ] = "Laskeva!";
+        QuickHelpText[ finnish ] = "Laskeva";
     };
     ImageRadioButton RB_SORTUP2
     {
@@ -3869,10 +3892,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
-        QuickHelpText[ polish ] = "Rosn¹co!";
+        QuickHelpText[ polish ] = "Rosn¹co";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
-        QuickHelpText[ japanese ] = "¸‡!";
-        QuickHelpText[ korean ] = "¿À¸§Â÷¼ø!";
+        QuickHelpText[ japanese ] = "¸‡";
+        QuickHelpText[ korean ] = "¿À¸§Â÷¼ø";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "¦V¤W";
         QuickHelpText[ arabic ] = "ÊÕÇÚÏí";
@@ -3881,7 +3904,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
-        QuickHelpText[ finnish ] = "Nouseva!";
+        QuickHelpText[ finnish ] = "Nouseva";
     };
     ImageRadioButton RB_SORTDOWN2
     {
@@ -3904,10 +3927,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
-        QuickHelpText[ polish ] = "Malej¹co!";
+        QuickHelpText[ polish ] = "Malej¹co";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
-        QuickHelpText[ japanese ] = "~‡!";
-        QuickHelpText[ korean ] = "³»¸²Â÷¼ø!";
+        QuickHelpText[ japanese ] = "~‡";
+        QuickHelpText[ korean ] = "³»¸²Â÷¼ø";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "¦V¤U";
         QuickHelpText[ arabic ] = "ÊäÇÒáí";
@@ -3916,7 +3939,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
-        QuickHelpText[ finnish ] = "Laskeva!";
+        QuickHelpText[ finnish ] = "Laskeva";
     };
     ImageRadioButton RB_SORTUP3
     {
@@ -3940,10 +3963,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
-        QuickHelpText[ polish ] = "Rosn¹co!";
+        QuickHelpText[ polish ] = "Rosn¹co";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
-        QuickHelpText[ japanese ] = "¸‡!";
-        QuickHelpText[ korean ] = "¿À¸§Â÷¼ø!";
+        QuickHelpText[ japanese ] = "¸‡";
+        QuickHelpText[ korean ] = "¿À¸§Â÷¼ø";
         QuickHelpText[ chinese_simplified ] = "Ascending";
         QuickHelpText[ chinese_traditional ] = "¦V¤W";
         QuickHelpText[ arabic ] = "ÊÕÇÚÏí";
@@ -3952,7 +3975,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aufsteigend";
         QuickHelpText[ catalan ] = "Ascendiente";
-        QuickHelpText[ finnish ] = "Nouseva!";
+        QuickHelpText[ finnish ] = "Nouseva";
     };
     ImageRadioButton RB_SORTDOWN3
     {
@@ -3975,10 +3998,10 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
-        QuickHelpText[ polish ] = "Malej¹co!";
+        QuickHelpText[ polish ] = "Malej¹co";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
-        QuickHelpText[ japanese ] = "~‡!";
-        QuickHelpText[ korean ] = "³»¸²Â÷¼ø!";
+        QuickHelpText[ japanese ] = "~‡";
+        QuickHelpText[ korean ] = "³»¸²Â÷¼ø";
         QuickHelpText[ chinese_simplified ] = "Descending";
         QuickHelpText[ chinese_traditional ] = "¦V¤U";
         QuickHelpText[ arabic ] = "ÊäÇÒáí";
@@ -3987,7 +4010,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Absteigend";
         QuickHelpText[ catalan ] = "Descendiente";
-        QuickHelpText[ finnish ] = "Laskeva!";
+        QuickHelpText[ finnish ] = "Laskeva";
     };
     FixedText FT_SECONDKEY
     {
@@ -4461,7 +4484,7 @@ ModalDialog DLG_ADD_IDX_STYLES
     Text[ polish ] = "Przypisz styl";
     Text[ portuguese_brazilian ] = "Assign styles";
     Text[ japanese ] = "½À²Ù‚Ì“K—p";
-    Text[ korean ] = "À¯Çü¡¡ÇÒ´ç";
+    Text[ korean ] = "À¯Çü ÇÒ´ç";
     Text[ chinese_simplified ] = "Ö¸¶¨ÑùÊ½";
     Text[ chinese_traditional ] = "«ü©w¼Ë¦¡";
     Text[ arabic ] = "ÊÚííä ÇáÃäãÇØ";
@@ -4651,7 +4674,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ japanese ] = "•¶š‹æ•Ê";
             Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ";
             Text[ chinese_simplified ] = "¾«È·";
-            Text[ chinese_traditional ] = "ºëÚÌ";
+            Text[ chinese_traditional ] = "ºë½T";
             Text[ arabic ] = "ãØÇÈŞÉ ÍÇáÉ ÇáÃÍÑİ";
             Text[ turkish ] = "Büyük/küçük harf duyarlı";
             Text[ catalan ] = "Coincidencia exacta";
@@ -4674,7 +4697,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ polish ] = "Ca³e s³owa";
             Text[ portuguese_brazilian ] = "Whole words";
             Text[ japanese ] = "’PŒê‚Æ‚µ‚Ä";
-            Text[ korean ] = "ÀüÃ¼´Ü¾î";
+            Text[ korean ] = "ÀüÃ¼ ´Ü¾î";
             Text[ chinese_simplified ] = "Õû¸ö×Ö";
             Text[ chinese_traditional ] = "§¹¾ãªº¦rµü";
             Text[ arabic ] = "ßáãÇÊ ßÇãáÉ";
@@ -4781,6 +4804,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
