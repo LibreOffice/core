@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorexecute.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:28:51 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,20 +66,20 @@
 //===============================================
 // includes
 
-#ifndef __DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef __com_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
-#ifndef __DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#ifndef __com_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
 
-#ifndef __DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef __com_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
 
-#ifndef __DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef __com_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
 
 #ifndef __COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
@@ -101,7 +101,6 @@ namespace svt
 {
 
 namespace  css = ::com::sun::star;
-namespace dcss = ::drafts::com::sun::star;
 
 //===============================================
 // definitions
@@ -169,9 +168,9 @@ void AcceleratorExecute::init(const css::uno::Reference< css::lang::XMultiServic
     // <- SAFE ----------------------------------
 
     // open all needed configuration objects
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xGlobalCfg;
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xModuleCfg;
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xDocCfg   ;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xModuleCfg;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xDocCfg   ;
 
     // global cfg
     xGlobalCfg = AcceleratorExecute::st_openGlobalConfig(xSMGR);
@@ -281,9 +280,9 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xGlobalCfg = m_xGlobalCfg;
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xModuleCfg = m_xModuleCfg;
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xDocCfg    = m_xDocCfg   ;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg = m_xGlobalCfg;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xModuleCfg = m_xModuleCfg;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xDocCfg    = m_xDocCfg   ;
 
     aLock.clear();
     // <- SAFE ----------------------------------
@@ -324,20 +323,20 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 }
 
 //-----------------------------------------------
-css::uno::Reference< dcss::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openGlobalConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openGlobalConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xAccCfg(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("drafts.com.sun.star.ui.GlobalAcceleratorConfiguration")),
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg(
+        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.ui.GlobalAcceleratorConfiguration")),
         css::uno::UNO_QUERY_THROW);
     return xAccCfg;
 }
 
 //-----------------------------------------------
-css::uno::Reference< dcss::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openModuleConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openModuleConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
                                                                                                    const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
-    css::uno::Reference< dcss::frame::XModuleManager > xModuleDetection(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("drafts.com.sun.star.frame.ModuleManager")),
+    css::uno::Reference< css::frame::XModuleManager > xModuleDetection(
+        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager")),
         css::uno::UNO_QUERY_THROW);
 
     ::rtl::OUString sModule;
@@ -348,23 +347,23 @@ css::uno::Reference< dcss::ui::XAcceleratorConfiguration > AcceleratorExecute::s
     catch(const css::uno::RuntimeException& exRuntime)
         { throw exRuntime; }
     catch(const css::uno::Exception&)
-        { return css::uno::Reference< dcss::ui::XAcceleratorConfiguration >(); }
+        { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
-    css::uno::Reference< dcss::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier")),
+    css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(
+        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier")),
         css::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< dcss::ui::XUIConfigurationManager >   xUIManager = xUISupplier->getUIConfigurationManager(sModule);
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xAccCfg    (xUIManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::ui::XUIConfigurationManager >   xUIManager = xUISupplier->getUIConfigurationManager(sModule);
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg    (xUIManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
     return xAccCfg;
 }
 
 //-----------------------------------------------
-css::uno::Reference< dcss::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel)
+css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel)
 {
-    css::uno::Reference< dcss::ui::XUIConfigurationManagerSupplier > xUISupplier(xModel, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< dcss::ui::XUIConfigurationManager >         xUIManager = xUISupplier->getUIConfigurationManager();
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration >       xAccCfg    (xUIManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xUISupplier(xModel, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::ui::XUIConfigurationManager >         xUIManager = xUISupplier->getUIConfigurationManager();
+    css::uno::Reference< css::ui::XAcceleratorConfiguration >       xAccCfg    (xUIManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
     return xAccCfg;
 }
 
