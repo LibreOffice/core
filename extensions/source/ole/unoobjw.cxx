@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-19 11:09:19 $
+ *  last change: $Author: jl $ $Date: 2000-10-26 08:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,7 @@ HRESULT InterfaceOleWrapper_Impl::convertDispparamsArgs(  DISPID id, unsigned sh
             // Check for dispatch
             // If the param is one and is not refereced ( VT_BYREF) then it could be an object
             // from JScript like an Array used for Squences and out-params
-            if( pdispparams->rgvarg[i].vt == VT_DISPATCH )
+            if( (pdispparams->rgvarg[i].vt & VT_TYPEMASK )== VT_DISPATCH )
             {
 
                 if( info.eMemberType == MemberType_METHOD && info.aParamModes[ countArgs - i -1 ]  == ParamMode_INOUT)
@@ -562,7 +562,8 @@ HRESULT InterfaceOleWrapper_Impl::convertDispparamsArgs(  DISPID id, unsigned sh
                 else if( info.eMemberType == MemberType_METHOD && info.aParamModes[ countArgs - i -1 ] == ParamMode_OUT)
                 {
                     // No conversion necessary. The VT_DISPATCH represents
-                    // an Array in which the outparam is written on index 0
+                    // an JScript Array in which the outparam is written on index 0
+                    // or it is VT_DISPATCH | VT_BYREF, out param in C
                     bDoConversion= sal_False;
                 }
             }
