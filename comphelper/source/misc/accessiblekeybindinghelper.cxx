@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblekeybindinghelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2002-12-10 17:19:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,10 @@ namespace comphelper
 {
 //..............................................................................
 
+    using namespace ::com::sun::star; // MT 04/2003: was ::drafts::com::sun::star - otherwise to many changes
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
-    using namespace ::drafts::com::sun::star;
-    using namespace ::drafts::com::sun::star::accessibility;
+    using namespace ::com::sun::star::accessibility;
 
     //==============================================================================
     // OAccessibleKeyBindingHelper
