@@ -131,31 +131,31 @@ public:
         const double fBound( 0.0001 );
         B2DPolygon result;
 
-        adaptiveSubdivideByDistance( result, aHalfCircle, fBound );
+        adaptiveSubdivideByDistance( result, aHalfCircle, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByDistance( result, aQuarterCircle, fBound );
+        adaptiveSubdivideByDistance( result, aQuarterCircle, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByDistance( result, aLoop, fBound );
+        adaptiveSubdivideByDistance( result, aLoop, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByDistance( result, aStraightLineDistinctEndPoints, fBound );
+        adaptiveSubdivideByDistance( result, aStraightLineDistinctEndPoints, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByDistance( result, aStraightLineDistinctEndPoints2, fBound );
+        adaptiveSubdivideByDistance( result, aStraightLineDistinctEndPoints2, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByDistance( result, aStraightLineIdenticalEndPoints, fBound );
+        adaptiveSubdivideByDistance( result, aStraightLineIdenticalEndPoints, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByDistance( result, aStraightLineIdenticalEndPoints2, fBound );
+        adaptiveSubdivideByDistance( result, aStraightLineIdenticalEndPoints2, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByDistance( result, aCrossing, fBound );
+        adaptiveSubdivideByDistance( result, aCrossing, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByDistance( result, aCusp, fBound );
+        adaptiveSubdivideByDistance( result, aCusp, fBound, true );
         aPlotter.plot(result); result.clear();
 
         CPPUNIT_ASSERT_MESSAGE("adaptiveByDistance", true );
@@ -169,31 +169,31 @@ public:
         ::std::ofstream output("bez_adaptiveByAngle.gnuplot");
         testtools::Plotter aPlotter( output );
 
-        adaptiveSubdivideByAngle( result, aHalfCircle, fBound );
+        adaptiveSubdivideByAngle( result, aHalfCircle, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByAngle( result, aQuarterCircle, fBound );
+        adaptiveSubdivideByAngle( result, aQuarterCircle, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByAngle( result, aLoop, fBound );
+        adaptiveSubdivideByAngle( result, aLoop, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByAngle( result, aStraightLineDistinctEndPoints, fBound );
+        adaptiveSubdivideByAngle( result, aStraightLineDistinctEndPoints, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByAngle( result, aStraightLineDistinctEndPoints2, fBound );
+        adaptiveSubdivideByAngle( result, aStraightLineDistinctEndPoints2, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByAngle( result, aStraightLineIdenticalEndPoints, fBound );
+        adaptiveSubdivideByAngle( result, aStraightLineIdenticalEndPoints, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByAngle( result, aStraightLineIdenticalEndPoints2, fBound );
+        adaptiveSubdivideByAngle( result, aStraightLineIdenticalEndPoints2, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByAngle( result, aCrossing, fBound );
+        adaptiveSubdivideByAngle( result, aCrossing, fBound, true );
         aPlotter.plot(result); result.clear();
 
-        adaptiveSubdivideByAngle( result, aCusp, fBound );
+        adaptiveSubdivideByAngle( result, aCusp, fBound, true );
         aPlotter.plot(result); result.clear();
 
         CPPUNIT_ASSERT_MESSAGE("adaptiveByAngle", true );
