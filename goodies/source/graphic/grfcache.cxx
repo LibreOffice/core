@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-20 13:41:20 $
+ *  last change: $Author: ka $ $Date: 2002-05-31 09:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ public:
                 }
 
     ByteString  GetIDString() const;
-    BOOL        IsEmpty() const { return( 0 == mnID1 && 0 == mnID2 && 0 == mnID3 && 0 == mnID4 ); }
+    BOOL        IsEmpty() const { return( 0 == mnID4 ); }
 };
 
 // -----------------------------------------------------------------------------
