@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 14:22:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ String RID_OUTLUNDO_HEIGHT
     TEXT[ korean ] = "ÀÌµ¿";
     TEXT[ turkish ] = "Taþý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Desplazar";
 };
 String RID_OUTLUNDO_DEPTH
 {
@@ -115,6 +116,7 @@ String RID_OUTLUNDO_DEPTH
     Text[ korean ] = "µé¿© ¾²±â";
     Text[ turkish ] = "Girinti";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sangría";
 };
 String RID_OUTLUNDO_EXPAND
 {
@@ -143,6 +145,7 @@ String RID_OUTLUNDO_EXPAND
     Text[ korean ] = "ºÎ´Ü¶ô Ç¥½Ã";
     Text[ turkish ] = "Alt bölümleri göster";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mostrar subpárrafos";
 };
 String RID_OUTLUNDO_COLLAPSE
 {
@@ -171,6 +174,7 @@ String RID_OUTLUNDO_COLLAPSE
     Text[ korean ] = "ºÎ´Ü¶ô ¼û±â±â";
     Text[ turkish ] = "Alt bölümleri gizle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ocultar subpárrafos";
 };
 String RID_OUTLUNDO_ATTR
 {
@@ -199,6 +203,7 @@ String RID_OUTLUNDO_ATTR
     TEXT[ korean ] = "¼Ó¼º Àû¿ë";
     TEXT[ turkish ] = "Öznitelikleri uygula";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Aplicar atributos";
 };
 String RID_OUTLUNDO_INSERT
 {
@@ -229,4 +234,5 @@ String RID_OUTLUNDO_INSERT
     TEXT[ korean ] = "»ðÀÔ";
     TEXT[ turkish ] = "Ekle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Insertar";
 };
