@@ -1,0 +1,182 @@
+/*************************************************************************
+ *
+ *  $RCSfile: PropertyBrowserController.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2002-09-02 12:09:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_PropertyBrowserController_idl__
+#define __com_sun_star_form_PropertyBrowserController_idl__
+
+#ifndef __com_sun_star_frame_XController_idl__
+#include <com/sun/star/frame/XController.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XFastPropertySet_idl__
+#include <com/sun/star/beans/XFastPropertySet.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+/** describes a controller which can be used to browse and modify properties of form controls.
+
+    <p>The controller can be plugged into an <type scope="com::sun::star::frame">XFrame</type>, and will
+    provide a visual component for inspecting control properties. This means it allows to interactively control
+    several aspects of a <type>FormControlModel</type> or <type>DataAwareControlModel</type>, such as it's
+    data binding, it's layout, and it's event binding</p>
+
+    <p>For using a PropertyBrowserController, you need to
+    <ul><li>instatiate it at a service factory of your choice</li>
+        <li>attach it to an empty frame of your choice</li>
+        <li>set the IntrospectedObject property to the control model which you wish to analyze</li>
+    </ul>
+    </p>
+
+    @example Java
+    <listing>
+        XFrame xFrame = getNewEmptyFrame();
+        XMultiServiceFactory xORB = getORB();
+        XPropertySet xControlModel = getMyControlModel();
+
+        // instantiate the controller
+        XController xController = (XController)UnoRuntime.queryInterface( XController.class,
+            xORB.createInstance( "com.sun.star.form.PropertyBrowserController" ) );
+
+        // marry the controller and the frame. This will cause the controller
+        // to create a visual component within the frame to inspect our object
+        xController.attachFrame( xFrame )
+
+        // tell the controller which object to inspect
+        XPropertySet xControllerProps = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet.class, xController );
+
+        xControllerProps.setPropertyValue( "IntrospectedObject", xControlModel );
+    </listing>
+
+    @see com::sun::star::frame::XController
+*/
+service PropertyBrowserController
+{
+    /** contains the object to inspect.
+
+        <p>Changing this property from outside causes the controller to update it's view
+        with the data of the new object</p>
+    */
+    [property] com::sun::star::beans::XPropertySet IntrospectedObject;
+
+    /** controls the actually visible page.
+
+        <p>The aspects of a <type>DataAwareControlModel</type> which can be browsed and modified
+        using this controller can be separated into 3 groups: common aspects, data-awareness
+        related aspects, and bound events.</br>
+        The appearance of the visual component created by the controller is that 3 tab pages, one for
+        each group, are displayed (of course if the control does not support any aspects of a given group,
+        the group is omitted).<br/>
+        With this property, it can be controller which page is currently acticve.</p>
+
+        <p>Valid values are (this list may be extended in the future):
+        <ul><li>Generic</li>
+            <li>Data</li>
+            <li>Events</li>
+        <ul></p>
+    */
+    [property] string CurrentPage;
+
+    /** ensures the basic functionality for a controller.
+
+        <p>With supporting this interface, the component is able to operate in (and provide content
+        for) an <type scope="com::sun::star::frame">XFrame</type>.</p>
+    */
+    interface com::sun::star::frame::XController;
+
+    /** allows to access the properties of the object
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** allows to access the properties via indicies
+    */
+    interface com::sun::star::beans::XFastPropertySet;
+
+    /** allows to access more than one property of the object at the same time
+    */
+    interface com::sun::star::beans::XMultiPropertySet;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.2.1  2002/08/29 14:51:26  fs
+ *  initial checkin - service description for the property browser component
+ *
+ *
+ *  Revision 1.0 29.08.2002 15:54:59  fs
+ ************************************************************************/
+
