@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 06:49:42 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ chinese_traditional ] = "段落樣式";
             Text[ arabic ] = "����� ����";
             Text[ greek ] = "������� ����������";
-            Text[ korean ] = "단락 템플릿";
+            Text[ korean ] = "단락 스타일";
             Text[ turkish ] = "Paragraf bi�imi";
             Text[ catalan ] = "Estils de par�graf";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
@@ -950,7 +950,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "自定样式" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ greek ] = "���� ����������";
-            Text[ korean ] = "문자 템플릿";
+            Text[ korean ] = "문자 유형";
             FilterList [ greek ] =
         {
             < "���" ; SFXSTYLEBIT_ALL ; > ;
@@ -1707,7 +1707,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text[ dutch ] = "%PRODUCTNAME 3.0 Tekst";
     Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 文本";
     Text[ greek ] = "������� (%PRODUCTNAME 3.0)";
-    Text[ korean ] = "%PRODUCTNAME 3.0 Text";
+    Text[ korean ] = "%PRODUCTNAME 3.0 텍스트";
     Text[ turkish ] = "%PRODUCTNAME 3.0 metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 3.0 Text";
@@ -1738,7 +1738,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text[ dutch ] = "%PRODUCTNAME 4.0 Tekst";
     Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 文本";
     Text[ greek ] = "������� (%PRODUCTNAME 4.0)";
-    Text[ korean ] = "%PRODUCTNAME 4.0 Text";
+    Text[ korean ] = "%PRODUCTNAME 4.0 텍스트";
     Text[ turkish ] = "%PRODUCTNAME 4.0 metni";
     Text[ catalan ] = "%PRODUCTNAME 4.0 text";
     Text[ finnish ] = "Teksti (%PRODUCTNAME 4.0)";
@@ -2023,7 +2023,7 @@ InfoBox MSG_ERROR_PASSWD
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    MESSAGE = "Fehlerhaftes Passwort." ;
+    MESSAGE = "Fehlerhaftes Kennwort." ;
     MESSAGE [ English ] = "Password doesn't match." ;
     MESSAGE [ norwegian ] = "Passord passer ikke." ;
     MESSAGE [ italian ] = "La password non corrisponde." ;
@@ -3181,7 +3181,7 @@ String STR_FDLG_TEMPLATE_NAME
     Text[ russian ] = "������� ������:  ";
     Text[ polish ] = "Aktualny szablon  ";
     Text[ japanese ] = "現在のスタイル： ";
-    Text[ chinese_traditional ] = "目前的樣式： ";
+    Text[ chinese_traditional ] = "格式範本： ";
     Text[ arabic ] = "����� ������: ";
     Text[ dutch ] = "Actuele sjabloon  ";
     Text[ chinese_simplified ] = "当前的样式： ";
@@ -3343,17 +3343,17 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
     Message[ russian ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ greek ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ dutch ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-    Message[ french ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-    Message[ spanish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
+    Message[ french ] = "Cette action supprime la liste des op�rations pouvant �tre annul�es. Ceci n'affecte pas les modifications apport�es au document, mais emp�che de les annuler. Poursuivre le formatage ?";
+    Message[ spanish ] = "Esta acci�n elimina la lista de las acciones que se pueden deshacer. Las modificaciones realizadas hasta ahora en el documento seguir�n siendo v�lidas, sin embargo no se podr�n deshacer. �Desea continuar con el formateado?";
     Message[ finnish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-    Message[ italian ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
+    Message[ italian ] = "Questa azione elimina l'elenco delle azioni da annullare. I cambiamenti effettuati al documento sono ancora validi ma non possono essere annullati. Volete proseguire la formattazione?";
     Message[ danish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-    Message[ swedish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
+    Message[ swedish ] = "Den h�r �tg�rden raderar listan med arbetssteg som g�r att �ngra. �ndringar som har gjorts hittills i dokumentet finns kvar men g�r inte att �ngra l�ngre. Vill du forts�tta med formateringen?";
     Message[ polish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ portuguese_brazilian ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-    Message[ japanese ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-    Message[ korean ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-    Message[ chinese_simplified ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
+    Message[ japanese ] = "このアクションで、元に戻すのが可能なアクションのリストが削除されます。これまでにドキュメントで行った変更はそのまま残りますが、アクションを元に戻すことはできません。書式設定を続行しますか。";
+    Message[ korean ] = "이 실행을 통해 원래대로 취소할 수 있는 모든 작업 과정의 목록이 삭제됩니다. 지금까지 문서에 변경된 사항은 유효하나 더 이상 취소할 수는 없습니다. 서식 지정을 계속하시겠습니까?";
+    Message[ chinese_simplified ] = "这项操作会删除用于撤消命令的每一步骤的记录列单。至目前为止文档所有的更改将会保存，但是您无法再撤消这些更改。您要继续执行格式化？";
     Message[ chinese_traditional ] = "這個動作會刪除復原清單的項目。已經變更的內容將會保留不變，但是不可以再復原所有的變更內容。\n要繼續執行這個格式化？";
     Message[ turkish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ arabic ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
