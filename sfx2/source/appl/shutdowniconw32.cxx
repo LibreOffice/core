@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 11:56:02 $
+ *  last change: $Author: hro $ $Date: 2002-11-19 17:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 
 #ifdef WNT
+
+// Support Windows 95 too
+#define WINVER 0x0400
 
 //
 // the systray icon is only available on windows
