@@ -2,9 +2,9 @@
 #
 #   $RCSfile: language.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:33:30 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:54:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,87 +64,40 @@ package installer::windows::language;
 
 use installer::exiter;
 
-#############################################
-# Determining the Windows language of a file
-# This list has to be removed from this
-# script as soon as possible.
-# FAKE (?)
-#############################################
+####################################################
+# Determining the Windows language of a file (LCID)
+####################################################
 
 sub get_windows_language
 {
     my ($language) = @_;
 
-    my $windowslangugage = "";
+    my $windowslanguage = "";
 
-    if (( $language eq "01" ) || ( $language eq "en" ) || ( $language eq "en-US" )) { $windowslanguage = "1033"; }
-    elsif (( $language eq "03" ) || ( $language eq "pt" ) || ( $language eq "pt-PT" )) { $windowslanguage = "2070"; }
-    elsif (( $language eq "07" ) || ( $language eq "ru" )) { $windowslanguage = "1049"; }
-    elsif (( $language eq "30" ) || ( $language eq "el" )) { $windowslanguage = "1032"; }
-    elsif (( $language eq "31" ) || ( $language eq "nl" )) { $windowslanguage = "1043"; }
-    elsif (( $language eq "33" ) || ( $language eq "fr" )) { $windowslanguage = "1036"; }
-    elsif (( $language eq "34" ) || ( $language eq "es" )) { $windowslanguage = "1034"; }
-    elsif (( $language eq "35" ) || ( $language eq "fi" )) { $windowslanguage = "1035"; }
-    elsif (( $language eq "36" ) || ( $language eq "hu" )) { $windowslanguage = "1038"; }
-    elsif (( $language eq "37" ) || ( $language eq "ca" )) { $windowslanguage = "1027"; }   # Catalan
-    elsif (( $language eq "39" ) || ( $language eq "it" )) { $windowslanguage = "1040"; }
-    elsif (( $language eq "42" ) || ( $language eq "cs" )) { $windowslanguage = "1029"; }
-    elsif (( $language eq "43" ) || ( $language eq "sk" )) { $windowslanguage = "1051"; }
-    elsif (( $language eq "44" ) || ( $language eq "en-GB" )) { $windowslanguage = "2057"; }
-    elsif (( $language eq "45" ) || ( $language eq "da" )) { $windowslanguage = "1030"; }
-    elsif (( $language eq "46" ) || ( $language eq "sv" )) { $windowslanguage = "1053"; }
-    elsif (( $language eq "47" ) || ( $language eq "no" )) { $windowslanguage = "1044"; }
-    elsif (( $language eq "48" ) || ( $language eq "pl" )) { $windowslanguage = "1045"; }
-    elsif (( $language eq "49" ) || ( $language eq "de" )) { $windowslanguage = "1031"; }
-    elsif (( $language eq "55" ) || ( $language eq "pt-BR" )) { $windowslanguage = "1046"; }
-    elsif (( $language eq "66" ) || ( $language eq "th" )) { $windowslanguage = "1054"; }
-    elsif (( $language eq "77" ) || ( $language eq "et" )) { $windowslanguage = "1061"; }
-    elsif (( $language eq "81" ) || ( $language eq "ja" )) { $windowslanguage = "1041"; }
-    elsif (( $language eq "82" ) || ( $language eq "ko" )) { $windowslanguage = "1042"; }
-    elsif (( $language eq "86" ) || ( $language eq "zh-CN" )) { $windowslanguage = "2052"; }
-    elsif (( $language eq "88" ) || ( $language eq "zh-TW" )) { $windowslanguage = "1028"; }
-    elsif (( $language eq "90" ) || ( $language eq "tr" )) { $windowslanguage = "1055"; }
-    elsif (( $language eq "91" ) || ( $language eq "hi" ) || ( $language eq "hi-IN" )) { $windowslanguage = "1081"; }
-    elsif (( $language eq "96" ) || ( $language eq "ar" ) || ( $language eq "ar-SA" )) { $windowslanguage = "1025"; }
-    elsif (( $language eq "97" ) || ( $language eq "he" )) { $windowslanguage = "1037"; }
-    elsif ( $language eq "af" ) { $windowslanguage = "1078"; }   # Afrikaans
-    elsif ( $language eq "sq" ) { $windowslanguage = "1052"; }   # Albanian
-    elsif ( $language eq "hy" ) { $windowslanguage = "1067"; }   # Armenian
-    elsif ( $language eq "eu" ) { $windowslanguage = "1069"; }   # Basque
-    elsif ( $language eq "be" ) { $windowslanguage = "1059"; }   # Belarusian
-    elsif ( $language eq "bg" ) { $windowslanguage = "1026"; }   # Bulgarian
-    elsif ( $language eq "is" ) { $windowslanguage = "1039"; }   # Icelandic
-    elsif ( $language eq "id" ) { $windowslanguage = "1057"; }   # Indonesian
-    elsif ( $language eq "lv" ) { $windowslanguage = "1062"; }   # Latvian
-    elsif ( $language eq "lt" ) { $windowslanguage = "1063"; }   # Lithuanian
-    elsif ( $language eq "mt" ) { $windowslanguage = "1082"; }   # Maltese
-    elsif ( $language eq "mr" ) { $windowslanguage = "1102"; }   # Marathi
-    elsif ( $language eq "rm" ) { $windowslanguage = "1047"; }   # Raeto-Romance
-    elsif ( $language eq "ro" ) { $windowslanguage = "1048"; }   # Romanian
-    elsif ( $language eq "sa" ) { $windowslanguage = "1103"; }   # Sanskrit
-    elsif ( $language eq "tn" ) { $windowslanguage = "1074"; }   # Setsuana
-    elsif ( $language eq "hr" ) { $windowslanguage = "1050"; }   # Croatian
-    elsif ( $language eq "fa" ) { $windowslanguage = "1065"; }   # Farsi
-    elsif ( $language eq "fo" ) { $windowslanguage = "1080"; }   # Faroese
-    elsif ( $language eq "sl" ) { $windowslanguage = "1060"; }   # Slovenian
-    elsif ( $language eq "sb" ) { $windowslanguage = "1070"; }   # Sorbian
-    elsif ( $language eq "sx" ) { $windowslanguage = "1072"; }   # Sutu
-    elsif ( $language eq "sw" ) { $windowslanguage = "1089"; }   # Swahili
-    elsif ( $language eq "ta" ) { $windowslanguage = "1097"; }   # Tamil
-    elsif ( $language eq "tt" ) { $windowslanguage = "1092"; }   # Tatar
-    elsif ( $language eq "ts" ) { $windowslanguage = "1073"; }   # Tsonga
-    elsif ( $language eq "uk" ) { $windowslanguage = "1058"; }   # Ukrainian
-    elsif ( $language eq "ur" ) { $windowslanguage = "1056"; }   # Urdu
-    elsif ( $language eq "vi" ) { $windowslanguage = "1066"; }   # Vietnamese
-    elsif ( $language eq "xh" ) { $windowslanguage = "1076"; }   # Xhosa
-    elsif ( $language eq "yi" ) { $windowslanguage = "1085"; }   # Yiddish
-    elsif ( $language eq "zu" ) { $windowslanguage = "1077"; }   # Zulu
-    else
-    {
-        installer::exiter::exit_program("ERROR: Unknown language $language in function get_windows_language", "get_windows_language");
-    }
+    if ( $installer::globals::msilanguage->{$language} ) { $windowslanguage = $installer::globals::msilanguage->{$language}; }
 
-    return $windowslanguage
+    if ( $windowslanguage eq "" ) { installer::exiter::exit_program("ERROR: Unknown language $language in function get_windows_language", "get_windows_language"); }
+
+    return $windowslanguage;
+}
+
+####################################################
+# Determining the Windows language of a file (LCID)
+####################################################
+
+sub get_windows_encoding
+{
+    my ($language) = @_;
+
+    my $windowsencoding = "";
+
+    if ( $installer::globals::msiencoding->{$language} ) { $windowsencoding = $installer::globals::msiencoding->{$language}; }
+
+    if ( $windowsencoding eq "" ) { installer::exiter::exit_program("ERROR: Unknown language $language in function get_windows_encoding", "get_windows_encoding"); }
+
+    if ( $windowsencoding eq "0" ) { $windowsencoding = "65001"; }  # languages with "0" have to be available in UTF-8 (65001)
+
+    return $windowsencoding;
 }
 
 1;
