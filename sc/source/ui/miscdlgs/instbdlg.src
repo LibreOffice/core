@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 07:52:30 $
+ *  last change: $Author: dr $ $Date: 2001-05-18 13:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,12 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 218 , 49 ) ;
+        Pos = MAP_APPFONT ( 218 , 45 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     FixedLine FL_POSITION
     {
-        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 206 , 8 ) ;
         Text = "Position" ;
         Text [ ENGLISH ] = "Position" ;
@@ -137,8 +137,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     RadioButton RB_BEFORE
     {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 194 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 197 , 10 ) ;
         Text = "~Vor aktueller Tabelle" ;
         Text [ ENGLISH ] = "Before selected sheet" ;
         TabStop = TRUE ;
@@ -167,7 +167,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     RadioButton RB_BEHIND
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 194 , 10 ) ;
+        Size = MAP_APPFONT ( 197 , 10 ) ;
         Text = "~Nach aktueller Tabelle" ;
         Text [ ENGLISH ] = "After selected sheet" ;
         TabStop = TRUE ;
@@ -195,7 +195,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     FixedLine FL_TABLE
     {
-        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 206 , 8 ) ;
         Text = "Tabelle" ;
         Text [ ENGLISH ] = "Table" ;
@@ -223,8 +223,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     RadioButton RB_NEW
     {
-        Pos = MAP_APPFONT ( 12 , 54 ) ;
-        Size = MAP_APPFONT ( 194 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 55 ) ;
+        Size = MAP_APPFONT ( 197 , 10 ) ;
         Text = "Neu ~erstellen" ;
         Text [ ENGLISH ] = "~Create new" ;
         Text [ DANISH ] = "Opret nyt" ;
@@ -251,8 +251,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     FixedText FT_COUNT
     {
-        Pos = MAP_APPFONT ( 30 , 67 ) ;
-        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Pos = MAP_APPFONT ( 20 , 68 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "An~zahl" ;
         Text [ ENGLISH ] = "Count" ;
         Text [ portuguese ] = "~N° de folhas" ;
@@ -280,17 +280,19 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     NumericField NF_COUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 66 ) ;
+        Pos = MAP_APPFONT ( 66 , 66 ) ;
         Size = MAP_APPFONT ( 23 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
+        SpinSize = 1 ;
+        Repeat = TRUE ;
         Minimum = 1 ;
         Maximum = 256 ;
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 30 , 83 ) ;
-        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Pos = MAP_APPFONT ( 20 , 84 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Na~me" ;
         Text [ ENGLISH ] = "Name" ;
         Text[ english_us ] = "Na~me";
@@ -317,13 +319,13 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     Edit ED_TABNAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 82 ) ;
-        Size = MAP_APPFONT ( 142 , 12 ) ;
+        Pos = MAP_APPFONT ( 66 , 82 ) ;
+        Size = MAP_APPFONT ( 137 , 12 ) ;
     };
     RadioButton RB_FROMFILE
     {
         Pos = MAP_APPFONT ( 12 , 100 ) ;
-        Size = MAP_APPFONT ( 194 , 10 ) ;
+        Size = MAP_APPFONT ( 197 , 10 ) ;
         Text = "~Aus Datei erstellen" ;
         Text [ ENGLISH ] = "F~rom file" ;
         Text [ DANISH ] = "Opret fra fil" ;
@@ -351,13 +353,13 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     MultiListBox LB_TABLES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 30 , 113 ) ;
-        Size = MAP_APPFONT ( 116 , 59 ) ;
+        Pos = MAP_APPFONT ( 20 , 113 ) ;
+        Size = MAP_APPFONT ( 123 , 59 ) ;
         AutoHScroll = TRUE ;
     };
     PushButton BTN_BROWSE
     {
-        Pos = MAP_APPFONT ( 152 , 113 ) ;
+        Pos = MAP_APPFONT ( 149 , 113 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "~Durchsuchen..." ;
         Text [ ENGLISH ] = "~Browse..." ;
@@ -385,8 +387,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     CheckBox CB_LINK
     {
-        Pos = MAP_APPFONT ( 152 , 131 ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Pos = MAP_APPFONT ( 149 , 131 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Ver~knüpfen : Ver~kn³pfen */
         Text = "Ver~knüpfen" ;
         Text [ ENGLISH ] = "Lin~k" ;
@@ -414,7 +416,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     FixedText FT_PATH
     {
-        Pos = MAP_APPFONT ( 30 , 176 ) ;
-        Size = MAP_APPFONT ( 176 , 10 ) ;
+        Pos = MAP_APPFONT ( 20 , 176 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
     };
 };
