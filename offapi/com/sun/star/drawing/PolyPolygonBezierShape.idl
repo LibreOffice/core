@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolyPolygonBezierShape.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 18:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <com/sun/star/drawing/LineShape.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_PolyPolygonShapeDescriptor_idl__
-#include <com/sun/star/drawing/PolyPolygonShapeDescriptor.idl>
+#ifndef __com_sun_star_drawing_PolyPolygonBezierShapeDescriptor_idl__
+#include <com/sun/star/drawing/PolyPolygonBezierShapeDescriptor.idl>
 #endif
 
 #ifndef __com_sun_star_drawing_Text_idl__
@@ -104,7 +104,7 @@ service PolyPolygonBezierShape
     service com::sun::star::drawing::LineShape;
 
     // DocMerge: empty anyway
-    service com::sun::star::drawing::PolyPolygonShapeDescriptor;
+    service com::sun::star::drawing::PolyPolygonBezierShapeDescriptor;
 
     // DocMerge: empty anyway
     service com::sun::star::drawing::Text;
@@ -124,6 +124,9 @@ service PolyPolygonBezierShape
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:42  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:14  hjs
     initial import
 
