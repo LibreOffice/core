@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:40:42 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,10 @@ public:
     bool IsOutlineNumbered() const
     {
         return pOutlineNumrule && IsOutline();
+    }
+    const SwNumRule* GetOutlineNumrule() const
+    {
+        return pOutlineNumrule;
     }
     CharSet GetCharSet() const;
 };
