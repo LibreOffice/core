@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: dl $ $Date: 2000-10-18 11:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1752,8 +1752,6 @@ void SdrTextObj::WriteData(SvStream& rOut) const
 #ifdef DBG_UTIL
         aTextCompat.SetID("SdrTextObj(OutlinerParaObject)");
 #endif
-        SfxStyleSheetPool* pStyleSheetPool = (SfxStyleSheetPool*) ( pModel!=NULL ? pModel->GetStyleSheetPool() : NULL );
-        pPara->PrepareStore( pStyleSheetPool );
         pPara->Store(rOut); // neues Store am Outliner ab SV303
         pPara->FinishStore();
     }
