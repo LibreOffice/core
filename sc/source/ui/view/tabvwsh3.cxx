@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-29 14:21:20 $
+ *  last change: $Author: sab $ $Date: 2002-09-12 08:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     //  print preview is now always in the same frame as the tab view
                     //  -> always switch this frame back to normal view
                     //  (ScPreviewShell ctor reads view data)
+
+                    // #102785#; finish input
+                    pScMod->InputEnterHandler();
 
                     pThisFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_ASYNCHRON );
                 }
