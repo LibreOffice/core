@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-22 17:14:31 $
+ *  last change: $Author: hdu $ $Date: 2002-11-29 16:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,7 +958,6 @@ private:
     int*            mpGlyphs2Chars;
 
     // platform specific info
-    HDC                     mhDC;
     mutable SCRIPT_CACHE    maScriptCache;
 };
 
