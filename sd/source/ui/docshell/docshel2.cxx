@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-04 18:02:00 $
+ *  last change: $Author: bm $ $Date: 2002-11-28 18:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ Bitmap SdDrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
 BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
 {
     const String aStrForDlg( rName );
-    bool bIsNameValid = IsNewPageNameValid( rName );
+    bool bIsNameValid = IsNewPageNameValid( rName, true );
 
     if( ! bIsNameValid )
     {
@@ -462,84 +462,104 @@ BOOL SdDrawDocShell::CheckPageName( Window* pWin, String& rName )
     return ( bIsNameValid ? TRUE : FALSE );
 }
 
-bool SdDrawDocShell::IsNewPageNameValid( String & rOutPageName )
+bool SdDrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStringIfStandardName /* = false */ )
 {
-    BOOL   bOutDummy;
-    USHORT nExistingPageNum = pDoc->GetPageByName( rOutPageName, bOutDummy );
-    bool   bCanUseNewName = ( nExistingPageNum == SDRPAGE_NOTFOUND );
+    bool bCanUseNewName = false;
 
     // check if name is something like 'Slide n'
-    if( bCanUseNewName )
+    const String aStrPage( SdResId( STR_SD_PAGE ) );
+    bool bIsStandardName = false;
+
+    // prevent also _future_ slide names of the form "'STR_SD_PAGE' + ' ' + '[0-9]+|[a-z]|[A-Z]|[CDILMVX]+|[cdilmvx]+'"
+    // (arabic, lower- and upper case single letter, lower- and upper case roman numbers)
+    if( rInOutPageName.Search( aStrPage ) != STRING_NOTFOUND &&
+        rInOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() != 0 )
     {
-        const String aStrPage( SdResId( STR_SD_PAGE ) );
-
-        // prevent also _future_ slide names of the form "'STR_SD_PAGE' + ' ' + '[0-9]+|[a-z]|[A-Z]|[CDILMVX]+|[cdilmvx]+'"
-        // (arabic, lower- and upper case single letter, lower- and upper case roman numbers)
-        if( rOutPageName.Search( aStrPage ) != STRING_NOTFOUND &&
-            rOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() != 0 )
+        if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= '0' &&
+            rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= '9' )
         {
-            if( rOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= '0' &&
-                rOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= '9' )
+            // check for arabic numbering
+
+            // gobble up all following numbers
+            String sRemainder = rInOutPageName.GetToken( 1, sal_Unicode(' ') );
+            while( sRemainder.Len() &&
+                   sRemainder.GetChar(0) >= '0' &&
+                   sRemainder.GetChar(0) <= '9' )
             {
-                // check for arabic numbering
-
-                // gobble up all following numbers
-                String sRemainder = rOutPageName.GetToken( 1, sal_Unicode(' ') );
-                while( sRemainder.Len() &&
-                       sRemainder.GetChar(0) >= '0' &&
-                       sRemainder.GetChar(0) <= '9' )
-                {
-                    // trim by one
-                    sRemainder.Erase(0, 1);
-                }
-
-                // EOL? Reserved name!
-                if( !sRemainder.Len() )
-                {
-                    rOutPageName = String();
-                }
+                // trim by one
+                sRemainder.Erase(0, 1);
             }
-            else if( rOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= 'a' &&
-                     rOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= 'z' &&
-                     rOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 )
+
+            // EOL? Reserved name!
+            if( !sRemainder.Len() )
             {
-                // lower case, single character: reserved
-                rOutPageName = String();
+                bIsStandardName = true;
             }
-            else if( rOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= 'A' &&
-                     rOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= 'Z' &&
-                     rOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 )
+        }
+        else if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= 'a' &&
+                 rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= 'z' &&
+                 rInOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 )
+        {
+            // lower case, single character: reserved
+            bIsStandardName = true;
+        }
+        else if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= 'A' &&
+                 rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= 'Z' &&
+                 rInOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() == 1 )
+        {
+            // upper case, single character: reserved
+            bIsStandardName = true;
+        }
+        else
+        {
+            // check for upper/lower case roman numbering
+            String sReserved( String::CreateFromAscii( "cdilmvx" ) );
+
+            // gobble up all following characters contained in one reserved class
+            String sRemainder = rInOutPageName.GetToken( 1, sal_Unicode(' ') );
+            if( sReserved.Search( sRemainder.GetChar(0) ) == STRING_NOTFOUND )
+                sReserved.ToUpperAscii();
+
+            while( sReserved.Search( sRemainder.GetChar(0) ) != STRING_NOTFOUND )
             {
-                // upper case, single character: reserved
-                rOutPageName = String();
+                // trim by one
+                sRemainder.Erase(0, 1);
             }
-            else
+
+            // EOL? Reserved name!
+            if( !sRemainder.Len() )
             {
-                // check for upper/lower case roman numbering
-                String sReserved( String::CreateFromAscii( "cdilmvx" ) );
-
-                // gobble up all following characters contained in one reserved class
-                String sRemainder = rOutPageName.GetToken( 1, sal_Unicode(' ') );
-                if( sReserved.Search( sRemainder.GetChar(0) ) == STRING_NOTFOUND )
-                    sReserved.ToUpperAscii();
-
-                while( sReserved.Search( sRemainder.GetChar(0) ) != STRING_NOTFOUND )
-                {
-                    // trim by one
-                    sRemainder.Erase(0, 1);
-                }
-
-                // EOL? Reserved name!
-                if( !sRemainder.Len() )
-                {
-                    rOutPageName = String();
-                }
+                bIsStandardName = true;
             }
         }
     }
 
-    return ( rOutPageName.Len() > 0
-             && bCanUseNewName );
+    if( bIsStandardName )
+    {
+        if( bResetStringIfStandardName )
+        {
+            // this is for insertion of slides from other files with standard
+            // name.  They get a new standard name, if the string is set to an
+            // empty one.
+            rInOutPageName = String();
+            bCanUseNewName = true;
+        }
+        else
+            bCanUseNewName = false;
+    }
+    else
+    {
+        if( rInOutPageName.Len() > 0 )
+        {
+            BOOL   bOutDummy;
+            USHORT nExistingPageNum = pDoc->GetPageByName( rInOutPageName, bOutDummy );
+            bCanUseNewName = ( nExistingPageNum == SDRPAGE_NOTFOUND );
+        }
+        else
+            bCanUseNewName = false;
+    }
+
+    return bCanUseNewName;
 }
 
 IMPL_LINK( SdDrawDocShell, RenameSlideHdl, SvxNameDialog*, pDialog )
