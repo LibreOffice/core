@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 16:12:13 $
+#   last change: $Author: vg $ $Date: 2005-03-08 13:46:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,8 +72,6 @@ AUTOSEG=true
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
-
-INCEXT=s:\solar\inc\hm
 
 .IF "$(mydebug)" != ""
 CDEFS+=-Dmydebug
