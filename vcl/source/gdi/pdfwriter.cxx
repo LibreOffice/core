@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:30:50 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ void PDFWriter::DrawTextLine(
 void PDFWriter::DrawTextArray(
                               const Point& rStartPt,
                               const XubString& rStr,
-                              const long* pDXAry,
+                              const sal_Int32* pDXAry,
                               xub_StrLen nIndex,
                               xub_StrLen nLen )
 {
