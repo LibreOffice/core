@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdminDlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:42:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ namespace dbaui
             sal_Bool bError = !xDriver.is();
             if ( !bError )
             {
-                m_xConnection = createConnection();
+                m_xConnection = createConnection().first;
                 if ( m_xConnection.is() )
                 {
                     // now set the tables supplier at the table control
@@ -224,11 +224,11 @@ namespace dbaui
         return m_pItemSet;
     }
     // -----------------------------------------------------------------------------
-    Reference< XConnection > OUserAdminDlg::createConnection()
+    ::std::pair< Reference<XConnection>,sal_Bool> OUserAdminDlg::createConnection()
     {
         if ( !m_xConnection.is() )
-            m_xConnection = m_pImpl->createConnection();
-        return m_xConnection;
+            m_xConnection = m_pImpl->createConnection().first;
+        return ::std::pair< Reference<XConnection>,sal_Bool> (m_xConnection,sal_False);
     }
     // -----------------------------------------------------------------------------
     Reference< XMultiServiceFactory > OUserAdminDlg::getORB()
