@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:08:43 $
+ *  last change: $Author: mib $ $Date: 2001-07-10 07:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,7 +903,7 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
         case MID_FONTHEIGHT_DIFF:
         {
-            float fRet = (float)nProp;
+            float fRet = (float)(short)nProp;
             switch( ePropUnit )
             {
                 case SFX_MAPUNIT_RELATIVE:
@@ -941,7 +941,7 @@ sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUn
         break;
         case SFX_MAPUNIT_POINT:
         {
-            short nTemp = (short)nDiff;
+            short nTemp = (short)nProp;
             nDiff = nTemp * 20;
             if(!bCoreInTwip)
                 nDiff = (short)TWIP_TO_MM100((long)(nDiff));
@@ -1015,9 +1015,9 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     return sal_False;
                 fValue = (float)nValue;
             }
-            sal_uInt16 nCoreDiffValue = (sal_uInt16)(fValue * 20.);
+            sal_Int16 nCoreDiffValue = (sal_Int16)(fValue * 20.);
             nHeight += bConvert ? nCoreDiffValue : TWIP_TO_MM100(nCoreDiffValue);
-            nProp = (sal_uInt16)fValue;
+            nProp = (sal_uInt16)((sal_Int16)fValue);
             ePropUnit = SFX_MAPUNIT_POINT;
         }
         break;
