@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleregistry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-12-04 12:15:46 $
+ *  last change: $Author: jsc $ $Date: 2001-02-19 17:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,7 @@ OUString SAL_CALL RegistryKeyImpl::getAsciiValue(  )
                     throw InvalidValueException();
                 } else
                 {
-                    OUString ret(OStringToOUString(value, RTL_TEXTENCODING_ASCII_US));
+                    OUString ret(OStringToOUString(value, RTL_TEXTENCODING_UTF8));
                     delete(value);
                     return ret;
                 }
@@ -490,7 +490,7 @@ void SAL_CALL RegistryKeyImpl::setAsciiValue( const OUString& value )
         throw InvalidRegistryException();
     } else
     {
-        OString         sValue = OUStringToOString(value, RTL_TEXTENCODING_ASCII_US);
+        OString         sValue = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
         sal_uInt32  size = sValue.getLength()+1;
         if ( m_key.setValue(OUString(), RG_VALUETYPE_STRING,
                             (RegValue)(sValue.getStr()), size) )
@@ -525,7 +525,7 @@ Sequence< OUString > SAL_CALL RegistryKeyImpl::getAsciiListValue(  )
                     for (sal_uInt32 i=0; i < size; i++)
                     {
                         seqValue.getArray()[i] =
-                            OStringToOUString(tmpValue.getElement(i), RTL_TEXTENCODING_ASCII_US);
+                            OStringToOUString(tmpValue.getElement(i), RTL_TEXTENCODING_UTF8);
                     }
 
                     return seqValue;
@@ -555,7 +555,7 @@ void SAL_CALL RegistryKeyImpl::setAsciiListValue( const Sequence< OUString >& se
 
         for (sal_uInt32 i=0; i < length; i++)
         {
-            pSValue[i] = OUStringToOString(seqValue.getConstArray()[i], RTL_TEXTENCODING_ASCII_US);
+            pSValue[i] = OUStringToOString(seqValue.getConstArray()[i], RTL_TEXTENCODING_UTF8);
             tmpValue[i] = (char*)pSValue[i].getStr();
         }
 
