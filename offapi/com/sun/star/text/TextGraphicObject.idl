@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextGraphicObject.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 15:14:13 $
+ *  last change: $Author: os $ $Date: 2001-06-18 14:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef __com_sun_star_drawing_ColorMode_idl__
 #include <com/sun/star/drawing/ColorMode.idl>
 #endif
+#ifndef __com_sun_star_container_XIndexContainer_idl__
+#include <com/sun/star/container/XIndexContainer.idl>
+#endif
 
 //=============================================================================
 
@@ -91,9 +94,9 @@ service TextGraphicObject
      */
     service BaseFrame;
     //-------------------------------------------------------------------------
-    /** determines if a client-side image map is assigned to the object.
+    /** returns the client-side image map if one is assigned to the object.
      */
-    [property] boolean ClientMap;
+    [property] com::sun::star::container::XIndexContainer ImageMap;
 
     //-------------------------------------------------------------------------
 
