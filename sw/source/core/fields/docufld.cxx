@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:27:34 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,12 @@
 #include <svtools/useroptions.hxx>
 #endif
 
+#ifndef _SHL_HXX //autogen
+#include <tools/shl.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
@@ -149,8 +155,8 @@
 #ifndef _SFXDOCTEMPL_HXX //autogen
 #include <sfx2/doctempl.hxx>
 #endif
-#ifndef _SVX_ADRITEM_HXX
-#include <svx/adritem.hxx>
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
 #endif
 
 
@@ -468,11 +474,11 @@ SwAuthorFieldType::SwAuthorFieldType()
 String SwAuthorFieldType::Expand(sal_uInt32 nFmt) const
 {
     String sRet;
-    SvtUserOptions aOpt;
+    SvtUserOptions&  rOpt = SW_MOD()->GetUserOptions();
     if((nFmt & 0xff) == AF_NAME)
-        sRet = aOpt.GetFullName();
+        sRet = rOpt.GetFullName();
     else
-        sRet = aOpt.GetID();
+        sRet = rOpt.GetID();
     return sRet;
 }
 
@@ -1949,33 +1955,35 @@ SwFieldType* SwExtUserFieldType::Copy() const
  ---------------------------------------------------------------------------*/
 String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 nFormat) const
 {
-    SvxAddressItem aAdr;
-    String aRet( aEmptyStr );
+    String aRet;
     sal_uInt16 nRet = USHRT_MAX;
     switch(nSub)
     {
-    case EU_FIRSTNAME:      aRet = aAdr.GetFirstName(); break;
-    case EU_NAME:           aRet = aAdr.GetName();      break;
-    case EU_SHORTCUT:       aRet = aAdr.GetShortName(); break;
+    case EU_FIRSTNAME:      aRet = USER_OPT_FIRSTNAME; break;
+    case EU_NAME:           aRet = USER_OPT_LASTNAME;  break;
+    case EU_SHORTCUT:       aRet = USER_OPT_ID; break;
 
-    case EU_COMPANY:        nRet = POS_COMPANY;         break;
-    case EU_STREET:         nRet = POS_STREET;          break;
-    case EU_TITLE:          nRet = POS_TITLE;           break;
-    case EU_POSITION:       nRet = POS_POSITION;        break;
-    case EU_PHONE_PRIVATE:  nRet = POS_TEL_PRIVATE;     break;
-    case EU_PHONE_COMPANY:  nRet = POS_TEL_COMPANY;     break;
-    case EU_FAX:            nRet = POS_FAX;             break;
-    case EU_EMAIL:          nRet = POS_EMAIL;           break;
-    case EU_COUNTRY:        nRet = POS_COUNTRY;         break;
-    case EU_ZIP:            nRet = POS_PLZ;             break;
-    case EU_CITY:           nRet = POS_CITY;            break;
-    case EU_STATE:          nRet = POS_STATE;           break;
-    case EU_FATHERSNAME:    nRet = POS_FATHERSNAME;     break;
-    case EU_APARTMENT:      nRet = POS_APARTMENT;       break;
+    case EU_COMPANY:        nRet = USER_OPT_COMPANY;        break;
+    case EU_STREET:         nRet = USER_OPT_STREET;         break;
+    case EU_TITLE:          nRet = USER_OPT_TITLE;          break;
+    case EU_POSITION:       nRet = USER_OPT_POSITION;       break;
+    case EU_PHONE_PRIVATE:  nRet = USER_OPT_TELEPHONEHOME;    break;
+    case EU_PHONE_COMPANY:  nRet = USER_OPT_TELEPHONEWORK;    break;
+    case EU_FAX:            nRet = USER_OPT_FAX;            break;
+    case EU_EMAIL:          nRet = USER_OPT_EMAIL;          break;
+    case EU_COUNTRY:        nRet = USER_OPT_COUNTRY;        break;
+    case EU_ZIP:            nRet = USER_OPT_ZIP;            break;
+    case EU_CITY:           nRet = USER_OPT_CITY;           break;
+    case EU_STATE:          nRet = USER_OPT_STATE;          break;
+    case EU_FATHERSNAME:    nRet = USER_OPT_FATHERSNAME;    break;
+    case EU_APARTMENT:      nRet = USER_OPT_APARTMENT;      break;
     default:                ASSERT( !this, "Field unknown");
     }
     if( USHRT_MAX != nRet )
-        aRet = aAdr.GetToken( nRet );
+    {
+        SvtUserOptions&  rUserOpt = SW_MOD()->GetUserOptions();
+        aRet = rUserOpt.GetToken( nRet );
+    }
     return aRet;
 }
 /* ---------------------------------------------------------------------------
