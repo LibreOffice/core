@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newppdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-02 17:33:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ void PPDImportDialog::Import()
 
         if( ! aPrinterName.Len() )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "Warning: File %s has empty printer name.\n",
                      ByteString( ByteString( aPath.PathToFileName(), osl_getThreadTextEncoding() ).GetBuffer() ) );
 #endif
