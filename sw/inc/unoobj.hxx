@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:03:31 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
+#include <com/sun/star/text/XTextContent.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XSORTABLE_HPP_
 #include <com/sun/star/util/XSortable.hpp>
@@ -1097,6 +1100,7 @@ class SwXParagraphEnumeration : public SwSimpleEnumerationBaseClass,
     public SwClient
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >           xParentText;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >    xNextPara;
 
     BOOL                bFirstParagraph;
     SwUnoCrsr*          GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
@@ -1104,8 +1108,11 @@ class SwXParagraphEnumeration : public SwSimpleEnumerationBaseClass,
     ULONG               nEndIndex;
     sal_Int32           nFirstParaStart;
     sal_Int32           nLastParaEnd;
+
 protected:
     virtual ~SwXParagraphEnumeration();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > SAL_CALL NextElement_Impl(void) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
+
 public:
     SwXParagraphEnumeration(SwXText* pParent, SwPosition& rPos, CursorType eType);
     SwXParagraphEnumeration(SwXText* pParent, SwUnoCrsr* pCrsr, CursorType eType);
@@ -1150,7 +1157,6 @@ class SwXParagraph : public cppu::WeakImplHelper9
     sal_Int32                   nSelectionStartPos;
     sal_Int32                   nSelectionEndPos;
 
-    SwUnoCrsr*              GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
 protected:
     virtual ~SwXParagraph();
 public:
@@ -1222,6 +1228,8 @@ public:
     virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     BOOL            IsDescriptor() const {return m_bIsDescriptor;}
+
+    SwUnoCrsr*      GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
 
     static BOOL getDefaultTextContentValue(::com::sun::star::uno::Any& rAny,
         const rtl::OUString& rPropertyName, USHORT nWID = 0);
