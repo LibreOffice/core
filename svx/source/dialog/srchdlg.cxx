@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:46:07 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1264,10 +1264,9 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
                                                                         pSearchItem->IsLEVRelaxed(),
                                                                         pSearchItem->GetLEVOther(),
                                                                         pSearchItem->GetLEVShorter(),
-                                                                        pSearchItem->GetLEVLonger(),
-                                                                        ResId(RID_SVXDLG_SEARCHSIMILARITY) );
+                                                                        pSearchItem->GetLEVLonger() );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            if ( pDlg->Execute() == RET_OK )
+            if ( pDlg && pDlg->Execute() == RET_OK )
             {
                 pSearchItem->SetLEVRelaxed( pDlg->IsRelaxed() );
                 pSearchItem->SetLEVOther( pDlg->GetOther() );
