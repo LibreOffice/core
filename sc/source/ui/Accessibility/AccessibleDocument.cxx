@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 15:11:20 $
+ *  last change: $Author: sab $ $Date: 2002-06-12 10:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1108,12 +1108,12 @@ void SAL_CALL ScAccessibleDocument::disposing()
     FreeAccessibleSpreadsheet();
     if (mpViewShell)
     {
-        mpViewShell->RemoveAccessibilityObject(*this);
-        mpViewShell = NULL;
-
         Window *pWin = mpViewShell->GetWindowByPos(meSplitPos);
         if( pWin )
             pWin->RemoveChildEventListener( LINK( this, ScAccessibleDocument, WindowChildEventListener ));
+
+        mpViewShell->RemoveAccessibilityObject(*this);
+        mpViewShell = NULL;
     }
     if (mpChildrenShapes)
         DELETEZ(mpChildrenShapes);
