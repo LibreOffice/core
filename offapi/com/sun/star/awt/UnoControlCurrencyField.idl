@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlCurrencyField.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,18 +80,22 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoCurrencyFieldControl
-/** specifies a field to display and edit a currency value.
+/** specifies a currency field control.
+
+    <p>A currency field makes it possible to enter, display and edit
+    currency values.</p>
  */
 service UnoControlCurrencyField
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlEdit;
 
-    // DocMerge: empty anyway
+    /** gives access to the value of a spin field and makes it possible to
+        register for spin events.
+
+        @since #97920#
+     */
     [optional] interface com::sun::star::awt::XSpinField;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XCurrencyField;
 
 };

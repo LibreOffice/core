@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlCurrencyFieldModel.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,26 +76,21 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoControlCurrencyFieldModel
 /** specifies the standard model of an <type>UnoControlCurrencyField</type>.
  */
 service UnoControlCurrencyFieldModel
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlModel;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::BackgroundColor
     /** specifies the background color (RGB) of the control.
      */
     [property] long BackgroundColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::Border
     /** specifies the border style of the control.
-
 
         <pre>
         0: No border
@@ -107,108 +102,41 @@ service UnoControlCurrencyFieldModel
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::CurrencySymbol
     /** specifies the currency symbol.
      */
     [property] string CurrencySymbol;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::DecimalAccuracy
     /** specifies the decimal accuracy.
      */
     [property] short DecimalAccuracy;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::Enabled
-    /** determines whether a control is enabled or disabled.
+    /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::FontDescriptor
     /** specifies the font attributes of the text in the control.
      */
     [property] com::sun::star::awt::FontDescriptor FontDescriptor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::ShowThousandsSeparator
-    /** specifies whether the thousands separator is to be displayed.
+    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+        value of the text in the control.
      */
-    [property] boolean ShowThousandsSeparator;
+    [property] short FontEmphasisMark;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::Printable
-    /** specifies that the control will be printed with the document.
+    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+        value of the text in the control.
      */
-    [property] boolean Printable;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::ReadOnly
-    /** specifies that the content of the control cannot be modified by the user.
-     */
-    [property] boolean ReadOnly;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::Spin
-    /** specifies that the control has a spin button.
-     */
-    [property] boolean Spin;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::StrictFormat
-    /** specifies that the value is checked during the input.
-     */
-    [property] boolean StrictFormat;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::Tabstop
-    /** specifies that the control can be reached with the tabulator key.
-     */
-    [property] boolean Tabstop;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::TextColor
-    /** specifies the text color (RGB) of the control.
-     */
-    [property] long TextColor;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::Value
-    /** specifies the value displayed in the control.
-     */
-    [property] double Value;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::ValueMax
-    /** specifies the maximum value that can be entered.
-     */
-    [property] double ValueMax;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::ValueMin
-    /** specifies the minimum value that can be entered.
-     */
-    [property] double ValueMin;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::awt::UnoControlCurrencyFieldModel::ValueStep
-    /** specifies the value step when using the spin buttons.
-     */
-    [property] double ValueStep;
+    [property] short FontRelief;
 
     //-------------------------------------------------------------------------
 
@@ -218,9 +146,89 @@ service UnoControlCurrencyFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the help id of the control.
+    /** specifies the help URL of the control.
      */
     [property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the currency symbol is to be prepended.
+     */
+
+    [property] boolean PrependCurrencySymbol;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control will be printed with the document.
+     */
+    [property] boolean Printable;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the content of the control cannot be modified by the user.
+     */
+    [property] boolean ReadOnly;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the thousands separator is to be displayed.
+     */
+    [property] boolean ShowThousandsSeparator;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control has a spin button.
+     */
+    [property] boolean Spin;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the value is checked during the user input.
+     */
+    [property] boolean StrictFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control can be reached with the TAB key.
+     */
+    [property] boolean Tabstop;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text color (RGB) of the control.
+     */
+    [property] long TextColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text line color (RGB) of the control.
+     */
+    [property] long TextLineColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the value displayed in the control.
+     */
+    [property] double Value;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the maximum value that can be entered.
+     */
+    [property] double ValueMax;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the minimum value that can be entered.
+     */
+    [property] double ValueMin;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the value step when using the spin button.
+     */
+    [property] double ValueStep;
+
 };
 
 //=============================================================================
