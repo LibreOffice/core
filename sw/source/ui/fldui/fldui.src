@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:43:36 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String STR_FLD_EDIT_DLG
     Text [ spanish ] = "Editar campo" ;
     Text [ english_us ] = "Edit Fields" ;
     Text[ chinese_simplified ] = "ç¼–è¾‘å­—æ®µæŒ‡ä»¤";
-    Text[ russian ] = "Ïğàâêà ïîëåé";
+    Text[ russian ] = "Ğåäàêòèğîâàíèå ïîëåé";
     Text[ polish ] = "Edytuj pole";
     Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ç·¨é›†";
     Text[ chinese_traditional ] = "ç·¨è¼¯æ¬„ä½æŒ‡ä»¤";
@@ -247,7 +247,7 @@ String STR_PAGENUMBERFLD
     TEXT [ italian ] = "Numero pagina" ;
     TEXT [ portuguese_brazilian ] = "N?ero de p?gina" ;
     TEXT [ portuguese ] = "Número de página" ;
-    TEXT [ finnish ] = "Sivunumerot" ;
+    TEXT [ finnish ] = "Sivunumero" ;
     TEXT [ danish ] = "Sidetal" ;
     TEXT [ french ] = "Numéro de page" ;
     TEXT [ swedish ] = "Sidnummer" ;
@@ -255,7 +255,7 @@ String STR_PAGENUMBERFLD
     TEXT [ spanish ] = "Número de página" ;
     TEXT [ english_us ] = "Page numbers" ;
     TEXT[ chinese_simplified ] = "é¡µç ";
-    TEXT[ russian ] = "Íîìåğ ñòğàíèöû";
+    TEXT[ russian ] = "Íîìåğà ñòğàíèöû";
     TEXT[ polish ] = "Numer strony";
     TEXT[ japanese ] = "ãƒšãƒ¼ã‚¸ç•ªå·";
     TEXT[ chinese_traditional ] = "é ç¢¼";
@@ -309,7 +309,7 @@ String STR_AUTHORFLD
     Text [ french ] = "Utilisateur" ;
     Text [ dutch ] = "Gebruiker" ;
     Text[ chinese_simplified ] = "ä½¿ç”¨è€…";
-    Text[ russian ] = "Ïîëüçîâàòåëü";
+    Text[ russian ] = "Àâòîğ";
     Text[ polish ] = "U¿ytkownik";
     Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼";
     Text[ chinese_traditional ] = "ä½¿ç”¨è€…";
@@ -319,7 +319,7 @@ String STR_AUTHORFLD
     Text[ turkish ] = "Yazan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Autor";
-    Text[ finnish ] = "Laatija";
+    Text[ finnish ] = "Tekijä";
     Text[ thai ] = "à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";
 };
 String STR_TEMPLNAMEFLD
@@ -330,7 +330,7 @@ String STR_TEMPLNAMEFLD
     TEXT [ italian ] = "Modello" ;
     TEXT [ portuguese_brazilian ] = "Modelo" ;
     TEXT [ portuguese ] = "Modelo de documento" ;
-    TEXT [ finnish ] = "Mallipohjat" ;
+    TEXT [ finnish ] = "Mallit" ;
     TEXT [ danish ] = "Dokumentskabelon" ;
     TEXT [ french ] = "Modèle de document" ;
     TEXT [ swedish ] = "Dokumentmall" ;
@@ -338,7 +338,7 @@ String STR_TEMPLNAMEFLD
     TEXT [ spanish ] = "Plantilla" ;
     TEXT [ english_us ] = "Templates" ;
     TEXT[ chinese_simplified ] = "æ–‡æ¡£æ ·å¼";
-    TEXT[ russian ] = "Øàáëîí äîêóìåíòà";
+    TEXT[ russian ] = "Øàáëîíû";
     TEXT[ polish ] = "Szablon dokumentu";
     TEXT[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
     TEXT[ chinese_traditional ] = "æ–‡ä»¶æ¨£å¼";
@@ -453,7 +453,7 @@ String STR_FORMELFLD
     TEXT [ spanish ] = "Insertar fórmula" ;
     TEXT [ english_us ] = "Insert Formula" ;
     TEXT[ chinese_simplified ] = "æ’å…¥å…¬å¼";
-    TEXT[ russian ] = "Âñòàâêà ôîğìóëû";
+    TEXT[ russian ] = "Âñòàâèòü ôîğìóëó";
     TEXT[ polish ] = "Wstaw formu³ê";
     TEXT[ japanese ] = "æ•°å¼ã®æŒ¿å…¥";
     TEXT[ chinese_traditional ] = "æ’å…¥å…¬å¼";
@@ -568,7 +568,7 @@ String STR_CONDTXTFLD
     TEXT [ spanish ] = "Texto condicionado" ;
     TEXT [ english_us ] = "Conditional text" ;
     TEXT[ chinese_simplified ] = "æœ‰æ¡ä»¶çš„æ–‡å­—";
-    TEXT[ russian ] = "Óñëîâíûé òåêñò";
+    TEXT[ russian ] = "Òåêñò ñ óñëîâèåì";
     TEXT[ polish ] = "Tekst warunkowy";
     TEXT[ japanese ] = "æ¡ä»¶ä»˜ããƒ†ã‚­ã‚¹ãƒˆ";
     TEXT[ chinese_traditional ] = "æœ‰æ¢ä»¶çš„æ–‡å­—";
@@ -652,7 +652,7 @@ String STR_SEQFLD
     TEXT [ spanish ] = "Secuencia" ;
     TEXT [ english_us ] = "Number range" ;
     TEXT[ chinese_simplified ] = "ç¼–å·é¡ºåº";
-    TEXT[ russian ] = "Ïîğÿäêîâûé íîìåğ";
+    TEXT[ russian ] = "Äèàïàçîí íóìåğàöèè";
     TEXT[ polish ] = "Sekwencja";
     TEXT[ japanese ] = "é€£ç•ª";
     TEXT[ chinese_traditional ] = "ç·¨è™Ÿé †åº";
@@ -678,7 +678,7 @@ String STR_SETREFPAGEFLD
     Text [ portuguese ] = "Definir variável de página" ;
     Text [ portuguese_brazilian ] = "Seitenvariable setzen" ;
     Text[ chinese_simplified ] = "è®¾å®šé¡µé¢å˜æ•°";
-    Text[ russian ] = "Óñòàíîâèòü ïåğåìåííûå ñòğàíèö";
+    Text[ russian ] = "Óñòàíîâèòü ïåğåìåííóş";
     Text[ polish ] = "OsadŸ zmienn¹ strony";
     Text[ japanese ] = "ãƒšãƒ¼ã‚¸å¤‰æ•°ã®è¨­å®š";
     Text[ chinese_traditional ] = "è¨­å®šé é¢è®Šé‡";
@@ -732,7 +732,7 @@ String STR_INTERNETFLD
     Text [ portuguese ] = "Carregar URL" ;
     Text [ portuguese_brazilian ] = "URL laden" ;
     Text[ chinese_simplified ] = "è£…å…¥ URL";
-    Text[ russian ] = "Çàãğóçèòü URL";
+    Text[ russian ] = "Àäğåñ URL";
     Text[ polish ] = "£aduj URL";
     Text[ japanese ] = "URLã®èª­ã¿è¾¼ã¿";
     Text[ chinese_traditional ] = "è¼‰å…¥ URL";
@@ -759,7 +759,7 @@ String STR_JUMPEDITFLD
     Text [ portuguese ] = "Marcador de ~posição" ;
     Text [ portuguese_brazilian ] = "Plat~zhalter" ;
     Text[ chinese_simplified ] = "é€šé…ç¬¦";
-    Text[ russian ] = "Ìåòêà-çàïîëíèòåëü";
+    Text[ russian ] = "Ïîëå ïîäñòàíîâêè";
     Text[ polish ] = "Znak-wype³niacz";
     Text[ japanese ] = "ãƒ—ãƒ¬ãƒ¼ã‚¹ãƒ›ãƒ«ãƒ€";
     Text[ chinese_traditional ] = "è¬ç”¨å­—å…ƒ";
@@ -778,7 +778,7 @@ String STR_COMBINED_CHARS
     TEXT [ English ] = "Combine characters" ;
     TEXT[ english_us ] = "Combine characters";
     TEXT[ portuguese ] = "Combinar caracteres";
-    TEXT[ russian ] = "Êîìáèíèğîâàòü çíàêè";
+    TEXT[ russian ] = "Îáúåäèíèòü ñèìâîëû";
     TEXT[ greek ] = "Óõíäõáóìüò ÷áñáêôŞñùí";
     TEXT[ dutch ] = "Tekens combineren";
     TEXT[ french ] = "Combiner les caractères";
@@ -869,7 +869,7 @@ String STR_DBFLD
     TEXT [ italian ] = "Campo stampa in serie" ;
     TEXT [ portuguese_brazilian ] = "Imprimir campo intercalado" ;
     TEXT [ portuguese ] = "Campo para cartas em série" ;
-    TEXT [ finnish ] = "Lomakekirjeen kenttä" ;
+    TEXT [ finnish ] = "Joukkokirjeen kenttä" ;
     TEXT [ danish ] = "Brevfletningsfelt" ;
     TEXT [ french ] = "Champ de mailing" ;
     TEXT [ swedish ] = "Standardbrevfält" ;
@@ -877,7 +877,7 @@ String STR_DBFLD
     TEXT [ spanish ] = "Campo de carta en serie" ;
     TEXT [ english_us ] = "Form letter field" ;
     TEXT[ chinese_simplified ] = "é‚®ä»¶åˆå¹¶å­—æ®µ";
-    TEXT[ russian ] = "Ïîëå öèğêóëÿğíîãî ïèñüìà";
+    TEXT[ russian ] = "Ïîëÿ áàç äàííûõ";
     TEXT[ polish ] = "Pole korespondencji seryjnej";
     TEXT[ japanese ] = "å·®ã—è¾¼ã¿å°åˆ·ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
     TEXT[ chinese_traditional ] = "åˆä½µåˆ—å°æ¬„ä½";
@@ -957,7 +957,7 @@ String STR_DBSETNUMBERFLD
     TEXT [ danish ] = "Datapostnummer" ;
     TEXT [ french ] = "Numéro d'enregistrement" ;
     TEXT [ swedish ] = "Datapostnummer" ;
-    TEXT [ dutch ] = "Record-nummer" ;
+    TEXT [ dutch ] = "Recordnummer" ;
     TEXT [ spanish ] = "Número de registro" ;
     TEXT [ english_us ] = "Record number" ;
     TEXT[ chinese_simplified ] = "æ•°æ®æ¡ç›®ç¼–å·";
@@ -1096,7 +1096,7 @@ String STR_POSTITFLD
     TEXT [ italian ] = "Nota" ;
     TEXT [ portuguese_brazilian ] = "Observa??o" ;
     TEXT [ portuguese ] = "Anotação" ;
-    TEXT [ finnish ] = "Huomautus:" ;
+    TEXT [ finnish ] = "Huomautus" ;
     TEXT [ danish ] = "Note" ;
     TEXT [ french ] = "Note" ;
     TEXT [ swedish ] = "Anteckning" ;
@@ -1149,7 +1149,7 @@ String STR_AUTHORITY
     TEXT [ English ] = "Authority entry" ;
     TEXT[ english_us ] = "Bibliography entry";
     TEXT[ portuguese ] = "Entrada bibliográfica";
-    TEXT[ russian ] = "İëåìåíò ñïèñêà ëèòåğàòóğû";
+    TEXT[ russian ] = "Áèáëèîãğàôè÷åñêàÿ ññûëêà";
     TEXT[ greek ] = "Êáôá÷şñéóç âéâëéïãñáößáò";
     TEXT[ dutch ] = "Item voor literatuurlijst";
     TEXT[ french ] = "Entrée de bibliographie";
@@ -1167,7 +1167,7 @@ String STR_AUTHORITY
     TEXT[ turkish ] = "Kaynakça girişi";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Entrada bibliografia";
-    TEXT[ finnish ] = "Bibliografiamerkintä";
+    TEXT[ finnish ] = "Lähdeluettelomerkintä";
     TEXT[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
 };
 String STR_HIDDENPARAFLD
@@ -1267,7 +1267,7 @@ String FLD_DATE_FIX
     TEXT [ italian ] = "Data (fissa)" ;
     TEXT [ portuguese_brazilian ] = "Data (fix)" ;
     TEXT [ portuguese ] = "Data (fixa)" ;
-    TEXT [ finnish ] = "Päivämäärä (kiinteä)" ;
+    TEXT [ finnish ] = "Kiinteä päivämäärä" ;
     TEXT [ danish ] = "Dato (fast)" ;
     TEXT [ french ] = "Date (fixe)" ;
     TEXT [ swedish ] = "Datum (fast)" ;
@@ -1322,7 +1322,7 @@ String FLD_TIME_FIX
     TEXT [ italian ] = "Orario (fisso)" ;
     TEXT [ portuguese_brazilian ] = "Hora (fix)" ;
     TEXT [ portuguese ] = "Hora (fixa)" ;
-    TEXT [ finnish ] = "Aika (kiinteä)" ;
+    TEXT [ finnish ] = "Kiinteä kellonaika" ;
     TEXT [ danish ] = "Klokkeslæt (fast)" ;
     TEXT [ french ] = "Heure (fixe)" ;
     TEXT [ swedish ] = "Klockslag (fast)" ;
@@ -1389,7 +1389,7 @@ String FLD_STAT_CHAR
     TEXT [ spanish ] = "Caracteres" ;
     TEXT [ english_us ] = "Characters" ;
     TEXT[ chinese_simplified ] = "å­—ç¬¦";
-    TEXT[ russian ] = "Çíàêè";
+    TEXT[ russian ] = "Ñèìâîëû";
     TEXT[ polish ] = "Znaki";
     TEXT[ japanese ] = "æ–‡å­—";
     TEXT[ language_user1 ] = " ";
@@ -1465,7 +1465,7 @@ String FLD_STAT_GRF
     TEXT [ italian ] = "Immagini" ;
     TEXT [ portuguese_brazilian ] = "Gr?ficos" ;
     TEXT [ portuguese ] = "Imagens" ;
-    TEXT [ finnish ] = "Kuvat" ;
+    TEXT [ finnish ] = "Grafiikka" ;
     TEXT [ danish ] = "Grafik" ;
     TEXT [ french ] = "Images" ;
     TEXT [ swedish ] = "Grafik" ;
@@ -1473,7 +1473,7 @@ String FLD_STAT_GRF
     TEXT [ spanish ] = "Imágenes" ;
     TEXT [ english_us ] = "Graphics" ;
     TEXT[ chinese_simplified ] = "å›¾å½¢";
-    TEXT[ russian ] = "Ğèñóíêè";
+    TEXT[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
     TEXT[ polish ] = "Grafiki";
     TEXT[ japanese ] = "å›³";
     TEXT[ chinese_traditional ] = "åœ–å½¢";
@@ -1583,7 +1583,7 @@ String FMT_DDE_NORMAL
     TEXT [ danish ] = "DDE manuel" ;
     TEXT [ french ] = "DDE manuel" ;
     TEXT [ swedish ] = "DDE manuell" ;
-    TEXT [ dutch ] = "DDE-handmatig" ;
+    TEXT [ dutch ] = "DDE handmatig" ;
     TEXT [ spanish ] = "DDE manual" ;
     TEXT [ english_us ] = "DDE manual" ;
     TEXT[ chinese_simplified ] = "DDE æ‰‹å·¥";
@@ -1622,7 +1622,7 @@ String FLD_EU_FIRMA
     TEXT [ spanish ] = "Empresa" ;
     TEXT [ english_us ] = "Company" ;
     TEXT[ chinese_simplified ] = "å…¬å¸";
-    TEXT[ russian ] = "Ôèğìà";
+    TEXT[ russian ] = "Îğãàíèçàöèÿ";
     TEXT[ polish ] = "Firma";
     TEXT[ japanese ] = "ä¼šç¤¾å";
     TEXT[ chinese_traditional ] = "å…¬å¸";
@@ -1753,7 +1753,7 @@ String FLD_EU_LAND
     TEXT [ italian ] = "Paese" ;
     TEXT [ portuguese_brazilian ] = "Pa?s" ;
     TEXT [ portuguese ] = "País" ;
-    TEXT [ finnish ] = "Maa" ;
+    TEXT [ finnish ] = "Maa/Alue" ;
     TEXT [ danish ] = "Land" ;
     TEXT [ french ] = "Pays" ;
     TEXT [ swedish ] = "Land" ;
@@ -1845,7 +1845,7 @@ String FLD_EU_TITEL
     TEXT [ spanish ] = "Título" ;
     TEXT [ english_us ] = "Title" ;
     TEXT[ chinese_simplified ] = "å¤´è¡”";
-    TEXT[ russian ] = "Òèòóë";
+    TEXT[ russian ] = "Çàãîëîâîê";
     TEXT[ polish ] = "Tytu³";
     TEXT[ japanese ] = "è‚©æ›¸ã";
     TEXT[ chinese_traditional ] = "é ­éŠœ";
@@ -1929,7 +1929,7 @@ String FLD_EU_TELFIRMA
     TEXT [ spanish ] = "Tel. (Emp.)" ;
     TEXT [ english_us ] = "Tel. (Work)" ;
     TEXT[ chinese_simplified ] = "ç”µè¯(åŠå…¬å®¤)";
-    TEXT[ russian ] = "Òåë. (ñëóæåáíûé)";
+    TEXT[ russian ] = "Òåë. (ğàáî÷èé)";
     TEXT[ polish ] = "Tel. (firmowy)";
     TEXT[ japanese ] = "Tel.(å‹¤å‹™å…ˆ)";
     TEXT[ chinese_traditional ] = "é›»è©±(è¾¦å…¬å®¤)";
@@ -1959,7 +1959,7 @@ String FLD_EU_EMAIL
     Text [ french ] = "E-Mail" ;
     Text [ dutch ] = "E-mail" ;
     Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶";
-    Text[ russian ] = "Àäğåñ ıë. ïî÷òû";
+    Text[ russian ] = "İë. Ïî÷òà";
     Text[ polish ] = "e-mail";
     Text[ japanese ] = "E-mail";
     Text[ chinese_traditional ] = "é›»å­éƒµä»¶";
@@ -1980,7 +1980,7 @@ String FLD_EU_STATE
     Text [ italian ] = "Stato" ;
     Text [ spanish ] = "Estado" ;
     Text [ french ] = "Région" ;
-    Text [ dutch ] = "Staat" ;
+    Text [ dutch ] = "Land" ;
     Text [ danish ] = "Stat" ;
     Text [ portuguese_brazilian ] = "Staat" ;
     Text [ portuguese ] = "Estado" ;
@@ -2023,7 +2023,7 @@ String FLD_PAGEREF_OFF
     Text[ turkish ] = "kapalı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "off";
-    Text[ finnish ] = "off";
+    Text[ finnish ] = "poissa käytöstä";
     Text[ thai ] = "à¸›à¸´à¸”";
 };
 String FLD_PAGEREF_ON
@@ -2050,7 +2050,7 @@ String FLD_PAGEREF_ON
     Text[ turkish ] = "Açık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "on";
-    Text[ finnish ] = "on";
+    Text[ finnish ] = "käytössä";
     Text[ thai ] = "à¹€à¸›à¸´à¸”";
 };
 /*--------------------------------------------------------------------
@@ -2069,7 +2069,7 @@ String FMT_FF_NAME
     TEXT [ danish ] = "Filnavn" ;
     TEXT [ french ] = "Nom de fichier" ;
     TEXT [ swedish ] = "Filnamn" ;
-    TEXT [ dutch ] = "Naam bestand" ;
+    TEXT [ dutch ] = "Bestandsnaam" ;
     TEXT [ spanish ] = "Nombre del archivo" ;
     TEXT [ english_us ] = "File name" ;
     TEXT[ chinese_simplified ] = "æ–‡ä»¶å";
@@ -2109,7 +2109,7 @@ String FMT_FF_NAME_NOEXT
     Text[ turkish ] = "Uzantısız dosya adı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nom del fitxer sense extensió";
-    Text[ finnish ] = "Tiedostonimi ilman tunnistetta";
+    Text[ finnish ] = "Tiedoston nimi ilman tunnistetta";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹à¸Ÿà¹‰à¸¡à¹„à¸¡à¹ˆà¸¡à¸µà¸ªà¹ˆà¸§à¸™à¸‚à¸¢à¸²à¸¢";
 };
 String FMT_FF_PATHNAME
@@ -2181,7 +2181,7 @@ String FMT_FF_UI_NAME
     Text [ french ] = "Modèle" ;
     Text [ dutch ] = "Sjabloon" ;
     Text[ chinese_simplified ] = "æ ·å¼";
-    Text[ russian ] = "Øàáëîí";
+    Text[ russian ] = "Ñòèëü";
     Text[ polish ] = "Szablon";
     Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
     Text[ chinese_traditional ] = "æ¨£å¼";
@@ -2208,7 +2208,7 @@ String FMT_FF_UI_RANGE
     Text [ french ] = "Catégorie" ;
     Text [ dutch ] = "Bereik" ;
     Text[ chinese_simplified ] = "åŒºåŸŸ";
-    Text[ russian ] = "Îáëàñòü";
+    Text[ russian ] = "Êàòåãîğèÿ";
     Text[ polish ] = "Obszar";
     Text[ japanese ] = "ç¯„å›²";
     Text[ chinese_traditional ] = "å€åŸŸ";
@@ -2236,7 +2236,7 @@ String FMT_CHAPTER_NAME
     TEXT [ danish ] = "Kapitelnavn" ;
     TEXT [ french ] = "Nom de chapitre" ;
     TEXT [ swedish ] = "Kapitelnamn" ;
-    TEXT [ dutch ] = "Naam hoofdstuk" ;
+    TEXT [ dutch ] = "Hoofdstuknaam" ;
     TEXT [ spanish ] = "Nombre del capítulo" ;
     TEXT [ english_us ] = "Chapter name" ;
     TEXT[ chinese_simplified ] = "ç« åç§°";
@@ -2264,7 +2264,7 @@ String FMT_CHAPTER_NO
     Text [ italian ] = "Numero capitolo" ;
     Text [ spanish ] = "Número del capítulo" ;
     Text [ french ] = "Numéro de chapitre" ;
-    Text [ dutch ] = "Nummer hoofdstuk" ;
+    Text [ dutch ] = "Hoofdstuknummer" ;
     Text[ chinese_simplified ] = "ç« èŠ‚ç¼–å·";
     Text[ russian ] = "Íîìåğ ãëàâû";
     Text[ polish ] = "Numer rozdzia³u";
@@ -2319,7 +2319,7 @@ String FMT_CHAPTER_NAMENO
     Text [ italian ] = "Numero di capitolo e nome" ;
     Text [ spanish ] = "Número y nombre" ;
     Text [ french ] = "Numéro et nom de chapitre" ;
-    Text [ dutch ] = "Hoofdstuknummer en naam" ;
+    Text [ dutch ] = "Hoofdstuknummer en -naam" ;
     Text[ chinese_simplified ] = "ç« èŠ‚ç¼–å·å’Œåç§°";
     Text[ russian ] = "Íàçâàíèå è íîìåğ ãëàâû";
     Text[ polish ] = "Numer i nazwa rozdzia³u";
@@ -2781,7 +2781,7 @@ String FMT_REG_AUTHOR
     TEXT [ italian ] = "Autore" ;
     TEXT [ portuguese_brazilian ] = "Autor" ;
     TEXT [ portuguese ] = "Autor" ;
-    TEXT [ finnish ] = "Laatija" ;
+    TEXT [ finnish ] = "Tekijä" ;
     TEXT [ danish ] = "Forfatter" ;
     TEXT [ french ] = "Auteur" ;
     TEXT [ swedish ] = "Författare" ;
@@ -2896,7 +2896,7 @@ String FMT_REF_PAGE
     TEXT [ italian ] = "Pagina" ;
     TEXT [ portuguese_brazilian ] = "P?gina" ;
     TEXT [ portuguese ] = "Página" ;
-    TEXT [ finnish ] = "Sivu " ;
+    TEXT [ finnish ] = "Sivu" ;
     TEXT [ danish ] = "Side" ;
     TEXT [ french ] = "Page" ;
     TEXT [ swedish ] = "Sida" ;
@@ -2983,7 +2983,7 @@ String FMT_REF_PAGE_PGDSC
     TEXT [ danish ] = "Som sidetypografi" ;
     TEXT [ french ] = "D'après le style de page" ;
     TEXT [ swedish ] = "Som sidformatmall" ;
-    TEXT [ dutch ] = "Volgens pagina-opmaakprofiel" ;
+    TEXT [ dutch ] = "Zoals pagina-opmaakprofiel" ;
     TEXT [ spanish ] = "Como estilo de página" ;
     TEXT [ english_us ] = "As Page Style" ;
     TEXT[ chinese_simplified ] = "å’Œé¡µé¢æ ·å¼ç›¸åŒ";
@@ -3040,7 +3040,7 @@ String FMT_REF_ONLYCAPTION
     Text [ portuguese ] = "Texto para etiqueta" ;
     Text [ portuguese_brazilian ] = "Beschriftungstext" ;
     Text[ chinese_simplified ] = "æ ‡ç­¾æ–‡";
-    Text[ russian ] = "Òåêñò íàäïèñè";
+    Text[ russian ] = "Òåêñò íàçâàíèÿ";
     Text[ polish ] = "Tekst etykiety";
     Text[ japanese ] = "å›³è¡¨ç•ªå·ãƒ†ã‚­ã‚¹ãƒˆ";
     Text[ chinese_traditional ] = "æ¨™ç±¤æ–‡";
@@ -3059,7 +3059,7 @@ String FMT_REF_ONLYSEQNO
     TEXT [ English ] = "Only Numbering" ;
     TEXT[ english_us ] = "Numbering";
     TEXT[ portuguese ] = "Número";
-    TEXT[ russian ] = "Íîìåğ";
+    TEXT[ russian ] = "Íóìåğàöèÿ";
     TEXT[ dutch ] = "Nummer";
     TEXT[ french ] = "Numéro";
     TEXT[ spanish ] = "Número";
@@ -3154,7 +3154,7 @@ String FMT_MARK_FRAME
     Text [ spanish ] = "Marco" ;
     Text [ english_us ] = "Frame" ;
     Text[ chinese_simplified ] = "æ¡†";
-    Text[ russian ] = "Ğàìêà";
+    Text[ russian ] = "Âğåçêà";
     Text[ polish ] = "Ramka";
     Text[ japanese ] = "æ ";
     Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š";
@@ -3174,7 +3174,7 @@ String FMT_MARK_GRAFIC
     Text [ italian ] = "Immagine" ;
     Text [ portuguese_brazilian ] = "Gr?fico" ;
     Text [ portuguese ] = "Imagem" ;
-    Text [ finnish ] = "Kuvat" ;
+    Text [ finnish ] = "Grafiikka" ;
     Text [ danish ] = "Grafik" ;
     Text [ french ] = "Image" ;
     Text [ swedish ] = "Grafik" ;
@@ -3182,7 +3182,7 @@ String FMT_MARK_GRAFIC
     Text [ spanish ] = "Imagen" ;
     Text [ english_us ] = "Graphics" ;
     Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ russian ] = "Ğèñóíîê";
+    Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Grafika";
     Text[ japanese ] = "å›³";
     Text[ chinese_traditional ] = "åœ–å½¢";
@@ -3276,7 +3276,7 @@ String STR_INSERT
     Text [ spanish ] = "Insertar" ;
     Text [ english_us ] = "Insert" ;
     Text[ chinese_simplified ] = "æ’å…¥";
-    Text[ russian ] = "Âñòàâêà";
+    Text[ russian ] = "Âñòàâèòü";
     Text[ polish ] = "Wstaw";
     Text[ japanese ] = "æŒ¿å…¥";
     Text[ chinese_traditional ] = "æ’å…¥";
@@ -3409,11 +3409,11 @@ String STR_MACNAME
     TEXT [ italian ] = "Nome ~macro" ;
     TEXT [ portuguese_brazilian ] = "Nome da macro" ;
     TEXT [ portuguese ] = "Nome da ~macro" ;
-    TEXT [ finnish ] = "Makron nimi" ;
+    TEXT [ finnish ] = "Makron n~imi" ;
     TEXT [ danish ] = "Makronavn" ;
     TEXT [ french ] = "~Nom de la macro" ;
     TEXT [ swedish ] = "~Makronamn" ;
-    TEXT [ dutch ] = "~Naam macro" ;
+    TEXT [ dutch ] = "Macro~naam" ;
     TEXT [ spanish ] = "Nombre de la ~macro" ;
     TEXT [ english_us ] = "~Macro name" ;
     TEXT[ chinese_simplified ] = "å®åç§°(~M)";
@@ -3445,7 +3445,7 @@ String STR_PROMPT
     TEXT [ spanish ] = "I~ndicación" ;
     TEXT [ english_us ] = "~Reference" ;
     TEXT[ chinese_simplified ] = "æç¤º(~R)";
-    TEXT[ russian ] = "Óêàçàíèå";
+    TEXT[ russian ] = "Ññûëêà";
     TEXT[ polish ] = "Wskazówka";
     TEXT[ japanese ] = "ãƒ’ãƒ³ãƒˆ(~R)";
     TEXT[ chinese_traditional ] = "æç¤º(~R)";
@@ -3463,7 +3463,7 @@ String STR_COMBCHRS_FT
     TEXT [ English ] = "Ch~aracters" ;
     TEXT[ english_us ] = "Ch~aracters";
     TEXT[ portuguese ] = "~Caracteres";
-    TEXT[ russian ] = "Çíàêè";
+    TEXT[ russian ] = "Ñèìâîëû";
     TEXT[ greek ] = "×áñáêôŞñåò";
     TEXT[ dutch ] = "~Tekens";
     TEXT[ french ] = "Caractères";
@@ -3499,7 +3499,7 @@ String STR_SETNO
     TEXT [ spanish ] = "Número de registro" ;
     TEXT [ english_us ] = "Record number" ;
     TEXT[ chinese_simplified ] = "æ¡ç›®ç¼–å·";
-    TEXT[ russian ] = "Íîìåğ ïğåäëîæåíèÿ";
+    TEXT[ russian ] = "Íîìåğ çàïèñè";
     TEXT[ polish ] = "Numer rekordu";
     TEXT[ japanese ] = "ãƒ¬ã‚³ãƒ¼ãƒ‰ç•ªå·";
     TEXT[ chinese_traditional ] = "æ¢ç›®è™Ÿç¢¼";
@@ -3527,7 +3527,7 @@ String STR_OFFSET
     TEXT [ spanish ] = "C~orrección" ;
     TEXT [ english_us ] = "O~ffset" ;
     TEXT[ chinese_simplified ] = "ä¿®æ”¹(~F)";
-    TEXT[ russian ] = "Êîğğåêòèğîâêà";
+    TEXT[ russian ] = "Ñìåùåíèå";
     TEXT[ polish ] = "Korekta";
     TEXT[ japanese ] = "ä¿®æ­£(~F)";
     TEXT[ chinese_traditional ] = "ä¿®æ”¹(~F)";
@@ -3610,7 +3610,7 @@ String STR_LEVEL
     TEXT [ spanish ] = "Nivel " ;
     TEXT [ english_us ] = "Layer " ;
     TEXT[ chinese_simplified ] = "çº§";
-    TEXT[ russian ] = "Óğîâåíü";
+    TEXT[ russian ] = "Ñëîé";
     TEXT[ polish ] = "Poziom  ";
     TEXT[ japanese ] = "ãƒ¬ãƒ™ãƒ«";
     TEXT[ chinese_traditional ] = "ç´š";
