@@ -76,3 +76,9 @@ hedabu: ..\inc\sdobjfac.hxx %_DEST%\inc%_EXT%\sd\sdobjfac.hxx
 ..\xml\SdXImpressView.xml %_DEST%\xml%_EXT%\SdXImpressView.xml
 ..\xml\SdXPresentation.xml %_DEST%\xml%_EXT%\SdXPresentation.xml
 ..\xml\SdXShape.xml %_DEST%\xml%_EXT%\SdXShape.xml
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
