@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 15:45:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,12 @@
  ************************************************************************/
 #ifndef DBACCESS_CORE_API_BOOKMARKSET_HXX
 #include "BookmarkSet.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
@@ -129,7 +135,7 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
 {
     Reference<XRowUpdate> xUpdRow(m_xRowLocate,UNO_QUERY);
     if(!xUpdRow.is())
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_XROWUPDATE),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 
     Reference<XResultSetUpdate> xUpd(m_xRowLocate,UNO_QUERY);
     if(xUpd.is())
@@ -145,7 +151,7 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
         (*_rInsertRow->begin()) = m_xRowLocate->getBookmark();
     }
     else
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_XRESULTSETUPDATE),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
@@ -153,7 +159,7 @@ void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowS
     //  OCacheSet::updateRow( _rInsertRow,_rOrginalRow,_xTable);
     Reference<XRowUpdate> xUpdRow(m_xRowLocate,UNO_QUERY);
     if(!xUpdRow.is())
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_XROWUPDATE),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 
     sal_Int32 i = 1;
     connectivity::ORowVector< ORowSetValue > ::const_iterator aOrgIter = _rOrginalRow->begin()+1;
@@ -168,7 +174,7 @@ void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowS
     if(xUpd.is())
         xUpd->updateRow();
     else
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_XRESULTSETUPDATE),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OBookmarkSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
