@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydeep.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,7 @@ inline sal_Bool isDerivedFrom(
     const ::com::sun::star::uno::Type& rBaseType,
     Interface* /*p*/)
 {
-    return isDerivedFrom(
-                rBaseType,
-                ::getCppuType(static_cast<const ::com::sun::star::uno::Reference<Interface> *>(0)));
+    return isDerivedFrom(rBaseType, Interface::static_type());
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -122,7 +120,7 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -139,9 +137,9 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -159,11 +157,11 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface3 > *>(0))))
+    else if (isDerivedFrom(rType, Interface3::static_type()))
         return ::com::sun::star::uno::Any( &p3, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -182,13 +180,13 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface3 > *>(0))))
+    else if (isDerivedFrom(rType, Interface3::static_type()))
         return ::com::sun::star::uno::Any( &p3, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface4 > *>(0))))
+    else if (isDerivedFrom(rType, Interface4::static_type()))
         return ::com::sun::star::uno::Any( &p4, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -208,15 +206,15 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     const ::com::sun::star::uno::Type & rType,
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface3 > *>(0))))
+    else if (isDerivedFrom(rType, Interface3::static_type()))
         return ::com::sun::star::uno::Any( &p3, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface4 > *>(0))))
+    else if (isDerivedFrom(rType, Interface4::static_type()))
         return ::com::sun::star::uno::Any( &p4, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface5 > *>(0))))
+    else if (isDerivedFrom(rType, Interface5::static_type()))
         return ::com::sun::star::uno::Any( &p5, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -239,17 +237,17 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface3 > *>(0))))
+    else if (isDerivedFrom(rType, Interface3::static_type()))
         return ::com::sun::star::uno::Any( &p3, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface4 > *>(0))))
+    else if (isDerivedFrom(rType, Interface4::static_type()))
         return ::com::sun::star::uno::Any( &p4, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface5 > *>(0))))
+    else if (isDerivedFrom(rType, Interface5::static_type()))
         return ::com::sun::star::uno::Any( &p5, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface6 > *>(0))))
+    else if (isDerivedFrom(rType, Interface6::static_type()))
         return ::com::sun::star::uno::Any( &p6, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -273,19 +271,19 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface3 > *>(0))))
+    else if (isDerivedFrom(rType, Interface3::static_type()))
         return ::com::sun::star::uno::Any( &p3, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface4 > *>(0))))
+    else if (isDerivedFrom(rType, Interface4::static_type()))
         return ::com::sun::star::uno::Any( &p4, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface5 > *>(0))))
+    else if (isDerivedFrom(rType, Interface5::static_type()))
         return ::com::sun::star::uno::Any( &p5, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface6 > *>(0))))
+    else if (isDerivedFrom(rType, Interface6::static_type()))
         return ::com::sun::star::uno::Any( &p6, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface7 > *>(0))))
+    else if (isDerivedFrom(rType, Interface7::static_type()))
         return ::com::sun::star::uno::Any( &p7, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -310,21 +308,21 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface3 > *>(0))))
+    else if (isDerivedFrom(rType, Interface3::static_type()))
         return ::com::sun::star::uno::Any( &p3, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface4 > *>(0))))
+    else if (isDerivedFrom(rType, Interface4::static_type()))
         return ::com::sun::star::uno::Any( &p4, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface5 > *>(0))))
+    else if (isDerivedFrom(rType, Interface5::static_type()))
         return ::com::sun::star::uno::Any( &p5, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface6 > *>(0))))
+    else if (isDerivedFrom(rType, Interface6::static_type()))
         return ::com::sun::star::uno::Any( &p6, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface7 > *>(0))))
+    else if (isDerivedFrom(rType, Interface7::static_type()))
         return ::com::sun::star::uno::Any( &p7, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface8 > *>(0))))
+    else if (isDerivedFrom(rType, Interface8::static_type()))
         return ::com::sun::star::uno::Any( &p8, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -350,23 +348,23 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface3 > *>(0))))
+    else if (isDerivedFrom(rType, Interface3::static_type()))
         return ::com::sun::star::uno::Any( &p3, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface4 > *>(0))))
+    else if (isDerivedFrom(rType, Interface4::static_type()))
         return ::com::sun::star::uno::Any( &p4, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface5 > *>(0))))
+    else if (isDerivedFrom(rType, Interface5::static_type()))
         return ::com::sun::star::uno::Any( &p5, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface6 > *>(0))))
+    else if (isDerivedFrom(rType, Interface6::static_type()))
         return ::com::sun::star::uno::Any( &p6, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface7 > *>(0))))
+    else if (isDerivedFrom(rType, Interface7::static_type()))
         return ::com::sun::star::uno::Any( &p7, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface8 > *>(0))))
+    else if (isDerivedFrom(rType, Interface8::static_type()))
         return ::com::sun::star::uno::Any( &p8, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface9 > *>(0))))
+    else if (isDerivedFrom(rType, Interface9::static_type()))
         return ::com::sun::star::uno::Any( &p9, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -393,25 +391,25 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     Interface1 * p1, Interface2 * p2, Interface3 * p3, Interface4 * p4, Interface5 * p5,
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface3 > *>(0))))
+    else if (isDerivedFrom(rType, Interface3::static_type()))
         return ::com::sun::star::uno::Any( &p3, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface4 > *>(0))))
+    else if (isDerivedFrom(rType, Interface4::static_type()))
         return ::com::sun::star::uno::Any( &p4, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface5 > *>(0))))
+    else if (isDerivedFrom(rType, Interface5::static_type()))
         return ::com::sun::star::uno::Any( &p5, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface6 > *>(0))))
+    else if (isDerivedFrom(rType, Interface6::static_type()))
         return ::com::sun::star::uno::Any( &p6, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface7 > *>(0))))
+    else if (isDerivedFrom(rType, Interface7::static_type()))
         return ::com::sun::star::uno::Any( &p7, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface8 > *>(0))))
+    else if (isDerivedFrom(rType, Interface8::static_type()))
         return ::com::sun::star::uno::Any( &p8, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface9 > *>(0))))
+    else if (isDerivedFrom(rType, Interface9::static_type()))
         return ::com::sun::star::uno::Any( &p9, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface10 > *>(0))))
+    else if (isDerivedFrom(rType, Interface10::static_type()))
         return ::com::sun::star::uno::Any( &p10, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -441,27 +439,27 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
     Interface11 * p11 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface3 > *>(0))))
+    else if (isDerivedFrom(rType, Interface3::static_type()))
         return ::com::sun::star::uno::Any( &p3, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface4 > *>(0))))
+    else if (isDerivedFrom(rType, Interface4::static_type()))
         return ::com::sun::star::uno::Any( &p4, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface5 > *>(0))))
+    else if (isDerivedFrom(rType, Interface5::static_type()))
         return ::com::sun::star::uno::Any( &p5, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface6 > *>(0))))
+    else if (isDerivedFrom(rType, Interface6::static_type()))
         return ::com::sun::star::uno::Any( &p6, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface7 > *>(0))))
+    else if (isDerivedFrom(rType, Interface7::static_type()))
         return ::com::sun::star::uno::Any( &p7, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface8 > *>(0))))
+    else if (isDerivedFrom(rType, Interface8::static_type()))
         return ::com::sun::star::uno::Any( &p8, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface9 > *>(0))))
+    else if (isDerivedFrom(rType, Interface9::static_type()))
         return ::com::sun::star::uno::Any( &p9, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface10 > *>(0))))
+    else if (isDerivedFrom(rType, Interface10::static_type()))
         return ::com::sun::star::uno::Any( &p10, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface11 > *>(0))))
+    else if (isDerivedFrom(rType, Interface11::static_type()))
         return ::com::sun::star::uno::Any( &p11, rType );
     else
         return ::com::sun::star::uno::Any();
@@ -492,29 +490,29 @@ inline ::com::sun::star::uno::Any queryDeepInterface(
     Interface6 * p6, Interface7 * p7, Interface8 * p8, Interface9 * p9, Interface10 * p10,
     Interface11 * p11, Interface12 * p12 )
 {
-    if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface1 > *>(0))))
+    if (isDerivedFrom(rType, Interface1::static_type()))
         return ::com::sun::star::uno::Any( &p1, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface2 > *>(0))))
+    else if (isDerivedFrom(rType, Interface2::static_type()))
         return ::com::sun::star::uno::Any( &p2, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface3 > *>(0))))
+    else if (isDerivedFrom(rType, Interface3::static_type()))
         return ::com::sun::star::uno::Any( &p3, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface4 > *>(0))))
+    else if (isDerivedFrom(rType, Interface4::static_type()))
         return ::com::sun::star::uno::Any( &p4, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface5 > *>(0))))
+    else if (isDerivedFrom(rType, Interface5::static_type()))
         return ::com::sun::star::uno::Any( &p5, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface6 > *>(0))))
+    else if (isDerivedFrom(rType, Interface6::static_type()))
         return ::com::sun::star::uno::Any( &p6, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface7 > *>(0))))
+    else if (isDerivedFrom(rType, Interface7::static_type()))
         return ::com::sun::star::uno::Any( &p7, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface8 > *>(0))))
+    else if (isDerivedFrom(rType, Interface8::static_type()))
         return ::com::sun::star::uno::Any( &p8, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface9 > *>(0))))
+    else if (isDerivedFrom(rType, Interface9::static_type()))
         return ::com::sun::star::uno::Any( &p9, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface10 > *>(0))))
+    else if (isDerivedFrom(rType, Interface10::static_type()))
         return ::com::sun::star::uno::Any( &p10, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface11 > *>(0))))
+    else if (isDerivedFrom(rType, Interface11::static_type()))
         return ::com::sun::star::uno::Any( &p11, rType );
-    else if (isDerivedFrom(rType, ::getCppuType(static_cast<const ::com::sun::star::uno::Reference< Interface12 > *>(0))))
+    else if (isDerivedFrom(rType, Interface12::static_type()))
         return ::com::sun::star::uno::Any( &p12, rType );
     else
         return ::com::sun::star::uno::Any();
