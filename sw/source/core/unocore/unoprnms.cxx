@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 12:00:41 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_LOCALE_COMPLEX                    
 
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_AUTO_KERNING                      (MAP_CHAR_LEN("CharAutoKerning"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_UNDERLINE                         (MAP_CHAR_LEN("CharUnderline"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_UNDERLINE_COLOR                           (MAP_CHAR_LEN("CharUnderlineColor"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_UNDERLINE_HAS_COLOR                           (MAP_CHAR_LEN("CharUnderlineHasColor"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_ESCAPEMENT                        (MAP_CHAR_LEN("CharEscapement"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_CASE_MAP                          (MAP_CHAR_LEN("CharCaseMap"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_SHADOWED                          (MAP_CHAR_LEN("CharShadowed"));
@@ -179,6 +181,10 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FLASH                             
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_KERNING                           (MAP_CHAR_LEN("CharKerning"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_BACK_COLOR                        (MAP_CHAR_LEN("CharBackColor"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_BACK_TRANSPARENT          (MAP_CHAR_LEN("CharBackTransparent"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_COMBINE_IS_ON         (MAP_CHAR_LEN("CharCombineIsOn"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_COMBINE_PREFIX            (MAP_CHAR_LEN("CharCombinePrefix"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_COMBINE_SUFFIX            (MAP_CHAR_LEN("CharCombineSuffix"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_EMPHASIZE         (MAP_CHAR_LEN("CharEmphasize"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_LINE_SPACING                      (MAP_CHAR_LEN("ParaLineSpacing"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_TOP_MARGIN                        (MAP_CHAR_LEN("ParaTopMargin"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_BOTTOM_MARGIN                     (MAP_CHAR_LEN("ParaBottomMargin"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 12:00:41 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,6 +511,8 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_CHAR_AUTO_ESCAPEMENT),          RES_CHRATR_ESCAPEMENT,  &::getBooleanCppuType()  ,              PropertyAttribute::MAYBEVOID, MID_AUTO_ESC  },                                                \
         { SW_PROP_NAME(UNO_NAME_CHAR_FLASH              ),  RES_CHRATR_BLINK    ,   &::getBooleanCppuType()  ,          PropertyAttribute::MAYBEVOID,     0},                                                                 \
         { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),            PropertyAttribute::MAYBEVOID, MID_UNDERLINE},                                                \
+        { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_COLOR),              RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_UL_COLOR},                                                \
+        { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR),              RES_CHRATR_UNDERLINE ,  &::getBooleanCppuType(),            PropertyAttribute::MAYBEVOID, MID_UL_HASCOLOR},                                                \
         { SW_PROP_NAME(UNO_NAME_PARA_GRAPHIC_URL      ),        RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_URL    },                                          \
         { SW_PROP_NAME(UNO_NAME_PARA_GRAPHIC_FILTER  ),         RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_FILTER    },                                       \
         { SW_PROP_NAME(UNO_NAME_PARA_GRAPHIC_LOCATION),         RES_BACKGROUND,         &::getCppuType((const style::GraphicLocation*)0), PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_POSITION},                                \
@@ -577,7 +579,11 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,&::getCppuType((const sal_Int8*)0),   PropertyAttribute::READONLY, 0},                                                     \
         { SW_PROP_NAME(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME),  FN_UNO_PARA_CONDITIONAL_STYLE_NAME, &::getCppuType((const OUString*)0),      PropertyAttribute::READONLY, 0},                                                     \
         { SW_PROP_NAME(UNO_NAME_PARA_IS_NUMBERING_RESTART),     FN_NUMBER_NEWSTART,     &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID, 0 },                                                                        \
-        { SW_PROP_NAME(UNO_NAME_PARA_SHADOW_FORMAT),            RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},
+        { SW_PROP_NAME(UNO_NAME_PARA_SHADOW_FORMAT),            RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS}, \
+        { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID, MID_TWOLINES}, \
+        { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PropertyAttribute::MAYBEVOID, MID_START_BRACKET}, \
+        { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PropertyAttribute::MAYBEVOID, MID_END_BRACKET}, \
+        { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_EMPHASIS},
 
 
 const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nPropertyId)
@@ -647,6 +653,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     _CJK_FONT_PROPERTIES
                     _CTL_FONT_PROPERTIES
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_COLOR),              RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_UL_COLOR},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR),              RES_CHRATR_UNDERLINE ,  &::getBooleanCppuType(),            PROPERTY_NONE, MID_UL_HASCOLOR},
                     { SW_PROP_NAME(UNO_NAME_CHAR_KERNING       ),           RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,  0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_NO_HYPHENATION     ),      RES_CHRATR_NOHYPHEN ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_SHADOWED),             RES_CHRATR_SHADOWED  ,  &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
@@ -660,6 +668,10 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),   RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_IS_PHYSICAL),                  FN_UNO_IS_PHYSICAL,    &::getBooleanCppuType(), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_DISPLAY_NAME),              FN_UNO_DISPLAY_NAME, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PROPERTY_NONE, MID_TWOLINES},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_START_BRACKET},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCharStyleMap;
@@ -691,6 +703,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     _CJK_FONT_PROPERTIES
                     _CTL_FONT_PROPERTIES
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_COLOR),              RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_UL_COLOR},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR),              RES_CHRATR_UNDERLINE ,  &::getBooleanCppuType(),            PROPERTY_NONE, MID_UL_HASCOLOR},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN_RELATIVE),  RES_LR_SPACE,         &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     MID_L_REL_MARGIN},
@@ -751,6 +765,10 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_DISPLAY_NAME),              FN_UNO_DISPLAY_NAME, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_CATEGORY),                  FN_UNO_CATEGORY,    &::getCppuType((sal_Int16*)0),          PROPERTY_NONE , 0 },
                     { SW_PROP_NAME(UNO_NAME_PARA_SHADOW_FORMAT),            RES_SHADOW,     &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PROPERTY_NONE, MID_TWOLINES},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_START_BRACKET},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aParaStyleMap;
@@ -1024,6 +1042,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     _CJK_FONT_PROPERTIES
                     _CTL_FONT_PROPERTIES
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_COLOR),              RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_UL_COLOR},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR),              RES_CHRATR_UNDERLINE ,  &::getBooleanCppuType(),            PROPERTY_NONE, MID_UL_HASCOLOR},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
@@ -1072,6 +1092,10 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHART_ROW_AS_LABEL),            FN_UNO_RANGE_ROW_LABEL, &::getBooleanCppuType(),            PROPERTY_NONE,  0},
                     { SW_PROP_NAME(UNO_NAME_CHART_COLUMN_AS_LABEL),         FN_UNO_RANGE_COL_LABEL, &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),           FN_UNO_PARA_STYLE,      &::getCppuType((const OUString*)0),         PROPERTY_NONE,     0},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PROPERTY_NONE, MID_TWOLINES},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_START_BRACKET},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aRangePropertyMap_Impl;
@@ -1613,6 +1637,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     _CJK_FONT_PROPERTIES
                     _CTL_FONT_PROPERTIES
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_COLOR),              RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_UL_COLOR},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR),              RES_CHRATR_UNDERLINE ,  &::getBooleanCppuType(),            PROPERTY_NONE, MID_UL_HASCOLOR},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
@@ -1660,6 +1686,10 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_WORD_MODE           ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),           FN_UNO_PARA_STYLE,      &::getCppuType((const OUString*)0),         PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),   RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PROPERTY_NONE, MID_TWOLINES},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_START_BRACKET},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
+                    { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTableCursorPropertyMap_Impl;
