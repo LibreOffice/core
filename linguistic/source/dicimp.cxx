@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-09 14:02:54 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _LANG_HXX //autogen wg. LANGUAGE_ENGLISH_US
 #include <tools/lang.hxx>
 #endif
@@ -236,7 +235,6 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
 
     // get stream to use
     SfxMedium aMedium( rMainURL, STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
-    aMedium.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
     SvStream *pStream = aMedium.GetInStream();
     if (!pStream)
         return nErr;
