@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:37:30 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,6 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( document::XLinkTargetSupplier )
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( lang::XMultiServiceFactory )
-    SC_QUERYINTERFACE( lang::XUnoTunnel )
     SC_QUERYINTERFACE( lang::XServiceInfo )
 
     uno::Any aRet = SfxBaseModel::queryInterface( rType );
@@ -410,7 +409,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         long nAggLen = aAggTypes.getLength();
         const uno::Type* pAggPtr = aAggTypes.getConstArray();
 
-        const long nThisLen = 15;
+        const long nThisLen = 14;
         aTypes.realloc( nParentLen + nAggLen + nThisLen );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheetDocument>*)0);
@@ -426,8 +425,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         pPtr[nParentLen +10] = getCppuType((const uno::Reference<document::XLinkTargetSupplier>*)0);
         pPtr[nParentLen +11] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
         pPtr[nParentLen +12] = getCppuType((const uno::Reference<lang::XMultiServiceFactory>*)0);
-        pPtr[nParentLen +13] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
-        pPtr[nParentLen +14] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
+        pPtr[nParentLen +13] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
 
         long i;
         for (i=0; i<nParentLen; i++)
@@ -1450,6 +1448,10 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
 
     //  aggregated number formats supplier has XUnoTunnel, too
     //  interface from aggregated object must be obtained via queryAggregation
+
+    sal_Int64 nRet = SfxBaseModel::getSomething( rId );
+    if ( nRet )
+        return nRet;
 
     if ( xNumberAgg.is() )
     {
