@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:57:08 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_SALDISP_CXX
-
 #define SAL_XT
 
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -80,10 +78,6 @@
 #if defined(SOLARIS) || defined(IRIX)
 #include <alloca.h>
 #include <osl/module.h>
-#endif
-
-#ifdef __SunOS_5_5_1
-extern "C" { int gethostname(char*,int); }
 #endif
 
 #include <prex.h>
@@ -744,10 +738,10 @@ extern "C" {
 #endif /* HAVE_LIBSN */
 
 SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
-        pDisp_( display ),
         mpFallbackFactory ( NULL ),
-        m_pWMAdaptor( NULL ),
-        hRefWindow_( None )
+        pDisp_( display ),
+        hRefWindow_( None ),
+        m_pWMAdaptor( NULL )
 {
     SalData *pSalData  = GetSalData();
     XVisualInfo aXVI;
@@ -1235,9 +1229,6 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
             if( GetServerVendor() == vendor_xfree )
             {
                 nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-#ifdef ARM32 // ??? Server! nicht Client ???
-                nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
-#endif
 #if defined LINUX || defined FREEBSD || defined MACOSX
                 // otherwm and olwm are a kind of default, which are not detected
                 // carefully. if we are running linux (i.e. not netbsd) on an xfree
@@ -1694,28 +1685,7 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
         }
         else switch( keysym )
         {
-#if 1 // Sun schaltet mit "Alt Graph"/XK_Mode_switch um
             // - - - - - Sun X-Server Tastatur ohne Cursorblock ??? - - -
-#if 0 // Sal supports F1 - F26
-            case XK_R1: // XK_F21:
-                nKey = KEY_F21; // KEY_PRINT/KEY_SYSREQ
-                break;
-            case XK_R2: // XK_F22:
-                nKey = KEY_F22; // KEY_SCROLLLOCK
-                break;
-            case XK_R3: // XK_F23:
-                nKey = KEY_F23; // KEY_PAUSE/KEY_BREAK
-                break;
-            case XK_R4: // XK_F24:
-                nKey = KEY_F24; // KEY_EQUAL
-                break;
-            case XK_R5: // XK_F25:
-                nKey = KEY_F25; // KEY_DIVIDE
-                break;
-            case XK_R6: // XK_F26:
-                nKey = KEY_F26; // KEY_MULTIPLY
-                break;
-#endif
             case XK_R7: // XK_F27:
                 nKey = KEY_HOME;
                 break;
@@ -1778,7 +1748,6 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             case XK_L10: // XK_F20:
                 nKey = KEY_CUT; // KEY_F20
                 break;
-#endif
             default:
                 if( keysym >= XK_F1 && keysym <= XK_F26 )
                     nKey = (USHORT)(KEY_F1 + keysym - XK_F1);
@@ -1838,13 +1807,13 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             case XK_Menu:
                 nKey = KEY_F10;
                 break;
-#if 0
+/*
             case XK_Break:
             case XK_Select:
             case XK_Execute:
             case XK_Print:
             case XK_Cancel:
-#endif
+*/
         }
     }
     else if( IsISOKey( keysym ) )  // XK_ISO_
