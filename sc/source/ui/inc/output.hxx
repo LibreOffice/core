@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:02:56 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,8 @@ public:
     void    DrawClipMarks();
 
     void    DrawNoteMarks();
-    void    PrintNoteMarks( const List& rPosList );     // Liste of ScAddress
+    void    AddPDFNotes();
+    void    PrintNoteMarks( const List& rPosList );     // List of ScAddress
 };
 
 
