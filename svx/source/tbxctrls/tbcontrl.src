@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:30:01 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ String RID_SVXSTR_AUTOMATIC
     Text[ english_us ] = "Automatic";
     Text[ portuguese ] = "Automatic";
     Text[ russian ] = "Автоматически";
-    Text[ greek ] = "Automatic";
+    Text[ greek ] = "Бхфьмбфб";
     Text[ dutch ] = "Automatic";
     Text[ french ] = "Automatique";
     Text[ spanish ] = "Automatic";
