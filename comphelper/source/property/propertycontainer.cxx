@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 11:14:04 $
+ *  last change: $Author: fs $ $Date: 2002-01-09 15:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,13 +363,25 @@ void OPropertyContainer::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, co
         case PropertyDescription::ltHoldMyself:
             m_aHoldProperties[aPos->aLocation.nOwnClassVectorIndex] = _rValue;
             break;
+
         case PropertyDescription::ltDerivedClassAnyType:
             *reinterpret_cast< Any* >(aPos->aLocation.pDerivedClassMember) = _rValue;
             break;
+
         case PropertyDescription::ltDerivedClassRealType:
-            OSL_ENSURE(_rValue.getValueType().equals(aPos->aType),
-                "OPropertyContainer::setFastPropertyValue_NoBroadcast : ooops .... the value is of the wrong type !");
-            uno_type_copyData(aPos->aLocation.pDerivedClassMember, const_cast<void*>(_rValue.getValue()), aPos->aType.getTypeLibType(), cpp_acquire);
+#ifdef _DEBUG
+            sal_Bool bSuccess =
+#endif
+            // copy the data from the to-be-set value
+            uno_type_assignData(
+                aPos->aLocation.pDerivedClassMember,        aPos->aType.getTypeLibType(),
+                const_cast< void* >( _rValue.getValue() ),  _rValue.getValueType().getTypeLibType(),
+                cpp_queryInterface,
+                cpp_acquire, cpp_release );
+
+            OSL_ENSURE( bSuccess,
+                "OPropertyContainer::setFastPropertyValue_NoBroadcast : ooops .... the value could not be assigned!");
+
             break;
     }
 }
@@ -499,6 +511,9 @@ void OPropertyContainer::describeProperties(Sequence< Property >& _rProps) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/09/27 11:14:04  hr
+ *  #65293#: includes
+ *
  *  Revision 1.8  2001/08/17 09:07:32  fs
  *  #91038# convertFastPropertyValue: allow for assigning different XInterface derivees
  *
