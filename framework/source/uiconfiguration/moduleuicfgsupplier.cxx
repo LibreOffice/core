@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuicfgsupplier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:08:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 11:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,10 +460,13 @@ throw ( NoSuchElementException, RuntimeException)
         aArgs[3] <<= aArg;
         */
         PropertyValue   aArg;
-        Sequence< Any > aArgs( 1 );
+        Sequence< Any > aArgs( 2 );
         aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleShortName" ));
         aArg.Value <<= sShort;
         aArgs[0] <<= aArg;
+        aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
+        aArg.Value <<= ModuleIdentifier;
+        aArgs[1] <<= aArg;
 
         pIter->second = Reference< XUIConfigurationManager >( m_xServiceManager->createInstanceWithArguments(
                                                                 SERVICENAME_MODULEUICONFIGURATIONMANAGER, aArgs ),

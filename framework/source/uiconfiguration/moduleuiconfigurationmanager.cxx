@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:09:11 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 11:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,11 +872,12 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
     if ( !m_bInitialized )
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleShortName"), ::rtl::OUString());
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleIdentifier"), ::rtl::OUString());
+        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleShortName"), ::rtl::OUString());
 
         m_aStorageHandler.connectToResource(PresetHandler::E_MODULES,
                                             PresetHandler::RESOURCETYPE_MENUBAR(), // this path wont be used later ... seee next lines!
-                                            m_aModuleIdentifier,
+                                            m_aModuleShortName,
                                             css::uno::Reference< css::embed::XStorage >()); // no document root used here!
 
         m_xUserRootCommit       = css::uno::Reference< css::embed::XTransactedObject >(m_aStorageHandler.getOrCreateRootStorageUser(), css::uno::UNO_QUERY_THROW);
