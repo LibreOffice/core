@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
+ *  last change: $Author: mtg $ $Date: 2001-06-07 14:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,7 +529,23 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
 /* -----------------24.06.98 18:12-------------------
  *
  * --------------------------------------------------*/
-#define COMMON_CRSR_PARA_PROPERTIES \
+#define COMMON_CRSR_PARA_PROPERTIES_FN_ONLY \
+        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),           FN_UNO_PARA_STYLE,      &::getCppuType((const OUString*)0),                 PropertyAttribute::MAYBEVOID,     0},                                                       \
+        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),                   FN_UNO_PAGE_STYLE,      &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},                       \
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_IS_NUMBER),       FN_UNO_IS_NUMBER,       &::getBooleanCppuType()  ,          PropertyAttribute::MAYBEVOID,     0},                                                                 \
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_LEVEL),           FN_UNO_NUM_LEVEL,       &::getCppuType((const sal_Int16*)0),            PropertyAttribute::MAYBEVOID, 0},                                                            \
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_RULES),           FN_UNO_NUM_RULES,       &::getCppuType((const uno::Reference<container::XIndexReplace>*)0),     PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},                        \
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_START_VALUE),     FN_UNO_NUM_START_VALUE, &::getCppuType((const sal_Int16*)0),            PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},                                                \
+        { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX),            FN_UNO_DOCUMENT_INDEX,  &::getCppuType((const uno::Reference<text::XDocumentIndex>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },            \
+        { SW_PROP_NAME(UNO_NAME_TEXT_TABLE),                FN_UNO_TEXT_TABLE,      &::getCppuType((const uno::Reference<text::XTextTable>*)0),     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },               \
+        { SW_PROP_NAME(UNO_NAME_CELL),                      FN_UNO_CELL,            &::getCppuType((uno::Reference<table::XCell>*)0),           PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                     \
+        { SW_PROP_NAME(UNO_NAME_TEXT_FRAME),                FN_UNO_TEXT_FRAME,      &::getCppuType((uno::Reference<text::XTextFrame>*)0),       PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                     \
+        { SW_PROP_NAME(UNO_NAME_TEXT_SECTION),              FN_UNO_TEXT_SECTION,    &::getCppuType((uno::Reference<text::XTextSection>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                    \
+        { SW_PROP_NAME(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,&::getCppuType((const sal_Int8*)0),   PropertyAttribute::READONLY, 0},                                                     \
+        { SW_PROP_NAME(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME),  FN_UNO_PARA_CONDITIONAL_STYLE_NAME, &::getCppuType((const OUString*)0),      PropertyAttribute::READONLY, 0},                                                     \
+        { SW_PROP_NAME(UNO_NAME_PARA_IS_NUMBERING_RESTART),     FN_NUMBER_NEWSTART,     &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID, 0 },
+
+#define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN \
         { SW_PROP_NAME(UNO_NAME_PARA_IS_HYPHENATION                ),   RES_PARATR_HYPHENZONE,      &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID, MID_IS_HYPHEN         },                                        \
         { SW_PROP_NAME(UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS ),   RES_PARATR_HYPHENZONE,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD   },                              \
         { SW_PROP_NAME(UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS),   RES_PARATR_HYPHENZONE,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL  },                              \
@@ -584,19 +600,8 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_PARA_BOTTOM_MARGIN),            RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_LO_MARGIN|CONVERT_TWIPS},                                 \
         { SW_PROP_NAME(UNO_NAME_CHAR_BACK_TRANSPARENT), RES_CHRATR_BACKGROUND, &::getBooleanCppuType(),             PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT        },                                                \
         { SW_PROP_NAME(UNO_NAME_PARA_BACK_TRANSPARENT), RES_BACKGROUND, &::getBooleanCppuType(),                    PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT        },                                                \
-        { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),           FN_UNO_PARA_STYLE,      &::getCppuType((const OUString*)0),                 PropertyAttribute::MAYBEVOID,     0},                                                       \
-        { SW_PROP_NAME(UNO_NAME_PAGE_STYLE_NAME),                   FN_UNO_PAGE_STYLE,      &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},                       \
         { SW_PROP_NAME(UNO_NAME_NUMBERING_STYLE_NAME),      RES_PARATR_NUMRULE,     &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID,   0},                                                           \
         { SW_PROP_NAME(UNO_NAME_CHAR_WORD_MODE),            RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PropertyAttribute::MAYBEVOID,     0},                                                             \
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_IS_NUMBER),       FN_UNO_IS_NUMBER,       &::getBooleanCppuType()  ,          PropertyAttribute::MAYBEVOID,     0},                                                                 \
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_LEVEL),           FN_UNO_NUM_LEVEL,       &::getCppuType((const sal_Int16*)0),            PropertyAttribute::MAYBEVOID, 0},                                                            \
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_RULES),           FN_UNO_NUM_RULES,       &::getCppuType((const uno::Reference<container::XIndexReplace>*)0),     PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},                        \
-        { SW_PROP_NAME(UNO_NAME_NUMBERING_START_VALUE),     FN_UNO_NUM_START_VALUE, &::getCppuType((const sal_Int16*)0),            PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},                                                \
-        { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX),            FN_UNO_DOCUMENT_INDEX,  &::getCppuType((const uno::Reference<text::XDocumentIndex>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },            \
-        { SW_PROP_NAME(UNO_NAME_TEXT_TABLE),                FN_UNO_TEXT_TABLE,      &::getCppuType((const uno::Reference<text::XTextTable>*)0),     PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },               \
-        { SW_PROP_NAME(UNO_NAME_CELL),                      FN_UNO_CELL,            &::getCppuType((uno::Reference<table::XCell>*)0),           PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                     \
-        { SW_PROP_NAME(UNO_NAME_TEXT_FRAME),                FN_UNO_TEXT_FRAME,      &::getCppuType((uno::Reference<text::XTextFrame>*)0),       PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                     \
-        { SW_PROP_NAME(UNO_NAME_TEXT_SECTION),              FN_UNO_TEXT_SECTION,    &::getCppuType((uno::Reference<text::XTextSection>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                    \
         { SW_PROP_NAME(UNO_NAME_LEFT_BORDER),                   RES_BOX,                &::getCppuType((const table::BorderLine*)0),        PropertyAttribute::MAYBEVOID, LEFT_BORDER  |CONVERT_TWIPS },                            \
         { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER),              RES_BOX,                &::getCppuType((const table::BorderLine*)0),        PropertyAttribute::MAYBEVOID, RIGHT_BORDER |CONVERT_TWIPS },                                \
         { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                    RES_BOX,                &::getCppuType((const table::BorderLine*)0),        PropertyAttribute::MAYBEVOID, TOP_BORDER   |CONVERT_TWIPS },                            \
@@ -613,9 +618,6 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_VISITED_CHAR_STYLE_NAME),     RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),        PropertyAttribute::MAYBEVOID ,MID_URL_UNVISITED_FMT  },                                                     \
         { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },                                   \
         { SW_PROP_NAME(UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES),  RES_TXTATR_UNKNOWN_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },                               \
-        { SW_PROP_NAME(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,&::getCppuType((const sal_Int8*)0),   PropertyAttribute::READONLY, 0},                                                     \
-        { SW_PROP_NAME(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME),  FN_UNO_PARA_CONDITIONAL_STYLE_NAME, &::getCppuType((const OUString*)0),      PropertyAttribute::READONLY, 0},                                                     \
-        { SW_PROP_NAME(UNO_NAME_PARA_IS_NUMBERING_RESTART),     FN_NUMBER_NEWSTART,     &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID, 0 },                                                                        \
         { SW_PROP_NAME(UNO_NAME_PARA_SHADOW_FORMAT),            RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS}, \
         { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_IS_ON),            RES_CHRATR_TWO_LINES,           &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID, MID_TWOLINES}, \
         { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PropertyAttribute::MAYBEVOID, MID_START_BRACKET}, \
@@ -632,13 +634,18 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_RUBY_ADJUST         ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID,          MID_RUBY_ADJUST },  \
         { SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID,          MID_RUBY_CHARSTYLE },  \
         { SW_PROP_NAME(UNO_NAME_RUBY_IS_ABOVE         ),        RES_TXTATR_CJK_RUBY,    &::getBooleanCppuType(),  PropertyAttribute::MAYBEVOID,         MID_RUBY_ABOVE },  \
-        { SW_PROP_NAME(UNO_NAME_CHAR_RELIEF            ),       RES_CHRATR_RELIEF,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID,      MID_RELIEF },  \
+        { SW_PROP_NAME(UNO_NAME_CHAR_RELIEF            ),       RES_CHRATR_RELIEF,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID,      MID_RELIEF },
 
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
 #define TABSTOPS_MAP_ENTRY        { SW_PROP_NAME( UNO_NAME_TABSTOPS),  RES_PARATR_TABSTOP,  new uno::Type(::getCppuType((uno::Sequence<style::TabStop>*)0)),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
 #else
 #define TABSTOPS_MAP_ENTRY                { SW_PROP_NAME(UNO_NAME_TABSTOPS),    RES_PARATR_TABSTOP,   &::getCppuType((const uno::Sequence<style::TabStop>*)0),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
 #endif
+
+#define COMMON_CRSR_PARA_PROPERTIES \
+        COMMON_CRSR_PARA_PROPERTIES_FN_ONLY \
+        COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
+
 
 #define  COMPLETE_TEXT_CURSOR_MAP\
         COMMON_CRSR_PARA_PROPERTIES\
@@ -1972,23 +1979,15 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 static SfxItemPropertyMap aTextDefaultMap_Impl[] =
                 {
                     { SW_PROP_NAME(UNO_NAME_TAB_STOP_DISTANCE ),            RES_PARATR_TABSTOP,     &::getCppuType((const sal_Int32*)0),    PROPERTY_NONE, MID_STD_TAB | CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME),                RES_CHRATR_FONT,        &::getCppuType((OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME),          RES_CHRATR_FONT,        &::getCppuType((OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY),              RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET),            RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH),               RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME_ASIAN),          RES_CHRATR_CJK_FONT,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME_ASIAN),    RES_CHRATR_CJK_FONT,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY_ASIAN),        RES_CHRATR_CJK_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET_ASIAN),      RES_CHRATR_CJK_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH_ASIAN),         RES_CHRATR_CJK_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME_COMPLEX),        RES_CHRATR_CTL_FONT,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME_COMPLEX),  RES_CHRATR_CTL_FONT,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY_COMPLEX),      RES_CHRATR_CTL_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET_COMPLEX),    RES_CHRATR_CTL_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH_COMPLEX),       RES_CHRATR_CTL_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
+                    COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
                     {0,0,0,0,0}
                 };
+                SfxItemPropertyMap * pMap = &aTextDefaultMap_Impl[0];
+                while ( pMap->pName )
+                {
+                    pMap->nFlags &= ~PropertyAttribute::MAYBEVOID;
+                    pMap++;
+                }
                 aMapArr[nPropertyId] = aTextDefaultMap_Impl;
             }
             break;
