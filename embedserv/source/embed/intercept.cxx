@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-28 16:31:27 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 09:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,13 @@
  *
  *
  ************************************************************************/
-
-
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
 #include "intercept.hxx"
 #ifndef _EMBEDDOC_HXX_
 #include "embeddoc.hxx"
 #endif
-
 
 
 using namespace ::com::sun::star;
@@ -79,8 +79,91 @@ uno::Sequence<::rtl::OUString> Interceptor::m_aInterceptedURL(IUL);
 
 
 
+
+struct equalOUString
+{
+    bool operator()(
+        const rtl::OUString& rKey1,
+        const rtl::OUString& rKey2 ) const
+    {
+        return !!( rKey1 == rKey2 );
+    }
+};
+
+
+struct hashOUString
+{
+    size_t operator()( const rtl::OUString& rName ) const
+    {
+        return rName.hashCode();
+    }
+};
+
+
+
+class StatusChangeListenerContainer
+    : public ::cppu::OMultiTypeInterfaceContainerHelperVar<
+rtl::OUString,hashOUString,equalOUString>
+{
+public:
+    StatusChangeListenerContainer( ::osl::Mutex& aMutex )
+        :  cppu::OMultiTypeInterfaceContainerHelperVar<
+    rtl::OUString,hashOUString,equalOUString>(aMutex)
+    {
+    }
+};
+
+
+void SAL_CALL
+Interceptor::addEventListener(
+    const uno::Reference<lang::XEventListener >& Listener )
+    throw( uno::RuntimeException )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    if ( ! m_pDisposeEventListeners )
+        m_pDisposeEventListeners =
+            new cppu::OInterfaceContainerHelper( m_aMutex );
+
+    m_pDisposeEventListeners->addInterface( Listener );
+}
+
+
+void SAL_CALL
+Interceptor::removeEventListener(
+    const uno::Reference< lang::XEventListener >& Listener )
+    throw( uno::RuntimeException )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_pDisposeEventListeners )
+        m_pDisposeEventListeners->removeInterface( Listener );
+}
+
+
+void SAL_CALL Interceptor::dispose()
+{
+    lang::EventObject aEvt;
+    aEvt.Source = static_cast< frame::XDispatch* >( this );
+
+    osl::MutexGuard aGuard(m_aMutex);
+
+    if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
+        m_pDisposeEventListeners->disposeAndClear( aEvt );
+
+    if(m_pStatCL)
+        m_pStatCL->disposeAndClear( aEvt );
+
+    m_xSlaveDispatchProvider = 0;
+    m_xMasterDispatchProvider = 0;
+}
+
+
+
 Interceptor::Interceptor(EmbedDocument_Impl* pOLEInterface)
-    : m_pOLEInterface(pOLEInterface)
+    : m_pOLEInterface(pOLEInterface),
+      m_pStatCL(0),
+      m_pDisposeEventListeners(0)
 {
     m_aInterceptedURL[0] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
@@ -94,6 +177,15 @@ Interceptor::Interceptor(EmbedDocument_Impl* pOLEInterface)
         RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
 }
 
+
+Interceptor::~Interceptor()
+{
+    if( m_pDisposeEventListeners )
+        delete m_pDisposeEventListeners;
+
+    if(m_pStatCL)
+        delete m_pStatCL;
+}
 
 
 
@@ -124,7 +216,58 @@ Interceptor::addStatusListener(
         uno::RuntimeException
     )
 {
-    return;
+    if(!Control.is())
+        return;
+
+    if(URL.Complete == m_aInterceptedURL[0])
+    {   // Save
+        frame::FeatureStateEvent aStateEvent;
+        aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
+        aStateEvent.FeatureDescriptor = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("Update"));
+        aStateEvent.IsEnabled = sal_True;
+        aStateEvent.Requery = sal_False;
+        aStateEvent.State <<= rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("update"));
+        Control->statusChanged(aStateEvent);
+
+        {
+            osl::MutexGuard aGuard(m_aMutex);
+            if(!m_pStatCL)
+                m_pStatCL =
+                    new StatusChangeListenerContainer(m_aMutex);
+        }
+
+        m_pStatCL->addInterface(URL.Complete,Control);
+        return;
+    }
+
+    sal_Int32 i = 2;
+    if(URL.Complete == m_aInterceptedURL[i] ||
+       URL.Complete == m_aInterceptedURL[++i] ||
+       URL.Complete == m_aInterceptedURL[++i] )
+    {   // Close and return
+        frame::FeatureStateEvent aStateEvent;
+        aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
+        aStateEvent.FeatureDescriptor = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("Close and Return"));
+        aStateEvent.IsEnabled = sal_True;
+        aStateEvent.Requery = sal_False;
+        aStateEvent.State <<= rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("closeandreturn"));
+        Control->statusChanged(aStateEvent);
+
+
+        {
+            osl::MutexGuard aGuard(m_aMutex);
+            if(!m_pStatCL)
+                m_pStatCL =
+                    new StatusChangeListenerContainer(m_aMutex);
+        }
+
+        m_pStatCL->addInterface(URL.Complete,Control);
+        return;
+    }
 }
 
 
@@ -137,7 +280,12 @@ Interceptor::removeStatusListener(
         uno::RuntimeException
     )
 {
-    return;
+    if(!(Control.is() && m_pStatCL))
+        return;
+    else {
+        m_pStatCL->removeInterface(URL.Complete,Control);
+        return;
+    }
 }
 
 

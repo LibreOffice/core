@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-27 16:09:44 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 09:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
+#endif
 #ifndef  _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #endif
@@ -79,6 +82,7 @@
 #endif
 
 
+class StatusChangeListenerContainer;
 class EmbedDocument_Impl;
 
 
@@ -91,6 +95,24 @@ class Interceptor
 public:
 
     Interceptor(EmbedDocument_Impl* pOLEInterface);
+    ~Interceptor();
+
+    // overwritten to release the statuslistner.
+
+    // XComponent
+    virtual void SAL_CALL
+    addEventListener(
+        const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
+        throw( com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL
+    removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
+        throw( com::sun::star::uno::RuntimeException );
+
+    void SAL_CALL
+    dispose() throw(::com::sun::star::uno::RuntimeException);
+
+
 
     //XDispatch
     virtual void SAL_CALL
@@ -194,6 +216,9 @@ private:
 
     static ::com::sun::star::uno::Sequence<::rtl::OUString>
     m_aInterceptedURL;
+
+    cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
+    StatusChangeListenerContainer*    m_pStatCL;
 };
 
 #endif
