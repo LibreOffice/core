@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:36:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <wmadaptor.hxx>
 #include <salbmp.h>
 #include <floatwin.hxx>
+#include <salprn.h>
 #include <svapp.hxx>
 
 #include <prex.h>
@@ -146,7 +147,9 @@ static USHORT GetKeyCode( guint keyval )
             case GDK_space:         nCode = KEY_SPACE;      break;
             case GDK_Insert:        nCode = KEY_INSERT;     break;
             case GDK_Delete:        nCode = KEY_DELETE;     break;
+            case GDK_plus:
             case GDK_KP_Add:        nCode = KEY_ADD;        break;
+            case GDK_minus:
             case GDK_KP_Subtract:   nCode = KEY_SUBTRACT;   break;
             case GDK_KP_Multiply:   nCode = KEY_MULTIPLY;   break;
             case GDK_KP_Divide:     nCode = KEY_DIVIDE;     break;
@@ -207,9 +210,9 @@ GtkSalFrame::~GtkSalFrame()
     if( m_pWindow )
         gtk_widget_destroy( GTK_WIDGET(m_pWindow) );
     if( m_pForeignParent )
-        gdk_window_destroy( m_pForeignParent );
+        g_object_unref( G_OBJECT(m_pForeignParent) );
     if( m_pForeignTopLevel )
-        gdk_window_destroy( m_pForeignTopLevel );
+        g_object_unref(G_OBJECT( m_pForeignTopLevel) );
 }
 
 void GtkSalFrame::InitCommon()
@@ -1270,9 +1273,9 @@ bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
     if( m_pWindow )
         gtk_widget_destroy( GTK_WIDGET(m_pWindow) );
     if( m_pForeignParent )
-        gdk_window_destroy( m_pForeignParent );
+        g_object_unref( G_OBJECT(m_pForeignParent) );
     if( m_pForeignTopLevel )
-        gdk_window_destroy( m_pForeignTopLevel );
+        g_object_unref( G_OBJECT(m_pForeignTopLevel) );
 
     // init new window
     if( pSysParent && pSysParent->aWindow != None )
@@ -1576,6 +1579,10 @@ gboolean GtkSalFrame::signalFocus( GtkWidget* pWidget, GdkEventFocus* pEvent, gp
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
     GTK_YIELD_GRAB();
+
+    // check if printers have changed (analogous to salframe focus handler)
+    if( static_cast< X11SalInstance* >(GetSalData()->pInstance_)->isPrinterInit() )
+        vcl_sal::PrinterUpdate::update();
 
     if( !pEvent->in )
     {
