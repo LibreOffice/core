@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-11 07:51:24 $
+ *  last change: $Author: mib $ $Date: 2000-10-23 11:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,12 @@ using namespace ::com::sun::star::beans;
 XMLTextMasterPageExport::XMLTextMasterPageExport( SvXMLExport& rExp ) :
     XMLPageExport( rExp ),
     sHeaderText( RTL_CONSTASCII_USTRINGPARAM( "HeaderText" ) ),
-    sHeaderOn( RTL_CONSTASCII_USTRINGPARAM( "HeaderOn" ) ),
-    sHeaderShareContent( RTL_CONSTASCII_USTRINGPARAM( "HeaderShareContent" ) ),
+    sHeaderOn( RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" ) ),
+    sHeaderShareContent( RTL_CONSTASCII_USTRINGPARAM( "HeaderIsShared" ) ),
     sHeaderTextLeft( RTL_CONSTASCII_USTRINGPARAM( "HeaderTextLeft" ) ),
     sFooterText( RTL_CONSTASCII_USTRINGPARAM( "FooterText" ) ),
-    sFooterOn( RTL_CONSTASCII_USTRINGPARAM( "FooterOn" ) ),
-    sFooterShareContent( RTL_CONSTASCII_USTRINGPARAM( "FooterShareContent" ) ),
+    sFooterOn( RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" ) ),
+    sFooterShareContent( RTL_CONSTASCII_USTRINGPARAM( "FooterIsShared" ) ),
     sFooterTextLeft( RTL_CONSTASCII_USTRINGPARAM( "FooterTextLeft" ) )
 {
 }
