@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2004-05-26 17:05:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,12 +108,5 @@ bool query_preselect_registration_for_ms_application(
 // value if available to the new registry
 // location
 int FixReturnRegistrationState(MSIHANDLE handle);
-
-// ActiveX control registration
-void RegisterActiveX4MsDoc(MSIHANDLE handle, int nPref);
-void UnregisterActiveX4MsDoc(MSIHANDLE handle, int nPref);
-
-inline void UnregisterActiveX4MsDocAll(MSIHANDLE handle)
-{ UnregisterActiveX4MsDoc(handle, 0x07); }
 
 #endif
