@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:18:23 $
+ *  last change: $Author: mba $ $Date: 2002-05-29 07:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             // external filters can't be detected with this service ( only their type may be used )
             pExternalFilter = pFilter;
         }
+        else if (!pFilter)
+            return aTypeName;
     }
 
     String aPrefix = String::CreateFromAscii( "private:factory/" );
