@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:16:10 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,6 @@
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #endif
 
-#ifndef _SV_GRAPH_HXX
-#include <vcl/graph.hxx>
-#endif
-#ifndef _SV_BMPACC_HXX
-#include <vcl/bmpacc.hxx>
-#endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
@@ -107,9 +101,6 @@
 #include <svx/eeitem.hxx>
 #endif
 #define ITEMID_FIELD EE_FEATURE_FIELD
-#ifndef _SVX_BRSHITEM_HXX
-#include <svx/brshitem.hxx>
-#endif
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
@@ -163,27 +154,149 @@ using ::com::sun::star::sheet::XAreaLink;
 
 // Shared string table ========================================================
 
-XclExpSst::~XclExpSst()
+// 1 = SST hash table statistics prompt
+#define EXC_INCL_SST_STATISTICS 0
+
+
+// ----------------------------------------------------------------------------
+
+/** A single string entry in the hash table. */
+struct XclExpHashEntry
+{
+    const XclExpString*         mpString;       /// Pointer to the string (no ownership).
+    sal_uInt32                  mnSstIndex;     /// The SST index of this string.
+    inline explicit             XclExpHashEntry( const XclExpString* pString = 0, sal_uInt32 nSstIndex = 0 ) :
+                                    mpString( pString ), mnSstIndex( nSstIndex ) {}
+};
+
+/** Function object for strict weak ordering. */
+struct XclExpHashEntrySWO
+{
+    inline bool                 operator()( const XclExpHashEntry& rLeft, const XclExpHashEntry& rRight ) const
+                                    { return *rLeft.mpString < *rRight.mpString; }
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** Implementation of the SST export.
+    @descr  Stores all passed strings in a hash table and prevents repeated
+    insertion of equal strings. */
+class XclExpSst_Impl
+{
+public:
+    explicit                    XclExpSst_Impl();
+
+    /** Inserts the passed string, if not already inserted, and returns the unique SST index. */
+    sal_uInt32                  Insert( XclExpStringPtr pString );
+
+    /** Writes the complete SST and EXTSST records. */
+    void                        Save( XclExpStream& rStrm );
+
+private:
+    typedef ::std::list< XclExpStringPtr >      XclExpStringList;
+    typedef ::std::vector< XclExpHashEntry >    XclExpHashVec;
+    typedef ::std::vector< XclExpHashVec >      XclExpHashTab;
+
+    XclExpStringList            maStringList;   /// List of unique strings (in SST ID order).
+    XclExpHashTab               maHashTab;      /// Hashed table that manages string pointers.
+    sal_uInt32                  mnTotal;        /// Total count of strings (including doubles).
+    sal_uInt32                  mnSize;         /// Size of the SST (count of unique strings).
+};
+
+
+// ----------------------------------------------------------------------------
+
+const sal_uInt32 EXC_SST_HASHTABLE_SIZE = 2048;
+
+XclExpSst_Impl::XclExpSst_Impl() :
+    maHashTab( EXC_SST_HASHTABLE_SIZE ),
+    mnTotal( 0 ),
+    mnSize( 0 )
 {
 }
 
-sal_uInt32 XclExpSst::Insert( XclExpString* pString )
+sal_uInt32 XclExpSst_Impl::Insert( XclExpStringPtr pString )
 {
-    //! TODO search for the strings to prevent doubles
-    maStringList.Append( pString );
-    return maStringList.Count() - 1;
+    DBG_ASSERT( pString.get(), "XclExpSst_Impl::Insert - empty pointer not allowed" );
+    if( !pString.get() )
+        pString.reset( new XclExpString );
+
+    ++mnTotal;
+    sal_uInt32 nSstIndex = 0;
+
+    // calculate hash value in range [0,EXC_SST_HASHTABLE_SIZE)
+    sal_uInt16 nHash = pString->GetHash();
+    (nHash ^= (nHash / EXC_SST_HASHTABLE_SIZE)) %= EXC_SST_HASHTABLE_SIZE;
+
+    XclExpHashVec& rVec = maHashTab[ nHash ];
+    XclExpHashEntry aEntry( pString.get(), mnSize );
+    XclExpHashVec::iterator aIt = ::std::lower_bound( rVec.begin(), rVec.end(), aEntry, XclExpHashEntrySWO() );
+    if( (aIt == rVec.end()) || (*aIt->mpString != *pString) )
+    {
+        nSstIndex = mnSize;
+        maStringList.push_back( pString );
+        rVec.insert( aIt, aEntry );
+        ++mnSize;
+    }
+    else
+    {
+        nSstIndex = aIt->mnSstIndex;
+    }
+
+    return nSstIndex;
 }
 
-void XclExpSst::Save( XclExpStream& rStrm )
+void XclExpSst_Impl::Save( XclExpStream& rStrm )
 {
-    if( maStringList.Empty() )
+    if( maStringList.empty() )
         return;
+
+#if (OSL_DEBUG_LEVEL > 1) && EXC_INCL_SST_STATISTICS
+    { // own scope for the statistics
+#define APPENDINT( value ) Append( ByteString::CreateFromInt32( value ) )
+        ScfUInt32Vec aVec;
+        sal_uInt32 nPerBucket = mnSize / EXC_SST_HASHTABLE_SIZE + 1, nEff = 0;
+        for( XclExpHashTab::const_iterator aTIt = maHashTab.begin(), aTEnd = maHashTab.end(); aTIt != aTEnd; ++aTIt )
+        {
+            sal_uInt32 nSize = aTIt->size();
+            if( nSize >= aVec.size() ) aVec.resize( nSize + 1, 0 );
+            ++aVec[ nSize ];
+            if( nSize > nPerBucket ) nEff += nSize - nPerBucket;
+        }
+        ByteString aStr( "SST HASHING STATISTICS\n\n" );
+        aStr.Append( "Total count:\t" ).APPENDINT( mnTotal ).Append( " strings\n" );
+        aStr.Append( "Reduced to:\t" ).APPENDINT( mnSize ).Append( " strings (" );
+        aStr.APPENDINT( 100 * mnSize / mnTotal ).Append( "%)\n" );
+        aStr.Append( "Effectivity:\t\t" ).APPENDINT( 100 - 100 * nEff / mnSize );
+        aStr.Append( "% (best: " ).APPENDINT( nPerBucket ).Append( " strings per bucket)\n" );
+        aStr.Append( "\t\tCount of buckets\nBucket size\ttotal\tmax\tTotal strings\n" );
+        for( sal_uInt32 nIx = 0, nSize = aVec.size(), nInc = 1; nIx < nSize; nIx += nInc )
+        {
+            if( (nIx == 10) || (nIx == 100) || (nIx == 1000) ) nInc = nIx;
+            sal_uInt32 nMaxIx = ::std::min( nIx + nInc, nSize ), nCount = 0, nMaxCount = 0, nStrings = 0;
+            for( sal_uInt32 nSubIx = nIx; nSubIx < nMaxIx; ++nSubIx )
+            {
+                nCount += aVec[ nSubIx ];
+                if( aVec[ nSubIx ] > nMaxCount ) nMaxCount = aVec[ nSubIx ];
+                nStrings += nSubIx * aVec[ nSubIx ];
+            }
+            if( nMaxCount )
+            {
+                aStr.APPENDINT( nIx );
+                if( nMaxIx - nIx > 1 ) aStr.Append( '-' ).APPENDINT( nMaxIx - 1 );
+                aStr.Append( "\t\t" ).APPENDINT( nCount ).Append( '\t' ).APPENDINT( nMaxCount );
+                aStr.Append( '\t' ).APPENDINT( nStrings ).Append( '\n' );
+            }
+        }
+        DBG_ERRORFILE( aStr.GetBuffer() );
+#undef APPENDINT
+    }
+#endif
 
     SvMemoryStream aExtSst( 8192 );
 
-    sal_uInt32 nCount = maStringList.Count();
-
-    sal_uInt32 nBucket = nCount;
+    sal_uInt32 nBucket = mnSize;
     while( nBucket > 0x0100 )
         nBucket /= 2;
 
@@ -194,8 +307,8 @@ void XclExpSst::Save( XclExpStream& rStrm )
 
     rStrm.StartRecord( EXC_ID_SST, 8 );
 
-    rStrm << nCount << nCount;
-    for( const XclExpString* pString = maStringList.First(); pString; pString = maStringList.Next() )
+    rStrm << mnTotal << mnSize;
+    for( XclExpStringList::const_iterator aIt = maStringList.begin(), aEnd = maStringList.end(); aIt != aEnd; ++aIt )
     {
         if( !nBucketIndex )
         {
@@ -207,7 +320,7 @@ void XclExpSst::Save( XclExpStream& rStrm )
                     << sal_uInt16( 0 );     // reserved
         }
 
-        rStrm << *pString;
+        rStrm << **aIt;
 
         if( ++nBucketIndex == nPerBucket )
             nBucketIndex = 0;
@@ -228,65 +341,25 @@ void XclExpSst::Save( XclExpStream& rStrm )
 }
 
 
-// Background bitmap ==========================================================
-
-inline XclExpStream& operator<<( XclExpStream& rStrm, const BitmapColor& rBmpColor )
-{
-    return rStrm << rBmpColor.GetBlue() << rBmpColor.GetGreen() << rBmpColor.GetRed();
-}
-
-
 // ----------------------------------------------------------------------------
 
-XclExpBitmap::XclExpBitmap( const XclExpRoot& rRoot ) :
-    XclExpRecord( EXC_ID_BITMAP ),
-    mpGraphic( NULL )
+XclExpSst::XclExpSst() :
+    mpImpl( new XclExpSst_Impl )
 {
-    SfxStyleSheet* pStyleSh = rRoot.mpRD->pStyleSheet;
-    if( pStyleSh )
-        mpGraphic = ((const SvxBrushItem&) rRoot.mpRD->pStyleSheetItemSet->Get( ATTR_BACKGROUND )).GetGraphic();
 }
 
-void XclExpBitmap::Save( XclExpStream& rStrm )
+XclExpSst::~XclExpSst()
 {
-    if( !mpGraphic ) return;
+}
 
-    Bitmap aBmp( mpGraphic->GetBitmap() );
-    if( aBmp.GetBitCount() != 24 )
-        aBmp.Convert( BMP_CONVERSION_24BIT );
+sal_uInt32 XclExpSst::Insert( XclExpStringPtr pString )
+{
+    return mpImpl->Insert( pString );
+}
 
-    BitmapReadAccess* pAccess = aBmp.AcquireReadAccess();
-    if( !pAccess ) return;
-
-    sal_Int32 nWidth = ::std::min( pAccess->Width(), 0xFFFFL );
-    sal_Int32 nHeight = ::std::min( pAccess->Height(), 0xFFFFL );
-    if( (nWidth > 0) && (nHeight > 0) )
-    {
-        rStrm.StartRecord( EXC_ID_BITMAP, 0 );
-        rStrm.SetMaxRecSize( EXC_BITMAP_MAXREC );
-        rStrm.SetMaxContSize( EXC_BITMAP_MAXCONT );
-
-        sal_uInt8 nPadding = static_cast< sal_uInt8 >( nWidth & 0x03 );
-        sal_uInt32 nTmpSize = (nWidth * 3UL + nPadding) * nHeight + 12;
-
-        rStrm   << EXC_BITMAP_UNKNOWNID
-                << nTmpSize                             // size after _this_ field
-                << sal_uInt32( 12 )                     // unknown
-                << static_cast< sal_uInt16 >( nWidth )  // width
-                << static_cast< sal_uInt16 >( nHeight ) // height
-                << sal_uInt16( 1 )                      // planes
-                << sal_uInt16( 24 );                    // bits per pixel
-
-        for( sal_Int32 nY = nHeight - 1; nY >= 0; --nY )
-        {
-            for( sal_Int32 nX = 0; nX < nWidth; ++nX )
-                rStrm << pAccess->GetPixel( nY, nX );
-            rStrm.WriteZeroBytes( nPadding );
-        }
-
-        rStrm.EndRecord();
-    }
-    aBmp.ReleaseAccess( pAccess );
+void XclExpSst::Save( XclExpStream& rStrm )
+{
+    mpImpl->Save( rStrm );
 }
 
 
@@ -303,7 +376,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     const INetProtocol eProtocol = aUrlObj.GetProtocol();
     bool bWithRepr = rRepr.Len() > 0;
     XclExpStream aXclStrm( *mpVarData, rRoot );         // using in raw write mode.
-    ::std::auto_ptr< XclExpString > pTextMark;
+    XclExpStringPtr pTextMark;
 
     // description
     if( bWithRepr )
@@ -396,7 +469,7 @@ void XclExpHyperlink::BuildFileName(
     if( rbRel )
     {
         String aTmpName( rName );
-        rName = rUrlObj.GetRelURL( rRoot.GetBasePath(), rName,
+        rName = INetURLObject::GetRelURL( rRoot.GetBasePath(), rName,
             INetURLObject::WAS_ENCODED, INetURLObject::DECODE_WITH_CHARSET );
 
         if( rName.SearchAscii( INET_FILE_SCHEME ) == 0 )    // not converted to rel -> make abs
@@ -887,7 +960,11 @@ void XclExpDV::WriteBody( XclExpStream& rStrm )
         case SC_VALERR_STOP:    nFlags |= EXC_DV_ERROR_STOP;    break;
         case SC_VALERR_WARNING: nFlags |= EXC_DV_ERROR_WARNING; break;
         case SC_VALERR_INFO:    nFlags |= EXC_DV_ERROR_INFO;    break;
-        case SC_VALERR_MACRO:   bShowError = false;             break;
+        case SC_VALERR_MACRO:
+            // #111781# set INFO for validity with macro call, delete title
+            nFlags |= EXC_DV_ERROR_INFO;
+            aErrorTitle.Assign( '\0' );     // contains macro name
+        break;
         default:                DBG_ERRORFILE( "XclExpDV::SaveCont - unknown error style" );
     }
     if( mpValData->IsIgnoreBlank() )
@@ -905,7 +982,7 @@ void XclExpDV::WriteBody( XclExpStream& rStrm )
 
     // first formula
     ::std::auto_ptr< ExcUPN > pXclTokArr1;
-    ::std::auto_ptr< XclExpString > pXclString;
+    XclExpStringPtr pXclString;
     pScTokArr.reset( mpValData->CreateTokenArry( 0 ) );
     if( pScTokArr.get() )
     {
@@ -1073,7 +1150,6 @@ XclExpWebQuery::XclExpWebQuery(
         sal_Int32 nRefrSecs ) :
     maDestRange( rRangeName ),
     maUrl( rUrl ),
-    mpQryTables( NULL ),
     // refresh delay time: seconds -> minutes
     mnRefresh( static_cast< sal_Int16 >( ::std::min( (nRefrSecs + 59L) / 60L, 0x7FFFL ) ) ),
     mbEntireDoc( false )
@@ -1095,7 +1171,7 @@ XclExpWebQuery::XclExpWebQuery(
     if( !bExitLoop )    // neither HTML_all nor HTML_tables found
     {
         if( aNewTables.Len() )
-            mpQryTables = new XclExpString( aNewTables );
+            mpQryTables.reset( new XclExpString( aNewTables ) );
         else
             mbEntireDoc = true;
     }
@@ -1103,12 +1179,11 @@ XclExpWebQuery::XclExpWebQuery(
 
 XclExpWebQuery::~XclExpWebQuery()
 {
-    delete mpQryTables;
 }
 
 void XclExpWebQuery::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( !mbEntireDoc || !mpQryTables, "XclExpWebQuery::Save - illegal mode" );
+    DBG_ASSERT( !mbEntireDoc || !mpQryTables.get(), "XclExpWebQuery::Save - illegal mode" );
     sal_uInt16 nFlags;
 
     // QSI record
@@ -1145,7 +1220,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 
     // WEBQRYSETTINGS record
-    nFlags = mpQryTables ? EXC_WQSETT_SPECTABLES : EXC_WQSETT_ALL;
+    nFlags = mpQryTables.get() ? EXC_WQSETT_SPECTABLES : EXC_WQSETT_ALL;
     rStrm.StartRecord( EXC_ID_WQSETT, 28 );
     rStrm   << EXC_ID_WQSETT            // repeated record id ?!?
             << sal_uInt16( 0x0000 )
@@ -1160,7 +1235,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 
     // WEBQRYTABLES record
-    if( mpQryTables )
+    if( mpQryTables.get() )
     {
         rStrm.StartRecord( EXC_ID_WQTABLES, 4 + mpQryTables->GetSize() );
         rStrm   << EXC_ID_WQTABLES          // repeated record id ?!?
