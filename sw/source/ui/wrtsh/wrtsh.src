@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:47:05 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1252,7 +1252,7 @@ String STR_NUMUPDOWN
     TEXT[ dutch ] = "Nummering indelen";
     TEXT[ chinese_simplified ] = "·Ö¼¶±àºÅ";
     TEXT[ greek ] = "Áñßèìçóç ìå åóï÷İò";
-    TEXT[ korean ] = "¹øÈ£ ÀÌµ¿";
+    TEXT[ korean ] = "¹øÈ£ ¸Å±â±â  ÀÌµ¿";
     TEXT[ turkish ] = "Numaralamayı değiştir";
 };
 String STR_MOVENUM
@@ -1329,7 +1329,7 @@ String STR_NUMORNONUM
     Text[ dutch ] = "Nummer aan/uit";
     Text[ chinese_simplified ] = "ÏÔÊ¾/ÒşÈë±àºÅ";
     Text[ greek ] = "Áñéèìüò Íáé/¼÷é";
-    Text[ korean ] = "¹øÈ£ Àû¿ë/ºñÀû¿ë";
+    Text[ korean ] = "¹øÈ£  ¿Â/¿ÀÇÁ";
     Text[ turkish ] = "Numara açık/kapalı";
     Text[ language_user1 ] = " ";
 };
