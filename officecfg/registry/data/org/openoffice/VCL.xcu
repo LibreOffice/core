@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:49:51 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  *
  ************************************************************************ -->
-<!DOCTYPE oor:node SYSTEM "../../../component-update.dtd">
-<oor:node oor:name="VCL" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
+<oor:component-data oor:name="VCL" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Settings">
     <node oor:name="Accessibility" oor:op="replace">
       <prop oor:name="EnableATToolSupport" oor:type="xs:string" oor:op="replace">
@@ -6552,4 +6552,4 @@
       </node>
     </node>
   </node>
-</oor:node>
+</oor:component-data>
