@@ -55,15 +55,16 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel;
 
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelDecoder;
-
-import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
-import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
-import org.openoffice.xmerge.ConvertData;
-
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
+
+import org.openoffice.xmerge.ConvertData;
+import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
+import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelDecoder;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Workbook;
+
 
 /**
  *  <p>Pocket Excel implementation of <code>DocumentDeserializer</code>
@@ -118,10 +119,11 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
      */
     protected String getWorkbookName(ConvertData cd)
         throws IOException {
-        Enumeration e = cd.getDocumentEnumeration();
-    PxlDocument pxlDoc = (PxlDocument) e.nextElement();
 
-    String workbookName = pxlDoc.getName();
+        Enumeration e = cd.getDocumentEnumeration();
+        Workbook wb = (Workbook) e.nextElement();
+
+        String workbookName = wb.getName();
         return workbookName;
     }
 
@@ -136,18 +138,19 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
      */
     protected String[] getWorksheetNames(ConvertData cd)
         throws IOException {
+
         Enumeration e = cd.getDocumentEnumeration();
-    PxlDocument pxlDoc = (PxlDocument) e.nextElement();
-    Vector v = pxlDoc.getWorksheetNames();
-    e = v.elements();
-    String worksheetNames[] = new String[v.size()];
-    int i = 0;
-    while(e.hasMoreElements()) {
-        worksheetNames[i] = (String) e.nextElement();
-        System.out.println("Worksheet Name : " + worksheetNames[i]);
-        i++;
-    }
-    return worksheetNames;
+        Workbook wb = (Workbook) e.nextElement();
+        Vector v = wb.getWorksheetNames();
+        e = v.elements();
+        String worksheetNames[] = new String[v.size()];
+        int i = 0;
+        while(e.hasMoreElements()) {
+            worksheetNames[i] = (String) e.nextElement();
+            System.out.println("Worksheet Name : " + worksheetNames[i]);
+            i++;
+        }
+        return worksheetNames;
     }
 }
 

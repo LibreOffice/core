@@ -68,6 +68,7 @@ import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetEncoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Workbook;
 
 /**
  *  This class is used by {@link
@@ -78,7 +79,7 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
  */
 final class PocketExcelEncoder extends SpreadsheetEncoder {
 
-    private PxlDocument pxlDoc;
+    private Workbook wb;
 
     /**
      *  Constructor creates a Pocket Excel WorkBook.
@@ -91,7 +92,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
     PocketExcelEncoder(String name, String password) throws IOException {
 
         super(name, password);
-        pxlDoc = new PxlDocument(name);
+        wb = new Workbook(name);
 
     }
 
@@ -106,7 +107,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      */
     public void createWorksheet(String sheetName) throws IOException {
 
-        pxlDoc.addWorksheet(sheetName);
+        wb.addWorksheet(sheetName);
     }
 
 
@@ -117,21 +118,21 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      */
     public int getNumberOfSheets() {
 
-        Vector v = pxlDoc.getWorksheetNames();
+        Vector v = wb.getWorksheetNames();
         return (v.size());
     }
 
 
     /**
-     *  This method returns the PxlDoc created.
+     *  This method returns the Workbook created.
      *
-     *  @return  Returns a <code>PxlDocument</code>
+     *  @return  Returns a <code>Workbook</code>
      *
      *  @throws  IOException  If any I/O error occurs.
      */
-    public PxlDocument getPxlDoc() throws IOException {
+    public Workbook getWorkbook() throws IOException {
 
-        return pxlDoc;
+        return wb;
     }
 
     /**
@@ -359,7 +360,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
             Debug.log(Debug.TRACE,"Parsing Formula");
         }
         if(cellContents.length()>0)
-            pxlDoc.addCell(row, column, fmt, cellContents);
+            wb.addCell(row, column, fmt, cellContents);
     }
 
 
@@ -371,7 +372,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      */
     public void setColumnWidths(IntArrayList columnWidths) throws IOException {
 
-        pxlDoc.addColInfo(columnWidths);
+        wb.addColInfo(columnWidths);
     }
 
 
@@ -412,7 +413,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      */
     public String getSheetName(int sheet) {
 
-        Vector v = pxlDoc.getWorksheetNames();
+        Vector v = wb.getWorksheetNames();
         String wsName = (String) (v.elementAt(sheet));
 
         return wsName;

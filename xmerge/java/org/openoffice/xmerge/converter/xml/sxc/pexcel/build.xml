@@ -136,7 +136,6 @@
             <classpath refid="classpath"/>
             <include name="${package}/PocketExcelDecoder.java"/>
             <include name="${package}/PocketExcelEncoder.java"/>
-            <include name="${package}/PxlDocument.java"/>
             <include name="${package}/SxcDocumentDeserializerImpl.java"/>
             <include name="${package}/SxcDocumentSerializerImpl.java"/>
             <include name="${package}/ConverterCapabilitiesImpl.java"/>

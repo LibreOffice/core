@@ -68,6 +68,7 @@ import org.openoffice.xmerge.DocumentMerger;
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.sxc.DocumentMergerImpl;
 import org.openoffice.xmerge.converter.xml.sxc.SxcPluginFactory;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Workbook;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 
 /**
@@ -144,8 +145,8 @@ public final class PluginFactoryImpl extends SxcPluginFactory
     public Document createDeviceDocument(String name, InputStream is)
     throws IOException {
 
-        PxlDocument pxlDoc = new PxlDocument(name, is);
-        return pxlDoc;
+        Workbook wb = new Workbook(name, is);
+        return wb;
     }
 
     public DocumentMerger createDocumentMerger(Document doc) {

@@ -77,6 +77,7 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Formula;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.LabelCell;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.CellValue;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.FloatNumber;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Workbook;
 
 /**
  *  This class is used by {@link
@@ -87,7 +88,7 @@ import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.FloatNumber;
  */
 final class PocketExcelDecoder extends SpreadsheetDecoder {
 
-    private PxlDocument pxlDoc;
+    private Workbook wb;
     private Worksheet ws;
     private CellValue cell;
     private int maxRows = 0;
@@ -126,7 +127,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
     public void addDeviceContent(ConvertData cd) throws IOException {
 
         Enumeration e = cd.getDocumentEnumeration();
-        pxlDoc = (PxlDocument) e.nextElement();
+        wb = (Workbook) e.nextElement();
     }
 
 
@@ -137,7 +138,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      *  @return  The number of sheets in the WorkBook.
      */
     public int getNumberOfSheets() {
-        Vector v = pxlDoc.getWorksheetNames();
+        Vector v = wb.getWorksheetNames();
         Debug.log(Debug.TRACE,"Total Number of Sheets : " + v.size());
         return (v.size());
     }
@@ -154,7 +155,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      */
     public void setWorksheet(int sheetIndex) throws IOException {
         Debug.log(Debug.TRACE,"Setting to worksheet : " + sheetIndex);
-        ws =  pxlDoc.getWorksheet(sheetIndex);
+        ws =  wb.getWorksheet(sheetIndex);
         cellValue = ws.getCellEnumerator();
         wsIndex = sheetIndex;
         while(goToNextCell()) {
@@ -172,7 +173,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
      *  @return  The name of the current WorkSheet.
      */
     public String getSheetName() {
-        Vector v = pxlDoc.getWorksheetNames();
+        Vector v = wb.getWorksheetNames();
         String wsName = (String) (v.elementAt(wsIndex));
         Debug.log(Debug.TRACE,"The name of the current Worksheet is : " + wsName);
         return wsName;

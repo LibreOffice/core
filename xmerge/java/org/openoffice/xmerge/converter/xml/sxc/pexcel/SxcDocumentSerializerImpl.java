@@ -67,9 +67,9 @@ import java.io.IOException;
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
-
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentSerializer;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Workbook;
 
 /**
  *  <p>Pocket Excel implementation of <code>SxcDocumentDeserializer</code>
@@ -124,8 +124,8 @@ public final class SxcDocumentSerializerImpl extends SxcDocumentSerializer {
         // Get the number of sheets in the workbook
         // This will equal the number of PDBs we need
         ConvertData cd = new ConvertData();
-        PxlDocument pxlDoc = ((PocketExcelEncoder) encoder).getPxlDoc();
-        cd.addDocument(pxlDoc);
+        Workbook wb = ((PocketExcelEncoder) encoder).getWorkbook();
+        cd.addDocument(wb);
 
         return cd;
     }
