@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:21:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 
 /** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
@@ -231,6 +234,7 @@ using namespace ::com::sun::star::task;
 using namespace ::comphelper;
 using namespace ::svxform;
 using namespace ::svx;
+using com::sun::star::style::VerticalAlignment_MIDDLE;
 
 namespace svxform
 {
@@ -1226,6 +1230,7 @@ sal_Int16 FmXFormView::implInitializeNewControlModel( const Reference< XProperty
         ControlLayouter::initializeControlLayout( _rxModel, eDocumentType );
 
         _rxModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
+        Reference< XPropertySetInfo> xPSI(_rxModel->getPropertySetInfo());
         switch ( nClassId )
         {
             case FormComponentType::SCROLLBAR:
@@ -1258,10 +1263,19 @@ sal_Int16 FmXFormView::implInitializeNewControlModel( const Reference< XProperty
                 const ::Rectangle& rBoundRect = _pObject->GetCurrentBoundRect();
                 if ( !( rBoundRect.GetWidth() > 4 * rBoundRect.GetHeight() ) )  // heuristics
                 {
-                    Reference< XPropertySetInfo > xProps( _rxModel->getPropertySetInfo() );
-                    if ( xProps.is() && xProps->hasPropertyByName( FM_PROP_MULTILINE ) )
+                    if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
                         _rxModel->setPropertyValue( FM_PROP_MULTILINE, makeAny( (sal_Bool)sal_True ) );
                 }
+            }
+            break;
+
+            case FormComponentType::RADIOBUTTON:
+            case FormComponentType::CHECKBOX:
+            case FormComponentType::FIXEDTEXT:
+            {
+                ::rtl::OUString sVertAlignPropertyName( RTL_CONSTASCII_USTRINGPARAM( "VerticalAlign" ) );
+                if ( xPSI.is() && xPSI->hasPropertyByName( sVertAlignPropertyName ) )
+                    _rxModel->setPropertyValue( sVertAlignPropertyName, makeAny( VerticalAlignment_MIDDLE ) );
             }
             break;
         }
