@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-24 12:57:51 $
+ *  last change: $Author: lo $ $Date: 2002-10-24 13:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,22 +472,26 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
         {
             pThread->maStreamPipe.write( aArguments.GetBuffer(),
                                          aArguments.Len() );
+
+            // write a NULL byte onto the pipe to mark end of transfer
+            pThread->maStreamPipe.write( "\0", 1 );
+
+            // wait for confirmation #95361# #95425#
+            ByteString aToken(sc_aConfirmationSequence);
+            char *aReceiveBuffer = new char[aToken.Len()+1];
+            int n = pThread->maStreamPipe.read( aReceiveBuffer, aToken.Len() );
+            aReceiveBuffer[n]='\0';
+            delete pThread;
+            if (aToken.CompareTo(aReceiveBuffer)!= COMPARE_EQUAL) {
+                // something went wrong
+                return IPC_STATUS_BOOTSTRAP_ERROR;
+            } else {
+                delete aReceiveBuffer;
+                return IPC_STATUS_2ND_OFFICE;
+            }
+
         }
         delete pThread;
-        if ( bWaitBeforeClose )
-        {
-            // Fix for bug #95361#
-            // We are waiting before office shutdown itself. Netscape
-            // deletes temporary files after the responsible application
-            // exited. The running office must have time to open the file
-            // before Netscape can delete it!!
-            // We have to find a better way to handle this kind of problem
-            // in the future.
-            TimeValue aTimeValue;
-            aTimeValue.Seconds = 5;
-            aTimeValue.Nanosec = 0; // 5sec
-            osl::Thread::wait( aTimeValue );
-        }
         return IPC_STATUS_2ND_OFFICE;
     }
     return IPC_STATUS_OK;
