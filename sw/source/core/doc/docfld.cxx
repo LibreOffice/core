@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:28 $
+ *  last change: $Author: os $ $Date: 2001-07-04 14:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1286,7 +1286,7 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
 
 void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
 {
-    if( IsExpFldsLocked() )
+    if( IsExpFldsLocked() || IsInReading() )
         return;
 
     BOOL bOldInUpdateFlds = pUpdtFlds->IsInUpdateFlds();
