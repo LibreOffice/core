@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostorageholder.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:53:01 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "unostorageholder.hxx"
+#include <storinfo.hxx>
 
 
 using namespace ::com::sun::star;
@@ -179,6 +180,18 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& aEvent )
     SotStorageRef rTempStorage = new SotStorage( TRUE, aTmpStorFile.GetURL(), STREAM_WRITE, STORAGE_TRANSACTED );
     if ( !rTempStorage.Is() || rTempStorage->GetError() != ERRCODE_NONE )
         throw uno::RuntimeException();
+
+    SvStorageInfoList aSubStorInfoList;
+    m_rSotStorage->FillInfoList( &aSubStorInfoList );
+    for ( sal_Int32 nInd = 0; nInd < aSubStorInfoList.Count(); nInd++ )
+    {
+        m_rSotStorage->Remove( aSubStorInfoList[nInd].GetName() );
+        if ( m_rSotStorage->GetError() )
+        {
+            m_rSotStorage->ResetError();
+            throw uno::RuntimeException();
+        }
+    }
 
     rTempStorage->CopyTo( m_rSotStorage );
 
