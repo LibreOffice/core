@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-29 14:31:48 $
+ *  last change: $Author: aw $ $Date: 2002-07-02 16:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,6 +663,28 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
         }
         else
             pGraphic->Draw( pOutDev, aRect.TopLeft() );
+    }
+    // #100499# OLE without context and without bitmap, do the same as
+    // for empty groups, additionally draw empty OLE bitmap
+    else
+    {
+        if(!rInfoRec.bPrinter && rInfoRec.aPaintLayer.IsSet(nLayerId))
+        {
+            OutputDevice* pOutDev = rOut.GetOutDev();
+
+            pOutDev->SetFillInBrush(Brush(BRUSH_NULL));
+            pOutDev->SetPen(Color(COL_LIGHTGRAY));
+            pOutDev->DrawRect(aOutRect);
+
+            Bitmap aBitmap(ResId(BMP_OLEOBJ, ImpGetResMgr()));
+            Rectangle aSnapRect(GetSnapRect());
+            Size aBitmapSize(pOutDev->PixelToLogic(aBitmap.GetSizePixel()));
+
+            pOutDev->DrawBitmap(
+                aSnapRect.Center() - Point(aBitmapSize.Width() / 2, aBitmapSize.Height() / 2),
+                aBitmapSize,
+                aBitmap);
+        }
     }
 
     if (HasText())
