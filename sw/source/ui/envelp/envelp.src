@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:52:59 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ String STR_DATABASE_NOT_OPENED
     Text[ hebrew ] = "Datenbank konnte nicht geöffnet werden.";
     Text[ hindi ] = "लेखासंचय को नहीं खोल सकते है ।";
     Text[ slovak ] = "Databázu nemožno otvoriť.";
+    Text[ hungarian ] = "Az adatbázist nem lehet megnyitni.";
+    Text[ slovenian ] = "Zbirke podatkov ni mogoče odpreti.";
 };
 String STR_NO_DRIVERS
 {
@@ -131,6 +133,8 @@ String STR_NO_DRIVERS
     Text[ hebrew ] = "Keine Datenbanktreiber installiert.";
     Text[ hindi ] = "कोई लेखासंचय ड्इवरों को प्रतिष्ठापित नहीं किया ।";
     Text[ slovak ] = "Nie sú nainštalované ovládače databázy.";
+    Text[ hungarian ] = "Nincs megfelelő adatbázis-illesztőprogram telepítve.";
+    Text[ slovenian ] = "Gonilniki za zbirko podatkov niso nameščeni.";
 };
 String STR_BTN_NEW_DOC
 {
@@ -141,7 +145,7 @@ String STR_BTN_NEW_DOC
     Text [ portuguese_brazilian ] = "~Novo Documento" ;
     Text [ portuguese ] = "~Novo documento" ;
     Text [ finnish ] = "Uusi asiakirja" ;
-    Text [ danish ] = "Nyt dokument" ;
+    Text [ danish ] = "~Nyt dokument" ;
     Text [ french ] = "~Nouveau document" ;
     Text [ swedish ] = "~Nytt dokument" ;
     Text [ dutch ] = "~Nieuw document" ;
@@ -165,6 +169,8 @@ String STR_BTN_NEW_DOC
     Text[ hebrew ] = "‮מסמך חדש‬";
     Text[ hindi ] = "~नया लेखपत्र";
     Text[ slovak ] = "~Nový dokument";
+    Text[ hungarian ] = "Ú~j dokumentum";
+    Text[ slovenian ] = "~Nov dokument";
 };
 
 String STR_BTN_NEWDOC
@@ -178,7 +184,7 @@ String STR_BTN_NEWDOC
     Text[ french ] = "Nouveau doc.";
     Text[ spanish ] = "~Nuevo doc.";
     Text[ italian ] = "Nuovo doc.";
-    Text[ danish ] = "Nyt dok.";
+    Text[ danish ] = "~Nyt dok.";
     Text[ swedish ] = "~Nytt dok.";
     Text[ polish ] = "~Nowy dokument";
     Text[ portuguese_brazilian ] = "~Novo Doc.";
@@ -199,6 +205,8 @@ String STR_BTN_NEWDOC
     Text[ hebrew ] = "~Neues Dok.";
     Text[ hindi ] = "~नया लेखपत्र";
     Text[ slovak ] = "~Nový dok.";
+    Text[ hungarian ] = "Ú~j dokumentum";
+    Text[ slovenian ] = "~Nov dok.";
 };
 
 String STR_SENDER_TOKENS
@@ -230,7 +238,10 @@ String STR_SENDER_TOKENS
     Text[ hebrew ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
     Text[ hindi ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
     Text[ slovak ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ hungarian ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ slovenian ] = "PODJETJE;CR;IME; ;PRIIMEK;CR;NASLOV;CR;KRAJ; ;DEŽELA; ;POŠTNAŠ T.;CR;DRŽAVA;CR;";
 };
+
 
 
 
