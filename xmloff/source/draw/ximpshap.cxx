@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-14 14:06:48 $
+ *  last change: $Author: cl $ $Date: 2002-01-18 16:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2341,6 +2341,12 @@ SdXMLObjectShapeContext::~SdXMLObjectShapeContext()
 
 void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
+    // #96717# in theorie, if we don't have a url we shouldn't even
+    // export this ole shape. But practical its to risky right now
+    // to change this so we better dispose this on load
+    if( !mbIsPlaceholder && (maHref.getLength() == 0) )
+        return;
+
     char* pService = "com.sun.star.drawing.OLE2Shape";
 
     sal_Bool bIsPresShape = isPresentationShape();
@@ -2410,7 +2416,6 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
 void SdXMLObjectShapeContext::EndElement()
 {
-    SetThumbnail();
 }
 
 // this is called from the parent group for each unparsed attribute in the attribute list

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-08 15:42:28 $
+ *  last change: $Author: cl $ $Date: 2002-01-18 16:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1390,11 +1390,16 @@ void XMLShapeExport::ImpExportOLE2Shape(
         if( !bIsEmptyPresObj )
         {
             // xlink:href
-            OUString sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
+            OUString sURL;
             OUString sPersistName;
 
             xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;
-            sURL += sPersistName;
+
+            if( sPersistName.getLength() )
+            {
+                sURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
+                sURL += sPersistName;
+            }
 
             sal_Bool bInternal;
             xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsInternal"))) >>= bInternal;
@@ -1405,33 +1410,23 @@ void XMLShapeExport::ImpExportOLE2Shape(
             if( sClassId.getLength() )
                 rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CLASS_ID, sClassId );
 
-            sURL = rExport.AddEmbeddedObject( sURL );
+            if( sURL.getLength() )
+            {
+                // #96717# in theorie, if we don't have a url we shouldn't even
+                // export this ole shape. But practical its to risky right now
+                // to change this so we better dispose this on load
+                sURL = rExport.AddEmbeddedObject( sURL );
 
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+            }
         }
 
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         enum XMLTokenEnum eElem = sClassId.getLength() ? XML_OBJECT_OLE : XML_OBJECT;
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, eElem, bCreateNewline, sal_True );
-
-        // see if we need to export a thumbnail bitmap
-        OUString sImageURL;
-        xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ThumbnailGraphicURL")) ) >>= sImageURL;
-        if( sImageURL.getLength() )
-        {
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.AddEmbeddedGraphicObject( sImageURL ) );
-
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-
-            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_THUMBNAIL, sal_True, sal_True );
-        }
 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
