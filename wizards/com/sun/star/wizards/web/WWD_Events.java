@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WWD_Events.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 14:09:04 $
+ *  last change: $Author: vg $  $Date: 2005-03-08 15:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,60 +169,56 @@ public abstract class WWD_Events extends WWD_Startup {
      * Ha ! the session should be loaded :-)
      */
     public void loadSession(final String sessionToLoad) {
+    try {
         final StatusDialog sd = getStatusDialog();
 
         final Task task = new Task("LoadDocs", "", 10);
 
-        sd.execute(this, task, new Runnable() {
-            public void run() {
-                try {
-                    task.start();
+        sd.execute(this, task, resources.resLoadingSession );
+        task.start();
 
-                    setSelectedDoc(EMPTY_SHORT_ARRAY);
-                    Helper.setUnoPropertyValue(getModel(lstDocuments), "SelectedItems", EMPTY_SHORT_ARRAY);
-                    Helper.setUnoPropertyValue(getModel(lstDocuments),"StringItemList", EMPTY_STRING_ARRAY);
+        setSelectedDoc(EMPTY_SHORT_ARRAY);
+        Helper.setUnoPropertyValue(getModel(lstDocuments), "SelectedItems", EMPTY_SHORT_ARRAY);
+        Helper.setUnoPropertyValue(getModel(lstDocuments),"StringItemList", EMPTY_STRING_ARRAY);
 
-                    Object view = null;
+        Object view = null;
 
-                    if (sessionToLoad.equals(""))
-                        view=  Configuration.getConfigurationRoot(xMSF, CONFIG_PATH + "/DefaultSession", false);
-                    else {
-                        view = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH + "/SavedSessions", false);
-                        view = Configuration.getNode(sessionToLoad, view);
-                    }
-
-                    CGSession session = new CGSession();
-                    session.setRoot(settings);
-                    session.readConfiguration(view, CONFIG_READ_PARAM);
-                    task.setMax(session.cp_Content.cp_Documents.getSize() * 5 + 7);
-                    task.advance(true);
-
-                    if (sessionToLoad.equals(""))
-                          setSaveSessionName(session);
-
-                    mount(session, task, false, sd.xControl);
-
-                    checkSteps();
-                    currentSession = sessionToLoad;
-
-                } catch (Exception ex) {
-                    unexpectedError(ex);
-                }
-
-                while (task.getStatus() <= task.getMax())
-                    task.advance(false);
-            }
-        }, resources.resLoadingSession );
-
-        //System.out.println("finished load session");
-
-        try {
-            refreshStylePreview();            updateIconsetText();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (sessionToLoad.equals(""))
+            view=  Configuration.getConfigurationRoot(xMSF, CONFIG_PATH + "/DefaultSession", false);
+        else {
+            view = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH + "/SavedSessions", false);
+            view = Configuration.getNode(sessionToLoad, view);
         }
+
+        CGSession session = new CGSession();
+        session.setRoot(settings);
+        session.readConfiguration(view, CONFIG_READ_PARAM);
+        task.setMax(session.cp_Content.cp_Documents.getSize() * 5 + 7);
+        task.advance(true);
+
+        if (sessionToLoad.equals(""))
+              setSaveSessionName(session);
+
+        mount(session, task, false, sd.xControl);
+
+        checkSteps();
+        currentSession = sessionToLoad;
+
+        while (task.getStatus() <= task.getMax())
+                task.advance(false);
+        task.removeTaskListener(sd);
+    } catch (Exception ex) {
+        unexpectedError(ex);
     }
+
+    try {
+        refreshStylePreview();            updateIconsetText();
+    } catch (Exception e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+    }
+
 
     /**
      * hmm. the user clicked the delete button.
@@ -342,15 +338,20 @@ public abstract class WWD_Events extends WWD_Startup {
         if (files.length > MIN_ADD_FILES_FOR_DIALOG) {
             StatusDialog sd = getStatusDialog();
             sd.setLabel(resources.resValidatingDocuments);
-
-            sd.execute(this, task, new LoadDocs( sd.xControl, files, task ), resources.prodName);
+            sd.execute(this, task, resources.prodName); // new LoadDocs( sd.xControl, files, task )
+            LoadDocs oLoadDocs = new LoadDocs( this.xControl, files, task);
+            oLoadDocs.loadDocuments();
+            task.removeTaskListener(sd);
         }
         /*
          * When adding a single document, do not use a
          * status dialog...
          */
-        else
-            new LoadDocs( this.xControl, files, task ).run();
+        else{
+            LoadDocs oLoadDocs = new LoadDocs( this.xControl, files, task);
+            oLoadDocs.loadDocuments();
+        }
+
     }
 
     /**
@@ -415,28 +416,21 @@ public abstract class WWD_Events extends WWD_Startup {
      * the user clicked the "backgrounds" button
      */
     public void chooseBackground() {
-        //new Thread() {
-            //public void run() {
-                try {
-                    setEnabled(btnBackgrounds, false);
-                    if (bgDialog == null) {
-                        bgDialog = new BackgroundsDialog(xMSF, settings.cp_BackgroundImages, resources );
-                        bgDialog.createWindowPeer(xControl.getPeer());
-                    }
-                    bgDialog.setSelected(settings.cp_DefaultSession.cp_Design.cp_BackgroundImage);
-                        short i = bgDialog.executeDialog((UnoDialog)WWD_Events.this);
-                        if (i == 1) //ok
-                            setBackground(bgDialog.getSelected());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                } finally {
-                    setEnabled(btnBackgrounds, true);
-                }
-            //}
-        //}
-        //.start();
-
-    }
+    try {
+        setEnabled(btnBackgrounds, false);
+        if (bgDialog == null) {
+            bgDialog = new BackgroundsDialog(xMSF, settings.cp_BackgroundImages, resources );
+            bgDialog.createWindowPeer(xControl.getPeer());
+        }
+        bgDialog.setSelected(settings.cp_DefaultSession.cp_Design.cp_BackgroundImage);
+            short i = bgDialog.executeDialog((UnoDialog)WWD_Events.this);
+            if (i == 1) //ok
+                setBackground(bgDialog.getSelected());
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    } finally {
+        setEnabled(btnBackgrounds, true);
+    }}
 
     /**
      * invoked when the BackgorundsDialog is "OKed".
@@ -455,29 +449,23 @@ public abstract class WWD_Events extends WWD_Startup {
      *
      */
     public void chooseIconset() {
-        //new Thread() {
-            //public void run() {
-                try {
-                    setEnabled(btnIconSets, false);
-                    if (iconsDialog == null) {
-                        iconsDialog = new IconsDialog(xMSF, settings.cp_IconSets, resources);
-                        iconsDialog.createWindowPeer(xControl.getPeer());
-                    }
+    try {
+        setEnabled(btnIconSets, false);
+        if (iconsDialog == null) {
+            iconsDialog = new IconsDialog(xMSF, settings.cp_IconSets, resources);
+            iconsDialog.createWindowPeer(xControl.getPeer());
+        }
 
-                    iconsDialog.setIconset(settings.cp_DefaultSession.cp_Design.cp_IconSet);
+        iconsDialog.setIconset(settings.cp_DefaultSession.cp_Design.cp_IconSet);
 
-                    short i = iconsDialog.executeDialog((UnoDialog)WWD_Events.this);
-                    if (i == 1) //ok
-                        setIconset(iconsDialog.getIconset());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                } finally {
-                    setEnabled(btnIconSets, true);
-                }
-            //}
-        //}
-        //.start();
-    }
+        short i = iconsDialog.executeDialog((UnoDialog)WWD_Events.this);
+        if (i == 1) //ok
+            setIconset(iconsDialog.getIconset());
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    } finally {
+        setEnabled(btnIconSets, true);
+    }}
 
     /**
         * invoked when the Iconsets Dialog is OKed.
@@ -534,15 +522,10 @@ public abstract class WWD_Events extends WWD_Startup {
      *
      */
     public void setFTPPublish() {
-        //new Thread(new Runnable() {
-            //public void run() {
-                if (showFTPDialog(getPublisher(FTP_PUBLISHER))) {
-                    getPublisher(FTP_PUBLISHER).cp_Publish = true;
-                    updatePublishUI(2);
-                }
-
-            //}
-        //}).start();
+        if (showFTPDialog(getPublisher(FTP_PUBLISHER))) {
+            getPublisher(FTP_PUBLISHER).cp_Publish = true;
+            updatePublishUI(2);
+        }
     }
 
     /**
@@ -572,13 +555,14 @@ public abstract class WWD_Events extends WWD_Startup {
 
     private TOCPreview docPreview;
 
+
     /**
      * the user clicks the "Preview" button.
      */
     public void documentPreview() {
         try {
             if (docPreview == null)
-                docPreview = new TOCPreview(xMSF, settings, resources, stylePreview.tempDir);
+                docPreview = new TOCPreview(xMSF, settings, resources, stylePreview.tempDir, myFrame);
             docPreview.refresh(settings);
         } catch (Exception ex) {
             unexpectedError(ex);
@@ -882,15 +866,11 @@ public abstract class WWD_Events extends WWD_Startup {
         final CGPublish p = getPublisher(FTP_PUBLISHER);
         // if ftp is checked, and no proxies are set, and password is empty...
         if (p.cp_Publish && (!proxies) && (p.password == null || p.password.equals(""))) {
-            //new Thread(new Runnable() {
-                //public void run() {
-                    if (showFTPDialog(p)) {
-                        updatePublishUI(2);
-                        //now continue...
-                        finishWizard2();
-                    }
-                //}
-            //}).start();
+            if (showFTPDialog(p)) {
+                updatePublishUI(2);
+                //now continue...
+                finishWizard2();
+            }
         }
         else
             finishWizard2();
@@ -984,10 +964,10 @@ public abstract class WWD_Events extends WWD_Startup {
             StatusDialog pd = getStatusDialog();
 
             pd.setRenderer(new ProcessStatusRenderer(resources));
-            pd.setFinishedMethod(new MethodInvocation("finishWizardFinished", this));
-
-
-            pd.execute(this, process.myTask, process, resources.prodName);
+            pd.execute(this, process.myTask,  resources.prodName);  //process,
+            process.runProcess();
+            finishWizardFinished();
+            process.myTask.removeTaskListener(pd);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1074,7 +1054,7 @@ public abstract class WWD_Events extends WWD_Startup {
 
     }
 
-    class LoadDocs implements Runnable {
+    public class LoadDocs {
         private XControl xC;
         String[] files;
         Task task;
@@ -1085,11 +1065,11 @@ public abstract class WWD_Events extends WWD_Startup {
             task = task_;
         }
 
-        public void run() {
+        public void loadDocuments() {
             //LogTaskListener lts = new LogTaskListener();
             //task.addTaskListener(lts);
 
-            task.start();
+//            task.start();
 
             // where the documents are added to in the list (offset)
             int offset = (getSelectedDoc().length > 0 ? selectedDoc[0] + 1 : getDocsCount());
