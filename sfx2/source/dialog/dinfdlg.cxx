@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-14 10:11:30 $
+ *  last change: $Author: pb $ $Date: 2001-06-27 13:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,14 +527,10 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     if ( aURL.GetProtocol() == INET_PROT_FILE )
         aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL() ) );
     aShowSizeFT.SetText( aSizeText );
+
     String aDescription( SfxResId( STR_SFX_NEWOFFICEDOC ) );
-
     if ( aURL.GetLastName().Len() )
-    {
-        DBG_WARNINGFILE( "Not implemented!" );
-//!     aDescription = SfxExplorerFile::GetDescription( rMainURL );
-    }
-
+        aDescription = SvFileInformationManager::GetDescription( rMainURL );
     aShowTypeFT.SetText( aDescription );
 
     // Bestimmung des Ortes
