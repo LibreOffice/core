@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORowSet.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-12-11 11:59:11 $
+ *  last change:$Date: 2004-08-02 17:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ import util.utils;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.frame.XStorable;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.ParametersRequest;
@@ -92,6 +94,7 @@ import com.sun.star.task.XInteractionAbort;
 import com.sun.star.task.XInteractionContinuation;
 import com.sun.star.task.XInteractionRequest;
 import com.sun.star.ucb.AuthenticationRequest;
+import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
@@ -200,7 +203,8 @@ public class ORowSet extends TestCase {
     boolean isMySQLDB = false;
     protected final static String dbSourceName = "ORowSetDataSource";
     public XConnection conn = null;
-
+    Object dbSrc = null;
+    String aFile = "";
 
     /**
     * Initializes some class fields. Then creates DataSource, which serves
@@ -257,8 +261,11 @@ public class ORowSet extends TestCase {
                 propInfo[0].Name = "JavaDriverClass";
                 propInfo[0].Value = "org.gjt.mm.mysql.Driver";
                 srcInf.Info = propInfo;
-                Object dbSrc = srcInf.getDataSourceService() ;
-                dbTools.reRegisterDB(dbSourceName, dbSrc);
+                dbSrc = srcInf.getDataSourceService() ;
+                if (uniqueSuffix < 1)
+                    dbTools.reRegisterDB(dbSourceName, dbSrc);
+                XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF ();
+                    aFile = utils.getOfficeTemp (xMSF)+dbSourceName+".odb";
             } catch (com.sun.star.uno.Exception e) {
                 log.println("Error while object test initialization :") ;
                 e.printStackTrace(log) ;
@@ -268,9 +275,9 @@ public class ORowSet extends TestCase {
         } else {
             try {
                 srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir) ;
-                Object dbSrc = srcInf.getDataSourceService() ;
-
-                dbTools.reRegisterDB(dbSourceName, dbSrc) ;
+                dbSrc = srcInf.getDataSourceService() ;
+                if (uniqueSuffix < 1)
+                    dbTools.reRegisterDB(dbSourceName, dbSrc) ;
             } catch (com.sun.star.uno.Exception e) {
                 log.println("Error while object test initialization :") ;
                 e.printStackTrace(log) ;
@@ -576,19 +583,27 @@ public class ORowSet extends TestCase {
     protected void cleanup( TestParameters Param, PrintWriter log) {
         try {
             conn.close() ;
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF ();
+            Object sfa = xMSF.createInstance ("com.sun.star.comp.ucb.SimpleFileAccess");
+            XSimpleFileAccess xSFA = (XSimpleFileAccess) UnoRuntime.queryInterface (XSimpleFileAccess.class, sfa);
+            log.println ("deleting database file");
+            xSFA.kill (aFile);
+            log.println ("Could delete file "+aFile+": "+!xSFA.exists (aFile));
         } catch (com.sun.star.uno.Exception e) {
             log.println("Can't close the connection") ;
             e.printStackTrace(log) ;
         } catch (com.sun.star.lang.DisposedException e) {
             log.println("Connection was already closed. It's OK.") ;
         }
-        try {
-            dbTools.revokeDB(dbSourceName) ;
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Error while object test cleaning up :") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Error while object test cleaning up",e) ;
-        }
+//        try {
+//            dbTools.revokeDB(dbSourceName) ;
+//            XComponent db = (XComponent) UnoRuntime.queryInterface(XComponent.class,dbSrc);
+//            db.dispose();
+//        } catch (com.sun.star.uno.Exception e) {
+//            log.println("Error while object test cleaning up :") ;
+//            e.printStackTrace(log) ;
+//            throw new StatusException("Error while object test cleaning up",e) ;
+//        }
     }
 
     /**
