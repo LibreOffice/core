@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   simpref.src  $
  //   $Author: hr $
- //     $Date: 2003-03-26 18:06:32 $
- // $Revision: 1.11 $
+ //     $Date: 2003-04-29 17:12:59 $
+ // $Revision: 1.12 $
  //  $Logfile:   T:/sc/source/ui/src/simpref.srv  $
  //----------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         Text [ ENGLISH ] = "Refers to" ;
         Text [ norwegian ] = "Refers to" ;
         Text [ italian ] = "Area" ;
-        Text [ portuguese_brazilian ] = "Remente a" ;
+        Text [ portuguese_brazilian ] = "�rea" ;
         Text [ portuguese ] = "�rea" ;
         Text [ finnish ] = "Alue" ;
         Text [ danish ] = "Omr�de" ;
@@ -110,6 +110,9 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "�rea";
         Text[ thai ] = "พื้นที่";
+        Text[ czech ] = "Oblast";
+        Text[ hebrew ] = "Bereich";
+        Text[ hindi ] = "विस्तीर्ण";
     };
     Edit ED_ASSIGN
     {
@@ -127,7 +130,7 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Encolher" ;
         QuickHelpText [ swedish ] = "F�rminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -148,6 +151,9 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "Zmenšit";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "सिकुडना";
     };
     OKButton BTN_OK
     {
@@ -168,6 +174,15 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         TabStop = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
