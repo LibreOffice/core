@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDispatchProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:23 $
+ *  last change:$Date: 2003-05-27 12:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ import com.sun.star.frame.DispatchDescriptor;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
@@ -113,7 +114,7 @@ public class _XDispatchProvider extends MultiMethodTest {
         try {
             XURLTransformer xParser=(XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
-                    tParam.getMSF().createInstance
+                    ((XMultiServiceFactory)tParam.getMSF()).createInstance
                         ("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of
             // URL objects.
@@ -148,7 +149,7 @@ public class _XDispatchProvider extends MultiMethodTest {
             log.println("Parsing URL");
             XURLTransformer xParser = (XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
-                    tParam.getMSF().createInstance
+                    ((XMultiServiceFactory)tParam.getMSF()).createInstance
                         ("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of
             // URL objects.
