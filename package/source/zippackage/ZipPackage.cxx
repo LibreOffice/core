@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 16:23:48 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 10:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #ifndef _ZIP_FILE_HXX
 #include <ZipFile.hxx>
 #endif
+#ifndef _THREADED_BUFFER_HXX
+#include <ThreadedBuffer.hxx>
+#endif
+#ifndef _PACKAGE_CONSTANTS_HXX_
+#include <PackageConstants.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
@@ -90,9 +96,6 @@
 #endif
 #ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTREADER_HPP_
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTWRITER_HPP_
-#include <com/sun/star/packages/manifest/XManifestWriter.hpp>
 #endif
 
 using namespace rtl;
@@ -321,13 +324,12 @@ void ZipPackage::getZipFileContents()
 void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException)
 {
-    OUString sURL;
     aArguments[0] >>= sURL;
     pContent = new ::ucb::Content(sURL, Reference < com::sun::star::ucb::XCommandEnvironment >() );
     Reference < XActiveDataSink > xSink = new ZipPackageSink;
     try
     {
-        if (pContent->openStream ( xSink) )
+        if (pContent->openStream ( xSink ) )
             xContentStream = xSink->getInputStream();
         xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
         try
@@ -542,102 +544,42 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
 void SAL_CALL ZipPackage::commitChanges(  )
         throw(WrappedTargetException, RuntimeException)
 {
-    std::vector < Sequence < PropertyValue > > aManList;
+    ThreadedBuffer *pBuffer;
+    Reference < XOutputStream > xBuffer = (pBuffer = new ThreadedBuffer ( n_ConstBufferSize, sURL, *this ));
+    ZipOutputStream aZipOut ( Reference < XOutputStream > (pBuffer), n_ConstBufferSize); //, nSegmentSize );
+    pBuffer->setZipOutputStream ( aZipOut );
 
-    // Set up output buffer. ZipPackageBuffer implements both
-    // XInputStream and XOutputStream as the UCB requires an XInputStream
-    // and the ZipOutputStream writes to an XOutputStream
-
-    ZipPackageBuffer *pZipBuffer = new ZipPackageBuffer( 65535 );
-    Reference < XOutputStream > xOutStream (pZipBuffer);
-    ZipOutputStream aZipOut ( xOutStream, 65535 );
-
-    // Make a reference to the manifest output stream so it persists
-    // until the call to ZipOutputStream->finish()
-
-    Reference < XOutputStream > xManOutStream;
     aZipOut.setMethod(DEFLATED);
     aZipOut.setLevel(DEFAULT_COMPRESSION);
 
     // Remove the old META-INF directory as this will be re-generated below.
-    // Pass save-contents a vector which will be used to store the entries which
-    // are placed inside the Manifest et al. Note: saveContents is called
-    // recursively.
+    // Pass save-contents a vector which will be used to store information
+    // that should be stored in the manifest.
 
     const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
-    const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
-    const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
     if (xRootFolder->hasByName( sMeta ) )
         xRootFolder->removeByName( sMeta );
 
-    Sequence < PropertyValue > aPropSeq ( 2 );
-    aPropSeq [0].Name = sMediaType;
-    aPropSeq [0].Value <<= pRootFolder->GetMediaType( );
-    aPropSeq [1].Name = sFullPath;
-    aPropSeq [1].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
-
-    aManList.push_back( aPropSeq );
-    pRootFolder->saveContents(OUString(), aManList, aZipOut, aEncryptionKey );
-
-    OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
-    Reference < XManifestWriter > xWriter (xFactory->createInstance( sManifestWriter ), UNO_QUERY );
-    if ( xWriter.is() )
-    {
-        ZipEntry * pEntry = new ZipEntry;
-        ZipPackageBuffer *pBuffer = new ZipPackageBuffer(65535);
-        xManOutStream = Reference < XOutputStream > (*pBuffer, UNO_QUERY);
-
-        pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
-        pEntry->nMethod = DEFLATED;
-        pEntry->nCrc = -1;
-        pEntry->nSize = -1;
-        pEntry->nCompressedSize = -1;
-        pEntry->nTime = ZipOutputStream::getCurrentDosTime();
-
-        Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size());
-        Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
-        for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
-             aIter != aEnd;
-             aIter++, pSequence++)
-            *pSequence= (*aIter);
-        xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
-
-        sal_Int32 nBufferLength = static_cast < sal_Int32 > (pBuffer->getPosition());
-        pBuffer->aBuffer.realloc( nBufferLength );
-
-        try
-        {
-            vos::ORef < EncryptionData > xEmpty;
-            aZipOut.putNextEntry(*pEntry, xEmpty);
-            aZipOut.write(pBuffer->aBuffer, 0, nBufferLength);
-            aZipOut.closeEntry();
-        }
-        catch (::com::sun::star::io::IOException & )
-        {
-            VOS_ENSURE( 0, "Error adding META-INF/manifest.xml to the ZipOutputStream" );
-        }
-    }
     try
     {
-        aZipOut.finish();
-    }
-    catch (::com::sun::star::io::IOException & )
-    {
-        VOS_ENSURE( 0, "Error writing ZIP file to disk" );
-    }
-
-    xContentStream = Reference < XInputStream > (pZipBuffer);
-    xContentSeek   = Reference < XSeekable > (pZipBuffer);
-
-    pZipFile->setInputStream ( xContentStream );
-    pZipBuffer->seek(0);
-    try
-    {
-        pContent->writeStream( Reference < XInputStream > (pZipBuffer), sal_True );
+        pContent->writeStream( Reference < XInputStream > (pBuffer), sal_True );
     }
     catch (::com::sun::star::ucb::CommandAbortedException&)
     {
         VOS_ENSURE( 0, "Unable to write Zip File to disk!");
+    }
+    Reference < XActiveDataSink > xSink = new ZipPackageSink;
+    try
+    {
+        // Update our references to point to the new file
+        if (pContent->openStream ( xSink ) )
+            xContentStream = xSink->getInputStream();
+        xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
+        pZipFile->setInputStream ( xContentStream );
+    }
+    catch (::com::sun::star::ucb::CommandAbortedException&)
+    {
+        // What the hell ?! In theory we just wrote it !
     }
 }
 
@@ -762,6 +704,13 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         if (!( aValue >>= aEncryptionKey ) )
             throw IllegalArgumentException();
     }
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SegmentSize") ) )
+    {
+        if (!( aValue >>= nSegmentSize ) )
+            throw IllegalArgumentException();
+    }
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") ) )
+        throw IllegalArgumentException (); // This property is read-only
     else
         throw UnknownPropertyException();
 }
@@ -772,6 +721,11 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "EncryptionKey" ) ) )
     {
         aAny <<= aEncryptionKey;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "SegmentSize" ) ) )
+    {
+        aAny <<= nSegmentSize;
         return aAny;
     }
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "HasEncryptedEntries" ) ) )
