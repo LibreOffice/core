@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:57:23 $
+ *  last change: $Author: ab $ $Date: 2001-02-21 17:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,16 @@
 #ifndef _CPPUHELPER_WEAKAGG_HXX_
 #include <cppuhelper/weakagg.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTEVENTSSUPPLIER_HPP_
+#include <com/sun/star/script/XScriptEventsSupplier.hpp>
+#endif
+//#ifndef _COM_SUN_STAR_XNAMECONTAINER_HPP_
+//#include <com/sun/star/container/XNameContainer.hpp>
+//#endif
+
 
 FORWARD_DECLARE_INTERFACE( lang, XMultiServiceFactory )
+FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 
 //........................................................................
 // namespace toolkit
@@ -96,10 +104,13 @@ FORWARD_DECLARE_INTERFACE( lang, XMultiServiceFactory )
         ,public ::comphelper::OPropertySetAggregationHelper
         ,public ::comphelper::OPropertyContainer
         ,public ::cppu::OWeakAggObject
+        ,public ::com::sun::star::script::XScriptEventsSupplier
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
                     m_xAggregate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+                    mxEventContainer;
 
         // <properties>
         sal_Int32       m_nPosX;
@@ -144,6 +155,11 @@ FORWARD_DECLARE_INTERFACE( lang, XMultiServiceFactory )
 
         // OPropertySetAggregationHelper overridables
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() = 0;
+
+        //XScriptEventsSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+            SAL_CALL getEvents(  ) throw(::com::sun::star::uno::RuntimeException);
+
     };
 
     //====================================================================
@@ -190,6 +206,9 @@ FORWARD_DECLARE_INTERFACE( lang, XMultiServiceFactory )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/24 14:57:23  mt
+ *  model for dialog controls (weith pos/size)
+ *
  *
  *  Revision 1.0 17.01.01 11:36:59  fs
  ************************************************************************/
