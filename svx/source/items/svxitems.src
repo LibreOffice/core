@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:25:06 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -11077,65 +11077,15 @@ String RID_SVXITEMS_PARASNAPTOGRID_OFF
     Text[ hungarian ] = "A bekezdés nem illeszkedik a szövegrácsra";
     Text[ slovenian ] = "Odstavka ne pripni na mrežo besedila";
 };
-
+String RID_SVXITEMS_CHARHIDDEN_FALSE
+{
+    Text = "Nicht ausgeblendet";
+    Text[ english_us ] = "Not hidden";
+};
+String RID_SVXITEMS_CHARHIDDEN_TRUE
+{
+    Text = "Ausgeblendet";
+    Text[ english_us ] = "Hidden";
+};
  // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
