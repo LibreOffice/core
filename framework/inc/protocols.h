@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protocols.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:10:31 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/*TODO outline this implementation :-) */
 
 #ifndef __FRAMEWORK_PROTOCOLS_H_
 #define __FRAMEWORK_PROTOCOLS_H_
