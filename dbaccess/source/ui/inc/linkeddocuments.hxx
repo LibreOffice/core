@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 14:08:29 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,12 @@ namespace dbaui
                             const String& _rObjectName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
                         );
+        sal_Bool        newReportWithPilot(
+                            const String& _rDataSourceName,
+                            const sal_Int32 _nCommandType,
+                            const String& _rObjectName,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                        );
 
         ::rtl::OUString getLocation(const ::rtl::OUString& _rLinkName);
 
@@ -145,6 +151,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/16 14:08:29  fs
+ *  #88813# +newFormWithPilot
+ *
  *  Revision 1.1  2001/04/26 11:52:20  fs
  *  initial checkin - access to the data source associated bookmarks
  *
