@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objfac3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:05:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,23 +153,23 @@ IMPL_LINK( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
             case E3D_POLYSCENE_ID:
                 pObjFactory->pNewObj = new E3dPolyScene();
                 break;
-            case E3D_LIGHT_ID:
-                pObjFactory->pNewObj = new E3dLight();
-                break;
-            case E3D_DISTLIGHT_ID:
-                pObjFactory->pNewObj = new E3dDistantLight();
-                break;
-            case E3D_POINTLIGHT_ID:
-                pObjFactory->pNewObj = new E3dPointLight();
-                break;
-            case E3D_SPOTLIGHT_ID:
-                break;
+//BFS01         case E3D_LIGHT_ID:
+//BFS01             pObjFactory->pNewObj = new E3dLight();
+//BFS01             break;
+//BFS01         case E3D_DISTLIGHT_ID:
+//BFS01             pObjFactory->pNewObj = new E3dDistantLight();
+//BFS01             break;
+//BFS01         case E3D_POINTLIGHT_ID:
+//BFS01             pObjFactory->pNewObj = new E3dPointLight();
+//BFS01             break;
+//BFS01         case E3D_SPOTLIGHT_ID:
+//BFS01             break;
             case E3D_OBJECT_ID:
                 pObjFactory->pNewObj = new E3dObject();
                 break;
-            case E3D_POLYOBJ_ID :
-                pObjFactory->pNewObj = new E3dPolyObj();
-                break;
+//BFS01         case E3D_POLYOBJ_ID :
+//BFS01             pObjFactory->pNewObj = new E3dPolyObj();
+//BFS01             break;
             case E3D_POLYGONOBJ_ID  :
                 pObjFactory->pNewObj = new E3dPolygonObj();
                 break;
