@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:49:46 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2196,6 +2196,7 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         nDocumentLock   ( 0 ), \
         nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG), \
         bUpdateEnabled  ( TRUE ), \
+        pOldAutoDBRange ( NULL ), \
         pVirtualDevice_100th_mm ( NULL ), \
         pModificator    ( NULL )
 
@@ -2289,6 +2290,8 @@ __EXPORT ScDocShell::~ScDocShell()
     delete pOldJobSetup;        // gesetzt nur bei Fehler in StartJob()
 
     delete pVirtualDevice_100th_mm;
+
+    delete pOldAutoDBRange;
 
     if (pModificator)
     {
