@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-07 08:41:04 $
+ *  last change: $Author: ab $ $Date: 2002-08-08 09:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,8 +1482,10 @@ SbUnoObject::SbUnoObject( const String& aName, const Any& aUnoObj_ )
 
     if( mxInvocation.is() )
     {
-        // MaterialHolder holen
-        mxMaterialHolder = Reference< XMaterialHolder >::query( mxInvocation );
+        // #94670: This is WRONG because then the MaterialHolder doesn't refer
+        // to the object implementing XInvocation but to the object passed to
+        // the invocation service!!!
+        // mxMaterialHolder = Reference< XMaterialHolder >::query( mxInvocation );
 
         // ExactName holen
         mxExactName = Reference< XExactName >::query( mxInvocation );
