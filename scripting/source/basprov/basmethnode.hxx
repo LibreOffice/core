@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: basprov.hxx,v $
+ *  $RCSfile: basmethnode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 10:07:04 $
+ *  last change: $Author: tbe $ $Date: 2003-09-23 10:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,36 +59,18 @@
  *
  ************************************************************************/
 
-#ifndef SCRIPTING_BASPROV_HXX
-#define SCRIPTING_BASPROV_HXX
+#ifndef SCRIPTING_BASMETHNODE_HXX
+#define SCRIPTING_BASMETHNODE_HXX
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#endif
 #ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_BROWSE_XBROWSENODE_HPP_
 #include <drafts/com/sun/star/script/framework/browse/XBrowseNode.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_PROVIDER_XSCRIPTPROVIDER_HPP_
-#include <drafts/com/sun/star/script/framework/provider/XScriptProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
-#endif
-
-class BasicManager;
+class SbMethod;
 
 
 //.........................................................................
@@ -97,45 +79,21 @@ namespace basprov
 //.........................................................................
 
     //  ----------------------------------------------------
-    //  class BasicProviderImpl
+    //  class BasicMethodNodeImpl
     //  ----------------------------------------------------
 
-    typedef ::cppu::WeakImplHelper4<
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::lang::XInitialization,
-        ::drafts::com::sun::star::script::framework::provider::XScriptProvider,
-        ::drafts::com::sun::star::script::framework::browse::XBrowseNode > BasicProviderImpl_BASE;
+    typedef ::cppu::WeakImplHelper1<
+        ::drafts::com::sun::star::script::framework::browse::XBrowseNode > BasicMethodNodeImpl_BASE;
 
 
-    class BasicProviderImpl : public BasicProviderImpl_BASE
+    class BasicMethodNodeImpl : public BasicMethodNodeImpl_BASE
     {
     private:
-        BasicManager*   m_pBasicManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xScriptingContext;
+        SbMethod* m_pMethod;
 
     public:
-        BasicProviderImpl(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
-        virtual ~BasicProviderImpl();
-
-        // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
-            throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-            throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-            throw (::com::sun::star::uno::RuntimeException);
-
-        // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-        // XScriptProvider
-        virtual ::com::sun::star::uno::Reference < ::drafts::com::sun::star::script::framework::provider::XScript > SAL_CALL getScript(
-            const ::rtl::OUString& scriptURI )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        BasicMethodNodeImpl( SbMethod* pMethod );
+        virtual ~BasicMethodNodeImpl();
 
         // XBrowseNode
         virtual ::rtl::OUString SAL_CALL getName(  )
@@ -152,4 +110,4 @@ namespace basprov
 }   // namespace basprov
 //.........................................................................
 
-#endif // SCRIPTING_BASPROV_HXX
+#endif // SCRIPTING_BASMETHNODE_HXX

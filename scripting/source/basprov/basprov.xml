@@ -22,6 +22,8 @@
         <type>com.sun.star.uno.Exception</type>
         <type>com.sun.star.uno.RuntimeException</type>
         <type>com.sun.star.uno.XComponentContext</type>
+        <type>drafts.com.sun.star.script.framework.browse.BrowseNodeTypes</type>
+        <type>drafts.com.sun.star.script.framework.browse.XBrowseNode</type>
         <type>drafts.com.sun.star.script.framework.provider.XScript</type>
         <type>drafts.com.sun.star.script.framework.provider.XScriptProvider</type>
     </component-description>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-16 15:21:52 $
+ *  last change: $Author: tbe $ $Date: 2003-09-23 10:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,15 @@
 #ifndef SCRIPTING_BASSCRIPT_HXX
 #include "basscript.hxx"
 #endif
+#ifndef SCRIPTING_BASLIBNODE_HXX
+#include "baslibnode.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_BROWSE_BROWSENODETYPES_HPP_
+#include <drafts/com/sun/star/script/framework/browse/BrowseNodeTypes.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
@@ -151,6 +157,7 @@ namespace basprov
 
     BasicProviderImpl::BasicProviderImpl( const Reference< XComponentContext >& xContext )
         :m_pBasicManager( 0 )
+        ,m_xLibContainer( 0 )
         ,m_xContext( xContext )
         ,m_xScriptingContext( 0 )
     {
@@ -218,6 +225,7 @@ namespace basprov
                         if ( xModel == pObjShell->GetModel() )
                         {
                             m_pBasicManager = pObjShell->GetBasicManager();
+                            m_xLibContainer = Reference< script::XLibraryContainer >( pObjShell->GetBasicContainer(), UNO_QUERY );
                             break;
                         }
                     }
@@ -244,6 +252,9 @@ namespace basprov
         // TODO
         if ( !m_pBasicManager )
             m_pBasicManager = SFX_APP()->GetBasicManager();
+
+        if ( !m_xLibContainer.is() )
+            m_xLibContainer = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
     }
 
     // -----------------------------------------------------------------------------
@@ -295,9 +306,9 @@ namespace basprov
                         SbxArray* pMethods = pModule->GetMethods();
                         if ( pMethods )
                         {
-                            SbMethod* pMethod = (SbMethod*)pMethods->Find( aMethod, SbxCLASS_METHOD );
+                            SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( aMethod, SbxCLASS_METHOD ) );
                             if ( pMethod )
-                                xScript = (provider::XScript*) new BasicScriptImpl( pMethod );
+                                xScript = static_cast< provider::XScript* >( new BasicScriptImpl( pMethod ) );
                         }
                     }
                 }
@@ -312,6 +323,66 @@ namespace basprov
         }
 
         return xScript;
+    }
+
+    // -----------------------------------------------------------------------------
+    // XBrowseNode
+    // -----------------------------------------------------------------------------
+
+    ::rtl::OUString BasicProviderImpl::getName(  ) throw (RuntimeException)
+    {
+        // TODO
+
+        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+
+        return ::rtl::OUString::createFromAscii( "Basic" );
+    }
+
+    // -----------------------------------------------------------------------------
+
+    Sequence< Reference< browse::XBrowseNode > > BasicProviderImpl::getChildNodes(  ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+
+        Sequence< Reference< browse::XBrowseNode > > aChildNodes;
+
+        if ( m_pBasicManager && m_xLibContainer.is() )
+        {
+            Sequence< ::rtl::OUString > aLibNames = m_xLibContainer->getElementNames();
+            sal_Int32 nLibCount = aLibNames.getLength();
+            const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+            aChildNodes.realloc( nLibCount );
+            Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();
+
+            for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
+            {
+                pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_pBasicManager, m_xLibContainer, pLibNames[i] ) );
+            }
+        }
+
+        return aChildNodes;
+    }
+
+    // -----------------------------------------------------------------------------
+
+    sal_Bool BasicProviderImpl::hasChildNodes(  ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+
+        sal_Bool bReturn = sal_False;
+        if ( m_xLibContainer.is() )
+            bReturn = m_xLibContainer->hasElements();
+
+        return bReturn;
+    }
+
+    // -----------------------------------------------------------------------------
+
+    sal_Int16 BasicProviderImpl::getType(  ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+
+        return browse::BrowseNodeTypes::CONTAINER;
     }
 
     // =============================================================================
