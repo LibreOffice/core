@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:28:20 $
+ *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _SC_XMLDDELINKSCONTEXT_HXX
 #include "XMLDDELinksContext.hxx"
 #endif
+#ifndef _SC_XMLCALCULATIONSETTINGSCONTEXT_HXX
+#include "XMLCalculationSettingsContext.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 
@@ -134,6 +137,9 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
 //      pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
 //                                            xAttrList, bOrdered );
 //      break;
+    case XML_TOK_BODY_CALCULATION_SETTINGS :
+        pContext = new ScXMLCalculationSettingsContext( GetScImport(), nPrefix, rLocalName, xAttrList );
+        break;
     case XML_TOK_BODY_CONTENT_VALIDATIONS :
         pContext = new ScXMLContentValidationsContext( GetScImport(), nPrefix, rLocalName, xAttrList );
         break;

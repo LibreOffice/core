@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:28:20 $
+ *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aBodyTokenMap[] =
 {
+    { XML_NAMESPACE_TABLE, sXML_calculation_settings,   XML_TOK_BODY_CALCULATION_SETTINGS   },
     { XML_NAMESPACE_TABLE, sXML_content_validations,    XML_TOK_BODY_CONTENT_VALIDATIONS    },
     { XML_NAMESPACE_TABLE, sXML_label_ranges,           XML_TOK_BODY_LABEL_RANGES           },
     { XML_NAMESPACE_TABLE, sXML_table,                  XML_TOK_BODY_TABLE                  },

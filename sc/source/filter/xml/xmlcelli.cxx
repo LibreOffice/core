@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:09:04 $
+ *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 break;
         }
     }
-
 }
 
 sal_Int16 ScXMLTableRowCellContext::GetCellType(const rtl::OUString& sOUValue) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 18:35:05 $
+ *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,9 @@ class ScXMLExport : public SvXMLExport
                                 const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
     sal_Bool IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2);
 
+    void WriteCalculationSettings(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
     void WriteScenario();   // core implementation
+    void WriteViewSettings();
     void WriteTheLabelRanges(const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
     void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, sal_Bool bColumn );
     void WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);

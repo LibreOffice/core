@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:28:20 $
+ *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ enum ScXMLStyleTokens
 
 enum ScXMLBodyTokens
 {
+    XML_TOK_BODY_CALCULATION_SETTINGS,
     XML_TOK_BODY_CONTENT_VALIDATIONS,
     XML_TOK_BODY_LABEL_RANGES,
     XML_TOK_BODY_TABLE,
@@ -319,7 +320,7 @@ enum ScXMLAnnotationAttrTokens
 enum ScXMLDetectiveElemTokens
 {
     XML_TOK_DETECTIVE_ELEM_HIGHLIGHTED,
-    XML_TOK_DETECTIVE_ELEM_OPERATION,
+    XML_TOK_DETECTIVE_ELEM_OPERATION
 };
 
 enum ScXMLDetectiveHighlightedAttrTokens

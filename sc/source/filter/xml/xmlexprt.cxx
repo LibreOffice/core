@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-22 19:53:32 $
+ *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,9 @@
 #endif
 #ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -1046,6 +1049,7 @@ void ScXMLExport::_ExportContent()
         uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
         if ( xIndex.is() )
         {
+            WriteCalculationSettings(xSpreadDoc);
             sal_Int32 nTableCount = xIndex->getCount();
             ScMyAreaLinksContainer aAreaLinks;
             GetAreaLinks( xSpreadDoc, aAreaLinks );
@@ -1093,6 +1097,7 @@ void ScXMLExport::_ExportContent()
                             AddAttribute( XML_NAMESPACE_TABLE, sXML_print_ranges, sPrintRanges );
                         SvXMLElementExport aElemT(*this, XML_NAMESPACE_TABLE, sXML_table, sal_True, sal_True);
                         CheckAttrList();
+                        WriteViewSettings();
                         WriteScenario();
                         GetxCurrentShapes(xCurrentShapes);
                         WriteTableShapes();
@@ -2167,6 +2172,67 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
     return bIsEqual;
 }
 
+void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(xSpreadDoc, uno::UNO_QUERY);
+    if (xPropertySet.is())
+    {
+        sal_Bool bCalcAsShown = ::cppu::any2bool( xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_CALCASSHOWN))) );
+        sal_Bool bIgnoreCase = ::cppu::any2bool( xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_IGNORECASE))) );
+        sal_Bool bLookUpLabels = ::cppu::any2bool( xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LOOKUPLABELS))) );
+        sal_Bool bMatchWholeCell = ::cppu::any2bool( xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_MATCHWHOLE))) );
+        sal_Bool bIsIterationEnabled = ::cppu::any2bool( xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERENABLED))) );
+        uno::Any aAny = xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERCOUNT)));
+        sal_Int32 nIterationCount(100);
+        aAny >>= nIterationCount;
+        aAny = xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITEREPSILON)));
+        double fIterationEpsilon;
+        aAny >>= fIterationEpsilon;
+        aAny = xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NULLDATE)));
+        util::Date aNullDate;
+        aAny >>= aNullDate;
+        if (bCalcAsShown || bIgnoreCase || !bLookUpLabels || !bMatchWholeCell || bIsIterationEnabled || nIterationCount != 100 || fIterationEpsilon != 0.001 ||
+            aNullDate.Day != 30 || aNullDate.Month != 12 || aNullDate.Year != 1899)
+        {
+            if (bIgnoreCase)
+                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_case_sensitive, sXML_false);
+            if (bCalcAsShown)
+                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_precision_as_shown, sXML_true);
+            if (!bMatchWholeCell)
+                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_search_criteria_must_apply_to_whole_cell, sXML_false);
+            if (!bLookUpLabels)
+                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_automatic_find_labels, sXML_false);
+            SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, sXML_calculation_settings, sal_True, sal_True);
+            {
+                if (aNullDate.Day != 30 || aNullDate.Month != 12 || aNullDate.Year != 1899)
+                {
+                    rtl::OUStringBuffer sDate;
+                    GetMM100UnitConverter().convertDateTime(sDate, 0.0, aNullDate);
+                    AddAttribute(XML_NAMESPACE_TABLE, sXML_date_value, sDate.makeStringAndClear());
+                    SvXMLElementExport aElemNullDate(*this, XML_NAMESPACE_TABLE, sXML_null_date, sal_True, sal_True);
+                }
+                if (bIsIterationEnabled || nIterationCount != 100 || fIterationEpsilon != 0.001)
+                {
+                    rtl::OUStringBuffer sBuffer;
+                    if (bIsIterationEnabled)
+                        AddAttribute(XML_NAMESPACE_TABLE, sXML_status, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("enable")));
+                    if (nIterationCount != 100)
+                    {
+                        GetMM100UnitConverter().convertNumber(sBuffer, nIterationCount);
+                        AddAttribute(XML_NAMESPACE_TABLE, sXML_steps, sBuffer.makeStringAndClear());
+                    }
+                    if (fIterationEpsilon != 0.001)
+                    {
+                        GetMM100UnitConverter().convertNumber(sBuffer, fIterationEpsilon);
+                        AddAttribute(XML_NAMESPACE_TABLE, sXML_maximum_difference, sBuffer.makeStringAndClear());
+                    }
+                    SvXMLElementExport aElemIteration(*this, XML_NAMESPACE_TABLE, sXML_iteration, sal_True, sal_True);
+                }
+            }
+        }
+    }
+}
+
 // core implementation
 void ScXMLExport::WriteScenario()
 {
@@ -2197,6 +2263,10 @@ void ScXMLExport::WriteScenario()
             AddAttribute(XML_NAMESPACE_TABLE, sXML_comment, rtl::OUString(sComment));
         SvXMLElementExport aElem(*this, XML_NAMESPACE_TABLE, sXML_scenario, sal_True, sal_True);
     }
+}
+
+void ScXMLExport::WriteViewSettings()
+{
 }
 
 void ScXMLExport::WriteTheLabelRanges( const uno::Reference< sheet::XSpreadsheetDocument >& xSpreadDoc )
