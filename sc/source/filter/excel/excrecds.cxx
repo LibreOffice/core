@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-19 15:28:25 $
+ *  last change: $Author: gt $ $Date: 2000-10-26 11:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2111,8 +2111,8 @@ void ExcRow::SetHeight( UINT16 nNewHeight, BOOL bUser )
 
     if( bUser )
         nOptions |= EXC_ROW_UNSYNCED;       // user height
-    else
-        nHeight |= EXC_ROW_FLAGDEFHEIGHT;   // default height
+//  else            not usable in Aplix as described in bug #76250#
+//      nHeight |= EXC_ROW_FLAGDEFHEIGHT;   // default height
 }
 
 void ExcRow::SaveCont( SvStream& rStrm )
