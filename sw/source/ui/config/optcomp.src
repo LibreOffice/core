@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcomp.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:21:41 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,9 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     };
     String STR_TAB_ALIGNMENT
     {
-        Text [ x-comment ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
-        Text [ de ] = "%FORMATNAME %FORMATVERSION Tabulator-Formatierungen verwenden";
-        Text [ en-US ] = "Use %FORMATNAME %FORMATVERSION tabstop formatting";
+        Text [ x-comment ] = "pb: %WRITERCOMPATIBILITYVERSIONOOO11 will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
+        Text [ de ] = "%WRITERCOMPATIBILITYVERSIONOOO11 Tabulator-Formatierungen verwenden";
+        Text [ en-US ] = "Use %WRITERCOMPATIBILITYVERSIONOOO11 tabstop formatting";
     };
     String STR_EXTERNAL_LEADING
     {
@@ -162,9 +162,9 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     };
     String STR_LINE_SPACING
     {
-        Text [ x-comment ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
-        Text [ de ] = "%FORMATNAME %FORMATVERSION Zeilenabstand verwenden";
-        Text [ en-US ] = "Use %FORMATNAME %FORMATVERSION line spacing";
+        Text [ x-comment ] = "pb: %WRITERCOMPATIBILITYVERSIONOOO11 will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
+        Text [ de ] = "%WRITERCOMPATIBILITYVERSIONOOO11 Zeilenabstand verwenden";
+        Text [ en-US ] = "Use %WRITERCOMPATIBILITYVERSIONOOO11 line spacing";
     };
     String STR_ADD_TABLESPACING
     {
@@ -173,15 +173,20 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     };
     String STR_USE_OBJPOSITIONING
     {
-        Text [ x-comment ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
-        Text [ de ] = "%FORMATNAME %FORMATVERSION Positionierung von Objekten verwenden";
-        Text [ en-US ] = "Use %FORMATNAME %FORMATVERSION object positioning";
+        Text [ x-comment ] = "pb: %WRITERCOMPATIBILITYVERSIONOOO11 will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
+        Text [ de ] = "%WRITERCOMPATIBILITYVERSIONOOO11 Positionierung von Objekten verwenden";
+        Text [ en-US ] = "Use %WRITERCOMPATIBILITYVERSIONOOO11 object positioning";
     };
     String STR_USE_OURTEXTWRAPPING
     {
-        Text [ x-comment ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
-        Text [ de ] = "%FORMATNAME %FORMATVERSION Textfluss um Objekte verwenden";
-        Text [ en-US ] = "Use %FORMATNAME %FORMATVERSION text wrapping around objects";
+        Text [ x-comment ] = "pb: %WRITERCOMPATIBILITYVERSIONOOO11 will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
+        Text [ de ] = "%WRITERCOMPATIBILITYVERSIONOOO11 Textfluss um Objekte verwenden";
+        Text [ en-US ] = "Use %WRITERCOMPATIBILITYVERSIONOOO11 text wrapping around objects";
+    };
+    String STR_CONSIDER_WRAPPINGSTYLE
+    {
+        Text [ x-comment ] = "";
+        Text [ de ] = "Umbruchart bei der Positionierung von Objekten berücksichtigen";
+        Text [ en-US ] = "Consider wrapping style when positioning objects";
     };
 };
-
