@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 09:06:32 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ String SCSTR_LONG_SCDOC_NAME
     Text [ swedish ] = "%PRODUCTNAME 5.0 tabell" ;
     Text [ danish ] = "%PRODUCTNAME Calc 5.0 regneark" ;
     Text [ italian ] = "Foglio di calcolo %PRODUCTNAME 5.0" ;
-    Text [ spanish ] = "Hoja de cálculo de %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 5.0 Hoja de cálculo" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Classeur" ;
     Text [ portuguese ] = "%PRODUCTNAME 5.0 Folha de cálculo" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Tabelle" ;
@@ -188,7 +188,7 @@ String SCSTR_40_LONG_DOCNAME
     Text [ swedish ] = "Star 4.0 tabell" ;
     Text [ danish ] = "StarCalc 4.0 regneark" ;
     Text [ italian ] = "Foglio elettronico %PRODUCTNAME 4.0" ;
-    Text [ spanish ] = "Hoja de cálculo de %PRODUCTNAME 4.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 4.0 Hoja de cálculo" ;
     Text [ french ] = "StarCalc 4.0 Classeur" ;
     Text [ portuguese ] = "Folha de cálculo StarCalc 4.0" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Tabelle" ;
@@ -2848,7 +2848,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text[ dutch ] = "Niet genoeg vrij geheugen om de afbeelding in te voegen";
     Text[ chinese_simplified ] = "Ã»ÓÐ×ã¹»µÄÄÚ´æÓÃÓÚ²åÈëÍ¼ÐÎ";
     Text[ greek ] = "Ç ìíÞìç äåí åðáñêåß ãéá ôçí ðñïóèÞêç ôïõ ãñáöéêïý.";
-    Text[ korean ] = "±×·¡ÇÈÀ» »ðÀÔÇÏ±â¿¡ ¸Þ¸ð¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
+    Text[ korean ] = "±×·¡ÇÈÀ» »ðÀÔÇÏ±â À§ÇÑ  ¸Þ¸ð¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
     Text[ turkish ] = "Grafiðin eklenmesi için yeterli bellek yok";
     Text[ language_user1 ] = " ";
 };
@@ -2856,11 +2856,11 @@ String SCSTR_UNDO_GRAFFILTER
 {
     Text = "Grafikfilter" ;
     Text [ ENGLISH ] = "Graphic filter" ;
-    Text [ english_us ] = "Graphics filter" ;
+    Text [ english_us ] = "Graphics Filter" ;
     Text[ portuguese ] = "Filtro gráfico";
     Text[ russian ] = "Ãðàôè÷åñêèé ôèëüòð";
     Text[ greek ] = "Ößëôñï ãñáöéêþí";
-    Text[ dutch ] = "Grafische filter";
+    Text[ dutch ] = "Afbeeldingsfilters";
     Text[ french ] = "Filtre graphique";
     Text[ spanish ] = "Filtro de imagen";
     Text[ italian ] = "Filtro grafico";
