@@ -1,53 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Dirk Grobler (OpenOffice) -->
 <xs:schema targetNamespace="http://openoffice.org/2001/registry" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" attributeFormDefault="qualified">
   <xs:annotation>
     <xs:documentation>specifies the document format for OOo configuration component schemata.</xs:documentation>
   </xs:annotation>
   <xs:redefine schemaLocation="component-types.xsd">
-    <xs:complexType name="group">
-      <xs:annotation>
-        <xs:documentation>redefines the group node type 
-                by adding documentation elements.</xs:documentation>
-      </xs:annotation>
-      <xs:complexContent>
-        <xs:extension base="oor:group">
-          <xs:sequence>
-            <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:element name="node-ref" type="oor:node-ref"/>
-              <xs:group ref="oor:subNodes"/>
-            </xs:choice>
-          </xs:sequence>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="set">
-      <xs:annotation>
-        <xs:documentation>redefines the set node type 
-                by adding documentation and item definition elements.</xs:documentation>
-      </xs:annotation>
-      <xs:complexContent>
-        <xs:extension base="oor:set">
-          <xs:sequence>
-            <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="item" minOccurs="0" maxOccurs="unbounded">
-              <xs:annotation>
-        <xs:documentation>defines the list of possible set item types. If omitted, the node-type attribute of the set specifies the single possible item type.</xs:documentation>
-      </xs:annotation>
-              <xs:complexType>
-                <xs:attribute ref="oor:node-type"/>
-                <xs:attribute ref="oor:component"/>
-              </xs:complexType>
-              <xs:unique name="setMember">
-                <xs:selector xpath="oor:item"/>
-                <xs:field xpath="@oor:node-type"/>
-              </xs:unique>
-            </xs:element>
-          </xs:sequence>
-          <xs:attribute ref="oor:node-type" use="required"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
     <xs:complexType name="prop">
       <xs:annotation>
         <xs:documentation>redefines the property type 
@@ -55,8 +12,8 @@
       </xs:annotation>
       <xs:complexContent>
         <xs:extension base="oor:prop">
-          <xs:sequence>
-            <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:sequence>            
+            <xs:element name="info" type="oor:info" minOccurs="0"/>
             <xs:element name="constraints" minOccurs="0">
               <xs:complexType>
                 <xs:sequence>
@@ -72,6 +29,7 @@
                 </xs:sequence>
               </xs:complexType>
             </xs:element>
+            <xs:element name="value" type="oor:value" nillable="true" minOccurs="0"/>
           </xs:sequence>
           <xs:attribute ref="oor:nillable"/>
           <xs:attribute ref="oor:type" use="required"/>
@@ -79,12 +37,49 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:redefine>
+  <xs:complexType name="group">
+    <xs:annotation>
+      <xs:documentation>type definition for group nodes</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="oor:node">
+        <xs:sequence>
+          <xs:element name="info" type="oor:info" minOccurs="0"/>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="prop" type="oor:prop" nillable="true"/>          
+            <xs:element name="group" type="oor:group"/>
+            <xs:element name="set" type="oor:set"/>
+            <xs:element name="node-ref" type="oor:node-ref"/>
+          </xs:choice>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="set">
+    <xs:annotation>
+      <xs:documentation>type definition for set nodes</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="oor:node">
+        <xs:sequence>
+          <xs:element name="info" type="oor:info" minOccurs="0"/>
+          <xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:attribute ref="oor:node-type"/>
+              <xs:attribute ref="oor:component"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute ref="oor:node-type" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
   <xs:complexType name="node-ref">
     <xs:annotation>
       <xs:documentation>allows to define node references. A node references points to an existing templated definition. This definition will be expanded at runtime.</xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="info" type="oor:info" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute ref="oor:name" use="required"/>
     <xs:attribute ref="oor:node-type" use="required"/>
@@ -95,16 +90,26 @@
       <xs:documentation>basic type for constraints, which can be applied for property elements.</xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="info" type="oor:info" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="value" type="xs:anySimpleType" use="required"/>
   </xs:complexType>
   <xs:complexType name="info">
     <xs:annotation>
-      <xs:documentation>type for providing human readable information. Can be attached to any kind of component schema element.</xs:documentation>
+      <xs:documentation>type for providing human readable information.  Can be attached to any kind of component schema element.</xs:documentation>
     </xs:annotation>
     <xs:sequence>
-      <xs:element name="desc" minOccurs="0">
+      <xs:element name="deprecated" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>identifies an entry as deprecated. Can be assiciated with an explanation e.g. since when the entry is deprecated.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="author" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>author(s) of the configuration entry.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="desc" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:annotation>
             <xs:documentation>provide a human
@@ -117,11 +122,11 @@
           </xs:simpleContent>
         </xs:complexType>
       </xs:element>
-      <xs:element name="label" minOccurs="0">
+      <xs:element name="label" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:annotation>
             <xs:documentation>describes a title or label, 
-                        which can be reused in an administration console or registry editor.</xs:documentation>
+                        which can be reused in a console.</xs:documentation>
           </xs:annotation>
           <xs:simpleContent>
             <xs:extension base="xs:string">
@@ -138,7 +143,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="info" type="oor:info" minOccurs="0"/>
         <xs:element name="import" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:attribute ref="oor:component" use="required"/>
@@ -152,21 +157,43 @@
         <xs:element name="templates" minOccurs="0">
           <xs:complexType>
             <xs:sequence>
-              <xs:group ref="oor:subNodes"/>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="group" type="oor:group">
+                  <xs:unique name="groupProperties">
+                    <xs:selector xpath="prop"/>
+                    <xs:field xpath="@oor:name"/>
+                  </xs:unique>
+                  <xs:unique name="groupMember">
+                    <xs:selector xpath="group|set|node-ref"/>
+                    <xs:field xpath="@oor:name"/>
+                  </xs:unique>
+                </xs:element>
+                <xs:element name="set" type="oor:set"/>
+              </xs:choice>
             </xs:sequence>
           </xs:complexType>
           <xs:unique name="templatesMember">
-            <xs:selector xpath="oor:group|oor:set|oor:node-ref"/>
+            <xs:selector xpath="oor:group|oor:set"/>
             <xs:field xpath="@oor:name"/>
           </xs:unique>
         </xs:element>
         <xs:element name="component">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="info" type="oor:info" minOccurs="0" maxOccurs="unbounded"/>
-              <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:choice minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="prop" type="oor:prop"/>
                 <xs:element name="node-ref" type="oor:node-ref"/>
-                <xs:group ref="oor:subNodes"/>
+                <xs:element name="group" type="oor:group">
+                  <xs:unique name="groupProperties1">
+                    <xs:selector xpath="oor:prop"/>
+                    <xs:field xpath="@oor:name"/>
+                  </xs:unique>
+                  <xs:unique name="groupMember1">
+                    <xs:selector xpath="oor:group|oor:set|oor:node-ref"/>
+                    <xs:field xpath="@oor:name"/>
+                  </xs:unique>
+                </xs:element>
+                <xs:element name="set" type="oor:set"/>
               </xs:choice>
             </xs:sequence>
           </xs:complexType>
@@ -188,6 +215,11 @@
                     Packages are used to structure component configuration data. 
                     An example of a package is 'org.openoffice', 
                     where 'org' and 'openoffice' each define a package.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="version" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>identifies the version of the component. The version number is build of major.minor.micro</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute ref="xml:lang" use="optional"/>

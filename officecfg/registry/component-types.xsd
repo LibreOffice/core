@@ -3,7 +3,8 @@
   <xs:annotation>
     <xs:documentation>provides a list of standard attribute and element definitions, reused in most parts of the different OOR document types</xs:documentation>
   </xs:annotation>
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" 
+   schemaLocation="http://www.w3.org/2001/xml.xsd"/>
   <!--List of attributes known in OOR-->
   <xs:attribute name="name" type="xs:string" use="required">
     <xs:annotation>
@@ -27,12 +28,12 @@
   </xs:attribute>
   <xs:attribute name="extensible" type="xs:boolean" use="optional" default="false">
     <xs:annotation>
-      <xs:documentation>determines, whether a node has an extensible list of properties or fixed list of attributes.</xs:documentation>
+      <xs:documentation>determines, whether a node has an extensible list of attributes or fixed list of attributes.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
   <xs:attribute name="localized" type="xs:boolean" use="optional" default="false">
     <xs:annotation>
-      <xs:documentation>specifies, whether a property has or might have different values for different locales. </xs:documentation>
+      <xs:documentation>specifies, whether an attribute has or might have different values for different locales. </xs:documentation>
     </xs:annotation>
   </xs:attribute>
   <xs:attribute name="separator" type="xs:string" default=" ">
@@ -112,52 +113,16 @@
     <xs:restriction base="xs:string"/>
   </xs:simpleType>
   <!--List of basic type definitions for all schema and instance elements known by OOR-->
-  <xs:group name="subNodes">
-    <xs:annotation>
-      <xs:documentation>specifies possible sub-elements of groups</xs:documentation>
-    </xs:annotation>
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element name="group" type="oor:group"/>
-      <xs:element name="set" type="oor:set"/>
-    </xs:choice>
-  </xs:group>
   <xs:complexType name="node">
     <xs:annotation>
       <xs:documentation>base class for all kinds of nodes (set | group)</xs:documentation>
     </xs:annotation>
-    <xs:sequence>
-      <xs:element name="prop" type="oor:prop" nillable="true" minOccurs="0" maxOccurs="unbounded">
-        <xs:unique name="uniqueLang">
-          <xs:selector xpath="oor:value"/>
-          <xs:field xpath="@xml:lang"/>
-        </xs:unique>
-      </xs:element>
-    </xs:sequence>
     <xs:attributeGroup ref="oor:node-info"/>
-  </xs:complexType>
-  <xs:complexType name="group">
-    <xs:annotation>
-      <xs:documentation>type definition for group nodes</xs:documentation>
-    </xs:annotation>
-    <xs:complexContent>
-      <xs:extension base="oor:node"/>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="set">
-    <xs:annotation>
-      <xs:documentation>type definition for set nodes</xs:documentation>
-    </xs:annotation>
-    <xs:complexContent>
-      <xs:extension base="oor:node"/>
-    </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="prop">
     <xs:annotation>
       <xs:documentation>type definition for node properties</xs:documentation>
     </xs:annotation>
-    <xs:sequence>
-      <xs:element name="value" type="oor:value" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
     <xs:attributeGroup ref="oor:prop-info"/>
   </xs:complexType>
   <xs:complexType name="value">
