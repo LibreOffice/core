@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-25 10:34:04 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2200,7 +2200,11 @@ BOOL SdOutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
         SfxItemSet aTempAttr( pDoc->GetPool() );
         aTempAttr.Put( XLineStyleItem( XLINE_NONE ) );
         aTempAttr.Put( XFillStyleItem( XFILL_NONE ) );
-        pTO->SetAttributes( aTempAttr, FALSE );
+
+//-/        pTO->SetAttributes( aTempAttr, FALSE );
+//-/        SdrBroadcastItemChange aItemChange(*pTO);
+        pTO->SetItemSetAndBroadcast(aTempAttr);
+//-/        pTO->BroadcastItemChange(aItemChange);
 
         // als Listener anmelden
         /*

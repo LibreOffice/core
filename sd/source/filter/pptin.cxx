@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-24 11:50:47 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,21 +723,31 @@ BOOL SdPPTImport::Import()
 
                 // Schatten am ersten Objekt (Hintergrundobjekt) entfernen (#57918#)
                 SfxItemSet aTempAttr(pDoc->GetPool());
-                pObj->TakeAttributes(aTempAttr, FALSE, TRUE);
+
+//-/                pObj->TakeAttributes(aTempAttr, FALSE, TRUE);
+                aTempAttr.Put(pObj->GetItemSet());
+
                 BOOL bShadowIsOn = ( (SdrShadowItem&)( aTempAttr.Get( SDRATTR_SHADOW ) ) ).GetValue();
                 if( bShadowIsOn )
                 {
                     aTempAttr.Put(SdrShadowItem( FALSE ) );
-                    pObj->NbcSetAttributes( aTempAttr, FALSE );
+
+//-/                    pObj->NbcSetAttributes( aTempAttr, FALSE );
+                    pObj->SetItemSet(aTempAttr);
                 }
                 SfxStyleSheet* pSheet = pMPage->GetStyleSheetForPresObj( PRESOBJ_BACKGROUND );
                 if ( pSheet )
                 {   // StyleSheet fuellen und dem Objekt zuweisen
                     pSheet->GetItemSet().ClearItem();
-                    pObj->TakeAttributes( pSheet->GetItemSet(), TRUE, FALSE );
+
+//-/                    pObj->TakeAttributes( pSheet->GetItemSet(), TRUE, FALSE );
+                    pSheet->GetItemSet().Put(pObj->GetItemSet());
+
                     pObj->SetStyleSheet( pSheet, TRUE );
                     SfxItemSet aSet( pDoc->GetPool() );
-                    pObj->NbcSetAttributes( aSet, TRUE );
+
+//-/                    pObj->NbcSetAttributes( aSet, TRUE );
+                    pObj->SetItemSet(aSet);
                 }
                 pMPage->GetPresObjList()->Insert( pObj, LIST_APPEND );
             }
@@ -2203,7 +2213,9 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
                     aTempAttr.Put( aMinHeight );
                     SdrTextAutoGrowHeightItem aAutoGrowHeight( FALSE );
                     aTempAttr.Put( aAutoGrowHeight );
-                    pText->NbcSetAttributes( aTempAttr, FALSE );
+
+//-/                    pText->NbcSetAttributes( aTempAttr, FALSE );
+                    pText->SetItemSet(aTempAttr);
                 }
                 else
                 {
@@ -2289,7 +2301,9 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
 
                             SfxItemSet aSet( pSdrModel->GetItemPool() );
                             ApplyAttributes( rStCtrl, aSet, pPresObj );
-                            pPresObj->NbcSetAttributes( aSet, FALSE );
+
+//-/                            pPresObj->NbcSetAttributes( aSet, FALSE );
+                            pPresObj->SetItemSet(aSet);
 
                             if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( pSlideLayout->aPlacementId[ i ] != -1 ) )
                             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,8 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             SdrObject* pObj = pPage->GetBackgroundObj();
             if( pObj )
             {
-                pObj->TakeAttributes( aMergedAttr, TRUE, TRUE );
+//-/                pObj->TakeAttributes( aMergedAttr, TRUE, TRUE );
+                aMergedAttr.Put(pObj->GetItemSet());
             }
             else
             {
@@ -426,7 +427,8 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 {
                     // BackgroundObj: no hard attributes allowed
                     SfxItemSet aSet( pDoc->GetPool() );
-                    pObj->NbcSetAttributes( aSet, TRUE );
+//-/                    pObj->NbcSetAttributes( aSet, TRUE );
+                    pObj->SetItemSet(aSet);
                 }
 
                 aNewAttr.Put(aTempSet);
@@ -553,7 +555,9 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         aSize.Height() -= nUpper + nLower - 1;
         Rectangle aRect( aPos, aSize );
         pObj->SetLogicRect( aRect );
-        pObj->NbcSetAttributes( *pArgs, FALSE );
+
+//-/        pObj->NbcSetAttributes( *pArgs, FALSE );
+        pObj->SetItemSet(*pArgs);
     }
 
     ///////////////////////////////////////////////////////////////////////////

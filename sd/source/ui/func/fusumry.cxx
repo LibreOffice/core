@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusumry.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,9 @@ FuSummaryPage::FuSummaryPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView
         SfxItemSet aAttr(pDoc->GetPool());
         aAttr.Put(XLineStyleItem(XLINE_NONE));
         aAttr.Put(XFillStyleItem(XFILL_NONE));
-        pTextObj->NbcSetAttributes(aAttr, TRUE);
+
+//-/        pTextObj->NbcSetAttributes(aAttr, TRUE);
+        pTextObj->SetItemSet(aAttr);
 
         pView->EndUndo();
         delete pOutl;

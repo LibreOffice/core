@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-27 14:29:25 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,6 @@
 #endif
 #ifndef _SVXMSBAS_HXX
 #include <svx/svxmsbas.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
-#include <svtools/saveopt.hxx>
 #endif
 
 #pragma hdrstop
@@ -600,17 +597,16 @@ BOOL SdDrawDocShell::Save()
     }
 
     // komprimiert/native speichern?
-    SvtSaveOptions                          aOptions;
-    const SvtSaveOptions::SaveGraphicsMode  eSaveMode( aOptions.GetSaveGraphicsMode() );
-    const BOOL                              bSaveCompressed = ( SvtSaveOptions::SaveGraphicsCompressed == eSaveMode );
-    const BOOL                              bSaveNative = ( SvtSaveOptions::SaveGraphicsOriginal == eSaveMode );
-
+    BOOL bSaveCompressed = SFX_APP()->GetOptions().IsSaveGraphicsCompressed();
     pDoc->SetSaveCompressed( bSaveCompressed );
+    BOOL bSaveNative = SFX_APP()->GetOptions().IsSaveOriginalGraphics();
     pDoc->SetSaveNative( bSaveNative );
 
     if( bRet )
     {
-        pDoc->PrepareStore();
+        // prepare saving, pre-processing of objects
+//-/        pDoc->PrepareStore();
+        pDoc->PreSave();
 
         SvStorage* pStor = GetStorage();
         SvStorageStreamRef aPoolStm = pStor->OpenStream(pSfxStyleSheets, STREAM_READ | STREAM_WRITE | STREAM_TRUNC);
@@ -687,6 +683,8 @@ BOOL SdDrawDocShell::Save()
         if (bRet && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             AddXMLAsZipToTheStorage( *pStor );
 
+        // save complete, post-process objects
+        pDoc->PostSave();
     }
 
     if( pProgress )
@@ -728,12 +726,9 @@ BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
         }
     }
     // komprimiert/native speichern?
-    SvtSaveOptions                          aOptions;
-    const SvtSaveOptions::SaveGraphicsMode  eSaveMode( aOptions.GetSaveGraphicsMode() );
-    const BOOL                              bSaveCompressed = ( SvtSaveOptions::SaveGraphicsCompressed == eSaveMode );
-    const BOOL                              bSaveNative = ( SvtSaveOptions::SaveGraphicsOriginal == eSaveMode );
-
+    BOOL bSaveCompressed = SFX_APP()->GetOptions().IsSaveGraphicsCompressed();
     pDoc->SetSaveCompressed( bSaveCompressed );
+    BOOL bSaveNative = SFX_APP()->GetOptions().IsSaveOriginalGraphics();
     pDoc->SetSaveNative( bSaveNative );
 
     if (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
@@ -760,7 +755,10 @@ BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
 
     if (bRet)
     {
-        pDoc->PrepareStore();
+        // prepare saving, pre-processing of objects
+//-/        pDoc->PrepareStore();
+        pDoc->PreSave();
+
         SvStorageStreamRef aStm = pStor->OpenStream(pSfxStyleSheets, STREAM_READ | STREAM_WRITE | STREAM_TRUNC);
         aStm->SetVersion(pStor->GetVersion());
 
@@ -821,6 +819,9 @@ BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
             if ( !bRet || aStm->GetErrorCode() )
                 SetError( aStm->GetErrorCode() );
         }
+
+        // save complete, post-process objects
+        pDoc->PostSave();
     }
 
     if (bRet && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:26:10 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 #include "fucon3d.hxx"
 #include "drawdoc.hxx"
 
+#ifndef _SVX3DITEMS_HXX
+#include <svx/svx3ditems.hxx>
+#endif
+
 class SfxRequest;
 class SdDrawDocument;
 
@@ -179,7 +183,8 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
 
                 // Dies ist ein offenes Objekt, muss daher defaultmaessig
                 // doppelseitig behandelt werden
-                p3DObj->SetDoubleSided(TRUE);
+//-/                p3DObj->SetDoubleSided(TRUE);
+                p3DObj->SetItem(Svx3DDoubleSidedItem(TRUE));
             }
             break;
 
@@ -278,7 +283,8 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
                 p3DObj = new E3dLatheObj(
                     pView->Get3DDefaultAttributes(),
                     aXPoly);
-                ((E3dLatheObj*)p3DObj)->SetHSegments(4);
+//-/                ((E3dLatheObj*)p3DObj)->SetHSegments(4);
+                p3DObj->SetItem(Svx3DHorizontalSegmentsItem(4));
             }
             break;
         }
@@ -297,11 +303,11 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
         Vector3D aMaxVec (aBoundVol.MaxVec ());
         double fDeepth = fabs (aMaxVec.Z () - aMinVec.Z ());
 
-        aCamera.SetPRP (Vector3D (0, 0, 1000));
-        aCamera.SetPosition (Vector3D (pView->DefaultCamPos ().X (), pView->DefaultCamPos ().Y (),
-                                       pView->DefaultCamPos ().Z () + fDeepth / 2));
-        aCamera.SetFocalLength(pView->DefaultCamFocal ());
-        pScene->SetCamera (aCamera);
+        aCamera.SetPRP(Vector3D(0, 0, 1000));
+        aCamera.SetPosition(Vector3D(
+            0.0, 0.0, pView->GetDefaultCamPosZ() + fDeepth / 2));
+        aCamera.SetFocalLength(pView->GetDefaultCamFocal());
+        pScene->SetCamera(aCamera);
 
         switch (nSlotId)
         {
@@ -369,7 +375,11 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
         pScene->FitSnapRectToBoundVol();
 
         SfxItemSet aAttr (pViewShell->GetPool());
-        pScene->SetAttributes (aAttr, FALSE);
+
+//-/        pScene->SetAttributes (aAttr, FALSE);
+//-/        SdrBroadcastItemChange aItemChange(*pScene);
+        pScene->SetItemSetAndBroadcast(aAttr);
+//-/        pScene->BroadcastItemChange(aItemChange);
 
         bReturn = pView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
 
@@ -383,7 +393,8 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
             // LineStyle rausnehmen
             aAttr.Put(XLineStyleItem (XLINE_NONE));
 
-            pObj->NbcSetAttributes(aAttr, FALSE);
+//-/            pObj->NbcSetAttributes(aAttr, FALSE);
+            pObj->SetItemSet(aAttr);
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-24 11:19:49 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,7 +1035,9 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
                     SfxItemSet aTempAttr( pDoc->GetPool(), SDRATTR_TEXT_ANIKIND, SDRATTR_TEXT_ANIKIND );
                     aTempAttr.InvalidateItem( SDRATTR_TEXT_ANIKIND );
                     aTempAttr.Put( SdrTextAniKindItem() );
-                    pClone->NbcSetAttributes( aTempAttr, FALSE );
+
+//-/                    pClone->NbcSetAttributes( aTempAttr, FALSE );
+                    pClone->SetItemSet(aTempAttr);
                 }
 
                 pClone->Paint( pRecord->rOut, pRecord->rInfoRec );

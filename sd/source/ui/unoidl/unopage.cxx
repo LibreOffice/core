@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-25 09:49:14 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1335,7 +1335,9 @@ void SdDrawPage::setBackground( const uno::Any& rValue )
         pBackground->fillItemSet( (SdDrawDocument*)mpPage->GetModel(), aSet );
     }
 
-    pObj->NbcSetAttributes( aSet, sal_False );
+//-/    pObj->NbcSetAttributes( aSet, sal_False );
+    pObj->SetItemSet(aSet);
+
     mpPage->SendRepaintBroadcast();
 }
 
@@ -1637,7 +1639,9 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
             pBackground->fillItemSet( (SdDrawDocument*)mpPage->GetModel(), aSet );
         }
 
-        pObj->NbcSetAttributes( aSet, sal_False );
+//-/        pObj->NbcSetAttributes( aSet, sal_False );
+        pObj->SetItemSet(aSet);
+
         mpPage->SendRepaintBroadcast();
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:30:53 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,9 @@ BOOL FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
             SetStyleSheet(aAttr, pObj);
             SetAttributes(aAttr, pObj);
             SetLineEnds(aAttr, pObj);
-            pObj->NbcSetAttributes(aAttr, FALSE);
+
+//-/            pObj->NbcSetAttributes(aAttr, FALSE);
+            pObj->SetItemSet(aAttr);
         }
     }
 

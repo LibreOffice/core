@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:37:36 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,7 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                             // BulletItems
                             if (aTempSet.GetItemState(EE_PARA_BULLET) == SFX_ITEM_SET)
                             {
-                                SvxBulletItem aOldBulItem((SvxBulletItem&)pStyleSheet->GetItemSet().Get(EE_PARA_BULLET));
+                                SvxBulletItem aOldBulItem((SvxBulletItem&)pStyleSheet->GetItem(EE_PARA_BULLET));
                                 SvxBulletItem& rNewBulItem = (SvxBulletItem&)aTempSet.Get(EE_PARA_BULLET);
                                 aOldBulItem.CopyValidProperties(rNewBulItem);
                                 aTempSet.Put(aOldBulItem);

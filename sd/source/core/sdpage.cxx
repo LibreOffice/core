@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-09-22 08:16:57 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, const Rectangle& rRect,
                 aTempAttr.Put(aAutoGrowHeight);
             }
 
-            pSdrObj->NbcSetAttributes(aTempAttr, FALSE);
+//-/            pSdrObj->NbcSetAttributes(aTempAttr, FALSE);
+            pSdrObj->SetItemSet(aTempAttr);
         }
 
         if ( aString.Len() && pSdrObj->ISA(SdrTextObj) )
@@ -490,7 +491,9 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, const Rectangle& rRect,
             SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool() );
             aSet.Put( SdrTextContourFrameItem( TRUE ) );
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
-            pSdrObj->NbcSetAttributes( aSet, FALSE );
+
+//-/            pSdrObj->NbcSetAttributes( aSet, FALSE );
+            pSdrObj->SetItemSet(aSet);
         }
 
         if (bInsert)
@@ -2057,12 +2060,17 @@ void __EXPORT SdPage::ScaleObjects(const Size& rNewPageSize,
                         ******************************************************/
                         pObj->GetOutlinerParaObject()->RemoveCharAttribs( EE_CHAR_FONTHEIGHT );
                         SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool(), EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT );
-                        pObj->TakeAttributes(aSet, TRUE, FALSE);
+
+//-/                        pObj->TakeAttributes(aSet, TRUE, FALSE);
+                        aSet.Put(pObj->GetItemSet());
+
                         const SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) aSet.Get(EE_CHAR_FONTHEIGHT);
                         ULONG nFontHeight = rOldHgt.GetHeight();
                         nFontHeight = long(nFontHeight * (double) aFractY);
                         aSet.Put(SvxFontHeightItem(nFontHeight));
-                        pObj->NbcSetAttributes(aSet, FALSE);
+
+//-/                        pObj->NbcSetAttributes(aSet, FALSE);
+                        pObj->SetItemSet(aSet);
                     }
                 }
             }
@@ -2168,14 +2176,19 @@ BOOL __EXPORT SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind,
             aTempAttr.Put( aMinHeight );
             SdrTextAutoGrowHeightItem aAutoGrowHeight(FALSE);
             aTempAttr.Put(aAutoGrowHeight);
-            pObj->NbcSetAttributes(aTempAttr, FALSE);
+
+//-/            pObj->NbcSetAttributes(aTempAttr, FALSE);
+            pObj->SetItemSet(aTempAttr);
+
             pObj->SetLogicRect(aRect);
 
             // AutoGrowHeight einschalten
             SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
             SdrTextAutoGrowHeightItem aAutoGrowHeightOn(TRUE);
             aAttr.Put(aAutoGrowHeightOn);
-            pObj->NbcSetAttributes(aAttr, FALSE);
+
+//-/            pObj->NbcSetAttributes(aAttr, FALSE);
+            pObj->SetItemSet(aAttr);
         }
     }
 
@@ -2234,9 +2247,14 @@ BOOL __EXPORT SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind,
 
                     // LRSpace-Item loeschen
                     SfxItemSet aSet(((SdDrawDocument*) pModel)->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
-                    pObj->TakeAttributes(aSet, TRUE, FALSE);
+
+//-/                    pObj->TakeAttributes(aSet, TRUE, FALSE);
+                    aSet.Put(pObj->GetItemSet());
+
                     aSet.ClearItem(EE_PARA_LRSPACE);
-                    pObj->NbcSetAttributes(aSet, FALSE);
+
+//-/                    pObj->NbcSetAttributes(aSet, FALSE);
+                    pObj->SetItemSet(aSet);
 
                     // Untertitel loeschen
                     aPresObjList.Remove(pSubtitle);
@@ -2274,12 +2292,17 @@ BOOL __EXPORT SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind,
 
                     // Linken Einzug zuruecksetzen
                     SfxItemSet aSet(((SdDrawDocument*) pModel)->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
-                    pObj->TakeAttributes(aSet, TRUE, FALSE);
+
+//-/                    pObj->TakeAttributes(aSet, TRUE, FALSE);
+                    aSet.Put(pObj->GetItemSet());
+
                     const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE);
                     SvxLRSpaceItem aNewLRItem(rLRItem);
                     aNewLRItem.SetTxtLeft(0);
                     aSet.Put(aNewLRItem);
-                    pObj->NbcSetAttributes(aSet, FALSE);
+
+//-/                    pObj->NbcSetAttributes(aSet, FALSE);
+                    pObj->SetItemSet(aSet);
 
                     SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TEXT);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-25 10:28:40 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,11 +624,16 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
             aSet.Put(aMinHeight);
             SdrTextAutoGrowHeightItem aAutoGrowHeight(TRUE);
             aSet.Put(aAutoGrowHeight);
-            pTextObj->NbcSetAttributes(aSet, FALSE);
+
+//-/            pTextObj->NbcSetAttributes(aSet, FALSE);
+            pTextObj->SetItemSet(aSet);
+
             pTextObj->AdjustTextFrameWidthAndHeight();
             SdrTextMaxFrameHeightItem aMaxHeight(pTextObj->GetLogicRect().GetSize().Height());
             aSet.Put(aMaxHeight);
-            pTextObj->NbcSetAttributes(aSet, FALSE);
+
+//-/            pTextObj->NbcSetAttributes(aSet, FALSE);
+            pTextObj->SetItemSet(aSet);
         }
 
         if (!pView->EndCreateObj(SDRCREATE_FORCEEND))
@@ -645,7 +650,10 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
             aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
             aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
             aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
-            pTextObj->NbcSetAttributes(aSet, FALSE);
+
+//-/            pTextObj->NbcSetAttributes(aSet, FALSE);
+            pTextObj->SetItemSet(aSet);
+
             pTextObj->AdjustTextFrameWidthAndHeight();
             SetInEditMode(rMEvt, FALSE);
         }
@@ -662,7 +670,10 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 aSet.Put(aMaxHeight);
                 SdrTextAutoGrowHeightItem aAutoGrowHeight(TRUE);
                 aSet.Put(aAutoGrowHeight);
-                pTextObj->NbcSetAttributes(aSet, FALSE);
+
+//-/                pTextObj->NbcSetAttributes(aSet, FALSE);
+                pTextObj->SetItemSet(aSet);
+
                 pTextObj->AdjustTextFrameWidthAndHeight();
             }
 
@@ -744,7 +755,10 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 aSet.Put(aAutoGrowWidth);
                 SdrTextHorzAdjustItem aTextHorzAdjust(SDRTEXTHORZADJUST_LEFT);
                 aSet.Put(aTextHorzAdjust);
-                pTextObj->NbcSetAttributes(aSet, FALSE);
+
+//-/                pTextObj->NbcSetAttributes(aSet, FALSE);
+                pTextObj->SetItemSet(aSet);
+
                 pTextObj->SetDisableAutoWidthOnDragging(TRUE);
                 SetInEditMode(rMEvt, FALSE);
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,11 @@ SdMorphDlg::SdMorphDlg( Window* pParent, const SdrObject* pObj1, const SdrObject
     SfxItemSet      aSet1( *pPool );
     SfxItemSet      aSet2( *pPool );
 
-    pObj1->TakeAttributes( aSet1, TRUE, FALSE );
-    pObj2->TakeAttributes( aSet2, TRUE, FALSE );
+//-/    pObj1->TakeAttributes( aSet1, TRUE, FALSE );
+    aSet1.Put(pObj1->GetItemSet());
+
+//-/    pObj2->TakeAttributes( aSet2, TRUE, FALSE );
+    aSet2.Put(pObj2->GetItemSet());
 
     const XLineStyle    eLineStyle1 = ( (const XLineStyleItem&) aSet1.Get( XATTR_LINESTYLE ) ).GetValue();
     const XLineStyle    eLineStyle2 = ( (const XLineStyleItem&) aSet2.Get( XATTR_LINESTYLE ) ).GetValue();

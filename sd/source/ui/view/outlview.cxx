@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-09-22 08:21:11 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,7 +1313,11 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                 SfxItemSet aTempAttr(pDoc->GetPool());
                 aTempAttr.Put(XLineStyleItem(XLINE_NONE));
                 aTempAttr.Put(XFillStyleItem(XFILL_NONE));
-                pTO->SetAttributes(aTempAttr, FALSE);
+
+//-/                pTO->SetAttributes(aTempAttr, FALSE);
+//-/                SdrBroadcastItemChange aItemChange(*pTO);
+                pTO->SetItemSetAndBroadcast(aTempAttr);
+//-/                pTO->BroadcastItemChange(aItemChange);
 
                 // als Listener anmelden
                 for (USHORT i = 1; i < 10; i++)
@@ -1376,7 +1380,9 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
 
                     // Untertitel-Objekt statt Gliederung -> Linken Einzug zuruecksetzen
                     SfxItemSet aSet(pDoc->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE);
-                    pTO->TakeAttributes(aSet, TRUE, FALSE);
+
+//-/                    pTO->TakeAttributes(aSet, TRUE, FALSE);
+                    aSet.Put(pTO->GetItemSet());
 
                     if (aSet.GetItemState(EE_PARA_LRSPACE) != SFX_ITEM_SET)
                     {
@@ -1384,7 +1390,9 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
                         SvxLRSpaceItem aNewLRItem(rLRItem);
                         aNewLRItem.SetTxtLeft(0);
                         aSet.Put(aNewLRItem);
-                        pTO->NbcSetAttributes(aSet, FALSE);
+
+//-/                        pTO->NbcSetAttributes(aSet, FALSE);
+                        pTO->SetItemSet(aSet);
                     }
                 }
             }
@@ -1427,12 +1435,17 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
 
                             // Linken Einzug zuruecksetzen
                             SfxItemSet aSet(pDoc->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE);
-                            pTO->TakeAttributes(aSet, TRUE, FALSE);
+
+//-/                            pTO->TakeAttributes(aSet, TRUE, FALSE);
+                            aSet.Put(pTO->GetItemSet());
+
                             const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE);
                             SvxLRSpaceItem aNewLRItem(rLRItem);
                             aNewLRItem.SetTxtLeft(0);
                             aSet.Put(aNewLRItem);
-                            pTO->NbcSetAttributes(aSet, FALSE);
+
+//-/                            pTO->NbcSetAttributes(aSet, FALSE);
+                            pTO->SetItemSet(aSet);
                         }
 
                         pTO->SetEmptyPresObj(TRUE);

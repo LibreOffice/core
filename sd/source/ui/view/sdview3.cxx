@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,9 @@ BOOL SdView::InsertData(SvDataObjectRef pDataObject, const Point& rPos,
                         BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
                         AddUndo(new SdrUndoAttrObj(*pPickObj));
                         SfxItemSet aSet(pDoc->GetPool());
-                        pObj->TakeAttributes(aSet, TRUE, FALSE);
+
+//-/                        pObj->TakeAttributes(aSet, TRUE, FALSE);
+                        aSet.Put(pObj->GetItemSet());
 
                         // Eckenradius soll nicht uebernommen werden.
                         // In der Gallery stehen Farbverlauefe (Rechtecke)
@@ -559,18 +561,30 @@ BOOL SdView::InsertData(SvDataObjectRef pDataObject, const Point& rPos,
                         // nicht auf das Objekt uebertragen werden.
                         aSet.ClearItem(SDRATTR_ECKENRADIUS);
 
-                        pPickObj->SetAttributes(aSet, FALSE);
+//-/                        pPickObj->SetAttributes(aSet, FALSE);
+//-/                        SdrBroadcastItemChange aItemChange(*pPickObj);
+                        pPickObj->SetItemSetAndBroadcast(aSet);
+//-/                        pPickObj->BroadcastItemChange(aItemChange);
 
                         if(pPickObj->ISA(E3dObject) && pObj->ISA(E3dObject))
                         {
                             // Zusaetzlich 3D Attribute handeln
                             SfxItemSet aNewSet(pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0);
                             SfxItemSet aOldSet(pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0);
-                            pPickObj->TakeAttributes(aOldSet, TRUE, TRUE);
-                            pObj->TakeAttributes(aNewSet, TRUE, TRUE);
+
+//-/                            pPickObj->TakeAttributes(aOldSet, TRUE, TRUE);
+                            aOldSet.Put(pPickObj->GetItemSet());
+
+//-/                            pObj->TakeAttributes(aNewSet, TRUE, TRUE);
+                            aNewSet.Put(pObj->GetItemSet());
+
                             AddUndo(new E3dAttributesUndoAction(*pDoc, this,
                                 (E3dObject*)pPickObj, aNewSet, aOldSet, FALSE));
-                            pPickObj->SetAttributes(aNewSet, FALSE);
+
+//-/                            pPickObj->SetAttributes(aNewSet, FALSE);
+//-/                            SdrBroadcastItemChange aItemChange(*pPickObj);
+                            pPickObj->SetItemSetAndBroadcast(aNewSet);
+//-/                            pPickObj->BroadcastItemChange(aItemChange);
                         }
                         EndUndo();
                         bChanged = TRUE;
@@ -900,7 +914,10 @@ BOOL SdView::InsertData(SvDataObjectRef pDataObject, const Point& rPos,
                     // Textfarbe hinzufuegen
 //                    aSet.Put(SvxColorItem(aColor, ITEMID_COLOR));
 
-                    pPickObj->SetAttributes(aSet, FALSE);
+//-/                    pPickObj->SetAttributes(aSet, FALSE);
+//-/                    SdrBroadcastItemChange aItemChange(*pPickObj);
+                    pPickObj->SetItemSetAndBroadcast(aSet);
+//-/                    pPickObj->BroadcastItemChange(aItemChange);
                 }
             }
         }

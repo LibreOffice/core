@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-12 11:42:18 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,11 @@ SdrGrafObj* SdView::InsertGraphic(const Graphic& rGraphic, DropAction& rAction,
             SfxItemSet aSet(pDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
             aSet.Put(XFillStyleItem(XFILL_BITMAP));
             aSet.Put(XFillBitmapItem(&pDocSh->GetPool(), aXOBitmap));
-            pPickObj->SetAttributes(aSet, FALSE);
+
+//-/            pPickObj->SetAttributes(aSet, FALSE);
+//-/            SdrBroadcastItemChange aItemChange(*pPickObj);
+            pPickObj->SetItemSetAndBroadcast(aSet);
+//-/            pPickObj->BroadcastItemChange(aItemChange);
         }
     }
     else if ( pPV )

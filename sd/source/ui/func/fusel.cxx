@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:36:51 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1162,7 +1162,10 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
     if (bClosed)
     {
         SfxItemSet aSet(pDoc->GetPool());
-        pObj->TakeAttributes(aSet, TRUE, FALSE);
+
+//-/        pObj->TakeAttributes(aSet, TRUE, FALSE);
+        aSet.Put(pObj->GetItemSet());
+
         const XFillStyleItem& rFillStyle = (const XFillStyleItem&) aSet.Get(XATTR_FILLSTYLE);
         bFilled = rFillStyle.GetValue() != XFILL_NONE;
     }

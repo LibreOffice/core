@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:31:42 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,14 +469,18 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
                 // Default-Attr. und Fuellung aus Vorlage zuweisen
                 SfxItemSet aAttr(*pView->GetDefaultAttr().Clone());
                 aAttr.Put(pSheet->GetItemSet().Get(XATTR_FILLSTYLE));
-                pObj->NbcSetAttributes(aAttr, FALSE);
+
+//-/                pObj->NbcSetAttributes(aAttr, FALSE);
+                pObj->SetItemSet(aAttr);
             }
             else
             {
                 // Default-Attr. und "Leere-Fuellung" zuweisen
                 SfxItemSet aAttr(*pView->GetDefaultAttr().Clone());
                 rAttr.Put(XFillStyleItem(XFILL_NONE));
-                pObj->NbcSetAttributes(aAttr, FALSE);
+
+//-/                pObj->NbcSetAttributes(aAttr, FALSE);
+                pObj->SetItemSet(aAttr);
             }
         }
     }
