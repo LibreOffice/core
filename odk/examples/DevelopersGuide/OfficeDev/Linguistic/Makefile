@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:27:00 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:47:23 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,28 +48,35 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-OUT_COMP_CLASS = $(OUT_CLASS)/OfficeDevLinguisticExample
+EXAMPLE_NAME=OfficeDevLinguisticExample
+OUT_COMP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
 
 COMPONENT1_NAME=SampleHyphenator
-COMPONENT1_PACKAGE = $(OUT_BIN)/$(COMPONENT1_NAME).uno.zip
-COMPONENT1_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).uno.zip")
+COMPONENT1_PACKAGE = $(OUT_BIN)/$(COMPONENT1_NAME).$(UNOPKG_EXT)
+COMPONENT1_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).$(UNOPKG_EXT)")
 COMPONENT1_JAR_NAME = $(COMPONENT1_NAME).uno.jar
-COMPONENT1_JAR = $(OUT_CLASS)/$(COMPONENT1_JAR_NAME)
+COMPONENT1_JAR = $(OUT_COMP_CLASS)/$(COMPONENT1_JAR_NAME)
 COMPONENT1_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT1_NAME).uno.Manifest
+COMPONENT1_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT1_NAME)/META-INF/manifest.xml
 
 COMPONENT2_NAME=SampleSpellChecker
-COMPONENT2_PACKAGE = $(OUT_BIN)/$(COMPONENT2_NAME).uno.zip
-COMPONENT2_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT2_NAME).uno.zip")
+COMPONENT2_PACKAGE = $(OUT_BIN)/$(COMPONENT2_NAME).$(UNOPKG_EXT)
+COMPONENT2_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT2_NAME).$(UNOPKG_EXT)")
 COMPONENT2_JAR_NAME = $(COMPONENT2_NAME).uno.jar
-COMPONENT2_JAR = $(OUT_CLASS)/$(COMPONENT2_JAR_NAME)
+COMPONENT2_JAR = $(OUT_COMP_CLASS)/$(COMPONENT2_JAR_NAME)
 COMPONENT2_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT2_NAME).uno.Manifest
+COMPONENT2_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT2_NAME)/META-INF/manifest.xml
 
 COMPONENT3_NAME=SampleThesaurus
-COMPONENT3_PACKAGE = $(OUT_BIN)/$(COMPONENT3_NAME).uno.zip
-COMPONENT3_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT3_NAME).uno.zip")
+COMPONENT3_PACKAGE = $(OUT_BIN)/$(COMPONENT3_NAME).$(UNOPKG_EXT)
+COMPONENT3_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT3_NAME).$(UNOPKG_EXT)")
 COMPONENT3_JAR_NAME = $(COMPONENT3_NAME).uno.jar
-COMPONENT3_JAR = $(OUT_CLASS)/$(COMPONENT3_JAR_NAME)
+COMPONENT3_JAR = $(OUT_COMP_CLASS)/$(COMPONENT3_JAR_NAME)
 COMPONENT3_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT3_NAME).uno.Manifest
+COMPONENT3_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT3_NAME)/META-INF/manifest.xml
+
+APP1_NAME=LinguisticExamples
+APP1_JAR=$(OUT_COMP_CLASS)/$(APP1_NAME).jar
 
 REGISTERFLAG = $(OUT_MISC)/devguide_officedevlinguistic_register_component.flag
 
@@ -84,8 +91,7 @@ JAVAFILES  = \
 	XSpellAlternatives_impl.java \
 	SampleHyphenator.java \
 	SampleSpellChecker.java \
-	SampleThesaurus.java \
-	LinguisticExamples.java
+	SampleThesaurus.java
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
@@ -110,8 +116,7 @@ SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLA
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 .PHONY: ALL
-ALL : \
-	OfficeDevLinguistic
+ALL : $(EXAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
@@ -123,33 +128,43 @@ $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
-yyy:
-	@echo $(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest 
-
-$(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+$(OUT_COMP_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
-$(OUT_BIN)/%.zip : $(OUT_CLASS)/%.jar
+# rule for component package manifest
+$(OUT_COMP_CLASS)/%/manifest.xml :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(<F)
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
+
+$(OUT_BIN)/%.pkg : $(OUT_COMP_CLASS)/%.jar
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(COMPONENT1_JAR) : $(COMPONENT1_MANIFESTFILE)
 
-$(COMPONENT1_PACKAGE) : $(COMPONENT1_JAR)
+$(COMPONENT1_PACKAGE) : $(COMPONENT1_JAR) $(COMPONENT1_UNOPKG_MANIFEST)
 
 $(COMPONENT2_JAR) : $(COMPONENT2_MANIFESTFILE)
 
-$(COMPONENT2_PACKAGE) : $(COMPONENT2_JAR)
+$(COMPONENT2_PACKAGE) : $(COMPONENT2_JAR) $(COMPONENT2_UNOPKG_MANIFEST)
 
 $(COMPONENT3_JAR) : $(COMPONENT3_MANIFESTFILE)
 
-$(COMPONENT3_PACKAGE) : $(COMPONENT3_JAR)
+$(COMPONENT3_PACKAGE) : $(COMPONENT3_JAR) $(COMPONENT3_UNOPKG_MANIFEST)
 
 $(REGISTERFLAG) : $(COMPONENT1_PACKAGE) $(COMPONENT2_PACKAGE) $(COMPONENT3_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
 	$(DEPLOYTOOL) $(COMPONENT2_PACKAGE_URL)
 	$(DEPLOYTOOL) $(COMPONENT3_PACKAGE_URL)
@@ -162,19 +177,37 @@ else
 	@echo --------------------------------------------------------------------------------
 endif
 
-OfficeDevLinguistic : $(REGISTERFLAG) 
+$(OUT_COMP_CLASS)/%.class : %.java
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $<
+
+$(OUT_COMP_CLASS)/%.mf :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
+
+$(APP1_JAR) : $(OUT_COMP_CLASS)/$(APP1_NAME).mf $(OUT_COMP_CLASS)/$(APP1_NAME).class 
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	+cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(basename $(@F)).mf $(basename $(@F)).class $(basename $(@F))$(QUOTE)$$Client.class
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+
+$(EXAMPLE_NAME) : $(REGISTERFLAG) $(APP1_JAR) 
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make LinguisticExamples.run 
+	@echo make $(APP1_NAME).run 
 	@echo --------
-	@echo Before you can run the examples the components "$(QM)SampleHyphenator$(QM)", 
-	@echo "$(QM)SampleSpellChecker$(QM)" and "$(QM)SampleThesaurus$(QM)" must be deployed. 
+	@echo Before you can run the examples the components "$(QM)$(COMPONENT1_NAME)$(QM)", 
+	@echo "$(QM)$(COMPONENT2_NAME)$(QM)" and "$(QM)$(COMPONENT3_NAME)$(QM)" must be deployed. 
 	@echo The components will be automatically deployed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
+%.run: $(OUT_COMP_CLASS)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
 .PHONY: clean
 clean :
