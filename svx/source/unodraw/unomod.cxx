@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-31 18:12:29 $
+ *  last change: $Author: cl $ $Date: 2001-07-20 13:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,17 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
         }
     }
 
+    uno::Reference< uno::XInterface > xRet( createTextField( ServiceSpecifier ) );
+    if( xRet.is() )
+        throw lang::ServiceNotRegisteredException();
+
+    return xRet;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createTextField( const ::rtl::OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+    uno::Reference< uno::XInterface > xRet;
+
     const OUString aTextFieldPrexit( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.") );
 
     if( ServiceSpecifier.compareTo( aTextFieldPrexit, aTextFieldPrexit.getLength() ) == 0 )
@@ -156,12 +167,10 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
         }
 
         if( nId != ID_NOTFOUND )
-            return (::cppu::OWeakObject * )new SvxUnoTextField( nId );
+            xRet = (::cppu::OWeakObject * )new SvxUnoTextField( nId );
     }
 
-    throw lang::ServiceNotRegisteredException();
-
-    return uno::Reference< uno::XInterface >();
+    return xRet;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< ::com::sun::star::uno::Any >& Arguments )
