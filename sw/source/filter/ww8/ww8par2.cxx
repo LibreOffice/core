@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:00 $
+ *  last change: $Author: cmc $ $Date: 2002-08-22 11:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,9 @@
 
 #ifndef _FLTSHELL_HXX
 #include <fltshell.hxx>         // fuer den Attribut Stack
+#endif
+#ifndef _FMTANCHR_HXX //autogen
+#include <fmtanchr.hxx>
 #endif
 
 #ifndef _WW8STRUC_HXX
@@ -480,7 +483,19 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
         {
             const BYTE* pB = pPap->HasSprm(TabRowSprm(nLevel));
             if (pB && *pB == 1)
-                return true;    // RowEnd found
+            {
+                const BYTE *pLevel = 0;
+                if (pLevel = pPap->HasSprm(0x6649))
+                {
+                    if (nLevel + 1 == *pLevel)
+                        return true;
+                }
+                else
+                {
+                    ASSERT(!nLevel || pLevel, "sublevel without level sprm");
+                    return true;    // RowEnd found
+                }
+            }
         }
 
         aRes.nStartPos = aRes.nEndPos;
@@ -1803,14 +1818,12 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
             break;
         }
 
+
+        pParams = pPap->HasSprm(pIo->TabCellSprm(pIo->nTable));
+        const BYTE *pLevel = pPap->HasSprm(0x6649);
         // InTable
-        if (
-            (0 == (pParams = pPap->HasSprm(pIo->TabCellSprm(pIo->nTable)))) ||
-            (1 != *pParams)
-           )
-        {
+        if (!pParams || (1 != *pParams) || (pLevel && (*pLevel <= pIo->nTable)))
             break;
-        }
 
         bool bStartApo, bStopApo;
         WW8FlyPara *rpNowStyleApo=0;
@@ -3031,8 +3044,15 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
         if (!aTableStack.empty() && !(bApo && pSFlyPara->pFlyFmt))
         {
             pTableDesc->pParentPos = new SwPosition(*pPaM->GetPoint());
+            SfxItemSet aItemSet(rDoc.GetAttrPool(),
+                RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+            SwFmtAnchor aAnchor(FLY_IN_CNTNT);
+            aAnchor.SetAnchor(pTableDesc->pParentPos);
+            aItemSet.Put(aAnchor);
             pTableDesc->pFlyFmt = rDoc.MakeFlySection(FLY_IN_CNTNT,
-                pTableDesc->pParentPos);
+                pTableDesc->pParentPos, &aItemSet);
+            ASSERT(pTableDesc->pFlyFmt->GetAnchor().GetAnchorId()
+                == FLY_IN_CNTNT, "Not the anchor type requested!");
             MoveInsideFly(pTableDesc->pFlyFmt);
         }
         pTableDesc->CreateSwTable();

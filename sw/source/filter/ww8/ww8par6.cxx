@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-21 13:00:03 $
+ *  last change: $Author: cmc $ $Date: 2002-08-22 11:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2924,6 +2924,8 @@ bool SwWW8ImplReader::StartApo(const BYTE* pSprm29,
 
         pSFlyPara->pFlyFmt = rDoc.MakeFlySection( pSFlyPara->eAnchor,
             pPaM->GetPoint(), &aFlySet );
+        ASSERT(pSFlyPara->pFlyFmt->GetAnchor().GetAnchorId() ==
+            pSFlyPara->eAnchor, "Not the anchor type requested!");
 
         if (pSFlyPara->pFlyFmt)
         {

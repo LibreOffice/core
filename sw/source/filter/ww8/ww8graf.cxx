@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-20 14:18:48 $
+ *  last change: $Author: cmc $ $Date: 2002-08-22 11:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2794,6 +2794,8 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             pRecord->eShapeType, aInnerDist );
 
         pRetFrmFmt = rDoc.MakeFlySection(eAnchor, pPaM->GetPoint(), &rFlySet );
+        ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() == eAnchor,
+            "Not the anchor type requested!");
 
         MatchWrapDistancesIntoFlyFmt( pRecord, pRetFrmFmt );
 

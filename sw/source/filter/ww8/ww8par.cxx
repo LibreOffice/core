@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-21 09:21:39 $
+ *  last change: $Author: cmc $ $Date: 2002-08-22 11:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1551,7 +1551,8 @@ bool SwWW8ImplReader::ProcessSpecial(bool bAllEnd, bool* pbReSync,
         if( bAnl )                          // Nummerierung ueber Zellengrenzen
             StopAnl();                      // fuehrt zu Absturz -> keine Anls
                                             // in Tabellen
-        nTable += StartTable(nStartCp);
+        while (nTable < nCellLevel)
+            nTable += StartTable(nStartCp);
         *pbReSync = true;                   // nach StartTable ist ein ReSync
                                             // noetig ( eigentlich nur, falls
                                             // die Tabelle ueber eine
@@ -1864,8 +1865,6 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                     pTest->Where() == nPosCp+1+nCpOfs)
                 {
                     TabCellEnd();
-                    ASSERT(!(bWasTabRowEnd && (nTable > 1)),
-                        "Complicated subtable mishap");
                     bRet = false;
                 }
             }
