@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unredln.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:41:48 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,9 +536,11 @@ void SwUndoCompDoc::Redo( SwUndoIter& rIter )
         delete pUnDel, pUnDel = 0;
 
         SetPaM( *pPam );
+
         SwRedline* pTmp = new SwRedline( *pRedlData, *pPam );
         ((SwRedlineTbl&)pDoc->GetRedlineTbl()).Insert( pTmp );
-        pTmp->InvalidateRange();
+        if (pTmp) // #i19649#
+            pTmp->InvalidateRange();
 
 //      pDoc->SetRedlineMode_intern( eOld );
     }
