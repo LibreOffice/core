@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-30 09:02:59 $
+#   last change: $Author: dbo $ $Date: 2001-06-01 11:48:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,13 @@ UNOTYPES= \
         com.sun.star.lang.XTypeProvider			\
         com.sun.star.lang.XComponent
 
+.IF "$(debug)" != ""
+# msvc++: no inlining for debugging
+.IF "$(COM)" == "MSC"
+CFLAGS += /Ob0
+.ENDIF
+.ENDIF
+
 SLOFILES= \
         $(SLO)$/typeprovider.obj 	\
         $(SLO)$/exc_thrower.obj 	\
@@ -146,13 +153,13 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
 
-.IF "$(OS)$(CPU)"=="WNTI"
+.IF "$(OS)$(CPU)$(COM)"=="WNTIMSC"
 SHL1VERSIONMAP=msci.map
-.ELIF "$(OS)$(CPU)"=="SOLARISS"
+.ELIF "$(OS)$(CPU)$(COM)"=="SOLARISSC52"
 SHL1VERSIONMAP=sols.map
-.ELIF "$(OS)$(CPU)"=="SOLARISI"
+.ELIF "$(OS)$(CPU)$(COM)"=="SOLARISIC52"
 SHL1VERSIONMAP=soli.map
-.ELIF "$(OS)$(CPU)"=="LINUXI"
+.ELIF "$(OS)$(CPU)$(COM)"=="LINUXIGCC"
 SHL1VERSIONMAP=lngi.map
 .ENDIF
 
