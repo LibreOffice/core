@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:05:15 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,14 +604,6 @@ ULONG SwXMLTextBlocks::PutText( const String& rShort, const String& rName,
     return nRes;
 }
 
-void SwXMLTextBlocks::SetCurrentText( const String& rText )
-{
-    if (!aCur.Len())
-        aCur = rText;
-    else
-        aCur += rText;
-}
-
 void SwXMLTextBlocks::MakeBlockText( const String& rText )
 {
     SwTxtNode* pTxtNode = pDoc->GetNodes()[ pDoc->GetNodes().GetEndOfContent().
@@ -632,16 +624,3 @@ void SwXMLTextBlocks::MakeBlockText( const String& rText )
         pTxtNode->Insert( sTemp, aIdx );
     } while ( STRING_NOTFOUND != nPos );
 }
-
-void SwXMLTextBlocks::AddTextNode ( const String & rText )
-{
-    SwTxtNode* pTxtNode = pDoc->GetNodes()[ pDoc->GetNodes().GetEndOfContent().
-                                        GetIndex() - 1 ]->GetTxtNode();
-    //JP 18.09.98: Bug 56706 - Standard sollte zumindest gesetzt sein!
-    if( pTxtNode->GetTxtColl() == pDoc->GetDfltTxtFmtColl() )
-        pTxtNode->ChgFmtColl( pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
-    SwIndex aIdx ( pTxtNode );
-    pTxtNode->Insert( rText, aIdx );
-}
-
-
