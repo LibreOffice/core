@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 10:30:29 $
+#   last change: $Author: hr $ $Date: 2004-11-09 11:49:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ $(MISC)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
 # org.openoffice.configuration.Inspector should be replaced and the
 # replacement should be invoked here.
     $(XSLTPROC) -o $(@:d)$*.val \
-                --stringparam componentName $(PACKAGE).$(<:b) \
+                --stringparam componentName $(PACKAGE).$* \
                 $(PRJ)$/util$/schema_val.xsl $<
     $(XSLTPROC) -o $(@:d)$*.san \
                 $(PRJ)$/util$/sanity.xsl $<
@@ -123,21 +123,17 @@ $(MISC)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
 # xsltproc already validates against the dtd.  For additional validation,
 # org.openoffice.configuration.Inspector should be replaced and the
 # replacement should be invoked here.
-    $(SED) 's|xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"||;s|extension-element-prefixes="filehelper"||;s|filehelper:makeAbs(\(.*\))|\1|' < $(PRJ)$/util$/data_val.xsl > $(PRJ)$/util$/dataval2.xsl
-    $(SED) 's|xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"||;s|extension-element-prefixes="filehelper"||;s|filehelper:makeAbs(\(.*\))|\1|' < $(PRJ)$/util$/alllang.xsl > $(@:d)allang2.xsl
     $(XSLTPROC) -o $(@:d)$*.val \
                 --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs \
                 --stringparam schemaRoot $(PWD)$/$(PRJ)$/registry$/schema \
-                $(PRJ)$/util$/dataval2.xsl $<
+                $(PRJ)$/util$/data_val.xsl $<
     $(XSLTPROC) -o $(@:d)$*.tmp \
                 --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs \
                 --stringparam schemaRoot $(PWD)$/$(PRJ)$/registry$/schema \
-                $(@:d)allang2.xsl $<
+                $(PRJ)$/util$/alllang.xsl $<
 # xsltproc already seems to pretty-print the xml, so
 # org.openoffice.helper.PrettyPrinter seems to be unnecessary.
     cp $(@:d)$*.tmp $@
-    +$(RM) $(PRJ)$/util$/dataval2.xsl > $(NULLDEV)
-    +$(RM) $(@:d)allang2.xsl > $(NULLDEV)
 .ENDIF
     +$(RM) $(@:d)$*.tmp > $(NULLDEV)
     +$(RM) $(@:d)$*.val > $(NULLDEV)
@@ -155,16 +151,14 @@ $(MISC)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| $(MISC)$/merge$
     $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$*.tmp xcs=$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(PRJ)$/registry$/schema locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(MISC)$/registry$/res$/, $@))}	
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
 .ELSE
-    $(SED) 's|xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"||;s|extension-element-prefixes="filehelper"||;s|filehelper:makeAbs(\(.*\))|\1|' < $(PRJ)$/util$/alllang.xsl > $(@:d)allang2.xsl
     $(XSLTPROC) -o $(@:d)$*.tmp \
                 --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs \
                 --stringparam schemaRoot $(PWD)$/$(PRJ)$/registry$/schema \
                 --stringparam locale {$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(MISC)$/registry$/res$/, $@))} \
-                $(@:d)allang2.xsl $<
+                $(PRJ)$/util$/alllang.xsl $<
 # xsltproc already seems to pretty-print the xml, so
 # org.openoffice.helper.PrettyPrinter seems to be unnecessary.
     cp $(@:d)$*.tmp $@
-    +$(RM) $(@:d)allang2.xsl > $(NULLDEV)
 .ENDIF
     +$(RM) $(@:d)$*.tmp > $(NULLDEV)
 
@@ -185,15 +179,13 @@ $(MISC)$/registry$/spool$/$(PACKAGE).%.xcu :| $$(@:b:s!.!$/!:s!-!.!:b).xcu
     $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(@:f:s/.xcu/.tmp/) xcs=$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema module={$(subst,$(<:b)-, $(*))}
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(@:f:s/.xcu/.tmp/) $@
 .ELSE
-    $(SED) 's|xmlns:filehelper="http://www.jclark.com/xt/java/org.openoffice.configuration.FileHelper"||;s|extension-element-prefixes="filehelper"||;s|filehelper:makeAbs(\(.*\))|\1|' < $(PRJ)$/util$/alllang.xsl > $(@:d)allang2.xsl
     $(XSLTPROC) -o $(@:d)$(@:f:s/.xcu/.tmp/) \
                 --stringparam xcs $(PWD)$/$(PRJ)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs \
                 --stringparam schemaRoot $(PWD)$/$(PRJ)$/registry$/schema \
                 --stringparam module $(subst,$(<:b)-, $(*)) \
-                $(@:d)allang2.xsl $<
+                $(PRJ)$/util$/alllang.xsl $<
 # xsltproc already seems to pretty-print the xml, so
 # org.openoffice.helper.PrettyPrinter seems to be unnecessary.
     cp $(@:d)$(@:f:s/.xcu/.tmp/) $@
-    +$(RM) $(@:d)allang2.xsl > $(NULLDEV)
 .ENDIF
     +$(RM) $(@:d)$(@:f:s/.xcu/.tmp/) > $(NULLDEV)
