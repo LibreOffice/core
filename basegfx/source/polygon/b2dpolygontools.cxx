@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2004-02-12 17:11:42 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@
 #ifndef _BGFX_CURVE_B2DBEZIERTOOLS_HXX
 #include <basegfx/curve/b2dbeziertools.hxx>
 #endif
+
+#include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1009,20 +1011,37 @@ namespace basegfx
         {
             B2DPolyPolygon aRetval;
 
+            if(0.0 == fFullDashDotLen && raDashDotArray.size())
+            {
+                // calculate fFullDashDotLen from raDashDotArray
+                fFullDashDotLen = ::std::accumulate(raDashDotArray.begin(), raDashDotArray.end(), 0.0);
+            }
+
             if(rCandidate.count() && fFullDashDotLen > 0.0)
             {
-                const sal_uInt32 nCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
+                // prepare candidate, evtl. remove curves
+                B2DPolygon aCandidate(rCandidate);
+
+                if(aCandidate.areControlVectorsUsed())
+                {
+                    aCandidate = adaptiveSubdivideByAngle(aCandidate);
+                }
+
+                const sal_uInt32 nCount(aCandidate.isClosed() ? aCandidate.count() : aCandidate.count() - 1L);
                 sal_uInt32 nDashDotIndex(0L);
                 double fDashDotLength(raDashDotArray[nDashDotIndex]);
 
                 for(sal_uInt32 a(0L); a < nCount; a++)
                 {
-                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
-                    const B2DPoint aStart(rCandidate.getB2DPoint(a));
-                    const B2DPoint aEnd(rCandidate.getB2DPoint(nNextIndex));
-                    const B2DVector aVector(aEnd - aStart);
+                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, aCandidate));
+                    const B2DPoint aStart(aCandidate.getB2DPoint(a));
+                    const B2DPoint aEnd(aCandidate.getB2DPoint(nNextIndex));
+                    B2DVector aVector(aEnd - aStart);
                     double fLength(aVector.getLength());
                     double fPosOnVector(0.0);
+
+                    // normalize vector for further usage as multiplication base
+                    aVector.normalize();
 
                     while(fLength >= fDashDotLength)
                     {
@@ -1063,6 +1082,7 @@ namespace basegfx
                         // add start and end point
                         const B2DPoint aPosA(aStart + (aVector * fPosOnVector));
                         aResult.append(aPosA);
+                        aResult.append(aEnd);
 
                         // add line to PolyPolygon
                         aRetval.append(aResult);
