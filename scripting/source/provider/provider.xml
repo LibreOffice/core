@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   ScriptRuntimeManager    </module-name>
+    <component-description>
+        <author> Noel Power</author>
+        <name>  drafts.com.sun.star.script.framework.provider.FunctionProvider  </name>
+        <description>
+    This component is part of the Scripting Framework
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
+        <status value="drafts"/>
+        <supported-service> drafts.com.sun.star.script.framework.provider.FunctionProvider  </supported-service>
+        <type>  com.sun.star.beans.XPropertySet                 </type>
+        <type>  com.sun.star.uno.Exception                  </type>
+        <type>  com.sun.star.io.IOException                 </type>
+        <type>  com.sun.star.io.XStream                 </type>
+        <type>  drafts.com.sun.star.script.framework.provider.XFunction </type>
+        <type>  drafts.com.sun.star.script.framework.provider.XFunctionProvider </type>
+        <type>  drafts.com.sun.star.script.framework.XScriptInvocation </type>
+        <type>  drafts.com.sun.star.script.framework.scripturi.XScriptURI </type>
+
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper2$(COM)   </runtime-module-dependency>
+    <runtime-module-dependency> cppu2   </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+</module-description>
