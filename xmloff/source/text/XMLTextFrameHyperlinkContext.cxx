@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:38:19 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,4 +216,19 @@ Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
 
     return xTxt;
 }
+
+// --> OD 2004-08-24 #33242#
+Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
+{
+    Reference < drawing::XShape > xShape;
+    if( xFrameContext.Is() )
+    {
+        SvXMLImportContext *pContext = &xFrameContext;
+        xShape = PTR_CAST( XMLTextFrameContext, pContext )->GetShape();
+    }
+
+    return xShape;
+}
+// <--
+
 
