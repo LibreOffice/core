@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-30 14:39:56 $
+ *  last change: $Author: mtg $ $Date: 2001-08-30 15:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -944,7 +944,8 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
 #ifdef MTG_DEBUG
         fprintf(stderr, "MTG: getVolumeInfo returned %d\n", aRC );
 #endif
-        if (aRC == FileBase::E_None )
+        // return value is not useful, so we check if we have valid attributes instead
+        if ( aInfo.isValid ( osl_VolumeInfo_Mask_FreeSpace) )
         {
             sal_Bool bReCheck;
             OUStringBuffer aBuffer;
@@ -963,8 +964,7 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
                 if ( (  bDynamicSpan && nFree < 1000         ) ||
                      ( !bDynamicSpan && nFree < nSegmentSize ) )
                 {
-                    if ( !HandleError (  osl_File_E_NOSPC, EC_RETRY|EC_ABORT, sFullPath )
-                      || RequestDisk ( rMountPath, nDiskNum ) < 0 )
+                    if ( !HandleError (  osl_File_E_NOSPC, EC_RETRY|EC_ABORT, sFullPath ) )
                     {
                         if ( pFile )
                             delete pFile;
@@ -999,6 +999,9 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
             }
             if ( aRC != FileBase::E_None )
             {
+#ifdef MTG_DEBUG
+                fprintf(stderr, "MTG: file open returned %d\n", aRC );
+#endif
                 if ( ! HandleError (  (oslFileError) aRC, EC_RETRY|EC_ABORT, sFullPath ) )
                 {
                     delete pFile;
@@ -1011,9 +1014,12 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
                 aRC = pFile->setSize ( 0 );
             }
         }
-#ifdef MTG_DEBUG
-        fprintf(stderr, "MTG: file open returned %d\n", aRC );
-#endif
+        else
+        {
+            aRC = FileBase::E_IO;
+            if ( ! HandleError (  (oslFileError) aRC, EC_RETRY|EC_ABORT, rMountPath ) )
+                return e_Aborted;
+        }
     }
     while (aRC != FileBase::E_None );
 
