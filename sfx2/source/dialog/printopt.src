@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:30:52 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 15:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,6 +1066,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
     Text[ catalan ] = "Warning";
     Text[ finnish ] = "Varoitus";
 };
+
 
 
 
