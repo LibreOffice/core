@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleDocumentPagePreview.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,32 +205,9 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
         //at.printAccessibleTree(log,xRoot);
-        XAccessibleContext mainWin = at.getAccessibleObjectForRole(xRoot,AccessibleRole.TOOL_BAR,"Page View");
-        //Jump to last page and back to first to verify that #
-        try {
-            XAccessible FirstPage = mainWin.getAccessibleChild(2);
-            log.println("Getting: "+
-                            FirstPage.getAccessibleContext().getAccessibleName());
-            XAccessible LastPage = mainWin.getAccessibleChild(3);
-            log.println("Getting "+
-                            LastPage.getAccessibleContext().getAccessibleName());
-            XAccessibleAction pressLast = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, LastPage);
-            XAccessibleAction pressFirst = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, FirstPage);
-            pressLast.doAccessibleAction(0);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {}
-            pressFirst.doAccessibleAction(0);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {}
-        } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}
-
 
         oObj = at.getAccessibleObjectForRole
             (xRoot, AccessibleRole.DOCUMENT, "");
