@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:58:38 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,9 @@
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
 #endif
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
@@ -1215,15 +1218,15 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
             sal_uInt32 nVal = lcl_Any_To_ULONG(rVal, bException);
             if( COMPARE_EQUAL == sName.CompareToAscii("PageRows" ) )
             {
-                if(!nVal)
+                if(!nVal || nVal > 0xff)
                     throw RuntimeException();
-                aData.SetRow(nVal);
+                aData.SetRow((BYTE)nVal);
             }
             else if(COMPARE_EQUAL == sName.CompareToAscii("PageColumns"))
             {
-                if(!nVal)
+                if(!nVal  || nVal > 0xff)
                     throw RuntimeException();
-                aData.SetCol(nVal);
+                aData.SetCol((BYTE)nVal);
             }
             else if(COMPARE_EQUAL == sName.CompareToAscii("LeftMargin"))
             {
@@ -1310,7 +1313,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             {
                 sal_Int32 nCopies;
                 aValue >>= nCopies;
-                aReq.AppendItem(SfxInt16Item( SID_PRINT_COPIES, nCopies ) );
+                aReq.AppendItem(SfxInt16Item( SID_PRINT_COPIES, (sal_Int16)nCopies ) );
             }
 
             // Collate-Property
@@ -2401,6 +2404,76 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
     }
     return aAny;
 }
+/*-- 06.01.2004 15:08:34---------------------------------------------------
+    The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
+    the current ViewShell so that fields are not printed as commands and
+    hidden text and hidden characters are always invisible.
+    After printing the view options are restored
+  -----------------------------------------------------------------------*/
+class SwViewOptionAdjust_Impl
+{
+    bool m_bSwitchOff_IsFldName;
+    bool m_bSwitchOff_HiddenChar;
+    bool m_bSwitchOff_HiddenParagraphs;
+
+    SwViewOption* m_pViewOption;
+    SwWrtShell& m_rShell;
+public:
+    SwViewOptionAdjust_Impl(SwWrtShell& rSh);
+    ~SwViewOptionAdjust_Impl();
+};
+/*-- 06.01.2004 15:08:34---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(SwWrtShell& rSh) :
+    m_pViewOption(0),
+    m_rShell(rSh)
+{
+    const SwViewOption* pCurrentViewOptions = m_rShell.GetViewOptions();
+    m_bSwitchOff_IsFldName = pCurrentViewOptions->IsFldName() && m_rShell.IsAnyFieldInDoc();
+    bool bApplyViewOptions = m_bSwitchOff_IsFldName;
+    //switch off display of hidden characters if on and hidden characters are in use
+    m_bSwitchOff_HiddenChar = pCurrentViewOptions->IsShowHiddenChar() && m_rShell.GetDoc()->ContainsHiddenChars();
+    //switch off display of hidden paragraphs if on and hidden paragraphs are in use
+    m_bSwitchOff_HiddenParagraphs = pCurrentViewOptions->IsShowHiddenPara();
+    if(m_bSwitchOff_HiddenParagraphs)
+    {
+        const SwFieldType* pFldType = m_rShell.GetDoc()->GetSysFldType(RES_HIDDENPARAFLD);
+        if(!pFldType || !pFldType->GetDepends())
+            m_bSwitchOff_HiddenParagraphs = false;
+    }
+
+    bApplyViewOptions |= m_bSwitchOff_HiddenChar;
+    bApplyViewOptions |= m_bSwitchOff_HiddenParagraphs;
+    if(bApplyViewOptions)
+    {
+        m_pViewOption = new SwViewOption(*m_rShell.GetViewOptions());
+        if(m_bSwitchOff_IsFldName)
+            m_pViewOption->SetFldName(FALSE);
+        if(m_bSwitchOff_HiddenChar)
+            m_pViewOption->SetShowHiddenChar(FALSE);
+        if(m_bSwitchOff_HiddenParagraphs)
+            m_pViewOption->SetShowHiddenPara(FALSE);
+        SW_MOD()->ApplyUsrPref(*m_pViewOption, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
+    }
+}
+/*-- 06.01.2004 15:08:34---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
+{
+    if(m_pViewOption)
+    {
+        if(m_bSwitchOff_IsFldName)
+            m_pViewOption->SetFldName(TRUE);
+        if(m_bSwitchOff_HiddenChar)
+            m_pViewOption->SetShowHiddenChar(TRUE);
+        if(m_bSwitchOff_HiddenParagraphs)
+            m_pViewOption->SetShowHiddenPara(TRUE);
+        SW_MOD()->ApplyUsrPref(*m_pViewOption, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
+        delete m_pViewOption;
+    }
+}
 /* -----------------------------23.08.02 16:00--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2466,14 +2539,16 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
     SwWrtShell *pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
+    sal_Int32 nRet = 0;
     if( pWrtShell )
     {
+        SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
         pWrtShell->SetPDFExportOption( sal_True );
         pWrtShell->CalcLayout();
         pWrtShell->SetPDFExportOption( sal_False );
+        nRet = pDoc->GetPageCount();
     }
-
-    return pDoc->GetPageCount();
+    return nRet;
 }
 /* -----------------------------23.08.02 16:00--------------------------------
 
@@ -2500,7 +2575,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (nRenderer >= pDoc->GetPageCount())
         return uno::Sequence< beans::PropertyValue >();
 
-    Size aPgSize( pDoc->GetPageSize( nRenderer + 1 ) );
+    Size aPgSize( pDoc->GetPageSize( sal_uInt16(nRenderer + 1) ) );
     DBG_ASSERT( aPgSize != Size(), "no page size" );
 
     awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
@@ -2619,9 +2694,12 @@ void SAL_CALL SwXTextDocument::render(
         //! aOptions.bPrintSelection parameter will be false.
         aOptions.bPrintSelection = FALSE;
 
+        SwViewOptionAdjust_Impl*  pViewOptionAdjust = pView->IsA(aSwViewTypeId) ?
+            new SwViewOptionAdjust_Impl(*((SwView*)pView)->GetWrtShellPtr()) : 0;
         pVwSh->SetPDFExportOption( sal_True );
         pVwSh->Prt( aOptions, aProgress, pOut );
         pVwSh->SetPDFExportOption( sal_False );
+        delete pViewOptionAdjust;
     }
 }
 /* -----------------------------20.06.00 09:54--------------------------------
