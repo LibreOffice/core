@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Events.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:48 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ service Events
             <dt>OnAlphaCharInput</dt>
             <dt>OnClick</dt>
             <dt>OnCloseApp</dt>
+            <dt>OnCopyTo</dt>
+            <dt>OnCopyToDone</dt>
             <dt>OnError</dt>
             <dt>OnFocus</dt>
             <dt>OnInsertDone</dt>
@@ -99,6 +101,7 @@ service Events
             <dt>OnLoadError</dt>
             <dt>OnLoadFinished</dt>
             <dt>OnMailMerge</dt>
+            <dt>OnMailMergeFinished</dt>
             <dt>OnModifyChanged</dt>
             <dt>OnMouseOut</dt>
             <dt>OnMouseOver</dt>
@@ -108,6 +111,7 @@ service Events
             <dt>OnNonAlphaCharInput</dt>
             <dt>OnPageCountChange</dt>
             <dt>OnPrepareUnload</dt>
+            <dt>OnPrepareViewClosing</dt>
             <dt>OnPrint</dt>
             <dt>OnResize</dt>
             <dt>OnSave</dt>
@@ -120,6 +124,8 @@ service Events
             <dt>OnToggleFullscreen</dt>
             <dt>OnUnfocus</dt>
             <dt>OnUnload</dt>
+            <dt>OnViewCreated</dt>
+            <dt>OnViewClosed</dt>
         </dl>
         </p>
         */
