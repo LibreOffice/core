@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-10 10:30:59 $
+ *  last change: $Author: gt $ $Date: 2001-10-11 11:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1673,6 +1673,24 @@ String SfxHelpIndexWindow_Impl::GetSearchText() const
     return sRet;
 }
 
+// class TextWin_Impl ----------------------------------------------------
+
+TextWin_Impl::TextWin_Impl( Window* p ) : DockingWindow( p, 0 )
+{
+}
+
+TextWin_Impl::~TextWin_Impl()
+{
+}
+
+long TextWin_Impl::Notify( NotifyEvent& rNEvt )
+{
+    if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_TAB )
+        return GetParent()->Notify( rNEvt );
+    else
+        return DockingWindow::Notify( rNEvt );
+}
+
 // class SfxHelpTextWindow_Impl ------------------------------------------
 
 SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
@@ -1681,7 +1699,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     aToolBox        ( this, 0 ),
     pHelpWin        ( pParent ),
-    pTextWin        ( new DockingWindow( this, 0 ) ),
+    pTextWin        ( new TextWin_Impl( this ) ),
     bIsDebug        ( sal_False ),
     bIsInClose      ( sal_False ),
     aIndexOnText    ( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),

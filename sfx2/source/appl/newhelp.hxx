@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-08 12:35:36 $
+ *  last change: $Author: gt $ $Date: 2001-10-11 11:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,17 @@ public:
     void                GrabFocusBack();
     sal_Bool            HasFocusOnEdit() const;
     String              GetSearchText() const;
+};
+
+// class TextWin_Impl ----------------------------------------------------
+
+class TextWin_Impl : public DockingWindow
+{
+public:
+                            TextWin_Impl( Window* pParent );
+    virtual                 ~TextWin_Impl();
+
+    virtual long            Notify( NotifyEvent& rNEvt );
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
