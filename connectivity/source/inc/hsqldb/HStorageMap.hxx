@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageMap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:16:07 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONLISTENER_HPP_
+#include <com/sun/star/embed/XTransactionListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
 #include <com/sun/star/io/XStream.hpp>
 #endif
@@ -107,7 +110,8 @@ namespace connectivity
 
 
         DECLARE_STL_USTRINGACCESS_MAP(::boost::shared_ptr<StreamHelper>,TStreamMap);
-        typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >, TStreamMap> TStoragePair;
+        typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >, ::rtl::OUString > TStorageURLPair;
+        typedef ::std::pair< TStorageURLPair, TStreamMap> TStoragePair;
         DECLARE_STL_USTRINGACCESS_MAP(TStoragePair,TStorages);
         /** contains all storages so far accessed.
         */
@@ -115,21 +119,33 @@ namespace connectivity
         {
         public:
             static ::rtl::OUString registerStorage(const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>& _xStorage,const ::rtl::OUString& _sURL);
-            static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getRegisteredStorage(const ::rtl::OUString& _sKey);
-            static void revokeStorage(const ::rtl::OUString& _sKey);
+            static TStorages::mapped_type getRegisteredStorage(const ::rtl::OUString& _sKey);
+            static ::rtl::OUString getRegisteredKey(const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>& _xStorage);
+            static void revokeStorage(const ::rtl::OUString& _sKey,const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener>& _xListener);
 
             static TStreamMap::mapped_type registerStream(JNIEnv * env,jstring name, jstring key,sal_Int32 _nMode);
             static void revokeStream(JNIEnv * env,jstring name, jstring key);
             static TStreamMap::mapped_type getRegisteredStream( JNIEnv * env, jstring name, jstring key);
 
             static ::rtl::OUString jstring2ustring(JNIEnv * env, jstring jstr);
-            static ::rtl::OUString removeURLPrefix(const ::rtl::OUString& _sURL);
+            static ::rtl::OUString removeURLPrefix(const ::rtl::OUString& _sURL,const ::rtl::OUString& _sFileURL);
+            static ::rtl::OUString removeOldURLPrefix(const ::rtl::OUString& _sURL);
         };
     //........................................................................
     }   // namespace hsqldb
     //........................................................................
 //........................................................................
 }   // namespace connectivity
+
+#if OSL_DEBUG_LEVEL > 0
+#include <stdio.h>
+#include <process.h>
+
+DECLARE_STL_USTRINGACCESS_MAP(FILE *,TDebugStreamMap);
+
+TDebugStreamMap& getStreams();
+#endif
+
 //........................................................................
 #endif // CONNECTIVI_HSQLDB_HSTORAGEMAP_HXX
 
