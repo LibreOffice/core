@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSortable.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:16:59 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 16:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,16 +84,16 @@ module com {  module sun {  module star {  module util {
 
     <p>There are older deprecated sort descriptors:</p>
     <ul>
-        <li>com::sun:star::util::SortDescriptor</li>
-        <li>com::sun:star::table::TableSortDescriptor</li>
-        <li>com::sun:star::text::TextSortDescriptor</li>
+        <li>com::sun::star::util::SortDescriptor</li>
+        <li>com::sun::star::table::TableSortDescriptor</li>
+        <li>com::sun::star::text::TextSortDescriptor</li>
     </ul>
 
     <p>And a new set of sort descriptors:</p>
     <ul>
-        <li>com::sun:star::util::SortDescriptor2</li>
-        <li>com::sun:star::table::TableSortDescriptor2</li>
-        <li>com::sun:star::text::TextSortDescriptor2</li>
+        <li>com::sun::star::util::SortDescriptor2</li>
+        <li>com::sun::star::table::TableSortDescriptor2</li>
+        <li>com::sun::star::text::TextSortDescriptor2</li>
     </ul>
 
     <p>Both types may be implemented by the same object.
@@ -111,12 +111,12 @@ interface XSortable: com::sun::star::uno::XInterface
             implements this interface. Therefore they can usually be used
             only for objects of that same type.</p>
 
-        @see com::sun:star::util::SortDescriptor
-        @see com::sun:star::table::TableSortDescriptor
-        @see com::sun:star::text::TextSortDescriptor
-        @see com::sun:star::util::SortDescriptor2
-        @see com::sun:star::table::TableSortDescriptor2
-        @see com::sun:star::text::TextSortDescriptor2
+        @see com::sun::star::util::SortDescriptor
+        @see com::sun::star::table::TableSortDescriptor
+        @see com::sun::star::text::TextSortDescriptor
+        @see com::sun::star::util::SortDescriptor2
+        @see com::sun::star::table::TableSortDescriptor2
+        @see com::sun::star::text::TextSortDescriptor2
 
      */
     sequence< com::sun::star::beans::PropertyValue > createSortDescriptor();
@@ -129,12 +129,12 @@ interface XSortable: com::sun::star::uno::XInterface
         those obtained by calling <member>createSortDescriptor</member>
         on the same type of object.<p>
 
-        @see com::sun:star::util::SortDescriptor
-        @see com::sun:star::table::TableSortDescriptor
-        @see com::sun:star::text::TextSortDescriptor
-        @see com::sun:star::util::SortDescriptor2
-        @see com::sun:star::table::TableSortDescriptor2
-        @see com::sun:star::text::TextSortDescriptor2
+        @see com::sun::star::util::SortDescriptor
+        @see com::sun::star::table::TableSortDescriptor
+        @see com::sun::star::text::TextSortDescriptor
+        @see com::sun::star::util::SortDescriptor2
+        @see com::sun::star::table::TableSortDescriptor2
+        @see com::sun::star::text::TextSortDescriptor2
      */
     void sort( [in] sequence< com::sun::star::beans::PropertyValue > xDescriptor );
 
