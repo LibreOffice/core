@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:37:03 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,6 +876,27 @@ void ViewShell::SetUseVirtualDevice( short nNew )
 {
     // this sets the flag at the document and calls PrtDataChanged
     GetDoc()->SetUseVirtualDevice( nNew );
+}
+
+// OD 06.01.2004 #i11859# - former formatting of text lines with proportional
+// line spacing or not.
+sal_Bool ViewShell::IsFormerLineSpacing() const
+{
+    return GetDoc()->IsFormerLineSpacing();
+}
+
+// OD 06.01.2004 #i11859# - control, if former formatting of text lines with
+// proportional line spacing is used or not.
+void ViewShell::SetUseFormerLineSpacing( const sal_Bool _bUseFormerLineSpacing )
+{
+    if ( GetDoc()->IsFormerLineSpacing() != _bUseFormerLineSpacing )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        GetDoc()->SetUseFormerLineSpacing( _bUseFormerLineSpacing );
+        const BYTE nInv = INV_PRTAREA;
+        //const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        lcl_InvalidateAllCntnt( *this, nInv );
+    }
 }
 
 
