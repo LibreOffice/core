@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:16:35 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 11:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 //====================================================================
 
-TYPEINIT1(SfxObjectShellItem,SfxPoolItem)
+TYPEINIT1_AUTOFACTORY(SfxObjectShellItem,SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SfxObjectItem,SfxPoolItem)
 
 //=========================================================================
@@ -97,13 +97,23 @@ SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 
 sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    if ( pObjSh )
-    {
-        rVal <<= pObjSh->GetModel();
-        return TRUE;
-    }
+    // HACK: don't use for UI relevant slots!
+    rVal <<= reinterpret_cast< sal_Int64 >( pObjSh );
+    return sal_True;
+}
 
-    return FALSE;
+//--------------------------------------------------------------------
+
+sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    // HACK: don't use for UI relevant slots!
+    sal_Int64 nVal;
+    if ( rVal >>= nVal )
+    {
+        pObjSh = reinterpret_cast< SfxObjectShell* >( nVal );
+        return sal_True;
+    }
+    return sal_False;
 }
 
 //=========================================================================
