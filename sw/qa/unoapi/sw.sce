@@ -1,3 +1,7 @@
+-o sw.CharacterStyle
+-o sw.ConditionalParagraphStyle
+-o sw.PageStyle
+-o sw.ParagraphStyle
 -o sw.SwAccessibleDocumentPageView
 -o sw.SwAccessibleDocumentView
 -o sw.SwAccessibleEndnoteView
@@ -45,7 +49,6 @@
 -o sw.SwXReferenceMark
 -o sw.SwXReferenceMarks
 -o sw.SwXShape
--o sw.SwXStyle
 -o sw.SwXStyleFamilies
 -o sw.SwXStyleFamily
 -o sw.SwXTableCellText
@@ -54,10 +57,15 @@
 -o sw.SwXTextColumns
 -o sw.SwXTextCursor
 -o sw.SwXTextDefaults
+-o sw.SwXTextDocument
+#binfilter-o sw.SwXTextEmbeddedObject
+#binfilter-o sw.SwXTextEmbeddedObjects
 -o sw.SwXTextField
 -o sw.SwXTextFieldMasters
 -o sw.SwXTextFieldTypes
+-o sw.SwXTextFrame
 -o sw.SwXTextFrameText
+-o sw.SwXTextGraphicObject
 -o sw.SwXTextGraphicObjects
 -o sw.SwXTextPortion
 -o sw.SwXTextPortionEnumeration
@@ -83,12 +91,4 @@
 -o sw.XMLSettingsImporter
 -o sw.XMLStylesExporter
 -o sw.XMLStylesImporter
--o sw.SwXTextEmbeddedObject
--o sw.SwXTextEmbeddedObjects
--o sw.SwXTextFrame
--o sw.SwXTextGraphicObject
--o sw.SwXTextDocument
--o sw.ParagraphStyle
--o sw.PageStyle
--o sw.ConditionalParagraphStyle
--o sw.CharacterStyle
+-o sw.DocumentSettings
