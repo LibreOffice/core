@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:53:38 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3039,10 +3039,15 @@ String STR_UNDO_HANGULHANJACONVERSION
     Text [ en-US ] = "Hangul/Hanja Conversion";
 };
 
-String STR_LEFT_PANE_TITLE
+String STR_LEFT_PANE_IMPRESS_TITLE
 {
     Text [ de ] = "Folien";
     Text [ en-US ] = "Slides";
+};
+String STR_LEFT_PANE_DRAW_TITLE
+{
+    Text [ de ] = "Seiten";
+    Text [ en-US ] = "Pages";
 };
 String STR_RIGHT_PANE_TITLE
 {
@@ -3062,17 +3067,17 @@ String STR_TASKPANEL_MASTER_PAGE_MENU_TITLE
 String STR_TASKPANEL_MASTER_PAGE_MENU_LOCK
 {
     Text [ de ] = "Aufgabenbereich andocken";
-    Text [ en-US ] = "~Dock Task Panel";
+    Text [ en-US ] = "~Dock Task Pane";
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK
 {
     Text [ de ] = "Aufgabenbereich entdocken";
-    Text [ en-US ] = "~Release Task Panel";
+    Text [ en-US ] = "~Undock Task Pane";
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_CLOSE
 {
     Text [ de ] = "Aufgabenbereich schlieﬂen";
-    Text [ en-US ] = "~Close Task Panel";
+    Text [ en-US ] = "~Close Task Pane";
 };
 String STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE
 {
