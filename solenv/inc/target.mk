@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.121 $
+#   $Revision: 1.122 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-21 13:04:19 $
+#   last change: $Author: svesik $ $Date: 2002-08-29 14:01:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2194,9 +2194,15 @@ COMPVTMP:=$(mktmp iii)
 "$(COMPVERMK)" : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
     @echo COMNAME:=$(COMNAME) > $(COMPVTMP)
     @echo COMID:=$(COMID) >> $(COMPVTMP)
+.IF "$(COM)"=="GCC"
+        @echo LIBSTDCPP3:=$(LIBSTDCPP3) >> $(COMPVTMP)
+        @echo SHORTSTDCPP3:=$(SHORTSTDCPP3) >> $(COMPVTMP)
+.ENDIF
+    @echo CCNUMVER:=$(CCNUMVER) >> $(COMPVTMP)
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $(COMPVTMP)
     @+-$(RM) $@ >& $(NULLDEV)
     @+-$(RENAME) $(COMPVTMP) $@
+    
 .ENDIF			# "$(COMPVERMK)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 
