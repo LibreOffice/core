@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: armin $ $Date: 2001-06-27 12:46:25 $
+#   last change: $Author: hjs $ $Date: 2001-06-27 13:24:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,14 +156,14 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     @$(MKDIR) $(foreach,i,$(OUTDIR2INC) $(INCCOM)$/$(i:b))
     @+echo copied $(foreach,i,$(OUTDIR2INC) $(shell +$(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
 .ELSE			# "$(GUI)"=="WNT"
-    $(COPY) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
+    +$(COPY) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(OUTDIR2INC)"!=""
 .IF "$(OUT2BIN)"!=""
-    $(COPY) $(foreach,i,$(OUT2BIN) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(BIN)
+    +$(COPY) $(foreach,i,$(OUT2BIN) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(BIN)
 .ENDIF			# "$(OUT2BIN)"!=""
 .IF "$(OUT2CLASS)"!=""
-    $(COPY) $(foreach,i,$(OUT2CLASS) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(CLASSDIR)
+    +$(COPY) $(foreach,i,$(OUT2CLASS) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(CLASSDIR)
 .ENDIF			# "$(OUT2BIN)"!=""
     +$(TOUCH) $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 
