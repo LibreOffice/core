@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addinlis.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEv
 
     //  notify document of changes
 
-    Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress( 0 ), NULL ) );
+    Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 
     const ScDocument** ppDoc = (const ScDocument**) pDocs->GetData();
     USHORT nCount = pDocs->Count();
