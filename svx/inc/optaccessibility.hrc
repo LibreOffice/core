@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:32:42 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,8 @@
 #define ROWA_3                  ( ROWA_2 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
 #define ROWA_4                  ( ROWA_3 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
 #define ROWA_5                  ( ROWA_4 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
-#define ROWA_6                  ( ROWA_5 + RSC_CD_FIXEDLINE_HEIGHT      + ROWSPACE )
 
-#define ROWB_0                  ( ROWA_6 + RSC_CD_TEXTBOX_HEIGHT        + ROWSPACE + GROUPSPACE )
+#define ROWB_0                  ( ROWA_5 + RSC_CD_TEXTBOX_HEIGHT        + ROWSPACE + GROUPSPACE )
 #define ROWB_1                  ( ROWB_0 + RSC_CD_FIXEDLINE_HEIGHT      + ROWSPACE )
 #define ROWB_2                  ( ROWB_1 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )
 #define ROWB_3                  ( ROWB_2 + RSC_CD_CHECKBOX_HEIGHT       + ROWSPACE )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:38:09 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage( Window* pParent,
     ,m_aMiscellaneousLabel      (this, ResId(FL_MISCELLANEOUS       ))
     ,m_aAccessibilityTool       (this, ResId(CB_ACCESSIBILITY_TOOL  ))
     ,m_aTextSelectionInReadonly (this, ResId(CB_TEXTSELECTION       ))
-    ,m_aSystemFont              (this, ResId(CB_SYSTEM_FONT         ))
     ,m_aAnimatedGraphics        (this, ResId(CB_ANIMATED_GRAPHICS   ))
     ,m_aAnimatedTexts           (this, ResId(CB_ANIMATED_TEXTS      ))
     ,m_aTipHelpCB               (this, ResId(CB_TIPHELP             ))
@@ -143,7 +142,6 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage( Window* pParent,
         nHeightDelta = aSize.Height();
 
         MovePosY( m_aTextSelectionInReadonly, nHeightDelta );
-        MovePosY( m_aSystemFont, nHeightDelta );
         MovePosY( m_aAnimatedGraphics, nHeightDelta );
         MovePosY( m_aAnimatedTexts, nHeightDelta );
         MovePosY( m_aTipHelpCB, nHeightDelta );
@@ -176,7 +174,6 @@ BOOL SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     m_pImpl->m_aConfig.SetIsAllowAnimatedGraphics( m_aAnimatedGraphics.IsChecked() );
     m_pImpl->m_aConfig.SetIsAllowAnimatedText( m_aAnimatedTexts.IsChecked() );
     m_pImpl->m_aConfig.SetIsAutomaticFontColor( m_aAutomaticFontColor.IsChecked() );
-    m_pImpl->m_aConfig.SetIsSystemFont( m_aSystemFont.IsChecked() );
     m_pImpl->m_aConfig.SetSelectionInReadonly( m_aTextSelectionInReadonly.IsChecked());
     m_pImpl->m_aConfig.SetAutoDetectSystemHC( m_aAutoDetectHC.IsChecked());
 
@@ -205,7 +202,7 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& rSet )
     m_aAnimatedGraphics.Check(        m_pImpl->m_aConfig.GetIsAllowAnimatedGraphics() );
     m_aAnimatedTexts.Check(           m_pImpl->m_aConfig.GetIsAllowAnimatedText() );
     m_aAutomaticFontColor.Check(      m_pImpl->m_aConfig.GetIsAutomaticFontColor() );
-    m_aSystemFont.Check(              m_pImpl->m_aConfig.GetIsSystemFont() );
+//  m_aSystemFont.Check(              m_pImpl->m_aConfig.GetIsSystemFont() );
     m_aTextSelectionInReadonly.Check( m_pImpl->m_aConfig.IsSelectionInReadonly() );
     m_aAutoDetectHC.Check(            m_pImpl->m_aConfig.GetAutoDetectSystemHC() );
 
