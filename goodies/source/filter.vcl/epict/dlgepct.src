@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-15 13:56:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text [ dutch ] = "Hoogte" ;
         Text [ swedish ] = "Hφjd" ;
         Text [ danish ] = "Hψjde" ;
-        Text [ portuguese_brazilian ] = "Hψjde" ;
+        Text [ portuguese_brazilian ] = "H?de" ;
         Text [ portuguese ] = "Altura" ;
         Text[ chinese_simplified ] = "Έί¶Θ";
         Text[ russian ] = "Βϋρξςΰ";
@@ -307,7 +307,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ arabic ] = "ΗαζΦΪ";
         Text[ dutch ] = "Modus";
         Text[ chinese_simplified ] = "Δ£Κ½";
-        Text[ greek ] = "Κατάσταση";
+        Text[ greek ] = "Κατάσταση λειτουργίας";
         Text[ korean ] = "Έπµε";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
@@ -329,3 +329,4 @@ ModalDialog DLG_EXPORT_EPCT
     Text[ catalan ] = "Opciones PICT";
     Text[ finnish ] = "PICT-asetukset";
 };
+
