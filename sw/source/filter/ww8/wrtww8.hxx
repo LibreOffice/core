@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-14 15:54:34 $
+ *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ class WW8_WrPlc0;
 class WW8_WrPlc1;
 class WW8_WrPlcDrawObj;
 class WW8_WrPlcFld;
+class WW8_WrMagicTable;
 class WW8_WrPlcFtnEdn;
 class WW8_WrPlcPn;
 class WW8_WrPlcPostIt;
@@ -361,6 +362,10 @@ public:
     WW8_WrPlcFld* pFldEdn;          // Felder in EndNotes
     WW8_WrPlcFld* pFldTxtBxs;       // fields in textboxes
     WW8_WrPlcFld* pFldHFTxtBxs;     // fields in header/footer textboxes
+    WW8_WrMagicTable *pMagicTable;  // keeps track of table cell positions, and
+                                    // marks those that contain graphics,
+                                    // which is required to make word display
+                                    // graphics inside tables
     SwWW8WrGrf* pGrf;
     const SwAttrSet* pStyAttr;      // StyleAttr fuer Tabulatoren
     const SwModify* pOutFmtNode;    // write Format or Node
@@ -452,6 +457,11 @@ public:
     void WriteText();
     void WriteCR();
     void WriteChar( sal_Unicode c );
+    void WriteCellEnd();
+    void WriteRowEnd();
+    USHORT StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
+        SwTwips &rPageSize, SwTwips &rTblOffset);
+
     void OutSwString( const String&, xub_StrLen nStt, xub_StrLen nLen,
                         BOOL bUnicode, rtl_TextEncoding eChrSet );
 
@@ -648,6 +658,14 @@ public:
     WW8_WrPlcFld( USHORT nStructSz, BYTE nTTyp )
         : WW8_WrPlc1( nStructSz ), nTxtTyp( nTTyp )
     {}
+    BOOL Write( SwWW8Writer& rWrt );
+};
+
+class WW8_WrMagicTable: public WW8_WrPlc1
+{
+public:
+    WW8_WrMagicTable() : WW8_WrPlc1( 4 ) {Append(0,0);}
+    void Append( WW8_CP nCp, ULONG nData );
     BOOL Write( SwWW8Writer& rWrt );
 };
 

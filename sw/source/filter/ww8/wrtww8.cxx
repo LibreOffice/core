@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-10 10:51:11 $
+ *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,6 +693,23 @@ BOOL WW8_WrPlcFld::Write( SwWW8Writer& rWrt )
     return TRUE;
 }
 
+BOOL WW8_WrMagicTable::Write( SwWW8Writer& rWrt )
+{
+    if( WW8_WrPlc1::Count() <= 1 )
+        return FALSE;
+    ULONG nFcStart = rWrt.pTableStrm->Tell();
+    WW8_WrPlc1::Write( *rWrt.pTableStrm );
+    rWrt.pFib->fcMagicTable = nFcStart;
+    rWrt.pFib->lcbMagicTable = rWrt.pTableStrm->Tell() - nFcStart;
+    return TRUE;
+}
+
+void WW8_WrMagicTable::Append( WW8_CP nCp, ULONG nData)
+{
+    SVBT32 nLittle;
+    LongToSVBT32(nData,nLittle);
+    WW8_WrPlc1::Append(nCp, nLittle);
+}
 
 //--------------------------------------------------------------------------
 
@@ -1879,6 +1896,7 @@ void SwWW8Writer::WriteFkpPlcUsw()
         OutListTab();                           // listformats  - LSTF
         OutOverrideListTab();                   //   - "" -     - LFO
         OutListNamesTab();                      //   - "" -     - ListNames
+        pMagicTable->Write( *this );
 
         pPiece->WritePc( *this );               // Piece-Table
         OutFontTab( *pFib );                    // FFNs
@@ -1914,6 +1932,7 @@ void SwWW8Writer::StoreDoc1()
     WriteStringAsPara( aEmptyStr, nLastFmtId ); // CR ans Ende ( sonst mault WW )
 
     pSepx->Finish( Fc2Cp( Strm().Tell() ));// Text + Ftn + HdFt als Section-Ende
+    pMagicTable->Finish( Fc2Cp( Strm().Tell() ),0);
 
     pFib->fcMac = Strm().Tell();        // Ende aller Texte
 
@@ -2066,6 +2085,8 @@ ULONG SwWW8Writer::StoreDoc()
     pFldTxtBxs = new WW8_WrPlcFld( 2, TXT_TXTBOX );
     pFldHFTxtBxs = new WW8_WrPlcFld( 2, TXT_HFTXTBOX );
 
+    pMagicTable = new WW8_WrMagicTable;
+
     pGrf = new SwWW8WrGrf( *this );
     pPiece = new WW8_WrPct( pFib->fcMin, bWrtWW8 );
     pDop = new WW8Dop;
@@ -2102,6 +2123,7 @@ ULONG SwWW8Writer::StoreDoc()
     }
 
     DELETEZ( pGrf );
+    DELETEZ( pMagicTable );
     DELETEZ( pFldFtn );
     DELETEZ( pFldTxtBxs );
     DELETEZ( pFldHFTxtBxs );
@@ -2278,11 +2300,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.14 2001-04-10 10:51:11 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.15 2001-06-02 16:06:13 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/04/10 10:51:11  cmc
+      CJK Kerning and Punctionation {im|ex}port
+
       Revision 1.13  2001/03/14 15:54:34  jp
       remove hard mapping of EditEngine- and Writer WhichIds
 

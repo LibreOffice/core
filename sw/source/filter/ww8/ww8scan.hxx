@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-25 14:06:21 $
+ *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,6 +1272,9 @@ public:
     */
     WW8_FC fcSttbListNames;// 0x0372 PLCF for Listname Table
     INT32 lcbSttbListNames;// 0x0376
+
+    WW8_FC fcMagicTable;
+    INT32 lcbMagicTable;
     /*
         General-Varaiblen, die fuer Ver67 und Ver8 verwendet werden,
         obwohl sie in der jeweiligen DATEI verschiedene Groesse haben:
@@ -1563,12 +1566,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.10 2001-04-25 14:06:21 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.11 2001-06-02 16:06:14 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/04/25 14:06:21  cmc
+      ##775## ##776## Update PLCF save/restore for cp based era
+
       Revision 1.9  2001/04/20 14:52:14  cmc
       New algorithm to find character and paragraph properties in fastsave documents
 

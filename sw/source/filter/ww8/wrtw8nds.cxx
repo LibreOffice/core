@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-21 15:45:50 $
+ *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1314,6 +1314,60 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
 /*  */
 
+USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
+    SwTwips &rPageSize, SwTwips &rTblOffset)
+
+{
+    SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
+
+    //Tell the undocumented table hack that everything between here and
+    //the last table position is nontable text
+    WW8_CP nPos = Fc2Cp(Strm().Tell());
+    if (nPos)
+        pMagicTable->Append(nPos,0);
+
+    // sprmPDxaFromText10
+    if( bWrtWW8 )
+    {
+        static BYTE __READONLY_DATA  aTabLineAttr[] = {
+                0, 0,               // Sty # 0
+                0x16, 0x24, 1,      // sprmPFInTable
+                0x17, 0x24, 1 };    // sprmPFTtp
+        rAt.Insert( aTabLineAttr, sizeof( aTabLineAttr ), rAt.Count() );
+    }
+    else
+    {
+        static BYTE __READONLY_DATA  aTabLineAttr[] = {
+                0, 0,               // Sty # 0
+                24, 1,              // sprmPFInTable
+                25, 1 };            // sprmPFTtp
+        rAt.Insert( aTabLineAttr, sizeof( aTabLineAttr ), rAt.Count() );
+    }
+
+    SwHoriOrient eHOri = pFmt->GetHoriOrient().GetHoriOrient();
+    switch( eHOri )
+    {
+    case HORI_CENTER:
+    case HORI_RIGHT:
+        if( bWrtWW8 )
+            InsUInt16( rAt, 0x5400 );
+        else
+            rAt.Insert( 182, rAt.Count() );
+        InsUInt16( rAt, (HORI_RIGHT == eHOri ? 2 : 1 ));
+        break;
+    case HORI_NONE:
+    case HORI_LEFT_AND_WIDTH:
+        {
+            const SvxLRSpaceItem& rLRSp = pFmt->GetLRSpace();
+            rTblOffset = rLRSp.GetLeft();
+            rPageSize -= rTblOffset + rLRSp.GetRight();
+        }
+        break;
+    }
+    return rAt.Count();
+}
+
+
 //---------------------------------------------------------------------------
 //       Tabellen
 //---------------------------------------------------------------------------
@@ -1348,54 +1402,12 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             nPageSize = aRect.Width();
     }
 
+    BOOL bRelBoxSize = TRUE /*ALWAYS relativ (nPageSize + ( nPageSize / 10 )) < nTblSz*/;
     SwTwips nTblSz = rTbl.GetFrmFmt()->GetFrmSize().GetWidth();
     WW8Bytes aAt( 128, 128 );   // Attribute fuer's Tabellen-Zeilenende
-
+    USHORT nStdAtLen = rWW8Wrt.StartTableFromFrmFmt(
+        aAt,rTbl.GetFrmFmt(),nPageSize, nTblOffset);
     static BYTE __READONLY_DATA aNullBytes[] = { 0, 0, 0, 0 };
-
-    // sprmPDxaFromText10
-    if( rWW8Wrt.bWrtWW8 )
-    {
-        static BYTE __READONLY_DATA  aTabLineAttr[] = {
-                0, 0,               // Sty # 0
-                0x16, 0x24, 1,      // sprmPFInTable
-                0x17, 0x24, 1 };    // sprmPFTtp
-        aAt.Insert( aTabLineAttr, sizeof( aTabLineAttr ), aAt.Count() );
-    }
-    else
-    {
-        static BYTE __READONLY_DATA  aTabLineAttr[] = {
-                0, 0,               // Sty # 0
-                24, 1,              // sprmPFInTable
-                25, 1 };            // sprmPFTtp
-        aAt.Insert( aTabLineAttr, sizeof( aTabLineAttr ), aAt.Count() );
-    }
-
-    SwHoriOrient eHOri = rTbl.GetFrmFmt()->GetHoriOrient().GetHoriOrient();
-    switch( eHOri )
-    {
-    case HORI_CENTER:
-    case HORI_RIGHT:
-        if( rWW8Wrt.bWrtWW8 )
-            SwWW8Writer::InsUInt16( aAt, 0x5400 );
-        else
-            aAt.Insert( 182, aAt.Count() );
-        SwWW8Writer::InsUInt16( aAt, (HORI_RIGHT == eHOri ? 2 : 1 ));
-        break;
-
-    case HORI_NONE:
-    case HORI_LEFT_AND_WIDTH:
-        {
-            const SvxLRSpaceItem& rLRSp = rTbl.GetFrmFmt()->GetLRSpace();
-            nTblOffset = rLRSp.GetLeft();
-            nPageSize -= nTblOffset + rLRSp.GetRight();
-        }
-        break;
-//  case FLY_HORI_FULL:
-    }
-
-    BOOL bRelBoxSize = TRUE /*ALWAYS relativ (nPageSize + ( nPageSize / 10 )) < nTblSz*/;
-    USHORT nStdAtLen = aAt.Count();
 
     SwWriteTable* pTableWrt;
     const SwHTMLTableLayout *pLayout = rTbl.GetHTMLTableLayout();
@@ -1527,15 +1539,15 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             if( nWWColMax < nRealColCnt )
             {
                 if( nRealBox+1 < nWWColMax || nRealBox+1 == nRealColCnt )
-                    rWW8Wrt.ReplaceCr( (char)0x07 );    // SpaltenEnde
+                    rWW8Wrt.WriteCellEnd(); // SpaltenEnde
             }
             else if( nRealBox < nWWColMax )
-                rWW8Wrt.ReplaceCr( (char)0x07 );    // SpaltenEnde
+                    rWW8Wrt.WriteCellEnd(); // SpaltenEnde
             ++nRealBox;
         }
 
         // das wars mit der Line
-        rWW8Wrt.WriteChar( (char)0x7 ); // TabellenZeilen-Ende
+        rWW8Wrt.WriteRowEnd();  // TabellenZeilen-Ende
 
         if( rWW8Wrt.bWrtWW8 )
         {
@@ -2010,11 +2022,14 @@ SwNodeFnTab aWW8NodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8nds.cxx,v 1.6 2001-05-21 15:45:50 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8nds.cxx,v 1.7 2001-06-02 16:06:13 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/05/21 15:45:50  cmc
+      ##897## #87014# #75277# Better inline (FLY_IN_CNTNT) graphics and ole2 object exporting (sideeffects add ole2 support to WW6 export)
+
       Revision 1.5  2001/03/14 10:22:09  jp
       Bug #75804#: W95 export - set graphics/ole-objects in tables always as character
 

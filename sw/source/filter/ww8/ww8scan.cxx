@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-23 12:58:24 $
+ *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4387,7 +4387,7 @@ WW8Fib::WW8Fib( SvStream& rSt, BYTE nWantedVersion,UINT32 nOffset ): nFibError( 
             }
 
             rSt.Seek( 0x372 );          // fcSttbListNames
-            rSt >>  fcSttbListNames;
+            rSt >> fcSttbListNames;
             rSt >> lcbSttbListNames;
             if( 0 != rSt.GetError() )
                 nFibError = ERR_SWG_READ_ERROR;
@@ -4414,7 +4414,7 @@ WW8Fib::WW8Fib( BYTE nVer )
         nProduct = 0x49;
 
         csw = 0x0e;     // muss das sein ???
-        cfclcb = 0x5d;  //      -""-
+        cfclcb = 0x6c;  //      -""-
         clw = 0x16;     //      -""-
         pnFbpChpFirst = pnFbpPapFirst = pnFbpLvcFirst = 0x000fffff;
         fExtChar = TRUE;
@@ -4692,6 +4692,14 @@ BOOL WW8Fib::Write( SvStream& rStrm )
         pData += 0x372 - 0x302;             // Pos + Offset (fcSttbListNames - fcDocUndo)
         Set_UInt32( pData, fcSttbListNames );
         Set_UInt32( pData, lcbSttbListNames );
+
+        pData += 0x382 - 0x37A;
+        Set_UInt32( pData, fcMagicTable );
+        Set_UInt32( pData, lcbMagicTable );
+
+        pData += 0x3FA - 0x38A;
+        Set_UInt16( pData, (UINT16)0x0002);
+        Set_UInt16( pData, (UINT16)0x00D9);
     }
 
     rStrm.Write( pDataPtr, fcMin );
@@ -6372,11 +6380,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.16 2001-05-23 12:58:24 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.17 2001-06-02 16:06:14 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/05/23 12:58:24  cmc
+      #87328# ##931## Bad little endian only cast made xp safe
+
       Revision 1.15  2001/05/21 09:21:16  cmc
       ##912## #86778# Document shows that fastsaved chp properties should not be searched for like pap properties
 

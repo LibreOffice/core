@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-21 15:45:50 $
+ *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,57 +443,172 @@ UINT32 SwWW8Writer::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
     return nOrdNum;
 }
 
+static BOOL lcl_IsFlyInFlyHere(const SwFrmFmt* pFmt, ULONG nStart, ULONG nEnd)
+{
+    BOOL bRet = FALSE;
+    const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
+    const SwPosition* pAPos;
+    ULONG nIdx;
+    if( ( pAnchor->GetAnchorId() == FLY_AT_CNTNT ||
+        pAnchor->GetAnchorId() == FLY_AT_FLY ||
+        pAnchor->GetAnchorId() == FLY_AUTO_CNTNT ) &&
+        0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
+        nStart <= ( nIdx = pAPos->nNode.GetIndex()) &&
+        nIdx < nEnd )
+    {
+        bRet = TRUE;
+    }
+    return bRet;
+}
+
 void SwWW8Writer::AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
                                     const Point& rNdTopLeft )
 {
     ASSERT( !pEscher, "der EscherStream wurde schon geschrieben!" );
     if( pEscher )
         return ;
+    BOOL bExportAsTable = FALSE;
+    USHORT nArrLen = 0, nLastFmt;
+    ULONG nStart, nEnd;
 
-    WW8_WrPlcDrawObj *pDrwO = TXT_HDFT == nTxtTyp ? pHFSdrObjs : pSdrObjs;
-    if( pDrwO->Append( *this, rCP, rFrmFmt, rNdTopLeft ))
+    if( RES_FLYFRMFMT == rFrmFmt.Which() )
     {
-        static BYTE __READONLY_DATA aSpec8[] = {
-            0x03, 0x6a, 0, 0, 0, 0,         // sprmCObjLocation (wahrscheinlich unnoetig)
-            0x55, 0x08, 1                   // sprmCFSpec
-        };
-                                                // fSpec-Attribut TRUE
-                            // Fuer DrawObjets muss ein Spezial-Zeichen
-                            // in den Text und darum ein fSpec-Attribut
-        pChpPlc->AppendFkpEntry( Strm().Tell() );
-        WriteChar( 0x8 );
-        rCP += 1;       // to next charakter position
-        pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
-
-        if( RES_FLYFRMFMT == rFrmFmt.Which() )
+        const SwNodeIndex* pNdIdx = rFrmFmt.GetCntnt().GetCntntIdx();
+        ASSERT( pNdIdx, "wo ist der NodeIndex geblieben?" );
+        nStart = pNdIdx->GetIndex();
+        nEnd = pNdIdx->GetNode().EndOfSectionIndex();
+        nArrLen = pDoc->GetSpzFrmFmts()->Count();
+        for( nLastFmt = 0; nLastFmt < nArrLen; ++nLastFmt )
         {
-            // search all Flys/DrawObj in Flys and put it behind this
-            // text position.
-            const SwNodeIndex* pNdIdx = rFrmFmt.GetCntnt().GetCntntIdx();
-            ASSERT( pNdIdx, "wo ist der NodeIndex geblieben?" );
-            ULONG nStart = pNdIdx->GetIndex(),
-                  nEnd = pNdIdx->GetNode().EndOfSectionIndex(),
-                  nIdx;
-
-            USHORT nArrLen = pDoc->GetSpzFrmFmts()->Count();
-            for( USHORT n = 0; n < nArrLen; ++n )
+            if (lcl_IsFlyInFlyHere(
+                (*pDoc->GetSpzFrmFmts())[nLastFmt],nStart,nEnd))
             {
-                const SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
-                const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-                const SwPosition* pAPos;
-                if( ( pAnchor->GetAnchorId() == FLY_AT_CNTNT ||
-                      pAnchor->GetAnchorId() == FLY_AT_FLY ||
-                      pAnchor->GetAnchorId() == FLY_AUTO_CNTNT ) &&
-                    0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-                    nStart <= ( nIdx = pAPos->nNode.GetIndex()) &&
-                    nIdx < nEnd )
+                bExportAsTable = TRUE;
+                break;
+            }
+        }
+    }
+
+    if (bExportAsTable)
+    {
+        SwTwips nTblSz = rFrmFmt.GetFrmSize().GetWidth();
+        SwTwips nPageSize = nTblSz;
+        SwTwips nTblOffset=0;
+        BOOL bRelBoxSize = TRUE;
+        WW8Bytes aAt( 128, 128 );
+        USHORT nStdAtLen = StartTableFromFrmFmt(aAt,&rFrmFmt,nPageSize,
+            nTblOffset);
+
+        static BYTE __READONLY_DATA aNullBytes[] = { 0, 0, 0, 0 };
+        USHORT nWWColMax = 1;
+
+        if( bWrtWW8 )
+            SwWW8Writer::InsUInt16( aAt, 0x3404 );
+        else
+            aAt.Insert( 186, aAt.Count() );
+        aAt.Insert( 1, aAt.Count() );
+
+        long nHeight=0;
+        const SwFmtFrmSize& rLSz = rFrmFmt.GetFrmSize();
+        if( ATT_VAR_SIZE != rLSz.GetSizeType() && rLSz.GetHeight() )
+            nHeight = ATT_MIN_SIZE == rLSz.GetSizeType()
+                ? rLSz.GetHeight() : -rLSz.GetHeight();
+
+        if( nHeight )
+        {
+            if( bWrtWW8 )
+                SwWW8Writer::InsUInt16( aAt, 0x9407 );
+            else
+                aAt.Insert( 189, aAt.Count() );
+            SwWW8Writer::InsUInt16( aAt, (USHORT)nHeight );
+        }
+
+        if( bWrtWW8 )
+            SwWW8Writer::InsUInt16( aAt, 0x3403 );
+        else
+            aAt.Insert( 185, aAt.Count() );
+        aAt.Insert( (BYTE)0, aAt.Count() );
+
+        const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+        ULONG nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+        ULONG nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+        WW8SaveData aSaveData(*this,nStt,nEnd);
+        bOutTable = TRUE;
+        bIsInTable= TRUE;
+        WriteText();
+        WriteCellEnd();
+        WriteRowEnd();
+
+        if( bWrtWW8 )
+        {
+            SwWW8Writer::InsUInt16( aAt, 0xD608 );
+            SwWW8Writer::InsUInt16( aAt, 2 + ( nWWColMax + 1 ) * 2 +
+                ( nWWColMax * 20 ));
+            aAt.Insert( nWWColMax, aAt.Count() );
+        }
+        else
+        {
+            aAt.Insert( 190, aAt.Count() );
+            SwWW8Writer::InsUInt16( aAt, nWWColMax * 12 + 4 );
+            aAt.Insert( nWWColMax, aAt.Count() );
+        }
+        nTblOffset = -8;
+        SwWW8Writer::InsUInt16( aAt, (USHORT)nTblOffset );
+
+        SwTwips nCalc = rFrmFmt.GetFrmSize().GetWidth();
+        nCalc *= nPageSize;
+        nCalc /= nTblSz;
+        SwWW8Writer::InsUInt16( aAt, (USHORT)(nTblOffset + nCalc ));
+
+        if( bWrtWW8 )
+        {
+            USHORT nFlags = 0;
+            SwWW8Writer::InsUInt16( aAt, nFlags );
+            aAt.Insert( aNullBytes, 2, aAt.Count() );
+            Out_SwFmtTableBox( aAt, rFrmFmt.GetBox() );
+        }
+
+        pPapPlc->AppendFkpEntry( Strm().Tell(),
+                aAt.Count(), aAt.GetData() );
+
+        if( aAt.Count() > nStdAtLen )
+            aAt.Remove( nStdAtLen, aAt.Count() - nStdAtLen );
+    }
+    else
+    {
+        WW8_WrPlcDrawObj *pDrwO = TXT_HDFT == nTxtTyp ? pHFSdrObjs : pSdrObjs;
+        if( pDrwO->Append( *this, rCP, rFrmFmt, rNdTopLeft ))
+        {
+            static BYTE __READONLY_DATA aSpec8[] = {
+                0x03, 0x6a, 0, 0, 0, 0,         // sprmCObjLocation (wahrscheinlich unnoetig)
+                0x55, 0x08, 1                   // sprmCFSpec
+            };
+                                                    // fSpec-Attribut TRUE
+                                // Fuer DrawObjets muss ein Spezial-Zeichen
+                                // in den Text und darum ein fSpec-Attribut
+            pChpPlc->AppendFkpEntry( Strm().Tell() );
+            WriteChar( 0x8 );
+            rCP += 1;       // to next charakter position
+            pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
+
+            if( RES_FLYFRMFMT == rFrmFmt.Which() )
+            {
+                // search all Flys/DrawObj in Flys and put it after this text
+                // position. The test to change the parent fly frame into a
+                // table will have left nLastFmt pointing to the first frame
+                // to begin exporting
+                for( ; nLastFmt < nArrLen; ++nLastFmt )
                 {
-                    AppendFlyInFlys( rCP, *pFmt, rNdTopLeft );
+                    const SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[nLastFmt];
+                    if (lcl_IsFlyInFlyHere(pFmt,nStart,nEnd))
+                        AppendFlyInFlys( rCP, *pFmt, rNdTopLeft );
                 }
             }
         }
     }
 }
+
+
 
 class WW8_SdrAttrIter : public WW8_AttrIter
 {
@@ -2339,11 +2454,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.16 2001-05-21 15:45:50 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.17 2001-06-02 16:06:13 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.16  2001/05/21 15:45:50  cmc
+      ##897## #87014# #75277# Better inline (FLY_IN_CNTNT) graphics and ole2 object exporting (sideeffects add ole2 support to WW6 export)
+
       Revision 1.15  2001/04/20 10:51:44  cmc
       escher graphic mode is 32bit not 16
 

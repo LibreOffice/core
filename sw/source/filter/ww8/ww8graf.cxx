@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-29 13:52:03 $
+ *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -996,7 +996,8 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
         ITEMID_LRSPACE,
         ITEMID_ULSPACE,
         RES_CHRATR_CJK_FONT,
-        RES_CHRATR_CJK_FONTSIZE
+        RES_CHRATR_CJK_FONTSIZE,
+        RES_CHRATR_EMPHASIS_MARK
     };
 
     static USHORT __READONLY_DATA aDstTab[] = {
@@ -1019,7 +1020,8 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
         EE_PARA_LRSPACE,
         EE_PARA_ULSPACE,
         EE_CHAR_FONTINFO_CJK,
-        EE_CHAR_FONTHEIGHT_CJK
+        EE_CHAR_FONTHEIGHT_CJK,
+        EE_CHAR_EMPHASISMARK
     };
 
     if( nColl < nColls && pCollA[nColl].pFmt && pCollA[nColl].bColl ){
@@ -3205,11 +3207,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.25 2001-05-29 13:52:03 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.26 2001-06-02 16:06:14 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.25  2001/05/29 13:52:03  cmc
+      #87557# ##974## CJK FontHeight in drawing layer
+
       Revision 1.24  2001/04/25 18:27:07  jp
       Bug #83181#: don't insert in GroupObjects SW-OLE-Objects
 

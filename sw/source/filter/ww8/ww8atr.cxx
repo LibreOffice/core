@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-24 10:26:11 $
+ *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2491,6 +2491,22 @@ ULONG SwWW8Writer::ReplaceCr( BYTE nChar )
     return nRetPos;
 }
 
+void SwWW8Writer::WriteCellEnd()
+{
+    //Technically in a word document this is a different value for a
+    //cell without a graphic. But it doesn't seem to make a difference
+    pMagicTable->Append(Fc2Cp(ReplaceCr( (BYTE)0x07 )),0x122);
+}
+
+void SwWW8Writer::WriteRowEnd()
+{
+    WriteChar( (BYTE)0x07 );
+    //Technically in a word document this is a different value for a row ends
+    //that are not row ends directly after a cell with a graphic. But it
+    //doesn't seem to make a difference
+    pMagicTable->Append(Fc2Cp(Strm().Tell()),0x1B6);
+}
+
 // Breaks schreiben nichts in das Ausgabe-Feld rWrt.pO,
 // sondern nur in den Text-Stream ( Bedingung dafuer, dass sie von Out_Break...
 // gerufen werden duerfen )
@@ -3749,6 +3765,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/04/24 10:26:11  cmc
+      CJK Vertical Text Alignment {im|ex}port
+
       Revision 1.13  2001/04/23 11:16:23  cmc
       Enable automatic text foreground color {im|ex}port
 
