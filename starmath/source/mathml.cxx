@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-23 07:46:57 $
+ *  last change: $Author: cmc $ $Date: 2001-04-05 14:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3040,11 +3040,12 @@ void SmXMLExport::_ExportContent()
 {
     SvXMLElementExport aEquation(*this,XML_NAMESPACE_MATH,sXML_math, sal_False,
         sal_True);
+    SvXMLElementExport *pSemantics=0;
 
     if (pText)
     {
-        SvXMLElementExport aSemantics(*this,XML_NAMESPACE_MATH,sXML_semantics,
-            sal_True, sal_True);
+        pSemantics = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
+            sXML_semantics, sal_True, sal_True);
     }
 
     ExportNodes(pTree,0);
@@ -3057,6 +3058,7 @@ void SmXMLExport::_ExportContent()
             sXML_annotation,sal_True, sal_False);
         GetDocHandler()->characters(*pText);
     }
+    delete pSemantics;
 }
 
 void SmXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
