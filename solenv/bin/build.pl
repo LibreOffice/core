@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: vg $ $Date: 2001-09-07 16:18:21 $
+#   last change: $Author: vg $ $Date: 2001-09-07 16:27:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.37 $ ';
+$id_str = ' $Revision: 1.38 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -643,6 +643,8 @@ sub usage {
     print STDERR "Syntax:   build [-help|-all|-from prj_name] \n";
     print STDERR "Example:  build -from sfx2\n";
     print STDERR "              - build all projects including current one from sfx2\n";
+    print STDERR "Example:  build -from_opt sfx2\n";
+    print STDERR "              - the same as -from, but skip all projects that could have been built (no secure way, use ONLY when -all or -from is already been run and there no external dependensies\' changes occurred)\n";
     print STDERR "Keys:     -all        - build all projects from very beginning till current one\n";
     print STDERR "      -from       - build all projects beginning from the specified till current one\n";
     print STDERR "      -show       - show what is gonna be built\n";
