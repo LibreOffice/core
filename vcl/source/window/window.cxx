@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-02 15:56:46 $
+ *  last change: $Author: ssa $ $Date: 2002-08-13 11:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3814,10 +3814,13 @@ void Window::ImplGrabFocus( USHORT nFlags )
 
     BOOL bMustNotGrabFocus = FALSE;
     // #100242#, check parent hierarchy if some floater prohibits grab focus
-    Window *pParent = this;
+
+    Window *pParent = mpParent;
     while( pParent )
     {
-        if( ( pParent->mbFloatWin || ( pParent->GetStyle() & WB_SYSTEMFLOATWIN ) ) && !( pParent->GetStyle() & WB_MOVEABLE ) )
+        // #102158#, ignore grabfocus only if the floating parent grabs keyboard focus by itself (GrabsFocus())
+        // otherwise we cannot set the focus in a floating toolbox
+        if( ( (pParent->mbFloatWin && ((FloatingWindow*)pParent)->GrabsFocus()) || ( pParent->GetStyle() & WB_SYSTEMFLOATWIN ) ) && !( pParent->GetStyle() & WB_MOVEABLE ) )
         {
             bMustNotGrabFocus = TRUE;
             break;
