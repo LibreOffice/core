@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:18:14 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,13 @@
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
+#include <list>
 
 class SwWrongList;
 class SwTxtNode;
 class Point;
+class MultiSelection;
+typedef std::list< xub_StrLen > PositionList;
 
 /*************************************************************************
  *                class SwScanner
@@ -131,6 +134,7 @@ private:
     SvXub_StrLens aKashida;
     SvXub_StrLens aCompChg;
     SvXub_StrLens aCompLen;
+    SvXub_StrLens aHiddenChg;
     SvBytes aCompType;
     xub_StrLen nInvalidityPos;
     BYTE nDefaultDir;
@@ -170,6 +174,11 @@ public:
     inline xub_StrLen GetCompLen( const USHORT nCnt ) const;
     inline BYTE GetCompType( const USHORT nCnt ) const;
 
+    inline USHORT CountHiddenChg() const;
+    inline xub_StrLen GetHiddenChg( const USHORT nCnt ) const;
+    static void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode,
+                                                MultiSelection& rHiddenMulti );
+
     // "high" level operations, nPos refers to string position
     xub_StrLen NextScriptChg( const xub_StrLen nPos ) const;
     BYTE ScriptType( const xub_StrLen nPos ) const;
@@ -183,6 +192,54 @@ public:
     BYTE DirType( const xub_StrLen nPos ) const;
 
     BYTE CompType( const xub_StrLen nPos ) const;
+
+/** Hidden text range information - static and non-version
+
+    @descr  Determines if a given position is inside a hidden text range. The
+            static version tries to obtain a valid SwScriptInfo object
+            via the SwTxtNode, otherwise it calculates the values from scratch.
+            The non-static version uses the internally cached informatio
+            for the calculation.
+
+    @param  rNode
+                The text node.
+    @param  nPos
+                The given position that should be checked.
+    @param  rnStartPos
+                Return parameter for the start position of the hidden range.
+                STRING_LEN if nPos is not inside a hidden range.
+    @param  rnEndPos
+                Return parameter for the end position of the hidden range.
+                0 if nPos is not inside a hidden range.
+    @param  rnEndPos
+                Return parameter that contains all the hidden text ranges. Optional.
+    @return
+            returns true if there are any hidden characters in this paragraph.
+
+*/
+    static bool GetBoundsOfHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos,
+                                        xub_StrLen& rnStartPos, xub_StrLen& rnEndPos,
+                                        PositionList* pList = 0 );
+    bool GetBoundsOfHiddenRange(  xub_StrLen nPos, xub_StrLen& rnStartPos,
+                                  xub_StrLen& rnEndPos, PositionList* pList = 0 ) const;
+
+    static bool IsInHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos );
+
+/** Hidden text range information
+
+    @descr  Takes a string and either deletes the hidden ranges or sets
+            a given character in place of the hidden characters.
+
+    @param  rNode
+                The text node.
+    @param  nPos
+                The string to modify.
+    @param  pCharacter
+                The character that should replace the hidden characters.
+                If 0, the hidden ranges will be erased.
+*/
+    static USHORT MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
+                                    const xub_Unicode* pCharacter = 0 );
 
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
     // returns start index of kana entry in array, otherwise USHRT_MAX
@@ -303,5 +360,13 @@ inline BYTE SwScriptInfo::GetCompType( const USHORT nCnt ) const
     ASSERT( nCnt < aCompChg.Count(),"No CompressionType today!");
     return aCompType[ nCnt ];
 }
+
+inline USHORT SwScriptInfo::CountHiddenChg() const { return aHiddenChg.Count(); };
+inline xub_StrLen SwScriptInfo::GetHiddenChg( const USHORT nCnt ) const
+{
+    ASSERT( nCnt < aHiddenChg.Count(),"No HiddenChg today!");
+    return aHiddenChg[ nCnt ];
+}
+
 
 #endif
