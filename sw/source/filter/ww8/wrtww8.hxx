@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:20:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,7 +724,7 @@ public:
 
             // nach aussen interessant
 
-    SwWW8Writer( const String& rFltName );
+    SwWW8Writer( const String& rFltName, const String& rBaseURL );
     virtual ~SwWW8Writer();
 
     // fuer WW8SaveData
