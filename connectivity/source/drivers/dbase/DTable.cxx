@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 13:31:00 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 13:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,7 +1059,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     m_aFileStream << (BYTE) aDate.GetMonth();
     m_aFileStream << (BYTE) aDate.GetDay();
     m_aFileStream << 0L;                                                                                                     // Anzahl der Datensätze
-    m_aFileStream << (USHORT)(m_pColumns->getCount() * 32 + 1);                // Kopfinformationen,
+    m_aFileStream << (USHORT)((m_pColumns->getCount()+1) * 32 + 1);                // Kopfinformationen,
                                                                         // pColumns erhält immer eine Spalte mehr
     m_aFileStream << (USHORT) 0;                                                                                     // Satzlänge wird später bestimmt
     m_aFileStream.Write(aBuffer, 20);
