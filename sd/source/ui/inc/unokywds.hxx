@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: cl $ $Date: 2001-01-19 16:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,82 +62,100 @@
 #ifndef _SD_UNOKYWDS_HXX_
 #define _SD_UNOKYWDS_HXX_
 
+#ifndef _STRING_HXX //autogen
+#include <tools/string.hxx>
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
 
+#ifndef SD_DEFINE_KEYWORDS
+#define SD_CONSTASCII_ACTION( n, s ) extern sal_Char __FAR_DATA n[sizeof(s)]
+#else
+#define SD_CONSTASCII_ACTION( n, s ) sal_Char __FAR_DATA n[sizeof(s)] = s
+#endif
+
+#define UNO_PREFIX "com.sun.star."
+
 // SdUnoStyleFamilies
-extern char __FAR_DATA sUNO_SdUnoStyleFamilies[];
-extern char __FAR_DATA sUNO_Graphic_Style_Family_Name[];
+SD_CONSTASCII_ACTION( sUNO_SdUnoStyleFamilies, "SdUnoStyleFamilies" );
+SD_CONSTASCII_ACTION( sUNO_Graphic_Style_Family_Name, "graphics" );
 
 // SdUnoPseudoStyleFamily
-extern char __FAR_DATA sUNO_SdUnoPseudoStyleFamily[];
-extern char __FAR_DATA sUNO_PseudoSheet_Title[];
-extern char __FAR_DATA sUNO_PseudoSheet_SubTitle[];
-extern char __FAR_DATA sUNO_PseudoSheet_Background[];
-extern char __FAR_DATA sUNO_PseudoSheet_Background_Objects[];
-extern char __FAR_DATA sUNO_PseudoSheet_Notes[];
-extern char __FAR_DATA sUNO_PseudoSheet_Outline1[];
-extern char __FAR_DATA sUNO_PseudoSheet_Outline2[];
-extern char __FAR_DATA sUNO_PseudoSheet_Outline3[];
-extern char __FAR_DATA sUNO_PseudoSheet_Outline4[];
-extern char __FAR_DATA sUNO_PseudoSheet_Outline5[];
-extern char __FAR_DATA sUNO_PseudoSheet_Outline6[];
-extern char __FAR_DATA sUNO_PseudoSheet_Outline7[];
-extern char __FAR_DATA sUNO_PseudoSheet_Outline8[];
-extern char __FAR_DATA sUNO_PseudoSheet_Outline9[];
-
-// SdUnoGraphicStyleFamily
-extern char __FAR_DATA sUNO_SdUnoGraphicStyleFamily[];
-extern char __FAR_DATA sUNO_StyleName_standard[];
-extern char __FAR_DATA sUNO_StyleName_objwitharrow[];
-extern char __FAR_DATA sUNO_StyleName_objwithshadow[];
-extern char __FAR_DATA sUNO_StyleName_objwithoutfill[];
-extern char __FAR_DATA sUNO_StyleName_text[];
-extern char __FAR_DATA sUNO_StyleName_textbody[];
-extern char __FAR_DATA sUNO_StyleName_textbodyjust[];
-extern char __FAR_DATA sUNO_StyleName_textbodyindent[];
-extern char __FAR_DATA sUNO_StyleName_title[];
-extern char __FAR_DATA sUNO_StyleName_title1[];
-extern char __FAR_DATA sUNO_StyleName_title2[];
-extern char __FAR_DATA sUNO_StyleName_headline[];
-extern char __FAR_DATA sUNO_StyleName_headline1[];
-extern char __FAR_DATA sUNO_StyleName_headline2[];
-extern char __FAR_DATA sUNO_StyleName_measure[];
-
-// sUNO_SdUnoGraphicStyle
-extern char __FAR_DATA sUNO_SdUnoGraphicStyle[];
+SD_CONSTASCII_ACTION( sUNO_SdUnoPseudoStyleFamily, "SdUnoPseudoStyleFamily" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Title, "title" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_SubTitle, "subtitle" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Background, "background" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Background_Objects, "backgroundobjects" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Notes, "notes" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline1, "outline1" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline2, "outline2" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline3, "outline3" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline4, "outline4" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline5, "outline5" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline6, "outline6" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline7, "outline7" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline8, "outline8" );
+SD_CONSTASCII_ACTION( sUNO_PseudoSheet_Outline9, "outline9" );
 
 // SdUnoPseudoStyle
-extern char __FAR_DATA sUNO_SdUnoPseudoStyle[];
+SD_CONSTASCII_ACTION( sUNO_SdUnoPseudoStyle, "SdUnoPseudoStyle" );
+
+// SdUnoGraphicStyleFamily
+SD_CONSTASCII_ACTION( sUNO_SdUnoGraphicStyleFamily, "SdUnoGraphicStyleFamily" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_standard, "standard" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_objwitharrow, "objectwitharrow" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_objwithshadow, "objectwithshadow" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_objwithoutfill, "objectwithoutfill" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_text, "text" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_textbody, "textbody" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_textbodyjust, "textbodyjustfied" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_textbodyindent, "textbodyindent" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_title, "title" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_title1, "title1" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_title2, "title2" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_headline, "headline" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_headline1, "headline1" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_headline2, "headline2" );
+SD_CONSTASCII_ACTION( sUNO_StyleName_measure, "measure" );
+
+// SdUnoGraphicStyle
+SD_CONSTASCII_ACTION( sUNO_SdUnoGraphicStyle, "SdUnoGraphicStyle" );
 
 // SdUnoPageBackground
-extern char __FAR_DATA sUNO_SdUnoPageBackground[];
+SD_CONSTASCII_ACTION( sUNO_SdUnoPageBackground, "SdUnoPageBackground" );
 
 // SdLayerManager
-extern char __FAR_DATA sUNO_SdLayerManager[];
+SD_CONSTASCII_ACTION( sUNO_SdLayerManager, "SdUnoLayerManager" );
 
 // SdLayer
-extern char __FAR_DATA sUNO_SdLayer[];
+SD_CONSTASCII_ACTION( sUNO_SdLayer, "SdUnoLayer" );
+SD_CONSTASCII_ACTION( sUNO_LayerName_background,         "background" );
+SD_CONSTASCII_ACTION( sUNO_LayerName_background_objects, "backgroundobjects" );
+SD_CONSTASCII_ACTION( sUNO_LayerName_layout,             "layout" );
+SD_CONSTASCII_ACTION( sUNO_LayerName_controls,           "controls" );
+SD_CONSTASCII_ACTION( sUNO_LayerName_measurelines,       "measurelines" );
 
 // SdXShape
-extern char __FAR_DATA sUNO_shape_style[];
+SD_CONSTASCII_ACTION( sUNO_shape_style, "Style" );
+SD_CONSTASCII_ACTION( sUNO_shape_layername, "LayerName" );
 
-// service names
-extern char __FAR_DATA sUNO_Service_StyleFamily[];
-extern char __FAR_DATA sUNO_Service_StyleFamilies[];
-extern char __FAR_DATA sUNO_Service_Style[];
-extern char __FAR_DATA sUNO_Service_AreaShapeDescriptor[];
-extern char __FAR_DATA sUNO_Service_LineShapeDescriptor[];
-extern char __FAR_DATA sUNO_Service_ParagraphProperties[];
-extern char __FAR_DATA sUNO_Service_CharacterProperties[];
-extern char __FAR_DATA sUNO_Service_Text[];
-extern char __FAR_DATA sUNO_Service_PageBackground[];
-extern char __FAR_DATA sUNO_Service_DrawingLayer[];
-extern char __FAR_DATA sUNO_Service_DrawingLayerManager[];
+// services
+SD_CONSTASCII_ACTION( sUNO_Service_StyleFamily, UNO_PREFIX "style.StyleFamily" );
+SD_CONSTASCII_ACTION( sUNO_Service_StyleFamilies, UNO_PREFIX "style.StyleFamilies" );
+SD_CONSTASCII_ACTION( sUNO_Service_Style, UNO_PREFIX "style.Style" );
+SD_CONSTASCII_ACTION( sUNO_Service_AreaShapeDescriptor, UNO_PREFIX "drawing.AreaShapeDescriptor" );
+SD_CONSTASCII_ACTION( sUNO_Service_LineShapeDescriptor, UNO_PREFIX "drawing.LineShapeDescriptor" );
+SD_CONSTASCII_ACTION( sUNO_Service_ParagraphProperties, UNO_PREFIX "style.ParagraphProperties" );
+SD_CONSTASCII_ACTION( sUNO_Service_CharacterProperties, UNO_PREFIX "style.CharacterProperties" );
+SD_CONSTASCII_ACTION( sUNO_Service_Text, UNO_PREFIX "drawing.Text" );
+SD_CONSTASCII_ACTION( sUNO_Service_PageBackground, UNO_PREFIX "drawing.PageBackground" );
+SD_CONSTASCII_ACTION( sUNO_Service_DrawingLayer, UNO_PREFIX "drawing.Layer" );
+SD_CONSTASCII_ACTION( sUNO_Service_DrawingLayerManager, UNO_PREFIX "drawing.LayerManager" );
 
 // properties
-extern char __FAR_DATA sUNO_Prop_Background[];
+SD_CONSTASCII_ACTION( sUNO_Prop_Background, "Background" );
 
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolayer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: cl $ $Date: 2001-01-19 16:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
+#include "glob.hrc"
 
 #include "unokywds.hxx"
 
@@ -132,6 +133,63 @@ const SfxItemPropertyMap* ImplGetSdLayerPropertyMap()
     };
 
     return aSdLayerPropertyMap_Impl;
+}
+
+String SdLayer::convertToInternalName( const OUString& rName )
+{
+    if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_LayerName_background) ) )
+    {
+        return String( SdResId( STR_LAYER_BCKGRND ) );
+    }
+    else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_LayerName_background_objects) ) )
+    {
+        return  String( SdResId( STR_LAYER_BCKGRNDOBJ ) );
+    }
+    else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_LayerName_layout) ) )
+    {
+        return  String( SdResId( STR_LAYER_LAYOUT ) );
+    }
+    else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_LayerName_controls) ) )
+    {
+        return  String( SdResId( STR_LAYER_CONTROLS ) );
+    }
+    else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_LayerName_measurelines) ) )
+    {
+        return  String( SdResId( STR_LAYER_MEASURELINES ) );
+    }
+    else
+    {
+        return String( rName );
+    }
+}
+
+OUString SdLayer::convertToExternalName( const String& rName )
+{
+    const String aCompare( rName );
+    if( rName == String( SdResId( STR_LAYER_BCKGRND ) ) )
+    {
+        return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_background) );
+    }
+    else if( rName == String( SdResId( STR_LAYER_BCKGRNDOBJ ) ) )
+    {
+        return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_background_objects) );
+    }
+    else if( rName == String( SdResId( STR_LAYER_LAYOUT ) ) )
+    {
+        return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_layout) );
+    }
+    else if( rName == String( SdResId( STR_LAYER_CONTROLS ) ) )
+    {
+        return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_controls) );
+    }
+    else if( rName == String( SdResId( STR_LAYER_MEASURELINES ) ) )
+    {
+        return OUString( RTL_CONSTASCII_USTRINGPARAM(sUNO_LayerName_measurelines) );
+    }
+    else
+    {
+        return OUString( rName );
+    }
 }
 
 /** */
@@ -221,7 +279,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         if(!(aValue >>= aName))
             throw lang::IllegalArgumentException();
 
-        pLayer->SetName(aName);
+        pLayer->SetName(SdLayer::convertToInternalName( aName ) );
         pLayerManager->UpdateLayerView();
         break;
     }
@@ -259,7 +317,7 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
         break;
     case WID_LAYER_NAME:
     {
-        OUString aRet( pLayer->GetName() );
+        OUString aRet( SdLayer::convertToExternalName( pLayer->GetName() ) );
         aValue <<= aRet;
         break;
     }
@@ -437,18 +495,11 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
             nLayer++;
         }
 
-        if(rModel.pDocShell)
-        {
-            SdViewShell* pViewSh = rModel.pDocShell->GetViewShell();
-            if(pViewSh)
-            {
-
-                SdrLayer* pNewLayer = pViewSh->GetView()->InsertNewLayer(aLayerName, nIndex );
-                xLayer = new SdLayer( this, pNewLayer );
-
-                rModel.SetModified();
-            }
-        }
+        SdrLayerAdmin& rLA=rModel.pDoc->GetLayerAdmin();
+        const sal_Int32 nMax=rLA.GetLayerCount();
+        if (nIndex>nMax) nIndex=nMax;
+        xLayer = new SdLayer( this, rLA.NewLayer(aLayerName,(USHORT)nIndex) );
+        rModel.SetModified();
     }
     return xLayer;
 }
@@ -541,7 +592,7 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
     if( rModel.pDoc )
     {
         SdrLayerAdmin& rLayerAdmin = rModel.pDoc->GetLayerAdmin();
-        uno::Reference< drawing::XLayer >  xLM = new SdLayer( (SdLayerManager*)this, rLayerAdmin.GetLayer(nLayer) );
+        uno::Reference< drawing::XLayer > xLM( new SdLayer( (SdLayerManager*)this, rLayerAdmin.GetLayer(nLayer) ) );
         aAny <<= xLM;
     }
     return aAny;
@@ -561,7 +612,7 @@ uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
     if( rModel.pDoc )
     {
         SdrLayerAdmin& rLayerAdmin = rModel.pDoc->GetLayerAdmin();
-        SdrLayer* pLayer = rLayerAdmin.GetLayer( aName, FALSE );
+        SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), FALSE );
         if( pLayer == NULL )
             throw container::NoSuchElementException();
 
@@ -591,7 +642,7 @@ uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
     {
         pLayer = rLayerAdmin.GetLayer( nLayer );
         if( pLayer )
-            *pStrings++ = pLayer->GetName();
+            *pStrings++ = SdLayer::convertToExternalName( pLayer->GetName() );
     }
 
     return aSeq;
@@ -603,7 +654,7 @@ sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName ) throw(uno::
 
     SdrLayerAdmin& rLayerAdmin = rModel.pDoc->GetLayerAdmin();
 
-    return NULL != rLayerAdmin.GetLayer( aName, FALSE );
+    return NULL != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), FALSE );
 }
 
 // XElementAccess

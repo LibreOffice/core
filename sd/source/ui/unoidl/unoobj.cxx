@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:04:14 $
+ *  last change: $Author: cl $ $Date: 2001-01-19 16:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 #include "docshell.hxx"
 #include "helpids.h"
 #include "glob.hxx"
+#include "unolayer.hxx"
 
 using namespace ::vos;
 using namespace ::rtl;
@@ -443,10 +444,21 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
     }
     else
     {
+        uno::Any aAny( aValue );
+
+        if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_layername ) ) )
+        {
+            OUString aName;
+            if( aAny >>= aName )
+            {
+                aName = SdLayer::convertToInternalName( aName );
+                aAny <<= aName;
+            }
+        }
         uno::Reference< beans::XPropertySet >  xPrSet;
-        uno::Any aAny(mxShapeAgg->queryAggregation( ITYPE( beans::XPropertySet ) ) );
-        if( aAny >>= xPrSet)
-            xPrSet->setPropertyValue(aPropertyName, aValue);
+        mxShapeAgg->queryAggregation( ITYPE( beans::XPropertySet ) ) >>= xPrSet;
+        if( xPrSet.is() )
+            xPrSet->setPropertyValue(aPropertyName, aAny);
     }
 
     if( mpModel )
@@ -547,7 +559,20 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         uno::Any aAny(mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertySet >*)0)));
 
         if( aAny >>= xPrSet)
+        {
             aRet = xPrSet->getPropertyValue(PropertyName);
+
+            if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_layername ) ) )
+            {
+                OUString aName;
+                if( aRet >>= aName )
+                {
+                    aName = SdLayer::convertToExternalName( aName );
+                    aRet <<= aName;
+                }
+            }
+        }
+
     }
 
     return aRet;

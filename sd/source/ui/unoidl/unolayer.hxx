@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolayer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: cl $ $Date: 2001-01-19 16:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@ public:
 
     // intern
     SdrLayer* GetSdrLayer() const throw() { return pLayer; }
+
+    static String convertToInternalName( const ::rtl::OUString& rName );
+    static ::rtl::OUString convertToExternalName( const String& rName );
 
     // uno helper
     UNO3_GETIMPLEMENTATION_DECL( SdLayer )
