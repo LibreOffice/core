@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:46:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ private:
     sal_Bool mbCompleteSheetSelected;
 
 public:
-    sal_uInt16 getVisibleTable() const; // use it in ScChildrenShapes
+    SCTAB getVisibleTable() const; // use it in ScChildrenShapes
 
 private:
     void FreeAccessibleSpreadsheet();
