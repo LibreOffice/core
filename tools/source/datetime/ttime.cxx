@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-06-11 17:17:46 $
+ *  last change: $Author: er $ $Date: 2002-04-15 10:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,15 @@ Time operator -( const Time& rTime1, const Time& rTime2 )
 {
     return Sec100ToTime( TimeToSec100( rTime1 ) -
                          TimeToSec100( rTime2 ) );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Time::IsEqualIgnore100Sec( const Time& rTime ) const
+{
+    long n1 = (nTime < 0 ? -Get100Sec() : Get100Sec() );
+    long n2 = (rTime.nTime < 0 ? -rTime.Get100Sec() : rTime.Get100Sec() );
+    return (nTime - n1) == (rTime.nTime - n2);
 }
 
 // -----------------------------------------------------------------------
