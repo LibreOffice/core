@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-19 15:31:21 $
+ *  last change: $Author: od $ $Date: 2002-10-24 09:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,9 +504,7 @@ BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm, long nBottom )
 {
     BOOL bRet = FALSE;
     const SwFrm* pOldUp = pFrm->GetUpper();
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pFrm )
-#endif
     do
     {
         if( pFrm->IsLayoutFrm() )
@@ -517,13 +515,9 @@ BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm, long nBottom )
                 bRet |= lcl_InnerCalcLayout( ((SwLayoutFrm*)pFrm)->Lower(), nBottom);
         }
         pFrm = pFrm->GetNext();
-#ifdef VERTICAL_LAYOUT
     } while( pFrm &&
             (*fnRect->fnYDiff)((pFrm->Frm().*fnRect->fnGetTop)(), nBottom) < 0
             && pFrm->GetUpper() == pOldUp );
-#else
-    } while( pFrm && pFrm->Frm().Top() < nBottom && pFrm->GetUpper()==pOldUp );
-#endif
     return bRet;
 }
 
@@ -747,9 +741,7 @@ void SwTabFrm::MakeAll()
         }
     }
 
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( this )
-#endif
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
@@ -760,19 +752,11 @@ void SwTabFrm::MakeAll()
                 bCalcLowers = TRUE;
             }
 
-#ifdef VERTICAL_LAYOUT
         Point aOldPos( (Frm().*fnRect->fnGetPos)() );
         MakePos();
         if ( aOldPos != (Frm().*fnRect->fnGetPos)() )
         {
             if ( aOldPos.Y() != (Frm().*fnRect->fnGetTop)() )
-#else
-        Point aOldPos( Frm().Pos() );
-        MakePos();
-        if ( aOldPos != Frm().Pos() )
-        {
-            if ( aOldPos.Y() != Frm().Top() )
-#endif
             {
                 SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
                 if( pLayout )
@@ -805,7 +789,6 @@ void SwTabFrm::MakeAll()
             if ( bRepeat && pFrm )
                 pFrm = pFrm->GetNext();
             if ( pFrm )
-#ifdef VERTICAL_LAYOUT
                 n1StLineHeight = (pFrm->Frm().*fnRect->fnGetHeight)();
         }
 
@@ -822,24 +805,6 @@ void SwTabFrm::MakeAll()
             if ( /*!bOptLower &&*/ pLayout &&
                  ((Prt().*fnRect->fnGetWidth)() != nOldPrtWidth ||
                   (Frm().*fnRect->fnGetWidth)() != nOldFrmWidth) )
-#else
-                n1StLineHeight = pFrm->Frm().Height();
-        }
-
-        if ( !bValidSize || !bValidPrtArea )
-        {
-            const BOOL bOptLower = Frm().Height() == 0;
-
-            const long nOldPrtWidth = Prt().Width();
-            const long nOldFrmWidth = Frm().Width();
-            const Point aOldPrtPos  = Prt().Pos();
-            Format( pAttrs );
-
-            SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
-            if ( /*!bOptLower &&*/ pLayout &&
-                 (Prt().Width() != nOldPrtWidth ||
-                  Frm().Width() != nOldFrmWidth) )
-#endif
             {
                 delete pAccess;
                 bCalcLowers |= pLayout->Resize(
@@ -848,11 +813,7 @@ void SwTabFrm::MakeAll()
                 pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs = pAccess->Get();
             }
-#ifdef VERTICAL_LAYOUT
             if ( !bOptLower && aOldPrtPos != (Prt().*fnRect->fnGetPos)() )
-#else
-            if ( !bOptLower && aOldPrtPos != Prt().Pos() )
-#endif
                 aNotify.SetLowersComplete( FALSE );
 
             if ( bOptLower )
@@ -881,22 +842,14 @@ void SwTabFrm::MakeAll()
                             const FASTBOOL bOldPrev = GetPrev() != 0;
                             if ( MoveBwd( bDummy ) )
                             {
-#ifdef VERTICAL_LAYOUT
                                 SWREFRESHFN( this )
-#endif
                                 bMovedBwd = TRUE;
                                 if ( bFtnsInDoc )
                                     MoveLowerFtns( 0, pOldBoss, 0, TRUE );
 
-#ifdef VERTICAL_LAYOUT
                                 long nOldTop = (Frm().*fnRect->fnGetTop)();
                                 MakePos();
                                 if( nOldTop != (Frm().*fnRect->fnGetTop)() )
-#else
-                                long nOldTop = Frm().Top();
-                                MakePos();
-                                if( nOldTop != Frm().Top() )
-#endif
                                 {
                                     SwHTMLTableLayout *pLayout =
                                         GetTable()->GetHTMLTableLayout();
@@ -958,11 +911,7 @@ void SwTabFrm::MakeAll()
                 SwFrm *pFrm = Lower();
                 if ( bRepeat && pFrm )
                     pFrm = pFrm->GetNext();
-#ifdef VERTICAL_LAYOUT
                 if(pFrm && n1StLineHeight >(pFrm->Frm().*fnRect->fnGetHeight)())
-#else
-                if ( pFrm && n1StLineHeight > pFrm->Frm().Height() )
-#endif
                 {
                     SwTabFrm *pMaster = (SwTabFrm*)FindMaster();
                     BOOL bDummy;
@@ -974,24 +923,16 @@ void SwTabFrm::MakeAll()
             BOOL bReformat;
             if ( MoveBwd( bReformat ) )
             {
-#ifdef VERTICAL_LAYOUT
                 SWREFRESHFN( this )
-#endif
                 bMovedBwd = TRUE;
                 aNotify.SetLowersComplete( FALSE );
                 if ( bFtnsInDoc )
                     MoveLowerFtns( 0, pOldBoss, 0, TRUE );
                 if ( bReformat || bKeep )
                 {
-#ifdef VERTICAL_LAYOUT
                     long nOldTop = (Frm().*fnRect->fnGetTop)();
                     MakePos();
                     if( nOldTop != (Frm().*fnRect->fnGetTop)() )
-#else
-                    long nOldTop = Frm().Top();
-                    MakePos();
-                    if ( nOldTop != Frm().Top() )
-#endif
                     {
                         SwHTMLTableLayout *pLayout =
                             GetTable()->GetHTMLTableLayout();
@@ -1031,25 +972,40 @@ void SwTabFrm::MakeAll()
         if ( !bValidPos || !bValidSize || !bValidPrtArea )
             continue;
 
-        //Fertig?
-#ifdef VERTICAL_LAYOUT
-        if( (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)())
-             >= 0)
-#else
-        if ( GetUpper()->Prt().Bottom()+GetUpper()->Frm().Top() >=
-             Frm().Bottom() )
-#endif
+        // check, if calculation of table frame is ready.
+
+        /// OD 23.10.2002 #103517# - Local variable <nDistanceToUpperPrtBottom>
+        ///     Introduce local variable and init it with the distance from the
+        ///     table frame bottom to the bottom of the upper printing area.
+        /// Note: negative values denotes the situation that table frame doesn't
+        ///     fit in its upper.
+        SwTwips nDistanceToUpperPrtBottom =
+                (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)());
+
+        /// OD 23.10.2002 #103517# - In online layout try to grow upper of table
+        /// frame, if table frame doesn't fit in its upper.
+        if ( nDistanceToUpperPrtBottom < 0 &&
+             GetFmt()->GetDoc()->IsBrowseMode() )
         {
-            //Wenn ich zur Unterkante des Upper noch Raum habe, so kann ich
-            //wenigstens probehalber eine weitere Zeile meines Follows
-            //aufnehmen.
+            if ( GetUpper()->Grow( -nDistanceToUpperPrtBottom ) )
+            {
+                // upper is grown --> recalculate <nDistanceToUpperPrtBottom>
+                nDistanceToUpperPrtBottom =
+                    (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)());
+            }
+        }
+
+        if( nDistanceToUpperPrtBottom >= 0)
+        {
+            // OD 23.10.2002 - translate german commentary
+            // If there is space left in the upper printing area, join as for trial
+            // at least one further row of an existing follow.
             if ( !bSplit && GetFollow() )
             {
                 BOOL bDummy;
                 if ( GetFollow()->ShouldBwdMoved( GetUpper(), FALSE, bDummy ) )
                 {
                     SwFrm *pTmp = GetUpper();
-#ifdef VERTICAL_LAYOUT
                     SwTwips nDeadLine = (pTmp->*fnRect->fnGetPrtBottom)();
                     if ( GetFmt()->GetDoc()->IsBrowseMode() )
                         nDeadLine += pTmp->Grow( LONG_MAX, TRUE );
@@ -1059,17 +1015,6 @@ void SwTabFrm::MakeAll()
                         if ( bRepeat )
                             pRow = pRow->GetNext();
                         const SwTwips nOld = (Frm().*fnRect->fnGetHeight)();
-#else
-                    SwTwips nDeadLine = pTmp->Prt().Bottom() + pTmp->Frm().Top();
-                    if ( GetFmt()->GetDoc()->IsBrowseMode() )
-                        nDeadLine += pTmp->Grow( LONG_MAX PHEIGHT, TRUE );
-                    if ( Frm().Bottom() < nDeadLine )
-                    {
-                        SwFrm *pRow = GetFollow()->Lower();
-                        if ( bRepeat )
-                            pRow = pRow->GetNext();
-                        const SwTwips nOld = Frm().Height();
-#endif
 
                         const BOOL bMoveFtns = bFtnsInDoc && pRow &&
                                                !GetFollow()->IsJoinLocked();
@@ -1086,12 +1031,8 @@ void SwTabFrm::MakeAll()
                         {
                             pRow->Cut();
                             pRow->Paste( this );
-#ifdef VERTICAL_LAYOUT
                             aNotify.AddHeightOfst(
                                         (pRow->Frm().*fnRect->fnGetHeight)() );
-#else
-                            aNotify.AddHeightOfst( pRow->Frm().Height() );
-#endif
                         }
                         //Die Fussnoten verschieben!
                         if ( pRow && bMoveFtns )
@@ -1099,11 +1040,7 @@ void SwTabFrm::MakeAll()
                                  0, pOldBoss, FindFtnBossFrm( TRUE ), TRUE ) )
                                 GetUpper()->Calc();
 
-#ifdef VERTICAL_LAYOUT
                         if ( pRow && nOld != (Frm().*fnRect->fnGetHeight)() )
-#else
-                        if ( pRow && nOld != Frm().Height() )
-#endif
                             ::lcl_Recalc( this, (SwLayoutFrm*)pRow, aNotify );
                         continue;
                     }
@@ -1178,7 +1115,6 @@ void SwTabFrm::MakeAll()
             //nur noch eine nicht Headline Zeile vorhanden ist.
             if ( !bRepeat || Lower()->GetNext()->GetNext() )
             {
-#ifdef VERTICAL_LAYOUT
                 SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
                 if( IsInSct() )
                     nDeadLine = (*fnRect->fnYInc)( nDeadLine,
@@ -1197,30 +1133,6 @@ void SwTabFrm::MakeAll()
                           (Lower()->GetNext()->Frm().*fnRect->fnGetHeight)()
                           : 0 ) );
                 if( (*fnRect->fnYDiff)(nDeadLine, nBreakLine) >=0 || !pIndPrev )
-#else
-                SwTwips nDeadLine = GetUpper()->Prt().Bottom() +
-                                    GetUpper()->Frm().Top();
-                if( IsInSct() )
-                    nDeadLine += GetUpper()->Grow( LONG_MAX PHEIGHT, TRUE );
-
-                //Zunaechst einmal sollten wir fuer Stabilitaet sorgen,
-                //denn andernfalls koennen wir nicht hinreichend zuverlaessig
-                //splitten.
-                ::lcl_CalcLayout( (SwLayoutFrm*)Lower(), nDeadLine );
-                bLowersFormatted = TRUE;
-                aNotify.SetLowersComplete( TRUE );
-                if( Frm().Bottom() < nDeadLine )
-                    continue;
-
-                //Position unter der ersten Zeile ermitteln. Wenn Headlines im
-                //Spiel sind, ist es die Pos unter der ersten nicht-Headline
-                //Zeile.
-                SwTwips nBreakLine = Lower()->Frm().Height();
-                if ( bRepeat )
-                    nBreakLine += Lower()->GetNext()->Frm().Height();
-                nBreakLine += Frm().Top() + Prt().Top();
-                if ( nBreakLine <= nDeadLine || !pIndPrev )
-#endif
                 {
                     aNotify.SubtractHeightOfst( Split( nDeadLine ) );
                     if ( aNotify.GetHeightOfst() < 0 )
@@ -1272,9 +1184,7 @@ void SwTabFrm::MakeAll()
         //Mal sehen ob ich irgenwo Platz finde...
         if ( !bMovedFwd && !MoveFwd( bMakePage, FALSE ) )
             bMakePage = FALSE;
-#ifdef VERTICAL_LAYOUT
         SWREFRESHFN( this )
-#endif
         bMovedFwd = bCalcLowers = TRUE;
         aNotify.SetLowersComplete( FALSE );
         if ( IsFollow() )
