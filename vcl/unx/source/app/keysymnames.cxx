@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: obo $ $Date: 2000-11-22 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,9 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
         int opcode, event, error;
         int major = XkbMajorVersion, minor = XkbMinorVersion;
         if( ! m_aKeyboardName.Len() &&
+            #ifndef USE_PSPRINT
             XSalIsDisplay( GetDisplay() ) &&
+            #endif
             XkbQueryExtension( GetDisplay(), &opcode, &event,&error, &major, &minor ) )
         {
             XkbDescPtr pXkbDesc = NULL;
