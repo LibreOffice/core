@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:00:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ Menu RID_LAYERTAB_POPUP
                     Text[ japanese ] = "γƒ¬γ‚¤γƒ¤γƒΌγ®ζΏε…¥(~I)...";
                     Text[ chinese_traditional ] = "ζ’ε…¥ε†ε±¤(~I)...";
             Text[ arabic ] = "...ΕΟΡΗΜ ΨΘήΙ";
-            Text[ greek ] = "~Εισαγωγή επιπέδου...";
+            Text[ greek ] = "~Eισαγωγή επιπέδου...";
             Text[ korean ] = "κ³„μΈµ μ‚½μ…(~I)...";
             Text[ turkish ] = "~Dόzey ekle...";
             Text[ language_user1 ] = " ";
@@ -374,6 +374,7 @@ Menu RID_LAYERTAB_POPUP
         MN_RENAME_LAYER
     };
 };
+
 
 
 
