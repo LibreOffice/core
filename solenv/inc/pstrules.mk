@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-16 12:59:49 $
+#   last change: $Author: hjs $ $Date: 2002-06-18 13:46:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -218,7 +218,7 @@ $(PAR)$/%.par :
     @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
     +$(PERL) $(SOLARENV)$/bin$/scp_control.pl $(*:b).scp
 .IF "$(GUI)"=="WNT"
-    cpplcc -+ -P $(INCLUDE) -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) $(SCPDEFS) -DDLLSUFFIX=$(DLLSUFFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
+    $(CPPLCC) -+ -P $(INCLUDE) -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) $(SCPDEFS) -DDLLSUFFIX=$(DLLSUFFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="SOLARIS"
@@ -228,7 +228,7 @@ $(PAR)$/%.par :
 .ENDIF
 .ENDIF
     +$(PERL) $(SOLARENV)$/bin$/scp_setcomma.pl $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre2
-    +scpcomp -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre2 -o $@
+    +$(SCPCOMP) -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre2 -o $@
     @+$(RM) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre2
     @+$(RM) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 
