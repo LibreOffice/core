@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ String STR_FILEDLG_SELECT
     Text [ ENGLISH ] = "Select" ;
     Text [ portuguese ] = "Seleccionar direct�rio" ;
     Text [ english_us ] = "Select Directory" ;
-    Text [ portuguese_brazilian ] = "Verzeichnis ausw?hlen" ;
+    Text [ portuguese_brazilian ] = "Selecionar Diret�rio" ;
     Text [ swedish ] = "V�lj katalog" ;
     Text [ danish ] = "V�lg bibliotek" ;
     Text [ italian ] = "Scelta cartella" ;
@@ -86,13 +86,16 @@ String STR_FILEDLG_SELECT
     Text[ catalan ] = "Seleccioneu el directori";
     Text[ finnish ] = "Valitse hakemisto";
     Text[ thai ] = "เลือกสารบบ";
+    Text[ czech ] = "Vybrat adresář";
+    Text[ hebrew ] = "‮בחירת ספריה‬";
+    Text[ hindi ] = "ड़ैरक्टरी चुनो";
 };
 String STR_FILEDLG_CANTCHDIR
 {
     Text = "Kann nicht in Verzeichnis wechseln" ;
     Text [ ENGLISH ] = "Can't change directory" ;
     Text [ english_us ] = "Cannot change to directory" ;
-    Text [ portuguese_brazilian ] = "Kann nicht in Verzeichnis wechseln" ;
+    Text [ portuguese_brazilian ] = "N�o foi poss�vel mudar para o diret�rio" ;
     Text [ swedish ] = "Kan inte v�xla till katalog" ;
     Text [ danish ] = "Kan ikke skifte til bibliotek" ;
     Text [ italian ] = "Impossibile passare alla cartella" ;
@@ -102,7 +105,7 @@ String STR_FILEDLG_CANTCHDIR
     Text [ portuguese ] = "Imposs�vel mudar para direct�rio" ;
     Text[ chinese_simplified ] = "无法转到目录";
     Text[ russian ] = "���������� �������� �������";
-    Text[ polish ] = "Nie mo�e zmieni� katalogu";
+    Text[ polish ] = "Nie mo�na zmieni� katalogu";
     Text[ japanese ] = "ディレクトリを変更できません。";
     Text[ chinese_traditional ] = "無法轉到目錄";
     Text[ arabic ] = "�� ���� ����� ������";
@@ -113,6 +116,9 @@ String STR_FILEDLG_CANTCHDIR
     Text[ catalan ] = "No es pot canviar el directori";
     Text[ finnish ] = "Hakemistoon ei voi siirty�";
     Text[ thai ] = "ไม่สามารถเปลี่ยนไปที่สารบบ";
+    Text[ czech ] = "Nelze přejít do adresáře";
+    Text[ hebrew ] = "‮לא ניתן לעבור אל הספריה‬";
+    Text[ hindi ] = "ड़ैरक्टरी को परिवर्तन नहीं कर सकते है";
 };
 String STR_FILEDLG_OPEN
 {
@@ -120,7 +126,7 @@ String STR_FILEDLG_OPEN
     Text [ ENGLISH ] = "Open" ;
     Text [ portuguese ] = "Abrir" ;
     Text [ english_us ] = "Open" ;
-    Text [ portuguese_brazilian ] = "?ffnen" ;
+    Text [ portuguese_brazilian ] = "Abrir" ;
     Text [ swedish ] = "�ppna" ;
     Text [ danish ] = "�bn" ;
     Text [ italian ] = "Apri" ;
@@ -140,6 +146,9 @@ String STR_FILEDLG_OPEN
     Text[ catalan ] = "Obre";
     Text[ finnish ] = "Avaa";
     Text[ thai ] = "เปิด";
+    Text[ czech ] = "Otevřít";
+    Text[ hebrew ] = "‮פתיחה‬";
+    Text[ hindi ] = "खोलो";
 };
 String STR_FILEDLG_FILE
 {
@@ -147,7 +156,7 @@ String STR_FILEDLG_FILE
     Text [ ENGLISH ] = "~File" ;
     Text [ portuguese ] = "~Ficheiro" ;
     Text [ english_us ] = "~File" ;
-    Text [ portuguese_brazilian ] = "Datei" ;
+    Text [ portuguese_brazilian ] = "~Arquivo" ;
     Text [ swedish ] = "F~il" ;
     Text [ danish ] = "Fil" ;
     Text [ italian ] = "File" ;
@@ -156,7 +165,7 @@ String STR_FILEDLG_FILE
     Text [ dutch ] = "~Bestand" ;
     Text[ chinese_simplified ] = "文件(~F)";
     Text[ russian ] = "~����";
-    Text[ polish ] = "Plik";
+    Text[ polish ] = "~Plik";
     Text[ japanese ] = "ファイル(~F)";
     Text[ chinese_traditional ] = "檔案(~F)";
     Text[ arabic ] = "���";
@@ -167,6 +176,9 @@ String STR_FILEDLG_FILE
     Text[ catalan ] = "~Fitxer";
     Text[ finnish ] = "~Tiedosto";
     Text[ thai ] = "แ~ฟ้ม";
+    Text[ czech ] = "Soubor";
+    Text[ hebrew ] = "‮קובץ‬";
+    Text[ hindi ] = "~फाइल";
 };
 String STR_FILEDLG_DIR
 {
@@ -174,7 +186,7 @@ String STR_FILEDLG_DIR
     Text [ ENGLISH ] = "~Directory" ;
     Text [ portuguese ] = "~Direct�rio" ;
     Text [ english_us ] = "~Directory" ;
-    Text [ portuguese_brazilian ] = "Verzeichnis" ;
+    Text [ portuguese_brazilian ] = "~Diret�rio" ;
     Text [ swedish ] = "~Katalog" ;
     Text [ danish ] = "Bibliotek" ;
     Text [ italian ] = "Cartella" ;
@@ -183,7 +195,7 @@ String STR_FILEDLG_DIR
     Text [ dutch ] = "~Directory" ;
     Text[ chinese_simplified ] = "目录(~D)";
     Text[ russian ] = "�������";
-    Text[ polish ] = "Katalog";
+    Text[ polish ] = "~Katalog";
     Text[ japanese ] = "ディレクトリ(~D)";
     Text[ chinese_traditional ] = "目錄(~D)";
     Text[ arabic ] = "����";
@@ -194,6 +206,9 @@ String STR_FILEDLG_DIR
     Text[ catalan ] = "~Directori";
     Text[ finnish ] = "~Hakemisto";
     Text[ thai ] = "~สารบบ";
+    Text[ czech ] = "Adresář";
+    Text[ hebrew ] = "‮ספריה‬";
+    Text[ hindi ] = "~Directory";
 };
 String STR_FILEDLG_TYPE
 {
@@ -201,7 +216,7 @@ String STR_FILEDLG_TYPE
     Text [ ENGLISH ] = "File ~type" ;
     Text [ portuguese ] = "~Tipo de ficheiro" ;
     Text [ english_us ] = "File ~type" ;
-    Text [ portuguese_brazilian ] = "Dateityp" ;
+    Text [ portuguese_brazilian ] = "~Tipo de arquivo" ;
     Text [ swedish ] = "Fil~typ" ;
     Text [ danish ] = "Filtype" ;
     Text [ italian ] = "Tipo di file" ;
@@ -210,7 +225,7 @@ String STR_FILEDLG_TYPE
     Text [ dutch ] = "Bestands~type" ;
     Text[ chinese_simplified ] = "文件类型(~T)";
     Text[ russian ] = "��� �����";
-    Text[ polish ] = "Typ pliku";
+    Text[ polish ] = "~Typ pliku";
     Text[ japanese ] = "ファイルの種類(~T)";
     Text[ chinese_traditional ] = "檔案類型(~T)";
     Text[ arabic ] = "��� �����";
@@ -221,6 +236,9 @@ String STR_FILEDLG_TYPE
     Text[ catalan ] = "~Tipus de fitxer";
     Text[ finnish ] = "Tiedosto~tyyppi";
     Text[ thai ] = "~ชนิดแฟ้ม";
+    Text[ czech ] = "Typ souboru";
+    Text[ hebrew ] = "‮סוג קובץ‬";
+    Text[ hindi ] = "फाइल ~वर्ग";
 };
 String STR_FILEDLG_CANTOPENFILE
 {
@@ -228,7 +246,7 @@ String STR_FILEDLG_CANTOPENFILE
     Text [ English ] = "Can't open file" ;
     Text [ portuguese ] = "Imposs�vel abrir ficheiro" ;
     Text [ english_us ] = "Can't open file" ;
-    Text [ portuguese_brazilian ] = "Kann Datei nicht ?fnen" ;
+    Text [ portuguese_brazilian ] = "N�o foi poss�vel abrir o arquivo" ;
     Text [ swedish ] = "Kan inte �ppna fil" ;
     Text [ danish ] = "Kan ikke �bne fil" ;
     Text [ italian ] = "Impossibile aprire il file" ;
@@ -237,7 +255,7 @@ String STR_FILEDLG_CANTOPENFILE
     Text [ dutch ] = "Kan bestand niet openen" ;
     Text[ chinese_simplified ] = "无法打开文件";
     Text[ russian ] = "���������� ������� ����";
-    Text[ polish ] = "Nie mo�e otworzy� pliku";
+    Text[ polish ] = "Nie mo�na otworzy� pliku";
     Text[ japanese ] = "ファイルを開くことができません。";
     Text[ chinese_traditional ] = "無法開啟檔案";
     Text[ arabic ] = "�� ���� ��� �����";
@@ -248,6 +266,9 @@ String STR_FILEDLG_CANTOPENFILE
     Text[ catalan ] = "No es pot obrir el fitxer";
     Text[ finnish ] = "Tiedostoa ei voi avata";
     Text[ thai ] = "ไม่สามารถเปิดแฟ้มได้";
+    Text[ czech ] = "Není možné otevřít soubor";
+    Text[ hebrew ] = "‮לא ניתן לפתוח את הקובץ‬";
+    Text[ hindi ] = "फाइल नहीं खोल सकते है";
 };
 String STR_FILEDLG_CANTOPENDIR
 {
@@ -255,7 +276,7 @@ String STR_FILEDLG_CANTOPENDIR
     Text [ English ] = "Can't open directory" ;
     Text [ portuguese ] = "Imposs�vel abrir direct�rio" ;
     Text [ english_us ] = "Can't open directory" ;
-    Text [ portuguese_brazilian ] = "Kann Verzeichnis nicht ?fnen" ;
+    Text [ portuguese_brazilian ] = "N�o foi poss�vel abrir o diret�rio" ;
     Text [ swedish ] = "Kan inte �ppna katalog" ;
     Text [ danish ] = "Kan ikke �bne bibliotek" ;
     Text [ italian ] = "Imposibile aprire la cartella" ;
@@ -264,7 +285,7 @@ String STR_FILEDLG_CANTOPENDIR
     Text [ dutch ] = "Kan map niet openen" ;
     Text[ chinese_simplified ] = "无法打开目录";
     Text[ russian ] = "���������� ������� �������";
-    Text[ polish ] = "Nie mo�e otworzy� katalogu";
+    Text[ polish ] = "Nie mo�na otworzy� katalogu";
     Text[ japanese ] = "ディレクトリを開くことができません。";
     Text[ chinese_traditional ] = "無法開啟目錄";
     Text[ arabic ] = "�� ���� ��� ������";
@@ -275,6 +296,9 @@ String STR_FILEDLG_CANTOPENDIR
     Text[ catalan ] = "No es pot obrir el directori";
     Text[ finnish ] = "Hakemistoa ei voi avata";
     Text[ thai ] = "ไม่สามารถเปิดสารบบ";
+    Text[ czech ] = "Není možné otevřít adresář";
+    Text[ hebrew ] = "‮לא ניתן לפתוח את הספריה‬";
+    Text[ hindi ] = "डैरक्टरी नहीं खोल सकते है";
 };
 String STR_FILEDLG_OVERWRITE
 {
@@ -282,7 +306,7 @@ String STR_FILEDLG_OVERWRITE
     Text [ English ] = "File exists. \nOverwrite file?" ;
     Text [ portuguese ] = "O ficheiro j� existe.\nSobregravar?" ;
     Text [ english_us ] = "This file already exists. \nOverwrite ?" ;
-    Text [ portuguese_brazilian ] = "Datei existiert. \nDatei ?erschreiben?" ;
+    Text [ portuguese_brazilian ] = "O arquivo j� existe.\nSobrescrever?" ;
     Text [ swedish ] = "Filen finns redan. \nSkriva �ver filen?" ;
     Text [ danish ] = "Filen eksisterer allerede.\nSkal den overskrives?" ;
     Text [ italian ] = "Il file esistet. \nSovrascriverlo?" ;
@@ -291,7 +315,7 @@ String STR_FILEDLG_OVERWRITE
     Text [ dutch ] = "Het bestand bestaat reeds. \nOverschrijven?" ;
     Text[ chinese_simplified ] = "文件已经存在。 \n要改写文件？";
     Text[ russian ] = "���� ��� ����������. \n����������?";
-    Text[ polish ] = "Plik ju� istnieje. \nSkasowa� plik przez zapisanie?";
+    Text[ polish ] = "Plik ju� istnieje. \nCzy go zast�pi�?";
     Text[ japanese ] = "ファイルはあります。 \n上書きしますか？";
     Text[ chinese_traditional ] = "檔案存在。 \n您要覆寫檔案？";
     Text[ arabic ] = "��� ����� ����� ������.\n�� ���� ������� ����";
@@ -302,6 +326,9 @@ String STR_FILEDLG_OVERWRITE
     Text[ catalan ] = "Aquest fitxer ja existeix. \nVoleu sobreescriure'l?";
     Text[ finnish ] = "Tiedosto on jo olemassa. \nKorvataanko?";
     Text[ thai ] = "มีแฟ้มนี้อยู่แล้ว \nเขียนทับหรือไม่ ?";
+    Text[ czech ] = "Tento soubor již existuje.\nPřepsat?";
+    Text[ hebrew ] = "‮בעל שם זהה קיים כבר. האם להחליפו?‬ ‮קובץ‬";
+    Text[ hindi ] = "इस फाइल पहिले से अस्तित्व में है ।\nऑवर-रइट् करना है ?";
 };
 String STR_FILEDLG_GOUP
 {
@@ -309,7 +336,7 @@ String STR_FILEDLG_GOUP
     Text [ English ] = "Go up" ;
     Text [ portuguese ] = "Um n�vel acima" ;
     Text [ english_us ] = "Up One Level" ;
-    Text [ portuguese_brazilian ] = "Eine Ebene h?er" ;
+    Text [ portuguese_brazilian ] = "Um N�vel Acima" ;
     Text [ swedish ] = "En niv� h�gre" ;
     Text [ danish ] = "Et niveau op" ;
     Text [ italian ] = "Un livello pi� alto" ;
@@ -329,6 +356,9 @@ String STR_FILEDLG_GOUP
     Text[ catalan ] = "Un nivell amunt";
     Text[ finnish ] = "Tasoa ylemm�s";
     Text[ thai ] = "ขึ้นหนึ่งระดับ";
+    Text[ czech ] = "O úroveň výše";
+    Text[ hebrew ] = "‮רמה אחת למעלה‬";
+    Text[ hindi ] = "एक स्तर ऊपर ";
 };
 String STR_FILEDLG_SAVE
 {
@@ -336,7 +366,7 @@ String STR_FILEDLG_SAVE
     Text [ English ] = "Save" ;
     Text [ portuguese ] = "Guardar" ;
     Text [ english_us ] = "Save" ;
-    Text [ portuguese_brazilian ] = "Speichern" ;
+    Text [ portuguese_brazilian ] = "Salvar" ;
     Text [ swedish ] = "Spara" ;
     Text [ danish ] = "Gem" ;
     Text [ italian ] = "Salva" ;
@@ -356,6 +386,9 @@ String STR_FILEDLG_SAVE
     Text[ catalan ] = "Desa";
     Text[ finnish ] = "Tallenna";
     Text[ thai ] = "บันทึก";
+    Text[ czech ] = "Uložit";
+    Text[ hebrew ] = "‮שמירה‬";
+    Text[ hindi ] = "संचित करो";
 };
 String STR_FILEDLG_DRIVES
 {
@@ -363,7 +396,7 @@ String STR_FILEDLG_DRIVES
     Text [ English ] = "D~rives" ;
     Text [ portuguese ] = "~Unidades" ;
     Text [ english_us ] = "D~rive" ;
-    Text [ portuguese_brazilian ] = "Unidades" ;
+    Text [ portuguese_brazilian ] = "~Unidades" ;
     Text [ swedish ] = "~Enheter" ;
     Text [ danish ] = "Drev" ;
     Text [ italian ] = "~Drive" ;
@@ -372,7 +405,7 @@ String STR_FILEDLG_DRIVES
     Text [ dutch ] = "~Stations" ;
     Text[ chinese_simplified ] = "驱动盘(~R)";
     Text[ russian ] = "����";
-    Text[ polish ] = "Nap�dy";
+    Text[ polish ] = "~Nap�d";
     Text[ japanese ] = "ドライブ(~R)";
     Text[ chinese_traditional ] = "驅動器(~R)";
     Text[ arabic ] = "������ �������";
@@ -383,6 +416,9 @@ String STR_FILEDLG_DRIVES
     Text[ catalan ] = "~Unitat";
     Text[ finnish ] = "A~sema";
     Text[ thai ] = "ได~ร้ฟ์";
+    Text[ czech ] = "Mechanika";
+    Text[ hebrew ] = "‮כונן‬";
+    Text[ hindi ] = "ड़्र~इव्";
 };
 String STR_FILEDLG_HOME
 {
@@ -390,7 +426,7 @@ String STR_FILEDLG_HOME
     Text [ ENGLISH ] = "Home Directory" ;
     Text [ portuguese ] = "Direct�rio do utilizador" ;
     Text [ english_us ] = "User Directory" ;
-    Text [ portuguese_brazilian ] = "Verzeichnis" ;
+    Text [ portuguese_brazilian ] = "Diret�rio do Usu�rio" ;
     Text [ swedish ] = "Anv�ndarkatalog" ;
     Text [ danish ] = "Brugerbibliotek" ;
     Text [ italian ] = "Cartella utente" ;
@@ -399,7 +435,7 @@ String STR_FILEDLG_HOME
     Text [ dutch ] = "Gebruikersmap" ;
     Text[ chinese_simplified ] = "使用者目录";
     Text[ russian ] = "������� ������������";
-    Text[ polish ] = "Katalog u�ytkownik�w";
+    Text[ polish ] = "Katalog u�ytkownika";
     Text[ japanese ] = "ユーザーのディレクトリ";
     Text[ chinese_traditional ] = "自訂目錄";
     Text[ arabic ] = "���� ��������";
@@ -410,6 +446,9 @@ String STR_FILEDLG_HOME
     Text[ catalan ] = "Directori de l'usuari";
     Text[ finnish ] = "Oma hakemisto";
     Text[ thai ] = "สารบบผู้ใช้";
+    Text[ czech ] = "Adresář uživatele";
+    Text[ hebrew ] = "‮ספרית המשתמש‬";
+    Text[ hindi ] = "उपभोक्ता डैरक्टरी";
 };
 String STR_FILEDLG_NEWDIR
 {
@@ -417,7 +456,7 @@ String STR_FILEDLG_NEWDIR
     Text [ ENGLISH ] = "Create Directory" ;
     Text [ portuguese ] = "Criar direct�rio" ;
     Text [ english_us ] = "Create Directory" ;
-    Text [ portuguese_brazilian ] = "Verzeichnis" ;
+    Text [ portuguese_brazilian ] = "Criar Diret�rio" ;
     Text [ swedish ] = "Skapa katalog" ;
     Text [ danish ] = "Opret bibliotek" ;
     Text [ italian ] = "Crea cartella" ;
@@ -437,13 +476,16 @@ String STR_FILEDLG_NEWDIR
     Text[ catalan ] = "Crea un directori";
     Text[ finnish ] = "Luo hakemisto";
     Text[ thai ] = "สร้างสารบบ";
+    Text[ czech ] = "Vytvořit adresář";
+    Text[ hebrew ] = "‮יצירת ספריה‬";
+    Text[ hindi ] = "डैरक्टरी उत्पन्न करो";
 };
 String STR_FILEDLG_ASKNEWDIR
 {
     Text = "Soll das Verzeichnis %s angelegt werden ?" ;
     Text [ English ] = "Do you want the directory %s to be created ?" ;
     Text [ english_us ] = "Do you want the directory %s to be created ?" ;
-    Text [ portuguese_brazilian ] = "Soll das Verzeichnis %s angelegt werden ?" ;
+    Text [ portuguese_brazilian ] = "Deseja criar o diret�rio %s ?" ;
     Text [ swedish ] = "Skall katalogen %s skapas ?" ;
     Text [ danish ] = "Skal biblioteket %s oprettes?" ;
     Text [ italian ] = "Volete creare una cartella %s ?" ;
@@ -453,7 +495,7 @@ String STR_FILEDLG_ASKNEWDIR
     Text [ portuguese ] = "Deseja criar o direct�rio %s ?" ;
     Text[ chinese_simplified ] = "您要建立这个目录 %s ？";
     Text[ russian ] = "������� ������� %s ?";
-    Text[ polish ] = "Czy utworzy� katalog %s?";
+    Text[ polish ] = "Czy chcesz utworzy� katalog %s?";
     Text[ japanese ] = "ディレクトリ %s を作成しますか。";
     Text[ chinese_traditional ] = "您要建立這個目錄 %s ？";
     Text[ arabic ] = "�� ���� ����� ������ %s�";
@@ -464,7 +506,19 @@ String STR_FILEDLG_ASKNEWDIR
     Text[ catalan ] = "Voleu crear el directori %s?";
     Text[ finnish ] = "Haluatko luoda hakemiston %s?";
     Text[ thai ] = "คุณต้องการสร้างสารบบ %s หรือไม่?";
+    Text[ czech ] = "Přejete si vytvořit adresář %s?";
+    Text[ hebrew ] = "‮האם ליצור ספריה %s?‬";
+    Text[ hindi ] = "Do you want the directory %s to be created ?";
 };
+
+
+
+
+
+
+
+
+
 
 
 
