@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:07:51 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ void FrameworkStatusBar::StateChanged( StateChangedType nType )
 
 void FrameworkStatusBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
+    StatusBar::DataChanged( rDCEvt );
     if ( m_pMgr )
         m_pMgr->DataChanged( rDCEvt );
 }
