@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxbsdi.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:07:25 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:15:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,8 +97,7 @@ CFLAGSEXCEPTIONS=-fexceptions
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-# -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -mpentiumpro -fno-for-scope -fpermissive -frtti
+CFLAGSCXX= -pipe -mpentiumpro -frtti
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
