@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-17 14:56:18 $
+ *  last change: $Author: cmc $ $Date: 2002-10-18 14:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,11 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     {
         xInsertTextRange = SwXTextRange::CreateTextRangeFromPosition(
             &rDoc, *rPaM.GetPoint(), 0 );
+    }
+    else
+    {
+        rPaM.GetBound(true).nContent.Assign(0, 0);
+        rPaM.GetBound(false).nContent.Assign(0, 0);
     }
 
     rDoc.AddLink(); // prevent deletion
