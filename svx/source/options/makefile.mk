@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2002-09-05 13:44:48 $
+#   last change: $Author: ghiggins $ $Date: 2002-09-06 07:25:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,7 +120,6 @@ SRCFILES += optsso.src
 
 SLOFILES += $(SLO)$/optsso.obj
 
-EXCEPTIONSFILES += $(SLO)$/optsso.obj
 .ENDIF
 
 SVXLIGHTOBJFILES= \
