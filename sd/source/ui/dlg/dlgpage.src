@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:58:58 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ TabDialog TAB_PAGE
                 Text[ czech ] = "Stránka";
                 Text[ hebrew ] = "‮דף‬";
                 Text[ hindi ] = "पृष्ठ";
+                Text[ slovak ] = "Stránka";
             };
 
             PageItem
@@ -153,6 +154,7 @@ TabDialog TAB_PAGE
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
         };
     };
@@ -208,6 +210,7 @@ TabDialog TAB_PAGE
         Text[ czech ] = "Návrat";
         Text[ hebrew ] = "Zurück";
         Text[ hindi ] = "लौटना";
+        Text[ slovak ] = "Návrat";
     };
     Text[ chinese_simplified ] = "设定页面";
     Text[ russian ] = "��������� ��������";
@@ -224,7 +227,10 @@ TabDialog TAB_PAGE
     Text[ czech ] = "Nastavení stránky";
     Text[ hebrew ] = "Seite einrichten";
     Text[ hindi ] = "पृष्ठ सेटप";
+    Text[ slovak ] = "Nastavenie stránky";
 };
+
+
 
 
 
