@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: er $ $Date: 2001-06-06 14:14:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -38086,7 +38086,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english_us ] = "Looks for a string of text within another (case sensitive)" ;
             Text[ chinese_simplified ] = "ÒÔÇø·Ö´óĞ¡Ğ´×ÖÄ¸µÄ·½Ê½ÔÚÒ»¸ö×Ö´®ÄÚ²éÕÒÄ³Ò»¸ö×Ö´®¡£";
             Text[ russian ] = "Èùåò ÷àñòü ñëîâà â òåêñòå ñ ó÷åòîì ğåãèñòğà.";
-            Text[ polish ] = "Wyszukuje czêœæ s³owa w tekœcie uwzglêdniaj¹c du¿e i ma³e litery.";
+            Text[ polish ] = "Wyszukuje czêœæ s³owa w tekœcie uwzglêdniaj¹c wielkie i ma³e litery.";
             Text[ japanese ] = "w’è‚µ‚½•¶š—ñ‚ğ‘¼‚Ì(‰pš‚Ì‘å•¶š‚Æ¬•¶š‚ğ‹æ•Ê‚Å‚«‚é)•¶š—ñ‚Ì’†‚ÅŒŸõ‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¥H°Ï¤À¤j¤p¼g¦r¥Àªº¤è¦¡¦b¤@­Ó¦r¦ê¤º¬d§ä¬Y¤@­Ó¦r¦ê¡C";
             Text[ arabic ] = "ÊÈÍË Úä ÌÒÁ ãä ßáãÉ İí äÕ ãÚ ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ æÇáÕÛíÑÉ.";
@@ -41137,23 +41137,23 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Rechnet einen Wert anhand einer Umrechnungstabelle aus der Konfiguration (calc.xml) um." ;
             Text [ english ] = "Converts a value according to a conversion table defined in the configuration (calc.xml)." ;
-            Text[ english_us ] = "Converts a value according to a conversion table defined in the configuration (calc.xml).";
+            Text[ english_us ] = "Converts a value according to a conversion table in the configuration.";
             Text[ portuguese ] = "Converte um valor a partir de uma entrada da tabela convert.ini.";
-            Text[ russian ] = "Ïğåîáğàçóåò çíà÷åíèå íà îñíîâàíèè ıëåìåíòîâ òàáëèöû convert.ini.";
+            Text[ russian ] = "Ïğåîáğàçóåò çíà÷åíèå íà îñíîâàíèè òàáëèöû ïğåîáğàçîâàíèé èç êîíôèãóğàöèè.";
             Text[ dutch ] = "Converteert een waarde aan de hand van een item in de tabel convert.ini.";
-            Text[ french ] = "Convertit une valeur à partir d'une entrée de la table du fichier convert.ini.";
-            Text[ spanish ] = "Convierte un valor en base a una entrada de la tabla convert.ini";
-            Text[ italian ] = "Converte un valore in base a una voce della tabella convert.ini.";
+            Text[ french ] = "Convertit une valeur à l'aide de la table de conversion provenant de la configuration.";
+            Text[ spanish ] = "Convierte un valor en base a una tabla de conversión de la configuración.";
+            Text[ italian ] = "Converte un valore in base a una tabella di conversione della configurazione.";
             Text[ danish ] = "Konverterer en værdi ved hjælp af et element i convert.ini tabellen.";
-            Text[ swedish ] = "Räknar om ett värde med hjälp av en post i convert.ini-tabellen.";
+            Text[ swedish ] = "Räknar om ett värde med hjälp av en omräkningstabell från konfigurationen.";
             Text[ polish ] = "Konwertuje wartoœæ na podstawie wpisu tabeli convert.ini.";
             Text[ portuguese_brazilian ] = "Converts a value according to an entry of the convert.ini table.";
-            Text[ japanese ] = "convert.ini Ã°ÌŞÙ‚Ì“ü—Í€–Ú‚ğ‚à‚Æ‚É‚µ‚Ä”’l‚Ì’PˆÊ‚ğ•ÏŠ·‚µ‚Ü‚·B";
-            Text[ chinese_simplified ] = "¸ù¾İ convert.ini ÎÄ¼şÄÚµÄÌõÄ¿×ª»»Ò»¸öÊıÖµµÄ»õ±Òµ¥Î»¡£";
+            Text[ japanese ] = "İ’èÌ§²Ù‚Ì’PˆÊ•ÏŠ·•\\‚ÉŠî‚Ã‚¢‚ÄA”’l‚Ì’PˆÊ‚ğ•ÏŠ·‚µ‚Ü‚·B";
+            Text[ chinese_simplified ] = "°´ÕÕÒ»¸öÅäÖÃÎÄ¼şµÄ»»Ëã±íÀ´»»ËãÄ³Ò»¸öÊıÖµ¡£";
             Text[ chinese_traditional ] = "®Ú¾Ú¤@­Ó convert.ini ¤å¥óªº±ø¥ØÂà´«¤@­Ó¼Æ­È¡C";
             Text[ arabic ] = "ÊÍæá ŞíãÉ ÊÈÚÇğ áÅÏÎÇá İí ÌÏæá convert.ini.";
             Text[ dutch ] = "Converteert een waarde aan de hand van een item in de tabel convert.ini.";
-            Text[ chinese_simplified ] = "¸ù¾İ convert.ini ÎÄ¼şÄÚµÄÌõÄ¿×ª»»Ò»¸öÊıÖµµÄ»õ±Òµ¥Î»¡£";
+            Text[ chinese_simplified ] = "°´ÕÕÒ»¸öÅäÖÃÎÄ¼şµÄ»»Ëã±íÀ´»»ËãÄ³Ò»¸öÊıÖµ¡£";
             Text[ greek ] = "Ìåôáôñİğåé ìéá ôéìŞ óıìöùíá ìå ìéá êáôá÷şñéóç ôïõ ğßíáêá convert.ini.";
             Text[ korean ] = "convert.ini¿¡ ÀÖ´Â Ç×¸ñ¿¡µû¶ó °ªÀ» Ç¥·Î º¯È¯";
             Text[ turkish ] = "convert.ini tablosundaki girişe göre değeri dönüştürür.";
@@ -41321,7 +41321,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ italian ] = "Unità nella quale si converte; sensibile all'utilizzo delle maiuscole/minuscole.";
             Text[ danish ] = "Enhed som konverteres til (skelner mellem store og små bogstaver).";
             Text[ swedish ] = "Enhet till vilken omräkning sker, versalkänslighet är relevant.";
-            Text[ polish ] = "Jednostka do przeliczenia (uwzglêdnij du¿e i ma³e litery).";
+            Text[ polish ] = "Jednostka do przeliczenia (uwzglêdnij wielkie i ma³e litery).";
             Text[ portuguese_brazilian ] = "Unit to convert to, case sensitive.";
             Text[ japanese ] = "•ÏŠ·Œã‚Ì”’l‚Ì’PˆÊB’PˆÊ–¼‚Æ—ªŒê‚Ì‘å•¶š‚Æ¬•¶š‚Í‹æ•Ê‚³‚ê‚Ü‚·B";
             Text[ chinese_simplified ] = "Òª×ª»»³ÉµÄ»õ±Òµ¥Î»£¬Çø·Ö´óĞ¡Ğ´¡£";
@@ -41562,3 +41562,4 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
