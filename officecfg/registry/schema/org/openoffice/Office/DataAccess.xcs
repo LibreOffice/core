@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:20:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,16 +71,16 @@
 		</info>
 		<group oor:name="DatabaseNameSetting">
 			<info>
-				<desc xml:lang="en-US">Describes how to establish a database connection and how to filter and layout the database data.</desc>
+				<desc>Describes how to establish a database connection and how to filter and layout the database data.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the name of the database.</desc>
+					<desc>Specifies the name of the database.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Location" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the location of the database.</desc>
+					<desc>Specifies the location of the database.</desc>
 				</info>
 			</prop>
 		</group>
@@ -244,7 +244,7 @@
 		
 		<set oor:name="RegisteredNames" oor:node-type="DatabaseNameSetting">
 			<info>
-				<desc xml:lang="en-US">Specifies all names which are registered.</desc>
+				<desc>Specifies all names which are registered.</desc>
 			</info>
 		</set>
 
