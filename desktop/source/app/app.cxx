@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-24 11:25:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1291,8 +1291,16 @@ void Desktop::Main()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Main" );
 
+    // Remember current context object
+    com::sun::star::uno::ContextLayer layer(
+        com::sun::star::uno::getCurrentContext() );
+
     if ( m_aBootstrapError == BE_OK )
     {
+        // Detect desktop environment - need to do this as early as possible
+        com::sun::star::uno::setCurrentContext(
+            new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
+
         // Startup screen
         OpenSplashScreen();
 
@@ -1328,7 +1336,6 @@ void Desktop::Main()
 
     try
     {
-
         RegisterServices( xSMgr );
 
         SetSplashScreenProgress(15);
@@ -1352,12 +1359,6 @@ void Desktop::Main()
             return;
         }
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main <- Lockfile" );
-
-        com::sun::star::uno::ContextLayer layer(
-            com::sun::star::uno::getCurrentContext() );
-
-        com::sun::star::uno::setCurrentContext(
-            new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
         ConfigurationErrorHandler aConfigErrHandler;
         if (!ShouldSuppressUI(pCmdLineArgs))
