@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:49:07 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ japanese ] = "#lib# ÌßÛ¸Ş×Ñ×²ÌŞ×Ø‚ğ“Ç‚İ‚ß‚È‚©‚Á‚½‚©A‚Ü‚½‚Í‚»‚ê©‘Ì‚ÉÄ×ÌŞÙ‚ª‚ ‚è‚Ü‚·BODBC ÃŞ°À¿°½‚Ìİ’è‚Í‚Å‚«‚Ü‚¹‚ñB";
         Text[ korean ] = "ÇÁ·Î±×·¥ ¶óÀÌºê·¯¸® #lib#¸¦ ·ÎµåÇÒ ¼ö ¾ø¾ú°Å³ª ¶Ç´Â °íÀåÀÔ´Ï´Ù.  ODBCµ¥ÀÌÅÍ ¼Ò½º ÄÁÇÇ±Ô·¹ÀÌ¼ÇÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÎŞ·¨×°Èë³ÌĞò¿â #lib# »òÒÑ¾­Ëğ»µ¡£ÎŞ·¨ÅäÖÃ ODBC Êı¾İÔ´¡£";
-        Text[ chinese_traditional ] = "µLªk¸Ë¤Jµ{¦¡®w #lib# ©Î¤w¸g·l§¥¡CµLªk³]©w ODBC ¸ê®Æ¨Ó·½¡C";
+        Text[ chinese_traditional ] = "µLªk¸ü¤Jµ{¦¡®w #lib# ©Î¤w¸g·l§¥¡CµLªk³]©w ODBC ¸ê®Æ¨Ó·½¡C";
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ arabic ] = "ÅãÇ Ãäå ÊÚĞÑ ÊÍãíá ãßÊÈÉ ÇáÈÑäÇãÌ #lib#¡ Ãæ ÃäåÇ ãÚØæÈÉ. Êßæíä ãÕÇÏÑ ÈíÇäÇÊ ODBC ÛíÑ ãÊæİÑ.";
     };
@@ -233,6 +233,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/01/26 20:49:07  kz
+ *  Merge SWT614: 26.01.01 - 21:48:43
+ *
  *  Revision 1.7  2000/11/29 09:49:28  kz
  *  Merge SRC614: 29.11.00 - 10:48:38 (NoBranch)
  *
