@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dg $ $Date: 2001-03-30 13:35:17 $
+#   last change: $Author: dg $ $Date: 2001-06-19 16:55:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,8 +60,18 @@
 #
 #*************************************************************************
 
-$(MISC)$/instance$/%.xml : %.xcd	
-    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar org.openoffice.configuration.SchemaImport $< $(PRJ)$/util$/instance.xsl $(MISC)
+$(MISC)$/instance$/%.xml : %.xcd
+    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar org.openoffice.configuration.XMLDefaultGenerator $< $(PRJ)$/util $(MISC) $(PRJ)$/data
+
+$(MISC)$/ldap$/%.conf : %.xcd
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/ldap-schema.xsl $@
+
+$(MISC)$/ldif$/%.ldif : %.xcd
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar org.openoffice.configuration.LDIFImport $< $(PRJ)$/util$/ldif.xsl $@ $(PRJ)$/data
+
+
+
+
 
 
 
