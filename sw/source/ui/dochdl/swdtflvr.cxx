@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-08 17:30:33 $
+ *  last change: $Author: os $ $Date: 2001-08-09 05:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,9 @@
 #endif
 #ifndef _NAVICONT_HXX
 #include <navicont.hxx>
+#endif
+#ifndef _SWCONT_HXX
+#include <swcont.hxx>
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
@@ -1148,7 +1151,7 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
             SwTransferable::PasteData( rData, rSh, nAction, nFormat,
-                                        nDestination, FALSE );
+                                        nDestination, FALSE, FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -1156,6 +1159,7 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
 int SwTransferable::PasteData( TransferableDataHelper& rData,
                             SwWrtShell& rSh, USHORT nAction, ULONG nFormat,
                             USHORT nDestination, BOOL bIsPasteFmt,
+                            sal_Bool bIsDefault,
                             const Point* pPt, sal_Int8 nDropAction )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), FALSE );
@@ -1335,6 +1339,15 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
                     NaviContentBookmark aBkmk;
                     if( aBkmk.Paste( rData ) )
                     {
+                        if(bIsDefault)
+                        {
+                            switch(aBkmk.GetDefaultDragType())
+                            {
+                                case REGION_MODE_NONE: nClearedAction = EXCHG_IN_ACTION_COPY; break;
+                                case REGION_MODE_EMBEDDED: nClearedAction = EXCHG_IN_ACTION_MOVE; break;
+                                case REGION_MODE_LINK: nClearedAction = EXCHG_IN_ACTION_LINK; break;
+                            }
+                        }
                         rSh.NavigatorPaste( aBkmk, nClearedAction );
                         nRet = 1;
                     }
@@ -2646,7 +2659,7 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
 
         if( EXCHG_INOUT_ACTION_NONE != nAction )
             nRet = SwTransferable::PasteData( rData, rSh, nAction, nFormat,
-                                                nDestination, TRUE );
+                                                nDestination, TRUE, FALSE );
     }
     return nRet;
 }

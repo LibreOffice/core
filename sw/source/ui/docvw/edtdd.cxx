@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-01 10:12:08 $
+ *  last change: $Author: os $ $Date: 2001-08-09 05:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     nRet = rEvt.mnAction;
     if( !SwTransferable::PasteData( aData, rSh, nDropAction, nDropFormat,
-                                nDropDestination, FALSE, &aDocPt, nRet ))
+                                nDropDestination, FALSE, rEvt.mbDefault, &aDocPt, nRet))
 //!!    nRet = OFF_APP()->ExecuteDrop( rEvt );
         nRet = DND_ACTION_NONE;
     else if ( SW_MOD()->pDragDrop )
@@ -569,6 +569,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/08/01 10:12:08  jp
+    Bug #90411#: DragFinished calls also the DropCleanUp for showing the correct TextCursor
+
     Revision 1.4  2001/05/07 14:49:00  jp
     use the correct D&D constants
 
