@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-05 23:10:57 $
+ *  last change: $Author: cl $ $Date: 2002-12-12 10:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,7 @@
 #include <tstpitem.hxx>
 #include <lspcitem.hxx>
 
-#ifdef DBG_UTIL
 #include <flditem.hxx>
-#endif
 
 #include <impedit.hxx>
 #include <editeng.hxx>
