@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:03:04 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,6 @@ class SwXCellRange : public cppu::WeakImplHelper7
     sal_Bool                        bFirstColumnAsLabel :1;
 
 public:
-    SwXCellRange();
     SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
     ~SwXCellRange();
 
