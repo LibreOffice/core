@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:10:06 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String STR_SVT_STYLE_LIGHT
     Text[ chinese_traditional ] = "²Ó";
     Text[ arabic ] = "İÇÊÍ";
     Text[ greek ] = "Áğáëü";
-    Text[ korean ] = "Light";
+    Text[ korean ] = "°¡´Â";
     Text[ turkish ] = "İnce";
     Text[ language_user1 ] = " ";
 };
@@ -105,7 +105,7 @@ String STR_SVT_STYLE_LIGHT_ITALIC
     Text[ chinese_traditional ] = "²Ó±×Åé";
     Text[ arabic ] = "İÇÊÍ ãÇÆá";
     Text[ greek ] = "ĞëÜãéá ÁğáëÜ";
-    Text[ korean ] = "°¡º­¿î ÀÌÅÅ¸¯Ã¼";
+    Text[ korean ] = "°¡´Â ÀÌÅÅ¸¯Ã¼";
     Text[ turkish ] = "İnce italik";
     Text[ language_user1 ] = " ";
 };
@@ -256,7 +256,7 @@ String STR_SVT_STYLE_BLACK_ITALIC
     Text[ chinese_traditional ] = "¶Â±×Åé";
     Text[ arabic ] = "ÃÓæÏ ãÇÆá";
     Text[ greek ] = "ĞëÜãéá Ìáıñï";
-    Text[ korean ] = "Èæ»ö, ÀÌÅÅ¸¯Ã¼";
+    Text[ korean ] = "°Ë°Ô, ÀÌÅÅ¸¯Ã¼";
     Text[ turkish ] = "Siyah italik";
 };
 
@@ -368,7 +368,7 @@ String STR_SVT_FONTMAP_SIZENOTAVAILABLE
     TEXT[ polish ] = "Dany rozmiar czcionki nie jest zaistalowany. U¿yty zostanie najbardziej pasuj¹cy, ju¿ istniej¹ca rozmiar.";
     TEXT[ portuguese_brazilian ] = "This font size is not installed. The closest available size will be used.";
     TEXT[ japanese ] = "‚±‚ÌÌ«İÄ»²½Ş‚Í²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBÅ‚à“KØ‚È»²½Ş‚ª‘I‚Î‚ê‚Ü‚·B";
-    TEXT[ korean ] = "ÀÌ ±Û²ÃÀÇ Å©±â´Â ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. À¯È¿ÇÑ °¡Àå À¯»çÇÑ Å©±â°¡ »ç¿ëµÉ°Í ÀÔ´Ï´Ù.";
+    TEXT[ korean ] = "ÀÌ ±Û²ÃÀÇ Å©±â´Â ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. ±âÁ¸ÀÇ¡¡°¡Àå ÀûÇÕÇÑ Å©±â°¡ »ç¿ëµÉ°Í ÀÔ´Ï´Ù.";
     TEXT[ chinese_simplified ] = "Ã»ÓĞ°²×°ÕâÖÖ×ÖÌå´óĞ¡¡£Ê¹ÓÃµÄÊÇÏÖÓĞµÄ×î½Ó½üµÄ×ÖÌå´óĞ¡¡£";
     TEXT[ chinese_traditional ] = "¨S¦³¦w¸Ë³o­Ó¦r«¬¡C±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
     TEXT[ arabic ] = "ÍÌã ÇáÎØ åĞÇ ÛíÑ ãËÈÊ. Óæİ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÃÍÌÇã ÇáãæÌæÏÉ ŞÑÈÇğ áå.";
@@ -392,7 +392,7 @@ String STR_SVT_FONTMAP_STYLENOTAVAILABLE
     TEXT[ polish ] = "Dany styl czcionki zostanie skopiowany lub zostanie u¿yty najlepiej pasuj¹cy styl.";
     TEXT[ portuguese_brazilian ] = "This font style will be generated or the closest matching style will be used.";
     TEXT[ japanese ] = "‚±‚ÌÌ«İÄ½À²Ù‚ÍC³‚³‚ê‚é‚©A‚Ü‚½‚ÍÅ‚à“KØ‚È½À²Ù‚ªg—p‚³‚ê‚Ü‚·B";
-    TEXT[ korean ] = "ÀÌ ±Û²ÃÃ¼¿¡ °¡Àå À¯»çÇÑ ±Û²ÃÃ¼°¡ »ç¿ëµÉ°Í ÀÔ´Ï´Ù.";
+    TEXT[ korean ] = "ÀÌ ±Û²ÃÃ¼¿¡ °¡Àå ÀûÇÕÇÑ ±Û²ÃÃ¼°¡ »ç¿ëµÉ°Í ÀÔ´Ï´Ù.";
     TEXT[ chinese_simplified ] = "Éú³ÉÕâÖÖ×ÖÌå»òÊ¹ÓÃ×î½Ó½üµÄ×ÖÌå¡£";
     TEXT[ chinese_traditional ] = "¼Ò¥é³o­Ó¦r«¬©Î±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
     TEXT[ arabic ] = "Óæİ íÊã ÊŞáíÏ äãØ ÇáÎØ åĞÇ¡ Ãæ Óæİ íÊã ÇÓÊÎÏÇã ÃŞÑÈ äãØğ áå.";
@@ -417,7 +417,7 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ polish ] = "Dana czcionka nie jest zainstalowana.U¿yta zostanie najbardziej pasuj¹ca, ju¿ istniej¹ca czcionka.";
     TEXT[ portuguese_brazilian ] = "This font is not installed. The closest available font will be used.";
     TEXT[ japanese ] = "‚±‚ÌÌ«İÄ‚Í²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBÅ‚à“KØ‚ÈÌ«İÄ‚ª‘I‚Î‚ê‚Ü‚·B";
-    TEXT[ korean ] = "ÀÌ ±Û²ÃÀº ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. À¯È¿ÇÑ °¡Àå À¯»çÇÑ ±Û²ÃÀÌ »ç¿ëµÉ°Í ÀÔ´Ï´Ù.";
+    TEXT[ korean ] = "ÀÌ ±Û²ÃÀº ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. ±âÁ¸ÀÇ °¡Àå ÀûÇÕÇÑ ±Û²ÃÀÌ »ç¿ëµÉ°Í ÀÔ´Ï´Ù.";
     TEXT[ chinese_simplified ] = "Ã»ÓĞ°²×°ÕâÖÖ×ÖÌå¡£Ê¹ÓÃµÄÊÇÏÖÓĞµÄ×î½Ó½üµÄ×ÖÌå¡£";
     TEXT[ chinese_traditional ] = "¨S¦³¦w¸Ë³o­Ó¦r«¬¡C±Ä¥Î³Ìªñ¦üªº¦r«¬¡C";
     TEXT[ arabic ] = "åĞÇ ÇáÎØ ÛíÑ ãËÈÊ. Óæİ íÊã ÇÓÊÎÏÇã ÃßËÑ ÇáÎØæØ ÇáãæÌæÏÉ ŞÑÈÇğ áå.";
