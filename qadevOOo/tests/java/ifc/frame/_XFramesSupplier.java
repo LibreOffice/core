@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFramesSupplier.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 12:15:46 $
+ *  last change:$Date: 2003-09-08 10:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 
 package ifc.frame;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XFramesSupplier;
-import lib.MultiMethodTest;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 
