@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 09:15:16 $
+ *  last change: $Author: mib $ $Date: 2001-09-05 08:32:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,17 +275,68 @@ SV_IMPL_OP_PTRARR_SORT( OUStringsSort_Impl, OUStringPtr )
 static txtparae_bContainsIllegalCharacters = sal_False;
 #endif
 
+// The following map shows which property values are required:
+//
+// property                     auto style pass     export
+// --------------------------------------------------------
+// ParaStyleName                if style exists     always
+// ParaConditionalStyleName     if style exists     always
+// NumberingRules               if style exists     always
+// TextSection                  always              always
+// ParaChapterNumberingLevel    never               always
+
+// The conclusion is that for auto styles the first three properties
+// should be queried using a multi property set if, and only if, an
+// auto style needs to be exported. TextSection should be queried by
+// an individual call to getPropertyvalue, because this seems to be
+// less expensive than querying the first three properties if they aren't
+// required.
+
+// For the export pass all properties can be queried using a multi property
+// set.
+
+static const sal_Char* aParagraphPropertyNamesAuto[] =
+{
+    "NumberingRules",
+    "ParaConditionalStyleName",
+    "ParaStyleName",
+    NULL
+};
+
+enum eParagraphPropertyNamesEnumAuto
+{
+    NUMBERING_RULES_AUTO = 0,
+    PARA_CONDITIONAL_STYLE_NAME_AUTO = 1,
+    PARA_STYLE_NAME_AUTO = 2,
+};
+
+static const sal_Char* aParagraphPropertyNames[] =
+{
+    "ParaChapterNumberingLevel",
+    "ParaConditionalStyleName",
+    "ParaStyleName",
+    "TextSection",
+    NULL
+};
+
+enum eParagraphPropertyNamesEnum
+{
+    PARA_CHAPTER_NUMERBING_LEVEL = 0,
+    PARA_CONDITIONAL_STYLE_NAME = 1,
+    PARA_STYLE_NAME = 2,
+    TEXT_SECTION = 3
+};
+
+
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
                                   const XMLPropertyState** ppAddStates)
 {
-    sal_Bool bCache = sal_False;
     UniReference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
-//      bCache = sal_True;
         break;
     case XML_STYLE_FAMILY_TEXT_TEXT:
         xPropMapper = GetTextPropMapper();
@@ -313,7 +364,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         }
     }
 
-    if( xPropStates.size() > 0L || bCache )
+    if( xPropStates.size() > 0L )
     {
         Reference< XPropertySetInfo > xPropSetInfo =
             rPropSet->getPropertySetInfo();
@@ -387,26 +438,128 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         }
         if( xPropStates.size() > 0 )
         {
-            if( bCache )
-            {
-                GetAutoStylePool().AddAndCache( nFamily, sParent, xPropStates );
-                if( sCondParent.getLength() && sParent != sCondParent )
-                    GetAutoStylePool().AddAndCache( nFamily, sCondParent, xPropStates );
-            }
-            else
-            {
-                GetAutoStylePool().Add( nFamily, sParent, xPropStates );
-                if( sCondParent.getLength() && sParent != sCondParent )
-                    GetAutoStylePool().Add( nFamily, sCondParent, xPropStates );
-            }
-        }
-        else if( bCache )
-        {
-            GetAutoStylePool().AddAndCache( nFamily, sParent );
+            GetAutoStylePool().Add( nFamily, sParent, xPropStates );
             if( sCondParent.getLength() && sParent != sCondParent )
-                GetAutoStylePool().AddAndCache( nFamily, sCondParent );
+                GetAutoStylePool().Add( nFamily, sCondParent, xPropStates );
         }
+    }
+}
 
+void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
+                                  MultiPropertySetHelper& rPropSetHelper,
+                                  const Reference < XPropertySet > & rPropSet,
+                                  const XMLPropertyState** ppAddStates)
+{
+    UniReference < SvXMLExportPropertyMapper > xPropMapper;
+    switch( nFamily )
+    {
+    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+        xPropMapper = GetParaPropMapper();
+        break;
+//  case XML_STYLE_FAMILY_TEXT_TEXT:
+//      xPropMapper = GetTextPropMapper();
+//      break;
+//  case XML_STYLE_FAMILY_TEXT_FRAME:
+//      xPropMapper = GetAutoFramePropMapper();
+//      break;
+//  case XML_STYLE_FAMILY_TEXT_SECTION:
+//      xPropMapper = GetSectionPropMapper();
+//      break;
+//  case XML_STYLE_FAMILY_TEXT_RUBY:
+//      xPropMapper = GetRubyPropMapper();
+//      break;
+    }
+    DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
+
+    vector< XMLPropertyState > xPropStates =
+            xPropMapper->Filter( rPropSet );
+    if( ppAddStates )
+    {
+        while( *ppAddStates )
+        {
+            xPropStates.push_back( **ppAddStates );
+            ppAddStates++;
+        }
+    }
+
+    if( xPropStates.size() > 0L )
+    {
+        OUString sParent, sCondParent;
+        Any aAny;
+        switch( nFamily )
+        {
+        case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+            if( rPropSetHelper.hasProperty( PARA_STYLE_NAME_AUTO ) )
+            {
+                aAny = rPropSetHelper.getValue( PARA_STYLE_NAME_AUTO, rPropSet,
+                                                sal_True );
+                aAny >>= sParent;
+            }
+            if( rPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME_AUTO ) )
+            {
+                aAny = rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME_AUTO,
+                                                 rPropSet, sal_True );
+                aAny >>= sCondParent;
+            }
+            if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
+            {
+                aAny = rPropSetHelper.getValue( NUMBERING_RULES_AUTO );
+                Reference < XIndexReplace > xNumRule;
+                aAny >>= xNumRule;
+                if( xNumRule.is() && xNumRule->getCount() )
+                {
+                    Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
+                    OUString sName;
+                    if( xNamed.is() )
+                        sName = xNamed->getName();
+                    sal_Bool bAdd = !sName.getLength();
+                    if( !bAdd )
+                    {
+                        Reference < XPropertySet > xNumPropSet( xNumRule,
+                                                                UNO_QUERY );
+                        OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
+                        if( xNumPropSet.is() &&
+                            xNumPropSet->getPropertySetInfo()
+                                       ->hasPropertyByName( sIsAutomatic ) )
+                        {
+                            aAny = xNumPropSet->getPropertyValue( sIsAutomatic );
+                            bAdd = *(sal_Bool *)aAny.getValue();
+                        }
+                        else
+                        {
+                            bAdd = sal_True;
+                        }
+                    }
+                    if( bAdd )
+                        pListAutoPool->Add( xNumRule );
+                }
+            }
+            break;
+//      case XML_STYLE_FAMILY_TEXT_TEXT:
+//          if( xPropSetInfo->hasPropertyByName( sCharStyleName ) )
+//          {
+//              aAny = rPropSet->getPropertyValue( sCharStyleName );
+//              aAny >>= sParent;
+//          }
+//          break;
+//      case XML_STYLE_FAMILY_TEXT_FRAME:
+//          if( xPropSetInfo->hasPropertyByName( sFrameStyleName ) )
+//          {
+//              aAny = rPropSet->getPropertyValue( sFrameStyleName );
+//              aAny >>= sParent;
+//          }
+//          break;
+//      case XML_STYLE_FAMILY_TEXT_SECTION:
+//      case XML_STYLE_FAMILY_TEXT_RUBY:
+//          ; // section styles have no parents
+//          break;
+        }
+        if( xPropStates.size() > 0 )
+        {
+            GetAutoStylePool().Add( nFamily, sParent, xPropStates );
+            if( sCondParent.getLength() && sParent != sCondParent )
+                GetAutoStylePool().Add( nFamily, sCondParent, xPropStates );
+        }
     }
 }
 
@@ -416,14 +569,12 @@ OUString XMLTextParagraphExport::Find(
         const OUString& rParent,
         const XMLPropertyState** ppAddStates) const
 {
-    sal_Bool bCache = sal_False;
     OUString sName( rParent );
     UniReference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
-//      bCache = sal_True;
         break;
     case XML_STYLE_FAMILY_TEXT_TEXT:
         xPropMapper = GetTextPropMapper();
@@ -437,15 +588,6 @@ OUString XMLTextParagraphExport::Find(
     case XML_STYLE_FAMILY_TEXT_RUBY:
         xPropMapper = GetRubyPropMapper();
         break;
-    }
-    OUString sCachedName;
-    if( bCache )
-    {
-        sCachedName = GetAutoStylePool().FindAndRemoveCached( nFamily );
-#ifdef PRODUCT
-        if( sCachedName.getLength() )
-            return sCachedName;
-#endif
     }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
     vector< XMLPropertyState > xPropStates =
@@ -461,8 +603,6 @@ OUString XMLTextParagraphExport::Find(
 
     if( xPropStates.size() > 0L )
         sName = GetAutoStylePool().Find( nFamily, sName, xPropStates );
-    DBG_ASSERT( !bCache || !sCachedName.getLength() || sCachedName == sName,
-                "cache error" );
 
     return sName;
 }
@@ -1217,23 +1357,6 @@ void XMLTextParagraphExport::exportText(
                                   bProgress, bExportParagraph   );
 }
 
-static const sal_Char* aParagraphPropertyNames[] =
-{
-    "ParaChapterNumberingLevel",
-    "ParaConditionalStyleName",
-    "ParaStyleName",
-    "TextSection",
-    NULL
-};
-
-enum eParagraphPropertyNamesEnum
-{
-    PARA_CHAPTER_NUMERBING_LEVEL = 0,
-    PARA_CONDITIONAL_STYLE_NAME = 1,
-    PARA_STYLE_NAME = 2,
-    TEXT_SECTION = 3
-};
-
 sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
         const Reference < XEnumeration > & rContEnum,
         sal_Bool bAutoStyles,
@@ -1252,7 +1375,9 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
     sal_Bool bHasContent sal_False;
     Reference<XTextSection> xCurrentTextSection = rBaseSection;
 
-    MultiPropertySetHelper aPropSetHelper( aParagraphPropertyNames );
+    MultiPropertySetHelper aPropSetHelper(
+                               bAutoStyles ? aParagraphPropertyNamesAuto :
+                                          aParagraphPropertyNames );
 
     Any aAny;
     sal_Bool bHoldElement = sal_False;
@@ -1267,19 +1392,30 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
         {
             aAny = rContEnum->nextElement();
             aAny >>= xTxtCntnt;
+
+            aPropSetHelper.resetValues();
+
         }
 
         Reference<XServiceInfo> xServiceInfo( xTxtCntnt, UNO_QUERY );
         if( xServiceInfo->supportsService( sParagraphService ) )
         {
-            if( !bAutoStyles )
+            if( bAutoStyles )
+            {
+                exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
+                                            aPrevNumInfo, aNextNumInfo,
+                                            bAutoStyles );
+            }
+            else
             {
                 aNextNumInfo.Set( xTxtCntnt );
+
+                exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,
+                                            TEXT_SECTION, xTxtCntnt,
+                                            aPrevNumInfo, aNextNumInfo,
+                                            bAutoStyles );
             }
 
-            exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
-                                        aPrevNumInfo, aNextNumInfo,
-                                        bAutoStyles );
 
             // if we found a mute section: skip all section content
             if (pSectionExport->IsMuteSection(xCurrentTextSection))
@@ -1290,6 +1426,8 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
                 {
                     aAny = rContEnum->nextElement();
                     aAny >>= xTxtCntnt;
+                    aPropSetHelper.resetValues();
+                    aNextNumInfo.Reset();
                 }
                 // the first non-mute element still needs to be processed
                 bHoldElement =
@@ -1384,17 +1522,12 @@ void XMLTextParagraphExport::exportParagraph(
 
     // check for supported properties
     if( !rPropSetHelper.checkedProperties() )
-    {
-        if( xMultiPropSet.is() )
-            rPropSetHelper.hasProperties( xMultiPropSet->getPropertySetInfo());
-        else
-            rPropSetHelper.hasProperties( xPropSet->getPropertySetInfo() );
-    }
+        rPropSetHelper.hasProperties( xPropSet->getPropertySetInfo() );
 
-    if( xMultiPropSet.is() )
-        rPropSetHelper.getValues( xMultiPropSet );
-    else
-        rPropSetHelper.getValues( xPropSet );
+//  if( xMultiPropSet.is() )
+//      rPropSetHelper.getValues( xMultiPropSet );
+//  else
+//      rPropSetHelper.getValues( xPropSet );
 
     Any aAny;
 
@@ -1402,14 +1535,19 @@ void XMLTextParagraphExport::exportParagraph(
     {
         if( bAutoStyles )
         {
-            Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet );
+            Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, rPropSetHelper, xPropSet );
         }
         else
         {
             OUString sStyle;
             if( rPropSetHelper.hasProperty( PARA_STYLE_NAME ) )
             {
-                aAny = rPropSetHelper.getValue( PARA_STYLE_NAME );
+                if( xMultiPropSet.is() )
+                    aAny = rPropSetHelper.getValue( PARA_STYLE_NAME,
+                                                    xMultiPropSet );
+                else
+                    aAny = rPropSetHelper.getValue( PARA_STYLE_NAME,
+                                                    xPropSet );
                 aAny >>= sStyle;
             }
 
@@ -1422,7 +1560,12 @@ void XMLTextParagraphExport::exportParagraph(
             if( rPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME ) )
             {
                 OUString sCondStyle;
-                aAny = rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME );
+                if( xMultiPropSet.is() )
+                    aAny = rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME,
+                                                     xMultiPropSet );
+                else
+                    aAny = rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME,
+                                                     xPropSet );
                 aAny >>= sCondStyle;
                 if( sCondStyle != sStyle )
                 {
@@ -1437,7 +1580,13 @@ void XMLTextParagraphExport::exportParagraph(
 
             if( rPropSetHelper.hasProperty( PARA_CHAPTER_NUMERBING_LEVEL ) )
             {
-                aAny = rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL );
+                if( xMultiPropSet.is() )
+                    aAny = rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,
+                                                     xMultiPropSet );
+                else
+                    aAny = rPropSetHelper.getValue( PARA_CHAPTER_NUMERBING_LEVEL,
+                                                     xPropSet );
+
                 aAny >>= nOutlineLevel;
                 if( -1 != nOutlineLevel )
                 {
@@ -1457,18 +1606,38 @@ void XMLTextParagraphExport::exportParagraph(
     Reference < XContentEnumerationAccess > xCEA( rTextContent, UNO_QUERY );
     if( xCEA.is() )
         xContentEnum = xCEA->createContentEnumeration( sTextContentService );
+    sal_Bool bHasContentEnum = xContentEnum.is() &&
+                                  xContentEnum->hasMoreElements();
 
     Reference < XTextSection > xSection;
-    if( rPropSetHelper.hasProperty( TEXT_SECTION ) )
+    if( bHasContentEnum )
     {
-        aAny = rPropSetHelper.getValue( TEXT_SECTION );
-        aAny >>= xSection;
+        // For the auto styles, the multi property set helper is only used
+        // if hard attributes are existing. Therfor, it seems to be a better
+        // strategy to have the TextSection property seperate, because otherwise
+        // we always retrieve the style names even if they are not required.
+        if( bAutoStyles )
+        {
+            if( xPropSet->getPropertySetInfo()->hasPropertyByName( sTextSection ) )
+            {
+                aAny = xPropSet->getPropertyValue( sTextSection );
+                aAny >>= xSection;
+            }
+        }
+        else
+        {
+            if( rPropSetHelper.hasProperty( TEXT_SECTION ) )
+            {
+                aAny = rPropSetHelper.getValue( TEXT_SECTION );
+                aAny >>= xSection;
+            }
+        }
     }
 
     if( bAutoStyles )
     {
         sal_Bool bPrevCharIsSpace = sal_True;
-        if( xContentEnum.is() )
+        if( bHasContentEnum )
             bPrevCharIsSpace = !exportTextContentEnumeration(
                                     xContentEnum, bAutoStyles, xSection,
                                     bProgress );
@@ -1481,7 +1650,7 @@ void XMLTextParagraphExport::exportParagraph(
             -1 == nOutlineLevel ? XML_P : XML_H;
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, eElem,
                                   sal_True, sal_False );
-        if( xContentEnum.is() )
+        if( bHasContentEnum )
             bPrevCharIsSpace = !exportTextContentEnumeration(
                                     xContentEnum, bAutoStyles, xSection,
                                     bProgress );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertySetHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-17 16:13:53 $
+ *  last change: $Author: mib $ $Date: 2001-09-05 08:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,38 @@ void MultiPropertySetHelper::getValues(
 }
 
 
+const Any& MultiPropertySetHelper::getValue( sal_Int16 nIndex,
+                     const Reference< XPropertySet> & rPropSet,
+                     sal_Bool bTryMulti )
+{
+    if( !pValues )
+    {
+        if( bTryMulti )
+        {
+            Reference < XMultiPropertySet > xMultiPropSet( rPropSet,
+                                                           UNO_QUERY );
+            if( xMultiPropSet.is() )
+                getValues( xMultiPropSet );
+            else
+                getValues( rPropSet );
+        }
+        else
+        {
+            getValues( rPropSet );
+        }
+    }
+
+    return getValue( nIndex );
+}
+
+const Any& MultiPropertySetHelper::getValue( sal_Int16 nIndex,
+                     const Reference< XMultiPropertySet> & rMultiPropSet )
+{
+    if( !pValues )
+        getValues( rMultiPropSet );
+
+    return getValue( nIndex );
+}
 
 // inline methods defined in header:
 // inline Any& MultiPropertySetHelper::getValue( sal_Int16 nIndex )

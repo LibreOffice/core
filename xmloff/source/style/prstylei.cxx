@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: mib $ $Date: 2001-09-05 08:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef __SGI_STL_SET
+#include <set>
+#endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
@@ -83,6 +86,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSTATES_HPP_
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -205,6 +211,8 @@ Reference < XStyle > XMLPropStyleContext::Create()
     return xNewStyle;
 }
 
+typedef ::std::set < OUString, ::comphelper::UStringLess > PropertyNameSet;
+
 void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 {
     const OUString& rName = GetName();
@@ -257,15 +265,40 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
             xPrMap = xImpPrMap->getPropertySetMapper();
         if( xPrMap.is() )
         {
-            sal_Int32 nCount = xPrMap->GetEntryCount();
-            for( sal_Int32 i = 0; i < nCount; i++ )
+            Reference < XMultiPropertyStates > xMultiStates( xPropSet,
+                                                             UNO_QUERY );
+            if( xMultiStates.is() )
             {
-                const OUString& rName = xPrMap->GetEntryAPIName( i );
-                if( xPropSetInfo->hasPropertyByName( rName ) &&
-                    PropertyState_DIRECT_VALUE ==
-                        xPropState->getPropertyState( rName ) )
+                xMultiStates->setAllPropertiesToDefault();
+            }
+            else
+            {
+                PropertyNameSet aNameSet;
+                sal_Int32 nCount = xPrMap->GetEntryCount();
+                sal_Int32 i;
+                for( i = 0; i < nCount; i++ )
                 {
-                    xPropState->setPropertyToDefault( rName );
+                    const OUString& rName = xPrMap->GetEntryAPIName( i );
+                    if( xPropSetInfo->hasPropertyByName( rName ) )
+                        aNameSet.insert( rName );
+                }
+
+                nCount = aNameSet.size();
+                Sequence < OUString > aNames( nCount );
+                OUString *pNames = aNames.getArray();
+                PropertyNameSet::iterator aIter = aNameSet.begin();
+                while( aIter != aNameSet.end() )
+                    *pNames++ = *aIter++;
+
+                Sequence < PropertyState > aStates(
+                    xPropState->getPropertyStates( aNames ) );
+                const PropertyState *pStates = aStates.getConstArray();
+                pNames = aNames.getArray();
+
+                for( i = 0; i < nCount; i++ )
+                {
+                    if( PropertyState_DIRECT_VALUE == *pStates++ )
+                        xPropState->setPropertyToDefault( pNames[i] );
                 }
             }
         }

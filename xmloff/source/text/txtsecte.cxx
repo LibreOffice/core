@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtsecte.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: mib $ $Date: 2001-09-05 08:32:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,9 @@
 #ifndef _XMLOFF_XMLREDLINEEXPORT_HXX
 #include "XMLRedlineExport.hxx"
 #endif
+#ifndef _XMLOFF_MULTIPROPERTYSETHELPER_HXX
+#include "MultiPropertySetHelper.hxx"
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -194,7 +197,6 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     sal_Bool bAutoStyles)
 {
     Reference<XTextSection> xNextSection;
-    Reference<XDocumentIndex> xNextIndex;
 
     // first: get current XTextSection
     Reference<XPropertySet> xPropSet(rNextSectionContent, UNO_QUERY);
@@ -203,6 +205,36 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         if (xPropSet->getPropertySetInfo()->hasPropertyByName(sTextSection))
         {
             Any aAny = xPropSet->getPropertyValue(sTextSection);
+            aAny >>= xNextSection;
+        }
+        // else: no current section
+    }
+
+    exportListAndSectionChange(rPrevSection, xNextSection,
+                               rPrevRule, rNextRule, bAutoStyles);
+}
+
+void XMLTextParagraphExport::exportListAndSectionChange(
+    Reference<XTextSection> & rPrevSection,
+    MultiPropertySetHelper& rPropSetHelper,
+    sal_Int16 nTextSectionId,
+    const Reference<XTextContent> & rNextSectionContent,
+    const XMLTextNumRuleInfo& rPrevRule,
+    const XMLTextNumRuleInfo& rNextRule,
+    sal_Bool bAutoStyles)
+{
+    Reference<XTextSection> xNextSection;
+
+    // first: get current XTextSection
+    Reference<XPropertySet> xPropSet(rNextSectionContent, UNO_QUERY);
+    if (xPropSet.is())
+    {
+        if( !rPropSetHelper.checkedProperties() )
+            rPropSetHelper.hasProperties( xPropSet->getPropertySetInfo() );
+        if( rPropSetHelper.hasProperty( nTextSectionId ))
+        {
+            Any aAny = rPropSetHelper.getValue( nTextSectionId , xPropSet,
+                                                    sal_True );
             aAny >>= xNextSection;
         }
         // else: no current section
@@ -246,12 +278,16 @@ void XMLTextParagraphExport::exportListAndSectionChange(
 
         vector<Reference<XTextSection> > aNewStack;
         aCurrent = rNextSection;
+        sal_Bool bMute = sal_False;
         while(aCurrent.is())
         {
             // if we have a mute section, ignore all its children
             // (all previous ones)
             if (pSectionExport->IsMuteSection(aCurrent))
+            {
                 aNewStack.clear();
+                bMute = sal_True;
+            }
 
             aNewStack.push_back(aCurrent);
             aCurrent = aCurrent->getParentSection();
@@ -306,7 +342,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         }
 
         // start new list
-        if ( !bAutoStyles )
+        if ( !bAutoStyles && !bMute )
             exportListChange(aEmptyNumRule, rNextRule);
     }
     else
