@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:24:15 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@
 #include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 #endif
 
-#ifndef _VCL_CANVASTOOLS_HXX
-#include <vcl/canvastools.hxx>
-#endif
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
 #endif
@@ -128,6 +125,9 @@
 
 #include <vector>
 #include <algorithm>
+#include <iterator>
+
+#include <boost/scoped_array.hpp>
 
 #include <boost/scoped_array.hpp>
 
@@ -187,7 +187,12 @@
 #include <tools/poly.hxx>
 #endif
 
-#include <outdevstate.hxx>
+#ifndef _SVTOOLS_GRAPHICTOOLS_HXX_
+#include <svtools/graphictools.hxx>
+#endif
+
+#include "mtftools.hxx"
+#include "outdevstate.hxx"
 
 
 using namespace ::com::sun::star;
@@ -217,20 +222,6 @@ namespace
                                                                      aColor );
         }
     }
-
-    // Doing that via inline class. Compilers tend to not inline free
-    // functions.
-    class ActionIndexComparator
-    {
-    public:
-        ActionIndexComparator() {}
-
-        bool operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction& rLHS,
-                         const ::cppcanvas::internal::ImplRenderer::MtfAction& rRHS )
-        {
-            return rLHS.mnOrigIndex < rRHS.mnOrigIndex;
-        }
-    };
 
     void setupStrokeAttributes( rendering::StrokeAttributes& o_rStrokeAttributes,
                                 const VirtualDevice&         rVDev,
@@ -299,6 +290,11 @@ namespace
         return rStates.back();
     }
 
+    const ::cppcanvas::internal::OutDevState& getState( const ::cppcanvas::internal::VectorOfOutDevStates& rStates )
+    {
+        return rStates.back();
+    }
+
     void pushState( ::cppcanvas::internal::VectorOfOutDevStates& rStates,
                     USHORT nFlags                                           )
     {
@@ -329,17 +325,27 @@ namespace
 
             if( (aCalculatedNewState.pushFlags & PUSH_LINECOLOR) )
             {
-                aCalculatedNewState.lineColor = rNewState.lineColor;
+                aCalculatedNewState.lineColor      = rNewState.lineColor;
+                aCalculatedNewState.isLineColorSet = rNewState.isLineColorSet;
             }
 
             if( (aCalculatedNewState.pushFlags & PUSH_FILLCOLOR) )
             {
-                aCalculatedNewState.fillColor = rNewState.fillColor;
+                aCalculatedNewState.fillColor      = rNewState.fillColor;
+                aCalculatedNewState.isFillColorSet = rNewState.isFillColorSet;
             }
 
             if( (aCalculatedNewState.pushFlags & PUSH_FONT) )
             {
-                aCalculatedNewState.xFont = rNewState.xFont;
+                aCalculatedNewState.xFont                   = rNewState.xFont;
+                aCalculatedNewState.fontRotation            = rNewState.fontRotation;
+                aCalculatedNewState.textReliefStyle         = rNewState.textReliefStyle;
+                aCalculatedNewState.textUnderlineStyle      = rNewState.textUnderlineStyle;
+                aCalculatedNewState.textStrikeoutStyle      = rNewState.textStrikeoutStyle;
+                aCalculatedNewState.textEmphasisMarkStyle   = rNewState.textEmphasisMarkStyle;
+                aCalculatedNewState.isTextEffectShadowSet   = rNewState.isTextEffectShadowSet;
+                aCalculatedNewState.isTextWordUnderlineSet  = rNewState.isTextWordUnderlineSet;
+                aCalculatedNewState.isTextOutlineModeSet    = rNewState.isTextOutlineModeSet;
             }
 
             if( (aCalculatedNewState.pushFlags & PUSH_TEXTCOLOR) )
@@ -366,15 +372,14 @@ namespace
 
             if( (aCalculatedNewState.pushFlags & PUSH_TEXTFILLCOLOR) )
             {
-                aCalculatedNewState.textFillColor = rNewState.textFillColor;
+                aCalculatedNewState.textFillColor      = rNewState.textFillColor;
+                aCalculatedNewState.isTextFillColorSet = rNewState.isTextFillColorSet;
             }
 
-            // TODO(F2): Text alignment (top, bottom, base) NYI. NOT
-            // be to confused with textAlignment member, which is in
-            // fact layout mode!
-            // if( (aCalculatedNewState.pushFlags & PUSH_TEXTALIGN) )
-            // {
-            // }
+            if( (aCalculatedNewState.pushFlags & PUSH_TEXTALIGN) )
+            {
+                aCalculatedNewState.textReferencePoint = rNewState.textReferencePoint;
+            }
 
             // TODO(F1): Refpoint handling NYI
             // if( (aCalculatedNewState.pushFlags & PUSH_REFPOINT) )
@@ -383,7 +388,8 @@ namespace
 
             if( (aCalculatedNewState.pushFlags & PUSH_TEXTLINECOLOR) )
             {
-                aCalculatedNewState.textLineColor = rNewState.textLineColor;
+                aCalculatedNewState.textLineColor      = rNewState.textLineColor;
+                aCalculatedNewState.isTextLineColorSet = rNewState.isTextLineColorSet;
             }
 
             if( (aCalculatedNewState.pushFlags & PUSH_TEXTLAYOUTMODE) )
@@ -416,35 +422,53 @@ namespace cppcanvas
 {
     namespace internal
     {
-        bool ImplRenderer::createFillAndStroke( const ::PolyPolygon&    rPolyPoly,
-                                                const CanvasSharedPtr&  rCanvas,
-                                                int                     rActionIndex,
-                                                VectorOfOutDevStates&   rStates )
+        bool ImplRenderer::createFillAndStroke( const ::PolyPolygon&        rPolyPoly,
+                                                const CanvasSharedPtr&      rCanvas,
+                                                sal_Int32&                  rActionIndex,
+                                                const VectorOfOutDevStates& rStates )
         {
             const OutDevState& rState( getState( rStates ) );
-            if( rState.lineColor.getLength() == 0 &&
-                rState.fillColor.getLength() == 0 )
+            if( (!rState.isLineColorSet &&
+                 !rState.isFillColorSet) ||
+                (rState.lineColor.getLength() == 0 &&
+                 rState.fillColor.getLength() == 0) )
             {
                 return false;
             }
 
-            maActions.push_back(
-                MtfAction(
-                    ActionSharedPtr(
-                        new internal::PolyPolyAction( rPolyPoly, rCanvas, rState ) ),
-                    rActionIndex ) );
+            ActionSharedPtr pPolyAction(
+                internal::PolyPolyActionFactory::createPolyPolyAction(
+                    rPolyPoly, rCanvas, rState ) );
+
+            if( pPolyAction )
+            {
+                maActions.push_back(
+                    MtfAction(
+                        pPolyAction,
+                        rActionIndex ) );
+
+                rActionIndex += pPolyAction->getActionCount()-1;
+            }
 
             return true;
         }
 
         void ImplRenderer::skipContent( GDIMetaFile& rMtf,
-                                        const char&  rCommentString ) const
+                                        const char*  pCommentString,
+                                        sal_Int32&   io_rCurrActionIndex ) const
         {
+            ENSURE_AND_THROW( pCommentString,
+                              "ImplRenderer::skipContent(): NULL string given" );
+
             MetaAction* pCurrAct;
             while( (pCurrAct=rMtf.NextAction()) )
             {
+                // increment action index, we've skipped an action.
+                ++io_rCurrActionIndex;
+
                 if( pCurrAct->GetType() == META_COMMENT_ACTION &&
-                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().CompareIgnoreCaseToAscii( rCommentString ) == COMPARE_EQUAL )
+                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().CompareIgnoreCaseToAscii(
+                        pCommentString ) == COMPARE_EQUAL )
                 {
                     // requested comment found, done
                     return;
@@ -455,14 +479,63 @@ namespace cppcanvas
             return;
         }
 
-        void ImplRenderer::createGradientAction( const ::PolyPolygon&   rPoly,
-                                                 const ::Gradient&      rGradient,
-                                                 ::VirtualDevice&       rVDev,
-                                                 const CanvasSharedPtr& rCanvas,
-                                                 VectorOfOutDevStates&  rStates,
-                                                 const Parameters&      rParms,
-                                                 int&                   io_rCurrActionIndex,
-                                                 bool                   bIsPolygonRectangle )
+        bool ImplRenderer::isActionContained( GDIMetaFile& rMtf,
+                                              const char*  pCommentString,
+                                              USHORT       nType ) const
+        {
+            ENSURE_AND_THROW( pCommentString,
+                              "ImplRenderer::isActionContained(): NULL string given" );
+
+            bool bRet( false );
+
+            // at least _one_ call to GDIMetaFile::NextAction() is
+            // executed
+            ULONG nPos( 1 );
+
+            MetaAction* pCurrAct;
+            while( (pCurrAct=rMtf.NextAction()) )
+            {
+                if( pCurrAct->GetType() == nType )
+                {
+                    bRet = true; // action type found
+                    break;
+                }
+
+                if( pCurrAct->GetType() == META_COMMENT_ACTION &&
+                    static_cast<MetaCommentAction*>(pCurrAct)->GetComment().CompareIgnoreCaseToAscii(
+                        pCommentString ) == COMPARE_EQUAL )
+                {
+                    // delimiting end comment found, done
+                    bRet = false; // not yet found
+                    break;
+                }
+
+                ++nPos;
+            }
+
+            // rewind metafile to previous position (this method must
+            // not change the current metaaction)
+            while( nPos-- )
+                rMtf.WindPrev();
+
+            if( !pCurrAct )
+            {
+                // EOF, and not yet found
+                bRet = false;
+            }
+
+            return bRet;
+        }
+
+        void ImplRenderer::createGradientAction( const ::PolyPolygon&           rPoly,
+                                                 const ::Gradient&              rGradient,
+                                                 ::VirtualDevice&               rVDev,
+                                                 const CanvasSharedPtr&         rCanvas,
+                                                 VectorOfOutDevStates&          rStates,
+                                                 const Parameters&              rParms,
+                                                 sal_Int32&                     io_rCurrActionIndex,
+                                                 bool                           bIsPolygonRectangle,
+                                                 bool                           bSubsettableActions )
         {
             DBG_TESTSOLARMUTEX();
 
@@ -755,14 +828,22 @@ namespace cppcanvas
                     ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
                                                                     aTextureTransformation );
 
-                    maActions.push_back(
-                        MtfAction(
-                            ActionSharedPtr(
-                                new internal::PolyPolyAction( aDevicePoly,
-                                                              rCanvas,
-                                                              getState( rStates ),
-                                                              aTexture ) ),
-                            io_rCurrActionIndex ) );
+                    ActionSharedPtr pPolyAction(
+                        internal::PolyPolyActionFactory::createPolyPolyAction(
+                            aDevicePoly,
+                            rCanvas,
+                            getState( rStates ),
+                            aTexture ) );
+
+                    if( pPolyAction )
+                    {
+                        maActions.push_back(
+                            MtfAction(
+                                pPolyAction,
+                                io_rCurrActionIndex ) );
+
+                        io_rCurrActionIndex += pPolyAction->getActionCount()-1;
+                    }
 
                     // done, using native gradients
                     return;
@@ -791,16 +872,18 @@ namespace cppcanvas
                                       rGradient,
                                       aTmpMtf );
 
-            createActions( rCanvas, rVDev, aTmpMtf, rStates, rParms, io_rCurrActionIndex );
+            createActions( rCanvas, rVDev, aTmpMtf, rStates,
+                           rParms, bSubsettableActions,
+                           io_rCurrActionIndex );
 
             popState( rStates );
         }
 
-        uno::Reference< rendering::XCanvasFont > ImplRenderer::createFont( ::basegfx::B2DHomMatrix&     o_rFontMatrix,
-                                                                           const ::Font&                rFont,
-                                                                           const CanvasSharedPtr&       rCanvas,
-                                                                           const ::VirtualDevice&       rVDev,
-                                                                           const Parameters&            rParms ) const
+        uno::Reference< rendering::XCanvasFont > ImplRenderer::createFont( double&                  o_rFontRotation,
+                                                                           const ::Font&            rFont,
+                                                                           const CanvasSharedPtr&   rCanvas,
+                                                                           const ::VirtualDevice&   rVDev,
+                                                                           const Parameters&        rParms ) const
         {
             rendering::FontRequest aFontRequest;
 
@@ -834,9 +917,12 @@ namespace cppcanvas
             if( nFontAngle != 0 )
             {
                 // set to unity transform rotated by font angle
-                const double rAngle( nFontAngle * (F_PI / 1800.0) );
-                o_rFontMatrix.identity();
-                o_rFontMatrix.rotate( -rAngle );
+                const double nAngle( nFontAngle * (F_PI / 1800.0) );
+                o_rFontRotation = -nAngle;
+            }
+            else
+            {
+                o_rFontRotation = 0.0;
             }
 
             geometry::Matrix2D aFontMatrix;
@@ -860,366 +946,108 @@ namespace cppcanvas
         }
 
         // create text effects such as shadow/relief/embossed
-        void ImplRenderer::createTextWithEffectsAction(
-                const Point&            rStartPoint,
-                const String            rString,
-                int                     nIndex,
-                int                     nLength,
-                const long*             pCharWidths,
-                VirtualDevice&          rVDev,
-                const CanvasSharedPtr&  rCanvas,
-                VectorOfOutDevStates&   rStates,
-                const Parameters&       rParms,
-                int                     nCurrActionIndex )
+        void ImplRenderer::createTextAction( const ::Point&                 rStartPoint,
+                                             const String                   rString,
+                                             int                            nIndex,
+                                             int                            nLength,
+                                             const sal_Int32*               pCharWidths,
+                                             ::VirtualDevice&               rVDev,
+                                             const CanvasSharedPtr&         rCanvas,
+                                             const VectorOfOutDevStates&    rStates,
+                                             const Parameters&              rParms,
+                                             bool                           bSubsettableActions,
+                                             sal_Int32&                     io_rCurrActionIndex )
         {
             ENSURE_AND_THROW( nIndex >= 0 && nLength <= rString.Len() + nIndex,
                               "ImplRenderer::createTextWithEffectsAction(): Invalid text index" );
 
-            // TODO(F2): implement all text effects
-            if( getState( rStates ).textAlignment );             // TODO(F2): NYI
+            if( !nLength )
+                return; // zero-length text, no visible output
 
-            if( getState( rStates ).isTextEffectShadowSet )
+            const OutDevState& rState( getState( rStates ) );
+
+            // TODO(F2): implement all text effects
+            if( rState.textAlignment );             // TODO(F2): NYI
+
+            ::Color aShadowColor( COL_AUTO );
+            ::Color aReliefColor( COL_AUTO );
+            ::Size  aShadowOffset;
+            ::Size  aReliefOffset;
+
+            if( rState.isTextEffectShadowSet )
             {
-                // calculate relief offset (similar to outdev3.cxx)
+                // calculate shadow offset (similar to outdev3.cxx)
                 // TODO(F3): better match with outdev3.cxx
-                long nShadowOffset = static_cast<long>(1.5 + ((rVDev.GetFont().GetHeight()-24.0)/24.0));
+                sal_Int32 nShadowOffset = static_cast<sal_Int32>(1.5 + ((rVDev.GetFont().GetHeight()-24.0)/24.0));
                 if( nShadowOffset < 1 )
                     nShadowOffset = 1;
-                Point aShadowPoint( nShadowOffset, nShadowOffset );
-                aShadowPoint += rStartPoint;
+
+                aShadowOffset.setWidth( nShadowOffset );
+                aShadowOffset.setHeight( nShadowOffset );
 
                 // determine shadow color (from outdev3.cxx)
                 ::Color aTextColor = ::vcl::unotools::sequenceToColor(
-                    rCanvas->getUNOCanvas()->getDevice(), getState( rStates ).textColor );
+                    rCanvas->getUNOCanvas()->getDevice(), rState.textColor );
                 bool bIsDark = (aTextColor.GetColor() == COL_BLACK)
                     || (aTextColor.GetLuminance() < 8);
-                ::Color aShadowColor( bIsDark ? COL_LIGHTGRAY : COL_BLACK );
-                aShadowColor.SetTransparency( aTextColor.GetTransparency() );
 
-                // draw shadow text and restore original rState
-                // TODO(P2): just restore textColor instead of push/pop
-                pushState( rStates, PUSH_ALL );
-                // ::com::sun::star::uno::Sequence< double > origTextColor = getState( rStates ).textColor;
-                getState( rStates ).textColor = ::vcl::unotools::colorToDoubleSequence(
-                    rCanvas->getUNOCanvas()->getDevice(), aShadowColor );
-                createTextWithLinesAction(
-                    aShadowPoint, rString, nIndex, nLength,
-                    pCharWidths, rVDev, rCanvas, rStates, rParms, nCurrActionIndex );
-                popState( rStates );
-                // getState( rStates ).textColor = origTextColor;
+                aShadowColor = bIsDark ? COL_LIGHTGRAY : COL_BLACK;
+                aShadowColor.SetTransparency( aTextColor.GetTransparency() );
             }
 
-            // draw the normal text
-            createTextWithLinesAction(
-                rStartPoint, rString, nIndex, nLength,
-                pCharWidths, rVDev, rCanvas, rStates, rParms, nCurrActionIndex );
-
-            if( getState( rStates ).textReliefStyle )
+            if( rState.textReliefStyle )
             {
                 // calculate relief offset (similar to outdev3.cxx)
-                long nReliefOffset = rVDev.PixelToLogic( Size( 1, 1 ) ).Height();
+                sal_Int32 nReliefOffset = rVDev.PixelToLogic( Size( 1, 1 ) ).Height();
                 nReliefOffset += nReliefOffset/2;
                 if( nReliefOffset < 1 )
                     nReliefOffset = 1;
 
-                if( getState( rStates ).textReliefStyle == RELIEF_ENGRAVED )
+                if( rState.textReliefStyle == RELIEF_EMBOSSED )
                     nReliefOffset = -nReliefOffset;
-                Point aReliefPoint( nReliefOffset, nReliefOffset );
-                aReliefPoint += rStartPoint;
+
+                aReliefOffset.setWidth( nReliefOffset );
+                aReliefOffset.setHeight( nReliefOffset );
 
                 // determine relief color (from outdev3.cxx)
                 ::Color aTextColor = ::vcl::unotools::sequenceToColor(
-                    rCanvas->getUNOCanvas()->getDevice(), getState( rStates ).textColor );
-                ::Color aReliefColor( COL_LIGHTGRAY );
+                    rCanvas->getUNOCanvas()->getDevice(), rState.textColor );
+
+                aReliefColor = ::Color( COL_LIGHTGRAY );
                 if( aTextColor.GetColor() == COL_BLACK )
                     aReliefColor = ::Color( COL_WHITE );
                 else if( aTextColor.GetColor() == COL_WHITE )
                     aReliefColor = ::Color( COL_BLACK );
                 aReliefColor.SetTransparency( aTextColor.GetTransparency() );
-
-                // draw relief text and restore original rState
-                // TODO(P2): just restore textColor instead of push/pop
-                pushState( rStates, PUSH_ALL );
-                // ::com::sun::star::uno::Sequence< double > origTextColor = getState( rStates ).textColor;
-                getState( rStates ).textColor = ::vcl::unotools::colorToDoubleSequence(
-                    rCanvas->getUNOCanvas()->getDevice(), aReliefColor );
-                createTextWithLinesAction(
-                    aReliefPoint, rString, nIndex, nLength,
-                    pCharWidths, rVDev, rCanvas, rStates, rParms, nCurrActionIndex );
-                popState( rStates );
-                // getState( rStates ).textColor = origTextColor;
             }
-        }
 
+            // create the actual text action
+            ActionSharedPtr pTextAction(
+                TextActionFactory::createTextAction(
+                    rStartPoint,
+                    aReliefOffset,
+                    aReliefColor,
+                    aShadowOffset,
+                    aShadowColor,
+                    rString,
+                    nIndex,
+                    nLength,
+                    pCharWidths,
+                    rVDev,
+                    rCanvas,
+                    rState,
+                    rParms,
+                    bSubsettableActions ) );
 
-        // create draw actions for text and underlines/strikeouts/etc.
-        void ImplRenderer::createTextWithLinesAction(
-                const Point&            rStartPoint,
-                const String            rString,
-                int                     nIndex,
-                int                     nLength,
-                const long*             pCharWidths,
-                VirtualDevice&          rVDev,
-                const CanvasSharedPtr&  rCanvas,
-                VectorOfOutDevStates&   rStates,
-                const Parameters&       rParms,
-                int                     nCurrActionIndex )
-       {
-            ::cppcanvas::internal::OutDevState& rState = getState( rStates );
-
-            Point aStartPixel = rVDev.LogicToPixel( rStartPoint );
-            internal::Action* pAction = NULL;
-
-            if( rState.isTextOutlineModeSet )
+            if( pTextAction )
             {
-                ::PolyPolygon aVclPolyPolygon;
-                if( rVDev.GetTextOutline( aVclPolyPolygon, rString,
-                    nIndex, nIndex, nLength, TRUE, 0, pCharWidths ) )
-                {
-                   int nOutlineWidth = rVDev.GetFont().GetHeight() / 32;
-                    if( nOutlineWidth <= 0 )
-                        nOutlineWidth = 1;
-                    // TODO(F3): rState.strokeWith = nOutlineWidth;
-                    // Path stroking not yet functional for all canvas
-                    // implementations
-                    aVclPolyPolygon.Translate( rStartPoint ); //####???
-                    aVclPolyPolygon = rVDev.LogicToPixel( aVclPolyPolygon );
+                maActions.push_back(
+                    MtfAction(
+                        pTextAction,
+                        io_rCurrActionIndex ) );
 
-                    // set outline color
-                    rState.lineColor = rState.textColor;
-                    rState.isLineColorSet = true;
-                    // set the fill color to match the VCL fill color for outlined text
-                    // TODO: in the current Canvas model setting a fixed color is beyond ugly
-                    ColorSharedPtr pColor( rCanvas.get()->createColor() );
-                    rState.fillColor = pColor->getDeviceColor( 0xFFFFFFFF ); // solid white
-                    rState.isFillColorSet = true;
-                    // NOTE: rState.strokeWidth is already set by the caller
-
-                    // TODO(F3): use bezier polygon directly when it
-                    // is implemented
-                    ::PolyPolygon aNOTBEZIER;
-                    aVclPolyPolygon.AdaptiveSubdivide( aNOTBEZIER );
-                    pAction = new internal::PolyPolyAction( aNOTBEZIER, rCanvas, rState );
-                }
+                io_rCurrActionIndex += pTextAction->getActionCount()-1;
             }
-
-            // if no outline mode was requested or possible then draw the normal text
-            if( !pAction )
-            {
-                if( !pCharWidths )
-                    pAction = new internal::TextAction( aStartPixel, rString,
-                        nIndex, nLength, rCanvas, rState,
-                        rParms.maTextTransformation );
-                else
-                {
-                    uno::Sequence< double > aCharWidthSeq( ::comphelper::arrayToSequence<double>( pCharWidths, nLength ) );
-                    // convert character widths from logical units
-                    for( int i = 0; i < nLength; ++i )
-                    {
-                        // TODO(F2): use correct scale direction
-                        const Size aSize( ::basegfx::fround( pCharWidths[i] + .5 ), 0 );
-                        aCharWidthSeq[i] = rVDev.LogicToPixel( aSize ).Width();
-                    }
-
-                    pAction = new internal::TextAction( aStartPixel, rString,
-                        nIndex, nLength, aCharWidthSeq, rCanvas, rState,
-                        rParms.maTextTransformation );
-                }
-            }
-
-            maActions.push_back( MtfAction( ActionSharedPtr( pAction ), nCurrActionIndex ) );
-
-            if( rState.textUnderlineStyle || rState.textStrikeoutStyle )
-            {
-                // TODO: split text lines on word breaks
-                if( rState.isTextWordUnderlineSet );    // TODO: NYI
-
-                long nTextWidth = rVDev.GetTextWidth( rString, nIndex, nLength );
-                createJustTextLinesAction( rStartPoint, nTextWidth, rVDev,
-                                           rCanvas, rStates, rParms, nCurrActionIndex );
-            }
-
-            // TODO: implement text emphasis mark styles
-            if( rState.textEmphasisMarkStyle );     // TODO: NYI
-       }
-
-
-        // create line actions for text such as underline and strikeout
-        void ImplRenderer::createJustTextLinesAction(
-                const Point&            rLogicalStartPoint,
-                long                    nLineWidth,
-                VirtualDevice&          rVDev,
-                const CanvasSharedPtr&  rCanvas,
-                VectorOfOutDevStates&   rStates,
-                const Parameters&       rParms,
-                int                     nCurrActionIndex )
-        {
-            pushState( rStates, PUSH_ALL );
-
-            // #i42812# Don't hold references into vector, when
-            // modifying it at the same time.
-            ::cppcanvas::internal::OutDevState& rState = getState( rStates );
-
-            // initialize the color of the text lines
-            if( !rState.isTextOutlineModeSet )
-            {
-                // normal text lines
-                rState.fillColor = rState.textColor;
-                // NOTE: strangely the text line color is ignored by vcl
-                // color = rState.isTextLineColorSet ? rState.textLineColor : rState.textColor;
-                rState.isFillColorSet = true;
-                rState.isLineColorSet = false;
-            }
-#if 0
-            // the line and fill colors are already set by the calling method
-            // when we are in outline mode, because the text rendering already needed it
-            else
-            {
-                // text lines for text using an outline font
-                rState.lineColor = rState.textColor;
-                rState.isLineColorSet = true;
-                // TODO: rState.fillColor = Color( COL_WHITE );
-                // TODO: rState.isFillColorSet = true;
-                // NOTE: rState.strokeWidth is already set by the caller
-            }
-#endif
-
-            // prepare text line position and size
-            ::FontMetric aMetric = rVDev.GetFontMetric();
-            long nLineHeight = (aMetric.GetDescent() + 2) / 4;
-            Point aUnderlineOffset( 0, aMetric.GetDescent() / 2);
-
-            // fill the polypolygon with all text lines
-            ::PolyPolygon aTextLinePolyPoly;
-
-            ::Polygon aPolygon(4);
-            switch( rState.textUnderlineStyle )
-            {
-                case UNDERLINE_NONE:    // nothing to do
-                case UNDERLINE_DONTKNOW:
-                    break;
-                case UNDERLINE_DASHDOT:       // TODO(F3): NYI
-                case UNDERLINE_DASHDOTDOT:    // TODO(F3): NYI
-                case UNDERLINE_SMALLWAVE:     // TODO(F3): NYI
-                case UNDERLINE_WAVE:          // TODO(F3): NYI
-                case UNDERLINE_DOUBLEWAVE:    // TODO(F3): NYI
-                case UNDERLINE_BOLDDOTTED:    // TODO(F3): NYI
-                case UNDERLINE_BOLDDASH:      // TODO(F3): NYI
-                case UNDERLINE_BOLDLONGDASH:  // TODO(F3): NYI
-                case UNDERLINE_BOLDDASHDOT:   // TODO(F3): NYI
-                case UNDERLINE_BOLDDASHDOTDOT:// TODO(F3): NYI
-                case UNDERLINE_BOLDWAVE:      // TODO(F3): NYI
-                case UNDERLINE_SINGLE:
-                {
-                    aPolygon = Polygon( Rectangle( aUnderlineOffset, Size( nLineWidth, nLineHeight ) ) );
-                    aTextLinePolyPoly.Insert( aPolygon );
-                    break;
-                }
-                case UNDERLINE_BOLD:
-                {
-                    aPolygon = Polygon( Rectangle( aUnderlineOffset, Size( nLineWidth, 2*nLineHeight ) ) );
-                    aTextLinePolyPoly.Insert( aPolygon );
-                    break;
-                }
-                case UNDERLINE_DOUBLE:
-                {
-                    aPolygon = Polygon( Rectangle( aUnderlineOffset, Size( nLineWidth, nLineHeight ) ) );
-                    aPolygon.Move( 0, -nLineHeight );
-                    aTextLinePolyPoly.Insert( aPolygon );
-                    aPolygon.Move( 0, +nLineHeight * 2 );
-                    aTextLinePolyPoly.Insert( aPolygon );
-                    break;
-                }
-                case UNDERLINE_DOTTED:
-                {
-                    aPolygon = Polygon( Rectangle( aUnderlineOffset, Size( nLineHeight, nLineHeight ) ) );
-                    for( int x = 0; x < nLineWidth;)
-                    {
-                        aTextLinePolyPoly.Insert( aPolygon );
-                        aPolygon.Move( 2 * nLineHeight, 0 );
-                        x += 6 * nLineHeight ;
-                    }
-                    break;
-                }
-                case UNDERLINE_DASH:
-                {
-                    aPolygon = Polygon( Rectangle( aUnderlineOffset, Size( 3*nLineHeight, nLineHeight ) ) );
-                    for( int x = 0; x < nLineWidth;)
-                    {
-                        aTextLinePolyPoly.Insert( aPolygon );
-                        aPolygon.Move( 6 * nLineHeight, 0 );
-                        x += 6 * nLineHeight ;
-                    }
-                    break;
-                }
-                case UNDERLINE_LONGDASH:
-                {
-                    aPolygon = Polygon( Rectangle( aUnderlineOffset, Size( 6*nLineHeight, nLineHeight ) ) );
-                    for( int x = 0; x < nLineWidth;)
-                    {
-                        aTextLinePolyPoly.Insert( aPolygon );
-                        aPolygon.Move( 12 * nLineHeight, 0 );
-                        x += 12 * nLineHeight;
-                    }
-                    break;
-                }
-            }
-
-            switch( rState.textStrikeoutStyle )
-            {
-                case STRIKEOUT_NONE:    // nothing to do
-                case STRIKEOUT_DONTKNOW:
-                    break;
-                case STRIKEOUT_SLASH:   // TODO: we should handle this in the text layer
-                case STRIKEOUT_X:
-                    break;
-                case STRIKEOUT_SINGLE:
-                {
-                    Point aOffset( 0, (aMetric.GetIntLeading() - aMetric.GetAscent()) / 3 );
-                    Rectangle aRect( aOffset, Size( nLineWidth, nLineHeight ) );
-                    aTextLinePolyPoly.Insert( ::Polygon( aRect ) );
-                    break;
-                }
-                case STRIKEOUT_BOLD:
-                {
-                    Point aOffset( 0, (aMetric.GetIntLeading() - aMetric.GetAscent()) / 3 );
-                    Rectangle aRect( aOffset, Size( nLineWidth, 2 * nLineHeight ) );
-                    aTextLinePolyPoly.Insert( ::Polygon( aRect ) );
-                    break;
-                }
-                case STRIKEOUT_DOUBLE:
-                {
-                    Point aOffset( 0, (aMetric.GetIntLeading() - aMetric.GetAscent()) / 3 );
-                    aOffset.Y() -= nLineHeight;
-                    Rectangle aRect( aOffset, Size( nLineWidth, nLineHeight ) );
-                    aTextLinePolyPoly.Insert( ::Polygon( aRect ) );
-                    aRect.Move( 0, 2 * nLineHeight );
-                    aTextLinePolyPoly.Insert( ::Polygon( aRect ) );
-                    break;
-                }
-            }
-
-            if( !aTextLinePolyPoly.Count() )
-                return;
-
-            // prepare text line orientation
-            basegfx::B2DTuple aTScale, aTTrans;
-            double fRotate, fShearX;
-            rState.fontTransform.decompose( aTScale, aTTrans, fRotate, fShearX );
-            fRotate = 3600 - fRotate * (1800.0 / F_PI);
-
-            // adjust to the target coordinate system
-            aTextLinePolyPoly.Rotate( Point(0,0),
-                                      ::canvas::tools::numeric_cast<USHORT>( ::basegfx::fround( fRotate ) ) );
-            aTextLinePolyPoly.Translate( rLogicalStartPoint );
-            aTextLinePolyPoly = rVDev.LogicToPixel( aTextLinePolyPoly );
-
-           // create the underline + strikethrough line actions
-            maActions.push_back( MtfAction( ActionSharedPtr(
-                new internal::PolyPolyAction( aTextLinePolyPoly, rCanvas, rState ) ),
-                nCurrActionIndex ) );
-
-            popState( rStates );
         }
 
         void ImplRenderer::updateClipping( VectorOfOutDevStates&            rStates,
@@ -1277,7 +1105,21 @@ namespace cppcanvas
 
             if( rState.clip.count() == 0 )
             {
-                rState.xClipPoly.clear();
+                if( rState.clipRect.IsEmpty() )
+                {
+                    rState.xClipPoly.clear();
+                }
+                else
+                {
+                    rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                        rCanvas->getUNOCanvas()->getDevice(),
+                        ::basegfx::B2DPolyPolygon(
+                            ::basegfx::tools::createPolygonFromRect(
+                                ::basegfx::B2DRectangle( rState.clipRect.Left(),
+                                                         rState.clipRect.Top(),
+                                                         rState.clipRect.Right(),
+                                                         rState.clipRect.Bottom() ) ) ) );
+                }
             }
             else
             {
@@ -1374,12 +1216,12 @@ namespace cppcanvas
                                           GDIMetaFile&              rMtf,
                                           VectorOfOutDevStates&     rStates,
                                           const Parameters&         rParms,
-                                          int&                      io_rCurrActionIndex )
+                                          bool                      bSubsettableActions,
+                                          sal_Int32&                io_rCurrActionIndex )
         {
             /* TODO(P2): interpret mtf-comments
                ================================
 
-               - Float-Transparency (skipped for prototype)
                - bitmap fillings (do that via comments)
                - gradient fillings (do that via comments)
 
@@ -1402,7 +1244,7 @@ namespace cppcanvas
             // TODO(P1): think about caching
             for( pCurrAct=rMtf.FirstAction();
                  pCurrAct;
-                 ++io_rCurrActionIndex, pCurrAct = rMtf.NextAction() )
+                 pCurrAct = rMtf.NextAction() )
             {
                 // execute every action, to keep VDev state up-to-date
                 // currently used only for
@@ -1431,6 +1273,11 @@ namespace cppcanvas
 
                     case META_POP_ACTION:
                         popState( rStates );
+                        break;
+
+                    case META_MAPMODE_ACTION:
+                        // Currently ignored, only affects rVDev (for
+                        // which it _is_ executed)
                         break;
 
                     // monitor clip regions, to assemble clip polygon on our own
@@ -1591,15 +1438,20 @@ namespace cppcanvas
                         break;
 
                     case META_TEXTALIGN_ACTION:
-                        // TODO(F2): NYI
-                        break;
+                    {
+                        ::cppcanvas::internal::OutDevState& rState = getState( rStates );
+                        const TextAlign eTextAlign( static_cast<MetaTextAlignAction*>(pCurrAct)->GetTextAlign() );
+
+                        rState.textReferencePoint = eTextAlign;
+                    }
+                    break;
 
                     case META_FONT_ACTION:
                     {
                         ::cppcanvas::internal::OutDevState& rState = getState( rStates );
                         const ::Font& rFont( static_cast<MetaFontAction*>(pCurrAct)->GetFont() );
 
-                        rState.xFont = createFont( rState.fontTransform,
+                        rState.xFont = createFont( rState.fontRotation,
                                                    rFont,
                                                    rCanvas,
                                                    rVDev,
@@ -1623,6 +1475,10 @@ namespace cppcanvas
                         break;
 
                     case META_REFPOINT_ACTION:
+                        // TODO(F2): NYI
+                        break;
+
+                    case META_TEXTLANGUAGE_ACTION:
                         // TODO(F2): NYI
                         break;
 
@@ -1678,7 +1534,8 @@ namespace cppcanvas
                                               rStates,
                                               rParms,
                                               io_rCurrActionIndex,
-                                              true );
+                                              true,
+                                              bSubsettableActions );
                     }
                     break;
 
@@ -1690,7 +1547,9 @@ namespace cppcanvas
                         rVDev.AddHatchActions( static_cast<MetaHatchAction*>(pCurrAct)->GetPolyPolygon(),
                                                static_cast<MetaHatchAction*>(pCurrAct)->GetHatch(),
                                                aTmpMtf );
-                        createActions( rCanvas, rVDev, aTmpMtf, rStates, rParms, io_rCurrActionIndex );
+                        createActions( rCanvas, rVDev, aTmpMtf, rStates,
+                                       rParms, bSubsettableActions,
+                                       io_rCurrActionIndex );
                     }
                     break;
 
@@ -1722,6 +1581,7 @@ namespace cppcanvas
                             createActions( rCanvas, rVDev,
                                            const_cast<GDIMetaFile&>(pAct->GetSubstitute()),
                                            rStates, rParms,
+                                           bSubsettableActions,
                                            io_rCurrActionIndex );
 
                             popState( rStates );
@@ -1766,128 +1626,130 @@ namespace cppcanvas
                                                                       rStates,
                                                                       rParms,
                                                                       io_rCurrActionIndex,
-                                                                      false );
+                                                                      false,
+                                                                      bSubsettableActions );
                                             }
                                         }
                                         break;
                                 }
                             }
                         }
-
-                        // Handle drawing layer strokes
-                        else if( pAct->GetComment().Equals( "XPATHSTROKE_SEQ_BEGIN" ) )
-                        {
-                            // TODO(F1): Later
-#if 0
-                            const BYTE* pData = pAct->GetData();
-                            if ( pData )
-                            {
-                                SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
-
-                                SvtGraphicStroke aStroke;
-                                aMemStm >> aStroke;
-
-                                // TODO(F1): respect exceptions, like
-                                // start/end arrows and joins not
-                                // displayable via Canvas
-
-                                // TODO(F1): use correct scale direction, stroke
-                                // width might be height or anything else
-                                const Size aSize( aStroke.getStrokeWidth(), 0 );
-
-                                internal::StrokeAction aStrokeAction( rVDev.LogicToPixel( aStroke.getPath() ),
-                                                                      aStroke.getTransparency(),
-                                                                      rVDev.LogicToPixel( aSize ).Width(),
-                                                                      aStroke.getJoinType(),
-                                                                      aStroke.getDashArray(),
-                                                                      aStroke.getMiterLimit(),
-                                                                      aStroke.getCapType(),
-                                                                      rCanvas,
-                                                                      getState( rStates ) );
-
-                                aStrokeAction.render( rViewState );
-
-                                // skip broken-down render output
-                                skipContent( rMtf, "XPATHSTROKE_SEQ_END" );
-                            }
-#endif
-                        }
+                        // TODO(P2): Handle drawing layer strokes, via
+                        // XPATHSTROKE_SEQ_BEGIN comment
 
                         // Handle drawing layer fills
                         else if( pAct->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
                         {
-                            // TODO(F1): Later
-#if 0
                             const BYTE* pData = pAct->GetData();
                             if ( pData )
                             {
-                                SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
+                                SvMemoryStream  aMemStm( (void*)pData, pAct->GetDataSize(), STREAM_READ );
 
                                 SvtGraphicFill aFill;
                                 aMemStm >> aFill;
 
-                                switch( aFill.getType() )
+                                // TODO(P2): Also handle gradients and
+                                // hatches like this
+
+                                // only evaluate comment for pure
+                                // bitmap fills. If a transparency
+                                // gradient is involved (denoted by
+                                // the FloatTransparent action), take
+                                // the normal meta actions.
+                                if( aFill.getFillType() == SvtGraphicFill::fillTexture &&
+                                    !isActionContained( rMtf,
+                                                       "XPATHFILL_SEQ_END",
+                                                        META_FLOATTRANSPARENT_ACTION ) )
                                 {
-                                    case SvtGraphicFill::fillSolid:
-                                    {
-                                        internal::SolidFillAction aFillAction( rVDev.LogicToPixel( aFill.getPath() ),
-                                                                               aFill.getFillColor(),
-                                                                               aFill.getTransparency(),
-                                                                               aFill.getFillRule(),
-                                                                               rCanvas,
-                                                                               getState( rStates ) );
-                                        aFillAction.render( rViewState );
-                                    }
-                                    break;
+                                    rendering::Texture aTexture;
 
-                                    case SvtGraphicFill::fillGradient:
-                                    {
-                                        internal::GradientFillAction aFillAction( rVDev.LogicToPixel( aFill.getPath() ),
-                                                                                  aFill.getTransparency(),
-                                                                                  aFill.getFillRule(),
-                                                                                  aFill.getTransform(),
-                                                                                  aFill.getGradientType(),
-                                                                                  aFill.getGradient1stColor(),
-                                                                                  aFill.getGradient2ndColor(),
-                                                                                  aFill.getGradientStepCount(),
-                                                                                  rCanvas,
-                                                                                  getState( rStates ) );
-                                        aFillAction.render( rViewState );
-                                    }
-                                    break;
+                                    // TODO(F1): the SvtGraphicFill
+                                    // can also transport metafiles
+                                    // here, handle that case, too
+                                    Graphic aGraphic;
+                                    aFill.getGraphic( aGraphic );
 
-                                    case SvtGraphicFill::fillHatch:
-                                    {
-                                        internal::HatchedFillAction aFillAction( rVDev.LogicToPixel( aFill.getPath() ),
-                                                                                 aFill.getTransparency(),
-                                                                                 aFill.getFillRule(),
-                                                                                 aFill.getTransform(),
-                                                                                 aFill.getHatchType(),
-                                                                                 aFill.getHatchColor(),
-                                                                                 rCanvas,
-                                                                                 getState( rStates ) );
-                                        aFillAction.render( rViewState );
-                                    }
-                                    break;
+                                    BitmapEx     aBmpEx( aGraphic.GetBitmapEx() );
+                                    const ::Size aBmpSize( aBmpEx.GetSizePixel() );
 
-                                    case SvtGraphicFill::fillTexture:
+                                    ::SvtGraphicFill::Transform aTransform;
+                                    aFill.getTransform( aTransform );
+
+                                    ::basegfx::B2DHomMatrix aMatrix;
+
+                                    // convert to basegfx matrix
+                                    aMatrix.set(0,0, aTransform.matrix[ 0 ] );
+                                    aMatrix.set(0,1, aTransform.matrix[ 1 ] );
+                                    aMatrix.set(0,2, aTransform.matrix[ 2 ] );
+                                    aMatrix.set(1,0, aTransform.matrix[ 3 ] );
+                                    aMatrix.set(1,1, aTransform.matrix[ 4 ] );
+                                    aMatrix.set(1,2, aTransform.matrix[ 5 ] );
+
+                                    ::basegfx::B2DHomMatrix aScale;
+                                    aScale.scale( aBmpSize.Width(),
+                                                  aBmpSize.Height() );
+
+                                    // post-multiply with the bitmap
+                                    // size (XCanvas' texture assumes
+                                    // the given bitmap to be
+                                    // normalized to [0,1]x[0,1]
+                                    // rectangle)
+                                    aMatrix = aMatrix * aScale;
+
+                                    // pre-multiply with the
+                                    // logic-to-pixel scale factor
+                                    // (the metafile comment works in
+                                    // logical coordinates).
+                                    ::basegfx::B2DHomMatrix aLogic2PixelTransform;
+                                    aMatrix *= tools::calcLogic2PixelLinearTransform( aLogic2PixelTransform,
+                                                                                      rVDev );
+
+                                    ::basegfx::unotools::affineMatrixFromHomMatrix(
+                                        aTexture.AffineTransform,
+                                        aMatrix );
+
+                                    aTexture.Alpha = 1.0 - aFill.getTransparency();
+                                    aTexture.Bitmap =
+                                        ::vcl::unotools::xBitmapFromBitmapEx(
+                                            rCanvas->getUNOCanvas()->getDevice(),
+                                            aBmpEx );
+                                    aTexture.RepeatModeX = rendering::TexturingMode::REPEAT;
+                                    aTexture.RepeatModeY = rendering::TexturingMode::REPEAT;
+
+                                    ::PolyPolygon aPath;
+                                    aFill.getPath( aPath );
+
+                                    // subdivide if polygon has curves
+                                    basegfx::B2DPolyPolygon aTmpPolyPolygon( aPath.getB2DPolyPolygon() );
+                                    if (aTmpPolyPolygon.areControlVectorsUsed())
                                     {
-                                        internal::BitmapFillAction aFillAction( rVDev.LogicToPixel( aFill.getPath() ),
-                                                                                aFill.getTransparency(),
-                                                                                aFill.getFillRule(),
-                                                                                aFill.getTransform(),
-                                                                                aFill.getFillGraphic(),
-                                                                                rCanvas,
-                                                                                getState( rStates ) );
-                                        aFillAction.render( rViewState );
+                                        aTmpPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle( aTmpPolyPolygon );
+                                        aPath = ::PolyPolygon( aTmpPolyPolygon );
                                     }
-                                    break;
+
+                                    ActionSharedPtr pPolyAction(
+                                        internal::PolyPolyActionFactory::createPolyPolyAction(
+                                            rVDev.LogicToPixel( aPath ),
+                                            rCanvas,
+                                            getState( rStates ),
+                                            aTexture ) );
+
+                                    if( pPolyAction )
+                                    {
+                                        maActions.push_back(
+                                            MtfAction(
+                                                pPolyAction,
+                                                io_rCurrActionIndex ) );
+
+                                        io_rCurrActionIndex += pPolyAction->getActionCount()-1;
+                                    }
+
+                                    // skip broken-down render output
+                                    skipContent( rMtf,
+                                                 "XPATHFILL_SEQ_END",
+                                                 io_rCurrActionIndex );
                                 }
-
-                                // skip broken-down render output
-                                skipContent( rMtf, "XPATHFILL_SEQ_END" );
                             }
-#endif
                         }
                     }
                     break;
@@ -1906,14 +1768,21 @@ namespace cppcanvas
                         const OutDevState& rState( getState( rStates ) );
                         if( rState.lineColor.getLength() )
                         {
-                            maActions.push_back(
-                                MtfAction(
-                                    ActionSharedPtr(
-                                        new internal::PointAction(
-                                            rVDev.LogicToPixel( static_cast<MetaPointAction*>(pCurrAct)->GetPoint() ),
-                                            rCanvas,
-                                            rState ) ),
-                                    io_rCurrActionIndex ) );
+                            ActionSharedPtr pPointAction(
+                                internal::PointActionFactory::createPointAction(
+                                    rVDev.LogicToPixel( static_cast<MetaPointAction*>(pCurrAct)->GetPoint() ),
+                                    rCanvas,
+                                    rState ) );
+
+                            if( pPointAction )
+                            {
+                                maActions.push_back(
+                                    MtfAction(
+                                        pPointAction,
+                                        io_rCurrActionIndex ) );
+
+                                io_rCurrActionIndex += pPointAction->getActionCount()-1;
+                            }
                         }
                     }
                     break;
@@ -1923,16 +1792,23 @@ namespace cppcanvas
                         const OutDevState& rState( getState( rStates ) );
                         if( rState.lineColor.getLength() )
                         {
-                            maActions.push_back(
-                                MtfAction(
-                                    ActionSharedPtr(
-                                        new internal::PointAction(
-                                            rVDev.LogicToPixel(
-                                                static_cast<MetaPixelAction*>(pCurrAct)->GetPoint() ),
-                                            rCanvas,
-                                            rState,
-                                            static_cast<MetaPixelAction*>(pCurrAct)->GetColor() ) ),
-                                    io_rCurrActionIndex ) );
+                            ActionSharedPtr pPointAction(
+                                internal::PointActionFactory::createPointAction(
+                                    rVDev.LogicToPixel(
+                                        static_cast<MetaPixelAction*>(pCurrAct)->GetPoint() ),
+                                    rCanvas,
+                                    rState,
+                                    static_cast<MetaPixelAction*>(pCurrAct)->GetColor() ) );
+
+                            if( pPointAction )
+                            {
+                                maActions.push_back(
+                                    MtfAction(
+                                        pPointAction,
+                                        io_rCurrActionIndex ) );
+
+                                io_rCurrActionIndex += pPointAction->getActionCount()-1;
+                            }
                         }
                     }
                     break;
@@ -1944,24 +1820,75 @@ namespace cppcanvas
                         {
                             MetaLineAction* pLineAct = static_cast<MetaLineAction*>(pCurrAct);
 
-                            // plain hair line
-                            maActions.push_back(
-                                MtfAction(
-                                    ActionSharedPtr(
-                                        new internal::LineAction(
-                                            rVDev.LogicToPixel( pLineAct->GetStartPoint() ),
-                                            rVDev.LogicToPixel( pLineAct->GetEndPoint() ),
-                                            rCanvas,
-                                            rState ) ),
-                                    io_rCurrActionIndex ) );
+                            const LineInfo& rLineInfo( pLineAct->GetLineInfo() );
+
+                            ::Point aPoints[2];
+                            aPoints[0] = rVDev.LogicToPixel( pLineAct->GetStartPoint() );
+                            aPoints[1] = rVDev.LogicToPixel( pLineAct->GetEndPoint() );
+
+                            ActionSharedPtr pLineAction;
+
+                            if( rLineInfo.IsDefault() )
+                            {
+                                // plain hair line
+                                pLineAction =
+                                    internal::LineActionFactory::createLineAction(
+                                        aPoints[0],
+                                        aPoints[1],
+                                        rCanvas,
+                                        rState );
+
+                                if( pLineAction )
+                                {
+                                    maActions.push_back(
+                                        MtfAction(
+                                            pLineAction,
+                                            io_rCurrActionIndex ) );
+
+                                    io_rCurrActionIndex += pLineAction->getActionCount()-1;
+                                }
+                            }
+                            else if( LINE_NONE != rLineInfo.GetStyle() )
+                            {
+                                // 'thick' line
+                                rendering::StrokeAttributes aStrokeAttributes;
+
+                                setupStrokeAttributes( aStrokeAttributes,
+                                                       rVDev,
+                                                       rLineInfo );
+
+                                // XCanvas can only stroke polygons,
+                                // not simple lines - thus, handle
+                                // this case via the polypolygon
+                                // action
+                                pLineAction =
+                                    internal::PolyPolyActionFactory::createPolyPolyAction(
+                                        ::PolyPolygon(
+                                            ::Polygon( 2, aPoints ) ),
+                                        rCanvas, rState, aStrokeAttributes );
+
+                                if( pLineAction )
+                                {
+                                    maActions.push_back(
+                                        MtfAction(
+                                            pLineAction,
+                                            io_rCurrActionIndex ) );
+
+                                    io_rCurrActionIndex += pLineAction->getActionCount()-1;
+                                }
+                            }
+                            // else: line style is default
+                            // (i.e. invisible), don't generate action
                         }
                     }
                     break;
 
                     case META_RECT_ACTION:
-                        createFillAndStroke( ::PolyPolygon( ::Polygon( rVDev.LogicToPixel( static_cast<MetaRectAction*>(pCurrAct)->GetRect() ) ) ),
-                                             rCanvas, io_rCurrActionIndex,
-                                             rStates );
+                        createFillAndStroke( ::PolyPolygon(
+                                                 ::Polygon(
+                                                     rVDev.LogicToPixel( static_cast<MetaRectAction*>(pCurrAct)->GetRect() ) ) ),
+                                              rCanvas, io_rCurrActionIndex,
+                                              rStates );
                         break;
 
                     case META_ROUNDRECT_ACTION:
@@ -2015,16 +1942,57 @@ namespace cppcanvas
                         {
                             MetaPolyLineAction* pPolyLineAct = static_cast<MetaPolyLineAction*>(pCurrAct);
 
-                            // plain hair line polygon
-                            maActions.push_back(
-                                MtfAction(
-                                    ActionSharedPtr(
-                                        new internal::PolyPolyAction(
-                                            rVDev.LogicToPixel( pPolyLineAct->GetPolygon() ),
-                                            rCanvas,
-                                            rState,
-                                            internal::PolyPolyAction::strokeOnly ) ),
-                                    io_rCurrActionIndex ) );
+                            const LineInfo& rLineInfo( pPolyLineAct->GetLineInfo() );
+
+                            ActionSharedPtr pLineAction;
+
+                            if( rLineInfo.IsDefault() )
+                            {
+                                // plain hair line polygon
+                                pLineAction =
+                                    internal::PolyPolyActionFactory::createLinePolyPolyAction(
+                                        rVDev.LogicToPixel( pPolyLineAct->GetPolygon() ),
+                                        rCanvas,
+                                        rState );
+
+                                if( pLineAction )
+                                {
+                                    maActions.push_back(
+                                        MtfAction(
+                                            pLineAction,
+                                            io_rCurrActionIndex ) );
+
+                                    io_rCurrActionIndex += pLineAction->getActionCount()-1;
+                                }
+                            }
+                            else if( LINE_NONE != rLineInfo.GetStyle() )
+                            {
+                                // 'thick' line polygon
+                                rendering::StrokeAttributes aStrokeAttributes;
+
+                                setupStrokeAttributes( aStrokeAttributes,
+                                                       rVDev,
+                                                       rLineInfo );
+
+                                pLineAction =
+                                    internal::PolyPolyActionFactory::createPolyPolyAction(
+                                        rVDev.LogicToPixel( pPolyLineAct->GetPolygon() ),
+                                        rCanvas,
+                                        rState,
+                                        aStrokeAttributes ) ;
+
+                                if( pLineAction )
+                                {
+                                    maActions.push_back(
+                                        MtfAction(
+                                            pLineAction,
+                                            io_rCurrActionIndex ) );
+
+                                    io_rCurrActionIndex += pLineAction->getActionCount()-1;
+                                }
+                            }
+                            // else: line style is default
+                            // (i.e. invisible), don't generate action
                         }
                     }
                     break;
@@ -2045,15 +2013,22 @@ namespace cppcanvas
                     {
                         MetaBmpAction* pAct = static_cast<MetaBmpAction*>(pCurrAct);
 
-                        maActions.push_back(
-                            MtfAction(
-                                ActionSharedPtr(
-                                    new internal::BitmapAction(
-                                        pAct->GetBitmap(),
-                                        rVDev.LogicToPixel( pAct->GetPoint() ),
-                                        rCanvas,
-                                        getState( rStates ) ) ),
-                                io_rCurrActionIndex ) );
+                        ActionSharedPtr pBmpAction(
+                                internal::BitmapActionFactory::createBitmapAction(
+                                    pAct->GetBitmap(),
+                                    rVDev.LogicToPixel( pAct->GetPoint() ),
+                                    rCanvas,
+                                    getState( rStates ) ) );
+
+                        if( pBmpAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pBmpAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pBmpAction->getActionCount()-1;
+                        }
                     }
                     break;
 
@@ -2061,16 +2036,23 @@ namespace cppcanvas
                     {
                         MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pCurrAct);
 
-                        maActions.push_back(
-                            MtfAction(
-                                ActionSharedPtr(
-                                    new internal::BitmapAction(
-                                        pAct->GetBitmap(),
-                                        rVDev.LogicToPixel( pAct->GetPoint() ),
-                                        rVDev.LogicToPixel( pAct->GetSize() ),
-                                        rCanvas,
-                                        getState( rStates ) ) ),
-                                io_rCurrActionIndex ) );
+                        ActionSharedPtr pBmpAction(
+                                internal::BitmapActionFactory::createBitmapAction(
+                                    pAct->GetBitmap(),
+                                    rVDev.LogicToPixel( pAct->GetPoint() ),
+                                    rVDev.LogicToPixel( pAct->GetSize() ),
+                                    rCanvas,
+                                    getState( rStates ) ) );
+
+                        if( pBmpAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pBmpAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pBmpAction->getActionCount()-1;
+                        }
                     }
                     break;
 
@@ -2078,18 +2060,30 @@ namespace cppcanvas
                     {
                         MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pCurrAct);
 
-                        maActions.push_back(
-                            MtfAction(
-                                ActionSharedPtr(
-                                    new internal::BitmapAction(
-                                        pAct->GetBitmap(),
-                                        pAct->GetSrcPoint(),
-                                        pAct->GetSrcSize(),
-                                        rVDev.LogicToPixel( pAct->GetDestPoint() ),
-                                        rVDev.LogicToPixel( pAct->GetDestSize() ),
-                                        rCanvas,
-                                        getState( rStates ) ) ),
-                                io_rCurrActionIndex ) );
+                        // crop bitmap to given source rectangle (no
+                        // need to copy and convert the whole bitmap)
+                        Bitmap aBmp( pAct->GetBitmap() );
+                        const Rectangle aCropRect( pAct->GetSrcPoint(),
+                                                    pAct->GetSrcSize() );
+                        aBmp.Crop( aCropRect );
+
+                        ActionSharedPtr pBmpAction(
+                                internal::BitmapActionFactory::createBitmapAction(
+                                    aBmp,
+                                    rVDev.LogicToPixel( pAct->GetDestPoint() ),
+                                    rVDev.LogicToPixel( pAct->GetDestSize() ),
+                                    rCanvas,
+                                    getState( rStates ) ) );
+
+                        if( pBmpAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pBmpAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pBmpAction->getActionCount()-1;
+                        }
                     }
                     break;
 
@@ -2097,15 +2091,22 @@ namespace cppcanvas
                     {
                         MetaBmpExAction* pAct = static_cast<MetaBmpExAction*>(pCurrAct);
 
-                        maActions.push_back(
-                            MtfAction(
-                                ActionSharedPtr(
-                                    new internal::BitmapAction(
-                                        pAct->GetBitmapEx(),
-                                        rVDev.LogicToPixel( pAct->GetPoint() ),
-                                        rCanvas,
-                                        getState( rStates ) ) ),
-                                io_rCurrActionIndex ) );
+                        ActionSharedPtr pBmpAction(
+                                internal::BitmapActionFactory::createBitmapAction(
+                                    pAct->GetBitmapEx(),
+                                    rVDev.LogicToPixel( pAct->GetPoint() ),
+                                    rCanvas,
+                                    getState( rStates ) ) );
+
+                        if( pBmpAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pBmpAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pBmpAction->getActionCount()-1;
+                        }
                     }
                     break;
 
@@ -2113,16 +2114,23 @@ namespace cppcanvas
                     {
                         MetaBmpExScaleAction* pAct = static_cast<MetaBmpExScaleAction*>(pCurrAct);
 
-                        maActions.push_back(
-                            MtfAction(
-                                ActionSharedPtr(
-                                    new internal::BitmapAction(
-                                        pAct->GetBitmapEx(),
-                                        rVDev.LogicToPixel( pAct->GetPoint() ),
-                                        rVDev.LogicToPixel( pAct->GetSize() ),
-                                        rCanvas,
-                                        getState( rStates ) ) ),
-                                io_rCurrActionIndex ) );
+                        ActionSharedPtr pBmpAction(
+                                internal::BitmapActionFactory::createBitmapAction(
+                                    pAct->GetBitmapEx(),
+                                    rVDev.LogicToPixel( pAct->GetPoint() ),
+                                    rVDev.LogicToPixel( pAct->GetSize() ),
+                                    rCanvas,
+                                    getState( rStates ) ) );
+
+                        if( pBmpAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pBmpAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pBmpAction->getActionCount()-1;
+                        }
                     }
                     break;
 
@@ -2130,18 +2138,30 @@ namespace cppcanvas
                     {
                         MetaBmpExScalePartAction* pAct = static_cast<MetaBmpExScalePartAction*>(pCurrAct);
 
-                        maActions.push_back(
-                            MtfAction(
-                                ActionSharedPtr(
-                                    new internal::BitmapAction(
-                                        pAct->GetBitmapEx(),
-                                        pAct->GetSrcPoint(),
-                                        pAct->GetSrcSize(),
-                                        rVDev.LogicToPixel( pAct->GetDestPoint() ),
-                                        rVDev.LogicToPixel( pAct->GetDestSize() ),
-                                        rCanvas,
-                                        getState( rStates ) ) ),
-                                io_rCurrActionIndex ) );
+                        // crop bitmap to given source rectangle (no
+                        // need to copy and convert the whole bitmap)
+                        BitmapEx aBmp( pAct->GetBitmapEx() );
+                        const Rectangle aCropRect( pAct->GetSrcPoint(),
+                                                   pAct->GetSrcSize() );
+                        aBmp.Crop( aCropRect );
+
+                        ActionSharedPtr pBmpAction(
+                            internal::BitmapActionFactory::createBitmapAction(
+                                aBmp,
+                                rVDev.LogicToPixel( pAct->GetDestPoint() ),
+                                rVDev.LogicToPixel( pAct->GetDestSize() ),
+                                rCanvas,
+                                getState( rStates ) ) );
+
+                        if( pBmpAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pBmpAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pBmpAction->getActionCount()-1;
+                        }
                     }
                     break;
 
@@ -2149,16 +2169,31 @@ namespace cppcanvas
                     {
                         MetaMaskAction* pAct = static_cast<MetaMaskAction*>(pCurrAct);
 
-                        // TODO(F2): masking NYI. Further members: mask color
-                        maActions.push_back(
-                            MtfAction(
-                                ActionSharedPtr(
-                                    new internal::BitmapAction(
-                                        pAct->GetBitmap(),
-                                        rVDev.LogicToPixel( pAct->GetPoint() ),
-                                        rCanvas,
-                                        getState( rStates ) ) ),
-                                io_rCurrActionIndex ) );
+                        // create masked BitmapEx right here, as the
+                        // canvas does not provide equivalent
+                        // functionality
+                        Bitmap aMask( pAct->GetBitmap().CreateMask( pAct->GetColor() ) );
+                        aMask.Invert();
+
+                        BitmapEx aBmp( pAct->GetBitmap(),
+                                       aMask );
+
+                        ActionSharedPtr pBmpAction(
+                            internal::BitmapActionFactory::createBitmapAction(
+                                aBmp,
+                                rVDev.LogicToPixel( pAct->GetPoint() ),
+                                rCanvas,
+                                getState( rStates ) ) );
+
+                        if( pBmpAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pBmpAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pBmpAction->getActionCount()-1;
+                        }
                     }
                     break;
 
@@ -2166,17 +2201,32 @@ namespace cppcanvas
                     {
                         MetaMaskScaleAction* pAct = static_cast<MetaMaskScaleAction*>(pCurrAct);
 
-                        // TODO(F2): masking NYI. Further members: mask color
-                        maActions.push_back(
-                            MtfAction(
-                                ActionSharedPtr(
-                                    new internal::BitmapAction(
-                                        pAct->GetBitmap(),
-                                        rVDev.LogicToPixel( pAct->GetPoint() ),
-                                        rVDev.LogicToPixel( pAct->GetSize() ),
-                                        rCanvas,
-                                        getState( rStates ) ) ),
-                                io_rCurrActionIndex ) );
+                        // create masked BitmapEx right here, as the
+                        // canvas does not provide equivalent
+                        // functionality
+                        Bitmap aMask( pAct->GetBitmap().CreateMask( pAct->GetColor() ) );
+                        aMask.Invert();
+
+                        BitmapEx aBmp( pAct->GetBitmap(),
+                                       aMask );
+
+                        ActionSharedPtr pBmpAction(
+                            internal::BitmapActionFactory::createBitmapAction(
+                                aBmp,
+                                rVDev.LogicToPixel( pAct->GetPoint() ),
+                                rVDev.LogicToPixel( pAct->GetSize() ),
+                                rCanvas,
+                                getState( rStates ) ) );
+
+                        if( pBmpAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pBmpAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pBmpAction->getActionCount()-1;
+                        }
                     }
                     break;
 
@@ -2184,19 +2234,38 @@ namespace cppcanvas
                     {
                         MetaMaskScalePartAction* pAct = static_cast<MetaMaskScalePartAction*>(pCurrAct);
 
-                        // TODO(F2): masking NYI. Further members: mask color
-                        maActions.push_back(
-                            MtfAction(
-                                ActionSharedPtr(
-                                    new internal::BitmapAction(
-                                        pAct->GetBitmap(),
-                                        pAct->GetSrcPoint(),
-                                        pAct->GetSrcSize(),
-                                        rVDev.LogicToPixel( pAct->GetDestPoint() ),
-                                        rVDev.LogicToPixel( pAct->GetDestSize() ),
-                                        rCanvas,
-                                        getState( rStates ) ) ),
-                                io_rCurrActionIndex ) );
+                        // create masked BitmapEx right here, as the
+                        // canvas does not provide equivalent
+                        // functionality
+                        Bitmap aMask( pAct->GetBitmap().CreateMask( pAct->GetColor() ) );
+                        aMask.Invert();
+
+                        BitmapEx aBmp( pAct->GetBitmap(),
+                                       aMask );
+
+                        // crop bitmap to given source rectangle (no
+                        // need to copy and convert the whole bitmap)
+                        const Rectangle aCropRect( pAct->GetSrcPoint(),
+                                                   pAct->GetSrcSize() );
+                        aBmp.Crop( aCropRect );
+
+                        ActionSharedPtr pBmpAction(
+                            internal::BitmapActionFactory::createBitmapAction(
+                                aBmp,
+                                rVDev.LogicToPixel( pAct->GetDestPoint() ),
+                                rVDev.LogicToPixel( pAct->GetDestSize() ),
+                                rCanvas,
+                                getState( rStates ) ) );
+
+                        if( pBmpAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pBmpAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pBmpAction->getActionCount()-1;
+                        }
                     }
                     break;
 
@@ -2217,15 +2286,22 @@ namespace cppcanvas
                         {
                             MetaTransparentAction* pAct = static_cast<MetaTransparentAction*>(pCurrAct);
 
-                            maActions.push_back(
-                                MtfAction(
-                                    ActionSharedPtr(
-                                        new internal::PolyPolyAction(
-                                            rVDev.LogicToPixel( pAct->GetPolyPolygon() ),
-                                            rCanvas,
-                                            rState,
-                                            pAct->GetTransparence() ) ),
-                                    io_rCurrActionIndex ) );
+                            ActionSharedPtr pPolyAction(
+                                internal::PolyPolyActionFactory::createPolyPolyAction(
+                                    rVDev.LogicToPixel( pAct->GetPolyPolygon() ),
+                                    rCanvas,
+                                    rState,
+                                    pAct->GetTransparence() ) );
+
+                            if( pPolyAction )
+                            {
+                                maActions.push_back(
+                                    MtfAction(
+                                        pPolyAction,
+                                        io_rCurrActionIndex ) );
+
+                                io_rCurrActionIndex += pPolyAction->getActionCount()-1;
+                            }
                         }
                     }
                     break;
@@ -2243,25 +2319,33 @@ namespace cppcanvas
 
                         DBG_TESTSOLARMUTEX();
 
-                        maActions.push_back(
-                            MtfAction(
-                                ActionSharedPtr(
-                                    new internal::TransparencyGroupAction(
-                                        pMtf,
-                                        pGradient,
-                                        rParms,
-                                        rVDev.LogicToPixel( pAct->GetPoint() ),
-                                        rVDev.LogicToPixel( pAct->GetSize() ),
-                                        rCanvas,
-                                        getState( rStates ) ) ),
-                                io_rCurrActionIndex ) );
+                        ActionSharedPtr pFloatTransAction(
+                            internal::TransparencyGroupActionFactory::createTransparencyGroupAction(
+                                pMtf,
+                                pGradient,
+                                rParms,
+                                rVDev.LogicToPixel( pAct->GetPoint() ),
+                                rVDev.LogicToPixel( pAct->GetSize() ),
+                                rCanvas,
+                                getState( rStates ) ) );
+
+                        if( pFloatTransAction )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pFloatTransAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pFloatTransAction->getActionCount()-1;
+                        }
                     }
                     break;
 
                     case META_TEXT_ACTION:
                     {
                         MetaTextAction* pAct = static_cast<MetaTextAction*>(pCurrAct);
-                        createTextWithEffectsAction(
+
+                        createTextAction(
                             pAct->GetPoint(),
                             pAct->GetText(),
                             pAct->GetIndex(),
@@ -2271,6 +2355,7 @@ namespace cppcanvas
                             rCanvas,
                             rStates,
                             rParms,
+                            bSubsettableActions,
                             io_rCurrActionIndex );
                     }
                     break;
@@ -2278,7 +2363,8 @@ namespace cppcanvas
                     case META_TEXTARRAY_ACTION:
                     {
                         MetaTextArrayAction* pAct = static_cast<MetaTextArrayAction*>(pCurrAct);
-                        createTextWithEffectsAction(
+
+                        createTextAction(
                             pAct->GetPoint(),
                             pAct->GetText(),
                             pAct->GetIndex(),
@@ -2288,6 +2374,7 @@ namespace cppcanvas
                             rCanvas,
                             rStates,
                             rParms,
+                            bSubsettableActions,
                             io_rCurrActionIndex );
                     }
                     break;
@@ -2295,20 +2382,46 @@ namespace cppcanvas
                     case META_TEXTLINE_ACTION:
                     {
                         MetaTextLineAction* pAct = static_cast<MetaTextLineAction*>(pCurrAct);
-                        createJustTextLinesAction(
-                            pAct->GetStartPoint(),
-                            pAct->GetWidth(),
-                            rVDev,
-                            rCanvas,
-                            rStates,
-                            rParms,
-                            io_rCurrActionIndex );
+
+                        const OutDevState&  rState( getState( rStates ) );
+                        const ::Size        aBaselineOffset( tools::getBaselineOffset( rState,
+                                                                                       rVDev ) );
+                        const ::Point       aStartPoint( pAct->GetStartPoint() );
+                        const ::Size        aSize( rVDev.LogicToPixel(
+                                                       ::Size( pAct->GetWidth(),
+                                                               0 ) ) );
+
+                        ActionSharedPtr pPolyAction(
+                            PolyPolyActionFactory::createPolyPolyAction(
+                                ::PolyPolygon(
+                                    tools::createTextLinesPolyPolygon(
+                                        ::vcl::unotools::b2DPointFromPoint(
+                                            rVDev.LogicToPixel(
+                                                ::Point(
+                                                    aStartPoint.X() + aBaselineOffset.Width(),
+                                                    aStartPoint.Y() + aBaselineOffset.Height() ) ) ),
+                                        aSize.Width(),
+                                        tools::createTextLineInfo( rVDev,
+                                                                   rState ) ) ),
+                                rCanvas,
+                                rState ) );
+
+                        if( pPolyAction.get() )
+                        {
+                            maActions.push_back(
+                                MtfAction(
+                                    pPolyAction,
+                                    io_rCurrActionIndex ) );
+
+                            io_rCurrActionIndex += pPolyAction->getActionCount()-1;
+                        }
                     }
                     break;
 
                     case META_TEXTRECT_ACTION:
                         // TODO(F2): NYI
-                        DBG_ERROR("META_TEXTRECT not yet supported");
+                        OSL_ENSURE( false,
+                                    "META_TEXTRECT not yet supported" );
                         break;
 
                     case META_STRETCHTEXT_ACTION:
@@ -2343,7 +2456,7 @@ namespace cppcanvas
                             *p++ += (sal_Int32)i*nWidthDifference/nLen;
                         }
 
-                        createTextWithEffectsAction(
+                        createTextAction(
                             pAct->GetPoint(),
                             pAct->GetText(),
                             pAct->GetIndex(),
@@ -2353,13 +2466,23 @@ namespace cppcanvas
                             rCanvas,
                             rStates,
                             rParms,
+                            bSubsettableActions,
                             io_rCurrActionIndex );
                     }
                     break;
 
                     default:
+                        OSL_ENSURE( false,
+                                    "Unknown meta action type encountered" );
                         break;
                 }
+
+                // increment action index (each mtf action counts _at
+                // least_ one. Some count for more, therefore,
+                // io_rCurrActionIndex is sometimes incremented by
+                // pAct->getActionCount()-1 above, the -1 being the
+                // correction for the unconditional increment here).
+                ++io_rCurrActionIndex;
             }
 
             return true;
@@ -2399,80 +2522,81 @@ namespace cppcanvas
             aVDev.SetMapMode( rMtf.GetPrefMapMode() );
 
             const Size aMtfSize( rMtf.GetPrefSize() );
-            const Size aMtfSizePix( aVDev.LogicToPixel( aMtfSize,
-                                                        rMtf.GetPrefMapMode() ) );
+            const Size aMtfSizePixPre( aVDev.LogicToPixel( aMtfSize,
+                                                           rMtf.GetPrefMapMode() ) );
             const Point aEmptyPt;
             const Point aMtfOriginPix( aVDev.LogicToPixel( aEmptyPt ) );
 
-            // skip null-sized output
-            if( aMtfSizePix.Width() != 0 &&
-                aMtfSizePix.Height() != 0 )
+            // #i44110# correct null-sized output - there are shapes
+            // which have zero size in at least one dimension
+            const Size aMtfSizePix( ::std::max( aMtfSizePixPre.Width(), 1L ),
+                                    ::std::max( aMtfSizePixPre.Height(), 1L ) );
+
+            // init state stack
+            clearStateStack( aStateStack );
+
+            // Setup local state, such that the metafile renders
+            // itself into a one-by-one square for identity view
+            // and render transformations
+            getState( aStateStack ).transform.translate( -aMtfOriginPix.X(), -aMtfOriginPix.Y() );
+            getState( aStateStack ).transform.scale( 1.0 / aMtfSizePix.Width(),
+                                                     1.0 / aMtfSizePix.Height() );
+
+            ColorSharedPtr pColor( getCanvas()->createColor() );
+
+            // setup default text color to black
+            getState( aStateStack ).textColor =
+                getState( aStateStack ).textFillColor =
+                getState( aStateStack ).textLineColor = pColor->getDeviceColor( 0x000000FF );
+
+            // apply overrides from the Parameters struct
+            if( rParams.maFillColor.isValid() )
             {
-                // init state stack
-                clearStateStack( aStateStack );
-
-                // Setup local state, such that the metafile renders
-                // itself into a one-by-one square for identity view
-                // and render transformations
-                getState( aStateStack ).transform.translate( -aMtfOriginPix.X(), -aMtfOriginPix.Y() );
-                getState( aStateStack ).transform.scale( 1.0 / aMtfSizePix.Width(),
-                                                         1.0 / aMtfSizePix.Height() );
-
-                ColorSharedPtr pColor( getCanvas()->createColor() );
-
-                // setup default text color to black
+                getState( aStateStack ).isFillColorSet = true;
+                getState( aStateStack ).fillColor = pColor->getDeviceColor( rParams.maFillColor.getValue() );
+            }
+            if( rParams.maLineColor.isValid() )
+            {
+                getState( aStateStack ).isLineColorSet = true;
+                getState( aStateStack ).lineColor = pColor->getDeviceColor( rParams.maLineColor.getValue() );
+            }
+            if( rParams.maTextColor.isValid() )
+            {
+                getState( aStateStack ).isTextFillColorSet = true;
+                getState( aStateStack ).isTextLineColorSet = true;
                 getState( aStateStack ).textColor =
                     getState( aStateStack ).textFillColor =
-                    getState( aStateStack ).textLineColor = pColor->getDeviceColor( 0x000000FF );
-
-                // apply overrides from the Parameters struct
-                if( rParams.maFillColor.isValid() )
-                {
-                    getState( aStateStack ).isFillColorSet = true;
-                    getState( aStateStack ).fillColor = pColor->getDeviceColor( rParams.maFillColor.getValue() );
-                }
-                if( rParams.maLineColor.isValid() )
-                {
-                    getState( aStateStack ).isLineColorSet = true;
-                    getState( aStateStack ).lineColor = pColor->getDeviceColor( rParams.maLineColor.getValue() );
-                }
-                if( rParams.maTextColor.isValid() )
-                {
-                    getState( aStateStack ).isTextFillColorSet = true;
-                    getState( aStateStack ).isTextLineColorSet = true;
-                    getState( aStateStack ).textColor =
-                        getState( aStateStack ).textFillColor =
-                        getState( aStateStack ).textLineColor = pColor->getDeviceColor( rParams.maTextColor.getValue() );
-                }
-                if( rParams.maFontName.isValid() ||
-                    rParams.maFontWeight.isValid() ||
-                    rParams.maFontLetterForm.isValid() ||
-                    rParams.maFontUnderline.isValid() )
-                {
-                    ::cppcanvas::internal::OutDevState& rState = getState( aStateStack );
-
-                    rState.xFont = createFont( rState.fontTransform,
-                                               ::Font(), // default font
-                                               rCanvas,
-                                               aVDev,
-                                               rParams );
-                }
-
-                int nCurrActions(0);
-                createActions( rCanvas,
-                               aVDev,
-                               const_cast<GDIMetaFile&>(rMtf), // HACK(Q2):
-                                                               // we're
-                                                               // changing
-                                                               // the
-                                                               // current
-                                                               // action
-                                                               // in
-                                                               // createActions!
-                               aStateStack,
-                               rParams,
-                               nCurrActions );
+                    getState( aStateStack ).textLineColor = pColor->getDeviceColor( rParams.maTextColor.getValue() );
             }
+            if( rParams.maFontName.isValid() ||
+                rParams.maFontWeight.isValid() ||
+                rParams.maFontLetterForm.isValid() ||
+                rParams.maFontUnderline.isValid() )
+            {
+                ::cppcanvas::internal::OutDevState& rState = getState( aStateStack );
+
+                rState.xFont = createFont( rState.fontRotation,
+                                           ::Font(), // default font
+                                           rCanvas,
+                                           aVDev,
+                                           rParams );
+            }
+
+            sal_Int32 nCurrActions(0);
+            createActions( rCanvas,
+                           aVDev,
+                           const_cast<GDIMetaFile&>(rMtf), // HACK(Q2):
+                                                           // we're
+                                                           // changing
+                                                              // the
+                                                              // current
+                                                              // action
+                                                              // in
+                                                              // createActions!
+                           aStateStack,
+                           rParams,
+                           true, // TODO(P1): make subsettability configurable
+                           nCurrActions );
         }
 
         ImplRenderer::ImplRenderer( const CanvasSharedPtr&  rCanvas,
@@ -2511,10 +2635,11 @@ namespace cppcanvas
             // create a single action for the provided BitmapEx
             maActions.push_back(
                 MtfAction(
-                    ActionSharedPtr( new BitmapAction(rBmpEx,
-                                                      Point(),
-                                                      rCanvas,
-                                                      aState) ),
+                    BitmapActionFactory::createBitmapAction(
+                        rBmpEx,
+                        Point(),
+                        rCanvas,
+                        aState),
                     0 ) );
         }
 
@@ -2549,31 +2674,152 @@ namespace cppcanvas
                 const ::basegfx::B2DHomMatrix   maTransformation;
                 bool                            mbRet;
             };
+
+            // Doing that via inline class. Compilers tend to not inline free
+            // functions.
+            struct UpperBoundActionIndexComparator
+            {
+                bool operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction& rLHS,
+                                 const ::cppcanvas::internal::ImplRenderer::MtfAction& rRHS )
+                {
+                    const sal_Int32 nLHSCount( rLHS.mpAction ?
+                                               rLHS.mpAction->getActionCount() : 0 );
+                    const sal_Int32 nRHSCount( rRHS.mpAction ?
+                                               rRHS.mpAction->getActionCount() : 0 );
+
+                    // compare end of action range, to have an action selected
+                    // by lower_bound even if the requested index points in
+                    // the middle of the action's range
+                    return rLHS.mnOrigIndex + nLHSCount < rRHS.mnOrigIndex + nRHSCount;
+                }
+            };
+
         }
 
-        bool ImplRenderer::drawSubset( int  startIndex,
-                                       int  endIndex ) const
+        bool ImplRenderer::drawSubset( sal_Int32    nStartIndex,
+                                       sal_Int32    nEndIndex ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::draw()" );
 
-            OSL_ENSURE( startIndex<=endIndex,
-                        "ImplRenderer::draw() invalid action range" );
+            ENSURE_AND_RETURN( nStartIndex<=nEndIndex,
+                               "ImplRenderer::drawSubset(): invalid action range" );
+
+            ENSURE_AND_RETURN( !maActions.empty(),
+                               "ImplRenderer::drawSubset(): no actions to render" );
+
+            const sal_Int32 nMinActionIndex( maActions.front().mnOrigIndex );
+            const sal_Int32 nMaxActionIndex( maActions.back().mnOrigIndex +
+                                             maActions.back().mpAction->getActionCount() );
+
+            // clip given range to permissible values (there might be
+            // ranges before and behind the valid indices)
+            nStartIndex = ::std::max( nMinActionIndex,
+                                      nStartIndex );
+            nEndIndex = ::std::min( nMaxActionIndex,
+                                    nEndIndex );
+
+            if( nStartIndex == nEndIndex ||
+                nStartIndex > nEndIndex )
+            {
+                // empty range, rendered 'nothing' successfully. The
+                // second condition e.g. happens if the requested
+                // range lies fully before or behind the valid action
+                // indices.
+                return true;
+            }
+
+
+            const ActionVector::const_iterator aBegin( maActions.begin() );
+            const ActionVector::const_iterator aEnd( maActions.end() );
+
 
             // find start and end action
-            ActionVector::const_iterator aIterBegin( ::std::lower_bound( maActions.begin(),
-                                                                         maActions.end(),
-                                                                         MtfAction( ActionSharedPtr(), startIndex ),
-                                                                         ActionIndexComparator() ) );
-            ActionVector::const_iterator aIterEnd( ::std::lower_bound( maActions.begin(),
-                                                                       maActions.end(),
-                                                                       MtfAction( ActionSharedPtr(), endIndex ),
-                                                                       ActionIndexComparator() ) );
+            // =========================
+            ActionVector::const_iterator aRangeBegin( ::std::lower_bound( aBegin, aEnd,
+                                                                          MtfAction( ActionSharedPtr(), nStartIndex ),
+                                                                          UpperBoundActionIndexComparator() ) );
+            ActionVector::const_iterator aRangeEnd( ::std::lower_bound( aBegin, aEnd,
+                                                                        MtfAction( ActionSharedPtr(), nEndIndex ),
+                                                                        UpperBoundActionIndexComparator() ) );
+
+            // now, aRangeBegin references the action in which the
+            // subset rendering must start, and aRangeEnd references
+            // the action in which the subset rendering must end (it
+            // might also end right at the start of the referenced
+            // action, such that zero of that action needs to be
+            // rendered).
+
+
+            // render subset of actions
+            // ========================
 
             ::basegfx::B2DHomMatrix aMatrix;
             ::canvas::tools::getRenderStateTransform( aMatrix, maRenderState );
 
-            // render subset of actions
-            return ::std::for_each( aIterBegin, aIterEnd, ActionRenderer( aMatrix ) ).result();
+            if( aRangeBegin == aRangeEnd )
+            {
+                // only a single action. Setup subset, and render
+                Action::Subset aSubset;
+                aSubset.mnSubsetBegin = ::std::max( 0L,
+                                                    nStartIndex - aRangeBegin->mnOrigIndex );
+                aSubset.mnSubsetEnd   = ::std::min( aRangeBegin->mpAction->getActionCount(),
+                                                    nEndIndex - aRangeBegin->mnOrigIndex );
+
+                ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                                   "ImplRenderer::drawSubset(): Invalid indices" );
+
+                return aRangeBegin->mpAction->render( aMatrix, aSubset );
+            }
+            else
+            {
+                // more than one action.
+
+                // render partial first, full intermediate, and
+                // partial last action
+                Action::Subset aSubset;
+                aSubset.mnSubsetBegin = ::std::max( 0L,
+                                                    nStartIndex - aRangeBegin->mnOrigIndex );
+                aSubset.mnSubsetEnd   = aRangeBegin->mpAction->getActionCount();
+
+                ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                                   "ImplRenderer::drawSubset(): Invalid indices" );
+
+                if( !aRangeBegin->mpAction->render( aMatrix, aSubset ) )
+                    return false;
+
+                // first action rendered, skip to next
+                ++aRangeBegin;
+
+                // render full middle actions
+                if( !::std::for_each( aRangeBegin,
+                                      aRangeEnd,
+                                      ActionRenderer( aMatrix ) ).result() )
+                {
+                    return false;
+                }
+
+                if( aRangeEnd == aEnd ||
+                    aRangeEnd->mnOrigIndex > nEndIndex )
+                {
+                    // aRangeEnd denotes end of action vector,
+                    //
+                    // or
+                    //
+                    // nEndIndex references something _after_
+                    // aRangeBegin, but _before_ aRangeEnd
+                    //
+                    // either way: no partial action left
+                    return true;
+                }
+
+                aSubset.mnSubsetBegin = 0;
+                aSubset.mnSubsetEnd   = nEndIndex - aRangeEnd->mnOrigIndex;
+
+                ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                                   "ImplRenderer::drawSubset(): Invalid indices" );
+
+                return aRangeEnd->mpAction->render( aMatrix, aSubset );
+            }
         }
 
         bool ImplRenderer::draw() const
