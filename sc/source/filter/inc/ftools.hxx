@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:39:48 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,42 @@ private:
     Type*               mpObj;
     size_t*             mpnCount;
 };
+
+template< typename Type >
+inline bool operator==( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() == rxRef2.get();
+}
+
+template< typename Type >
+inline bool operator!=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() != rxRef2.get();
+}
+
+template< typename Type >
+inline bool operator<( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() < rxRef2.get();
+}
+
+template< typename Type >
+inline bool operator>( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() > rxRef2.get();
+}
+
+template< typename Type >
+inline bool operator<=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() <= rxRef2.get();
+}
+
+template< typename Type >
+inline bool operator>=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
+{
+    return rxRef1.get() >= rxRef2.get();
+}
 
 // ============================================================================
 
