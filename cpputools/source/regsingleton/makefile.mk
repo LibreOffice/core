@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 13:07:55 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:45:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,16 +63,13 @@ PRJ=..$/..
 
 PRJNAME=cpputools
 TARGET=regsingleton
-TARGETTYPE=CUI
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
@@ -98,12 +95,11 @@ UNOTYPES= \
 
 # --- Files --------------------------------------------------------
 
-CXXFILES= \
-    regsingleton.cxx
+DEPOBJFILES= \
+    $(OBJ)$/regsingleton.obj 
 
 APP1TARGET=$(TARGET)
-APP1OBJS= \
-    $(OBJ)$/regsingleton.obj 
+APP1OBJS=$(DEPOBJFILES)  
 
 APP1STDLIBS= \
     $(SALLIB)		\
