@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:44:34 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Calculates the number of weeks in a specific period";
             Text[ portuguese ] = "Determines the number of weeks in a specific period.";
             Text[ russian ] = "Βϋχθρλÿες κξλθχερςβξ νεδελό β ξοπεδελεννξμ οεπθξδε βπεμενθ.";
-            Text[ greek ] = "Determines the number of weeks in a specific period.";
+            Text[ greek ] = "Υπολογίζει τον αριθμό των εβδομάδων σε μια συγκεκριμένη περίοδο";
             Text[ dutch ] = "Berekent het aantal weken binnen een bepaalde periode.";
             Text[ french ] = "Calcule le nombre de semaines dans une pιriode dιterminιe.";
             Text[ spanish ] = "Calcula el nϊmero de semanas en un periodo determinado.";
@@ -106,7 +106,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Start date";
             Text[ portuguese ] = "Data inicial";
             Text[ russian ] = "Νΰχΰλόνΰÿ δΰςΰ";
-            Text[ greek ] = "Start date";
+            Text[ greek ] = "Ημερομηνία έναρξης";
             Text[ dutch ] = "Begindatum";
             Text[ french ] = "Date initiale";
             Text[ spanish ] = "Fecha inicial";
@@ -137,7 +137,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "First day of the period";
             Text[ portuguese ] = "First day of the period.";
             Text[ russian ] = "Οεπβϋι δενό οεπθξδΰ.";
-            Text[ greek ] = "First day of the period.";
+            Text[ greek ] = "Πρώτη ημέρα της περιόδου";
             Text[ dutch ] = "De eerste dag van de periode.";
             Text[ french ] = "Premier jour de la pιriode.";
             Text[ spanish ] = "Primer dνa del periodo";
@@ -168,7 +168,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "End date";
             Text[ portuguese ] = "Data final";
             Text[ russian ] = "Κξνεχνΰÿ δΰςΰ";
-            Text[ greek ] = "End date";
+            Text[ greek ] = "Ημερομηνία λήξης";
             Text[ dutch ] = "Einddatum";
             Text[ french ] = "Date de fin";
             Text[ spanish ] = "Fecha final";
@@ -199,7 +199,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Last day of the period";
             Text[ portuguese ] = "Last day of the period.";
             Text[ russian ] = "Οξρλεδνθι δενό οεπθξδΰ.";
-            Text[ greek ] = "Last day of the period.";
+            Text[ greek ] = "Τελευταία ημέρα της περιόδου";
             Text[ dutch ] = "Laatste dag van de periode.";
             Text[ french ] = "Dernier jour de la pιriode.";
             Text[ spanish ] = "Ϊltimo dνa del periodo.";
@@ -230,7 +230,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Type";
             Text[ portuguese ] = "Mode";
             Text[ russian ] = "Òθο";
-            Text[ greek ] = "Mode";
+            Text[ greek ] = "Τύπος";
             Text[ dutch ] = "Soort";
             Text[ french ] = "Mode";
             Text[ spanish ] = "Tipo";
@@ -261,7 +261,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar weeks.";
             Text[ portuguese ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
             Text[ russian ] = "Òθο βϋχθρλενθι: ςθο=0 ξηνΰχΰες βπεμεννξι θνςεπβΰλ; ςθο=1 ξηνΰχΰες χθρλξ κΰλενδΰπνϋυ νεδελό.";
-            Text[ greek ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
+            Text[ greek ] = "Τύπος υπολογισμού: Τύπος=0 σημαίνει το χρονικό διάστημα, Τύπος=1 σημαίνει ημερολογιακές εβδομάδες.";
             Text[ dutch ] = "Soort berekening: soort=0 voor aantal weken in interval, soort=1 voor kalenderweken.";
             Text[ french ] = "Type de calcul : Mode=0 pour le nombre de semaines dans l'intervalle, Mode=1 pour les semaines du calendrier.";
             Text[ spanish ] = "Tipo de calculaciσn: Tipo=0 significa el nϊmero de semanas y Tipo=1 el nϊmero de semanas del calendario.";
@@ -296,7 +296,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Determines the number of months in a specific period.";
             Text[ portuguese ] = "Determines the number of months in a specific period.";
             Text[ russian ] = "Βϋχθρλÿες κξλθχερςβξ μερÿφεβ β ξοπεδελεννξμ οεπθξδε βπεμενθ.";
-            Text[ greek ] = "Determines the number of months in a specific period.";
+            Text[ greek ] = "Καθορίζει τον αριθμό των μηνών σε μια συγκεκριμένη περίοδο.";
             Text[ dutch ] = "Berekent het aantal maanden in een bepaalde periode.";
             Text[ french ] = "Calcule le nombre de mois dans une pιriode dιterminιe.";
             Text[ spanish ] = "Calcula el nϊmero de meses en un periodo determinado.";
@@ -327,7 +327,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Start date";
             Text[ portuguese ] = "Data inicial";
             Text[ russian ] = "Νΰχΰλόνΰÿ δΰςΰ";
-            Text[ greek ] = "Start date";
+            Text[ greek ] = "Ημερομηνία έναρξης";
             Text[ dutch ] = "Begindatum";
             Text[ french ] = "Date initiale";
             Text[ spanish ] = "Fecha inicial";
@@ -358,7 +358,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "First day of the period.";
             Text[ portuguese ] = "First day of the period.";
             Text[ russian ] = "Οεπβϋι δενό οεπθξδΰ.";
-            Text[ greek ] = "First day of the period.";
+            Text[ greek ] = "Πρώτη ημέρα της περιόδου.";
             Text[ dutch ] = "Eerste dag van de periode.";
             Text[ french ] = "Premier jour de la pιriode.";
             Text[ spanish ] = "Primer dνa del periodo.";
@@ -389,7 +389,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "End date";
             Text[ portuguese ] = "Data final";
             Text[ russian ] = "Κξνεχνΰÿ δΰςΰ";
-            Text[ greek ] = "End date";
+            Text[ greek ] = "Ημερομηνία λήξης";
             Text[ dutch ] = "Einddatum";
             Text[ french ] = "Date de fin";
             Text[ spanish ] = "Fecha final";
@@ -420,7 +420,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Last day of the period.";
             Text[ portuguese ] = "Last day of the period.";
             Text[ russian ] = "Οξρλεδνθι δενό οεπθξδΰ.";
-            Text[ greek ] = "Last day of the period.";
+            Text[ greek ] = "Τελευταία ημέρα της περιόδου.";
             Text[ dutch ] = "Laatste dag van de periode.";
             Text[ french ] = "Dernier jour de la pιriode.";
             Text[ spanish ] = "Ϊltimo dνa del periodo.";
@@ -451,7 +451,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Type";
             Text[ portuguese ] = "Mode";
             Text[ russian ] = "Òθο";
-            Text[ greek ] = "Mode";
+            Text[ greek ] = "Τύπος";
             Text[ dutch ] = "Type";
             Text[ french ] = "Mode";
             Text[ spanish ] = "Tipo";
@@ -482,7 +482,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar months.";
             Text[ portuguese ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar months.";
             Text[ russian ] = "Òθο βϋχθρλενθι: ςθο=0 ξηνΰχΰες βπεμεννξι θνςεπβΰλ; ςθο=1 ξηνΰχΰες κΰλενδΰπνϋε μερÿφϋ.";
-            Text[ greek ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar months.";
+            Text[ greek ] = "Τύπος υπολογισμού: Τύπος=0 σημαίνει το χρονικό διάστημα, Τύπος=1 σημαίνει ημερολογιακοί μήνες.";
             Text[ dutch ] = "Soort berekening: soort=0 voor aantal maanden in interval, soort=1 voor kalendermaanden.";
             Text[ french ] = "Type de calcul : Mode=0 pour le nombre de mois dans l'intervalle, Mode=1 pour les mois du calendrier.";
             Text[ spanish ] = "Tipo de calculaciσn: Tipo=0 para el nϊmero de meses, Tipo=1 para el mes del calendario.";
@@ -517,7 +517,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Calculates the number of years in a specific period.";
             Text[ portuguese ] = "Determines the number of years in a specific period.";
             Text[ russian ] = "Βϋχθρλÿες κξλθχερςβξ λες β σκΰηΰννξμ οεπθξδε βπεμενθ.";
-            Text[ greek ] = "Determines the number of years in a specific period.";
+            Text[ greek ] = "Υπολογίζει τον αριθμό των ετών μέσα σε μια συγκεκριμένη περίοδο.";
             Text[ dutch ] = "Berekent het aantal jaren binnen een bepaalde periode.";
             Text[ french ] = "Calcule le nombre d'annιes dans une pιriode dιterminιe.";
             Text[ spanish ] = "Calcula el nϊmero de aρos en un determinado periodo.";
@@ -548,7 +548,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Start date";
             Text[ portuguese ] = "Data inicial";
             Text[ russian ] = "Νΰχΰλόνΰÿ δΰςΰ";
-            Text[ greek ] = "Start date";
+            Text[ greek ] = "Ημερομηνία έναρξης";
             Text[ dutch ] = "Begindatum";
             Text[ french ] = "Date initiale";
             Text[ spanish ] = "Fecha inicial";
@@ -579,7 +579,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "First day of the period";
             Text[ portuguese ] = "First day of the period.";
             Text[ russian ] = "Οεπβϋι δενό οεπθξδΰ.";
-            Text[ greek ] = "First day of the period.";
+            Text[ greek ] = "Πρώτη ημέρα της περιόδου";
             Text[ dutch ] = "Eerste dag van de periode.";
             Text[ french ] = "Premier jour de la pιriode.";
             Text[ spanish ] = "Primer dνa del periodo.";
@@ -610,7 +610,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "End date";
             Text[ portuguese ] = "Data final";
             Text[ russian ] = "Κξνεχνΰÿ δΰςΰ";
-            Text[ greek ] = "End date";
+            Text[ greek ] = "Ημερομηνία λήξης";
             Text[ dutch ] = "Einddatum";
             Text[ french ] = "Date de fin";
             Text[ spanish ] = "Fecha final";
@@ -641,7 +641,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Last day of the period";
             Text[ portuguese ] = "Last day of the period.";
             Text[ russian ] = "Οξρλεδνθι δενό οεπθξδΰ.";
-            Text[ greek ] = "Last day of the period.";
+            Text[ greek ] = "Τελευταία ημέρα της περιόδου";
             Text[ dutch ] = "Laatste dag van de periode.";
             Text[ french ] = "Dernier jour de la pιriode.";
             Text[ spanish ] = "Ϊltimo dνa del periodo.";
@@ -672,7 +672,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Type";
             Text[ portuguese ] = "Mode";
             Text[ russian ] = "Òθο";
-            Text[ greek ] = "Mode";
+            Text[ greek ] = "Τύπος";
             Text[ dutch ] = "Type";
             Text[ french ] = "Mode";
             Text[ spanish ] = "Tipo";
@@ -703,7 +703,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Type of calculation: Type=0 means the time interval, Typee=1 means calendar years.";
             Text[ portuguese ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar years.";
             Text[ russian ] = "Òθο βϋχθρλενθι: ςθο=0 ξηνΰχΰες βπεμεννξι θνςεπβΰλ; ςθο=1 ξηνΰχΰες κξλθχερςβξ κΰλενδΰπνϋυ λες.";
-            Text[ greek ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar years.";
+            Text[ greek ] = "Τύπος υπολογισμού: Τύπος=0 σημαίνει το χρονικό διάστημα, Τύπος=1 σημαίνει ημερολογιακά έτη.";
             Text[ dutch ] = "Soort berekening: soort=0 voor aantal jaren in interval, soort=1 voor kalenderjaren.";
             Text[ french ] = "Type de calcul : Mode=0 pour le nombre d'annιes dans l'intervalle, Mode=1 pour les annιes du calendrier.";
             Text[ spanish ] = "Tipo de calculaciσn: Tipo=0 significa el nϊmero de aρo, Tipo=1 los aρos del calendario.";
@@ -738,7 +738,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
             Text[ portuguese ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
             Text[ russian ] = "Βξηβπΰωΰες 1 (ΘΡÒΘΝΐ), ερλθ σκΰηΰννΰÿ δΰςΰ βϋοΰδΰες νΰ βθρξκξρνϋι γξδ, β οπξςθβνξμ ρλσχΰε βξηβπΰωΰες ηνΰχενθε 0 (ΛΞΖά).";
-            Text[ greek ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
+            Text[ greek ] = "Επιστρέφει 1 (ΑΛΗΘΗΣ) αν η ημερομηνία είναι μια ημέρα δίσεκτου έτους, αλλιώς 0 (ΨΕΥΔΗΣ).";
             Text[ dutch ] = "Geeft als resultaat 1 (WAAR) als de opgegeven datum in een schrikkeljaar valt, anders 0 (ONWAAR).";
             Text[ french ] = "Renvoie 1 (VRAI) si l'annιe d'une date est bissextile, sinon 0 (FAUX).";
             Text[ spanish ] = "Devuelve 1 (VERDADERO) si la fecha indicada es aρo bisiesto, de lo contrario 0 (FALSO).";
@@ -800,7 +800,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Any day in the desired year";
             Text[ portuguese ] = "Any day in the desired year.";
             Text[ russian ] = "Λώαξι δενό ηΰδΰννξγξ γξδΰ.";
-            Text[ greek ] = "Any day in the desired year.";
+            Text[ greek ] = "Οποιαδήποτε ημέρα στο επιθυμητό έτος";
             Text[ dutch ] = "Een willekeurige dag in het gewenste jaar.";
             Text[ french ] = "Un jour quelconque dans l'annιe en question.";
             Text[ spanish ] = "Cualquier dνa en un aρo deseado.";
@@ -835,7 +835,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Returns the number of days of the month in which the date entered occurs";
             Text[ portuguese ] = "Returns the number of days of the month in relation to the date entered.";
             Text[ russian ] = "Βξηβπΰωΰες χθρλξ δνει β μερÿφε, νΰ κξςξπϋι οπθυξδθςρÿ σκΰηΰννΰÿ δΰςΰ.";
-            Text[ greek ] = "Returns the number of days of the month in relation to the date entered.";
+            Text[ greek ] = "Επιστρέφει τον αριθμό των ημερών του μήνα στον οποίο ανήκει η ημερομηνία που δόθηκε.";
             Text[ dutch ] = "Geeft als resultaat het aantal dagen van de maand waarin de opgegeven datum valt.";
             Text[ french ] = "Renvoie le nombre de jours dans le mois en relation avec la date indiquιe.";
             Text[ spanish ] = "Devuelve la cantidad de dνas del mes en el que figure la fecha indicada.";
@@ -897,7 +897,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Any day in the desired month";
             Text[ portuguese ] = "Any day in the desired month.";
             Text[ russian ] = "Λώαξι δενό ηΰδΰννξγξ μερÿφΰ.";
-            Text[ greek ] = "Any day in the desired month.";
+            Text[ greek ] = "Οποιαδήποτε ημέρα στον επιθυμητό μήνα";
             Text[ dutch ] = "Een willekeurige dag in de gewenste maand.";
             Text[ french ] = "Un jour quelconque dans le mois en question.";
             Text[ spanish ] = "Cualquier dνa en un mes deseado.";
@@ -932,7 +932,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Returns the number of days of the year in which the date entered occurs.";
             Text[ portuguese ] = "Returns the number of days of the year in relation to the date entered.";
             Text[ russian ] = "Βξηβπΰωΰες χθρλξ δνει β γξδσ, νΰ κξςξπϋι οπθυξδθςρÿ σκΰηΰννΰÿ δΰςΰ.";
-            Text[ greek ] = "Returns the number of days of the year in relation to the date entered.";
+            Text[ greek ] = "Επιστρέφει τον αριθμό των ημερών του έτους στο οποίο ανήκει η ημερομηνία που δόθηκε.";
             Text[ dutch ] = "Retourneert het aantal dagen van het jaar dat de opgegeven datum bevat.";
             Text[ french ] = "Renvoie le nombre de jours dans l'annιe en relation avec la date indiquιe.";
             Text[ spanish ] = "Devuelve la cantidad de dνas del aρo en el que figure la fecha indicada.";
@@ -994,7 +994,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Any day in the desired year";
             Text[ portuguese ] = "Any day in the desired year.";
             Text[ russian ] = "Λώαξι δενό ηΰδΰννξγξ γξδΰ.";
-            Text[ greek ] = "Any day in the desired year.";
+            Text[ greek ] = "Οποιαδήποτε ημέρα στο επιθυμητό έτος";
             Text[ dutch ] = "Een willekeurige dag in het gewenste jaar.";
             Text[ french ] = "Un jour quelconque dans l'annιe en question.";
             Text[ spanish ] = "Cualquier dνa en un aρo deseado.";
@@ -1029,7 +1029,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Returns the number of weeks of the year in which the date entered occurs";
             Text[ portuguese ] = "Returns the number of weeks of the year in relation to the date entered.";
             Text[ russian ] = "Βξηβπΰωΰες χθρλξ νεδελό β γξδσ, νΰ κξςξπϋι οπθυξδθςρÿ σκΰηΰννΰÿ δΰςΰ.";
-            Text[ greek ] = "Returns the number of weeks of the year in relation to the date entered.";
+            Text[ greek ] = "Επιστρέφει τον αριθμό των εβδομάδων του έτους στο οποίο ανήκει η ημερομηνία που δόθηκε";
             Text[ dutch ] = "Retourneert het aantal weken van het jaar dat de opgegeven datum bevat.";
             Text[ french ] = "Renvoie le nombre de semaines dans l'annιe en relation avec la date indiquιe.";
             Text[ spanish ] = "Devuelve el nϊmero de semanas del aρo en el que figure la fecha indicada.";
@@ -1091,7 +1091,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Any day in the desired year";
             Text[ portuguese ] = "Any day in the desired year.";
             Text[ russian ] = "Λώαξι δενό ηΰδΰννξγξ γξδΰ.";
-            Text[ greek ] = "Any day in the desired year.";
+            Text[ greek ] = "Οποιαδήποτε ημέρα στο επιθυμητό έτος";
             Text[ dutch ] = "Een willekeurige dag in het gewenste jaar.";
             Text[ french ] = "Un jour quelconque dans l'annιe en question.";
             Text[ spanish ] = "Cualquier dνa en un aρo deseado.";
@@ -1126,7 +1126,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Encrypts or decrypts a text using the ROT13 algorithm";
             Text[ portuguese ] = "Encrypts or decrypts a text using the ROT13 algorithm.";
             Text[ russian ] = "Ψθτπσες θ δεψθτπσες ςεκρς οπθ οξμξωθ ΰλγξπθςμΰ ROT13.";
-            Text[ greek ] = "Encrypts or decrypts a text using the ROT13 algorithm.";
+            Text[ greek ] = "Κρυπτογραφεί ή αποκρυπτογραφεί ένα κείμενο χρησιμοποιώντας τον αλγόριθμο ROT13";
             Text[ dutch ] = "Codeert of decodeert een tekst met behulp van de ROT13-algoritme.";
             Text[ french ] = "Chiffre ou dιchiffre un texte en utilisant l'algorithme ROT13.";
             Text[ spanish ] = "Codifica y descodifica un texto con la ayuda del algoritmo ROT13.";
@@ -1188,7 +1188,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ english_us ] = "Text to be encrypted or text already encrypted";
             Text[ portuguese ] = "Text to be encrypted or encrypted text.";
             Text[ russian ] = "Ηΰψθτπξβΰννϋι ςεκρς θλθ ςεκρς, κξςξπϋι νεξαυξδθμξ ηΰψθτπξβΰςό.";
-            Text[ greek ] = "Text to be encrypted or encrypted text.";
+            Text[ greek ] = "Το κείμενο που θα κρυπτογραφηθεί ή που έχει ήδη κρυπτογραφηθεί";
             Text[ dutch ] = "Te coderen of gecodeerde tekst.";
             Text[ french ] = "Texte ΰ chiffrer ou ΰ dιchiffrer";
             Text[ spanish ] = "Texto codificado o a codificar.";
@@ -1225,7 +1225,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ english_us ] = "WEEKS";
         Text[ portuguese ] = "Semanas";
         Text[ russian ] = "ΝΕΔΕΛΘ";
-        Text[ greek ] = "Εβδομάδες";
+        Text[ greek ] = "WEEKS";
         Text[ dutch ] = "WEKEN";
         Text[ french ] = "SEMAINES";
         Text[ spanish ] = "SEMANAS";
@@ -1256,7 +1256,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ english_us ] = "MONTHS";
         Text[ portuguese ] = "Meses";
         Text[ russian ] = "ΜΕΡίΦΫ";
-        Text[ greek ] = "Μήνες";
+        Text[ greek ] = "MONTHS";
         Text[ dutch ] = "MAANDEN";
         Text[ french ] = "NB.MOIS";
         Text[ spanish ] = "MESES";
@@ -1287,7 +1287,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ english_us ] = "YEARS";
         Text[ portuguese ] = "Anos";
         Text[ russian ] = "ΓΞΔΫ";
-        Text[ greek ] = "Χρόνια";
+        Text[ greek ] = "YEARS";
         Text[ dutch ] = "JAREN";
         Text[ french ] = "ANNEES";
         Text[ spanish ] = "AΡOS";
@@ -1318,7 +1318,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ english_us ] = "ISLEAPYEAR";
         Text[ portuguese ] = "ΙAnoBissexto";
         Text[ russian ] = "ΒΘΡΞΚΞΡΓΞΔ";
-        Text[ greek ] = "ΕίναιΔίσεκτοΈτος";
+        Text[ greek ] = "ISLEAPYEAR";
         Text[ dutch ] = "ISSCHRIKKELJAAR";
         Text[ french ] = "ESTBISSEXTILE";
         Text[ spanish ] = "ESAΡOBISIESTO";
@@ -1349,7 +1349,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ english_us ] = "DAYSINMONTH";
         Text[ portuguese ] = "DiasNoMκs";
         Text[ russian ] = "ΔΝΕΙΒΜΕΡ";
-        Text[ greek ] = "ΗμέρεςΑνάΜήνα";
+        Text[ greek ] = "DAYSINMONTH";
         Text[ dutch ] = "DAGENINMAAND";
         Text[ french ] = "JOURSDANSMOIS";
         Text[ spanish ] = "DΝASENMES";
@@ -1380,7 +1380,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ english_us ] = "DAYSINYEAR";
         Text[ portuguese ] = "DiasNoAno";
         Text[ russian ] = "ΔΝΕΙΒΓΞΔΣ";
-        Text[ greek ] = "ΗμέρεςΣτοΈτος";
+        Text[ greek ] = "DAYSINYEAR";
         Text[ dutch ] = "DAGENINJAAR";
         Text[ french ] = "JOURSDANSANNEE";
         Text[ spanish ] = "DΝASENAΡO";
@@ -1411,7 +1411,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ english_us ] = "WEEKSINYEAR";
         Text[ portuguese ] = "SemanasNoAno";
         Text[ russian ] = "ΝΕΔΕΛάΒΓΞΔΣ";
-        Text[ greek ] = "ΕβδομάδεςΑνάΈτος";
+        Text[ greek ] = "WEEKSINYEAR";
         Text[ dutch ] = "WEKENINJAAR";
         Text[ french ] = "SEMAINESDANSANNEE";
         Text[ spanish ] = "SEMANASENAΡO";
@@ -1536,6 +1536,7 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
 
 
 
