@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinguisticExamples.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:01:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -39,7 +39,8 @@
  *************************************************************************/
 
 // used interfaces
-import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.linguistic2.XLinguServiceManager;
 import com.sun.star.linguistic2.XSpellChecker;
 import com.sun.star.linguistic2.XHyphenator;
@@ -65,8 +66,10 @@ import com.sun.star.lang.XComponent;
 
 public class LinguisticExamples
 {
+    // The remote office ocntext
+    protected XComponentContext mxRemoteContext = null;
     // The MultiServiceFactory interface of the Office
-    protected XMultiServiceFactory mxFactory = null;
+    protected XMultiComponentFactory mxRemoteServiceManager = null;
 
     // The LinguServiceManager interface
     protected XLinguServiceManager mxLinguSvcMgr = null;
@@ -89,67 +92,39 @@ public class LinguisticExamples
 
     public static void main(String args[])
     {
-        String sConnection;
-        // Get the connect string, defaulting to localhost, port 2083
-        // if non supplied as command line arguments
-        if( args.length == 0 )
-        {
-            sConnection = "socket,host=localhost,port=2083";
-            System.out.println( "Using default connect string: " + sConnection );
-        }
-        else
-        {
-            sConnection = args[0];
-            System.out.println( "Using connect string: " + sConnection );
-        }
-
         // Create an instance of the class and call it's begin method
         try {
             LinguisticExamples aExample = new LinguisticExamples();
-            aExample.Connect(sConnection);
+            aExample.Connect();
             aExample.Run();
         } catch (Exception e) {
+            System.err.println("failed to run examples");
             e.printStackTrace();
-            System.out.println("failed to run examples");
         }
     }
 
 
-    public void Connect( String sConnection )
-        throws com.sun.star.uno.Exception,
-        com.sun.star.uno.RuntimeException,
-        Exception
+    public void Connect()
+        throws java.lang.Exception
     {
-        XComponentContext xContext =
-            com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
-        XMultiComponentFactory xLocalServiceManager = xContext.getServiceManager();
-
-        Object  xUrlResolver  = xLocalServiceManager.createInstanceWithContext(
-            "com.sun.star.bridge.UnoUrlResolver", xContext );
-        XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(
-            XUnoUrlResolver.class, xUrlResolver );
-        Object rInitialObject = urlResolver.resolve( "uno:" + sConnection +
-            ";urp;StarOffice.NamingService" );
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(XNamingService.class,
-            rInitialObject );
-        if( rName != null )
-        {
-            Object rXsmgr = rName.getRegisteredObject( "StarOffice.ServiceManager" );
-            mxFactory = (XMultiServiceFactory)
-                UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
-        }
+        // get the remote office context. If necessary a new office
+        // process is started
+        mxRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+        System.out.println("Connected to a running office ...");
+        mxRemoteServiceManager = mxRemoteContext.getServiceManager();
     }
 
 
-    /** Get the LinguServiceManager to be used. For example to access spell checker,
-        thesaurus and hyphenator, also the component may choose to register itself
-        as listener to it in order to get notified of relevant events. */
+    /** Get the LinguServiceManager to be used. For example to access spell
+        checker, thesaurus and hyphenator, also the component may choose to
+        register itself as listener to it in order to get notified of relevant
+        events. */
     public boolean GetLinguSvcMgr()
         throws com.sun.star.uno.Exception
     {
-        if (mxFactory != null) {
-            Object aObj = mxFactory.createInstance(
-                "com.sun.star.linguistic2.LinguServiceManager" );
+        if (mxRemoteContext != null && mxRemoteServiceManager != null) {
+            Object aObj = mxRemoteServiceManager.createInstanceWithContext(
+                "com.sun.star.linguistic2.LinguServiceManager", mxRemoteContext );
             mxLinguSvcMgr = (XLinguServiceManager)
                     UnoRuntime.queryInterface(XLinguServiceManager.class, aObj);
         }
@@ -258,14 +233,18 @@ public class LinguisticExamples
             // character in the resulting word of the hyphenation
             short nMaxLeading = 6;
 
-            XHyphenatedWord xHyphWord = mxHyph.hyphenate( "waterfall", aLocale, nMaxLeading , aEmptyProps );
+            XHyphenatedWord xHyphWord = mxHyph.hyphenate( "waterfall",
+                                                          aLocale, nMaxLeading ,
+                                                          aEmptyProps );
             if (xHyphWord == null)
                 System.out.println( "no valid hyphenation position found" );
             else
             {
-                System.out.println( "valid hyphenation pos found at " + xHyphWord.getHyphenationPos()
+                System.out.println( "valid hyphenation pos found at "
+                                    + xHyphWord.getHyphenationPos()
                         + " in " + xHyphWord.getWord() );
-                System.out.println( "hyphenation char will be after char " + xHyphWord.getHyphenPos()
+                System.out.println( "hyphenation char will be after char "
+                                    + xHyphWord.getHyphenPos()
                         + " in " + xHyphWord.getHyphenatedWord() );
             }
 
@@ -279,14 +258,18 @@ public class LinguisticExamples
             {
                 if (xHyphWord.isAlternativeSpelling())
                     System.out.println( "alternative spelling detectetd!" );
-                System.out.println( "valid hyphenation pos found at " + xHyphWord.getHyphenationPos()
+                System.out.println( "valid hyphenation pos found at "
+                                    + xHyphWord.getHyphenationPos()
                         + " in " + xHyphWord.getWord() );
-                System.out.println( "hyphenation char will be after char " + xHyphWord.getHyphenPos()
+                System.out.println( "hyphenation char will be after char "
+                                    + xHyphWord.getHyphenPos()
                         + " in " + xHyphWord.getHyphenatedWord() );
             }
 
 
-            XPossibleHyphens xPossHyph = mxHyph.createPossibleHyphens( "waterfall", aLocale, aEmptyProps );
+            XPossibleHyphens xPossHyph = mxHyph.createPossibleHyphens("waterfall",
+                                                                      aLocale,
+                                                                      aEmptyProps );
             if (xPossHyph == null)
                 System.out.println( "no hyphenation positions found." );
             else
@@ -297,7 +280,8 @@ public class LinguisticExamples
         GetThes();
         if (mxThes != null)
         {
-            XMeaning[] xMeanings = mxThes.queryMeanings( "house", aLocale, aEmptyProps );
+            XMeaning[] xMeanings = mxThes.queryMeanings("house", aLocale,
+                                                        aEmptyProps );
             if (xMeanings == null)
                 System.out.println( "nothing found." );
             else
@@ -317,8 +301,10 @@ public class LinguisticExamples
         XLinguServiceEventListener aClient = new Client();
 
         // get access to LinguProperties property set
-        Object aObj = mxFactory.createInstance( "com.sun.star.linguistic2.LinguProperties" );
-        XPropertySet aLinguProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,aObj);
+        Object aObj = mxRemoteServiceManager.createInstanceWithContext(
+            "com.sun.star.linguistic2.LinguProperties", mxRemoteContext);
+        XPropertySet aLinguProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet.class,aObj);
 
         // set a spellchecker and hyphenator property value to a defined state
         try {
