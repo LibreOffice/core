@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bc $ $Date: 2002-08-12 15:54:00 $
+ *  last change: $Author: bc $ $Date: 2002-08-21 15:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ public class Dataimport extends ReportWizard{
         getGroupFieldFortmats(xMSF, CurReportDocument, CurDBMetaData);
         CurUNOProgressDialog.modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
         CurUNOProgressDialog.modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
-        insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument, CurUNOProgressDialog);
+        insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
     }
     CurUNOProgressDialog.xComponent.dispose();
     }
@@ -286,7 +286,7 @@ public class Dataimport extends ReportWizard{
     }}
 
 
-    public void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF, DBMetaData CurDBMetaData, ReportDocument CurReportDocument, UNODialogs CurUNOProgressDialog){
+    public void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF, ReportDocument CurReportDocument, UNODialogs CurUNOProgressDialog){
     try{
         int ColIndex;
         int i;
@@ -300,6 +300,7 @@ public class Dataimport extends ReportWizard{
     String CurGroupValue;
     String CurGroupTableName;
     com.sun.star.sdbc.XRow xResultSetRow;
+    DBMetaData CurDBMetaData = CurReportDocument.CurDBMetaData;
         int GroupFieldCount = CurDBMetaData.GroupFieldNames.length;
     int FieldCount = CurDBMetaData.FieldNames.length;
     String[] OldGroupFieldValues = new String[GroupFieldCount];
@@ -325,7 +326,7 @@ public class Dataimport extends ReportWizard{
             xGroupBaseTables[ColIndex] = (XTextTable) CurReportDocument.TextTablesSupplier.getTextTables().getByName(CurGroupTableName);
             OldGroupFieldValues[ColIndex] = CurDBMetaData.getColumnValue(xResultSetRow, iCommandType, GroupColIndices, ColIndex);
             CurGroupValue = CurDBMetaData.getColumnValue(xResultSetRow, iCommandType, GroupColIndices, ColIndex);
-        CurGroupFieldFormat = (ReportDocument.GroupFieldFormat) GroupFormatVector.elementAt(ColIndex);
+        CurGroupFieldFormat = (ReportDocument.GroupFieldFormat) CurReportDocument.GroupFormatVector.elementAt(ColIndex);
         addLinkedTextSection(CurReportDocument, xTextCursor, "GroupField" + Integer.toString(ColIndex+1), CurGroupFieldFormat, CurGroupValue);
         }
         if (CurDBMetaData.getcurrentRecordData(xMSF, xResultSetRow, xFrame, ColIndex, FieldCount, RecordFieldCount, SelColIndices, iCommandType, DataVector, sMsgQueryCreationImpossible) == true){
@@ -343,7 +344,7 @@ public class Dataimport extends ReportWizard{
             if ((CurGroupValue.equals((Object) OldGroupFieldValues[ColIndex]) == false) || (breset)){
                 breset = true;
                 insertDataToRecordTable(CurReportDocument, xTextCursor, DataVector, RecordFieldCount);
-                CurGroupFieldFormat = (ReportDocument.GroupFieldFormat) GroupFormatVector.elementAt(ColIndex);
+                CurGroupFieldFormat = (ReportDocument.GroupFieldFormat) CurReportDocument.GroupFormatVector.elementAt(ColIndex);
                 addLinkedTextSection(CurReportDocument, xTextCursor, "GroupField" + Integer.toString(ColIndex+1), CurGroupFieldFormat, CurGroupValue);
                 OldGroupFieldValues[ColIndex] = CurGroupValue;
                 breset = !(ColIndex == GroupFieldCount-1);
@@ -406,17 +407,13 @@ public class Dataimport extends ReportWizard{
         int iRowCount = xTextTable.getRows().getCount();
         int iColCount = xTextTable.getColumns().getCount();
 
-        XCellRange xNewRange = xCellRange.getCellRangeByPosition(0,1,FieldCount -1,DataLength);
+        XCellRange xNewRange = xCellRange.getCellRangeByPosition(0,1,FieldCount -1, DataLength);
         XCellRangeData xDataArray = (XCellRangeData) UnoRuntime.queryInterface(XCellRangeData.class, xNewRange);
         xDataArray.setDataArray(RecordArray);
     }
     DataVector.removeAllElements();
     }
     catch( com.sun.star.uno.Exception exception ){
-//  Msgbox: Daten könnnen nicht in die Tabelle eingefügt werden.
-//  if (ColCount != FieldCount)
-//      "Anzahl der Spalten Ihrer Abfrage stimmt nicht mit der Anzahl der Spalten der Tabelle RecordSection überein!"
-
     exception.printStackTrace(System.out);
      }}
 
@@ -518,9 +515,9 @@ public class Dataimport extends ReportWizard{
     int GroupCount = CurDBMetaData.GroupFieldNames.length;
     ReportDocument.GroupFieldFormat CurGroupFieldFormat;
     for (int i = 0; i < GroupCount; i++){
-        CurGroupFieldFormat = CurReportDocument.addGroupTableFormat(CurReportDocument.TextTablesSupplier, CurDBMetaData.xColumns, CurDBMetaData.GroupFieldNames[i], i);
+        CurGroupFieldFormat = CurReportDocument.addGroupTableFormat(CurDBMetaData.GroupFieldNames[i], i, "Tbl_GroupField" + (i + 1));
         if (CurGroupFieldFormat != null){
-        GroupFormatVector.addElement(CurGroupFieldFormat);
+        CurReportDocument.GroupFormatVector.addElement(CurGroupFieldFormat);
         }
         else{
         String sMessage = tools.replaceSubString(sMsgTableNotExisting, "Tbl_GroupField" + (GroupCount), "<TABLENAME>");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: bc $ $Date: 2002-08-15 14:17:39 $
+ *  last change: $Author: bc $ $Date: 2002-08-21 15:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,6 @@ import java.util.*;
 
 public class ReportWizard {
      static XMultiServiceFactory xGlobalMSF;
-     DBMetaData CurDBMetaData;
      UNODialogs CurUNODialog;
      UNODialogs CurUNOProgressDialog;
      String[] DatabaseNames;
@@ -255,7 +254,6 @@ public class ReportWizard {
      ReportPaths CurReportPaths;
 
      java.util.Vector GroupFieldVector;
-     java.util.Vector GroupFormatVector = new java.util.Vector();
      String TemplatePath;
 
      static String sMsgWizardName;
@@ -323,10 +321,10 @@ public class ReportWizard {
     try{
         short DBIndex = xDBListBox.getSelectedItemPos();
         String sDBName = DatabaseNames[DBIndex];
-    boolean bGetConnection = CurDBMetaData.getConnection(xMSF,CurReportDocument, sDBName, sMsgNoConnection, sMsgConnectionImpossible);
+    boolean bGetConnection = CurReportDocument.CurDBMetaData.getConnection(xMSF,CurReportDocument, sDBName, sMsgNoConnection, sMsgConnectionImpossible);
         if (bGetConnection == true){
-        CurDBMetaData.DataSourceName = sDBName;
-        String[] ContentList = CurDBMetaData.getDBMetaData(CurReportDocument);
+        CurReportDocument.CurDBMetaData.DataSourceName = sDBName;
+        String[] ContentList = CurReportDocument.CurDBMetaData.getDBMetaData(CurReportDocument);
             CurUNODialog.assignPropertyToDialogControl("lstTables", "StringItemList", ContentList);
             if (ContentList != null){
                 iCommandTypes = DBMetaData.createCommandTypeList();
@@ -350,12 +348,12 @@ public class ReportWizard {
     int FieldCount = 0;
     try{
         if (xTableListBox.getItemCount() > 0){
-        CurDBMetaData.getSpecificFieldNames(WidthList);
-        FieldCount = CurDBMetaData.AllFieldNames.length;
+        CurReportDocument.CurDBMetaData.getSpecificFieldNames(WidthList);
+        FieldCount = CurReportDocument.CurDBMetaData.AllFieldNames.length;
         if (FieldCount > 0){
         bEnableBinaryOptionGroup = false;
         xFieldsListBox.removeItems((short) 0, xFieldsListBox.getItemCount());
-        xFieldsListBox.addItems(CurDBMetaData.AllFieldNames, (short) 0);
+        xFieldsListBox.addItems(CurReportDocument.CurDBMetaData.AllFieldNames, (short) 0);
         CurUNODialog.initializeListboxProcedures(xFieldsListBox, xSelFieldsListBox, OriginalList);
         }
         }
@@ -447,7 +445,7 @@ public class ReportWizard {
             break;
 
         case SOTBLLST:
-            fillUpFieldsListbox(CurDBMetaData, true);
+            fillUpFieldsListbox(CurReportDocument.CurDBMetaData, true);
             break;
 
         case SOFLDSLST:
@@ -485,8 +483,9 @@ public class ReportWizard {
         case SOCONTENTLST:
             CurReportDocument.ReportTextDocument.lockControllers();
             iPos = xContentListBox.getSelectedItemPos();
-            CurReportDocument.loadSectionsfromTemplate( CurDBMetaData, GroupFormatVector, CurReportPaths.ContentFiles[0][iPos]);
+            CurReportDocument.loadSectionsfromTemplate(CurReportPaths.ContentFiles[0][iPos]);
             CurReportDocument.loadStyleTemplates(CurReportPaths.ContentFiles[0][iPos], "LoadTextStyles");
+            CurReportDocument.setTableColumnSeparators();
             CurReportDocument.ReportTextDocument.unlockControllers();
             CurReportDocument.selectFirstPage();
             break;
@@ -496,7 +495,7 @@ public class ReportWizard {
             iPos = xLayoutListBox.getSelectedItemPos();
             boolean bOldIsCurLandscape = ((Boolean) tools.getUNOPropertyValue(CurReportDocument.ReportPageStyle, "IsLandscape")).booleanValue();
             CurReportDocument.loadStyleTemplates(CurReportPaths.LayoutFiles[0][iPos], "LoadPageStyles");
-            CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, CurDBMetaData, bOldIsCurLandscape);
+            CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, bOldIsCurLandscape);
             CurReportDocument.ReportTextDocument.unlockControllers();
             CurReportDocument.selectFirstPage();
             break;
@@ -528,7 +527,7 @@ public class ReportWizard {
                        break;
 
             case SOSELFLDSLST:
-                        CurUNODialog.MoveOrderedSelectedListBox(xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames, false);
+                        CurUNODialog.MoveOrderedSelectedListBox(xFieldsListBox, xSelFieldsListBox, CurReportDocument.CurDBMetaData.AllFieldNames, false);
                         break;
 
                     case SOCMDMOVESEL:
@@ -536,15 +535,15 @@ public class ReportWizard {
                         break;
 
                     case SOCMDMOVEALL:
-                        CurUNODialog.FormMoveAll(xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames);
+                        CurUNODialog.FormMoveAll(xFieldsListBox, xSelFieldsListBox, CurReportDocument.CurDBMetaData.AllFieldNames);
                         break;
 
                     case SOCMDREMOVESEL:
-                        CurUNODialog.MoveOrderedSelectedListBox(xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames, false);
+                        CurUNODialog.MoveOrderedSelectedListBox(xFieldsListBox, xSelFieldsListBox, CurReportDocument.CurDBMetaData.AllFieldNames, false);
                         break;
 
                     case SOCMDREMOVEALL:
-                        CurUNODialog.MoveOrderedSelectedListBox(xFieldsListBox, xSelFieldsListBox, CurDBMetaData.AllFieldNames, true);
+                        CurUNODialog.MoveOrderedSelectedListBox(xFieldsListBox, xSelFieldsListBox, CurReportDocument.CurDBMetaData.AllFieldNames, true);
                         break;
 
                     case SOCMDGOON:
@@ -556,31 +555,31 @@ public class ReportWizard {
                         break;
 
                     case SOGROUPLST:
-                       bGoOn = CurReportDocument.addGroupNametoDocument(xGlobalMSF, CurDBMetaData, CurUNODialog,
-                                     xGroupListBox, xSelGroupListBox, GroupFieldVector, GroupFormatVector,
+                       bGoOn = CurReportDocument.addGroupNametoDocument(xGlobalMSF, CurUNODialog,
+                                     xGroupListBox, xSelGroupListBox, GroupFieldVector,
                                      CurReportPaths.ReportPath, sMsgTableNotExisting + (char) 13 + sMsgEndAutopilot);
                        break;
 
                     case SOSELGROUPLST:
-                       CurReportDocument.removeGroupName(CurDBMetaData, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector, GroupFormatVector);
+                       CurReportDocument.removeGroupName(CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector);
                        break;
 
                     case SOCMDGROUPOUT:
-                       bGoOn = CurReportDocument.addGroupNametoDocument(xGlobalMSF, CurDBMetaData, CurUNODialog,
-                                    xGroupListBox, xSelGroupListBox, GroupFieldVector, GroupFormatVector,
+                       bGoOn = CurReportDocument.addGroupNametoDocument(xGlobalMSF, CurUNODialog,
+                                    xGroupListBox, xSelGroupListBox, GroupFieldVector,
                                     CurReportPaths.ReportPath, sMsgTableNotExisting + (char) 13 + sMsgEndAutopilot);
                        break;
 
                     case SOCMDGROUPIN:
-            CurReportDocument.removeGroupName(CurDBMetaData, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector, GroupFormatVector);
+            CurReportDocument.removeGroupName(CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector);
                        break;
 
                     case SOOPTLANDSCAPE:
-                        CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, CurDBMetaData, true);
+                        CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, true);
                         break;
 
                     case SOOPTPORTRAIT:
-                        CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, CurDBMetaData, false);
+                        CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, false);
                         break;
 
             case SOOPTSAVEASTEMPLATE:
@@ -622,16 +621,16 @@ public class ReportWizard {
         int iPage = ((Integer) tools.getUNOPropertyValue(CurUNODialog.DialogModel, "Step")).intValue();
         switch (iPage){
             case 1:
-                updateSecondStep();
+                updateSecondStep(CurReportDocument.CurDBMetaData);
                 break;
             case 2:
-        updateThirdStep();
+        updateThirdStep(CurReportDocument.CurDBMetaData);
                 break;
             case 3:
                 setUpSortList();
-        CurDBMetaData.RecordFieldNames = CurDBMetaData.setRecordFieldNames();
-                CurDBMetaData.combineSelectStatement(TableName);
-        CurReportDocument.setupRecordSection(CurReportPaths.ReportPath + "/cnt-default.stw", CurDBMetaData);
+        CurReportDocument.CurDBMetaData.RecordFieldNames = CurReportDocument.CurDBMetaData.setRecordFieldNames();
+                CurReportDocument.CurDBMetaData.combineSelectStatement(TableName);
+        CurReportDocument.setupRecordSection(CurReportPaths.ReportPath + "/cnt-default.stw");
         xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xContentListBox);
         //TODO: A message box should pop up when a single sorting criteria has been selected more than once
         break;
@@ -647,13 +646,13 @@ public class ReportWizard {
         StorePath = getStorePath();
         if (tools.PathisValid(xGlobalMSF, StorePath, CurUNODialog.xWindowPeer, sMsgFilePathInvalid)){
             if (bcreateTemplate == true){
-            CurReportDocument.createDBForm(xMSF, CurDBMetaData, SOREPORTFORMNAME);
+            CurReportDocument.createDBForm(xMSF, SOREPORTFORMNAME);
             tools.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");      //"service:com.sun.star.wizards.report.CallReportWizard?fill"
             buseTemplate = ((Short) CurUNODialog.getPropertyOfDialogControl("optUseTemplate", "State")).shortValue() == (short) 1;
             bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component , StorePath, "swriter: writer_StarOffice_XML_Writer_Template",
                                    buseTemplate, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
             if (bDocisStored == true)
-                CurDBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
+                CurReportDocument.CurDBMetaData.createDBLink(CurReportDocument.CurDBMetaData.DataSource, StorePath);
             }
             else{
             bcreateLink = ((Short) CurUNODialog.getPropertyOfDialogControl("chkcreateLink", "State")).shortValue() == (short) 1;
@@ -693,10 +692,10 @@ public class ReportWizard {
         int iPage = ((Integer) tools.getUNOPropertyValue(CurUNODialog.DialogModel, "Step")).intValue();
         switch (iPage){
             case 2:
-        CurDBMetaData.OldGroupFieldNames = CurDBMetaData.GroupFieldNames;
+        CurReportDocument.CurDBMetaData.OldGroupFieldNames = CurReportDocument.CurDBMetaData.GroupFieldNames;
         break;
             case 3:
-        CurDBMetaData.OldSortFieldNames = CurDBMetaData.SortFieldNames;
+        CurReportDocument.CurDBMetaData.OldSortFieldNames = CurReportDocument.CurDBMetaData.SortFieldNames;
         break;
         case 4:
         CurReportDocument.removeTextSectionbyName("RecordSection");
@@ -741,16 +740,16 @@ public class ReportWizard {
         else
         break;
     }
-        CurDBMetaData.SortFieldNames = new String[MaxSortIndex+1][2];
+        CurReportDocument.CurDBMetaData.SortFieldNames = new String[MaxSortIndex+1][2];
         for (int i=0; i<=MaxSortIndex; i++){
         CurFieldName = xSortListBox[i].getSelectedItem();
         // Todo: Messagebox in case a sorting criteria is set twice
-        CurDBMetaData.SortFieldNames[i][0] = xSortListBox[i].getSelectedItem();
+        CurReportDocument.CurDBMetaData.SortFieldNames[i][0] = xSortListBox[i].getSelectedItem();
         iCurState = ((Short) CurUNODialog.getPropertyOfDialogControl("optAscend" + new Integer(i+1).toString(), "State")).shortValue();
         if (iCurState == 1)
-        CurDBMetaData.SortFieldNames[i][1] = "ASC";
+        CurReportDocument.CurDBMetaData.SortFieldNames[i][1] = "ASC";
         else
-        CurDBMetaData.SortFieldNames[i][1] = "DESC";
+        CurReportDocument.CurDBMetaData.SortFieldNames[i][1] = "DESC";
         }
     }
     catch( Exception exception ){
@@ -833,7 +832,7 @@ public class ReportWizard {
     public void insertStorePathToTextBox(XMultiServiceFactory xMSF){
     try{
     String sStorePath = "";
-    String DefaultName = "Report_" + CurDBMetaData.DataSourceName + "_" + CurDBMetaData.MainCommandName;
+    String DefaultName = "Report_" + CurReportDocument.CurDBMetaData.DataSourceName + "_" + CurReportDocument.CurDBMetaData.MainCommandName;
     boolean bStoreAsTemplate = ((Short) CurUNODialog.getPropertyOfDialogControl("optCreateReportTemplate", "State")).shortValue() == (short) 1;
     if (bStoreAsTemplate == true){
         if (CurReportPaths.UserTemplatePath == null)
@@ -990,7 +989,7 @@ public class ReportWizard {
     }}
 
 
-    public boolean checkIfToupdateStep(){
+    public boolean checkIfToupdateStep(DBMetaData CurDBMetaData){
     boolean bIsSame = CurDBMetaData.MainCommandName.equals(CurDBMetaData.OldMainCommandName) && (CurDBMetaData.MainCommandName != null);
     if (bIsSame == true)
         bIsSame = Arrays.equals(CurDBMetaData.FieldNames, CurDBMetaData.OldFieldNames) && (CurDBMetaData.FieldNames != null);
@@ -1002,11 +1001,11 @@ public class ReportWizard {
     }
 
 
-    public void updateThirdStep(){
+    public void updateThirdStep(DBMetaData CurDBMetaData){
     try{
     XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xSortListBox[0]);
     xWindow.setFocus();
-    if (checkIfToupdateStep() == true){
+    if (checkIfToupdateStep(CurReportDocument.CurDBMetaData) == true){
         CurDBMetaData.OldGroupFieldNames = CurDBMetaData.GroupFieldNames;
         String[] GroupFieldNames = new String[GroupFieldVector.size()];
         GroupFieldVector.copyInto(GroupFieldNames);
@@ -1080,14 +1079,14 @@ public class ReportWizard {
     }}
 
 
-    public void updateSecondStep(){
+    public void updateSecondStep(DBMetaData CurDBMetaData){
     try{
     CurUNODialog.assignPropertyToDialogControl("cmdBack", "Enabled", new Boolean(true));
         CurDBMetaData.FieldNames = xSelFieldsListBox.getItems();
     XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xGroupListBox);
     xWindow.setFocus();
 
-    if (checkIfToupdateStep() == true){
+    if (checkIfToupdateStep(CurReportDocument.CurDBMetaData) == true){
         CurDBMetaData.GroupFieldNames = null;
         CurDBMetaData.SortFieldNames = null;
         CurDBMetaData.RecordFieldNames = null;
@@ -1131,7 +1130,7 @@ public class ReportWizard {
     }}
 
 
-    public void fillFirstStep(XMultiServiceFactory xMSF, ReportDocument CurReportDocument, String[] DatabaseNames,  Object[] CurPropertyValue)
+    public void fillFirstStep(XMultiServiceFactory xMSF, ReportDocument CurReportDocument, String[] DatabaseNames,  Object[] CurPropertyValue, DBMetaData CurDBMetaData)
 
 // Scenario 1. No parameters are given
 //  MainWithDefault()
@@ -1294,11 +1293,10 @@ public class ReportWizard {
     xDesktop = tools.getDesktop(xMSF);
     XFramesSupplier xFrameSuppl = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
     CurReportDocument =  new ReportDocument(xMSF, true, false);
-    CurDBMetaData = new DBMetaData();
     CurReportPaths = new ReportPaths(xMSF);
-    CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, null, null, true);
+    CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, null, true);
     getReportResources(xMSF, false);
-    DatabaseNames = CurDBMetaData.getDatabaseNames(CurReportDocument);
+    DatabaseNames = CurReportDocument.CurDBMetaData.getDatabaseNames(CurReportDocument);
     if (DatabaseNames.length > 0){
         CurReportDocument.ProgressBar.setValue(20);
         CurReportDocument.loadStyleTemplates(CurReportPaths.ReportPath + "/stl-default.stw", "LoadPageStyles");
@@ -1306,7 +1304,7 @@ public class ReportWizard {
         CurUNODialog = new UNODialogs(xMSF, new String[] {"Height", "HelpURL", "Step", "Title", "Width"},
                             new Object[] {new Integer(210), "HID:34320", new Integer(1), WizardTitle[0], new Integer(270)});
         CurReportDocument.ProgressBar.setValue(35);
-        fillFirstStep(xMSF, CurReportDocument, DatabaseNames, CurPropertyValue);
+        fillFirstStep(xMSF, CurReportDocument, DatabaseNames, CurPropertyValue, CurReportDocument.CurDBMetaData);
         CurReportDocument.ProgressBar.setValue(50);
         fillSecondStep();
         CurReportDocument.ProgressBar.setValue(65);
@@ -1327,11 +1325,11 @@ public class ReportWizard {
             return;
             }
             if ((buseTemplate == true) || (bcreateTemplate == false)){
-            if (CurReportDocument.checkReportLayoutMode(CurDBMetaData.GroupFieldNames)){
+            if (CurReportDocument.checkReportLayoutMode(CurReportDocument.CurDBMetaData.GroupFieldNames)){
                 Dataimport CurDataimport = new Dataimport();
                 CurUNOProgressDialog = CurDataimport.showProgressDisplay(xMSF, CurReportDocument, false);  // CurReportDocument.Frame.getComponentWindow().getPosSize().Width);
-                if (CurDBMetaData.executeCommand(xMSF, CurReportDocument.Frame, sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot)){
-                CurDataimport.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument, CurUNOProgressDialog);
+                if (CurReportDocument.CurDBMetaData.executeCommand(xMSF, CurReportDocument.Frame, sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot)){
+                CurDataimport.insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
                 }
                 CurUNOProgressDialog.xComponent.dispose();
                 return;
@@ -1340,7 +1338,7 @@ public class ReportWizard {
                 boolean bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component, StorePath, "swriter: StarOffice XML (Writer)",
                                     false, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
                 if (bcreateLink && bDocisStored)
-                CurDBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
+                CurReportDocument.CurDBMetaData.createDBLink(CurReportDocument.CurDBMetaData.DataSource, StorePath);
             }
             }
             break;
