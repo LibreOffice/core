@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:26:15 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,14 +808,6 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
             aInf.GetTxtFly()->ShowContour( pOut );
 #endif
 
-        // "Beep"
-        if( bOneBeepOnly && bOnWin &&
-            Frm().Top() + Prt().Top() + Prt().Height() < aLine.Y() &&
-            ( GetFollow() || IsFollow() || GetNext() ) )
-        {
-            bOneBeepOnly = sal_False;
-            Sound::Beep();
-        }
         if( rRepaint.HasArea() )
             rRepaint.Clear();
 
