@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:43:04 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx> // SvxLRSpaceItem
+#endif
+#ifndef _SVX_ULSPITEM_HXX //autogen
+#include <svx/ulspitem.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
@@ -413,25 +416,53 @@ long GetListFirstLineIndent(const SwNumFmt &rFmt)
 }
 
 long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
-    long &rFirstLinePos, long &rPseudoListFirstLine)
+    long &rFirstLinePos)
 {
     long nBodyIndent = rLR.GetTxtLeft();
     long nFirstLineDiff = rLR.GetTxtFirstLineOfst();
     rFirstLinePos = nBodyIndent + nFirstLineDiff;
+
     long nPseudoListBodyIndent = rFmt.GetAbsLSpace();
     long nReverseListIndented = GetListFirstLineIndent(rFmt);
-    rPseudoListFirstLine = nPseudoListBodyIndent + nReverseListIndented;
-    return nReverseListIndented;
+    long nExtraListIndent = nPseudoListBodyIndent + nReverseListIndented;
+
+    return nExtraListIndent > 0 ? nExtraListIndent : 0;
 }
 
-void SyncStyleIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt)
+void SyncIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt)
 {
-    long nFirstLinePos, nPseudoListFirstLine;
-    lcl_GetTrueMargin(rLR, rFmt, nFirstLinePos, nPseudoListFirstLine);
-    nFirstLinePos -= nPseudoListFirstLine;
-    rLR.SetTxtLeft(nFirstLinePos);
+    long nWantedFirstLinePos;
+    long nExtraListIndent = lcl_GetTrueMargin(rLR, rFmt, nWantedFirstLinePos);
+    rLR.SetTxtLeft(nWantedFirstLinePos - nExtraListIndent);
     rLR.SetTxtFirstLineOfst(0);
 }
+
+const SwNumRule* GetNumRuleFromTxtNode(const SwTxtNode &rTxtNode,
+        const SwDoc &rDoc)
+{
+    const SwNumRule *pRet = 0;
+    const SwNumRule *pRule = 0;
+    const SwNodeNum* pNum;
+
+    if (
+        (pNum = rTxtNode.GetNum()) &&
+        (MAXLEVEL > pNum->GetLevel()) &&
+        (pRule = rTxtNode.GetNumRule())
+       )
+    {
+        pRet = pRule;
+    }
+    else if (
+              (pNum = rTxtNode.GetOutlineNum()) &&
+              (MAXLEVEL > pNum->GetLevel()) &&
+              (pRule = rDoc.GetOutlineNumRule())
+            )
+    {
+        pRet = pRule;
+    }
+    return pRet;
+}
+
 
 const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode,
     const SwDoc &rDoc)
@@ -477,51 +508,85 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     return pRet;
 }
 
-void SyncParagraphIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt)
-{
-    long nFirstLinePos, nPseudoListFirstLine;
-    long nReverseListIndented = lcl_GetTrueMargin(rLR, rFmt, nFirstLinePos,
-        nPseudoListFirstLine);
-    if (nFirstLinePos < nPseudoListFirstLine)
-        nFirstLinePos -= nPseudoListFirstLine;
-    rLR.SetTxtLeft(nFirstLinePos-nReverseListIndented);
-    rLR.SetTxtFirstLineOfst(nReverseListIndented);
-}
-
 void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     SwFltStackEntry* pEntry)
 {
+    using sw::util::AdjustTabs;
     switch( pEntry->pAttr->Which() )
     {
-        case RES_LR_SPACE:
+        case RES_PARATR_TABSTOP:
             {
-                SwPaM aRegion( rTmpPos );
+                /*
+                Loop over the affected nodes and adjust the 0 based word style
+                tabstops to writer style tabstops relative to the paragraph
+                indent
+                */
+                SwPaM aRegion(rTmpPos);
                 if (pEntry->MakeRegion(pDoc, aRegion, false))
                 {
-                    SvxLRSpaceItem aLR( *(SvxLRSpaceItem*)pEntry->pAttr );
+                    SvxTabStopItem aTabStops(*(SvxTabStopItem*)pEntry->pAttr);
+                    ULONG nStart = aRegion.Start()->nNode.GetIndex();
+                    ULONG nEnd = aRegion.End()->nNode.GetIndex();
+                    for(; nStart <= nEnd; ++nStart)
+                    {
+                        SwCntntNode *pNd =
+                            pDoc->GetNodes()[nStart]->GetCntntNode();
+                        if (!pNd)
+                            continue;
+                        const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)
+                            pNd->GetAttr(RES_LR_SPACE);
+                        AdjustTabs(rLR.GetTxtLeft(), 0, aTabStops);
+                        pNd->SetAttr(aTabStops);
+                    }
+                }
+            }
+        break;
+        case RES_LR_SPACE:
+            {
+                /*
+                 Loop over the affect nodes and
+                 a) convert the word style absolute indent to indent relative
+                  to any numbering indent active on the nodes
+                 b) adjust the writer style tabstops relative to the old
+                  paragraph indent to be relative to the new paragraph indent
+                */
+                SwPaM aRegion(rTmpPos);
+                if (pEntry->MakeRegion(pDoc, aRegion, false))
+                {
+                    SvxLRSpaceItem aNewLR( *(SvxLRSpaceItem*)pEntry->pAttr );
                     ULONG nStart = aRegion.Start()->nNode.GetIndex();
                     ULONG nEnd   = aRegion.End()->nNode.GetIndex();
                     for(; nStart <= nEnd; ++nStart)
                     {
                         SwNode* pNode = pDoc->GetNodes()[ nStart ];
-                        if (pNode->IsTxtNode())
+                        if (!pNode || !pNode->IsTxtNode())
+                            continue;
+
+                        SwCntntNode* pNd = (SwCntntNode*)pNode;
+                        SvxLRSpaceItem aOldLR = (const SvxLRSpaceItem&)
+                                pNd->GetAttr(RES_LR_SPACE);
+
+                        SwTxtNode *pTxtNode = (SwTxtNode*)pNode;
+                        const SwNumFmt *pNum = 0;
+                        pNum = GetNumFmtFromStack(*aRegion.GetPoint(),
+                            *pTxtNode);
+                        if (!pNum)
+                            pNum = GetNumFmtFromTxtNode(*pTxtNode, *pDoc);
+
+                        if (pNum)
+                            SyncIndentWithList(aNewLR, *pNum);
+
+                        if (aNewLR == aOldLR)
+                            continue;
+
+                        pNd->SetAttr(aNewLR);
+
+                        SvxTabStopItem aTabs = (const SvxTabStopItem&)
+                            pNd->GetAttr(RES_PARATR_TABSTOP);
+                        if (AdjustTabs(aNewLR.GetTxtLeft(),
+                            aOldLR.GetTxtLeft(), aTabs))
                         {
-                            pNode->SetNumLSpace(false);
-                            SwTxtNode *pTxtNode = (SwTxtNode*)pNode;
-
-                            const SwNumFmt *pNum = 0;
-                            pNum = GetNumFmtFromStack(*aRegion.GetPoint(),
-                                *pTxtNode);
-
-                            if (!pNum)
-                                pNum = GetNumFmtFromTxtNode(*pTxtNode, *pDoc);
-
-                            if (pNum)
-                                SyncParagraphIndentWithList(aLR, *pNum);
-                            ((SwCntntNode*)pNode)->SetAttr( aLR );
-                            // wenn wir dies nicht tun, ueberschreibt die
-                            // NumRule uns alle harten L-Randeinstellungen
-                            pNode->SetNumLSpace(false);
+                            pNd->SetAttr(aTabs);
                         }
                     }
                 }
@@ -570,7 +635,25 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
         if (!pNd)
             pItem = &pDoc->GetAttrPool().GetDefaultItem(nWhich);
         else
-            pItem = &pNd->GetAttr(nWhich);
+        {
+            /*
+            If we're hunting for the indent on a paragraph and need to use the
+            parent style indent, then return the indent in msword format, and
+            not writer format, because that's the style that the filter works
+            in (naturally)
+            */
+            if (nWhich == RES_LR_SPACE)
+            {
+                SfxItemState eState = SFX_ITEM_DEFAULT;
+                if (const SwAttrSet *pSet = pNd->GetpSwAttrSet())
+                    eState = pSet->GetItemState(RES_LR_SPACE, false);
+                if (eState != SFX_ITEM_SET)
+                    pItem = &(rReader.pCollA[rReader.nAktColl].maWordLR);
+            }
+
+            if (!pItem)
+                pItem = &pNd->GetAttr(nWhich);
+        }
     }
     return pItem;
 }
@@ -806,28 +889,21 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
 /*
  For styles we will do our tabstop arithmetic in word style and adjust them to
- writer style after all the styles have been finished and the just settles as
- to what affects what.  For explicit attributes we use the style underlying
- margins and if there was an explicit margin change we handle the
- adjustment on the close of the margina attribute, which gaurantees the
- collection of all margin and tab begins.
+ writer style after all the styles have been finished and the dust settles as
+ to what affects what.
+
+ For explicit attributes we turn the adjusted writer tabstops back into 0 based
+ word indexes and we'll turn them back into writer indexes when setting them
+ into the document. If explicit left indent exist which affects them, then this
+ is handled when the explict left indent is set into the document
 */
 void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
 {
-    if( nLen < 0 )
+    if (nLen < 0)
     {
-        if (!pTabNode) //Leave unclosed if the margins have not been finialized
-            pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_PARATR_TABSTOP);
+        pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_PARATR_TABSTOP);
         return;
     }
-
-    // Para L-Space
-    short nLeftPMgn = pAktColl ? 0 : pCollA[nAktColl].nLeftParaMgn;
-
-    // Para L-Space OR Left Margin of Para's first line respectively
-    short nLeftMostPos = pAktColl ? 0 : pCollA[nAktColl].nTxtFirstLineOfst;
-    if( 0 < nLeftMostPos )
-        nLeftMostPos = 0;
 
     short i;
     const BYTE* pDel = pData + 1;                       // Del - Array
@@ -836,7 +912,7 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
     BYTE nIns = pData[nDel*2+1];
     WW8_TBD* pTyp = (WW8_TBD*)(pData + 2*nDel + 2*nIns + 2);// Typ - Array
 
-    SvxTabStopItem aAttr( 0, 0, SVX_TAB_ADJUST_DEFAULT );
+    SvxTabStopItem aAttr(0, 0, SVX_TAB_ADJUST_DEFAULT);
 
     const SwTxtFmtColl* pSty = 0;
     USHORT nTabBase;
@@ -862,29 +938,48 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
             aAttr = *((const SvxTabStopItem*)pTabs);
         else
         {
+
+            USHORT nOldTabBase = nTabBase;
             // If based on another
-            if( nTabBase < nColls &&
-                (nTabBase = pCollA[nTabBase].nBase) < nColls )
+            if (nTabBase < nColls)
+                nTabBase = pCollA[nTabBase].nBase;
+
+            if (nTabBase < nColls && nOldTabBase != nTabBase)
                 pSty = (const SwTxtFmtColl*)pCollA[nTabBase].pFmt;
             else
                 pSty = 0;                           // gib die Suche auf
         }
     }
 
+    //Now turn back into 0 based word-style index, during style import
+    //we're already in word based 0 index, we only move into crackpot
+    //writer style when we're finished importing the styles. For
+    //explicit tabstops we'll have to adjust on setting into the
+    //document
+    short nLeftPMgn(0);
+    if (pAktColl)
+        nLeftPMgn = 0;  //During style import we are always 0 based (word style)
+    else if (nAktColl < nColls && pCollA[nAktColl].pFmt)
+    {
+        //otherwise we are writer x based, so turn back into 0 based word style
+        const SvxLRSpaceItem &rLR = pCollA[nAktColl].pFmt->GetLRSpace();
+        nLeftPMgn = rLR.GetTxtLeft();
+    }
+
+    sw::util::AdjustTabs(0, nLeftPMgn, aAttr);
+
     SvxTabStop aTabStop;
 
     for( i=0; i<nDel; i++ )
     {
-        USHORT nPos = aAttr.GetPos( SVBT16ToShort( pDel + i*2 ) - nLeftPMgn );
+        USHORT nPos = aAttr.GetPos(SVBT16ToShort(pDel + i*2));
         if( nPos != SVX_TAB_NOTFOUND )
             aAttr.Remove( nPos, 1 );
     }
 
     for( i=0; i<nIns; i++ )
     {
-        short nPos = SVBT16ToShort( pIns + i*2 ) - nLeftPMgn;
-        if( nPos < nLeftMostPos )
-            continue;
+        short nPos = SVBT16ToShort(pIns + i*2);
         aTabStop.GetTabPos() = nPos;
         switch( SVBT8ToByte( pTyp[i].aBits1 ) & 0x7 )       // pTyp[i].jc
         {
@@ -936,7 +1031,7 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
 
 void SwWW8ImplReader::ImportDop()
 {
-    sw::log::Context aContext(maTracer, sw::log::eDocumentProperties);
+    maTracer.EnterEnvironment(sw::log::eDocumentProperties);
     // correct the LastPrinted date in DocumentInfo
     if (rDoc.GetpInfo())
     {
@@ -964,7 +1059,7 @@ void SwWW8ImplReader::ImportDop()
 
     // Abstand zwischen zwei Absaetzen ist die SUMME von unterem
     // Abst. des ersten und oberem Abst. des zweiten
-    rDoc.SetParaSpaceMax(!pWDop->fDontUseHTMLAutoSpacing, true);
+    rDoc.SetParaSpaceMax(pWDop->fDontUseHTMLAutoSpacing, true);
     maTracer.Log(sw::log::eDontUseHTMLAutoSpacing);
     // move tabs on alignment
     rDoc.SetTabCompat(true);
@@ -981,10 +1076,6 @@ void SwWW8ImplReader::ImportDop()
 
     rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
 
-    // set default language (from FIB)
-    rDoc.GetAttrPool().SetPoolDefaultItem(
-        SvxLanguageItem( (const LanguageType)pWwFib->lid )  );
-
     rDoc._SetUseVirtualDevice(!pWDop->fUsePrinterMetrics);
     if (!pWDop->fUsePrinterMetrics)
         maTracer.Log(sw::log::ePrinterMetrics);
@@ -997,7 +1088,6 @@ void SwWW8ImplReader::ImportDop()
     //import magic doptypography information, if its there
     if (pWwFib->nFib > 105)
         ImportDopTypography(pWDop->doptypography);
-
 
     if (pWDop->fProtEnabled)
     {
@@ -1021,6 +1111,7 @@ void SwWW8ImplReader::ImportDop()
         }
     }
 
+    maTracer.LeaveEnvironment(sw::log::eDocumentProperties);
 }
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
@@ -1094,7 +1185,9 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     mbSymbol(pRdr->bSymbol), mbHdFtFtnEdn(pRdr->bHdFtFtnEdn),
     mbTxbxFlySection(pRdr->bTxbxFlySection), mbAnl(pRdr->bAnl),
     mbInHyperlink(pRdr->bInHyperlink), mbPgSecBreak(pRdr->bPgSecBreak),
-    mbWasParaEnd(pRdr->bWasParaEnd), mbHasBorder(pRdr->bHasBorder)
+    mbWasParaEnd(pRdr->bWasParaEnd), mbHasBorder(pRdr->bHasBorder),
+    mpPreviousNumPaM(pRdr->pPreviousNumPaM), mnParaNumber(pRdr->nParaNumber),
+    mpPrevNumRule(pRdr->pPrevNumRule)
 {
     pRdr->bSymbol = false;
     pRdr->bHdFtFtnEdn = true;
@@ -1103,8 +1196,11 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     pRdr->nInTable = 0;
     pRdr->pWFlyPara = 0;
     pRdr->pSFlyPara = 0;
+    pRdr->pPreviousNumPaM = 0;
+    pRdr->pPrevNumRule = 0;
     pRdr->pTableDesc = 0;
     pRdr->nAktColl = 0;
+    pRdr->nParaNumber = 0;
 
     pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
         *pRdr);
@@ -1134,6 +1230,8 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 {
     pRdr->pWFlyPara = mpWFlyPara;
     pRdr->pSFlyPara = mpSFlyPara;
+    pRdr->pPreviousNumPaM = mpPreviousNumPaM;
+    pRdr->pPrevNumRule = mpPrevNumRule;
     pRdr->pTableDesc = mpTableDesc;
     pRdr->cSymbol = mcSymbol;
     pRdr->bSymbol = mbSymbol;
@@ -1147,6 +1245,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bPgSecBreak = mbPgSecBreak;
     pRdr->nAktColl = mnAktColl;
     pRdr->bHasBorder = mbHasBorder;
+    pRdr->nParaNumber = mnParaNumber;
 
     // schliesse alle Attribute, da sonst Attribute
     // entstehen koennen, die aus dem Fly rausragen
@@ -1273,6 +1372,36 @@ void SwWW8ImplReader::Read_HdFtText(long nStart, long nLen, SwFrmFmt* pHdFtFmt)
     *pPaM->GetPoint() = aTmpPos;
 }
 
+bool SwWW8ImplReader::HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt,
+    int nSect)
+{
+    if (pHdFt)
+    {
+        WW8_CP start;
+        long nLen;
+        BYTE nNumber = 5;
+
+        for( BYTE nI = 0x20; nI; nI >>= 1, nNumber-- )
+        {
+            if (nI & nWhichItems)
+            {
+                bool bOk = true;
+                if( bVer67 )
+                    bOk = ( pHdFt->GetTextPos(grpfIhdt, nI, start, nLen ) && nLen >= 2 );
+                else
+                {
+                    pHdFt->GetTextPosExact(nNumber + (nSect+1)*6, start, nLen);
+                    bOk = ( 2 <= nLen );
+                }
+
+                if (bOk)
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+
 void SwWW8ImplReader::Read_HdFt(BYTE nWhichItems, BYTE grpfIhdt, int nSect, SwPageDesc* pPD,
     const SwPageDesc *pPrev)
 {
@@ -1295,7 +1424,7 @@ void SwWW8ImplReader::Read_HdFt(BYTE nWhichItems, BYTE grpfIhdt, int nSect, SwPa
                     bOk = ( 2 <= nLen );
                 }
 
-                   bool bUseLeft
+                bool bUseLeft
                     = (nI & ( WW8_HEADER_EVEN | WW8_FOOTER_EVEN )) ? true: false;
                 bool bFooter
                     = (nI & ( WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST )) ? true: false;
@@ -1396,6 +1525,8 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
     const String &rStr = pTxt->GetTxt();
     xub_StrLen nLen=rStr.Len();
+
+
     //If we happen to end on a tab, something a well formed sentence shouldn't
     //do :-), then go into strip mode.
     if (nLen && rStr.GetChar(nLen-1) == '\x9')
@@ -1447,7 +1578,92 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
         }
     }
 
+    SvxULSpaceItem aUL(*(const SvxULSpaceItem*)GetFmtAttr(RES_UL_SPACE));
+    const SwNumRule* pRule = GetNumRuleFromTxtNode(*pTxt, rDoc);
+
+    if (
+         pRule && !pWDop->fDontUseHTMLAutoSpacing &&
+         (bParaAutoBefore || bParaAutoAfter)
+       )
+    {
+        // If after spacing is set to auto, set the after space to 0
+        if (bParaAutoAfter)
+        {
+            aUL.SetLower(0);
+            pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
+            pCtrlStck->NewAttr(rPos, aUL);
+            pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_UL_SPACE);
+        }
+        // If the previous textnode had numbering and
+        // and before spacing is set to auto, set before space to 0
+        if(pPrevNumRule && bParaAutoBefore)
+        {
+            aUL.SetUpper(0);
+            pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
+            pCtrlStck->NewAttr(rPos, aUL);
+            pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_UL_SPACE);
+        }
+
+        // If the previous numbering rule was different we need
+        // to insert a space after the previous paragraph
+        if((pRule != pPrevNumRule) && pPreviousNumPaM)
+        {
+            const SwPosition* pPreviousPos = pPreviousNumPaM->GetPoint();
+            const SfxPoolItem* pOldUL = pCtrlStck->GetFmtAttr( *pPreviousPos, RES_UL_SPACE );
+            SvxULSpaceItem aOldUL(*(const SvxULSpaceItem*)pOldUL);
+            aOldUL.SetLower(GetParagraphAutoSpace(pWDop->fDontUseHTMLAutoSpacing));
+            pPreviousNumPaM->GetPoint()->nContent.Assign(pPreviousNumPaM->GetCntntNode(), 0);
+            pCtrlStck->NewAttr(*pPreviousPos, aOldUL);
+            pCtrlStck->SetAttr(*pPreviousPos, RES_UL_SPACE);
+        }
+
+        // cache current paragraph
+        if(pPreviousNumPaM)
+            delete pPreviousNumPaM, pPreviousNumPaM = 0;
+
+        pPreviousNumPaM = new SwPaM(*pPaM);
+        pPrevNumRule = pRule;
+    }
+    else if(!pRule && pPreviousNumPaM)
+    {
+        // If the previous paragraph has numbering but the current one does not
+        // we need to add a space after the previous paragraph
+        const SwPosition* pPreviousPos = pPreviousNumPaM->GetPoint();
+        const SfxPoolItem* pOldUL = pCtrlStck->GetFmtAttr( *pPreviousPos, RES_UL_SPACE );
+        SvxULSpaceItem aOldUL(*(const SvxULSpaceItem*)pOldUL);
+        aOldUL.SetLower(GetParagraphAutoSpace(pWDop->fDontUseHTMLAutoSpacing));
+        pPreviousNumPaM->GetPoint()->nContent.Assign(pPreviousNumPaM->GetCntntNode(), 0);
+        pCtrlStck->NewAttr(*pPreviousPos, aOldUL);
+        pCtrlStck->SetAttr(*pPreviousPos, RES_UL_SPACE);
+        delete pPreviousNumPaM, pPreviousNumPaM = 0;
+        pPrevNumRule = 0;
+    }
+    else
+    {
+        // clear paragraph cache
+        if(pPreviousNumPaM)
+            delete pPreviousNumPaM, pPreviousNumPaM = 0;
+        pPrevNumRule = pRule;
+    }
+
+    // If this is the first paragraph in the document and
+    // Auto-spacing before paragraph is set,
+    // set the upper spacing value to 0
+    if(bParaAutoBefore && nParaNumber==0 && !pWDop->fDontUseHTMLAutoSpacing)
+    {
+        aUL.SetUpper(0);
+
+        xub_StrLen nEnd = pPaM->GetPoint()->nContent.GetIndex();
+        pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
+        pCtrlStck->NewAttr(*pPaM->GetPoint(), aUL);
+        pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), nEnd);
+        pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_UL_SPACE);
+    }
+
+    nParaNumber++;
+
     rDoc.AppendTxtNode(rPos);
+
     //We can flush all anchored graphics at the end of a paragraph.
     pAnchorStck->Flush();
 }
@@ -1556,7 +1772,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
 
 //  then look if we are in an Apo
 
-    ApoTestResults aApo = TestApo(nCellLevel, bTableRowEnd , pTabPos);
+    ApoTestResults aApo = TestApo(nCellLevel, bTableRowEnd, pTabPos);
 
     //look to see if we are in a Table, but Table in foot/end note not allowed
     bool bStartTab = (nInTable < nCellLevel) && !bFtnEdn;
@@ -1846,7 +2062,7 @@ bool SwWW8ImplReader::ReadChars(long& rPos, long nNextAttr, long nTextEnd,
     while (true)
     {
         if (ReadPlainChars(rPos, nEnd, nCpOfs))
-             return false;                  // Fertig
+            return false;                   // Fertig
 
         bool bStartLine = ReadChar(rPos, nCpOfs);
         rPos++;
@@ -1925,32 +2141,9 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 bRet = HandlePageBreakChar();
             else if (!nInTable)
             {
-                /*
-                #i2451#, similarly to i1909 column breaks appear to be ignored
-                if they are inside tables. Appears impossible to create one
-                from scratch with winword.
-                */
-                SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
-                if ( pNd )
-                {
-                    const SfxItemSet* pSet = pNd->GetpSwAttrSet();
-                    if (pSet &&
-                        (SFX_ITEM_ON == pSet->GetItemState(RES_PAGEDESC,false)))
-                    {
-                        AppendTxtNode( *pPaM->GetPoint() );
-                    }
-                    else
-                    {
-                        const SwPosition* pPos  = pPaM->GetPoint();
-                        const SwTxtNode* pSttNd =
-                            rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
-                        USHORT nCntPos = pPos->nContent.GetIndex();
-                        if( nCntPos && pSttNd->GetTxt().Len() )
-                            rDoc.SplitNode( *pPos );
-                    }
-                }
-                // column break
-                rDoc.Insert( *pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE) );
+                // Always insert a txtnode for a column break, e.g. ##
+                AppendTxtNode(*pPaM->GetPoint());
+                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE));
             }
             break;
         case 0x7:
@@ -2086,25 +2279,25 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     return bRet;
 }
 
-
 void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     bool* pStartAttr, bool bCallProcessSpecial)
 {
     USHORT nOldColl = nAktColl;
     nAktColl = pPlcxMan->GetColl();
 
-    if( nAktColl >= nColls || !pCollA[nAktColl].pFmt
-        || !pCollA[nAktColl].bColl )
+    // Invalid Style-Id
+    if (nAktColl >= nColls || !pCollA[nAktColl].pFmt || !pCollA[nAktColl].bColl)
     {
-        nAktColl = 0;           // Unguelige Style-Id
-        nLeftParaMgn      = 0;
-        nTxtFirstLineOfst = 0;
+        nAktColl = 0;
+        bParaAutoBefore = false;
+        bParaAutoAfter = false;
     }
     else
     {
-        nLeftParaMgn      = pCollA[nAktColl].nLeftParaMgn;
-        nTxtFirstLineOfst = pCollA[nAktColl].nTxtFirstLineOfst;
+        bParaAutoBefore = pCollA[nAktColl].bParaAutoBefore;
+        bParaAutoAfter = pCollA[nAktColl].bParaAutoAfter;
     }
+
     bool bTabRowEnd = false;
     if( pStartAttr && bCallProcessSpecial && !bInHyperlink )
     {
@@ -2275,12 +2468,13 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
         eContext = sw::log::eMainText;
     else
         eContext = sw::log::eSubDoc;
-    sw::log::Context aContext(maTracer, eContext);
+    maTracer.EnterEnvironment(eContext);
 
     bool bJoined=false;
 
     bool bStartLine = true;
     short nCrCount = 0;
+    short nDistance = 0;
 
     bWasParaEnd = false;
     nAktColl    =  0;
@@ -2293,7 +2487,8 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
     long nCpOfs = pPlcxMan->GetCpOfs(); // Offset fuer Header/Footer, Footnote
 
     WW8_CP nNext = pPlcxMan->Where();
-
+    SwTxtNode* pPreviousNode = 0;
+    int nDropLines = 0;
     pStrm->Seek( pSBase->WW8Cp2Fc( nStartCp + nCpOfs, &bIsUnicode ) );
 
     WW8_CP l = nStartCp;
@@ -2308,8 +2503,59 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
 
         bStartLine = ReadChars(l, nNext, nStartCp+nTextLen, nCpOfs);
 
-        if (bStartLine) // Zeilenende
+        // If the previous paragraph was a dropcap then do not
+        // create a new txtnode and join the two paragraphs together
+
+        if (bStartLine && !pPreviousNode) // Zeilenende
             AppendTxtNode(*pPaM->GetPoint());
+
+        if (pPreviousNode && bStartLine)
+        {
+            SwTxtNode* pEndNd = pPaM->GetNode()->GetTxtNode();
+            const short nDropCapLen = pPreviousNode->GetTxt().Len();
+
+            // Need to reset the font size and text position for the dropcap
+            {
+                SwPaM aTmp(*pEndNd, 0, *pEndNd, nDropCapLen+1);
+                pCtrlStck->Delete(aTmp);
+            }
+
+            // Get the default document dropcap which we can use as our template
+            const SwFmtDrop* defaultDrop = (const SwFmtDrop*) GetFmtAttr(RES_PARATR_DROP);
+            SwFmtDrop aDrop(*defaultDrop);
+
+            aDrop.GetLines()    = (BYTE) nDropLines;
+            aDrop.GetDistance() = nDistance;
+            aDrop.GetChars()    = nDropCapLen;
+            aDrop.GetWholeWord() = false;       // Word has no concept of a "whole word dropcap"
+
+            SwPosition aStart(*pEndNd);
+            pCtrlStck->NewAttr(aStart, aDrop);
+            pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_PARATR_DROP);
+            pPreviousNode = 0;
+        }
+        else if(bDropCap)
+        {
+            // If we have found a dropcap store the textnode
+            pPreviousNode = pPaM->GetNode()->GetTxtNode();
+
+            const BYTE *pDCS = pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
+            if(pDCS)
+            {
+                short nDCS = SVBT16ToShort( pDCS );
+                nDropLines = nDCS >> 3;
+            }
+            else    // There is no Drop Cap Specifier hence no dropcap
+                pPreviousNode = 0;
+
+            const BYTE *pDistance = pPlcxMan->GetPapPLCF()->HasSprm(0x842F);
+            if(pDistance)
+                nDistance = SVBT16ToShort( pDistance );
+            else
+                nDistance = 0;
+
+            bDropCap=false;
+        }
 
         if (bStartLine || bWasTabRowEnd)
         {
@@ -2351,6 +2597,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
         bJoined = JoinNode(*pPaM);
                                             // PlcxMan noch gibt
     delete pPlcxMan, pPlcxMan = 0;
+    maTracer.LeaveEnvironment(eContext);
     return bJoined;
 }
 
@@ -2364,7 +2611,7 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pTableStream(0), pDataStream(0), rDoc(rD), maSectionManager(*this),
     maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
     maGrfNameGenerator(bNewDoc,String('G')), pMSDffManager(0), mpAtnNames(0),
-    pAuthorInfos(0), pTabNode(0), mbNewDoc(bNewDoc)
+    pAuthorInfos(0), mbNewDoc(bNewDoc)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -2380,12 +2627,17 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pLstManager = 0;
     pAktItemSet = 0;
     pCollA = 0;
+    pDfltTxtFmtColl = 0;
+    pStandardFmtColl = 0;
     pHdFt = 0;
     pWFlyPara = 0;
     pSFlyPara = 0;
     pFlyFmtOfJustInsertedGraphic   = 0;
     pFmtOfJustInsertedApo = 0;
+    pPreviousNumPaM = 0;
+    pPrevNumRule = 0;
     nColls = nAktColl = 0;
+    nParaNumber = 0;
     nObjLocFc = nPicLocFc = 0;
     nInTable=0;
     bReadNoTbl = bPgSecBreak = bSpec = bObj = bTxbxFlySection
@@ -2400,6 +2652,8 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     bNoLnNumYet = true;
     bInHyperlink = false;
     bWasParaEnd = false;
+    bParaAutoBefore = false;
+    bParaAutoAfter = false;
     nProgress = 0;
     nSwNumLevel = nWwNumType = 0xff;
     pTableDesc = 0;
@@ -2412,8 +2666,6 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pDrawEditEngine = 0;
     pWWZOrder = 0;
     pFormImpl = 0;
-    nLeftParaMgn = 0;
-    nTxtFirstLineOfst = 0;
     pNumFldType = 0;
     nFldNum = 0;
 
@@ -2449,6 +2701,19 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
 
     SwFrmFmt &rFmt = rPage.GetMaster();
 
+    if (mrReader.pWDop->fUseBackGroundInAllmodes && mrReader.pMSDffManager)
+    {
+        Rectangle aRect(0, 0, 100, 100); //A dummy, we don't care about the size
+        SvxMSDffImportData aData(aRect);
+        SdrObject* pObject = 0;
+        if (mrReader.pMSDffManager->GetShape(0x401, pObject, aData))
+        {
+            SfxItemSet aSet(rFmt.GetAttrSet());
+            mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,
+                mso_sptRectangle, aRect);
+            rFmt.SetAttr(aSet.Get(RES_BACKGROUND));
+        }
+    }
     wwULSpaceData aULData;
     GetPageULData(rSection, bTitlePage, aULData);
     SetPageULSpaceItems(rFmt, aULData);
@@ -2481,9 +2746,110 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
     }
 }
 
-void wwSectionManager::InsertSegments(bool bIsNewDoc)
+//Set the page descriptor on this node, handle the different cases for a text
+//node or a table
+void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
+    SwDoc &rDoc)
 {
-    sal_uInt16 nDesc(0);
+    /*
+    If its a table here, apply the pagebreak to the table
+    properties, otherwise we add it to the para at this
+    position
+    */
+    if (rIdx.GetNode().IsTableNode())
+    {
+        SwTable& rTable =
+            rIdx.GetNode().GetTableNode()->GetTable();
+        SwFrmFmt* pApply = rTable.GetFrmFmt();
+        ASSERT(pApply, "impossible");
+        if (pApply)
+            pApply->SetAttr(rPgDesc);
+    }
+    else
+    {
+        SwPosition aPamStart(rIdx);
+        aPamStart.nContent.Assign(
+            rIdx.GetNode().GetCntntNode(), 0);
+        SwPaM aPage(aPamStart);
+
+        rDoc.Insert(aPage, rPgDesc);
+    }
+}
+
+//Map a word section with to either one or two writer page descriptors
+//depending on if the word section has a title page
+bool wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter, mySegIter &rStart,
+    SwNodeIndex &rWhere, bool bIgnoreCols)
+{
+    if (rIter->HasTitlePage())
+    {
+        if (IsNewDoc() && rIter == rStart)
+        {
+            rIter->mpTitlePage =
+                mrReader.rDoc.GetPageDescFromPool(RES_POOLPAGE_FIRST);
+        }
+        else
+        {
+            USHORT nPos = mrReader.rDoc.MakePageDesc(
+                ViewShell::GetShellRes()->GetPageDescName(mnDesc)
+                , 0, false);
+            rIter->mpTitlePage = &mrReader.rDoc._GetPageDesc(nPos);
+        }
+        ASSERT(rIter->mpTitlePage, "no page!");
+        if (!rIter->mpTitlePage)
+            return false;
+
+        SetSegmentToPageDesc(*rIter, true, bIgnoreCols);
+    }
+
+    if (IsNewDoc() && rIter == rStart)
+    {
+        rIter->mpPage =
+            mrReader.rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+    }
+    else
+    {
+        USHORT nPos = mrReader.rDoc.MakePageDesc(
+            ViewShell::GetShellRes()->GetPageDescName(mnDesc,
+                false, rIter->HasTitlePage()),
+                rIter->mpTitlePage, false);
+        rIter->mpPage = &mrReader.rDoc._GetPageDesc(nPos);
+    }
+    ASSERT(rIter->mpPage, "no page!");
+    if (!rIter->mpPage)
+        return false;
+
+    const wwSection *pPrevious = 0;
+    if (rIter != rStart)
+        pPrevious = &(*(rIter-1));
+    SetHdFt(*rIter, std::distance(rStart, rIter), pPrevious);
+    SetUseOn(*rIter);
+
+    if (rIter->mpTitlePage)
+        SetSegmentToPageDesc(*rIter, true, bIgnoreCols);
+    SetSegmentToPageDesc(*rIter, false, bIgnoreCols);
+
+    SwFmtPageDesc aPgDesc(rIter->HasTitlePage() ?
+            rIter->mpTitlePage : rIter->mpPage);
+
+    if (rIter->mpTitlePage)
+        rIter->mpTitlePage->SetFollow(rIter->mpPage);
+
+    if (rIter->PageRestartNo())
+        aPgDesc.SetNumOffset(rIter->PageStartAt());
+
+    GiveNodePageDesc(rWhere, aPgDesc, mrReader.rDoc);
+    ++mnDesc;
+    return true;
+}
+
+bool wwSectionManager::IsNewDoc() const
+{
+    return mrReader.mbNewDoc;
+}
+
+void wwSectionManager::InsertSegments()
+{
     mySegIter aEnd = maSegments.end();
     mySegIter aStart = maSegments.begin();
     for (mySegIter aIter = aStart; aIter != aEnd; ++aIter)
@@ -2491,8 +2857,9 @@ void wwSectionManager::InsertSegments(bool bIsNewDoc)
         mySegIter aNext = aIter+1;
 
         bool bInsertSection = aIter != aStart ? aIter->IsContinous() : false;
+        bool bInsertPageDesc = !bInsertSection;
 
-        if (!bInsertSection)
+        if (bInsertPageDesc)
         {
             /*
              If a cont section follow this section then we won't be
@@ -2517,92 +2884,14 @@ void wwSectionManager::InsertSegments(bool bIsNewDoc)
                     bInsertSection = true;
             }
 
-            if (aIter->HasTitlePage())
-            {
-                if (bIsNewDoc && aIter == aStart)
-                {
-                    aIter->mpTitlePage =
-                        mrReader.rDoc.GetPageDescFromPool(RES_POOLPAGE_FIRST);
-                }
-                else
-                {
-                    USHORT nPos = mrReader.rDoc.MakePageDesc(
-                        ViewShell::GetShellRes()->GetPageDescName(nDesc)
-                        , 0, false);
-                    aIter->mpTitlePage = &mrReader.rDoc._GetPageDesc(nPos);
-                }
-                ASSERT(aIter->mpTitlePage, "no page!");
-                if (!aIter->mpTitlePage)
-                    continue;
-
-                SetSegmentToPageDesc(*aIter, true, bIgnoreCols);
-            }
-
-            if (bIsNewDoc && aIter == aStart)
-            {
-                aIter->mpPage =
-                    mrReader.rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
-            }
-            else
-            {
-                USHORT nPos = mrReader.rDoc.MakePageDesc(
-                    ViewShell::GetShellRes()->GetPageDescName(nDesc,
-                        false, aIter->HasTitlePage()),
-                        aIter->mpTitlePage, false);
-                aIter->mpPage = &mrReader.rDoc._GetPageDesc(nPos);
-            }
-            ASSERT(aIter->mpPage, "no page!");
-            if (!aIter->mpPage)
+            if (!SetSwFmtPageDesc(aIter, aStart, aIter->maStart, bIgnoreCols))
                 continue;
-
-            const wwSection *pPrevious = 0;
-            if (aIter != aStart)
-                pPrevious = &(*(aIter-1));
-            SetHdFt(*aIter, std::distance(aStart, aIter), pPrevious);
-            SetUseOn(*aIter);
-
-            if (aIter->mpTitlePage)
-                SetSegmentToPageDesc(*aIter, true, bIgnoreCols);
-            SetSegmentToPageDesc(*aIter, false, bIgnoreCols);
-
-            SwFmtPageDesc aPgDesc(aIter->HasTitlePage() ?
-                    aIter->mpTitlePage : aIter->mpPage);
-
-            if (aIter->mpTitlePage)
-                aIter->mpTitlePage->SetFollow(aIter->mpPage);
-
-            if (aIter->PageRestartNo())
-                aPgDesc.SetNumOffset(aIter->PageStartAt());
-
-            /*
-            If its a table here, apply the pagebreak to the table
-            properties, otherwise we add it to the para at this
-            position
-            */
-            if (aIter->maStart.GetNode().IsTableNode())
-            {
-                SwTable& rTable =
-                    aIter->maStart.GetNode().GetTableNode()->GetTable();
-                SwFrmFmt* pApply = rTable.GetFrmFmt();
-                ASSERT(pApply, "impossible");
-                if (pApply)
-                    pApply->SetAttr(aPgDesc);
-            }
-            else
-            {
-                SwPosition aPamStart(aIter->maStart);
-                aPamStart.nContent.Assign(
-                    aIter->maStart.GetNode().GetCntntNode(), 0);
-                SwPaM aPage(aPamStart);
-
-                mrReader.rDoc.Insert(aPage, aPgDesc);
-            }
-            ++nDesc;
         }
 
         SwTxtNode* pTxtNd = 0;
         if (bInsertSection)
         {
+            //Start getting the bounds of this section
             SwPaM aSectPaM(*mrReader.pPaM);
             SwNodeIndex aAnchor(aSectPaM.GetPoint()->nNode);
             if (aNext != aEnd)
@@ -2634,11 +2923,46 @@ void wwSectionManager::InsertSegments(bool bIsNewDoc)
             aSectPaM.GetPoint()->nNode = aIter->maStart;
             aSectPaM.GetPoint()->nContent.Assign(
                 aSectPaM.GetCntntNode(), 0);
+            //End getting the bounds of this section, quite a job eh ?
 
             SwSectionFmt *pRet = InsertSection(aSectPaM, *aIter);
             //The last section if continous is always unbalanced
             if (aNext == aEnd && pRet)
                 pRet->SetAttr(SwFmtNoBalancedColumns(true));
+
+            bool bHasOwnHdFt = false;
+            /*
+             #112027# #110379#
+             In this nightmare scenario the continuous section has its own
+             headers and footers so we will try and find a hard page break
+             between here and the end of the section and put the headers and
+             footers there.
+            */
+            if (!bInsertPageDesc)
+            {
+               bHasOwnHdFt =
+                mrReader.HasOwnHeaderFooter(
+                 aIter->maSep.grpfIhdt & ~(WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
+                 aIter->maSep.grpfIhdt, std::distance(aStart, aIter)
+                );
+            }
+            if (bHasOwnHdFt)
+            {
+                ULONG nStart = aSectPaM.Start()->nNode.GetIndex();
+                ULONG nEnd   = aSectPaM.End()->nNode.GetIndex();
+                for(; nStart <= nEnd; ++nStart)
+                {
+                    SwNode* pNode = mrReader.rDoc.GetNodes()[nStart];
+                    if (!pNode)
+                        continue;
+                    if (sw::util::HasPageBreak(*pNode))
+                    {
+                        SwNodeIndex aIdx(*pNode);
+                        SetSwFmtPageDesc(aIter, aStart, aIdx, true);
+                        break;
+                    }
+                }
+            }
         }
 
         if (pTxtNd)
@@ -2749,7 +3073,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 break;
 
         case 8:
-                {
             if( !pStg )
             {
                 ASSERT( pStg, "Version 8 muss immer einen Storage haben!" );
@@ -2775,15 +3098,16 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             else
                 pDataStream = pStrm;
 
-            if( pWwFib->lcbPlcfspaHdr || pWwFib->lcbPlcfspaMom )
+            if (pWwFib->lcbPlcfspaHdr || pWwFib->lcbPlcfspaMom || pWwFib->lcbDggInfo)
             {
-                pMSDffManager = new SwMSDffManager( *this );
+                GrafikCtor();
+                pMSDffManager = new SwMSDffManager(*this);
+                pMSDffManager->SetModel(pDrawModel, 1440);
                 //#79055# Now the dff manager always needs a controls
                 //converter as well, but a control converter may still exist
                 //without a dffmanager. cmc
                 pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(), pPaM);
             }
-                }
             break;
         default:
             // Programm-Fehler!
@@ -3040,10 +3364,10 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                         rDoc.SetContainsMSVBasic(true);
 
                     StoreMacroCmds();
-                  }
+                }
             }
 
-            maSectionManager.InsertSegments(mbNewDoc);
+            maSectionManager.InsertSegments();
 
             if (pCollA)
                 delete[] pCollA;
@@ -3061,7 +3385,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             DELETEZ( pFonts );
             delete mpAtnNames;
             DELETEZ( pAuthorInfos );
-            DELETEZ( pTabNode );
             delete mpSprmParser;
             ::EndProgress( rDoc.GetDocShell() );
         }
@@ -3076,14 +3399,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     delete mpRedlineStack;
     DeleteAnchorStk();
     DeleteRefStk();
-
-    aRelNumRule.SetNumRelSpaces(rDoc);
-    if (!mbNewDoc && !nErrRet && aSttNdIdx.GetIndex())
-    {
-        aSttNdIdx++;
-        aRelNumRule.SetOultineRelSpaces( aSttNdIdx,
-                                    pPaM->GetPoint()->nNode );
-    }
 
     UpdateFields();
 
@@ -3143,7 +3458,7 @@ void SwWW8ImplReader::SetOutLineStyles()
     {
         SwWW8StyInf& rSI = pCollA[nI];
 
-        if (rSI.IsOutline())
+        if (rSI.IsOutlineNumbered())
         {
             USHORT nAktFlags = 1 << rSI.nOutlineLevel;
             if (nAktFlags & nFlagsStyleOutlLevel)
