@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-13 18:05:38 $
+ *  last change: $Author: dbo $ $Date: 2001-06-14 11:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,16 +66,96 @@ import com.sun.star.comp.loader.JavaLoader;
 
 import com.sun.star.container.XSet;
 
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XSingleComponentFactory;
 
 import com.sun.star.loader.XImplementationLoader;
 
 import com.sun.star.uno.UnoRuntime;
 
+import java.util.Hashtable;
+
 
 public class Bootstrap {
+
+    private static void insertBasicFactories(
+        XSet xSet, XImplementationLoader xImpLoader )
+        throws Exception
+    {
+        // insert the factory of the loader
+        xSet.insert( xImpLoader.activate(
+            "com.sun.star.comp.loader.JavaLoader", null, null, null ) );
+
+        // insert the factory of the URLResolver
+        xSet.insert( xImpLoader.activate(
+            "com.sun.star.comp.urlresolver.UrlResolver", null, null, null ) );
+
+        // insert the bridgefactory
+        xSet.insert( xImpLoader.activate(
+            "com.sun.star.comp.bridgefactory.BridgeFactory", null, null, null ) );
+
+        // insert the connector
+        xSet.insert( xImpLoader.activate(
+            "com.sun.star.comp.connections.Connector", null, null, null ) );
+
+        // insert the acceptor
+        xSet.insert( xImpLoader.activate(
+            "com.sun.star.comp.connections.Acceptor", null, null, null ) );
+    }
+
+    /** Bootstraps an initial component context with service manager and basic
+        jurt components inserted.
+    */
+    static public XComponentContext createInitialComponentContext( Hashtable context_entries )
+        throws Exception
+    {
+        XImplementationLoader xImpLoader = (XImplementationLoader)UnoRuntime.queryInterface(
+            XImplementationLoader.class, new JavaLoader() );
+
+        // Get the factory of the ServiceManager
+        XSingleComponentFactory smgr_fac = (XSingleComponentFactory)UnoRuntime.queryInterface(
+            XSingleComponentFactory.class, xImpLoader.activate(
+                "com.sun.star.comp.servicemanager.ServiceManager", null, null, null ) );
+
+        // Create an instance of the ServiceManager
+        XMultiComponentFactory xSMgr = (XMultiComponentFactory)UnoRuntime.queryInterface(
+            XMultiComponentFactory.class, smgr_fac.createInstanceWithContext( null ) );
+
+        // post init loader
+        XInitialization xInit = (XInitialization)UnoRuntime.queryInterface(
+            XInitialization.class, xImpLoader );
+        Object[] args = new Object [] { xSMgr };
+        xInit.initialize( args );
+
+        // initial component context
+        if (context_entries == null)
+            context_entries = new Hashtable( 1 );
+        // add smgr
+        context_entries.put(
+            "com.sun.star.lang.ServiceManager",
+            new ComponentContextEntry( null, xSMgr ) );
+        // ... xxx todo: add standard entries
+        XComponentContext xContext = new ComponentContext( context_entries, null );
+
+        // post init smgr
+        xInit = (XInitialization)UnoRuntime.queryInterface(
+            XInitialization.class, xSMgr );
+        args = new Object [] { null, xContext }; // no registry, default context
+        xInit.initialize( args );
+
+        XSet xSet = (XSet)UnoRuntime.queryInterface( XSet.class, xSMgr );
+        // insert the service manager
+        xSet.insert( smgr_fac );
+        // and basic jurt factories
+        insertBasicFactories( xSet, xImpLoader );
+
+        return xContext;
+    }
+
     /**
      * Bootstraps a servicemanager with the jurt base components registered.
      * <p>
@@ -83,59 +163,9 @@ public class Bootstrap {
      * @see        com.sun.star.lang.ServiceManager
      * @since       UDK2.08
      */
-    static public XMultiServiceFactory createSimpleServiceManager() throws Exception {
-        JavaLoader loader = new JavaLoader();
-
-        XImplementationLoader xImpLoader = (XImplementationLoader)UnoRuntime.queryInterface(XImplementationLoader.class, loader);
-
-        // Get the factory for the ServiceManager
-        Object loaderobj = xImpLoader.activate("com.sun.star.comp.servicemanager.ServiceManager", null, null, null);
-
-        // Ensure that we have got a factory
-        XSingleServiceFactory xManagerFac = (XSingleServiceFactory) UnoRuntime.queryInterface(XSingleServiceFactory.class, loaderobj);
-        // Create an instance of the ServiceManager
-        XMultiServiceFactory xMultiFac = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class,
-                                                                                          xManagerFac.createInstance());
-
-        // set the ServiceManager at the JavaLoader with the XInitialization interface
-        XInitialization xInit = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, xImpLoader);
-        Object[] iniargs = { xMultiFac };
-        xInit.initialize( iniargs );
-
-
-        // now use the XSet interface at the ServiceManager to add the factory of the loader
-        XSet xSet = (XSet) UnoRuntime.queryInterface(XSet.class, xMultiFac);
-
-        // Get the factory of the loader
-        XSingleServiceFactory xSingleServiceFactory = (XSingleServiceFactory) UnoRuntime.queryInterface(XSingleServiceFactory.class,
-                                                                                                        xImpLoader.activate("com.sun.star.comp.loader.JavaLoader", null, null, null));
-
-        // add the javaloader
-        xSet.insert(xSingleServiceFactory);
-
-        // add the service manager
-        xSet.insert(xManagerFac);
-
-        // Get the factory of the URLResolver
-        xSingleServiceFactory = (XSingleServiceFactory)UnoRuntime.queryInterface(XSingleServiceFactory.class,
-                                                                                 xImpLoader.activate("com.sun.star.comp.urlresolver.UrlResolver", null, null, null));
-        xSet.insert(xSingleServiceFactory);
-
-        // add the bridgefactory
-        xSingleServiceFactory = (XSingleServiceFactory)UnoRuntime.queryInterface(XSingleServiceFactory.class,
-                                                                                 xImpLoader.activate("com.sun.star.comp.bridgefactory.BridgeFactory", null, null, null));
-        xSet.insert(xSingleServiceFactory);
-
-        // add the connector
-        xSingleServiceFactory = (XSingleServiceFactory)UnoRuntime.queryInterface(XSingleServiceFactory.class,
-                                                                                 xImpLoader.activate("com.sun.star.comp.connections.Connector", null, null, null));
-        xSet.insert(xSingleServiceFactory);
-
-        // add the acceptor
-        xSingleServiceFactory = (XSingleServiceFactory)UnoRuntime.queryInterface(XSingleServiceFactory.class,
-                                                                                 xImpLoader.activate("com.sun.star.comp.connections.Acceptor", null, null, null));
-        xSet.insert(xSingleServiceFactory);
-
-        return xMultiFac;
+    static public XMultiServiceFactory createSimpleServiceManager() throws Exception
+    {
+        return (XMultiServiceFactory)UnoRuntime.queryInterface(
+            XMultiServiceFactory.class, createInitialComponentContext( null ).getServiceManager() );
     }
 }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:31:32 $
+#   last change: $Author: dbo $ $Date: 2001-06-14 11:58:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,9 +71,10 @@ TARGET  = com_sun_star_comp_helper_test
 
 # --- Files --------------------------------------------------------
 
-JARFILES = sandbox.jar jurt.jar unoil.jar
+JARFILES = sandbox.jar jurt.jar ridl.jar
 
 JAVACLASSFILES=	\
+    $(CLASSDIR)$/$(PACKAGE)$/ComponentContext_Test.class \
     $(CLASSDIR)$/$(PACKAGE)$/SharedLibraryLoader_Test.class \
     $(CLASSDIR)$/$(PACKAGE)$/RegistryServiceFactory_Test.class
 

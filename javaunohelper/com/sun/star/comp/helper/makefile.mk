@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kr $ $Date: 2001-02-13 18:05:38 $
+#   last change: $Author: dbo $ $Date: 2001-06-14 11:58:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,10 @@ TARGET  = com_sun_star_comp_helper
 JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
 
 JAVAFILES=	\
+    ComponentContextEntry.java		\
+    ComponentContext.java			\
     Bootstrap.java				\
-    SharedLibraryLoader.java	\
+    SharedLibraryLoader.java		\
     RegistryServiceFactory.java
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
