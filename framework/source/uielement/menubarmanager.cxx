@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:51:59 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,26 @@ throw ( RuntimeException )
                 rtl::OUString aItemText;
 
                 if ( Event.State >>= aItemText )
+                {
+                    // Replacement for place holders
+                    if ( aItemText.matchAsciiL( "($1)", 4 ))
+                    {
+                        String aResStr = String( FwkResId( STR_UPDATEDOC ));
+                        rtl::OUString aTmp( aResStr );
+                        aTmp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
+                        aTmp += aItemText.copy( 4 );
+                        aItemText = aTmp;
+                    }
+                    else if ( aItemText.matchAsciiL( "($2)", 4 ))
+                    {
+                        String aResStr = String( FwkResId( STR_CLOSEDOC_ANDRETURN ));
+                        rtl::OUString aTmp( aResStr );
+                        aTmp += aItemText.copy( 4 );
+                        aItemText = aTmp;
+                    }
+
                     m_pVCLMenu->SetItemText( pStatusChangedMenu->nItemId, aItemText );
+                }
             }
         }
 
