@@ -2,9 +2,9 @@
  *
  *  $RCSfile: otlnbuff.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:56:07 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 class ScOutlineArray;
 
-class OutlineBuffer
+class XclImpOutlineBuffer
 {
     // -> exctools.cxx
     private:
@@ -81,8 +81,8 @@ class OutlineBuffer
         ScOutlineArray* pOutlineArray;
         BOOL            bButtonNormal;  // TRUE -> right / under
     public:
-                        OutlineBuffer( SCSIZE nNewSize );
-                        ~OutlineBuffer();
+                        XclImpOutlineBuffer( SCSIZE nNewSize );
+                        ~XclImpOutlineBuffer();
         void            SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden );
         void            SetOutlineArray( ScOutlineArray* pOArray );
         void            Reset( void );
@@ -99,13 +99,13 @@ class OutlineBuffer
 
 
 
-inline BOOL OutlineBuffer::HasOutline( void ) const
+inline BOOL XclImpOutlineBuffer::HasOutline( void ) const
 {
     return nMaxLevel > 0;
 }
 
 
-inline void OutlineBuffer::SetButtonMode( const BOOL b )
+inline void XclImpOutlineBuffer::SetButtonMode( const BOOL b )
 {
     bButtonNormal = b;
 }
