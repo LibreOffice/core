@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:36:02 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 07:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ japanese ] = "%PRODUCTNAME 6.0 Ï½À°ÄÞ·­ÒÝÄ";
     TEXT[ korean ] = "%PRODUCTNAME 6.0 Master Document";
-    TEXT[ chinese_simplified ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ chinese_simplified ] = "%PRODUCTNAME 6.0 Ö÷¿ØÎÄµµ";
     TEXT[ chinese_traditional ] = "%PRODUCTNAME 6.0 ¥D±±¤å¥ó";
     TEXT[ turkish ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ arabic ] = "%PRODUCTNAME 6.0 Master Document";
