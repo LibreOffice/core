@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 19:24:45 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 21:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ String STR_SVT_STYLE_BOLD_ITALIC
     Text [ portuguese ] = "Negrito itálico" ;
     Text[ russian ] = "Æèðíûé êóðñèâ";
     Text[ polish ] = "Pogrubiona kursywa";
-    Text[ japanese ] = "‘¾Žš‚ÌŽÎ‘Ì";
+    Text[ japanese ] = "‘¾ŽšŽÎ‘Ì";
     Text[ chinese_simplified ] = "´ÖÐ±Ìå";
     Text[ chinese_traditional ] = "²Ê±×Åé";
     Text[ arabic ] = "ÚÑíÖ ãÇÆá";
@@ -448,3 +448,4 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ catalan ] = "Esta fuente no está instalada. Se usará la fuente existente más adecuada.";
     TEXT[ finnish ] = "Tätä fonttia ei ole asennettu. Lähintä käytettävissä olevaa fonttia käytetään.";
 };
+
