@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 16:02:19 $
+ *  last change: $Author: tl $ $Date: 2001-02-12 13:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,8 +1069,11 @@ void SmDocShell::Execute(SfxRequest& rReq)
         case SID_TOOLBOX:
         {
             SmViewShell *pView = SmGetActiveView();
-            pView->GetViewFrame()->ToggleChildWindow(
-                    SmToolBoxWrapper::GetChildWindowId() );
+            if (pView)
+            {
+                pView->GetViewFrame()->ToggleChildWindow(
+                        SmToolBoxWrapper::GetChildWindowId() );
+            }
             break;
         }
 
@@ -1296,11 +1299,14 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             {
                 BOOL bState = FALSE;
                 SmViewShell *pView = SmGetActiveView();
-                SfxChildWindow *pChildWnd = pView->GetViewFrame()->
-                        GetChildWindow( SmToolBoxWrapper::GetChildWindowId() );
+                if (pView)
+                {
+                    SfxChildWindow *pChildWnd = pView->GetViewFrame()->
+                            GetChildWindow( SmToolBoxWrapper::GetChildWindowId() );
 
-                if (pChildWnd  &&  pChildWnd->GetWindow()->IsVisible())
-                    bState = TRUE;
+                    if (pChildWnd  &&  pChildWnd->GetWindow()->IsVisible())
+                        bState = TRUE;
+                }
                 rSet.Put(SfxBoolItem(SID_TOOLBOX, bState));
                 break;
             }
