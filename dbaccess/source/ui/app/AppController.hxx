@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:59:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,12 +440,6 @@ namespace dbaui
         /** disposes all created connections
         */
         void clearConnections();
-
-        /** returns the filter for this controller
-            @retrun
-                the filter
-        */
-        const SfxFilter* getStandardFilter();
 
         /** add event listener and remember the document
             @param  _xDocument
