@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-11 11:43:22 $
+ *  last change: $Author: tl $ $Date: 2001-06-14 08:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2144,8 +2144,10 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         for (n = 0;  n < nDispSrvcCount;  ++n)
         {
             pInfo = rAllDispSrvcArr.Get(n);
+            BOOL bIsSuppLang = pInfo->xSpell.is()  &&
+                               pInfo->xSpell->hasLocale( aCurLocale );
             const OUString &rImplName = pInfo->sSpellImplName;
-            if (rImplName.getLength())
+            if (rImplName.getLength()  &&  bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
@@ -2173,8 +2175,10 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         for (n = 0;  n < nDispSrvcCount;  ++n)
         {
             pInfo = rAllDispSrvcArr.Get(n);
+            BOOL bIsSuppLang = pInfo->xHyph.is()  &&
+                               pInfo->xHyph->hasLocale( aCurLocale );
             const OUString &rImplName = pInfo->sHyphImplName;
-            if (rImplName.getLength())
+            if (rImplName.getLength()  &&  bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
@@ -2202,8 +2206,10 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         for (n = 0;  n < nDispSrvcCount;  ++n)
         {
             pInfo = rAllDispSrvcArr.Get(n);
+            BOOL bIsSuppLang = pInfo->xThes.is()  &&
+                               pInfo->xThes->hasLocale( aCurLocale );
             const OUString &rImplName = pInfo->sThesImplName;
-            if (rImplName.getLength())
+            if (rImplName.getLength()  &&  bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
