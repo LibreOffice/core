@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-17 20:13:17 $
+ *  last change: $Author: pb $ $Date: 2001-08-20 14:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ TabPage TP_HELP_SEARCH
     {
         Pos = MAP_APPFONT ( 69, 34 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "N~ur in Titeln suchen" ;
+        Text = "Nur in ~Titeln suchen" ;
         Text [ english_us ] = "Find in ~headings only";
         Text[ portuguese ] = "~Procurar sу em tнtulos";
         Text[ russian ] = "~Искать только в заголовках";
