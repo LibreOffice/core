@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldta.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:51:39 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,13 @@ void    SeqRemoveNegEntries(
 BOOL    SeqHasEntry(
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq,
                 const ::rtl::OUString &rTxt);
+
+///////////////////////////////////////////////////////////////////////////
+
+void SearchSimilarText( const rtl::OUString &rText, INT16 nLanguage,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::linguistic2::XDictionaryList > &xDicList,
+        std::vector< rtl::OUString > & rDicListProps );
 
 ///////////////////////////////////////////////////////////////////////////
 
