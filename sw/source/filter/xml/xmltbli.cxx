@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:15:00 $
+ *  last change: $Author: mib $ $Date: 2000-09-27 06:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1725,10 +1725,12 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             }
         }
 
+        ASSERT( nWidth, "No relative width? That's no good idea!" );
         if( !nWidth )
         {
-            // If no width has been specified by now, we may use any value
-            nWidth = nRelWidth > USHRT_MAX ? USHRT_MAX : nRelWidth;
+            // If no width has been specified by now, we use USHRT_MAX,
+            // because this is a value that works!
+            nWidth = USHRT_MAX;
         }
         if( nRelWidth != nWidth )
         {
@@ -1960,10 +1962,14 @@ void SwXMLTableContext::MakeTable()
             switch( eHoriOrient )
             {
             case HORI_FULL:
+            case HORI_NONE:
+                // #78246#: For HORI_NONE we would prefere to use the sum
+                // of the relative column widths as reference width.
+                // Unfortunately this works only if this sum interpreted as
+                // twip value is larger than the space that is avaialable.
+                // We don't know that space, so we have to use USHRT_MAX, too.
                 nWidth = USHRT_MAX;
                 break;
-            case HORI_NONE:
-                // The width will be set in _MakeTable
                 break;
             default:
                 if( pSize->GetWidthPercent() )
@@ -2186,11 +2192,14 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmltbli.cxx,v 1.1.1.1 2000-09-18 17:15:00 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmltbli.cxx,v 1.2 2000-09-27 06:16:11 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:15:00  hr
+      initial import
+
       Revision 1.11  2000/09/18 16:05:07  willem.vandorp
       OpenOffice header added.
 
