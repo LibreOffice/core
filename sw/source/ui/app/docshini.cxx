@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 14:18:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,7 +785,8 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
             pStor->FillInfoList( &aInfoList );
 
             // erstmal alle nicht "OLE-Objecte" aus der Liste entfernen
-            for( sal_uInt32 n = aInfoList.Count(); n; )
+            sal_uInt32 n;
+            for( n = aInfoList.Count(); n; )
             {
                 const String& rName = aInfoList.GetObject( --n ).GetName();
                 // in ndole.cxx wird dieser PreFix benutzt
