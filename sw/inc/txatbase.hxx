@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-05 13:50:48 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 16:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ class SwTxtAttr
     BOOL bDontMoveAttr : 1;             // refmarks, toxmarks
     BOOL bCharFmtAttr : 1;              // charfmt, inet
     BOOL bOverlapAllowedAttr : 1;       // refmarks, toxmarks
-    BOOL bRedlineAttr : 1;              // redlining attribute
+    BOOL bPriorityAttr : 1;             // attribute has priority (redlining)
 protected:
     SwTxtAttr( const SfxPoolItem& rAttr, xub_StrLen nStart );
 
@@ -157,8 +157,8 @@ public:
     BOOL IsDontMoveAttr() const             { return bDontMoveAttr; }
     BOOL IsCharFmtAttr() const              { return bCharFmtAttr; }
     BOOL IsOverlapAllowedAttr() const       { return bOverlapAllowedAttr; }
-    BOOL IsRedlineAttr() const              { return bRedlineAttr; }
-    void SetRedlineAttr( BOOL bFlag )       { bRedlineAttr = bFlag; }
+    BOOL IsPriorityAttr() const             { return bPriorityAttr; }
+    void SetPriorityAttr( BOOL bFlag )       { bPriorityAttr = bFlag; }
 
     inline const SfxPoolItem& GetAttr() const;
     inline USHORT Which() const { return GetAttr().Which(); }
@@ -471,6 +471,9 @@ inline const SvxCharReliefItem& SwTxtAttr::GetCharRelief() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/03/05 13:50:48  jp
+      new: SvxCharReliefItem
+
       Revision 1.9  2001/02/28 11:16:12  ama
       New: RedlineAttr-flag public
 

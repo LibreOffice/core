@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-05 12:52:38 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 16:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,136 +218,136 @@ static USHORT StackPos[ NUM_OBJECTS ] = {
  * a font depending on the stack id.
  *************************************************************************/
 
-void FontChg(const SfxPoolItem* pItem, SwFont& pFnt, sal_Bool bPush )
+void FontChg(const SfxPoolItem* pItem, SwFont& rFnt, sal_Bool bPush )
 {
     ASSERT( pItem, "No pool item" );
 
     switch ( pItem->Which() )
     {
         case RES_CHRATR_CASEMAP :
-            pFnt.SetCaseMap( ((SvxCaseMapItem*)pItem)->GetCaseMap() );
+            rFnt.SetCaseMap( ((SvxCaseMapItem*)pItem)->GetCaseMap() );
             break;
         case RES_CHRATR_COLOR :
-            pFnt.SetColor( ((SvxColorItem*)pItem)->GetValue() );
+            rFnt.SetColor( ((SvxColorItem*)pItem)->GetValue() );
             break;
         case RES_CHRATR_CONTOUR :
-            pFnt.SetOutline( ((SvxContourItem*)pItem)->GetValue() );
+            rFnt.SetOutline( ((SvxContourItem*)pItem)->GetValue() );
             break;
         case RES_CHRATR_CROSSEDOUT :
-            pFnt.SetStrikeout( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
+            rFnt.SetStrikeout( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
             break;
         case RES_CHRATR_ESCAPEMENT :
-            pFnt.SetEscapement( ((SvxEscapementItem*)pItem)->GetEsc() );
-            pFnt.SetProportion( ((SvxEscapementItem*)pItem)->GetProp() );
+            rFnt.SetEscapement( ((SvxEscapementItem*)pItem)->GetEsc() );
+            rFnt.SetProportion( ((SvxEscapementItem*)pItem)->GetProp() );
             break;
         case RES_CHRATR_FONT :
-            pFnt.SetName( ((SvxFontItem*)pItem)->GetFamilyName(), SW_LATIN );
-            pFnt.SetStyleName( ((SvxFontItem*)pItem)->GetStyleName(), SW_LATIN );
-            pFnt.SetFamily( ((SvxFontItem*)pItem)->GetFamily(), SW_LATIN );
-            pFnt.SetPitch( ((SvxFontItem*)pItem)->GetPitch(), SW_LATIN );
-            pFnt.SetCharSet( ((SvxFontItem*)pItem)->GetCharSet(), SW_LATIN );
+            rFnt.SetName( ((SvxFontItem*)pItem)->GetFamilyName(), SW_LATIN );
+            rFnt.SetStyleName( ((SvxFontItem*)pItem)->GetStyleName(), SW_LATIN );
+            rFnt.SetFamily( ((SvxFontItem*)pItem)->GetFamily(), SW_LATIN );
+            rFnt.SetPitch( ((SvxFontItem*)pItem)->GetPitch(), SW_LATIN );
+            rFnt.SetCharSet( ((SvxFontItem*)pItem)->GetCharSet(), SW_LATIN );
             break;
         case RES_CHRATR_FONTSIZE :
-            pFnt.SetSize(Size(0,((SvxFontHeightItem*)pItem)->GetHeight() ), SW_LATIN );
+            rFnt.SetSize(Size(0,((SvxFontHeightItem*)pItem)->GetHeight() ), SW_LATIN );
             break;
         case RES_CHRATR_KERNING :
-            pFnt.SetFixKerning( ((SvxKerningItem*)pItem)->GetValue() );
+            rFnt.SetFixKerning( ((SvxKerningItem*)pItem)->GetValue() );
             break;
         case RES_CHRATR_LANGUAGE :
-            pFnt.SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage(), SW_LATIN );
+            rFnt.SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage(), SW_LATIN );
             break;
         case RES_CHRATR_POSTURE :
-            pFnt.SetItalic( ((SvxPostureItem*)pItem)->GetPosture(), SW_LATIN );
+            rFnt.SetItalic( ((SvxPostureItem*)pItem)->GetPosture(), SW_LATIN );
             break;
         case RES_CHRATR_SHADOWED :
-            pFnt.SetShadow( ((SvxShadowedItem*)pItem)->GetValue() );
+            rFnt.SetShadow( ((SvxShadowedItem*)pItem)->GetValue() );
             break;
         case RES_CHRATR_UNDERLINE :
-            pFnt.SetUnderline( ((SvxUnderlineItem*)pItem)->GetUnderline() );
-            pFnt.SetUnderColor( ((SvxUnderlineItem*)pItem)->GetColor() );
+            rFnt.SetUnderline( ((SvxUnderlineItem*)pItem)->GetUnderline() );
+            rFnt.SetUnderColor( ((SvxUnderlineItem*)pItem)->GetColor() );
             break;
         case RES_CHRATR_WEIGHT :
-            pFnt.SetWeight( ((SvxWeightItem*)pItem)->GetWeight(), SW_LATIN );
+            rFnt.SetWeight( ((SvxWeightItem*)pItem)->GetWeight(), SW_LATIN );
             break;
         case RES_CHRATR_WORDLINEMODE :
-            pFnt.SetWordLineMode( ((SvxWordLineModeItem*)pItem)->GetValue() );
+            rFnt.SetWordLineMode( ((SvxWordLineModeItem*)pItem)->GetValue() );
             break;
         case RES_CHRATR_AUTOKERN :
-            pFnt.SetAutoKern( ((SvxAutoKernItem*)pItem)->GetValue() );
+            rFnt.SetAutoKern( ((SvxAutoKernItem*)pItem)->GetValue() );
             break;
         case RES_CHRATR_BLINK :
-            pFnt.SetBlink( ((SvxBlinkItem*)pItem)->GetValue() );
+            rFnt.SetBlink( ((SvxBlinkItem*)pItem)->GetValue() );
             break;
         case RES_CHRATR_BACKGROUND :
-            pFnt.SetBackColor(new Color( ((SvxBrushItem*)pItem)->GetColor() ) );
+            rFnt.SetBackColor(new Color( ((SvxBrushItem*)pItem)->GetColor() ) );
             break;
         case RES_CHRATR_CJK_FONT :
-            pFnt.SetName( ((SvxFontItem*)pItem)->GetFamilyName(), SW_CJK );
-            pFnt.SetStyleName( ((SvxFontItem*)pItem)->GetStyleName(), SW_CJK );
-            pFnt.SetFamily( ((SvxFontItem*)pItem)->GetFamily(), SW_CJK );
-            pFnt.SetPitch( ((SvxFontItem*)pItem)->GetPitch(), SW_CJK );
-            pFnt.SetCharSet( ((SvxFontItem*)pItem)->GetCharSet(), SW_CJK );
+            rFnt.SetName( ((SvxFontItem*)pItem)->GetFamilyName(), SW_CJK );
+            rFnt.SetStyleName( ((SvxFontItem*)pItem)->GetStyleName(), SW_CJK );
+            rFnt.SetFamily( ((SvxFontItem*)pItem)->GetFamily(), SW_CJK );
+            rFnt.SetPitch( ((SvxFontItem*)pItem)->GetPitch(), SW_CJK );
+            rFnt.SetCharSet( ((SvxFontItem*)pItem)->GetCharSet(), SW_CJK );
             break;
         case RES_CHRATR_CJK_FONTSIZE :
-            pFnt.SetSize(Size( 0, ((SvxFontHeightItem*)pItem)->GetHeight()), SW_CJK);
+            rFnt.SetSize(Size( 0, ((SvxFontHeightItem*)pItem)->GetHeight()), SW_CJK);
             break;
         case RES_CHRATR_CJK_LANGUAGE :
-            pFnt.SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage(), SW_CJK );
+            rFnt.SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage(), SW_CJK );
             break;
         case RES_CHRATR_CJK_POSTURE :
-            pFnt.SetItalic( ((SvxPostureItem*)pItem)->GetPosture(), SW_CJK );
+            rFnt.SetItalic( ((SvxPostureItem*)pItem)->GetPosture(), SW_CJK );
             break;
         case RES_CHRATR_CJK_WEIGHT :
-            pFnt.SetWeight( ((SvxWeightItem*)pItem)->GetWeight(), SW_CJK );
+            rFnt.SetWeight( ((SvxWeightItem*)pItem)->GetWeight(), SW_CJK );
             break;
         case RES_CHRATR_CTL_FONT :
-            pFnt.SetName( ((SvxFontItem*)pItem)->GetFamilyName(), SW_CTL );
-            pFnt.SetStyleName( ((SvxFontItem*)pItem)->GetStyleName(), SW_CTL );
-            pFnt.SetFamily( ((SvxFontItem*)pItem)->GetFamily(), SW_CTL );
-            pFnt.SetPitch( ((SvxFontItem*)pItem)->GetPitch(), SW_CTL );
-            pFnt.SetCharSet( ((SvxFontItem*)pItem)->GetCharSet(), SW_CTL );
+            rFnt.SetName( ((SvxFontItem*)pItem)->GetFamilyName(), SW_CTL );
+            rFnt.SetStyleName( ((SvxFontItem*)pItem)->GetStyleName(), SW_CTL );
+            rFnt.SetFamily( ((SvxFontItem*)pItem)->GetFamily(), SW_CTL );
+            rFnt.SetPitch( ((SvxFontItem*)pItem)->GetPitch(), SW_CTL );
+            rFnt.SetCharSet( ((SvxFontItem*)pItem)->GetCharSet(), SW_CTL );
             break;
         case RES_CHRATR_CTL_FONTSIZE :
-            pFnt.SetSize(Size(0, ((SvxFontHeightItem*)pItem)->GetHeight() ), SW_CTL);
+            rFnt.SetSize(Size(0, ((SvxFontHeightItem*)pItem)->GetHeight() ), SW_CTL);
             break;
         case RES_CHRATR_CTL_LANGUAGE :
-            pFnt.SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage(), SW_CTL );
+            rFnt.SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage(), SW_CTL );
             break;
         case RES_CHRATR_CTL_POSTURE :
-            pFnt.SetItalic( ((SvxPostureItem*)pItem)->GetPosture(), SW_CTL );
+            rFnt.SetItalic( ((SvxPostureItem*)pItem)->GetPosture(), SW_CTL );
             break;
         case RES_CHRATR_CTL_WEIGHT :
-            pFnt.SetWeight( ((SvxWeightItem*)pItem)->GetWeight(), SW_CTL );
+            rFnt.SetWeight( ((SvxWeightItem*)pItem)->GetWeight(), SW_CTL );
             break;
         case RES_CHRATR_EMPHASIS_MARK :
-            pFnt.SetEmphasisMark(
+            rFnt.SetEmphasisMark(
                      ((SvxEmphasisMarkItem*)pItem)->GetEmphasisMark()
                      );
             break;
         case RES_CHRATR_SCALEW :
-            pFnt.SetPropWidth( ((SvxCharScaleWidthItem*)pItem)->GetValue() );
+            rFnt.SetPropWidth( ((SvxCharScaleWidthItem*)pItem)->GetValue() );
             break;
 
         case RES_CHRATR_ROTATE :
-            pFnt.SetVertical( ((SvxCharRotateItem*)pItem)->GetValue() );
+            rFnt.SetVertical( ((SvxCharRotateItem*)pItem)->GetValue() );
             break;
         case RES_CHRATR_TWO_LINES :
-            pFnt.SetVertical( 0 );
+            rFnt.SetVertical( 0 );
             break;
         case RES_TXTATR_CJK_RUBY :
-            pFnt.SetVertical( 0 );
+            rFnt.SetVertical( 0 );
             break;
         case RES_TXTATR_REFMARK :
             if ( bPush )
-                pFnt.GetRef()++;
+                rFnt.GetRef()++;
             else
-                pFnt.GetRef()--;
+                rFnt.GetRef()--;
             break;
         case RES_TXTATR_TOXMARK :
             if ( bPush )
-                pFnt.GetTox()++;
+                rFnt.GetTox()++;
             else
-                pFnt.GetTox()--;
+                rFnt.GetTox()--;
             break;
     }
 }
@@ -536,7 +536,7 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet )
  *                      SwAttrHandler::PushAndChg()
  *************************************************************************/
 
-void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& pFnt )
+void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 {
     // these special attributes in fact represent a collection of attributes
     // they have to be pushed to each stack they belong to
@@ -558,8 +558,8 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& pFnt )
             {
                 // we push rAttr onto the appropriate stack
                 if ( Push( rAttr, StackPos[ i ] ) )
-                    // we let pItem change pFnt
-                    FontChg( pItem, pFnt, sal_True );
+                    // we let pItem change rFnt
+                    FontChg( pItem, rFnt, sal_True );
             }
         }
     }
@@ -568,8 +568,8 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& pFnt )
     else
     {
         if ( Push( rAttr, StackPos[ rAttr.Which() ] ) )
-            // we let pItem change pFnt
-            FontChg( &rAttr.GetAttr(), pFnt, sal_True );
+            // we let pItem change rFnt
+            FontChg( &rAttr.GetAttr(), rFnt, sal_True );
     }
 }
 
@@ -602,7 +602,7 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const USHORT nStack )
 
     // attributes originating from redlining have highest priority
     const SwTxtAttr* pTopAttr = aAttrStack[ nStack ].Top();
-    if ( !pTopAttr || !pTopAttr->IsRedlineAttr() )
+    if ( !pTopAttr || !pTopAttr->IsPriorityAttr() )
     {
         aAttrStack[ nStack ].Push( rAttr );
         return sal_True;
@@ -620,7 +620,7 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const USHORT nStack )
  *                      SwAttrHandler::PopAndChg()
  *************************************************************************/
 
-void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& pFnt )
+void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 {
     // these special attributes in fact represent a collection of attributes
     // they have to be removed from each stack they belong to
@@ -659,13 +659,13 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& pFnt )
 
                         const SfxPoolItem* pItemNext;
                         pFmtNext->GetItemState( i, TRUE, &pItemNext );
-                        FontChg( pItemNext, pFnt, sal_False );
+                        FontChg( pItemNext, rFnt, sal_False );
                     }
                     else
-                        FontChg( &pTopAt->GetAttr(), pFnt, sal_False );
+                        FontChg( &pTopAt->GetAttr(), rFnt, sal_False );
                 }
                 else
-                    FontChg( pDefaultArray[ nStackPos ], pFnt, sal_False );
+                    FontChg( pDefaultArray[ nStackPos ], rFnt, sal_False );
             }
         }
     }
@@ -673,32 +673,10 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& pFnt )
     // stack and reset the font
     else
     {
-        const USHORT nStackPos = StackPos[ rAttr.Which() ];
-        aAttrStack[ nStackPos ].Remove( rAttr );
+        aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
         // reset font according to attribute on top of stack
         // or default value
-        const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
-        if ( pTopAt )
-        {
-            // check again, if attribute is collection of attributes
-            if ( RES_TXTATR_INETFMT == pTopAt->Which() ||
-                 RES_TXTATR_CHARFMT == pTopAt->Which() )
-            {
-                SwCharFmt* pFmtNext;
-                if( RES_TXTATR_INETFMT == pTopAt->Which() )
-                    pFmtNext = ((SwTxtINetFmt*)pTopAt)->GetCharFmt();
-                else
-                    pFmtNext = pTopAt->GetCharFmt().GetCharFmt();
-
-                const SfxPoolItem* pItemNext;
-                pFmtNext->GetItemState( rAttr.Which(), TRUE, &pItemNext );
-                FontChg( pItemNext, pFnt, sal_False );
-            }
-            else
-                FontChg( &pTopAt->GetAttr(), pFnt, sal_False );
-        }
-        else
-            FontChg( pDefaultArray[ nStackPos ], pFnt, sal_False );
+        ActivateTop( rFnt, rAttr.Which() );
     }
 }
 
@@ -711,6 +689,62 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& pFnt )
 void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
 {
     aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
+}
+
+/*************************************************************************
+ *                      SwAttrHandler::ChangeScript()
+ *************************************************************************/
+
+//void SwAttrHandler::ChangeScript( SwFont& rFnt, const BYTE nScr )
+//{
+//    USHORT i;
+
+//    switch ( nScr ) {
+//        case SW_LATIN :
+//            ActivateTop( rFnt, RES_CHRATR_FONT );
+//            ActivateTop( rFnt, RES_CHRATR_FONTSIZE );
+//            ActivateTop( rFnt, RES_CHRATR_LANGUAGE );
+//            ActivateTop( rFnt, RES_CHRATR_POSTURE );
+//            ActivateTop( rFnt, RES_CHRATR_WEIGHT );
+//            break;
+//        case SW_CJK :
+//            for ( i = RES_CHRATR_CJK_FONT; i <= RES_CHRATR_CJK_WEIGHT; i++ )
+//                ActivateTop( rFnt, i );
+//            break;
+//        case SW_CTL :
+//            for ( i = RES_CHRATR_CTL_FONT; i <= RES_CHRATR_CTL_WEIGHT; i++ )
+//                ActivateTop( rFnt, i );
+//            break;
+//    }
+//}
+
+/*************************************************************************
+ *                      SwAttrHandler::ActivateTop()
+ *************************************************************************/
+void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
+{
+    const SwTxtAttr* pTopAt = aAttrStack[ StackPos[ nAttr ] ].Top();
+    if ( pTopAt )
+    {
+        // check again, if attribute is collection of attributes
+        if ( RES_TXTATR_INETFMT == pTopAt->Which() ||
+             RES_TXTATR_CHARFMT == pTopAt->Which() )
+        {
+            SwCharFmt* pFmtNext;
+            if( RES_TXTATR_INETFMT == pTopAt->Which() )
+                pFmtNext = ((SwTxtINetFmt*)pTopAt)->GetCharFmt();
+            else
+                pFmtNext = pTopAt->GetCharFmt().GetCharFmt();
+
+            const SfxPoolItem* pItemNext;
+            pFmtNext->GetItemState( nAttr, TRUE, &pItemNext );
+            FontChg( pItemNext, rFnt, sal_False );
+        }
+        else
+            FontChg( &pTopAt->GetAttr(), rFnt, sal_False );
+    }
+    else
+        FontChg( pDefaultArray[ StackPos[ nAttr ] ], rFnt, sal_False );
 }
 
 /**************************************************************************

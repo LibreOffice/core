@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-05 12:51:48 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 16:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,12 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include <svx/charscaleitem.hxx>
+#endif
+#ifndef _TXTATR_HXX
+#include <txtatr.hxx>
+#endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
@@ -916,6 +921,17 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
 
+#ifndef OLD_ATTR_HANDLING
+    // We do not want scaling attributes to be considered during this
+    // calculation. For this, we push a temporary scaling attribute with
+    // scaling value 100 and priority flag on top of the scaling stack
+    SwAttrHandler& rAH = aIter.GetAttrHandler();
+    SvxCharScaleWidthItem aItem;
+    SwTxtCharScaleWidth aAttr( aItem, nStt, nEnd );
+    aAttr.SetPriorityAttr( sal_True );
+    rAH.PushAndChg( aAttr, *(aIter.GetFnt()) );
+#endif
+
     xub_StrLen nIdx = nStt;
 
     ULONG nWidth = 0;
@@ -933,7 +949,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
 
         nStop = nIdx;
         xub_Unicode cChar = CH_BLANK;
-        SwTxtAttr* pHint;
+        SwTxtAttr* pHint = NULL;
 
         // stop at special characters in [ nIdx, nNextChg ]
         while( nStop < nEnd && nStop < nNextChg )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-05 12:50:14 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 16:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,9 @@ public:
 
     inline const BYTE GetPropFont() const { return nPropFont; }
     inline void SetPropFont( const BYTE nNew ) { nPropFont = nNew; }
+
+    inline SwAttrHandler& GetAttrHandler() { return aAttrHandler; }
+
 #ifdef DEBUG
     void Dump( SvStream &rOS ) const;
 #endif
