@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarGrid.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-23 10:27:32 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 16:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,14 +139,14 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         rPoints[0][nTick].X = static_cast<sal_Int32>(aScenePosition3D.PositionX);
         rPoints[0][nTick].Y = static_cast<sal_Int32>(aScenePosition3D.PositionY);
     }
-    if(rPoints.getLength()>1)
+    if(rPoints[0].getLength()>1)
     {
         rPoints[0].realloc(nTick+1);
         rPoints[0][nTick].X = rPoints[0][0].X;
         rPoints[0][nTick].Y = rPoints[0][0].Y;
     }
     else
-        rPoints[0].realloc(nTick);
+        rPoints[0].realloc(0);
 }
 
 void VPolarGrid::create2DAngleGrid( const uno::Reference< drawing::XShapes >& xTarget
@@ -176,7 +176,7 @@ void VPolarGrid::create2DAngleGrid( const uno::Reference< drawing::XShapes >& xT
     if(nLinePropertiesCount)
     {
         //create axis main lines
-        drawing::PointSequenceSequence aAllPoints(1);
+        drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
         sal_Int32 nRealPointCount = 0;
@@ -227,7 +227,7 @@ void VPolarGrid::create2DRadiusGrid( const uno::Reference< drawing::XShapes >& x
         ; aDepthIter++, nDepth++ )
     {
         //create axis main lines
-        drawing::PointSequenceSequence aAllPoints(1);
+        drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
         sal_Int32 nRealPointCount = 0;
@@ -244,7 +244,8 @@ void VPolarGrid::create2DRadiusGrid( const uno::Reference< drawing::XShapes >& x
             drawing::PointSequenceSequence aPoints(1);
             VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, rAngleTickInfos
                 , rAngleIncrement, rAngleScale, m_pPosHelper, fLogicRadius, fLogicZ );
-            appendPointSequence( aAllPoints, aPoints );
+            if(aPoints[0].getLength())
+                appendPointSequence( aAllPoints, aPoints );
         }
 
         uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
