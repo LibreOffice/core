@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:52:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,16 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     {
         Pos = MAP_APPFONT( DLGS_BOTTOM_HELP_X( DS_WIDTH ), DLGS_BOTTOM_BTN_Y( DS_HEIGHT ) );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+    Image IMG_STATE_VALID_HC
+    {
+        ImageBitmap = Bitmap { File = "signet_11x16_h.png"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image IMG_STATE_BROKEN_HC
+    {
+        ImageBitmap = Bitmap { File = "caution_11x16_h.png"; };
+        MaskColor = STD_MASKCOLOR;
     };
 };
 
