@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _OFA_OSPLCFG_HXX //autogen
 #include <offmgr/osplcfg.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
@@ -1436,18 +1439,13 @@ BOOL FuText::RequestHelp(const HelpEvent& rHEvt)
             /******************************************************************
             * URL-Field
             ******************************************************************/
-            aHelpText = ((const SvxURLField*) pField)->GetURL();
+            aHelpText = INetURLObject::decode( ((const SvxURLField*)pField)->GetURL(), '%', INetURLObject::DECODE_WITH_CHARSET );
         }
-
         if (aHelpText.Len())
         {
             Rectangle aLogicPix = pWindow->LogicToPixel(pTextObj->GetLogicRect());
             Rectangle aScreenRect(pWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
                                   pWindow->OutputToScreenPixel(aLogicPix.BottomRight()));
-
-#ifdef OS2
-            aScreenRect = Rectangle(rHEvt.GetMousePosPixel(), Size(5, 5));
-#endif
 
             if (Help::IsBalloonHelpEnabled())
             {
