@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+ *  last change: $Author: gh $ $Date: 2001-06-20 10:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #include <tools/list.hxx>
 
 // local includes
-#include "utf8conv.hxx"
 #include "tagtest.hxx"
 
 //
@@ -316,6 +315,16 @@ void Help()
 }
 
 /*****************************************************************************/
+ByteString GetLineType( const ByteString &rLine )
+/*****************************************************************************/
+{
+    ByteString sTmp( rLine );
+    sTmp.SearchAndReplaceAll( "($$)", "\t" );
+
+    return sTmp.GetToken( 1, '\t' );
+}
+
+/*****************************************************************************/
 ULONG GetUniqId( const ByteString &rLine )
 /*****************************************************************************/
 {
@@ -432,31 +441,41 @@ int _cdecl main( int argc, char *argv[] )
     GSIBlock *pBlock = NULL;
     ULONG nLine = 0;
 
-    while ( !aGSI.IsEof()) {
-
+    while ( !aGSI.IsEof())
+    {
         aGSI.ReadLine( sGSILine );
         nLine++;
 
-        if ( sGSILine.Len()) {
-            ULONG nId = GetUniqId( sGSILine );
-            if ( nId != nOldId ) {
-                if ( pBlock )
-                {
-                    pBlock->CheckSyntax( nLine );
-
-                    if ( bWriteError )
-                        pBlock->WriteError( aErrOut );
-                    if ( bWriteCorrect )
-                        pBlock->WriteCorrect( aOkOut );
-
-                    delete pBlock;
-                }
-                pBlock = new GSIBlock( bPrintContext );
-
-                nOldId = nId;
+        if ( sGSILine.Len())
+        {
+            if ( GetLineType( sGSILine ).CompareIgnoreCaseToAscii("res-comment") == COMPARE_EQUAL )
+            {   // ignore comment lines, but write them to Correct Items File
+                if ( bWriteCorrect )
+                       aOkOut.WriteLine( sGSILine );
             }
+            else
+            {
+                ULONG nId = GetUniqId( sGSILine );
+                if ( nId != nOldId )
+                {
+                    if ( pBlock )
+                    {
+                        pBlock->CheckSyntax( nLine );
 
-            pBlock->InsertLine( sGSILine, nLine );
+                        if ( bWriteError )
+                            pBlock->WriteError( aErrOut );
+                        if ( bWriteCorrect )
+                            pBlock->WriteCorrect( aOkOut );
+
+                        delete pBlock;
+                    }
+                    pBlock = new GSIBlock( bPrintContext );
+
+                    nOldId = nId;
+                }
+
+                pBlock->InsertLine( sGSILine, nLine );
+            }
         }
     }
     if ( pBlock )
