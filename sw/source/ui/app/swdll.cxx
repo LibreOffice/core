@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: os $ $Date: 2000-10-12 08:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,32 +176,4 @@ void SwDLL::Exit()
     delete (*ppShlPtr);
     (*ppShlPtr) = NULL;
 }
-
-
-/*-------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/09/18 16:05:12  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.5  2000/08/07 14:02:28  os
-    portal menu added
-
-    Revision 1.4  1999/04/20 10:22:10  OS
-    #64980# eigener SwAttrPool fuer das SwModule
-
-
-      Rev 1.3   20 Apr 1999 12:22:10   OS
-   #64980# eigener SwAttrPool fuer das SwModule
-
-      Rev 1.2   24 Nov 1997 14:22:36   MA
-   includes
-
-      Rev 1.1   07 Nov 1997 15:50:36   OS
-   MakeObject-Link auch aus der richtigen Liste entfernen
-
-      Rev 1.0   01 Sep 1997 13:09:42   OS
-   Initial revision.
-
-
--------------------------------------------------------------------------*/
 
