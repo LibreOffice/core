@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-13 10:14:39 $
+ *  last change: $Author: ama $ $Date: 2001-06-15 11:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,7 +883,7 @@ void SwFrm::ImplInvalidateNextPos( BOOL bNoFtn )
                 {
                     SwFrm* pTmp = ((SwSectionFrm*)pFrm)->ContainsAny();
                     if( pTmp )
-                        pTmp->_InvalidatePos();
+                        pTmp->InvalidatePos();
                     else if( !bNoFtn )
                         ((SwSectionFrm*)pFrm)->InvalidateFtnPos();
                     if( !IsInSct() || FindSctFrm()->GetFollow() != pFrm )
@@ -899,7 +899,7 @@ void SwFrm::ImplInvalidateNextPos( BOOL bNoFtn )
                   // die Seite zu wechseln, muss er ebenfalls invalidiert werden.
                     SwFrm* pTmp = ((SwSectionFrm*)pFrm)->ContainsAny();
                     if( pTmp )
-                        pTmp->_InvalidatePos();
+                        pTmp->InvalidatePos();
                     if( !IsInSct() || FindSctFrm()->GetFollow() != pFrm )
                         pFrm->InvalidatePos();
                 }
