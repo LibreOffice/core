@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-26 19:25:20 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 13:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
  */
 
 // forward declarations
-
 namespace utl { class MultiAtomProvider; } // see unotools/atom.hxx
 
 namespace psp {
@@ -345,6 +344,8 @@ class PrintFontManager
     void getFontAttributesFromXLFD( PrintFont* pFont, const ByteString& rXLFD ) const;
 
     bool analyzeFontFile( int nDirID, const ::rtl::OString& rFileName, bool bReadFile, const ::std::list< ::rtl::OString >& rXLFDs, ::std::list< PrintFont* >& rNewFonts ) const;
+    ::rtl::OUString convertTrueTypeName( void* pNameRecord ) const; // actually a NameRecord* formt font subsetting code
+    ::rtl::OUString analyzeTrueTypeFamilyName( void* pTTFont ) const; // actually a TrueTypeFont* from font subsetting code
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;
     // finds the FIRST id for this font file; there may be more
     // for TrueType collections

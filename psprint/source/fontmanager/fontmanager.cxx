@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-26 19:25:20 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 13:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,10 @@
  ************************************************************************/
 
 #define Window XLIB_Window
+#define Time XLIB_Time
 #include <X11/Xlib.h>
 #undef Window
+#undef Time
 #include <unistd.h>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -105,6 +107,13 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
+#endif
+#ifndef _TOOLS_INTN_HXX
+#include <tools/intn.hxx>
+#endif
+
 
 #include <parseAFM.hxx>
 #include <sft.h>
@@ -1145,6 +1154,119 @@ ByteString PrintFontManager::getXLFD( PrintFont* pFont ) const
 
 // -------------------------------------------------------------------------
 
+OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
+{
+    NameRecord* pNameRecord = (NameRecord*)pRecord;
+    OUString aValue;
+    if(
+       ( pNameRecord->platformID == 3 && pNameRecord->encodingID == 1 )  // MS, Unicode
+       ||
+       ( pNameRecord->platformID == 0 ) // Apple, Unicode
+       )
+    {
+        OUStringBuffer aName( pNameRecord->slen/2 );
+        const byte* pNameBuffer = pNameRecord->sptr;
+        for(int n = 0; n < pNameRecord->slen/2; n++ )
+            aName.append( (sal_Unicode)getUInt16BE( pNameBuffer ) );
+        aValue = aName.makeStringAndClear();
+    }
+    else if( pNameRecord->platformID == 3 )
+    {
+        if( pNameRecord->encodingID >= 2 && pNameRecord->encodingID <= 6 )
+        {
+            /*
+             *  and now for a special kind of madness:
+             *  some fonts encode their byte value string as BE uint16
+             *  (leading to stray zero bytes in the string)
+             *  while others code two bytes as a uint16 and swap to BE
+             */
+            OStringBuffer aName;
+            const byte* pNameBuffer = pNameRecord->sptr;
+            for(int n = 0; n < pNameRecord->slen/2; n++ )
+            {
+                sal_Unicode aCode = (sal_Unicode)getUInt16BE( pNameBuffer );
+                sal_Char aChar = aCode >> 8;
+                if( aChar )
+                    aName.append( aChar );
+                aChar = aCode & 0x00ff;
+                if( aChar )
+                    aName.append( aChar );
+            }
+            switch( pNameRecord->encodingID )
+            {
+                case 2:
+                    aValue = OStringToOUString( aName.makeStringAndClear(), RTL_TEXTENCODING_MS_932 );
+                    break;
+                case 3:
+                    aValue = OStringToOUString( aName.makeStringAndClear(), RTL_TEXTENCODING_MS_936 );
+                    break;
+                case 4:
+                    aValue = OStringToOUString( aName.makeStringAndClear(), RTL_TEXTENCODING_MS_950 );
+                    break;
+                case 5:
+                    aValue = OStringToOUString( aName.makeStringAndClear(), RTL_TEXTENCODING_MS_949 );
+                    break;
+                case 6:
+                    aValue = OStringToOUString( aName.makeStringAndClear(), RTL_TEXTENCODING_MS_1361 );
+                    break;
+            }
+        }
+    }
+    return aValue;
+}
+
+// -------------------------------------------------------------------------
+
+OUString PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont ) const
+{
+    OUString aFamily;
+
+    NameRecord* pNameRecords = NULL;
+    int nNameRecords = GetTTNameRecords( (TrueTypeFont*)pTTFont, &pNameRecords );
+    if( nNameRecords && pNameRecords )
+    {
+        LanguageType aLang = GetSystemLanguage();
+        int nLastMatch = -1;
+        for( int i = 0; i < nNameRecords; i++ )
+        {
+            if( pNameRecords[i].nameID != 1 )
+                continue;
+#ifdef DEBUG
+            fprintf( stderr, "   family: platform = %d, encoding = %d, language = 0x%.4x\n", pNameRecords[i].platformID, pNameRecords[i].encodingID, pNameRecords[i].languageID );
+#endif
+
+            int nMatch = -1;
+            if( pNameRecords[i].platformID == 0 ) // Unicode
+                nMatch = 4000;
+            else if( pNameRecords[i].platformID == 3 )
+            {
+                // this bases on the LanguageType actually being a Win LCID
+                if( pNameRecords[i].languageID == aLang )
+                    nMatch = 8000;
+                else if( pNameRecords[i].languageID == LANGUAGE_ENGLISH_US )
+                    nMatch = 2000;
+                else if( pNameRecords[i].languageID == LANGUAGE_ENGLISH ||
+                         pNameRecords[i].languageID == LANGUAGE_ENGLISH_UK )
+                    nMatch = 1500;
+                else
+                    nMatch = 1000;
+            }
+            if( nMatch > nLastMatch )
+            {
+                nLastMatch = nMatch;
+                aFamily = convertTrueTypeName( pNameRecords + i );
+#ifdef DEBUG
+                fprintf( stderr, "taken\n" );
+#endif
+            }
+        }
+        DisposeNameRecords( pNameRecords, nNameRecords );
+    }
+    return aFamily;
+}
+
+// -------------------------------------------------------------------------
+
 bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
 {
     bool bSuccess = false;
@@ -1161,14 +1283,16 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         // set family name from XLFD if possible
         if( ! pFont->m_nFamilyName )
         {
-            if( aInfo.ufamily && *aInfo.ufamily )
-                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OUString( aInfo.ufamily ), sal_True );
-            else if( aInfo.family && *aInfo.family )
-                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, String( ByteString( aInfo.family ), aEncoding ), sal_True );
+#ifdef DEBUG
+            fprintf( stderr, "font %s\n", pTTFontFile->m_aFontFile.getStr() );
+#endif
+            OUString aFamilyName( analyzeTrueTypeFamilyName( pTTFont ) );
+            if( aFamilyName.getLength() )
+                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, aFamilyName, sal_True );
             else
                 // poor font does not have a family name
                 // name it to file name minus ".tt{f|c}"
-                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( pTTFontFile->m_aFontFile.copy( 0, pTTFontFile->m_aFontFile.getLength()-4 ), aEncoding ) );
+                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( pTTFontFile->m_aFontFile.copy( 0, pTTFontFile->m_aFontFile.getLength()-4 ), aEncoding ), sal_True );
         }
 
 
@@ -2737,22 +2861,13 @@ bool PrintFontManager::getAlternativeFamilyNames( fontID nFont, ::std::list< OUS
                 if( pNameRecords[i].nameID != 1 ) // family name
                     continue;
 
-                if(
-                   ( pNameRecords[i].platformID == 3 && pNameRecords[i].encodingID == 1 )  // MS, Unicode
-                   ||
-                   ( pNameRecords[i].platformID == 0 ) // Apple, Unicode
-                   )
+                OUString aFamily( convertTrueTypeName( pNameRecords+i ) );
+                if( aFamily.getLength()
+                    &&
+                    m_pAtoms->getAtom( ATOM_FAMILYNAME, aFamily, sal_True ) != pFont->m_nFamilyName
+                    )
                 {
-                    OUStringBuffer aName( pNameRecords[i].slen/2 );
-                    const byte* pNameBuffer = pNameRecords[i].sptr;
-                    for(int n = 0; n < pNameRecords[i].slen/2; n++ )
-                        aName.append( (sal_Unicode)getUInt16BE( pNameBuffer ) );
-                    if( aName.getLength() )
-                    {
-                        OUString aFamily( aName.makeStringAndClear() );
-                        if( m_pAtoms->getAtom( ATOM_FAMILYNAME, aFamily, sal_True ) != pFont->m_nFamilyName )
-                            rNames.push_back( aFamily );
-                    }
+                    rNames.push_back( aFamily );
                 }
             }
 
