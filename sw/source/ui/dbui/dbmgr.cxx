@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 11:45:55 $
+ *  last change: $Author: os $ $Date: 2000-12-07 09:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1928,7 +1928,7 @@ BOOL    SwNewDBMgr::ShowInBeamer(const String& rDBName, const String& rTableName
         pProperties[1].Name = C2U("Command");
         pProperties[1].Value <<= OUString(rTableName);
         pProperties[2].Name = C2U("CommandType");
-        pProperties[2].Value <<= (sal_Int32)SW_DB_SELECT_TABLE == nType ? CommandType::TABLE : CommandType::QUERY;
+        pProperties[2].Value <<= (sal_Int32)SW_DB_SELECT_QUERY == nType ? CommandType::QUERY : CommandType::TABLE;
         xD->dispatch(aURL, aProperties);
     }
     else
