@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 15:39:29 $
+ *  last change: $Author: rt $ $Date: 2000-11-29 10:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ chinese_simplified ] = "×ÖÌå(~H)";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ó~åô ÷áñáêôÞñùí";
-        Text[ korean ] = "¹®ÀÚ ¼¼Æ®(~H)";
+        Text[ korean ] = "¹®ÀÚ ÁýÇÕ(~H)";
         Text[ turkish ] = "~Karakter kümesi";
     };
     ListBox LB_CHARSET
