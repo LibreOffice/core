@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-21 13:49:11 $
+ *  last change: $Author: sb $ $Date: 2000-12-05 12:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,12 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
 
    ; private
    db-url = "DB:" *uric
+
+
+   ; private
+   vnd-sun-star-cmd-url = "VND.SUN.STAR.CMD:" opaque_part
+   opaque_part = uric_no_slash *uric
+   uric_no_slash = unreserved / escaped / ";" / "?" / ":" / "@" / "&" / "=" / "+" / "$" / ","
  */
 
 //============================================================================
@@ -394,8 +400,8 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, true },
         { "db", "db:", 0, false, false, false, false, false, false, false,
           false },
-        { 0, 0, 0, false, false, false, false, false, false, false,
-          false } };
+        { "vnd.sun.star.cmd", "vnd.sun.star.cmd:", 0, false, false, false,
+          false, false, false, false, false } };
 
 inline INetURLObject::SchemeInfo const &
 INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
@@ -465,107 +471,108 @@ enum
     pV = INetURLObject::PART_VISIBLE_NONSPECIAL,
     pW = INetURLObject::PART_CREATEFRAGMENT,
     pX = INetURLObject::PART_UNO_PARAM_VALUE,
-    pY = INetURLObject::PART_UNAMBIGUOUS
+    pY = INetURLObject::PART_UNAMBIGUOUS,
+    pZ = INetURLObject::PART_URIC_NO_SLASH
 };
 
 static sal_uInt32 const aMustEncodeMap[128]
     = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 /*   */                                                                         pY,
-/* ! */       pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* ! */       pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
 /* " */                                                             pU+pV      +pY,
 /* # */                                                             pU,
-/* $ */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* $ */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
 /* % */                                                             pU,
-/* & */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP   +pR+pS+pT+pU+pV+pW+pX,
-/* ' */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* ( */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* ) */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* * */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* + */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX,
-/* , */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW,
-/* - */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* . */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* & */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP   +pR+pS+pT+pU+pV+pW+pX   +pZ,
+/* ' */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* ( */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* ) */          pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* * */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* + */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ,
+/* , */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW      +pZ,
+/* - */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* . */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
 /* / */ pA+pB+pC+pH+pJ                  +pL+pM      +pP+pQ+pR   +pT+pU+pV   +pX,
-/* 0 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* 1 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* 2 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* 3 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* 4 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* 5 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* 6 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* 7 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* 8 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* 9 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* : */    pB+pC            +pH+pI+pJ   +pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX,
-/* ; */       pC+pD            +pI+pJ+pK+pL+pM   +pO+pP+pQ+pR   +pT+pU   +pW,
+/* 0 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* 1 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* 2 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* 3 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* 4 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* 5 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* 6 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* 7 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* 8 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* 9 */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* : */    pB+pC            +pH+pI+pJ   +pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX   +pZ,
+/* ; */       pC+pD            +pI+pJ+pK+pL+pM   +pO+pP+pQ+pR   +pT+pU   +pW      +pZ,
 /* < */       pC                                 +pO+pP            +pU+pV      +pY,
-/* = */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN         +pR+pS+pT+pU+pV+pW,
+/* = */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN         +pR+pS+pT+pU+pV+pW      +pZ,
 /* > */       pC                                 +pO+pP            +pU+pV      +pY,
-/* ? */       pC                        +pL                     +pT+pU   +pW+pX,
-/* @ */       pC            +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* A */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* B */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* C */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* D */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* E */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* F */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* G */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* H */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* I */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* J */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* K */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* L */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* M */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* N */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* O */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* P */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* Q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* R */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* S */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* T */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* U */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* V */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* W */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* X */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* Y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* Z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* ? */       pC                        +pL                     +pT+pU   +pW+pX   +pZ,
+/* @ */       pC            +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* A */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* B */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* C */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* D */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* E */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* F */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* G */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* H */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* I */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* J */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* K */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* L */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* M */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* N */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* O */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* P */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* Q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* R */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* S */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* T */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* U */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* V */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* W */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* X */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* Y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* Z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
 /* [ */                                  pL                        +pU+pV   +pX,
 /* \ */    pB                                                      +pU+pV      +pY,
 /* ] */                                  pL                        +pU+pV   +pX,
 /* ^ */                                                             pU+pV      +pY,
-/* _ */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* _ */ pA+pB+pC+pD+pE   +pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
 /* ` */                                                             pU+pV      +pY,
-/* a */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* b */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* c */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* d */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* e */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* f */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* g */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* h */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* i */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* j */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* k */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* l */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* m */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* n */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* o */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* p */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* r */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* s */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* t */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* u */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* v */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* w */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* x */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
-/* z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* a */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* b */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* c */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* d */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* e */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* f */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* g */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* h */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* i */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* j */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* k */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* l */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* m */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* n */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* o */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* p */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* q */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* r */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* s */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* t */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* u */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* v */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* w */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* x */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* y */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
+/* z */ pA+pB+pC+pD+pE+pF+pG+pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
 /* { */                                                             pU+pV      +pY,
 /* | */    pB+pC                              +pN               +pT+pU+pV      +pY,
 /* } */                                                             pU+pV      +pY,
-/* ~ */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY,
+/* ~ */ pA+pB+pC+pD+pE      +pH+pI+pJ+pK+pL+pM+pN+pO+pP+pQ+pR+pS+pT+pU+pV+pW+pX+pY+pZ,
         0 };
 
 inline bool mustEncode(sal_uInt32 nUTF32, INetURLObject::Part ePart)
@@ -1245,7 +1252,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
     // Parse #<fragment>
     if (pPos < pEnd && *pPos == nFragmentDelimiter)
     {
-        aSynAbsURIRef += nFragmentDelimiter;
+        aSynAbsURIRef += sal_Unicode(nFragmentDelimiter);
         UniString aSynFragment;
         for (++pPos; pPos < pEnd;)
         {
@@ -1713,7 +1720,7 @@ bool INetURLObject::convertAbsToRel(UniString const & rTheAbsURIRef,
         rTheRelURIRef = aSubject.GetMainURL(eDecodeMechanism, eCharset);
         return false;
     }
-    sal_uInt32 nMatch = pSlash - pBasePathBegin;
+    xub_StrLen nMatch = pSlash - pBasePathBegin;
 
     // For file URLs, if the common prefix of the two paths is only "/" (which
     // covers different DOS volumes like "/a:" and "/b:"), the subject is not
@@ -1913,6 +1920,8 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               PrefixInfo::EXTERNAL },
             { "vim:", "staroffice.vim:", INET_PROT_VIM,
               PrefixInfo::INTERNAL },
+            { "vnd.sun.star.cmd:", 0, INET_PROT_VND_SUN_STAR_CMD,
+              PrefixInfo::OFFICIAL },
             { "vnd.sun.star.help:", 0, INET_PROT_VND_SUN_STAR_HELP,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.hier:", 0, INET_PROT_VND_SUN_STAR_HIER,
@@ -1941,15 +1950,16 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
         if (p >= pEnd)
             break;
         sal_uInt32 nChar = INetMIME::toLowerCase(*p++);
-        while (pFirst <= pLast && pFirst->m_pPrefix[i] < nChar)
+        while (pFirst <= pLast && sal_uChar(pFirst->m_pPrefix[i]) < nChar)
             ++pFirst;
-        while (pFirst <= pLast && pLast->m_pPrefix[i] > nChar)
+        while (pFirst <= pLast && sal_uChar(pLast->m_pPrefix[i]) > nChar)
             --pLast;
     }
     if (pFirst == pLast)
     {
         sal_Char const * q = pFirst->m_pPrefix + i;
-        while (p < pEnd && *q != '\0' && INetMIME::toLowerCase(*p) == *q)
+        while (p < pEnd && *q != '\0'
+               && INetMIME::toLowerCase(*p) == sal_uChar(*q))
         {
             ++p;
             ++q;
@@ -2529,6 +2539,27 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             {
                 setInvalid();
                 return false;
+            }
+            break;
+        }
+
+        case INET_PROT_VND_SUN_STAR_CMD:
+        {
+            if (pPos == pEnd || *pPos == nFragmentDelimiter)
+            {
+                setInvalid();
+                return false;
+            }
+            Part ePart = PART_URIC_NO_SLASH;
+            while (pPos != pEnd && *pPos != nFragmentDelimiter)
+            {
+                EscapeType eEscapeType;
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
+                                             cEscapePrefix, eMechanism,
+                                             eCharset, eEscapeType);
+                appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets, ePart,
+                           cEscapePrefix, eCharset, true);
+                ePart = PART_URIC;
             }
             break;
         }
@@ -4505,7 +4536,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
         {
             int nWeight1;
             int nWeight2;
-            if (nUTF32 == cEscapePrefix && rBegin + 1 < pEnd
+            if (nUTF32 == sal_uChar(cEscapePrefix) && rBegin + 1 < pEnd
                 && (nWeight1 = INetMIME::getHexWeight(rBegin[0])) >= 0
                 && (nWeight2 = INetMIME::getHexWeight(rBegin[1])) >= 0)
             {
@@ -4603,7 +4634,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
         {
             int nWeight1;
             int nWeight2;
-            if (nUTF32 == cEscapePrefix && rBegin + 1 < pEnd
+            if (nUTF32 == sal_uChar(cEscapePrefix) && rBegin + 1 < pEnd
                 && ((nWeight1 = INetMIME::getHexWeight(rBegin[0])) >= 0)
                 && ((nWeight2 = INetMIME::getHexWeight(rBegin[1])) >= 0))
             {
