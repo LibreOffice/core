@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:51:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,16 +67,19 @@
 #include <tchar.h>
 
 #define MODULE_NAME TEXT("shlxthdl.dll")
+#define MODULE_NAME_FILTER TEXT("ooofilt.dll")
 
-#define COLUMN_HANDLER_DESCRIPTIVE_NAME    TEXT("OpenOffice Column Handler")
-#define INFOTIP_HANDLER_DESCRIPTIVE_NAME   TEXT("OpenOffice Infotip Handler")
-#define PROPSHEET_HANDLER_DESCRIPTIVE_NAME TEXT("OpenOffice Property Sheet Handler")
-
+#define COLUMN_HANDLER_DESCRIPTIVE_NAME    TEXT("OpenOffice.org Column Handler")
+#define INFOTIP_HANDLER_DESCRIPTIVE_NAME   TEXT("OpenOffice.org Infotip Handler")
+#define PROPSHEET_HANDLER_DESCRIPTIVE_NAME TEXT("OpenOffice.org Property Sheet Handler")
+#define THUMBVIEWER_HANDLER_DESCRIPTIVAE_NAME TEXT("OpenOffice.org Thumbnail Viewer")
 
 #define META_CONTENT_NAME               "meta.xml"
+#define DOC_CONTENT_NAME                "content.xml"
 
 #define EMPTY_STRING                    L""
 #define SPACE                           L" "
+#define LF                              L"\n"
 #define META_INFO_TITLE                 L"title"
 #define META_INFO_AUTHOR                L"initial-creator"
 #define META_INFO_SUBJECT               L"subject"
@@ -105,6 +108,22 @@
 #define META_INFO_GENERATOR             L"generator"
 
 
+#define CONTENT_TEXT_A                           L"a"
+#define CONTENT_TEXT_P                           L"p"
+#define CONTENT_TEXT_H                           L"h"
+#define CONTENT_TEXT_SPAN                        L"span"
+#define CONTENT_TEXT_SEQUENCE                    L"sequence"
+#define CONTENT_TEXT_BOOKMARK_REF                L"bookmark-ref"
+#define CONTENT_TEXT_INDEX_TITLE_TEMPLATE        L"index-title-template"
+#define CONTENT_TEXT_STYLENAME                   L"style-name"
 
+#define CONTENT_STYLE_STYLE                      L"style"
+#define CONTENT_STYLE_STYLE_NAME                 L"name"
+#define CONTENT_STYLE_PROPERTIES                 L"properties"
+#define CONTENT_TEXT_STYLE_PROPERTIES            L"text-properties"        // added for OASIS Open Office XML format.
+#define CONTENT_STYLE_PROPERTIES_LANGUAGE        L"language"
+#define CONTENT_STYLE_PROPERTIES_COUNTRY         L"country"
+#define CONTENT_STYLE_PROPERTIES_LANGUAGEASIAN   L"language-asian"
+#define CONTENT_STYLE_PROPERTIES_COUNTRYASIAN    L"country-asian"
 
 #endif
