@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaldx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:49:55 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,16 @@
  *
  *
  ************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "osl/thread.h"
+#include "sal/main.h"
 #include "sal/types.h"
+#include "osl/thread.h"
 #include "rtl/ustring.hxx"
 #include "rtl/byteseq.hxx"
 #include "jvmfwk/framework.h"
-
-
 
 using namespace rtl;
 
@@ -87,7 +87,7 @@ static rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
 "--help or -h\n"
 
 
-int main(int argc, char **argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     if( hasOption("--help",argc, argv) || hasOption("-h", argc, argv))
     {
