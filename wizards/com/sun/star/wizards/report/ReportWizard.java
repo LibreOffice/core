@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-14 14:22:20 $
+ *  last change: $Author: bc $ $Date: 2002-06-14 17:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,8 +288,10 @@ public class ReportWizard {
     static String[] WizardHeaderText = new String[5];
     static String[] WizardTitle = new String[5];
     static String sWriterFilterName;
-    static boolean bCloseDocument;
+    static String StorePath = "";
 
+    static boolean bCloseDocument;
+    static boolean bLoadDocument;
 
     public ReportWizard() {
     }
@@ -475,7 +477,6 @@ public class ReportWizard {
 
         public void disposing(EventObject eventObject) {
         }
-
     }
 
 
@@ -596,30 +597,26 @@ public class ReportWizard {
         UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGoOn", "Label", scmdReady);
         break;
         case 5:
-        String sStorePath = "";
         boolean bCreateTemplate = ((Short)  UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optCreateReportTemplate", "State")).shortValue() == (short) 1;
-        sStorePath = getStorePath();
+        StorePath = getStorePath();
         if (bCreateTemplate == true){
             ReportDocument.createDBForm(xMSF, CurReportDocument, CurDBMetaData);
             ReportDocument.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");     //"service:com.sun.star.wizards.report.CallReportWizard?fill"
             boolean bUseTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optUseTemplate", "State")).shortValue() == (short) 1;
-            tools.storeDocument(xMSF, (XComponent) CurReportDocument.Component , sStorePath, "swriter: writer_StarOffice_XML_Writer_Template");
-            DBMetaData.createDBLink(CurDBMetaData.DataSource, sStorePath);
-            if (bUseTemplate == true){
-            PropertyValue[] oEmptyArgs = new PropertyValue[0];
-            XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
-            CurReportDocument.Component = xComponentLoader.loadComponentFromURL(sStorePath, "_blank", 0, oEmptyArgs);
-            CurReportDocument.ReportTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, CurReportDocument.Component);
-            ReportDocument.initializeReportDocument(xGlobalMSF, CurReportDocument);
-            ReportDocument.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument);
-            }
+            tools.storeDocument(xMSF, (XComponent) CurReportDocument.Component , StorePath, "swriter: writer_StarOffice_XML_Writer_Template");
+            DBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
+            bLoadDocument = bUseTemplate;
+//          CurReportDocument.Component = xComponentLoader.loadComponentFromURL(sStorePath, "_blank", 0, oEmptyArgs);
+//          CurReportDocument.ReportTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, CurReportDocument.Component);
+//          ReportDocument.initializeReportDocument(xGlobalMSF, CurReportDocument);
+//          ReportDocument.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument);
         }
         else{
             boolean bcreateLink = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "chkcreateLink", "State")).shortValue() == (short) 1;
             ReportDocument.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument);
-            tools.storeDocument(xMSF, CurReportDocument.Component , sStorePath, "swriter: StarOffice XML (Writer)");
+            tools.storeDocument(xMSF, CurReportDocument.Component , StorePath, "swriter: StarOffice XML (Writer)");
             if (bcreateLink == true)
-            DBMetaData.createDBLink(CurDBMetaData.DataSource, sStorePath);
+            DBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
         }
         bSetTitle = false;
         bCloseDocument = false;
@@ -1134,6 +1131,7 @@ public class ReportWizard {
     fillFifthStep();
     CurReportDocument.ProgressBar.setValue(100);
     bCloseDocument = true;
+    bLoadDocument = false;
     executeDialog(xMSF, CurReportDocument);
     }
     catch(java.lang.Exception jexception ){
@@ -1189,12 +1187,23 @@ public class ReportWizard {
             xComponent.dispose();
             CurReportDocument.Component.dispose();
             }
-            System.exit(0);
+            return;
+        }
+        if (bLoadDocument == true){
+            XComponent xComponent = ( XComponent ) UnoRuntime.queryInterface(XComponent.class, objectDialog);
+            xComponent.dispose();
+            CurReportDocument.Component.dispose();
+            xDesktop = tools.getDesktop(xGlobalMSF);
+            PropertyValue[] oEmptyArgs = new PropertyValue[0];
+            XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
+            xComponentLoader.loadComponentFromURL(StorePath, "_blank", 0, oEmptyArgs);
+            return;
         }
         break;
             case 1:
                 break;
         }
+        System.out.println("hier sollte ich eigentlich gar nicht sein!");
         XComponent xComponent = ( XComponent ) UnoRuntime.queryInterface(XComponent.class, objectDialog);
     xComponent.dispose();
     }
