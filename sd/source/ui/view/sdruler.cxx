@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdruler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "Ruler.hxx"
+
 #ifndef _SFXPTITEM_HXX //autogen
 #include <svtools/ptitem.hxx>
 #endif
@@ -77,35 +79,41 @@
 
 #pragma hdrstop
 
-#include "sdview.hxx"
-#include "drviewsh.hxx"
-#include "sdwindow.hxx"
-#include "sdruler.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 
+namespace sd {
 
 /*************************************************************************
 |*
-|* Controller-Item fuer SdRuler
+|* Controller-Item fuer Ruler
 |*
 \************************************************************************/
 
-class SdRulerCtrlItem : public SfxControllerItem
+class RulerCtrlItem : public SfxControllerItem
 {
-    SdRuler &rRuler;
+    Ruler &rRuler;
 
  protected:
     virtual void StateChanged( USHORT nSId, SfxItemState eState,
                                 const SfxPoolItem* pItem );
 
  public:
-    SdRulerCtrlItem(USHORT nId, SdRuler& rRlr, SfxBindings& rBind);
+    RulerCtrlItem(USHORT nId, Ruler& rRlr, SfxBindings& rBind);
 };
 
 /*************************************************************************
 |*
 \************************************************************************/
 
-SdRulerCtrlItem::SdRulerCtrlItem(USHORT nId, SdRuler& rRlr,
+RulerCtrlItem::RulerCtrlItem(USHORT nId, Ruler& rRlr,
                                  SfxBindings& rBind) :
     SfxControllerItem(nId, rBind),
     rRuler(rRlr)
@@ -117,7 +125,7 @@ SdRulerCtrlItem::SdRulerCtrlItem(USHORT nId, SdRuler& rRlr,
 |*
 \************************************************************************/
 
-void SdRulerCtrlItem::StateChanged( USHORT nSId,
+void RulerCtrlItem::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     switch( nSId )
@@ -140,15 +148,19 @@ void SdRulerCtrlItem::StateChanged( USHORT nSId,
 |*
 \************************************************************************/
 
-SdRuler::SdRuler(SdDrawViewShell& rViewSh, Window* pParent, SdWindow* pWin,
-                 USHORT nRulerFlags, SfxBindings& rBindings,
-                 WinBits nWinStyle) :
-    SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle),
-    pDrViewShell(&rViewSh),
-    pSdWin(pWin)
+Ruler::Ruler (
+    DrawViewShell& rViewSh,
+    ::Window* pParent,
+    ::sd::Window* pWin,
+    USHORT nRulerFlags,
+    SfxBindings& rBindings,
+    WinBits nWinStyle)
+    : SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle),
+      pDrViewShell(&rViewSh),
+      pSdWin(pWin)
 {
     rBindings.EnterRegistrations();
-    pCtrlItem = new SdRulerCtrlItem(SID_RULER_NULL_OFFSET, *this, rBindings);
+    pCtrlItem = new RulerCtrlItem(SID_RULER_NULL_OFFSET, *this, rBindings);
     rBindings.LeaveRegistrations();
 
     if ( nWinStyle & WB_HSCROLL )   bHorz = TRUE;
@@ -161,7 +173,7 @@ SdRuler::SdRuler(SdDrawViewShell& rViewSh, Window* pParent, SdWindow* pWin,
 |*
 \************************************************************************/
 
-SdRuler::~SdRuler()
+Ruler::~Ruler()
 {
     SfxBindings& rBindings = pCtrlItem->GetBindings();
     rBindings.EnterRegistrations();
@@ -175,7 +187,7 @@ SdRuler::~SdRuler()
 |*
 \************************************************************************/
 
-void SdRuler::MouseButtonDown(const MouseEvent& rMEvt)
+void Ruler::MouseButtonDown(const MouseEvent& rMEvt)
 {
     Point aMPos = rMEvt.GetPosPixel();
     RulerType eType = GetType(aMPos);
@@ -196,7 +208,7 @@ void SdRuler::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void SdRuler::MouseMove(const MouseEvent& rMEvt)
+void Ruler::MouseMove(const MouseEvent& rMEvt)
 {
     SvxRuler::MouseMove(rMEvt);
 }
@@ -207,7 +219,7 @@ void SdRuler::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void SdRuler::MouseButtonUp(const MouseEvent& rMEvt)
+void Ruler::MouseButtonUp(const MouseEvent& rMEvt)
 {
     SvxRuler::MouseButtonUp(rMEvt);
 }
@@ -218,7 +230,7 @@ void SdRuler::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void SdRuler::SetNullOffset(const Point& rOffset)
+void Ruler::SetNullOffset(const Point& rOffset)
 {
     long nOffset;
 
@@ -234,7 +246,7 @@ void SdRuler::SetNullOffset(const Point& rOffset)
 |*
 \************************************************************************/
 
-void SdRuler::Command(const CommandEvent& rCEvt)
+void Ruler::Command(const CommandEvent& rCEvt)
 {
     if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
         !pDrViewShell->GetView()->IsTextEdit() )
@@ -253,11 +265,11 @@ void SdRuler::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-void SdRuler::ExtraDown()
+void Ruler::ExtraDown()
 {
     if( !pDrViewShell->GetView()->IsTextEdit() )
         SvxRuler::ExtraDown();
 }
 
-
+} // end of namespace sd
 
