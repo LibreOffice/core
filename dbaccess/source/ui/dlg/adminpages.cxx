@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 11:21:45 $
+ *  last change: $Author: fs $ $Date: 2001-01-25 12:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,8 +925,7 @@ void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSav
     SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     SFX_ITEMSET_GET(_rSet, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
     ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
-    SfxItemState eState = _rSet.GetItemState(DSID_TYPECOLLECTION);
-    if (pTypeCollection && pUrlItem && (SFX_ITEM_DEFAULT != eState))
+    if (pTypeCollection && pUrlItem && pUrlItem->GetValue().Len())
         m_sDsn = pTypeCollection->cutPrefix(pUrlItem->GetValue());
 
     // get the other relevant items
@@ -1911,6 +1910,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/01/04 11:21:45  fs
+ *  #81485# +OAdoDetailsPage
+ *
  *  Revision 1.24  2001/01/04 09:43:26  fs
  *  #81615# auto completion for the extension checkbox is case sensitive
  *
