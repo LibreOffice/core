@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:00:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,22 @@
 #include <tools/string.hxx>
 #endif
 
+//CP : added by CP
+#include <rtl/locale.h>
+#include <osl/nlsupport.h>
+
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+
+//CP : end
+
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
+namespace cssxc = com::sun::star::xml::crypto;
+namespace cssi = com::sun::star::io;
+
+
 
 /** convert util::DateTime to ISO Date String */
 void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
@@ -303,11 +317,17 @@ cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
         if (infor.ouX509IssuerName.getLength()>0 && infor.ouX509SerialNumber.getLength()>0 && xSecurityEnvironment.is())
         {
             result += rtl::OUString::createFromAscii( "--Certificate Path :\n" );
-            cssu::Reference< ::com::sun::star::security::XCertificate > xCert
-                = xSecurityEnvironment->getCertificate( infor.ouX509IssuerName, numericStringToBigInteger(infor.ouX509SerialNumber) );
-
-        cssu::Sequence < cssu::Reference< ::com::sun::star::security::XCertificate > > xCertPath
-            = xSecurityEnvironment->buildCertificatePath( xCert ) ;
+            cssu::Reference< ::com::sun::star::security::XCertificate > xCert = xSecurityEnvironment->getCertificate( infor.ouX509IssuerName, numericStringToBigInteger(infor.ouX509SerialNumber) );
+            cssu::Sequence < cssu::Reference< ::com::sun::star::security::XCertificate > > xCertPath;
+            if(! xCert.is() )
+            {
+                fprintf(stdout , " xCert is NULL , so can not buildCertificatePath\n");
+                return result ;
+            }
+            else
+            {
+                xCertPath = xSecurityEnvironment->buildCertificatePath( xCert ) ;
+            }
 
         for( int i = 0; i < xCertPath.getLength(); i++ )
         {
@@ -356,4 +376,71 @@ cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
     result += rtl::OUString::createFromAscii( "\n" );
 
     return result;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >
+    getCertificateFromEnvironment( ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >  xSecurityEnvironment , BOOL nType)
+{
+    cssu::Sequence< cssu::Reference< ::com::sun::star::security::XCertificate > > xPersonalCerts ;
+    int length = 0;
+    int i;
+
+    // add By CP
+    sal_uInt16 encoding ;
+    rtl_Locale *pLocale = NULL ;
+    osl_getProcessLocale( &pLocale ) ;
+    encoding = osl_getTextEncodingFromLocale( pLocale ) ;
+    // CP end
+
+    if( nType != FALSE )
+        xPersonalCerts = xSecurityEnvironment->getPersonalCertificates() ;
+    else
+        return NULL; // not support then;
+
+    length = xPersonalCerts.getLength();
+    if(length == 0)
+    {
+        fprintf( stdout, "\nNo certificate found!\n" ) ;
+        return NULL;
+    }
+    fprintf( stdout, "\nSelect a certificate\n" ) ;
+    fprintf( stdout, "================================================================================\n" ) ;
+    for( i = 0; i < length; i ++ )
+    {
+        rtl::OUString xxxIssuer;
+        rtl::OUString xxxSubject;
+        rtl::OString yyyIssuer;
+        rtl::OString yyySubject;
+
+        xxxIssuer=xPersonalCerts[i]->getIssuerName();
+        yyyIssuer=rtl::OUStringToOString( xxxIssuer, encoding );
+
+        xxxSubject=xPersonalCerts[i]->getSubjectName();
+        yyySubject=rtl::OUStringToOString( xxxSubject, encoding );
+
+        fprintf( stdout, "%d:issuer=[%s] subject=[%s]\n",
+            i+1,
+            yyyIssuer.getStr(),
+            yyySubject.getStr());
+    }
+
+    fprintf( stdout, "================================================================================\n" ) ;
+
+    bool bInvalid = false;
+    int sel = 0;
+    do
+    {
+        if (bInvalid)
+        {
+            fprintf( stdout, "Invalid value! \n" );
+        }
+
+        fprintf( stdout, "Select <1-%d>:", length ) ;
+        fflush(stdin);
+        fscanf( stdin, "%d", &sel ) ;
+        bInvalid = true;
+    }while(sel<1 || sel>length);
+    sel--;
+
+    return xPersonalCerts[sel] ;
 }
