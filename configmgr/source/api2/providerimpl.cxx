@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-12 16:28:27 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 16:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,8 +359,11 @@ namespace configmgr
     {
         try
         {
-            m_pTreeMgr->dispose();
-            m_pSession->close();
+            if (m_pTreeMgr)
+                m_pTreeMgr->dispose();
+
+            if (m_pSession)
+                m_pSession->close();
         }
         catch (uno::Exception& e)
         {
