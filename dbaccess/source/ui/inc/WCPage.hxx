@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-07 13:12:29 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 13:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,13 +125,13 @@ namespace dbaui
         virtual BOOL            LeavePage();
         virtual String          GetTitle() const ;
 
-        OCopyTable( Window * pParent, EImportMode atWhat, BOOL bIsQuery, OCopyTableWizard::Wizard_Create_Style nLastAction );
+        OCopyTable( Window * pParent, EImportMode atWhat, BOOL bIsView, OCopyTableWizard::Wizard_Create_Style nLastAction );
         virtual ~OCopyTable();
 
-        BOOL IsOptionDefData()      const { return m_aRB_DefData.IsChecked(); }
-        BOOL IsOptionDef()          const { return m_aRB_Def.IsChecked(); }
-        BOOL IsOptionAppendData()   const { return m_aRB_AppendData.IsChecked(); }
-        BOOL IsOptionView()         const { return m_aRB_View.IsChecked(); }
+        inline BOOL IsOptionDefData()       const { return m_aRB_DefData.IsChecked(); }
+        inline BOOL IsOptionDef()           const { return m_aRB_Def.IsChecked(); }
+        inline BOOL IsOptionAppendData()    const { return m_aRB_AppendData.IsChecked(); }
+        inline BOOL IsOptionView()          const { return m_aRB_View.IsChecked(); }
 
     };
 }

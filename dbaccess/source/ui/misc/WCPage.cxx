@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 12:03:56 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 13:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ using namespace ::com::sun::star::sdbcx;
 //========================================================================
 DBG_NAME(OCopyTable);
 //------------------------------------------------------------------------
-OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery, OCopyTableWizard::Wizard_Create_Style nLastAction )
+OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, OCopyTableWizard::Wizard_Create_Style nLastAction )
     : OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) ),
     m_ftTableName(          this, ResId( FT_TABLENAME       ) ),
     m_edTableName(          this, ResId( ET_TABLENAME       ) ),
@@ -129,7 +129,7 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery,
     m_edKeyName(            this, ResId( ET_KEYNAME         ) ),
     m_pPage2(NULL),
     m_pPage3(NULL),
-    m_bIsViewAllowed(bIsQuery)
+    m_bIsViewAllowed(bIsView)
 {
     DBG_CTOR(OCopyTable,NULL);
 
@@ -166,7 +166,7 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery,
             }
         }
 
-        if(!m_bIsViewAllowed)
+        if ( !m_bIsViewAllowed || bIsView ) // if it is a view disable the view checkbox #100644# OJ
             m_aRB_View.Disable();
 
         //////////////////////////////////////////////////////////////////////

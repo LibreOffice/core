@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-28 08:39:10 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 13:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,10 @@ void OHTMLReader::NextToken( int nToken )
                 }
                 break;
             case HTML_TABLEROW_ON:
-                m_xResultSetUpdate->moveToInsertRow(); // sonst neue Zeile anh"angen
+                if ( m_xResultSetUpdate.is() )
+                    m_xResultSetUpdate->moveToInsertRow(); // sonst neue Zeile anh"angen
+                else
+                    m_bError = sal_True;
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
@@ -353,6 +356,11 @@ void OHTMLReader::NextToken( int nToken )
                 }
                 break;
             case HTML_TABLEROW_OFF:
+                if ( !m_xResultSetUpdate.is() )
+                {
+                    m_bError = sal_True;
+                    break;
+                }
                 try
                 {
                     m_nRowCount++;
