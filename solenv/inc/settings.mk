@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hjs $ $Date: 2001-04-26 15:21:03 $
+#   last change: $Author: hjs $ $Date: 2001-04-27 16:44:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 
 .INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
 
+.INCLUDE : $(PRJ)$/inc$/udkversion.mk
 
 # --- reset defined Environments --------------------
 .SUFFIXES:
@@ -764,6 +765,9 @@ VERSIONOBJ=$(SOLARENV)$/$(OUTPATH)$/lib$/_version.o
 .ENDIF
 .ENDIF
 
+.IF "$(GUI)"=="WNT"
+WINVERSIONNAMES=$(UNIXVERSIONNAMES)
+.ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="WNT"
 SHELLLIB=$(LIBPRE) gdi32.lib $(LIBPRE) shell32.lib $(LIBPRE) advapi32.lib $(LIBPRE) comdlg32.lib
