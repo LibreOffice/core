@@ -3,11 +3,12 @@ fr	framework								usr1	-	all	fr_mkout NULL
 fr	framework\source\unotypes				nmake	-	all	fr_unotypes NULL
 fr	framework\source\threadhelp				nmake	-	all	fr_threadhelp fr_unotypes NULL
 fr	framework\source\classes				nmake	-	all	fr_classes fr_threadhelp fr_unotypes NULL
+fr	framework\source\interaction				nmake	-	all	fr_interaction fr_threadhelp fr_unotypes NULL
 fr	framework\source\helper					nmake	-	all	fr_helper fr_threadhelp fr_unotypes NULL
 fr	framework\source\dispatch				nmake	-	all	fr_dispatch fr_threadhelp fr_unotypes NULL
 fr	framework\source\services				nmake	-	all	fr_services fr_threadhelp fr_unotypes NULL
 fr	framework\source\register				nmake	-	all	fr_register fr_threadhelp fr_unotypes NULL
 fr	framework\source\application			nmake	-	all	fr_application fr_threadhelp fr_unotypes NULL
 fr  framework\source\recording              nmake   -   all fr_recording fr_threadhelp fr_unotypes NULL
-fr  framework\util                          nmake   -   all fr_util fr_unotypes fr_threadhelp fr_classes fr_helper fr_dispatch fr_services fr_register fr_application fr_recording NULL
+fr  framework\util                          nmake   -   all fr_util fr_unotypes fr_threadhelp fr_classes fr_interaction fr_helper fr_dispatch fr_services fr_register fr_application fr_recording NULL
 fr	framework\util\guiapps					nmake	-	all	fr_guiapp fr_util NULL
