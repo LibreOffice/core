@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: af $ $Date: 2002-11-22 14:47:01 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
                 }
 
                 // cleanup
-                delete pPixelArray;
+                delete[] pPixelArray;
             }
         }
 
