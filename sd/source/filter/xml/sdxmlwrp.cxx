@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-10 16:14:18 $
+ *  last change: $Author: cl $ $Date: 2001-10-17 10:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,56 +527,39 @@ sal_Bool SdXMLFilter::Import()
     SvStorageStreamRef xDocStream;
     Reference<io::XInputStream> xInputStream;
     SvStorage *pStorage = 0;
-//  if( pMedium )
-        pStorage = mrMedium.GetStorage();
-/*
-    else
-        pStorage = pStg;
-*/
+
+    pStorage = mrMedium.GetStorage();
+
     if( !pStorage )
     {
-//      if( pMedium )
+        // if there is a medium and if this medium has a load environment,
+        // we get an active data source from the medium.
+        mrMedium.GetInStream()->Seek( 0 );
+        xSource = mrMedium.GetDataSource();
+        DBG_ASSERT( xSource.is(), "XMLReader:: got no data source from medium" );
+        if( !xSource.is() )
         {
-            // if there is a medium and if this medium has a load environment,
-            // we get an active data source from the medium.
-            mrMedium.GetInStream()->Seek( 0 );
-            xSource = mrMedium.GetDataSource();
-            DBG_ASSERT( xSource.is(), "XMLReader:: got no data source from medium" );
-            if( !xSource.is() )
+            nRet = SD_XML_READERROR;
+        }
+        else
+        {
+            // get a pipe for connecting the data source to the parser
+            xPipe = xServiceFactory->createInstance(
+                    OUString::createFromAscii("com.sun.star.io.Pipe") );
+            DBG_ASSERT( xPipe.is(),
+                    "XMLReader::Read: com.sun.star.io.Pipe service missing" );
+            if( !xPipe.is() )
             {
                 nRet = SD_XML_READERROR;
             }
             else
             {
-                // get a pipe for connecting the data source to the parser
-                xPipe = xServiceFactory->createInstance(
-                        OUString::createFromAscii("com.sun.star.io.Pipe") );
-                DBG_ASSERT( xPipe.is(),
-                        "XMLReader::Read: com.sun.star.io.Pipe service missing" );
-                if( !xPipe.is() )
-                {
-                    nRet = SD_XML_READERROR;
-                }
-                else
-                {
-                    // connect pipe's output stream to the data source
-                    Reference< io::XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
-                    xSource->setOutputStream( xPipeOutput );
+                // connect pipe's output stream to the data source
+                Reference< io::XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
+                xSource->setOutputStream( xPipeOutput );
 
-                    xInputStream = Reference< io::XInputStream >( xPipe, UNO_QUERY );
-                }
+                xInputStream = Reference< io::XInputStream >( xPipe, UNO_QUERY );
             }
-        }
-    }
-    else
-    {
-        // KA=>CL: seems to be a strange kind of code?!
-        SvStream* pStrm = mrMedium.GetInStream();
-
-        if( pStrm )
-        {
-            pStrm->SetBufferSize( 16*1024 );
-            xInputStream = new utl::OInputStreamWrapper( *pStrm );
         }
     }
 
