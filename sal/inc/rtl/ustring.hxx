@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:56:46 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,20 @@ public:
     {
         rtl_uString_release( pData );
     }
+
+    /** Provides an OUString const & passing a storage pointer of an
+        rtl_uString * handle.
+        It is more convenient to use C++ OUString member functions when dealing
+        with rtl_uString * handles.  Using this function avoids unnecessary
+        acquire()/release() calls for a temporary OUString object.
+
+        @param ppHandle
+               pointer to storage
+        @return
+               OUString const & based on given storage
+    */
+    static inline OUString const & unacquired( rtl_uString * const * ppHandle )
+        { return * reinterpret_cast< OUString const * >( ppHandle ); }
 
     /**
       Assign a new string.
