@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:24 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #include "connectivity/sqlnode.hxx"
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
 
 
 using namespace ::connectivity;
@@ -85,14 +88,15 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-typedef ::std::list<OEvaluateSet*>      OEvaluateSetList;
 DBG_NAME( file_OSQLAnalyzer )
 //------------------------------------------------------------------
 OSQLAnalyzer::OSQLAnalyzer()
-               : m_aCompiler(this)
-               , m_aInterpreter(m_aCompiler)
+               : m_bSelectionFirstTime(sal_True)
+               , m_bHasSelectionCode(sal_False)
 {
     DBG_CTOR( file_OSQLAnalyzer, NULL );
+    m_aCompiler = new OPredicateCompiler(this);
+    m_aInterpreter = new OPredicateInterpreter(m_aCompiler);
 }
 
 // -----------------------------------------------------------------------------
@@ -104,32 +108,64 @@ OSQLAnalyzer::~OSQLAnalyzer()
 // -----------------------------------------------------------------------------
 void OSQLAnalyzer::setIndexes(const Reference< XNameAccess>& _xIndexes)
 {
-    m_aCompiler.m_xIndexes = _xIndexes;
+    m_aCompiler->m_xIndexes = _xIndexes;
 }
 //------------------------------------------------------------------
 void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 {
-    m_aCompiler.start(pSQLParseNode);
+    if (SQL_ISRULE(pSQLParseNode,select_statement))
+    {
+        DBG_ASSERT(pSQLParseNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
+
+        // check that we don't use anything other than count(*) as function
+        OSQLParseNode* pSelection = pSQLParseNode->getChild(2);
+        if ( SQL_ISRULE(pSelection,scalar_exp_commalist) )
+        {
+            for (sal_uInt32 i = 0; i < pSelection->count(); i++)
+            {
+                OSQLParseNode *pColumnRef = pSelection->getChild(i)->getChild(0);
+                if (    ( SQL_ISRULE(pColumnRef,set_fct_spec) && pColumnRef->count() == 4 )
+                    ||  SQL_ISRULE(pColumnRef,char_value_fct)
+                    ||  SQL_ISRULE(pColumnRef,char_substring_fct)
+                    ||  SQL_ISRULE(pColumnRef,position_exp)
+                    ||  SQL_ISRULE(pColumnRef,fold)
+                    ||  SQL_ISRULE(pColumnRef,length_exp)
+                    ||  SQL_ISRULE(pColumnRef,set_fct_spec) )
+                {
+                    ::vos::ORef<OPredicateCompiler>     pCompiler = new OPredicateCompiler(this);
+                    pCompiler->setOrigColumns(m_aCompiler->getOrigColumns());
+                    ::vos::ORef<OPredicateInterpreter>  pInterpreter = new OPredicateInterpreter(pCompiler);
+                    pCompiler->execute( pColumnRef );
+                    m_aSelectionEvaluations.push_back( TPredicates(pCompiler,pInterpreter) );
+                }
+                else if ( ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 ) )
+                {
+                    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Statement to complex. Only \"COUNT(*)\" is supported.")),NULL);
+                }
+                else
+                    m_aSelectionEvaluations.push_back( TPredicates() );
+            }
+        }
+    }
+
+    m_aCompiler->start(pSQLParseNode);
 }
 
 //------------------------------------------------------------------
-::std::vector<sal_Int32>* OSQLAnalyzer::bindResultRow(OValueRow _pRow)
+void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvaluateSetList& _rEvaluateSetList)
 {
-    OCodeList& rCodeList    = m_aCompiler.m_aCodeList;
     // Zaehlen, wieviele Kriterien
     // wenn nur ein Kriterium, und das entsprechende Feld ist indiziert
     // dann wird der Index verwendet
 
-    OEvaluateSetList    aEvaluateSetList;
     OEvaluateSet*       pEvaluateSet = NULL;
-    ::std::vector<sal_Int32>*   pKeySet = NULL;
 
     for (OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
     {
         OOperandAttr* pAttr = PTR_CAST(OOperandAttr,(*aIter));
         if (pAttr)
         {
-            if (pAttr->isIndexed() && !m_aCompiler.hasORCondition())
+            if (pAttr->isIndexed() && !m_aCompiler->hasORCondition())
             {
                 OCode* pCode1 = *(aIter + 1);
                 OCode* pCode2 = *(aIter + 2);
@@ -142,12 +178,32 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 
             if (pEvaluateSet)
             {
-                aEvaluateSetList.push_back(pEvaluateSet);
+                _rEvaluateSetList.push_back(pEvaluateSet);
                 pEvaluateSet = NULL;
             }
             pAttr->bindValue(_pRow);
         }
     }
+}
+//------------------------------------------------------------------
+void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
+{
+    // first the select part
+    OEvaluateSetList    aEvaluateSetList;
+    for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
+    {
+        if ( aIter->first.isValid() )
+            bindRow( aIter->first->m_aCodeList,_pRow,aEvaluateSetList);
+    }
+}
+//------------------------------------------------------------------
+::std::vector<sal_Int32>* OSQLAnalyzer::bindEvaluationRow(OValueRefRow& _pRow)
+{
+    OEvaluateSetList    aEvaluateSetList;
+    bindRow( m_aCompiler->m_aCodeList,_pRow,aEvaluateSetList);
+
+    ::std::vector<sal_Int32>*   pKeySet      = NULL;
+    OEvaluateSet*               pEvaluateSet = NULL;
 
     // Keyset erzeugen mit kleinster Liste
     if(!aEvaluateSetList.empty())
@@ -182,7 +238,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 //------------------------------------------------------------------
 void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
 {
-    OCodeList& rCodeList    = m_aCompiler.m_aCodeList;
+    OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
     OCodeStack aCodeStack;
 
     if (!rCodeList.size())
@@ -195,11 +251,11 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
 
 
     // Anlegen einer Testzeile, wird benötigt um die Parameter zu beschreiben
-    OValueRow aParameterRow  = new OValueVector(rParameterColumns->size());
+    OValueRefRow aParameterRow  = new OValueRefVector(rParameterColumns->size());
     bindParameterRow(aParameterRow);
 
-    OValueRow aTestRow = new OValueVector(Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getCount());
-    delete bindResultRow(aTestRow);                 // Binden der Attribute an die Values
+    OValueRefRow aTestRow = new OValueRefVector(Reference< XIndexAccess>(m_aCompiler->getOrigColumns(),UNO_QUERY)->getCount());
+    delete bindEvaluationRow(aTestRow);                 // Binden der Attribute an die Values
 
     for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
     {
@@ -218,7 +274,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
                     if (pLeft)
                     {
                         Reference< XPropertySet> xCol;
-                        Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()) >>= xCol;
+                        Reference< XIndexAccess>(m_aCompiler->getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()) >>= xCol;
                         OSL_ENSURE(xCol.is(), "Ungültige Struktur");
                         pParam->describe(xCol, aNewParamColumns);
                     }
@@ -238,7 +294,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
         OSL_ENSURE(0,"Illegal here!");
 
     rParameterColumns = aNewParamColumns;
-    //  m_aCompiler.setParameterColumns(rParameterColumns);
+    //  m_aCompiler->setParameterColumns(rParameterColumns);
 }
 
 // -----------------------------------------------------------------------------
@@ -246,13 +302,61 @@ OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
                                               const Reference< XPropertySet>& _xCol,
                                               const Reference< XNameAccess>& _xIndexes)
 {
-    return new OOperandAttr(_nPos,_xCol);
+    return new OOperandAttr(static_cast<sal_uInt16>(_nPos),_xCol);
 }
 // -----------------------------------------------------------------------------
 BOOL OSQLAnalyzer::hasRestriction() const
 {
-    return m_aCompiler.hasCode();
+    return m_aCompiler->hasCode();
 }
-
-
-
+// -----------------------------------------------------------------------------
+BOOL OSQLAnalyzer::hasFunctions() const
+{
+    if ( m_bSelectionFirstTime )
+    {
+        m_bSelectionFirstTime = sal_False;
+        for ( ::std::vector< TPredicates >::const_iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end() && !m_bHasSelectionCode ;++aIter)
+        {
+            if ( aIter->first.isValid() )
+                m_bHasSelectionCode = aIter->first->hasCode();
+        }
+    }
+    return m_bHasSelectionCode;;
+}
+// -----------------------------------------------------------------------------
+void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std::vector<sal_Int32>& _rColumnMapping)
+{
+    sal_Int32 nPos = 1;
+    for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter,++nPos)
+    {
+        if ( aIter->second.isValid() )
+        {
+            sal_Int32   map = nPos;
+            // the first column (index 0) is for convenience only. The first real select column is no 1.
+            if ( (nPos > 0) && (nPos < static_cast<sal_Int32>(_rColumnMapping.size())) )
+                map = _rColumnMapping[nPos];
+            aIter->second->startSelection((*_pRow)[map]);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void OSQLAnalyzer::dispose()
+{
+    m_aCompiler->dispose();
+    for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
+    {
+        if ( aIter->first.isValid() )
+            aIter->first->dispose();
+    }
+}
+// -----------------------------------------------------------------------------
+void OSQLAnalyzer::setOrigColumns(const OFileColumns& rCols)
+{
+    m_aCompiler->setOrigColumns(rCols);
+    for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
+    {
+        if ( aIter->first.isValid() )
+            aIter->first->setOrigColumns(rCols);
+    }
+}
+// -----------------------------------------------------------------------------
