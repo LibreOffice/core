@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 15:50:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,8 @@ public:
 
     BOOL                IsAutomaticLanguage() const { return bIsAutomaticLanguage;}
     void                SetAutomaticLanguage(BOOL bSet){bIsAutomaticLanguage = bSet;}
+
+    virtual String      GetDescription() const;
 };
 
 inline SwFieldType* SwField::GetTyp() const
