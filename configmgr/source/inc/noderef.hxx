@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ namespace configmgr
 
         // view & data layer binding
         public:
-            data::Accessor getDataAccessor() const { return m_accessor; }
+            data::Accessor const & getDataAccessor() const { return m_accessor; }
 
             view::ViewTreeAccess getView() const;
 
