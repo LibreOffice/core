@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_nssimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:27:25 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 11:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #include <com/sun/star/security/XCertificate.hpp>
 #endif
 
+#ifdef SYSTEM_MOZILLA
+#include "nssrenam.h"
+#endif
 #include "cert.h"
 
 class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
