@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 15:40:03 $
+ *  last change: $Author: jp $ $Date: 2000-11-24 18:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,15 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
-#include "uiparam.hxx"
-#include "swerror.h"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+#ifndef _UIPARAM_HXX
+#include <uiparam.hxx>
+#endif
+#ifndef _SWERROR_H
+#include <swerror.h>
+#endif
 
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
@@ -155,14 +161,30 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#include "docsh.hxx"
-#include "swmodule.hxx"
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
+#endif
+#ifndef _SWEVENT_HXX
 #include <swevent.hxx>
+#endif
+#ifndef _SWACORR_HXX
 #include <swacorr.hxx>
-#include "cmdid.h"
+#endif
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _DOBJFAC_HXX
 #include <dobjfac.hxx>
+#endif
+#ifndef _INIT_HXX
 #include <init.hxx>
+#endif
 #ifndef _SWPVIEW_HXX //autogen
 #include <pview.hxx>
 #endif
@@ -211,12 +233,24 @@
 #ifndef _SWWFRMSH_HXX //autogen
 #include <wfrmsh.hxx>
 #endif
-#include "drformsh.hxx"
-#include "wgrfsh.hxx"
-#include "wolesh.hxx"
-#include "wlistsh.hxx"
-#include "wtabsh.hxx"
-#include "wdrwbase.hxx"
+#ifndef _DRFORMSH_HXX
+#include <drformsh.hxx>
+#endif
+#ifndef _WGRFSH_HXX
+#include <wgrfsh.hxx>
+#endif
+#ifndef _WOLESH_HXX
+#include <wolesh.hxx>
+#endif
+#ifndef _WLISTSH_HXX
+#include <wlistsh.hxx>
+#endif
+#ifndef _WTABSH_HXX
+#include <wtabsh.hxx>
+#endif
+#ifndef _WDRWBASE_HXX
+#include <wdrwbase.hxx>
+#endif
 #ifndef _NAVIPI_HXX //autogen
 #include <navipi.hxx>
 #endif
@@ -238,17 +272,39 @@
 #ifndef _PRTOPT_HXX //autogen
 #include <prtopt.hxx>
 #endif
-#include "bookctrl.hxx"
-#include "tmplctrl.hxx"
-#include "tblctrl.hxx"
-#include "zoomctrl.hxx"
-#include "swstbctl.hxx"
-#include "workctrl.hxx"
-#include "numctrl.hxx"
-#include "tbxanchr.hxx"
-#include "fldwrap.hxx"
-#include "redlndlg.hxx"
-#include "syncbtn.hxx"
+#ifndef _BOOKCTRL_HXX
+#include <bookctrl.hxx>
+#endif
+#ifndef _TMPLCTRL_HXX
+#include <tmplctrl.hxx>
+#endif
+#ifndef _TBLCTRL_HXX
+#include <tblctrl.hxx>
+#endif
+#ifndef _ZOOMCTRL_HXX
+#include <zoomctrl.hxx>
+#endif
+#ifndef _SWSTBCTL_HXX
+#include <swstbctl.hxx>
+#endif
+#ifndef _WORKCTRL_HXX
+#include <workctrl.hxx>
+#endif
+#ifndef _NUMCTRL_HXX
+#include <numctrl.hxx>
+#endif
+#ifndef _TBXANCHR_HXX
+#include <tbxanchr.hxx>
+#endif
+#ifndef _FLDWRAP_HXX
+#include <fldwrap.hxx>
+#endif
+#ifndef _REDLNDLG_HXX
+#include <redlndlg.hxx>
+#endif
+#ifndef _SYNCBTN_HXX
+#include <syncbtn.hxx>
+#endif
 #ifndef _HDFTCTRL_HXX
 #include <hdftctrl.hxx>
 #endif
@@ -271,13 +327,14 @@
 #include <swatrset.hxx>
 #endif
 #ifndef _IDXMRK_HXX
-#include "idxmrk.hxx"
+#include <idxmrk.hxx>
 #endif
 #ifndef _DLELSTNR_HXX_
 #include <dlelstnr.hxx>
 #endif
-
-#include "barcfg.hxx"
+#ifndef _BARCFG_HXX
+#include <barcfg.hxx>
+#endif
 
 #include <app.hrc>
 
@@ -541,6 +598,9 @@ void SwDLL::RegisterControls()
     SvxGrafGammaToolBoxControl::RegisterControl( SID_ATTR_GRAF_GAMMA, pMod );
     SvxGrafTransparenceToolBoxControl::RegisterControl( SID_ATTR_GRAF_TRANSPARENCE, pMod );
     SvxGrafModeToolBoxControl::RegisterControl( SID_ATTR_GRAF_MODE, pMod );
+
+    SvxGrafFilterToolBoxControl::RegisterControl( SID_GRFFILTER, pMod );
+
     GalleryChildWindow::RegisterChildWindow(0, pMod);
 }
 

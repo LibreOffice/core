@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:41:56 $
+ *  last change: $Author: jp $ $Date: 2000-11-24 18:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _SVX_GRFFLT_HXX //autogen
+#include <svx/grfflt.hxx>
 #endif
 
 #ifndef _FMTURL_HXX //autogen
@@ -548,6 +551,29 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                             ((SfxUInt16Item*)pItem)->GetValue() ));
             break;
 
+        case SID_GRFFILTER:
+        case SID_GRFFILTER_INVERT:
+        case SID_GRFFILTER_SMOOTH:
+        case SID_GRFFILTER_SHARPEN:
+        case SID_GRFFILTER_REMOVENOISE:
+        case SID_GRFFILTER_SOBEL:
+        case SID_GRFFILTER_MOSAIC:
+        case SID_GRFFILTER_EMBOSS:
+        case SID_GRFFILTER_POSTER:
+        case SID_GRFFILTER_POPART:
+        case SID_GRFFILTER_SEPIA:
+        case SID_GRFFILTER_SOLARIZE:
+            if( GRAPHIC_BITMAP == nGrfType )
+            {
+                GraphicObject aFilterObj( GetShell().GetGraphicObj() );
+
+                if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
+                    SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ))
+                    GetShell().ReRead( aEmptyStr, aEmptyStr,
+                                        &aFilterObj.GetGraphic() );
+            }
+            break;
+
         default:
             ASSERT(!this, falscher Dispatcher);
         }
@@ -564,6 +590,9 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     rSh.GetAttr( aCoreSet );
     BOOL bParentCntProt = 0 != rSh.IsSelObjProtected(
                     (FlyProtectType)(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) );
+
+    USHORT nGrfType = CNT_GRF == GetShell().GetCntType()
+                            ? GetShell().GetGraphicType() : 0;
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
@@ -651,6 +680,22 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             if( !bParentCntProt )
                 rSet.Put( SfxUInt16Item( nWhich, (GraphicDrawMode)((SwDrawModeGrf&)
                         aCoreSet.Get(RES_GRFATR_DRAWMODE)).GetValue() ));
+            break;
+
+        case SID_GRFFILTER:
+        case SID_GRFFILTER_INVERT:
+        case SID_GRFFILTER_SMOOTH:
+        case SID_GRFFILTER_SHARPEN:
+        case SID_GRFFILTER_REMOVENOISE:
+        case SID_GRFFILTER_SOBEL:
+        case SID_GRFFILTER_MOSAIC:
+        case SID_GRFFILTER_EMBOSS:
+        case SID_GRFFILTER_POSTER:
+        case SID_GRFFILTER_POPART:
+        case SID_GRFFILTER_SEPIA:
+        case SID_GRFFILTER_SOLARIZE:
+            if( !bParentCntProt && GRAPHIC_BITMAP == nGrfType )
+                bDisable = FALSE;
             break;
 
         default:
@@ -916,6 +961,9 @@ IMPL_LINK( SwTextShell, InitGraphicFrame, Button *, pButton )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/20 13:41:56  jp
+    use correct INetURL-Decode enum
+
     Revision 1.3  2000/10/06 13:36:37  jp
     should changes: don't use IniManager
 
