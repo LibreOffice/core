@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-17 10:55:18 $
+ *  last change: $Author: mib $ $Date: 2001-01-22 13:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,11 +146,6 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     if( !xServiceFactory.is() )
         return ERR_SWG_READ_ERROR;
 
-    // Get data source ...
-    DBG_ASSERT( pMedium, "There is the medium" );
-    if( !pMedium )
-        return ERR_SWG_READ_ERROR;
-
     Reference< io::XActiveDataSource > xSource;
     Reference< XInterface > xPipe;
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
@@ -160,7 +155,11 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
      xml::sax::InputSource aParserInput;
     aParserInput.sSystemId = rName;
 
-    SvStorage *pStorage = pMedium->GetStorage();
+    SvStorage *pStorage = 0;
+    if( pMedium )
+        pStorage = pMedium->GetStorage();
+    else
+        pStorage = pStg;
     if( pStorage )
     {
         pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
@@ -174,7 +173,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         xDocStream->SetBufferSize( 16*1024 );
         aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
     }
-    else
+    else if( pMedium )
     {
         // if there is a medium and if this medium has a load environment,
         // we get an active data source from the medium.
@@ -198,6 +197,11 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 
         aParserInput.aInputStream = Reference< io::XInputStream >( xPipe,
                                                                    UNO_QUERY );
+    }
+    else
+    {
+        pStrm->SetBufferSize( 16*1024 );
+        aParserInput.aInputStream = new utl::OInputStreamWrapper( *pStrm );
     }
 
     // get parser
@@ -243,6 +247,14 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComp );
 
+    Reference<XUnoTunnel> xFilterTunnel;
+    SwXMLImport *pFilter = 0;
+    if( aOpt.IsFmtsOnly() || bInsertMode || IsBlockMode() )
+    {
+        xFilterTunnel = Reference<XUnoTunnel>( xFilter, UNO_QUERY );
+        pFilter = (SwXMLImport *)xFilterTunnel->getSomething(
+                                            SwXMLImport::getUnoTunnelId() );
+    }
     if( aOpt.IsFmtsOnly() )
     {
         sal_uInt16 nStyleFamilyMask = 0U;
@@ -255,9 +267,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         if( aOpt.IsNumRules() )
             nStyleFamilyMask |= SFX_STYLE_FAMILY_PSEUDO;
 
-        Reference<XUnoTunnel> xFilterTunnel( xFilter, UNO_QUERY );
-        SwXMLImport *pFilter = (SwXMLImport *)xFilterTunnel->getSomething(
-                                            SwXMLImport::getUnoTunnelId() );
+        ASSERT( pFilter, "There is the filter?" );
         pFilter->setStyleInsertMode( nStyleFamilyMask, !aOpt.IsMerge() );
     }
     else if( bInsertMode )
@@ -265,11 +275,15 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         Reference < XTextRange > xTextRange =
             SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(),
                                                         0 );
-        Reference<XUnoTunnel> xFilterTunnel( xFilter, UNO_QUERY );
-        SwXMLImport *pFilter = (SwXMLImport *)xFilterTunnel->getSomething(
-                                            SwXMLImport::getUnoTunnelId() );
+        ASSERT( pFilter, "There is the filter?" );
         pFilter->setTextInsertMode( xTextRange );
     }
+    else if( IsBlockMode() )
+    {
+        ASSERT( pFilter, "There is the filter?" );
+        pFilter->setBlockMode();
+    }
+
     aOpt.ResetAllFmtsOnly();
 
     rDoc.AddLink(); // prevent deletion

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 13:50:00 $
+ *  last change: $Author: mib $ $Date: 2001-01-22 13:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ ULONG SwReader::Read( const Reader& rOptions )
         !po->SetStrmStgPtr() )
     {
         po->SetReadUTF8( FALSE );
+        po->SetBlockMode( FALSE );
         return ERR_SWG_FILE_FORMAT_ERROR;
     }
 
@@ -464,6 +465,7 @@ ULONG SwReader::Read( const Reader& rOptions )
         ((Sw3Reader*)po)->SetSw3Io( 0 );
 
     po->SetReadUTF8( FALSE );
+    po->SetBlockMode( FALSE );
     return nError;
 }
 
@@ -544,7 +546,7 @@ SwReader::SwReader( SfxMedium& rMedium, const String& rFileName, SwPaM& rPam )
 Reader::Reader()
     : pStrm(0), pStg(0), pMedium(0), pTemplate(0),
     bTmplBrowseMode( FALSE ), bInsertMode( FALSE ),
-    bReadUTF8( FALSE )
+    bReadUTF8( FALSE ), bBlockMode( FALSE )
 {
 }
 
@@ -1086,6 +1088,9 @@ BOOL SetHTMLTemplate( SwDoc & rDoc )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/21 13:50:00  jp
+      remove function GetTmpFileName
+
       Revision 1.4  2000/11/06 09:27:12  jp
       must changes: tempfile
 

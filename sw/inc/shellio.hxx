@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-22 12:29:13 $
+ *  last change: $Author: mib $ $Date: 2001-01-22 13:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,7 @@ protected:
     BOOL bInsertMode : 1;
     BOOL bTmplBrowseMode : 1;
     BOOL bReadUTF8: 1;      // Stream als UTF-8 interpretieren
+    BOOL bBlockMode: 1;
 
 public:
     Reader();
@@ -293,6 +294,9 @@ public:
 
     BOOL IsReadUTF8() const { return bReadUTF8; }
     void SetReadUTF8( BOOL bSet ) { bReadUTF8 = bSet; }
+
+    BOOL IsBlockMode() const { return bBlockMode; }
+    void SetBlockMode( BOOL bSet ) { bBlockMode = bSet; }
 
     virtual BOOL HasGlossaries() const;
     virtual BOOL ReadGlossaries( SwTextBlocks&, BOOL bSaveRelFiles ) const;
