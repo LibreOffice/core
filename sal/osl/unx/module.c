@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-28 13:03:22 $
+ *  last change: $Author: pluby $ $Date: 2001-03-09 04:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,14 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
      */
     if ( osl_searchPath( pszModuleName, "DYLD_LIBRARY_PATH", '\0', path, sizeof(path) ) == osl_Process_E_None )
         pszModulePath = path;
+
+    /* Try checking in the system directories */
+    if ( ! pszModulePath )
+    {
+        strcat( path, "/System/Library/Frameworks/" );
+        strcat( path, pszModuleName );
+        pszModulePath = path;
+    }
 
     if ( pszModulePath )
     {
