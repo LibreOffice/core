@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-02-25 13:50:21 $
+dnl * Date: $Date: 2004-03-09 12:31:08 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.61 $ )
+AC_REVISION( $Revision: 1.62 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -787,22 +787,14 @@ if test "$_os" = "WINNT"; then
 							}
 							}"`
 			AC_MSG_RESULT([found Compiler version $CCNUMVER.])
-         if test $CCNUMVER -ge "001300103077"; then
-            COMEX=10
-         else
-			   if test $CCNUMVER -ge "001300000000"; then
-				   COMEX=8
-			   else
-				   if test $CCNUMVER -ge "001200000000"; then
-					   if test "$with_old_psdk" != "yes"; then
-						   COMEX=9
-					   else
-						   COMEX=7
-					   fi
-				   else
-					   AC_MSG_ERROR([Compiler too old.])
-				   fi
-            fi
+			if test "$CCNUMVER" -ge "001300103077"; then
+				COMEX=10
+			else
+				if test "$CCNUMVER" -ge "001300000000"; then
+					COMEX=8
+				else
+					AC_MSG_ERROR([Compiler too old. Use Microsoft C/C++ .NET 2002 compiler.])
+				fi
 			fi
 		else
 			AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
@@ -1240,16 +1232,28 @@ if test "$enable_java" != "no"; then
       dnl Check if there is a java compiler at all.
       if test -x "$_javac_path"; then
          JAVAC=$_javac_path
-   	else
-   		AC_MSG_ERROR([$_javac_path not found set with_jdk_home])
+      else
+          _javac_path="$with_jdk_home/gcj"
+          dnl Check for gcj
+          if test -x "$_javac_path"; then
+             JAVAC=$_javac_path
+          else
+             AC_MSG_ERROR([$_javac_path not found set with_jdk_home])
+          fi
       fi
       
       _java_path="$with_jdk_home/bin/java"
       dnl Check if there is a java interpreter at all.
       if test -x "$_java_path"; then
          JAVA=$_java_path
-   	else
-   		AC_MSG_ERROR([$_java_path not found set with_jdk_home])
+      else
+          _java_path="$with_jdk_home/gij"
+          dnl Check for gcj
+          if test -x "$_java_path"; then
+             JAVA=$_java_path
+          else
+              AC_MSG_ERROR([$_java_path not found set with_jdk_home])
+          fi
       fi
    fi
    AC_MSG_CHECKING([the installed JDK])
@@ -1274,6 +1278,22 @@ if test "$enable_java" != "no"; then
         AC_MSG_RESULT([checked (Kaffe $KAFFE_VER)])
         AC_MSG_WARN([EXPERIMENTAL: Kaffe is not a full JDK replacement - some projects will fail to compile])
         echo "EXPERIMENTAL: Kaffe is not a full JDK replacement - some projects will fail to compile" >>warn
+        JAVA_HOME=`echo $JAVAC | $SED -n "s,//*bin//*javac,,p"`
+      elif test `$JAVAC -v 2>&1 | grep -c "gcc version"` -gt 0; then
+
+        dnl gcj specific tests
+
+        GCJ_VER=`$JAVAC -dumpversion 2>&1`
+        if test -z "$GCJ_VER"; then
+          AC_MSG_ERROR([looks like gcj but version detection failed])
+        fi
+        _gcj_ver=$GCJ_VER
+
+        JDK=gcj
+        AC_MSG_RESULT([checked (gcj $GCJ_VER)])
+        AC_MSG_WARN([EXPERIMENTAL: gcj is not a full JDK replacement - some projects will fail to compile])
+        echo "EXPERIMENTAL: gcj is not a full JDK replacement - some projects will fail to compile" >>warn
+        JAVA_HOME=`echo $JAVAC | $SED -n "s,//*gcj,,p"`
       else
         
         dnl SUN JDK specific tests
@@ -1284,10 +1304,10 @@ if test "$enable_java" != "no"; then
              AC_MSG_ERROR([JDK is too old, you need at least 1.3])
         fi
         AC_MSG_RESULT([checked (JDK $_jdk)])
+        JAVA_HOME=`echo $JAVAC | $SED -n "s,//*bin//*javac,,p"`
       fi
-      JAVA_HOME=`echo $JAVAC | $SED -n "s,//*bin//*javac,,p"`
    else
-      AC_MSG_ERROR([JAVA not found. You need at least jdk-1.3])
+      AC_MSG_ERROR([JAVA not found. You need at least jdk-1.3, Kaffee 1.01, or gcj])
    fi
    dnl xsltproc not needed with JDK present.
    XSLTPROC=NO_XSLTPROC
