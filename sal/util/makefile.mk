@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hro $ $Date: 2001-09-19 15:13:45 $
+#   last change: $Author: hjs $ $Date: 2001-12-12 16:30:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,10 @@ UNIXVERSIONNAMES=UDK
 .IF "$(depend)" == ""
 
 # --- Files --------------------------------------------------------
+
+# disable check for PIC code as it would complain about 
+# hand coded assembler
+CHECKFORPIC=
 
 .IF "$(header)" == ""
 LIB1TARGET=$(SLB)$/$(TARGET).lib
