@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLAutoStylePoolP.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 12:30:02 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
         ::std::vector< XMLPropertyState >::const_iterator iter = rProperties.begin();
         for( iter; (iter != rProperties.end()); iter++ )
         {
+            if( iter->mnIndex == -1 )
+                continue;
+
             UniReference< XMLPropertySetMapper > aPropMapper =
                 mrSchXMLExport.GetPropertySetMapper();
             sal_Int16 nContextID = aPropMapper->GetEntryContextId( iter->mnIndex );
