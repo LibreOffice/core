@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:58:12 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ String sHelpButton
     Text[ arabic ] = "~ãÓÇÚÏÉ";
     Text[ turkish ] = "~Yardım";
     Text[ catalan ] = "~Help";
-    Text[ finnish ] = "~Hilfe";
+    Text[ finnish ] = "~Ohje";
 };
 
 String sCancelButton
@@ -179,7 +179,7 @@ String sCancelButton
     Text[ arabic ] = "~ÅáÛÇÁ ÇáÃãÑ";
     Text[ turkish ] = "~İptal";
     Text[ catalan ] = "~Cancel";
-    Text[ finnish ] = "~Abbrechen";
+    Text[ finnish ] = "~Peruuta";
 };
 
 String sBackButton
@@ -207,7 +207,7 @@ String sBackButton
     Text[ arabic ] = "<< ~ÇáÓÇÈŞ";
     Text[ turkish ] = "<< ~Geri";
     Text[ catalan ] = "<< ~Back";
-    Text[ finnish ] = "<< ~Zurück";
+    Text[ finnish ] = "<< Takaisin";
 };
 
 String sNextButton
@@ -235,7 +235,7 @@ String sNextButton
     Text[ arabic ] = "~ÇáÊÇáí >>";
     Text[ turkish ] = "İl~eri >>";
     Text[ catalan ] = "C~ontinue >>";
-    Text[ finnish ] = "~Weiter >>";
+    Text[ finnish ] = "Seuraava >>";
 };
 
 String sBeginButton
@@ -291,7 +291,7 @@ String sWelcometextLabel1
     Text[ arabic ] = "íŞæã åĞÇ ÇáãÑÔÏ ÇáÂáí ÈÊÍæíá ãÓÊäÏÇÊ StarOffice  ÇáŞÏíãÉ æãÓÊäÏÇÊ Microsoft Office  Åáì ÇáÊäÓíŞ %PRODUCTNAME XML ÇáÌÏíÏ.";
     Text[ turkish ] = "Bu OtoPilot, dizinlerde ve tüm alt dizinlerde Microsoft Office formatında dosyalar arar. Tüm belgeleri ve/veya şablonları %PRODUCTNAME formatına dönüştürebilirsiniz.";
     Text[ catalan ] = "This AutoPilot converts old StarOffice formats and Microsoft Office documents to the new %PRODUCTNAME XML format.";
-    Text[ finnish ] = "Dieser AutoPilot wandelt Dokumente des alten StarOffice-Formates und Microsoft Office - Dokumente in das neue %PRODUCTNAME XML-Format um.";
+    Text[ finnish ] = "Tämä automaattinen ohjaus muuntaa vanhat StarOffice-muodot ja Microsoft Office -asiakirjat uuteen %PRODUCTNAME XML -muotoon.";
 };
 
 String sWelcometextLabel2
@@ -310,7 +310,7 @@ String sWelcometextLabel2
     Text[ swedish ] = "Observera att bifogade VBA-makron förlorar sin funktionalitet när Microsoft-dokument konverteras.";
     Text[ russian ] = "Ó÷òèòå, ÷òî ïğè ïğåîáğàçîâàíèè äîêóìåíòîâ Microsoft, ïğèëàãàåìûå ìàêğîñû VBA òåğÿşò ñâîş ôóíêöèîíàëüíîñòü.";
     Text[ danish ] = "På de følgende sider vælger du, om du vil importere WinWord-tekster, Excel-regneark eller PowerPoint-præsentationer. Vælg Microsoft-filernes mapper og målmappen for de nyoprettede %PRODUCTNAME-filer.";
-    Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e podczas konwersji dokumentów Microsoft za³¹czone makra VBA strac¹ swoj¹ funkcjonalnoœæ.";
+    Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e podczas konwersji dokumentów Microsoft za³¹czone makra VBA strac¹ swoj¹ funkcjonalno?æ.";
     Text[ portuguese_brazilian ] = "On the following pages, you can choose if you want to import Winword texts, Excel spreadsheets or Powerpoint presentations. Select the Microsoft file folder and the target folder for the newly rendered %PRODUCTNAME file.";
     Text[ japanese ] = "Microsoft ÄŞ·­ÒİÄ‚Ì•ÏŠ·‚ÉA“Y•t‚³‚ê‚½ VBA Ï¸Û‚Ì‹@”\\‚ª¸‚í‚ê‚È‚¢‚æ‚¤’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ korean ] = "Microsoft - ¹®¼­ º¯È¯½Ã¿¡, ¾îÅÂÄ¡µÈ VBA macros ´Â °íÀ¯ ±â´É¼ºÀ» »ó½ÇÇÑ´Ù´Â Á¡¿¡À¯ÀÇÇÏ½Ê½Ã¿À.";
@@ -320,7 +320,7 @@ String sWelcometextLabel2
     Text[ turkish ] = "İlerdeki sayfalarda dönüştürülecek Winword metinleri, Excel tabloları ya da Powerpoint sunularını seçebilirsiniz. Microsoft dosyalarının bulunduğu dizini ve yeni oluşturulan %PRODUCTNAME dosyaları için bir hedef dizin seçin.";
     Text[ language_user1 ] = "VBA = Visual Basics for Applications TSM 01.12.00";
     Text[ catalan ] = "Please note that when converting Microsoft documents any attached VBA macros lose their functionality.";
-    Text[ finnish ] = "Bitte beachten Sie, dass beim Konvertieren der Microsoft - Dokumente angehängte VBA-Makros ihre Funktionalität verlieren";
+    Text[ finnish ] = "Ota huomioon, että Microsoft-asiakirjojen VBA-makrot eivät enää toimi, jos ne muunnetaan.";
 };
 
 String sWelcometextLabel3
@@ -346,7 +346,7 @@ String sWelcometextLabel3
     Text[ turkish ] = "Select which kind of documents you wish to convert:";
     Text[ arabic ] = "ÇÎÊÑ ÃäæÇÚ ÇáãÓÊäÏÇÊ ÇáãÑÇÏ ÊÍæíáåÇ:";
     Text[ catalan ] = "Select the document type for conversion:";
-    Text[ finnish ] = "Wählen Sie die umzuwandelnden Dokumenttypen aus:";
+    Text[ finnish ] = "Valitse muunnettava asiakirjatyyppi:";
 };
 
 
@@ -376,7 +376,7 @@ String sMSTemplateCheckbox_1_
     Text[ arabic ] = "ŞæÇáÈ Word";
     Text[ turkish ] = "Word şablonları";
     Text[ catalan ] = "Word Templates";
-    Text[ finnish ] = "Word-Vorlagen";
+    Text[ finnish ] = "Word-asiakirjamalli";
 };
 
 String sMSTemplateCheckbox_2_
@@ -404,7 +404,7 @@ String sMSTemplateCheckbox_2_
     Text[ arabic ] = "ŞæÇáÈ Excel";
     Text[ turkish ] = "Excel şablonları";
     Text[ catalan ] = "Excel Templates";
-    Text[ finnish ] = "Excel-Vorlagen";
+    Text[ finnish ] = "Excel-mallit";
 };
 
 String sMSTemplateCheckbox_3_
@@ -432,7 +432,7 @@ String sMSTemplateCheckbox_3_
     Text[ arabic ] = "ŞæÇáÈ PowerPoint";
     Text[ turkish ] = "PowerPoint şablonları";
     Text[ catalan ] = "PowerPoint Templates";
-    Text[ finnish ] = "PowerPoint-Vorlagen";
+    Text[ finnish ] = "PowerPoint-mallit";
 };
 
 String sMSDocumentCheckbox_1_
@@ -460,7 +460,7 @@ String sMSDocumentCheckbox_1_
     Text[ arabic ] = "ãÓÊäÏÇÊ Word";
     Text[ turkish ] = "Word belgeleri";
     Text[ catalan ] = "Word Documents";
-    Text[ finnish ] = "Word-Dokumente";
+    Text[ finnish ] = "Word-asiakirja";
 };
 
 String sMSDocumentCheckbox_2_
@@ -488,7 +488,7 @@ String sMSDocumentCheckbox_2_
     Text[ arabic ] = "ãÓÊäÏÇÊ Excel";
     Text[ turkish ] = "Excel belgeleri";
     Text[ catalan ] = "Excel Documents";
-    Text[ finnish ] = "Excel-Dokumente";
+    Text[ finnish ] = "Excel-asiakirjat";
 };
 
 String sMSDocumentCheckbox_3_
@@ -516,7 +516,7 @@ String sMSDocumentCheckbox_3_
     Text[ arabic ] = "ãÓÊäÏÇÊPowerPoint ";
     Text[ turkish ] = "PowerPoint belgeleri";
     Text[ catalan ] = "PowerPoint Documents";
-    Text[ finnish ] = "PowerPoint-Dokumente";
+    Text[ finnish ] = "PowerPoint-asiakirjat";
 };
 
 
@@ -545,7 +545,7 @@ String sSearchInSubDir
     Text[ arabic ] = "ÈãÇ İí Ğáß ÇáÏáÇÆá ÇáİÑÚíÉ";
     Text[ turkish ] = "Alt dizinler dahil";
     Text[ catalan ] = "including subdirectories";
-    Text[ finnish ] = "inkl. Unterverzeichnisse";
+    Text[ finnish ] = "sisällytetään alikansiot";
 };
 
 String sSumInclusiveSubDir
@@ -573,7 +573,7 @@ String sSumInclusiveSubDir
     Text[ arabic ] = "ÓíÊã ãÑÇÚÇÉ ßá ÇáÏáÇÆá ÇáİÑÚíÉ";
     Text[ turkish ] = "Tüm alt dizinler dikkate alınacak";
     Text[ catalan ] = "All directories will be considered";
-    Text[ finnish ] = "Es werden alle Unterverzeichnisse berücksichtigt";
+    Text[ finnish ] = "Kaikki hakemistot huomioidaan";
 };
 
 String sSumSaveDokumente
@@ -601,7 +601,7 @@ String sSumSaveDokumente
     Text[ arabic ] = "Óæİ íÊã ÊÕÏíÑåÇ Åáì ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "Bu dosyaların aktarılacağı hedef dizin:";
     Text[ catalan ] = "These will be exported to the following directory:";
-    Text[ finnish ] = "Exportiert werden sie in das folgende Verzeichnis:";
+    Text[ finnish ] = "Kohteet viedään seuraavaan hakemistoon:";
 };
 
 String sSumDocuments
@@ -686,7 +686,7 @@ String sSummaryHeader
     Text[ arabic ] = "ÇáÊáÎíÕ:";
     Text[ turkish ] = "Özet:";
     Text[ catalan ] = "Summary:";
-    Text[ finnish ] = "Zusammenfassung:";
+    Text[ finnish ] = "Yhteenveto:";
 };
 
 String sTextImportLabel
@@ -712,7 +712,7 @@ String sTextImportLabel
     Text[ turkish ] = "Import from:";
     Text[ arabic ] = "ÇÓÊíÑÇÏ ãä:";
     Text[ catalan ] = "Import from:";
-    Text[ finnish ] = "Importieren von:";
+    Text[ finnish ] = "Lähde:";
 };
 
 
@@ -741,7 +741,7 @@ String sTextExportLabel
     Text[ arabic ] = "ÍİÙ İí:";
     Text[ turkish ] = "Metin şablon grubu:";
     Text[ catalan ] = "Save to:";
-    Text[ finnish ] = "Speichern in:";
+    Text[ finnish ] = "Tallenna:";
 };
 
 
@@ -770,7 +770,7 @@ String sTextGroupnameDefault
     Text[ arabic ] = "ŞæÇáÈ_äÕ_ãÓÊæÑÏÉ";
     Text[ turkish ] = "İçe aktarılan metin şablonları";
     Text[ catalan ] = "Imported_text_templates";
-    Text[ finnish ] = "Importierte_Textvorlagen";
+    Text[ finnish ] = "Tuodut_tekstimallipohjat";
 };
 
 String sSpeadGroupnameDefault
@@ -798,7 +798,7 @@ String sSpeadGroupnameDefault
     Text[ arabic ] = "ŞæÇáÈ ÍÓÇÈ ãÓÊæÑÏÉ";
     Text[ turkish ] = "İçe aktarılan hesap şablonları";
     Text[ catalan ] = "Imported_calculation_templates";
-    Text[ finnish ] = "Importierte_Kalkulationsvorlagen";
+    Text[ finnish ] = "Tuodut_laskentamallipohjat";
 };
 
 String sPresGroupnameDefault
@@ -826,7 +826,7 @@ String sPresGroupnameDefault
     Text[ arabic ] = "ŞæÇáÈ ÚÑæÖ ÊŞÏíãíÉ ãÓÊæÑÏÉ";
     Text[ turkish ] = "İçe aktarılan sunu şablonları";
     Text[ catalan ] = "Imported_presentation_templates";
-    Text[ finnish ] = "Importierte_Präsentationsvorlagen";
+    Text[ finnish ] = "Tuodut_esityspohjat";
 };
 
 String sProgressDesc1
@@ -854,7 +854,7 @@ String sProgressDesc1
     Text[ arabic ] = "ÇáÊŞÏã: ";
     Text[ turkish ] = "İlerleme: ";
     Text[ catalan ] = "Progress: ";
-    Text[ finnish ] = "Fortschritt: ";
+    Text[ finnish ] = "Tilanne:";
 };
 
 String sProgressOneDoc
@@ -882,7 +882,7 @@ String sProgressOneDoc
     Text[ arabic ] = "ãÓÊäÏ";
     Text[ turkish ] = "Belge";
     Text[ catalan ] = "Document";
-    Text[ finnish ] = " Dokument";
+    Text[ finnish ] = "Asiakirja";
 };
 
 String sProgressMoreDocs
@@ -910,7 +910,7 @@ String sProgressMoreDocs
     Text[ arabic ] = "ãÓÊäÏÇÊ";
     Text[ turkish ] = "Belgeler";
     Text[ catalan ] = "Documents";
-    Text[ finnish ] = "Dokumente";
+    Text[ finnish ] = "Asiakirjat";
 };
 
 
@@ -937,7 +937,7 @@ String sProgressMoreTemplates
     Text[ turkish ] = "Templates";
     Text[ arabic ] = "ŞæÇáÈ";
     Text[ catalan ] = "Templates";
-    Text[ finnish ] = "Vorlagen";
+    Text[ finnish ] = "Tyylit";
 };
 
 
@@ -966,7 +966,7 @@ String sNoDirCreation
     Text[ arabic ] = "áÇ íãßä ÅäÔÇÁ ÇáÏáíá '%1':";
     Text[ turkish ] = "Aşağıdaki dizin mevcut değil: ";
     Text[ catalan ] = "The '%1' directory cannot be created: ";
-    Text[ finnish ] = "Das Verzeichnis '%1' kann nicht angelegt werden: ";
+    Text[ finnish ] = "Hakemistoa %1 ei voida luoda: ";
 };
 
 
@@ -1051,7 +1051,7 @@ String sFileExists
     Text[ arabic ] = "Çáãáİ '<1>' ãæÌæÏ ãÓÈŞÇğ. <CR>åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Text[ turkish ] = "Bunları değiştirin.";
     Text[ catalan ] = "The '<1>' file already exists. Do you want to overwrite it?";
-    Text[ finnish ] = "Die Datei '<1>' existiert bereits.<CR>Möchten Sie sie überschreiben?";
+    Text[ finnish ] = "Tiedosto '<1>' on jo olemassa. Haluatko korvata sen?";
 };
 
 String sMorePathsError3
@@ -1079,7 +1079,7 @@ String sMorePathsError3
     Text[ arabic ] = "ÏáÇÆá ÛíÑ ãæÌæÏÉ";
     Text[ turkish ] = "Dizinler mevcut değil";
     Text[ catalan ] = "Directories do not exist";
-    Text[ finnish ] = "Verzeichnisse nicht vorhanden";
+    Text[ finnish ] = "Hakemistoja ei ole";
 };
 
 String sConvertError1
@@ -1135,7 +1135,7 @@ String sConvertError2
     Text[ arabic ] = "æŞİ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí";
     Text[ turkish ] = "Otopilot'tan çık";
     Text[ catalan ] = "Cancel Autopilot";
-    Text[ finnish ] = "Autopiloten abbrechen";
+    Text[ finnish ] = "Peruuta automaattinen ohjaus";
 };
 
 String sRTErrorDesc
@@ -1163,7 +1163,7 @@ String sRTErrorDesc
     Text[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÊæŞÚ İí ÇáãÑÔÏ ÇáÂáí.";
     Text[ turkish ] = "OtoPilot'ta beklenmeyen bir hata oluştu.";
     Text[ catalan ] = "An unexpected error has occured in the AutoPilot.";
-    Text[ finnish ] = "Es ist ein unerwarteter Fehler im Autopiloten aufgetreten.";
+    Text[ finnish ] = "Automaattisessa ohjauksessa on ilmennyt odottamaton virhe.";
 };
 
 String sRTErrorHeader
@@ -1191,7 +1191,7 @@ String sRTErrorHeader
     Text[ arabic ] = "ÎØÃ";
     Text[ turkish ] = "Hata";
     Text[ catalan ] = "Error";
-    Text[ finnish ] = "Fehler";
+    Text[ finnish ] = "Virhe";
 };
 
 
@@ -1220,7 +1220,7 @@ String sPathDialogMessage
     Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ Ïáíá";
     Text[ turkish ] = "Bir dizin seçin";
     Text[ catalan ] = "Select a directory";
-    Text[ finnish ] = "Wählen Sie ein Verzeichnis aus";
+    Text[ finnish ] = "Valitse hakemisto";
 };
 
 String sDialogTitle
@@ -1246,7 +1246,7 @@ String sDialogTitle
     Text[ arabic ] = "ãÍæá ÇáãÓÊäÏÇÊ";
     Text[ turkish ] = "OtoPilot Microsoft içe aktarma";
     Text[ catalan ] = "Document Converter";
-    Text[ finnish ] = "Dokumenten-Konverter";
+    Text[ finnish ] = "Asiakirjan muunto";
 };
 
 String sProgressPage1
@@ -1272,7 +1272,7 @@ String sProgressPage1
     Text[ turkish ] = "Current Progress";
     Text[ arabic ] = "ÇáÊŞÏã";
     Text[ catalan ] = "Already completed";
-    Text[ finnish ] = "Arbeitsfortschritt";
+    Text[ finnish ] = "Tilanne";
 };
 
 String sProgressPage2
@@ -1298,7 +1298,7 @@ String sProgressPage2
     Text[ turkish ] = "Retrieval of the relevant documents";
     Text[ arabic ] = "ÊÓÌíá ÇáãÓÊäÏÇÊ æËíŞÉ ÇáÕáÉ:";
     Text[ catalan ] = "Retrieving the relevant documents:";
-    Text[ finnish ] = "Erfassen der relevanten Dokumente:";
+    Text[ finnish ] = "Haetaan asianmukaiset asiakirjat:";
 };
 
 String sProgressPage3
@@ -1324,7 +1324,7 @@ String sProgressPage3
     Text[ turkish ] = "Converting the documents";
     Text[ arabic ] = "ÊÍæíá ÇáãÓÊäÏÇÊ";
     Text[ catalan ] = "Document conversion";
-    Text[ finnish ] = "Konvertieren der Dokumente";
+    Text[ finnish ] = "Asiakirjan muunto";
 };
 
 
@@ -1351,7 +1351,7 @@ String sProgressFound
     Text[ turkish ] = "Found";
     Text[ arabic ] = "Êã ÇáÚËæÑ Úáì:";
     Text[ catalan ] = "Found:";
-    Text[ finnish ] = "Gefunden:";
+    Text[ finnish ] = "Tulokset:";
 };
 
 
@@ -1378,7 +1378,7 @@ String sProgressPage5
     Text[ turkish ] = "%1 found";
     Text[ arabic ] = "%1 Êã ÇáÚËæÑ Úáì";
     Text[ catalan ] = "%1 found";
-    Text[ finnish ] = "%1 gefunden";
+    Text[ finnish ] = "%1 löydetty";
 };
 
 String sReady
@@ -1404,7 +1404,7 @@ String sReady
     Text[ turkish ] = "Ready!";
     Text[ arabic ] = "Êã!";
     Text[ catalan ] = "Complete !";
-    Text[ finnish ] = "Fertig!";
+    Text[ finnish ] = "Valmis!";
 };
 
 
@@ -1433,7 +1433,7 @@ String sXMLTemplateCheckbox_1_
     Text[ arabic ] = "ŞæÇáÈ äÕ";
     Text[ turkish ] = "%PRODUCTNAME Writer şablonları";
     Text[ catalan ] = "Text templates";
-    Text[ finnish ] = "Textvorlagen";
+    Text[ finnish ] = "Tekstityylit";
 };
 
 String sXMLTemplateCheckbox_2_
@@ -1680,6 +1680,6 @@ String sXMLHelperApplications_2
     Text[ turkish ] = "Formulas";
     Text[ arabic ] = "ÕíÛ";
     Text[ catalan ] = "Formulas";
-    Text[ finnish ] = "Formeln";
+    Text[ finnish ] = "Kaavat";
 };
 
