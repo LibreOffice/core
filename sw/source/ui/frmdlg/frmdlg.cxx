@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:27:07 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,11 +263,10 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
     case TP_BACKGROUND:
         if( DLG_FRM_STD == nDlgType )
         {
-            //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowSelector();
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
+            sal_Int32 nFlagType = SVX_SHOW_SELECTOR;
             if(!bHTMLMode)
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_ENABLE_TRANSPARENCY));
-                //CHINA001 ((SvxBackgroundTabPage&)rPage).EnableTransparency(TRUE, TRUE);
+                nFlagType |= SVX_ENABLE_TRANSPARENCY;
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
             rPage.PageCreated(aSet);
         }
         break;
