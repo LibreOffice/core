@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 13:39:21 $
+ *  last change: $Author: pb $ $Date: 2002-01-10 11:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ class SfxVersionDialog : public SfxModalDialog
     FixedText                   aSavedByText;
     FixedText                   aCommentText;
     SfxVersionsTabListBox_Impl  aVersionBox;
-    PushButton                  aCloseButton;
+    CancelButton                aCloseButton;
     PushButton                  aOpenButton;
     PushButton                  aViewButton;
     PushButton                  aDeleteButton;

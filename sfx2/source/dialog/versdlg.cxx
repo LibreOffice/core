@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-30 14:27:33 $
+ *  last change: $Author: pb $ $Date: 2002-01-10 11:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,6 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pFrame, Window *pParent )
     aSaveButton.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
     aDeleteButton.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
     aCompareButton.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
-    aCloseButton.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
     aOpenButton.SetClickHdl ( LINK( this, SfxVersionDialog, ButtonHdl_Impl ) );
     aVersionBox.SetSelectHdl( LINK( this, SfxVersionDialog, SelectHdl_Impl ) );
     aVersionBox.SetDoubleClickHdl( LINK( this, SfxVersionDialog, DClickHdl_Impl ) );
@@ -261,11 +260,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
     SvLBoxEntry *pEntry = aVersionBox.FirstSelected();
 
-    if ( pButton == &aCloseButton )
-    {
-        Close();
-    }
-    else if ( pButton == &aSaveCheckBox )
+    if ( pButton == &aSaveCheckBox )
     {
         pObjShell->GetDocInfo().SetSaveVersionOnClose( aSaveCheckBox.IsChecked() );
         pObjShell->SetModified( TRUE );
@@ -273,11 +268,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     else if ( pButton == &aSaveButton )
     {
         SfxVersionInfo aInfo;
-#if SUPD<613//MUSTINI
-        aInfo.aCreateStamp = SfxStamp( SFX_INIMANAGER()->GetUserFullName() );
-#else
         aInfo.aCreateStamp = SfxStamp( SvtUserOptions().GetFullName() );
-#endif
         SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl( this, aInfo, TRUE );
         short nRet = pDlg->Execute();
         if ( nRet == RET_OK )
