@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-03 08:40:13 $
+ *  last change: $Author: sj $ $Date: 2001-05-22 10:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,10 +1186,8 @@ void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
                 aStr += ByteString::CreateFromInt32( nPos );
                 aStr += "\n";
                 aStr += "Inventor: ";
-                aStr += char(aHead.nInventor);
-                aStr += char(aHead.nInventor >> 8);
-                aStr += char(aHead.nInventor >> 16);
-                aStr += char(aHead.nInventor >> 24);
+                sal_Int32 nInv = SWAPLONG( aHead.nInventor );
+                aStr += ByteString::CreateFromInt32( nInv );
                 aStr += ", Identifier: ";
                 aStr += ByteString::CreateFromInt32( aHead.nIdentifier );
                 aStr += "\n";
