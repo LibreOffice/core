@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ref.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,19 @@ public:
             m_pBody->release();
     }
 
+    /** Set...
+         Similar to assignment.
+     */
+    inline Reference<reference_type> &
+    SAL_CALL set (reference_type * pBody)
+    {
+        if (pBody)
+            pBody->acquire();
+        if (m_pBody)
+            m_pBody->release();
+        m_pBody = pBody;
+        return *this;
+    }
 
     /** Assignment.
          Unbinds this instance from its body (if bound) and
@@ -145,41 +158,15 @@ public:
     inline Reference<reference_type> &
     SAL_CALL operator= (const Reference<reference_type> & handle)
     {
-        if (m_pBody)
-            m_pBody->release();
-        m_pBody = handle.m_pBody;
-        if (m_pBody)
-            m_pBody->acquire();
-        return *this;
+        return set( handle.m_pBody );
     }
-
 
     /** Assignment...
      */
     inline Reference<reference_type> &
     SAL_CALL operator= (reference_type * pBody)
     {
-        if (m_pBody)
-            m_pBody->release();
-        m_pBody = pBody;
-        if (m_pBody)
-            m_pBody->acquire();
-        return *this;
-    }
-
-
-    /** Set...
-         Similar to assignment.
-     */
-    inline Reference<reference_type> &
-    SAL_CALL set (reference_type * pBody)
-    {
-        if (m_pBody)
-            m_pBody->release();
-        m_pBody = pBody;
-        if (m_pBody)
-            m_pBody->acquire();
-        return *this;
+        return set( pBody );
     }
 
     /** Unbind the body from this handle.
