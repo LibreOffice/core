@@ -2,9 +2,9 @@
  *
  *  $RCSfile: various.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 12:57:41 $
+ *  last change:$Date: 2003-09-08 12:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,25 +61,23 @@
 
 package mod._remotebridge;
 
-import com.sun.star.bridge.XBridge;
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
-import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.utils;
 
 /**
 * Test for object which is represented by service
@@ -112,9 +110,11 @@ public class various extends TestCase {
     * which is free.
     */
     protected static final int basePort = 50000;
-    private int curPort ;
+    private int curPort = 50000;
 
     private XAcceptor xAcctr;
+    private XConnector xCntr;
+    private XBridgeFactory xBrdgFctr;
     private AcceptorThread accThread;
 
     public XInterface bridge = null;
@@ -147,6 +147,7 @@ public class various extends TestCase {
         public Object getInstance(String aInstanceName)
                         throws com.sun.star.container.NoSuchElementException
                         {
+            System.out.println("######## Try to get "+aInstanceName);
             try {
                 return xMSF.createInstance(aInstanceName);
             }
@@ -193,15 +194,11 @@ public class various extends TestCase {
         public void run() {
             try {
                 acceptedCall = acc.accept(connectString) ;
-                XBridge xBridge = xBrdgFctr.createBridge("MyBridge", "urp",
-                                            acceptedCall, xInstProv);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 ex = e ;
             } catch (com.sun.star.connection.ConnectionSetupException e) {
                 ex = e ;
             } catch (com.sun.star.connection.AlreadyAcceptingException e) {
-                ex = e ;
-            } catch (com.sun.star.bridge.BridgeExistsException e) {
                 ex = e ;
             }
         }
@@ -223,7 +220,7 @@ public class various extends TestCase {
     */
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
-        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory) tParam.getMSF();
 
         try {
             XInterface xInt = (XInterface)xMSF.createInstance(
@@ -237,7 +234,7 @@ public class various extends TestCase {
             int idx = cncstr.indexOf("host=") + 5 ;
 
             // select the port
-            curPort = utils.getNextFreePort(basePort);
+//            curPort; //utils.getNextFreePort(basePort);
             log.println("Choose Port nr: " + curPort);
 
             connectString = "socket,host=" +
@@ -253,13 +250,13 @@ public class various extends TestCase {
             // create connector
             XInterface oCntr = (XInterface)xMSF.createInstance(
                     "com.sun.star.connection.Connector") ;
-            XConnector xCntr = (XConnector)UnoRuntime.queryInterface(
+            xCntr = (XConnector)UnoRuntime.queryInterface(
                     XConnector.class, oCntr);
 
             // create bridge factory
             XInterface oBrdg = (XInterface)xMSF.createInstance(
                     "com.sun.star.bridge.BridgeFactory") ;
-            XBridgeFactory xBrdgFctr = (XBridgeFactory)
+            xBrdgFctr = (XBridgeFactory)
                         UnoRuntime.queryInterface(XBridgeFactory.class, oBrdg);
 
             // create own implementation of XInstanceProvider
@@ -279,7 +276,7 @@ public class various extends TestCase {
             String protocol = "urp";
             String bridgeName = protocol + ":" + connectString;
 
-            bridgeDisposed[0] = false ;
+/*            bridgeDisposed[0] = false ;
             XComponent xComp = (XComponent)UnoRuntime.queryInterface(
                 XComponent.class, xInt);
             final PrintWriter logF = log;
@@ -289,7 +286,7 @@ public class various extends TestCase {
                     logF.println("The bridge Disposed.");
                 }
             });
-
+*/
             tEnv.addObjRelation("XInitialization.args", new Object[] {
                     bridgeName, protocol, xConnection, null});
 
@@ -306,20 +303,37 @@ public class various extends TestCase {
      * Stop the acceptor thread and dispose the bridge
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
+
+        System.out.println("++++++++ cleanup");
         xAcctr.stopAccepting();
         if (accThread.isAlive()) {
             accThread.interrupt();
         }
-
         XComponent xComp = (XComponent)UnoRuntime.queryInterface(
-                XComponent.class, bridge);
-        if (xComp != null && !bridgeDisposed[0])
+                XComponent.class, xAcctr);
+        if (xComp != null)
             xComp.dispose();
-        // wait for dispose
-        try {
-            Thread.sleep(5000);
-        }
-        catch(java.lang.InterruptedException e) {
+        xComp = (XComponent)UnoRuntime.queryInterface(
+                XComponent.class, xCntr);
+        if (xComp != null)
+            xComp.dispose();
+        xComp = (XComponent)UnoRuntime.queryInterface(
+                XComponent.class, xBrdgFctr);
+        if (xComp != null)
+            xComp.dispose();
+
+        xComp = (XComponent)UnoRuntime.queryInterface(
+                XComponent.class, bridge);
+        if (xComp != null) {
+            System.out.println("######## Dispose bridge");
+            bridgeDisposed[0] = true;
+            xComp.dispose();
+            // wait for dispose
+            try {
+                Thread.sleep(5000);
+            }
+            catch(java.lang.InterruptedException e) {
+            }
         }
     }
 }
