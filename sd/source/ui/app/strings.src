@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:50:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1872,7 +1872,7 @@ String STR_DESC_LINESTYLE
     Text [ english_us ] = "Please enter a name for the new line style:" ;
     Text[ chinese_simplified ] = "ΗλΔϊΞªΥβΈφΠΒµΔΟίΜυΚ½ΡωΚδΘλÒ»ΈφΓϋ³Ζ£Ί";
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ δλÿ νξβξγξ ρςθλÿ λθνθθ:";
-    Text[ polish ] = "Wstaw nazwκ dla nowego stylu linii:";
+    Text[ polish ] = "Wpisz nazwκ nowego stylu linii:";
     Text[ japanese ] = "‚±‚±‚ΙV‚µ‚Άό‚Μν—ή‚Μ–Ό‘O‚π“ό—Ν‚µ‚ά‚·:";
     Text[ greek ] = "Παρακαλώ εισάγετε ένα όνομα για το στυλ γραμμής::";
     Text[ korean ] = "»υ Ό± ΐ―Ηόΐ» ΐ§ΗΡ ΐΜΈ§ΐ» Ώ©±βΏ΅ ΐΤ·ΒΗΟ½Κ½ΓΏΐ:";
@@ -2774,7 +2774,7 @@ String STR_AUTOLAYOUT_ORG
     Text [ english_us ] = "Title, Organization Chart" ;
     Text[ chinese_simplified ] = "±κΜβ£¬½αΉΉΝΌ±ν";
     Text[ russian ] = "Ηΰγξλξβξκ, ξπγΰνθηΰφθξννΰÿ δθΰγπΰμμΰ";
-    Text[ polish ] = "Tytu³, Schemat organizacyjny";
+    Text[ polish ] = "Tytu³, schemat organizacyjny";
     Text[ japanese ] = "ΐ²ΔΩA‘gD}";
     Text[ greek ] = "Τίτλος, Οργανοδιάγραμμα";
     Text[ korean ] = "Α¦Έρ, Α¶Αχµµ";
@@ -2826,7 +2826,7 @@ String STR_AUTOLAYOUT_CLIPTEXT
     Text [ english_us ] = "Title, Clipart, Text" ;
     Text[ chinese_simplified ] = "±κΜβ£¬ΌτΜω»­£¬ΞΔΧΦ";
     Text[ russian ] = "Ηΰγξλξβξκ, κΰπςθνκθ Clipart, ςεκρς";
-    Text[ polish ] = "Tytu³, Clipart, Tekst";
+    Text[ polish ] = "Tytu³, klipart, tekst";
     Text[ japanese ] = "ΐ²ΔΩ¤ΈΨ―Μί±°Δ¤Γ·½Δ";
     Text[ greek ] = "Τίτλος, Clipart, Κείμενο";
     Text[ korean ] = "Α¦Έρ, Ε¬Έ³ΎΖΖ®, ΕΨ½ΊΖ®,";
@@ -2904,7 +2904,7 @@ String STR_AUTOLAYOUT_TEXTCLIP
     Text [ english_us ] = "Title, Text, Clipart" ;
     Text[ chinese_simplified ] = "±κΜβ£¬ΞΔΧΦ£¬ΌτΜω»­";
     Text[ russian ] = "Ηΰγξλξβξκ, ςεκρς, κΰπςθνκθ Clipart";
-    Text[ polish ] = "Tytu³, Tekst, Clipart";
+    Text[ polish ] = "Tytu³, tekst, klipart";
     Text[ japanese ] = "ΐ²ΔΩ¤Γ·½Δ¤ΈΨ―Μί±°Δ";
     Text[ greek ] = "Τίτλος, Κείμενοt, Clipart";
     Text[ korean ] = "Α¦Έρ, ΕΨ½ΊΖ®, Ε¬Έ³ΎΖΖ®";
@@ -3615,7 +3615,7 @@ String STR_DESC_LINEEND
     Text [ english_us ] = "Please enter a name for the new arrowhead:" ;
     Text[ chinese_simplified ] = "ΗλΔϊΞªΥβΈφΠΒΟίΜυΌύΝ·ΚδΘλÒ»ΈφΓϋ³Ζ£Ί";
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ δλÿ νξβξγξ κξνφΰ λθνθθ :";
-    Text[ polish ] = "Wstaw nazwκ dla nowych koρcσwek linii:";
+    Text[ polish ] = "Wpisz nazwκ nowych koρcσwek linii:";
     Text[ japanese ] = "‚±‚±‚ΙV‚µ‚Άό’[‚Μ–Ό‘O‚π“ό—Ν‚µ‚ά‚·:";
     Text[ greek ] = "Παρακαλώ εισάγετε ένα όνομα για το νέο τέλος της γραμμής:";
     Text[ korean ] = "»υ Ό± ³΅ΐ» ΐ§ΗΡ ΐΜΈ§ΐ» Ώ©±βΏ΅ ΐΤ·ΒΗΟ½Κ½ΓΏΐ:";
@@ -3948,7 +3948,7 @@ String STR_EXPORT_GRFILTER_FILTERERROR
     TEXT[ japanese ] = "‰ζ‘Μ¨Ωΐ‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρB";
     TEXT[ greek ] = "Το φίλτρο γραφικών δεν βρέθηκε";
     TEXT[ korean ] = "±Χ·΅ΗΘ ΗΚΕΝΈ¦ Γ£Αφ ΈψΗίΐ½";
-    TEXT[ chinese_traditional ] = "¨S¦³§δ¨μΉΟ§ΞΉLΒoΎΉ";
+    TEXT[ chinese_traditional ] = "¨S¦³§δ¨μΉΟ§ΞΒΰ΄«ΎΉ";
     TEXT[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ έαΚΡ ΗαΡΣζγΗΚ";
     TEXT[ turkish ] = "Grafik filtresi bulunamadύ";
     TEXT[ catalan ] = "No se encontrσ el filtro de imagen";
@@ -4105,7 +4105,7 @@ String STR_EXPORT_IMPORTGRAPHIC_COUNT
     Text[ japanese ] = "‰ζ‘Μ¨Ωΐ";
     Text[ greek ] = "Φίλτρο γραφικών";
     Text[ korean ] = "±Χ·΅ΗΘ ΗΚΕΝ";
-    Text[ chinese_traditional ] = "ΉΟ§ΞΉLΒoΎΉ";
+    Text[ chinese_traditional ] = "ΉΟ§ΞΒΰ΄«ΎΉ";
     Text[ arabic ] = "έαΚΡ ΗαΡΣζγΗΚ";
     Text[ turkish ] = "Grafik filtresi";
     Text[ catalan ] = "Filtro de imagen";
@@ -4186,7 +4186,7 @@ String STR_DESC_NAMEGROUP
     Text [ portuguese_brazilian ] = "Geben Sie bitte den Namen des Objektes ein" ;
     Text[ chinese_simplified ] = "ΗλΔϊΞªΥβΈφ¶ΤΟσΚδΘλÒ»ΈφΓϋ³Ζ";
     Text[ russian ] = "Ββεδθςε, οξζΰλσιρςΰ, θμÿ δλÿ ύςξγξ ξαϊεκςΰ";
-    Text[ polish ] = "Wstaw proszκ nazwκ obiektu";
+    Text[ polish ] = "Wpisz nazwκ obiektu";
     Text[ japanese ] = "µΜήΌήªΈΔ‚Μ–Ό‘O‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚Ά";
     Text[ greek ] = "Παρακαλώ εισάγετε το όνομα του αντικειμένου";
     Text[ korean ] = "°³ΓΌΐΗ ΐΜΈ§ΐ» ΐΤ·ΒΗΟ½Κ½ΓΏΐ";
@@ -4288,13 +4288,13 @@ String STR_FORMAT_STRING
     Text [ dutch ] = "Tekst zonder opmaak" ;
     Text [ spanish ] = "Texto no formateado" ;
     Text [ english_us ] = "Unformatted Text" ;
-    Text[ chinese_simplified ] = "ΙΠΞ΄ΈρΚ½»―µΔΞΔ±Ύ";
+    Text[ chinese_simplified ] = "Ξ΄ΈρΚ½»―µΔΞΔΧΦ";
     Text[ russian ] = "Νετξπμΰςθπξβΰννϋι ςεκρς";
     Text[ polish ] = "niesformatowany tekst";
     Text[ japanese ] = "‘®έ’θ‚³‚κ‚Δ‚Ά‚Θ‚ΆΓ·½Δ";
     Text[ greek ] = "Μη μορφοποιημένο κείμενο";
     Text[ korean ] = "ΖχΈΛµΗΑφ ΎΚΐΊ ΕΨ½ΊΖ®";
-    Text[ chinese_traditional ] = "©|¥Ό®ζ¦΅¤ΖªΊ¤Ί¤ε";
+    Text[ chinese_traditional ] = "¥Ό®ζ¦΅¤ΖªΊ¤ε¦r";
     Text[ arabic ] = "δΥ ΫνΡ γδΣή";
     Text[ turkish ] = "Formatsύz metin";
     Text[ catalan ] = "Texto no formateado";
@@ -4862,7 +4862,7 @@ String STR_ASK_DELETE_LAYER
     Text [ portuguese ] = "Eliminar realmente o nνvel '$'?\nAtenηγo: todos os objectos deste nνvel serγo tambιm eliminados!" ;
     Text[ chinese_simplified ] = "ΔϊΥζµΔÒªΙΎ³ύ·Φ²γ'$' £Ώ\nΜαΚΎ£ΊΥβΡω΄Λ·Φ²γΔΪµΔΛωΣΠ¶ΤΟσ±γ»α±»ΙΎ³ύ£΅";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξς ρλξι '$'?\nΚ Βΰψεμσ ρβεδενθώ: βρε ξαϊεκςϋ ύςξγξ ρλξÿ ασδσς ςΰκζε σδΰλενϋ!";
-    Text[ polish ] = "Czy chcesz na pewno usunΉζ warstwκ '$' ?\nWskazσwka: Wszystkie obiekty tej warstwy zostanΉ rσwnieΏ usuniκte!";
+    Text[ polish ] = "Czy chcesz na pewno usunΉζ warstwκ '$' ?\nUwaga: usuniκte zostanΉ rσwnieΏ wszystkie obiekty tej warstwy!";
     Text[ japanese ] = "‘w '$' ‚πν‚µ‚Δ‚ΰ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B\nw¦:‚±‚Μ‘w‚Μ‘SµΜήΌήªΈΔ‚ªν‚³‚κ‚ά‚·B";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί το επίπεδο \"$\";\nΌλα τα αντικείμενα αυτού του επιπέδου θα διαγραφούν!";
     Text[ korean ] = "·ΉΊ§\"$\"ΐ»(Έ¦) Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\nΒό°ν: ΐΜ ·ΉΊ§Ώ΅ ΐΦ΄Β Έπµη °³ΓΌ Ώª½Γ »θΑ¦µΛ΄Ο΄Ω!";
@@ -5195,7 +5195,7 @@ String STR_OPEN_DOCUMENT
     Text [ french ] = "Charger un document" ;
     Text [ swedish ] = "Ladda dokument" ;
     Text [ dutch ] = "Document laden" ;
-    Text [ spanish ] = "Abrir documento" ;
+    Text [ spanish ] = "Cargar documento" ;
     Text[ chinese_simplified ] = "Χ°ΘλΞΔµµ";
     Text[ russian ] = "Ηΰγπσηκΰ δξκσμενςΰ";
     Text[ polish ] = "£aduj dokument";
@@ -5406,7 +5406,7 @@ String STR_SCALE_OBJECTS
     Text [ portuguese_brazilian ] = "Das Format der neuen Seiten wird angepa?t.\nWollen Sie die Objekte auch anpassen?" ;
     Text[ chinese_simplified ] = "ÒΡΎ­ΟΰΣ¦µχΥϋΑΛΠΒ½¨Ò³ΓζµΔΈρΚ½΅£\nÒ²ÒªΟΰΣ¦µχΥϋΥβΈφ¶ΤΟσΒπ£Ώ";
     Text[ russian ] = "Τξπμΰς νξβξι ρςπΰνθφϋ ασδες ρξγλΰρξβΰν.\nΒϋ υξςθςε ςΰκζε ρξγλΰρξβΰςό ξαϊεκςϋ?";
-    Text[ polish ] = "Format nowych stron zostanie dopasowany.\nCzy dopasowaζ rσwnieΏ obiekty?";
+    Text[ polish ] = "Format nowych stron zostanie dopasowany.\nDopasowaζ rσwnieΏ obiekty?";
     Text[ japanese ] = "V‚µ‚ΆΝί°Όή‚Μ‘®‚π“K‡‚³‚Ή‚ά‚·B\nµΜήΌήªΈΔ‚ΰ“K‡‚³‚Ή‚ά‚·‚©B";
     Text[ greek ] = "Η μορφή των νέων σελιδών θα προσαρμοστεί.\nΘέλετε να γίνει προσαρμογή και των αντικειμένων;";
     Text[ korean ] = "»υ ΖδΐΜΑφΐΗ Ό­½ΔΐΜ Α¶Α¤µΙ °ΝΐΤ΄Ο΄Ω.\n°³ΓΌµµ Α¶Α¤ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -5659,7 +5659,7 @@ String STR_WARN_DEL_PAGE
     Text [ portuguese_brazilian ] = "Diese Aktion l?cht die Seite $. \nDie Seite enth?lt Zeichenobjekte!" ;
     Text[ chinese_simplified ] = "ΥβΈφ²ΩΧχ»αΙΎ³ύÒ³ '$' ΅£\nΥβÒ³Ί¬ΣΠ»ζΝΌ¶ΤΟσ£΅";
     Text[ russian ] = "έςΰ ΰκφθÿ σδΰλÿες ρςπΰνθφσ '$'. \nέςΰ ρςπΰνθφΰ ρξδεπζθς γπΰτθχερκθε ξαϊεκςϋ!";
-    Text[ polish ] = "Ta akcja usuwa slajd '$'.\nSlajd zawiera obiekty graficzne!";
+    Text[ polish ] = "Operacja ta usuwa slajd '$'.\nSlajd zawiera obiekty graficzne!";
     Text[ japanese ] = "‚±‚Μ±ΈΌ®έ‚Ν '$' ‚ΜΝί°Όή‚πν‚µ‚ά‚·B\nΝί°Όή‚Ι‚Ν}`•`‰ζµΜήΌήªΈΔ‚ªά‚ά‚κ‚Δ‚Ά‚ά‚·B";
     Text[ greek ] = "Η ενέργεια αυτή διαγράφει την σελίδα '$'. \nΗ σελίδα περιέχει αντικείμενα σχεδίασης!";
     Text[ korean ] = "ΐΜ ΐΫΎχΐ» ½ΗΗΰΗΟΈι ΖδΐΜΑφ '$'ΐΜ(°΅) »θΑ¦µΛ΄Ο΄Ω.\nΐΜ ΖδΐΜΑφΏ΅΄Β ±ΧΈ®±β °³ΓΌ°΅ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω!";
@@ -5684,7 +5684,7 @@ String STR_WARN_DEL_SEL_PAGES
     Text [ portuguese_brazilian ] = "Diese Aktion l?cht die selektierten Seiten. \nDie Seiten enthalten Zeichenobjekte!" ;
     Text[ chinese_simplified ] = "ΥβΈφ²ΩΧχΙΎ³ύ±»Ρ΅ΦΠµΔÒ³΅£\nΥβΠ©Ò³Ί¬ΣΠ»ζΝΌ¶ΤΟσ£΅";
     Text[ russian ] = "έςΰ ΰκφθÿ σδΰλÿες ρςπΰνθφϋ. \nέςθ ρςπΰνθφϋ ρξδεπζΰς γπΰτθχερκθε ξαϊεκςϋ!";
-    Text[ polish ] = "Ta akcja usuwa zaznaczone slajdy.\nSlajdy zawierajΉ obiekty graficzne!";
+    Text[ polish ] = "Operacja ta usuwa zaznaczone slajdy.\nSlajdy zawierajΉ obiekty graficzne!";
     Text[ japanese ] = "‚±‚Μ±ΈΌ®έ‚Ν‘I‘π‚µ‚½Νί°Όή‚πν‚µ‚ά‚·B\nΝί°Όή‚Ι‚Ν}`•`‰ζµΜήΌήªΈΔ‚ªά‚ά‚κ‚Δ‚Ά‚ά‚·B";
     Text[ greek ] = "Η ενέργεια αυτή διαγράφει την επιλεγμένη σελίδα. \nΗ σελίδα περιέχει αντικείμενα σχεδίασης!";
     Text[ korean ] = "ΐΜ ΐΫΎχΐ» ½ΗΗΰΗΟΈι Ό±ΕΓµΘ ΖδΐΜΑφ°΅ »θΑ¦µΛ΄Ο΄Ω.\nΐΜ ΖδΐΜΑφΏ΅΄Β ±ΧΈ®±β °³ΓΌ°΅ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω!";
@@ -5709,7 +5709,7 @@ String STR_WARN_DEL_SEL_PAGE
     Text[ italian ] = "Questo procedimento elimina la pagina selezionata.\nNota: La pagina contiene oggetti di disegno!";
     Text[ danish ] = "Denne handling sletter den udvalgte side \nSiden indeholder tegneobjekter!";
     Text[ swedish ] = "Den hδr εtgδrden tar bort den valda sidan. \nSidan innehεller ritobjekt!";
-    Text[ polish ] = "Akcja ta usuwa zaznaczonΉ stronκ.\nStrona ta zawiera obiekty graficzne.";
+    Text[ polish ] = "Operacja ta usuwa zaznaczonΉ stronκ.\nStrona ta zawiera obiekty graficzne.";
     Text[ portuguese_brazilian ] = "This action will delete the selected page.\nNote: the page contains drawing objects!";
     Text[ japanese ] = "‚±‚Μ±ΈΌ®έ‚Ν‘I‘πΝί°Όή‚πν‚µ‚ά‚·B\n‚±‚Μƒy[ƒW‚Ν•`‰ζµΜήΌήªΈΔ‚πά‚ρ‚Ε‚Ά‚ά‚·B";
     Text[ korean ] = "ΐΜ°Νΐ» ½ΗΗΰΗΟΈι Ό±ΕΓµΘ ΒΚΐΜ »θΑ¦µΛ΄Ο΄Ω. \nΐΜ ΒΚΐΊ ±ΧΈ®±β°³ΓΌΈ¦ ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω!";
@@ -5866,7 +5866,7 @@ String STR_WARN_PRINTFORMAT_FAILURE
     Text [ portuguese_brazilian ] = "Das Dokumentformat konnte am Drucker nicht eingestellt werden." ;
     Text[ chinese_simplified ] = "ΥβΈφΞΔµµΈρΚ½²»Κά΄ςΣ΅»ϊµΔΦ§³Φ΅£";
     Text[ russian ] = "Σρςΰνξβθςό ύςξς τξπμΰς δξκσμενςΰ νΰ οπθνςεπε νε σδΰεςρÿ.";
-    Text[ polish ] = "Format dokumentu nie mσg³ zostaζ ustawiony na drukarce.";
+    Text[ polish ] = "Ustawiwnie formatu dokumentu na drukarce nie powiod³o siκ.";
     Text[ japanese ] = "Δή·­ÒέΔ‚Μ‘®‚ΝΜίΨέΐ‚Ι“K‡‚µ‚ά‚Ή‚ρ‚Ε‚µ‚½B";
     Text[ greek ] = "Δεν ήταν δυνατόν να οριστεί η μορφή εγγράφου στον εκτυπωτή.";
     Text[ korean ] = "Ή®Ό­Ό­½Δΐ» ΗΑΈ°ΕΝΏ΅ Ό³Α¤ΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
@@ -5894,7 +5894,7 @@ String STR_REMOVE_LINK
     Text [ spanish ] = "Esta imagen estα vinculada al documento. \nΏDesea eliminar el vνnculo para editar la imagen?" ;
     Text[ chinese_simplified ] = "ΥβΈφΝΌΠΞΚΗΊΝΞΔµµΑ΄½ΣµΔ΅£ \nΔϊÒªΘ΅ΟϋΥβΈφΑ΄½Σ£¬±ΰΌ­ΥβΈφΝΌΠΞΒπ£Ώ";
     Text[ russian ] = "έςξς πθρσνξκ ρρϋλΰεςρÿ νΰ δξκσμενς. \nΒϋ υξςθςε ρνÿςό ρρϋλκσ, χςξαϋ βϋοξλνθςό οπΰβκσ πθρσνκΰ?";
-    Text[ polish ] = "Ta grafika jest po³Ήczona z dokumentem. \nCzy chcesz usunΉζ to po³Ήczenie, aby edytowaζ grafikκ?";
+    Text[ polish ] = "Grafika ta jest po³Ήczona z dokumentem.\nUsunΉζ po³Ήczenie w celu jej edycji?";
     Text[ japanese ] = "‚±‚Μ}‚ΝΔή·­ÒέΔ‚ΖΨέΈ‚³‚κ‚Δ‚Ά‚ά‚·B\n}‚Μ•ÒW‚π‚·‚ι‚½‚ί‚ΙAΨέΈ‚π‰π‚µ‚ά‚·‚©B";
     Text[ greek ] = "Το γραφικό αυτό είναι συνδεδεμένο με το έγγραφο. \nΘέλετε να καταργηθεί η σύνδεση για να επεξεργάσετε το γραφικό;";
     Text[ korean ] = "ΐΜ ±Χ·΅ΗΘΐΊ Ή®Ό­ΏΝ Ώ¬°αµΗΎξ ΐΦ½ΐ΄Ο΄Ω. \n±Χ·΅ΗΘ ΖνΑύΐ» ΐ§ΗΨ Ώ¬°αΐ» ΗΨΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -6024,7 +6024,7 @@ String STR_IMPORT_GRFILTER_FILTERERROR
     Text[ japanese ] = "‰ζ‘Μ¨Ωΐ‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρB";
     Text[ greek ] = "Το φίλτρο γραφικών δεν βρέθηκε";
     Text[ korean ] = "±Χ·΅ΗΘΗΚΕΝΈ¦ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω";
-    Text[ chinese_traditional ] = "¨S¦³§δ¨μΉΟ§ΞΉLΒoΎΉ";
+    Text[ chinese_traditional ] = "¨S¦³§δ¨μΉΟ§ΞΒΰ΄«ΎΉ";
     Text[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ έαΚΡ ΗαΡΣζγΗΚ";
     Text[ turkish ] = "Grafik filtresi bulunamadύ";
     Text[ catalan ] = "No se encontrσ el filtro de imagen";
@@ -6096,7 +6096,7 @@ String STR_END_SEARCHING
     Text [ portuguese_brazilian ] = "Die Suche f? dieses Dokument ist abgeschlossen!" ;
     Text[ chinese_simplified ] = "ÒΡΎ­Νκ³ΙΛΡΡ°ΥβΈφΞΔµµ£΅";
     Text[ russian ] = "Οξθρκ ύςξγξ δξκσμενςΰ ηΰκξνχεν!";
-    Text[ polish ] = "Szukanie dokumentu zosta³o zakoρczone!";
+    Text[ polish ] = "Zakoρczono szukanie dokumentu!";
     Text[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Μυ‚ΝI—Ή‚µ‚ά‚µ‚½B";
     Text[ greek ] = "Η αναζήτηση του εγγράφου ολοκληρώθηκε!";
     Text[ korean ] = "ΐΜ Ή®Ό­ΐΗ Ε½»φΐ» Έ¶ΓΖ½ΐ΄Ο΄Ω.";
@@ -6122,7 +6122,7 @@ String STR_END_SPELLING
     Text [ portuguese_brazilian ] = "Die Rechtschreibpr?ung f? dieses Dokument ist abgeschlossen!" ;
     Text[ chinese_simplified ] = "ÒΡΎ­Νκ³ΙΥϋΈφΞΔµµµΔΖ΄Π΄Όμ²ι£΅";
     Text[ russian ] = "Οπξβεπκΰ οπΰβξοθρΰνθÿ ύςξγξ δξκσμενςΰ ηΰκξνχενΰ!";
-    Text[ polish ] = "Sprawdzanie pisowni dla tego dokumentu zosta³o zakoρczone!";
+    Text[ polish ] = "Zakoρczono sprawdzanie pisowni w tym dokumencie!";
     Text[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Μ½ΝίΩ Αª―Έ‚ΝI—Ή‚µ‚ά‚µ‚½B";
     Text[ greek ] = "Ο έλεγχος ορθογραφίας για ολόκληρο το έγγραφο ολοκληρώθηκε!";
     Text[ korean ] = "ΐΜ Ή®Ό­Ώ΅ ΄λΗΡ ΈΒΓγΉύ °Λ»ηΈ¦ ΏΟ·αΗΟΏ΄½ΐ΄Ο΄Ω!";
@@ -6148,7 +6148,7 @@ String STR_END_SPELLING_OBJ
     Text [ dutch ] = "De spellingcontrole voor de geselecteerde objecten is beλindigd!" ;
     Text[ chinese_simplified ] = "ÒΡΎ­Νκ³ΙΡ΅ΦΠ¶ΤΟσµΔΖ΄Π΄Όμ²ι£΅";
     Text[ russian ] = "Οπξβεπκΰ οπΰβξοθρΰνθÿ βϋδελεννξγξ ξαϊεκςΰ ηΰκξνχενΰ!";
-    Text[ polish ] = "Sprawdzanie pisowni dla wybranych obiektσw zosta³o zakoρczone!";
+    Text[ polish ] = "Zakoρczono sprawdzanie pisowni w zaznaczonych obiektach!";
     Text[ japanese ] = "‘I‘π‚µ‚½µΜήΌήªΈΔ‚Μ½ΝίΩΑª―Έ‚ΝI—Ή‚µ‚ά‚µ‚½B";
     Text[ greek ] = "Ο ορθογραφικός έλεγχος για τα επιλεγμένα αντικείμενα ολοκληρώθηκε!";
     Text[ korean ] = "Ό±ΕΓµΘ °³ΓΌΏ΅ ΄λΗΡ  ΈΒΓγΉύ °Λ»ηΈ¦ ΏΟ·αΗΟΏ΄½ΐ΄Ο΄Ω!";
@@ -6227,7 +6227,7 @@ String STR_CLPBRD_CLEAR
     Text [ spanish ] = "Ha copiado una gran cantidad de datos al portapapeles.\nΏDesea que el contenido del portapapeles estι disponible para otras aplicaciones?" ;
     Text[ chinese_simplified ] = "ΤΪΌτΜω°εΔΪ΄ζΣΠÒ»Έφ½Ο΄σµΔΚύΎέ΅£\nΔϊÒªΘΓΥβΈφΚύΎέÒ²ΜαΉ©ΈψΖδΛϋΣ¦ΣΓ³ΜΠςΚΉΣΓ£Ώ";
     Text[ russian ] = "Βϋ οξμερςθλθ ρλθψκξμ αξλόψξε κξλθχερςβξ δΰννϋυ β αστεπ ξαμενΰ.\nΟπεδξρςΰβθςό ρξδεπζθμξε αστεπΰ ξαμενΰ δπσγθμ οπθλξζενθÿμ?";
-    Text[ polish ] = "Umieci³e wiκksze iloci danych w schowku.\nCzy udostκpniζ zawartoζ schowka innym aplikacjom?";
+    Text[ polish ] = "Umieszczono wiκkszΉ iloζ danych w schowku.\nCzy udostκpniζ zawartoζ schowka innym aplikacjom?";
     Text[ japanese ] = "‘ε—Κ‚ΜΓή°ΐ‚ªΈΨ―ΜίΞή°Δή‚Ι•ΫΗ‚³‚κ‚Δ‚Ά‚ά‚·B\nΈΨ―ΜίΞή°Δή‚Μ“ΰ—e‚π•Κ‚Μ±ΜίΨΉ°Ό®έ‚Ι‚ΰg—p‚µ‚ά‚·‚©B";
     Text[ greek ] = "Έχετε αποθηκεύσει μεγάλη ποσότητα δεδομένων στο πρόχειρο.\nΘέλετε τα δεδομένα αυτά να είναι διαθέσιμα και για άλλες εφαρμογές;";
     Text[ korean ] = "Ε¬Έ³ΊΈµεΏ΅ ΈΉΐΊ ΎηΐΗ µ¥ΐΜΕΝ°΅ ΐϊΐεµΗΎϊ½ΐ΄Ο΄Ω.\nΕ¬Έ³ΊΈµεΐΗ ³»Ώλΐ» ΄ΩΈ¥ ΐΐΏλ ΗΑ·Ξ±Χ·¥Ώ΅Ό­µµ »ηΏλΗÒ Όφ ΐΦµµ·Ο ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -6509,7 +6509,7 @@ String STR_STRING_NOTFOUND
     Text [ dutch ] = "Zoekbegrip niet gevonden." ;
     Text [ spanish ] = "No se encontrσ la expresiσn buscada." ;
     Text [ english_us ] = "Search key not found." ;
-    Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½¶ΤΟσ΅£";
+    Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΛΡΡ°ΜυΔΏ΅£";
     Text[ russian ] = "Θρκξμξε οξνÿςθε νενΰιδενξ.";
     Text[ polish ] = "Szukanego has³a nie znaleziono.";
     Text[ japanese ] = "υ·°‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρB";
@@ -6539,7 +6539,7 @@ String STR_DRAW_FILTERPROGRESS
     Text[ japanese ] = "‰ζ‘Μ¨Ωΐ";
     Text[ greek ] = "Φίλτρο γραφικών";
     Text[ korean ] = "±Χ·΅ΗΘ ΗΚΕΝ";
-    Text[ chinese_traditional ] = "ΉΟ§ΞΉLΒoΎΉ";
+    Text[ chinese_traditional ] = "ΉΟ§ΞΒΰ΄«ΎΉ";
     Text[ arabic ] = "έαΚΡ ΗαΡΣζγΗΚ";
     Text[ turkish ] = "Grafik filtresi";
     Text[ catalan ] = "Filtro de imagen";
@@ -6839,7 +6839,7 @@ String STR_CLICK_ACTION_PREVPAGE
     Text [ portuguese_brazilian ] = "Sprung zur vorhergehenden Seite" ;
     Text[ chinese_simplified ] = "Χªµ½ΙΟÒ»Ò³";
     Text[ russian ] = "Οεπειςθ κ οπεδϋδσωεμσ ρλΰιδσ";
-    Text[ polish ] = "Przejd do poprzedniego slajdu";
+    Text[ polish ] = "Przejd na poprzedni slajd";
     Text[ japanese ] = "‘O‚ΜΝί°Όή‚ΦΌή¬έΜί";
     Text[ greek ] = "Μετάβαση προς την προηγούμενη σελίδα";
     Text[ korean ] = "ΐΜΐό ½½¶σΐΜµε·Ξ ³ΡΎξ°΅±β";
@@ -6865,7 +6865,7 @@ String STR_CLICK_ACTION_NEXTPAGE
     Text [ portuguese_brazilian ] = "Sprung zur n?chsten Seite" ;
     Text[ chinese_simplified ] = "Χªµ½ΟΒÒ»Ò³";
     Text[ russian ] = "Οεπειςθ κ ρλεδσώωεμσ ρλΰιδσ";
-    Text[ polish ] = "Przejd do nastκpnego slajdu";
+    Text[ polish ] = "Przejd na nastκpny slajd";
     Text[ japanese ] = "‚ΜΝί°Όή‚ΦΌή¬έΜί";
     Text[ greek ] = "Μετάβαση προς την επόμενη σελίδα";
     Text[ korean ] = "΄Ωΐ½ ½½¶σΐΜµε·Ξ ³ΡΎξ°΅±β";
@@ -6890,7 +6890,7 @@ String STR_CLICK_ACTION_FIRSTPAGE
     Text [ portuguese_brazilian ] = "Sprung zur ersten Seite" ;
     Text[ chinese_simplified ] = "Χªµ½ΚΧÒ³";
     Text[ russian ] = "Οεπειςθ κ οεπβξμσ ρλΰιδσ";
-    Text[ polish ] = "Przejd do pierwszego slajdu";
+    Text[ polish ] = "Przejd na pierwszy slajd";
     Text[ japanese ] = "Ε‰‚ΜΝί°Όή‚ΦΌή¬έΜί";
     Text[ greek ] = "Μετάβαση προς τη πρώτη σελίδα";
     Text[ korean ] = "ΓΉ ½½¶σΐΜµε·Ξ ³ΡΎξ°΅±β";
@@ -6915,7 +6915,7 @@ String STR_CLICK_ACTION_LASTPAGE
     Text [ portuguese_brazilian ] = "Sprung zur letzten Seite" ;
     Text[ chinese_simplified ] = "Χªµ½Ξ²Ò³";
     Text[ russian ] = "Οεπειςθ κ οξρλεδνεμσ ρλΰιδσ";
-    Text[ polish ] = "Przejd do ostatniego slajdu";
+    Text[ polish ] = "Przejd na ostatni slajd";
     Text[ japanese ] = "Εγ‚ΜΝί°Όή‚ΦΌή¬έΜί";
     Text[ greek ] = "Μετάβαση προς τη τελευταία σελίδα";
     Text[ korean ] = "Έ¶ΑφΈ· ½½¶σΐΜµε·Ξ ³ΡΎξ°΅±β";
@@ -6940,7 +6940,7 @@ String STR_CLICK_ACTION_BOOKMARK
     Text [ portuguese_brazilian ] = "Sprung zu Seite oder Objekt" ;
     Text[ chinese_simplified ] = "Χªµ½Ò³Γζ»ς¶ΤΟσ";
     Text[ russian ] = "Οεπειςθ κ ρςπΰνθφε θλθ ξαϊεκςσ";
-    Text[ polish ] = "Przejd do slajdu lub dokumentu";
+    Text[ polish ] = "Przejd na slajd lub na dokument";
     Text[ japanese ] = "Νί°Όή‚ά‚½‚ΝµΜήΌήªΈΔ‚ΦΌή¬έΜί";
     Text[ greek ] = "Μετάβαση σε σελίδα ή αντικείμενο";
     Text[ korean ] = "ΖδΐΜΑφΐΜ³ª °³ΓΌ·Ξ ³ΡΎξ°΅±β";
@@ -7521,7 +7521,7 @@ String STR_EFFECT_FADE_TO_CENTER
     Text [ norwegian ] = "Fade to center" ;
     Text [ italian ] = "Diaframma verso il centro" ;
     Text [ portuguese_brazilian ] = "Desvanescer para o centro" ;
-    Text [ portuguese ] = "Esbater para o centro" ;
+    Text [ portuguese ] = "De fora para dentro" ;
     Text [ finnish ] = "Hδivytδ keskelle" ;
     Text [ danish ] = "Ton over indad" ;
     Text [ french ] = "Fondu vers le centre" ;
@@ -7548,7 +7548,7 @@ String STR_EFFECT_FADE_FROM_CENTER
     Text [ norwegian ] = "Fade from center" ;
     Text [ italian ] = "Diaframma dal centro" ;
     Text [ portuguese_brazilian ] = "Desvanescer do centro" ;
-    Text [ portuguese ] = "Esbater a partir do centro" ;
+    Text [ portuguese ] = "De dentro para fora" ;
     Text [ finnish ] = "Hδivytδ keskeltδ" ;
     Text [ danish ] = "Ton over udad" ;
     Text [ french ] = "Fondre en partant du centre" ;
@@ -7574,7 +7574,7 @@ String STR_EFFECT_DISCARD_FROM_L
     Text [ norwegian ] = "Discard from left" ;
     Text [ italian ] = "Scopri da sinistra" ;
     Text [ portuguese_brazilian ] = "Descartar a partir da esquerda" ;
-    Text [ portuguese ] = "Descobrir a partir da esquerda" ;
+    Text [ portuguese ] = "Tapar a partir da esquerda" ;
     Text [ finnish ] = "Poista peite vasemmalta" ;
     Text [ danish ] = "Afdζk mod hψjre" ;
     Text [ french ] = "Dιcouvrir ΰ partir de la gauche" ;
@@ -7598,7 +7598,7 @@ String STR_EFFECT_DISCARD_FROM_UL
     Text = "Aufdecken von links oben" ;
     Text [ ENGLISH ] = "Discard from upper left" ;
     Text [ english_us ] = "Uncover From Top Left" ;
-    Text[ portuguese ] = "Descobrir a partir do topo esquerdo";
+    Text[ portuguese ] = "Tapar a partir do topo esquerdo";
     Text[ russian ] = "Ξςκπϋςό ρβεπυσ ρλεβΰ";
     Text[ greek ] = "Εμφάνιση από πάνω αριστερά";
     Text[ dutch ] = "Vertonen vanaf linksboven";
@@ -7623,7 +7623,7 @@ String STR_EFFECT_DISCARD_FROM_T
     Text = "Aufdecken von oben" ;
     Text [ ENGLISH ] = "Discard from top" ;
     Text [ english_us ] = "Uncover From Top" ;
-    Text[ portuguese ] = "Descobrir a partir do topo";
+    Text[ portuguese ] = "Tapar a partir do topo";
     Text[ russian ] = "Ξςκπϋςό ρβεπυσ";
     Text[ greek ] = "Εμφάνιση από πάνω";
     Text[ dutch ] = "Vertonen vanaf boven";
@@ -7648,7 +7648,7 @@ String STR_EFFECT_DISCARD_FROM_UR
     Text = "Aufdecken von rechts oben" ;
     Text [ ENGLISH ] = "Discard from upper right" ;
     Text [ english_us ] = "Uncover From Upper Right" ;
-    Text[ portuguese ] = "Descobrir a partir do topo direito";
+    Text[ portuguese ] = "Tapar a partir do topo direito";
     Text[ russian ] = "Ξςκπϋςό ρβεπυσ ροπΰβΰ";
     Text[ greek ] = "Εμφάνιση από πάνω δεξιά";
     Text[ dutch ] = "Vertonen vanaf boven";
@@ -7675,7 +7675,7 @@ String STR_EFFECT_DISCARD_FROM_R
     Text [ norwegian ] = "Discard from right" ;
     Text [ italian ] = "Scopri da destra" ;
     Text [ portuguese_brazilian ] = "Descartar a partir da direita" ;
-    Text [ portuguese ] = "Descobrir a partir da direita" ;
+    Text [ portuguese ] = "Tapar a partir da direita" ;
     Text [ finnish ] = "Poista peite oikealta" ;
     Text [ danish ] = "Afdζk mod venstre" ;
     Text [ french ] = "Dιcouvrir ΰ partir de la droite" ;
@@ -7699,7 +7699,7 @@ String STR_EFFECT_DISCARD_FROM_LR
     Text = "Aufdecken von rechts unten" ;
     Text [ ENGLISH ] = "Discard from lower right" ;
     Text [ english_us ] = "Uncover From Lower Right" ;
-    Text[ portuguese ] = "Descobrir a partir da base direita";
+    Text[ portuguese ] = "Tapar a partir da base direita";
     Text[ russian ] = "Ξςκπϋςό ρνθησ ροπΰβΰ";
     Text[ greek ] = "Εμφάνιση από κάτω δεξιά";
     Text[ dutch ] = "Vertonen vanaf rechtsonder";
@@ -7726,7 +7726,7 @@ String STR_EFFECT_DISCARD_FROM_B
     Text [ norwegian ] = "Discard from bottom" ;
     Text [ italian ] = "Scopri dal basso" ;
     Text [ portuguese_brazilian ] = "Descartar a partir da base" ;
-    Text [ portuguese ] = "Descobrir a partir da base" ;
+    Text [ portuguese ] = "Tapar a partir da base" ;
     Text [ finnish ] = "Poista peite alhaalta" ;
     Text [ danish ] = "Afdζk opad" ;
     Text [ french ] = "Dιcouvrir ΰ partir du bas" ;
@@ -7750,7 +7750,7 @@ String STR_EFFECT_DISCARD_FROM_LL
     Text = "Aufdecken von links unten" ;
     Text [ ENGLISH ] = "Discard from lower left" ;
     Text [ english_us ] = "Uncover From Lower Left" ;
-    Text[ portuguese ] = "Descobrir a partir da base esquerda";
+    Text[ portuguese ] = "Tapar a partir da base esquerda";
     Text[ russian ] = "Ξςκπϋςό ρνθησ ρλεβΰ";
     Text[ greek ] = "Εμφάνιση από κάτω αριστερά";
     Text[ dutch ] = "Vertonen vanaf linksonder";
@@ -7775,7 +7775,7 @@ String STR_EFFECT_DISCARD_S_FROM_L
     Text = "Von links verkόrzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from left" ;
     Text [ english_us ] = "Uncover Object From Left" ;
-    Text[ portuguese ] = "Descobrir a partir da esquerda";
+    Text[ portuguese ] = "Tapar a partir da esquerda";
     Text[ russian ] = "Ξςκπϋςό β πΰμκε ξαϊεκςΰ ρλεβΰ";
     Text[ greek ] = "Σύντομη εμφάνιση από αριστερά";
     Text[ dutch ] = "Kort uitrollen vanaf links";
@@ -7800,7 +7800,7 @@ String STR_EFFECT_DISCARD_S_FROM_UL
     Text = "Von links oben verkόrzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from upper left" ;
     Text [ english_us ] = "Uncover Object From Upper Left" ;
-    Text[ portuguese ] = "Descobrir a partir do topo esquerdo";
+    Text[ portuguese ] = "Tapar a partir do topo esquerdo";
     Text[ russian ] = "Ξςκπϋςό β πΰμκε ξαϊεκςΰ ρλεβΰ ρβεπυσ";
     Text[ greek ] = "Σύντομη εμφάνιση από πάνω αριστερά";
     Text[ dutch ] = "Kort uitrollen vanaf linksboven";
@@ -7825,7 +7825,7 @@ String STR_EFFECT_DISCARD_S_FROM_T
     Text = "Von oben verkόrzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from top" ;
     Text [ english_us ] = "Uncover Object From Top" ;
-    Text[ portuguese ] = "Descobrir a partir do topo";
+    Text[ portuguese ] = "Tapar a partir do topo";
     Text[ russian ] = "Ξςκπϋςό β πΰμκε ξαϊεκςΰ ρβεπυσ";
     Text[ greek ] = "Σύντομη εμφάνιση από πάνω";
     Text[ dutch ] = "Kort uitrollen van bovenaf";
@@ -7850,7 +7850,7 @@ String STR_EFFECT_DISCARD_S_FROM_UR
     Text = "Von rechts oben verkόrzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from upper right" ;
     Text [ english_us ] = "Uncover Object From Upper Right" ;
-    Text[ portuguese ] = "Descobrir a partir do topo direito";
+    Text[ portuguese ] = "Tapar a partir do topo direito";
     Text[ russian ] = "Ξςκπϋςό β πΰμκε ξαϊεκςΰ ροπΰβΰ ρβεπυσ";
     Text[ greek ] = "Σύντομη εμφάνιση από πάνω δεξιά";
     Text[ dutch ] = "Kort uitrollen vanaf rechtsboven";
@@ -7875,7 +7875,7 @@ String STR_EFFECT_DISCARD_S_FROM_R
     Text = "Von rechts verkόrzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from right" ;
     Text [ english_us ] = "Uncover Object From Right" ;
-    Text[ portuguese ] = "Descobrir a partir da direita";
+    Text[ portuguese ] = "Tapar a partir da direita";
     Text[ russian ] = "Ξςκπϋςό β πΰμκε ξαϊεκςΰ ροπΰβΰ";
     Text[ greek ] = "Σύντομη εμφάνιση από δεξιά";
     Text[ dutch ] = "Kort uitrollen vanaf rechts";
@@ -7900,7 +7900,7 @@ String STR_EFFECT_DISCARD_S_FROM_LR
     Text = "Von rechts unten verkόrzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from lower right" ;
     Text [ english_us ] = "Uncover Object From Lower Right" ;
-    Text[ portuguese ] = "Descobrir a partir da base esquerda";
+    Text[ portuguese ] = "Tapar a partir da base esquerda";
     Text[ russian ] = "Ξςκπϋςό β πΰμκε ξαϊεκςΰ ροπΰβΰ ρνθησ";
     Text[ greek ] = "Σύντομη εμφάνιση από κάτω δεξιά";
     Text[ dutch ] = "Kort uitrollen vanaf rechtsonder";
@@ -7925,7 +7925,7 @@ String STR_EFFECT_DISCARD_S_FROM_B
     Text = "Von unten verkόrzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from bottom" ;
     Text [ english_us ] = "Uncover Object From Bottom" ;
-    Text[ portuguese ] = "Descobrir a partir da base";
+    Text[ portuguese ] = "Tapar a partir da base";
     Text[ russian ] = "Ξςκπϋςό β πΰμκε ξαϊεκςΰ ρνθησ";
     Text[ greek ] = "Σύντομη εμφάνιση από κάτω";
     Text[ dutch ] = "Kort uitrollen vanaf beneden";
@@ -7950,7 +7950,7 @@ String STR_EFFECT_DISCARD_S_FROM_LL
     Text = "Von links unten verkόrzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from lower left" ;
     Text [ english_us ] = "Uncover Object From Lower Left" ;
-    Text[ portuguese ] = "Descobrir a partir da base esquerda";
+    Text[ portuguese ] = "Tapar a partir da base esquerda";
     Text[ russian ] = "Ξςκπϋςό β πΰμκε ξαϊεκςΰ ρλεβΰ ρνθησ";
     Text[ greek ] = "Σύντομη εμφάνιση από κάτω αριστερά";
     Text[ dutch ] = "Kort uitrollen vanaf linksonder";
@@ -7977,7 +7977,7 @@ String STR_EFFECT_VERTICAL_STRIPES
     Text [ norwegian ] = "Vertikal blenden" ;
     Text [ italian ] = "Scopertura a veneziana verticale" ;
     Text [ portuguese_brazilian ] = "Vertikal blenden" ;
-    Text [ portuguese ] = "Esbater vertical" ;
+    Text [ portuguese ] = "Persiana vertical" ;
     Text [ finnish ] = "Hδivytδ pystytasossa" ;
     Text [ danish ] = "Fade lodret" ;
     Text [ french ] = "Fondu vertical" ;
@@ -8003,7 +8003,7 @@ String STR_EFFECT_HORIZONTAL_STRIPES
     Text [ norwegian ] = "Horizontal blenden" ;
     Text [ italian ] = "Scopertura a veneziana orizzontale" ;
     Text [ portuguese_brazilian ] = "Horizontal blenden" ;
-    Text [ portuguese ] = "Esbater na horizontal" ;
+    Text [ portuguese ] = "Persiana horizontal" ;
     Text [ finnish ] = "Hδivytδ vaakatasossa" ;
     Text [ danish ] = "Fade vandret" ;
     Text [ french ] = "Fondu horizontal" ;
@@ -8077,7 +8077,7 @@ String STR_EFFECT_VERTICAL_CHECKERBOARD
     Text = "Schachbrett vertikal" ;
     Text [ ENGLISH ] = "Vertical checkerboard";
     Text [ english_us ] = "Vertical Checkerboard";
-    Text[ portuguese ] = "Tabuleiro de xadrez vertical";
+    Text[ portuguese ] = "Xadrez vertical";
     Text[ russian ] = "Β ψΰυμΰςνξμ οξπÿδκε, βεπςθκΰλόνξ";
     Text[ greek ] = "Κατακόρυφη σκακιέρα";
     Text[ dutch ] = "Verticaal schaakbord";
@@ -8102,7 +8102,7 @@ String STR_EFFECT_HORIZONTAL_CHECKERBOARD
     Text = "Schachbrett horizontal" ;
     Text [ ENGLISH ] = "Horizontal checkerboard";
     Text [ english_us ] = "Horizontal Checkerboard";
-    Text[ portuguese ] = "Tabuleiro de xadrez horizontal";
+    Text[ portuguese ] = "Xadrez horizontal";
     Text[ russian ] = "Β ψΰυμΰςνξμ οξπÿδκε, γξπθηξνςΰλόνξ";
     Text[ greek ] = "Οριζόντια σκακιέρα";
     Text[ dutch ] = "Horizontaal schaakbord";
@@ -8129,7 +8129,7 @@ String STR_EFFECT_ROLL_FROM_L
     Text [ norwegian ] = "Roll from left" ;
     Text [ italian ] = "Scorri da sinistra" ;
     Text [ portuguese_brazilian ] = "Rolar a partir da esquerda" ;
-    Text [ portuguese ] = "Rolar a partir da esquerda" ;
+    Text [ portuguese ] = "Enrolar a partir da esquerda" ;
     Text [ finnish ] = "Vieritδ vasemmalta" ;
     Text [ danish ] = "Rul mod hψjre" ;
     Text [ french ] = "Rouler ΰ partir de la gauche" ;
@@ -8181,7 +8181,7 @@ String STR_EFFECT_ROLL_FROM_R
     Text [ norwegian ] = "Roll from right" ;
     Text [ italian ] = "Scorri da destra" ;
     Text [ portuguese_brazilian ] = "Rolar a partir da direita" ;
-    Text [ portuguese ] = "Rolar a partir da direita" ;
+    Text [ portuguese ] = "Enrolar a partir da direita" ;
     Text [ finnish ] = "Vieritδ oikealta" ;
     Text [ danish ] = "Rul mod venstre" ;
     Text [ french ] = "Rouler ΰ partir de la droite" ;
@@ -8337,7 +8337,7 @@ String STR_EFFECT_CLOCKWISE
     Text [ french ] = "Fondre dans le sens des aiguilles" ;
     Text [ swedish ] = "Tona medurs" ;
     Text [ danish ] = "Fade med uret" ;
-    Text [ portuguese ] = "Esbater no sentido dos ponteiros do relσgio" ;
+    Text [ portuguese ] = "No sentido dos ponteiros do relσgio" ;
     Text [ portuguese_brazilian ] = "Im Uhrzeigersinn blenden" ;
     Text[ chinese_simplified ] = "Λ³Κ±ΦΈΥλ·½ΟςÒώ³φ";
     Text[ russian ] = "Ηΰρλξνÿςό οξ χΰρξβξι ρςπελκε";
@@ -8362,11 +8362,11 @@ String STR_EFFECT_COUNTERCLOCKWISE
     Text [ dutch ] = "Tegen de wijzers van de klok bedekken" ;
     Text [ swedish ] = "Tona moturs" ;
     Text [ danish ] = "Fade mod uret" ;
-    Text [ portuguese ] = "Esbater no sentido contrαrio aos ponteiros do relσgio" ;
+    Text [ portuguese ] = "No sentido contrαrio aos ponteiros do relσgio" ;
     Text [ portuguese_brazilian ] = "Gegen den Uhrzeigersinn blenden" ;
     Text[ chinese_simplified ] = "ΔζΚ±ΦΈΥλ·½ΟςÒώ³φ";
     Text[ russian ] = "Ηΰρλξνÿςό οπξςθβ χΰρξβξι ρςπελκθ";
-    Text[ polish ] = "Ukryj niezgodnie z ruchem wskazσwek zegara";
+    Text[ polish ] = "Ukryj w kierunku przeciwnym do ruchu wskazσwek zegara";
     Text[ japanese ] = "”½v‰ρ‚θ‚Ιά²Μί";
     Text[ greek ] = "Αποχρωματισμός σύμφωνα με την αντίθετη φορά των δεικτών ωρολογίου";
     Text[ korean ] = "½Γ°θ Ήέ΄λ ΉζΗβΐΈ·Ξ Θε·ΑΑφ±β";
@@ -8394,7 +8394,7 @@ String STR_EFFECT_FADE_FROM_UL
     Text [ portuguese_brazilian ] = "Von links oben blenden" ;
     Text[ chinese_simplified ] = "΄ΣΧσΙΟ½ΗΦπ½¥Òώ³φ";
     Text[ russian ] = "Νΰολϋβ ρβεπυσ ρλεβΰ";
-    Text[ polish ] = "Przenikaj od lewej z gσry";
+    Text[ polish ] = "Przenikaj z lewej od gσry";
     Text[ japanese ] = "¶γ‚©‚ηά²Μί";
     Text[ greek ] = "Αποχρωματισμός από πάνω αριστερά";
     Text[ korean ] = "ΐ§ ΏήΒΚΏ΅Ό­ ³―ΎΖΏΐ±β";
@@ -8422,7 +8422,7 @@ String STR_EFFECT_FADE_FROM_UR
     Text [ portuguese_brazilian ] = "Von rechts oben blenden" ;
     Text[ chinese_simplified ] = "΄ΣΣÒΙΟ½ΗΦπ½¥Òώ³φ";
     Text[ russian ] = "Νΰολϋβ ρβεπυσ ροπΰβΰ";
-    Text[ polish ] = "Przenikaj od prawej z gσry";
+    Text[ polish ] = "Przenikaj z prawej od gσry";
     Text[ japanese ] = "‰Eγ‚©‚ηά²Μί";
     Text[ greek ] = "Αποχρωματισμός από πάνω δεξιά";
     Text[ korean ] = "ΐ§ ΏΐΈ¥ΒΚΏ΅Ό­ ³―ΎΖΏΐ±β";
@@ -8450,7 +8450,7 @@ String STR_EFFECT_FADE_FROM_LL
     Text [ portuguese_brazilian ] = "Von links unten blenden" ;
     Text[ chinese_simplified ] = "΄ΣΧσΟΒ½ΗΦπ½¥Òώ³φ";
     Text[ russian ] = "Νΰολϋβ ρνθησ ρλεβΰ";
-    Text[ polish ] = "Przenikaj od lewej z do³u";
+    Text[ polish ] = "Przenikaj z lewej od do³u";
     Text[ japanese ] = "¶‰Ί‚©‚ηά²Μί";
     Text[ greek ] = "Αποχρωματισμός από κάτω αριστερά";
     Text[ korean ] = "ΎΖ·΅ ΏήΒΚΏ΅Ό­ ³―ΎΖΏΐ±β";
@@ -8478,7 +8478,7 @@ String STR_EFFECT_FADE_FROM_LR
     Text [ portuguese_brazilian ] = "Von rechts unten blenden" ;
     Text[ chinese_simplified ] = "΄ΣΣÒΟΒ½ΗΦπ½¥Òώ³φ";
     Text[ russian ] = "Νΰολϋβ ρνθησ ροπΰβΰ";
-    Text[ polish ] = "Przenikaj od prawej z do³u";
+    Text[ polish ] = "Przenikaj z prawej od do³u";
     Text[ japanese ] = "‰E‰Ί‚©‚ηά²Μί";
     Text[ greek ] = "Αποχρωματισμός από κάτω δεξιά";
     Text[ korean ] = "ΎΖ·΅ ΏΐΈ¥ΒΚΏ΅Ό­ ³―ΎΖΏΐ±β";
@@ -8603,7 +8603,7 @@ String STR_EFFECT_PATH
     Text [ dutch ] = "Langs boog bewegen" ;
     Text [ swedish ] = "Flytta lδngs kurva" ;
     Text [ danish ] = "langs med kurven" ;
-    Text [ portuguese ] = "Mover ao longo da curva" ;
+    Text [ portuguese ] = "Deslocar ao longo da curva" ;
     Text [ portuguese_brazilian ] = "an Kurve entlang" ;
     Text[ chinese_simplified ] = "ΡΨΧΕΗϊΟί";
     Text[ russian ] = "Δβθζενθε οξ κπθβξι";
@@ -8622,7 +8622,7 @@ String STR_EFFECT_MOVE
     Text = "Bewegen" ;
     Text [ ENGLISH ] = "Move" ;
     Text[ english_us ] = "Move";
-    Text[ portuguese ] = "Mover";
+    Text[ portuguese ] = "Deslocar";
     Text[ russian ] = "Οεπεμεωΰςό";
     Text[ greek ] = "Μετακίνηση";
     Text[ dutch ] = "Bewegen";
@@ -8653,7 +8653,7 @@ String STR_EFFECT_MOVE_TO_L
     Text [ french ] = "Dιplacer vers la gauche" ;
     Text [ swedish ] = "Flytta till vδnster" ;
     Text [ danish ] = "Flyt mod venstre" ;
-    Text [ portuguese ] = "Mover para a esquerda" ;
+    Text [ portuguese ] = "Deslocar para a esquerda" ;
     Text [ portuguese_brazilian ] = "Nach links bewegen" ;
     Text[ chinese_simplified ] = "ΟςΧσÒΖ¶―";
     Text[ russian ] = "Οεπεμεωενθε βλεβξ";
@@ -8672,7 +8672,7 @@ String STR_EFFECT_MOVE_TO_UL
     Text = "Bewegen nach links oben" ;
     Text [ ENGLISH ] = "Move to upper left" ;
     Text [ english_us ] = "Move To Upper Left" ;
-    Text[ portuguese ] = "Mover para topo esquerdo";
+    Text[ portuguese ] = "Deslocar para topo esquerdo";
     Text[ russian ] = "Οεπεμεωενθε βλεβξ ββεπυ";
     Text[ greek ] = "Μετακίνηση προς τα πάνω αριστερά";
     Text[ dutch ] = "Naar linksboven bewegen";
@@ -8703,7 +8703,7 @@ String STR_EFFECT_MOVE_TO_T
     Text [ dutch ] = "Naar boven bewegen" ;
     Text [ swedish ] = "Flytta uppεt" ;
     Text [ danish ] = "Flyt opad" ;
-    Text [ portuguese ] = "Mover para cima" ;
+    Text [ portuguese ] = "Deslocar para cima" ;
     Text [ portuguese_brazilian ] = "Nach oben bewegen" ;
     Text[ chinese_simplified ] = "ΟςΙΟÒΖ¶―";
     Text[ russian ] = "Οεπεμεωενθε ββεπυ";
@@ -8722,7 +8722,7 @@ String STR_EFFECT_MOVE_TO_UR
     Text = "Bewegen nach rechts oben" ;
     Text [ ENGLISH ] = "Move to upper right" ;
     Text [ english_us ] = "Move To Upper Right" ;
-    Text[ portuguese ] = "Mover para topo direito";
+    Text[ portuguese ] = "Deslocar para topo direito";
     Text[ russian ] = "Οεπεμεωενθε βοπΰβξ ββεπυ";
     Text[ greek ] = "Μετακίνηση προς τα πάνω δεξιά";
     Text[ dutch ] = "Naar rechtsboven bewegen";
@@ -8753,7 +8753,7 @@ String STR_EFFECT_MOVE_TO_R
     Text [ dutch ] = "Naar rechts bewegen" ;
     Text [ swedish ] = "Flytta till hφger" ;
     Text [ danish ] = "Flyt mod hψjre" ;
-    Text [ portuguese ] = "Mover para a direita" ;
+    Text [ portuguese ] = "Deslocar para a direita" ;
     Text [ portuguese_brazilian ] = "Nach rechts bewegen" ;
     Text[ chinese_simplified ] = "ΟςΣÒÒΖ¶―";
     Text[ russian ] = "Οεπεμεωενθε βοπΰβξ";
@@ -8772,7 +8772,7 @@ String STR_EFFECT_MOVE_TO_LR
     Text = "Bewegen nach rechts unten" ;
     Text [ ENGLISH ] = "Move to lower right" ;
     Text [ english_us ] = "Move To Lower Right" ;
-    Text[ portuguese ] = "Mover para base direita";
+    Text[ portuguese ] = "Deslocar para base direita";
     Text[ russian ] = "Οεπεμεωενθε βοπΰβξ βνθη";
     Text[ greek ] = "Μετακίνηση προς τα κάτω δεξιά";
     Text[ dutch ] = "Bewegen naar rechtsonder";
@@ -8803,7 +8803,7 @@ String STR_EFFECT_MOVE_TO_B
     Text [ french ] = "Dιplacer vers le bas" ;
     Text [ swedish ] = "Flytta nedεt" ;
     Text [ danish ] = "Flyt nedad" ;
-    Text [ portuguese ] = "Mover para baixo" ;
+    Text [ portuguese ] = "Deslocar para baixo" ;
     Text [ portuguese_brazilian ] = "Nach unten bewegen" ;
     Text[ chinese_simplified ] = "ΟςΟΒÒΖ¶―";
     Text[ russian ] = "Οεπεμεωενθε βνθη";
@@ -8822,7 +8822,7 @@ String STR_EFFECT_MOVE_TO_LL
     Text = "Bewegen nach links unten" ;
     Text [ ENGLISH ] = "Move to lower left" ;
     Text [ english_us ] = "Move To Lower Left" ;
-    Text[ portuguese ] = "Mover para base esquerda";
+    Text[ portuguese ] = "Deslocar para base esquerda";
     Text[ russian ] = "Οεπεμεωενθε βλεβξ βνθη";
     Text[ greek ] = "Μετακίνηση προς τα κάτω αριστερά";
     Text[ dutch ] = "Bewegen naar linksonder";
@@ -8847,7 +8847,7 @@ String STR_EFFECT_MOVE_S_TO_L
     Text = "Verkόrzt bewegen nach links" ;
     Text [ ENGLISH ] = "Move short to left" ;
     Text [ english_us ] = "Move Object To Left" ;
-    Text[ portuguese ] = "Mover objecto para a esquerda";
+    Text[ portuguese ] = "Deslocar para a esquerda";
     Text[ russian ] = "Δβθζενθε θη πΰμκθ ξαϊεκςΰ βλεβξ";
     Text[ greek ] = "Σύντομη μετακίνηση προς τα αριστερά";
     Text[ dutch ] = "Kort naar links bewegen";
@@ -8872,7 +8872,7 @@ String STR_EFFECT_MOVE_S_TO_UL
     Text = "Verkόrzt bewegen nach links oben" ;
     Text [ ENGLISH ] = "Move short to upper left" ;
     Text [ english_us ] = "Move Object To Upper Left" ;
-    Text[ portuguese ] = "Mover objecto para topo esquerdo";
+    Text[ portuguese ] = "Deslocar para topo esquerdo";
     Text[ russian ] = "Δβθζενθε θη πΰμκθ ξαϊεκςΰ βλεβξ ββεπυ";
     Text[ greek ] = "Σύντομη μετακίνηση προς τα πάνω αριστερά";
     Text[ dutch ] = "Kort naar linksboven bewegen";
@@ -8897,7 +8897,7 @@ String STR_EFFECT_MOVE_S_TO_T
     Text = "Verkόrzt bewegen nach oben" ;
     Text [ ENGLISH ] = "Move short to top" ;
     Text [ english_us ] = "Move Object Upwards" ;
-    Text[ portuguese ] = "Mover objecto para o topo";
+    Text[ portuguese ] = "Deslocar para cima";
     Text[ russian ] = "Δβθζενθε θη πΰμκθ ξαϊεκςΰ ββεπυ";
     Text[ greek ] = "Σύντομη μετακίνηση προς τα πάνω";
     Text[ dutch ] = "Kort naar boven bewegen";
@@ -8922,7 +8922,7 @@ String STR_EFFECT_MOVE_S_TO_UR
     Text = "Verkόrzt bewegen nach rechts oben" ;
     Text [ ENGLISH ] = "Move short to upper right" ;
     Text [ english_us ] = "Move Object To Upper Right" ;
-    Text[ portuguese ] = "Mover objecto para topo direito";
+    Text[ portuguese ] = "Deslocar para topo direito";
     Text[ russian ] = "Δβθζενθε θη πΰμκθ ξαϊεκςΰ βοπΰβξ ββεπυ";
     Text[ greek ] = "Σύντομη μετακίνηση προς τα πάνω δεξιά";
     Text[ dutch ] = "Kort naar rechtsboven bewegen";
@@ -8947,7 +8947,7 @@ String STR_EFFECT_MOVE_S_TO_R
     Text = "Verkόrzt bewegen nach rechts" ;
     Text [ ENGLISH ] = "Move short to right" ;
     Text [ english_us ] = "Move Object To Right" ;
-    Text[ portuguese ] = "Mover objecto para a direita";
+    Text[ portuguese ] = "Deslocar para a direita";
     Text[ russian ] = "Δβθζενθε θη πΰμκθ ξαϊεκςΰ βοπΰβξ";
     Text[ greek ] = "Σύντομη μετακίνηση προς τα δεξιά";
     Text[ dutch ] = "Kort naar rechts bewegen";
@@ -8972,7 +8972,7 @@ String STR_EFFECT_MOVE_S_TO_LR
     Text = "Verkόrzt bewegen nach rechts unten" ;
     Text [ ENGLISH ] = "Move short to lower right" ;
     Text [ english_us ] = "Move Object To Lower Right" ;
-    Text[ portuguese ] = "Mover objecto para a base direita";
+    Text[ portuguese ] = "Deslocar para a base direita";
     Text[ russian ] = "Δβθζενθε θη πΰμκθ ξαϊεκςΰ βοπΰβξ βνθη";
     Text[ greek ] = "Σύντομη μετακίνηση προς τα κάτω δεξιά";
     Text[ dutch ] = "Kort naar rechtsonder bewegen";
@@ -8997,7 +8997,7 @@ String STR_EFFECT_MOVE_S_TO_B
     Text = "Verkόrzt bewegen nach unten" ;
     Text [ ENGLISH ] = "Move short to bottom" ;
     Text [ english_us ] = "Move Object Downwards" ;
-    Text[ portuguese ] = "Mover objecto para a base";
+    Text[ portuguese ] = "Deslocar para baixo";
     Text[ russian ] = "Δβθζενθε θη πΰμκθ ξαϊεκςΰ βνθη";
     Text[ greek ] = "Σύντομη μετακίνηση προς τα κάτω";
     Text[ dutch ] = "Kort naar beneden bewegen";
@@ -9022,7 +9022,7 @@ String STR_EFFECT_MOVE_S_TO_LL
     Text = "Verkόrzt bewegen nach links unten" ;
     Text [ ENGLISH ] = "Move short to lower left" ;
     Text [ english_us ] = "Move Object To Lower Left" ;
-    Text[ portuguese ] = "Mover objecto para a base esquerda";
+    Text[ portuguese ] = "Deslocar para a base esquerda";
     Text[ russian ] = "Δβθζενθε θη πΰμκθ ξαϊεκςΰ βλεβξ βνθη";
     Text[ greek ] = "Σύντομη μετακίνηση προς τα κάτω αριστερά";
     Text[ dutch ] = "Kort naar linksonder bewegen";
@@ -9563,7 +9563,7 @@ String STR_GENERAL_PUBLISHING_ERROR
     Text [ portuguese_brazilian ] = "Beim Speichern der Ver?fentlichung ist ein Fehler aufgetreten." ;
     Text[ chinese_simplified ] = "±£΄ζ·Ά±νΞΔΌώΚ±·ΆΙϊÒ»Έφ΄νΞσ΅£";
     Text[ russian ] = "Οπθ ρξυπΰνενθθ οσαλθκΰφθθ οπξθηξψλΰ ξψθακΰ.";
-    Text[ polish ] = "Przy zapisie publikacji wystΉpi³ b³Ήd.";
+    Text[ polish ] = "WystΉpi³ b³Ήd w trakcie zapisywania publikacji.";
     Text[ japanese ] = "”­•\\‚·‚ι‚ΰ‚Μ‚π•Ϋ‘¶‚·‚ιΫ‚Ι ΄Χ°‚ª”­¶‚µ‚ά‚µ‚½B";
     Text[ greek ] = "Παρουσιάστηκε σφάλμα κατά την αποθήκευση της δημοσίευσης.";
     Text[ korean ] = "°Τ½ΓΉ°ΐ» ΐϊΐεΗÒ ¶§ Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.";
@@ -9890,7 +9890,7 @@ String STR_EFFECT_RANDOM
     Text [ portuguese_brazilian ] = "Automatisch (Zufall)" ;
     Text[ chinese_simplified ] = "ΧΤ¶―(Λζ»ϊ)";
     Text[ russian ] = "ΐβςξμΰςθχερκθ (ρλσχΰινξ)";
-    Text[ polish ] = "Automatycznie (Przypadek)";
+    Text[ polish ] = "Automatycznie (przypadek)";
     Text[ japanese ] = "©“®(ΧέΐήΡ)";
     Text[ greek ] = "Αυτόματα (Τυχαία)";
     Text[ korean ] = "ΐΪµΏΐΈ·Ξ (ΐΣΐΗ)";
@@ -10341,7 +10341,7 @@ String STR_EFFECT_DISCARD
     Text [ french ] = "Dιcouvrir" ;
     Text [ swedish ] = "Tδck av" ;
     Text [ danish ] = "Afdζk" ;
-    Text [ portuguese ] = "Descobrir" ;
+    Text [ portuguese ] = "Tapar" ;
     Text [ portuguese_brazilian ] = "Aufdecken" ;
     Text[ chinese_simplified ] = "ΟΤΒ¶";
     Text[ russian ] = "Ξςκπϋςό";
@@ -10360,7 +10360,7 @@ String STR_EFFECT_DISCARD_SHORT
     Text = "Verkόrzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short" ;
     Text [ english_us ] = "Uncover Object" ;
-    Text[ portuguese ] = "Descobrir objecto";
+    Text[ portuguese ] = "Tapar objecto";
     Text[ russian ] = "Ξςκπϋςό β πΰμκε ξαϊεκςΰ";
     Text[ greek ] = "Σύντομη εμφάνιση";
     Text[ dutch ] = "Kort uitrollen";
@@ -10391,7 +10391,7 @@ String STR_EFFECT_FADE
     Text [ french ] = "Fondu" ;
     Text [ swedish ] = "Tona" ;
     Text [ danish ] = "Fade" ;
-    Text [ portuguese ] = "Esbater" ;
+    Text [ portuguese ] = "Descobrir" ;
     Text [ portuguese_brazilian ] = "Blenden" ;
     Text[ chinese_simplified ] = "ΟϋΚ§";
     Text[ russian ] = "Ηΰρλξνÿςό";
@@ -10586,7 +10586,7 @@ String STR_EFFECT_APPEAR
     Text = "Erscheinen";
     Text [ ENGLISH ] = "Appear" ;
     Text[ english_us ] = "Appear";
-    Text[ portuguese ] = "Descobrir";
+    Text[ portuguese ] = "Tapar";
     Text[ russian ] = "Οξÿβλενθε";
     Text[ dutch ] = "Verschijnen";
     Text[ french ] = "Dιcouvrir";
@@ -10964,7 +10964,7 @@ String STR_PUBLISH_NEXT
     Text [ ENGLISH ] = "Next" ;
     Text [ english_us ] = "Continue" ;
     Text [ italian ] = "Avanti" ;
-    Text [ spanish ] = "Avanzar" ;
+    Text [ spanish ] = "Continuar" ;
     Text [ french ] = "Suivant" ;
     Text [ dutch ] = "Volgende" ;
     Text [ swedish ] = "Fortsδtt" ;
@@ -11306,7 +11306,7 @@ String STR_ASK_GALLERY_INSERT
     Text [ dutch ] = "Wilt u het geluid opnemen in de gallery?" ;
     Text[ chinese_simplified ] = "ΔϊÒª½«ΥβΈφÒτΖµΌΣΘλ»­ΐΘ-ΦχΜβ£Ώ";
     Text[ russian ] = "Βϋ υξςθςε δξοξλνθςό Γΰλεπεώ ηβσκξμ?";
-    Text[ polish ] = "Czy chcesz dodaζ dwiκk do galerii?";
+    Text[ polish ] = "Czy dodaζ dwiκk do Galerii?";
     Text[ japanese ] = "»³έΔή‚π·ή¬ΧΨΓ°Ο‚Ι‘}“ό‚µ‚ά‚·‚©B";
     Text[ greek ] = "Θέλετε να εισαχθεί ο ήχος στο θέμα της Gallery;";
     Text[ korean ] = "»ηΏξµεΈ¦ °¶·―Έ® ΑΦΑ¦Ώ΅ Γί°΅ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -11333,7 +11333,7 @@ String STR_TWAIN_NO_SOURCE_UNX
     Text [ dutch ] = "Momenteel helaas geen SANE-bron beschikbaar." ;
     Text[ russian ] = "Β νΰρςξÿωθι μξμενς θρςξχνθκ SANE νεδξρςσοεν.";
     Text[ greek ] = "Δεν υπάρχει διαθέσιμη προέλευση SANE αυτή τη στιγμή.";
-    Text[ polish ] = "Nie jest narazie dostκpne rσd³o SANE.";
+    Text[ polish ] = "Nie jest na razie dostκpne Ώadne rσd³o SANE.";
     Text[ japanese ] = "SANE Ώ°½‚Ν‘ό΅g—p‚Ε‚«‚ά‚Ή‚ρB";
     Text[ korean ] = "Αφ±έΐΊ SANE ΌÒ½ΊΈ¦ »ηΏλΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ chinese_simplified ] = "µ±Η°Ξή·¨ΜαΉ©SANEΧΚΤ΄΅£";
@@ -11614,7 +11614,7 @@ String STR_RELEASE_GRAPHICLINK
     Text [ spanish ] = "La imagen estα vinculada al documento. ΏDesea usted deshacer el vνnculo para editar la imagen?" ;
     Text[ chinese_simplified ] = "ΥβΈφΝΌΠΞΚΗΊΝΞΔµµΑ΄½ΣµΔ΅£ΔϊÒªΘ΅ΟϋΥβΈφΑ΄½Σ£¬±ΰΌ­ΥβΈφΝΌΠΞΒπ£Ώ";
     Text[ russian ] = "έςξς πθρσνξκ ρρϋλΰεςρÿ νΰ δξκσμενς. Βϋ υξςθςε ρνÿςό ρρϋλκσ, χςξαϋ βϋοξλνθςό οπΰβκσ πθρσνκΰ?";
-    Text[ polish ] = "Ta grafika jest po³Ήczona z dokumentem. Czy chcesz usunΉζ to po³Ήczenie, by edytowaζ grafikκ?";
+    Text[ polish ] = "Grafika ta jest po³Ήczona z dokumentem. UsunΉζ po³Ήczenie w celu jej edycji?";
     Text[ japanese ] = "‚±‚Μ}‚ΝΔή·­ÒέΔ‚ΖΨέΈ‚³‚κ‚Δ‚Ά‚ά‚·B}‚Μ•ÒW‚π‚·‚ι‚½‚ί‚ΙAΨέΈ‚π‰π‚µ‚ά‚·‚©B";
     Text[ greek ] = "Το γραφικό αυτό είναι συνδεδεμένο με το έγγραφο. Θέλετε να καταργηθεί η σύνδεση για να επεξεργάσετε το γραφικό;";
     Text[ korean ] = "ΐΜ ±Χ·΅ΗΘΐΊ Ή®Ό­ΏΝ Ώ¬°αµΗΎξ ΐΦ½ΐ΄Ο΄Ω.±Χ·΅ΗΘ ΖνΑύΐ» ΐ§ΗΨ Ώ¬°αΐ» ΗΨΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
@@ -12017,7 +12017,7 @@ String STR_BREAK_FAIL
     Text[ english_us ] = "It was not possible to ungroup all drawing objects.";
     Text[ chinese_simplified ] = "Ξή·¨²πΏªΛωΣΠµΔΧΦ·ϋ¶ΤΟσ£΅";
     Text[ russian ] = "Νεβξημξζνξ πΰηγπσοοθπξβΰςό βρε γπΰτθχερκθε ξαϊεκςϋ!";
-    Text[ polish ] = "Nie moΏna by³o rozgrupowaζ wszystkich obiektσw graficznych!";
+    Text[ polish ] = "Nie uda³o siκ rozgrupowaζ wszystkich obiektσw graficznych!";
     Text[ japanese ] = "‚·‚Χ‚Δ‚Μ}`•`‰ζµΜήΌήªΈΔ‚Ν‰π‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
     Text[ greek ] = "Δεν ήταν δυνατόν να καταργηθεί η ομαδοποίηση όλων των αντικειμένων σχεδίασης!";
     Text[ korean ] = "±ΧΈ®±β °³ΓΌΈ¦ ΈπµΞ ±Χ·μΗΨΑ¦ΗΟΑφ΄Β ΈψΗί½ΐ΄Ο΄Ω!";
@@ -12042,9 +12042,9 @@ String STR_PUBDLG_SAMENAME
     Text[ dutch ] = "Er bestaat reeds een design met deze naam\nOverschrijven?";
     Text[ spanish ] = "Ya existe un diseρo con este nombre.\nΏDesea sobrescribirlo?";
     Text[ english_us ] = "A design already exists with this name.\nDo you want to replace it?";
-    Text[ chinese_simplified ] = "ÒΡΎ­ΣΠÒ»ΈφΝ¬ΓϋµΔΡωΚ½΅£\nΔϊÒªΈ²Π΄ΛόΒπ£Ώ";
+    Text[ chinese_simplified ] = "ÒΡΎ­ΣΠÒ»ΈφΝ¬ΓϋµΔΡωΚ½΅£\nÒªΈΔΠ΄£Ώ";
     Text[ russian ] = "Δθηΰιν ρ  ςΰκθμ θμενεμ σζε ρσωερςβσες\nΗΰμενθςό?";
-    Text[ polish ] = "Istnieje juΏ projekt o tej nazwie.\nCzy ma on zostaζ skasowany przez zapisanie?";
+    Text[ polish ] = "Istnieje juΏ projekt o tej nazwie.\nSkasowaζ go przez zapisanie?";
     Text[ japanese ] = "‚±‚Μ–Ό‘O‚ΜΓή»ή²έ‚Ν‚·‚Ε‚Ι‚ ‚θ‚ά‚·B\nγ‘‚«‚µ‚ά‚·‚©B";
     Text[ language_user1 ] = "θλθ: Δθηΰιν - - - -";
     Text[ greek ] = "Υπάρχει ήδη ένα σχέδιο με αυτό το όνομα.\nΘέλετε να αντικατασταθεί;";
@@ -12410,7 +12410,7 @@ String STR_HTMLEXP_NOFRAMES
     Text[ english_us ] = "Unfortunately your browser does not support floating frames.";
     Text[ chinese_simplified ] = "ΊάÒΕΊ¶£¬ΔϊµΔδ―ΐΐΖχ²»Φ§³ΦΏς¶ΤΟσ΅£";
     Text[ russian ] = "Κ ρξζΰλενθώ, Βΰψ απΰσηεπ νε οξδδεπζθβΰες κΰδπϋ";
-    Text[ polish ] = "PrzeglΉdarka stosowana przez uΏytkownika nie obs³uguje niestety ramek";
+    Text[ polish ] = "PrzeglΉdarka stosowana przez uΏytkownika nie obs³uguje niestety ramek.";
     Text[ japanese ] = "c”O‚Θ‚ª‚ηΥ°»ή°‚ΜΜήΧ³»ή‚ΝΜΪ°Ρ‚πx‰‡‚µ‚ά‚Ή‚ρ";
     Text[ greek ] = "Δυστηχώς, το πρόγραμμα ανάγνωσης ιστοσελίδων σας δεν υποστηρίζει πλαίσια";
     Text[ korean ] = "ΐ―°¨½Ί·΄°Τµµ »ηΏλΐΪΐΗ Ίκ¶σΏμΐϊ΄Β ΗΑ·ΉΐΣΐ» ΑφΏψΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
@@ -12803,7 +12803,7 @@ String STR_UNDO_APPLY_3D_FAVOURITE
     Text[ portuguese_brazilian ] = "Apply 3D favorite";
     Text[ japanese ] = "3D ‚π‚¨‹C‚Ι“ό‚θ‚Ι’Η‰Α";
     Text[ korean ] = "3£Δ Αρ°άΓ£±β ΐϋΏλ";
-    Text[ chinese_simplified ] = "ΚΉΣΓΘύΞ¬ΚΥ²Ψ";
+    Text[ chinese_simplified ] = "ΦΈ¶¨ΘύΞ¬ΚΥ²Ψ";
     Text[ chinese_traditional ] = "«ό©w 3D ³Μ·R";
     Text[ arabic ] = "ΚΨΘνή ΗαΞΥΗΖΥ ΛαΗΛνΙ ΗαΓΘΪΗΟ ΗαγυέΦαΙ";
     Text[ turkish ] = "Sύk kullanύlan 3B efekt uygula";
@@ -12857,7 +12857,7 @@ String STR_UNDO_GRAFFILTER
     Text[ japanese ] = "‰ζ‘Μ¨Ωΐ";
     Text[ korean ] = "±Χ·΅ΗΘ ΗΚΕΝ";
     Text[ chinese_simplified ] = "ΝΌΠΞΉύΒΛΖχ";
-    Text[ chinese_traditional ] = "ΉΟ§ΞΉLΒoΎΉ";
+    Text[ chinese_traditional ] = "ΉΟ§ΞΒΰ΄«ΎΉ";
     Text[ arabic ] = "έαΚΡ ΗαΡΣζγΗΚ";
     Text[ turkish ] = "Grafik filtresi";
     Text[ catalan ] = "Filtro de imagen";
@@ -12982,7 +12982,7 @@ String STR_HTMLEXP_ERROR_CREATE_FILE
     Text[ italian ] = "Non θ stato possibile creare il file $(URL1).";
     Text[ danish ] = "Det var ikke muligt at oprette filen $(URL1).";
     Text[ swedish ] = "Fil $(URL1) kunde inte skapas.";
-    Text[ polish ] = "Nie moΏna by³o utworzyζ pliku $(URL1).";
+    Text[ polish ] = "Utworzenie pliku $(URL1) nie powiod³o siκ.";
     Text[ portuguese_brazilian ] = "Cannot create the file $(URL1).";
     Text[ japanese ] = "Μ§²Ω $(URL1)‚Νμ¬‚Ε‚«‚ά‚Ή‚ρB";
     Text[ korean ] = "ΖΔΐΟ$(URL1)ΐ»(Έ¦) ΈΈµι Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
@@ -13007,7 +13007,7 @@ String STR_HTMLEXP_ERROR_OPEN_FILE
     Text[ italian ] = "Non θ stato possibile aprire il file $(URL1).";
     Text[ danish ] = "Det var ikke muligt at εbne filen $(URL1).";
     Text[ swedish ] = "Fil $(URL1) kunde inte φppnas.";
-    Text[ polish ] = "Nie moΏna by³o otworzyζ pliku $(URL1).";
+    Text[ polish ] = "Otwarcie pliku $(URL1) nie powiod³o siκ.";
     Text[ portuguese_brazilian ] = "Could not open the file $(URL1).";
     Text[ japanese ] = "Μ§²Ω $(URL1)‚ΝJ‚―‚η‚κ‚ά‚Ή‚ρB";
     Text[ korean ] = "ΖΔΐΟ$(URL1)ΐ»(Έ¦) Ώ­Αφ ΈψΗί½ΐ΄Ο΄Ω.";
@@ -13032,7 +13032,7 @@ String STR_HTMLEXP_ERROR_COPY_FILE
     Text[ italian ] = "Non θ stato possibile aprire il file $(URL1) secondo $(URL2)";
     Text[ danish ] = "Det var ikke muligt at kopiere filen $(URL1) til $(URL2).";
     Text[ swedish ] = "Filen $(URL1) kunde inte kopieras enligt $(URL2)";
-    Text[ polish ] = "Nie moΏna by³o skopiowaζ pliku $(URL1) do $(URL2).";
+    Text[ polish ] = "Przekopiowanie pliku $(URL1) do $(URL2) nie powiod³o siκ.";
     Text[ portuguese_brazilian ] = "The file $(URL1) could not be copied according to $(URL2)";
     Text[ japanese ] = "Μ§²Ω $(URL1) ‚Ν $(URL2) ‚Ι‚ζ‚θΊΛί°‚Ε‚«‚ά‚Ή‚ρ";
     Text[ korean ] = "ΖΔΐΟ$(URL1)ΐ»(Έ¦) $(URL2)·Ξ ΊΉ»ηΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
@@ -13057,7 +13057,7 @@ String STR_HTMLEXP_ERROR_GALLERY
     Text[ italian ] = "Si θ verificato un errore mentre venivano copiati i file grafici dalla Gallery.";
     Text[ danish ] = "Der opstod en fejl under kopiering af grafikfiler fra Gallery.";
     Text[ swedish ] = "Det uppstod ett fel vid kopieringen av grafikfiler frεn Gallery.";
-    Text[ polish ] = "WystΉpi³ b³Ήd w kopiowaniu plikσw graficznych z galerii.";
+    Text[ polish ] = "WystΉpi³ b³Ήd w kopiowaniu plikσw graficznych z Galerii.";
     Text[ portuguese_brazilian ] = "Error while copying graphic filese from the Gallery.";
     Text[ japanese ] = "·ή¬ΧΨ‚©‚η‰ζ‘Μ§²Ω‚ΜΊΛί°’†‚ΙA΄Χ°‚ª”­¶‚µ‚ά‚µ‚½B";
     Text[ korean ] = "°¶·―Έ®Ώ΅Ό­ ±Χ·΅ΗΘ ΖΔΐΟΐ» ΊΉ»ηΗÒ ¶§ Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.";
@@ -13164,7 +13164,7 @@ String STR_GRAFCROP
     Text[ portuguese_brazilian ] = "Crop";
     Text[ japanese ] = "ΔΨΠέΈή";
     Text[ korean ] = "΄Ωµλ±β";
-    Text[ chinese_simplified ] = "ΌτΗΠ";
+    Text[ chinese_simplified ] = "²ΓΌτ";
     Text[ chinese_traditional ] = "µτ°Ε";
     Text[ turkish ] = "Crop";
     Text[ arabic ] = "ΗήΚΥΗΥ";
@@ -13371,6 +13371,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Lδpikuultavuus";
 };
+
 
 
 
