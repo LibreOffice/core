@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:00:30 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 15:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ import java.io.*;
  *  files. That provides the possibility to overwrite
  *  config values via command line parameter.
  *
- *  @author Andreas Schlüns
+ *
  */
 public class ConfigHelper extends java.util.Properties
 {
@@ -161,7 +161,7 @@ public class ConfigHelper extends java.util.Properties
                 continue;
             }
 
-            // There ís an unknown format used by this argument ...
+            // There is an unknown format used by this argument ...
             throw new MalformedCommandLineException("Invalid command line detected. The argument \""+lCommandLineArgs[arg]+"\" use an unsupported format.");
         }
     }
