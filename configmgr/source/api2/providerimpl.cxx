@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-17 15:02:27 $
+ *  last change: $Author: lla $ $Date: 2001-01-18 14:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::updateTree(TreeChangeList& aChanges) throw (lang::WrappedTargetException, uno::RuntimeException)
+    void OProviderImpl::updateTree(TreeChangeList& aChanges) throw (uno::Exception)
     {
         m_pTreeMgr->updateTree(aChanges);
     }
