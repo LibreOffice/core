@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:50:34 $
+ *  last change: $Author: vg $ $Date: 2001-07-20 20:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1158,7 +1158,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ italian ] = "Testo alternativo" ;
         Text [ spanish ] = "Texto alternativo" ;
         Text [ french ] = "Texte (facultatif)" ;
-        Text [ dutch ] = "Alternatieve tekst:" ;
+        Text [ dutch ] = "~Alternatieve tekst" ;
         Text [ swedish ] = "~Alternativtext" ;
         Text [ danish ] = "Alternativtekst:" ;
         Text [ portuguese_brazilian ] = "Alternativtext:" ;
@@ -1190,7 +1190,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "~URL" ;
         Text [ English ] = "~URL Text" ;
-        Text [ dutch ] = "URL:" ;
+        Text [ dutch ] = "~URL" ;
         Text [ english_us ] = "~URL" ;
         Text [ italian ] = "URL" ;
         Text [ spanish ] = "URL" ;
@@ -1274,7 +1274,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ italian ] = "Frame" ;
         Text [ spanish ] = "Frame" ;
         Text [ french ] = "Frame" ;
-        Text [ dutch ] = "Frame:" ;
+        Text [ dutch ] = "~Frame" ;
         Text [ portuguese ] = "~Frame" ;
         Text[ chinese_simplified ] = "¿ò(~R)";
         Text[ russian ] = "Êàäð";
@@ -1313,7 +1313,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ italian ] = "Nome" ;
         Text [ spanish ] = "Nombre" ;
         Text [ french ] = "Nom" ;
-        Text [ dutch ] = "Naam:" ;
+        Text [ dutch ] = "~Naam" ;
         Text[ chinese_simplified ] = "Ãû³Æ(~N)";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
@@ -1409,6 +1409,7 @@ String STR_IMAPDLG_MODIFY
     Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
 };
 /******************************************************************************/
+
 
 
 
