@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-08 12:21:40 $
+ *  last change: $Author: obo $ $Date: 2000-12-08 12:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
             }
             else
-                throw (NoSuchElementException());
+                throw NoSuchElementException();
             nOldIndex = nIndex+1;
         }
     }
@@ -386,7 +386,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 xCurrent = Reference < XNameContainer > (xChildRef, UNO_QUERY);
             }
             else
-                throw (NoSuchElementException());
+                throw NoSuchElementException();
 
             nOldIndex = nIndex+1;
         }
@@ -394,7 +394,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         if (xCurrent->hasByName(sStreamName))
             aAny <<= xCurrent->getByName(sStreamName);
         else
-            throw (NoSuchElementException());
+            throw NoSuchElementException();
     }
     return aAny;
 }
