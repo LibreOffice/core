@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-27 16:22:04 $
+ *  last change: $Author: cmc $ $Date: 2002-04-16 17:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,12 +205,18 @@ int SvRTFParser::_GetNextToken()
                             if( 0 <= nTokenValue )
                             {
                                 nUCharOverread = (BYTE)nTokenValue;
+#if 1
+                                //cmc: other ifdef breaks #i3584
+                                aParserStates[ aParserStates.Count()-1].
+                                    nUCharOverread = nUCharOverread;
+#else
                                 if( !nUCharOverread )
                                     nUCharOverread = aParserStates[
                                         aParserStates.Count()-1].nUCharOverread;
                                 else
                                     aParserStates[ aParserStates.Count()-1].
                                         nUCharOverread = nUCharOverread;
+#endif
                             }
                             // read next token
                             nRet = 0;
