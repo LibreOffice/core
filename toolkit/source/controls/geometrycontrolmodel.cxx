@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-08 16:44:03 $
+ *  last change: $Author: tbe $ $Date: 2001-03-22 15:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #define GCM_PROPERTY_ID_TABINDEX    6
 #define GCM_PROPERTY_ID_STEP        7
 #define GCM_PROPERTY_ID_TAG         8
+#define GCM_PROPERTY_ID_HELPTEXT    9
 
 #define GCM_PROPERTY_POS_X      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"))
 #define GCM_PROPERTY_POS_Y      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"))
@@ -97,6 +98,7 @@
 #define GCM_PROPERTY_TABINDEX   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex"))
 #define GCM_PROPERTY_STEP       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Step"))
 #define GCM_PROPERTY_TAG        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tag"))
+#define GCM_PROPERTY_HELPTEXT   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpText"))
 
 #define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
@@ -128,6 +130,7 @@
         ,m_nTabIndex(0)
         ,m_nStep(0)
         ,m_aTag(::rtl::OUString())
+        ,m_aHelpText(::rtl::OUString())
     {
         OSL_ENSURE(NULL != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
 
@@ -187,6 +190,7 @@
         registerProperty(GCM_PROPERTY_TABINDEX, GCM_PROPERTY_ID_TABINDEX,   DEFAULT_ATTRIBS(), &m_nTabIndex, ::getCppuType(&m_nTabIndex));
         registerProperty(GCM_PROPERTY_STEP,     GCM_PROPERTY_ID_STEP,       DEFAULT_ATTRIBS(), &m_nStep, ::getCppuType(&m_nStep));
         registerProperty(GCM_PROPERTY_TAG,      GCM_PROPERTY_ID_TAG,        DEFAULT_ATTRIBS(), &m_aTag, ::getCppuType(&m_aTag));
+        registerProperty(GCM_PROPERTY_HELPTEXT, GCM_PROPERTY_ID_HELPTEXT,   DEFAULT_ATTRIBS(), &m_aHelpText, ::getCppuType(&m_aHelpText));
     }
 
     //--------------------------------------------------------------------
@@ -204,6 +208,7 @@
             case GCM_PROPERTY_ID_TABINDEX:      aDefault <<= (sal_Int16) 0; break;
             case GCM_PROPERTY_ID_STEP:          aDefault <<= (sal_Int32) 0; break;
             case GCM_PROPERTY_ID_TAG:           aDefault <<= ::rtl::OUString(); break;
+            case GCM_PROPERTY_ID_HELPTEXT:      aDefault <<= ::rtl::OUString(); break;
             default:                            DBG_ERROR( "ImplGetDefaultValueByHandle - unknown Property" );
         }
 
@@ -225,6 +230,7 @@
             case GCM_PROPERTY_ID_TABINDEX:      aValue <<= m_nTabIndex; break;
             case GCM_PROPERTY_ID_STEP:          aValue <<= m_nStep; break;
             case GCM_PROPERTY_ID_TAG:           aValue <<= m_aTag; break;
+            case GCM_PROPERTY_ID_HELPTEXT:      aValue <<= m_aHelpText; break;
             default:                            DBG_ERROR( "ImplGetPropertyValueByHandle - unknown Property" );
         }
 
@@ -244,6 +250,7 @@
             case GCM_PROPERTY_ID_TABINDEX:      aValue >>= m_nTabIndex; break;
             case GCM_PROPERTY_ID_STEP:          aValue >>= m_nStep; break;
             case GCM_PROPERTY_ID_TAG:           aValue >>= m_aTag; break;
+            case GCM_PROPERTY_ID_HELPTEXT:      aValue >>= m_aHelpText; break;
             default:                            DBG_ERROR( "ImplSetPropertyValueByHandle - unknown Property" );
         }
     }
@@ -392,6 +399,7 @@
         pOwnClone->m_nTabIndex  = m_nTabIndex;
         pOwnClone->m_nStep      = m_nStep;
         pOwnClone->m_aTag       = m_aTag;
+        pOwnClone->m_aHelpText  = m_aHelpText;
 
         return pOwnClone;
     }
@@ -411,6 +419,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/08 16:44:03  tbe
+ *  OPropertyStateHelper overridables
+ *
  *  Revision 1.6  2001/03/07 14:27:23  tbe
  *  added step and tag property
  *
