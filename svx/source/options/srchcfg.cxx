@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchcfg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-03-20 10:29:20 $
+ *  last change: $Author: os $ $Date: 2001-03-30 13:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ sal_Bool SvxSearchEngineData::operator==(const SvxSearchEngineData& rData)
 /* -----------------------------16.01.01 15:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-const Sequence<OUString>& lcl_GetPropertyNames()
+const Sequence<OUString>& lcl_GetSearchPropertyNames_Impl()
 {
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
@@ -148,7 +148,7 @@ SvxSearchConfig::SvxSearchConfig(sal_Bool bEnableNotify) :
     pImpl(new SvxSearchConfig_Impl)
 {
     if(bEnableNotify)
-        EnableNotification(lcl_GetPropertyNames());
+        EnableNotification(lcl_GetSearchPropertyNames_Impl());
     Load();
 }
 /* -----------------------------16.01.01 15:36--------------------------------
@@ -170,7 +170,7 @@ void SvxSearchConfig::Load()
     {
         SvxSearchEngineDataPtr pNew = new SvxSearchEngineData;
         pNew->sEngineName = pNodeNames[nNode];
-        const Sequence<OUString>& rPropNames = lcl_GetPropertyNames();
+        const Sequence<OUString>& rPropNames = lcl_GetSearchPropertyNames_Impl();
         const OUString* pPropNames = rPropNames.getConstArray();
         Sequence<OUString> aPropertyNames(rPropNames.getLength());
         OUString* pPropertyNames = aPropertyNames.getArray();
@@ -228,7 +228,7 @@ void SvxSearchConfig::Commit()
         PropertyValue* pSetValues = aSetValues.getArray();
         sal_Int32 nSetValue = 0;
 
-        const Sequence<OUString>& rPropNames = lcl_GetPropertyNames();
+        const Sequence<OUString>& rPropNames = lcl_GetSearchPropertyNames_Impl();
         const OUString* pPropNames = rPropNames.getConstArray();
         const OUString sSlash(C2U("/"));
         for(sal_uInt16 i = 0; i < pImpl->aEngineArr.Count(); i++)
