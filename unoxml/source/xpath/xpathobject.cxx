@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpathobject.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:32:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,41 +72,41 @@ namespace XPath
         {
         case XPATH_UNDEFINED:
             m_xPathObjectType = XPathObjectType_XPATH_UNDEFINED;
-            break;                
+            break;
         case XPATH_NODESET:
             m_xPathObjectType = XPathObjectType_XPATH_NODESET;
-            break;                
+            break;
         case XPATH_BOOLEAN:
             m_xPathObjectType = XPathObjectType_XPATH_BOOLEAN;
-            break;                
+            break;
         case XPATH_NUMBER:
             m_xPathObjectType = XPathObjectType_XPATH_NUMBER;
-            break;                
+            break;
         case XPATH_STRING:
             m_xPathObjectType = XPathObjectType_XPATH_STRING;
-            break;                
+            break;
         case XPATH_POINT:
             m_xPathObjectType = XPathObjectType_XPATH_POINT;
-            break;                
+            break;
         case XPATH_RANGE:
             m_xPathObjectType = XPathObjectType_XPATH_RANGE;
-            break;                
+            break;
         case XPATH_LOCATIONSET:
             m_xPathObjectType = XPathObjectType_XPATH_LOCATIONSET;
-            break;                
+            break;
         case XPATH_USERS:
             m_xPathObjectType = XPathObjectType_XPATH_USERS;
-            break;                
+            break;
         case XPATH_XSLT_TREE:
             m_xPathObjectType = XPathObjectType_XPATH_XSLT_TREE;
             break;
         default:
             m_xPathObjectType = XPathObjectType_XPATH_UNDEFINED;
-            break;                   
+            break;
         }
     }
-        
-    /**      
+
+    /**
         get object type
     */
     XPathObjectType CXPathObject::getObjectType() throw (RuntimeException)
@@ -121,7 +121,7 @@ namespace XPath
     {
         return Reference< XNodeList >(new CNodeList(m_pXPathObj));
     }
-    
+
      /**
         get value of a boolean object
      */
@@ -186,6 +186,6 @@ namespace XPath
         const sal_Char* x1 = (sal_Char*) xmlXPathCastToString(m_pXPathObj);
         return OUString(x1, strlen(x1), RTL_TEXTENCODING_UTF8);
     }
-    
+
 }
 
