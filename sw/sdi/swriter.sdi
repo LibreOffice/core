@@ -9564,4 +9564,30 @@ SvxBrushItem TableBackground SID_ATTR_BRUSH_TABLE
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
+//--------------------------------------------------------------------------
+SfxBoolItem RowSplit FN_TABLE_ROW_SPLIT
+
+[
+        /* flags: */
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = TRUE,
+        Container = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        Synchron;
+
+        Readonly = FALSE,
+
+        /* config: */
+        AccelConfig = TRUE,
+        MenuConfig = TRUE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = TRUE,
+        GroupId = GID_FORMAT;
+]
 
