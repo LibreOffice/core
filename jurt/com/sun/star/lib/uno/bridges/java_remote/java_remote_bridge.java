@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jbu $ $Date: 2002-06-25 07:08:59 $
+ *  last change: $Author: sb $ $Date: 2002-09-17 14:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -132,7 +132,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.25 $ $ $Date: 2002-06-25 07:08:59 $
+ * @version     $Revision: 1.26 $ $ $Date: 2002-09-17 14:58:52 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -832,27 +832,28 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         return _iProtocol.getName() + "," + _xConnection.getDescription();
     }
 
-
     public void sendReply(boolean exception, ThreadId threadId, Object result) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".sendReply:" + exception + " " + result);
+        if (DEBUG) {
+            System.err.println("##### " + getClass().getName() + ".sendReply: "
+                               + exception + " " + result);
+        }
 
-        if(_disposed) throw new DisposedException(
-            "java_remote_bridge(" + this + ").sendReply - is disposed");
+        // FIXME  _disposed read outside of synchronized block
+        if (_disposed) {
+            throw new DisposedException("java_remote_bridge(" + this
+                                        + ").sendReply - is disposed");
+        }
 
-        synchronized(_outputStream) {
-            _iProtocol.writeReply(exception, threadId, result);
-            try {
+        try {
+            synchronized (_outputStream) {
+                _iProtocol.writeReply(exception, threadId, result);
                 _iProtocol.flush(_outputStream);
                 _outputStream.flush();
             }
-            catch(IOException iOException) {
-                DisposedException disposedException = new DisposedException(
-                    getClass().getName() + ".sendReply - unexpected:" + iOException);
-                dispose(disposedException);
-
-                throw disposedException;
-            }
-
+        } catch (Exception e) {
+            dispose(e);
+            throw new DisposedException(getClass().getName()
+                                        + ".sendReply - unexpected: " + e);
         }
     }
 
@@ -932,4 +933,3 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         _stableListeners.removeElement(stableListener);
     }
 }
-
