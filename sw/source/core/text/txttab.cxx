@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
         // Tabs mit Fuellung
         XubString aTxt( cFill );
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ASSERT( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
 #endif
         // robust:
