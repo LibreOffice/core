@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-03 16:23:41 $
+ *  last change: $Author: hdu $ $Date: 2002-05-07 16:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,17 +180,23 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         ; //TODO
 
     DWORD nRC;
-    if ( aSalShlData.mbWNT )
+    if( aSalShlData.mbWNT )
     {
         nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
                     mnGlyphCount, rArgs.mnLayoutWidth, &aGCP, nGcpOption );
     }
     else
     {
-        UniString  aUStr( rArgs.mpStr + rArgs.mnFirstCharIndex, mnGlyphCount );
-        ByteString aBStr = ImplSalGetWinAnsiString( aUStr );
+        // convert into ANSI code page
+        int nMBLen = WideCharToMultiByte( CP_ACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
+            mnGlyphCount, NULL, 0, NULL, NULL );
+        if( (nMBLen <= 0) || (nMBLen >= 8 * mnGlyphCount) )
+            return false;
+        char* pMBStr = (char*)alloca( nMBLen );
+        WideCharToMultiByte( CP_ACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
+            mnGlyphCount, pMBStr, nMBLen, NULL, NULL );
         // note: because aGCP.lpOutString==NULL GCP_RESULTSA is compatible with GCP_RESULTSW
-        nRC = ::GetCharacterPlacementA( mhDC, aBStr.GetBuffer(), aBStr.Len(),
+        nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     rArgs.mnLayoutWidth, (GCP_RESULTSA*)&aGCP, nGcpOption );
     }
 
@@ -234,7 +240,8 @@ bool SimpleWinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyP
     {
         // get outline of individual glyph
         PolyPolygon aGlyphOutline;
-        bRet |= rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], aGlyphOutline );
+        if( rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], aGlyphOutline ) )
+            bRet = true;
 
         // insert outline at correct position
         aGlyphOutline.Move( nWidth, 0 );
