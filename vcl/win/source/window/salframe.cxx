@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-22 14:15:50 $
+ *  last change: $Author: th $ $Date: 2001-07-25 15:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,13 @@
 #endif
 
 #define _SV_SALFRAME_CXX
+
+#ifndef _RTL_STRING_H_
+#include <rtl/string.h>
+#endif
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -1946,13 +1953,18 @@ static void ImplSalUpdateStyleFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rF
 {
     ImplSalLogFontToFontA( hDC, rLogFont, rFont, bReplaceFont );
 
-    // Da bei einigen Windows-Einstellungen 6 Punkt eingetragen ist,
-    // obwohl im Dialog 8 Punkt angezeigt werden (da MS Sans Serif
-    // nicht skalierbar ist) vergroessern wir hier das als Hack, da
-    // ansonsten in russisch Symbolunterschriften nicht lesbar sind
-    if ( (rFont.GetName().EqualsIgnoreCaseAscii( "MS Sans Serif" ) ) &&
-         (rFont.GetHeight() < 8) )
-        rFont.SetHeight( 8 );
+    // On Windows 9x, Windows NT we get sometimes very small sizes
+    // (for example for the small Caption height).
+    // So if it is MS Sans Serif, a none scalable font we use
+    // 8 Point as the minimum control height, in all other cases
+    // 6 Point is the smallest one
+    if ( rFont.GetHeight() < 8 )
+    {
+        if ( rtl_str_compareIgnoreAsciiCase( rLogFont.lfFaceName, "MS Sans Serif" ) == 0 )
+            rFont.SetHeight( 8 );
+        else if ( rFont.GetHeight() < 6 )
+            rFont.SetHeight( 6 );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1962,13 +1974,18 @@ static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rF
 {
     ImplSalLogFontToFontW( hDC, rLogFont, rFont, bReplaceFont );
 
-    // Da bei einigen Windows-Einstellungen 6 Punkt eingetragen ist,
-    // obwohl im Dialog 8 Punkt angezeigt werden (da MS Sans Serif
-    // nicht skalierbar ist) vergroessern wir hier das als Hack, da
-    // ansonsten in russisch Symbolunterschriften nicht lesbar sind
-    if ( (rFont.GetName().EqualsIgnoreCaseAscii( "MS Sans Serif" ) ) &&
-         (rFont.GetHeight() < 8) )
-        rFont.SetHeight( 8 );
+    // On Windows 9x, Windows NT we get sometimes very small sizes
+    // (for example for the small Caption height).
+    // So if it is MS Sans Serif, a none scalable font we use
+    // 8 Point as the minimum control height, in all other cases
+    // 6 Point is the smallest one
+    if ( rFont.GetHeight() < 8 )
+    {
+        if ( rtl_ustr_compareIgnoreAsciiCase( rLogFont.lfFaceName, L"MS Sans Serif" ) == 0 )
+            rFont.SetHeight( 8 );
+        else if ( rFont.GetHeight() < 6 )
+            rFont.SetHeight( 6 );
+    }
 }
 
 // -----------------------------------------------------------------------
