@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConditionalText.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 09:40:46 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@ service ConditionalText
      restore the result without initiation of a new evaluation.</p>
      */
     [property] boolean IsConditionTrue;
+    /** contains the current content of the text field.
+                <p> This property is escpecially usefull for import/export purposes. </p>
+         */
+    [optional, property]string CurrentPresentation;
 };
 
 //=============================================================================
