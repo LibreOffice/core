@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpmread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:18:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
             {
                 mnIdentifier = XPMCOLORS;
 
-                // mpColMap beinhaltet für jede vorhandene
+                // mpColMap beinhaltet fuer jede vorhandene
                 // Farbe:   ( mnCpp )Byte(s)-> ASCII Eintrag der der Farbe zugeordnet ist
                 //              1    Byte   -> 0xff wenn Farbe transparent ist
                 //              3    Bytes  -> RGB Wert der Farbe
@@ -261,8 +261,8 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 #endif
 
 // ------------------------------------------------------------------------
-// ImplGetColor ermittelt sämtliche Farbwerte,
-// die Rückgabe ist TRUE wenn sämtliche Farben zugeordnet werden konnten
+// ImplGetColor ermittelt saemtliche Farbwerte,
+// die Rueckgabe ist TRUE wenn saemtliche Farben zugeordnet werden konnten
 
 BOOL XPMReader::ImplGetColor( ULONG nNumb )
 {
@@ -346,9 +346,9 @@ BOOL XPMReader::ImplGetScanLine( ULONG nY )
 }
 
 // ------------------------------------------------------------------------
-// versucht aus mpStringBuf einen Farbwert zu übermitteln
+// versucht aus mpStringBuf einen Farbwert zu uebermitteln
 // wurde eine Farbe gefunden wird an pDest[1]..pDest[2] der RGB wert geschrieben
-// pDest[0] enthält 0xff wenn die Farbe transparent ist sonst 0
+// pDest[0] enthaelt 0xff wenn die Farbe transparent ist sonst 0
 
 BOOL XPMReader::ImplGetColSub( BYTE* pDest )
 {
@@ -415,7 +415,7 @@ BOOL XPMReader::ImplGetColSub( BYTE* pDest )
 
 // ------------------------------------------------------------------------
 // ImplGetColKey durchsuch den String mpStringBuf nach einem Parameter 'nKey'
-// und gibt einen BOOL zurück. ( wenn TRUE werden mpPara und mnParaSize gesetzt )
+// und gibt einen BOOL zurueck. ( wenn TRUE werden mpPara und mnParaSize gesetzt )
 
 BOOL XPMReader::ImplGetColKey( BYTE nKey )
 {
@@ -458,9 +458,9 @@ BOOL XPMReader::ImplGetColKey( BYTE nKey )
 }
 
 // ------------------------------------------------------------------------
-// ImplGetRGBHex übersetzt den ASCII-Hexadezimalwert der sich bei mpPara befindet
+// ImplGetRGBHex uebersetzt den ASCII-Hexadezimalwert der sich bei mpPara befindet
 // in einen RGB wert und schreibt diesen nach pDest
-// folgende Formate müssen sich bei mpPara befinden:
+// folgende Formate muessen sich bei mpPara befinden:
 // wenn nAdd = 0 : '#12ab12'                    -> RGB = 0x12, 0xab, 0x12
 //             2 : '#1234abcd1234'                  "      "     "     "
 //             6 : '#12345678abcdefab12345678'      "      "     "     "
@@ -488,7 +488,7 @@ void XPMReader::ImplGetRGBHex( BYTE* pDest,ULONG  nAdd )
 }
 
 // ------------------------------------------------------------------------
-// ImplGetUlong gibt den wert einer bis zu 6stelligen ASCII-Dezimalzahl zurück.
+// ImplGetUlong gibt den wert einer bis zu 6stelligen ASCII-Dezimalzahl zurueck.
 
 ULONG XPMReader::ImplGetULONG( ULONG nPara )
 {
@@ -544,7 +544,7 @@ BOOL XPMReader::ImplCompare( BYTE* pSource, BYTE* pDest, ULONG nSize, ULONG nMod
 // ------------------------------------------------------------------------
 // ImplGetPara versucht den nNumb  ( 0...x ) Parameter aus mpStringBuf zu ermitteln.
 // Ein Parameter ist durch Spaces oder Tabs von den anderen getrennt.
-// Konnte der Parameter gefunden werden ist der Rückgabewert TRUE und mpPara + mnParaSize
+// Konnte der Parameter gefunden werden ist der Rueckgabewert TRUE und mpPara + mnParaSize
 // werden gesetzt.
 
 BOOL XPMReader::ImplGetPara ( ULONG nNumb )
@@ -598,9 +598,9 @@ BOOL XPMReader::ImplGetPara ( ULONG nNumb )
 }
 
 // ------------------------------------------------------------------------
-// Der nächste String wird ausgelesen und in mpStringBuf (mit 0 abgeschloßen) abgelegt;
-// mnStringSize enthält die Größe des gelesenen Strings.
-// Bemerkungen wie '//' und '/*.....*/' werden übersprungen.
+// Der naechste String wird ausgelesen und in mpStringBuf (mit 0 abgeschlossen) abgelegt;
+// mnStringSize enthaelt die Groesse des gelesenen Strings.
+// Bemerkungen wie '//' und '/*.....*/' werden uebersprungen.
 
 BOOL XPMReader::ImplGetString( void )
 {
