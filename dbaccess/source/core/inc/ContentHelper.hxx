@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:59:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@
 
 namespace dbaccess
 {
-    class ODatabaseSource;
+    class ODatabaseModelImpl;
     struct ContentProperties
     {
         ::rtl::OUString aTitle;         // Title
@@ -151,7 +151,7 @@ namespace dbaccess
         virtual ~OContentHelper_Impl();
 
         ContentProperties   m_aProps;
-        ODatabaseSource*    m_pDataSource; // this will stay alive as long as the content exists
+        ODatabaseModelImpl* m_pDataSource; // this will stay alive as long as the content exists
     };
 
     typedef ::boost::shared_ptr<OContentHelper_Impl> TContentPtr;
