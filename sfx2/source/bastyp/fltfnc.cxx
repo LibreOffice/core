@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-19 09:12:12 $
+ *  last change: $Author: mba $ $Date: 2001-03-19 09:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1287,7 +1287,10 @@ sal_uInt32 SfxFactoryFilterContainer::GetFilter4Content(
         return nErr;
     }
     else
+    {
+        DBG_ERROR( "No DetectFilter function set!" );
         return 0;
+    }
 }
 
 //----------------------------------------------------------------
