@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:55:18 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ class Oasis2OOoTransformer : public XMLTransformerBase
 {
     XMLTransformerActions       *m_aActions[MAX_OASIS_ACTIONS];
     XMLTransformerOASISEventMap_Impl *m_pEventMap;
+    XMLTransformerOASISEventMap_Impl *m_pFormEventMap;
 
 protected:
 
@@ -101,7 +102,8 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString GetEventName( const ::rtl::OUString& rName );
+    virtual ::rtl::OUString GetEventName( const ::rtl::OUString& rName,
+                                             sal_Bool bForm );
 };
 
 #endif  //  _XMLOFF_OASIS2OOO_HXX
