@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:54:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,6 @@
 
 #include "tbxctrl.hxx"
 #include "mnumgr.hxx"
-#include "stbmgr.hxx"
 #include "dispatch.hxx"
 #include "fltfnc.hxx"
 #include "msg.hxx"
@@ -199,12 +198,12 @@
 #include "app.hxx"
 #include "unoctitm.hxx"
 #include "helpid.hrc"
-#include "imagemgr.hxx"
 #include "workwin.hxx"
 #include "imgmgr.hxx"
 #include "virtmenu.hxx"
 #include "viewfrm.hxx"
 #include "module.hxx"
+#include "imagemgr.hxx"
 
 //using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -221,8 +220,8 @@ using namespace ::drafts::com::sun::star::ui;
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, TRUE);
 SFX_IMPL_TOOLBOX_CONTROL(SfxAppToolBoxControl_Impl, SfxStringItem);
-SFX_IMPL_TOOLBOX_CONTROL(SfxReloadToolBoxControl_Impl, SfxBoolItem);
-SFX_IMPL_TOOLBOX_CONTROL(SfxAddonsToolBoxControl_Impl, SfxVoidItem);
+//SFX_IMPL_TOOLBOX_CONTROL(SfxReloadToolBoxControl_Impl, SfxBoolItem);
+//SFX_IMPL_TOOLBOX_CONTROL(SfxAddonsToolBoxControl_Impl, SfxVoidItem);
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL )
 {
@@ -1892,7 +1891,7 @@ void SfxAppToolBoxControl_Impl::Click( )
 }
 
 //--------------------------------------------------------------------
-
+/*
 SfxAddonsToolBoxControl_Impl::SfxAddonsToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox )
     : SfxToolBoxControl( nSlotId, nId, rBox )
     , bBigImages( FALSE )
@@ -2041,4 +2040,4 @@ void SfxReloadToolBoxControl_Impl::Select( USHORT nModifier )
         if ( xDispatch.is() )
             xDispatch->dispatch( aTargetURL, aArgs );
     }
-}
+}*/
