@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 13:18:16 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,11 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
 //-----------------------------------------------
 PresetHandler::~PresetHandler()
 {
-    forgetCachedStorages();
+    m_xWorkingStorageShare.clear();
+    m_xWorkingStorageUser.clear();
+    m_aSharedStorages->m_lStoragesUser.forgetCachedStorages();
+    m_aSharedStorages->m_lStoragesShare.forgetCachedStorages();
+    m_lDocumentStorages.forgetCachedStorages();
 }
 
 //-----------------------------------------------
@@ -220,11 +224,11 @@ void PresetHandler::forgetCachedStorages()
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    m_xWorkingStorageShare.clear();
-    m_xWorkingStorageUser.clear();
-
-    m_aSharedStorages->m_lStoragesUser.forgetCachedStorages();
-    m_aSharedStorages->m_lStoragesShare.forgetCachedStorages();
+    if (m_eConfigType == E_DOCUMENT)
+    {
+        m_xWorkingStorageShare.clear();
+        m_xWorkingStorageUser.clear();
+    }
 
     m_lDocumentStorages.forgetCachedStorages();
 
