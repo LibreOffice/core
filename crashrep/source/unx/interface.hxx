@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interface.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:27:39 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ class WizardDialog;
 // returns success, on true application will quit
 bool save_crash_report( const std::string& rFileName, const std::hash_map< std::string, std::string >& rSettings );
 // returns success, on true application will quit
-bool send_crash_report( WizardDialog &rDialog, const std::hash_map< std::string, std::string >& rSettings );
+bool send_crash_report( WizardDialog *pDialog, const std::hash_map< std::string, std::string >& rSettings );
 // must return a valid UTF8 string containing the message that will be sent
 std::string crash_get_details( const std::hash_map< std::string, std::string >& rSettings );
 
