@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-29 08:20:18 $
+ *  last change: $Author: hr $ $Date: 2001-10-10 14:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,15 +276,7 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
         String aTitle = pTmp->GetTitle( SFX_TITLE_TITLE );
         pNewEntry = new _FileListEntry( pTmp->GetMedium()->GetName(), pCollator, &aTitle );
         pNewEntry->aDocShell = pTmp;
-#if defined( SOLARIS )
-        pImpl->pDocList->Insert( (_FileListEntry const *)pNewEntry );
-#else
-#if defined( WTC) || ( defined( IRIX ) && defined( C700 ) ) || defined( ICC ) || defined ( HPUX )
-        pImpl->pDocList->Insert( (_FileListEntry const *&) pNewEntry );
-#else
-        pImpl->pDocList->Insert( pNewEntry );
-#endif
-#endif
+        pImpl->pDocList->C40_PTR_INSERT( _FileListEntry, pNewEntry );
     }
 }
 
@@ -735,15 +727,7 @@ BOOL SfxOrganizeMgr::InsertFile( SfxOrganizeListBox_Impl* pCaller, const String&
 {
     const CollatorWrapper* pCollator = pImpl->pIntlWrapper->getCaseCollator();
     _FileListEntry* pEntry = new _FileListEntry( rFileName, pCollator );
-#if defined( SOLARIS )
-    if ( pImpl->pDocList->Insert( (_FileListEntry const *)pEntry ) )
-#else
-#if defined( WTC ) || ( defined( IRIX ) && defined( C700 ) ) || defined( ICC ) || defined ( HPUX )
-    if ( pImpl->pDocList->Insert( (_FileListEntry const *&)pEntry ) )
-#else
-    if ( pImpl->pDocList->Insert( pEntry ) )
-#endif
-#endif
+    if ( pImpl->pDocList->C40_PTR_INSERT( _FileListEntry, pEntry ) )
     {
         USHORT nPos = 0;
         pImpl->pDocList->Seek_Entry( pEntry, &nPos );
