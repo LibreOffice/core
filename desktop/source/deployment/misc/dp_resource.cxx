@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:53:29 $
+ *  last change: $Author: obo $ $Date: 2005-01-04 09:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,9 @@ void dummy() {}
 struct DeploymentResMgr : public rtl::StaticWithInit<
     ResMgr *, DeploymentResMgr> {
     ResMgr * operator () () {
-        OUString path;
-        ::osl::Module::getUrlFromAddress( (void *) dummy, path );
-        String resourcePath(
-            path.copy( 0, path.lastIndexOf( '/' ) + 1 ) + OUSTR("resource") );
         const ::vos::OGuard guard( g_pResMgrMutex );
         return ResMgr::CreateResMgr( "deployment" LIBRARY_SOLARUPD(),
-                                     OfficeLocale::get(), NULL, &resourcePath );
+                                     OfficeLocale::get() );
     }
 };
 
