@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mt $ $Date: 2001-02-09 16:42:31 $
+#   last change: $Author: mtg $ $Date: 2001-02-09 18:03:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ PROJECTPCH4DLL=TRUE
 PROJECTPCH=eeng_pch
 PROJECTPCHSOURCE=eeng_pch
 
-#ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS=TRUE
 
 
 # --- Settings -----------------------------------------------------------
@@ -91,6 +91,8 @@ CDEFS+=-DEDITDEBUG
 SLOFILES =	\
             $(SLO)$/txtrange.obj \
             $(SLO)$/svxacorr.obj \
+            $(SLO)$/SvXMLAutoCorrectImport.obj \
+            $(SLO)$/SvXMLAutoCorrectExport.obj \
             $(SLO)$/swafopt.obj \
             $(SLO)$/editattr.obj \
             $(SLO)$/editdbg.obj	\
