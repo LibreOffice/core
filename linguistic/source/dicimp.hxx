@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:32 $
+ *  last change: $Author: tl $ $Date: 2000-12-01 18:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx> // helper for implementations
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 08:08:15 $
+ *  last change: $Author: tl $ $Date: 2000-12-01 18:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #include <ucbhelper/content.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
 
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
@@ -151,15 +154,18 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
 
     if (rMainURL.getLength() > 0)
     {
-        // get DirEntry to object
-        INetURLObject   aURLObject;
-        aURLObject.SetSmartProtocol( INET_PROT_FILE );
-        aURLObject.SetURL( rMainURL );
-        DBG_ASSERT(!aURLObject.HasError(), "lng : invalid URL");
-        String aPathToFile( aURLObject.PathToFileName() );
-        DirEntry    aDest( aPathToFile );
-
-        if (!aDest.Exists())
+        BOOL bExists = FALSE;
+        try
+        {
+            ::ucb::Content aTestContent( rMainURL ,
+                            Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+            bExists = aTestContent.isDocument();
+        }
+        catch(...)
+        {
+            bExists = FALSE;
+        }
+        if (!bExists)
         {
             //! create physical representation of an **empty** dictionary
             //! that could be searched for (see DicList::searchForDictionaries)
@@ -946,7 +952,7 @@ BOOL DictionaryNeo::isReadonly_Impl()
             Any aAny( aContent.getPropertyValue( A2OU( "IsReadOnly" ) ) );
             aAny >>= bRes;
         }
-        catch (::com::sun::star::ucb::ContentCreationException &)
+        catch (::ucb::ContentCreationException &)
         {
             bRes = TRUE;
         }

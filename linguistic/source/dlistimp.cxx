@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-29 16:07:14 $
+ *  last change: $Author: tl $ $Date: 2000-12-01 18:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #endif
 #include <cppuhelper/factory.hxx>   // helper for factories
 
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
@@ -124,7 +128,7 @@ static const sal_Char*  aVerStr5    = "WBSWG5";
 
 // forward dedclarations
 
-static BOOL IsVers2( const DirEntry& rPathName, USHORT& nLng, BOOL& bNeg,
+static BOOL IsVers2( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
                      sal_Char* pWordBuf);
 
 static void AddInternal( Reference< XDictionary > &rDic,
@@ -443,26 +447,20 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    // get DirEntry for dictionaries directory
-    DirEntry aDicDir( rDicDir );
-    aDicDir.ToAbs();
-
-    // Alle auf Platte stehenden Dictionary-Names einlesen
-    String aDirTmp( String::CreateFromAscii( "*.*" ) );
-    aDicDir += DirEntry( aDirTmp );
-    Dir aDir(aDicDir, FSYS_KIND_FILE, FSYS_SORT_END);
+    const Sequence< OUString > aDirCnt( utl::LocalFileHelper().
+                                        GetFolderContents( rDicDir, FALSE ) );
+    const OUString *pDirCnt = aDirCnt.getConstArray();
+    INT32 nEntries = aDirCnt.getLength();
 
     String aDCN( String::CreateFromAscii( "dcn" ) );
     String aDCP( String::CreateFromAscii( "dcp" ) );
-    INetURLObject   aURLObject;
-    aURLObject.SetSmartProtocol( INET_PROT_FILE );
-    for (USHORT i=0; i < aDir.Count(); ++i)
+    for (INT32 i = 0;  i < nEntries;  ++i)
     {
-        String  aName(aDir[i].GetName());
+        String  aName( pDirCnt[i] );
         USHORT  nLang = LANGUAGE_NONE;
         BOOL    bNeg  = FALSE;
 
-        if(!::IsVers2(aDir[i], nLang, bNeg, aBuf))
+        if(!::IsVers2( aName, nLang, bNeg, aBuf ))
         {
             // Wenn kein
             xub_StrLen nPos  = aName.Search('.');
@@ -482,6 +480,9 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
         //
         INT16 nSystemLanguage = ::GetSystemLanguage();
         String aTmp1 = ToLower( aName, nSystemLanguage );
+        xub_StrLen nPos = aTmp1.SearchBackward( '/' );
+        if (STRING_NOTFOUND != nPos)
+            aTmp1 = aTmp1.Copy( nPos + 1 );
         String aTmp2;
         INT32 j;
         INT32  nCount = rDicList.Count();
@@ -494,16 +495,15 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
         }
         if(j >= nCount)     // dictionary not yet in DicList
         {
-            String aFileName (rDicDir);
-            aFileName += DirEntry::GetAccessDelimiter();
-            aFileName += aName;
-            aURLObject.SetSmartURL( aFileName );
-            DBG_ASSERT(!aURLObject.HasError(), "lng : invalid URL");
+            String rDicURL( aName );
+            xub_StrLen nPos = aName.SearchBackward( '/' );
+            if (STRING_NOTFOUND != nPos)
+                aName = aName.Copy( nPos + 1 );
 
             DictionaryType eType = bNeg ? DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
             Reference< XDictionary > xDic =
                     new DictionaryNeo( aName, nLang, eType,
-                                       aURLObject.GetMainURL() );
+                                       rDicURL );
 
             addDictionary( xDic );
             nCount++;
@@ -936,25 +936,24 @@ static void AddUserData( const Reference< XDictionary > &rDic )
 
 #pragma optimize("ge",off)
 
-static BOOL IsVers2( const DirEntry& rPathName, USHORT& nLng, BOOL& bNeg,
+static BOOL IsVers2( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
                      sal_Char* pWordBuf)
 {
+    if (rFileURL.Len() == 0)
+        return FALSE;
+
     String aDIC( String::CreateFromAscii( aDicExt ) );
-    String aExt(rPathName.GetExtension());
+    String aExt;
+    xub_StrLen nPos = rFileURL.SearchBackward( '.' );
+    if (STRING_NOTFOUND != nPos)
+        aExt = rFileURL.Copy( nPos + 1 );
     aExt.ToLowerAscii();
 
     if(aExt != aDIC)
         return FALSE;
 
-    // get binary files URL
-    INetURLObject aURLObj;
-    aURLObj.SetSmartProtocol( INET_PROT_FILE );
-    aURLObj.SetSmartURL( rPathName.GetFull() );
-    String aFileURL( aURLObj.GetMainURL() );
-
     // get stream to be used
-    SfxMedium aMedium( aFileURL,
-            STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
+    SfxMedium aMedium( rFileURL, STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
     aMedium.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
     SvStream *pStream = aMedium.GetInStream();
     if (!pStream || pStream->GetError())
