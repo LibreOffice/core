@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undocell.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ class ScUndoCursorAttr: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoCursorAttr( ScDocShell* pNewDocShell,
-                            USHORT nNewCol, USHORT nNewRow, USHORT nNewTab,
+                            SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             const ScPatternAttr* pOldPat, const ScPatternAttr* pNewPat,
                             const ScPatternAttr* pApplyPat, BOOL bAutomatic );
     virtual         ~ScUndoCursorAttr();
@@ -95,9 +95,9 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nCol;
-    USHORT          nRow;
-    USHORT          nTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+    SCTAB           nTab;
     ScPatternAttr*  pOldPattern;
     ScPatternAttr*  pNewPattern;
     ScPatternAttr*  pApplyPattern;
@@ -112,8 +112,8 @@ class ScUndoEnterData: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoEnterData( ScDocShell* pNewDocShell,
-                            USHORT nNewCol, USHORT nNewRow, USHORT nNewTab,
-                            USHORT nNewCount, USHORT* pNewTabs,
+                            SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
+                            SCTAB nNewCount, SCTAB* pNewTabs,
                             ScBaseCell** ppOldData, BOOL* pHasForm, ULONG* pOldForm,
                             const String& rNewStr, EditTextObject* pObj = NULL );
     virtual         ~ScUndoEnterData();
@@ -127,16 +127,16 @@ public:
 
 private:
     String          aNewString;
-    USHORT*         pTabs;
+    SCTAB*          pTabs;
     ScBaseCell**    ppOldCells;
     BOOL*           pHasFormat;
     ULONG*          pOldFormats;
     EditTextObject* pNewEditData;
     ULONG           nEndChangeAction;
-    USHORT          nCol;
-    USHORT          nRow;
-    USHORT          nTab;
-    USHORT          nCount;             //  markierte Tabellen
+    SCCOL           nCol;
+    SCROW           nRow;
+    SCTAB           nTab;
+    SCTAB           nCount;             //  markierte Tabellen
 
     void            DoChange() const;
     void            SetChangeTrack();
@@ -202,7 +202,7 @@ class ScUndoPageBreak: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoPageBreak( ScDocShell* pNewDocShell,
-                            USHORT nNewCol, USHORT nNewRow, USHORT nNewTab,
+                            SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             BOOL bNewColumn, BOOL bNewInsert );
     virtual         ~ScUndoPageBreak();
 
@@ -214,9 +214,9 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nCol;
-    USHORT          nRow;
-    USHORT          nTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+    SCTAB           nTab;
     BOOL            bColumn;        // Spalten- oder Zeilenumbruch
     BOOL            bInsert;        // Einfuegen oder Loeschen
 
@@ -227,7 +227,7 @@ class ScUndoPrintZoom: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoPrintZoom( ScDocShell* pNewDocShell, USHORT nT,
+                    ScUndoPrintZoom( ScDocShell* pNewDocShell, SCTAB nT,
                                     USHORT nOS, USHORT nOP, USHORT nNS, USHORT nNP );
     virtual         ~ScUndoPrintZoom();
 
@@ -239,7 +239,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nTab;
+    SCTAB           nTab;
     USHORT          nOldScale;
     USHORT          nOldPages;
     USHORT          nNewScale;
@@ -253,7 +253,7 @@ class ScUndoThesaurus: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoThesaurus( ScDocShell* pNewDocShell,
-                            USHORT nNewCol, USHORT nNewRow, USHORT nNewTab,
+                            SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             const String& rNewUndoStr, const EditTextObject* pUndoTObj,
                             const String& rNewRedoStr, const EditTextObject* pRedoTObj);
     virtual         ~ScUndoThesaurus();
@@ -266,9 +266,9 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT          nCol;
-    USHORT          nRow;
-    USHORT          nTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+    SCTAB           nTab;
     String          aUndoStr;           // Daten bei StringZelle
     EditTextObject* pUndoTObject;       //       bei EditZelle
     String          aRedoStr;
