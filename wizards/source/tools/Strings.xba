@@ -339,7 +339,7 @@ End Function
 Function DirectoryNameoutofPath(sPath as String, Separator as String) as String
 Dim LocFileName as String
 	LocFileName = FileNameoutofPath(sPath, Separator)
-	DirectoryNameoutofPath = RTrimStr(sPath, Separator &amp; LocFileName)
+	DirectoryNameoutofPath = RTrimStr(sPath, LocFileName)
 End Function
 
 

@@ -594,8 +594,7 @@ Dim PropValue(1) as new com.sun.star.beans.PropertyValue
 End Sub
 
 
-
-Function ModifyPropertyValue(oContent() as Object, TargetProperties() as New com.sun.star.beans.PropertyValue )
+Function ModifyPropertyValue(oContent() as Object, TargetProperties())
 Dim MaxIndex as Integer
 Dim i as Integer
 Dim a as Integer
