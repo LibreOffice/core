@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:53:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,92 +192,155 @@ void Clipboard::DoPaste (::Window* pWindow)
 
     if (pClipTransferable!=NULL && pClipTransferable->IsPageTransferable())
     {
-        sal_Int32 nInsertPosition = 0;
-        bool bMergeMasterPages = !pClipTransferable->HasSourceDoc (
-            mrController.GetModel().GetDocument());
+        OSL_TRACE("DoPaste 0 : %d %d",
+            mrController.GetFocusManager().HasFocus(),
+            mrController.GetFocusManager().IsFocusShowing());
+        sal_Int32 nInsertPosition = GetInsertionPosition(pWindow);
 
-        // Determine the insertion position.  That is
-        // a) When the focus indicator is visible, then before or after the
-        // focused page, depending on user input to a dialog.
-        // b) When there is a selection but no focus, then after the
-        // selection.
-        // c) After the last page when there is no selection and no focus.
-        if (mrController.GetFocusManager().IsFocusShowing())
+        if (nInsertPosition >= 0)
         {
-            SdInsertPasteDlg aDialog (pWindow);
-            if (aDialog.Execute() != RET_OK)
-                return;
+            OSL_TRACE("DoPaste: %d %d",
+                mrController.GetFocusManager().HasFocus(),
+                mrController.GetFocusManager().IsFocusShowing());
+            // Paste the pages from the clipboard.
+            sal_Int32 nInsertPageCount = PasteTransferable(nInsertPosition);
+            OSL_TRACE("DoPaste: %d %d",
+                mrController.GetFocusManager().HasFocus(),
+                mrController.GetFocusManager().IsFocusShowing());
+            // Select the pasted pages and make the first of them the
+            // current page.
+            mrController.GetView().GetWindow()->GrabFocus();
+            OSL_TRACE("DoPaste: %d %d",
+                mrController.GetFocusManager().HasFocus(),
+                mrController.GetFocusManager().IsFocusShowing());
+            SelectPageRange(nInsertPosition, nInsertPageCount);
+        }
+    }
+}
 
-            nInsertPosition
-                = mrController.GetFocusManager().GetFocusedPageIndex();
+
+
+
+sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
+{
+    sal_Int32 nInsertPosition = -1;
+
+    // Determine the insertion position.  That is
+    // a) When the focus indicator is visible, then before or after the
+    // focused page, depending on user input to a dialog.
+    // b) When there is a selection but no focus, then after the
+    // selection.
+    // c) After the last page when there is no selection and no focus.
+    if (mrController.GetFocusManager().IsFocusShowing())
+    {
+        SdInsertPasteDlg aDialog (pWindow);
+        if (aDialog.Execute() == RET_OK)
+        {
+            nInsertPosition = mrController.GetFocusManager().GetFocusedPageIndex();
             if ( ! aDialog.IsInsertBefore())
                 nInsertPosition ++;
         }
-        else
+    }
+    else
+    {
+        model::SlideSorterModel::Enumeration aSelectedPages
+            (mrController.GetModel().GetSelectedPagesEnumeration());
+        // Initialize (for the case of an empty selection) with the position
+        // at the end of the document.
+        nInsertPosition = mrController.GetModel().GetPageCount();
+        while (aSelectedPages.HasMoreElements())
         {
-            model::SlideSorterModel::Enumeration aSelectedPages
-                (mrController.GetModel().GetSelectedPagesEnumeration());
-            // Initialize (for the case of an empty selection) with the
-            // position at the end of the document.
-            nInsertPosition = mrController.GetModel().GetPageCount();
-            while (aSelectedPages.HasMoreElements())
-            {
-                nInsertPosition
-                    = aSelectedPages.GetNextElement().GetPage()->GetPageNum();
-                // Convert *2+1 index to straight index (/2) after the page
-                // (+1).
-                nInsertPosition = nInsertPosition/2 + 1;
-            }
+            nInsertPosition = aSelectedPages.GetNextElement().GetPage()->GetPageNum();
+            // Convert *2+1 index to straight index ((n-1)/2) after the page
+            // (+1).
+            nInsertPosition = (nInsertPosition-1)/2 + 1;
         }
+    }
+
+    return nInsertPosition;
+}
 
 
-        USHORT nInsertIndex = (USHORT)(nInsertPosition * 2 + 1);
-        USHORT nInsertPgCnt;
-        if (pClipTransferable->HasPageBookmarks())
+
+
+sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
+{
+    SdTransferable* pClipTransferable = SD_MOD()->pTransferClip;
+    bool bMergeMasterPages = !pClipTransferable->HasSourceDoc (
+        mrController.GetModel().GetDocument());
+    USHORT nInsertIndex ((USHORT)(nInsertPosition * 2 + 1));
+    sal_Int32 nInsertPageCount (0);
+    if (pClipTransferable->HasPageBookmarks())
+    {
+        const List& rBookmarkList = pClipTransferable->GetPageBookmarks();
+        const ::vos::OGuard aGuard (Application::GetSolarMutex());
+
+        nInsertPageCount = (USHORT) rBookmarkList.Count();
+        mrController.GetModel().GetDocument()->InsertBookmarkAsPage(
+            const_cast<List*>(&rBookmarkList),
+            NULL,
+            FALSE,
+            FALSE,
+            nInsertIndex,
+            FALSE,
+            pClipTransferable->GetPageDocShell(),
+            TRUE,
+            bMergeMasterPages,
+            FALSE);
+    }
+    else
+    {
+        SfxObjectShell* pShell = pClipTransferable->GetDocShell();
+        DrawDocShell* pDataDocSh = (DrawDocShell*)pShell;
+        SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
+
+        if (pDataDoc!=NULL
+            && pDataDoc->GetSdPageCount(PK_STANDARD))
         {
-            const List& rBookmarkList = pClipTransferable->GetPageBookmarks();
             const ::vos::OGuard aGuard (Application::GetSolarMutex());
 
-            nInsertPgCnt = (USHORT) rBookmarkList.Count();
+            bMergeMasterPages = (pDataDoc != mrController.GetModel().GetDocument());
+            nInsertPageCount = pDataDoc->GetSdPageCount( PK_STANDARD );
             mrController.GetModel().GetDocument()->InsertBookmarkAsPage(
-                const_cast<List*>(&rBookmarkList),
+                NULL,
                 NULL,
                 FALSE,
                 FALSE,
                 nInsertIndex,
                 FALSE,
-                pClipTransferable->GetPageDocShell(),
+                pDataDocSh,
                 TRUE,
                 bMergeMasterPages,
                 FALSE);
         }
-        else
+    }
+    mrController.HandleModelChange();
+    return nInsertPageCount;
+}
+
+
+
+
+void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
+{
+    // Select the newly inserted pages.  That are the nInsertPageCount pages
+    // after the nInsertIndex position.
+    PageSelector& rSelector (mrController.GetPageSelector());
+    rSelector.DeselectAllPages();
+    for (USHORT i=0; i<nPageCount; i++)
+    {
+        model::PageDescriptor* pDescriptor
+            = mrController.GetModel().GetPageDescriptor(nFirstIndex + i);
+        if (pDescriptor != NULL)
         {
-            SfxObjectShell* pShell = pClipTransferable->GetDocShell();
-            DrawDocShell* pDataDocSh = (DrawDocShell*)pShell;
-            SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
-
-            if (pDataDoc!=NULL
-                && pDataDoc->GetSdPageCount(PK_STANDARD))
+            rSelector.SelectPage(*pDescriptor);
+            // The first page of the new selection is made the current page.
+            if (i == 0)
             {
-                const ::vos::OGuard aGuard (Application::GetSolarMutex());
-
-                bMergeMasterPages = (pDataDoc != mrController.GetModel().GetDocument());
-                nInsertPgCnt = pDataDoc->GetSdPageCount( PK_STANDARD );
-                mrController.GetModel().GetDocument()->InsertBookmarkAsPage(
-                    NULL,
-                    NULL,
-                    FALSE,
-                    FALSE,
-                    nInsertIndex,
-                    FALSE,
-                    pDataDocSh,
-                    TRUE,
-                    bMergeMasterPages,
-                    FALSE);
+                rSelector.SetCurrentPage(*pDescriptor);
+                mrController.GetFocusManager().SetFocusedPage(*pDescriptor);
             }
         }
-        mrController.HandleModelChange();
     }
 }
 
@@ -383,7 +446,7 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
     if (pDragTransferable != NULL)
         pDragTransferable->SetView (NULL);
 
-    PageSelector& rSelector = mrController.GetPageSelector();
+    PageSelector& rSelector (mrController.GetPageSelector());
     if ((nDropAction & DND_ACTION_MOVE) != 0)
     {
         // Remove the pages that have been moved to another place (possibly
@@ -399,14 +462,22 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
         mrController.DeleteSelectedPages ();
     }
 
+    SelectPages();
+}
+
+
+
+
+void Clipboard::SelectPages (void)
+{
+    PageSelector& rSelector (mrController.GetPageSelector());
+
     // Select the dropped pages.
-    PageList::iterator aDroppedPage;
+    PageList::iterator iPage;
     rSelector.DeselectAllPages();
-    for (aDroppedPage=maPagesToSelect.begin();
-         aDroppedPage!=maPagesToSelect.end();
-         aDroppedPage++)
+    for (iPage=maPagesToSelect.begin(); iPage!=maPagesToSelect.end(); ++iPage)
     {
-        rSelector.SelectPage (*aDroppedPage);
+        rSelector.SelectPage(*iPage);
     }
 }
 
