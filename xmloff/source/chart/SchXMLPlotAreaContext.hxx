@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:03:47 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ private:
     rtl::OUString& mrCategoriesAddress;
     ::std::list< ::chartxml::DataRowPointStyle > maSeriesStyleList;
     sal_Int32 mnDomainOffset;
+    sal_Int32 mnNumOfLines;
     sal_Int32 mnSeries;
     sal_Int32 mnMaxSeriesLength;
     SdXML3DSceneAttributesHelper maSceneImportHelper;
@@ -213,6 +214,7 @@ private:
     sal_Int32 mnDataPointIndex;
     sal_Int32& mrMaxSeriesLength;
     sal_Int32& mrDomainOffset;
+    sal_Int32& mrNumOfLines;
     SchXMLAxis* mpAttachedAxis;
     sal_Int32 mnAttachedAxis;
     ::rtl::OUString msAutoStyleName;
@@ -226,7 +228,8 @@ public:
                          ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
                          sal_Int32 nSeriesIndex,
                          sal_Int32& rMaxSeriesLength,
-                         sal_Int32& rDomainOffset );
+                         sal_Int32& rDomainOffset,
+                         sal_Int32& rNumOfLines );
     virtual ~SchXMLSeriesContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
