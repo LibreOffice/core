@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: pb $ $Date: 2002-08-13 13:21:10 $
+#   last change: $Author: cd $ $Date: 2002-08-21 10:28:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,8 @@ SLOFILES = \
 EXCEPTIONSFILES = \
     $(SLO)$/accelcfg.obj				\
     $(SLO)$/inetoptions.obj				\
-    $(SLO)$/xmlaccelcfg.obj
+    $(SLO)$/xmlaccelcfg.obj			\
+    $(SLO)$/pathoptions.obj
 
 # --- Targets ------------------------------------------------------
 
