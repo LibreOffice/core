@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhommatrix.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:52 $
+ *  last change: $Author: thb $ $Date: 2003-11-10 15:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,20 +71,20 @@
 #include <basegfx/vector/b3dvector.hxx>
 #endif
 
-class Impl3DHomMatrix : public ImplHomMatrixTemplate< 4 >
-{
-};
-
-static Impl3DHomMatrix& get3DIdentityMatrix()
-{
-    static Impl3DHomMatrix maStatic3DIdentityHomMatrix;
-    return maStatic3DIdentityHomMatrix;
-}
-
 namespace basegfx
 {
     namespace matrix
     {
+        class Impl3DHomMatrix : public ::basegfx::internal::ImplHomMatrixTemplate< 4 >
+        {
+        };
+
+        static Impl3DHomMatrix& get3DIdentityMatrix()
+        {
+            static Impl3DHomMatrix maStatic3DIdentityHomMatrix;
+            return maStatic3DIdentityHomMatrix;
+        }
+
         void B3DHomMatrix::implPrepareChange()
         {
             if(mpM->getRefCount())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:51 $
+ *  last change: $Author: thb $ $Date: 2003-11-10 15:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,20 +79,20 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #endif
 
-class Impl2DHomMatrix : public ImplHomMatrixTemplate< 3 >
-{
-};
-
-static Impl2DHomMatrix& get2DIdentityMatrix()
-{
-    static Impl2DHomMatrix maStatic2DIdentityHomMatrix;
-    return maStatic2DIdentityHomMatrix;
-}
-
 namespace basegfx
 {
     namespace matrix
     {
+        class Impl2DHomMatrix : public ::basegfx::internal::ImplHomMatrixTemplate< 3 >
+        {
+        };
+
+        static Impl2DHomMatrix& get2DIdentityMatrix()
+        {
+            static Impl2DHomMatrix maStatic2DIdentityHomMatrix;
+            return maStatic2DIdentityHomMatrix;
+        }
+
         void B2DHomMatrix::implPrepareChange()
         {
             if(mpM->getRefCount())
