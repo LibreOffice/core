@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdffilter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-16 09:47:33 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     sal_Int32                   nLength = rDescriptor.getLength();
     const PropertyValue*        pValue = rDescriptor.getConstArray();
     sal_Bool                    bRet = sal_False;
+    Reference< task::XStatusIndicator > xStatusIndicator;
 
     for ( sal_Int32 i = 0 ; ( i < nLength ) && !xOStm.is(); ++i)
     {
@@ -97,6 +98,8 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             pValue[ i ].Value >>= xOStm;
         else if( pValue[ i ].Name.equalsAscii( "FilterData" ) )
             pValue[ i ].Value >>= aFilterData;
+        else if ( pValue[ i ].Name.equalsAscii( "StatusIndicator" ) )
+            pValue[ i ].Value >>= xStatusIndicator;
     }
 
     /* we don't get FilterData if we are exporting directly
@@ -104,12 +107,19 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     if ( !aFilterData.getLength() )
     {
         FilterConfigItem aCfgItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ) );
-        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 );
+        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ) ), sal_False );
+        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 90 );
+        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ) ), sal_False );
+        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ), 300 );
+        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), sal_False );
+        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), sal_True );
+        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), sal_True );
+        aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
         aFilterData = aCfgItem.GetFilterData();
     }
     if( mxSrcDoc.is() && xOStm.is() )
     {
-        PDFExport       aExport( mxSrcDoc );
+        PDFExport       aExport( mxSrcDoc, xStatusIndicator );
         ::utl::TempFile aTempFile;
 
         aTempFile.EnableKillingFile();
