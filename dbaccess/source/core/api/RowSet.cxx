@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 11:03:28 $
+ *  last change: $Author: oj $ $Date: 2001-06-29 08:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1151,7 +1151,9 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
     if(notifyAllListenersCursorBeforeMove())
     {
         // remember old value for fire
-        positionCache();
+        // check before because the resultset could be empty
+        if(m_aBookmark.hasValue())
+            positionCache();
 
         ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
