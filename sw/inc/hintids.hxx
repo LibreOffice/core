@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-05 10:47:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,7 @@ RES_MSG_BEGIN = RES_FMT_END,
     RES_FIELD_DELETED,
     RES_NAME_CHANGED,
     RES_ALT_TEXT_CHANGED,
+    RES_UNOCURSOR_LEAVES_SECTION,
 RES_MSG_END
 };
 
