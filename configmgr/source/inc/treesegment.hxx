@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treesegment.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:34:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef CONFIGMGR_TREESEGMENT_HXX
 #define CONFIGMGR_TREESEGMENT_HXX
+
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
+#include "valuenode.hxx"
+#endif
 
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
