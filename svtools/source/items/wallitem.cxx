@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wallitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:17:48 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 12:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,9 @@ public:
     queryInterface( const com::sun::star::uno::Type& aType )
         throw( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL
-    acquire()
-        throw(::com::sun::star::uno::RuntimeException );
+    acquire() throw();
     virtual void SAL_CALL
-    release()
-        throw(::com::sun::star::uno::RuntimeException );
+    release() throw();
 
     // XOutputStream
     virtual void SAL_CALL
@@ -568,16 +566,14 @@ com::sun::star::uno::Any SAL_CALL WallpaperSink_Impl::
 
 //--------------------------------------------------------------------------------------------------
 // virtual
-void SAL_CALL WallpaperSink_Impl::acquire()
-    throw(::com::sun::star::uno::RuntimeException )
+void SAL_CALL WallpaperSink_Impl::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
 //--------------------------------------------------------------------------------------------------
 // virtual
-void SAL_CALL WallpaperSink_Impl::release()
-    throw(::com::sun::star::uno::RuntimeException )
+void SAL_CALL WallpaperSink_Impl::release() throw()
 {
     OWeakObject::release();
 }
