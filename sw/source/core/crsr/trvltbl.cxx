@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:03:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,17 @@ FASTBOOL SwCrsrShell::GotoTblBox( const String& rName )
     return bRet;
 }
 
+const SwFrm* lcl_FindMostUpperCellFrm( const SwFrm* pFrm )
+{
+    while ( pFrm &&
+            ( !pFrm->IsCellFrm() ||
+              !pFrm->GetUpper()->GetUpper()->IsTabFrm() ||
+               pFrm->GetUpper()->GetUpper()->GetUpper()->IsInTab() ) )
+    {
+        pFrm = pFrm->GetUpper();
+    }
+    return pFrm;
+}
 
 FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
 {
@@ -213,23 +224,20 @@ FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     if( !pFrm->IsInTab() )
         return FALSE;
 
-    const SwTabFrm *pTblFrm = pFrm->ImplFindTabFrm();
-
     SET_CURR_SHELL( this );
 
-    SwTableBox* pStt = 0;
-    SwTableBox* pEnd = 0;
+    const SwTableBox* pStt = 0;
+    const SwTableBox* pEnd = 0;
+
+    // lasse ueber das Layout die Boxen suchen
+    SwSelBoxes aBoxes;
+    SwTblSearchType eType = bRow ? TBLSEARCH_ROW : TBLSEARCH_COL;
+
+    if( !IsReadOnlyAvailable() )
+        eType = (SwTblSearchType)(eType | TBLSEARCH_PROTECT);
 
     if ( !bRowSimple )
     {
-        // lasse ueber das Layout die Boxen suchen
-        SwSelBoxes aBoxes;
-
-        SwTblSearchType eType = bRow ? TBLSEARCH_ROW : TBLSEARCH_COL;
-
-        if( !IsReadOnlyAvailable() )
-            eType = (SwTblSearchType)(eType | TBLSEARCH_PROTECT);
-
         GetTblSel( *this, aBoxes, eType );
 
         if( !aBoxes.Count() )
@@ -241,22 +249,46 @@ FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     // --> FME 2004-07-30 #i32329# Enhanced table selection
     else
     {
-        // find most upper row frame:
-        while ( true )
+        const SwShellCrsr *pCrsr = _GetCrsr();
+        const SwFrm* pStartFrm = pFrm;
+        const SwFrm* pEndFrm   = pCrsr->GetCntntNode( FALSE )->GetFrm( &pCrsr->GetMkPos() );
+
+        if ( bRow )
         {
-            if (  pFrm->IsRowFrm() &&
-                  pFrm->GetUpper()->IsTabFrm() &&
-                 !pFrm->GetUpper()->GetUpper()->IsInTab() )
-                 break;
-            pFrm = pFrm->GetUpper();
+            pStartFrm = lcl_FindMostUpperCellFrm( pStartFrm );
+            pEndFrm   = lcl_FindMostUpperCellFrm( pEndFrm   );
         }
 
-        ASSERT( pFrm->IsRowFrm() &&
-                pFrm->GetUpper()->IsTabFrm(), "weired table structur" )
+        if ( !pStartFrm || !pEndFrm )
+            return FALSE;
 
-        const SwTableLine* pLine = static_cast<SwRowFrm*>(pFrm)->GetTabLine();
-        pStt = pLine->GetTabBoxes()[ 0 ];
-        pEnd = pLine->GetTabBoxes()[ pLine->GetTabBoxes().Count() - 1 ];
+        const bool bVert = pFrm->ImplFindTabFrm()->IsVertical();
+
+        // If we select upwards it is sufficient to set pStt and pEnd
+        // to the first resp. last box of the selection obtained from
+        // GetTblSel. However, selecting downwards requires the frames
+        // located at the corners of the selection. This does not work
+        // for column selections in vertical tables:
+        const bool bSelectUp = ( bVert && !bRow ) ||
+                                *pCrsr->GetPoint() <= *pCrsr->GetMark();
+        SwCellFrms aCells;
+        GetTblSel( static_cast<const SwCellFrm*>(pStartFrm),
+                   static_cast<const SwCellFrm*>(pEndFrm),
+                   aBoxes, bSelectUp ? 0 : &aCells, eType );
+
+        if( !aBoxes.Count() || ( !bSelectUp && 4 != aCells.Count() ) )
+            return FALSE;
+
+        if ( bSelectUp )
+        {
+            pStt = aBoxes[0];
+            pEnd = aBoxes[aBoxes.Count() - 1];
+        }
+        else
+        {
+            pStt = aCells[ bVert ? (bRow ? 0 : 3) : (bRow ? 2 : 1) ]->GetTabBox();  // will become point of table cursor
+            pEnd = aCells[ bVert ? (bRow ? 3 : 0) : (bRow ? 1 : 2) ]->GetTabBox();  // will become mark of table cursor
+        }
     }
     // <--
 
@@ -269,12 +301,14 @@ FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     }
 
     pTblCrsr->DeleteMark();
+
     // dann setze mal Anfang und Ende der Spalte
-    pTblCrsr->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
-    pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
-    pTblCrsr->SetMark();
     pTblCrsr->GetPoint()->nNode = *pEnd->GetSttNd();
     pTblCrsr->Move( fnMoveForward, fnGoCntnt );
+    pTblCrsr->SetMark();
+    pTblCrsr->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
+    pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
+
     UpdateCrsr();                 // und den akt. Updaten
     return TRUE;
 }
