@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-18 11:55:12 $
+ *  last change: $Author: ama $ $Date: 2002-02-14 12:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,6 @@ SdrUnoControlRec::SdrUnoControlRec(SdrUnoControlList* _pParent, SdrUnoObj* _pObj
                  ,bVisible(TRUE)
                  ,bIsListening(FALSE)
                  ,bDisposed(FALSE)
-                 ,nEvent(0)
                  ,pParent(_pParent)
 {
     uno::Reference< awt::XWindow> xWindow(xControl, uno::UNO_QUERY);
@@ -209,18 +208,6 @@ SdrUnoControlRec::SdrUnoControlRec(SdrUnoControlList* _pParent, SdrUnoObj* _pObj
 //------------------------------------------------------------------------------
 SdrUnoControlRec::~SdrUnoControlRec() throw()
 {
-    {
-        ::osl::MutexGuard aEventGuard( m_aEventSafety );
-        if (nEvent)
-            Application::RemoveUserEvent(nEvent);
-        nEvent = 0;
-    }
-
-    ::osl::MutexGuard aDestructionGuard(m_aDestructionSafety);
-    // this is just for the case we're deleted while another thread just handled the event :
-    // if this other thread called our link while we were deleting the event here, the
-    // link handler blocked. With leaving the above block it continued, but now we are prevented
-    // to leave this destructor 'til the link handler recognized that nEvent == 0 and left.
 }
 
 //------------------------------------------------------------------------------
@@ -243,15 +230,6 @@ void SAL_CALL SdrUnoControlRec::disposing( const ::com::sun::star::lang::EventOb
 
         if (pParent)
         {
-            // now that the control is disposed, cancel any async events
-            // 11/24/2000 - 80508 - FS
-            {
-                ::osl::MutexGuard aEventGuard( m_aEventSafety );
-                if (nEvent)
-                    Application::RemoveUserEvent(nEvent);
-                nEvent = 0;
-            }
-
             uno::Reference< uno::XInterface > xThis(*this);
             xControl = NULL;
             pObj = NULL;
@@ -338,13 +316,6 @@ void SAL_CALL SdrUnoControlRec::propertyChange( const ::com::sun::star::beans::P
 void SAL_CALL SdrUnoControlRec::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (!pObj)
-        return;
-    osl::MutexGuard aEventGuard( m_aEventSafety );
-    // bild fertig gelesen, dann nochmals neuzeichnen (async)
-    if (nEvent)
-        Application::RemoveUserEvent(nEvent);
-    nEvent = Application::PostUserEvent(LINK(this,SdrUnoControlRec,OnComplete));
 }
 
 //------------------------------------------------------------------------------
@@ -500,29 +471,6 @@ void SdrUnoControlRec::StopListening()
             }
         }
     }
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(SdrUnoControlRec, OnComplete, void*, EMPTYTAG)
-{
-    {
-        ::osl::MutexGuard aDestructionGuard( m_aDestructionSafety );
-        {
-            ::osl::MutexGuard aEventGuard( m_aEventSafety );
-            if (!nEvent)
-                // our destructor deleted the event just while we we're waiting for m_aEventSafety
-                // -> get outta here
-                return 0;
-            nEvent = 0;
-        }
-    }
-
-    // Bereich neu Zeichnen
-    OutputDevice* pOut = pObj->GetOutputDevice(xControl);
-    if (pOut && pOut->GetOutDevType() == OUTDEV_WINDOW)
-        ((Window*)pOut)->Invalidate(pObj->GetBoundRect());
-
-    return 0;
 }
 
 
