@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:28:43 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3012,7 +3012,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     long nMaxHeight = pWin->GetDesktopRectPixel().GetHeight();
     if ( pStartedFrom && pStartedFrom->bIsMenuBar )
         nMaxHeight -= pW->GetSizePixel().Height();
-    long nLeft, nTop, nRight, nBottom;
+    sal_Int32 nLeft, nTop, nRight, nBottom;
     pWindow->GetBorder( nLeft, nTop, nRight, nBottom );
     nMaxHeight -= nTop+nBottom;
     if ( aSz.Height() > nMaxHeight )
@@ -3442,7 +3442,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
                 aItemTopLeft.Y() -= 2;
             else
             {
-                long nL, nT, nR, nB;
+                sal_Int32 nL, nT, nR, nB;
                 GetBorder( nL, nT, nR, nB );
                 aItemTopLeft.Y() -= nT;
             }
