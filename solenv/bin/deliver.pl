@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2001-12-04 11:07:14 $
+#   last change: $Author: hr $ $Date: 2002-01-08 10:58:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.17 $ ';
+$id_str = ' $Revision: 1.18 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -324,7 +324,6 @@ sub init_globals {
         }
     }
 
-
     # do we have a valid environment?
     if ( !defined($inpath) ) {
             print_error("no environment", 0);
@@ -521,6 +520,12 @@ sub copy_if_newer {
         if ( $rc) {
             utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
             fix_file_permissions($$from_stat_ref[2], $to);
+            # handle special packaging of *.dylib files for Mac OS X
+            if ( $^O eq 'darwin' )
+            {
+                system("create-bundle", $to) if ( $to =~ /\.dylib/ );
+                system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
+            }
             push_on_ziplist($to) if $opt_zip;
             return 1;
         }
@@ -630,6 +635,14 @@ sub push_default_actions {
     # deliver build.lst to $dest/inc/$module
     push(@action_data, ['mkdir', "%_DEST%/inc/$module"]); # might be necessary
     push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
+
+    # need to copy libstaticmxp.dylib for Mac OS X
+    if ( $^O eq 'darwin' )
+    {
+        push(@action_data, ['copy', "../%__SRC%/misc/*staticdatamembers.cxx %_DEST%/inc%_EXT%/*staticdatamembers.cxx"]);
+        push(@action_data, ['copy', "../%__SRC%/misc/*staticdatamembers.h* %_DEST%/inc%_EXT%/*staticdatamembers.H*"]);
+        push(@action_data, ['copy', "../%__SRC%/lib/lib*static*.dylib %_DEST%/lib%_EXT%/lib*static*.dylib"]);
+    }
 }
 
 sub walk_hedabu_list {
@@ -674,8 +687,6 @@ sub hedabu_if_newer {
         $content =~ s/\n\s+\n/\n\n/sg;
         # squeeze multiple blank lines
         $content =~ s/\n{3,}/\n\n/sg;
-        # squeeze leading spaces into tabs
-        $content =~ s/^\s{4}/\t/mg;
 
         foreach $header (@$hedabu_headers_ref) {
             $content =~ s/#include [<"]$header[>"]/#include <$module\/$header>/g;
