@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 09:57:02 $
+ *  last change: $Author: as $ $Date: 2002-08-07 11:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -985,7 +985,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
 
         rReq.SetArgs( *(SfxAllItemSet*)pSet );
-        rReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilter ) );
+        if (aFilter.Len() >0 )
+            rReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilter ) );
         rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
         rReq.AppendItem( SfxStringItem( SID_REFERER, String::CreateFromAscii(SFX_REFERER_USER) ) );
         delete pSet;
