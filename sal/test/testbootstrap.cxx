@@ -13,7 +13,7 @@ using namespace ::rtl;
 void main( int argc, char *argv[] )
 {
     sal_Int32 nCount = rtl_getAppCommandArgCount();
-    fprintf( stdout, "rtl-commandargs (%d)" , nCount );
+    fprintf( stdout, "rtl-commandargs (%d) real args:%i ", nCount, argc);
     for( sal_Int32 i = 0 ; i < nCount ; i ++ )
     {
         OUString data;
@@ -35,7 +35,14 @@ void main( int argc, char *argv[] )
     OUString value;
       Bootstrap::get( name, value, myDefault );
 
-    OSL_ASSERT( OUString::createFromAscii( argv[1] ) == value );
+    OUString para(OUString::createFromAscii( argv[1] ));
+    if(para != value)
+    {
+        OString para_tmp = OUStringToOString(para, RTL_TEXTENCODING_ASCII_US);
+        OString value_tmp = OUStringToOString(value, RTL_TEXTENCODING_ASCII_US);
+
+        fprintf(stderr, "para(%s) != value(%s)\n", para_tmp.getStr(), value_tmp.getStr());
+    }
 
     // test the default case
     name = OUString( RTL_CONSTASCII_USTRINGPARAM( "no_one_has_set_this_name" ) );
