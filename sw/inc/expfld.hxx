@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:30:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,8 @@ class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
     String      sName;
     const SwNode* pOutlChgNd;
-    sal_Unicode cDelim;
+//  sal_Unicode cDelim;
+    String      sDelim;
     USHORT      nType;
     BYTE        nLevel;
     BOOL        bDeleted;
@@ -231,8 +232,10 @@ public:
     String MakeSeqName( USHORT nSeqNo );
 
     // Seqencefelder ggfs. Kapitelweise numerieren
-    sal_Unicode GetDelimiter() const        { return cDelim; }
-    void SetDelimiter( sal_Unicode c )      { cDelim = c; }
+//  sal_Unicode GetDelimiter() const        { return cDelim; }
+//  void SetDelimiter( sal_Unicode c )      { cDelim = c; }
+    const String& GetDelimiter() const      { return sDelim; }
+    void SetDelimiter( const String& s )    { sDelim = s; }
     BYTE GetOutlineLvl() const              { return nLevel; }
     void SetOutlineLvl( BYTE n )            { nLevel = n; }
     void SetChapter( SwSetExpField& rFld, const SwNode& rNd );
