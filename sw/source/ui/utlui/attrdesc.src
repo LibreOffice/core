@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:02:44 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,7 +1178,7 @@ String STR_HORI_CENTER
     Text[ chinese_simplified ] = "Ë®Æ½¾ÓÖĞ";
     Text[ russian ] = "ãîğèçîíòàëüíî ïî öåíòğó";
     Text[ polish ] = "Wyœrodkuj poziomo";
-    Text[ japanese ] = "…•½‚É’†‰›‘µ‚¦";
+    Text[ japanese ] = "‰¡ˆÊ’u‚É’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¤ô¥­¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ ÃİŞí";
     Text[ dutch ] = "horizontaal gecentreerd";
