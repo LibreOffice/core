@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-07 14:28:33 $
+#   last change: $Author: hjs $ $Date: 2001-11-07 18:43:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2758,7 +2758,7 @@ $(MISC)$/$(TARGET).dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
 $(MISC)$/$(TARGET).dpz : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARGETN) $(ZIP4TARGETN) $(ZIP5TARGETN) $(ZIP6TARGETN) $(ZIP7TARGETN) $(ZIP8TARGETN) $(ZIP9TARGETN)
 .ENDIF
 
-$(INCCOM)$/_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
+$(INCCOM)$/_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.flag
 .IF "$(GUI)"=="UNX"
         @+echo "#define" _BUILD \"$(BUILD)\"	> $@
         @+echo "#define" _UPD \"$(UPD)\"		>> $@

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-07 14:31:24 $
+#   last change: $Author: hjs $ $Date: 2001-11-07 18:43:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
     @+tr -d "\015" < $(SOLARVERSION)$/$(UPD)minor.mk > $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
 .ELSE			# "$(GUI)"=="UNX"
     @+$(COPY) $(SOLARVERSION)$/$(UPD)minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk >& $(NULLDEV)
+    @+$(COPY) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.flag >& $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(UPDATER)"!=""
 
