@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:17:40 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ TabPage TP_FLD_DOK
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Typ";
     };
     ListBox LB_DOKTYPE
     {
@@ -146,6 +147,7 @@ TabPage TP_FLD_DOK
         Text[ czech ] = "Vybrat";
         Text[ hebrew ] = "~Auswahl";
         Text[ hindi ] = "चु~नो";
+        Text[ slovak ] = "Vy~brať";
     };
     ListBox LB_DOKSELECTION
     {
@@ -186,6 +188,7 @@ TabPage TP_FLD_DOK
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "F~ormat";
         Text[ hindi ] = "र~चना";
+        Text[ slovak ] = "F~ormát";
     };
     ListBox LB_DOKFORMAT
     {
@@ -240,6 +243,7 @@ TabPage TP_FLD_DOK
         TEXT[ czech ] = "Odchylka";
         TEXT[ hebrew ] = "Ko~rrektur";
         TEXT[ hindi ] = "~ऑफसेट्ट";
+        TEXT[ slovak ] = "O~dchýlka";
     };
     Edit ED_DOKVALUE
     {
@@ -311,6 +315,7 @@ TabPage TP_FLD_DOK
         Text[ czech ] = "Pevný obsah";
         Text[ hebrew ] = "~Inhalt fixieren";
         Text[ hindi ] = "~स्थिर विषय";
+        Text[ slovak ] = "Pe~vný obsah";
     };
     Bitmap BMP_DOKROOT_OPENED
     {
@@ -349,6 +354,7 @@ TabPage TP_FLD_DOK
         Text[ czech ] = "Odchylka ve dnech";
         Text[ hebrew ] = "Ko~rrektur in Tagen";
         Text[ hindi ] = "ऑ~फसेट्ट दिनों में";
+        Text[ slovak ] = "Odchýlka v dň~och";
     };
     String STR_DOKTIMEOFF
     {
@@ -379,6 +385,7 @@ TabPage TP_FLD_DOK
         Text[ czech ] = "Odchylka v minutách";
         Text[ hebrew ] = "Ko~rrektur in Minuten";
         Text[ hindi ] = "ऑ~फसेट्ट मिनटों में";
+        Text[ slovak ] = "Od~chýlka v minútach";
     };
     Text [ english_us ] = "Document" ;
     Text [ portuguese_brazilian ] = "Documento" ;
@@ -405,7 +412,10 @@ TabPage TP_FLD_DOK
     Text[ czech ] = "Dokument";
     Text[ hebrew ] = "Dokument";
     Text[ hindi ] = "लेखपत्र";
+    Text[ slovak ] = "Dokument";
 };
+
+
 
 
 
