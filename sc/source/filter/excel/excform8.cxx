@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 21:32:50 $
+ *  last change: $Author: gt $ $Date: 2001-07-13 14:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,97 +80,6 @@
 #endif
 
 
-// ------------------------------------------------------------------ 0x06
-
-void ImportExcel8::Formula( void )
-{
-    UINT16  nRow, nCol, nXF, nFormLen;
-    double  fCurVal;
-    BYTE    nFlag0;
-    BOOL    bShrFmla;
-
-    aIn >> nRow >> nCol;
-
-    aIn >> nXF >> fCurVal >> nFlag0;
-    aIn.Ignore( 5 );
-
-    aIn >> nFormLen;
-
-    bShrFmla = nFlag0 & 0x08;   // shared or not shared
-
-    nLastXF = nXF;
-
-    Formula( nCol, nRow, nTab, nXF, nFormLen, fCurVal, nFlag0, bShrFmla );
-}
-
-
-
-void ImportExcel8::Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
-    UINT16 nXF, UINT16 nFormLen, double& rCurVal, BYTE nFlag, BOOL bShrFmla )
-{
-    ConvErr eErr = ConvOK;
-
-    if( nRow <= MAXROW && nCol <= MAXCOL )
-    {
-        // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
-        const ScTokenArray* pErgebnis;
-        BOOL                bConvert;
-
-        pFormConv->Reset( ScAddress( nCol, nRow, nTab ) );
-
-        if( bShrFmla )
-            bConvert = !pFormConv->GetShrFmla( pErgebnis, nFormLen );
-        else
-            bConvert = TRUE;
-
-        if( bConvert )
-            eErr = pFormConv->Convert( pErgebnis, nFormLen );
-
-        ScFormulaCell *pZelle = NULL;
-
-        if( pErgebnis )
-        {
-            pZelle = new ScFormulaCell( pD, ScAddress( nCol, nRow, nTab ), pErgebnis );
-
-            pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
-
-            aColRowBuff.Used( nCol, nRow );
-        }
-        else
-        {
-            CellType    eCellType;
-            ScBaseCell  *pBaseCell;
-            pD->GetCellType( nCol, nRow, nTab, eCellType );
-            if( eCellType == CELLTYPE_FORMULA )
-            {
-                pD->GetCell( nCol, nRow, nTab, pBaseCell );
-                pZelle = ( ScFormulaCell * ) pBaseCell;
-                if( pZelle )
-                    pZelle->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
-            }
-        }
-
-        if( pZelle )
-        {
-            if( eErr != ConvOK )
-                ExcelToSc::SetError( *pZelle, eErr );
-            else if( ExcelToSc::SetCurVal( *pZelle, rCurVal ) )
-                pLastFormCell = pZelle; // String-Record sollte folgen
-            else
-                pLastFormCell = NULL;
-        }
-        else
-            pLastFormCell = NULL;
-
-        pFltTab->SetXF( nCol, nRow, nXF );
-    }
-    else
-        bTabTruncated = TRUE;
-}
-
-
-
-
 ExcelToSc8::ExcelToSc8( RootData* pRD, XclImpStream& aStr, const UINT16& rOrgTab ) :
     ExcelToSc( pRD, aStr, rOrgTab ),
     rExtsheetBuffer( *pExcRoot->pExtsheetBuffer )
@@ -223,8 +132,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
     aSRD.InitFlags();
     ComplRefData            aCRD;
     aCRD.InitFlags();
-
-//  bExternName = FALSE;
 
     if( eStatus != ConvOK )
     {
@@ -736,7 +643,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x39: // Name or External Name                 [    275]
                 aIn >> nINT16 >> nUINT16;
                 aIn.Ignore( 2 );
-                if( nINT16 == 0 || ( nINT16 > 0 && pExcRoot->pExtSheetBuff->IsExternal( UINT16( nINT16 ) ) ) )
+                if( nINT16 == 0 || ( nINT16 > 0 && !pExcRoot->pExtsheetBuffer->IsSelf( ULONG( nINT16 - 1 ) ) ) )
                 {
                     const ExtName*  pExtName;
                     pExtName = pExcRoot->pExtNameBuff->GetName( nUINT16 );
@@ -901,11 +808,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
         rpTokArray = aPool[ aStack.Get() ];
         eRet = ConvErrCount;
     }
-//  else if( bExternName )
-//  {
-//      rpTokArray = aPool[ aStack.Get() ];
-//      eRet = ConvErrExternal;
-//  }
     else if( bArrayFormula )
     {
         rpTokArray = NULL;

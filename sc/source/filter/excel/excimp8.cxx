@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-12 17:03:44 $
+ *  last change: $Author: gt $ $Date: 2001-07-13 14:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2153,7 +2153,15 @@ const XclImpSupbook* XclImpExternsheetBuffer::GetSupbook( ULONG nXtiIndex ) cons
     return pXti ? aSupbookBuffer.Get( pXti->nSupbook ) : NULL;
 }
 
+BOOL XclImpExternsheetBuffer::IsSelf( ULONG n ) const
+{
+    const XclImpSupbook*        p = GetSupbook( n );
 
+    if( p )
+        return p->IsSelf();
+    else
+        return TRUE;
+}
 
 //___________________________________________________________________
 // web queries
