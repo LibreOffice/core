@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:31:13 $
+#   last change: $Author: hr $ $Date: 2004-04-13 11:21:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,12 +74,15 @@ USE_DEFFILE=TRUE
 LDUMP=ldump2.exe
 
 # --- Library -----------------------------------
-
+# 같� frm 같같같같같같같같같같같같같같같같같같같�
 LIB1TARGET=$(SLB)$/forms.lib
 LIB1FILES=\
         $(SLB)$/common.lib \
         $(SLB)$/resource.lib \
-        $(SLB)$/component.lib
+        $(SLB)$/component.lib \
+        $(SLB)$/helper.lib \
+        $(SLB)$/solarcomponent.lib  \
+        $(SLB)$/solarcontrol.lib
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
@@ -93,6 +96,7 @@ SHL1STDLIBS= \
         $(VCLLIB) \
         $(SVTOOLLIB) \
         $(SVLLIB)	\
+        $(TKLIB) \
         $(SFX2LIB) \
         $(VOSLIB) \
         $(UNOTOOLSLIB) \
@@ -102,7 +106,7 @@ SHL1STDLIBS= \
         $(SVXLIB)
 
 SHL1LIBS=$(LIB1TARGET)
-SHL1DEPN=	$(LIB1TARGET)	\
+SHL1DEPN=$(LIB1TARGET)	\
         makefile.mk
 
 
@@ -140,52 +144,16 @@ SHL1STDLIBS +=\
 
 # --- Filter-Datei ---
 
+.IF "$(depend)"==""
+
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
-    @echo Making: $@
     @echo CLEAR_THE_FILE			> $@
-    @echo OControl					>> $@
-    @echo OBoundControl				>> $@
-    @echo OCombo					>> $@
-    @echo OList						>> $@
-    @echo OFixedText				>> $@
-    @echo OCheckBox					>> $@
-    @echo OGroupBox					>> $@
-    @echo RadioButton				>> $@
-    @echo OHidden					>> $@
-    @echo OEdit						>> $@
-    @echo OEditBase					>> $@
-    @echo ONumeric					>> $@
-    @echo OPattern					>> $@
-    @echo OCurrency					>> $@
-    @echo ODate						>> $@
-    @echo OTime						>> $@
-    @echo OFile						>> $@
-    @echo OFormatted				>> $@
-    @echo OComponent				>> $@
-    @echo OButton					>> $@
-    @echo OImage					>> $@
-    @echo OInterfaceContainer		>> $@
-    @echo OFormsCollection			>> $@
-    @echo OGroup					>> $@
-    @echo HtmlSuccess				>> $@
-    @echo OSuccess					>> $@
-    @echo OParameter				>> $@
-    @echo ODatabaseForm				>> $@
-    @echo OFormComponents			>> $@
-    @echo OFormSubmitResetThread	>> $@
-    @echo OGrid						>> $@
-    @echo FieldColumn				>> $@
-    @echo BoxColumn					>> $@
-    @echo StandardFormatsSupplier	>> $@
-    @echo OGuard					>> $@
-    @echo OPropertyChange			>> $@
-    @echo OEnumeration				>> $@
-    @echo Weak						>> $@
-    @echo OUString					>> $@
-    @echo Any@uno@star@sun@com		>> $@
-    @echo _C						>> $@
-    @echo _TI2						>> $@
-    @echo _real						>> $@
-
+    @echo __CT				    >>$@
+    @echo createRegistryInfo    >>$@
+    @echo queryInterface        >>$@
+    @echo queryAggregation      >>$@
+    @echo NavigationToolBar     >>$@
+    @echo ONavigationBar        >>$@
+.ENDIF
 
