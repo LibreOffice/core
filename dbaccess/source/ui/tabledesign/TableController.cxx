@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-15 09:05:13 $
+ *  last change: $Author: fs $ $Date: 2001-03-16 16:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #ifndef DBAUI_DLGSAVE_HXX
 #include "dlgsave.hxx"
@@ -131,6 +131,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XINDEXESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
+#endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
@@ -170,6 +173,12 @@
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _DBAUI_INDEXDIALOG_HXX_
+#include "indexdialog.hxx"
+#endif
 
 extern "C" void SAL_CALL createRegistryInfo_OTableControl()
 {
@@ -188,8 +197,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui;
-//  using namespace ::com::sun::star::sdbcx;
-//  using namespace ::connectivity;
 using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
@@ -241,6 +248,41 @@ OTableController::~OTableController()
 
     m_aTypeInfo.clear();
 }
+
+// -----------------------------------------------------------------------------
+void OTableController::startTableListening()
+{
+    Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->addEventListener(static_cast<XPropertyChangeListener*>(this));
+}
+
+// -----------------------------------------------------------------------------
+void OTableController::stopTableListening()
+{
+    Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->removeEventListener(static_cast<XPropertyChangeListener*>(this));
+}
+
+// -----------------------------------------------------------------------------
+void OTableController::startConnectionListening()
+{
+    // we have to remove ourself before dispoing the connection
+    Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->addEventListener(static_cast<XPropertyChangeListener*>(this));
+}
+
+// -----------------------------------------------------------------------------
+void OTableController::stopConnectionListening()
+{
+    // we have to remove ourself before dispoing the connection
+    Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->removeEventListener(static_cast<XPropertyChangeListener*>(this));
+}
+
 // -----------------------------------------------------------------------------
 void OTableController::disposing()
 {
@@ -249,17 +291,9 @@ void OTableController::disposing()
     delete m_pView;
     m_pView     = NULL;
 
+    stopConnectionListening();
     if(m_bOwnConnection)
-    {
-        // we have to remove ourself before dispoing the connection
-        Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-        if (xComponent.is())
-        {
-            Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-            xComponent->removeEventListener(xEvtL);
-        }
         ::comphelper::disposeComponent(m_xConnection);
-    }
     m_xConnection = NULL;
 }
 // -----------------------------------------------------------------------------
@@ -267,7 +301,6 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
 {
     FeatureState aReturn;
         // (disabled automatically)
-    aReturn.bEnabled = sal_True;
 
     switch (_nId)
     {
@@ -288,6 +321,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = m_bEditable && static_cast<OTableDesignView*>(getView())->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
+            aReturn.bEnabled = sal_True;
             break;
         case ID_BROWSER_PASTE:
             aReturn.bEnabled = m_bEditable;
@@ -297,6 +331,9 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
             break;
         case ID_BROWSER_REDO:
             aReturn.bEnabled = m_bEditable && m_aUndoManager.GetRedoActionCount() != 0;
+            break;
+        case SID_INDEXDESIGN:
+            aReturn.bEnabled = sal_True;
             break;
     }
     return aReturn;
@@ -419,24 +456,28 @@ void OTableController::Execute(sal_uInt16 _nId)
                         catch(SQLContext& e)
                         {
                             m_sName = ::rtl::OUString();
+                            stopTableListening();
                             m_xTable = NULL;
                             aInfo = SQLExceptionInfo(e);
                         }
                         catch(SQLWarning& e)
                         {
                             m_sName = ::rtl::OUString();
+                            stopTableListening();
                             m_xTable = NULL;
                             aInfo = SQLExceptionInfo(e);
                         }
                         catch(SQLException& e)
                         {
                             m_sName = ::rtl::OUString();
+                            stopTableListening();
                             m_xTable = NULL;
                             aInfo = SQLExceptionInfo(e);
                         }
                         catch(Exception&)
                         {
                             m_sName = ::rtl::OUString();
+                            stopTableListening();
                             m_xTable = NULL;
                             OSL_ENSURE(0,"table could not be inserted!");
                         }
@@ -469,9 +510,55 @@ void OTableController::Execute(sal_uInt16 _nId)
             m_aUndoManager.Redo();
             InvalidateFeature(ID_BROWSER_UNDO);
             break;
+        case SID_INDEXDESIGN:
+            doEditIndexes();
+            break;
     }
     InvalidateFeature(_nId);
 }
+
+// -----------------------------------------------------------------------------
+void OTableController::doEditIndexes()
+{
+    Reference< XNameAccess > xIndexes;          // will be the keys of the table
+    Sequence< ::rtl::OUString > aFieldNames;    // will be the column names of the table
+    try
+    {
+        // get the keys
+        Reference< XIndexesSupplier > xIndexesSupp(m_xTable, UNO_QUERY);
+        if (xIndexesSupp.is())
+        {
+            xIndexes = xIndexesSupp->getIndexes();
+            OSL_ENSURE(xIndexes.is(), "OTableController::doEditIndexes: no keys got from the indexes supplier!");
+        }
+        else
+            OSL_ENSURE(sal_False, "OTableController::doEditIndexes: should never have reached this (no indexes supplier)!");
+
+        // get the field names
+        Reference< XColumnsSupplier > xColSupp(m_xTable, UNO_QUERY);
+        OSL_ENSURE(xColSupp.is(), "OTableController::doEditIndexes: no columns supplier!");
+        if (xColSupp.is())
+        {
+            Reference< XNameAccess > xCols = xColSupp->getColumns();
+            OSL_ENSURE(xCols.is(), "OTableController::doEditIndexes: no columns!");
+            if (xCols.is())
+                aFieldNames = xCols->getElementNames();
+        }
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(sal_False, "OTableController::doEditIndexes: caught an exception while retrieving the indexes/columns!");
+    }
+
+    if (!xIndexes.is())
+        return;
+
+    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getORB());
+    if (RET_OK != aDialog.Execute())
+        return;
+
+}
+
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
@@ -489,13 +576,8 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
             {
                 aValue.Value >>= m_xConnection;
                 OSL_ENSURE(m_xConnection.is(),"We need at least a connection!");
-                // be notified when connection is in disposing
-                Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-                if (xComponent.is())
-                {
-                    Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                    xComponent->addEventListener(xEvtL);
-                }
+                // get notified if connection is in disposing
+                startConnectionListening();
             }
             else if(aValue.Name == PROPERTY_DATASOURCENAME)
             {
@@ -551,7 +633,6 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
     {
         OSL_ASSERT(0);
     }
-
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::Construct(Window* pParent)
@@ -579,7 +660,7 @@ void SAL_CALL OTableController::elementReplaced(const ::com::sun::star::containe
 {
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OTableController::suspend(sal_Bool bSuspend) throw( RuntimeException )
+sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeException )
 {
     if(isModified())
     {
@@ -634,7 +715,7 @@ void OTableController::setModified(sal_Bool _bModified)
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableController::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    if(Reference<XConnection>(Source.Source,UNO_QUERY) == m_xConnection)
+    if (m_xConnection.is() && Reference<XConnection>(Source.Source,UNO_QUERY) == m_xConnection)
     {
         // our connection was disposed so we need a new one
         createNewConnection(sal_True);
@@ -645,6 +726,7 @@ void SAL_CALL OTableController::disposing( const EventObject& Source ) throw(Run
             Reference<XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
             xComponent->removeEventListener(xEvtL);
         }
+        stopTableListening();
         m_xTable    = NULL;
         assignTable();
         if(!m_xTable.is())
@@ -656,6 +738,7 @@ void SAL_CALL OTableController::disposing( const EventObject& Source ) throw(Run
     }
     else if(Reference<XPropertySet>(Source.Source,UNO_QUERY) == m_xTable)
     {   // some deleted our table so we have a new one
+        stopTableListening();
         m_xTable    = NULL;
         m_bNew      = sal_True;
         setModified(sal_True);
@@ -675,12 +758,14 @@ void OTableController::Load(const Reference< XObjectInputStream>& _rxIn)
 // -----------------------------------------------------------------------------
 void OTableController::createNewConnection(sal_Bool _bUI)
 {
+    stopConnectionListening();
     m_xConnection       = NULL;
     m_bOwnConnection    = sal_False;
 
     if (!_bUI || (RET_YES == QueryBox(getView(),ModuleRes(TABLE_QUERY_CONNECTION_LOST)).Execute()))
     {
         m_xConnection = connect(m_sDataSourceName);
+        startConnectionListening();
         m_bOwnConnection = m_xConnection.is();
     }
     ToolBox* pToolBox = getView()->getToolBox();
@@ -1398,6 +1483,8 @@ void OTableController::assignTable()
             if(xNameAccess->hasByName(m_sName) && ::cppu::extractInterface(xProp,xNameAccess->getByName(m_sName)) && xProp.is())
             {
                 m_xTable = xProp;
+                startTableListening();
+
                 Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
                 m_bEditable = xAlter.is();
                 if(!m_bEditable)
@@ -1408,12 +1495,6 @@ void OTableController::assignTable()
                 }
                 m_bNew = sal_False;
                 // be notified when the table is in disposing
-                Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
-                if (xComponent.is())
-                {
-                    Reference<XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                    xComponent->addEventListener(xEvtL);
-                }
                 InvalidateAll();
             }
         }
