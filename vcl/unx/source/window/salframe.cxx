@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: cp $ $Date: 2001-10-29 18:13:22 $
+ *  last change: $Author: pl $ $Date: 2001-10-30 16:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,8 +384,8 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                    ( pFrame->maFrameData.mpParent
                      || pFrame->maFrameData.IsOverrideRedirect()
                      || ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
-                     || ! pFrame->maFrameData.aPosSize_.GetWidth()
-                     || ! pFrame->maFrameData.aPosSize_.GetHeight()
+                     || ! pFrame->GetGeometry().nWidth
+                     || ! pFrame->GetGeometry().nHeight
                      )
                    )
                 pFrame = pFrame->maFrameData.pNextFrame_;
@@ -393,10 +393,11 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
             {
                 // set a document position and size
                 // the first frame gets positioned by the window manager
-                x = pFrame->maFrameData.aPosSize_.Left();
-                y = pFrame->maFrameData.aPosSize_.Top();
-                w = pFrame->maFrameData.aPosSize_.GetWidth();
-                h = pFrame->maFrameData.aPosSize_.GetHeight();
+                const SalFrame::Geometry& rGeom( pFrame->GetGeometry() );
+                x = rGeom.nX;
+                y = rGeom.nY;
+                w = rGeom.nWidth;
+                h = rGeom.nHeight;
                 if( x+w+40 <= pDisplay_->GetScreenSize().Width() &&
                     y+h+40 <= pDisplay_->GetScreenSize().Height()
                     )
@@ -448,7 +449,10 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                                &Attributes );
     mhShellWindow = pParentData ? mhShellWindow : mhWindow;
 
-    aPosSize_ = Rectangle( Point( x, y ), Size( w, h ) );
+    pFrame_->maGeometry.nX      = x;
+    pFrame_->maGeometry.nY      = y;
+    pFrame_->maGeometry.nWidth  = w;
+    pFrame_->maGeometry.nHeight = h;
 
     if( ! pParentData )
     {
@@ -554,10 +558,6 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     nCompose_                   = -1;
 
     nShowState_                 = SHOWSTATE_UNKNOWN;
-    nLeft_                      = 0;
-    nTop_                       = 0;
-    nRight_                     = 0;
-    nBottom_                    = 0;
     nMaxWidth_                  = 0;
     nMaxHeight_                 = 0;
     nWidth_                     = 0;
@@ -595,20 +595,6 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
 SalFrame::SalFrame() : maFrameData( this )
 {
     memset( &maGeometry, 0, sizeof(maGeometry) );
-}
-
-const SalFrame::Geometry& SalFrame::GetGeometry()
-{
-    maGeometry.nX = maFrameData.aPosSize_.Left();
-    maGeometry.nY = maFrameData.aPosSize_.Top();
-    maGeometry.nWidth = maFrameData.aPosSize_.GetWidth();
-    maGeometry.nHeight = maFrameData.aPosSize_.GetHeight();
-    maGeometry.nLeftDecoration = maFrameData.nLeft_;
-    maGeometry.nRightDecoration = maFrameData.nRight_;
-    maGeometry.nTopDecoration = maFrameData.nTop_;
-    maGeometry.nBottomDecoration = maFrameData.nBottom_;
-
-    return maGeometry;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -875,8 +861,8 @@ void SalFrame::Show( BOOL bVisible )
         if( ! bWasIntroBitmap && maFrameData.IsOverrideRedirect() )
         {
             const Size& rScreenSize( maFrameData.pDisplay_->GetScreenSize() );
-            if( maFrameData.aPosSize_.GetWidth() < rScreenSize.Width()-30 ||
-                maFrameData.aPosSize_.GetHeight() < rScreenSize.Height()-30 )
+            if( maGeometry.nWidth < rScreenSize.Width()-30 ||
+                maGeometry.nHeight < rScreenSize.Height()-30 )
             {
                 bWasIntroBitmap = true;
                 pIntroBitmap = this;
@@ -894,12 +880,13 @@ void SalFrame::Show( BOOL bVisible )
         XMapWindow( _GetXDisplay(), maFrameData.GetWindow() );
         XSelectInput( _GetXDisplay(), maFrameData.GetWindow(), CLIENT_EVENTS );
 
-        if( !maFrameData.aPosSize_.IsEmpty()
-            && (maFrameData.nWidth_ != maFrameData.aPosSize_.GetWidth()
-                || maFrameData.nHeight_ != maFrameData.aPosSize_.GetHeight()) )
+        if( maGeometry.nWidth > 0
+            && maGeometry.nHeight > 0
+            && (   maFrameData.nWidth_  != maGeometry.nWidth
+                || maFrameData.nHeight_ != maGeometry.nHeight ) )
         {
-            maFrameData.nWidth_  = maFrameData.aPosSize_.GetWidth();
-            maFrameData.nHeight_ = maFrameData.aPosSize_.GetHeight();
+            maFrameData.nWidth_  = maGeometry.nWidth;
+            maFrameData.nHeight_ = maGeometry.nHeight;
         }
 
         XSync( _GetXDisplay(), False );
@@ -974,8 +961,8 @@ void SalFrame::GetClientSize( long &rWidth, long &rHeight )
         return;
     }
 
-    rWidth  = maFrameData.aPosSize_.GetWidth();
-    rHeight = maFrameData.aPosSize_.GetHeight();
+    rWidth  = maGeometry.nWidth;
+    rHeight = maGeometry.nHeight;
 
     if( !rWidth || !rHeight )
     {
@@ -1008,8 +995,15 @@ void SalFrameData::Center( )
         SalFrame* pFrame = mpParent;
         while( pFrame->maFrameData.mpParent )
             pFrame = pFrame->maFrameData.mpParent;
-        if( pFrame->maFrameData.aPosSize_.IsEmpty() )
-            pFrame->maFrameData.GetPosSize( pFrame->maFrameData.aPosSize_ );
+        if( pFrame->maGeometry.nWidth < 1  || pFrame->maGeometry.nHeight < 1 )
+        {
+            Rectangle aRect;
+            pFrame->maFrameData.GetPosSize( aRect );
+            pFrame->maGeometry.nX       = aRect.Left();
+            pFrame->maGeometry.nY       = aRect.Top();
+            pFrame->maGeometry.nWidth   = aRect.GetWidth();
+            pFrame->maGeometry.nHeight  = aRect.GetHeight();
+        }
 
         if( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_CHILD )
         {
@@ -1025,18 +1019,17 @@ void SalFrameData::Center( )
         }
         else
         {
-            nScreenX        = pFrame->maFrameData.aPosSize_.Left();
-            nScreenY        = pFrame->maFrameData.aPosSize_.Top();
-            nScreenWidth    = pFrame->maFrameData.aPosSize_.GetWidth();
-            nScreenHeight   = pFrame->maFrameData.aPosSize_.GetHeight();
+            nScreenX        = pFrame->maGeometry.nX;
+            nScreenY        = pFrame->maGeometry.nY;
+            nScreenWidth    = pFrame->maGeometry.nWidth;
+            nScreenHeight   = pFrame->maGeometry.nHeight;
         }
     }
 
-    SalFrameData* pParentData = mpParent ? &mpParent->maFrameData : NULL;
-    if( pParentData && pParentData->nShowState_ == SHOWSTATE_NORMAL )
+    if( mpParent && mpParent->maFrameData.nShowState_ == SHOWSTATE_NORMAL )
     {
-        if( aPosSize_.GetWidth() >= pParentData->aPosSize_.GetWidth() &&
-            aPosSize_.GetHeight() >= pParentData->aPosSize_.GetHeight() )
+        if( pFrame_->maGeometry.nWidth >= mpParent->maGeometry.nWidth &&
+            pFrame_->maGeometry.nHeight >= mpParent->maGeometry.nHeight )
         {
             nX = nScreenX + 40;
             nY = nScreenY + 40;
@@ -1044,15 +1037,15 @@ void SalFrameData::Center( )
         else
         {
             // center the window relative to the top level frame
-            nX = (nScreenWidth  - aPosSize_.GetWidth() ) / 2 + nScreenX;
-            nY = (nScreenHeight - aPosSize_.GetHeight()) / 2 + nScreenY;
+            nX = (nScreenWidth  - pFrame_->maGeometry.nWidth ) / 2 + nScreenX;
+            nY = (nScreenHeight - pFrame_->maGeometry.nHeight) / 2 + nScreenY;
         }
     }
     else
     {
         // center the window relative to screen
-        nX = (nRealScreenWidth  - aPosSize_.GetWidth() ) / 2;
-        nY = (nRealScreenHeight - aPosSize_.GetHeight()) / 2;
+        nX = (nRealScreenWidth  - pFrame_->maGeometry.nWidth ) / 2;
+        nY = (nRealScreenHeight - pFrame_->maGeometry.nHeight) / 2;
     }
     nX = nX < 0 ? 0 : nX;
     nY = nY < 0 ? 0 : nY;
@@ -1060,12 +1053,12 @@ void SalFrameData::Center( )
     bDefaultPosition_ = False;
     if( mpParent )
     {
-        nX -= mpParent->maFrameData.aPosSize_.Left();
-        nY -= mpParent->maFrameData.aPosSize_.Top();
+        nX -= mpParent->maGeometry.nX;
+        nY -= mpParent->maGeometry.nY;
     }
 
     Point aPoint ( nX, nY );
-    SetPosSize( Rectangle( aPoint, aPosSize_.GetSize() ) );
+    SetPosSize( Rectangle( aPoint, Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) ) );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1076,20 +1069,20 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT n
 
     // relative positioning in SalFrameData::SetPosSize
 
-    Rectangle aPosSize( maFrameData.aPosSize_ );
+    Rectangle aPosSize( Point( maGeometry.nX, maGeometry.nY ), Size( maGeometry.nWidth, maGeometry.nHeight ) );
     aPosSize.Justify();
 
     if( ! ( nFlags & SAL_FRAME_POSSIZE_X ) )
     {
         nX = aPosSize.Left();
         if( maFrameData.mpParent )
-            nX -= maFrameData.mpParent->maFrameData.aPosSize_.Left();
+            nX -= maFrameData.mpParent->maFrameData.pFrame_->maGeometry.nX;
     }
     if( ! ( nFlags & SAL_FRAME_POSSIZE_Y ) )
     {
         nY = aPosSize.Top();
         if( maFrameData.mpParent )
-            nY -= maFrameData.mpParent->maFrameData.aPosSize_.Top();
+            nY -= maFrameData.mpParent->maFrameData.pFrame_->maGeometry.nY;
     }
     if( ! ( nFlags & SAL_FRAME_POSSIZE_WIDTH ) )
         nWidth = aPosSize.GetWidth();
@@ -1101,7 +1094,8 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT n
     if( maFrameData.bDefaultPosition_
         && ! ( nFlags & ( SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y ) ) )
     {
-        maFrameData.aPosSize_.SetSize( aPosSize.GetSize() );
+        maGeometry.nWidth = aPosSize.GetWidth();
+        maGeometry.nHeight = aPosSize.GetHeight();
         maFrameData.Center();
     }
     else
@@ -1166,24 +1160,24 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             int nGravity = pWM->getPositionWinGravity();
 
             // adjust position so that frame fits onto screen
-            if( aPosSize.Right()+maFrameData.nRight_ >= rScreenSize.Width() )
+            if( aPosSize.Right()+maGeometry.nRightDecoration >= rScreenSize.Width() )
             {
-                aPosSize.Move( (long)rScreenSize.Width() - (long)aPosSize.Right() - (long)maFrameData.nRight_, 0 );
+                aPosSize.Move( (long)rScreenSize.Width() - (long)aPosSize.Right() - (long)maGeometry.nRightDecoration, 0 );
                 nGravity = EastGravity;
             }
-            if( aPosSize.Bottom()+maFrameData.nBottom_ >= rScreenSize.Height() )
+            if( aPosSize.Bottom()+maGeometry.nBottomDecoration >= rScreenSize.Height() )
             {
-                aPosSize.Move( 0, (long)rScreenSize.Height() - (long)aPosSize.Bottom() - (long)maFrameData.nBottom_ );
+                aPosSize.Move( 0, (long)rScreenSize.Height() - (long)aPosSize.Bottom() - (long)maGeometry.nBottomDecoration );
                 nGravity = nGravity == EastGravity ? SouthEastGravity : SouthGravity;
             }
-            if( aPosSize.Left() < maFrameData.nLeft_ )
+            if( aPosSize.Left() < maGeometry.nLeftDecoration )
             {
-                aPosSize.Move( (long)maFrameData.nLeft_ - (long)aPosSize.Left(), 0 );
+                aPosSize.Move( (long)maGeometry.nLeftDecoration - (long)aPosSize.Left(), 0 );
                 nGravity = ( nGravity == SouthGravity || nGravity == SouthEastGravity ) ? SouthWestGravity : WestGravity;
             }
-            if( aPosSize.Top() < maFrameData.nTop_ )
+            if( aPosSize.Top() < maGeometry.nTopDecoration )
             {
-                aPosSize.Move( 0, (long)maFrameData.nTop_ - (long)aPosSize.Top() );
+                aPosSize.Move( 0, (long)maGeometry.nTopDecoration - (long)aPosSize.Top() );
                 nGravity =
                     ( nGravity == SouthEastGravity || nGravity == EastGravity ) ? NorthEastGravity :
                     ( ( nGravity == SouthWestGravity || nGravity == WestGravity ) ? NorthWestGravity : NorthGravity );
@@ -1208,8 +1202,8 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             if (pWM->supportsICCCMPos())
             {
                 if( maFrameData.mpParent )
-                    aPosSize.Move( -maFrameData.mpParent->maFrameData.aPosSize_.Left(),
-                                   -maFrameData.mpParent->maFrameData.aPosSize_.Top() );
+                    aPosSize.Move( -maFrameData.mpParent->maGeometry.nX,
+                                   -maFrameData.mpParent->maGeometry.nY );
                 maFrameData.SetPosSize( aPosSize );
             }
             else
@@ -1328,19 +1322,20 @@ SalFrame::SnapShot()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrameData::GetPosSize( Rectangle &rPosSize )
 {
-    if( aPosSize_.IsEmpty() )
+    if( pFrame_->maGeometry.nWidth < 1 || pFrame_->maGeometry.nHeight < 1 )
     {
         long w = nMaxWidth_
                  ? nMaxWidth_
-                 : pDisplay_->GetScreenSize().Width()  - nLeft_ - nRight_;
+                 : pDisplay_->GetScreenSize().Width()  - pFrame_->maGeometry.nLeftDecoration - pFrame_->maGeometry.nRightDecoration;
         long h = nMaxHeight_
                  ? nMaxHeight_
-                 : pDisplay_->GetScreenSize().Height() - nTop_ - nBottom_;
+                 : pDisplay_->GetScreenSize().Height() - pFrame_->maGeometry.nTopDecoration - pFrame_->maGeometry.nBottomDecoration;
 
-        rPosSize = Rectangle( Point( nLeft_, nTop_ ), Size( w, h ) );
+        rPosSize = Rectangle( Point( pFrame_->maGeometry.nX, pFrame_->maGeometry.nY ), Size( w, h ) );
     }
     else
-        rPosSize = aPosSize_;
+        rPosSize = Rectangle( Point( pFrame_->maGeometry.nX, pFrame_->maGeometry.nY ),
+                              Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1376,7 +1371,8 @@ void SalFrameData::SetSize( const Size &rSize )
         if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
             MarkWindowAsGoodPositioned( GetShellWindow() );
 
-        aPosSize_.SetSize( rSize );
+        pFrame_->maGeometry.nWidth  = rSize.Width();
+        pFrame_->maGeometry.nHeight = rSize.Height();
 
         // allow the external status window to reposition
         if (mbInputFocus && mpInputContext != NULL)
@@ -1396,7 +1392,13 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     values.width    = rPosSize.GetWidth();
     values.height   = rPosSize.GetHeight();
 
-    if ( !values.width || !values.height || aPosSize_ == rPosSize )
+    if ( !values.width
+         || !values.height
+         || ( pFrame_->maGeometry.nX == rPosSize.Left()
+              && pFrame_->maGeometry.nY == rPosSize.Top()
+              && pFrame_->maGeometry.nWidth == rPosSize.GetWidth()
+              && pFrame_->maGeometry.nHeight == rPosSize.GetHeight() )
+         )
         return;
 #ifdef DEBUG
     fprintf(stderr, "SalFrameData::SetPosSize( %dx%d+%d+%d )\n",
@@ -1418,9 +1420,9 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
 
     bool bMoved = false;
     bool bSized = false;
-    if( values.x != aPosSize_.Left() || values.y != aPosSize_.Top() )
+    if( values.x != pFrame_->maGeometry.nX || values.y != pFrame_->maGeometry.nY )
         bMoved = true;
-    if( values.width != aPosSize_.GetWidth() || values.height != aPosSize_.GetHeight() )
+    if( values.width != pFrame_->maGeometry.nWidth || values.height != pFrame_->maGeometry.nHeight )
         bSized = true;
 
     if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
@@ -1429,8 +1431,8 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
 
         if( !(pDisplay_->GetProperties() & PROPERTY_SUPPORT_WM_ClientPos) )
         {
-            values.x    -= nLeft_;
-            values.y    -= nTop_;
+            values.x    -= pFrame_->maGeometry.nLeftDecoration;
+            values.y    -= pFrame_->maGeometry.nTopDecoration;
         }
     }
 
@@ -1459,7 +1461,10 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     if( GetShellWindow() != GetWindow() )
         XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
 
-    aPosSize_ = Rectangle( Point( values.x, values.y ), Size( values.width, values.height ) );
+    pFrame_->maGeometry.nX      = values.x;
+    pFrame_->maGeometry.nY      = values.y;
+    pFrame_->maGeometry.nWidth  = values.width;
+    pFrame_->maGeometry.nHeight = values.height;
     if( bSized && ! bMoved )
         Call ( SALEVENT_RESIZE, NULL );
     else if( bMoved && ! bSized )
@@ -1668,11 +1673,11 @@ void SalFrame::SetPointerPos(long nX, long nY)
      * window isn't mapped already. So use coordinates relative to the root window.
      * Please note that the window isn't reparented yet and still will be moved out of
      * center */
-    unsigned int nWindowLeft = maFrameData.aPosSize_.Left() + maFrameData.nLeft_;
-    unsigned int nWindowTop  = maFrameData.aPosSize_.Top()  + maFrameData.nTop_;
+    unsigned int nWindowLeft = maGeometry.nX + maGeometry.nLeftDecoration;
+    unsigned int nWindowTop  = maGeometry.nY + maGeometry.nTopDecoration;
 
     XWarpPointer( _GetXDisplay(), None, maFrameData.pDisplay_->GetRootWindow(),
-            0, 0, 0, 0, nWindowLeft + nX, nWindowTop + nY);
+                  0, 0, 0, 0, nWindowLeft + nX, nWindowTop + nY);
 }
 
 // delay handling of extended text input
@@ -2556,10 +2561,10 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
 
     if( pEvent->window == GetStackingWindow() )
     {
-        if( aPosSize_.Left() != pEvent->x || aPosSize_.Top() != pEvent->y )
+        if( pFrame_->maGeometry.nX != pEvent->x || pFrame_->maGeometry.nY != pEvent->y )
         {
-
-            aPosSize_ = Rectangle( Point( pEvent->x, pEvent->y ), aPosSize_.GetSize() );
+            pFrame_->maGeometry.nX = pEvent->x;
+            pFrame_->maGeometry.nY = pEvent->y;
             Call( SALEVENT_MOVE, NULL );
         }
         return 1;
@@ -2609,14 +2614,17 @@ IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
 {
     bool bMoved = false;
     bool bSized = true;
-    if( maResizeBuffer.Left() != aPosSize_.Left() ||
-        maResizeBuffer.Top() != aPosSize_.Top() )
+    if( maResizeBuffer.Left() != pFrame_->maGeometry.nX ||
+        maResizeBuffer.Top() != pFrame_->maGeometry.nY )
         bMoved = true;
-    if( maResizeBuffer.GetWidth() != aPosSize_.GetWidth() ||
-        maResizeBuffer.GetHeight() != aPosSize_.GetHeight() )
+    if( maResizeBuffer.GetWidth() != pFrame_->maGeometry.nWidth ||
+        maResizeBuffer.GetHeight() != pFrame_->maGeometry.nHeight )
         bSized = true;
 
-    aPosSize_ = maResizeBuffer;
+    pFrame_->maGeometry.nX      = maResizeBuffer.Left();
+    pFrame_->maGeometry.nY      = maResizeBuffer.Top();
+    pFrame_->maGeometry.nWidth  = maResizeBuffer.GetWidth();
+    pFrame_->maGeometry.nHeight = maResizeBuffer.GetHeight();
     // update children's position
     RepositionChildren();
 
@@ -2739,15 +2747,16 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     XFree( Children );
 #endif
 
-    if( !XTranslateCoordinates( GetXDisplay(),
-                                GetShellWindow(),
-                                hWM_Parent,
-                                0, 0,
-                                &nLeft_, &nTop_,
-                                &hDummy ) )
-    {
-        nLeft_ = nTop_ = 0;
-    }
+    int nLeft = 0, nTop = 0;
+    XTranslateCoordinates( GetXDisplay(),
+                           GetShellWindow(),
+                           hWM_Parent,
+                           0, 0,
+                           &nLeft,
+                           &nTop,
+                           &hDummy );
+    pFrame_->maGeometry.nLeftDecoration = nLeft;
+    pFrame_->maGeometry.nTopDecoration  = nTop;
 
     /*
      *  decorations are not symmetric,
@@ -2764,11 +2773,13 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
                   hWM_Parent,
                   &hRoot,
                   &xp, &yp, &wp, &hp, &bw, &d );
-    nRight_     = wp - w - nLeft_;
-    nBottom_    = hp - h - nTop_;
-    bool bResized = w != aPosSize_.GetWidth() || h != aPosSize_.GetHeight();
-    aPosSize_   = Rectangle( Point( xp+nLeft_, yp+nTop_ ), Size( w, h ) );
-
+    pFrame_->maGeometry.nRightDecoration    = wp - w - pFrame_->maGeometry.nLeftDecoration;
+    pFrame_->maGeometry.nBottomDecoration   = hp - h - pFrame_->maGeometry.nTopDecoration;
+    pFrame_->maGeometry.nX      = xp + pFrame_->maGeometry.nLeftDecoration;
+    pFrame_->maGeometry.nY      = xp + pFrame_->maGeometry.nTopDecoration;
+    bool bResized = w != pFrame_->maGeometry.nWidth || h != pFrame_->maGeometry.nHeight;
+    pFrame_->maGeometry.nWidth  = w;
+    pFrame_->maGeometry.nHeight = h;
     XSizeHints* pHints = XAllocSizeHints();
     long nSuppliedFlags;
     if( XGetWMNormalHints( pEvent->display,
@@ -2792,12 +2803,14 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
 
     XFree (pHints);
 
-    if( (aPosSize_.IsEmpty() || WindowNeedGoodPosition( GetShellWindow() ) )
+    if( (pFrame_->maGeometry.nWidth < 1 || pFrame_->maGeometry.nHeight < 1 || WindowNeedGoodPosition( GetShellWindow() ) )
         && pDisplay_->GetProperties() & PROPERTY_FEATURE_Maximize )
     {
         nShowState_ = SHOWSTATE_NORMAL;
         Maximize();
-        aRestoreFullScreen_ = aPosSize_;
+        aRestoreFullScreen_ =
+            Rectangle( Point( pFrame_->maGeometry.nX, pFrame_->maGeometry.nY ),
+                       Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) );
     }
     else
     {
@@ -2806,17 +2819,17 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
 
         int nScreenWidth  = pDisplay_->GetScreenSize().Width();
         int nScreenHeight = pDisplay_->GetScreenSize().Height();
-        int nFrameWidth   = aPosSize_.GetWidth()  + nLeft_ + nRight_;
-        int nFrameHeight  = aPosSize_.GetHeight() + nTop_  + nBottom_;
+        int nFrameWidth   = pFrame_->maGeometry.nWidth + pFrame_->maGeometry.nLeftDecoration + pFrame_->maGeometry.nRightDecoration;
+        int nFrameHeight  = pFrame_->maGeometry.nHeight + pFrame_->maGeometry.nTopDecoration  + pFrame_->maGeometry.nBottomDecoration;
 
         if ((nFrameWidth > nScreenWidth) || (nFrameHeight > nScreenHeight))
         {
-            Size aSize(aPosSize_.GetWidth(), aPosSize_.GetHeight());
+            Size aSize(pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight);
 
             if (nFrameWidth  > nScreenWidth)
-                aSize.Width()  = nScreenWidth  - nRight_  - nLeft_;
+                aSize.Width()  = nScreenWidth  - pFrame_->maGeometry.nRightDecoration - pFrame_->maGeometry.nLeftDecoration;
             if (nFrameHeight > nScreenHeight)
-                aSize.Height() = nScreenHeight - nBottom_ - nTop_;
+                aSize.Height() = nScreenHeight - pFrame_->maGeometry.nBottomDecoration - pFrame_->maGeometry.nTopDecoration;
 
             SetSize (aSize);
         }
@@ -3027,10 +3040,13 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                          *  so start a paint via the timer here
                          *  to avoid duplicate paints
                          */
-                        maPaintRegion.Union( Rectangle( Point( 0, 0 ), aPosSize_.GetSize() ) );
+                        maPaintRegion.Union( Rectangle( Point( 0, 0 ), Size( pFrame_->maGeometry.nWidth, pFrame_->maGeometry.nHeight ) ) );
                         if( ! maResizeTimer.IsActive() )
                         {
-                            maResizeBuffer = aPosSize_;
+                            maResizeBuffer = Rectangle( Point( pFrame_->maGeometry.nX,
+                                                               pFrame_->maGeometry.nY ),
+                                                        Size( pFrame_->maGeometry.nWidth,
+                                                              pFrame_->maGeometry.nHeight ) );
                             maResizeTimer.Start();
                         }
                     }

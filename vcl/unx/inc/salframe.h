@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: pl $ $Date: 2001-10-30 16:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,15 +161,10 @@ class SalFrameData
     int             nCompose_;          // compose state
 
     int             nShowState_;        // show state
-    int             nLeft_;             // left decoration size
-    int             nTop_;              // top decoration size
-    int             nRight_;            // right decoration size
-    int             nBottom_;           // bottom decoration size
     int             nMaxWidth_;         // client max width
     int             nMaxHeight_;        // client max height
     int             nWidth_;            // client width
     int             nHeight_;           // client height
-    Rectangle       aPosSize_;          // Shells Pos&Size
     Rectangle       aRestoreFullScreen_;
     ULONG           nStyle_;
     BOOL            bAlwaysOnTop_;
@@ -260,7 +255,6 @@ public:
     inline  SalColormap    &GetColormap() const;
             bool            IsOverrideRedirect() const;
     SalI18N_InputContext* getInputContext() const { return mpInputContext; }
-    const Rectangle&        getPosSize() const { return aPosSize_; }
     void                    setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
 };
 

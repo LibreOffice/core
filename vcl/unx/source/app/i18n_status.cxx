@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-17 17:49:41 $
+ *  last change: $Author: pl $ $Date: 2001-10-30 16:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,8 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
         Point aCursorPos( x, y );
         aCursorPos.X() += aPosEvent.mnX;
         aCursorPos.Y() += aPosEvent.mnY+aPosEvent.mnHeight + 4;
-        Rectangle aRect( pStatusFrame->maFrameData.getPosSize() );
+        const SalFrame::Geometry& rGeom( pStatusFrame->GetGeometry() );
+        Rectangle aRect( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         Size aStatusSize( aRect.GetSize() );
         aStatusSize.Width() = GetTextWidth( m_aStatusText.GetText() )+8;
         aRect.SetPos( aCursorPos );
@@ -283,12 +284,11 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
 
     if( pParent )
     {
+        const SalFrame::Geometry& rGeom( pParent->GetGeometry() );
         XMoveWindow( (Display*)pEnvData->pDisplay,
                      (XLIB_Window)pEnvData->aShellWindow,
-                     pParent->maFrameData.getPosSize().Left(),
-                     pParent->maFrameData.getPosSize().Top()
-                     + pParent->maFrameData.getPosSize().GetHeight()
-                     + 20 // leave a little more space
+                     rGeom.nX,
+                     rGeom.nY + rGeom.nHeight + 20 // leave a little more space
                      );
     }
 #ifdef DEBUG
