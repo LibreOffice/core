@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-15 15:44:58 $
+ *  last change: $Author: vg $ $Date: 2001-10-17 10:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,12 +158,12 @@ uno::Any SAL_CALL Svx3DSceneObject::queryInterface( const uno::Type & rType ) th
     return SvxShape::queryInterface( rType );
 }
 
-void SAL_CALL Svx3DSceneObject::acquire() throw( uno::RuntimeException )
+void SAL_CALL Svx3DSceneObject::acquire() throw ( )
 {
     SvxShape::acquire();
 }
 
-void SAL_CALL Svx3DSceneObject::release() throw( uno::RuntimeException )
+void SAL_CALL Svx3DSceneObject::release() throw ( )
 {
     SvxShape::release();
 }

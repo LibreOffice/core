@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-01 13:58:49 $
+ *  last change: $Author: vg $ $Date: 2001-10-17 10:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,12 +394,12 @@ Any SAL_CALL SvxUnoDrawPool::queryAggregation( const Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvxUnoDrawPool::acquire() throw(uno::RuntimeException)
+void SAL_CALL SvxUnoDrawPool::acquire() throw ( )
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvxUnoDrawPool::release() throw(uno::RuntimeException)
+void SAL_CALL SvxUnoDrawPool::release() throw ( )
 {
     OWeakAggObject::release();
 }

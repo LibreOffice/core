@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-10 07:49:48 $
+ *  last change: $Author: vg $ $Date: 2001-10-17 10:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,12 +186,12 @@ uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvxShapeGroup::acquire() throw(uno::RuntimeException)
+void SAL_CALL SvxShapeGroup::acquire() throw ( )
 {
     SvxShape::acquire();
 }
 
-void SAL_CALL SvxShapeGroup::release() throw(uno::RuntimeException)
+void SAL_CALL SvxShapeGroup::release() throw ( )
 {
     SvxShape::release();
 }
@@ -463,12 +463,12 @@ uno::Any SAL_CALL SvxShapeConnector::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvxShapeConnector::acquire() throw(uno::RuntimeException)
+void SAL_CALL SvxShapeConnector::acquire() throw ( )
 {
     SvxShapeText::acquire();
 }
 
-void SAL_CALL SvxShapeConnector::release() throw(uno::RuntimeException)
+void SAL_CALL SvxShapeConnector::release() throw ( )
 {
     SvxShapeText::release();
 }
@@ -645,12 +645,12 @@ uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-void SAL_CALL SvxShapeControl::acquire() throw(uno::RuntimeException)
+void SAL_CALL SvxShapeControl::acquire() throw ( )
 {
     SvxShapeText::acquire();
 }
 
-void SAL_CALL SvxShapeControl::release() throw(uno::RuntimeException)
+void SAL_CALL SvxShapeControl::release() throw ( )
 {
     SvxShapeText::release();
 }

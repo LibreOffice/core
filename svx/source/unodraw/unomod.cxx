@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-02 14:25:58 $
+ *  last change: $Author: vg $ $Date: 2001-10-17 10:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,12 +377,12 @@ uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const uno::Type & rType ) 
     return aAny;
 }
 
-void SAL_CALL SvxUnoDrawingModel::acquire() throw(uno::RuntimeException)
+void SAL_CALL SvxUnoDrawingModel::acquire() throw ( )
 {
     SfxBaseModel::acquire();
 }
 
-void SAL_CALL SvxUnoDrawingModel::release() throw(uno::RuntimeException)
+void SAL_CALL SvxUnoDrawingModel::release() throw ( )
 {
     SfxBaseModel::release();
 }
