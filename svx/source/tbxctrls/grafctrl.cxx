@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:22:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,12 +475,15 @@ void ImplGrafModeControl::Select()
         aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GrafMode" ));
         aArgs[0].Value = makeAny( sal_Int16( GetSelectEntryPos() ));
 
+        /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+            This instance may be deleted in the meantime (i.e. when a dialog is opened
+            while in Dispatch()), accessing members will crash in this case. */
+        ImplReleaseFocus();
+
         SfxToolBoxControl::Dispatch(
             Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
             OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GrafMode" )),
             aArgs );
-
-        ImplReleaseFocus();
     }
 }
 
