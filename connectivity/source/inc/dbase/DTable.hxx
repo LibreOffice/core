@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:25:04 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,8 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> isUniqueByColumnName(const ::rtl::OUString& _rColName);
             void AllocBuffer();
 
-            void FileClose();
+        protected:
+            virtual void FileClose();
         public:
             virtual void refreshColumns();
             virtual void refreshIndexes();
@@ -184,16 +185,6 @@ namespace connectivity
             virtual BOOL InsertRow(file::OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual BOOL DeleteRow(const OSQLColumns& _rCols);
             virtual BOOL UpdateRow(file::OValueVector& rRow, file::OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
-        };
-
-        class ODbaseTableDescriptor :    public ODbaseTable
-        {
-        protected:
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-        public:
-            ODbaseTableDescriptor( ODbaseConnection* _pConnection);
-
         };
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:10:28 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,10 @@ namespace connectivity
         {
             sal_Bool m_bBookmarkable;
         protected:
-            DECLARE_CTY_PROPERTY(OFlatResultSet_BASE3,OFlatResultSet_BASE2);
+            // OPropertyArrayUsageHelper
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+            // OPropertySetHelper
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
             DECLARE_CTY_DEFAULTS(OFlatResultSet_BASE2);
             DECLARE_SERVICE_INFO();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:25:04 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,7 @@ namespace connectivity
         typedef file::OBoolOperator OBoolOperator_BASE;
         typedef file::OOperand OOperand_BASE;
 
-        class ODbaseIndex : public ODbaseIndex_BASE,
-                            public com::sun::star::lang::XUnoTunnel
+        class ODbaseIndex : public ODbaseIndex_BASE
         {
             friend SvStream& operator << (SvStream &rStream, ODbaseIndex&);
             friend SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
@@ -145,10 +144,6 @@ namespace connectivity
 
             virtual void refreshColumns();
 
-            //XInterface
-            virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type & rType ) throw(com::sun::star::uno::RuntimeException);
-            //XTypeProvider
-            virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(com::sun::star::uno::RuntimeException);
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(com::sun::star::uno::RuntimeException);
             static com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
@@ -193,18 +188,6 @@ namespace connectivity
 
         SvStream& operator << (SvStream &rStream, ODbaseIndex&);
         SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
-
-        class ODbaseIndexDescriptor;
-        typedef ::comphelper::OPropertyArrayUsageHelper<ODbaseIndexDescriptor> ODbaseIndexDescriptor_PROP;
-
-        class ODbaseIndexDescriptor :    public ODbaseIndex
-                                        ,public ODbaseIndexDescriptor_PROP
-        {
-            DECLARE_CTY_PROPERTY(ODbaseIndexDescriptor_PROP,ODbaseIndexDescriptor)
-        public:
-            ODbaseIndexDescriptor(ODbaseTable* _pTable);
-            DECLARE_SERVICE_INFO();
-        };
     }
 }
 
