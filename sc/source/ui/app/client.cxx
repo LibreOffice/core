@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:33:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,8 @@ void __EXPORT ScClient::RequestObjAreaPixel( const Rectangle& rObjRect )
                             pWin->PixelToLogic( aRect.GetSize() ) );
 
     BOOL bChange = FALSE;
-    USHORT nTab = pViewSh->GetViewData()->GetTabNo();
-    SdrPage* pPage = pModel->GetPage(nTab);
+    SCTAB nTab = pViewSh->GetViewData()->GetTabNo();
+    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
     if (pPage)
     {
         Point aPos;
