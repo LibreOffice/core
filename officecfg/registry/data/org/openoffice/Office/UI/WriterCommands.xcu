@@ -966,7 +966,7 @@
                     <value xml:lang="en-US">Frame Properties</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="en-US">Rahmen...</value>
+                    <value xml:lang="de">Rahmen...</value>
                     <value xml:lang="en-US">Fram~e...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
