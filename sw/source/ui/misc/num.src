@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ TabPage TP_NUM_POSITION
         Size = MAP_APPFONT ( 102 , 10 ) ;
         Text = "Abstand zum Te~xt" ;
         Text [ ENGLISH ] = "Indent" ;
-        Text [ english_us ] = "Space to Te~xt" ;
+        Text [ english_us ] = "Space to te~xt" ;
         Text [ swedish ] = "Avstånd till text" ;
         Text [ danish ] = "Afstand til tekst" ;
         Text [ italian ] = "~Rientro" ;
@@ -237,7 +237,7 @@ TabPage TP_NUM_POSITION
         Text [ portuguese ] = "~Distância do texto" ;
         Text[ chinese_simplified ] = "ÖÁÕıÎÄµÄ¾àÀë(~X)";
         Text[ russian ] = "Ğàññòîÿíèå îò òåêñòà";
-        Text[ polish ] = "Odstêp do tekstu";
+        Text[ polish ] = "Odstêp od tekstu";
         Text[ japanese ] = "Ã·½Ä‚Ü‚Å‚ÌŠÔŠu(~X)";
         Text[ chinese_traditional ] = "¦Ü¤º¤åªº¶ZÖÃ(~X)";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
@@ -427,7 +427,7 @@ TabPage TP_NUM_POSITION
     StringList [ polish ] =
     {
             < "Z lewej" ; > ;
-        < "Wy?rodkowany" ; > ;
+        < "Wyœrodkowany" ; > ;
         < "Z prawej" ; > ;
     };
     StringList [ japanese ] =
@@ -502,7 +502,7 @@ TabPage TP_NUM_POSITION
         Text [ portuguese ] = "~Padrão" ;
         Text[ chinese_simplified ] = "±ê×¼(~D)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domy?lnie";
+        Text[ polish ] = "Domyœlnie";
         Text[ japanese ] = "•W€(~D)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
@@ -764,4 +764,5 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     Text[ catalan ] = "Numeración/Viñetas";
     Text[ finnish ] = "Numerointi/luettelomerkit";
 };
+
 
