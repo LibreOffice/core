@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-19 11:43:25 $
+ *  last change: $Author: thb $ $Date: 2002-07-04 13:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,8 @@ Polygon ImplSubdivideBezier( const Polygon& rPoly )
 {
     Polygon aPoly;
 
-    rPoly.GetSimple( aPoly );
+    // #100127# Use adaptive subdivide instead of fixed 25 segments
+    rPoly.AdaptiveSubdivide( aPoly );
 
     return aPoly;
 }
@@ -294,9 +295,9 @@ Polygon ImplSubdivideBezier( const Polygon& rPoly )
 
 PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly )
 {
-    USHORT i, nPoints = rPolyPoly.Count();
-    PolyPolygon aPolyPoly( nPoints );
-    for( i=0; i<nPoints; ++i )
+    USHORT i, nPolys = rPolyPoly.Count();
+    PolyPolygon aPolyPoly( nPolys );
+    for( i=0; i<nPolys; ++i )
         aPolyPoly.Insert( ImplSubdivideBezier( rPolyPoly.GetObject(i) ) );
 
     return aPolyPoly;
