@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:41:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScBaseCell* pCell)
             if (!pEditTextObj)
             {
                 pEditTextObj = new ScEditEngineTextObj();
-                xText = pEditTextObj;
+                xText.set(pEditTextObj);
             }
             pEditTextObj->SetText(*(pEditCell->GetData()));
             if (xText.is())
@@ -678,7 +678,7 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
                     if ( (pDel->GetDx() > pDelAction->GetDx() || pDel->GetDy() > pDelAction->GetDy()) &&
                             pDel->GetBigRange() == pDelAction->GetBigRange() )
                     {
-                        nSlavesCount++;
+                        ++nSlavesCount;
                         p = p->GetNext();
                     }
                     else
@@ -765,7 +765,7 @@ void ScChangeTrackingExportHelper::CollectCellAutoStyles(const ScBaseCell* pBase
             if (!pEditTextObj)
             {
                 pEditTextObj = new ScEditEngineTextObj();
-                xText = pEditTextObj;
+                xText.set(pEditTextObj);
             }
             pEditTextObj->SetText(*(pEditCell->GetData()));
             if (xText.is())
