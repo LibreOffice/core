@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:12:36 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 11:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,22 +518,22 @@ String S_WIN_DISABLED
     Text = "Konnte auf ($Arg1) nicht zugreifen.";
     Text[ english_us ] = "($Arg1) could not be accessed.";
     Text[ portuguese ] = "ImpossÌvel o acesso a ($Arg1).";
-    Text[ russian ] = "(Arg1) could not be accessed";
+    Text[ russian ] = "($Arg1) could not be accessed";
     Text[ greek ] = "($Arg1) could not be accessed";
     Text[ dutch ] = "Geen toegang tot ($Arg1)";
     Text[ french ] = "AccËs ‡ ($Arg1) impossible";
     Text[ spanish ] = "No se pudo acceder a ($Arg1)";
     Text[ italian ] = "Impossibile accedere a ($Arg1)";
-    Text[ danish ] = "(Arg1) could not be accessed";
+    Text[ danish ] = "($Arg1) could not be accessed";
     Text[ swedish ] = "($Arg1) could not be accessed";
     Text[ polish ] = "Brak dostÍpu do ($Arg1).";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "($Arg1) Ç…±∏æΩÇ≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
-    Text[ korean ] = "(Arg1)ø° ¡¢±Ÿ«“ºˆ æ¯Ω¿¥œ¥Ÿ.";
+    Text[ korean ] = "($Arg1)ø° ¡¢±Ÿ«“ºˆ æ¯æ˙Ω¿¥œ¥Ÿ.";
     Text[ chinese_simplified ] = "($Arg1) could not be accessed.";
     Text[ chinese_traditional ] = "($Arg1) could not be accessed.";
     Text[ arabic ] = " ⁄–— «·Ê’Ê· ≈·Ï ($Arg1).";
-    Text[ turkish ] = "(Arg1) could not be accessed";
+    Text[ turkish ] = "($Arg1) could not be accessed";
 };
 String S_NUMBER_TOO_BIG
 {
