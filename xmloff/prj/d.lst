@@ -106,6 +106,9 @@ hedabu: ..\inc\XMLFilterServiceNames.h %_DEST%\inc%_EXT%\xmloff\XMLFilterService
 hedabu: ..\inc\XMLBase64Export.hxx %_DEST%\inc%_EXT%\xmloff\XMLBase64Export.hxx
 hedabu: ..\inc\XMLBase64ImportContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLBase64ImportContext.hxx
 hedabu: ..\inc\xmltoken.hxx %_DEST%\inc%_EXT%\xmloff\xmltoken.hxx
+hedabu: ..\inc\XMLEventExport.hxx %_DEST%\inc%_EXT%\xmloff\XMLEventExport.hxx
+hedabu: ..\inc\xmlevent.hxx %_DEST%\inc%_EXT%\xmloff\xmlevent.hxx
+hedabu: ..\inc\XMLEventsImportContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLEventsImportContext.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
