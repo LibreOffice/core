@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 13:36:11 $
+ *  last change: $Author: os $ $Date: 2001-01-30 08:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,9 @@
 
 #ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
+#endif
+#ifndef _SVX_UNOFILL_HXX_
+#include <svx/unofill.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
@@ -1723,12 +1726,42 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             sal_Bool bShape = sCategory == C2U("drawing");
             if( bShape || sCategory == C2U("form"))
             {
-                //hier den Draw - Service suchen
-                Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(rServiceName);
                 if(bShape)
-                    xRet = *new SwXShape( xTmp );
-                else
-                    xRet = xTmp;
+                {
+                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) )
+                    {
+                        xRet = SvxUnoDashTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                    }
+                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) )
+                    {
+                        xRet = SvxUnoGradientTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                    }
+                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) )
+                    {
+                        xRet = SvxUnoHatchTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                    }
+                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) )
+                    {
+                        xRet = SvxUnoBitmapTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                    }
+                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) )
+                    {
+                        xRet = SvxUnoTransGradientTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                    }
+                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
+                    {
+                        xRet = SvxUnoMarkerTable_createInstance( pDocShell->GetDoc()->MakeDrawModel() );
+                    }
+                }
+                if(!xRet.is())
+                {
+                    //hier den Draw - Service suchen
+                    Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(rServiceName);
+                    if(bShape)
+                        xRet = *new SwXShape( xTmp );
+                    else
+                        xRet = xTmp;
+                }
             }
         }
         else
