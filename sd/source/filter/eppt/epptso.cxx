@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 10:54:34 $
+ *  last change: $Author: sj $ $Date: 2002-01-17 20:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2503,7 +2503,17 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 cBulletId = aString.GetChar( 0 );
                         }
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletFont" ) ) )
+                        {
                             aFontDesc = *( (::com::sun::star::awt::FontDescriptor*)pValue );
+
+                            // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
+                            // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
+                            // Because there might exist a lot of damaged documemts I added this two lines
+                            // which fixes the bullet problem for the export.
+                            if ( aFontDesc.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarSymbol" ) ) )
+                                aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
+
+                        }
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicURL" ) ) )
                             aGraphicURL = ( *(::rtl::OUString*)pValue );
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicSize" ) ) )
@@ -2530,11 +2540,13 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             nParaFlags |= 0x40;
                             nBulletFlags |= 8;
                         }
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Prefix" ) ) )
+                            sPrefix = ( *(::rtl::OUString*)pValue );
+                        else if  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Suffix" ) ) )
+                            sSuffix = ( *(::rtl::OUString*)pValue );
 #ifdef DBG_UTIL
                         else if ( ! (
                                 ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SymbolTextDistance" ) ) )
-                            ||  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Prefix" ) ) )
-                            ||  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Suffix" ) ) )
                             ||  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Graphic" ) ) ) ) )
                         {
                             DBG_ERROR( "Unbekanntes Property" );
