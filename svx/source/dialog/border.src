@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-27 12:45:05 $
+ *  last change: $Author: rt $ $Date: 2002-05-28 20:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ polish ] = "~Default";
         Text[ portuguese_brazilian ] = "~Default";
         Text[ japanese ] = "~Default";
-        Text[ korean ] = "~Default";
+        Text[ korean ] = "표준";
         Text[ chinese_simplified ] = "~Default";
         Text[ chinese_traditional ] = "標準(~D)";
         Text[ turkish ] = "~Default";
@@ -179,7 +179,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ polish ] = "~User-defined";
         Text[ portuguese_brazilian ] = "~User-defined";
         Text[ japanese ] = "~User-defined";
-        Text[ korean ] = "~User-defined";
+        Text[ korean ] = "사용자 정의";
         Text[ chinese_simplified ] = "~User-defined";
         Text[ chinese_traditional ] = "使用者自訂(~U)";
         Text[ turkish ] = "~User-defined";
@@ -250,7 +250,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ polish ] = "St~yle";
         Text[ portuguese_brazilian ] = "St~yle";
         Text[ japanese ] = "St~yle";
-        Text[ korean ] = "St~yle";
+        Text[ korean ] = "유형";
         Text[ chinese_simplified ] = "St~yle";
         Text[ chinese_traditional ] = "風格";
         Text[ turkish ] = "St~yle";
@@ -283,7 +283,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ polish ] = "~Color";
         Text[ portuguese_brazilian ] = "~Color";
         Text[ japanese ] = "~Color";
-        Text[ korean ] = "~Color";
+        Text[ korean ] = "색상";
         Text[ chinese_simplified ] = "~Color";
         Text[ chinese_traditional ] = "顏色(~C)";
         Text[ turkish ] = "~Color";
