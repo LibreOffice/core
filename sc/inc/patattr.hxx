@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 13:59:14 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 13:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@ enum ScAutoFontColorMode
     SC_AUTOCOL_RAW,         // COL_AUTO is returned
     SC_AUTOCOL_BLACK,       // always use black
     SC_AUTOCOL_PRINT,       // black or white, depending on background
-    SC_AUTOCOL_DISPLAY      // from style settings or white
+    SC_AUTOCOL_DISPLAY,     // from style settings or white
+    SC_AUTOCOL_FORCE        // like SC_AUTOCOL_DISPLAY, but for all stored font colors
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:01:15 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 13:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
 
     //  Auszeichnungen
 
-    if ( aColor.GetColor() == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW )
+    if ( ( aColor.GetColor() == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW ) || eAutoMode == SC_AUTOCOL_FORCE )
     {
         if ( eAutoMode == SC_AUTOCOL_BLACK )
             aColor.SetColor( COL_BLACK );
@@ -418,7 +418,7 @@ void ScPatternAttr::GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
                 //  use white if on dark background
                 aColor.SetColor( COL_WHITE );
             }
-            else if ( eAutoMode == SC_AUTOCOL_DISPLAY )
+            else if ( eAutoMode == SC_AUTOCOL_DISPLAY || eAutoMode == SC_AUTOCOL_FORCE )
             {
                 //  use color from style settings for display
                 aColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
