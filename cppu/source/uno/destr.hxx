@@ -2,9 +2,9 @@
  *
  *  $RCSfile: destr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:53:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,24 +232,24 @@ inline sal_Int32 idestructElements(
     switch (pElementType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
-        return sizeof(sal_Unicode);
+        return (sal_Int32)(sizeof(sal_Unicode));
     case typelib_TypeClass_BOOLEAN:
-        return sizeof(sal_Bool);
+        return (sal_Int32)(sizeof(sal_Bool));
     case typelib_TypeClass_BYTE:
-        return sizeof(sal_Int8);
+        return (sal_Int32)(sizeof(sal_Int8));
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        return sizeof(sal_Int16);
+        return (sal_Int32)(sizeof(sal_Int16));
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        return sizeof(sal_Int32);
+        return (sal_Int32)(sizeof(sal_Int32));
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        return sizeof(sal_Int64);
+        return (sal_Int32)(sizeof(sal_Int64));
     case typelib_TypeClass_FLOAT:
-        return sizeof(float);
+        return (sal_Int32)(sizeof(float));
     case typelib_TypeClass_DOUBLE:
-        return sizeof(double);
+        return (sal_Int32)(sizeof(double));
 
     case typelib_TypeClass_STRING:
     {
@@ -258,7 +258,7 @@ inline sal_Int32 idestructElements(
         {
             ::rtl_uString_release( pDest[nPos] );
         }
-        return sizeof(rtl_uString *);
+        return (sal_Int32)(sizeof(rtl_uString *));
     }
     case typelib_TypeClass_TYPE:
     {
@@ -267,7 +267,7 @@ inline sal_Int32 idestructElements(
         {
             ::typelib_typedescriptionreference_release( pDest[nPos] );
         }
-        return sizeof(typelib_TypeDescriptionReference *);
+        return (sal_Int32)(sizeof(typelib_TypeDescriptionReference *));
     }
     case typelib_TypeClass_ANY:
     {
@@ -276,10 +276,10 @@ inline sal_Int32 idestructElements(
         {
             _destructAny( &pDest[nPos], release );
         }
-        return sizeof(uno_Any);
+        return (sal_Int32)(sizeof(uno_Any));
     }
     case typelib_TypeClass_ENUM:
-        return sizeof(sal_Int32);
+        return (sal_Int32)(sizeof(sal_Int32));
     case typelib_TypeClass_TYPEDEF:
         OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
@@ -329,7 +329,7 @@ inline sal_Int32 idestructElements(
                 release );
         }
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-        return sizeof(uno_Sequence *);
+        return (sal_Int32)(sizeof(uno_Sequence *));
     }
     case typelib_TypeClass_ARRAY:
         OSL_ENSURE( 0, "### unexpected array!" );
@@ -358,7 +358,7 @@ inline sal_Int32 idestructElements(
                 }
             }
         }
-        return sizeof(void *);
+        return (sal_Int32)(sizeof(void *));
     }
     }
     return 0;
