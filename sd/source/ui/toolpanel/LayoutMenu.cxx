@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:35:58 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "LayoutMenu.hxx"
 
 #include "TaskPaneShellManager.hxx"
@@ -79,6 +78,11 @@
 #include "DrawViewShell.hxx"
 #include "PaneManager.hxx"
 #include "SlideSorterViewShell.hxx"
+#include "controller/SlideSorterController.hxx"
+#include "controller/SlsPageSelector.hxx"
+
+#include <vector>
+#include <memory>
 
 #ifndef _SFXOBJFACE_HXX
 #include <sfx2/objface.hxx>
@@ -453,7 +457,7 @@ void LayoutMenu::Execute (SfxRequest& rRequest)
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 {
     ViewShell* pViewShell = mrBase.GetMainViewShell();
-    if (pViewShell == NULL)
+    if (pViewShell != NULL)
     {
         // Because we process the SID_INSERTPAGE slot ourselves we have to
         // call ExecuteSlot() at the main view shell directly or otherwise
@@ -490,38 +494,6 @@ int LayoutMenu::CalculateRowCount (const Size& rItemSize, int nColumnCount)
 
 
 
-bool LayoutMenu::IsMainViewInMasterPageMode (void)
-{
-    bool bMasterPageMode (false);
-
-    ViewShell* pMainViewShell = mrBase.GetMainViewShell();
-    if (pMainViewShell != NULL)
-        switch (pMainViewShell->GetShellType())
-        {
-            case ViewShell::ST_NOTES:
-            case ViewShell::ST_HANDOUT:
-            case ViewShell::ST_IMPRESS:
-            {
-                DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(
-                    pMainViewShell);
-                if (pDrawViewShell != NULL)
-                    if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
-                        bMasterPageMode = true;
-            }
-            break;
-
-            default:
-                // All other view shells do not support a master page mode,
-                // so let the bMasterPageMode keep its default value.
-                break;
-        }
-
-    return bMasterPageMode;
-}
-
-
-
-
 IMPL_LINK(LayoutMenu, ClickHandler, ValueSet*, pValueSet)
 {
     AssignLayoutToSelectedSlides (GetSelectedAutoLayout());
@@ -536,6 +508,9 @@ IMPL_LINK(LayoutMenu, ClickHandler, ValueSet*, pValueSet)
 */
 void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
 {
+    using namespace ::sd::slidesorter;
+    using namespace ::sd::slidesorter::controller;
+
     do
     {
         // Filter out the cases where an assignment is not possible or does
@@ -554,6 +529,72 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
 
         SfxRequest aRequest (CreateRequest(SID_MODIFYPAGE, aLayout));
         pViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
+=======
+        ViewShell* pViewShell = mrBase.GetMainViewShell();
+        if (pViewShell == NULL)
+            break;
+
+        // Determine if the current view is in an invalid master page mode.
+        // The handout view is always in master page mode and therefore not
+        // invalid.
+        bool bMasterPageMode (false);
+        switch (pViewShell->GetShellType())
+        {
+            case ViewShell::ST_NOTES:
+            case ViewShell::ST_IMPRESS:
+            {
+                DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pViewShell);
+                if (pDrawViewShell != NULL)
+                    if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
+                        bMasterPageMode = true;
+            }
+        }
+        if (bMasterPageMode)
+            break;
+
+        // Get a list of all selected slides and call the SID_MODIFYPAGE
+        // slot for all of them.
+        ::std::vector<SdPage*> aSelectedPages;
+
+        SlideSorterViewShell* pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
+        if (pSlideSorter != NULL)
+        {
+            // There is a slide sorter visible so get the list of selected pages from it.
+            PageSelector& rSelector (pSlideSorter->GetSlideSorterController().GetPageSelector());
+            ::std::auto_ptr<PageSelector::PageSelection> pSelection (rSelector.GetPageSelection());
+            {
+                SlideSorterController::ModelChangeLock aLock (pSlideSorter->GetSlideSorterController());
+
+                pSlideSorter->GetSelectedPages(aSelectedPages);
+            }
+        }
+        else
+        {
+            // No slide sorter visible.  Ask the main view shell for its current page.
+            ViewShell* pShell = mrBase.GetMainViewShell();
+            if (pShell != NULL)
+                aSelectedPages.push_back(pShell->GetActualPage());
+        }
+
+
+        if (aSelectedPages.size() == 0)
+            break;
+
+        ::std::vector<SdPage*>::iterator iPage;
+        for (iPage=aSelectedPages.begin(); iPage!=aSelectedPages.end(); ++iPage)
+            {
+                if ((*iPage) == NULL)
+                    continue;
+
+                // Call the SID_ASSIGN_LAYOUT slot with all the necessary parameters.
+                SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
+                aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, ((*iPage)->GetPageNum()-1)/2));
+                aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
+                pViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
+            }
+
+        // Restore the previous selection.
+//        rSelector.SetPageSelection(*pSelection.get());
     }
     while(false);
 }
