@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomedia.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:05:34 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ UINT16 SdrMediaObj::GetObjIdentifier() const
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SdrMediaObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrMediaObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     return true;
 }
