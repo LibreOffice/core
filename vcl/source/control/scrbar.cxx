@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:15:03 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _SV_SCRBAR_HXX
 #include <scrbar.hxx>
 #endif
+#ifndef _SV_TIMER_HXX
+#include <timer.hxx>
+#endif
 
 #ifndef _SV_RC_H
 #include <rc.h>
@@ -111,10 +114,17 @@ static long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
 
 #define SCRBAR_VIEW_STYLE           (WB_3DLOOK | WB_HORZ | WB_VERT)
 
+struct ImplScrollBarData
+{
+    AutoTimer       maTimer;            // Timer
+    BOOL            mbHide;
+};
+
 // =======================================================================
 
 void ScrollBar::ImplInit( Window* pParent, WinBits nStyle )
 {
+    mpData              = NULL;
     mnThumbPixRange     = 0;
     mnThumbPixPos       = 0;
     mnThumbPixSize      = 0;
@@ -176,6 +186,8 @@ ScrollBar::ScrollBar( Window* pParent, const ResId& rResId ) :
 
 ScrollBar::~ScrollBar()
 {
+    if( mpData )
+        delete mpData;
 }
 
 // -----------------------------------------------------------------------
@@ -286,7 +298,7 @@ void ScrollBar::ImplUpdateRects( BOOL bUpdate )
             if ( !ImplUpdateThumbRect( aOldThumbRect ) )
                 nDraw |= SCRBAR_DRAW_THUMB;
         }
-        ImplDraw( nDraw );
+        ImplDraw( nDraw, this );
     }
 }
 
@@ -434,12 +446,57 @@ void ScrollBar::ImplCalc( BOOL bUpdate )
 
 // -----------------------------------------------------------------------
 
-void ScrollBar::ImplDraw( USHORT nDrawFlags )
+void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
 {
-    DecorationView          aDecoView( this );
+    Point       aPos  = pDev->LogicToPixel( rPos );
+    Size        aSize = pDev->LogicToPixel( rSize );
+    Rectangle   aRect( aPos, aSize );
+
+    pDev->Push();
+    pDev->SetMapMode();
+    if ( !(nFlags & WINDOW_DRAW_MONO) )
+    {
+        // DecoView uses the FaceColor...
+        AllSettings aSettings = pDev->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        if ( IsControlBackground() )
+            aStyleSettings.SetFaceColor( GetControlBackground() );
+        else
+            aStyleSettings.SetFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
+
+        aSettings.SetStyleSettings( aStyleSettings );
+        pDev->SetSettings( aSettings );
+    }
+
+    // for printing:
+    // -calculate the size of the rects
+    // -because this is zero-based add the correct offset
+    // -print
+    // -force recalculate
+
+    if ( mbCalcSize )
+        ImplCalc( FALSE );
+
+    maBtn1Rect+=aPos;
+    maBtn2Rect+=aPos;
+    maThumbRect+=aPos;
+    maPage1Rect+=aPos;
+    maPage2Rect+=aPos;
+
+    ImplDraw( SCRBAR_DRAW_ALL, pDev );
+    pDev->Pop();
+
+    mbCalcSize = TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+void ScrollBar::ImplDraw( USHORT nDrawFlags, OutputDevice* pOutDev )
+{
+    DecorationView          aDecoView( pOutDev );
     Rectangle               aTempRect;
     USHORT                  nStyle;
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings&    rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
     SymbolType              eSymbolType;
     BOOL                    bEnabled = IsEnabled();
 
@@ -501,7 +558,7 @@ void ScrollBar::ImplDraw( USHORT nDrawFlags )
         aDecoView.DrawSymbol( aTempRect, eSymbolType, rStyleSettings.GetButtonTextColor(), nStyle );
     }
 
-    SetLineColor();
+    pOutDev->SetLineColor();
 
     if ( nDrawFlags & SCRBAR_DRAW_THUMB )
     {
@@ -529,12 +586,12 @@ void ScrollBar::ImplDraw( USHORT nDrawFlags )
                                 if ( nX > aTempRect.Right()-1 )
                                     break;
 
-                                SetLineColor( rStyleSettings.GetButtonTextColor() );
-                                DrawLine( Point( nX, aTempRect.Top()+1 ),
+                                pOutDev->SetLineColor( rStyleSettings.GetButtonTextColor() );
+                                pOutDev->DrawLine( Point( nX, aTempRect.Top()+1 ),
                                           Point( nX, aTempRect.Bottom()-1 ) );
                                 nX++;
-                                SetLineColor( rStyleSettings.GetLightColor() );
-                                DrawLine( Point( nX, aTempRect.Top()+1 ),
+                                pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
+                                pOutDev->DrawLine( Point( nX, aTempRect.Top()+1 ),
                                           Point( nX, aTempRect.Bottom()-1 ) );
                                 nX++;
                             }
@@ -553,24 +610,24 @@ void ScrollBar::ImplDraw( USHORT nDrawFlags )
                                 if ( nY > aTempRect.Bottom()-1 )
                                     break;
 
-                                SetLineColor( rStyleSettings.GetButtonTextColor() );
-                                DrawLine( Point( aTempRect.Left()+1, nY ),
+                                pOutDev->SetLineColor( rStyleSettings.GetButtonTextColor() );
+                                pOutDev->DrawLine( Point( aTempRect.Left()+1, nY ),
                                           Point( aTempRect.Right()-1, nY ) );
                                 nY++;
-                                SetLineColor( rStyleSettings.GetLightColor() );
-                                DrawLine( Point( aTempRect.Left()+1, nY ),
+                                pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
+                                pOutDev->DrawLine( Point( aTempRect.Left()+1, nY ),
                                           Point( aTempRect.Right()-1, nY ) );
                                 nY++;
                             }
                         }
                     }
-                    SetLineColor();
+                    pOutDev->SetLineColor();
                 }
             }
             else
             {
-                SetFillColor( rStyleSettings.GetCheckedColor() );
-                DrawRect( maThumbRect );
+                pOutDev->SetFillColor( rStyleSettings.GetCheckedColor() );
+                pOutDev->DrawRect( maThumbRect );
             }
         }
     }
@@ -578,18 +635,18 @@ void ScrollBar::ImplDraw( USHORT nDrawFlags )
     if ( nDrawFlags & SCRBAR_DRAW_PAGE1 )
     {
         if ( mnStateFlags & SCRBAR_STATE_PAGE1_DOWN )
-            SetFillColor( rStyleSettings.GetShadowColor() );
+            pOutDev->SetFillColor( rStyleSettings.GetShadowColor() );
         else
-            SetFillColor( rStyleSettings.GetCheckedColor() );
-        DrawRect( maPage1Rect );
+            pOutDev->SetFillColor( rStyleSettings.GetCheckedColor() );
+        pOutDev->DrawRect( maPage1Rect );
     }
     if ( nDrawFlags & SCRBAR_DRAW_PAGE2 )
     {
         if ( mnStateFlags & SCRBAR_STATE_PAGE2_DOWN )
-            SetFillColor( rStyleSettings.GetShadowColor() );
+            pOutDev->SetFillColor( rStyleSettings.GetShadowColor() );
         else
-            SetFillColor( rStyleSettings.GetCheckedColor() );
-        DrawRect( maPage2Rect );
+            pOutDev->SetFillColor( rStyleSettings.GetCheckedColor() );
+        pOutDev->DrawRect( maPage2Rect );
     }
 }
 
@@ -690,7 +747,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, BOOL bCallAction )
     }
 
     if ( nOldStateFlags != mnStateFlags )
-        ImplDraw( mnDragDraw );
+        ImplDraw( mnDragDraw, this );
     if ( bAction )
         ImplDoAction( FALSE );
 }
@@ -728,6 +785,13 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else if ( maThumbRect.IsInside( rMousePos ) )
         {
+            if( mpData )
+            {
+                mpData->mbHide = TRUE;  // disable focus blinking
+                if( HasFocus() )
+                    ImplDraw( SCRBAR_DRAW_THUMB, this ); // paint without focus
+            }
+
             if ( mnVisibleSize < mnMaxRange-mnMinRange )
             {
                 nTrackFlags     = 0;
@@ -744,7 +808,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                 if ( GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_OS2STYLE )
                 {
                     mnStateFlags |= SCRBAR_STATE_THUMB_DOWN;
-                    ImplDraw( mnDragDraw );
+                    ImplDraw( mnDragDraw, this );
                 }
             }
             else
@@ -792,7 +856,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
                           SCRBAR_STATE_PAGE1_DOWN | SCRBAR_STATE_PAGE2_DOWN |
                           SCRBAR_STATE_THUMB_DOWN);
         if ( nOldStateFlags != mnStateFlags )
-            ImplDraw( mnDragDraw );
+            ImplDraw( mnDragDraw, this );
         mnDragDraw = 0;
 
         // Bei Abbruch, die alte ThumbPosition wieder herstellen
@@ -822,6 +886,10 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
         EndScroll();
         mnDelta = 0;
         meScrollType = SCROLL_DONTKNOW;
+
+        if( mpData )
+            mpData->mbHide = FALSE; // re-enable focus blinking
+
     }
     else
     {
@@ -912,7 +980,7 @@ void ScrollBar::KeyInput( const KeyEvent& rKEvt )
 
 void ScrollBar::Paint( const Rectangle& rRect )
 {
-    ImplDraw( SCRBAR_DRAW_ALL );
+    ImplDraw( SCRBAR_DRAW_ALL, this );
 }
 
 // -----------------------------------------------------------------------
@@ -924,6 +992,60 @@ void ScrollBar::Resize()
     if ( IsReallyVisible() )
         ImplCalc( FALSE );
     Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( ScrollBar, ImplAutoTimerHdl, AutoTimer*, EMPTYARG )
+{
+    if( mpData && mpData->mbHide )
+        return 0;
+    ImplInvert();
+    return 0;
+}
+
+void ScrollBar::ImplInvert()
+{
+    Rectangle aRect( maThumbRect );
+    if( aRect.getWidth() > 4 )
+    {
+        aRect.Left() += 2;
+        aRect.Right() -= 2;
+    }
+    if( aRect.getHeight() > 4 )
+    {
+        aRect.Top() += 2;
+        aRect.Bottom() -= 2;
+    }
+
+    Invert( aRect, 0 );
+}
+
+// -----------------------------------------------------------------------
+
+void ScrollBar::GetFocus()
+{
+    if( !mpData )
+    {
+        mpData = new ImplScrollBarData;
+        mpData->maTimer.SetTimeoutHdl( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
+        mpData->mbHide = FALSE;
+    }
+    ImplInvert();   // react immediately
+    mpData->maTimer.SetTimeout( GetSettings().GetStyleSettings().GetCursorBlinkTime() );
+    mpData->maTimer.Start();
+    Control::GetFocus();
+}
+
+// -----------------------------------------------------------------------
+
+void ScrollBar::LoseFocus()
+{
+    if( mpData )
+        mpData->maTimer.Stop();
+    ImplDraw( SCRBAR_DRAW_THUMB, this );
+
+    Control::LoseFocus();
 }
 
 // -----------------------------------------------------------------------
