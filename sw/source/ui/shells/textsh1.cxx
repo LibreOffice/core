@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:36:37 $
+ *  last change: $Author: os $ $Date: 2001-01-10 16:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,10 +824,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (!rWrtSh.IsAddMode())
                 rWrtSh.MoveParagraph(-1);
             break;
-
+        case SID_RUBY_DIALOG:
         case SID_HYPERLINK_DIALOG:
         {
-            SfxRequest aReq(SID_HYPERLINK_DIALOG, SFX_CALLMODE_SLOT, SFX_APP()->GetPool());
+            SfxRequest aReq(nSlot, SFX_CALLMODE_SLOT, SFX_APP()->GetPool());
             GetView().GetViewFrame()->ExecuteSlot( aReq);
         }
         break;
@@ -994,9 +994,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 if(!rSh.HasSelection())
                     rSet.DisableItem( nWhich );
             break;
+            case SID_RUBY_DIALOG:
             case SID_HYPERLINK_DIALOG:
-                if(!GetView().GetViewFrame()->HasChildWindow(SID_HYPERLINK_DIALOG)  && rSh.HasReadonlySel())
-                    rSet.DisableItem(SID_HYPERLINK_DIALOG);
+                if(!GetView().GetViewFrame()->HasChildWindow(nWhich)  && rSh.HasReadonlySel())
+                    rSet.DisableItem(nWhich);
+                else
+                    rSet.Put(SfxBoolItem(nWhich, 0 != GetView().GetViewFrame()->GetChildWindow(nWhich)));
             break;
             case FN_EDIT_HYPERLINK:
             {
@@ -1019,6 +1022,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/06 13:36:37  jp
+    should changes: don't use IniManager
+
     Revision 1.1.1.1  2000/09/18 17:14:47  hr
     initial import
 

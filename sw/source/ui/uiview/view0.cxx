@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 15:49:54 $
+ *  last change: $Author: os $ $Date: 2001-01-10 16:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
     SFX_CHILDWINDOW_REGISTRATION(FN_REDLINE_ACCEPT);
     SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_DIALOG);
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(SID_RUBY_DIALOG);
 
 
         SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_SYNC_LABELS, 1);
@@ -178,6 +179,9 @@ view::XSelectionSupplier* SwView::GetUNOObject()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/11/10 15:49:54  tbe
+    removed outcommented basctl include file idetemp.hxx
+
     Revision 1.4  2000/10/23 10:52:34  tbe
     idetemp.hxx include removed
 

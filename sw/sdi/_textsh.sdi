@@ -2,7 +2,7 @@
 
     $Workfile:   _textsh.sdi  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_textsh.sdi,v 1.4 2000-12-21 13:02:28 jp Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_textsh.sdi,v 1.5 2001-01-10 16:14:47 os Exp $
 
     Beschreibung:   Basis-interfaces fuer Text
 
@@ -191,6 +191,11 @@ interface BaseText : Selection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_HYPERLINK_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+    ]
+    SID_RUBY_DIALOG
     [
         ExecMethod = Execute ;
         StateMethod = GetState;
@@ -1224,6 +1229,9 @@ interface BaseText : Selection
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 13:02:28  jp
+    new: transliteration
+
     Revision 1.3  2000/11/13 12:25:09  jp
     character attribute use the method of the BaseShell
 

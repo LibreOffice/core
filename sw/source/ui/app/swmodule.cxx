@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-24 18:02:44 $
+ *  last change: $Author: os $ $Date: 2001-01-10 16:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,9 @@
 #ifndef _BARCFG_HXX
 #include <barcfg.hxx>
 #endif
+#ifndef _SVX_RUBYDLG_HXX_
+#include <svx/rubydialog.hxx>
+#endif
 
 #include <app.hrc>
 
@@ -589,6 +592,7 @@ void SwDLL::RegisterControls()
     SwSyncChildWin::RegisterChildWindow( sal_True, pMod );
     SwInsertIdxMarkWrapper::RegisterChildWindow( sal_False, pMod );
     SwInsertAuthMarkWrapper::RegisterChildWindow( sal_False, pMod );
+    SvxRubyChildWindow::RegisterChildWindow( sal_False, pMod);
 
     SvxGrafRedToolBoxControl::RegisterControl( SID_ATTR_GRAF_RED, pMod );
     SvxGrafGreenToolBoxControl::RegisterControl( SID_ATTR_GRAF_GREEN, pMod );
