@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsccont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:49:21 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ struct ENTRY_STRUCT {
     void Destroy();
 };
 struct RscBaseContInst {
-    USHORT          nEntries;
+    sal_uInt32          nEntries;
     ENTRY_STRUCT *  pEntries;
     BOOL            bDflt;
 };
@@ -90,21 +90,21 @@ protected:
     RscTop *        pTypeClass; // Typ der Eintraege
     RscTop *        pTypeClass1;// Zwei verschiedene Typen moeglich
     BOOL            bNoId;      // Keine Identifier
-    USHORT          nSize;      // Groesse der Instanzdaten dieser Klasse
+    sal_uInt32          nSize;      // Groesse der Instanzdaten dieser Klasse
                                 // mit Superklassen
-    USHORT          nOffInstData;// Offset auf eigen Instanzdaten
+    sal_uInt32          nOffInstData;// Offset auf eigen Instanzdaten
     void            DestroyElements( RscBaseContInst * pClassData );
     RSCINST         SearchElePos( const RSCINST & rInst, const RscId & rEleName,
-                                  RscTop * pClass, USHORT nPos );
+                                  RscTop * pClass, sal_uInt32 nPos );
 protected:
     void            ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
-                                  RscTypCont * pTC, USHORT nTab, const char * );
+                                  RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         ContWriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                                 RscTypCont * pTC, USHORT, BOOL bExtra );
+                                 RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     void            ContWriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                         const char *, BOOL nWriteSize );
 public:
-                    RscBaseCont( HASHID nId, USHORT nTypId,
+                    RscBaseCont( Atom nId, sal_uInt32 nTypId,
                                  RscTop * pSuper = NULL,
                                  BOOL bNoId = TRUE );
                     ~RscBaseCont();
@@ -121,22 +121,22 @@ public:
                                 RSCINST * pGetInst );
     RSCINST         SearchEle( const RSCINST & rInst, const RscId & rEleName,
                                RscTop * pClass );
-    USHORT          GetCount( const RSCINST & rInst );
-    RSCINST         GetPosEle( const RSCINST & rInst, USHORT nPos );
-    ERRTYPE         MovePosEle( const RSCINST & rInst, USHORT nDestPos,
-                                USHORT nSourcePos );
-    virtual ERRTYPE SetPosRscId( const RSCINST & rInst, USHORT nPos,
+    sal_uInt32          GetCount( const RSCINST & rInst );
+    RSCINST         GetPosEle( const RSCINST & rInst, sal_uInt32 nPos );
+    ERRTYPE         MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
+                                sal_uInt32 nSourcePos );
+    virtual ERRTYPE SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
                                  const RscId & rRscId);
-    SUBINFO_STRUCT  GetInfoEle( const RSCINST & rInst, USHORT nPos );
-    ERRTYPE         SetString( const RSCINST &, char * pStr );
+    SUBINFO_STRUCT  GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos );
+    ERRTYPE         SetString( const RSCINST &, const char * pStr );
     ERRTYPE         SetNumber( const RSCINST &, INT32 lValue );
     ERRTYPE         SetBool( const RSCINST & rInst, BOOL bValue );
-    ERRTYPE         SetConst( const RSCINST & rInst, HASHID nValueId,
+    ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
                               INT32 nValue );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
 
                     // Gibt die Groesse der Klasse in Bytes
-    USHORT          Size(){ return( nSize ); };
+    sal_uInt32          Size(){ return( nSize ); };
 
     BOOL            IsConsistent( const RSCINST & rInst, RscInconsList * pList );
     void            SetToDefault( const RSCINST & rInst );
@@ -145,12 +145,12 @@ public:
 
     void            Delete( const RSCINST & rInst, RscTop * pClass,
                             const RscId & rId );
-    void            DeletePos( const RSCINST & rInst, USHORT nPos );
+    void            DeletePos( const RSCINST & rInst, sal_uInt32 nPos );
 
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT , BOOL bExtra);
+                             RscTypCont * pTC, sal_uInt32 , BOOL bExtra);
     ERRTYPE         WriteHxx( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, const RscId & rId );
     ERRTYPE         WriteCxx( const RSCINST & rInst, FILE * fOutput,
@@ -161,21 +161,21 @@ public:
 class RscContWriteSrc : public RscBaseCont
 {
 public:
-                    RscContWriteSrc( HASHID nId, USHORT nTypId,
+                    RscContWriteSrc( Atom nId, sal_uInt32 nTypId,
                                      RscTop * pSuper = NULL,
                                      BOOL bNoId = TRUE );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
 };
 
 /******************* R s c C o n t ***************************************/
 class RscCont : public RscContWriteSrc {
 public:
-                    RscCont( HASHID nId, USHORT nTypId,
+                    RscCont( Atom nId, sal_uInt32 nTypId,
                              RscTop * pSuper = NULL,
                              BOOL bNoId = TRUE );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };
@@ -183,11 +183,11 @@ public:
 /******************* R s c C o n t E x t r a D a t a *********************/
 class RscContExtraData : public RscContWriteSrc {
 public:
-                    RscContExtraData( HASHID nId, USHORT nTypId,
+                    RscContExtraData( Atom nId, sal_uInt32 nTypId,
                              RscTop * pSuper = NULL,
                              BOOL bNoId = TRUE );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
 };
 
 #endif //_RSCCONT_HXX
