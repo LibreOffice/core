@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-01-16 15:44:17 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,7 +618,12 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     }
     aLbLanguage.SelectLanguage( eLangType );
     UpdateFormatListBox_Impl(FALSE,TRUE);
-    SelFormatHdl_Impl( &aLbCategory );
+
+//! erAck 26.01.01
+//! This spoils everything because it rematches currency formats based on
+//! the selected aLbCurrency entry instead of the current format.
+//! Besides that everything seems to be initialized by now, so why call it?
+//  SelFormatHdl_Impl( &aLbCategory );
 
     if ( pValFmtAttr )
     {

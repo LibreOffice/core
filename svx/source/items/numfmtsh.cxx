@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,10 +231,14 @@ void SvxNumberFormatShell::CategoryChanged( sal_uInt16     nCatLbPos,
                                             short&     rFmtSelPos,
                                             SvStrings& rFmtEntries )
 {
+    short nOldCategory = nCurCategory;
     PosToCategory_Impl( nCatLbPos, nCurCategory );
     pCurFmtTable = &( pFormatter->GetEntryTable( nCurCategory,
                                                  nCurFormatKey,
                                                  eCurLanguage ) );
+    // reinitialize currency if category newly entered
+    if ( nCurCategory == NUMBERFORMAT_CURRENCY && nOldCategory != nCurCategory )
+        pCurCurrencyEntry = NULL;
     rFmtSelPos = FillEntryList_Impl( rFmtEntries );
 }
 
@@ -617,7 +621,7 @@ short SvxNumberFormatShell::FillEntryList_Impl( SvStrings& rList )
     }
 
     if( nPrivCat!=CAT_CURRENCY)
-        nSelPos=FillEListWithUsD_Impl(rList,nSelPos);
+        nSelPos=FillEListWithUsD_Impl(rList,nPrivCat,nSelPos);
 
     return nSelPos;
 }
@@ -634,60 +638,48 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( SvStrings& rList,sal_uInt16 nP
     if(aCurrencyFormatList.Count()>0)
         aCurrencyFormatList.DeleteAndDestroy(0,aCurrencyFormatList.Count());
 
-
-    SvNumberformat* pNumEntry   = (SvNumberformat*)( pCurFmtTable->First() );
-    sal_uInt16          nCount      = 0;
-    String          aStrComment;
-    String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
-    Color           aColor;
-
-    short           nMyCat      = SELPOS_NONE;
-    short           nIq=0;
-
-    NfIndexTableOffset eOffsetStart;
-    NfIndexTableOffset eOffsetEnd;
-
-    switch(nPrivCat)
-    {
-        case CAT_NUMBER         :eOffsetStart=NF_NUMBER_START;
-                                 eOffsetEnd=NF_NUMBER_END;
-                                 break;
-        case CAT_PERCENT        :eOffsetStart=NF_PERCENT_START;
-                                 eOffsetEnd=NF_PERCENT_END;
-                                 break;
-        case CAT_CURRENCY       :eOffsetStart=NF_CURRENCY_START;
-                                 eOffsetEnd=NF_CURRENCY_END;
-                                 break;
-        case CAT_DATE           :eOffsetStart=NF_DATE_START;
-                                 eOffsetEnd=NF_DATE_END;
-                                 break;
-        case CAT_TIME           :eOffsetStart=NF_TIME_START;
-                                 eOffsetEnd=NF_TIME_END;
-                                 break;
-        case CAT_SCIENTIFIC     :eOffsetStart=NF_SCIENTIFIC_START;
-                                 eOffsetEnd=NF_SCIENTIFIC_END;
-                                 break;
-        case CAT_FRACTION       :eOffsetStart=NF_FRACTION_START;
-                                 eOffsetEnd=NF_FRACTION_END;
-                                 break;
-        case CAT_BOOLEAN        :eOffsetStart=NF_BOOLEAN;
-                                 eOffsetEnd=NF_BOOLEAN;
-                                 break;
-        case CAT_TEXT           :eOffsetStart=NF_TEXT;
-                                 eOffsetEnd=NF_TEXT;
-                                 break;
-        default                 :return;
-                                 break;
-    }
-
     if(nPrivCat==CAT_CURRENCY)
     {
         nSelPos=FillEListWithCurrency_Impl(rList,nSelPos);
     }
     else
     {
+        NfIndexTableOffset eOffsetStart;
+        NfIndexTableOffset eOffsetEnd;
+
+        switch(nPrivCat)
+        {
+            case CAT_NUMBER         :eOffsetStart=NF_NUMBER_START;
+                                     eOffsetEnd=NF_NUMBER_END;
+                                     break;
+            case CAT_PERCENT        :eOffsetStart=NF_PERCENT_START;
+                                     eOffsetEnd=NF_PERCENT_END;
+                                     break;
+            case CAT_CURRENCY       :eOffsetStart=NF_CURRENCY_START;
+                                     eOffsetEnd=NF_CURRENCY_END;
+                                     break;
+            case CAT_DATE           :eOffsetStart=NF_DATE_START;
+                                     eOffsetEnd=NF_DATE_END;
+                                     break;
+            case CAT_TIME           :eOffsetStart=NF_TIME_START;
+                                     eOffsetEnd=NF_TIME_END;
+                                     break;
+            case CAT_SCIENTIFIC     :eOffsetStart=NF_SCIENTIFIC_START;
+                                     eOffsetEnd=NF_SCIENTIFIC_END;
+                                     break;
+            case CAT_FRACTION       :eOffsetStart=NF_FRACTION_START;
+                                     eOffsetEnd=NF_FRACTION_END;
+                                     break;
+            case CAT_BOOLEAN        :eOffsetStart=NF_BOOLEAN;
+                                     eOffsetEnd=NF_BOOLEAN;
+                                     break;
+            case CAT_TEXT           :eOffsetStart=NF_TEXT;
+                                     eOffsetEnd=NF_TEXT;
+                                     break;
+            default                 :return;
+                                     break;
+        }
+
         nSelPos=FillEListWithFormats_Impl(rList,nSelPos,eOffsetStart,eOffsetEnd);
 
         if(nPrivCat==CAT_DATE || nPrivCat==CAT_TIME)
@@ -711,7 +703,7 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( SvStrings& rList,short nS
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    SvNumberformat* pNumEntry   = (SvNumberformat*)( pCurFmtTable->First() );
+    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
     sal_uInt16          nCount      = 0;
     sal_uInt32          nNFEntry;
     String          aStrComment;
@@ -729,7 +721,7 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( SvStrings& rList,short nS
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 
-        pNumEntry   = (SvNumberformat*)pFormatter->GetEntry(nNFEntry);
+        pNumEntry   = pFormatter->GetEntry(nNFEntry);
 
         if(pNumEntry==NULL) continue;
 
@@ -758,7 +750,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( SvStrings& rList,short n
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    SvNumberformat* pNumEntry   = (SvNumberformat*)( pCurFmtTable->First() );
+    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
     sal_uInt16          nCount      = 0;
     sal_uInt32          nNFEntry;
     String          aStrComment;
@@ -776,7 +768,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( SvStrings& rList,short n
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 
-        pNumEntry   = (SvNumberformat*)pFormatter->GetEntry(nNFEntry);
+        pNumEntry   = pFormatter->GetEntry(nNFEntry);
         if(pNumEntry!=NULL)
         {
             nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
@@ -808,21 +800,19 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl( SvStrings& rList,short n
      */
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    const NfCurrencyTable& rCurrencyTable=pFormatter->GetTheCurrencyTable();
-    sal_uInt16 nCount=rCurrencyTable.Count();
-
     const NfCurrencyEntry* pTmpCurrencyEntry;
     sal_Bool             bTmpBanking;
     XubString        rSymbol;
-    XubString        rBankSymbol;
 
     sal_Bool bFlag=pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
                 &pTmpCurrencyEntry,&bTmpBanking);
 
     if((!bFlag && pCurCurrencyEntry==NULL)  ||
-        (bFlag && pTmpCurrencyEntry==NULL)  ||
+        (bFlag && pTmpCurrencyEntry==NULL && !rSymbol.Len())    ||
         nCurCategory==NUMBERFORMAT_ALL)
     {
+        if ( nCurCategory == NUMBERFORMAT_ALL )
+            FillEListWithUserCurrencys(rList,nSelPos);
         nSelPos=FillEListWithSysCurrencys(rList,nSelPos);
     }
     else
@@ -845,7 +835,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    SvNumberformat* pNumEntry   = (SvNumberformat*)( pCurFmtTable->First() );
+    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
     sal_uInt16          nCount      = 0;
     sal_uInt32          nNFEntry;
     String          aStrComment;
@@ -867,7 +857,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 
-        pNumEntry   = (SvNumberformat*)pFormatter->GetEntry(nNFEntry);
+        pNumEntry   = pFormatter->GetEntry(nNFEntry);
 
         if(pNumEntry==NULL) continue;
 
@@ -889,7 +879,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
 
     if(nCurCategory!=NUMBERFORMAT_ALL)
     {
-        pNumEntry   = (SvNumberformat*)( pCurFmtTable->First() );
+        pNumEntry   = pCurFmtTable->First();
         nCount      = 0;
         while ( pNumEntry )
         {
@@ -926,7 +916,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
                     aCurEntryList.Insert( nKey, aCurEntryList.Count() );
                 }
             }
-            pNumEntry = (SvNumberformat*)( pCurFmtTable->Next() );
+            pNumEntry = pCurFmtTable->Next();
         }
     }
     return nSelPos;
@@ -984,7 +974,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
         pTmpCurrencyEntry->BuildSymbolString(rShortSymbol,bTmpBanking,sal_True);
     }
 
-    SvNumberformat* pNumEntry   = (SvNumberformat*)( pCurFmtTable->First() );
+    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
 
     while ( pNumEntry )
     {
@@ -994,7 +984,8 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
 
         if ( !IsRemoved_Impl( nKey ) )
         {
-            if(pNumEntry->GetType() & NUMBERFORMAT_DEFINED)
+            if( pNumEntry->GetType() & NUMBERFORMAT_DEFINED ||
+                    pNumEntry->IsAdditionalStandardDefined() )
             {
                 nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
                 aStrComment=pNumEntry->GetComment();
@@ -1002,7 +993,9 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
                 aNewFormNInfo=  pNumEntry->GetFormatstring();
 
                 sal_Bool bInsFlag=sal_False;
-                if(!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND||
+                if ( pNumEntry->HasNewCurrency() )
+                    bInsFlag = sal_True;    // merge locale formats into currency selection
+                else if(!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND||
                    bTmpBanking && aNewFormNInfo.Search(rBankSymbol)!=STRING_NOTFOUND)
                 {
                     bInsFlag=sal_True;
@@ -1032,21 +1025,20 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
                 }
             }
         }
-        pNumEntry = (SvNumberformat*)( pCurFmtTable->Next() );
+        pNumEntry = pCurFmtTable->Next();
     }
 
     NfWSStringsDtor aWSStringsDtor;
     sal_uInt16 nDefault;
-    if ( pTmpCurrencyEntry )
-        nDefault = pFormatter->GetCurrencyFormatStrings( aWSStringsDtor,
-            *pTmpCurrencyEntry, bTmpBanking );
+    if ( pTmpCurrencyEntry && nCurCategory != NUMBERFORMAT_ALL )
+        nSelPos = nDefault = pFormatter->GetCurrencyFormatStrings(
+            aWSStringsDtor, *pTmpCurrencyEntry, bTmpBanking );
     else
         nDefault = 0;
 
-    nSelPos=nDefault;
-
     sal_uInt16 i,nPos;
-    for(i=0,nPos=0;i<aWSStringsDtor.Count();i++)
+    sal_uInt16 nOldListCount = rList.Count();
+    for( i=0, nPos=nOldListCount; i<aWSStringsDtor.Count(); i++)
     {
         sal_Bool bFlag=sal_True;
         String aInsStr(*aWSStringsDtor[i]);
@@ -1084,23 +1076,22 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
         }
     }
 
-    for(i=0;i<rList.Count();i++)
+    for(i=nOldListCount;i<rList.Count();i++)
     {
         aCurrencyFormatList.Insert(new String(*rList[i]),aCurrencyFormatList.Count());
 
-        if ( aCurEntryList[i]== nCurFormatKey ) nSelPos =i;
+        if ( nSelPos == SELPOS_NONE && aCurEntryList[i] == nCurFormatKey )
+            nSelPos = i;
     }
 
-    if(nCurCategory!=NUMBERFORMAT_ALL && nSelPos==SELPOS_NONE)
-    {
-        nSelPos=0;
-    }
+    if ( nSelPos == SELPOS_NONE && nCurCategory != NUMBERFORMAT_ALL )
+        nSelPos = nDefault;
 
     return nSelPos;
 }
 
 
-short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList,short nSelPos)
+short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 nPrivCat, short nSelPos)
 {
     /* Erstellen einer aktuellen Liste von Format-Eintraegen.
      * Rueckgabewert ist die Listenposition des aktuellen Formates.
@@ -1111,7 +1102,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList,short nSelPo
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    SvNumberformat* pNumEntry   = (SvNumberformat*)( pCurFmtTable->First() );
+    const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
     sal_uInt16          nCount      = 0;
     String          aStrComment;
     String          aNewFormNInfo;
@@ -1122,6 +1113,8 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList,short nSelPo
 
     short           nMyCat      = SELPOS_NONE;
     short           nIq=0;
+    sal_Bool        bAdditional = (nPrivCat != CAT_USERDEFINED &&
+                                    nCurCategory != NUMBERFORMAT_ALL);
 
     while ( pNumEntry )
     {
@@ -1131,7 +1124,8 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList,short nSelPo
 
         if ( !IsRemoved_Impl( nKey ) )
         {
-            if(pNumEntry->GetType() & NUMBERFORMAT_DEFINED)
+            if( (pNumEntry->GetType() & NUMBERFORMAT_DEFINED) ||
+                    (bAdditional && pNumEntry->IsAdditionalStandardDefined()) )
             {
                 nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
                 aStrComment=pNumEntry->GetComment();
@@ -1155,7 +1149,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList,short nSelPo
                 }
             }
         }
-        pNumEntry = (SvNumberformat*)( pCurFmtTable->Next() );
+        pNumEntry = pCurFmtTable->Next();
     }
     return nSelPos;
 }
@@ -1321,7 +1315,7 @@ void SvxNumberFormatShell::SetComment4Entry(short nEntry,String aEntStr)
 
 String SvxNumberFormatShell::GetComment4Entry(short nEntry)
 {
-    SvNumberformat *pNumEntry;
+    const SvNumberformat *pNumEntry;
 
     if(nEntry < 0)
         return String();
@@ -1329,7 +1323,7 @@ String SvxNumberFormatShell::GetComment4Entry(short nEntry)
     if(nEntry<aCurEntryList.Count())
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
-        pNumEntry = (SvNumberformat*)pFormatter->GetEntry(nMyNfEntry);
+        pNumEntry = pFormatter->GetEntry(nMyNfEntry);
         if(pNumEntry!=NULL)
             return pNumEntry->GetComment();
     }
@@ -1354,7 +1348,7 @@ String SvxNumberFormatShell::GetComment4Entry(short nEntry)
 
 short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 {
-    SvNumberformat *pNumEntry;
+    const SvNumberformat *pNumEntry;
     if(nEntry<0) return 0;
 
     if(nEntry<aCurEntryList.Count())
@@ -1363,7 +1357,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 
         if(nMyNfEntry!=NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
-            pNumEntry = (SvNumberformat*)pFormatter->GetEntry(nMyNfEntry);
+            pNumEntry = pFormatter->GetEntry(nMyNfEntry);
             sal_uInt16 nMyCat,nMyType;
             if(pNumEntry!=NULL)
             {
@@ -1400,12 +1394,12 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 
 sal_Bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 {
-    SvNumberformat *pNumEntry;
+    const SvNumberformat *pNumEntry;
     if(nEntry<0) return 0;
     if(nEntry<aCurEntryList.Count())
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
-        pNumEntry = (SvNumberformat*)pFormatter->GetEntry(nMyNfEntry);
+        pNumEntry = pFormatter->GetEntry(nMyNfEntry);
 
         if(pNumEntry!=NULL)
         {
@@ -1436,7 +1430,7 @@ sal_Bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 
 String SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 {
-    SvNumberformat *pNumEntry;
+    const SvNumberformat *pNumEntry;
 
     if(nEntry < 0)
         return String();
@@ -1449,7 +1443,7 @@ String SvxNumberFormatShell::GetFormat4Entry(short nEntry)
     else
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
-        pNumEntry = (SvNumberformat*)pFormatter->GetEntry(nMyNfEntry);
+        pNumEntry = pFormatter->GetEntry(nMyNfEntry);
 
         if(pNumEntry!=NULL)
             return pNumEntry->GetFormatstring();
@@ -1674,7 +1668,6 @@ void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt16 nPos)
         {
             pCurCurrencyEntry=rCurrencyTable[nCurrencyPos];
             nCurCurrencyEntryPos=nPos;
-            nCurFormatKey=NUMBERFORMAT_ENTRY_NEW_CURRENCY;
         }
         else
         {
@@ -1740,29 +1733,54 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const String& rFmtString )
 
 sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtString, sal_Bool &bTestBanking )
 {
+    sal_uInt16 nPos=(sal_uInt16) -1;
+
     const NfCurrencyTable& rCurrencyTable=pFormatter->GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
 
-    sal_uInt16 nPos=(sal_uInt16) -1;
-    for(sal_uInt16 i=0;i<nCount;i++)
-    {
-        const NfCurrencyEntry* pTmpCurrencyEntry=rCurrencyTable[i];
-        XubString        rSymbol;
-        XubString        rBankSymbol;
-        pTmpCurrencyEntry->BuildSymbolString(rSymbol,sal_False);
-        pTmpCurrencyEntry->BuildSymbolString(rBankSymbol,sal_True);
-
-        if(rFmtString.Search(rSymbol)!=STRING_NOTFOUND)
+    const SvNumberformat* pFormat;
+    String aSymbol, aExtension;
+    sal_uInt32 nFound = pFormatter->TestNewString( rFmtString, eCurLanguage );
+    if ( nFound != NUMBERFORMAT_ENTRY_NOT_FOUND &&
+            (pFormat = pFormatter->GetEntry( nFound )) &&
+            pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
+    {   // eventually match with format locale
+        const NfCurrencyEntry* pTmpCurrencyEntry =
+            pFormatter->GetCurrencyEntry( bTestBanking, aSymbol, aExtension,
+            pFormat->GetLanguage() );
+        if ( pTmpCurrencyEntry )
         {
-            bTestBanking=sal_False;
-            nPos=i;
-            break;
+            for(sal_uInt16 i=0;i<nCount;i++)
+            {
+                if(pTmpCurrencyEntry==rCurrencyTable[i])
+                {
+                    nPos=i;
+                    break;
+                }
+            }
         }
-        else if(rFmtString.Search(rBankSymbol)!=STRING_NOTFOUND)
+    }
+    else
+    {   // search symbol string only
+        for(sal_uInt16 i=0;i<nCount;i++)
         {
-            bTestBanking=sal_True;
-            nPos=i;
-            break;
+            const NfCurrencyEntry* pTmpCurrencyEntry=rCurrencyTable[i];
+            XubString aSymbol, aBankSymbol;
+            pTmpCurrencyEntry->BuildSymbolString(aSymbol,sal_False);
+            pTmpCurrencyEntry->BuildSymbolString(aBankSymbol,sal_True);
+
+            if(rFmtString.Search(aSymbol)!=STRING_NOTFOUND)
+            {
+                bTestBanking=sal_False;
+                nPos=i;
+                break;
+            }
+            else if(rFmtString.Search(aBankSymbol)!=STRING_NOTFOUND)
+            {
+                bTestBanking=sal_True;
+                nPos=i;
+                break;
+            }
         }
     }
 
