@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:29:07 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@ using namespace com::sun::star::uno;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
+void dummy_can_throw_anything( char const * );
+
 //==================================================================================================
 static void callVirtualMethod( void * pThis,
                                       sal_Int32 nVtableIndex,
@@ -97,6 +99,9 @@ static void callVirtualMethod( void * pThis,
     OSL_ENSURE( (sizeof(void *) == 4) &&
                  (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
     OSL_ENSURE( nStackLongs && pStackLongs, "### no stack in callVirtualMethod !" );
+
+    // never called
+    if (! pThis) dummy_can_throw_anything("xxx"); // address something
 
     volatile long o0 = 0, o1 = 0; // for register returns
     volatile double f0d = 0;
