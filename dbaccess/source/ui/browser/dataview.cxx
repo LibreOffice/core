@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-19 13:48:54 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,16 +83,24 @@
 #ifndef DBAUI_ICONTROLLER_HXX
 #include "IController.hxx"
 #endif
-
-using namespace dbaui;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::lang;
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
+#ifndef _SFX_HRC
+#include <sfx2/sfx.hrc>
+#endif
+#ifndef _SVTOOLS_IMGDEF_HXX
+#include <svtools/imgdef.hxx>
+#endif
 
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::lang;
+
     //=====================================================================
     //= ColorChanger
     //=====================================================================
@@ -123,7 +131,6 @@ namespace dbaui
                             const Reference< XMultiServiceFactory >& _rFactory,
                             WinBits nStyle)
         :Window(pParent,nStyle)
-        ,m_pToolBox( NULL )
         ,m_xServiceFactory(_rFactory)
         ,m_pSeparator( NULL )
         ,m_pController( _pController )
@@ -166,22 +173,24 @@ namespace dbaui
         }
         Resize();
     }
-
     // -------------------------------------------------------------------------
     void ODataView::setToolBox(ToolBox* pTB)
     {
-        if (pTB == m_pToolBox)
+        if (pTB == getToolBox())
             return;
 
-        if (m_pToolBox)
-            delete m_pToolBox;
-
-        m_pToolBox = pTB;
-        if (m_pToolBox)
+        if (getToolBox())
         {
-            m_pToolBox->SetParent(this);
-            m_pToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
-            m_pToolBox->Show();
+            notifySystemWindow(this,getToolBox(),::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+            delete getToolBox();
+        }
+
+        OToolBoxHelper::setToolBox(pTB);
+        if ( getToolBox() )
+        {
+            getToolBox()->SetParent(this);
+            notifySystemWindow(this,getToolBox(),::comphelper::mem_fun(&TaskPaneList::AddWindow));
+            getToolBox()->Show();
         }
 
         // rearrange the grid and the TB
@@ -222,12 +231,12 @@ namespace dbaui
         }
 
         // position the tool box
-        if ( m_pToolBox )
+        if ( getToolBox() )
         {
-            m_pToolBox->SetPosPixel( aPlayground.TopLeft() );
+            getToolBox()->SetPosPixel( aPlayground.TopLeft() );
 
-            Size aToolboxSize( aPlayground.GetSize().Width(), m_pToolBox->GetSizePixel().Height() );
-            m_pToolBox->SetSizePixel( aToolboxSize );
+            Size aToolboxSize( aPlayground.GetSize().Width(), getToolBox()->GetSizePixel().Height() );
+            getToolBox()->SetSizePixel( aToolboxSize );
 
             aPlayground.Top() += aToolboxSize.Height();
         }
@@ -286,7 +295,52 @@ namespace dbaui
         return bHandled ? 1L : Window::PreNotify(rNEvt);
     }
     // -----------------------------------------------------------------------------
+    void ODataView::StateChanged( StateChangedType nType )
+    {
+        Window::StateChanged( nType );
 
+        if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+        {
+            // Check if we need to get new images for normal/high contrast mode
+            checkImageList();
+            m_pController->notifyHiContrastChanged();
+        }
+        else if ( nType == STATE_CHANGE_TEXT )
+        {
+            // The physical toolbar changed its outlook and shows another logical toolbar!
+            // We have to set the correct high contrast mode on the new tbx manager.
+            //  checkImageList();
+            //  notifyHiContrastChanged(isHiContrast());
+        }
+    }
+    // -----------------------------------------------------------------------------
+    void ODataView::DataChanged( const DataChangedEvent& rDCEvt )
+    {
+        Window::DataChanged( rDCEvt );
+
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        {
+            // Check if we need to get new images for normal/high contrast mode
+            checkImageList();
+            m_pController->notifyHiContrastChanged();
+        }
+    }
+    // -----------------------------------------------------------------------------
+    sal_Int16 ODataView::getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
+    {
+        sal_Int16 nN = RID_DEFAULTIMAGELIST_SC;
+        sal_Int16 nH = RID_DEFAULTIMAGELIST_SCH;
+        if ( _eBitmapSet == SFX_SYMBOLS_LARGE )
+        {
+            nN = RID_DEFAULTIMAGELIST_LC;
+            nH = RID_DEFAULTIMAGELIST_LCH;
+        }
+
+        return _bHiContast ? nH : nN;
+    }
 //.........................................................................
-}   // namespace dbaui
+}
+// namespace dbaui
 //.........................................................................
