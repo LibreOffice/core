@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2001-04-19 11:52:29 $
+#   last change: $Author: fs $ $Date: 2001-05-14 09:19:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..$/..$/..
 
 PRJNAME=api
 
-TARGET=cssfcomp
+TARGET=cssfcontrol
 PACKAGE=com$/sun$/star$/form$/control
 
 # --- Settings -----------------------------------------------------
