@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:10:46 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ USHORT Export::LangId[ LANGUAGES ] =
     THAI,
     HINDI,
     ESTONIAN,
+    SLOVENIAN,
     EXTERN
 };
 
@@ -203,6 +204,8 @@ USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
         return CZECH;
     else if ( sLang == ByteString( SLOVAK_ISO ).ToUpperAscii())
         return SLOVAK;
+    else if ( sLang == ByteString( SLOVENIAN_ISO ).ToUpperAscii())
+        return SLOVENIAN;
     else if ( sLang == ByteString( ENGLISH_ISO ).ToUpperAscii())
         return ENGLISH;
     else if ( sLang == ByteString( DANISH_ISO ).ToUpperAscii())
@@ -281,6 +284,7 @@ ByteString Export::GetIsoLangByIndex( USHORT nIndex )
         case THAI_INDEX: return THAI_ISO;
         case HINDI_INDEX: return HINDI_ISO;
         case ESTONIAN_INDEX: return ESTONIAN_ISO;
+        case SLOVENIAN_INDEX: return SLOVENIAN_ISO;
         case EXTERN_INDEX: return sIsoCode99;
     }
     return "";
@@ -409,6 +413,7 @@ const ByteString Export::LangName[ LANGUAGES ] =
     "thai",
     "hindi",
     "estonian",
+    "slovenian",
     "extern"
 };
 
