@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:42 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ public:
     FASTBOOL GoNextSentence(){return GoSentence(NEXT_SENT);}
     FASTBOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
 
-    FASTBOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode, BOOL bAllowVisual,
+    FASTBOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden,
                         BOOL bInsertCrsr );
     FASTBOOL UpDown( BOOL bUp, USHORT nCnt = 1,
                     Point* pPt = 0, long nUpDownX = 0 );
@@ -195,10 +195,10 @@ public:
     FASTBOOL SttEndDoc( BOOL bSttDoc );
     FASTBOOL GoPrevNextCell( BOOL bNext, USHORT nCnt );
 
-    FASTBOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
-                                    { return LeftRight( TRUE, nCnt, nMode, bAllowVisual, FALSE ); }
-    FASTBOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
-                                    { return LeftRight( FALSE, nCnt, nMode, bAllowVisual, FALSE ); }
+    FASTBOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden )
+                                    { return LeftRight( TRUE, nCnt, nMode, bAllowVisual, bSkipHidden, FALSE ); }
+    FASTBOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden )
+                                    { return LeftRight( FALSE, nCnt, nMode, bAllowVisual, bSkipHidden, FALSE ); }
     FASTBOOL Up( USHORT nCnt = 1 )      { return UpDown( TRUE, nCnt ); }
     FASTBOOL Down( USHORT nCnt = 1 )    { return UpDown( FALSE, nCnt ); }
     FASTBOOL LeftMargin()               { return LeftRightMargin( TRUE ); }
