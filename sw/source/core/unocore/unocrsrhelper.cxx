@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:27:03 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,12 +618,12 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         else
                         {
 
-                            // CharStyle besorgen und an der chaos::Rule setzen
+                            // CharStyle besorgen und an der Rule setzen
                             sal_uInt16 nChCount = pDoc->GetCharFmts()->Count();
                             SwCharFmt* pCharFmt = 0;
-                            for(sal_uInt16 i = 0; i< nChCount; i++)
+                            for(sal_uInt16 nCharFmt = 0; nCharFmt < nChCount; nCharFmt++)
                             {
-                                SwCharFmt& rChFmt = *((*(pDoc->GetCharFmts()))[i]);;
+                                SwCharFmt& rChFmt = *((*(pDoc->GetCharFmts()))[nCharFmt]);;
                                 if(rChFmt.GetName() == pNewCharStyles[i])
                                 {
                                     pCharFmt = &rChFmt;
