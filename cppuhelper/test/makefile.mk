@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2001-10-31 16:18:25 $
+#   last change: $Author: hr $ $Date: 2001-11-07 11:10:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,17 +112,6 @@ SLOFILES= \
 LIB1TARGET=$(SLB)$/cfg_test.lib
 LIB1OBJFILES=$(SLOFILES)
 
-SHL1TARGET=cfg_test
-SHL1STDLIBS= \
-        $(CPPUHELPERLIB)	\
-        $(CPPULIB)		\
-        $(SALLIB)
-SHL1VERSIONMAP=$(SHL1TARGET).map
-SHL1DEPN=
-SHL1IMPLIB=i$(SHL1TARGET)
-SHL1LIBS=$(SLB)$/$(SHL1TARGET).lib
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
 
 APP3OBJS = $(OBJ)$/cfg_test.obj
 APP3STDLIBS += $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB)

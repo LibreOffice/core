@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 16:02:09 $
+ *  last change: $Author: hr $ $Date: 2001-11-07 11:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
+#include <com/sun/star/reflection/XIdlField2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
@@ -262,7 +263,8 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     TEST_ENSHURE(*(sal_Int32*)xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructA") ))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") ))->get(
         Any(&aStructC, ::getCppuType( (const StructC *)0 ))).getValue() == aConstLong, "test_RegCoreReflection(): error 52");
     TEST_ENSHURE(xRefl->forName(OUString::createFromAscii("ModuleA.StructA"))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") ))->getAccessMode() == FieldAccessMode_READWRITE, "test_RegCoreReflection(): error 52a");
-    xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC") ))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") ))->set(aStructAny, aAny);
+    Reference< XIdlField2 > rField ( xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC") ))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") )) , UNO_QUERY );
+    rField->set(aStructAny, aAny);
     TEST_ENSHURE(*(sal_Int32*)xRefl->forName(OUString::createFromAscii("ModuleA.StructB"))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") ))->get(aStructAny).getValue() == *(sal_Int32*)aAny.getValue(), "test_RegCoreReflection(): error 53");
 
     xRefl->forName( OUString::createFromAscii("[]ModuleA.StructA") )->createObject(aAny);
@@ -285,6 +287,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     try
     {
+        fprintf( stderr, "%1\n" );
         Any bla = xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString"))->get(Any());
         TEST_ENSHURE(sal_False, "test_RegCoreReflection(): error 63");
         return sal_False;
@@ -295,10 +298,13 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     try
     {
+        fprintf( stderr, "%2\n" );
         Any blup;
         blup <<= aStructC;
         Any gulp;
-        xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString"))->set(blup, gulp);
+        rField = Reference< XIdlField2 > ( xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString")) , UNO_QUERY);
+        rField->set( blup, gulp);
+//          xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString"))->set(blup, gulp);
         TEST_ENSHURE(sal_False, "test_RegCoreReflection(): error 64");
         return sal_False;
     }
@@ -308,10 +314,13 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     try
     {
+        fprintf( stderr, "%3\n" );
         Any gulp;
         gulp <<= 3.14f;
         Any blup;
         blup <<= aStructC;
+        rField = Reference< XIdlField2 > (
+            xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString")) , UNO_QUERY);
         xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString"))->set(blup, gulp);
         TEST_ENSHURE(sal_False, "test_RegCoreReflection(): error 65");
         return sal_False;
@@ -331,6 +340,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     try
     {
         Sequence< Any > params;
+        fprintf( stderr, "%4\n" );
 
         Any a;
         a <<= xAI;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-31 09:12:21 $
+ *  last change: $Author: hr $ $Date: 2001-11-07 11:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ int __cdecl main( int argc, char * argv[] )
         test_ImplHelper( x );
         testPropertyTypeHelper();
         testidlclass( x );
-        test_PropertySetHelper();
+//          test_PropertySetHelper();
         test_interfacecontainer();
     }
     catch (Exception & rExc)

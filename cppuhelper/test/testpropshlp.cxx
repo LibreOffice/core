@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testpropshlp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 16:18:25 $
+ *  last change: $Author: hr $ $Date: 2001-11-07 11:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,8 +414,9 @@ public:
     sal_Int32                   nPropCount;
 protected:
     IPropertyArrayHelper & SAL_CALL getInfoHelper() throw(RuntimeException);
-    sal_Bool SAL_CALL convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue,
-                                                sal_Int32 nHandle, const Any& rValue )
+    sal_Bool SAL_CALL convertFastPropertyValue(
+        Any & rConvertedValue, Any & rOldValue,
+        sal_Int32 nHandle, const Any& rValue )
         throw(IllegalArgumentException);
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw(RuntimeException);
     void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw(RuntimeException);
