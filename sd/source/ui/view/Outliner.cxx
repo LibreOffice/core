@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:38:49 $
+ *  last change: $Author: obo $ $Date: 2004-01-23 10:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,7 +1385,7 @@ bool Outliner::HandleFailedSearch (void)
         pParent = mpViewShell->GetActiveWindow();
 
     if (pParent == NULL)
-        pParent = Application::GetDefModalDialogParent();
+        pParent = Application::GetDefDialogParent();
 
     return pParent;
 }
