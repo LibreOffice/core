@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-09 12:49:32 $
+ *  last change: $Author: dv $ $Date: 2001-02-12 11:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,6 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_VIEW_PAPERORIENTATION_HPP_
-#include <com/sun/star/view/PaperOrientation.hpp>
-#endif
-
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
@@ -106,10 +102,6 @@
 //ASDBG #ifndef _USR_SMARTCONV_HXX_
 //ASDBG #include <usr/smartconv.hxx>
 //ASDBG #endif
-
-#ifndef _SV_RESARY_HXX
-#include <vcl/resary.hxx>
-#endif
 
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
@@ -183,12 +175,11 @@
 #include <eventsupplier.hxx>
 #endif
 
-#include <vos/mutex.hxx>
+#ifndef _SFX_EVENTCONF_HXX
+#include <evntconf.hxx>
+#endif
 
-#include "sfxsids.hrc"
-#include "doc.hrc"
-#include "sfxlocal.hrc"
-#include "sfxresid.hxx"
+#include <vos/mutex.hxx>
 
 //________________________________________________________________________________________________________
 //  defines
@@ -240,7 +231,6 @@
 struct IMPL_SfxBaseModel_DataContainer
 {
     SfxObjectShell*                                 m_pObjectShell          ;
-    ResStringArray                                  m_aEventNames           ;
     OUSTRING                                        m_sURL                  ;
     sal_uInt16                                      m_nControllerLockCount  ;
     OMULTITYPEINTERFACECONTAINERHELPER              m_aInterfaceContainer   ;
@@ -255,7 +245,6 @@ struct IMPL_SfxBaseModel_DataContainer
     IMPL_SfxBaseModel_DataContainer::IMPL_SfxBaseModel_DataContainer(   MUTEX&          aMutex          ,
                                                                         SfxObjectShell* pObjectShell    )
             :   m_pObjectShell          ( pObjectShell  )
-            ,   m_aEventNames           ( SfxResId( EVENT_NAMES_ARY ) )
             ,   m_sURL                  ( String()      )
             ,   m_nControllerLockCount  ( 0             )
             ,   m_aInterfaceContainer   ( aMutex        )
@@ -945,11 +934,11 @@ void SAL_CALL SfxBaseModel::setModified( sal_Bool bModified )
 //  XModifiable
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::addModifyListener(const REFERENCE< XMODIFYLISTENER >& xListener) throw(RUNTIMEEXCEPTION )
+void SAL_CALL SfxBaseModel::addModifyListener(const REFERENCE< XMODIFYLISTENER >& xListener) throw( RUNTIMEEXCEPTION )
 {
     // object already disposed?
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        return;
 
     m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0),xListener );
 }
@@ -958,11 +947,11 @@ void SAL_CALL SfxBaseModel::addModifyListener(const REFERENCE< XMODIFYLISTENER >
 //  XModifiable
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::removeModifyListener(const REFERENCE< XMODIFYLISTENER >& xListener) throw(RUNTIMEEXCEPTION )
+void SAL_CALL SfxBaseModel::removeModifyListener(const REFERENCE< XMODIFYLISTENER >& xListener) throw( RUNTIMEEXCEPTION )
 {
     // object already disposed?
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        return;
 
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0), xListener );
 }
@@ -1635,23 +1624,11 @@ void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
     if( pIC )
 
     {
-        OUSTRING aName = getEventName_Impl( rHint.GetEventId() );
+        OUSTRING aName = SfxEventConfiguration::GetEventName_Impl( rHint.GetEventId() );
         DOCEVENTOBJECT aEvent( (XMODEL *)this, aName );
         OINTERFACEITERATORHELPER aIt( *pIC );
         while( aIt.hasMoreElements() )
             ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
     }
-}
-
-// -------------------------------------------------------------------------------------------------------
-String SfxBaseModel::getEventName_Impl( long nID )
-{
-    String aName;
-    USHORT nIndex = m_pData->m_aEventNames.FindIndex( nID );
-
-    if ( nIndex != RESARRAY_INDEX_NOTFOUND )
-        aName= m_pData->m_aEventNames.GetString( nIndex );
-
-    return aName;
 }
 
