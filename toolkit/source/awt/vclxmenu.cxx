@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxmenu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 16:59:43 $
+ *  last change: $Author: ssa $ $Date: 2002-08-15 08:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,19 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                     }
                 }
                 break;
+
+                // ignore accessibility events
+                case VCLEVENT_MENU_ENABLE:
+                case VCLEVENT_MENU_INSERTITEM:
+                case VCLEVENT_MENU_REMOVEITEM:
+                case VCLEVENT_MENU_SUBMENUACTIVATE:
+                case VCLEVENT_MENU_SUBMENUDEACTIVATE:
+                case VCLEVENT_MENU_SUBMENUCHANGED:
+                case VCLEVENT_MENU_DEHIGHLIGHT:
+                case VCLEVENT_MENU_DISABLE:
+                case VCLEVENT_MENU_ITEMTEXTCHANGED:
+                break;
+
                 default:    DBG_ERROR( "MenuEventListener - Unknown event!" );
            }
        }
