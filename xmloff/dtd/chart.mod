@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.14 2001-03-30 13:03:23 bm Exp $
+	$Id: chart.mod,v 1.15 2001-04-11 10:23:11 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -131,6 +131,21 @@
 		  svg:width %length; #IMPLIED
 		  svg:height %length; #IMPLIED
 		  chart:style-name %styleName; #IMPLIED >
+
+<!-- 3d scene attributes on plot-area -->
+<!ATTLIST chart:plot-area
+		  dr3d:vrp %vector3D; #IMPLIED
+		  dr3d:vpn %vector3D; #IMPLIED
+		  dr3d:vup %vector3D; #IMPLIED
+		  dr3d:projection (parallel|perspective) #IMPLIED
+		  dr3d:transform CDATA #IMPLIED
+		  dr3d:distance %length; #IMPLIED
+		  dr3d:focal-length %length; #IMPLIED
+		  dr3d:shadow-slant %nonNegativeInteger; #IMPLIED
+		  dr3d:shade-mode (flat|phong|gouraud|draft) #IMPLIED
+		  dr3d:ambient-color %color; #IMPLIED
+		  dr3d:lighting-mode %boolean; #IMPLIED >
+
 
 <!ELEMENT chart:wall EMPTY>
 <!ATTLIST chart:wall
