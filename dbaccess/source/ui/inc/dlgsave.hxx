@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:37:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
@@ -92,6 +95,7 @@
 
 #define SAD_TITLE_STORE_AS          0x0000
 #define SAD_TITLE_PASTE_AS          0x0100
+#define SAD_TITLE_RENAME            0x0200
 
 namespace dbaui
 {
@@ -113,8 +117,10 @@ namespace dbaui
         String              m_aName;
         String              m_aExists;
         String              m_aExistsOverwrite;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xNames;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xMetaData;
+        String              m_sParentURL;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>             m_xNames;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess> m_xHierarchyNames;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>            m_xMetaData;
         sal_Int32           m_nType;
         sal_Int32           m_nFlags;
 
@@ -126,6 +132,17 @@ namespace dbaui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                     const String& rDefault,
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
+        OSaveAsDlg( Window * pParent,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>&  _rxNames,
+                    const String& rDefault,
+                    const String& _sLabel,
+                    sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
+        OSaveAsDlg( Window * pParent,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess>&  _rxNames,
+                    const String& rDefault,
+                    const String& _sLabel,
+                    const String& _sParentURL,
+                    sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
 
         String getName() const      { return m_aName; }
         String getCatalog() const   { return m_aCatalog.IsVisible() ? m_aCatalog.GetText() : String(); }
@@ -133,6 +150,9 @@ namespace dbaui
     private:
         DECL_LINK(ButtonClickHdl, Button *);
         DECL_LINK(EditModifyHdl,  Edit * );
+
+        void implInitOnlyTitle(const String& _rLabel);
+        void implInit();
     };
 }
 
