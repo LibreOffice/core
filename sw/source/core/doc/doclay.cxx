@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:23:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2239,31 +2239,16 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
                                const Point* pPt ) const
 {
     short nRet;
-    Point aPt;
-    if( pPt )
-        aPt = *pPt;
 
     SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
-    SwCntntFrm *pFrm;
 
-    if( pNd && 0 != (pFrm = pNd->GetFrm( &aPt, &rPos )) )
+    // --> OD 2005-02-21 #i42921# - use new method <SwCntntNode::GetTextDirection(..)>
+    if ( pNd )
     {
-        if ( pFrm->IsVertical() )
-        {
-            if ( pFrm->IsRightToLeft() )
-                nRet = FRMDIR_VERT_TOP_LEFT;
-            else
-                nRet = FRMDIR_VERT_TOP_RIGHT;
-        }
-        else
-        {
-            if ( pFrm->IsRightToLeft() )
-                nRet = FRMDIR_HORI_RIGHT_TOP;
-            else
-                nRet = FRMDIR_HORI_LEFT_TOP;
-        }
+        nRet = pNd->GetTextDirection( rPos, pPt );
     }
-    else
+    if ( nRet == -1 )
+    // <--
     {
         const SvxFrameDirectionItem* pItem = 0;
         if( pNd )
