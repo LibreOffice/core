@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabBar.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-11-02 12:06:42 $
+ *  last change:$Date: 2005-02-24 17:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ public class AccessibleTabBar extends TestCase {
         SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
 
         try {
-            log.println("creating a document");
+            log.println("creating a calc document");
             xDoc = (XComponent) UnoRuntime.queryInterface(XComponent.class,
                                                           SOF.createCalcDoc(
                                                                   null));
