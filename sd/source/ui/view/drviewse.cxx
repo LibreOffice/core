@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 17:09:27 $
+ *  last change: $Author: aw $ $Date: 2002-02-27 14:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,12 +1102,28 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         {
             const SfxItemSet* pReqArgs = rReq.GetArgs();
 
+            // #97516# Remember old ruler state
+            BOOL bOldHasRuler(HasRuler());
+
             if ( pReqArgs )
             {
                 SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, ID_VAL_ISACTIVE, FALSE);
                 SetRuler (pIsActive->GetValue ());
             }
             else SetRuler (!HasRuler());
+
+            // #97516# Did ruler state change? Tell that to SdOptions, too.
+            BOOL bHasRuler(HasRuler());
+
+            if(bOldHasRuler != bHasRuler)
+            {
+                SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
+
+                if(pOptions && pOptions->IsRulerVisible() != bHasRuler)
+                {
+                    pOptions->SetRulerVisible(bHasRuler);
+                }
+            }
 
             Invalidate (SID_RULER);
             rReq.Done ();
