@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mba $ $Date: 2001-11-15 15:11:48 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:29:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,25 +66,12 @@ PRJNAME=sfx2
 TARGET=inet
 ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-# w.g. compilerbugs
-#!IF "$(GUI)"=="WNT"
-#CFLAGS=$(CFLAGS) -Od
-#!ENDIF
-
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-    inettbc.cxx  \
-    $(PROJECTPCHSOURCE).cxx
 
 
 SLOFILES =	\
