@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-27 14:19:29 $
+#   last change: $Author: hr $ $Date: 2003-08-07 15:11:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,9 +75,9 @@ ENABLE_EXCEPTIONS=TRUE
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:testjob by codegen.pl 
 SHL1OBJS=  \
-    $(SLO)$/osl_Mutex.obj
+    $(SLO)$/osl_Thread.obj
 
-SHL1TARGET= Mutex
+SHL1TARGET= Thread
 SHL1STDLIBS=\
    $(SALLIB) 
 .IF "$(GUI)" == "WNT"
@@ -88,10 +88,13 @@ SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+
+# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-DEF1EXPORTFILE= export.exp
+# DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP = export.map
+
 # END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
