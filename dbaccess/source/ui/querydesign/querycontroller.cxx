@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:30:23 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 14:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,7 +707,8 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
     {
         if (xSource.get() == m_xCurrentFrame.get())
         {   // our frame is beeing disposed -> close the preview window (if we have one)
-            ::comphelper::disposeComponent(getContainer()->getPreviewFrame());
+            Reference<XFrame> xXFrame( getContainer()->getPreviewFrame());
+            ::comphelper::disposeComponent( xXFrame );
         }
         else if (xSource.get() == getContainer()->getPreviewFrame().get())
         {
