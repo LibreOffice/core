@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 17:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,15 @@ OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::M
 OCollection::~OCollection()
 {
 }
+
+// -------------------------------------------------------------------------
+void OCollection::clear_NoDispose()
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    m_aNameMap.clear();
+    m_aElements.clear();
+}
+
 // -------------------------------------------------------------------------
 void OCollection::disposing(void)
 {
