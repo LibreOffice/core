@@ -46,6 +46,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages\manifest
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\packages\zip
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\presentation
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\animations
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\reflection
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\registry
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\sdb
@@ -203,6 +204,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\com\sun\star\packages\zip\*.hpp %_DEST%\inc%_EXT%\com\sun\star\packages\zip\*.hpp
 ..\%__SRC%\inc\com\sun\star\presentation\*.hdl %_DEST%\inc%_EXT%\com\sun\star\presentation\*.hdl
 ..\%__SRC%\inc\com\sun\star\presentation\*.hpp %_DEST%\inc%_EXT%\com\sun\star\presentation\*.hpp
+..\%__SRC%\inc\com\sun\star\animations\*.hdl %_DEST%\inc%_EXT%\com\sun\star\animations\*.hdl
+..\%__SRC%\inc\com\sun\star\animations\*.hpp %_DEST%\inc%_EXT%\com\sun\star\animations\*.hpp
 ..\%__SRC%\inc\com\sun\star\reflection\*.hdl %_DEST%\inc%_EXT%\com\sun\star\reflection\*.hdl
 ..\%__SRC%\inc\com\sun\star\reflection\*.hpp %_DEST%\inc%_EXT%\com\sun\star\reflection\*.hpp
 ..\%__SRC%\inc\com\sun\star\registry\*.hpp %_DEST%\inc%_EXT%\com\sun\star\registry\*.hpp
@@ -301,10 +304,9 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
 
 ..\%__SRC%\inc\drafts\com\sun\star\geometry\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\geometry\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry\*.hdl
+
 ..\%__SRC%\inc\drafts\com\sun\star\rendering\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\rendering\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering\*.hdl
-..\%__SRC%\inc\drafts\com\sun\star\drawing\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\drawing\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing\*.hdl
 
 ..\%__SRC%\inc\com\sun\star\script\browse\*.hpp %_DEST%\inc%_EXT%\com\sun\star\script\browse\*.hpp
 ..\%__SRC%\inc\com\sun\star\script\browse\*.hdl %_DEST%\inc%_EXT%\com\sun\star\script\browse\*.hdl
