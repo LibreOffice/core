@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 08:49:25 $
+ *  last change: $Author: oj $ $Date: 2001-03-21 13:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@
 #define TABLE_QUERY_CONNECTION_LOST     RID_QUERYBOX_START +  6
 #define QUERY_SAVE_CURRENT_INDEX        RID_QUERYBOX_START +  7
 #define QUERY_SAVE_TABLE_EDIT_INDEXES   RID_QUERYBOX_START +  8
+#define RELATION_DESIGN_SAVEMODIFIED    RID_QUERYBOX_START +  9
 
 //========================================================================
 // warning boxes
@@ -382,6 +383,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.33  2001/03/20 08:49:25  oj
+ *  new defines
+ *
  *  Revision 1.32  2001/03/19 06:01:17  fs
  *  +STR_INDEXDESIGN_DOUBLE_COLUMN_NAME + QUERY_SAVE_TABLE_EDIT_INDEXES
  *
