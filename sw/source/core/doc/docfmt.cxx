@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:37:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,12 +984,6 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         pDoc->GetNodes().ForEach( aSt, aEnd, lcl_RstTxtAttr, &aPara );
     }
 
-#ifdef USED
-//JP 30.10.96: siehe unten
-    // sollte ueber mehrere Nodes das SwFmtChrFmt gesetzt werden ??
-    const SfxPoolItem* pChrFmtItem = 0;
-    aCharSet.GetItemState( RES_TXTATR_CHARFMT, FALSE, &pChrFmtItem );
-#endif
     BOOL bCreateSwpHints =
         SFX_ITEM_SET == aCharSet.GetItemState( RES_TXTATR_CHARFMT, FALSE ) ||
         SFX_ITEM_SET == aCharSet.GetItemState( RES_TXTATR_INETFMT, FALSE );
@@ -1006,38 +1000,6 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             SwRegHistory aRegH( pNode, *pNode, pHistory );
             SwpHints *pSwpHints;
 
-#ifdef USED
-//JP 30.10.96: Das loeschen der Zeichen erledigt schon das SwpHints-Array
-//              Warum dann hier doppelt?
-//              !!  Ausserdem ist die Sonderbehandlung fuer die
-//              !!  Zeichenvorlage/INetAttribut falsch
-
-            // loesche alle Text-Attribute, die durch den Set "ersetzt" werden
-            if( pTNd && 0 != ( pSwpHints = pTNd->GetpSwpHints() ) &&
-                pSwpHints->Count() )
-            {
-                pSwpHints->Register( &aRegH );
-
-                for( USHORT n = pSwpHints->Count(); n;  )
-                {
-                    SwTxtAttr* pAttr = pSwpHints->GetHt( --n );
-                    if( !pAttr->GetEnd() || RES_CHRATR_END <= pAttr->Which() )
-                        continue;
-                    if( pChrFmtItem || SFX_ITEM_SET ==
-                                aCharSet.GetItemState( pAttr->Which() ) )
-                    {
-                        pTNd->Delete( pAttr, TRUE );
-                        if( !pTNd->GetpSwpHints() )
-                        {
-                            pSwpHints = 0;
-                            break;
-                        }
-                    }
-                }
-                if( pSwpHints )
-                    pSwpHints->DeRegister();
-            }
-#endif
             if( pTNd && aCharSet.Count() )
             {
                 pSwpHints = bCreateSwpHints ? &pTNd->GetOrCreateSwpHints()
@@ -1516,27 +1478,6 @@ void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl )
     USHORT nFmt = pTxtFmtCollTbl->GetPos( pColl );
     ASSERT( USHRT_MAX != nFmt, "Collection not found," );
     DelTxtFmtColl( nFmt );
-}
-
-void SwDoc::DelGrfFmtColl(USHORT nFmtColl)
-{
-    ASSERT( nFmtColl, "Remove fuer Coll 0." );
-
-    // Wer hat die zu loeschende als Next
-    SwGrfFmtColl *pDel = (*pGrfFmtCollTbl)[nFmtColl];
-    if( pDfltGrfFmtColl == pDel )
-        return;     // default nie loeschen !!
-    // Die FmtColl austragen
-    pGrfFmtCollTbl->Remove(nFmtColl);
-    delete pDel;
-    SetModified();
-}
-
-void SwDoc::DelGrfFmtColl( SwGrfFmtColl *pColl )
-{
-    USHORT nFmt = pGrfFmtCollTbl->GetPos( pColl );
-    ASSERT( USHRT_MAX != nFmt, "Collection not found," );
-    DelGrfFmtColl( nFmt );
 }
 
 BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
