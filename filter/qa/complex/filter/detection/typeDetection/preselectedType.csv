@@ -1,0 +1,6 @@
+fileAlias;preselectFileType;expectFileType
+csv1;writer_Text;writer_Text_encoded:writer_Text
+csv1;calc_Text_txt_csv_StarCalc;calc_Text_txt_csv_StarCalc
+#csv2;writer_Text_encoded
+#csv2;calc_Text_txt_csv_StarCalc
+text1;writer_Text_encoded;writer_Text_encoded:writer_Text
