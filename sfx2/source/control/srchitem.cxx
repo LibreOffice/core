@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-04 07:54:35 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,8 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
+        case MID_SEARCH_COMMAND:
+            rVal <<= (sal_Int16) nCommand; break;
         case MID_SEARCH_STYLEFAMILY:
             rVal <<= (sal_Int16) eFamily; break;
         case MID_SEARCH_CELLTYPE:
@@ -526,6 +528,8 @@ sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMe
     sal_Int32 nInt;
     switch ( nMemberId )
     {
+        case MID_SEARCH_COMMAND:
+            bRet = (rVal >>= nInt); nCommand = (sal_uInt16) nInt; break;
         case MID_SEARCH_STYLEFAMILY:
             bRet = (rVal >>= nInt); eFamily =  (SfxStyleFamily) (sal_Int16) nInt; break;
         case MID_SEARCH_CELLTYPE:
