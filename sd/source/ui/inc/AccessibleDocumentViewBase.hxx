@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-08 09:58:26 $
+ *  last change: $Author: af $ $Date: 2002-06-07 08:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOWLISTENER_HPP_
 #include <com/sun/star/awt/XWindowListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOWLISTENER_HPP_
+#include <com/sun/star/awt/XTopWindowListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
@@ -118,7 +121,8 @@ class AccessibleDocumentViewBase
         public IAccessibleViewForwarderListener,
         public ::com::sun::star::beans::XPropertyChangeListener,
         public ::com::sun::star::frame::XFrameActionListener,
-        public ::com::sun::star::awt::XWindowListener
+        public ::com::sun::star::awt::XWindowListener,
+        public ::com::sun::star::awt::XTopWindowListener
 {
 public:
     //=====  internal  ========================================================
@@ -257,6 +261,17 @@ public:
         windowHidden (const ::com::sun::star::lang::EventObject& e)
         throw (::com::sun::star::uno::RuntimeException);
 
+
+    //=====  XTopWindowListener  ==============================================
+
+    virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL windowClosed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL windowMinimized( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL windowNormalized( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
+
 protected:
 
     // return the member maMutex;
@@ -312,6 +327,18 @@ protected:
     virtual ::rtl::OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
+
+    /** This method is called when (after) the frame containing this
+        document has been activated.  Can be used to send FOCUSED state
+        changes for the currently selected element.
+    */
+    virtual void Activated (void);
+
+    /** This method is called when (before or after?) the frame containing
+        this document has been deactivated.  Can be used to send FOCUSED
+        state changes for the currently selected element.
+    */
+    virtual void Deactivated (void);
 };
 
 } // end of namespace accessibility

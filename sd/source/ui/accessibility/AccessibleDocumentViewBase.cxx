@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-06-03 15:09:25 $
+ *  last change: $Author: af $ $Date: 2002-06-07 08:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
@@ -226,6 +229,18 @@ void AccessibleDocumentViewBase::Init (void)
         xSet->addPropertyChangeListener (
             OUString (RTL_CONSTASCII_USTRINGPARAM("")),
             static_cast<beans::XPropertyChangeListener*>(this));
+
+
+    // Register as top window listener at the top window.
+    uno::Reference<awt::XTopWindow> xTopWindow;
+    if (mxController.is())
+        if (mxController->getFrame().is())
+            xTopWindow = uno::Reference<awt::XTopWindow> (
+                mxController->getFrame()->getContainerWindow(),
+                uno::UNO_QUERY);
+    if (xTopWindow.is())
+        xTopWindow->addTopWindowListener (
+            static_cast<awt::XTopWindowListener*>(this));
 }
 
 
@@ -349,7 +364,9 @@ uno::Any SAL_CALL
             static_cast<frame::XFrameActionListener*>(this)),
             static_cast<frame::XFrameActionListener*>(this),
             static_cast<beans::XPropertyChangeListener*>(this),
-            static_cast<awt::XWindowListener*>(this));
+            static_cast<awt::XWindowListener*>(this),
+            static_cast<awt::XTopWindowListener*>(this)
+            );
     return aReturn;
 }
 
@@ -418,6 +435,8 @@ void SAL_CALL
          ::getCppuType((const uno::Reference<beans::XPropertyChangeListener>*)0);
     const uno::Type aWindowListenerType =
          ::getCppuType((const uno::Reference<awt::XWindowListener>*)0);
+    const uno::Type aTopWindowListenerType =
+         ::getCppuType((const uno::Reference<awt::XTopWindowListener>*)0);
     const uno::Type aEventBroadcaster =
          ::getCppuType((const uno::Reference<XAccessibleEventBroadcaster>*)0);
     aTypeList.realloc (nTypeCount + 5);
@@ -425,7 +444,8 @@ void SAL_CALL
     aTypeList[nTypeCount+2] = aFrameActionListenerType;
     aTypeList[nTypeCount+3] = aPropertyChangeListenerType;
     aTypeList[nTypeCount+3] = aWindowListenerType;
-    aTypeList[nTypeCount+4] = aEventBroadcaster;
+    aTypeList[nTypeCount+4] = aTopWindowListenerType;
+    aTypeList[nTypeCount+5] = aEventBroadcaster;
 
     return aTypeList;
 }
@@ -504,7 +524,7 @@ void SAL_CALL
     OSL_TRACE ("FrameAction (%d)", rEventObject.Action);
     if (rEventObject.Action == frame::FrameAction_COMPONENT_REATTACHED)
     {
-        if ( ! (mxController.is() && rEventObject.Frame != mxController->getFrame()))
+        if ((mxController.is() && rEventObject.Frame != mxController->getFrame()))
             OSL_TRACE ("Controller invalid or event is not for us");
         // The type of the view has (been) changed.
         // Unregister from old controller.
@@ -512,17 +532,20 @@ void SAL_CALL
         {
             uno::Reference<frame::XFrame> xFrame (mxController->getFrame());
             if (xFrame.is())
-                xFrame->removeFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
-            OSL_TRACE ("Removing shape list");
+                xFrame->removeFrameActionListener (
+                    static_cast<frame::XFrameActionListener*>(this));
         }
 
         // Get new controller, set the shape tree info accordingly, and
         // register as frame listener.
         mxController = rEventObject.Frame->getController();
         maShapeTreeInfo.SetControllerBroadcaster (
-            uno::Reference<document::XEventBroadcaster>(mxController->getModel(), uno::UNO_QUERY));
+            uno::Reference<document::XEventBroadcaster>(
+                mxController->getModel(), uno::UNO_QUERY));
+        maShapeTreeInfo.SetController (mxController);
         if (rEventObject.Frame.is())
-            rEventObject.Frame->addFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
+            rEventObject.Frame->addFrameActionListener (
+                static_cast<frame::XFrameActionListener*>(this));
 
         // Set new view to view forwarder.
         SfxViewShell* pViewShell = mpViewFrame->GetViewShell ();
@@ -605,6 +628,50 @@ void SAL_CALL
 
 
 
+//=====  XTopWindowListener  ==================================================
+
+void SAL_CALL AccessibleDocumentViewBase::windowOpened( const ::com::sun::star::lang::EventObject& e )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL AccessibleDocumentViewBase::windowClosing( const ::com::sun::star::lang::EventObject& e )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL AccessibleDocumentViewBase::windowClosed( const ::com::sun::star::lang::EventObject& e )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL AccessibleDocumentViewBase::windowMinimized( const ::com::sun::star::lang::EventObject& e )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL AccessibleDocumentViewBase::windowNormalized( const ::com::sun::star::lang::EventObject& e )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL AccessibleDocumentViewBase::windowActivated( const ::com::sun::star::lang::EventObject& e )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_TRACE ("AccessibleDocumentViewBase::windowActivated");
+    Activated ();
+}
+
+void SAL_CALL AccessibleDocumentViewBase::windowDeactivated( const ::com::sun::star::lang::EventObject& e )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_TRACE ("AccessibleDocumentViewBase::windowDeactivated");
+    Deactivated ();
+}
+
+
+
+
 //=====  protected internal  ==================================================
 
 // This method is called from the component helper base class while disposing.
@@ -654,6 +721,25 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
             RTL_CONSTASCII_USTRINGPARAM("Accessible Draw Document"));
     return sDescription;
 }
+
+
+
+
+void AccessibleDocumentViewBase::Activated (void)
+{
+    // Empty.  Overwrite to do something usefull.
+}
+
+
+
+
+void AccessibleDocumentViewBase::Deactivated (void)
+{
+    // Empty.  Overwrite to do something usefull.
+}
+
+
+
 
 //=====  methods from AccessibleSelectionBase ==================================================
 
