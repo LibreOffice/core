@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 16:54:18 $
+ *  last change: $Author: ka $ $Date: 2002-02-20 11:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,6 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
@@ -1070,21 +1067,13 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
 
                 pOutl->SetControlWord(nCntrl);
 
-                Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-                Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
-                                                                    uno::UNO_QUERY );
+                Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
+                if ( xSpellChecker.is() )
+                    pOutl->SetSpeller( xSpellChecker );
 
-                if ( xLinguServiceManager.is() )
-                {
-                    Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
-                    if ( xSpellChecker.is() )
-                        pOutl->SetSpeller( xSpellChecker );
-
-                    Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
-                    if( xHyphenator.is() )
-                        pOutl->SetHyphenator( xHyphenator );
-                }
+                Reference< XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
+                if( xHyphenator.is() )
+                    pOutl->SetHyphenator( xHyphenator );
 
                 pOutl->SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
 
