@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:12 $
+ *  last change: $Author: cmc $ $Date: 2002-07-15 09:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2100,17 +2100,18 @@ ULONG SwWW8Writer::StoreDoc()
 
     pFib = new WW8Fib( bWrtWW8 ? 8 : 6 );
 
+#if 0
+    //If we do this we need to localize the field strings for
+    //english,french,spanish as well as the current german.
+    //
+    //And we also need to consider the two language -> one language
+    //problem
     if (const SvxLanguageItem* pLang = (const SvxLanguageItem*)
         pDoc->GetAttrPool().GetPoolDefaultItem(RES_CHRATR_LANGUAGE))
     {
         pFib->lid = pLang->GetLanguage();
     }
-
-    if (const SvxLanguageItem* pLang = (const SvxLanguageItem*)
-        pDoc->GetAttrPool().GetPoolDefaultItem(RES_CHRATR_LANGUAGE))
-    {
-        pFib->lid = pLang->GetLanguage();
-    }
+#endif
 
     SvStream* pOldStrm = pStrm;         // JP 19.05.99: wozu das ???
     SvStorageStreamRef xWwStrm( pStg->OpenStream( aMainStg ) );
