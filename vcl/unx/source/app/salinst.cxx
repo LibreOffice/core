@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:58:19 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 14:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,6 @@ X11SalInstance::~X11SalInstance()
     delete pSalData;
     SetSalData( NULL );
 
-      mpSalYieldMutex->release();
       delete mpSalYieldMutex;
 }
 
