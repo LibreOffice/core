@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-19 11:58:07 $
+#   last change: $Author: oj $ $Date: 2001-04-26 10:34:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,6 +156,22 @@ SDBC_CPP=1
 
 SDBC=$(SDBC_TARGET_TARGET)_$(CMPEXT)
 
+# -----------------------Connection Pool settings--------------------------------#
+# target
+DBPOOL_TARGET=dbpool
+
+# the major 
+DBPOOL_MAJOR=2
+# the minor 
+DBPOOL_MINOR=0
+# the micro 
+DBPOOL_MICRO=0
+
+# this is a c++ compatible library 
+DBPOOL_CPP=1
+
+DBPOOL=$(DBPOOL_TARGET_TARGET)_$(CMPEXT)
+
 # ----------------------------DBASE settings-----------------------------------#
 # target
 DBASE_TARGET=dbase
@@ -171,5 +187,15 @@ DBASE_MICRO=0
 DBASE_CPP=1
 
 DBASE=$(DBASE_TARGET_TARGET)_$(CMPEXT)
+
+# --------------------------- Precompiled header files -------------------------- #
+PROJECTPCH=pch
+PDBTARGET=pch
+PROJECTPCHSOURCE=$(PRJ)$/source$/types$/pch
+PROJECTPCH4DLL=TRUE
+.IF "$(prjpch)" != ""
+CDEFS+=-DPRECOMPILED
+.ENDIF
+
 
 
