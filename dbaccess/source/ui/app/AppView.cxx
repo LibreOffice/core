@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:40:23 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,33 +608,36 @@ void OApplicationView::showPreview( const ::rtl::OUString& _sDataSourceName,
                                     sal_Bool _bTable)
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    stopComponentListening(m_xObject);
-    m_xObject = NULL;
-    try
+    if ( isPreviewEnabled() )
     {
-        Reference<XNameAccess> xNameAccess;
-        if ( _bTable )
+        stopComponentListening(m_xObject);
+        m_xObject = NULL;
+        try
         {
-            Reference<XTablesSupplier> xSup(_xConnection,UNO_QUERY);
-            if ( xSup.is() )
-                xNameAccess.set(xSup->getTables(),UNO_QUERY);
+            Reference<XNameAccess> xNameAccess;
+            if ( _bTable )
+            {
+                Reference<XTablesSupplier> xSup(_xConnection,UNO_QUERY);
+                if ( xSup.is() )
+                    xNameAccess.set(xSup->getTables(),UNO_QUERY);
+            }
+            else
+            {
+                Reference<XQueriesSupplier> xSup(_xConnection,UNO_QUERY);
+                if ( xSup.is() )
+                    xNameAccess.set(xSup->getQueries(),UNO_QUERY);
+            }
+            if ( xNameAccess.is() && xNameAccess->hasByName(_sName) )
+                m_xObject.set(xNameAccess->getByName(_sName),UNO_QUERY);
         }
-        else
+        catch(Exception)
         {
-            Reference<XQueriesSupplier> xSup(_xConnection,UNO_QUERY);
-            if ( xSup.is() )
-                xNameAccess.set(xSup->getQueries(),UNO_QUERY);
+            OSL_ENSURE(0,"Exception caught!");
         }
-        if ( xNameAccess.is() && xNameAccess->hasByName(_sName) )
-            m_xObject.set(xNameAccess->getByName(_sName),UNO_QUERY);
+        if ( m_xObject.is() )
+            startComponentListening(m_xObject);
+        getDetailView()->showPreview(_sDataSourceName,_xConnection,_sName,_bTable);
     }
-    catch(Exception)
-    {
-        OSL_ENSURE(0,"Exception caught!");
-    }
-    if ( m_xObject.is() )
-        startComponentListening(m_xObject);
-    getDetailView()->showPreview(_sDataSourceName,_xConnection,_sName,_bTable);
 }
 // -----------------------------------------------------------------------------
 void OApplicationView::setStatusInformations(const Reference< XPropertySet>& _xDatasource)
