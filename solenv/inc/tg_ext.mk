@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-15 14:08:35 $
+#   last change: $Author: hjs $ $Date: 2002-04-22 18:15:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -194,6 +194,9 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 .ENDIF          # "$(BSCLIENT)"!=""
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
+.IF "$(T_ADDITIONAL_FILES)"!=""
+    +$(TOUCH) $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
+.ENDIF          # "$(T_ADDITIONAL_FILES)"!=""
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     @+-$(RM) $@ >& $(NULLDEV)
