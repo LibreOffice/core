@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:21:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,14 +111,14 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text [ dutch ] = "OVER" ;
     Text [ spanish ] = "SOBRE" ;
     Text [ english_us ] = "OVER" ;
-    Text[ chinese_simplified ] = "∏≤–¥";
+    Text[ chinese_simplified ] = "∏ƒ–¥";
     Text[ russian ] = "«¿Ã≈Õ¿";
     Text[ polish ] = "KASUJ";
     Text[ japanese ] = "è„èëÇ´";
     Text[ chinese_traditional ] = "¬–ºg";
     Text[ arabic ] = "›Êﬁ";
     Text[ dutch ] = "OVER";
-    Text[ chinese_simplified ] = "∏≤–¥";
+    Text[ chinese_simplified ] = "∏ƒ–¥";
     Text[ greek ] = "¡Õ‘… ¡‘";
     Text[ korean ] = "√ ∞˙";
     Text[ turkish ] = "‹ZR";
@@ -587,6 +587,7 @@ Image RID_SVXBMP_SIZE
         Blue = 0xC000 ;
     };
 };
+
 
 
 
