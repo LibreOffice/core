@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ Menu MN_ANCHOR_POPUP
             Text[ japanese ] = "•¶‚Ι";
             Text[ chinese_traditional ] = "¦b¦r¤Έ¤W";
             Text[ arabic ] = "Ϊαμ ΗαΝΡέ";
-            Text[ greek ] = "Ως χαρακτήρας";
+            Text[ greek ] = "Στον χαρακτήρα";
             Text[ korean ] = "Ή®ΐΪΏ΅";
             Text[ turkish ] = "Karaktere";
             Text[ language_user1 ] = " ";
