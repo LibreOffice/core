@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 17:18:12 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 09:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,55 +858,61 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
-    if( pForwarder )
+    do
     {
+        SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+
+        if( NULL == pForwarder )
+            break;
+
         CheckSelection( aSelection, pEditSource->GetTextForwarder() );
 
         const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), PropertyName );
-        if ( pMap )
+        if( NULL == pMap )
+            break;
+
+        SfxItemSet aSet( *pForwarder->GetPool(), TRUE );
+
+        if( pMap->nWID == WID_FONTDESC )
         {
-            SfxItemSet aSet( *pForwarder->GetPool(), TRUE );
-
-            switch( pMap->nWID )
-            {
-            case WID_FONTDESC:
-                SvxUnoFontDescriptor::setPropertyToDefault( aSet );
-                break;
-
-            case WID_NUMLEVEL:
-                {
-                    sal_Int16 nLevel = 0;
-
-                    SvxTextEditSource* pEditSource = (SvxTextEditSource*)GetEditSource();
-                    SdrObject* pObj = pEditSource->GetSdrObject();
-
-                    if(pObj == NULL)
-                        return;
-
-                    if((pObj->GetObjInventor() == SdrInventor) &&
-                       (pObj->GetObjIdentifier() == OBJ_OUTLINETEXT))
-                        nLevel++;
-
-                    Outliner& rOutliner = ((SvxOutlinerForwarder*)pForwarder)->GetOutliner();
-                    Paragraph* pPara =  rOutliner.GetParagraph( aSelection.nStartPara );
-                    if( pPara )
-                        rOutliner.SetDepth( pPara, nLevel );
-                    return;
-                }
-
-            default:
-                aSet.InvalidateItem( pMap->nWID );
-            }
-
-            if(nPara != -1)
-                pForwarder->SetParaAttribs( (USHORT)nPara, aSet );
-            else
-                pForwarder->QuickSetAttribs( aSet, GetSelection() );
-
-            GetEditSource()->UpdateData();
+            SvxUnoFontDescriptor::setPropertyToDefault( aSet );
         }
+        else if( pMap->nWID == WID_NUMLEVEL )
+        {
+            sal_Int16 nLevel = 0;
+
+            SvxTextEditSource* pEditSource = (SvxTextEditSource*)GetEditSource();
+            SdrObject* pObj = pEditSource->GetSdrObject();
+
+            if(pObj)
+            {
+                if((pObj->GetObjInventor() == SdrInventor) &&
+                   (pObj->GetObjIdentifier() == OBJ_OUTLINETEXT))
+                    nLevel++;
+
+                Outliner& rOutliner = ((SvxOutlinerForwarder*)pForwarder)->GetOutliner();
+                Paragraph* pPara =  rOutliner.GetParagraph( aSelection.nStartPara );
+                if( pPara )
+                    rOutliner.SetDepth( pPara, nLevel );
+                return;
+            }
+        }
+        else
+        {
+            aSet.InvalidateItem( pMap->nWID );
+        }
+
+        if(nPara != -1)
+            pForwarder->SetParaAttribs( (USHORT)nPara, aSet );
+        else
+            pForwarder->QuickSetAttribs( aSet, GetSelection() );
+
+        GetEditSource()->UpdateData();
+
+        return;
     }
+    while(0);
+
     throw beans::UnknownPropertyException();
 }
 
@@ -919,7 +925,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
     if( pForwarder )
     {
         const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), aPropertyName );
-        if ( !pMap )
+        if( pMap )
         {
             SfxItemPool* pPool = pForwarder->GetPool();
 
