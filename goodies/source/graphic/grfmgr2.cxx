@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:07:51 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,7 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         long*           pMapFX = new long[ nNewW ];
         long*           pMapIY = new long[ nNewH ];
         long*           pMapFY = new long[ nNewH ];
-        long            nStartX, nStartY, nEndX, nEndY;
+        long            nStartX = -1, nStartY = -1, nEndX = -1, nEndY = -1;
         long            nX, nY, nTmp, nTmpX, nTmpY;
         BOOL            bHMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
         BOOL            bVMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
