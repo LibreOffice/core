@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1147,7 +1147,7 @@ void FmXFormController::focusGained(const ::com::sun::star::awt::FocusEvent& e) 
             )
         {
             // check the old control if the content is ok
-#if DEBUG || DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
             Reference< ::com::sun::star::form::XBoundControl >  xLockingTest(m_xCurrentControl, UNO_QUERY);
             sal_Bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
             DBG_ASSERT(!bControlIsLocked, "FmXFormController::focusLost : I'm modified and the current control is locked ? How this ?");
