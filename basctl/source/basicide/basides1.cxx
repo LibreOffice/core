@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-13 18:26:08 $
+ *  last change: $Author: tbe $ $Date: 2001-12-14 16:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
 
                     if ( !pLib )
                     {
-                        ErrorBox( pCurWin, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
+                        DBG_ERROR( "BasicIDEShell::ExecuteGlobal: Error loading library!" );
                         // Hat leider keine Auswirkung, weil alter Wert => Kein StateChanged...
                         BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR );
                         return;

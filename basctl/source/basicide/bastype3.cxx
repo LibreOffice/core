@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-13 18:27:59 $
+ *  last change: $Author: tbe $ $Date: 2001-12-14 16:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
             }
             else
             {
-                // library couldn't be loaded
-                ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
+                DBG_ERROR( "BasicTreeListBox::RequestingChilds: Error loading library!" );
             }
         }
     }

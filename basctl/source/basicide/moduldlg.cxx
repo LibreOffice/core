@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-13 18:29:39 $
+ *  last change: $Author: tbe $ $Date: 2001-12-14 16:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,9 +869,7 @@ StarBASIC* ObjectPage::GetSelectedBasic()
             if ( bOK )
             {
                 pBasic = pBasMgr->GetLib( aLibName );
-
-                if ( !pBasic )
-                    ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
+                DBG_ASSERT( pBasic, "ObjectPage::GetSelectedBasic: Error loading library!" );
             }
         }
     }
