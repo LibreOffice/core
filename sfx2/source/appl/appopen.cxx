@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-30 16:17:47 $
+ *  last change: $Author: gt $ $Date: 2002-10-16 09:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,11 +567,23 @@ SfxMedium* SfxApplication::InsertDocumentDialog
     const SfxObjectFactory& rFact
 )
 {
+    return InsertDocumentDialog( nFlags, rFact, 0 );
+}
+
+//--------------------------------------------------------------------
+
+SfxMedium* SfxApplication::InsertDocumentDialog
+(
+    ULONG                   nFlags,
+    const SfxObjectFactory& rFact,
+    ULONG                   nHelpId
+)
+{
     SfxMedium *pMedium=0;
     SvStringsDtor* pURLList = NULL;
     String aFilter;
     SfxItemSet* pSet=0;
-    ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String() );
+    ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String(), nHelpId );
     DBG_ASSERT( pURLList, "invalid URLList" );
     if( pURLList && !nErr )
     {
@@ -597,17 +609,20 @@ SfxMedium* SfxApplication::InsertDocumentDialog
     return pMedium;
 }
 
+//--------------------------------------------------------------------
+
 SfxMediumList* SfxApplication::InsertDocumentsDialog
 (
     ULONG                   nFlags,
-    const SfxObjectFactory& rFact
+    const SfxObjectFactory& rFact,
+    ULONG                   nHelpId
 )
 {
     SfxMediumList *pMediumList=new SfxMediumList;
     SvStringsDtor* pURLList = NULL;
     String aFilter;
     SfxItemSet* pSet=0;
-    ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | SFXWB_MULTISELECTION | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String() );
+    ErrCode nErr = sfx2::FileOpenDialog_Impl( nFlags | SFXWB_INSERT | SFXWB_MULTISELECTION | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String(), nHelpId );
     DBG_ASSERT( pURLList, "invalid URLList" );
     if( pURLList && !nErr )
     {
@@ -639,6 +654,16 @@ SfxMediumList* SfxApplication::InsertDocumentsDialog
     return pMediumList;
 }
 
+//--------------------------------------------------------------------
+
+SfxMediumList* SfxApplication::InsertDocumentsDialog
+(
+    ULONG                   nFlags,
+    const SfxObjectFactory& rFact
+)
+{
+    return InsertDocumentsDialog( nFlags, rFact, 0 );
+}
 
 //--------------------------------------------------------------------
 
