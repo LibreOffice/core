@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-27 10:44:10 $
+ *  last change: $Author: vg $ $Date: 2001-02-28 13:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,11 +186,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::portal::client;
 
 #ifdef UNX
-class SalData
-{
-
-    void Init (int *pIPointer, char *pCPointer[] );
-};
 void SalData::Init (int *pIPointer, char *pCPointer[] )
 {};
 #endif /* UNX */
