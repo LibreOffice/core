@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:32:35 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2765,11 +2765,14 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
             sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTmp);
             aAuthFieldsLB.SetEntryData(nPos, (void*)(i));
         }
-        String sLevelPattern(pCurrentForm->GetPattern(nLevel + 1));
-        SwFormTokenEnumerator aEnumerator(sLevelPattern);
-        while(aEnumerator.HasNextToken())
+
+        // #i21237#
+        SwFormTokens aPattern = pCurrentForm->GetPattern(nLevel + 1);
+        SwFormTokens::iterator aIt = aPattern.begin();;
+
+        while(aIt != aPattern.end())
         {
-            SwFormToken aToken = aEnumerator.GetNextToken();
+            SwFormToken aToken = *aIt; // #i21237#
             if(TOKEN_AUTHORITY == aToken.eTokenType)
             {
                 sal_uInt32 nSearch = aToken.nAuthorityField;
@@ -2777,6 +2780,8 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
                 DBG_ASSERT(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?")
                 aAuthFieldsLB.RemoveEntry(nLstBoxPos);
             }
+
+            aIt++; // #i21237#
         }
         aAuthFieldsLB.SelectEntryPos(0);
     }
@@ -3114,14 +3119,16 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
         sal_uInt16 nControlId = 1;
          Size aToolBoxSize = GetSizePixel();
 
-        String sLevelPattern(pForm->GetPattern(nLevel + 1));
-        SwFormTokenEnumerator aEnumerator(sLevelPattern);
+        // #i21237#
+        SwFormTokens aPattern = pForm->GetPattern(nLevel + 1);
+        SwFormTokens::iterator aIt = aPattern.begin();
         sal_Bool bLastWasText = sal_False; //assure alternating text - code - text
 
         Control* pSetActiveControl = 0;
-        while(aEnumerator.HasNextToken())
+        while(aIt != aPattern.end()) // #i21237#
         {
-            SwFormToken aToken(aEnumerator.GetNextToken());
+            SwFormToken aToken(*aIt); // #i21237#
+
             if(TOKEN_TEXT == aToken.eTokenType)
             {
                 DBG_ASSERT(!bLastWasText, "text following text is invalid")
@@ -3158,6 +3165,8 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                                  : aEmptyStr, aToken );
                 bLastWasText = sal_False;
             }
+
+            aIt++; // #i21237#
         }
         if(!bLastWasText)
         {
@@ -3931,10 +3940,6 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
                     TOX_INDEX == pCurrentForm->GetTOXType() ? i - 1 : i );
         }
         String aCpy( aStr );
-        aStr += ' ';
-        aStr += aDeliStart;
-        aStr += pCurrentForm->GetPattern(i);
-        aStr += aDeliEnd;
 
         if( pCurrentForm->GetTemplate( i ).Len() )
         {
