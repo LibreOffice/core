@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.sdi,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,92 @@ interface TextDraw : TextDrawBase
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
+    SID_EXTRUSION_TOOGLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_DOWN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_UP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_LEFT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_TILT_RIGHT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DEPTH_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DEPTH_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DIRECTION_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_LIGHTING_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_SURFACE_FLOATER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_3D_COLOR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DEPTH
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_DIRECTION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_PROJECTION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_LIGHTING_DIRECTION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_LIGHTING_INTENSITY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_EXTRUSION_SURFACE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 }
 
 shell SwDrawShell : SwDrawBaseShell
@@ -312,6 +398,7 @@ shell SwDrawShell : SwDrawBaseShell
         StateMethod = GetFormTextState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
 }
 
 
