@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:22:26 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ String RID_STR_IMPORT_GRAPHIC
     Text[ chinese_simplified ] = "²åÈëÍ¼ĞÎ";
     Text[ russian ] = "Âñòàâèòü ğèñóíîê";
     Text[ polish ] = "Wstaw grafikê";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì‘}“ü";
+    Text[ japanese ] = "}‚Ì‘}“ü";
     Text[ chinese_traditional ] = "´¡¤J¹Ï§Î";
     Text[ greek ] = "ÅéóáãùãŞ ãñáöéêïı";
     Text[ korean ] = "±×·¡ÇÈ »ğÀÔ";
