@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 21:19:52 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,11 +882,11 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ spanish ] = "~Pegar todo" ;
         Text [ english_us ] = "~Paste all" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ε…¨ιƒ¨ζ’ε…¥(~P)";
+        Text[ chinese_simplified ] = "ε…¨ιƒ¨η²θ΄΄(~P)";
         Text[ russian ] = "Βρςΰβθςό βρε";
         Text[ polish ] = "Wstaw wszystko";
         Text[ japanese ] = "γ™γΉγ¦ζΏε…¥(~P)";
-        Text[ chinese_traditional ] = "ε…¨ιƒ¨ζ’ε…¥(~P)";
+        Text[ chinese_traditional ] = "ε…¨ιƒ¨θ²ΌδΈ(~P)";
         Text[ arabic ] = "αΥή Ηαία";
         Text[ greek ] = "Επικόλληση όλ~α";
         Text[ korean ] = "λª¨λ‘ λ¶™μ—¬λ„£κΈ°(~P)";
@@ -1062,17 +1062,17 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ russian ] = "O~bjects";
         Text[ greek ] = "O~bjects";
         Text[ dutch ] = "O~bjects";
-        Text[ french ] = "O~bjects";
+        Text[ french ] = "Objects";
         Text[ spanish ] = "O~bjects";
         Text[ finnish ] = "O~bjects";
-        Text[ italian ] = "O~bjects";
+        Text[ italian ] = "Oggetti";
         Text[ danish ] = "O~bjects";
-        Text[ swedish ] = "O~bjects";
+        Text[ swedish ] = "O~bjekt";
         Text[ polish ] = "O~bjects";
-        Text[ japanese ] = "O~bjects";
-        Text[ korean ] = "O~bjects";
-        Text[ chinese_simplified ] = "O~bjects";
-        Text[ chinese_traditional ] = "O~bjects";
+        Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ";
+        Text[ korean ] = "κ°μ²΄";
+        Text[ chinese_simplified ] = "ε―Ήθ±΅";
+        Text[ chinese_traditional ] = "η‰©δ»¶(~B)";
         Text[ turkish ] = "O~bjects";
         Text[ arabic ] = "O~bjects";
     };
@@ -1555,11 +1555,11 @@ ModalDialog RID_SCDLG_INSCONT
         Pos = MAP_APPFONT( 102 , 127 ) ;
         Size = MAP_APPFONT( 1 , 38 ) ;
     };
-    Text[ chinese_simplified ] = "ζ’ε…¥ε†…ε®Ή";
+    Text[ chinese_simplified ] = "η²θ΄΄ε†…ε®Ή";
     Text[ russian ] = "Ροεφθΰλόνΰÿ βρςΰβκΰ";
     Text[ polish ] = "Wstaw zawartoζ";
     Text[ japanese ] = "ε½ΆεΌγ‚’ιΈζγ—γ¦θ²Όγ‚δ»γ‘";
-    Text[ chinese_traditional ] = "ζ’ε…¥ε…§ε®Ή";
+    Text[ chinese_traditional ] = "θ²ΌδΈε…§ε®Ή";
     Text[ arabic ] = "αΥή ΞΗΥ";
     Text[ greek ] = "Ειδική επικόλληση";
     Text[ korean ] = "μ„ νƒν•μ—¬ λ¶™μ—¬λ„£κΈ°";
@@ -3670,11 +3670,11 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text [ danish ] = "Indsζt navn" ;
         Text [ portuguese ] = "Inserir nomes" ;
         Text [ portuguese_brazilian ] = "Namen einf?en" ;
-        Text[ chinese_simplified ] = "ζ’ε…¥εη§°";
+        Text[ chinese_simplified ] = "η²θ΄΄εη§°";
         Text[ russian ] = "Βρςΰβθςό θμÿ";
         Text[ polish ] = "Wklej nazwκ";
         Text[ japanese ] = "εε‰γ®ζΏε…¥";
-        Text[ chinese_traditional ] = "ζ’ε…¥εη¨±";
+        Text[ chinese_traditional ] = "θ²ΌδΈεη¨±";
         Text[ arabic ] = "αΥή ΓΣγΗΑ";
         Text[ greek ] = "Επικόλληση ονόματος";
         Text[ korean ] = "μ΄λ¦„ λ¶™μ—¬λ„£κΈ°";
@@ -3754,11 +3754,11 @@ ModalDialog RID_SCDLG_NAMES_PASTE
     Text [ danish ] = "Indsζt navn" ;
     Text [ portuguese_brazilian ] = "Namen einf?en" ;
     Text [ portuguese ] = "Inserir nomes" ;
-    Text[ chinese_simplified ] = "ζ’ε…¥εη§°";
+    Text[ chinese_simplified ] = "η²θ΄΄εη§°";
     Text[ russian ] = "Βρςΰβθςό θμÿ";
     Text[ polish ] = "Wklej nazwκ";
     Text[ japanese ] = "εε‰γ®ζΏε…¥";
-    Text[ chinese_traditional ] = "ζ’ε…¥εη¨±";
+    Text[ chinese_traditional ] = "θ²ΌδΈεη¨±";
     Text[ arabic ] = "αΥή ΓΣγΗΑ";
     Text[ greek ] = "Επικόλληση ονόματος";
     Text[ korean ] = "μ΄λ¦„ λ¶™μ—¬λ„£κΈ°";
