@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-24 08:35:55 $
+ *  last change: $Author: sab $ $Date: 2000-10-24 14:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,6 +816,9 @@ XML_CONSTASCII_ACTION( sXML_reference_mark_start, "reference-mark-start" );
 XML_CONSTASCII_ACTION( sXML_reference_ref, "reference-ref" );
 XML_CONSTASCII_ACTION( sXML_reference_start, "reference-start" );
 XML_CONSTASCII_ACTION( sXML_reference_type, "reference-type" );
+XML_CONSTASCII_ACTION( sXML_region_center, "region-center" );
+XML_CONSTASCII_ACTION( sXML_region_left, "region-left" );
+XML_CONSTASCII_ACTION( sXML_region_right, "region-right" );
 XML_CONSTASCII_ACTION( sXML_register_true, "register-true" );
 XML_CONSTASCII_ACTION( sXML_rel_column_width, "rel-column-width" );
 XML_CONSTASCII_ACTION( sXML_rel_width, "rel-width" );
