@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultregistry.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-12-07 15:37:29 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ public:
     virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
 
-    friend NestedKeyImpl;
+    friend class NestedKeyImpl;
 protected:
     Mutex                       m_mutex;
     sal_uInt32                  m_state;
