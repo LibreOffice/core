@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadPool_Test.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:16:00 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public class ThreadPool_Test extends ComplexTestCase {
     }
 
     public void testDispose() throws InterruptedException {
-        IThreadPool iThreadPool = ThreadPoolFactory.createThreadPool();
+        IThreadPool iThreadPool = ThreadPoolManager.create();
         TestThread testThread = new TestThread(iThreadPool);
 
         ThreadId threadId = null;
@@ -426,7 +426,7 @@ public class ThreadPool_Test extends ComplexTestCase {
         }
 
         public void run() {
-            _threadId = ThreadPoolFactory.getThreadId();
+            _threadId = _iThreadPool.getThreadId();
 
 
             try {
@@ -464,7 +464,7 @@ public class ThreadPool_Test extends ComplexTestCase {
         {
             IMessage iMessage = new TestMessage(
                 true, ThreadPool_Test.__workAt_td, "oid",
-                ThreadPoolFactory.getThreadId(), null, null, null);
+                __iThreadPool.getThreadId(), null, null, null);
 
             // marshal reply
             ThreadPool_Test.__iThreadPool.putJob(
@@ -474,8 +474,7 @@ public class ThreadPool_Test extends ComplexTestCase {
         public  void asyncCall() throws Throwable {
             for (int i = 0 ; i < 5 ; ++i) {
                 ThreadPool_Test.__iThreadPool.attach();
-                ThreadPool_Test.putJob(this, true,
-                                       ThreadPoolFactory.getThreadId(),
+                ThreadPool_Test.putJob(this, true, __iThreadPool.getThreadId(),
                                        "syncCall");
                 // wait for reply
                 ThreadPool_Test.__iThreadPool.enter();
@@ -494,8 +493,7 @@ public class ThreadPool_Test extends ComplexTestCase {
         private final TestWorkAt _async_WorkAt;
     }
 
-    private static final IThreadPool __iThreadPool
-    = ThreadPoolFactory.createThreadPool();
+    private static final IThreadPool __iThreadPool = ThreadPoolManager.create();
     private static final IReceiver __iReceiver = new TestReceiver();
     private static final TypeDescription __workAt_td
     = TypeDescription.getTypeDescription(TestIWorkAt.class);
