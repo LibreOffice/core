@@ -9,6 +9,7 @@ dt	desktop\source\offacc					nmake	-	all	dt_offac NULL
 dt	desktop\source\splash					nmake	-	all	dt_spl NULL
 dt	desktop\win32\source					nmake	-	w	dt_wrapper NULL
 dt	desktop\win32\source\setup				nmake	-	w	dt_setup NULL
+dt	desktop\win32\source\applauncher		nmake	-	w	dt_applauncher NULL
 dt	desktop\source\pagein					nmake	-	u	dt_pagein NULL
 dt	desktop\source\pkgchk					nmake	-	all	dt_pkgchk dt_dp_misc dt_app NULL
 dt	desktop\source\pkgchk\msi				nmake	-	w	dt_pkgchk_msi dt_pkgchk NULL
