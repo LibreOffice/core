@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-18 09:51:40 $
+ *  last change: $Author: rt $ $Date: 2001-06-19 07:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #endif
 
 #include "unoshprp.hxx"
-#include "UnoApi.hxx"
+#include "unoapi.hxx"
 
 ///////////////////////////////////////////////////////////////////////
 
