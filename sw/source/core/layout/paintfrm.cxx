@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:31:08 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,13 +1360,11 @@ void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect&                _rRect,
     // OD 21.05.2003 #108789# - extend left/right border/shadow rectangle to
     // bottom of previous frame/to top of next frame, if border/shadow is joined
     // with previous/next frame.
-    //if ( rAttrs.GetBox().GetTop() && !rAttrs.GetTopLine( pFrm ) )
     if ( _rAttrs.JoinedWithPrev( _rFrm ) )
     {
         const SwFrm* pPrevFrm = _rFrm.GetPrev();
         (_rRect.*_rRectFn->fnSetTop)( (pPrevFrm->*_rRectFn->fnGetPrtBottom)() );
     }
-    //if ( rAttrs.GetBox().GetBottom() && !rAttrs.GetBottomLine( pFrm ) )
     if ( _rAttrs.JoinedWithNext( _rFrm ) )
     {
         const SwFrm* pNextFrm = _rFrm.GetNext();
@@ -2932,8 +2930,8 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     SwRect aOut( rOutRect );
 
     const FASTBOOL bCnt    = IsCntntFrm();
-    const FASTBOOL bTop    = !bCnt || rAttrs.GetTopLine  ( this ) ? TRUE : FALSE;
-    const FASTBOOL bBottom = !bCnt || rAttrs.GetBottomLine( this ) ? TRUE : FALSE;
+    const FASTBOOL bTop    = !bCnt || rAttrs.GetTopLine  ( *(this) ) ? TRUE : FALSE;
+    const FASTBOOL bBottom = !bCnt || rAttrs.GetBottomLine( *(this) ) ? TRUE : FALSE;
 
     SvxShadowLocation eLoc = rShadow.GetLocation();
 
@@ -3179,13 +3177,13 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
 void MA_FASTCALL lcl_SubTopBottom( SwRect&              _iorRect,
                                    const SvxBoxItem&    _rBox,
                                    const SwBorderAttrs& _rAttrs,
-                                   const SwFrm*         _pFrm,
+                                   const SwFrm&         _rFrm,
                                    const SwRectFn&      _rRectFn,
                                    const sal_Bool       _bPrtOutputDev )
 {
-    const BOOL bCnt = _pFrm->IsCntntFrm();
+    const BOOL bCnt = _rFrm.IsCntntFrm();
     if ( _rBox.GetTop() && _rBox.GetTop()->GetInWidth() &&
-         ( !bCnt || _rAttrs.GetTopLine( _pFrm ) )
+         ( !bCnt || _rAttrs.GetTopLine( _rFrm ) )
        )
     {
         // substract distance between outer and inner line.
@@ -3211,7 +3209,7 @@ void MA_FASTCALL lcl_SubTopBottom( SwRect&              _iorRect,
         // is a hair line
         if ( bIsInnerTopLineHairline )
         {
-            if ( _pFrm->IsVertical() )
+            if ( _rFrm.IsVertical() )
             {
                 // right of border rectangle has to be checked and adjusted
                 Point aCompPt( _iorRect.Right(), 0 );
@@ -3235,7 +3233,7 @@ void MA_FASTCALL lcl_SubTopBottom( SwRect&              _iorRect,
     }
 
     if ( _rBox.GetBottom() && _rBox.GetBottom()->GetInWidth() &&
-         ( !bCnt || _rAttrs.GetBottomLine( _pFrm ) )
+         ( !bCnt || _rAttrs.GetBottomLine( _rFrm ) )
        )
     {
         // substract distance between outer and inner line.
@@ -3261,7 +3259,7 @@ void MA_FASTCALL lcl_SubTopBottom( SwRect&              _iorRect,
         // bottom line is a hair line.
         if ( bIsInnerBottomLineHairline )
         {
-            if ( _pFrm->IsVertical() )
+            if ( _rFrm.IsVertical() )
             {
                 // left of border rectangle has to be checked and adjusted
                 Point aCompPt( _iorRect.Left(), 0 );
@@ -3358,7 +3356,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
     if ( bPrtOutputDev )
     {
         // substract width of outer top line.
-        if ( rBox.GetTop() && (!bCnt || _rAttrs.GetTopLine( &_rFrm )) )
+        if ( rBox.GetTop() && (!bCnt || _rAttrs.GetTopLine( _rFrm )) )
         {
             long nDist = ::lcl_AlignHeight( rBox.GetTop()->GetOutWidth() );
             (aRect.*_rRectFn->fnSubTop)( -nDist );
@@ -3389,7 +3387,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
             }
         }
         // substract width of outer bottom line.
-        if ( rBox.GetBottom() && (!bCnt || _rAttrs.GetBottomLine( &_rFrm )) )
+        if ( rBox.GetBottom() && (!bCnt || _rAttrs.GetBottomLine( _rFrm )) )
         {
             long nDist = ::lcl_AlignHeight( rBox.GetBottom()->GetOutWidth());
             (aRect.*_rRectFn->fnAddBottom)( -nDist );
@@ -3424,7 +3422,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
     if ( !pLeftRightBorder->GetInWidth() )
     {
         // OD 06.05.2003 #107169# - add 6th parameter
-        ::lcl_SubTopBottom( aRect, rBox, _rAttrs, &_rFrm, _rRectFn, bPrtOutputDev );
+        ::lcl_SubTopBottom( aRect, rBox, _rAttrs, _rFrm, _rRectFn, bPrtOutputDev );
     }
 
     // OD 29.04.2003 #107169# - paint SwAligned-rectangle
@@ -3466,7 +3464,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
             (aRect.*_rRectFn->fnAddRight)( nWidth - (aRect.*_rRectFn->fnGetWidth)() );
         }
         // OD 06.05.2003 #107169# - add 6th parameter
-        ::lcl_SubTopBottom( aRect, rBox, _rAttrs, &_rFrm, _rRectFn, bPrtOutputDev );
+        ::lcl_SubTopBottom( aRect, rBox, _rAttrs, _rFrm, _rRectFn, bPrtOutputDev );
         // OD 29.04.2003 #107169# - paint SwAligned-rectangle
         {
             SwRect aPaintRect( aRect );
@@ -3898,7 +3896,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
             //::lcl_PaintRightLine ( this, pPage, aRect, rRect, rAttrs, fnRect );
             ::lcl_PaintLeftRightLine ( sal_True, *(this), *(pPage), aRect, rRect, rAttrs, fnRect );
             ::lcl_PaintLeftRightLine ( sal_False, *(this), *(pPage), aRect, rRect, rAttrs, fnRect );
-            if ( !IsCntntFrm() || rAttrs.GetTopLine( this ) )
+            if ( !IsCntntFrm() || rAttrs.GetTopLine( *(this) ) )
             {
                 // OD 21.02.2003 #b4779636#, #107692# -
                 // #b4779636#-hack: If another cell frame for top border
@@ -3919,7 +3917,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                     ::lcl_PaintTopBottomLine( sal_True, *(this), *(pPage), aRect, rRect, rAttrs, fnRect );
                 }
             }
-            if ( !IsCntntFrm() || rAttrs.GetBottomLine( this ) )
+            if ( !IsCntntFrm() || rAttrs.GetBottomLine( *(this) ) )
             {
                 // OD 21.02.2003 #b4779636#, #107692# -
                 // #b4779636#-hack: If another cell frame for bottom border
