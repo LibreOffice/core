@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:04:39 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ void XMLChartStyleContext::SetAttribute(
     }
     else
     {
-        XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        XMLShapeStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
     }
 }
 
@@ -112,7 +112,7 @@ XMLChartStyleContext::XMLChartStyleContext(
     const uno::Reference< xml::sax::XAttributeList > & xAttrList,
     SvXMLStylesContext& rStyles, sal_uInt16 nFamily ) :
 
-        XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
+        XMLShapeStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
         mrStyles( rStyles )
 {}
 
@@ -123,7 +123,7 @@ XMLChartStyleContext::~XMLChartStyleContext()
 void XMLChartStyleContext::FillPropertySet(
     const uno::Reference< beans::XPropertySet > & rPropSet )
 {
-    XMLPropStyleContext::FillPropertySet( rPropSet );
+    XMLShapeStyleContext::FillPropertySet( rPropSet );
     if( msDataStyleName.getLength())
     {
         SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)mrStyles.FindStyleChildContext(
@@ -169,8 +169,8 @@ SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
     }
 
     if( !pContext )
-        pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                          xAttrList );
+        pContext = XMLShapeStyleContext::CreateChildContext( nPrefix, rLocalName,
+                                                             xAttrList );
 
     return pContext;
 }
