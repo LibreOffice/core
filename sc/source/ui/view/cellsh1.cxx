@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:21:53 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "ui_pch.hxx"
 #endif
@@ -139,8 +138,8 @@
 #include "editable.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
-
 #include "dpgroup.hxx"      // for ScDPNumGroupInfo
+#include "spellparam.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx" //CHINA001
@@ -1670,17 +1669,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 }
 
                                 //execute translation
-                                sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
-                                sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
-                                sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                                LanguageType eSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                                LanguageType eTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                                sal_Int32 nOptions = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
                                 if( !bCommonTerms )
-                                    nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
+                                    nOptions |= i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
                                 Font aTargetFont = GetViewData()->GetActiveWin()->GetDefaultFont(
                                                     DEFAULTFONT_CJK_SPREADSHEET,
-                                                    nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
-                                ChineseTranslationParams aParams( nSourceLang, nTargetLang, aTargetFont, nOptions );
-                                pTabViewShell->DoChineseTranslation( aParams );
+                                                    eTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
+                                ScConversionParam aConvParam( SC_CONVERSION_CHINESE_TRANSL,
+                                    eSourceLang, eTargetLang, aTargetFont, nOptions, false );
+                                pTabViewShell->DoSheetConversion( aConvParam );
                             }
                         }
                         Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );
