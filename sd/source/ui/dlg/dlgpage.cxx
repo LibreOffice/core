@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-06 15:13:55 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #endif
 #include "dlgpage.hxx"
 
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 
 
 /*************************************************************************
