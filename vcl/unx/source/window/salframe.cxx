@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 17:55:03 $
+ *  last change: $Author: pl $ $Date: 2002-09-18 16:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,8 +449,8 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                    ( pFrame->maFrameData.mpParent
                      || pFrame->maFrameData.IsOverrideRedirect()
                      || ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
-                     || ! pFrame->GetGeometry().nWidth
-                     || ! pFrame->GetGeometry().nHeight
+                     || ! pFrame->GetUnmirroredGeometry().nWidth
+                     || ! pFrame->GetUnmirroredGeometry().nHeight
                      )
                    )
                 pFrame = pFrame->maFrameData.pNextFrame_;
@@ -458,7 +458,7 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
             {
                 // set a document position and size
                 // the first frame gets positioned by the window manager
-                const SalFrameGeometry& rGeom( pFrame->GetGeometry() );
+                const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
                 x = rGeom.nX;
                 y = rGeom.nY;
                 w = rGeom.nWidth;
@@ -1586,7 +1586,7 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
      if( mpParent )
      {
         // --- RTL --- (mirror window pos)
-        if( pGraphics_ && (pGraphics_->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+        if( Application::GetSettings().GetLayoutRTL() )
             values.x = mpParent->maGeometry.nWidth-values.width-1-values.x;
 
          XLIB_Window aChild;
@@ -2045,6 +2045,12 @@ void SalFrame::SetParent( SalFrame* pNewParent )
     }
 }
 
+SalFrame* SalFrame::GetParent() const
+{
+    return maFrameData.mpParent;
+}
+
+
 // Sound
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::Beep( SoundType eSoundType ) // not fully suported
@@ -2276,7 +2282,7 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
             nEvent = SALEVENT_WHEELMOUSE;
 
             // --- RTL --- (mirror mouse pos)
-            if( pGraphics_ && (pGraphics_->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+        if( Application::GetSettings().GetLayoutRTL() )
                 aWheelEvt.mnX = nWidth_-1-aWheelEvt.mnX;
             return Call( nEvent, &aWheelEvt );
         }
@@ -2289,7 +2295,7 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         )
     {
         // --- RTL --- (mirror mouse pos)
-        if( pGraphics_ && (pGraphics_->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+        if( Application::GetSettings().GetLayoutRTL() )
             aMouseEvt.mnX = nWidth_-1-aMouseEvt.mnX;
         return Call( nEvent, &aMouseEvt );
     }
@@ -2684,7 +2690,7 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
     aPEvt.mnBoundHeight     = maPaintRegion.GetHeight();
 
     // --- RTL --- (mirror paint rect)
-    if( pGraphics_ && (pGraphics_->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+    if( Application::GetSettings().GetLayoutRTL() )
         aPEvt.mnBoundX = nWidth_-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
 
      Call( SALEVENT_PAINT, &aPEvt );
@@ -2879,6 +2885,9 @@ IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
     aPEvt.mnBoundY          = maPaintRegion.Top();
     aPEvt.mnBoundWidth      = maPaintRegion.GetWidth();
     aPEvt.mnBoundHeight     = maPaintRegion.GetHeight();
+
+    if( Application::GetSettings().GetLayoutRTL() )
+        aPEvt.mnBoundX = nWidth_-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
 
     Call( SALEVENT_PAINT, &aPEvt );
     maPaintRegion = Rectangle();

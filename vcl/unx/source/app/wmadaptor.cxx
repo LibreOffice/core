@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-30 07:35:51 $
+ *  last change: $Author: pl $ $Date: 2002-09-18 16:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1088,7 +1088,7 @@ void NetWMAdaptor::setNetWMState( SalFrame* pFrame ) const
                 }
             }
             Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
-            const SalFrameGeometry& rGeom( pFrame->GetGeometry() );
+            const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
             aPosSize = Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
                                          aPosSize.Top()  + rGeom.nTopDecoration ),
                                   Size( aPosSize.GetWidth()
@@ -1197,7 +1197,7 @@ void GnomeWMAdaptor::setGnomeWMState( SalFrame* pFrame ) const
                 }
             }
             Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
-            const SalFrameGeometry& rGeom( pFrame->GetGeometry() );
+            const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
             aPosSize = Rectangle( Point( aPosSize.Left() + rGeom.nLeftDecoration,
                                          aPosSize.Top()  + rGeom.nTopDecoration ),
                                   Size( aPosSize.GetWidth()
@@ -1360,7 +1360,7 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
     pFrame->maFrameData.mbMaximizedVert = bVertical;
     pFrame->maFrameData.mbMaximizedHorz = bHorizontal;
 
-    const SalFrameGeometry& rGeom( pFrame->GetGeometry() );
+    const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
 
     // discard pending configure notifies for this frame
     XSync( m_pDisplay, False );
@@ -1522,7 +1522,7 @@ void NetWMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVert
             pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
         else if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
         {
-            const SalFrameGeometry& rGeom( pFrame->GetGeometry() );
+            const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
             pFrame->maFrameData.aRestoreFullScreen_ =
                 Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         }
@@ -1577,7 +1577,7 @@ void GnomeWMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVe
             pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
         else if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
         {
-            const SalFrameGeometry& rGeom( pFrame->GetGeometry() );
+            const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
             pFrame->maFrameData.aRestoreFullScreen_ =
                 Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         }

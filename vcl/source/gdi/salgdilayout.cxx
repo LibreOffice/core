@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-09 16:30:12 $
+ *  last change: $Author: pl $ $Date: 2002-09-18 16:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,26 @@
 #endif
 
 #define IS_NOTRTL_ENABLED() ( pOutDev && !pOutDev->IsRTLEnabled() )
+
+
+// ----------------------------------------------------------------------------
+// The only common SalFrame method
+// ----------------------------------------------------------------------------
+
+SalFrameGeometry SalFrame::GetGeometry()
+{
+    // mirror frame coordinates at parent
+    SalFrame *pParent = GetParent();
+    if( pParent && Application::GetSettings().GetLayoutRTL() )
+    {
+        SalFrameGeometry aGeom = maGeometry;
+        int parent_x = aGeom.nX - pParent->maGeometry.nX;
+        aGeom.nX = pParent->maGeometry.nX + pParent->maGeometry.nWidth - maGeometry.nWidth - parent_x;
+        return aGeom;
+    }
+    else
+        return maGeometry;
+}
 
 // ----------------------------------------------------------------------------
 
