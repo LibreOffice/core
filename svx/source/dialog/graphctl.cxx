@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:47:05 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,15 +253,18 @@ void GraphCtrl::InitSdrModel()
     // View anlegen
     pView = new GraphCtrlView( pModel, this );
     pView->SetWorkArea( Rectangle( Point(), aGraphSize ) );
-    pView->SetHlplVisible( FALSE );
-    pView->SetGridVisible( FALSE );
-    pView->SetBordVisible( FALSE );
-    pView->SetPageVisible( FALSE );
+//BFS09 pView->SetHlplVisible( FALSE );
+//BFS09 pView->SetGridVisible( FALSE );
+//BFS09 pView->SetBordVisible( FALSE );
+//BFS09 pView->SetPageVisible( FALSE );
     pView->EnableExtendedMouseEventDispatcher( TRUE );
     pView->ShowPagePgNum( 0, Point() );
     pView->SetFrameDragSingles( TRUE );
     pView->SetMarkedPointsSmooth( SDRPATHSMOOTH_SYMMETRIC );
     pView->SetEditMode( TRUE );
+
+    //BFS09
+    pView->SetPagePaintingAllowed(sal_False);
 
     // Tell the accessibility object about the changes.
     if (mpAccContext != NULL)
