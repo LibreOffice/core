@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-19 09:56:00 $
+ *  last change: $Author: dv $ $Date: 2001-02-09 12:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include "arrdecl.hxx"
 
+#ifndef _SV_RESARY_HXX
+#include <vcl/resary.hxx>
+#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -123,6 +126,7 @@
 #include "evntconf.hxx"
 #include "request.hxx"
 #include "doc.hrc"
+#include "sfxlocal.hrc"
 #include "docinf.hxx"
 #include "objuno.hxx"
 #include "appdata.hxx"
@@ -715,6 +719,25 @@ const String& SfxObjectShell::GetLastMark_Impl() const
 SfxObjectShell* SfxObjectShell::GetObjectShell()
 {
     return this;
+}
+
+//--------------------------------------------------------------------
+
+SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
+{
+    ResStringArray aEventNames( SfxResId( EVENT_NAMES_ARY ) );
+    USHORT nCount = aEventNames.Count();
+
+    SEQUENCE < OUSTRING > aSequence( nCount );
+
+    OUSTRING* pNames = aSequence.getArray();
+
+    for ( USHORT i=0; i<nCount; i++ )
+    {
+        pNames[i] = aEventNames.GetString( i );
+    }
+
+    return aSequence;
 }
 
 //--------------------------------------------------------------------
