@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-16 12:40:35 $
+ *  last change: $Author: mh $ $Date: 2002-04-09 10:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #undef HAVE_POLL_H
 #endif
 
-#if defined(LINUX) || defined (IRIX)
+#if defined(LINUX) || defined (IRIX) || defined(NETBSD)
 #include <sys/poll.h>
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */
