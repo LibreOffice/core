@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:38:26 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,18 @@
 #include <vcl/rcid.h>
 #include <helpid.hrc>
 
+#include <svtools/texteng.hxx>
+#include <svtools/textview.hxx>
+#include <svtools/xtextedt.hxx>
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #ifndef _SFX_MINFITEM_HXX //autogen
 #include <sfx2/minfitem.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
@@ -104,6 +114,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
+
+#include <algorithm>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -753,6 +766,146 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         case SID_SHOW_PROPERTYBROWSER:
         {
             GetViewFrame()->ChildWindowExecute( rReq );
+            rReq.Done();
+        }
+        break;
+        case SID_BASICIDE_SHOWWINDOW:
+        {
+            BasicManager* pBasMgr = 0;
+            SfxObjectShell* pObjShell = 0;
+            String aDocument;
+            SFX_REQUEST_ARG( rReq, pDocumentItem, SfxStringItem, SID_BASICIDE_ARG_DOCUMENT, sal_False );
+            if ( pDocumentItem )
+                aDocument = pDocumentItem->GetValue();
+
+            if ( aDocument.Len() != 0 )
+            {
+                SfxViewFrame* pView = SfxViewFrame::GetFirst();
+                while ( pView )
+                {
+                    pObjShell = pView->GetObjectShell();
+                    if ( pObjShell )
+                    {
+                        SfxMedium* pMedium = pObjShell->GetMedium();
+                        if ( ( pMedium && aDocument == pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) ||
+                                aDocument == pObjShell->GetTitle( SFX_TITLE_FILENAME ) )
+                        {
+                            pBasMgr = pObjShell->GetBasicManager();
+                            break;
+                        }
+                    }
+                    pView = SfxViewFrame::GetNext( *pView );
+                }
+            }
+            else
+            {
+                pBasMgr = SFX_APP()->GetBasicManager();
+            }
+
+            if ( pBasMgr )
+            {
+                SFX_REQUEST_ARG( rReq, pLibNameItem, SfxStringItem, SID_BASICIDE_ARG_LIBNAME, sal_False );
+                if ( pLibNameItem )
+                {
+                    String aLibName( pLibNameItem->GetValue() );
+                    Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pObjShell );
+                    if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
+                        xModLibContainer->loadLibrary( aLibName );
+                    StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
+                    if ( pBasic )
+                    {
+                        if ( pCurBasic && ( pCurBasic != pBasic ) )
+                            SetCurBasic( pBasic );
+
+                        SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_BASICIDE_ARG_NAME, sal_False );
+                        if ( pNameItem )
+                        {
+                            String aName( pNameItem->GetValue() );
+                            String aModType( String::CreateFromAscii( "Module" ) );
+                            String aDlgType( String::CreateFromAscii( "Dialog" ) );
+                            String aType( aModType );
+                            SFX_REQUEST_ARG( rReq, pTypeItem, SfxStringItem, SID_BASICIDE_ARG_TYPE, sal_False );
+                            if ( pTypeItem )
+                                aType = pTypeItem->GetValue();
+
+                            IDEBaseWindow* pWin = 0;
+                            if ( aType == aModType )
+                                pWin = FindBasWin( pBasic, aName, FALSE );
+                            else if ( aType == aDlgType )
+                                pWin = FindDlgWin( pBasic, aName, FALSE );
+
+                            if ( pWin )
+                            {
+                                SetCurWindow( pWin, TRUE );
+                                if ( pTabBar )
+                                    pTabBar->MakeVisible( pTabBar->GetCurPageId() );
+
+                                if ( pWin->ISA( ModulWindow ) )
+                                {
+                                    ModulWindow* pModWin = (ModulWindow*)pWin;
+                                    SFX_REQUEST_ARG( rReq, pLineItem, SfxUInt32Item, SID_BASICIDE_ARG_LINE, sal_False );
+                                    if ( pLineItem )
+                                    {
+                                        pModWin->AssertValidEditEngine();
+                                        TextView* pTextView = pModWin->GetEditView();
+                                        if ( pTextView )
+                                        {
+                                            TextEngine* pTextEngine = pTextView->GetTextEngine();
+                                            if ( pTextEngine )
+                                            {
+                                                sal_uInt32 nLine = pLineItem->GetValue();
+                                                sal_uInt32 nLineCount = 0;
+                                                for ( sal_uInt32 i = 0, nCount = pTextEngine->GetParagraphCount(); i < nCount; ++i )
+                                                    nLineCount += pTextEngine->GetLineCount( i );
+                                                if ( nLine > nLineCount )
+                                                    nLine = nLineCount;
+                                                if ( nLine > 0 )
+                                                    --nLine;
+
+                                                // scroll window and set selection
+                                                long nVisHeight = pModWin->GetOutputSizePixel().Height();
+                                                long nTextHeight = pTextEngine->GetTextHeight();
+                                                if ( nTextHeight > nVisHeight )
+                                                {
+                                                    long nMaxY = nTextHeight - nVisHeight;
+                                                    long nOldY = pTextView->GetStartDocPos().Y();
+                                                    long nNewY = nLine * pTextEngine->GetCharHeight() - nVisHeight / 2;
+                                                    nNewY = ::std::min( nNewY, nMaxY );
+                                                    pTextView->Scroll( 0, -( nNewY - nOldY ) );
+                                                    pTextView->ShowCursor( FALSE, TRUE );
+                                                    pModWin->GetEditVScrollBar().SetThumbPos( pTextView->GetStartDocPos().Y() );
+                                                }
+                                                sal_uInt16 nCol1 = 0, nCol2 = 0;
+                                                SFX_REQUEST_ARG( rReq, pCol1Item, SfxUInt16Item, SID_BASICIDE_ARG_COLUMN1, sal_False );
+                                                if ( pCol1Item )
+                                                {
+                                                    nCol1 = pCol1Item->GetValue();
+                                                    if ( nCol1 > 0 )
+                                                        --nCol1;
+                                                    nCol2 = nCol1;
+                                                }
+                                                SFX_REQUEST_ARG( rReq, pCol2Item, SfxUInt16Item, SID_BASICIDE_ARG_COLUMN2, sal_False );
+                                                if ( pCol2Item )
+                                                {
+                                                    nCol2 = pCol2Item->GetValue();
+                                                    if ( nCol2 > 0 )
+                                                        --nCol2;
+                                                }
+                                                TextSelection aSel( TextPaM( nLine, nCol1 ), TextPaM( nLine, nCol2 ) );
+                                                pTextView->SetSelection( aSel );
+                                                pTextView->ShowCursor();
+                                                Window* pWindow = pTextView->GetWindow();
+                                                if ( pWindow )
+                                                    pWindow->GrabFocus();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             rReq.Done();
         }
         break;
