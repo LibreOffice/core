@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: mt $ $Date: 2001-03-14 11:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,18 +661,27 @@ VCLXRadioButton::~VCLXRadioButton()
 {
     RadioButton* pBox = (RadioButton*) GetWindow();
     if ( pBox )
+    {
         pBox->SetClickHdl( Link() );
+        pBox->SetToggleHdl( Link() );
+    }
 }
 
 void VCLXRadioButton::SetWindow( Window* pWindow )
 {
     RadioButton* pPrevRadioButton = (RadioButton*) GetWindow();
     if ( pPrevRadioButton )
+    {
         pPrevRadioButton->SetClickHdl( Link() );
+        pPrevRadioButton->SetToggleHdl( Link() );
+    }
 
     RadioButton* pNewRadioButton = (RadioButton*) pWindow;
     if ( pNewRadioButton )
+    {
         pNewRadioButton->SetClickHdl( LINK( this, VCLXRadioButton, ClickHdl ) );
+        pNewRadioButton->SetToggleHdl( LINK( this, VCLXRadioButton, ToggleHdl ) );
+    }
 
     VCLXWindow::SetWindow( pWindow );
 }
@@ -836,15 +845,22 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
 
 IMPL_LINK( VCLXRadioButton, ClickHdl, RadioButton*, EMPTYARG )
 {
-    // RadioButton reagiert wieder auf Click() statt auf Toggle().
-    // Dadurch wird bei dem RadioButton, den TH uncheckt, kein
-    // itemStateChanged gerufen.
-    // Sollte hoffentlich kein Problem sein, unter JAVA und im Office wird
-    // das Gruppenverhalten von DG/KR erledigt, damit stimmen dann
-    // auch die Properties.
+    ImplClickedOrToggled( FALSE );
+    return 1;
+}
 
+IMPL_LINK( VCLXRadioButton, ToggleHdl, RadioButton*, EMPTYARG )
+{
+    ImplClickedOrToggled( TRUE );
+    return 1;
+}
+
+void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
+{
+    // In the formulars, RadioChecked is not enabled, call itemStateChanged only for click
+    // In the dialog editor, RadioChecked is enabled, call itemStateChanged only for bToggled
     RadioButton* pRadioButton = (RadioButton*)GetWindow();
-    if ( pRadioButton && pRadioButton->IsStateChanged() && maItemListeners.getLength() )
+    if ( pRadioButton && ( pRadioButton->IsRadioCheckEnabled() == bToggled ) && ( bToggled || pRadioButton->IsStateChanged() ) && maItemListeners.getLength() )
     {
         ::com::sun::star::awt::ItemEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
@@ -852,7 +868,6 @@ IMPL_LINK( VCLXRadioButton, ClickHdl, RadioButton*, EMPTYARG )
         aEvent.Selected = pRadioButton->IsChecked();
         maItemListeners.itemStateChanged( aEvent );
     }
-    return 1;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: mt $ $Date: 2001-03-14 11:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,9 @@ private:
 
 protected:
     DECL_LINK(      ClickHdl, RadioButton* );
+    DECL_LINK(      ToggleHdl, RadioButton* );
+    void            ImplClickedOrToggled( BOOL bToggled );
+
 
 public:
                     VCLXRadioButton();
