@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:20:09 $
+ *  last change: $Author: sab $ $Date: 2002-10-02 09:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,11 +378,11 @@ protected:
     /// Use this method to set initial Description without notification
     void SetDescription(const rtl::OUString& rDesc) { msDescription = rDesc; }
 
-private:
     /// Reference to the parent object.
     ::com::sun::star::uno::Reference<
          ::drafts::com::sun::star::accessibility::XAccessible> mxParent;
 
+private:
     /** Description of this object.  This is not a constant because it can
         be set from the outside.  Furthermore, it changes according the the
         draw page's display mode.
