@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2001-07-25 18:50:59 $
+ *  last change: $Author: cd $ $Date: 2001-08-16 12:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1863,7 +1863,7 @@ SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BO
     SfxObjectShellRef xDoc;
     SfxMedium *pMed = new SfxMedium( aTargetURL, STREAM_STD_READ, FALSE, 0 );
     const SfxFilter* pFilter = NULL;
-    if( SFX_APP()->GetFilterMatcher().GuessFilter( *pMed, &pFilter ) == ERRCODE_NONE && pFilter->IsOwnFormat() )
+    if( SFX_APP()->GetFilterMatcher().GuessFilter( *pMed, &pFilter ) == ERRCODE_NONE && pFilter && pFilter->IsOwnFormat() )
     {
         delete pMed;
         StreamMode nMode = bForWriting ? STREAM_STD_READWRITE : STREAM_STD_READ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-03 18:05:49 $
+ *  last change: $Author: cd $ $Date: 2001-08-16 12:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,19 @@ static USHORT __FAR_DATA aCodeArr[] =
     KEY_BACKSPACE,
     KEY_INSERT   ,
     KEY_DELETE   ,
+
+    KEY_OPEN        ,
+    KEY_CUT         ,
+    KEY_COPY        ,
+    KEY_PASTE       ,
+    KEY_UNDO        ,
+    KEY_REPEAT      ,
+    KEY_FIND        ,
+    KEY_PROPERTIES  ,
+    KEY_FRONT       ,
+    KEY_CONTEXTMENU ,
+    KEY_MENU        ,
+    KEY_HELP        ,
 
     KEY_F2        | KEY_SHIFT,
     KEY_F3        | KEY_SHIFT,
@@ -281,11 +294,6 @@ static long nAccCfgTabs[] =
 };
 
 #define ACC_CODEARRSIZE   ( sizeof( aCodeArr ) / sizeof( aCodeArr[ 0 ] ) )
-#ifdef VCL
-#define ACC_FUNCTIONCOUNT 0
-#else
-#define ACC_FUNCTIONCOUNT 18
-#endif
 
 #ifdef MSC
 #pragma warning (disable:4355)
@@ -308,14 +316,14 @@ void SfxAccCfgTabListBox_Impl::KeyInput( const KeyEvent &rKEvt )
          nCode != KEY_LEFT   && nCode != KEY_RIGHT    &&
          nCode != KEY_PAGEUP && nCode != KEY_PAGEDOWN )
     {
-        for ( USHORT i = 0; i < ACC_CODEARRSIZE; i++ )
+        for ( USHORT i = 0; i < m_pAccelConfigPage->aConfigCodeArr.Count(); i++ )
         {
-            KeyCode aCode2( aCodeArr[ i ] );
+            KeyCode aCode2( m_pAccelConfigPage->aConfigCodeArr[ i ] );
 
             if ( aCode1.GetCode    () == aCode2.GetCode    () &&
                  aCode1.GetModifier() == aCode2.GetModifier() )
             {
-                SvLBoxEntry *pEntry = GetEntry( 0, i + ACC_FUNCTIONCOUNT );
+                SvLBoxEntry *pEntry = GetEntry( 0, i );
                 Select( pEntry );
                 MakeVisible( pEntry );
                 return;
@@ -338,7 +346,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
 
     aChangeButton       ( this, ResId( BTN_ACC_CHANGE          ) ),
     aRemoveButton       ( this, ResId( BTN_ACC_REMOVE          ) ),
-    aEntriesBox         ( this, ResId( BOX_ACC_ENTRIES         ) ),
+    aEntriesBox         ( this, this, ResId( BOX_ACC_ENTRIES   ) ),
     aKeyboardGroup      ( this, ResId( GRP_ACC_KEYBOARD        ) ),
     aGroupText          ( this, ResId( TXT_ACC_GROUP           ) ),
     aGroupLBox          ( this, ResId( BOX_ACC_GROUP ), SFX_SLOT_ACCELCONFIG ),
@@ -376,9 +384,17 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
     aResetButton .SetClickHdl ( LINK( this, SfxAcceleratorConfigPage,
       Default      ) );
 
-    // aAccelArr dimensionieren
-    for ( USHORT i = 0; i < ACC_FUNCTIONCOUNT + ACC_CODEARRSIZE; i++ )
+    // initializing aAccelArr and aAccelConfigArr
+    for ( USHORT i = 0; i < ACC_CODEARRSIZE; i++ )
+    {
         aAccelArr.Append( 0 );
+        KeyCode aKeyCode = PosToKeyCode_All( i );
+        if ( aKeyCode.GetName().Len() > 0 )
+        {
+            aConfigAccelArr.Append( 0 );
+            aConfigCodeArr.Append( aKeyCode.GetFullCode() );
+        }
+    }
 
     // Entriesbox initialisieren
 //(mba)/task    SfxWaitCursor aWait;
@@ -394,22 +410,12 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
 
 void SfxAcceleratorConfigPage::Init()
 {
-    // aEntriesBox initialisieren
-    USHORT i;
-    for ( i=0; i<ACC_FUNCTIONCOUNT; i++ )
+    // Insert all editable accelerators into list box. It is possible
+    // that some accelerators are not mapped on the current system/keyboard
+    // but we don't want to lose these mappings.
+    for ( USHORT i=0; i< aConfigAccelArr.Count(); i++ )
     {
-        // F"ur alle "physikalischen" Acceleratoren einen Eintrag anlegen
-        String aEntry = GetFunctionName( ( KeyFuncType ) ( i + 1 ) );
-        SfxMenuConfigEntry *pEntry = new SfxMenuConfigEntry( 0, aEntry, String(), FALSE );
-        SvLBoxEntry *pLBEntry = aEntriesBox.InsertEntry( aEntry, 0L, LIST_APPEND, 0xFFFF );
-        aEntriesBox.EntryInserted( pLBEntry );
-        pLBEntry->SetUserData( pEntry );
-    }
-
-    for ( i=0; i<ACC_CODEARRSIZE; i++ )
-    {
-        // F"ur alle "logischen" Acceleratoren einen Eintrag anlegen
-        String aEntry = PosToKeyCode( i + ACC_FUNCTIONCOUNT ).GetName();
+        String aEntry = PosToKeyCode_Config( i ).GetName();
         SfxMenuConfigEntry *pEntry = new SfxMenuConfigEntry( 0, aEntry, String(), FALSE );
         SvLBoxEntry *pLBEntry = aEntriesBox.InsertEntry( aEntry, 0L, LIST_APPEND, 0xFFFF );
         aEntriesBox.EntryInserted( pLBEntry );
@@ -425,9 +431,16 @@ void SfxAcceleratorConfigPage::Init()
     for ( p = rItems.begin(); p != rItems.end(); p++ )
     {
         SfxAcceleratorConfigItem aItem( *p );
-        USHORT nId = aItem.nId;
+        USHORT  nId = aItem.nId;
+        KeyCode aKeyCode = aItem.nCode ? KeyCode( aItem.nCode, aItem.nModifier ) : KeyCode( aItem.nModifier);
 
-        USHORT nPos = KeyCodeToPos( aItem.nCode ? KeyCode( aItem.nCode, aItem.nModifier ) : KeyCode( aItem.nModifier) );
+        // init full accelerator array
+        USHORT nPos = KeyCodeToPos_All( aKeyCode );
+        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+            aAccelArr[ nPos ] = nId;
+
+        // init configurable accelerator array
+        nPos = KeyCodeToPos_Config( aKeyCode );
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             USHORT nCol = aEntriesBox.TabCount() - 1;
@@ -435,31 +448,27 @@ void SfxAcceleratorConfigPage::Init()
             aText += SFX_SLOTPOOL().GetSlotName_Impl( nId );
             aText += ']';
             aEntriesBox.SetEntryText( aText, nPos, nCol );
-            aAccelArr[ nPos ] = nId;
             SfxMenuConfigEntry *pEntry = (SfxMenuConfigEntry*) aEntriesBox.GetEntry( 0, nPos )->GetUserData();
             pEntry->SetId( nId );
+            aConfigAccelArr[ nPos ] = nId;
 
 #ifdef MBA_PUT_ITEMS
             KeyCode aCode = pMgr->GetKeyCode();
-            String aName;
-            if ( !aCode.IsFunction() )
-                aName = aCode.GetName();
-            else
-                aName = GetFunctionName( aCode.GetFunction() );
+            String aName( aCode.GetName() );
             aFile << aText.GetStr() << '\t' << aName.GetStr() << '\n';
 #endif
         }
     }
-
-//  for ( i=0; i<ACC_FUNCTIONCOUNT; i++ )
-//      aEntriesBox.GetModel()->Remove( aEntriesBox.FirstChild( 0 ) );
 }
 
 void SfxAcceleratorConfigPage::ResetConfig()
 {
     aEntriesBox.Clear();
-    for ( USHORT i = 0; i < ACC_FUNCTIONCOUNT + ACC_CODEARRSIZE; i++ )
+    for ( USHORT i = 0; i < ACC_CODEARRSIZE; i++ )
         aAccelArr[i] = 0;
+
+    for ( i = 0; i < aConfigAccelArr.Count(); i++ )
+        aConfigAccelArr[i] = 0;
 }
 
 void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr )
@@ -483,7 +492,7 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr )
     // zaehlen
     USHORT nCount = 0;
     USHORT i;
-    for ( i = ACC_FUNCTIONCOUNT + ACC_CODEARRSIZE; i > 0; --i )
+    for ( i = ACC_CODEARRSIZE; i > 0; --i )
     {
         if ( aAccelArr[i-1] )
             ++nCount;
@@ -506,7 +515,7 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr )
 
     // Liste von hinten durchgehen, damit logische Acceleratoren Vorrang
     // vor physikalischen haben.
-    for ( i = ACC_FUNCTIONCOUNT + ACC_CODEARRSIZE; i > 0; --i )
+    for ( i = ACC_CODEARRSIZE; i > 0; --i )
     {
         if ( aAccelArr[i-1] )
         {
@@ -522,7 +531,7 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr )
                     SFX_APP()->GetMacroConfig()->RegisterSlotId(aAccelArr[i-1]);
             }
 
-            pAccMgr->AppendItem( aAccelArr[i-1], PosToKeyCode( i-1 ) );
+            pAccMgr->AppendItem( aAccelArr[i-1], PosToKeyCode_All( i-1 ) );
         }
     }
 
@@ -642,6 +651,12 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
         {
             // create new AcceleratorManager and apply changes
             SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pMgr, pCfgMgr );
+
+            // We want to save the current accelerator configuration
+            // Set bDefault and bModified to ensure this!
+            bDefault = FALSE;
+            bModified = TRUE;
+
             Apply( pAccMgr );
             pAccMgr->SetDefault( FALSE );
             pCfgMgr->StoreConfigItem( *pAccMgr );
@@ -720,7 +735,14 @@ IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button *, pButton )
     aText += ']';
     USHORT nCol = aEntriesBox.TabCount() - 1;
     aEntriesBox.SetEntryText( aText, nPos, nCol );
-    aAccelArr[ nPos ] = nId;
+
+    // change configurable and full array!
+    aConfigAccelArr[ nPos ] = nId;
+    KeyCode aKeyCode = PosToKeyCode_Config( nPos );
+    nPos = KeyCodeToPos_All( aKeyCode );
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        aAccelArr[ nPos ] = nId;
+
     pEntry->SetId( nId );
     pEntry->SetHelpText( String() );
     ((Link &) aFunctionBox.GetSelectHdl()).Call( &aFunctionBox );
@@ -740,7 +762,14 @@ IMPL_LINK( SfxAcceleratorConfigPage, RemoveHdl, Button *, pButton )
     // Funktionsnamen aus dem Eintrag l"oschen
     USHORT nCol = aEntriesBox.TabCount() - 1;
     aEntriesBox.SetEntryText( pEntry->GetName(), nPos );  // Nur letzte Spalte auf "" setzen funzt nicht - Bug ??
-    aAccelArr[ nPos ] = 0;
+
+    // change configurable and full array!
+    aConfigAccelArr[ nPos ] = 0;
+    KeyCode aKeyCode = PosToKeyCode_Config( nPos );
+    nPos = KeyCodeToPos_All( aKeyCode );
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        aAccelArr[ nPos ] = 0;
+
     pEntry->SetId( 0 );
     ((Link &) aFunctionBox.GetSelectHdl()).Call( &aFunctionBox );
     return 0;
@@ -755,8 +784,8 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     {
         // Eintrag ausgewaehlt: Buttons enablen/disablen
         USHORT nPos = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
-        aChangeButton.Enable( nPos >= ACC_FUNCTIONCOUNT && aAccelArr[ nPos ] != aFunctionBox.GetCurId() );
-        aRemoveButton.Enable( nPos >= ACC_FUNCTIONCOUNT && aAccelArr[ nPos ] > 0 );
+        aChangeButton.Enable( aConfigAccelArr[ nPos ] != aFunctionBox.GetCurId() );
+        aRemoveButton.Enable( aConfigAccelArr[ nPos ] > 0 );
     }
     else if ( pListBox == &aGroupLBox )
     {
@@ -771,22 +800,18 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         // Zuerst "uberpr"ufen, ob durch den Wechsel der Selektion der Zustand des ChangeButtons wechselt
         USHORT nEntryPos = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
         USHORT nId = aFunctionBox.GetCurId();
-        aChangeButton.Enable( nEntryPos >= ACC_FUNCTIONCOUNT && aAccelArr[ nEntryPos ] != nId );
-        aRemoveButton.Enable( nEntryPos >= ACC_FUNCTIONCOUNT && aAccelArr[ nEntryPos ] > 0 );
+        aChangeButton.Enable( aConfigAccelArr[ nEntryPos ] != nId );
+        aRemoveButton.Enable( aConfigAccelArr[ nEntryPos ] > 0 );
 
         aKeyBox.Clear();
         aKeyArr.Clear();
 
-        for ( USHORT i = 0; i < ACC_FUNCTIONCOUNT + ACC_CODEARRSIZE; i++ )
+        for ( USHORT i = 0; i < aConfigAccelArr.Count(); i++ )
         {
-            if ( aAccelArr[ i ] == nId )
+            if ( aConfigAccelArr[ i ] == nId )
             {
-                KeyCode aCode = PosToKeyCode( i );
-                if ( !aCode.IsFunction() )
-                    aKeyBox.InsertEntry( aCode.GetName() );
-                else
-                    aKeyBox.InsertEntry( GetFunctionName( aCode.GetFunction() ) );
-
+                KeyCode aCode = PosToKeyCode_Config( i );
+                aKeyBox.InsertEntry( aCode.GetName() );
                 aKeyArr.Append( i );
             }
         }
@@ -795,7 +820,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     {
         // Taste ausgewaehlt: Eintrag anspringen
         USHORT n = aKeyBox.GetSelectEntryPos();
-        USHORT nPos = aKeyArr[ n ] /* - ACC_FUNCTIONCOUNT */;
+        USHORT nPos = aKeyArr[ n ];
         SvLBoxEntry *pEntry = aEntriesBox.GetEntry( 0, nPos );
         aEntriesBox.Select( pEntry );
         aEntriesBox.MakeVisible( pEntry );
@@ -803,39 +828,48 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     return 0;
 }
 
-KeyCode SfxAcceleratorConfigPage::PosToKeyCode( USHORT nPos ) const
+KeyCode SfxAcceleratorConfigPage::PosToKeyCode_Config( USHORT nPos ) const
 {
-    DBG_ASSERT( nPos < ACC_CODEARRSIZE + ACC_FUNCTIONCOUNT, "Invalid position!" );
+    DBG_ASSERT( nPos < aConfigCodeArr.Count(), "Invalid position!" );
 
-      if ( nPos < ACC_FUNCTIONCOUNT )
-      {
-          KeyCode aTmpCode( ( KeyFuncType ) ( nPos + 1 ) );
-          return aTmpCode;
-      }
-      else
-      {
-        KeyCode aTmpCode( aCodeArr[ nPos - ACC_FUNCTIONCOUNT] & 0xFFF,
-                          aCodeArr[ nPos - ACC_FUNCTIONCOUNT] & ( KEY_SHIFT | KEY_MOD1 ) );
-        return aTmpCode;
-      }
+    KeyCode aTmpCode( aConfigCodeArr[ nPos ] & 0xFFF,
+                      aConfigCodeArr[ nPos ] & ( KEY_SHIFT | KEY_MOD1 ) );
+    return aTmpCode;
 }
 
-USHORT SfxAcceleratorConfigPage::KeyCodeToPos( const KeyCode &rCode ) const
+USHORT SfxAcceleratorConfigPage::KeyCodeToPos_Config( const KeyCode &rCode ) const
 {
-      if ( rCode.IsFunction() )
-          return ( USHORT ) rCode.GetFunction() - 1;
-      else
-      {
-        USHORT nCode = rCode.GetCode() + rCode.GetModifier();
+    USHORT nCode = rCode.GetCode() + rCode.GetModifier();
 
-        for ( USHORT i = 0; i < ACC_CODEARRSIZE; i++ )
-        {
-            if ( aCodeArr[ i ] == nCode )
-                return i + ACC_FUNCTIONCOUNT;
-        }
+    for ( USHORT i = 0; i < aConfigCodeArr.Count(); i++ )
+    {
+        if ( aConfigCodeArr[ i ] == nCode )
+            return i;
+    }
 
-        return LISTBOX_ENTRY_NOTFOUND;
-      }
+    return LISTBOX_ENTRY_NOTFOUND;
+}
+
+KeyCode SfxAcceleratorConfigPage::PosToKeyCode_All( USHORT nPos ) const
+{
+    DBG_ASSERT( nPos < ACC_CODEARRSIZE, "Invalid position!" );
+
+    KeyCode aTmpCode( aCodeArr[ nPos ] & 0xFFF,
+                      aCodeArr[ nPos ] & ( KEY_SHIFT | KEY_MOD1 ) );
+    return aTmpCode;
+}
+
+USHORT SfxAcceleratorConfigPage::KeyCodeToPos_All( const KeyCode &rCode ) const
+{
+    USHORT nCode = rCode.GetCode() + rCode.GetModifier();
+
+    for ( USHORT i = 0; i < ACC_CODEARRSIZE; i++ )
+    {
+        if ( aCodeArr[ i ] == nCode )
+            return i;
+    }
+
+    return LISTBOX_ENTRY_NOTFOUND;
 }
 
 String SfxAcceleratorConfigPage::GetFunctionName( KeyFuncType eType ) const
@@ -902,5 +936,3 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& )
         aGroupLBox.Select( aGroupLBox.GetEntry( 0, 0 ) );
     }
 }
-
-

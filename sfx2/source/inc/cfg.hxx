@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 12:09:13 $
+ *  last change: $Author: cd $ $Date: 2001-08-16 12:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,14 +287,20 @@ class SfxAcceleratorManager;
 
 // class SfxAcceleratorConfigListBox *************************************************
 
+class SfxAcceleratorConfigPage;
 class SfxAccCfgTabListBox_Impl : public SfxMenuCfgTabListBox_Impl
 {
+    SfxAcceleratorConfigPage*   m_pAccelConfigPage;
+
     void                        KeyInput( const KeyEvent &rKEvt );
 
 public:
-                                SfxAccCfgTabListBox_Impl( Window *pParent,
+                                SfxAccCfgTabListBox_Impl(
+                                        SfxAcceleratorConfigPage* pAccelConfigPage,
+                                        Window *pParent,
                                         const ResId &rResId ) :
-                                    SfxMenuCfgTabListBox_Impl( pParent, rResId )
+                                    SfxMenuCfgTabListBox_Impl( pParent, rResId ),
+                                    m_pAccelConfigPage( pAccelConfigPage )
                                 {}
 
     void                        ReplaceEntry( USHORT nPos, const String &rStr );
@@ -304,6 +310,7 @@ public:
 
 class SfxAcceleratorConfigPage : public SfxTabPage
 {
+    friend SfxAccCfgTabListBox_Impl;
 private:
     SfxAccCfgTabListBox_Impl        aEntriesBox;
     FixedLine                       aKeyboardGroup;
@@ -322,6 +329,8 @@ private:
 
     SfxAcceleratorManager*      pMgr;
 
+    USHORTArr                   aConfigAccelArr;
+    USHORTArr                   aConfigCodeArr;
     USHORTArr                   aAccelArr;
     USHORTArr                   aKeyArr;
     BOOL                        bModified;
@@ -334,8 +343,12 @@ private:
     DECL_LINK(                  Load, Button * );
     DECL_LINK(                  Default, PushButton * );
 
-    KeyCode                     PosToKeyCode   ( USHORT nPos )          const;
-    USHORT                      KeyCodeToPos   ( const KeyCode &rCode ) const;
+    KeyCode                     PosToKeyCode_Config( USHORT nPos ) const;
+    USHORT                      KeyCodeToPos_Config( const KeyCode &rCode ) const;
+
+    KeyCode                     PosToKeyCode_All( USHORT nPos ) const;
+    USHORT                      KeyCodeToPos_All( const KeyCode& rCode ) const;
+
     String                      GetFunctionName( KeyFuncType eType )    const;
 
     void                        Init();
