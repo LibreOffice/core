@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:49:59 $
+#   last change: $Author: hr $ $Date: 2003-06-30 16:02:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -223,6 +223,7 @@ DOCUHTMLFILES+= \
 DOCUFILES+= \
     $(DOCUHTMLFILES) \
     $(DESTDIRDOCUIMAGES)$/black_dot.gif \
+    $(DESTDIRDOCUIMAGES)$/nada.gif \
     $(DESTDIRDOCUIMAGES)$/logo.gif \
     $(DESTDIRDOCUIMAGES)$/sdk_logo.gif
 #	$(DOCUSTUDIO4INTEGRATIONGRAPHICSFILES) \
