@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: os $ $Date: 2002-10-07 13:08:09 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1716,7 +1716,7 @@ SfxSlotInfo FN_FLIP_HORZ_GRAFIC
     SlotName[ russian ] = "Отразить по вертикали";
     SlotName[ dutch ] = "Verticaal spiegelen";
     SlotName[ french ] = "Reflйter verticalement";
-    SlotName[ spanish ] = "Reflejar vertical";
+    SlotName[ spanish ] = "Reflejar verticalmente";
     SlotName[ italian ] = "Rispecchia in verticale";
     SlotName[ danish ] = "Spejlvend lodret";
     SlotName[ swedish ] = "Spegelvдnd vertikalt";
@@ -1745,7 +1745,7 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
     SlotName[ russian ] = "Отразить по горизонтали";
     SlotName[ dutch ] = "Horizontaal spiegelen";
     SlotName[ french ] = "Reflйter horizontalement";
-    SlotName[ spanish ] = "Reflejar horizontal";
+    SlotName[ spanish ] = "Reflejar horizontalmente";
     SlotName[ italian ] = "Rispecchia in orizzontale";
     SlotName[ danish ] = "Spejlvend vandret";
     SlotName[ swedish ] = "Spegelvдnd horisontellt";
@@ -3485,7 +3485,7 @@ SfxSlotInfo FN_INSERT_ENDNOTE
     SlotName[ russian ] = "Вставить непосредственно концевую сноску";
     SlotName[ dutch ] = "Eindnoot direct invoegen";
     SlotName[ french ] = "Insйrer directement une note de fin";
-    SlotName[ spanish ] = "Insertar nota final directamente";
+    SlotName[ spanish ] = "Insertar directamente una nota final";
     SlotName[ italian ] = "Inserisci direttamente nota di chiusura";
     SlotName[ danish ] = "Indsжt slutnote direkte";
     SlotName[ swedish ] = "Infoga slutnot direkt";
@@ -9908,7 +9908,7 @@ SfxSlotInfo FN_TO_FOOTNOTE_AREA
     SlotName[ greek ] = "Edit Footnote/Endnote";
     SlotName[ dutch ] = "Edit Footnote/Endnote";
     SlotName[ french ] = "Йditer les notes de bas de page / notes de fin";
-    SlotName[ spanish ] = "Editar nota al pie / nota al final";
+    SlotName[ spanish ] = "Editar nota al pie / nota final";
     SlotName[ finnish ] = "Edit Footnote/Endnote";
     SlotName[ italian ] = "Modifica note a piи pagina/di chiusura";
     SlotName[ danish ] = "Edit Footnote/Endnote";
