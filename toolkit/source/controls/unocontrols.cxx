@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 13:23:35 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 07:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ UnoControlModel::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 
-::rtl::OUString UnoControlDialogModel::getServiceName() const
+::rtl::OUString UnoControlDialogModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialogModel );
 }
@@ -814,7 +814,7 @@ UnoControlEditModel::UnoControlEditModel()
     ImplRegisterProperty( BASEPROPERTY_VSCROLL );
 }
 
-::rtl::OUString UnoControlEditModel::getServiceName() const
+::rtl::OUString UnoControlEditModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlEditModel );
 }
@@ -1086,7 +1086,7 @@ UnoControlFormattedFieldModel::UnoControlFormattedFieldModel()
     ImplRegisterProperty( BASEPROPERTY_TREATASNUMBER, aTreatAsNumber );
 }
 
-::rtl::OUString UnoControlFormattedFieldModel::getServiceName() const
+::rtl::OUString UnoControlFormattedFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel );
 }
@@ -1174,7 +1174,7 @@ UnoControlFileControlModel::UnoControlFileControlModel()
     ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
-::rtl::OUString UnoControlFileControlModel::getServiceName() const
+::rtl::OUString UnoControlFileControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFileControlModel );
 }
@@ -1245,7 +1245,7 @@ uno::Any UnoControlButtonModel::queryAggregation( const uno::Type & rType ) thro
     return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
 }
 
-::rtl::OUString UnoControlButtonModel::getServiceName() const
+::rtl::OUString UnoControlButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlButtonModel );
 }
@@ -1521,7 +1521,7 @@ uno::Any UnoControlImageControlModel::queryAggregation( const uno::Type & rType 
     return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
 }
 
-::rtl::OUString UnoControlImageControlModel::getServiceName() const
+::rtl::OUString UnoControlImageControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageControlModel );
 }
@@ -1757,7 +1757,7 @@ UnoControlRadioButtonModel::UnoControlRadioButtonModel()
     ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
-::rtl::OUString UnoControlRadioButtonModel::getServiceName() const
+::rtl::OUString UnoControlRadioButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlRadioButtonModel );
 }
@@ -1961,7 +1961,7 @@ UnoControlCheckBoxModel::UnoControlCheckBoxModel()
     ImplRegisterProperty( BASEPROPERTY_TRISTATE );
 }
 
-::rtl::OUString UnoControlCheckBoxModel::getServiceName() const
+::rtl::OUString UnoControlCheckBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlCheckBoxModel );
 }
@@ -2137,7 +2137,7 @@ UnoControlFixedTextModel::UnoControlFixedTextModel()
     ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
-::rtl::OUString UnoControlFixedTextModel::getServiceName() const
+::rtl::OUString UnoControlFixedTextModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedTextModel );
 }
@@ -2274,7 +2274,7 @@ UnoControlGroupBoxModel::UnoControlGroupBoxModel()
     ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
-::rtl::OUString UnoControlGroupBoxModel::getServiceName() const
+::rtl::OUString UnoControlGroupBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBoxModel );
 }
@@ -2350,7 +2350,7 @@ UnoControlListBoxModel::UnoControlListBoxModel()
     ImplRegisterProperty( BASEPROPERTY_READONLY );
 }
 
-::rtl::OUString UnoControlListBoxModel::getServiceName() const
+::rtl::OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlListBoxModel );
 }
@@ -2770,7 +2770,7 @@ UnoControlComboBoxModel::UnoControlComboBoxModel()
     ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
-::rtl::OUString UnoControlComboBoxModel::getServiceName() const
+::rtl::OUString UnoControlComboBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlComboBoxModel );
 }
@@ -3035,7 +3035,7 @@ UnoControlDateFieldModel::UnoControlDateFieldModel()
     ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
-::rtl::OUString UnoControlDateFieldModel::getServiceName() const
+::rtl::OUString UnoControlDateFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlDateFieldModel );
 }
@@ -3236,7 +3236,7 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel()
     ImplRegisterProperty( BASEPROPERTY_TIMEMIN );
 }
 
-::rtl::OUString UnoControlTimeFieldModel::getServiceName() const
+::rtl::OUString UnoControlTimeFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlTimeFieldModel );
 }
@@ -3427,7 +3427,7 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel()
     ImplRegisterProperty( BASEPROPERTY_VALUE_DOUBLE );
 }
 
-::rtl::OUString UnoControlNumericFieldModel::getServiceName() const
+::rtl::OUString UnoControlNumericFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlNumericFieldModel );
 }
@@ -3622,7 +3622,7 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel()
     ImplRegisterProperty( BASEPROPERTY_VALUE_DOUBLE );
 }
 
-::rtl::OUString UnoControlCurrencyFieldModel::getServiceName() const
+::rtl::OUString UnoControlCurrencyFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlCurrencyFieldModel );
 }
@@ -3815,7 +3815,7 @@ UnoControlPatternFieldModel::UnoControlPatternFieldModel()
     ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
-::rtl::OUString UnoControlPatternFieldModel::getServiceName() const
+::rtl::OUString UnoControlPatternFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlPatternFieldModel );
 }
@@ -3954,7 +3954,7 @@ UnoControlProgressBarModel::UnoControlProgressBarModel()
     ImplRegisterProperty( BASEPROPERTY_PROGRESSVALUE_MIN );
 }
 
-::rtl::OUString UnoControlProgressBarModel::getServiceName() const
+::rtl::OUString UnoControlProgressBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBarModel );
 }
@@ -4085,7 +4085,7 @@ UnoControlScrollBarModel::UnoControlScrollBarModel()
     ImplRegisterProperty( BASEPROPERTY_VISIBLESIZE );
 }
 
-::rtl::OUString UnoControlScrollBarModel::getServiceName() const
+::rtl::OUString UnoControlScrollBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlScrollBarModel );
 }
@@ -4343,7 +4343,7 @@ UnoControlFixedLineModel::UnoControlFixedLineModel()
     ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
-::rtl::OUString UnoControlFixedLineModel::getServiceName() const
+::rtl::OUString UnoControlFixedLineModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedLineModel );
 }
