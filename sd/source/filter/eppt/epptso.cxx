@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-04 15:57:04 $
+ *  last change: $Author: sj $ $Date: 2001-04-06 12:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,18 +849,18 @@ sal_Bool PPTWriter::ImplCloseDocument()
         sal_uInt32 nExEmbedSize = mpExEmbed->Tell();
 
         // nEnviroment : Gesamtgroesse des Environment Containers
-        sal_uInt32 nEnvironment = maFontCollection.GetCount() * 76  // 68 bytes pro Fontenityatom und je 8 Bytes fuer die Header
-                                + 8                             // 1 FontCollection Container
-                                + 20                            // SrKinsoku Container
-                                + 18                            // 1 TxSiStyleAtom
-                                + 118;                          // 1 TxMasterStyleAtom;
+        sal_uInt32 nEnvironment = maFontCollection.GetCount() * 76      // 68 bytes pro Fontenityatom und je 8 Bytes fuer die Header
+                                + 8                                     // 1 FontCollection Container
+                                + 20                                    // SrKinsoku Container
+                                + 18                                    // 1 TxSiStyleAtom
+                                + 118                                   // 1 TxMasterStyleAtom;
+                                + mpStyleSheet->SizeOfTxCFStyleAtom();
 
         sal_uInt32 nBytesToInsert = nEnvironment + 8;
 
         if ( nExEmbedSize )
             nBytesToInsert += nExEmbedSize + 8 + 12;
 
-        nBytesToInsert += mpStyleSheet->SizeOfTxCFStyleAtom();
         nBytesToInsert += maSoundCollection.GetSize();
         nBytesToInsert += mpPptEscherEx->DrawingGroupContainerSize();
         nBytesToInsert += ImplMasterSlideListContainer( NULL );
