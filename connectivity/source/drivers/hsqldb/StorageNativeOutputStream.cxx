@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageNativeOutputStream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:52:17 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 10:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,9 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
 {
 #if OSL_DEBUG_LEVEL > 1
     OperationLogFile( env, name, "output" ).logOperation( "flush" );
+
+    ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
+    ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
 #endif
 }
 // -----------------------------------------------------------------------------
