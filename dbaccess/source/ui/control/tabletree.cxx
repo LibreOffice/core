@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 15:37:48 $
+ *  last change: $Author: oj $ $Date: 2001-01-15 10:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
 
         sal_Int32 nOverallLen = _rTables.getLength() + _rViews.getLength();
         const ::rtl::OUString* pCurrentTable = pTables ? pTables : pViews;  // currently handled table or view name
-        sal_Bool bIsView = pTables ? sal_True : sal_False;  // pCurrentTable points to a view name ?
+        sal_Bool bIsView = pTables ? sal_False : sal_True;  // pCurrentTable points to a view name ?
         for (   sal_Int32 i = 0;
                 i < nOverallLen;
                 ++i                                                                 // inc the counter
@@ -423,6 +423,9 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/10/30 15:37:48  fs
+ *  #79816# no need for a XDataDefinitionSupplier anymore - collect table/view names from the meta data
+ *
  *  Revision 1.4  2000/10/26 14:55:04  oj
  *  local strings for dll
  *
