@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-08 09:53:38 $
+ *  last change: $Author: gt $ $Date: 2001-05-08 12:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1764,7 +1764,7 @@ sal_Bool DoubleList::Append( const SEQSEQ( double )& aVLst )
 }
 
 
-void DoubleList::Append( const SEQ( uno::Any )& aVList ) THROWDEF_RTE_IAE
+void DoubleList::Append( const SEQ( uno::Any )& aVList, sal_Bool bEmptyAs0, sal_Bool bErrOnEmpty ) THROWDEF_RTE_IAE
 {
     sal_Int32           nE = aVList.getLength();
     sal_Int32           nZ = 0;
@@ -1777,6 +1777,23 @@ void DoubleList::Append( const SEQ( uno::Any )& aVList ) THROWDEF_RTE_IAE
         switch( r.getValueTypeClass() )
         {
             case uno::TypeClass_VOID:
+                if( bErrOnEmpty )
+                    THROW_IAE;
+                break;
+            case uno::TypeClass_STRING:
+                if( bEmptyAs0 )
+                {
+                    if( ( ( const STRING* ) r.getValue() )->len() )
+                        THROW_IAE;
+
+                    const double        f = 0.0;
+                    if( IsFaulty( f ) )
+                        THROW_IAE;
+                    if( IsProper( f ) )
+                        _Append( f );
+                }
+                else
+                    THROW_IAE;
                 break;
             case uno::TypeClass_DOUBLE:
                 {
@@ -2019,7 +2036,7 @@ ComplexList::~ComplexList()
 }
 
 
-void ComplexList::Append( const SEQSEQ( STRING )& r ) THROWDEF_RTE_IAE
+void ComplexList::Append( const SEQSEQ( STRING )& r, sal_Bool bEmpty0 ) THROWDEF_RTE_IAE
 {
     sal_Int32   n1, n2;
     sal_Int32   nE1 = r.getLength();
@@ -2031,12 +2048,21 @@ void ComplexList::Append( const SEQSEQ( STRING )& r ) THROWDEF_RTE_IAE
         nE2 = rList.getLength();
 
         for( n2 = 0 ; n2 < nE2 ; n2++ )
-            Append( new Complex( rList[ n2 ] ) );
+        {
+            const STRING&   rStr = rList[ n2 ];
+
+            if( rStr.len() )
+                Append( new Complex( rStr ) );
+            else if( bEmpty0 )
+                Append( new Complex( 0.0 ) );
+            else
+                THROW_IAE;
+        }
     }
 }
 
 
-void ComplexList::Append( const SEQ( uno::Any )& aMultPars ) THROWDEF_RTE_IAE
+void ComplexList::Append( const SEQ( uno::Any )& aMultPars, sal_Bool bEmpty0 ) THROWDEF_RTE_IAE
 {
     sal_Int32       nE = aMultPars.getLength();
 
@@ -2047,27 +2073,29 @@ void ComplexList::Append( const SEQ( uno::Any )& aMultPars ) THROWDEF_RTE_IAE
         {
             case uno::TypeClass_VOID:       break;
             case uno::TypeClass_STRING:
-                Append( new Complex( *( STRING* ) r.getValue() ) );
+                {
+                const STRING*       pStr = ( const STRING* ) r.getValue();
+
+                if( pStr->len() )
+                    Append( new Complex( *( STRING* ) r.getValue() ) );
+                else if( bEmpty0 )
+                    Append( new Complex( 0.0 ) );
+                else
+                    THROW_IAE;
+                }
                 break;
             case uno::TypeClass_DOUBLE:
                 Append( new Complex( *( double* ) r.getValue(), 0.0 ) );
                 break;
             case uno::TypeClass_SEQUENCE:
                 {
-                SEQSEQ( uno::Any )          aValArr;
+                SEQSEQ( uno::Any )  aValArr;
                 if( r >>= aValArr )
                 {
                     sal_Int32               nE = aValArr.getLength();
                     const SEQ( uno::Any )*  pArr = aValArr.getConstArray();
                     for( sal_Int32 n = 0 ; n < nE ; n++ )
-                        Append( pArr[ n ] );
-/*                  {
-                        sal_Int32           nF = pArr[ n ].getLength();
-                        const uno::Any*     pAny = pArr[ n ].getConstArray();
-
-                        for( sal_Int32 m = 0 ; m < nF ; m++ )
-                            InsertHolidayList( pAny[ m ], nNullDate, bInsOnWE );
-                    }*/
+                        Append( pArr[ n ], bEmpty0 );
                 }
                 else
                     THROW_IAE;

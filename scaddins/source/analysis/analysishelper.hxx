@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
+ *  last change: $Author: gt $ $Date: 2001-05-08 12:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,15 @@ public:
 
     inline sal_Bool         Append( double fVal );
     sal_Bool                Append( const SEQSEQ( double )& aValList );
-                            // return = FALSE if one or more values don't match IsValid()
-                            //  but, even if an error occur, the list might be changed!
-    void                    Append( const SEQ( CSS::uno::Any )& aValList ) THROWDEF_RTE_IAE;
+                                // return = FALSE if one or more values don't match IsValid()
+                                //  but, even if an error occur, the list might be changed!
+    void                    Append( const SEQ( CSS::uno::Any )& aValList,
+                                sal_Bool bEmptyStringAs0 = sal_True,
+                                sal_Bool bForceErrorOnEmpty = sal_False ) THROWDEF_RTE_IAE;
+                                // when bEmptyStringAs0, no empty entry is possible as result ->
+                                //  bForceErrorOnEmpty has no effect, but an exception is thrown,
+                                //  when the string is _not_ empty
+                                // when bForceErrorOnEmpty, no voids and empty strings are allowed
     virtual sal_Bool        IsProper( double fVal ) const;
     virtual sal_Bool        IsFaulty( double fVal ) const;
 };
@@ -392,8 +398,10 @@ public:
     List::Count;
 
     inline void             Append( Complex* pNew );
-    void                    Append( const SEQSEQ( STRING )& rComplexNumList ) THROWDEF_RTE_IAE;
-    void                    Append( const SEQ( uno::Any )& aMultPars ) THROWDEF_RTE_IAE;
+    void                    Append( const SEQSEQ( STRING )& rComplexNumList,
+                                    sal_Bool bEmptyStringAs0 = sal_True ) THROWDEF_RTE_IAE;
+    void                    Append( const SEQ( uno::Any )& aMultPars,
+                                    sal_Bool bEmptyStringAs0 = sal_True ) THROWDEF_RTE_IAE;
 };
 
 
