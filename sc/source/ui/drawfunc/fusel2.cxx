@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2000-12-07 10:03:57 $
+ *  last change: $Author: nn $ $Date: 2000-12-20 18:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdview.hxx>
+#include <svx/outliner.hxx>
 
 #include "fusel.hxx"
 #include "tabvwsh.hxx"
@@ -155,35 +156,48 @@ BOOL FuSelection::TestComment( SdrPageView* pPV, const Point& rPos )
     if (!pPV)
         return FALSE;
 
-    BOOL bFound = FALSE;
+    SdrObject* pFoundObj = NULL;
+
     SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
-    while (pObject && !bFound)
+    while (pObject)
     {
         if ( pObject->GetLayer()==SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj)
             && pObject->GetLogicRect().IsInside( rPos ) )
         {
-//          SdrHdl* pHdl = pView->HitHandle( rPos, *pWindow );
-//          BOOL bDrag = pView->BegDragObj( rPos, NULL, pHdl );
-
-            pViewShell->GetViewData()->GetDispatcher().
-                Execute(SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
-            // jetzt den erzeugten FuText holen und in den EditModus setzen
-            FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
-            if ( pPoor && pPoor->GetSlotID() == SID_DRAW_NOTEEDIT )  // hat keine RTTI
-            {
-                FuText* pText = (FuText*)pPoor;
-                Point aPixel = pWindow->LogicToPixel( rPos );
-                pText->SetInEditMode( pObject, &aPixel );
-            }
-
-            bFound = TRUE;
+            pFoundObj = pObject;
+            // keep searching - use the last matching object (on top)
         }
-
         pObject = aIter.Next();
     }
 
-    return bFound;
+    if ( pFoundObj )
+    {
+        pViewShell->GetViewData()->GetDispatcher().
+            Execute(SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+        // now get the created FuText and put in EditMode
+        FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+        if ( pPoor && pPoor->GetSlotID() == SID_DRAW_NOTEEDIT )  // no RTTI
+        {
+            FuText* pText = (FuText*)pPoor;
+            Point aPixel = pWindow->LogicToPixel( rPos );
+            pText->SetInEditMode( pFoundObj, &aPixel );
+        }
+
+        //  repaint outliner view with background now
+
+        OutlinerView* pOlView = pView->GetTextEditOutlinerView();
+        if ( pOlView && pOlView->GetWindow() == pWindow )
+        {
+            Rectangle aEditRect = pOlView->GetOutputArea();
+            pWindow->SetFillColor( pOlView->GetBackgroundColor() );
+            pWindow->SetLineColor();
+            pWindow->DrawRect( aEditRect );
+            pOlView->Paint( aEditRect );
+        }
+    }
+
+    return (pFoundObj != NULL);
 }
 
 //==================================================================
