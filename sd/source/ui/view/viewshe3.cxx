@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-25 13:24:43 $
+ *  last change: $Author: ka $ $Date: 2002-07-18 10:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1405,11 +1405,8 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
     {
         eOrientation = pPage->GetOrientation();
     }
-    else
-    {
-        if( aPageSize.Width() < aPageSize.Height() )
-            eOrientation = ORIENTATION_LANDSCAPE;
-    }
+    else if( aPageSize.Width() < aPageSize.Height() )
+        eOrientation = ORIENTATION_LANDSCAPE;
 
     if ( !rPrinter.SetOrientation(eOrientation) &&
         (!pPrintOpts || pPrintOpts->IsWarningOrientation()) )
@@ -1445,16 +1442,45 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
             MapMode                                         aStdMap( rPrinter.GetMapMode() );
             ::std::vector< USHORT >                         aPageVector;
             ::std::vector< ::std::pair< USHORT, USHORT > >  aPairVector;
-            double                                          fHorz = (double) aPrintSize.Width() / (double) aPageSize.Width();
-            double                                          fVert = (double) aPrintSize.Height() / (double) aPageSize.Height();
+            Point                                           aOffset;
+            Size                                            aPrintSize_2( aPrintSize );
+            Size                                            aPageSize_2( aPageSize );
 
-            if( fHorz < fVert )
-                aFract = Fraction( aPrintSize.Width(), aPageSize.Width() );
+            if( eOrientation == ORIENTATION_LANDSCAPE )
+                aPrintSize_2.Width() >>= 1;
             else
-                aFract = Fraction( aPrintSize.Height(), aPageSize.Height() );
+                aPrintSize_2.Height() >>= 1;
 
-            aMap.SetScaleX( aFract );
-            aMap.SetScaleY( aFract );
+            const double fPageWH = (double) aPageSize_2.Width() / aPageSize_2.Height();
+            const double fPrintWH = (double) aPrintSize_2.Width() / aPrintSize_2.Height();
+
+            if( fPageWH < fPrintWH )
+            {
+                aPageSize_2.Width() = (long) ( aPrintSize_2.Height() * fPageWH );
+                aPageSize_2.Height()= aPrintSize_2.Height();
+            }
+            else
+            {
+                aPageSize_2.Width() = aPrintSize_2.Width();
+                aPageSize_2.Height() = (long) ( aPrintSize_2.Width() / fPageWH );
+            }
+
+            aMap.SetScaleX( Fraction( aPageSize_2.Width(), aPageSize.Width() ) );
+            aMap.SetScaleY( Fraction( aPageSize_2.Height(), aPageSize.Height() ) );
+
+            // calculate adjusted print size
+            aPrintSize = OutputDevice::LogicToLogic( aPrintSize, aStdMap, aMap );
+
+            if( eOrientation == ORIENTATION_LANDSCAPE )
+            {
+                aOffset.X() = ( ( aPrintSize.Width() >> 1 ) - aPageSize.Width() ) >> 1;
+                aOffset.Y() = ( aPrintSize.Height() - aPageSize.Height() ) >> 1;
+            }
+            else
+            {
+                aOffset.X() = ( aPrintSize.Width() - aPageSize.Width() ) >> 1;
+                aOffset.Y() = ( ( aPrintSize.Height() >> 1 ) - aPageSize.Height() ) >> 1;
+            }
 
             // create vector of pages to print
             while( nPage < nPageMax )
@@ -1494,7 +1520,6 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                 if( ( !( i & 1 ) && bPrintFrontPage ) || ( ( i & 1 ) && bPrintBackPage ) )
                 {
                     const ::std::pair< USHORT, USHORT > aPair( aPairVector[ i ] );
-                    Point                               aPt;
 
                     rPrinter.StartPage();
 
@@ -1502,7 +1527,7 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
 
                     if( pPage )
                     {
-                        aMap.SetOrigin( aPt );
+                        aMap.SetOrigin( aOffset );
                         rPrinter.SetMapMode( aMap );
                         PrintPage( rPrinter, pPrintView, pPage, bPrintMarkedOnly );
                     }
@@ -1511,12 +1536,14 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
 
                     if( pPage )
                     {
-                        if( eOrientation == ORIENTATION_LANDSCAPE )
-                            aPt.X() = aPageSize.Width() + aPageOfs.X();
-                        else
-                            aPt.Y() = aPageSize.Height() + aPageOfs.Y();
+                        Point aSecondOffset( aOffset );
 
-                        aMap.SetOrigin( aPt );
+                        if( eOrientation == ORIENTATION_LANDSCAPE )
+                            aSecondOffset.X() += ( aPrintSize.Width() >> 1 );
+                        else
+                            aSecondOffset.Y() += ( aPrintSize.Height() >> 1 );
+
+                        aMap.SetOrigin( aSecondOffset );
                         rPrinter.SetMapMode( aMap );
                         PrintPage( rPrinter, pPrintView, pPage, bPrintMarkedOnly );
                     }
