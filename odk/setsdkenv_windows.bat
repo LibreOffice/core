@@ -22,13 +22,17 @@ REM Directory of the C++ tools.
 REM Example:set SDK_CPP_HOME=C:\Programme\Microsoft Visual Studio\VC98\bin
 set SDK_CPP_HOME=
 
+REM STLPORT installation directory.
+REM Example: set STLPORT_HOME=D:\stlport-4.5.3
+set STLPORT_HOME=
+
 REM Java installation directory.
 REM Example: set SDK_JAVA_HOME=C:\Programme\Java\J2SDK_Forte\jdk1.4.0
 set SDK_JAVA_HOME=
 
 REM Environment variable to enable auto deployment of example components
 REM Example: set SDK_AUTO_DEPLOYMENT=YES
-REM set SDK_AUTO_DEPLOYMENT=YES
+set SDK_AUTO_DEPLOYMENT=YES
 
 REM ANT installation directory.
 REM Example: set SDK_ANT=D:\jakarta-ant-1.4
@@ -44,6 +48,9 @@ if not defined OFFICE_HOME goto error
 REM Set library path.
 set LIB=%SDK_HOME%\windows\lib;%SDK_HOME%\WINexample.out\lib;%LIB
 
+REM Add directory of the STLPORT library to the library path.
+if defined STLPORT_HOME set LIB=%STLPORT_HOME%\lib;%LIB%
+
 REM Set office program path.
 set OFFICE_PROGRAM_PATH=%OFFICE_HOME%\program
 
@@ -55,6 +62,9 @@ if defined SDK_MAKE set PATH=%SDK_MAKE%;%PATH%
 
 REM Add directory of the C++ tools to the path, if necessary.
 if defined SDK_CPP_HOME set PATH=%SDK_CPP_HOME%;%PATH%
+
+REM Add directory of the STLPORT library to the path, if necessary.
+if defined STLPORT_HOME set PATH=%STLPORT_HOME%\lib;%PATH%
 
 REM Add directory of the Java tools to the path, if necessary.
 if defined SDK_JAVA_HOME set PATH=%SDK_JAVA_HOME%\bin;%SDK_JAVA_HOME%\jre\bin;%PATH%
