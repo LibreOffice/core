@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:43:44 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,17 @@
 #ifndef SWTYPES_HXX
 #include <swtypes.hxx>  // enum RndStdIds
 #endif
-#ifndef _FMTFSIZE_HXX //autogen
+#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
 #endif
-#ifndef _FMTORNT_HXX //autogen
+#ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
-#ifndef _FMTSRND_HXX //autogen
+#ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
+#endif
+#ifndef _SVX_LRSPITEM_HXX
+#include <svx/lrspitem.hxx>
 #endif
 
 #ifndef WW8SCAN_HXX
@@ -173,8 +176,6 @@ public:
     WW8FlyPara* pWWFly;
     SwNumRule*  pOutlineNumrule;
     long        nFilePos;
-    short       nLeftParaMgn;
-    short       nTxtFirstLineOfst;
     USHORT      nBase;
     USHORT      nFollow;
     USHORT      nLFOIndex;
@@ -182,6 +183,7 @@ public:
     BYTE        nOutlineLevel;      // falls Gliederungs-Style
     BYTE        n81Flags;           // Fuer Bold, Italic, ...
     BYTE        n81BiDiFlags;       // Fuer Bold, Italic, ...
+    SvxLRSpaceItem maWordLR;
     bool bInvisFlag;        // For invisibile
     bool bValid;            // leer oder Valid
     bool bImported;         // fuers rekursive Importieren
@@ -194,6 +196,8 @@ public:
                                  //of pFmt->GetItemState(RES_LR_SPACE, false)
                                  //if it was possible to get the ItemState
                                  //for L of the LR space independantly
+    bool bParaAutoBefore;   // For Auto spacing before a paragraph
+    bool bParaAutoAfter;    // For Auto Spacing after a paragraph
 
     SwWW8StyInf() :
         sWWStyleName( aEmptyStr ),
@@ -205,8 +209,6 @@ public:
         pWWFly( 0 ),
         pOutlineNumrule( 0 ),
         nFilePos( 0 ),
-        nLeftParaMgn( 0 ),
-        nTxtFirstLineOfst( 0 ),
         nBase( 0 ),
         nFollow( 0 ),
         nLFOIndex( USHRT_MAX ),
@@ -221,7 +223,10 @@ public:
         bImportSkipped(false),
         bHasStyNumRule(false),
         bHasBrokenWW6List(false),
-        bListReleventIndentSet(false)
+        bListReleventIndentSet(false),
+        bParaAutoBefore(false),
+        bParaAutoAfter(false)
+
     {}
 
     ~SwWW8StyInf()
@@ -241,11 +246,14 @@ public:
     }
     bool IsOutline() const
     {
-        return ((MAXLEVEL > nOutlineLevel) && pOutlineNumrule && pFmt);
+        return (pFmt && (MAXLEVEL > nOutlineLevel));
+    }
+    bool IsOutlineNumbered() const
+    {
+        return pOutlineNumrule && IsOutline();
     }
     CharSet GetCharSet() const;
 };
-
 
 class WW8RStyle: public WW8Style
 {
