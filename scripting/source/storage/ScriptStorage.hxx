@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:13 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <hash_map>
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase6.hxx> // helper for component factory
+#include <cppuhelper/implbase4.hxx> // helper for component factory
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -75,13 +75,9 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
-#include <drafts/com/sun/star/script/framework/storage/XScriptAccessManager.hpp>
-#include <drafts/com/sun/star/script/framework/storage/XScriptImplAccess.hpp>
+#include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageExport.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
-#include <drafts/com/sun/star/script/framework/storage/NoSuchView.hpp>
-#include <drafts/com/sun/star/script/framework/scripturi/XScriptURI.hpp>
-#include <drafts/com/sun/star/script/framework/storage/XParcelInvocationPrep.hpp>
 
 namespace scripting_impl
 {
@@ -104,13 +100,11 @@ ScriptOutput_hash;
 //=============================================================================
 
 class ScriptStorage : public
-    ::cppu::WeakImplHelper6<
+    ::cppu::WeakImplHelper4<
         css::lang::XServiceInfo,
         css::lang::XInitialization,
-        dcsssf::storage::XScriptImplAccess,
-        dcsssf::storage::XScriptStorageExport,
-        dcsssf::storage::XScriptAccessManager,
-        dcsssf::storage::XParcelInvocationPrep >
+        dcsssf::storage::XScriptInfoAccess,
+        dcsssf::storage::XScriptStorageExport >
 {
 public:
     //Constructors and Destructors
@@ -143,25 +137,7 @@ public:
         throw (css::uno::RuntimeException, css::uno::Exception);
     //=========================================================================
 
-    // XScriptAccessManager impl
-    //=========================================================================
-    /**
-     * Gets the sequence of XScriptInfo interfaces for the corresponding
-     * logical name that is passed in
-     *
-     * @param name
-     *      The logical name of the script
-     *
-     * @return Sequence< XScriptInfo >
-     *      A sequence of XScriptInfos which represent the implementations
-     *      of the passed in logical name
-     */
-    virtual css::uno::Sequence< css::uno::Reference< dcsssf::storage::XScriptInfo > >
-        SAL_CALL getScriptInfoService( const ::rtl::OUString & name )
-        throw (css::uno::RuntimeException);
-    //=========================================================================
-
-    //XScriptImplAccess
+    //XScriptInfoAccess
     //=========================================================================
     /**
      * Get the logical names for this storage
@@ -180,28 +156,15 @@ public:
      * @param queryURI
      *      The URI to get the implementations for
      *
-     * @return sequence < XScriptURI >
+     * @return sequence < XScriptInfo >
      *      The URIs of the implementations
      */
-    virtual css::uno::Sequence< css::uno::Reference< dcsssf::scripturi::XScriptURI > >
+    virtual css::uno::Sequence< css::uno::Reference< dcsssf::storage::XScriptInfo > >
         SAL_CALL getImplementations(
-            const css::uno::Reference< dcsssf::scripturi::XScriptURI >& queryURI )
+            const ::rtl::OUString& queryURI )
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
 
-    //XNamingAccess
-    //=========================================================================
-    /**
-     * Get a certain type of view of the naming heirarchy
-     *
-     * @param viewName
-     *      The view name
-     *
-     * @return XInterface
-     *      The view of the hierarchy
-     */
-    css::uno::Reference< css::uno::XInterface > getView( const ::rtl::OUString& viewName )
-        throw (dcsssf::storage::NoSuchView, css::uno::RuntimeException);
     //=========================================================================
 
     // XScriptStorageExport
@@ -209,21 +172,6 @@ public:
         throw (css::uno::RuntimeException);
     //=========================================================================
 
-    //XParcelInvocationPrep
-    //=========================================================================
-    /**
-        copies a parcel to a temporary location
-
-        @params parcelURI
-            the location of the parcel (file URI) to be copied
-
-        @return
-            <type>::rtl::OUString</type> the new location of the parcel (file URI)
-    */
-    ::rtl::OUString SAL_CALL prepareForInvocation( const ::rtl::OUString& parcelURI )
-        throw (css::uno::RuntimeException);
-    //=========================================================================
-private:
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::ucb::XSimpleFileAccess > m_xSimpleFileAccess;
@@ -240,21 +188,6 @@ private:
     void updateMaps(const Datas_vec & vScriptDatas);
     void writeMetadataHeader(
         css::uno::Reference < css::xml::sax::XExtendedDocumentHandler > & xExDocHandler);
-    /**
-       This function copies the contents of the source folder into the
-       destination folder. If the destination folder does not exist, it
-       is created. If the destination folder exists, it is deleted and then
-       created. All URIs supported by the relevant XSimpleFileAccess
-       implementation are supported.
-
-        @params src
-            the source folder (file URI)
-
-        @params dest
-            the destination folder (file URI)
-    */
-    void copyFolder(const ::rtl::OUString & src, const ::rtl::OUString & dest)
-        throw (css::uno::RuntimeException);
 
 }
 ; // class ScriptingStorage

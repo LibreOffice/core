@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.10 $
-*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:13 $
+*  $Revision: 1.11 $
+*  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "ScriptStorage.hxx"
 #include "ScriptElement.hxx"
 #include "ScriptMetadataImporter.hxx"
+#include "ScriptURI.hxx"
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -96,6 +97,8 @@ static Sequence< OUString > ss_serviceNames = Sequence< OUString >( &ss_serviceN
 const sal_uInt16 NUMBER_STORAGE_INITIALIZE_ARGS = 3;
 
 extern ::rtl_StandardModuleCount s_moduleCount;
+
+
 
 //*************************************************************************
 ScriptStorage::ScriptStorage( const Reference <
@@ -253,7 +256,11 @@ throw ( RuntimeException, Exception )
                     {
                         xInput->closeInput();
                     }
-                    OSL_TRACE( "caught com::sun::star::xml::sax::SAXException in ScriptStorage::initalize" );
+                    OSL_TRACE(
+                        "caught com::sun::star::xml::sax::SAXException in ScriptStorage::initalize %s",
+                        ::rtl::OUStringToOString( saxe.Message,
+                        RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
+
                     continue;
                 }
                 catch ( io::IOException ioe )
@@ -329,7 +336,7 @@ ScriptStorage::updateMaps( const Datas_vec & vScriptDatas )
     for ( Datas_vec::const_iterator it = vScriptDatas.begin() ; it != it_end; ++it )
     {
         //find the Datas_vec for this logical name
-        ScriptInfo_hash::iterator h_it = mh_implementations.find( it->logicalName );
+        ScriptInfo_hash::iterator h_it = mh_implementations.find( it->logicalname );
 
         if ( h_it == mh_implementations.end() )
         {
@@ -337,21 +344,21 @@ ScriptStorage::updateMaps( const Datas_vec & vScriptDatas )
 #ifdef _DEBUG
             fprintf( stderr,
                      "updateMaps: new logical name: %s\n", rtl::OUStringToOString(
-                         it->logicalName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                         it->logicalname, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             fprintf( stderr, "language name: %s\n",
                      rtl::OUStringToOString(
-                         it->functionName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                         it->functionname, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 #endif
 
             Datas_vec v;
             v.push_back( *it );
-            mh_implementations[ it->logicalName ] = v;
+            mh_implementations[ it->logicalname ] = v;
         }
         else
         {
 #ifdef _DEBUG
-            fprintf( stderr, "updateMaps: existing logical name: %s\n", rtl::OUStringToOString( it->logicalName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            fprintf( stderr, "                    language name: %s\n", rtl::OUStringToOString( it->functionName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            fprintf( stderr, "updateMaps: existing logical name: %s\n", rtl::OUStringToOString( it->logicalname, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            fprintf( stderr, "                    language name: %s\n", rtl::OUStringToOString( it->functionname, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 #endif
 
             h_it->second.push_back( *it );
@@ -464,62 +471,6 @@ ScriptStorage::writeMetadataHeader( Reference <xml::sax::XExtendedDocumentHandle
     xHandler->ignorableWhitespace( OUString() );
 }
 
-//*************************************************************************
-//Returns a sequence of XScriptInfo interfaces
-//to give access to info on scripts
-//Eh, method name is not initiutive, maybe it
-//should be getScriptInfoInterfaces? (Need to change IDL)
-Sequence < Reference< storage::XScriptInfo > >
-ScriptStorage::getScriptInfoService( const OUString & name )
-throw ( RuntimeException )
-{
-    ::osl::Guard< osl::Mutex > aGuard( m_mutex );
-
-    Sequence< Reference< storage::XScriptInfo > > sr_xScriptInfo;
-
-    //Get iterator over the hash_map
-    ScriptInfo_hash::const_iterator h_iter = mh_implementations.find( name );
-
-    if ( h_iter == mh_implementations.end() )
-    {
-        OSL_TRACE("ScriptStorage::getScriptInfoService: EMPTY STORAGE");
-        return sr_xScriptInfo;
-    }
-    sr_xScriptInfo.realloc( h_iter->second.size() );
-
-    try
-    {
-        //Get array of XScriptInfos
-        //        Reference< storage::XScriptInfo >* pScriptInfo = sr_xScriptInfo.getArray();
-
-        Datas_vec::const_iterator end_iter = h_iter->second.end();
-        sal_Int32 count = 0;
-        for ( Datas_vec::const_iterator it = h_iter->second.begin(); it != end_iter; ++it )
-        {
-            sr_xScriptInfo[ count ] = Reference< storage::XScriptInfo >(
-                new ScriptInfo( m_xContext, *it, m_scriptStorageID ) );
-            count++;
-        }
-    }
-    catch ( RuntimeException re )
-    {
-        OSL_TRACE( "caught com::sun::star::uno::RuntimeException in ScriptStorage::getScriptInfoService" );
-        throw RuntimeException(
-            OUSTR( "ScriptStorage::getScriptInfoService RuntimeException: " ).concat( re.Message ),
-            Reference<XInterface> () );
-    }
-    return sr_xScriptInfo;
-}
-
-//XNamingAccess
-/**
-Reference<XInterface> ScriptStorage::getView(
-    const ::rtl::OUString& viewName )
-    throw (storage::NoSuchView,
-    RuntimeException)
-{
-}
-*/
 
 //*************************************************************************
 Sequence< ::rtl::OUString >
@@ -567,22 +518,35 @@ throw ( lang::IllegalArgumentException,
 }
 
 //*************************************************************************
-Sequence< Reference< scripturi::XScriptURI > >
-ScriptStorage::getImplementations( const Reference <
-                                   scripturi::XScriptURI > & queryURI )
+Sequence< Reference< storage::XScriptInfo > >
+ScriptStorage::getImplementations( const ::rtl::OUString & queryURI )
 throw ( lang::IllegalArgumentException,
         RuntimeException )
 {
 
-    Sequence< Reference< scripturi::XScriptURI > > results;
-    ScriptInfo_hash::iterator h_it =
-        mh_implementations.find( queryURI->getLogicalName() );
-
-    if ( h_it == mh_implementations.end() )
+    Sequence< Reference< storage::XScriptInfo > > results;
+    ScriptURI scriptURI(queryURI);
+    OSL_TRACE("getting impl for logical name: %s",
+    ::rtl::OUStringToOString( scriptURI.getLogicalName(), RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    ScriptInfo_hash::iterator h_itEnd =  mh_implementations.end();
+    ScriptInfo_hash::iterator h_it = mh_implementations.begin();
+    if ( h_it == h_itEnd )
     {
         OSL_TRACE("ScriptStorage::getImplementations: EMPTY STORAGE");
         return results;
     }
+
+    h_it = mh_implementations.find( scriptURI.getLogicalName() );
+
+    if ( h_it == h_itEnd )
+    {
+        OSL_TRACE("ScriptStorage::getImplementations: no impls found for %s",
+            ::rtl::OUStringToOString( scriptURI.getLogicalName(),
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        return results;
+    }
+
+
     results.realloc( h_it->second.size() );
 
     //find the implementations for the given logical name
@@ -596,21 +560,10 @@ throw ( lang::IllegalArgumentException,
         for ( sal_Int32 count = 0; it_datas != it_datas_end ; ++it_datas )
         {
             Sequence<Any> aArgs( 2 );
+            OSL_TRACE("Adding to sequence of impls ");
             Reference< storage::XScriptInfo > xScriptInfo = new ScriptInfo ( m_xContext, *it_datas, m_scriptStorageID );
 
-            aArgs[ 0 ] <<= xScriptInfo;
-            aArgs[ 1 ] <<= m_scriptStorageID;
-
-            Reference< XInterface > xInterface =
-                m_xMgr->createInstanceWithArgumentsAndContext(
-                    OUString::createFromAscii(
-                        "drafts.com.sun.star.script.framework.scripturi.ScriptURI" ), aArgs,
-                    m_xContext );
-            validateXRef( xInterface,
-                          "ScriptStorage::getImplementations: cannot get drafts.com.sun.star.script.framework.storage.ScriptURI" );
-            Reference<scripturi::XScriptURI> uri( xInterface, UNO_QUERY_THROW );
-
-            results[ count++ ] = uri;
+            results[ count++ ] = xScriptInfo;
         }
 
     }
@@ -625,182 +578,8 @@ throw ( lang::IllegalArgumentException,
         throw RuntimeException( OUSTR( "ScriptStorage::getImplementations Exception: " ).concat( e.Message ),
                                 Reference<XInterface> () );
     }
+    OSL_TRACE("returning from ScriptStorage::getImplementations with %d entries",results.getLength());
     return results;
-}
-
-//*************************************************************************
-/**
-    copies a parcel to a temporary location
-
-    @params parcelURI
-    the location of the parcel (file URI) to be copied
-
-    @return
-    <type>::rtl::OUString</type> the new location of the parcel (file URI)
-*/
-OUString SAL_CALL
-ScriptStorage::prepareForInvocation( const OUString& parcelURI )
-throw ( RuntimeException )
-{
-    try
-    {
-        if ( ( m_xSimpleFileAccess->exists( parcelURI ) != sal_True ) ||
-                ( m_xSimpleFileAccess->isFolder( parcelURI ) != sal_True ) )
-        {
-            throw RuntimeException(
-                OUSTR( "Parcel URI is not valid" ),
-                Reference<XInterface> () );
-        }
-
-        OUString dest;
-        if ( ::osl::FileBase::E_None != ::osl::FileBase::getTempDirURL( dest ) )
-        {
-            throw RuntimeException(
-                OUSTR( "getTempDirURL failed" ),
-                Reference<XInterface> () );
-        }
-
-        // Add time value to tmp dir name to prvent name clashes
-        TimeValue timeVal;
-        OUString sTime;
-        if ( sal_False != osl_getSystemTime( &timeVal ) )
-        {
-            sTime = sTime.valueOf( static_cast<sal_Int32>( timeVal.Seconds ) );
-        }
-        OSL_TRACE( ::rtl::OUStringToOString(
-                       sTime.concat( OUString::createFromAscii( "  Time to add to parcel name." ) ), RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
-        sal_Int32 idx = parcelURI.lastIndexOf( '/' );
-        sal_Int32 len = parcelURI.getLength();
-        if ( idx == ( len - 1 ) )
-        {
-            // deal with the trailing separator
-            idx = parcelURI.lastIndexOf( '/', len - 2 );
-            OUString parcel_base = parcelURI.copy( idx, len - idx - 1 );
-            dest = dest.concat( parcel_base );
-        }
-        else
-        {
-            dest = dest.concat( parcelURI.copy( idx ) );
-        }
-        dest = dest.concat( OUString::valueOf( ( sal_Int32 ) m_scriptStorageID ) );
-
-        dest = dest.concat( sTime );
-
-#ifdef _DEBUG
-
-        fprintf( stderr, "dest is: %s\n",
-                 rtl::OUStringToOString( dest, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-#endif
-
-        copyFolder( parcelURI, dest );
-
-        return dest;
-    }
-    catch ( RuntimeException & e )
-    {
-        throw RuntimeException(
-            OUSTR( "ScriptStorage::prepareForInvocation RuntimeException: " ).concat( e.Message ),
-            Reference<XInterface> () );
-    }
-    catch ( Exception & e )
-    {
-        throw RuntimeException(
-            OUSTR( "ScriptStorage::prepareForInvocation Exception: " ).concat( e.Message ),
-            Reference<XInterface> () );
-    }
-#ifdef _DEBUG
-    catch ( ... )
-    {
-        throw RuntimeException(
-            OUSTR( "ScriptStorage::prepareForInvocation UnknownException: " ),
-            Reference<XInterface> () );
-    }
-#endif
-}
-
-//*************************************************************************
-/**
-   This function copies the contents of the source folder into the
-   destination folder. If the destination folder does not exist, it
-   is created. If the destination folder exists, it is deleted and then
-   created. All URIs supported by the relevant XSimpleFileAccess
-   implementation are supported.
-
-    @params src
-        the source folder (file URI)
-
-    @params dest
-    the destination folder (file URI)
-*/
-void
-ScriptStorage::copyFolder( const OUString &src, const OUString &dest )
-throw ( RuntimeException )
-{
-    try
-    {
-        /* A mutex guard is needed to not write later into
-         * a folder that has been deleted by an incoming thread.
-         * Note that this calls into the SimpleFileAccess service
-         * with a locked mutex, but the implementation of this method
-         * will probably change soon.
-         */
-        ::osl::Guard< osl::Mutex > aGuard( m_mutex );
-
-        if ( m_xSimpleFileAccess->isFolder( dest ) == sal_True )
-        {
-            m_xSimpleFileAccess->kill( dest );
-        }
-        m_xSimpleFileAccess->createFolder( dest );
-
-        Sequence <OUString> seq = m_xSimpleFileAccess->getFolderContents(
-                                      src, sal_True );
-        OUString new_dest;
-        sal_Int32 idx;
-        sal_Int32 len = seq.getLength();
-        for ( sal_Int32 i = 0; i < len; i++ )
-        {
-            new_dest = dest;
-            idx = seq[ i ].lastIndexOf( '/' );
-            new_dest = new_dest.concat( seq[ i ].copy( idx ) );
-
-            if ( m_xSimpleFileAccess->isFolder( seq[ i ] ) == sal_True )
-            {
-                copyFolder( seq[ i ], new_dest );
-            }
-            else
-            {
-                m_xSimpleFileAccess->copy( seq[ i ], new_dest );
-            }
-        }
-    }
-    catch ( ucb::CommandAbortedException & e )
-    {
-        OUString temp = OUSTR(
-                            "ScriptStorage::copyFolder CommandAbortedException: " );
-        throw RuntimeException( temp.concat( e.Message ),
-                                Reference<XInterface> () );
-    }
-    catch ( RuntimeException & e )
-    {
-        OUString temp = OUSTR( "ScriptStorage::copyFolder RuntimeException: " );
-        throw RuntimeException( temp.concat( e.Message ),
-                                Reference<XInterface> () );
-    }
-    catch ( Exception & e )
-    {
-        OUString temp = OUSTR( "ScriptStorage::copyFolder Exception: " );
-        throw RuntimeException( temp.concat( e.Message ),
-                                Reference<XInterface> () );
-    }
-#ifdef _DEBUG
-    catch ( ... )
-    {
-        throw RuntimeException( OUSTR(
-                                    "ScriptStorage::copyFolder UnknownException: " ),
-                                Reference<XInterface> () );
-    }
-#endif
 }
 
 

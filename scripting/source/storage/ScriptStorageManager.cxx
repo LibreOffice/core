@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:14 $
+*  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -68,9 +68,11 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "ScriptStorageManager.hxx"
 #include <util/util.hxx>
+#include <util/scriptingconstants.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -310,6 +312,42 @@ ScriptStorageManager::disposing( const ::com::sun::star::lang::EventObject& Sour
 throw ( ::com::sun::star::uno::RuntimeException )
 {
     OSL_TRACE( "ScriptStorageManager::disposing started" );
+    Reference< beans::XPropertySet > xScriptingContext(Source.Source, UNO_QUERY );
+    validateXRef( xScriptingContext, "ScriptStorageManager::disposing can't get script context from EventObject" );
+    scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
+        scripting_constants::ScriptingConstantsPool::instance();
+
+    // get the scriptStorageID from the script context
+    Any a = xScriptingContext->getPropertyValue(  scriptingConstantsPool.DOC_STORAGE_ID );
+    sal_Int32 scriptStorageID;
+    OSL_TRACE( "extracting sid");
+    if( sal_False == (a >>= scriptStorageID ) )
+    {
+            throw RuntimeException(
+                OUSTR( "ScriptStorageManager::disposing: can't get script context" ), Reference< XInterface > ());
+    }
+    if( scriptStorageID == -1 )
+    {
+        return;
+    }
+    OSL_TRACE( "disposing storageID = %d", scriptStorageID );
+
+    // attempt to get the storage from the hash to ensure that we have a
+    // valid storageID
+    ScriptStorage_hash::const_iterator itr =
+        m_ScriptStorageHash.find( scriptStorageID );
+
+    if ( itr == m_ScriptStorageHash.end() )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::disposing: attempt to dispose non-existent storage" ),
+            Reference< XInterface >() );
+    }
+    validateXRef( itr->second,
+                  "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
+
+    // erase the entry from the hash
+    m_ScriptStorageHash.erase( scriptStorageID );
 }
 
 //*************************************************************************

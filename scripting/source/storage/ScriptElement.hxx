@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptElement.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dsherwin $ $Date: 2002-10-17 14:59:00 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,10 @@ class ScriptElement : public ::scripting_impl::XMLElement
 {
 public:
     /**
-    Construct a ScriptElement from a ScriptData object
+    Construct a ScriptElement from a ScriptData  object
 
     @param sII
-    the ScriptDataObject
+    the ScriptData Object
     */
     explicit ScriptElement( ScriptData & sII );
     ~ScriptElement() SAL_THROW (());

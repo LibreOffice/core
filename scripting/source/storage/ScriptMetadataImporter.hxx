@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:12 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,9 @@ namespace scripting_impl
 #define css ::com::sun::star
 #define dcsssf ::drafts::com::sun::star::script::framework
 
-typedef ::std::vector< ScriptData > Datas_vec;
+typedef ::std::vector< ScriptData > InfoImpls_vec;
+typedef ::std::pair< ::rtl::OUString, ::std::pair< ::rtl::OUString,
+    ::rtl::OUString > > strpair_pair;
 
 /**
  * Script Meta Data Importer
@@ -101,7 +103,7 @@ public:
      */
     void parseMetaData( css::uno::Reference< css::io::XInputStream >
         const & xInput, const ::rtl::OUString & parcelURI,
-        Datas_vec & io_ScriptDatas )
+        InfoImpls_vec & io_ScriptDatas )
         throw ( css::xml::sax::SAXException, css::io::IOException,
             css::uno::RuntimeException);
 
@@ -226,10 +228,13 @@ public:
     virtual void SAL_CALL setDocumentLocator(
         const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
+
+
+
 private:
 
     /** Vector contains the ScriptData structs */
-    Datas_vec* mpv_scriptDatas;
+    InfoImpls_vec* mpv_ScriptDatas;
 
     /** @internal */
     osl::Mutex     m_mutex;
@@ -241,13 +246,28 @@ private:
     ::rtl::OUString ms_parcelURI;
 
     /** States for state machine during parsing */
-    enum { PARCEL, SCRIPT, LANGUAGE_NAME, LOGICALNAME, LANGUAGENAME,
-           DEPENDENCIES, DESCRIPTION, DELIVERY, DELIVERFILE, DEPENDFILE } m_state;
-
-    css::uno::Sequence< ::rtl::OUString > ms_dependFiles;
+    enum { PARCEL, SCRIPT, LOCALE, DISPLAYNAME, DESCRIPTION, FUNCTIONNAME,
+        LOGICALNAME, LANGUAGEDEPPROPS, LANGDEPPROPS, FILESET, FILESETPROPS,
+        FILES, FILEPROPS } m_state;
 
     /** Build up the struct during parsing the meta data */
-    ScriptData m_scriptData;
+    ScriptData m_ScriptData;
+
+    /** @internal */
+    ::rtl::OUString ms_localeLang;
+    ::rtl::OUString ms_localeDisName;
+    ::rtl::OUString ms_localeDesc;
+
+    props_vec mv_filesetprops;
+
+    ::rtl::OUString ms_filename;
+    ::rtl::OUString ms_filesetname;
+
+    props_vec mv_fileprops;
+
+    strpairvec_map mm_files;
+
+    InfoImpls_vec mv_ScriptDatas;
 
     /**
      *   Helper function to set the state

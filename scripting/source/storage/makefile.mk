@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-09-20 14:33:56 $
+#   last change: $Author: dfoster $ $Date: 2002-10-23 14:22:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ COMP1TYPELIST=$(TARGET)
 .INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES=\
+        $(SLO)$/ScriptURI.obj\
         $(SLO)$/ScriptStorage.obj\
         $(SLO)$/ScriptInfo.obj\
         $(SLO)$/ScriptMetadataImporter.obj\

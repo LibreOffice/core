@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:12 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,13 @@
 #ifndef __SCRIPT_FRAMEWORK_STORAGE_SCRIPTINFO_HXX_
 #define __SCRIPT_FRAMEWORK_STORAGE_SCRIPTINFO_HXX_
 
-#include <cppuhelper/implbase4.hxx> // helper for component factory
+#include <cppuhelper/implbase3.hxx> // helper for component factory
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
-#include <drafts/com/sun/star/script/framework/storage/XScriptInvocationPrep.hpp>
 #include "ScriptData.hxx"
 
 namespace scripting_impl {
@@ -77,9 +76,8 @@ namespace scripting_impl {
 #define css ::com::sun::star
 #define dcsssf ::drafts::com::sun::star::script::framework
 
-class ScriptInfo : public ::cppu::WeakImplHelper4< css::lang::XServiceInfo,
-    css::lang::XInitialization, dcsssf::storage::XScriptInfo,
-    dcsssf::storage::XScriptInvocationPrep >
+class ScriptInfo : public ::cppu::WeakImplHelper3< css::lang::XServiceInfo,
+    css::lang::XInitialization, dcsssf::storage::XScriptInfo >
 {
 public:
     explicit ScriptInfo(
@@ -101,41 +99,22 @@ public:
 
     // XScriptInfo
     virtual ::rtl::OUString SAL_CALL getLogicalName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLogicalName( const ::rtl::OUString& name )
-        throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getDescription()
-        throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setDescription( const ::rtl::OUString& desc )
         throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getLanguage() throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getScriptLocation()
         throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLanguage( const ::rtl::OUString& language )
-        throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasSource(  ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLanguageSpecificName()
-        throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLanguageSpecificName( const ::rtl::OUString& langName )
-        throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getRoot() throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getDependencies()
+    virtual ::rtl::OUString SAL_CALL getFunctionName()
         throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getLocation() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL extraProperties()
-        throw (css::uno::RuntimeException);
-    /**
-        This function prepares the script for invocation and returns the full path
-       to the prepared parcel folder
+    virtual ::rtl::OUString SAL_CALL getParcelURI() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
+        getLanguageProperties() throw (css::uno::RuntimeException);
 
-       @return
-        <type>::rtl::OUString</type> file URI to the prepared parcel
-
-    */
-    virtual ::rtl::OUString SAL_CALL prepareForInvocation()
-        throw (css::uno::RuntimeException);
 
 private:
     css::uno::Reference< css::uno::XComponentContext> m_xContext;
+    css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
 
     ::osl::Mutex     m_mutex;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:14 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include <drafts/com/sun/star/script/framework/scripturi/XScriptURI.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
 
 namespace scripting_impl

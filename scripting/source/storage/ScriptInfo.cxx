@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:11 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,17 @@
  ************************************************************************/
 #include <cppuhelper/implementationentry.hxx>
 
+#include <hash_map>
+
 #include <util/util.hxx>
 #include <ScriptInfo.hxx>
 #include <osl/file.hxx>
 
+#include <cppuhelper/implbase1.hxx>
+
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
-#include <drafts/com/sun/star/script/framework/storage/XParcelInvocationPrep.hpp>
 
 using namespace ::rtl;
 using namespace com::sun::star;
@@ -73,10 +78,159 @@ using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::script::framework;
 using namespace ::drafts::com::sun::star::script::framework::storage;
 
-typedef ::std::vector < ::std::pair < ::rtl::OUString, bool > >  dependencies_vec;
-
 namespace scripting_impl
 {
+
+typedef ::std::hash_map < ::rtl::OUString, css::uno::Any, ::rtl::OUStringHash,
+    ::std::equal_to< ::rtl::OUString > > PropertySet_hash;
+
+class PropertySetImpl : public ::cppu::WeakImplHelper1< css::beans::XPropertySet >
+{
+
+public:
+    PropertySetImpl();
+    ~PropertySetImpl();
+
+// XPropertySet implementation
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo( )
+        throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName,
+        const css::uno::Any& aValue )
+        throw ( css::beans::UnknownPropertyException,
+            css::beans::PropertyVetoException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
+        throw ( css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+        const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener )
+        throw ( css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+    virtual void SAL_CALL removePropertyChangeListener(
+        const ::rtl::OUString& aPropertyName,
+        const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener )
+        throw ( css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+    virtual void SAL_CALL addVetoableChangeListener(
+        const ::rtl::OUString& PropertyName,
+        const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
+        throw ( css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+    virtual void SAL_CALL removeVetoableChangeListener(
+        const ::rtl::OUString& PropertyName,
+        const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
+        throw ( css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException );
+
+private:
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
+    osl::Mutex m_mutex;
+    PropertySet_hash m_propertyMap;
+};
+
+PropertySetImpl::PropertySetImpl()
+{
+   OSL_TRACE( "<PropertySetImpl ctor called\n");
+}
+
+PropertySetImpl::~PropertySetImpl()
+{
+    OSL_TRACE( "<PropertySetImpl dtor called\n>" );
+}
+
+Reference< beans::XPropertySetInfo > SAL_CALL PropertySetImpl::getPropertySetInfo( )
+    throw ( RuntimeException )
+{
+    return Reference< beans::XPropertySetInfo > (); // Not supported
+}
+
+void SAL_CALL PropertySetImpl::setPropertyValue( const ::rtl::OUString& aPropertyName,
+    const Any& aValue )
+    throw ( beans::UnknownPropertyException, beans::PropertyVetoException,
+            lang::IllegalArgumentException, lang::WrappedTargetException,
+            RuntimeException )
+{
+    ::osl::Guard< osl::Mutex > aGuard( m_mutex );
+    m_propertyMap[ aPropertyName ] = aValue;
+}
+
+//*************************************************************************
+Any SAL_CALL PropertySetImpl::getPropertyValue( const ::rtl::OUString& PropertyName )
+    throw ( beans::UnknownPropertyException,
+            lang::WrappedTargetException, RuntimeException )
+{
+    if ( m_propertyMap.find( PropertyName ) == m_propertyMap.end() )
+    {
+        throw RuntimeException(
+
+            OUSTR( "PropertySetImpl::getPropertyValue: invalid PropertyName ").concat(
+                PropertyName),
+            Reference< XInterface >() );
+    }
+
+    ::osl::Guard< osl::Mutex > aGuard( m_mutex );
+    Any returnValue = m_propertyMap[ PropertyName ];
+
+    return returnValue;
+}
+
+//*************************************************************************
+void SAL_CALL PropertySetImpl::addPropertyChangeListener(
+    const ::rtl::OUString& aPropertyName,
+    const Reference< beans::XPropertyChangeListener >& xListener )
+    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
+            RuntimeException )
+{
+    throw RuntimeException(
+        OUSTR( "PropertySetImpl::addPropertyChangeListener: method not supported" ),
+        Reference< XInterface >() );
+}
+
+//*************************************************************************
+void SAL_CALL PropertySetImpl::removePropertyChangeListener(
+    const ::rtl::OUString& aPropertyName,
+    const Reference< beans::XPropertyChangeListener >& aListener )
+    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
+            RuntimeException )
+{
+    throw RuntimeException(
+        OUSTR( "PropertySetImpl::removePropertyChangeListener: method not supported" ),
+        Reference< XInterface >() );
+}
+
+//*************************************************************************
+void SAL_CALL PropertySetImpl::addVetoableChangeListener(
+    const ::rtl::OUString& PropertyName,
+    const Reference< beans::XVetoableChangeListener >& aListener )
+    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
+            RuntimeException )
+{
+    throw RuntimeException(
+        OUSTR( "PropertySetImpl::addVetoableChangeListener: method not supported" ),
+        Reference< XInterface >() );
+}
+
+//*************************************************************************
+void SAL_CALL PropertySetImpl::removeVetoableChangeListener(
+    const ::rtl::OUString& PropertyName,
+    const Reference< beans::XVetoableChangeListener >& aListener )
+    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
+            RuntimeException )
+{
+    throw RuntimeException(
+        OUSTR( "PropertySetImpl::removeVetoableChangeListener: method not supported" ),
+        Reference< XInterface >() );
+}
+
 
 const sal_Char* const SI_SERVICE_NAME="drafts.com.sun.star.script.framework.storage.ScriptInfo";
 const sal_Char* const SI_IMPL_NAME="drafts.com.sun.star.script.framework.storage.ScriptInfo";
@@ -94,6 +248,11 @@ ScriptInfo::ScriptInfo( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext )
 {
     OSL_TRACE( "< ++++++ ScriptInfo ctor called >\n" );
+    validateXRef( m_xContext, "ScriptInfo::ScriptInfo : cannot get component context");
+
+    m_xMgr = m_xContext->getServiceManager();
+    validateXRef( m_xMgr, "ScriptInfo::ScriptInfo : cannot get service manager");
+
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 
@@ -104,6 +263,10 @@ ScriptInfo::ScriptInfo( const Reference< XComponentContext > & xContext,
 {
     OSL_TRACE( "< ++++++ ScriptInfo ctor called >\n" );
     OSL_TRACE( "< ++++++ parcelURI=%s>\n",::rtl::OUStringToOString(m_scriptData.parcelURI , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    validateXRef( m_xContext, "ScriptInfo::ScriptInfo : cannot get component context");
+
+    m_xMgr = m_xContext->getServiceManager();
+    validateXRef( m_xMgr, "ScriptInfo::ScriptInfo : cannot get service manager");
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 //*************************************************************************
@@ -134,42 +297,34 @@ throw (RuntimeException, Exception)
 OUString SAL_CALL ScriptInfo::getLogicalName(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return m_scriptData.logicalName;
-}
-
-//*************************************************************************
-void SAL_CALL ScriptInfo::setLogicalName( const OUString& name ) throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    m_scriptData.logicalName = name;
+    OSL_TRACE("ScriptInfo::getLogicalName() ");
+    return m_scriptData.logicalname;
 }
 
 //*************************************************************************
 OUString SAL_CALL ScriptInfo::getDescription(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return m_scriptData.scriptDescription;
-}
+    OUString rs_desc;
+    OUString localeLang = OUString::createFromAscii("eng");
+    strpair_map::const_iterator str_it =
+        m_scriptData.locales.find( localeLang );
 
-//*************************************************************************
-void SAL_CALL ScriptInfo::setDescription( const OUString& desc ) throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    m_scriptData.scriptDescription = desc;
+    if( str_it == m_scriptData.locales.end())
+    {
+        OSL_TRACE("No description set in meta-data");
+        return rs_desc;
+    }
+    rs_desc = str_it->second.second;
+    return rs_desc;
 }
 
 //*************************************************************************
 OUString SAL_CALL ScriptInfo::getLanguage(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return m_scriptData.scriptLanguage;
-}
-
-//*************************************************************************
-void SAL_CALL ScriptInfo::setLanguage( const OUString& language ) throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    m_scriptData.scriptLanguage = language;
+    OSL_TRACE("ScriptInfo::getLanguage() ");
+    return m_scriptData.language;
 }
 
 //*************************************************************************
@@ -177,50 +332,16 @@ OUString SAL_CALL ScriptInfo::getScriptLocation()
     throw ( RuntimeException )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return m_scriptData.scriptLocation;
+    return OUString::createFromAscii("Not done at the moment");
+    //return m_scriptData.scriptLocation;
 }
 
 //*************************************************************************
-sal_Bool SAL_CALL ScriptInfo::hasSource(  ) throw (RuntimeException)
-{
-    return m_scriptData.scriptSource;
-}
-
-//*************************************************************************
-OUString SAL_CALL ScriptInfo::getLanguageSpecificName(  ) throw (RuntimeException)
+OUString SAL_CALL ScriptInfo::getFunctionName(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    return m_scriptData.functionName;
-}
-
-//*************************************************************************
-void SAL_CALL ScriptInfo::setLanguageSpecificName( const OUString& langName ) throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    m_scriptData.functionName = langName;
-}
-
-//*************************************************************************
-OUString SAL_CALL ScriptInfo::getRoot(  ) throw (RuntimeException)
-{
-    return m_scriptData.scriptRoot;
-}
-
-//*************************************************************************
-Sequence< OUString > SAL_CALL ScriptInfo::getDependencies(  ) throw (RuntimeException)
-{
-    dependencies_vec  & scriptDependencies =
-                m_scriptData.scriptDependencies;
-    Sequence< OUString > r_deps( scriptDependencies.size() );
-    dependencies_vec::const_iterator it = scriptDependencies.begin();
-    dependencies_vec::const_iterator it_end = scriptDependencies.end();
-
-    for(int i = 0; it != it_end; ++it )
-    {
-        r_deps[i++] = it->first;
-    }
-
-    return r_deps;
+    OSL_TRACE("ScriptInfo::getFunctionName() ");
+    return m_scriptData.functionname;
 }
 
 //*************************************************************************
@@ -230,13 +351,39 @@ OUString SAL_CALL ScriptInfo::getLocation(  ) throw (RuntimeException)
 
     return location;
 }
+//*************************************************************************
+OUString SAL_CALL ScriptInfo::getParcelURI(  ) throw (RuntimeException)
+{
+    return m_scriptData.parcelURI;
+}
 
 //*************************************************************************
-Reference< beans::XPropertySet > SAL_CALL ScriptInfo::extraProperties(  ) throw (RuntimeException)
+Reference< beans::XPropertySet > SAL_CALL ScriptInfo::getLanguageProperties(  )
+    throw (RuntimeException)
 {
-    Reference < beans::XPropertySet > x;
+    Reference< beans::XPropertySet > xPropSet = new PropertySetImpl();
 
-    return x;
+    props_vec::const_iterator pv_it = m_scriptData.languagedepprops.begin();
+    props_vec::const_iterator pv_itend = m_scriptData.languagedepprops.end();
+
+    for( ; pv_it != pv_itend; ++pv_it )
+    {
+        try
+        {
+            xPropSet->setPropertyValue( pv_it->first, makeAny( pv_it->second ) );
+        }
+        catch( Exception& e )
+        {
+            OUString msg = OUSTR(
+                "ScriptInfo::getLanguage caught exception while setting property," );
+            msg = msg.concat( OUSTR( " PropertryName: " ) ).concat( pv_it->first );
+            msg = msg.concat( OUSTR( " \nException message is: " ) );
+            msg = msg.concat( e.Message );
+            throw RuntimeException( msg , Reference< XInterface >() );
+        }
+    }
+
+    return xPropSet;
 }
 
 //*************************************************************************
@@ -244,57 +391,6 @@ OUString SAL_CALL ScriptInfo::getImplementationName(  )
 throw(RuntimeException)
 {
     return si_implName;
-}
-
-//*************************************************************************
-/**
- *  This function prepares the script for invocation and returns the full path
- *  to the prepared parcel folder
- *
- */
-::rtl::OUString SAL_CALL ScriptInfo::prepareForInvocation() throw(RuntimeException)
-{
-    OSL_TRACE("******* In ScriptInfo::prepareForInvocation() *************\n");
-    try
-    {
-        OSL_TRACE("preparing %s for invocation",::rtl::OUStringToOString(m_scriptData.parcelURI, RTL_TEXTENCODING_ASCII_US).pData->buffer);
-        if (m_scriptData.parcelURI.compareToAscii(docUriPrefix, 16) != 0) {
-        return m_scriptData.parcelURI;
-        }
-
-        validateXRef(m_xContext, "ScriptInfo::prepareForInvocation(): invalid context");
-        Any aAny=m_xContext->getValueByName(
-        OUString::createFromAscii(
-        "/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager"));
-        Reference <XInterface> xx;
-        if ((aAny >>= xx) == sal_False) {
-        throw RuntimeException(OUSTR("ScriptInfo::prepareForInvocation(): could not get ScriptStorageManager"), Reference< XInterface >());
-        }
-
-        validateXRef(xx, "ScriptInfo::prepareForInvocation(): could not get XInterface");
-        Reference<XScriptStorageManager> xSSM(xx,UNO_QUERY);
-        validateXRef(xSSM, "ScriptInfo::prepareForInvocation(): could not get XScriptStorageManager");
-        xx = xSSM->getScriptStorage(m_storageID);
-        validateXRef(xx, "ScriptInfo::prepareForInvocation(): could not get XInterface");
-        Reference <XParcelInvocationPrep> xPIP(xx, UNO_QUERY);
-        validateXRef(xPIP, "ScriptInfo::prepareForInvocation(): could not get XParcelInvocationPrep");
-        return xPIP->prepareForInvocation(m_scriptData.parcelURI);
-    }
-    catch(RuntimeException &e)
-    {
-        OUString temp = OUSTR(
-            "ScriptInfo::prepareForInvocation RuntimeException: ");
-        throw RuntimeException(temp.concat(e.Message),
-                               Reference<XInterface> ());
-    }
-#ifdef _DEBUG
-    catch ( ... )
-    {
-        throw RuntimeException(OUSTR(
-            "ScriptInfo::prepareForInvocation UnknownException: "),
-                         Reference<XInterface> ());
-    }
-#endif
 }
 
 //*************************************************************************

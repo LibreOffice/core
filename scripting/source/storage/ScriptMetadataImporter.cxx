@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-17 10:04:12 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,13 +95,16 @@ ScriptMetadataImporter::~ScriptMetadataImporter() SAL_THROW( () )
 void ScriptMetadataImporter::parseMetaData(
     Reference< io::XInputStream > const & xInput,
     const ::rtl::OUString & parcelURI,
-    Datas_vec &  io_ScriptDatas )
+    InfoImpls_vec &  io_ScriptDatas )
     throw ( xml::sax::SAXException, io::IOException, RuntimeException )
 {
-    mpv_scriptDatas=&io_ScriptDatas;
-    Datas_vec & ms_scriptDatas=*mpv_scriptDatas;
+
+    ::osl::Guard< ::osl::Mutex > aGuard( m_mutex );
+
+    mpv_ScriptDatas = &io_ScriptDatas;
+    InfoImpls_vec & ms_ScriptDatas = *mpv_ScriptDatas;
     //Clear the vector of parsed information
-    ms_scriptDatas.clear();
+    ms_ScriptDatas.clear();
 
     //Set the placeholder for the parcel URI
     ms_parcelURI = parcelURI;
@@ -166,7 +169,7 @@ void ScriptMetadataImporter::parseMetaData(
 
 #ifdef _DEBUG
     fprintf(stderr, "ScriptMetadataImporter: vector size is %d\n",
-        ms_scriptDatas.size());
+        ms_ScriptDatas.size());
 #endif
 }
 
@@ -241,122 +244,132 @@ void ScriptMetadataImporter::startElement(
     //Set the state of the state machine
     setState(tagName);
 
-    //Temporay variables
-    ::rtl::OUString t_delivered = ::rtl::OUString::createFromAscii("false");
-
     //Processing the elements
     switch(m_state)
     {
-    case PARCEL:
-        break;
-
-    case SCRIPT:
-        {
-            //Assign a new empty struct to the member struct to clear
-            //all values in the struct
-            ScriptData t_implInfo;
-            m_scriptData = t_implInfo;
-            m_scriptData.parcelURI = ms_parcelURI;
-            if(xAttribs->getLength() == 2)
-            {
-                //Get the script tag attributes
-                OSL_TRACE("ScriptMetadataImporter: Get language and deployment dir\n");
-
-                //script language
-                m_scriptData.scriptLanguage = xAttribs->getValueByName(
-                    ::rtl::OUString::createFromAscii("language"));
-
+        case SCRIPT:
+            m_ScriptData.parcelURI = ms_parcelURI;
+            m_ScriptData.language = xAttribs->getValueByName(
+                ::rtl::OUString::createFromAscii("language"));
 #ifdef _DEBUG
-                fprintf(stderr, "ScriptMetadataImporter: Got language: %s\n",
-                    ::rtl::OUStringToOString(m_scriptData.scriptLanguage,
-                        RTL_TEXTENCODING_ASCII_US).pData->buffer);
+            fprintf(stderr, "Trace Message: language is %s\n",
+                ::rtl::OUStringToOString(m_ScriptData.language,
+                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
-
-                //script root directory
-                m_scriptData.scriptRoot = xAttribs->getValueByName(
-                    ::rtl::OUString::createFromAscii( "deploymentdir" ));
-
-#ifdef _DEBUG
-                fprintf(stderr, "ScriptMetadataImporter: Got dir: %s\n",
-                    ::rtl::OUStringToOString(m_scriptData.scriptRoot,
-                        RTL_TEXTENCODING_ASCII_US).pData->buffer);
-#endif
-
-            }
             break;
-        }
-
-    case LOGICALNAME:
-        //logical name
-        m_scriptData.logicalName =
-            xAttribs->getValueByName(
-                ::rtl::OUString::createFromAscii("value"));
-
+        case LOCALE:
+            ms_localeLang = xAttribs->getValueByName(
+               ::rtl::OUString::createFromAscii("lang"));
 #ifdef _DEBUG
-        fprintf(stderr, "ScriptMetadataImporter: Got  logicalname: %s\n",
-            ::rtl::OUStringToOString(m_scriptData.logicalName,
-                RTL_TEXTENCODING_ASCII_US).pData->buffer);
+            fprintf(stderr, "Trace Message: Locale is %s\n",
+                ::rtl::OUStringToOString(ms_localeLang,
+                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
-
-        break;
-
-    case LANGUAGENAME:
-        //language(function) name
-        m_scriptData.functionName =
-            xAttribs->getValueByName(
-                ::rtl::OUString::createFromAscii("value"));
-        m_scriptData.scriptLocation =
-            xAttribs->getValueByName(
-                ::rtl::OUString::createFromAscii("location"));
-
-#ifdef _DEBUG
-        fprintf(stderr, "ScriptMetadataImporter: Got language: %s\n",
-            ::rtl::OUStringToOString(m_scriptData.functionName,
-                RTL_TEXTENCODING_ASCII_US).pData->buffer);
-#endif
-
-        break;
-
-    case DELIVERFILE:
-        {
-            //Get Info about delivered files
-            ::std::pair < ::rtl::OUString, ::rtl::OUString > deliveryFile(
-                xAttribs->getValueByName(
-                    ::rtl::OUString::createFromAscii( "name" ) ),
-                xAttribs->getValueByName(
-                    ::rtl::OUString::createFromAscii( "type" ) ) );
-            m_scriptData.parcelDelivers.push_back( deliveryFile );
-
             break;
-        }
-
-    case DEPENDFILE:
-        {
-            //push the dependency into the the vector
-            ::std::pair < ::rtl::OUString, bool > dependFile(
-                xAttribs->getValueByName(
-                    ::rtl::OUString::createFromAscii( "name" ) ),
-                false );
-            ::rtl::OUString t_delivered = xAttribs->getValueByName(
-                    ::rtl::OUString::createFromAscii( "isdeliverable" ) );
-            if( t_delivered.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("yes")) )
-            {
-                dependFile.second = true;
-            }
-            m_scriptData.scriptDependencies.push_back( dependFile );
-
+        case DISPLAYNAME:
+            ms_localeDisName = xAttribs->getValueByName(
+               ::rtl::OUString::createFromAscii("value"));
 #ifdef _DEBUG
-            fprintf(stderr, "ScriptMetadataImporter: Got dependency: %s\n",
+            fprintf(stderr, "Trace Message: Displyaname is %s\n",
+                ::rtl::OUStringToOString(ms_localeDisName,
+                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
+#endif
+            break;
+        case FUNCTIONNAME:
+            m_ScriptData.functionname = xAttribs->getValueByName(
+               ::rtl::OUString::createFromAscii("value"));
+#ifdef _DEBUG
+            fprintf(stderr, "Trace Message: Functionname is %s\n",
+                ::rtl::OUStringToOString(m_ScriptData.functionname,
+                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
+#endif
+            break;
+        case LOGICALNAME:
+            m_ScriptData.logicalname = xAttribs->getValueByName(
+               ::rtl::OUString::createFromAscii("value"));
+#ifdef _DEBUG
+            fprintf(stderr, "Trace Message: logicalname is %s\n",
+                ::rtl::OUStringToOString(m_ScriptData.logicalname,
+                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
+#endif
+            break;
+        case LANGDEPPROPS:
+             m_ScriptData.languagedepprops.push_back(
+                ::std::make_pair( xAttribs->getValueByName(
+                     ::rtl::OUString::createFromAscii( "name" )),
+                 xAttribs->getValueByName(
+                     ::rtl::OUString::createFromAscii( "value" ))
+                 ));
+#ifdef _DEBUG
+            fprintf(stderr, "Trace Message: Langdepprops is %s\t%s\n",
                 ::rtl::OUStringToOString( xAttribs->getValueByName(
                    ::rtl::OUString::createFromAscii("name")),
-                       RTL_TEXTENCODING_ASCII_US).pData->buffer);
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                ::rtl::OUStringToOString( xAttribs->getValueByName(
+                   ::rtl::OUString::createFromAscii("value")),
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer);
 #endif
-
+             break;
+        case FILESET:
+            ms_filesetname = xAttribs->getValueByName(
+               ::rtl::OUString::createFromAscii("name"));
+#ifdef _DEBUG
+            fprintf(stderr, "Trace Message: filesetname is %s\n",
+                ::rtl::OUStringToOString(ms_filesetname,
+                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
+#endif
             break;
-        }
+        case FILESETPROPS:
+            mv_filesetprops.push_back( ::std::make_pair(
+                xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii("name")),
+                xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii("value"))
+                ));
+#ifdef _DEBUG
+            fprintf(stderr, "Trace Message: filesetprops is %s\t%s\n",
+                ::rtl::OUStringToOString( xAttribs->getValueByName(
+                   ::rtl::OUString::createFromAscii("name")),
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                ::rtl::OUStringToOString( xAttribs->getValueByName(
+                   ::rtl::OUString::createFromAscii("value")),
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+#endif
+            break;
+        case FILES:
+            ms_filename = xAttribs->getValueByName(
+                ::rtl::OUString::createFromAscii( "name" ));
+#ifdef _DEBUG
+            fprintf(stderr, "Trace Message: filename is %s\n",
+                ::rtl::OUStringToOString(ms_filename,
+                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
+#endif
+            break;
+        case FILEPROPS:
+            /**
+            mm_files.insert( strpair_pair(ms_filename,
+                str_pair( xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii( "name" )),
+                xAttribs->getValueByName(
+                    ::rtl::OUString::createFromAscii( "value")))
+                )
+            );
+            */
+            mv_fileprops.push_back(str_pair( xAttribs->getValueByName(
+                ::rtl::OUString::createFromAscii( "name" )),
+                xAttribs->getValueByName(
+                ::rtl::OUString::createFromAscii( "value"))));
+#ifdef _DEBUG
+            fprintf(stderr, "Trace Message: fileprops is %s\t%s\n",
+                ::rtl::OUStringToOString( xAttribs->getValueByName(
+                   ::rtl::OUString::createFromAscii("name")),
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                ::rtl::OUStringToOString( xAttribs->getValueByName(
+                   ::rtl::OUString::createFromAscii("value")),
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+#endif
+            break;
 
-        //Needs to be here to circumvent bypassing of initialization of
-        //local(global) variables affecting other cases
     }
 }
 
@@ -377,36 +390,28 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
     //Set the state
     setState(aName);
 
-    //Temporary variables
-    int t_delSize = 0;
 
     switch (m_state)
     {
-    case PARCEL:
-        break;
-    case SCRIPT:
-
-#ifdef _DEBUG
-        OSL_TRACE("ScriptMetadataImporter: Got a scriptData\n");
-        fprintf(stderr, "ScriptMetadataImporter: \t %s\n", ::rtl::OUStringToOString(
-            m_scriptData.scriptLanguage, RTL_TEXTENCODING_ASCII_US).pData->buffer);
-#endif
-
-        //Push the struct into the vector
-        mpv_scriptDatas->push_back(m_scriptData);
-        break;
-
-    case LOGICALNAME:
-        break;
-
-    case LANGUAGENAME:
-        break;
-
-    case DELIVERY:
-        break;
-
-    case DEPENDENCIES:
-        break;
+        case PARCEL:
+            break;
+        case SCRIPT:
+            mpv_ScriptDatas->push_back( m_ScriptData );
+            //Clear all templates used in preparation for next script
+            mv_filesetprops.clear();
+            mm_files.clear();
+            break;
+        case LOCALE:
+            m_ScriptData.locales[ms_localeLang] = ::std::make_pair(
+                ms_localeDisName, ms_localeDesc );
+            break;
+        case FILESET:
+            m_ScriptData.filesets[ms_filesetname] = ::std::make_pair(
+                mv_filesetprops, mm_files );
+        case FILES:
+            mm_files[ms_filename] = mv_fileprops;
+            mv_fileprops.clear();
+            break;
     }
 }
 
@@ -420,25 +425,9 @@ void ScriptMetadataImporter::characters( const ::rtl::OUString & aChars )
 
     switch (m_state)
     {
-    case PARCEL:
-        break;
-    case SCRIPT:
-        break;
-    case LANGUAGENAME:
-        break;
-    case LOGICALNAME:
-        break;
-    case DEPENDENCIES:
-        break;
     case DESCRIPTION:
         //Put description into the struct
-        m_scriptData.scriptDescription = aChars;
-        break;
-    case DELIVERY:
-        break;
-    case DELIVERFILE:
-        break;
-    case DEPENDFILE:
+        ms_localeDesc = aChars;
         break;
     }
 }
@@ -479,44 +468,56 @@ void ScriptMetadataImporter::setState(const ::rtl::OUString & tagName)
         //Parcel tag
         m_state = PARCEL;
     }
-    else if (tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("script") ))
+    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("script")) )
     {
-        //Script tag
         m_state = SCRIPT;
     }
-    else if (tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("logicalname") ))
+    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "locale" )))
     {
-        //logicalname tag
-        m_state = LOGICALNAME;
+        m_state = LOCALE;
     }
-    else if (tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("languagename") ))
+    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "displayname" )))
     {
-        //languagename tag
-        m_state = LANGUAGENAME;
+        m_state = DISPLAYNAME;
     }
-    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dependencies") ))
+    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "description" )))
     {
-        //dependencies tag
-        m_state = DEPENDENCIES;
-    }
-    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("description") ))
-    {
-        //Description tag
         m_state = DESCRIPTION;
     }
-    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("delivery") ))
+    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "functionname")))
     {
-        //delivery tag, nothing to be done here
-        m_state = DELIVERY;
+        m_state = FUNCTIONNAME;
     }
-    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("deliverfile") ))
+    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "logicalname" )))
     {
-        //deliverfile tag, nothing to be done here
-        m_state = DELIVERFILE;
+        m_state = LOGICALNAME;
     }
-    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dependfile") ))
+    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "languagedepprops" )))
     {
-        m_state = DEPENDFILE;
+        m_state = LANGUAGEDEPPROPS;
+    }
+    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "prop" )))
+    {
+        if(m_state == LANGUAGEDEPPROPS)
+        {
+            m_state = LANGDEPPROPS;
+        }
+        else if(m_state == FILESET)
+        {
+            m_state = FILESETPROPS;
+        }
+        else if(m_state == FILES)
+        {
+            m_state = FILEPROPS;
+        }
+    }
+    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "fileset" )))
+    {
+        m_state = FILESET;
+    }
+    else if(tagName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "file" )))
+    {
+        m_state = FILES;
     }
     else
     {
@@ -533,4 +534,5 @@ void ScriptMetadataImporter::setState(const ::rtl::OUString & tagName)
             str_sax, Reference< XInterface >(), Any() );
     }
 }
+
 }
