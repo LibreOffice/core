@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,20 +68,20 @@
 #include <accmap.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
+#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ILLEGALACCESSIBLECOMPONENTSTATEEXCEPTION_HDL_
-#include <drafts/com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ILLEGALACCESSIBLECOMPONENTSTATEEXCEPTION_HDL_
+#include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -118,10 +118,10 @@ const sal_Char sAccessibleServiceName[] = "com.sun.star.accessibility.Accessible
 
 class SwAccessibleContext :
     public ::cppu::WeakImplHelper5<
-                ::drafts::com::sun::star::accessibility::XAccessible,
-                ::drafts::com::sun::star::accessibility::XAccessibleContext,
-                ::drafts::com::sun::star::accessibility::XAccessibleComponent,
-                ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
+                ::com::sun::star::accessibility::XAccessible,
+                ::com::sun::star::accessibility::XAccessibleContext,
+                ::com::sun::star::accessibility::XAccessibleComponent,
+                ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                 ::com::sun::star::lang::XServiceInfo
                 >,
     public SwAccessibleFrame
@@ -144,7 +144,7 @@ private:
     // The parent if it has been retrieved. This is always an
     // SwAccessibleContext. (protected by Mutex)
     ::com::sun::star::uno::WeakReference <
-        ::drafts::com::sun::star::accessibility::XAccessible > xWeakParent;
+        ::com::sun::star::accessibility::XAccessible > xWeakParent;
 
     SwAccessibleMap *pMap;  // must be protected by solar mutex
 
@@ -167,7 +167,7 @@ protected:
     sal_Int16 GetRole() const { return nRole; }
 
     void SetParent( SwAccessibleContext *pParent );
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> GetWeakParent() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> GetWeakParent() const;
 
     sal_Bool IsDisposing() const { return bDisposing; }
 
@@ -223,7 +223,7 @@ protected:
 
 public:
 
-    void FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent );
+    void FireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
 protected:
 
@@ -254,7 +254,7 @@ public:
     //=====  XAccessible  =====================================================
 
     /// Return the XAccessibleContext.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext (void) throw (com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
@@ -264,13 +264,13 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (long nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Return a reference to the parent.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -296,13 +296,13 @@ public:
 
     /// Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
+            ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
+            ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -311,26 +311,26 @@ public:
     */
     virtual ::com::sun::star::lang::Locale SAL_CALL
         getLocale (void)
-        throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleEventBroadcaster  =====================================
 
     virtual void SAL_CALL addEventListener(
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
+                ::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener(
             const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
+                ::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleComponent  ============================================
-    virtual sal_Bool SAL_CALL contains(
+    virtual sal_Bool SAL_CALL containsPoint(
             const ::com::sun::star::awt::Point& aPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt(
+        ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint(
                 const ::com::sun::star::awt::Point& aPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
