@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-14 14:49:12 $
+ *  last change: $Author: ama $ $Date: 2000-12-20 15:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,7 @@ inline void SwSubFont::SetVertical( const BOOL bNew )
 {
     pMagic = 0;
     Font::SetVertical( bNew );
-    Font::SetOrientation( bNew ? 2700 : 0 );
+    Font::SetOrientation( bNew ? 900 : 0 );
 }
 
 inline void SwFont::SetVertical( const BOOL bNew )
