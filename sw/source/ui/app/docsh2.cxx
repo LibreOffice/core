@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:17:54 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,8 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
 
         // dflt. PageDesc und StandardZeichenvorlage nie loeschen !!!
         if( ( SFX_STYLE_FAMILY_PAGE == eOldFamily &&
-              pDoc->GetPageDesc(0).GetName() == rOldName ) ||
+              const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName() ==
+              rOldName ) ||
               ( SFX_STYLE_FAMILY_CHAR == eOldFamily &&
                 rOldName == *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
                                                 RES_POOLCOLL_TEXT_BEGIN ] ))
@@ -698,7 +699,8 @@ BOOL SwDocShell::Remove(USHORT nIdx1,       // siehe Insert
 
         // dflt. PageDesc und StandardZeichenvorlage nie loeschen !!!
         if( ( SFX_STYLE_FAMILY_PAGE == eFamily &&
-              pDoc->GetPageDesc(0).GetName() == aName ) ||
+              const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName()
+              == aName ) ||
               ( SFX_STYLE_FAMILY_CHAR == eFamily &&
                 aName == *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
                                                 RES_POOLCOLL_TEXT_BEGIN ] ))
