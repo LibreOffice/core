@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-14 15:57:28 $
+ *  last change: $Author: hdu $ $Date: 2002-11-28 17:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2488,6 +2488,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pFontSelData->mePitch           = ePitch;
     pFontSelData->mnOrientation     = nOrientation;
     pFontSelData->mbVertical        = bVertical;
+    pFontSelData->mbNonAntialiased  = FALSE;
 
     return pEntry;
 }
@@ -4077,7 +4078,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
                 ImplInitTextLineSize();
             nLineHeight = pFontEntry->maMetric.mnBStrikeoutSize;
             nLinePos    = nY + pFontEntry->maMetric.mnBStrikeoutOffset;
-
         }
         else if ( eStrikeout == STRIKEOUT_DOUBLE )
         {
@@ -4864,7 +4864,6 @@ void OutputDevice::SetFont( const Font& rNewFont )
         aFont.SetColor( aTextColor );
 
         BOOL bTransFill = aFont.IsTransparent();
-
         if ( !bTransFill )
         {
             Color aTextFillColor( aFont.GetFillColor() );
@@ -5606,7 +5605,8 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         const xub_Unicode* pStr = aStr.GetBuffer() + nMinIndex;
         const xub_Unicode* pEnd = pStr + (nEndIndex-nMinIndex);
         for( ; pStr < pEnd; ++pStr )
-            if( (*pStr >= 0x0590) && (*pStr < 0x1900)
+            if( (*pStr >= 0x0590) && (*pStr < 0x10A0)
+            ||  (*pStr >= 0x1700) && (*pStr < 0x1900)
             ||  (*pStr >= 0xFB1D) && (*pStr < 0xFE00)   // middle east presentation
             ||  (*pStr >= 0xFE70) && (*pStr < 0xFF00) ) // arabic presentation B
                 break;
@@ -5671,9 +5671,11 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 
         if( pFallbackFont && (pFallbackFont != mpFontEntry) )
         {
+            // use matching fallback font for text layout
             OutputDevice& rOut = const_cast<OutputDevice&>(*this);
-            // use fallback font for text layout
-            mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(pFallbackFont->maFontSelData), 1 );
+            ImplFontSelectData aIFSD = mpFontEntry->maFontSelData;
+            aIFSD.mpFontData = pFallbackFont->maFontSelData.mpFontData;
+            pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aIFSD, 1 );
             SalLayout* pFallback = mpGraphics->LayoutText( aLayoutArgs, 1 );
             if( pFallback )
             {
