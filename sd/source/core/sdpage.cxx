@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-07 10:42:17 $
+ *  last change: $Author: cl $ $Date: 2001-02-19 13:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,6 +588,9 @@ void __EXPORT SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType,
             case SDRUSERCALL_MOVEONLY:
             case SDRUSERCALL_RESIZE:
             {
+                if( pModel->isLocked() )
+                    break;
+
                 SdrObject* pObj = (SdrObject*) &rObj;
 
                 if (pObj)
