@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 16:36:01 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #include "View.hxx"
 
-#include <so3/iface.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _PRESENTATION_HXX
 #include "pres.hxx"
