@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:00:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2134,14 +2134,14 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                      pFly->IsFlyAtCntFrm() && aFlyRect.IsOver( aRect ) &&
                      // OD 25.02.2003 #i9040# - use '<=' instead of '<'
                      (*fnRect->fnYDiff)(
-                            (pFly->GetAnchor()->Frm().*fnRect->fnGetBottom)(),
+                            (pFly->GetAnchorFrm()->Frm().*fnRect->fnGetBottom)(),
                             (Frm().*fnRect->fnGetTop)() ) <= 0 &&
                      !IsAnLower( pFly ) && !pFly->IsAnLower( this ) &&
                      ( !pMyFly || pMyFly->IsAnLower( pFly ) ) &&
                      pPage->GetPhyPageNum() >=
-                     pFly->GetAnchor()->FindPageFrm()->GetPhyPageNum() &&
+                     pFly->GetAnchorFrm()->FindPageFrm()->GetPhyPageNum() &&
                      // anchor should be in same page body/header/footer
-                     ( pFly->GetAnchor()->FindFooterOrHeader() ==
+                     ( pFly->GetAnchorFrm()->FindFooterOrHeader() ==
                        FindFooterOrHeader() ) )
                 {
                     const SwFmtSurround   &rSur = pFly->GetFmt()->GetSurround();
@@ -2159,7 +2159,7 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                     {
                         const long nWidth = (*fnRect->fnXDiff)(
                             (aFlyRect.*fnRect->fnGetRight)(),
-                            (pFly->GetAnchor()->Frm().*fnRect->fnGetLeft)() );
+                            (pFly->GetAnchorFrm()->Frm().*fnRect->fnGetLeft)() );
                         rLeftOffset = Max( rLeftOffset, nWidth );
                         bInvalidatePrtArea = TRUE;
                     }
@@ -2168,7 +2168,7 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                          HORI_RIGHT == rHori.GetHoriOrient() )
                     {
                         const long nWidth = (*fnRect->fnXDiff)(
-                            (pFly->GetAnchor()->Frm().*fnRect->fnGetRight)(),
+                            (pFly->GetAnchorFrm()->Frm().*fnRect->fnGetRight)(),
                             (aFlyRect.*fnRect->fnGetLeft)() );
                         rRightOffset = Max( rRightOffset, nWidth );
                         bInvalidatePrtArea = TRUE;
@@ -2480,6 +2480,7 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         if ( nReal < nDist )
         {
             nTmp = GetUpper()->Grow( nDist - ( nReal > 0 ? nReal : 0), bTst, bInfo );
+
             if ( IsRestrictTableGrowth() )
             {
                 nTmp = Min( nDist, nReal + nTmp );
@@ -3212,8 +3213,8 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                             const SwTwips nFlyWidth =
                                 (pFly->Frm().*fnRect->fnGetHeight)() +
                                     ( bVert ?
-                                      pFly->GetCurRelPos().X() :
-                                      pFly->GetCurRelPos().Y() );
+                                      pFly->GetCurrRelPos().X() :
+                                      pFly->GetCurrRelPos().Y() );
 
                             const SwTwips nFrmDiff =
                                 (*fnRect->fnYDiff)(
@@ -3767,25 +3768,17 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                     }
                     else
                     {
-                        // OD 30.06.2003 #108784# - consider 'virtual' drawing
-                        // objects.
-                        if ( pO->ISA(SwDrawVirtObj) )
+                        // OD 2004-04-06 #i26791# - Direct object positioning
+                        // no longer needed. Instead invalidate and determine
+                        // its position.
+                        SwContact* pContact = ::GetUserCall( pO );
+                        ASSERT( pContact, "<lcl_ArrangeLowers(..)> - missing contact object - please inform OD." );
+                        if ( pContact )
                         {
-                            SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pO);
-                            pDrawVirtObj->SetAnchorPos( pFrm->GetFrmAnchorPos( ::HasWrap( pO ) ) );
-                            pDrawVirtObj->AdjustRelativePosToReference();
-                        }
-                        else
-                        {
-                            pO->SetAnchorPos( pFrm->GetFrmAnchorPos( ::HasWrap( pO ) ) );
-                            // OD 30.06.2003 #108784# - correct relative position
-                            // of 'virtual' drawing objects.
-                            SwDrawContact* pDrawContact =
-                                static_cast<SwDrawContact*>(pO->GetUserCall());
-                            if ( pDrawContact )
-                            {
-                                pDrawContact->CorrectRelativePosOfVirtObjs();
-                            }
+                            SwAnchoredObject* pAnchoredObj =
+                                                pContact->GetAnchoredObj( pO );
+                            pAnchoredObj->InvalidateObjPos();
+                            pAnchoredObj->MakeObjPos();
                         }
                     }
                 }
@@ -3948,10 +3941,10 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                             const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                             if ( pFly->IsAnLower( this ) )
                                 continue;
-                            pAnch = pFly->GetAnchor();
+                            pAnch = pFly->GetAnchorFrm();
                         }
                         else
-                            pAnch = ((SwDrawContact*)pUserCall)->GetAnchor();
+                            pAnch = ((SwDrawContact*)pUserCall)->GetAnchorFrm();
                         if ( !IsAnLower( pAnch ) )
                         {
                             bVertDir = FALSE;
