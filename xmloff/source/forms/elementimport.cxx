@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:14:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1907,7 +1907,8 @@ namespace xmloff
             }
             while (nElementStart < nLength);
 
-            aList = Sequence< ::rtl::OUString >(aElements.begin(), aElements.size());
+            ::rtl::OUString *pElements = aElements.empty() ? 0 : &aElements[0];
+            aList = Sequence< ::rtl::OUString >(pElements, aElements.size());
         }
         else
         {
