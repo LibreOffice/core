@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPropertySetInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:58 $
+ *  last change:$Date: 2003-09-08 10:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.beans;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySetInfo;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.beans.XPropertySetInfo</code>
@@ -147,7 +148,6 @@ public class _XPropertySetInfo extends MultiMethodTest {
     */
     public void _hasPropertyByName() {
         requiredMethod("getProperties()");
-        boolean result;
         tRes.tested("hasPropertyByName()",
         (
             (oObj.hasPropertyByName(IsThere.Name)) &&

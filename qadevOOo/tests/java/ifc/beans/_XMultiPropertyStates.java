@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMultiPropertyStates.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:59 $
+ *  last change:$Date: 2003-09-08 10:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 package ifc.beans;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyState;
@@ -68,9 +72,6 @@ import com.sun.star.beans.XMultiPropertyStates;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.beans.XMultiPropertyStates</code>
@@ -148,14 +149,20 @@ public class _XMultiPropertyStates extends MultiMethodTest {
         // searching for property which currently don't have default value
         // and preferable has MAYBEDEFAULT attr
         // if no such properties are found then the first one is selected
+
+        String ro = (String) tEnv.getObjRelation("allReadOnly");
+        if (ro != null) {
+            log.println(ro);
+            tRes.tested("setPropertiesToDefault()",Status.skipped(true));
+            return;
+        }
+
         boolean mayBeDef = false;
         String propName = names[0];
-        int propIdx = 0;
 
         for(int i = 0; i < names.length; i++) {
             if (!mayBeDef && states[i] != PropertyState.DEFAULT_VALUE ) {
                 propName = names[i];
-                propIdx = i;
                 XPropertySet xPropSet = (XPropertySet)
                     UnoRuntime.queryInterface(XPropertySet.class, oObj);
                 XPropertySetInfo xPropSetInfo = xPropSet.getPropertySetInfo();

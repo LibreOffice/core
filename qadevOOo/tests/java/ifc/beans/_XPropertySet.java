@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPropertySet.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:59 $
+ *  last change:$Date: 2003-09-08 10:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 package ifc.beans;
 
+import java.util.Random;
+import java.util.StringTokenizer;
+
+import lib.MultiMethodTest;
+import util.ValueChanger;
+import util.utils;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyChangeEvent;
@@ -69,11 +76,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.lang.EventObject;
-import java.util.Random;
-import java.util.StringTokenizer;
-import lib.MultiMethodTest;
-import util.ValueChanger;
-import util.utils;
 
 /**
 * Testing <code>com.sun.star.beans.XPropertySet</code>
@@ -365,7 +367,7 @@ public class _XPropertySet extends MultiMethodTest {
         }
 
         try {
-            Object gValue = oObj.getPropertyValue(toCheck);
+            oObj.getPropertyValue(toCheck);
             tRes.tested("getPropertyValue()",true);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("Exception occured while trying to get property '"+

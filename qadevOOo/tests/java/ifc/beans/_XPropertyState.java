@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPropertyState.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:58 $
+ *  last change:$Date: 2003-09-08 10:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 package ifc.beans;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyState;
@@ -69,8 +73,6 @@ import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.XPropertyState;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.StatusException;
 
 
 /**
@@ -158,8 +160,12 @@ public class _XPropertyState extends MultiMethodTest {
         */
         public void _getPropertyDefault(){
             boolean result = true ;
+            String localName = pName;
+            if (localName == null) {
+                localName = (propertySetInfo.getProperties()[0]).Name;
+            }
             try {
-                propDef = oObj.getPropertyDefault(pName);
+                propDef = oObj.getPropertyDefault(localName);
                 log.println("Default property value is : '" + propDef + "'");
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Exception " + e +
@@ -181,8 +187,14 @@ public class _XPropertyState extends MultiMethodTest {
         */
         public void _getPropertyState(){
             boolean result = true ;
+
+            String localName = pName;
+            if (localName == null) {
+                localName = (propertySetInfo.getProperties()[0]).Name;
+            }
+
             try {
-                PropertyState ps = oObj.getPropertyState(pName);
+                PropertyState ps = oObj.getPropertyState(localName);
                 if (ps == null) {
                     log.println("!!! Returned value == null") ;
                     result = false ;
@@ -203,9 +215,15 @@ public class _XPropertyState extends MultiMethodTest {
         */
         public void _getPropertyStates(){
             boolean result = true ;
+
+            String localName = pName;
+            if (localName == null) {
+                localName = (propertySetInfo.getProperties()[0]).Name;
+            }
+
             try {
                 PropertyState[] ps = oObj.getPropertyStates
-                    (new String[] {pName});
+                    (new String[] {localName});
                 if (ps == null) {
                     log.println("!!! Returned value == null") ;
                     result = false ;
@@ -238,6 +256,12 @@ public class _XPropertyState extends MultiMethodTest {
         */
         public void _setPropertyToDefault(){
             requiredMethod("getPropertyDefault()") ;
+
+            if (pName == null) {
+                log.println("all found properties are read only");
+                tRes.tested("setPropertyToDefault()",Status.skipped(true));
+                return;
+            }
 
             boolean result = true ;
             try {
