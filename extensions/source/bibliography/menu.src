@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-04-06 07:03:08 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,8 +304,8 @@ Menu RID_MAIN_MENU
                         Text[ portuguese_brazilian ] = "Filter...";
                         Text[ japanese ] = "Ã®Ÿ¿(~F)...";
                         Text[ korean ] = "« ≈Õ(~F)...";
-                        Text[ chinese_simplified ] = "…∏—°(~F)...";
-                        Text[ chinese_traditional ] = "øzøÔ(~F)...";
+                        Text[ chinese_simplified ] = "…∏—°...";
+                        Text[ chinese_traditional ] = "øzøÔ...";
                         Text[ arabic ] = " ’›Ì…...";
                         Text[ turkish ] = "~Filtrele...";
                         Text[ language_user1 ] = " ";
