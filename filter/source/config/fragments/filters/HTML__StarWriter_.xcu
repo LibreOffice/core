@@ -1,0 +1,42 @@
+    <node oor:name="HTML (StarWriter)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_web_HTML</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>HTML</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">Strona WWW (%productname% Writer)</value>
+            <value xml:lang="hu">HTML-dokumentum (%productname% Writer)</value>
+            <value xml:lang="ja">HTML ドキュメント (%productname% Writer)</value>
+            <value xml:lang="es">Documento HTML (%productname% Writer)</value>
+            <value xml:lang="tr">HTML Belgesi (%productname% Writer)</value>
+            <value xml:lang="ru">Web-страница (%productname% Writer)</value>
+            <value xml:lang="th">HTML Document (%productname% Writer)</value>
+            <value xml:lang="x-comment">HTML-Document (%productname% Writer)</value>
+            <value xml:lang="ca">HTML Document (%productname% Writer)</value>
+            <value xml:lang="el">Έγγραφο HTML (%productname% Writer)</value>
+            <value xml:lang="zh-CN">HTML 文档(%productname% Writer)</value>
+            <value xml:lang="pt">Página Web (%productname% Writer)</value>
+            <value xml:lang="cs">HTML dokument (%productname% Writer)</value>
+            <value xml:lang="fr">Document HTLM (%productname% Writer)</value>
+            <value xml:lang="ar">HTML Document (%productname% Writer)</value>
+            <value xml:lang="zh-TW">HTML 文件 (%productname% Writer)</value>
+            <value xml:lang="sl">Dokument HTML (%productname% Writer)</value>
+            <value xml:lang="fi">HTML Document (%productname% Writer)</value>
+            <value xml:lang="hi-IN">HTML Document (%productname% Writer)</value>
+            <value xml:lang="en-US">HTML Document (%productname% Writer)</value>
+            <value xml:lang="sk">HTML dokument (%productname% Writer)</value>
+            <value xml:lang="he">‮מסמך HTML (%productname% Writer)‬</value>
+            <value xml:lang="sv">HTML-dokument (%productname% Writer)</value>
+            <value xml:lang="da">HTML-dokument (%productname% Writer)</value>
+            <value xml:lang="de">HTML-Dokument (%productname% Writer)</value>
+            <value xml:lang="ko">HTML 문서 (%productname% Writer)</value>
+            <value xml:lang="nl">Webpagina (%productname% Writer)</value>
+            <value xml:lang="pt-BR">HTML Document (%productname% Writer)</value>
+            <value xml:lang="it">Documento HTML (%productname% Writer)</value>
+            <value xml:lang="x-translate">HTML-Document (%productname% Writer)</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN ASYNCHRON</value></prop>
+    </node>
