@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-09 13:50:24 $
+ *  last change: $Author: ama $ $Date: 2001-11-21 11:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,7 +969,10 @@ void SwPageFrm::AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld )
                     ::lcl_ChgRootSize( this, nFix );
                 nDiff = nVar;
                 if ( GetPrev() && !((SwPageFrm*)GetPrev())->IsEmptyPage() )
-                    nDiff += DOCUMENTBORDER/2;
+                {
+                    if( !IsEmptyPage() || !GetNext() )
+                        nDiff += DOCUMENTBORDER/2;
+                }
                 else if ( !IsEmptyPage() && GetNext() )
                     nDiff += DOCUMENTBORDER/2;
             }
@@ -983,7 +986,7 @@ void SwPageFrm::AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld )
                     nDiff -= DOCUMENTBORDER/2;
                 else if ( !IsEmptyPage() && GetNext() )
                     nDiff -= DOCUMENTBORDER/2;
-                if ( IsEmptyPage() && GetNext() && GetPrev() )
+                if ( IsEmptyPage() && GetNext() )
                     nDiff = -nVar;
             }
             break;
@@ -1049,13 +1052,13 @@ inline void SetLastPage( SwPageFrm *pPage )
 
 void SwPageFrm::Cut()
 {
+    AdjustRootSize( CHG_CUTPAGE, 0 );
+
     ViewShell *pSh = GetShell();
     if ( !IsEmptyPage() )
     {
         if ( GetNext() )
             GetNext()->InvalidatePos();
-
-        AdjustRootSize( CHG_CUTPAGE, 0 );
 
         //Flys deren Anker auf anderen Seiten stehen umhaengen.
         //DrawObjecte spielen hier keine Rolle.
@@ -1163,8 +1166,7 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
         _InvalidateSize();
     InvalidatePos();
 
-    if ( !IsEmptyPage() )
-        AdjustRootSize( CHG_NEWPAGE, 0 );
+    AdjustRootSize( CHG_NEWPAGE, 0 );
 
     ViewShell *pSh = GetShell();
     if ( pSh )
