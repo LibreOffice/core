@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecomponenthelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-23 11:10:21 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 11:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ namespace comphelper
     {
         OContextEntryGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );
-        return Size( aBounds.Width - aBounds.X, aBounds.Height - aBounds.Y );
+        return Size( aBounds.Width, aBounds.Height );
     }
 
     //--------------------------------------------------------------------
@@ -229,6 +229,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/04/23 11:10:21  fs
+ *  initial checkin - helper for implementing an XAccessible(Extended)Component
+ *
  *
  *  Revision 1.0 18.04.2002 11:54:56  fs
  ************************************************************************/
