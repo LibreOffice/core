@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:23:31 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ RootData::RootData( void )
     pRNameBuff = NULL;
     pShrfmlaBuff = NULL;
     pExtNameBuff = NULL;
+    pFmlaConverter = NULL;
     pCharset = NULL;
     pExtDocOpt = NULL;
 
