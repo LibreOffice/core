@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_brw.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:25:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,27 +70,22 @@
 #define SBA_BROWSER_SETTING_ORDER           RID_STR_BRW_START +  2
 #define SBA_BROWSER_SETTING_FILTER          RID_STR_BRW_START +  3
 #define STR_DATASOURCE_GRIDCONTROL_DESC     RID_STR_BRW_START +  4
-#define RID_STR_QUERIES_CONTAINER           RID_STR_BRW_START +  5
-#define RID_STR_TABLES_CONTAINER            RID_STR_BRW_START +  6
-#define RID_STR_BOOKMARKS_CONTAINER         RID_STR_BRW_START +  7
-#define STR_NO_COLUMNNAME_MATCHING          RID_STR_BRW_START +  8
-#define RID_STR_SAVE_CURRENT_RECORD         RID_STR_BRW_START +  9
-#define STR_DATASOURCE_GRIDCONTROL_NAME     RID_STR_BRW_START + 10
-#define STR_OPENTABLES_WARNINGS             RID_STR_BRW_START + 11
-#define STR_OPENTABLES_WARNINGS_DETAILS     RID_STR_BRW_START + 12
-#define STR_CONNECTING_DATASOURCE           RID_STR_BRW_START + 13
-#define STR_LOADING_QUERY                   RID_STR_BRW_START + 14
-#define STR_LOADING_TABLE                   RID_STR_BRW_START + 15
-#define STR_DSBROWSER_TITLE                 RID_STR_BRW_START + 16
-#define STR_NO_TABLE_FORMAT_INSIDE          RID_STR_BRW_START + 17
-#define STR_COULDNOTCONNECT_DATASOURCE      RID_STR_BRW_START + 18
-#define RID_STR_UNDO_MODIFY_RECORD          RID_STR_BRW_START + 19
+#define RID_STR_UNDO_MODIFY_RECORD          RID_STR_BRW_START +  5
+#define STR_NO_COLUMNNAME_MATCHING          RID_STR_BRW_START +  6
+#define RID_STR_SAVE_CURRENT_RECORD         RID_STR_BRW_START +  7
+#define STR_DATASOURCE_GRIDCONTROL_NAME     RID_STR_BRW_START +  8
+#define STR_OPENTABLES_WARNINGS             RID_STR_BRW_START +  9
+#define STR_OPENTABLES_WARNINGS_DETAILS     RID_STR_BRW_START + 10
+#define STR_CONNECTING_DATASOURCE           RID_STR_BRW_START + 11
+#define STR_LOADING_QUERY                   RID_STR_BRW_START + 12
+#define STR_LOADING_TABLE                   RID_STR_BRW_START + 13
+#define STR_DSBROWSER_TITLE                 RID_STR_BRW_START + 14
+
 
 // please adjust checking before insert new strings
 
-#if RID_STR_UNDO_MODIFY_RECORD > RID_STR_BRW_END
+#if STR_DSBROWSER_TITLE > RID_STR_BRW_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
 #endif // _DBU_BRW_HRC_
-
