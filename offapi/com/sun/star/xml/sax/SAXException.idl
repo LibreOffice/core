@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SAXException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com {  module sun {  module star {  module xml {  module sax {
         <li>URI = Uniform Resource Identifier </li>
         <li>DTD = document type definition </li>
  */
-exception SAXException: com::sun::star::uno::Exception
+published exception SAXException: com::sun::star::uno::Exception
 {
     //-------------------------------------------------------------------------
 
