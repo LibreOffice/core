@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-16 11:41:37 $
+ *  last change: $Author: thb $ $Date: 2002-10-21 14:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,8 @@ OutputDevice::OutputDevice() :
     mnDPIY              = 0;
     mnTextOffX          = 0;
     mnTextOffY          = 0;
+    mnOutOffOrigX       = 0;
+    mnOutOffOrigY       = 0;
     mnEmphasisAscent    = 0;
     mnEmphasisDescent   = 0;
     mnDrawMode          = 0;
