@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:44:06 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 10:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1513,7 +1513,9 @@ BOOL ScDocument::IsDocProtected() const
 
 BOOL ScDocument::IsDocEditable() const
 {
-    return !bProtected && ( !pShell || !pShell->IsReadOnly() );
+    // import into read-only document is possible - must be extended if other filters use api
+
+    return !bProtected && ( !pShell || !pShell->IsReadOnly() || bImportingXML );
 }
 
 BOOL ScDocument::IsTabProtected( USHORT nTab ) const
