@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-08 13:53:18 $
+ *  last change: $Author: ab $ $Date: 2001-05-07 12:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ public:
 
     SbiIoSystem* GetIoSystem() { return pIosys; }
     SbiDdeControl* GetDdeControl() { return pDdeCtrl; }
+    StarBASIC* GetBasic( void ) { return pBasic; }
     SbiDllMgr* GetDllMgr();
     SbiRTLData* GetRTLData() const { return (SbiRTLData*)&aRTLData; }
 
