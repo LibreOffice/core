@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:19:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1267,6 +1267,11 @@ void StatusBar::SetItemText( USHORT nItemId, const XubString& rText )
         if ( pItem->maText != rText )
         {
             pItem->maText = rText;
+
+            // adjust item width - see also DataChanged()
+            long nWidth = GetTextWidth( pItem->maText );
+            if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
+                pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
 
             // Item neu Zeichen, wenn StatusBar sichtbar und
             // UpdateMode gesetzt ist
