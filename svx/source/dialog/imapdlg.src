@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:16:22 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,7 +783,7 @@ FloatingWindow RID_SVXDLG_IMAP
     };
     Text [ english_us ] = "ImageMap Editor" ;
     Text [ portuguese_brazilian ] = "ImageMap-Editor" ;
-    Text [ swedish ] = "ImageMap-editor" ;
+    Text [ swedish ] = "Image map-editor" ;
     Text [ danish ] = "ImageMap-redigering" ;
     Text [ italian ] = "Editor ImageMap" ;
     Text [ spanish ] = "Editor ImageMap" ;
@@ -1375,7 +1375,7 @@ String STR_IMAPDLG_SAVE
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen gespeichert werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen gespeichert werden? */
     Text = "Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
-    Text [ swedish ] = "ImageMap har ändrats.\nSkall ändringarna sparas?" ;
+    Text [ swedish ] = "Image map har ändrats.\nSkall ändringarna sparas?" ;
     Text [ danish ] = "ImageMap er blevet ændret.\nVil du gemme ændringerne?" ;
     Text [ portuguese_brazilian ] = "Die ImageMap wurde ge?ndert.\nSollen die ?nderungen gespeichert werden?" ;
     Text [ portuguese ] = "O ImageMap foi modificado.\nDeseja guardar as modificações?" ;
@@ -1393,7 +1393,7 @@ String STR_IMAPDLG_MODIFY
     Text = "Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden?" ;
     Text [ English ] = "The ImageMap has been modified.\nDo you want to take your changes?" ;
     Text [ english_us ] = "The ImageMap has been modified.\nDo you want to save the changes?" ;
-    Text [ swedish ] = "ImageMap har ändrats.\nSkall ändringarna övertas?" ;
+    Text [ swedish ] = "Image map har ändrats.\nSkall ändringarna övertas?" ;
     Text [ danish ] = "ImageMap er blevet ændret.\nSkal ændringerne overtages?" ;
     Text [ italian ] = "La ImageMap è stata cambiata.\nAccettare le modifiche?" ;
     Text [ spanish ] = "Se ha modificado el ImageMap.\n¿Desea guardar las modificaciones?" ;
@@ -1415,3 +1415,4 @@ String STR_IMAPDLG_MODIFY
     Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
 };
 /******************************************************************************/
+
