@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:35:20 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,7 +897,7 @@ void PatternFormatter::ImplLoadRes( const ResId& rResId )
     ByteString  aEditMask;
     XubString   aLiteralMask;
     ResMgr*     pMgr = Resource::GetResManager();
-    USHORT      nMask = pMgr->ReadShort();
+    ULONG       nMask = pMgr->ReadLong();
 
     if ( PATTERNFORMATTER_STRICTFORMAT & nMask )
         SetStrictFormat( (BOOL)pMgr->ReadShort() );
@@ -1705,7 +1705,7 @@ DateFormatter::DateFormatter() :
 void DateFormatter::ImplLoadRes( const ResId& )
 {
     ResMgr*     pMgr = Resource::GetResManager();
-    USHORT      nMask = pMgr->ReadShort();
+    ULONG       nMask = pMgr->ReadLong();
 
     if ( DATEFORMATTER_MIN & nMask )
     {
@@ -2149,7 +2149,7 @@ void DateField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     DateFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
 
-    USHORT  nMask = ReadShortRes();
+    ULONG  nMask = ReadLongRes();
 
     if ( DATEFIELD_FIRST & nMask )
     {
@@ -2873,7 +2873,7 @@ TimeFormatter::TimeFormatter() :
 void TimeFormatter::ImplLoadRes( const ResId& )
 {
     ResMgr* pMgr = Resource::GetResManager();
-    USHORT  nMask = pMgr->ReadShort();
+    ULONG   nMask = pMgr->ReadLong();
 
     if ( TIMEFORMATTER_MIN & nMask )
     {
@@ -2888,7 +2888,7 @@ void TimeFormatter::ImplLoadRes( const ResId& )
     }
 
     if ( TIMEFORMATTER_TIMEFIELDFORMAT & nMask )
-        meFormat = (TimeFieldFormat)pMgr->ReadShort();
+        meFormat = (TimeFieldFormat)pMgr->ReadLong();
 
     if ( TIMEFORMATTER_DURATION & nMask )
         mbDuration = (BOOL)pMgr->ReadShort();
@@ -3199,7 +3199,7 @@ void TimeField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     TimeFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
 
-    USHORT      nMask = ReadShortRes();
+    ULONG      nMask = ReadLongRes();
 
     if ( TIMEFIELD_FIRST & nMask )
     {
