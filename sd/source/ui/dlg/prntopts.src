@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:36:05 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,5 +743,6 @@ TabPage TP_PRINT_OPTIONS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones";
 };
+
 
 
