@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xerecord.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:01:01 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XERECORD_HXX
 #define SC_XERECORD_HXX
 
@@ -71,71 +69,75 @@
 #include "xestream.hxx"
 #endif
 
-
 // Base classes to export Excel records =======================================
 
 /** Base class for all Excel records.
-    @descr  Derive from this class to implement any functionality performed during
-    saving the records - except really writing a record (i.e. write a list of records
-    contained in the class). Derive from XclExpRecord instead from this class to
-    write common records. */
+
+    Derive from this class to implement any functionality performed during
+    saving the records - except really writing a record (i.e. write a list of
+    records contained in the class). Derive from XclExpRecord (instead from
+    this class) to write common records.
+ */
 class XclExpRecordBase
 {
 public:
-    virtual                     ~XclExpRecordBase();
+    virtual             ~XclExpRecordBase();
 
-    /** Overwrite this method to do any operation while saving the record list. */
-    virtual void                Save( XclExpStream& rStrm );
+    /** Overwrite this method to do any operation while saving the record. */
+    virtual void        Save( XclExpStream& rStrm );
 
     /** Calls Save(XclExpStream&) nCount times. */
-    void                        SaveRepeated( XclExpStream& rStrm, sal_uInt32 nCount );
+    void                SaveRepeated( XclExpStream& rStrm, sal_uInt32 nCount );
 };
 
+typedef ScfRef< XclExpRecordBase > XclExpRecordRef;
 
 // ----------------------------------------------------------------------------
 
 /** Base class for single records with any content.
-    @descr  This class handles writing the record header. Derived classes only have
-    to write the record body. Calculating the record size before saving optimizes the
-    write process (the stream does not have to seek back and update the written
-    record size). But it is not required to calculate a valid size (maybe it would be
-    too complex or just impossible until the record is really written). */
+
+    This class handles writing the record header. Derived classes only have to
+    write the record body. Calculating the record size before saving optimizes
+    the write process (the stream does not have to seek back and update the
+    written record size). But it is not required to calculate a valid size
+    (maybe it would be too complex or just impossible until the record is
+    really written).
+ */
 class XclExpRecord : public XclExpRecordBase
 {
 public:
     /** @param nRecId  The record ID of this record. May be set later with SetRecId().
         @param nRecSize  The predicted record size. May be set later with SetRecSize(). */
-    explicit                    XclExpRecord(
-                                    sal_uInt16 nRecId = EXC_ID_UNKNOWN,
-                                    sal_uInt32 nRecSize = 0 );
+    explicit            XclExpRecord(
+                            sal_uInt16 nRecId = EXC_ID_UNKNOWN,
+                            sal_uInt32 nRecSize = 0 );
 
-    virtual                     ~XclExpRecord();
+    virtual             ~XclExpRecord();
 
     /** Returns the current record ID. */
-    inline sal_uInt16           GetRecId() const { return mnRecId; }
+    inline sal_uInt16   GetRecId() const { return mnRecId; }
     /** Returns the current record size prediction. */
-    inline sal_uInt32           GetRecSize() const { return mnRecSize; }
+    inline sal_uInt32   GetRecSize() const { return mnRecSize; }
 
     /** Sets a new record ID. */
-    inline void                 SetRecId( sal_uInt16 nRecId ) { mnRecId = nRecId; }
+    inline void         SetRecId( sal_uInt16 nRecId ) { mnRecId = nRecId; }
     /** Sets a new record size prediction. */
-    inline void                 SetRecSize( sal_uInt32 nRecSize ) { mnRecSize = nRecSize; }
+    inline void         SetRecSize( sal_uInt32 nRecSize ) { mnRecSize = nRecSize; }
     /** Sets record ID and size with one call. */
-    void                        SetRecHeader( sal_uInt16 nRecId, sal_uInt32 nRecSize );
+    void                SetRecHeader( sal_uInt16 nRecId, sal_uInt32 nRecSize );
 
     /** Writes the record header and calls WriteBody(). */
-    virtual void                Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm );
 
 private:
     /** Writes the body of the record (without record header).
         @descr  Usually this method will be overwritten by derived classes. */
-    virtual void                WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    sal_uInt32                  mnRecSize;      /// The predicted record size.
-    sal_uInt16                  mnRecId;        /// The record ID.
+    sal_uInt32          mnRecSize;      /// The predicted record size.
+    sal_uInt16          mnRecId;        /// The record ID.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -144,14 +146,13 @@ class XclExpEmptyRecord : public XclExpRecord
 {
 public:
     /** @param nRecId  The record ID of this record. */
-    inline explicit             XclExpEmptyRecord( sal_uInt16 nRecId );
+    inline explicit     XclExpEmptyRecord( sal_uInt16 nRecId );
 };
 
 inline XclExpEmptyRecord::XclExpEmptyRecord( sal_uInt16 nRecId ) :
     XclExpRecord( nRecId, 0 )
 {
 }
-
 
 // ============================================================================
 
@@ -164,22 +165,22 @@ public:
     /** @param nRecId  The record ID of this record.
         @param rValue  The value for the record body.
         @param nSize  Record size. Uses sizeof( Type ), if this parameter is omitted. */
-    inline explicit             XclExpValueRecord(
-                                    sal_uInt16 nRecId,
-                                    const Type& rValue,
-                                    sal_uInt32 nSize = sizeof( Type ) );
+    inline explicit     XclExpValueRecord(
+                            sal_uInt16 nRecId,
+                            const Type& rValue,
+                            sal_uInt32 nSize = sizeof( Type ) );
 
     /** Returns the value of the record. */
-    inline const Type&          GetValue() const { return maValue; }
+    inline const Type&  GetValue() const { return maValue; }
     /** Sets a new record value. */
-    inline void                 SetValue( const Type& rValue ) { maValue = rValue; }
+    inline void         SetValue( const Type& rValue ) { maValue = rValue; }
 
 private:
     /** Writes the body of the record. */
-    virtual void                WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    Type                        maValue;        /// The record data.
+    Type                maValue;        /// The record data.
 };
 
 template< typename Type >
@@ -195,7 +196,6 @@ void XclExpValueRecord< Type >::WriteBody( XclExpStream& rStrm )
     rStrm << maValue;
 }
 
-
 // ----------------------------------------------------------------------------
 
 /** A record containing an unsigned 16-bit value. */
@@ -207,7 +207,6 @@ typedef XclExpValueRecord< sal_uInt32 >     XclExpUInt32Record;
 /** A record containing a double value. */
 typedef XclExpValueRecord< double >         XclExpDoubleRecord;
 
-
 // ----------------------------------------------------------------------------
 
 /** Record which contains a Boolean value.
@@ -217,22 +216,21 @@ class XclExpBoolRecord : public XclExpRecord
 public:
     /** @param nRecId  The record ID of this record.
         @param nValue  The value for the record body. */
-    inline explicit             XclExpBoolRecord( sal_uInt16 nRecId, bool bValue ) :
-                                    XclExpRecord( nRecId, 2 ), mbValue( bValue ) {}
+    inline explicit     XclExpBoolRecord( sal_uInt16 nRecId, bool bValue ) :
+                            XclExpRecord( nRecId, 2 ), mbValue( bValue ) {}
 
     /** Returns the Boolean value of the record. */
-    inline bool                 GetBool() const { return mbValue; }
+    inline bool         GetBool() const { return mbValue; }
     /** Sets a new Boolean record value. */
-    inline void                 SetBool( bool bValue ) { mbValue = bValue; }
+    inline void         SetBool( bool bValue ) { mbValue = bValue; }
 
 private:
     /** Writes the body of the record. */
-    virtual void                WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    bool                        mbValue;        /// The record data.
+    bool                mbValue;        /// The record data.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -243,61 +241,104 @@ public:
     /** @param nRecId  The record ID of this record.
         @param pRecData  Pointer to the data array representing the record body.
         @param nRecSize  Size of the data array. */
-    explicit                    XclExpDummyRecord(
-                                    sal_uInt16 nRecId, const void* pRecData, sal_uInt32 nRecSize );
+    explicit            XclExpDummyRecord(
+                            sal_uInt16 nRecId, const void* pRecData, sal_uInt32 nRecSize );
 
     /** Sets a data array. */
-    void                        SetData( const void* pRecData, sal_uInt32 nRecSize );
+    void                SetData( const void* pRecData, sal_uInt32 nRecSize );
 
 private:
     /** Writes the body of the record. */
-    virtual void                WriteBody( XclExpStream& rStrm );
+    virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    const void*                 mpData;         /// The record data.
+    const void*         mpData;         /// The record data.
 };
-
 
 // ----------------------------------------------------------------------------
 
 /** A record that stores a reference to an existing record object.
-    @descr  The record object does not take ownership of the passed record. This
-    class should be used to insert an existing record into another record list.
-    This prevents that the list takes ownership of the passed record. */
+
+    The record object does not take ownership of the passed record. This class
+    should be used to insert an existing record into another record list. This
+    prevents that the list takes ownership of the passed record.
+ */
 class XclExpRefRecord : public XclExpRecordBase
 {
 public:
-    inline explicit             XclExpRefRecord( XclExpRecordBase& rRec ) : mrRec( rRec ) {}
+    inline explicit     XclExpRefRecord( XclExpRecordBase& rRec ) : mrRec( rRec ) {}
 
     /** Writes the entire record. */
-    virtual void                Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm );
 
 protected:
-    XclExpRecordBase&           mrRec;          /// Reference to the record.
+    XclExpRecordBase&   mrRec;          /// Reference to the record.
 };
-
 
 // List of records ============================================================
 
 /** A list of Excel record objects.
-    @descr  Provides saving the compete list. This class is derived from
+
+    Provides saving the compete list. This class is derived from
     XclExpRecordBase, so it can be used as record in another record list.
-    Requires RecType::Save( XclExpStream& ). */
+    Requires RecType::Save( XclExpStream& ).
+ */
 template< typename RecType = XclExpRecordBase >
-class XclExpRecordList : public XclExpRecordBase, public ScfDelList< RecType >
+class XclExpRecordList : public XclExpRecordBase
 {
 public:
+    typedef ScfRef< RecType > RecordRefType;
+
+    /** Returns pointer to an existing record or 0 on error. */
+    inline bool         Empty() const { return maRecs.empty(); }
+    /** Returns pointer to an existing record or 0 on error. */
+    inline size_t       Size() const { return maRecs.size(); }
+
+    /** Returns reference to an existing record or empty reference on error. */
+    inline const RecordRefType GetRecord( size_t nPos ) const
+                            { return (nPos < maRecs.size()) ? maRecs[ nPos ] : RecordRefType(); }
+    /** Returns reference to an existing record or empty reference on error. */
+    inline RecordRefType GetRecord( size_t nPos )
+                            { return (nPos < maRecs.size()) ? maRecs[ nPos ] : RecordRefType(); }
+
+    /** Returns reference to the last existing record or empty reference, if list is empty. */
+    inline const RecordRefType GetLastRecord() const
+                            { return maRecs.empty() ? RecordRefType() : maRecs.back(); }
+    /** Returns reference to the last existing record or empty reference, if list is empty. */
+    inline RecordRefType GetLastRecord()
+                            { return maRecs.empty() ? RecordRefType() : maRecs.back(); }
+
+    /** Inserts a new record at the specified position into the list. */
+    inline void         InsertRecord( RecordRefType xRec, size_t nPos )
+                            { if( xRec.get() ) maRecs.insert( maRecs.begin() + ::std::min( nPos, maRecs.size() ), xRec ); }
+    /** Appends a new record to the list. */
+    inline void         AppendRecord( RecordRefType xRec )
+                            { if( xRec.get() ) maRecs.push_back( xRec ); }
+
+    /** Removes the record at the specified position from the list. */
+    inline void         RemoveRecord( size_t nPos )
+                            { if( nPos < maRecs.size() ) maRecs.erase( maRecs.begin() + nPos ); }
+    /** Removes all records from the list. */
+    inline void         RemoveAllRecords() { maRecs.clear(); }
+
+    /** Replaces the record at the specified position from the list with the passed record. */
+    inline void         ReplaceRecord( RecordRefType xRec, size_t nPos )
+                            { RemoveRecord( nPos ); InsertRecord( xRec, nPos ); }
+
     /** Writes the complete record list. */
-    virtual void                Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    typedef ::std::vector< RecordRefType > RecordVec;
+    RecordVec           maRecs;
 };
 
 template< typename RecType >
 void XclExpRecordList< RecType >::Save( XclExpStream& rStrm )
 {
-    for( RecType* pRec = this->First(); pRec; pRec = this->Next() )
-        pRec->Save( rStrm );
+    for( typename RecordVec::iterator aIt = maRecs.begin(), aEnd = maRecs.end(); aIt != aEnd; ++aIt )
+        (*aIt)->Save( rStrm );
 }
-
 
 // ============================================================================
 
