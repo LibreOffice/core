@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 15:24:39 $
+ *  last change: $Author: mib $ $Date: 2002-04-03 09:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,8 +497,8 @@ BOOL SfxHTMLParser::ParseMetaOptions( SfxDocumentInfo *pInfo,
     // current encoding if both, the current and the new encoding, are 1-BYTE
     // encodings. Everything else cannot lead to reasonable results.
     if( RTL_TEXTENCODING_DONTKNOW != eEnc &&
-        eEnc < RTL_TEXTENCODING_STD_COUNT &&
-        GetSrcEncoding() < RTL_TEXTENCODING_STD_COUNT )
+        rtl_isOctetTextEncoding( eEnc ) &&
+        rtl_isOctetTextEncoding( GetSrcEncoding() ) )
         SetSrcEncoding( eEnc );
 
     return bRet;
