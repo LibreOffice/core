@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 13:57:31 $
+ *  last change: $Author: os $ $Date: 2000-09-22 08:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ void SwView::SelectShell()
         GetEditWin().UpdatePointer(aPnt);
 
         SdrView* pDView = GetWrtShell().GetDrawView();
-        if ( bInitFormShell &&  )
+        if ( bInitFormShell && pDView )
             pFormShell->SetView(PTR_CAST(FmFormView, pDView));
 
     }
