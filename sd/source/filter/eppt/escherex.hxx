@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-07 16:52:23 $
+ *  last change: $Author: sj $ $Date: 2000-12-08 16:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,9 +145,6 @@ class _EscherEx : public EscherPersistTable
 
         UINT32  ImplDggAtomSize();
         void    ImplWriteDggAtom( SvStream& rSt );
-
-        UINT32  ImplBlibStoreContainerSize();
-        void    ImplWriteBlibStoreContainer( SvStream& rSt );
 
         UINT32  ImplOptAtomSize();
         void    ImplWriteOptAtom( SvStream& rSt );

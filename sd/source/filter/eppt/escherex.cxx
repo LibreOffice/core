@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-07 16:52:31 $
+ *  last change: $Author: sj $ $Date: 2000-12-08 16:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ UINT32 _EscherEx::ImplDggContainerSize()
     UINT32 nSize;
 
     nSize  = ImplDggAtomSize();
-    nSize += ImplBlibStoreContainerSize();
+    if ( mpGraphicProvider )
+        nSize += mpGraphicProvider->GetBlibStoreContainerSize();
     nSize += ImplOptAtomSize();
     nSize += ImplSplitMenuColorsAtomSize();
 
@@ -148,7 +149,8 @@ void _EscherEx::ImplWriteDggContainer( SvStream& rSt )
             << (UINT32)( nSize - 8 );
 
         ImplWriteDggAtom( rSt );
-        ImplWriteBlibStoreContainer( rSt );
+        if ( mpGraphicProvider )
+            mpGraphicProvider->WriteBlibStoreContainer( rSt );
         ImplWriteOptAtom( rSt );
         ImplWriteSplitMenuColorsAtom( rSt );
     }
@@ -174,46 +176,6 @@ void _EscherEx::ImplWriteDggAtom( SvStream& rSt )
             << mnDrawings;
 
         rSt.Write( maFIDCLs.GetData(), nSize - 24 );
-    }
-}
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 _EscherEx::ImplBlibStoreContainerSize()
-{
-    UINT32 nSize = 0;
-    if ( mpGraphicProvider && mpGraphicProvider->mnBlibEntrys )
-        nSize = 44 * mpGraphicProvider->mnBlibEntrys + 8;
-    return nSize;
-}
-
-void _EscherEx::ImplWriteBlibStoreContainer( SvStream& rSt )
-{
-    UINT32 nSize = ImplBlibStoreContainerSize();
-    if ( nSize )
-    {
-        rSt << (UINT32)( ( ESCHER_BstoreContainer << 16 ) | 0x1f )
-            << (UINT32)( nSize - 8 );
-
-        for ( UINT32 i = 0; i < mpGraphicProvider->mnBlibEntrys; i++ )
-        {
-            EscherBlibEntry* pBlibEntry = mpGraphicProvider->mpBlibEntrys[ i ];
-            BYTE nBlibType = pBlibEntry->meBlibType;
-            AddAtom( 36, ESCHER_BSE, 2, nBlibType );
-            rSt << nBlibType;
-            if ( ( nBlibType == WMF ) || ( nBlibType == EMF ) )
-            {                                                       // WMF auf OS2 zu Pict Konvertieren
-                rSt << (BYTE)4;
-                rSt.Write( &pBlibEntry->mnIdentifier[ 0 ], 16 );
-                rSt << (UINT16)0 << (UINT32)( pBlibEntry->mnSize + 0x4a ) << (UINT32)( i + 1 ) << pBlibEntry->mnPictureOffset << (UINT32)0;
-            }
-            else
-            {
-                rSt << nBlibType;
-                rSt.Write( &pBlibEntry->mnIdentifier[ 0 ], 16 );
-                rSt << (UINT16)0 << pBlibEntry->mnSize << (UINT32)( i + 1 ) << pBlibEntry->mnPictureOffset << (UINT32)0;
-            }
-        }
     }
 }
 
