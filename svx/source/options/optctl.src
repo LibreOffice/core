@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:29:31 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ dutch ] = "Sequence checking";
         Text[ french ] = "Contr�le de s�quence";
         Text[ finnish ] = "Sequence checking";
-        Text[ danish ] = "Sequence checking";
+        Text[ danish ] = "Sekvenskontrol";
         Text[ chinese_simplified ] = "检查顺序";
         Text[ chinese_traditional ] = "順序檢查";
         Text[ arabic ] = "Sequence checking";
@@ -104,6 +104,8 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ hebrew ] = "Sequence checking";
         Text[ hindi ] = "Sequence checking";
         Text[ slovak ] = "Preverenie sekvencie";
+        Text[ hungarian ] = "Sorrendellenőrzés";
+        Text[ slovenian ] = "Preverjanje niza";
     };
     CheckBox CB_SEQUENCECHECKING
     {
@@ -126,7 +128,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ dutch ] = "Use se~quence checking";
         Text[ french ] = "Appliquer le contr�le de s�quence";
         Text[ finnish ] = "Use se~quence checking";
-        Text[ danish ] = "Use se~quence checking";
+        Text[ danish ] = "Brug sekvenskontrol";
         Text[ chinese_simplified ] = "使用顺序检查(~Q)";
         Text[ chinese_traditional ] = "使用順序檢查(~q)";
         Text[ arabic ] = "Use se~quence checking";
@@ -135,6 +137,8 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ hebrew ] = "Se~quenzüberprüfung anwenden";
         Text[ hindi ] = "Use se~quence checking";
         Text[ slovak ] = "Použiť preverenie se~kvencie";
+        Text[ hungarian ] = "~Jelsorrend ellenőrzése";
+        Text[ slovenian ] = "Uporabi pre~verjanje niza";
     };
     FixedLine FL_CURSORCONTROL
     {
@@ -154,10 +158,10 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ turkish ] = "�mle� kontrol�";
         Text[ thai ] = "Cursor control";
         Text[ greek ] = "Cursor control";
-        Text[ dutch ] = "Cursor control";
+        Text[ dutch ] = "Cursorbesturing";
         Text[ french ] = "Contr�le du curseur";
         Text[ finnish ] = "Cursor control";
-        Text[ danish ] = "Cursor control";
+        Text[ danish ] = "Mark�rkontrol";
         Text[ chinese_simplified ] = "鼠标控制";
         Text[ chinese_traditional ] = "游標控制";
         Text[ arabic ] = "Cursor control";
@@ -166,6 +170,8 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ hebrew ] = "Cursor control";
         Text[ hindi ] = "Cursor control";
         Text[ slovak ] = "Ovládací prvok kurzora";
+        Text[ hungarian ] = "Kurzor beállítása";
+        Text[ slovenian ] = "Nadzor kazalke";
     };
     FixedText FT_MOVEMENT
     {
@@ -185,10 +191,10 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ turkish ] = "Hareket";
         Text[ thai ] = "Movement";
         Text[ greek ] = "Movement";
-        Text[ dutch ] = "Movement";
+        Text[ dutch ] = "Beweging";
         Text[ french ] = "Mouvement";
         Text[ finnish ] = "Movement";
-        Text[ danish ] = "Movement";
+        Text[ danish ] = "Bev�gelse";
         Text[ chinese_simplified ] = "移动";
         Text[ chinese_traditional ] = "移動";
         Text[ arabic ] = "Movement";
@@ -197,6 +203,8 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ hebrew ] = "Movement";
         Text[ hindi ] = "Movement";
         Text[ slovak ] = "Pohyb";
+        Text[ hungarian ] = "Mozgás";
+        Text[ slovenian ] = "Gibanje";
     };
     RadioButton RB_MOVEMENT_LOGICAL
     {
@@ -216,10 +224,10 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ turkish ] = "~Mant�ksal";
         Text[ thai ] = "Lo~gical";
         Text[ greek ] = "Lo~gical";
-        Text[ dutch ] = "Lo~gical";
+        Text[ dutch ] = "Lo~gisch";
         Text[ french ] = "Logique";
         Text[ finnish ] = "Lo~gical";
-        Text[ danish ] = "Lo~gical";
+        Text[ danish ] = "Lo~gisk";
         Text[ chinese_simplified ] = "逻辑的(~G)";
         Text[ chinese_traditional ] = "邏輯(~G)";
         Text[ arabic ] = "Lo~gical";
@@ -228,6 +236,8 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ hebrew ] = "Lo~gical";
         Text[ hindi ] = "Lo~gical";
         Text[ slovak ] = "Lo~gické";
+        Text[ hungarian ] = "Lo~gikai";
+        Text[ slovenian ] = "Lo~gično";
     };
     RadioButton RB_MOVEMENT_VISUAL
     {
@@ -247,10 +257,10 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ turkish ] = "~G�rsel";
         Text[ thai ] = "~Visual";
         Text[ greek ] = "~Visual";
-        Text[ dutch ] = "~Visual";
+        Text[ dutch ] = "~Visueel";
         Text[ french ] = "Visuel";
         Text[ finnish ] = "~Visual";
-        Text[ danish ] = "~Visual";
+        Text[ danish ] = "~Visuel";
         Text[ chinese_simplified ] = "视觉的(~V)";
         Text[ chinese_traditional ] = "視覺(~V)";
         Text[ arabic ] = "~Visual";
@@ -259,6 +269,8 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ hebrew ] = "~Visual";
         Text[ hindi ] = "~Visual";
         Text[ slovak ] = "~Vizuálne";
+        Text[ hungarian ] = "~Látható";
+        Text[ slovenian ] = "~Vidno";
     };
     FixedLine FL_GENERAL
     {
@@ -290,6 +302,8 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ hebrew ] = "‮אפשריות כלליות‬";
         Text[ hindi ] = "सामान्य विकल्प";
         Text[ slovak ] = "Všeobecné voľby";
+        Text[ hungarian ] = "Általános beállítások";
+        Text[ slovenian ] = "Splošne možnosti";
     };
     FixedText FT_NUMERALS
     {
@@ -309,10 +323,10 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ turkish ] = "~Say�lar";
         Text[ thai ] = "~Numerals (in text only)";
         Text[ greek ] = "~Numerals (in text only)";
-        Text[ dutch ] = "~Numerals (in text only)";
+        Text[ dutch ] = "~Cijfers";
         Text[ french ] = "Chiffres";
         Text[ finnish ] = "~Numerals (in text only)";
-        Text[ danish ] = "~Numerals (in text only)";
+        Text[ danish ] = "~Tal";
         Text[ chinese_simplified ] = "数字(~N)";
         Text[ chinese_traditional ] = "數字(~N)";
         Text[ arabic ] = "~Numerals (in text only)";
@@ -321,6 +335,8 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ hebrew ] = "~Numerals";
         Text[ hindi ] = "~Numerals";
         Text[ slovak ] = "~Numerické";
+        Text[ hungarian ] = "~Számok";
+        Text[ slovenian ] = "~Številski sistem";
     };
     ListBox LB_NUMERALS
     {
@@ -490,6 +506,18 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         < "Hindi" ; > ;
         < "Systémové" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Arab" ; > ;
+        < "Hindi" ; > ;
+        < "Rendszer" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Arabski" ; > ;
+        < "Hindujski" ; > ;
+        < "Sistem" ; > ;
+    };
     };
     Text[ portuguese ] = "Complex Text Layout";
     Text[ russian ] = "Complex Text Layout";
@@ -506,7 +534,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
     Text[ dutch ] = "Complex Text Layout";
     Text[ french ] = "Scripts complexes";
     Text[ finnish ] = "Complex Text Layout";
-    Text[ danish ] = "Complex Text Layout";
+    Text[ danish ] = "Complex Text Layout (CTL)";
     Text[ chinese_simplified ] = "复杂文字的版式";
     Text[ chinese_traditional ] = "複雜文字版式";
     Text[ arabic ] = "Complex Text Layout";
@@ -515,7 +543,10 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
     Text[ hebrew ] = "Complex Text Layout";
     Text[ hindi ] = "Complex Text Layout";
     Text[ slovak ] = "Komplexné rozloženie textu";
+    Text[ hungarian ] = "Komplex szöveg megjelenítése";
+    Text[ slovenian ] = "Postavitev kompleksnega besedila (CTL)";
 };
+
 
 
 
