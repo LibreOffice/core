@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:20 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,9 @@ static sal_Char* aFieldItemNameMap_Impl[] =
     "ExtTime",
     "ExtFile",
     "Author",
-    "Measure"
+    "Measure",
+    "ExtDate",
+    "Unknown"
 };
 
 /* conversion routines */
@@ -358,7 +360,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
     mxAnchor( xAnchor ),
     mpPropSet(NULL),
     mpImpl( new SvxUnoFieldData_Impl ),
-    mnServiceId(ID_NOTFOUND)
+    mnServiceId(ID_UNKNOWN)
 {
     DBG_ASSERT(pData, "pFieldData == NULL! [CL]" );
 
@@ -367,8 +369,8 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
     if(pData)
     {
         mnServiceId = GetFieldId(pData);
-        DBG_ASSERT(mnServiceId != ID_NOTFOUND, "unknown SvxFieldData! [CL]");
-        if(mnServiceId != ID_NOTFOUND)
+        DBG_ASSERT(mnServiceId != ID_UNKNOWN, "unknown SvxFieldData! [CL]");
+        if(mnServiceId != ID_UNKNOWN)
         {
             // extract field properties from data class
             switch( mnServiceId )
@@ -632,7 +634,8 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
 
     if(bShowCommand)
     {
-        return OUString::createFromAscii( aFieldItemNameMap_Impl[mnServiceId] );
+        DBG_ASSERT( ((sal_uInt32)mnServiceId) < ID_UNKNOWN, "Unknown field type" );
+        return OUString::createFromAscii( aFieldItemNameMap_Impl[(((sal_uInt32)mnServiceId) > ID_UNKNOWN)? ID_UNKNOWN : mnServiceId ] );
     }
     else
     {
@@ -1067,7 +1070,7 @@ sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const th
     else if( pFieldData->ISA( SdrMeasureField ) )
         return ID_MEASUREFIELD;
 
-    return ID_NOTFOUND;
+    return ID_UNKNOWN;
 }
 
 // lang::XServiceInfo
