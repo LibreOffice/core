@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 06:40:36 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 07:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ void OQueryController::clearFields()
     OTableFields().swap(m_vTableFieldDesc);
 }
 // -----------------------------------------------------------------------------
-FeatureState OQueryController::GetState(sal_uInt16 _nId) const
+FeatureState OQueryController::GetState(sal_uInt16 _nId)
 {
     FeatureState aReturn;
     aReturn.bEnabled = sal_True;
@@ -363,14 +363,22 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
         case ID_BROWSER_QUERY_VIEW_TABLES:
         case ID_BROWSER_QUERY_VIEW_ALIASES:
             aReturn.aState = ::cppu::bool2any(getContainer() && getContainer()->isSlotEnabled(_nId));
+            aReturn.bEnabled = m_bDesign;
             break;
         case ID_BROWSER_QUERY_DISTINCT_VALUES:
-            aReturn.bEnabled = m_bEditable;
+            aReturn.bEnabled = m_bDesign && m_bEditable;
             aReturn.aState = ::cppu::bool2any(m_bDistinct);
             break;
         case ID_BROWSER_QUERY_EXECUTE:
             aReturn.bEnabled = sal_True;
             break;
+        case ID_BROWSER_ADDTABLE:
+            if ( !m_bDesign )
+            {
+                aReturn.bEnabled = sal_False;
+                break;
+            }
+            // run through
         default:
             aReturn = OJoinController::GetState(_nId);
             break;
@@ -475,7 +483,10 @@ void OQueryController::Execute(sal_uInt16 _nId)
                 {
                 }
                 if(m_bDesign)
+                {
                     InvalidateFeature(ID_BROWSER_ADDTABLE);
+                    InvalidateFeature(ID_RELATION_ADD_RELATION);
+                }
             }
             break;
         case ID_BROWSER_CLEAR_QUERY:

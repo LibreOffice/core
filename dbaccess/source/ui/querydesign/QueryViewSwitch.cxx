@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:00:01 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 07:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,7 @@ void OQueryViewSwitch::switchView()
     }
     else
     {
+        ::rtl::OUString sOldStatement = static_cast<OQueryController*>(m_pDesignView->getController())->getStatement();
         // we have to stop the sqledit from our textview
         m_pTextView->getSqlEdit()->stopTimer();
         getAddTableDialog()->Update();
