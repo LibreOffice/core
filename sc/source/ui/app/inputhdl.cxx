@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:46 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1712,6 +1712,12 @@ void ScInputHandler::DataChanged()
 
     if (eMode==SC_INPUT_NONE)
         eMode = SC_INPUT_TYPE;
+
+    if ( eMode == SC_INPUT_TOP && pTopView )
+    {
+        //  table EditEngine is formatted below, input line needs formatting after paste
+        pTopView->GetEditEngine()->QuickFormatDoc( TRUE );
+    }
 
     bModified = TRUE;
     bSelIsRef = FALSE;
