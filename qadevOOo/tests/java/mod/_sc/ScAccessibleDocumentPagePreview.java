@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleDocumentPagePreview.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,29 +61,8 @@
 
 package mod._sc;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.awt.Rectangle;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XComponent;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.table.XCell;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.URL;
-import com.sun.star.util.XURLTransformer;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleAction;
 import java.io.PrintWriter;
+
 import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
@@ -92,8 +71,31 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
-import com.sun.star.uno.Type;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.XWindow;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.table.XCell;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.URL;
+import com.sun.star.util.XURLTransformer;
 
 /**
  * Test for object which is represented by accessible component of
