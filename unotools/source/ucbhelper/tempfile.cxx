@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:18:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <rtl/ustring.hxx>
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 #include <osl/file.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
@@ -73,10 +76,14 @@
 
 using namespace osl;
 
+namespace
+{
+    struct TempNameBase_Impl
+        : public rtl::Static< ::rtl::OUString, TempNameBase_Impl > {};
+}
+
 namespace utl
 {
-
-static ::rtl::OUString aTempNameBase_Impl;
 
 struct TempFile_Impl
 {
@@ -187,17 +194,18 @@ String ConstructTempDir_Impl( const String* pParent )
 
     if ( !aName.Len() )
     {
-        if (aTempNameBase_Impl.getLength() == 0)
+        ::rtl::OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
+        if (rTempNameBase_Impl.getLength() == 0)
         {
             ::rtl::OUString ustrTempDirURL;
             ::osl::FileBase::RC rc = ::osl::File::getTempDirURL(
                 ustrTempDirURL );
             if (rc == ::osl::FileBase::E_None)
-                aTempNameBase_Impl = ustrTempDirURL;
+                rTempNameBase_Impl = ustrTempDirURL;
         }
         // if no parent or invalid parent : use default directory
-        DBG_ASSERT( aTempNameBase_Impl.getLength(), "No TempDir!" );
-        aName = aTempNameBase_Impl;
+        DBG_ASSERT( rTempNameBase_Impl.getLength(), "No TempDir!" );
+        aName = rTempNameBase_Impl;
         ensuredir( aName );
     }
 
@@ -422,16 +430,17 @@ String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
     {
         // append own internal directory
         bRet = sal_True;
-        aTempNameBase_Impl = rBaseName;
-        aTempNameBase_Impl += ::rtl::OUString( '/' );
+        ::rtl::OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
+        rTempNameBase_Impl = rBaseName;
+        rTempNameBase_Impl += ::rtl::OUString( '/' );
 
         TempFile aBase( NULL, sal_True );
         if ( aBase.IsValid() )
             // use it in case of success
-            aTempNameBase_Impl = aBase.pImp->aName;
+            rTempNameBase_Impl = aBase.pImp->aName;
 
         // return system path of used directory
-        FileBase::getSystemPathFromFileURL( aTempNameBase_Impl, aTmp );
+        FileBase::getSystemPathFromFileURL( rTempNameBase_Impl, aTmp );
     }
 
     return aTmp;
@@ -439,11 +448,12 @@ String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
 
 String TempFile::GetTempNameBaseDirectory()
 {
-    if ( !aTempNameBase_Impl.getLength() )
+    const ::rtl::OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
+    if ( !rTempNameBase_Impl.getLength() )
         return String();
 
     rtl::OUString aTmp;
-    FileBase::getSystemPathFromFileURL( aTempNameBase_Impl, aTmp );
+    FileBase::getSystemPathFromFileURL( rTempNameBase_Impl, aTmp );
     return aTmp;
 }
 
