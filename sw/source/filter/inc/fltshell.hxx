@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ public:
     };
 
     SwFltControlStack(SwDoc* pDo, ULONG nFieldFl);
-    ~SwFltControlStack();
+    virtual ~SwFltControlStack();
 
     BOOL IsFlagSet(Flags no) const  { return ::SwFltGetFlag(nFieldFlags, no);}
 
