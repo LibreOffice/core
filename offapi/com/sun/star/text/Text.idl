@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Text.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
+ *  last change: $Author: os $ $Date: 2002-03-19 09:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 
 #ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValues_idl__
+#include <com/sun/star/beans/PropertyValues.idl>
 #endif
 
 
@@ -127,48 +133,49 @@ service Text
      */
     [optional] interface XRelativeTextContentInsert;
 
+    /** provides properties valid for the complete text object
+     */
+    [optional] interface ::com::sun::star::container::XEnumerationAccess;
+    /** contains the properties of a redline at the start of the document.<br>
+    The sequence contains the following properties
+    <UL>
+        <LI><P>string RedlineAuthor        </P></LI>
+        <LI><P>com::sun::star::util::DateTime RedlineDate_Time     </P></LI>
+        <LI><P>string RedlineComment       </P></LI>
+        <LI><P>string RedlineType          </P></LI>
+        <LI><P>string RedlineIdentifier    </P></LI>
+        <LI><P>boolean IsCollapsed          </P></LI>
+        <LI><P>boolean IsStart              </P></LI>
+        <LI><P>boolean MergeLastPara        </P></LI>
+        <LI><P>[maybevoid] com::sun::star::text::XText RedlineText  (maybevoid)</P></LI>
+        <LI><P>com::sun::star::beans::PropertyValues RedlineSuccessorData
+            (contains the same properties except for the RedlineSuccessorData</P></LI>
+    </UL>
+     @see EndRedline
+     */
+    [optional, property] ::com::sun::star::beans::PropertyValues StartRedline;
+    /** contains the properties of a redline at the start of the document.
+    The sequence contains the following properties
+    <UL>
+        <LI><P>string RedlineAuthor        </P></LI>
+        <LI><P>com::sun::star::util::DateTime RedlineDate_Time     </P></LI>
+        <LI><P>string RedlineComment       </P></LI>
+        <LI><P>string RedlineType          </P></LI>
+        <LI><P>string RedlineIdentifier    </P></LI>
+        <LI><P>boolean IsCollapsed          </P></LI>
+        <LI><P>boolean IsStart              </P></LI>
+        <LI><P>boolean MergeLastPara        </P></LI>
+        <LI><P>[maybevoid] com::sun::star::text::XText RedlineText  (maybevoid)</P></LI>
+        <LI><P>com::sun::star::beans::PropertyValues RedlineSuccessorData
+            (contains the same properties except for the RedlineSuccessorData</P></LI>
+    </UL>
+     @see StartRedline
+     */
+    [optional, maybevoid, property] ::com::sun::star::beans::PropertyValues EndRedline;
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/03/02 12:22:25  os
-    #84533# XTextRangeMover now optinal
-
-    Revision 1.5  2000/12/21 08:35:21  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.4  2000/12/20 16:49:39  cl
-    #81061# made some interfaces optional
-
-    Revision 1.3  2000/11/08 12:44:27  mi
-    moved from api
-
-    Revision 1.3  2000/10/11 08:30:59  mi
-    #73107# XTextRangeMover is optional now
-
-    Revision 1.2  2000/10/09 14:25:02  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:36:03  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:53:00  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/07/11 08:31:35  os
-    #76708# insert/remove paragraphs before/behind tables
-
-    Revision 1.2  2000/03/28 08:16:36  mi
-    #74484# XTextRangeCompare: new interface
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
