@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 08:06:03 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 08:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
     // detect using SfxFilter names
     // can't detect filter for external filters, so set the "dont" flag accordingly
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
     SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
     if ( aPreselectedFilterName.Len() )
@@ -550,6 +551,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         if ( !pFilter )
             // no SFX handled type at all
             return aTypeName;
+            //return String();
     }
     else
     {
@@ -561,11 +563,12 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
         TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
         SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
+
         bWasReadOnly = pItem && pItem->GetValue();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
         aMedium.UseInteractionHandler( TRUE );
+
         BOOL bIsStorage = aMedium.IsStorage();
         if ( bIsStorage )
             aMedium.GetStorage();
@@ -663,7 +666,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                 }
 
                 // no filter found : try everything possible
-                if ( !pFilter && aMedium.GetErrorCode() == ERRCODE_NONE )
+                if ( aMedium.GetErrorCode() == ERRCODE_NONE && ( !pFilter || !pFilter->IsOwnFormat() ) )
                     nErr = rMatcher.GetFilter4Content( aMedium, &pFilter, nMust, nDont );
             }
         }
