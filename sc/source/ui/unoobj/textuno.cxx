@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-27 18:20:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
 
 void ScHeaderFooterTextObj::FillDummyFieldData( ScHeaderFieldData& rData )  // static
 {
-    String aDummy = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "???" ));
+    String aDummy(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "???" )));
     rData.aTitle        = aDummy;
     rData.aLongDocName  = aDummy;
     rData.aShortDocName = aDummy;
@@ -476,7 +476,7 @@ rtl::OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeExce
 void SAL_CALL ScHeaderFooterTextObj::setString( const rtl::OUString& aText ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aText;
+    String aString(aText);
 
     // for pure text, no font info is needed in pool defaults
     ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), TRUE );
@@ -530,7 +530,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
         if ( pHeaderField && !pHeaderField->IsInserted() && pTextRange )
         {
             SvxEditSource* pEditSource = pTextRange->GetEditSource();
-            ESelection aSelection = pTextRange->GetSelection();
+            ESelection aSelection(pTextRange->GetSelection());
 
             if (!bAbsorb)
             {
@@ -540,7 +540,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
                 aSelection.nStartPos  = aSelection.nEndPos;
             }
 
-            SvxFieldItem aItem = pHeaderField->CreateFieldItem();
+            SvxFieldItem aItem(pHeaderField->CreateFieldItem());
 
             SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
             pForwarder->QuickInsertField( aItem, aSelection );
@@ -709,7 +709,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getStart() throw(uno
     ScCellTextCursor* pNew = new ScCellTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
 
-    ESelection aNewSel = GetSelection();
+    ESelection aNewSel(GetSelection());
     aNewSel.nEndPara = aNewSel.nStartPara;
     aNewSel.nEndPos  = aNewSel.nStartPos;
     pNew->SetSelection( aNewSel );
@@ -726,7 +726,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getEnd() throw(uno::
     ScCellTextCursor* pNew = new ScCellTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
 
-    ESelection aNewSel = GetSelection();
+    ESelection aNewSel(GetSelection());
     aNewSel.nStartPara = aNewSel.nEndPara;
     aNewSel.nStartPos  = aNewSel.nEndPos;
     pNew->SetSelection( aNewSel );
@@ -813,7 +813,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getStart() t
     ScHeaderFooterTextCursor* pNew = new ScHeaderFooterTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
 
-    ESelection aNewSel = GetSelection();
+    ESelection aNewSel(GetSelection());
     aNewSel.nEndPara = aNewSel.nStartPara;
     aNewSel.nEndPos  = aNewSel.nStartPos;
     pNew->SetSelection( aNewSel );
@@ -830,7 +830,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd() thr
     ScHeaderFooterTextCursor* pNew = new ScHeaderFooterTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
 
-    ESelection aNewSel = GetSelection();
+    ESelection aNewSel(GetSelection());
     aNewSel.nStartPara = aNewSel.nEndPara;
     aNewSel.nStartPos  = aNewSel.nEndPos;
     pNew->SetSelection( aNewSel );
@@ -917,7 +917,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getStart() throw(uno
     ScDrawTextCursor* pNew = new ScDrawTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
 
-    ESelection aNewSel = GetSelection();
+    ESelection aNewSel(GetSelection());
     aNewSel.nEndPara = aNewSel.nStartPara;
     aNewSel.nEndPos  = aNewSel.nStartPos;
     pNew->SetSelection( aNewSel );
@@ -934,7 +934,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd() throw(uno::
     ScDrawTextCursor* pNew = new ScDrawTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
 
-    ESelection aNewSel = GetSelection();
+    ESelection aNewSel(GetSelection());
     aNewSel.nStartPara = aNewSel.nEndPara;
     aNewSel.nStartPos  = aNewSel.nEndPos;
     pNew->SetSelection( aNewSel );
