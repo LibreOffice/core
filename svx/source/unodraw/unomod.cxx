@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: cl $ $Date: 2000-10-18 16:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "unoprov.hxx"
 #include "unomod.hxx"
 #include "unopage.hxx"
+#include "unofield.hxx"
 
 extern UHashMapEntry pSdrShapeIdentifierMap[];
 
@@ -93,11 +94,11 @@ using namespace ::com::sun::star;
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& ServiceSpecifier )
     throw( uno::Exception, uno::RuntimeException )
 {
-    const OUString aPrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.") );
+    const OUString aDrawingPrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.") );
 
-    if( ServiceSpecifier.compareTo( aPrefix, aPrefix.getLength() ) == 0 )
+    if( ServiceSpecifier.compareTo( aDrawingPrefix, aDrawingPrefix.getLength() ) == 0 )
     {
-        OUString aShapeType( ServiceSpecifier.copy( aPrefix.getLength() ) );
+        OUString aShapeType( ServiceSpecifier.copy( aDrawingPrefix.getLength() ) );
 
         UINT32 nType = aSdrShapeIdentifierMap.getId( aShapeType );
         if( nType != UHASHMAP_NOTFOUND )
@@ -108,6 +109,48 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
             return uno::Reference< uno::XInterface >( (drawing::XShape*) SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI ) );
         }
     }
+
+    const OUString aTextFieldPrexit( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.") );
+
+    if( ServiceSpecifier.compareTo( aTextFieldPrexit, aTextFieldPrexit.getLength() ) == 0 )
+    {
+        OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
+
+        sal_Int32 nId = ID_NOTFOUND;
+
+        if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("DateTime") ) )
+        {
+            nId = ID_DATEFIELD;
+        }
+        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("URL") ) )
+        {
+            nId = ID_URLFIELD;
+        }
+        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("PageNumber") ) )
+        {
+            nId = ID_PAGEFIELD;
+        }
+        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("PageCount") ) )
+        {
+            nId = ID_PAGESFIELD;
+        }
+        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("SheetName") ) )
+        {
+            nId = ID_TABLEFIELD;
+        }
+        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName") ) )
+        {
+            nId = ID_EXT_FILEFIELD;
+        }
+        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("Author") ) )
+        {
+            nId = ID_AUTHORFIELD;
+        }
+
+        if( nId != ID_NOTFOUND )
+            return (::cppu::OWeakObject * )new SvxUnoTextField( nId );
+    }
+
     throw lang::ServiceNotRegisteredException();
 
     return uno::Reference< uno::XInterface >();

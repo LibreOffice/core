@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-29 12:16:30 $
+ *  last change: $Author: cl $ $Date: 2000-10-18 16:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_TEXT_CONTROLCHARACTER_HPP_
 #include <com/sun/star/text/ControlCharacter.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HDL_
+#include <com/sun/star/text/XTextField.hdl>
+#endif
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -110,6 +113,7 @@
 #include <svtools/intitem.hxx>
 #endif
 
+#define ITEMID_FIELD EE_FEATURE_FIELD
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
@@ -121,6 +125,8 @@
 #include "unonrule.hxx"
 #include "unofdesc.hxx"
 #include "unoapi.hxx"
+#include "unofield.hxx"
+#include "flditem.hxx"
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -262,6 +268,17 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) th
 SvxUnoTextRangeBase::~SvxUnoTextRangeBase() throw()
 {
     delete pEditSource;
+}
+
+/** puts a field item with a copy of the given FieldData into the itemset
+    corresponding with this range */
+void SvxUnoTextRangeBase::attachField( const SvxFieldData* pData ) throw()
+{
+    if( pData && pEditSource )
+    {
+        SvxFieldItem aField( *pData );
+        pEditSource->GetTextForwarder()->QuickInsertField( aField, aSelection );
+    }
 }
 
 void SvxUnoTextRangeBase::SetSelection( const ESelection& rSelection ) throw()
@@ -530,8 +547,32 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& Propert
     //  Dontcare durch Default ersetzen, damit man immer eine Reflection hat
     pAttribs->ClearInvalidItems();
 
-    if(!GetPropertyValueHelper( *pAttribs, pMap, aAny, &aSelection, (SvxTextEditSource*)GetEditSource() ))
-        aAny = aPropSet.getPropertyValue(PropertyName, *pAttribs);
+    if( pMap->nWID == EE_FEATURE_FIELD )
+    {
+        if ( pAttribs->GetItemState( EE_FEATURE_FIELD, sal_False )  & SFX_ITEM_SET )
+        {
+            SvxFieldItem* pItem = (SvxFieldItem*)pAttribs->GetItem( EE_FEATURE_FIELD );
+            const SvxFieldData* pData = pItem->GetField();
+            uno::Reference< text::XTextRange > xAnchor( this );
+
+            // get presentation string for field
+            Color* pTColor = NULL;
+            Color* pFColor = NULL;
+
+            OUString aPresentation( pForwarder->CalcFieldValue( *pData, aSelection.nStartPara, aSelection.nStartPos, pTColor, pFColor ) );
+
+            delete pTColor;
+            delete pFColor;
+
+            uno::Reference< text::XTextField > xField( new SvxUnoTextField( xAnchor, aPresentation, pData ) );
+            aAny <<= xField;
+        }
+    }
+    else
+    {
+        if(!GetPropertyValueHelper( *pAttribs, pMap, aAny, &aSelection, (SvxTextEditSource*)GetEditSource() ))
+            aAny = aPropSet.getPropertyValue(PropertyName, *pAttribs);
+    }
 
     delete pAttribs;
     return aAny;
@@ -1334,8 +1375,37 @@ void SAL_CALL SvxUnoText::insertControlCharacter( const uno::Reference< text::XT
 }
 
 // XText
-void SAL_CALL SvxUnoText::insertTextContent( const uno::Reference< text::XTextRange >& xRange, const uno::Reference< text::XTextContent >& xContent, sal_Bool bAbsorb ) throw(lang::IllegalArgumentException, uno::RuntimeException)
+void SAL_CALL SvxUnoText::insertTextContent( const uno::Reference< text::XTextRange >& xRange, const uno::Reference< text::XTextContent >& xContent, sal_Bool bAbsorb )
+    throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
+    SvxUnoTextRangeBase* pRange = SvxUnoTextRange::getImplementation( xRange );
+    SvxUnoTextField* pField = SvxUnoTextField::getImplementation( xContent );
+
+    if( pRange == NULL || pField == NULL )
+        throw lang::IllegalArgumentException();
+
+    ESelection aSelection = pRange->GetSelection();
+    if( !bAbsorb )
+    {
+        aSelection.nStartPara = aSelection.nEndPara;
+        aSelection.nStartPos  = aSelection.nEndPos;
+    }
+
+    SvxTextForwarder* pForwarder = GetEditSource()->GetTextForwarder();
+
+    SvxFieldData* pFieldData = pField->CreateFieldData();
+    if( pField == NULL )
+        throw lang::IllegalArgumentException();
+
+    SvxFieldItem aField( *pFieldData );
+    pForwarder->QuickInsertField( aField, aSelection );
+    GetEditSource()->UpdateData();
+
+    aSelection.nEndPos += 1;
+    aSelection.nStartPos = aSelection.nEndPos;
+    pRange->SetSelection( aSelection );
+
+    delete pField;
 }
 
 void SAL_CALL SvxUnoText::removeTextContent( const uno::Reference< text::XTextContent >& xContent ) throw(container::NoSuchElementException, uno::RuntimeException)
