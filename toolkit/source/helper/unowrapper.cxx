@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 11:43:32 $
+ *  last change: $Author: mt $ $Date: 2001-10-10 12:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,6 +457,7 @@ void UnoWrapper::WindowEvent_MouseMove( Window* pWindow, const MouseEvent& rEvt 
             ::com::sun::star::awt::MouseEvent aEvent;
             aEvent.Source = (::cppu::OWeakObject*)pWindow->GetWindowPeer();
             ImplInitMouseEvent( aEvent, rEvt );
+            aEvent.ClickCount = 0;  // #92138#
 
             if ( rEvt.GetMode() & MOUSE_SIMPLEMOVE )
                 pWindow->GetWindowPeer()->GetMouseMotionListeners().mouseMoved( aEvent );
