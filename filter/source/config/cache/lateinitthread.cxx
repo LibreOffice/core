@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lateinitthread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 13:42:50 $
+ *  last change: $Author: rt $ $Date: 2004-05-12 08:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ void SAL_CALL LateInitThread::run()
         // The filter cache use this information to show an assertion
         // for "optimization failure" in case the first calli of loadAll()
         // was not this thread ...
-        ::comphelper::SingletonRef< FilterCache > rCache;
+        ::salhelper::SingletonRef< FilterCache > rCache;
         rCache->load(FilterCache::E_CONTAINS_ALL);
     }
     catch(const css::uno::Exception&)
