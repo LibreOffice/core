@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-29 11:56:42 $
+ *  last change: $Author: kz $ $Date: 2001-04-04 19:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,24 @@ String RID_CNT_STR_WAITING
 {
     Text = "Die Vorlagen werden jetzt für die erstmalige Benutzung einmal initialisiert." ;
     Text [ ENGLISH ] = "Initializing the templates for the first usage." ;
-    Text [ english_us ] = "Initializing the templates for the first usage." ;
+    Text [ english_us ] = "Initializing the %PRODUCTNAME components for the first time after installation." ;
+    Text[ language_user1 ] = " ";
+    Text[ portuguese ] = "Os componentes do %PRODUCTNAME acabados de instalar estão agora a ser inicializados.";
+    Text[ russian ] = "Èíèöèàëèçàöèÿ êîìïîíåíòîâ %PRODUCTNAME ïîñëå èíñòàëëÿöèè.";
+    Text[ greek ] = "Áñ÷éêïğïßçóç ôùí óôïé÷åßùí ôïõ %PRODUCTNAME ãéá ğñşôç öïñÜ ìåôÜ ôçí åãêáôÜóôáóç.";
+    Text[ dutch ] = "De %PRODUCTNAME-componenten worden na de installatie eerst geïnitialiseerd";
+    Text[ french ] = "L'initialisation des composants de %PRODUCTNAME qui viennent d'être installés est en cours...";
+    Text[ spanish ] = "Los componentes de %PRODUCTNAME van a ser inicializados ahora tras la instalación.";
+    Text[ italian ] = "Adesso le componenti di %PRODUCTNAME vengono inizializzate.";
+    Text[ danish ] = "%PRODUCTNAME-komponenterne initialiseres.";
+    Text[ swedish ] = "%PRODUCTNAME-komponenterna initieras nu efter installationen.";
+    Text[ polish ] = "Po zakoñczeniu instalacji rozpocznie siê inicjalizacja komponentów %PRODUCTNAME.";
+    Text[ portuguese_brazilian ] = "Die %PRODUCTNAME Komponenten werden initialisiert";
+    Text[ japanese ] = "%PRODUCTNAME ºİÎß°ÈİÄ‚ÍA²İ½Ä°Ù‚³‚ê‚½‚ ‚Æ‚É‚Ü‚¸‰Šú‰»‚³‚ê‚Ü‚·B";
+    Text[ korean ] = "%PRODUCTNAME ±¸¼º¿ä¼Ò´Â ¼³Ä¡ÇÑ ÈÄ ÀÌÁ¦ ÇÑ¹ø ÃÊ±âÈ­µË´Ï´Ù.";
+    Text[ chinese_simplified ] = "°²×°Íê³ÉºóÊ×´Î³õÊ¼»¯ %PRODUCTNAME ³ÌÊ½²¿¼ş¡£";
+    Text[ chinese_traditional ] = "¦w¸Ë§¹¦¨«á­º¦¸ªì©l¤Æ %PRODUCTNAME µ{¦¡³¡¥ó¡C";
+    Text[ turkish ] = "Kurulumdan sonra %PRODUCTNAME bileşenleri şimdi yeniden başlatılacak.";
+    Text[ arabic ] = "ÌÇÑí ÇáÂä ÊåíÆÉ ãßæäÇÊ %PRODUCTNAME ááãÑÉ ÇáÃæáì ÈÚÏ ÇäÊåÇÁ ÚãáíÉ ÇáÊËÈíÊ.";
 };
 
