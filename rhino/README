@@ -5,11 +5,7 @@ JavaScript interpreter, available under the Mozilla Public License
 In addition, to support the debugging of scripts contained in OpenOffice.org
 documents, we have modified the Java source file Main.java.
 
-The modified source code is rebuilt and repackaged in the Rhino js.jar file
-before being deliver to the OpenOffice.org solver. The modified source is
-also available from the OpenOffice.org website at:
-
-http://framework.openoffice.org/source/browse/framework/scripting/examples/java/debugger/rhino/Main.java
-
-In order to allow Java classloading to work properly (issue 30929)
-we have included versions of a number of files from Rhino 1.5R4.1
+The Rhino source tarball is patched with the modified code. The Rhino
+Jar file (js.jar) is then built and delivered to the solver. The file
+rhino15R4.patch contains the changes made in order to build Rhino. The
+patch was generated using the command: diff -wurN
