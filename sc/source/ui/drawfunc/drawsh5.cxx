@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-05 10:41:06 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,11 @@
 #include <svx/fmglob.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/fontwork.hxx>
+#include <svx/svdocapt.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xftsfit.hxx>
 #include <vcl/msgbox.hxx>
@@ -101,6 +104,7 @@
 #include "scresid.hxx"
 #include "undotab.hxx"
 #include "drwlayer.hxx"
+#include "userdat.hxx"
 
 #include "sc.hrc"
 
@@ -376,10 +380,40 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_DELETE:
         case SID_DELETE_CONTENTS:
+        {
+            const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
+            if(rNoteMarkList.GetMarkCount() == 1)
+            {
+                SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetObj();
+        if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
+            {
+                    ScAddress aTabPos;
+                    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+                    if( pData )
+                        aTabPos = pData->aStt;
+                    ScDocument* pDoc = pViewData->GetDocument();
+                    ScPostIt aNote(pDoc);
+                    pViewData->GetViewShell()->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );   // with Undo
+
+                    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+                    if (pModel)
+                    {
+                        SdrPage* pPage = pModel->GetPage( aTabPos.Tab() );
+                        if(pPage)
+            {
+                ScDocShell* pDocSh = pViewData->GetDocShell();
+                pDocSh->GetUndoManager()->AddUndoAction( new SdrUndoRemoveObj( *pObj));
+                            pPage->RemoveObject( pObj->GetOrdNum() );
+            }
+                    }
+                    break;
+                }
+            }
             pView->DeleteMarked();
             if (!pTabView->IsDrawSelMode())
                 pViewData->GetViewShell()->SetDrawShell( FALSE );
-            break;
+        }
+        break;
 
         case SID_CUT:
             pView->DoCut();
