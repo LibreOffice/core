@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTypeWizDlgSetup.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:10:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 11:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ Sequence<sal_Int8> SAL_CALL ODBTypeWizDialogSetup::getImplementationId(  ) throw
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    Reference < XInterface > xDBContext = _rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseDocument")));
+    Reference < XInterface > xDBContext = _rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")));
        Sequence<Any> aSequence(1);
     PropertyValue aPropertyValue;
     Any aTmp;
