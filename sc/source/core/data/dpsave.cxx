@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:26:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,18 @@
 #include "dpsave.hxx"
 #include "miscuno.hxx"
 #include "scerrors.hxx"
+#include "unonames.hxx"
 #include "global.hxx"
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
+#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
@@ -182,7 +187,7 @@ BOOL ScDPSaveMember::operator== ( const ScDPSaveMember& r ) const
     return TRUE;
 }
 
-BOOL ScDPSaveMember::HasIsVisible()
+BOOL ScDPSaveMember::HasIsVisible() const
 {
     return nVisibleMode != SC_DPSAVEMODE_DONTKNOW;
 }
@@ -192,7 +197,7 @@ void ScDPSaveMember::SetIsVisible(BOOL bSet)
     nVisibleMode = bSet;
 }
 
-BOOL ScDPSaveMember::HasShowDetails()
+BOOL ScDPSaveMember::HasShowDetails() const
 {
     return nShowDetailsMode != SC_DPSAVEMODE_DONTKNOW;
 }
@@ -237,6 +242,10 @@ ScDPSaveDimension::ScDPSaveDimension(const String& rName, BOOL bDataLayout) :
     nShowEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     nFunction( sheet::GeneralFunction_AUTO ),
     nUsedHierarchy( -1 ),
+    pReferenceValue( NULL ),
+    pSortInfo( NULL ),
+    pAutoShowInfo( NULL ),
+    pLayoutInfo( NULL ),
     pLayoutName( NULL ),
     pSelectedPage( NULL )
 {
@@ -267,6 +276,22 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
         ScDPSaveMember* pNew = new ScDPSaveMember( *(ScDPSaveMember*)r.aMemberList.GetObject(i) );
         aMemberList.Insert( pNew, LIST_APPEND );
     }
+    if (r.pReferenceValue)
+        pReferenceValue = new sheet::DataPilotFieldReference( *(r.pReferenceValue) );
+    else
+        pReferenceValue = NULL;
+    if (r.pSortInfo)
+        pSortInfo = new sheet::DataPilotFieldSortInfo( *(r.pSortInfo) );
+    else
+        pSortInfo = NULL;
+    if (r.pAutoShowInfo)
+        pAutoShowInfo = new sheet::DataPilotFieldAutoShowInfo( *(r.pAutoShowInfo) );
+    else
+        pAutoShowInfo = NULL;
+    if (r.pLayoutInfo)
+        pLayoutInfo = new sheet::DataPilotFieldLayoutInfo( *(r.pLayoutInfo) );
+    else
+        pLayoutInfo = NULL;
     if (r.pLayoutName)
         pLayoutName = new String( *(r.pLayoutName) );
     else
@@ -312,6 +337,10 @@ ScDPSaveDimension::ScDPSaveDimension(SvStream& rStream)
         ScDPSaveMember* pNew = new ScDPSaveMember( rStream );
         aMemberList.Insert( pNew, LIST_APPEND );
     }
+    pReferenceValue = NULL;
+    pSortInfo = NULL;
+    pAutoShowInfo = NULL;
+    pLayoutInfo = NULL;
     pLayoutName = NULL;
     pSelectedPage = NULL;
 }
@@ -355,8 +384,13 @@ ScDPSaveDimension::~ScDPSaveDimension()
     for (long i=0; i<nCount; i++)
         delete (ScDPSaveMember*)aMemberList.GetObject(i);
     aMemberList.Clear();
+    delete pReferenceValue;
+    delete pSortInfo;
+    delete pAutoShowInfo;
+    delete pLayoutInfo;
     delete pLayoutName;
     delete pSelectedPage;
+    delete [] pSubTotalFuncs;
 }
 
 BOOL ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
@@ -412,7 +446,7 @@ void ScDPSaveDimension::SetSubTotals(BOOL bSet)
 void ScDPSaveDimension::SetSubTotals(long nCount, const USHORT* pFuncs)
 {
     if (pSubTotalFuncs)
-        delete pSubTotalFuncs;
+        delete [] pSubTotalFuncs;
     nSubTotalCount = nCount;
     if ( nCount && pFuncs )
     {
@@ -466,6 +500,42 @@ const String& ScDPSaveDimension::GetLayoutName() const
     if (pLayoutName)
         return *pLayoutName;
     return aName;
+}
+
+void ScDPSaveDimension::SetReferenceValue(const sheet::DataPilotFieldReference* pNew)
+{
+    delete pReferenceValue;
+    if (pNew)
+        pReferenceValue = new sheet::DataPilotFieldReference(*pNew);
+    else
+        pReferenceValue = NULL;
+}
+
+void ScDPSaveDimension::SetSortInfo(const sheet::DataPilotFieldSortInfo* pNew)
+{
+    delete pSortInfo;
+    if (pNew)
+        pSortInfo = new sheet::DataPilotFieldSortInfo(*pNew);
+    else
+        pSortInfo = NULL;
+}
+
+void ScDPSaveDimension::SetAutoShowInfo(const sheet::DataPilotFieldAutoShowInfo* pNew)
+{
+    delete pAutoShowInfo;
+    if (pNew)
+        pAutoShowInfo = new sheet::DataPilotFieldAutoShowInfo(*pNew);
+    else
+        pAutoShowInfo = NULL;
+}
+
+void ScDPSaveDimension::SetLayoutInfo(const sheet::DataPilotFieldLayoutInfo* pNew)
+{
+    delete pLayoutInfo;
+    if (pNew)
+        pLayoutInfo = new sheet::DataPilotFieldLayoutInfo(*pNew);
+    else
+        pLayoutInfo = NULL;
 }
 
 void ScDPSaveDimension::SetCurrentPage( const String* pPage )
@@ -537,6 +607,12 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             xDimProp->setPropertyValue( rtl::OUString::createFromAscii(DP_PROP_USEDHIERARCHY), aAny );
         }
 
+        if ( pReferenceValue )
+        {
+            aAny <<= *pReferenceValue;
+            xDimProp->setPropertyValue( rtl::OUString::createFromAscii(SC_UNO_REFVALUE), aAny );
+        }
+
         uno::Sequence<sheet::TableFilterField> aFilter;
         // set the selected page field only if the dimension is used as page dimension
         if ( pSelectedPage && nOrientation == sheet::DataPilotFieldOrientation_PAGE )
@@ -594,6 +670,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             DBG_ASSERT( xLevProp.is(), "no properties at level" );
             if ( xLevProp.is() )
             {
+                uno::Any aAny;
                 if ( !bSubTotalDefault )
                 {
                     if ( !pSubTotalFuncs )
@@ -603,13 +680,49 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                     sheet::GeneralFunction* pArray = aSeq.getArray();
                     for (long i=0; i<nSubTotalCount; i++)
                         pArray[i] = (sheet::GeneralFunction)pSubTotalFuncs[i];
-                    uno::Any aAny;
                     aAny <<= aSeq;
                     xLevProp->setPropertyValue( rtl::OUString::createFromAscii(DP_PROP_SUBTOTALS), aAny );
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                     lcl_SetBoolProperty( xLevProp,
                         rtl::OUString::createFromAscii(DP_PROP_SHOWEMPTY), (BOOL)nShowEmptyMode );
+
+                if ( pSortInfo )
+                {
+                    aAny <<= *pSortInfo;
+                    try
+                    {
+                        xLevProp->setPropertyValue( rtl::OUString::createFromAscii(SC_UNO_SORTING), aAny );
+                    }
+                    catch ( beans::UnknownPropertyException& )
+                    {
+                        // recent addition - allow source to not handle it (no error)
+                    }
+                }
+                if ( pAutoShowInfo )
+                {
+                    aAny <<= *pAutoShowInfo;
+                    try
+                    {
+                        xLevProp->setPropertyValue( rtl::OUString::createFromAscii(SC_UNO_AUTOSHOW), aAny );
+                    }
+                    catch ( beans::UnknownPropertyException& )
+                    {
+                        // recent addition - allow source to not handle it (no error)
+                    }
+                }
+                if ( pLayoutInfo )
+                {
+                    aAny <<= *pLayoutInfo;
+                    try
+                    {
+                        xLevProp->setPropertyValue( rtl::OUString::createFromAscii(SC_UNO_LAYOUT), aAny );
+                    }
+                    catch ( beans::UnknownPropertyException& )
+                    {
+                        // recent addition - allow source to not handle it (no error)
+                    }
+                }
 
                 // exceptions are caught at ScDPSaveData::WriteToSource
             }
@@ -787,6 +900,14 @@ ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const String& rName)
     pNew->SetDupFlag( TRUE );
     aDimList.Insert( pNew, LIST_APPEND );
     return pNew;
+}
+
+ScDPSaveDimension& ScDPSaveData::DuplicateDimension( const ScDPSaveDimension& rDim )
+{
+    ScDPSaveDimension* pNew = new ScDPSaveDimension( rDim );
+    pNew->SetDupFlag( TRUE );
+    aDimList.Insert( pNew, LIST_APPEND );
+    return *pNew;
 }
 
 void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
