@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 13:57:25 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 10:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,13 +202,13 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     GetScImport().GetTables().AddColumn(bTempIsCovered);
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableRowCellAttrTokenMap();
+    rtl::OUString aLocalName;
+    rtl::OUString sValue;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+                                            xAttrList->getNameByIndex( i ), &aLocalName );
+        sValue = xAttrList->getValueByIndex( i );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
