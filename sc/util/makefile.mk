@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:23:19 $
+#   last change: $Author: vg $ $Date: 2003-04-24 12:56:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..
 
-PRJNAME=SC
+PRJNAME=sc
 TARGET=scalc3
 #LIBTARGET=NO
 GEN_HID=TRUE
