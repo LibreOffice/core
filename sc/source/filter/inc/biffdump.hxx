@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:56:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-03 15:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ protected:
     UINT32                      nFieldCnt;
     UINT32                      nItemCnt;
     UINT32                      nTabIndexCnt;
+    UINT16                      nFontIndex;
 
     static const UINT16         nRecCnt;
     UINT16*                     pDumpModes;

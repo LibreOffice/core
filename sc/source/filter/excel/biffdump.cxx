@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 14:17:11 $
+ *  last change: $Author: dr $ $Date: 2001-05-03 15:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,6 +1164,38 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDTEXT( ":" );         __AddRef( t, nC2, nR2 );
                     PRINT();
                 }
+            }
+            break;
+            case 0x0031:        // FONT
+            case 0x0231:
+            {
+                LINESTART();
+                ADDTEXT( "(index=" );           __AddDec( t, nFontIndex );
+                ADDTEXT( ")   " );
+                nFontIndex++; if( nFontIndex == 4 ) nFontIndex++;
+                ADDTEXT( "height: " );          ADDDEC( 2 );
+                ADDTEXT( "/20pt   " );
+                rIn >> __nFlags;
+                STARTFLAG();
+                ADDFLAG( 0x0002, " fItalic" );
+                ADDFLAG( 0x0008, " fStrikeout" );
+                ADDFLAG( 0x0010, " fOutline" );
+                ADDFLAG( 0x0020, " fShadow" );
+                ADDRESERVED( 0xFFC5 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "color: " );           ADDDEC( 2 );
+                ADDTEXT( "   boldness: " );     ADDDEC( 2 );
+                ADDTEXT( "   sub/sup: " );      ADDDEC( 2 );
+                ADDTEXT( "   underline: " );    ADDHEX( 1 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "family: " );          ADDDEC( 1 );
+                ADDTEXT( "   charset: " );      ADDDEC( 1 );
+                ADDTEXT( "   reserved: " );     ADDHEX( 1 );
+                ADDTEXT( "   " );
+                AddUNICODEString( t, rIn, FALSE );
+                PRINT();
             }
             break;
             case 0x51:
@@ -6715,6 +6747,7 @@ void Biff8RecDumper::AddError( const UINT32 n, const ByteString& rT, const ByteS
 Biff8RecDumper::Biff8RecDumper( RootData& rRootData ) :  ExcRoot( &rRootData )
 {
     nXFCount = 0;
+    nFontIndex = 0;
     nInstances++;
     pPivotCache = NULL;
 
