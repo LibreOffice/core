@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:30:46 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -890,14 +890,15 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         break;
 
         case RES_LAYOUT_SPLIT:
+        case RES_ROW_SPLIT:
         {
-            SwFmtLayoutSplit* pLayoutSplit = PTR_CAST(SwFmtLayoutSplit, &rItem);
-            DBG_ASSERT( pLayoutSplit != NULL, "Wrong Which-ID" );
+            SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
+            DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
 
             sal_Bool bValue;
             bOk = rUnitConverter.convertBool( bValue, rValue );
             if( bOk )
-                pLayoutSplit->SetValue( bValue );
+                pSplit->SetValue( bValue );
         }
         break;
 
