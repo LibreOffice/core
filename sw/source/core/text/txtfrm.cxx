@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-10-12 13:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,11 @@ void SwTxtFrm::InitCtor()
     nType = FRMC_TXT;
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
         bEmpty = bInFtnConnect = bFtn = bRepaint = bBlinkPor =
+#ifdef VERTICAL_LAYOUT
         bFieldFollow = bHasAnimation = bIsSwapped = sal_False;
+#else
+        bFieldFollow = bHasAnimation = sal_False;
+#endif
 }
 
 
@@ -624,6 +628,7 @@ void SwTxtFrm::CalcLineSpace()
  *************************************************************************/
 
 #define SET_WRONG( nPos, nCnt, fnFunc )\
+{\
     if( GetTxtNode()->GetWrong() && !IsFollow() )\
         GetTxtNode()->GetWrong()->fnFunc( nPos, nCnt );\
     GetNode()->SetWrongDirty( sal_True );\
@@ -632,7 +637,8 @@ void SwTxtFrm::CalcLineSpace()
     if( pPage ) {  \
         pPage->InvalidateSpelling(); \
         pPage->InvalidateAutoCompleteWords(); \
-    }
+    }\
+}
 
 #define SET_SCRIPT_INVAL( nPos )\
     if( GetPara() )\
