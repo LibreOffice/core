@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:43:57 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ greek ] = "ÊáôÜëçøç ìíŞìçò (óå %):";
         Text[ dutch ] = "~Gebruikt geheugen (in %):";
         Text[ french ] = "Mémoire ~utilisée (en %):";
-        Text[ spanish ] = "~Memoria usada (en %):";
+        Text[ spanish ] = "~Memoria utilizada (en %):";
         Text[ italian ] = "Memoria utilizzata (in %):";
         Text[ danish ] = "H~ukommelsesbrug (i %):";
         Text[ swedish ] = "~Minnesutnyttjande (i %):";
@@ -377,7 +377,7 @@ ModalDialog DLG_ADABASSTAT
     Text[ greek ] = "ÓôáôéóôéêÜ âÜóçò äåäïìİíùí";
     Text[ dutch ] = "Database statistieken";
     Text[ french ] = "Statistiques de la base de données";
-    Text[ spanish ] = "Estadísticas de base de datos";
+    Text[ spanish ] = "Estadísticas de la base de datos";
     Text[ italian ] = "Statistiche database";
     Text[ danish ] = "Databasestatistik";
     Text[ swedish ] = "Databasstatistiker";
@@ -431,7 +431,7 @@ String STR_ADABAS_HELP_TRANSACT
     Text[ greek ] = "Ğåñéİ÷åé ğëçñïöïñßåò ãéá ôçí óõíáëëáãŞ";
     Text[ dutch ] = "Bevat gegevens over de transactie";
     Text[ french ] = "Contient une information sur les transactions";
-    Text[ spanish ] = "Contiene información sobre transacción";
+    Text[ spanish ] = "Contiene información sobre la transacción";
     Text[ italian ] = "Contiene informazioni sulla transazione";
     Text[ danish ] = "Indeholder oplysninger om transaktioner";
     Text[ swedish ] = "Innehåller information om transaktion";
@@ -512,7 +512,7 @@ String STR_ADABAS_HELP_FREESIZE
     Text[ greek ] = "Áğïìİíïõóá ìíŞìç ğñéí ôçí äçìéïõñãßá åíüò íİïõ áñ÷åßïõ Datadev.";
     Text[ dutch ] = "Noch beschikbare vrije ruimte voordat een nieuw Datadev-bestand wordt aangelegd.";
     Text[ french ] = "Mémoire encore disponible avant génération d'un nouveau fichier Datadev.";
-    Text[ spanish ] = "Memoria existente actualmente antes de crear un nuevo archivo datadev.";
+    Text[ spanish ] = "Memoria aún disponible antes de crear un nuevo archivo datadev.";
     Text[ italian ] = "Memoria ancora disponibile prima di creare un nuovo file Datadev.";
     Text[ danish ] = "Yderligere harddiskplads til rådighed, før der oprettes en ny Datadev-fil.";
     Text[ swedish ] = "Minne som är tillgängligt innan en ny datadev-fil skapas.";
@@ -539,7 +539,7 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text[ greek ] = "Ğñïò ôï ğáñüí êáôåëçììİíç ìíŞìç";
     Text[ dutch ] = "Momenteel gebruikte vrije ruimte";
     Text[ french ] = "Mémoire actuellement utilisée";
-    Text[ spanish ] = "Memoria usada actualmente";
+    Text[ spanish ] = "Memoria utilizada actualmente";
     Text[ italian ] = "Memoria attualmente in uso";
     Text[ danish ] = "Anvendt harddiskplads i øjeblikket";
     Text[ swedish ] = "Minne som används för närvarande";
@@ -566,7 +566,7 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text[ greek ] = "Could no display the information. No access rights for system tables.";
     Text[ dutch ] = "Er konden geen gegevens worden weergegeven, daar er geen toegangsrecht bestaat voor de benodigde systeemtabellen.";
     Text[ french ] = "Impossible d'afficher les informations : aucun droit d'accès aux tables de système requises.";
-    Text[ spanish ] = "No se puede mostrar ninguna información porque no existe el derecho de acceso a las tablas de sistema necesarias.";
+    Text[ spanish ] = "No se puede mostrar ninguna información porque no existe derecho de acceso a las tablas de sistema necesarias.";
     Text[ finnish ] = "Could no display the information. No access rights for system tables.";
     Text[ italian ] = "Impossibile visualizzare le informazioni poiché manca l'autorizzazione alle tabelle di sistema richieste";
     Text[ danish ] = "Oplysninger kan ikke vises, da du ikke har adgangsrettigheder til de nødvendige systemtabeller!";
