@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:37:16 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
+#include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
+#include <com/sun/star/bridge/oleautomation/Date.hpp>
+#include <com/sun/star/bridge/oleautomation/Decimal.hpp>
+#include <com/sun/star/bridge/oleautomation/Currency.hpp>
 
 
 using namespace com::sun::star::uno;
@@ -115,6 +119,7 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
 using namespace com::sun::star::container;
+using namespace com::sun::star::bridge;
 using namespace cppu;
 using namespace rtl;
 
@@ -250,6 +255,40 @@ Reference< XTypeConverter > getTypeConverter_Impl( void )
     }
     return xTypeConverter;
 }
+
+
+// #111851 factory function to create an OLE object
+SbUnoObject* createOLEObject_Impl( const String& aType )
+{
+    static Reference< XMultiServiceFactory > xOLEFactory;
+    static bool bNeedsInit = true;
+
+    if( bNeedsInit )
+    {
+        bNeedsInit = false;
+
+        Reference< XComponentContext > xContext = getComponentContext_Impl();
+        if( xContext.is() )
+        {
+            Reference<XMultiComponentFactory> xSMgr = xContext->getServiceManager();
+            xOLEFactory = Reference<XMultiServiceFactory>(
+                xSMgr->createInstanceWithContext(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.OleObjectFactory")),
+                        xContext ), UNO_QUERY );
+        }
+    }
+
+    SbUnoObject* pUnoObj = NULL;
+    if( xOLEFactory.is() )
+    {
+        Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aType );
+        Any aAny;
+        aAny <<= xOLEObject;
+        pUnoObj = new SbUnoObject( aType, aAny );
+    }
+    return pUnoObj;
+}
+
 
 String implGetExceptionMsg( Exception& e, const String& aExceptionType_ );
 
@@ -445,6 +484,42 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         case TypeClass_INTERFACE:
         case TypeClass_STRUCT:
         {
+            if( eTypeClass == TypeClass_STRUCT )
+            {
+                SbiInstance* pInst = pINST;
+                if( pInst && pInst->IsCompatibility() )
+                {
+                    oleautomation::Date aDate;
+                    if( (aValue >>= aDate) )
+                    {
+                        pVar->PutDate( aDate.Value );
+                        break;
+                    }
+                    else
+                    {
+                        oleautomation::Decimal aDecimal;
+                        if( (aValue >>= aDecimal) )
+                        {
+                            pVar->PutDecimal( aDecimal );
+                            break;
+                        }
+                        else
+                        {
+                            oleautomation::Currency aCurrency;
+                            if( (aValue >>= aCurrency) )
+                            {
+                                sal_Int64 nValue64 = aCurrency.Value;
+                                SbxINT64 aInt64;
+                                aInt64.nHigh = nValue64 >> 32;
+                                aInt64.nLow = (UINT32)( nValue64 & 0xffffffff );
+                                pVar->PutCurrency( aInt64 );
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
             // SbUnoObject instanzieren
             String aName;
             SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aValue );
@@ -579,8 +654,17 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
         case SbxLONG:       aRetType = ::getCppuType( (sal_Int32*)0 ); break;
         case SbxSINGLE:     aRetType = ::getCppuType( (float*)0 ); break;
         case SbxDOUBLE:     aRetType = ::getCppuType( (double*)0 ); break;
-        //case SbxCURRENCY: break;
-        case SbxDATE:       aRetType = ::getCppuType( (double*)0 ); break;
+        case SbxCURRENCY:   aRetType = ::getCppuType( (oleautomation::Currency*)0 ); break;
+        case SbxDECIMAL:    aRetType = ::getCppuType( (oleautomation::Decimal*)0 ); break;
+        case SbxDATE:       {
+                            SbiInstance* pInst = pINST;
+                            if( pInst && pInst->IsCompatibility() )
+                                aRetType = ::getCppuType( (double*)0 );
+                            else
+                                aRetType = ::getCppuType( (oleautomation::Date*)0 );
+                            }
+                            break;
+        // case SbxDATE:        aRetType = ::getCppuType( (double*)0 ); break;
         case SbxSTRING:     aRetType = ::getCppuType( (OUString*)0 ); break;
         //case SbxOBJECT:   break;
         //case SbxERROR:    break;
@@ -623,8 +707,9 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
         SbxBaseRef xObj = (SbxBase*)pVal->GetObject();
         if( !xObj )
         {
-            aRetType = ::getCppuType( (const Reference< XInterface > *)0 );
+            // #109936 No error any more
             // StarBASIC::Error( SbERR_INVALID_OBJECT );
+            aRetType = getCppuType( static_cast<Reference<XInterface> *>(0) );
             return aRetType;
         }
 
@@ -703,7 +788,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
 Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty = NULL );
 
 // Konvertierung von Sbx nach Uno ohne bekannte Zielklasse fuer TypeClass_ANY
-Any sbxToUnoValue( SbxVariable* pVar )
+Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = false )
 {
     SbxDataType eBaseType = pVar->SbxValue::GetType();
     if( eBaseType == SbxOBJECT )
@@ -716,60 +801,69 @@ Any sbxToUnoValue( SbxVariable* pVar )
     Type aType = getUnoTypeForSbxValue( pVar );
     TypeClass eType = aType.getTypeClass();
 
-    // #79615 Choose "smallest" represention for int values
-    // because up cast is allowed, downcast not
-    switch( eType )
+    if( !bBlockConversionToSmallestType )
     {
-        case TypeClass_FLOAT:
-        case TypeClass_DOUBLE:
+        // #79615 Choose "smallest" represention for int values
+        // because up cast is allowed, downcast not
+        switch( eType )
         {
-            double d = pVar->GetDouble();
-            if( d == floor( d ) )
+            case TypeClass_FLOAT:
+            case TypeClass_DOUBLE:
             {
-                if( d >= -128 && d <= 127 )
-                    aType = ::getCppuType( (sal_Int8*)0 );
-                else if( d >= SbxMININT && d <= SbxMAXINT )
-                    aType = ::getCppuType( (sal_Int16*)0 );
-                else if( d >= -SbxMAXLNG && d <= SbxMAXLNG )
-                    aType = ::getCppuType( (sal_Int32*)0 );
+                double d = pVar->GetDouble();
+                if( d == floor( d ) )
+                {
+                    if( d >= -128 && d <= 127 )
+                        aType = ::getCppuType( (sal_Int8*)0 );
+                    else if( d >= SbxMININT && d <= SbxMAXINT )
+                        aType = ::getCppuType( (sal_Int16*)0 );
+                    else if( d >= -SbxMAXLNG && d <= SbxMAXLNG )
+                        aType = ::getCppuType( (sal_Int32*)0 );
+                }
+                break;
             }
-            break;
-        }
-        case TypeClass_SHORT:
-        {
-            sal_Int16 n = pVar->GetInteger();
-            if( n >= -128 && n <= 127 )
-                aType = ::getCppuType( (sal_Int8*)0 );
-            break;
-        }
-        case TypeClass_LONG:
-        {
-            sal_Int32 n = pVar->GetLong();
-            if( n >= -128 && n <= 127 )
-                aType = ::getCppuType( (sal_Int8*)0 );
-            else if( n >= SbxMININT && n <= SbxMAXINT )
-                aType = ::getCppuType( (sal_Int16*)0 );
-            break;
-        }
-        case TypeClass_UNSIGNED_SHORT:
-        {
-            sal_uInt16 n = pVar->GetUShort();
-            if( n <= 255 )
-                aType = ::getCppuType( (sal_uInt8*)0 );
-            break;
-        }
-        case TypeClass_UNSIGNED_LONG:
-        {
-            sal_uInt32 n = pVar->GetLong();
-            if( n <= 255 )
-                aType = ::getCppuType( (sal_uInt8*)0 );
-            else if( n <= SbxMAXUINT )
-                aType = ::getCppuType( (sal_uInt16*)0 );
-            break;
+            case TypeClass_SHORT:
+            {
+                sal_Int16 n = pVar->GetInteger();
+                if( n >= -128 && n <= 127 )
+                    aType = ::getCppuType( (sal_Int8*)0 );
+                break;
+            }
+            case TypeClass_LONG:
+            {
+                sal_Int32 n = pVar->GetLong();
+                if( n >= -128 && n <= 127 )
+                    aType = ::getCppuType( (sal_Int8*)0 );
+                else if( n >= SbxMININT && n <= SbxMAXINT )
+                    aType = ::getCppuType( (sal_Int16*)0 );
+                break;
+            }
+            case TypeClass_UNSIGNED_SHORT:
+            {
+                sal_uInt16 n = pVar->GetUShort();
+                if( n <= 255 )
+                    aType = ::getCppuType( (sal_uInt8*)0 );
+                break;
+            }
+            case TypeClass_UNSIGNED_LONG:
+            {
+                sal_uInt32 n = pVar->GetLong();
+                if( n <= 255 )
+                    aType = ::getCppuType( (sal_uInt8*)0 );
+                else if( n <= SbxMAXUINT )
+                    aType = ::getCppuType( (sal_uInt16*)0 );
+                break;
+            }
         }
     }
 
     return sbxToUnoValue( pVar, aType );
+}
+
+// Map old interface
+Any sbxToUnoValue( SbxVariable* pVar )
+{
+    return sbxToUnoValueImpl( pVar );
 }
 
 // Konvertierung von Sbx nach Uno mit bekannter Zielklasse
@@ -812,9 +906,51 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
             }
             else
             {
+                // #112368 Special conversion for Decimal, Currency and Date
+                if( eType == TypeClass_STRUCT )
+                {
+                    SbiInstance* pInst = pINST;
+                    if( pInst && pInst->IsCompatibility() )
+                    {
+                        if( rType == ::getCppuType( (oleautomation::Decimal*)0 ) )
+                        {
+                            oleautomation::Decimal aDecimal;
+                            pVar->fillAutomationDecimal( aDecimal );
+                            aRetVal <<= aDecimal;
+                            break;
+                        }
+                        else if( rType == ::getCppuType( (oleautomation::Currency*)0 ) )
+                        {
+                            SbxINT64 aInt64 = pVar->GetCurrency();
+                            oleautomation::Currency aCurrency;
+                            sal_Int64& rnValue64 = aCurrency.Value;
+                            rnValue64 = aInt64.nHigh;
+                            rnValue64 <<= 32;
+                            rnValue64 |= aInt64.nLow;
+                            aRetVal <<= aCurrency;
+                            break;
+                        }
+                        else if( rType == ::getCppuType( (oleautomation::Date*)0 ) )
+                        {
+                            oleautomation::Date aDate;
+                            aDate.Value = pVar->GetDate();
+                            aRetVal <<= aDate;
+                            break;
+                        }
+                    }
+                }
+
                 SbxBaseRef pObj = (SbxBase*)pVar->GetObject();
                 if( pObj && pObj->ISA(SbUnoObject) )
+                {
                     aRetVal = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+                }
+                else
+                {
+                    // #109936 NULL object -> NULL XInterface
+                    Reference<XInterface> xInt;
+                    aRetVal <<= xInt;
+                }
             }
         }
         break;
@@ -908,7 +1044,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
         // Bei Any die Klassen-unabhaengige Konvertierungs-Routine nutzen
         case TypeClass_ANY:
         {
-            aRetVal = sbxToUnoValue( pVar );
+            aRetVal = sbxToUnoValueImpl( pVar );
         }
         break;
 
@@ -1110,6 +1246,7 @@ String Dbg_SbxDataType2String( SbxDataType eType )
         case SbxSINGLE:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxSINGLE") ); break;
         case SbxDOUBLE:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDOUBLE") ); break;
         case SbxCURRENCY:   aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCURRENCY") ); break;
+        case SbxDECIMAL:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDECIMAL") ); break;
         case SbxDATE:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDATE") ); break;
         case SbxSTRING:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxSTRING") ); break;
         case SbxOBJECT:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxOBJECT") ); break;
@@ -1306,6 +1443,8 @@ String Impl_DumpMethods( const String& rClassName, SbUnoObject* pUnoObj )
     return aRet;
 }
 
+TYPEINIT1(AutomationNamedArgsSbxArray,SbxArray)
+
 // Implementation SbUnoObject
 void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                            const SfxHint& rHint, const TypeId& rHintType )
@@ -1445,7 +1584,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 else if( mxInvocation.is() )
                 {
                     // Wert von Uno nach Sbx uebernehmen
-                    Any aAnyValue = sbxToUnoValue( pVar );
+                    Any aAnyValue = sbxToUnoValueImpl( pVar );
                     try
                     {
                         // Wert setzen
@@ -1470,28 +1609,52 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         {
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
-                UINT32 nParamCount = 0;
+                // Anzahl Parameter -1 wegen Param0 == this
+                UINT32 nParamCount = pParams ? ((UINT32)pParams->Count() - 1) : 0;
                 Sequence<Any> args;
                 BOOL bOutParams = FALSE;
                 UINT32 i;
-                if( pParams )
+
+                if( mxUnoAccess.is() )
                 {
-                    // Anzahl Parameter -1 wegen Param0 == this
-                    nParamCount = (UINT32)pParams->Count() - 1;
-                    args.realloc( nParamCount );
-                    Any* pAnyArgs = args.getArray();
+                    // Infos holen
+                    const Sequence<ParamInfo>& rInfoSeq = pMeth->getParamInfos();
+                    const ParamInfo* pParamInfos = rInfoSeq.getConstArray();
+                    UINT32 nUnoParamCount = rInfoSeq.getLength();
+                    UINT32 nAllocParamCount = nParamCount;
 
-                    if( mxUnoAccess.is() )
+                    // Ueberschuessige Parameter ignorieren, Alternative: Error schmeissen
+                    if( nParamCount > nUnoParamCount )
                     {
-                        // Infos holen
-                        const Sequence<ParamInfo>& rInfoSeq = pMeth->getParamInfos();
-                        const ParamInfo* pParamInfos = rInfoSeq.getConstArray();
-                        UINT32 nUnoParamCount = rInfoSeq.getLength();
+                        nParamCount = nUnoParamCount;
+                        nAllocParamCount = nParamCount;
+                    }
+                    else if( nParamCount < nUnoParamCount )
+                    {
+                        SbiInstance* pInst = pINST;
+                        if( pInst && pInst->IsCompatibility() )
+                        {
+                            // Check types
+                            bool bError = false;
+                            for( i = nParamCount ; i < nUnoParamCount ; i++ )
+                            {
+                                const ParamInfo& rInfo = pParamInfos[i];
+                                const Reference< XIdlClass >& rxClass = rInfo.aType;
+                                if( rxClass->getTypeClass() != TypeClass_ANY )
+                                {
+                                    bError = true;
+                                    StarBASIC::Error( SbERR_NOT_OPTIONAL );
+                                }
+                            }
+                            if( !bError )
+                                nAllocParamCount = nUnoParamCount;
+                        }
+                    }
 
-                        // Ueberschuessige Parameter ignorieren, Alternative: Error schmeissen
-                        if( nParamCount > nUnoParamCount )
-                            nParamCount = nUnoParamCount;
-
+                    if( nAllocParamCount > 0 )
+                    {
+                        args.realloc( nAllocParamCount );
+                        Any* pAnyArgs = args.getArray();
                         for( i = 0 ; i < nParamCount ; i++ )
                         {
                             const ParamInfo& rInfo = pParamInfos[i];
@@ -1512,12 +1675,54 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                             }
                         }
                     }
-                    else if( mxInvocation.is() )
+                }
+                else if( pParams && mxInvocation.is() )
+                {
+                    bool bOLEAutomation = true;
+                    // TODO: bOLEAutomation = xOLEAutomation.is()
+
+                    AutomationNamedArgsSbxArray* pArgNamesArray = NULL;
+                    if( bOLEAutomation )
+                        pArgNamesArray = PTR_CAST(AutomationNamedArgsSbxArray,pParams);
+
+                    args.realloc( nParamCount );
+                    Any* pAnyArgs = args.getArray();
+                    bool bBlockConversionToSmallestType = pINST->IsCompatibility();
+                    if( pArgNamesArray )
+                    {
+                        Sequence< OUString >& rNameSeq = pArgNamesArray->getNames();
+                        OUString* pNames = rNameSeq.getArray();
+
+                        Any aValAny;
+                        for( i = 0 ; i < nParamCount ; i++ )
+                        {
+                            USHORT iSbx = (USHORT)(i+1);
+
+                            // ACHTUNG: Bei den Sbx-Parametern den Offset nicht vergessen!
+                            aValAny = sbxToUnoValueImpl( pParams->Get( iSbx ),
+                                                        bBlockConversionToSmallestType );
+
+                            OUString aParamName = pNames[iSbx];
+                            if( aParamName.getLength() )
+                            {
+                                oleautomation::NamedArgument aNamedArgument;
+                                aNamedArgument.Name = aParamName;
+                                aNamedArgument.Value = aValAny;
+                                pAnyArgs[i] <<= aNamedArgument;
+                            }
+                            else
+                            {
+                                pAnyArgs[i] = aValAny;
+                            }
+                        }
+                    }
+                    else
                     {
                         for( i = 0 ; i < nParamCount ; i++ )
                         {
                             // ACHTUNG: Bei den Sbx-Parametern den Offset nicht vergessen!
-                            pAnyArgs[i] = sbxToUnoValue( pParams->Get( (USHORT)(i+1) ) );
+                            pAnyArgs[i] = sbxToUnoValueImpl( pParams->Get( (USHORT)(i+1) ),
+                                                            bBlockConversionToSmallestType );
                         }
                     }
                 }
@@ -1828,13 +2033,40 @@ SbUnoMethod::~SbUnoMethod()
         pNext->pPrev = pPrev;
 }
 
+SbxInfo* SbUnoMethod::GetInfo()
+{
+    if( !pInfo && m_xUnoMethod.is() )
+    {
+        SbiInstance* pInst = pINST;
+        if( pInst && pInst->IsCompatibility() )
+        {
+            pInfo = new SbxInfo();
+
+            const Sequence<ParamInfo>& rInfoSeq = getParamInfos();
+            const ParamInfo* pParamInfos = rInfoSeq.getConstArray();
+            UINT32 nParamCount = rInfoSeq.getLength();
+
+            for( int i = 0 ; i < nParamCount ; i++ )
+            {
+                const ParamInfo& rInfo = pParamInfos[i];
+                OUString aParamName = rInfo.aName;
+
+                // const Reference< XIdlClass >& rxClass = rInfo.aType;
+                SbxDataType t = SbxVARIANT;
+                USHORT nFlags = SBX_READ;
+                pInfo->AddParam( aParamName, t, nFlags );
+            }
+        }
+    }
+    return pInfo;
+}
+
 const Sequence<ParamInfo>& SbUnoMethod::getParamInfos( void )
 {
-    if( !pParamInfoSeq )
+    if( !pParamInfoSeq && m_xUnoMethod.is() )
     {
-       Sequence<ParamInfo> aTmp  =  m_xUnoMethod->getParameterInfos() ;
+        Sequence<ParamInfo> aTmp = m_xUnoMethod->getParameterInfos() ;
         pParamInfoSeq = new Sequence<ParamInfo>( aTmp );
-        //pParamInfoSeq = new Sequence<ParamInfo>( m_xUnoMethod->getParameterInfos() );
     }
     return *pParamInfoSeq;
 }
@@ -1985,19 +2217,30 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
         }
         else if( mxInvocation.is() )
         {
-            if( mxInvocation->hasProperty( aUName ) )
+            try
             {
-                // Property anlegen und reinbraten
-                SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, aDummyProp, 0 );
-                QuickInsert( (SbxVariable*)xVarRef );
-                pRes = xVarRef;
+                if( mxInvocation->hasProperty( aUName ) )
+                {
+                    // Property anlegen und reinbraten
+                    SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, aDummyProp, 0 );
+                    QuickInsert( (SbxVariable*)xVarRef );
+                    pRes = xVarRef;
+                }
+                else if( mxInvocation->hasMethod( aUName ) )
+                {
+                    // SbUnoMethode anlegen und reinbraten
+                    SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod );
+                    QuickInsert( (SbxVariable*)xMethRef );
+                    pRes = xMethRef;
+                }
             }
-            else if( mxInvocation->hasMethod( aUName ) )
+            catch( RuntimeException& e )
             {
-                // SbUnoMethode anlegen und reinbraten
-                SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod );
-                QuickInsert( (SbxVariable*)xMethRef );
-                pRes = xMethRef;
+                // Anlegen, damit der Exception-Fehler nicht ueberschrieben wird
+                if( !pRes )
+                    pRes = new SbxVariable( SbxVARIANT );
+
+                StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e ) );
             }
         }
     }
@@ -2611,7 +2854,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
                         // #95792 Avoid a second call
                         USHORT nFlags = pVar->GetFlags();
                         pVar->SetFlag( SBX_NO_BROADCAST );
-                        *pRet = sbxToUnoValue( pVar );
+                        *pRet = sbxToUnoValueImpl( pVar );
                         pVar->SetFlags( nFlags );
                     }
                 }
@@ -2920,7 +3163,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 
 
     // Preconvert value
-    Any aVal = sbxToUnoValue( pVal );
+    Any aVal = sbxToUnoValueImpl( pVal );
     Any aConvertedVal = convertAny( aVal, aDestType );
 
     /*
