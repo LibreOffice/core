@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textaction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:57:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ namespace cppcanvas
 
             void init( const ::Point&                                                   rStartPoint,
                        const OutDevState&                                               rState,
+                       const CanvasSharedPtr&                                           rCanvas,
                        const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&    rTextTransform );
 
             // TODO(P2): This is potentially a real mass object (every character might be
