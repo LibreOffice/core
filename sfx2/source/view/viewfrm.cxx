@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-25 15:56:13 $
+ *  last change: $Author: mba $ $Date: 2001-02-05 15:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,6 +770,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 pNewSet->Put( SfxUInt16Item( SID_BROWSEMODE, NO_BROWSE ) );
                 pNewSet->Put( SfxBoolItem( SID_RELOAD, sal_True ) );
                 pNewSet->Put( SfxFrameItem ( SID_DOCFRAME, GetFrame() ) );
+                pNewSet->Put( SfxBoolItem( SID_SILENT, sal_True ) );
 
                 LoadEnvironment_ImplRef xLoader =
                     new LoadEnvironment_Impl(
