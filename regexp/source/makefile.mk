@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 12:34:08 $
+#   last change: $Author: hr $ $Date: 2003-11-27 14:57:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,12 +83,6 @@ EXCEPTIONSFILES= \
 
 SLOFILES= \
         $(EXCEPTIONSFILES)
-
-.IF "$(OS)" == "SOLARIS"
-.IF "$(CPU)" == "I"
-NOOPTFILES=$(SLO)$/reclass.obj
-.ENDIF
-.ENDIF
 
 SHL1TARGET=		$(TARGET)$(COMID)
 SHL1IMPLIB=     i$(TARGET)
