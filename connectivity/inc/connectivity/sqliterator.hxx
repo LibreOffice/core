@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:21:57 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 12:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ namespace connectivity
         OSQLTables                          m_aTables;          // Alle Tabellen die im ParseTree und bei der Connection gefunden wurden
         ::vos::ORef<OSQLColumns>            m_aSelectColumns;   // alle Spalten aus dem Select-Clause
         ::vos::ORef<OSQLColumns>            m_aParameters;      // all parameters
+        ::vos::ORef<OSQLColumns>            m_aGroupColumns;    // the group by columns
+        ::vos::ORef<OSQLColumns>            m_aOrderColumns;    // the order by columns
         ::comphelper::UStringMixEqual       m_aCaseEqual;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;
@@ -171,14 +173,18 @@ namespace connectivity
                                                 ::rtl::OUString& aValue,
                                                 sal_Bool bCompareNull,
                                                 OSQLParseNode * pParameter);
+        void traverseByColumnNames(const OSQLParseNode* pSelectNode,sal_Bool _bOrder);
+
         OSQLParseNode *     getTableRef(OSQLParseNode *pTableRef,::rtl::OUString& aTableRange);
         OSQLParseNode *     getQualified_join(OSQLParseNode *pTableRef,::rtl::OUString& aTableRange);
         void                getSelect_statement(OSQLParseNode *pSelect);
         ::rtl::OUString     getUniqueColumnName(const ::rtl::OUString & rColumnName)    const;
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange);
+
       protected:
-        void setSelectColumnName(const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR);
-        void appendColumns(const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable);
+        void setSelectColumnName(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR);
+        void appendColumns(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable);
         // Weitere Member-Variable, die in den "set"-Funktionen zur
         // Verfuegung stehen sollen, koennen in der abgeleiteten Klasse
         // definiert werden und z. B. in deren Konstruktor initialisiert
@@ -217,6 +223,11 @@ namespace connectivity
         const OSQLParseNode* getOrderTree() const;
         const OSQLParseNode* getGroupByTree() const;
         const OSQLParseNode* getHavingTree() const;
+
+        const OSQLParseNode* getSimpleWhereTree() const;
+        const OSQLParseNode* getSimpleOrderTree() const;
+        const OSQLParseNode* getSimpleGroupByTree() const;
+        const OSQLParseNode* getSimpleHavingTree() const;
 
         ::com::sun::star::sdbc::SQLWarning  getWarning() const { return m_aWarning; }
         // Statement-Typ (wird bereits in setParseTree gesetzt):
@@ -283,6 +294,9 @@ namespace connectivity
 
         void traverseOrderByColumnNames(const OSQLParseNode* pSelectNode);
         virtual void setOrderByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, sal_Bool bAscending);
+
+        void traverseGroupByColumnNames(const OSQLParseNode* pSelectNode);
+        virtual void setGroupByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange);
         // [TableRange kann leer sein, wenn nicht angegeben]
 
         // Bei Selektionskriterien werden (selbst bei einem einfachen Praedikat)
@@ -335,6 +349,8 @@ namespace connectivity
         const OSQLTables& getTables() const { return m_aTables;}
 
         ::vos::ORef<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
+        ::vos::ORef<OSQLColumns> getGroupColumns() const { return m_aGroupColumns;}
+        ::vos::ORef<OSQLColumns> getOrderColumns() const { return m_aOrderColumns;}
         ::vos::ORef<OSQLColumns> getParameters()    const { return m_aParameters; }
 
         /** return the columname and the table range
