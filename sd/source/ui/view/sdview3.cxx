@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ka $ $Date: 2002-10-20 07:08:42 $
+ *  last change: $Author: thb $ $Date: 2002-11-19 18:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                 nInsertPgCnt = (USHORT) rBookmarkList.Count();
                 pDoc->InsertBookmarkAsPage( const_cast< List* >( &rBookmarkList ), NULL, FALSE, FALSE, nInsertPos,
                                             pOwnData == SD_MOD()->pTransferDrag,
-                                            pOwnData->GetPageDocShell(), TRUE, bMergeMasterPages );
+                                            pOwnData->GetPageDocShell(), TRUE, bMergeMasterPages, FALSE );
 
                 if( bWait )
                     pWin->EnterWait();
@@ -344,7 +344,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                     nInsertPgCnt = pDataDoc->GetSdPageCount( PK_STANDARD );
                     pDoc->InsertBookmarkAsPage( NULL, NULL, FALSE, FALSE, nInsertPos,
                                                 pOwnData == SD_MOD()->pTransferDrag,
-                                                pDataDocSh, TRUE, bMergeMasterPages );
+                                                pDataDocSh, TRUE, bMergeMasterPages, FALSE );
 
                     if( bWait )
                         pWin->EnterWait();

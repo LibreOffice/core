@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-19 17:22:22 $
+ *  last change: $Author: thb $ $Date: 2002-11-19 18:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,7 @@ void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, BOOL bPersist
         if( bPersistent )
         {
             pSdDrawDocument->CreateFirstPages();
-            pSdDrawDocument->InsertBookmarkAsPage( const_cast< List* >( &rPageBookmarks ), NULL, FALSE, TRUE, 1, TRUE, pSourceDoc->GetDocSh(), TRUE, TRUE );
+            pSdDrawDocument->InsertBookmarkAsPage( const_cast< List* >( &rPageBookmarks ), NULL, FALSE, TRUE, 1, TRUE, pSourceDoc->GetDocSh(), TRUE, TRUE, FALSE );
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: iha $ $Date: 2002-11-11 17:23:34 $
+ *  last change: $Author: thb $ $Date: 2002-11-19 18:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <utility>
+#include <algorithm>
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -343,7 +346,7 @@ BOOL SdDrawDocument::InsertBookmark(
     {
         // Zuerst werden alle Seiten-Bookmarks eingefuegt
         bOK = InsertBookmarkAsPage(pBookmarkList, pExchangeList, bLink, bReplace,
-                                   nInsertPos, bNoDialogs, pBookmarkDocSh, bCopy, TRUE);
+                                   nInsertPos, bNoDialogs, pBookmarkDocSh, bCopy, TRUE, FALSE);
     }
 
     if ( bOK && pBookmarkList )
@@ -362,6 +365,142 @@ BOOL SdDrawDocument::InsertBookmark(
 |*
 \************************************************************************/
 
+/** Concrete incarnations get called by IterateBookmarkPages, for
+    every page in the bookmark document/list
+ */
+class SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
+{
+public:
+    virtual ~InsertBookmarkAsPage_PageFunctorBase() = 0 {};
+    virtual void operator()( SdDrawDocument&, SdPage* ) = 0;
+};
+
+void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList, USHORT nBMSdPageCount,
+                                           SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase& rPageIterator )
+{
+    //
+    // #96029# Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage
+    //
+    int nPos, nEndPos;
+
+    if( !pBookmarkList )
+    {
+        // no list? whole source document
+        nEndPos = nBMSdPageCount;
+    }
+    else
+    {
+        // bookmark list? number of entries
+        nEndPos = pBookmarkList->Count();
+    }
+
+    SdPage* pBMPage;
+
+    // iterate over number of pages to insert
+    for (nPos = 0; nPos < nEndPos; ++nPos)
+    {
+        // the master page associated to the nPos'th page to insert
+        SdPage* pBMMPage = NULL;
+
+        if( !pBookmarkList )
+        {
+            // simply take master page of nPos'th page in source document
+            pBMMPage = (SdPage*) pBookmarkDoc->
+                GetSdPage(nPos, PK_STANDARD)->GetMasterPage(0);
+        }
+        else
+        {
+            // fetch nPos'th entry from bookmark list, and determine master page
+            String  aBMPgName (*(String*) pBookmarkList->GetObject(nPos));
+            BOOL    bIsMasterPage;
+
+            USHORT nBMPage = pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage );
+
+            if (nBMPage != SDRPAGE_NOTFOUND)
+            {
+                pBMPage = (SdPage*) pBookmarkDoc->GetPage(nBMPage);
+            }
+            else
+            {
+                pBMPage = NULL;
+            }
+
+            // enforce that bookmarked page is a standard page and not already a master page
+            if (pBMPage && pBMPage->GetPageKind()==PK_STANDARD && !pBMPage->IsMasterPage())
+            {
+                const USHORT nBMSdPage = (nBMPage - 1) / 2;
+
+                pBMMPage = (SdPage*) pBookmarkDoc->
+                    GetSdPage(nBMSdPage, PK_STANDARD)->GetMasterPage(0);
+            }
+        }
+
+        // successfully determined valid (bookmarked) page?
+        if( pBMMPage )
+        {
+            // yes, call functor
+            rPageIterator( *this, pBMMPage );
+        }
+    }
+}
+
+class InsertBookmarkAsPage_FindDuplicateLayouts : public SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
+{
+public:
+    InsertBookmarkAsPage_FindDuplicateLayouts( List* pLayoutsToTransfer, SdDrawDocument* pBookmarkDoc,
+                                               List* pBookmarkList, USHORT nBMSdPageCount ) :
+        mpLayoutsToTransfer(pLayoutsToTransfer), mpBookmarkDoc(pBookmarkDoc),
+        mpBookmarkList(pBookmarkList), mnBMSdPageCount(nBMSdPageCount) {}
+    virtual ~InsertBookmarkAsPage_FindDuplicateLayouts() {};
+    virtual void operator()( SdDrawDocument&, SdPage* );
+private:
+    List*           mpLayoutsToTransfer;
+    SdDrawDocument* mpBookmarkDoc;
+    List*           mpBookmarkList;
+    USHORT          mnBMSdPageCount;
+};
+
+void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage )
+{
+    // now check for duplicate masterpage and layout names
+    // ===================================================
+
+    String  sFullLayoutName( pBMMPage->GetLayoutName() );
+    String* pLayout = new String(sFullLayoutName);
+    pLayout->Erase( pLayout->SearchAscii( SD_LT_SEPARATOR ));
+
+    String* pTest = (String*) mpLayoutsToTransfer->First();
+    BOOL bFound = FALSE;
+
+    while (pTest && !bFound)    // found yet?
+    {
+        if (*pLayout == *pTest)
+            bFound = TRUE;
+        else
+            pTest = (String*)mpLayoutsToTransfer->Next();
+    }
+
+    const USHORT nMPageCount = rDoc.GetMasterPageCount();
+    for (USHORT nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
+    {
+        /**************************************************************
+         * Gibt es die Layouts schon im Dokument?
+         **************************************************************/
+        SdPage* pTest = (SdPage*) rDoc.GetMasterPage(nMPage);
+        String aTest(pTest->GetLayoutName());
+        aTest.Erase( aTest.SearchAscii( SD_LT_SEPARATOR ));
+
+        if (aTest == *pLayout)
+            bFound = TRUE;
+    }
+
+    if (!bFound)
+        mpLayoutsToTransfer->Insert(pLayout, LIST_APPEND);
+    else
+        delete pLayout;
+}
+
+
 BOOL SdDrawDocument::InsertBookmarkAsPage(
     List* pBookmarkList,
     List* pExchangeList,            // Liste der zu verwendenen Namen
@@ -371,7 +510,8 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
     BOOL bNoDialogs,
     SdDrawDocShell* pBookmarkDocSh,
     BOOL bCopy,
-    BOOL bMergeMasterPages)
+    BOOL bMergeMasterPages,
+    BOOL bPreservePageNames)
 {
     BOOL bOK = TRUE;
     BOOL bContinue = TRUE;
@@ -400,9 +540,9 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         return FALSE;
     }
 
-    USHORT nSdPageCount = GetSdPageCount(PK_STANDARD);
-    USHORT nBMSdPageCount = pBookmarkDoc->GetSdPageCount(PK_STANDARD);
-    USHORT nMPageCount = GetMasterPageCount();
+    const USHORT nSdPageCount = GetSdPageCount(PK_STANDARD);
+    const USHORT nBMSdPageCount = pBookmarkDoc->GetSdPageCount(PK_STANDARD);
+    const USHORT nMPageCount = GetMasterPageCount();
 
     if (nSdPageCount==0 || nBMSdPageCount==0 || nMPageCount==0)
     {
@@ -441,133 +581,28 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         }
     }
 
+
     /**************************************************************************
     |* Die benoetigten Praesentations-StyleSheets ermitteln und vor
     |* den Seiten transferieren, sonst verlieren die Textobjekte
     |* beim Transfer den Bezug zur Vorlage
     \*************************************************************************/
-    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-    pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_INSERTPAGES)), String());
+    SfxUndoManager* pUndoMgr = NULL;
+    if( pDocSh )
+    {
+        pUndoMgr = pDocSh->GetUndoManager();
+        pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_INSERTPAGES)), String());
+    }
 
     List* pLayoutsToTransfer = new List;
-    USHORT nBMSdPage;
 
-    if (!pBookmarkList)
-    {
-        /**********************************************************************
-        * Alle Seiten sollen einfuegt werden: Layouts pruefen
-        **********************************************************************/
+    //
+    // #96029# Refactored copy'n'pasted layout name collection into IterateBookmarkPages
+    //
+    InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( pLayoutsToTransfer, pBookmarkDoc,
+                                                              pBookmarkList, nBMSdPageCount );
+    IterateBookmarkPages( pBookmarkDoc, pBookmarkList, nBMSdPageCount, aSearchFunctor );
 
-        for (nBMSdPage = 0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
-        {
-            /**************************************************************
-            * Welche Layouts gibt im Bookmark-Dokument?
-            **************************************************************/
-            SdPage* pBMMPage = (SdPage*) pBookmarkDoc->
-                             GetSdPage(nBMSdPage, PK_STANDARD)->GetMasterPage(0);
-            String* pLayout = new String(pBMMPage->GetLayoutName());
-            pLayout->Erase( pLayout->SearchAscii( SD_LT_SEPARATOR ));
-
-            String* pTest = (String*) pLayoutsToTransfer->First();
-            BOOL bFound = FALSE;
-
-            while (pTest && !bFound)    // schon gefunden?
-            {
-                if (*pLayout == *pTest)
-                    bFound = TRUE;
-                else
-                    pTest = (String*)pLayoutsToTransfer->Next();
-            }
-
-            for (USHORT nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
-            {
-                /**************************************************************
-                * Gibt es die Layouts schon im Dokument?
-                **************************************************************/
-                SdPage* pTest = (SdPage*) GetMasterPage(nMPage);
-                String aTest(pTest->GetLayoutName());
-                aTest.Erase( aTest.SearchAscii( SD_LT_SEPARATOR ));
-
-                if (aTest == *pLayout)
-                    bFound = TRUE;
-            }
-
-            if (!bFound)
-                pLayoutsToTransfer->Insert(pLayout, LIST_APPEND);
-            else
-                delete pLayout;
-        }
-    }
-    else
-    {
-        /**********************************************************************
-        * Ausgewaehlte Seiten sollen einfuegt werden: Layouts pruefen
-        **********************************************************************/
-
-        SdPage* pBMPage;
-
-        for (USHORT nPos = 0; nPos < pBookmarkList->Count(); nPos++)
-        {
-            /******************************************************************
-            * Namen der Bookmark-Seiten aus Liste holen
-            ******************************************************************/
-            String  aBMPgName (*(String*) pBookmarkList->GetObject(nPos));
-            BOOL    bIsMasterPage;
-
-            USHORT nBMPage = pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage );
-
-            if (nBMPage != SDRPAGE_NOTFOUND)
-            {
-                pBMPage = (SdPage*) pBookmarkDoc->GetPage(nBMPage);
-            }
-            else
-            {
-                pBMPage = NULL;
-            }
-
-            if (pBMPage && pBMPage->GetPageKind()==PK_STANDARD && !pBMPage->IsMasterPage())
-            {
-                /**************************************************************
-                * Es muss eine StandardSeite sein
-                **************************************************************/
-                USHORT nBMSdPage = (nBMPage - 1) / 2;
-
-                SdPage* pMPage = (SdPage*) pBookmarkDoc->
-                                 GetSdPage(nBMSdPage, PK_STANDARD)->GetMasterPage(0);
-                String* pLayout = new String(pMPage->GetLayoutName());
-                pLayout->Erase( pLayout->SearchAscii( SD_LT_SEPARATOR ));
-
-                String* pTest = (String*) pLayoutsToTransfer->First();
-                BOOL bFound = FALSE;
-
-                while (pTest && !bFound)    // schon gefunden?
-                {
-                    if (*pLayout == *pTest)
-                        bFound = TRUE;
-                    else
-                        pTest = (String*)pLayoutsToTransfer->Next();
-                }
-
-                for (USHORT nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
-                {
-                    /**********************************************************
-                    * Gibt es die Layouts schon im Dokument?
-                    **********************************************************/
-                    SdPage* pTest = (SdPage*) GetMasterPage(nMPage);
-                    String aTest(pTest->GetLayoutName());
-                    aTest.Erase( aTest.SearchAscii( SD_LT_SEPARATOR ));
-
-                    if (aTest == *pLayout)
-                        bFound = TRUE;
-                }
-
-                if (!bFound)
-                    pLayoutsToTransfer->Insert(pLayout, LIST_APPEND);
-                else
-                    delete pLayout;
-            }
-        }
-    }
 
     /**************************************************************************
     * Die tatsaechlich benoetigten Vorlagen kopieren
@@ -590,9 +625,12 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
         if (pCreatedStyles->Count() > 0)
         {
-            SdMoveStyleSheetsUndoAction* pMovStyles =
-            new SdMoveStyleSheetsUndoAction(this, pCreatedStyles, TRUE);
-            pUndoMgr->AddUndoAction(pMovStyles);
+            if( pUndoMgr )
+            {
+                SdMoveStyleSheetsUndoAction* pMovStyles =
+                    new SdMoveStyleSheetsUndoAction(this, pCreatedStyles, TRUE);
+                pUndoMgr->AddUndoAction(pMovStyles);
+            }
         }
         else
         {
@@ -770,6 +808,13 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
                     if (pStandardPage)
                     {
+                        if( bPreservePageNames )
+                        {
+                            // #96029# Take old slide names for inserted pages
+                            SdPage* pPage = (SdPage*) GetPage(nActualInsertPos);
+                            pPage->SetName( pStandardPage->GetName() );
+                        }
+
                         AddUndo(new SdrUndoDelPage(*pStandardPage));
                         RemovePage(nActualInsertPos+2);
                     }
@@ -778,6 +823,13 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
                     if (pNotesPage)
                     {
+                        if( bPreservePageNames )
+                        {
+                            // #96029# Take old slide names for inserted pages
+                            SdPage* pNotesPage = (SdPage*) GetPage(nActualInsertPos+1);
+                            pNotesPage->SetName( pStandardPage->GetName() );
+                        }
+
                         AddUndo(new SdrUndoDelPage(*pNotesPage));
                         RemovePage(nActualInsertPos+2);
                     }
@@ -789,6 +841,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             }
         }
     }
+
 
     /**************************************************************************
     |* Dabei sind evtl. zu viele Masterpages ruebergekommen, da die
@@ -809,6 +862,8 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         {
             SdPage* pTest = (SdPage*) GetMasterPage(nTest);
             String aTest(pTest->GetLayoutName());
+
+            // #96029# nInsertPos > 2 is always true when inserting into non-empty models
             if ( nInsertPos > 2 &&
                  aTest == aMPLayout &&
                  eKind == pTest->GetPageKind() )
@@ -821,6 +876,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         }
     }
 
+    // #96029# nInsertPos > 2 is always true when inserting into non-empty models
     if (nInsertPos > 2)
     {
         /**********************************************************************
@@ -887,6 +943,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             String aLayout(pPage->GetLayoutName());
             aLayout.Erase(aLayout.SearchAscii( SD_LT_SEPARATOR ));
 
+            // update layout and referred master page
             pPage->SetPresentationLayout(aLayout);
 
             if (bScaleObjects)
@@ -899,6 +956,8 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             pPage->SetOrientation( eOrient );
 
             pPage = GetSdPage(nSdPage, PK_NOTES);
+
+            // update layout and referred master page
             pPage->SetPresentationLayout(aLayout);
 
             if (bScaleObjects)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-06 12:50:26 $
+ *  last change: $Author: thb $ $Date: 2002-11-19 18:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,7 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             if( bNameOK )
                 bOK = pDoc->InsertBookmarkAsPage( pBookmarkList, pExchangeList,
                                     bLink, bReplace, nPos,
-                                    FALSE, NULL, TRUE, TRUE );
+                                    FALSE, NULL, TRUE, TRUE, FALSE );
 
             // Loeschen der BookmarkList
             if( pBookmarkList )

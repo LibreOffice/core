@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: af $ $Date: 2002-11-04 14:37:13 $
+ *  last change: $Author: thb $ $Date: 2002-11-19 18:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,8 @@ protected:
 
 public:
 
+    class InsertBookmarkAsPage_PageFunctorBase;
+
                         TYPEINFO();
 
                         SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
@@ -261,13 +263,62 @@ public:
                                         BOOL bReplace, USHORT nPgPos, BOOL bNoDialogs,
                                         SdDrawDocShell* pBookmarkDocSh, BOOL bCopy,
                                         Point* pObjPos);
+    /** Insert pages into this document
+
+        This method inserts whole pages into this document, either
+        selected ones (specified via pBookmarkList/pExchangeList), or
+        all from the source document.
+
+        @attention Beware! This method in it's current state does not
+        handle all combinations of their input parameters
+        correctly. For example, for pBookmarkList=NULL, bReplace=TRUE
+        is ignored (no replace happens).
+
+        @param pBookmarkList
+        A list of strings, denoting the names of the pages to be copied
+
+        @param pExchangeList
+        A list of strings, denoting the names of the pages to be renamed
+
+        @param bLink
+        Whether the inserted pages should be links to the bookmark document
+
+        @param bReplace
+        Whether the pages should not be inserted, but replace the pages in
+        the destination document
+
+        @param nPgPos
+        Insertion point/start of replacement
+
+        @param bNoDialogs
+        Whether query dialogs are allowed (e.g. for page scaling)
+
+        @param pBookmarkDocSh
+        DocShell of the source document (used e.g. to extract the filename
+        for linked pages)
+
+        @param bCopy
+        Whether the source document should be treated as immutable (i.e.
+        inserted pages are not removed from it, but cloned)
+
+        @param bMergeMasterPages
+        Whether the source document's master pages should be copied, too.
+
+        @param bPreservePageNames
+        Whether the replace operation should take the name from the new
+        page, or preserve the old name
+     */
     BOOL                InsertBookmarkAsPage(List* pBookmarkList, List* pExchangeList,
                                               BOOL bLink, BOOL bReplace, USHORT nPgPos,
                                               BOOL bNoDialogs, SdDrawDocShell* pBookmarkDocSh,
-                                              BOOL bCopy, BOOL bMergeMasterPages);
+                                              BOOL bCopy, BOOL bMergeMasterPages,
+                                              BOOL bPreservePageNames);
     BOOL                InsertBookmarkAsObject(List* pBookmarkList, List* pExchangeListL,
                                                 BOOL bLink, SdDrawDocShell* pBookmarkDocSh,
                                                 Point* pObjPos);
+    void                IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList,
+                                              USHORT nBMSdPageCount,
+                                              InsertBookmarkAsPage_PageFunctorBase& rPageIterator );
     void                CloseBookmarkDoc();
 
     SdrObject*          GetObj(const String& rObjName) const;

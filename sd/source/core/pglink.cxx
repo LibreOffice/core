@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pglink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
+ *  last change: $Author: thb $ $Date: 2002-11-19 18:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ void SdPageLink::DataChanged( const String& ,
             }
 
             pDoc->InsertBookmarkAsPage(&aBookmarkList, NULL, bLink, bReplace,
-                                       nInsertPos, bNoDialogs, NULL, bCopy, TRUE);
+                                       nInsertPos, bNoDialogs, NULL, bCopy, TRUE, TRUE);
 
             if( !pDoc->pDocLockedInsertingLinks )
                 pDoc->CloseBookmarkDoc();
