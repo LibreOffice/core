@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:01:55 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,18 +107,23 @@
 // Dialog-Id's -----------------------------------------------------------
 #define RID_SVXTBX_FORM                             (RID_FORMS_START + 1)
 #define TBX_FORM                                    (RID_FORMS_START + 2)
-#define RID_SVXTBX_FORM_NAVIGATION                  (RID_FORMS_START + 3)
-#define RID_SVXTBX_FORM_FILTER                      (RID_FORMS_START + 4)
+    // FREE
+    // FREE
 #define RID_SVXDLG_ADD_TABLE                        (RID_FORMS_START + 5)
 #define RID_SVXDLG_TAB_ORDER                        (RID_FORMS_START + 6)
 #define RID_SVXDLG_SETFORM                          (RID_FORMS_START + 9)
 #define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 10)
-// --------- free id -----------------
+    // FREE
 #define RID_SVXDLG_SEARCHFORM                       (RID_FORMS_START + 14)
 #define RID_SVXERR_SEARCH_NORECORD                  (RID_FORMS_START + 15)
 #define RID_SVXERR_SEARCH_GENERAL_ERROR             (RID_FORMS_START + 16)
 #define RID_SVX_DLG_INPUTRECORDNO                   (RID_FORMS_START + 17)
 #define RID_SVX_DLG_SHOWGRIDCOLUMNS                 (RID_FORMS_START + 18)
+
+// Toolbars ------------------------------------------------------------
+#define RID_SVXTBX_FORM_NAVIGATION                  (RID_FORMS_START + 1)
+#define RID_SVXTBX_FORM_FILTER                      (RID_FORMS_START + 2)
+#define RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (RID_FORMS_START + 3)
 
 // Menu-Id's -----------------------------------------------------------
 #define RID_FMEXPLORER_POPUPMENU                    (RID_FORMS_START + 0)
@@ -127,6 +132,10 @@
 #define RID_SVXMNU_CELL                             (RID_FORMS_START + 3)
 #define RID_FMSHELL_CONVERSIONMENU                  (RID_FORMS_START + 4)
 #define RID_FM_FILTER_MENU                          (RID_FORMS_START + 5)
+#define RID_FM_TEXTATTRIBUTE_MENU                   (RID_FORMS_START + 6)
+#define MENU_FM_TEXTATTRIBITES_STYLE                (RID_FORMS_START + 7)
+#define MENU_FM_TEXTATTRIBITES_ALIGNMENT            (RID_FORMS_START + 8)
+#define MENU_FM_TEXTATTRIBITES_SPACING              (RID_FORMS_START + 9)
 
 
 // QueryBox-Id's -----------------------------------------------------------
