@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergechildwindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:22:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 11:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <vcl/toolbox.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwWrtShell;
 
 /*-- 25.05.2004 15:25:56---------------------------------------------------
@@ -94,7 +98,7 @@ public:
 /*-- 25.05.2004 15:25:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-class SwSendMailDialog;
+class SW_DLLPUBLIC SwSendMailDialog;
 class SwMailMergeChildWindow : public SfxChildWindow
 {
 public:
