@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-11 13:04:48 $
+ *  last change: $Author: dbo $ $Date: 2002-11-21 16:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,6 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
 
                             if (class_path != null)
                             {
-                                System.err.println( "class-path read" + class_path );
                                 java.util.Enumeration tokens =
                                     new java.util.StringTokenizer( class_path );
                                 while (tokens.hasMoreElements())
@@ -353,13 +352,13 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
 
         public void run() {
             try {
-                System.err.println("#### ClassContext - killerThread start");
+                if (DEBUG) System.err.println("#### ClassContext - killerThread start");
                 threadGroup.stop();
                 threadGroup.destroy();
-                System.err.println("#### ClassContext - killerThread succeeded");
+                if (DEBUG) System.err.println("#### ClassContext - killerThread succeeded");
             }
             catch(Exception exception) {
-                System.err.println("ClassContext.dispose:" + exception);
+                if (DEBUG) System.err.println("ClassContext.dispose:" + exception);
             }
         }
     };
