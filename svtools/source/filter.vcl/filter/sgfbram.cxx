@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgfbram.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:27:34 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ BOOL SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
     USHORT         nColBits;           // Anzahl der Bits/Pixel (2, 4,  8)
     USHORT         i,j,k;              // SpaltenzÑhler, ZeilenzÑhler, PlanezÑhler
     USHORT         a,b;                // Hilfsvariable
-    BYTE           pl1,pl2;            // Masken fÅr die Planes
+    BYTE           pl1 = 0,pl2= 0;     // Masken fÅr die Planes
     BYTE*          pBuf=NULL;          // Buffer fÅr eine Pixelzeile
     PcxExpand      aPcx;
     ULONG          nOfs;
