@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:26:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,35 +558,42 @@ void SwWW8Writer::Out_SfxBreakItems( const SfxItemSet& rSet, const SwNode& rNd )
         bool bNewPageDesc = false;
         const SfxPoolItem* pItem=0;
         const SwFmtPageDesc *pPgDesc=0;
-        if (!bStyDef && !bOutKF && !bInWriteEscher && !bOutPageDescs &&
-            SFX_ITEM_SET == rSet.GetItemState(RES_PAGEDESC, false, &pItem)
-            && ((SwFmtPageDesc*)pItem)->GetRegisteredIn())
+
+        bool bAllowOutputPageDesc = false;
+        if (!bStyDef && !bOutKF && !bInWriteEscher && !bOutPageDescs)
+            bAllowOutputPageDesc = true;
+
+        if (bAllowOutputPageDesc)
         {
-            bNewPageDesc = true;
-            pPgDesc = (const SwFmtPageDesc*)pItem;
-            pAktPageDesc = pPgDesc->GetPageDesc();
-        }
-        else if (SFX_ITEM_SET == rSet.GetItemState(RES_BREAK, false, &pItem))
-        {
-            ASSERT(pAktPageDesc, "should not be possible");
-            //If because of this pagebreak the page desc following the
-            //page break is the follow style of the current page desc
-            //then output a section break using that style instead.
-            //At least in those cases we end up with the same style
-            //in word and writer, nothing can be done when it happens
-            //when we get a new pagedesc because we overflow from the
-            //first page style.
-            if (pAktPageDesc)
+            if (SFX_ITEM_SET == rSet.GetItemState(RES_PAGEDESC, false, &pItem)
+                && ((SwFmtPageDesc*)pItem)->GetRegisteredIn())
             {
-                const SwPageDesc* pCurrent = SwPageDesc::GetPageDescOfNode(rNd);
-                if (pCurrent != pAktPageDesc)
-                {
-                    pAktPageDesc = pCurrent;
-                    bNewPageDesc = true;
-                }
+                bNewPageDesc = true;
+                pPgDesc = (const SwFmtPageDesc*)pItem;
+                pAktPageDesc = pPgDesc->GetPageDesc();
             }
-            if (!bNewPageDesc)
-                OutWW8_SwFmtBreak( *this, *pItem );
+            else if (SFX_ITEM_SET == rSet.GetItemState(RES_BREAK, false, &pItem))
+            {
+                ASSERT(pAktPageDesc, "should not be possible");
+                //If because of this pagebreak the page desc following the
+                //page break is the follow style of the current page desc
+                //then output a section break using that style instead.
+                //At least in those cases we end up with the same style
+                //in word and writer, nothing can be done when it happens
+                //when we get a new pagedesc because we overflow from the
+                //first page style.
+                if (pAktPageDesc)
+                {
+                    const SwPageDesc* pCurrent = SwPageDesc::GetPageDescOfNode(rNd);
+                    if (pCurrent != pAktPageDesc)
+                    {
+                        pAktPageDesc = pCurrent;
+                        bNewPageDesc = true;
+                    }
+                }
+                if (!bNewPageDesc)
+                    OutWW8_SwFmtBreak( *this, *pItem );
+            }
         }
 
         if (bNewPageDesc)
