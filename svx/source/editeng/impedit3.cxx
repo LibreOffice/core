@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-17 12:34:49 $
+ *  last change: $Author: mt $ $Date: 2001-10-17 17:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ BYTE GetCharTypeForCompression( xub_Unicode cChar )
     }
 }
 
-void lcl_DrawRedLines( OutputDevice* pOutDev, long nFontHeight, const Point& rPnt, sal_uInt16 nIndex, sal_uInt16 nMaxEnd, const long* pDXArray, WrongList* pWrongs, short nOrientation, const Point& rOrigin )
+void lcl_DrawRedLines( OutputDevice* pOutDev, long nFontHeight, const Point& rPnt, sal_uInt16 nIndex, sal_uInt16 nMaxEnd, const long* pDXArray, WrongList* pWrongs, short nOrientation, const Point& rOrigin, BOOL bVertical )
 {
 #ifndef SVX_LIGHT
     // Aber nur, wenn Font nicht zu klein...
@@ -225,11 +225,28 @@ void lcl_DrawRedLines( OutputDevice* pOutDev, long nFontHeight, const Point& rPn
             if ( nEnd > nMaxEnd )
                 nEnd = nMaxEnd;
             Point aPnt1( rPnt );
+            if ( bVertical && ( nStyle != WAVE_FLAT ) )
+            {
+                // VCL doesn't know that the text is vertical, and is manipulating
+                // the positions a little bit in y direction...
+                long nOnePixel = pOutDev->PixelToLogic( Size( 0, 1 ) ).Height();
+                long nCorrect = ( nStyle == WAVE_NORMAL ) ? 2*nOnePixel : nOnePixel;
+                aPnt1.Y() -= nCorrect;
+                aPnt1.X() -= nCorrect;
+            }
             if ( nStart > nIndex )
-                aPnt1.X() += pDXArray[ nStart - nIndex - 1 ];
+            {
+                if ( !bVertical )
+                    aPnt1.X() += pDXArray[ nStart - nIndex - 1 ];
+                else
+                    aPnt1.Y() += pDXArray[ nStart - nIndex - 1 ];
+            }
             Point aPnt2( rPnt );
             DBG_ASSERT( nEnd > nIndex, "RedLine: aPnt2?" );
-            aPnt2.X() += pDXArray[ nEnd - nIndex - 1 ];
+            if ( !bVertical )
+                aPnt2.X() += pDXArray[ nEnd - nIndex - 1 ];
+            else
+                aPnt2.Y() += pDXArray[ nEnd - nIndex - 1 ];
             if ( nOrientation )
             {
                 aPnt1 = Rotate( aPnt1, nOrientation, rOrigin );
@@ -2624,7 +2641,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 #ifndef SVX_LIGHT
                                     if ( GetStatus().DoOnlineSpelling() && GetStatus().DoDrawRedLines() && pPortion->GetNode()->GetWrongList()->HasWrongs() && pTextPortion->GetLen() )
                                     {
-                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aTmpPos, nIndex, nIndex + pTextPortion->GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin );
+                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aTmpPos, nIndex, nIndex + pTextPortion->GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical() );
                                     }
 #endif // !SVX_LIGHT
                                 }
