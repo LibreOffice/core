@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:38:00 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,7 @@ void Application::SetSettings( const AllSettings& rSettings )
             while ( pFrame )
             {
                 // AppFont-Cache-Daten zuruecksetzen
-                pFrame->mpFrameData->meMapUnit = MAP_PIXEL;
+                pFrame->mpWindowImpl->mpFrameData->meMapUnit = MAP_PIXEL;
 
                 // UpdateSettings am ClientWindow aufrufen, damit
                 // die Daten nicht doppelt geupdatet werden
@@ -795,7 +795,7 @@ void Application::SetSettings( const AllSettings& rSettings )
                     pClientWin = pClientWin->ImplGetClientWindow();
                 pClientWin->UpdateSettings( rSettings, TRUE );
 
-                Window* pTempWin = pFrame->mpFrameData->mpFirstOverlap;
+                Window* pTempWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
                 while ( pTempWin )
                 {
                     // UpdateSettings am ClientWindow aufrufen, damit
@@ -804,10 +804,10 @@ void Application::SetSettings( const AllSettings& rSettings )
                     while ( pClientWin->ImplGetClientWindow() )
                         pClientWin = pClientWin->ImplGetClientWindow();
                     pClientWin->UpdateSettings( rSettings, TRUE );
-                    pTempWin = pTempWin->mpNextOverlap;
+                    pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
                 }
 
-                pFrame = pFrame->mpFrameData->mpNextFrame;
+                pFrame = pFrame->mpWindowImpl->mpFrameData->mpNextFrame;
             }
 
             // Wenn sich die DPI-Aufloesung fuer Screen-Ausgaben
@@ -864,14 +864,14 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
     {
         pFrame->NotifyAllChilds( rDCEvt );
 
-        Window* pSysWin = pFrame->mpFrameData->mpFirstOverlap;
+        Window* pSysWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
         while ( pSysWin )
         {
             pSysWin->NotifyAllChilds( rDCEvt );
-            pSysWin = pSysWin->mpNextOverlap;
+            pSysWin = pSysWin->mpWindowImpl->mpNextOverlap;
         }
 
-        pFrame = pFrame->mpFrameData->mpNextFrame;
+        pFrame = pFrame->mpWindowImpl->mpFrameData->mpNextFrame;
     }
 }
 
@@ -1057,8 +1057,8 @@ IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData )
         break;
     };
 
-    if( pData->mpWin && pData->mpWin->mpFrameWindow && pEventData )
-        ImplWindowFrameProc( (void*) pData->mpWin->mpFrameWindow, NULL, (USHORT) nEvent, pEventData );
+    if( pData->mpWin && pData->mpWin->mpWindowImpl->mpFrameWindow && pEventData )
+        ImplWindowFrameProc( (void*) pData->mpWin->mpWindowImpl->mpFrameWindow, NULL, (USHORT) nEvent, pEventData );
 
     // remove this event from list of posted events, watch for destruction of internal data
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
@@ -1240,7 +1240,7 @@ Window* Application::GetFirstTopLevelWindow()
 
 Window* Application::GetNextTopLevelWindow( Window* pWindow )
 {
-    return pWindow->mpFrameData->mpNextFrame;
+    return pWindow->mpWindowImpl->mpFrameData->mpNextFrame;
 }
 
 // -----------------------------------------------------------------------
@@ -1254,7 +1254,7 @@ long    Application::GetTopWindowCount()
     {
         if( pWin->ImplGetWindow()->IsTopWindow() )
             nRet++;
-        pWin = pWin->mpFrameData->mpNextFrame;
+        pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
     }
     return nRet;
 }
@@ -1273,7 +1273,7 @@ Window* Application::GetTopWindow( long nIndex )
                 return pWin->ImplGetWindow();
             else
                 nIdx++;
-        pWin = pWin->mpFrameData->mpNextFrame;
+        pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
     }
     return NULL;
 }
@@ -1287,7 +1287,7 @@ Window* Application::GetActiveTopWindow()
     {
         if( pWin->IsTopWindow() )
             return pWin;
-        pWin = pWin->mpParent;
+        pWin = pWin->mpWindowImpl->mpParent;
     }
     return NULL;
 }
@@ -1479,18 +1479,18 @@ Window* Application::GetDefDialogParent()
         Window *pWin = NULL;
         if( pWin = pSVData->maWinData.mpFocusWin )
         {
-            while( pWin->mpParent )
-                pWin = pWin->mpParent;
+            while( pWin->mpWindowImpl->mpParent )
+                pWin = pWin->mpWindowImpl->mpParent;
             // use only decorated windows
-            if( pWin->mpFrameWindow->GetStyle() & (WB_MOVEABLE | WB_SIZEABLE) )
-                return pWin->mpFrameWindow->ImplGetWindow();
+            if( pWin->mpWindowImpl->mpFrameWindow->GetStyle() & (WB_MOVEABLE | WB_SIZEABLE) )
+                return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
             else
                 return NULL;
         }
         // last active application frame
         else if( pWin = pSVData->maWinData.mpActiveApplicationFrame )
         {
-            return pWin->mpFrameWindow->ImplGetWindow();
+            return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
         }
         else
         {
@@ -1498,13 +1498,13 @@ Window* Application::GetDefDialogParent()
             pWin = pSVData->maWinData.mpFirstFrame;
             while( pWin )
             {
-                if( pWin->ImplGetWindow()->IsTopWindow() && pWin->mbReallyVisible )
+                if( pWin->ImplGetWindow()->IsTopWindow() && pWin->mpWindowImpl->mbReallyVisible )
                 {
-                    while( pWin->mpParent )
-                        pWin = pWin->mpParent;
-                    return pWin->mpFrameWindow->ImplGetWindow();
+                    while( pWin->mpWindowImpl->mpParent )
+                        pWin = pWin->mpWindowImpl->mpParent;
+                    return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
                 }
-                pWin = pWin->mpFrameData->mpNextFrame;
+                pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
             }
             // use the desktop
             return NULL;
