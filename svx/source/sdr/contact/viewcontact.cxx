@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:07:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,11 @@ namespace sdr
         // React on changes of the object of this ViewContact
         void ViewContact::ActionChanged()
         {
+            // #i42815#
+            // Invalidate paint rectangle first, else calls to ObjectGettingPotentiallyVisible
+            // may use the old one. Before, this was done at the end of this method.
+            InvalidatePaintRectangle();
+
             // check existing animation. This may create or delete an AnimationInfo.
             CheckAnimationFeatures();
 
@@ -411,9 +416,6 @@ namespace sdr
 
                 pCandidate->ActionChanged();
             }
-
-            // also invalidate the PaintRectangle, this may have changed now, too.
-            InvalidatePaintRectangle();
         }
 
         // Does this ViewContact support animation? Default is sal_False
