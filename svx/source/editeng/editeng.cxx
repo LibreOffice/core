@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-14 10:56:55 $
+ *  last change: $Author: mt $ $Date: 2001-11-16 12:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,6 +547,15 @@ USHORT EditEngine::GetScriptType( const ESelection& rSelection ) const
     EditSelection aSel( pImpEditEngine->CreateSel( rSelection ) );
     return pImpEditEngine->GetScriptType( aSel );
 }
+
+LanguageType EditEngine::GetLanguage( USHORT nPara, USHORT nPos ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
+    DBG_ASSERT( pNode, "GetLanguage - nPara is invalid!" );
+    return pNode ? pImpEditEngine->GetLanguage( EditPaM( pNode, nPos ) ) : LANGUAGE_DONTKNOW;
+}
+
 
 void EditEngine::TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode )
 {

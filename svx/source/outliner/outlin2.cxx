@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-11 13:16:19 $
+ *  last change: $Author: mt $ $Date: 2001-11-16 12:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,4 +699,10 @@ USHORT Outliner::GetScriptType( const ESelection& rSelection ) const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetScriptType( rSelection );
+}
+
+LanguageType Outliner::GetLanguage( USHORT nPara, USHORT nPos ) const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->GetLanguage( nPara, nPos );
 }
