@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:40:34 $
+ *  last change: $Author: nf $ $Date: 2003-07-11 10:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,10 +421,19 @@ void CfgParser::AddText(
 {
     USHORT nLang = Export::GetLangByIsoLang( rIsoLang );
     if ( nLang != 0xFFFF ) {
+        ByteString sText = rText;
+        USHORT nTextLen = 0;
+        while ( sText.Len() != nTextLen ) {
+            nTextLen = sText.Len();
+            sText.SearchAndReplaceAll( "\n", " " );
+            sText.SearchAndReplaceAll( "\r", " " );
+            sText.SearchAndReplaceAll( "\t", " " );
+            sText.SearchAndReplaceAll( "  ", " " );
+        }
         USHORT nLangIndex = Export::GetLangIndex( nLang );
         pStackData->sResTyp = rResTyp;
         WorkOnText( rText, nLangIndex, rResTyp );
-         pStackData->sText[ nLangIndex ] = rText;
+         pStackData->sText[ nLangIndex ] = sText;
     }
     else if ( rIsoLang != NO_TRANSLATE_ISO ) {
         ByteString sError( "Unknown language code: " );
