@@ -13,6 +13,9 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 ..\%__SRC%\bin\tk%upd%??.dll %_DEST%\bin%_EXT%\tk?????.dll
 ..\%__SRC%\misc\tk%upd%??.map %_DEST%\bin%_EXT%\tk?????.map
 
+..\util\toolkit.xml %_DEST%\xml%_EXT%\toolkit.xml
+
+
 hedabu: ..\inc\toolkit\awt\vclxcontainer.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxcontainer.hxx
 hedabu: ..\inc\toolkit\awt\vclxdevice.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxdevice.hxx
 hedabu: ..\inc\toolkit\awt\vclxtoolkit.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxtoolkit.hxx
