@@ -1,4 +1,4 @@
-jh	javaunohelper	:	bridges cppuhelper jurt NULL
+jh	javaunohelper	:	bridges cppuhelper NULL
 jh	javaunohelper							usr1	-	all	jh_mkout NULL
 jh	javaunohelper\com\sun\star\comp\helper	nmake	-	all	jh_helper NULL
 jh	javaunohelper\source					nmake	-	all	jh_source NULL
