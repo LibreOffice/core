@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 12:39:16 $
+ *  last change: $Author: pb $ $Date: 2001-12-11 15:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,50 @@
 #include <vcl/image.hxx>
 #endif
 
+namespace svtools {
+
+struct VolumeInfo
+{
+    sal_Bool    m_bIsVolume;
+    sal_Bool    m_bIsRemote;
+    sal_Bool    m_bIsRemoveable;
+    sal_Bool    m_bIsFloppy;
+    sal_Bool    m_bIsCompactDisc;
+
+    VolumeInfo() :
+        m_bIsVolume     ( sal_False ),
+        m_bIsRemote     ( sal_False ),
+        m_bIsRemoveable ( sal_False ),
+        m_bIsFloppy     ( sal_False ),
+        m_bIsCompactDisc( sal_False ) {}
+
+    VolumeInfo( sal_Bool _bIsVolume,
+                sal_Bool _bIsRemote,
+                sal_Bool _bIsRemoveable,
+                sal_Bool _bIsFloppy,
+                sal_Bool _bIsCompactDisc ) :
+        m_bIsVolume     ( _bIsVolume ),
+        m_bIsRemote     ( _bIsRemote ),
+        m_bIsRemoveable ( _bIsRemoveable ),
+        m_bIsFloppy     ( _bIsFloppy ),
+        m_bIsCompactDisc( _bIsCompactDisc ) {}
+};
+
+}
+
 class SvFileInformationManager
 {
+private:
+    static String   GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder );
+
 public:
-    static Image GetImage( const INetURLObject& rURL, BOOL bBig = FALSE );
-    static Image GetImageNoDefault( const INetURLObject& rURL, BOOL bBig = FALSE );
-    static String GetDescription( const INetURLObject& rObject );
+    static Image    GetImage( const INetURLObject& rURL, BOOL bBig = FALSE );
+    static Image    GetFileImage( const INetURLObject& rURL, BOOL bBig = FALSE );
+    static Image    GetImageNoDefault( const INetURLObject& rURL, BOOL bBig = FALSE );
+    static Image    GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig = FALSE );
+    static String   GetDescription( const INetURLObject& rObject );
+    static String   GetFileDescription( const INetURLObject& rObject );
+    static String   GetFolderDescription( const svtools::VolumeInfo& rInfo );
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-05 18:14:56 $
+ *  last change: $Author: pb $ $Date: 2001-12-11 15:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,12 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
-//#include <com/sun/star/uno/Reference.h>
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
 
 #include "svtools.hrc"
 #include "imagemgr.hrc"
@@ -120,22 +124,6 @@
 
 static ImageList* _pSmallImageList = NULL;
 static ImageList* _pBigImageList = NULL;
-
-struct SvtVolumeInfo_Impl
-{
-    sal_Bool    m_bIsVolume;
-    sal_Bool    m_bIsRemote;
-    sal_Bool    m_bIsRemoveable;
-    sal_Bool    m_bIsFloppy;
-    sal_Bool    m_bIsCompactDisc;
-
-    SvtVolumeInfo_Impl() :
-        m_bIsVolume     ( sal_False ),
-        m_bIsRemote     ( sal_False ),
-        m_bIsRemoveable ( sal_False ),
-        m_bIsFloppy     ( sal_False ),
-        m_bIsCompactDisc( sal_False ) {}
-};
 
 struct SvtExtensionResIdMapping_Impl
 {
@@ -387,17 +375,17 @@ USHORT GetImageId_Impl( const String& rExtension )
     return nImage;
 }
 
-sal_Bool GetVolumeProperties_Impl( const String& rURL, SvtVolumeInfo_Impl& rVolumeInfo )
+sal_Bool GetVolumeProperties_Impl( ::ucb::Content& rContent, svtools::VolumeInfo& rVolumeInfo )
 {
     sal_Bool bRet = sal_False;
 
     try
     {
-        bRet = ( ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsVolume") ) >>= rVolumeInfo.m_bIsVolume ) &&
-                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsRemote") ) >>= rVolumeInfo.m_bIsRemote ) &&
-                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsRemoveable") ) >>= rVolumeInfo.m_bIsRemoveable ) &&
-                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsFloppy") ) >>= rVolumeInfo.m_bIsFloppy ) &&
-                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsCompactDisc") ) >>= rVolumeInfo.m_bIsCompactDisc ) );
+        bRet = ( ( rContent.getPropertyValue( ASCII_STRING("IsVolume") ) >>= rVolumeInfo.m_bIsVolume ) &&
+                 ( rContent.getPropertyValue( ASCII_STRING("IsRemote") ) >>= rVolumeInfo.m_bIsRemote ) &&
+                 ( rContent.getPropertyValue( ASCII_STRING("IsRemoveable") ) >>= rVolumeInfo.m_bIsRemoveable ) &&
+                 ( rContent.getPropertyValue( ASCII_STRING("IsFloppy") ) >>= rVolumeInfo.m_bIsFloppy ) &&
+                 ( rContent.getPropertyValue( ASCII_STRING("IsCompactDisc") ) >>= rVolumeInfo.m_bIsCompactDisc ) );
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -410,22 +398,30 @@ sal_Bool GetVolumeProperties_Impl( const String& rURL, SvtVolumeInfo_Impl& rVolu
 USHORT GetFolderImageId_Impl( const String& rURL )
 {
     USHORT nRet = IMG_FOLDER;
-    SvtVolumeInfo_Impl aVolumeInfo;
-    if ( GetVolumeProperties_Impl( rURL, aVolumeInfo ) )
+    ::svtools::VolumeInfo aVolumeInfo;
+    try
     {
-        if ( aVolumeInfo.m_bIsRemote )
-            nRet = IMG_NETWORKDEV;
-        else if ( aVolumeInfo.m_bIsCompactDisc )
-            nRet = IMG_CDROMDEV;
-        else if ( aVolumeInfo.m_bIsRemoveable )
-            nRet = IMG_REMOVEABLEDEV;
-        else if ( aVolumeInfo.m_bIsVolume )
-            nRet = IMG_FIXEDDEV;
+        ::ucb::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
+        {
+            if ( aVolumeInfo.m_bIsRemote )
+                nRet = IMG_NETWORKDEV;
+            else if ( aVolumeInfo.m_bIsCompactDisc )
+                nRet = IMG_CDROMDEV;
+            else if ( aVolumeInfo.m_bIsRemoveable )
+                nRet = IMG_REMOVEABLEDEV;
+            else if ( aVolumeInfo.m_bIsVolume )
+                nRet = IMG_FIXEDDEV;
+        }
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        // ...
     }
     return nRet;
 }
 
-USHORT GetImageId_Impl( const INetURLObject& rObject )
+USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
     String aExt, sURL = rObject.GetMainURL( INetURLObject::NO_DECODE );
     USHORT nImage = IMG_FILE;
@@ -480,7 +476,7 @@ USHORT GetImageId_Impl( const INetURLObject& rObject )
 
     if ( nImage == IMG_FILE )
     {
-        if ( ::utl::UCBContentHelper::IsFolder( sURL ) )
+        if ( bDetectFolder && ::utl::UCBContentHelper::IsFolder( sURL ) )
             nImage = GetFolderImageId_Impl( sURL );
         else if ( aExt.Len() > 0 )
             nImage = GetImageId_Impl( aExt );
@@ -535,88 +531,62 @@ String GetDescriptionByFactory_Impl( const String& rFactory )
 USHORT GetFolderDescriptionId_Impl( const String& rURL )
 {
     USHORT nRet = STR_DESCRIPTION_FOLDER;
-    SvtVolumeInfo_Impl aVolumeInfo;
-    if ( GetVolumeProperties_Impl( rURL, aVolumeInfo ) )
+    svtools::VolumeInfo aVolumeInfo;
+    try
     {
-        if ( aVolumeInfo.m_bIsRemote )
-            nRet = STR_DESCRIPTION_REMOTE_VOLUME;
-        else if ( aVolumeInfo.m_bIsFloppy )
-            nRet = STR_DESCRIPTION_FLOPPY_VOLUME;
-        else if ( aVolumeInfo.m_bIsCompactDisc )
-            nRet = STR_DESCRIPTION_CDROM_VOLUME;
-        else if ( aVolumeInfo.m_bIsRemoveable || aVolumeInfo.m_bIsVolume )
-            nRet = STR_DESCRIPTION_LOCALE_VOLUME;
+        ::ucb::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
+        {
+            if ( aVolumeInfo.m_bIsRemote )
+                nRet = STR_DESCRIPTION_REMOTE_VOLUME;
+            else if ( aVolumeInfo.m_bIsFloppy )
+                nRet = STR_DESCRIPTION_FLOPPY_VOLUME;
+            else if ( aVolumeInfo.m_bIsCompactDisc )
+                nRet = STR_DESCRIPTION_CDROM_VOLUME;
+            else if ( aVolumeInfo.m_bIsRemoveable || aVolumeInfo.m_bIsVolume )
+                nRet = STR_DESCRIPTION_LOCALE_VOLUME;
+        }
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        // ...
     }
     return nRet;
 }
 
-//****************************************************************************
-
-
-Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, BOOL bBig )
+Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig )
 {
-    USHORT nImage = GetImageId_Impl( rObject );
-    DBG_ASSERT( nImage, "invalid ImageId" );
-
-    if ( nImage == IMG_FILE )
-        return Image();
-
-    ImageList* pList = NULL;
-    if ( bBig )
-    {
-        if ( !_pBigImageList )
-            _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
-        pList = _pBigImageList;
-    }
-    else
-    {
-        if ( !_pSmallImageList )
-            _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
-        pList = _pSmallImageList;
-    }
-
-    return pList->GetImage( nImage );
-}
-
-Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBig )
-{
-    USHORT nImage = GetImageId_Impl( rObject );
-    DBG_ASSERT( nImage, "invalid ImageId" );
-
-    if ( !bBig && IMG_FOLDER == nImage )
+    if ( !bBig && IMG_FOLDER == nImageId )
         // return our new small folder image (256 colors)
         return Image( SvtResId( IMG_SVT_FOLDER ) );
 
     ImageList* pList = NULL;
+
     if ( bBig )
     {
         if ( !_pBigImageList )
-        {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
-        }
         pList = _pBigImageList;
     }
     else
     {
         if ( !_pSmallImageList )
-        {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
-        }
         pList = _pSmallImageList;
     }
 
-    return pList->GetImage( nImage );
+    return pList->GetImage( nImageId );
 }
 
-String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
+//****************************************************************************
+
+String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
     String sDescription;
     String sExtension( rObject.getExtension() ), sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
     USHORT nResId = 0;
     sal_Bool bShowExt = sal_False, bDetected = sal_False, bOnlyFile = sal_False;
-    sal_Bool bFolder = ::utl::UCBContentHelper::IsFolder( sURL );
+    sal_Bool bFolder = bDetectFolder ? ::utl::UCBContentHelper::IsFolder( sURL ) : sal_False;
     if ( !bFolder )
     {
 #if defined( OS2 ) || defined( MAC )
@@ -688,6 +658,74 @@ String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
         sDescription += ')';
     }
 
+    return sDescription;
+}
+
+Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBig )
+{
+    USHORT nImage = GetImageId_Impl( rObject, sal_True );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+    return GetImageFromList_Impl( nImage, bBig );
+}
+
+Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, BOOL bBig )
+{
+    USHORT nImage = GetImageId_Impl( rObject, sal_False );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+    return GetImageFromList_Impl( nImage, bBig );
+}
+
+Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, BOOL bBig )
+{
+    USHORT nImage = GetImageId_Impl( rObject, sal_True );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+
+    if ( nImage == IMG_FILE )
+        return Image();
+
+    return GetImageFromList_Impl( nImage, bBig );
+}
+
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig )
+{
+    USHORT nImage = IMG_FOLDER;
+    DBG_ASSERT( nImage, "invalid ImageId" );
+
+    if ( rInfo.m_bIsRemote )
+        nImage = IMG_NETWORKDEV;
+    else if ( rInfo.m_bIsCompactDisc )
+        nImage = IMG_CDROMDEV;
+    else if ( rInfo.m_bIsRemoveable || rInfo.m_bIsFloppy )
+        nImage = IMG_REMOVEABLEDEV;
+    else if ( rInfo.m_bIsVolume )
+        nImage = IMG_FIXEDDEV;
+
+    return GetImageFromList_Impl( nImage, bBig );
+}
+
+String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
+{
+    return SvFileInformationManager::GetDescription_Impl( rObject, sal_True );
+}
+
+String SvFileInformationManager::GetFileDescription( const INetURLObject& rObject )
+{
+    return SvFileInformationManager::GetDescription_Impl( rObject, sal_False );
+}
+
+String SvFileInformationManager::GetFolderDescription( const svtools::VolumeInfo& rInfo )
+{
+    USHORT nResId = STR_DESCRIPTION_FOLDER;
+    if ( rInfo.m_bIsRemote )
+        nResId = STR_DESCRIPTION_REMOTE_VOLUME;
+    else if ( rInfo.m_bIsFloppy )
+        nResId = STR_DESCRIPTION_FLOPPY_VOLUME;
+    else if ( rInfo.m_bIsCompactDisc )
+        nResId = STR_DESCRIPTION_CDROM_VOLUME;
+    else if ( rInfo.m_bIsRemoveable || rInfo.m_bIsVolume )
+        nResId = STR_DESCRIPTION_LOCALE_VOLUME;
+
+    String sDescription = String( SvtResId( nResId ) );
     return sDescription;
 }
 
