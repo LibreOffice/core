@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.41 $
- *  last change: $Author: vg $ $Date: 2001-05-18 14:50:50 $
+ *  $Revision: 1.42 $
+ *  last change: $Author: kz $ $Date: 2001-05-21 10:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,12 @@
  *
  ************************************************************************/
 
+#if defined(WIN32)
+#ifndef _SV_SVSYS_HXX
+#include <svsys.h>
+#endif
+#endif
+
 #include <gcach_ftyp.hxx>
 
 #include <svapp.hxx>
@@ -86,7 +92,6 @@
     #include <sys/stat.h>
     #include <sys/mman.h>
 #elif defined(WIN32)
-    #include <windows.h>
     #include <io.h>
 #endif
 
