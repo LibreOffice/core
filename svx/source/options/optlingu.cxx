@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:36:56 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 12:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1584,6 +1584,16 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     BOOL  bVal  = FALSE;
     ULONG nUserData = 0;
 
+    pEntry = CreateEntry( sSpellAuto,       CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_AUTO) ) >>= bVal;
+    const SfxPoolItem* pItem = GetItem( rSet, SID_AUTOSPELL_CHECK );
+    if (pItem)
+        bVal = ((SfxBoolItem *) pItem)->GetValue();
+    nUserData = OptionsUserData( EID_SPELL_AUTO, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
     pEntry = CreateEntry( sCapitalWords,    CBCOL_FIRST );
     aLngCfg.GetProperty( C2U(UPN_IS_SPELL_UPPER_CASE) ) >>= bVal;
     nUserData = OptionsUserData( EID_CAPITAL_WORDS, FALSE, 0, TRUE, bVal).GetUserData();
@@ -1615,16 +1625,6 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     pEntry = CreateEntry( sAllLanguages,    CBCOL_FIRST );
     aLngCfg.GetProperty( C2U(UPN_IS_SPELL_IN_ALL_LANGUAGES) ) >>= bVal;
     nUserData = OptionsUserData( EID_ALL_LANGUAGES, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sSpellAuto,       CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_AUTO) ) >>= bVal;
-    const SfxPoolItem* pItem = GetItem( rSet, SID_AUTOSPELL_CHECK );
-    if (pItem)
-        bVal = ((SfxBoolItem *) pItem)->GetValue();
-    nUserData = OptionsUserData( EID_SPELL_AUTO, FALSE, 0, TRUE, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
