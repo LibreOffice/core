@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-27 18:03:04 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,10 @@ protected:
     SvLBoxEntry*            FindEntry( SvLBoxEntry* pParent, const String& rText, BYTE nType );
     virtual long            ExpandingHdl();
 
-    void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, StarBASIC* pLib );
+    void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxObjectShell* pShell, const String& rLibName );
+
+    static BOOL             StringCompareLessThan( const String& rStr1, const String& rStr2 )
+                                { return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS); }
 
 public:
                     BasicTreeListBox( Window* pParent, const ResId& rRes );
@@ -142,9 +145,6 @@ public:
 
     // new dialogs
     SbxItem         GetSbxItem( SvLBoxEntry* pEntry );
-
-    static BOOL     StringCompareLessThan( const String& rStr1, const String& rStr2 )
-                        { return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS); }
 };
 
 /****************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-10 11:30:53 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,9 +649,34 @@ BOOL EditorWindow::SetSourceInBasic( BOOL bQuiet )
         else if ( !StarBASIC::IsRunning() ) // Nicht zur Laufzeit!
         {
             String aSource( pEditEngine->GetText() );
-            DBG_ASSERT( pModulWindow->GetModule(), "Kein Modul?!" );
-            pModulWindow->GetModule()->SetSource( aSource );
-            BasicIDE::UpdateModuleInLibrary( pModulWindow->GetModule() );
+            DBG_ASSERT( pModulWindow->GetSbModule(), "Kein Modul?!" );
+            pModulWindow->GetSbModule()->SetSource( aSource );
+            pModulWindow->SetModule( ::rtl::OUString( aSource ) );
+
+            // update module in library
+            SbModule* pModule = pModulWindow->GetSbModule();
+            DBG_ASSERT(pModule, "EditorWindow::SetSourceInBasic: No Module found!");
+            if ( pModule )
+            {
+                SbxObject* pParent = pModule->GetParent();
+                StarBASIC* pBasic = PTR_CAST(StarBASIC,pParent);
+                DBG_ASSERT(pBasic, "EditorWindow::SetSourceInBasic: No Basic found!");
+                if ( pBasic )
+                {
+                    BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+                    DBG_ASSERT(pBasMgr, "EditorWindow::SetSourceInBasic: No BasicManager found!");
+                    if ( pBasMgr )
+                    {
+                        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+                        String aLibName = pBasic->GetName();
+                        String aModName = pModule->GetName();
+                        ::rtl::OUString aModule = pModule->GetSource();
+
+                        BasicIDE::UpdateModule( pShell, aLibName, aModName, aModule );
+                    }
+                }
+            }
+
             pEditEngine->SetModified( FALSE );
             BasicIDE::MarkDocShellModified( pModulWindow->GetBasic() );
             bChanged = TRUE;
@@ -667,7 +692,7 @@ void EditorWindow::CreateEditEngine()
         return;
 
 #ifdef DEBUG
-    BOOL bModified = pModulWindow->GetModule()->IsModified();
+    BOOL bModified = pModulWindow->GetSbModule()->IsModified();
 #endif
 
 
@@ -697,7 +722,7 @@ void EditorWindow::CreateEditEngine()
     aHighlighter.initialize( HIGHLIGHT_BASIC );
 
     bDoSyntaxHighlight = FALSE; // Bei grossen Texten zu langsam...
-    String aSource( pModulWindow->GetModule()->GetSource() );
+    String aSource( pModulWindow->GetSbModule()->GetSource() );
     aSource.ConvertLineEnd( LINEEND_LF );
     USHORT nLines = aSource.GetTokenCount( LINE_SEP );
 

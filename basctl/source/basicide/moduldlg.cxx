@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-31 15:07:16 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,6 +574,17 @@ void ObjectPage::CheckButtons()
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     USHORT nDepth = pCurEntry ? aBasicBox.GetModel()->GetDepth( pCurEntry ) : 0;
 
+    if ( nDepth == 1 || nDepth == 2 )
+    {
+        aNewModButton.Enable();
+        aNewDlgButton.Enable();
+    }
+    else
+    {
+        aNewModButton.Disable();
+        aNewDlgButton.Disable();
+    }
+
     if ( nDepth == 2 )
         aEditButton.Enable();
     else
@@ -700,13 +711,16 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
 
 StarBASIC* ObjectPage::GetSelectedBasic()
 {
-    String aLib, aModOrDlg, aSub;
-    BasicManager* pBasMgr = aBasicBox.GetSelectedSbx( aLib, aModOrDlg, aSub );
+    String aLibName, aModOrDlg, aSub;
+    BasicManager* pBasMgr = aBasicBox.GetSelectedSbx( aLibName, aModOrDlg, aSub );
     DBG_ASSERT( pBasMgr, "Kein BasicManager!" );
-    StarBASIC* pLib = aLib.Len() ? pBasMgr->GetLib( aLib ) : pBasMgr->GetLib( 0 );
-    if ( !pLib && aLib.Len() )
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+
+    /* old code
+    StarBASIC* pLib = aLibName.Len() ? pBasMgr->GetLib( aLibName ) : pBasMgr->GetLib( 0 );
+    if ( !pLib && aLibName.Len() )
     {
-        USHORT nLib = pBasMgr->GetLibId( aLib );
+        USHORT nLib = pBasMgr->GetLibId( aLibName );
         BOOL bOK = TRUE;
         if ( pBasMgr->HasPassword( nLib ) &&
                 !pBasMgr->IsPasswordVerified( nLib ) )
@@ -721,7 +735,35 @@ StarBASIC* ObjectPage::GetSelectedBasic()
                 ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
         }
     }
-    return pLib;
+    */
+
+    StarBASIC* pBasic = 0;
+    DBG_ASSERT( aLibName.Len(), "ObjectPage::GetSelectedBasic(): No library name!" );
+    if ( aLibName.Len() )
+    {
+        // TODO: check password
+
+
+        ::rtl::OUString aOULibName( aLibName );
+
+        // load module library (if not loaded)
+        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
+            xModLibContainer->loadLibrary( aOULibName );
+
+        // load dialog library (if not loaded)
+        Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+            xDlgLibContainer->loadLibrary( aOULibName );
+
+        // get Basic
+        pBasic = pBasMgr->GetLib( aLibName );
+    }
+
+    if ( !pBasic )
+        ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
+
+    return pBasic;
 }
 
 /*

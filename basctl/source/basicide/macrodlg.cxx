@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,13 @@ void MacroChooser::DeleteMacro()
         pModule->GetMethods()->Remove( pMethod );
         CutLines( aSource, nStart-1, nEnd-nStart+1, TRUE );
         pModule->SetSource( aSource );
+
+        // update module in library
+        String aLibName = pBasic->GetName();
+        String aModName = pModule->GetName();
+        ::rtl::OUString aModule = pModule->GetSource();
+        BasicIDE::UpdateModule( pShell, aLibName, aModName, aModule );
+
         SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
         DBG_ASSERT( pEntry, "DeleteMacro: Entry ?!" );
         aMacroBox.GetModel()->Remove( pEntry );

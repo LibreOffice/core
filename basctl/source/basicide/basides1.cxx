@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                 ModulWindow* pWin = (ModulWindow*)pCurWin;
                 SfxObjectShell* pShell = pWin->GetShell();
                 String aLibName = pWin->GetLibName();
-                String aName = pWin->GetModName();
+                String aName = pWin->GetModuleName();
                 if ( QueryDelModule( aName, pCurWin ) )
                 {
                     try
@@ -492,7 +492,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     DBG_ASSERT( nId, "No entry in Tabbar!" );
                     if ( nId )
                     {
-                        pTabBar->SetPageText( nId, pEditWin->GetModName() );
+                        pTabBar->SetPageText( nId, pEditWin->GetModuleName() );
                     }
                 }
             }
@@ -986,7 +986,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
                 {
                     StarBASIC* pLib = ((ModulWindow*)pCurWin)->GetBasic();
                     LibInfo* pLibInf =  IDE_DLL()->GetExtraData()->GetLibInfos().GetInfo( pLib, TRUE );
-                    pLibInf->aCurrentModule = ((ModulWindow*)pCurWin)->GetModule()->GetName();
+                    pLibInf->aCurrentModule = ((ModulWindow*)pCurWin)->GetSbModule()->GetName();
                 }
             }
             else
@@ -1048,7 +1048,7 @@ IDEBaseWindow* BasicIDEShell::FindWindow( const SbxObject* pObj, BOOL bFindSuspe
                 return pWin;
             else if ( pWin->IsA( TYPE( ModulWindow ) ) )
             {
-                if ( ((ModulWindow*)pWin)->GetModule() == pObj )
+                if ( ((ModulWindow*)pWin)->GetSbModule() == pObj )
                     return pWin;
             }
             else
@@ -1074,7 +1074,7 @@ IDEBaseWindow* BasicIDEShell::FindWindow( SfxObjectShell* pShell, const String& 
             {
                 if ( ((ModulWindow*)pWin)->GetShell() == pShell &&
                      ((ModulWindow*)pWin)->GetLibName() == rLibName &&
-                     ((ModulWindow*)pWin)->GetModName() == rName &&
+                     ((ModulWindow*)pWin)->GetModuleName() == rName &&
                      nType == BASICIDE_TYPE_MODULE )
                     return pWin;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,6 +873,9 @@ void __EXPORT ModulWindow::UpdateData()
     // UpdateData wird gerufen, wenn sich der Source von aussen
     // geaendert hat.
     // => Keine Unterbrechungen erwuenscht!
+
+    SetModule( ::rtl::OUString( xModule->GetSource() ) );
+
     if ( GetEditView() )
     {
         TextSelection aSel = GetEditView()->GetSelection();
@@ -1153,7 +1156,7 @@ void __EXPORT ModulWindow::GoOnTop()
     IDE_DLL()->GetShell()->GetViewFrame()->ToTop();
 }
 
-String ModulWindow::GetModuleName()
+String ModulWindow::GetSbModuleName()
 {
     String aModuleName;
     if ( xModule.Is() )
@@ -1165,7 +1168,7 @@ String ModulWindow::GetModuleName()
 
 String __EXPORT ModulWindow::GetTitle()
 {
-    return GetModuleName();
+    return GetSbModuleName();
 }
 
 
@@ -1287,7 +1290,7 @@ String ModulWindow::CreateSbxDescription()
 {
     String aDescription = IDEBaseWindow::CreateSbxDescription();
     aDescription += ';';
-    aDescription += GetModule()->GetName();
+    aDescription += GetSbModule()->GetName();
     return aDescription;
 }
 

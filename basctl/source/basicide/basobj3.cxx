@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-27 18:03:04 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,25 +164,41 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
 
     aSource += aSubStr;
     pModule->SetSource( aSource );
-    BasicIDE::UpdateModuleInLibrary( pModule );
-//  SbxObject* pObject = pModule->GetParent();
-//  DBG_ASSERT( pObject->ISA( StarBASIC ), "Kein Basic! (GetParent)" );
-//  ((StarBASIC*)pObject)->Compile( pModule );
+
+    // update module in library
+    SbxObject* pParent = pModule->GetParent();
+    StarBASIC* pBasic = PTR_CAST(StarBASIC,pParent);
+    DBG_ASSERT(pBasic, "BasicIDE::CreateMacro: No Basic found!");
+    if ( pBasic )
+    {
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+        DBG_ASSERT(pBasMgr, "BasicIDE::CreateMacro: No BasicManager found!");
+        if ( pBasMgr )
+        {
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            String aLibName = pBasic->GetName();
+            String aModName = pModule->GetName();
+            ::rtl::OUString aModule = pModule->GetSource();
+
+            BasicIDE::UpdateModule( pShell, aLibName, aModName, aModule );
+        }
+    }
+
     SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD );
     if( pDispatcher )
     {
         pDispatcher->Execute( SID_BASICIDE_UPDATEALLMODULESOURCES );
     }
-    SbxObject* pParent = pModule->GetParent();
-    if ( pParent && pParent->ISA( StarBASIC ) )
-        BasicIDE::MarkDocShellModified( (StarBASIC*)pParent );
+
+    if ( pBasic )
+        BasicIDE::MarkDocShellModified( pBasic );
+
     return pMethod;
 }
 
 //----------------------------------------------------------------------------
 
-Reference< container::XNameContainer > BasicIDE::GetDialogLibrary( SfxObjectShell* pShell, const String& rLibName, BOOL bLoadLibrary )
-    throw(NoSuchElementException)
+Reference< script::XLibraryContainer > BasicIDE::GetDialogLibraryContainer( SfxObjectShell* pShell )
 {
     // get library container
     Reference< script::XLibraryContainer > xLibContainer;
@@ -196,6 +212,36 @@ Reference< container::XNameContainer > BasicIDE::GetDialogLibrary( SfxObjectShel
         // application
         xLibContainer = Reference< script::XLibraryContainer >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
     }
+
+    return xLibContainer;
+}
+
+//----------------------------------------------------------------------------
+
+BOOL BasicIDE::HasDialogLibrary( SfxObjectShell* pShell, const String& rLibName )
+{
+    BOOL bHasDialogLibrary = FALSE;
+
+    // get library container
+    Reference< script::XLibraryContainer > xLibContainer = GetDialogLibraryContainer( pShell );
+
+    // check if library container has dialog library
+    ::rtl::OUString aOULibName( rLibName );
+    if( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
+    {
+        bHasDialogLibrary = TRUE;
+    }
+
+    return bHasDialogLibrary;
+}
+
+//----------------------------------------------------------------------------
+
+Reference< container::XNameContainer > BasicIDE::GetDialogLibrary( SfxObjectShell* pShell, const String& rLibName, BOOL bLoadLibrary )
+    throw(NoSuchElementException)
+{
+    // get library container
+    Reference< script::XLibraryContainer > xLibContainer = GetDialogLibraryContainer( pShell );
 
     // get library
     Reference< container::XNameContainer > xLib;
@@ -215,6 +261,31 @@ Reference< container::XNameContainer > BasicIDE::GetDialogLibrary( SfxObjectShel
     // load library
     if( bLoadLibrary && !xLibContainer->isLibraryLoaded( aOULibName ) )
         xLibContainer->loadLibrary( aOULibName );
+
+    return xLib;
+}
+
+//----------------------------------------------------------------------------
+
+Reference< ::com::sun::star::container::XNameContainer > BasicIDE::CreateDialogLibrary( SfxObjectShell* pShell, const String& rLibName )
+    throw(ElementExistException)
+{
+    // get library container
+    Reference< script::XLibraryContainer > xLibContainer = GetDialogLibraryContainer( pShell );
+
+    // create dialog library
+    Reference< container::XNameContainer > xLib;
+    ::rtl::OUString aOULibName( rLibName );
+    if( xLibContainer.is() && !xLibContainer->hasByName( aOULibName ) )
+    {
+        xLib = xLibContainer->createLibrary( aOULibName );
+    }
+    else
+    {
+        throw ElementExistException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::CreateDialogLibrary: ElementExistException!") ),
+            Reference<XInterface>() );
+    }
 
     return xLib;
 }
@@ -494,59 +565,6 @@ StarBASIC* BasicIDE::FindBasic( const SbxVariable* pVar )
 
     DBG_ASSERT( !pSbx || pSbx->ISA( StarBASIC ), "Find Basic: Kein Basic!" );
     return (StarBASIC*)pSbx;
-}
-
-//----------------------------------------------------------------------------
-
-void BasicIDE::UpdateModuleInLibrary( SbModule* pMod )
-{
-    if( !pMod )
-        return;
-
-    SbxObject* pParent = pMod->GetParent();
-    StarBASIC* pLib = PTR_CAST(StarBASIC,pParent);
-    if( !pLib )
-        return;
-
-    Reference< script::XLibraryContainer > xLibContainer;
-    BasicManager* pBasMgr = FindBasicManager( pLib );
-    if ( pBasMgr )
-    {
-        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-        if ( pShell )
-        {
-            xLibContainer = uno::Reference< script::XLibraryContainer >
-                ( pShell->GetBasicContainer(), uno::UNO_QUERY );
-        }
-        else
-        {
-            xLibContainer = uno::Reference< script::XLibraryContainer >
-                ( SFX_APP()->GetBasicContainer(), uno::UNO_QUERY );
-        }
-    }
-
-    if( xLibContainer.is() )
-    {
-        String aLibName = pLib->GetName();
-        if( !xLibContainer->hasByName( aLibName ) )
-            xLibContainer->createLibrary( aLibName );
-
-        Any aLibAny = xLibContainer->getByName( aLibName );
-        Reference< container::XNameContainer > xLib;
-        aLibAny >>= xLib;
-        if( xLib.is() )
-        {
-            ::rtl::OUString aModName = pMod->GetName();
-            ::rtl::OUString aSource = pMod->GetSource();
-            Any aSourceAny;
-            aSourceAny <<= aSource;
-            if( xLib->hasByName( aModName ) )
-                xLib->replaceByName( aModName, aSourceAny );
-            else
-                xLib->insertByName( aModName, aSourceAny );
-        }
-    }
-
 }
 
 //----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-05 09:20:52 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 
 #define GLOBALOVERFLOW
+
+#include <vector>
+#include <algorithm>
 
 #include <ide_pch.hxx>
 
@@ -146,7 +149,7 @@ LibPage::LibPage( Window * pParent ) :
 
     aLibBox.SetMode( LIBMODE_MANAGER );
     aLibBox.EnableInplaceEditing( TRUE );
-    aLibBox.SetCheckButtonHdl( LINK( this, LibPage, CheckBoxHdl ) );
+    //aLibBox.SetCheckButtonHdl( LINK( this, LibPage, CheckBoxHdl ) );
     aCloseButton.GrabFocus();
 
     long aTabs[] = { 2, 30, 120 };
@@ -161,6 +164,7 @@ LibPage::LibPage( Window * pParent ) :
 
 void LibPage::CheckButtons()
 {
+    /*
     SvLBoxEntry* pCur = aLibBox.GetCurEntry();
     BOOL bCurChecked = pCur ? aLibBox.IsChecked( aLibBox.GetModel()->GetAbsPos( pCur ) ) : FALSE;
     if ( bCurChecked )
@@ -181,17 +185,26 @@ void LibPage::CheckButtons()
         aDelButton.Enable();
     else
         aDelButton.Disable();
+    */
+
+    // TODO: enable password button
+    SvLBoxEntry* pCur = aLibBox.GetCurEntry();
+    if ( pCur )
+    {
+        aPasswordButton.Disable();
+        aInsertLibButton.Disable();     // TODO: enable aInsertLibButton
+    }
 }
 
 
-
+/*
 IMPL_LINK_INLINE_START( LibPage, CheckBoxHdl, SvTreeListBox *, EMPTYARG )
 {
     CheckButtons();
     return 0;
 }
 IMPL_LINK_INLINE_END( LibPage, CheckBoxHdl, SvTreeListBox *, EMPTYARG )
-
+*/
 
 
 void __EXPORT LibPage::ActivatePage()
@@ -203,7 +216,7 @@ void __EXPORT LibPage::ActivatePage()
 
 void __EXPORT LibPage::DeactivatePage()
 {
-    ActivateCurrentLibSettings();
+    //ActivateCurrentLibSettings();
 }
 
 
@@ -232,7 +245,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
 {
     if ( pButton == &aEditButton )
     {
-        ActivateCurrentLibSettings();
+        //ActivateCurrentLibSettings();
         SfxViewFrame* pCurFrame = SfxViewFrame::Current();
         DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
         SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
@@ -259,7 +272,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         DeleteCurrent();
     else if ( pButton == &aCloseButton )
     {
-        ActivateCurrentLibSettings();
+        //ActivateCurrentLibSettings();
         EndTabDialog( 0 );
     }
     else if ( pButton == &aPasswordButton )
@@ -295,7 +308,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
             if ( bHadPassword != aLibBox.GetBasicManager()->HasPassword( nLib ) )
             {
                 aLibBox.GetModel()->Remove( pCurEntry );
-                ImpInsertLibEntry( nLib );
+                ImpInsertLibEntry( pBasMgr->GetLibName( nLib ), nLib );
                 aLibBox.GetBasicManager()->SetPasswordVerified( nLib );
             }
         }
@@ -309,6 +322,9 @@ void LibPage::NewLib()
 {
     BasicManager* pBasMgr = BasicIDE::FindBasicManager( aCurBasMgr );
     DBG_ASSERT( pBasMgr, "BasMgr?!" );
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+
+    // create library name
     String aLibName;
     String aLibStdName( String( RTL_CONSTASCII_USTRINGPARAM( "Library" ) ) );
     //String aLibStdName( IDEResId( RID_STR_STDLIBNAME ) );
@@ -318,15 +334,14 @@ void LibPage::NewLib()
     {
         aLibName = aLibStdName;
         aLibName += String::CreateFromInt32( i );
-        if ( !pBasMgr->HasLib( aLibName ) )
+        if ( !BasicIDE::HasModuleLibrary( pShell, aLibName ) && !BasicIDE::HasDialogLibrary( pShell, aLibName ) )
             bValid = TRUE;
         i++;
     }
 
     NewObjectDialog* pNewDlg = new NewObjectDialog( this, NEWOBJECTMODE_LIB );
     pNewDlg->SetObjectName( aLibName );
-    BOOL bEnableSepFile = ( pBasMgr->GetStorageName().Len() && ( pBasMgr == SFX_APP()->GetBasicManager() ) );
-    pNewDlg->EnableSeparateFile( bEnableSepFile );
+
     if ( pNewDlg->Execute() )
     {
         if ( pNewDlg->GetObjectName().Len() )
@@ -341,140 +356,58 @@ void LibPage::NewLib()
             ErrorBox( this, WB_OK | WB_DEF_OK,
                         String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
         }
-        else if ( pBasMgr->HasLib( aLibName ) )
+        else if ( BasicIDE::HasModuleLibrary( pShell, aLibName ) || BasicIDE::HasDialogLibrary( pShell, aLibName ) )
         {
             ErrorBox( this, WB_OK | WB_DEF_OK,
                         String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
         }
         else
         {
-            BOOL bCreateLib = TRUE;
-            String aLibStorageName;
-            if ( pNewDlg->IsSeparateFile() )
+            try
             {
-                INetURLObject aFileURL( pBasMgr->GetStorageName() , INetURLObject::FSYS_DETECT );
-                String aExt = aFileURL.getExtension();
-                aFileURL.setName( aLibName );
-                aFileURL.setExtension( aExt );
-                aLibStorageName = aFileURL.getFSysPath( INetURLObject::FSYS_DETECT );
-                String aFileURLStr = aFileURL.GetMainURL();
+                // create module and dialog library
+                Reference< container::XNameContainer > xModLib = BasicIDE::CreateModuleLibrary( pShell, aLibName );
+                Reference< container::XNameContainer > xDlgLib = BasicIDE::CreateDialogLibrary( pShell, aLibName );
 
-                Reference< XSimpleFileAccess > xSFI;
-                Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-                if( xSMgr.is() )
-                {
-                    xSFI = Reference< XSimpleFileAccess >( xSMgr->createInstance
-                        ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
-                }
-                if( xSFI.is() )
-                {
-                    sal_Bool bExists = sal_False;
-                    try { bExists = xSFI->exists( aFileURLStr ); }
-                    catch( Exception & ) {}
-                    if( bExists )
-                    {
-                        String aText( IDEResId( RID_STR_FILEEXISTS ) );
-                        aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aLibStorageName );
-                        ErrorBox( this, WB_OK | WB_DEF_OK, aText ).Execute();
-                        bCreateLib = FALSE;
-                    }
-                }
-            }
-
-            if ( bCreateLib )
-            {
-                StarBASIC* pLib = pBasMgr->CreateLib( aLibName );
-
-                // get shell
-                SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-
-                // get library container
-                Reference< script::XLibraryContainer > xBasicLibContainer;
-                Reference< script::XLibraryContainer > xDialogLibContainer;
-                if( pShell )
-                {
-                    // document
-                    xBasicLibContainer  = Reference< script::XLibraryContainer >( pShell->GetBasicContainer(), UNO_QUERY );
-                    xDialogLibContainer = Reference< script::XLibraryContainer >( pShell->GetDialogContainer(), UNO_QUERY );
-                }
-                else
-                {
-                    // application
-                    xBasicLibContainer  = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
-                    xDialogLibContainer = Reference< script::XLibraryContainer >( SFX_APP()->GetDialogContainer(), UNO_QUERY );
-                }
-
+                // check if libraries are loaded
+                /*
+                BOOL bLoaded = FALSE;
                 ::rtl::OUString aOULibName( aLibName );
-
-                // create basic library
-                if( xBasicLibContainer.is() && !xBasicLibContainer->hasByName( aOULibName ) )
-                    xBasicLibContainer->createLibrary( aOULibName );
-
-                // create dialog library
-                if( xDialogLibContainer.is() && !xDialogLibContainer->hasByName( aOULibName ) )
-                    xDialogLibContainer->createLibrary( aOULibName );
+                Reference< script::XLibraryContainer > xModuleLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+                Reference< script::XLibraryContainer > xDialogLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+                if ( xModuleLibContainer.is() && xModuleLibContainer->isLibraryLoaded( aOULibName ) &&
+                     xDialogLibContainer.is() && xDialogLibContainer->isLibraryLoaded( aOULibName ) )
+                {
+                    bLoaded = TRUE;
+                }
+                */
 
                 SvLBoxEntry* pEntry = aLibBox.InsertEntry( aLibName );
-                USHORT nPos = (USHORT)aLibBox.GetModel()->GetAbsPos( pEntry );
-                USHORT nLib = pBasMgr->GetLibId( aLibName );
-                aLibBox.CheckEntryPos( nPos, pBasMgr->IsLibLoaded( nLib ) );
+                //USHORT nPos = (USHORT)aLibBox.GetModel()->GetAbsPos( pEntry );
+                //aLibBox.CheckEntryPos( nPos, bLoaded );
 
-                if ( aLibStorageName.Len() )
+                // create a module
+                String aModName = BasicIDE::CreateModuleName( pShell, aLibName );
+                ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aModName, BASICIDE_TYPE_MODULE );
+                SfxViewFrame* pCurFrame = SfxViewFrame::Current();
+                DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
+                SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+                if( pDispatcher )
                 {
-                    INetURLObject aFileURL( aLibStorageName , INetURLObject::FSYS_DETECT );
-                    String aShortName = aFileURL.getName();
-
-                    // conversion to 8.3 filename for FAT filesystem not implemented, because
-                    // INetURLObject doesn't have a method corresponding to old DirEntry::MakeShortName
-                    //
-                    // old code for comparison:
-                    /*
-                    DirEntry aDirEntry( aLibStorageName );
-                    String aShortName = aDirEntry.GetName();
-
-                    // Immer 8.3
-                    DirEntry aTempEntry( aDirEntry.GetPath() );
-                    if( aTempEntry.MakeShortName( aDirEntry.GetName(), FSYS_KIND_NONE, TRUE, FSYS_STYLE_FAT ) )
-                    {
-                        aLibStorageName = aTempEntry.GetFull();
-                        aShortName = aTempEntry.GetName();
-                    }
-                    */
-
-                    pBasMgr->SetLibStorageName( nLib, aLibStorageName );
-                    aLibBox.SetEntryText( aShortName, pEntry, 1 );
-
-                    // Sofort speichern, sonst erhaelt man ggf. spaeter
-                    // nochmal den gleichen ShortName
-                    pBasMgr->StoreLib( nLib );
+                    pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
+                                          SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
                 }
-
-                // Ein Modul anlegen:
-                try
-                {
-                    String aModName = BasicIDE::CreateModuleName( pShell, aLibName );
-                    ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
-                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, pShell, aLibName, aModName, BASICIDE_TYPE_MODULE );
-
-                    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-                    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-                    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
-                    if( pDispatcher )
-                    {
-                        pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
-                                              SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-                    }
-                }
-                catch ( container::ElementExistException& e )
-                {
-                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                    DBG_ERROR( aBStr.GetBuffer() );
-                }
-                catch ( container::NoSuchElementException& e )
-                {
-                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                    DBG_ERROR( aBStr.GetBuffer() );
-                }
+            }
+            catch ( container::ElementExistException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
+            }
+            catch ( container::NoSuchElementException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
             }
         }
     }
@@ -561,7 +494,7 @@ void LibPage::InsertLib()
                             }
                             SvLBoxEntry* pEntry = pLibDlg->GetLibBox().InsertEntry( rInf.GetName() );
                             USHORT nPos = (USHORT) pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry );
-                            pLibDlg->GetLibBox().CheckEntryPos( nPos, TRUE);
+                            //pLibDlg->GetLibBox().CheckEntryPos( nPos, TRUE);
 
                         }
                     }
@@ -579,8 +512,8 @@ void LibPage::InsertLib()
                             BOOL bReference = pLibDlg->IsReference();
                             for ( USHORT nLib = 0; nLib < pLibDlg->GetLibBox().GetEntryCount(); nLib++ )
                             {
-                                if ( pLibDlg->GetLibBox().IsChecked( nLib ) )
-                                {
+                                //if ( pLibDlg->GetLibBox().IsChecked( nLib ) )
+                                //{
                                     SvLBoxEntry* pEntry = pLibDlg->GetLibBox().GetEntry( nLib );
                                     DBG_ASSERT( pEntry, "Entry?!" );
                                     String aName( pLibDlg->GetLibBox().GetEntryText( pEntry, 0 ) );
@@ -630,9 +563,9 @@ void LibPage::InsertLib()
                                         pBasMgr->SetLibStorageName( nLib, aFileURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
                                     }
                                     DBG_ASSERT( nLib != LIB_NOTFOUND, "Lib nicht eingefuegt?!" );
-                                    ImpInsertLibEntry( nLib );
+                                    ImpInsertLibEntry( pBasMgr->GetLibName( nLib ), nLib );
                                     bChanges = TRUE;
-                                }
+                                //}
                             }
                             SvLBoxEntry* pFirstNew = aLibBox.GetEntry( nNewPos );
                             if ( pFirstNew )
@@ -658,13 +591,18 @@ void LibPage::DeleteCurrent()
 {
     BasicManager* pBasMgr = BasicIDE::FindBasicManager( aCurBasMgr );
     DBG_ASSERT( pBasMgr, "BasMgr?!" );
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
     SvLBoxEntry* pCurEntry = aLibBox.GetCurEntry();
     DBG_ASSERT( pCurEntry && aLibBox.GetModel()->GetAbsPos( pCurEntry ), "Kann nicht loeschen!" );
     String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
-    USHORT nLib = pBasMgr->GetLibId( aLibName );
-    if ( QueryDelLib( aLibName, pBasMgr->IsReference( nLib ), this ) )
+    BOOL bReference = FALSE;
+    // TODO: check, if library is Reference/Link
+    // old code:
+    //USHORT nLib = pBasMgr->GetLibId( aLibName );
+    //BOOL bReference = pBasMgr->IsReference( nLib );
+    if ( QueryDelLib( aLibName, bReference, this ) )
     {
-        // BasicIDE informieren, falls oben.
+        // inform BasicIDE
         String aLib( CreateMgrAndLibStr( aCurBasMgr, aLibName ) );
         SfxStringItem aLibItem( SID_BASICIDE_ARG_LIBNAME, aLib );
         SfxViewFrame* pCurFrame = SfxViewFrame::Current();
@@ -675,9 +613,18 @@ void LibPage::DeleteCurrent()
             pDispatcher->Execute( SID_BASICIDE_LIBREMOVED,
                                   SFX_CALLMODE_SYNCHRON, &aLibItem, 0L );
         }
-        pBasMgr->RemoveLib( nLib, TRUE );
+
+        // remove library from module and dialog library containers
+        ::rtl::OUString aOULibName( aLibName );
+        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+            xModLibContainer->removeLibrary( aOULibName );
+        Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
+            xDlgLibContainer->removeLibrary( aOULibName );
+
         ((SvLBox&)aLibBox).GetModel()->Remove( pCurEntry );
-        BasicIDE::MarkDocShellModified( pBasMgr->GetStdLib() );
+        BasicIDE::MarkDocShellModified( pShell );
     }
 }
 
@@ -728,22 +675,64 @@ void LibPage::SetCurLib()
     String aSelected( aBasicsBox.GetSelectEntry() );
     if ( aSelected != aCurBasMgr )
     {
-        ActivateCurrentLibSettings();
+        //ActivateCurrentLibSettings();
         aCurBasMgr = aSelected;
         BasicManager* pBasMgr = BasicIDE::FindBasicManager( aCurBasMgr );
         DBG_ASSERT( pBasMgr, "BasMgr?!" );
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
         aLibBox.SetBasicManager( pBasMgr );
-        USHORT nLibs = pBasMgr->GetLibCount();
         aLibBox.Clear();
-        Image aLockedImg( IDEResId( RID_IMG_LOCKED ) );
-        for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
-            ImpInsertLibEntry( nLib );
+        //Image aLockedImg( IDEResId( RID_IMG_LOCKED ) );
+
+        // create a sorted list of module library names
+        ::std::vector<String> aModLibList;
+        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+        if ( xModLibContainer.is() )
+        {
+            Sequence< ::rtl::OUString > aModLibNames = xModLibContainer->getElementNames();
+            sal_Int32 nModLibCount = aModLibNames.getLength();
+            const ::rtl::OUString* pModLibNames = aModLibNames.getConstArray();
+            for ( sal_Int32 i = 0 ; i < nModLibCount ; i++ )
+                aModLibList.push_back( pModLibNames[ i ] );
+            ::std::sort( aModLibList.begin() , aModLibList.end() , StringCompareLessThan );
+        }
+
+        // create a sorted list of dialog library names
+        ::std::vector<String> aDlgLibList;
+        Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+        if ( xDlgLibContainer.is() )
+        {
+            Sequence< ::rtl::OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
+            sal_Int32 nDlgLibCount = aDlgLibNames.getLength();
+            const ::rtl::OUString* pDlgLibNames = aDlgLibNames.getConstArray();
+            for ( sal_Int32 i = 0 ; i < nDlgLibCount ; i++ )
+                aDlgLibList.push_back( pDlgLibNames[ i ] );
+            ::std::sort( aDlgLibList.begin() , aDlgLibList.end() , StringCompareLessThan );
+        }
+
+        // merge both lists
+        ::std::vector<String> aLibList( aModLibList.size() + aDlgLibList.size() );
+        ::std::merge( aModLibList.begin(), aModLibList.end(), aDlgLibList.begin(), aDlgLibList.end(), aLibList.begin(), StringCompareLessThan );
+        ::std::vector<String>::iterator aIterEnd = ::std::unique( aLibList.begin(), aLibList.end() );  // move unique elements to the front
+        aLibList.erase( aIterEnd, aLibList.end() ); // remove duplicates
+
+        sal_Int32 nLibCount = aLibList.size();
+        for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
+            ImpInsertLibEntry( aLibList[ i ], i );
+
         aLibBox.SetCurEntry( aLibBox.GetEntry( 0 ) );
+        /*
+        String aStdLibName = String::CreateFromAscii("Standard");
+        SvLBoxEntry* pEntry = aLibBox.FindEntry( aStdLibName );
+        if ( !pEntry )
+            pEntry = aLibBox.GetEntry( 0 );
+        aLibBox.SetCurEntry( pEntry );
+        */
     }
 }
 
 
-
+/*
 void LibPage::ActivateCurrentLibSettings()
 {
     BasicManager* pBasMgr = BasicIDE::FindBasicManager( aCurBasMgr );
@@ -787,12 +776,15 @@ void LibPage::ActivateCurrentLibSettings()
         }
     }
 }
+*/
 
-SvLBoxEntry* LibPage::ImpInsertLibEntry( USHORT nLib )
+SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
 {
-    BasicManager* pBasicManager = aLibBox.GetBasicManager();
-    DBG_ASSERT( pBasicManager, "ImpInsertLibEntry: Kein BasicManager!" );
-    BOOL bPassword = pBasicManager->HasPassword( nLib );
+    //BasicManager* pBasicManager = aLibBox.GetBasicManager();
+    //DBG_ASSERT( pBasicManager, "ImpInsertLibEntry: Kein BasicManager!" );
+
+    // TODO: check password
+    //BOOL bPassword = pBasicManager->HasPassword( nLib );
 //  if ( !pBasicManager->IsLibLoaded( nLib ) )
 //  {
 //      // Lib muss geladen sein, wenn Passwortabfrage...
@@ -800,6 +792,8 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( USHORT nLib )
 //      bPassword = pBasicManager->HasPassword( nLib );
 //      pBasicManager->UnloadLib( nLib );
 //  }
+
+    /*
     if ( bPassword )
     {
         Image aImg = Image( IDEResId( RID_IMG_LOCKED ) );
@@ -807,9 +801,12 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( USHORT nLib )
         aLibBox.SetDefaultExpandedEntryBmp( aImg );
         aLibBox.SetDefaultCollapsedEntryBmp( aImg );
     }
+    */
 
-    SvLBoxEntry* pNewEntry = aLibBox.InsertEntry( pBasicManager->GetLibName( nLib ), nLib );
+    SvLBoxEntry* pNewEntry = aLibBox.InsertEntry( rLibName, nPos );
 
+    // TODO: check, if library is reference/link
+    /*
     if ( pBasicManager->IsReference( nLib ) || pBasicManager->IsExtern( nLib ) )
     {
         String aLibStorage = pBasicManager->GetLibStorageName( nLib );
@@ -828,15 +825,19 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( USHORT nLib )
 
         aLibBox.SetEntryText( aLibStorage, pNewEntry, 1 );
     }
+    */
 
-    aLibBox.CheckEntryPos( nLib, pBasicManager->IsLibLoaded( nLib ) );
+    //aLibBox.CheckEntryPos( nLib, pBasicManager->IsLibLoaded( nLib ) );
 
+
+    /*
     if ( bPassword )
     {
         Image aImg; // Default zuruecksetzen
         aLibBox.SetDefaultExpandedEntryBmp( aImg );
         aLibBox.SetDefaultCollapsedEntryBmp( aImg );
     }
+    */
 
     return pNewEntry;
 }
@@ -857,9 +858,10 @@ BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId ) :
 
 __EXPORT BasicCheckBox::~BasicCheckBox()
 {
-    delete pCheckButton;
+    //delete pCheckButton;
 }
 
+/*
 void __EXPORT BasicCheckBox::CheckButtonHdl()
 {
     SvLBoxEntry* pEntry = GetHdlEntry();
@@ -877,9 +879,11 @@ void __EXPORT BasicCheckBox::CheckButtonHdl()
         SelectEntryPos( nPos, TRUE );
     }
 }
+*/
 
 void BasicCheckBox::Init()
 {
+    /*
     BasicCheckBoxBitmaps theBmps;
 
     pCheckButton = new SvLBoxButtonData;
@@ -890,6 +894,7 @@ void BasicCheckBox::Init()
     pCheckButton->aBmps[SV_BMP_TRISTATE]    = theBmps.GetTriStateBmp();
     pCheckButton->aBmps[SV_BMP_HITRISTATE]  = theBmps.GetHiTriStateBmp();
     EnableCheckButton( pCheckButton );
+    */
     SetHighlightRange();
 }
 
@@ -934,7 +939,7 @@ ULONG BasicCheckBox::GetSelectEntryPos() const
 }
 
 
-
+/*
 ULONG BasicCheckBox::GetCheckedEntryCount() const
 {
     ULONG   nCheckCount = 0;
@@ -948,9 +953,9 @@ ULONG BasicCheckBox::GetCheckedEntryCount() const
 
     return nCheckCount;
 }
+*/
 
-
-
+/*
 void BasicCheckBox::CheckEntryPos( ULONG nPos, BOOL bCheck )
 {
     if ( nPos < GetEntryCount() )
@@ -964,16 +969,16 @@ void BasicCheckBox::CheckEntryPos( ULONG nPos, BOOL bCheck )
                                     : SvButtonState(SV_BUTTON_UNCHECKED) );
     }
 }
+*/
 
-
-
+/*
 BOOL BasicCheckBox::IsChecked( ULONG nPos ) const
 {
     if ( nPos < GetEntryCount() )
         return (GetCheckButtonState( GetEntry( nPos ) ) == SV_BUTTON_CHECKED);
     return FALSE;
 }
-
+*/
 
 BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
@@ -981,14 +986,19 @@ BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
         return FALSE;
 
     DBG_ASSERT( pEntry, "Kein Eintrag?" );
-    ULONG nAbsPos = GetModel()->GetAbsPos( pEntry );
-    if ( nAbsPos == 0 )
+
+    // check, if Standard library
+    String aLibName = GetEntryText( pEntry, 0 );
+    if ( aLibName.EqualsIgnoreCaseAscii( "Standard" ) )
     {
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTCHANGENAMESTDLIB ) ) ).Execute();
         return FALSE;
     }
 
+    // TODO: check if library is reference/link
+
     // Prueffen, ob Referenz...
+    /*
     USHORT nLib = pBasMgr->GetLibId( GetEntryText( pEntry, 0 ) );
     DBG_ASSERT( nLib != LIB_NOTFOUND, "LibId ?!" );
     if ( pBasMgr->IsReference( nLib ) )
@@ -996,9 +1006,9 @@ BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTCHANGENAMEREFLIB ) ) ).Execute();
         return FALSE;
     }
+    */
     return TRUE;
 }
-
 
 
 BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
@@ -1032,8 +1042,7 @@ BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNe
     return bValid;
 }
 
-
-
+/*
 BasicCheckBoxBitmaps::BasicCheckBoxBitmaps() :
     Resource        ( ResId( RID_RES_CHECKBITMAPS ) ),
     aUncheckedBmp   ( ResId( CHKBTN_UNCHECKED ) ),
@@ -1045,13 +1054,12 @@ BasicCheckBoxBitmaps::BasicCheckBoxBitmaps() :
 {
     FreeResource();
 }
-
+*/
 
 NewObjectDialog::NewObjectDialog( Window* pParent, USHORT nMode )
     : ModalDialog( pParent, IDEResId( RID_DLG_NEWLIB ) ),
         aText( this, IDEResId( RID_FT_NEWLIB ) ),
         aEdit( this, IDEResId( RID_ED_LIBNAME ) ),
-        aCheckBox( this, IDEResId( RID_CHKB_EXTRAFILE ) ),
         aOKButton( this, IDEResId( RID_PB_OK ) ),
         aCancelButton( this, IDEResId( RID_PB_CANCEL ) )
 {
@@ -1060,7 +1068,6 @@ NewObjectDialog::NewObjectDialog( Window* pParent, USHORT nMode )
 
     if ( nMode == NEWOBJECTMODE_LIB )
     {
-        aCheckBox.Show();
         SetText( String( IDEResId( RID_STR_NEWLIB ) ) );
     }
     else if ( nMode == NEWOBJECTMODE_MOD )

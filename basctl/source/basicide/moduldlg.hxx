@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-31 15:07:16 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,19 +111,12 @@ private:
     OKButton        aOKButton;
     CancelButton    aCancelButton;
 
-    // NEWOBJECTMODE_LIB
-    CheckBox        aCheckBox;
-
 public:
-
                 NewObjectDialog( Window* pParent, USHORT nMode );
                 ~NewObjectDialog();
 
     String      GetObjectName() const { return aEdit.GetText(); }
     void        SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
-
-    BOOL        IsSeparateFile() const              { return aCheckBox.IsChecked(); }
-    void        EnableSeparateFile( BOOL bEnable )  { aCheckBox.Enable( bEnable ); }
 };
 
 
@@ -155,12 +148,12 @@ class BasicCheckBox : public SvTabListBox
 {
 private:
     USHORT              nMode;
-    SvLBoxButtonData*   pCheckButton;
+    //SvLBoxButtonData* pCheckButton;
     BasicManager*       pBasMgr;
     void                Init();
 
 protected:
-    virtual void    CheckButtonHdl();
+    //virtual void  CheckButtonHdl();
 
 public:
                     BasicCheckBox( Window* pParent, const ResId& rResId );
@@ -173,9 +166,9 @@ public:
     void            SelectEntryPos( ULONG nPos, BOOL bSelect = TRUE );
     ULONG           GetSelectEntryPos() const;
 
-    ULONG           GetCheckedEntryCount() const;
-    void            CheckEntryPos( ULONG nPos, BOOL bCheck = TRUE );
-    BOOL            IsChecked( ULONG nPos ) const;
+    //ULONG         GetCheckedEntryCount() const;
+    //void          CheckEntryPos( ULONG nPos, BOOL bCheck = TRUE );
+    //BOOL          IsChecked( ULONG nPos ) const;
 
     virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
     virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
@@ -188,6 +181,7 @@ public:
 
 };
 
+/*
 class BasicCheckBoxBitmaps : public Resource
 {
 private:
@@ -208,7 +202,7 @@ public:
     const Bitmap&   GetTriStateBmp    () const { return aTriStateBmp; }
     const Bitmap&   GetHiTriStateBmp  () const { return aHiTriStateBmp; }
 };
-
+*/
 
 class LibDialog: public ModalDialog
 {
@@ -318,7 +312,7 @@ protected:
 
     DECL_LINK( TreeListHighlightHdl, SvTreeListBox * );
     DECL_LINK( BasicSelectHdl, ListBox * );
-    DECL_LINK( CheckBoxHdl, SvTreeListBox * );
+    //DECL_LINK( CheckBoxHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
     void                CheckButtons();
     void                DeleteCurrent();
@@ -327,12 +321,15 @@ protected:
     void                EndTabDialog( USHORT nRet );
     void                FillListBox();
     void                SetCurLib();
-    SvLBoxEntry*        ImpInsertLibEntry( USHORT nLib );
-    void                ActivateCurrentLibSettings();
+    SvLBoxEntry*        ImpInsertLibEntry( const String& rLibName, ULONG nPos );
+    //void              ActivateCurrentLibSettings();  // library preloading obsolete!
     virtual void        ActivatePage();
     virtual void        DeactivatePage();
 
     TabDialog*          pTabDlg;
+
+    static BOOL         StringCompareLessThan( const String& rStr1, const String& rStr2 )
+                            { return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS); }
 
 public:
                         LibPage( Window* pParent );

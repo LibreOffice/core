@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,14 +108,17 @@ BasicTreeListBox::~BasicTreeListBox()
 
 void BasicTreeListBox::ScanBasic( BasicManager* pBasMgr, const String& rName )
 {
-    DBG_ASSERT( pBasMgr, "Wir scannen einen NULL-Pointer... (warum kein BasicManager?!)" );
+    // can be called multiple times for updating!
+
+    DBG_ASSERT( pBasMgr, "BasicTreeListBox::ScanBasic: No BasicManager!" );
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
 
     // eigentlich prueffen, ob Basic bereits im Baum ?!
     SetUpdateMode( FALSE );
 
-    // Erste Ebene: Welcher BasicManager ( App, Doc, ... )
-    // 30.1.96: ScanBasic kann mehrfach zum Updateten aufgerufen werden
-    // => pruefen, ob Eintrag schon vorhanden.
+    // level 1: BasicManager (application, document, ...)
+
+    // create tree list box entry
     SvLBoxEntry* pBasicManagerRootEntry = FindEntry( 0, rName, OBJTYPE_BASICMANAGER );
     if ( !pBasicManagerRootEntry )
     {
@@ -124,68 +127,102 @@ void BasicTreeListBox::ScanBasic( BasicManager* pBasMgr, const String& rName )
         pBasicManagerRootEntry->SetUserData( new BasicManagerEntry( pBasMgr ) );
     }
 
-    Reference< script::XLibraryContainer > xLibContainer;
-    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-    if ( pShell )
+    // level 2: libraries (Standard, ...)
+
+    // create a sorted list of module library names
+    ::std::vector<String> aModLibList;
+    Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+    if ( xModLibContainer.is() )
     {
-        xLibContainer = uno::Reference< script::XLibraryContainer >
-            ( pShell->GetBasicContainer(), uno::UNO_QUERY );
-    }
-    else
-    {
-        xLibContainer = uno::Reference< script::XLibraryContainer >
-            ( SFX_APP()->GetBasicContainer(), uno::UNO_QUERY );
+        Sequence< ::rtl::OUString > aModLibNames = xModLibContainer->getElementNames();
+        sal_Int32 nModLibCount = aModLibNames.getLength();
+        const ::rtl::OUString* pModLibNames = aModLibNames.getConstArray();
+        for ( sal_Int32 i = 0 ; i < nModLibCount ; i++ )
+            aModLibList.push_back( pModLibNames[ i ] );
+        ::std::sort( aModLibList.begin() , aModLibList.end() , StringCompareLessThan );
     }
 
-    // Zweite Ebene: Libs ( Standard, ... )
-    USHORT nLibs = pBasMgr->GetLibCount();
-    for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
+    // create a sorted list of dialog library names
+    ::std::vector<String> aDlgLibList;
+    Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+    if ( xDlgLibContainer.is() )
     {
-        StarBASIC* pLib = pBasMgr->GetLib( nLib );
-        String aLibName = pBasMgr->GetLibName( nLib );
+        Sequence< ::rtl::OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
+        sal_Int32 nDlgLibCount = aDlgLibNames.getLength();
+        const ::rtl::OUString* pDlgLibNames = aDlgLibNames.getConstArray();
+        for ( sal_Int32 i = 0 ; i < nDlgLibCount ; i++ )
+            aDlgLibList.push_back( pDlgLibNames[ i ] );
+        ::std::sort( aDlgLibList.begin() , aDlgLibList.end() , StringCompareLessThan );
+    }
 
-        // New library container
-        if( xLibContainer.is() && xLibContainer->hasByName( aLibName ) &&
-            !xLibContainer->isLibraryLoaded( aLibName ) )
+    // merge both lists
+    ::std::vector<String> aLibList( aModLibList.size() + aDlgLibList.size() );
+    ::std::merge( aModLibList.begin(), aModLibList.end(), aDlgLibList.begin(), aDlgLibList.end(), aLibList.begin(), StringCompareLessThan );
+    ::std::vector<String>::iterator aIterEnd = ::std::unique( aLibList.begin(), aLibList.end() );  // move unique elements to the front
+    aLibList.erase( aIterEnd, aLibList.end() ); // remove duplicates
+
+    sal_Int32 nLibCount = aLibList.size();
+
+    for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
+    {
+        String aLibName = aLibList[ i ];
+        ::rtl::OUString aOULibName( aLibName );
+
+        // check, if the module library is loaded
+        BOOL bModLibLoaded = FALSE;
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) )
+            bModLibLoaded = TRUE;
+
+        // check, if the dialog library is loaded
+        BOOL bDlgLibLoaded = FALSE;
+        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+            bDlgLibLoaded = TRUE;
+
+        BOOL bLoaded = bModLibLoaded || bDlgLibLoaded;
+
+        // if only one of the libraries is loaded, load also the other
+        if ( bLoaded )
         {
-            pLib = NULL;
+            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
+                xModLibContainer->loadLibrary( aOULibName );
+
+            if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+                xDlgLibContainer->loadLibrary( aOULibName );
         }
 
-        // Jetzt LoadOnDemand...
-//      if ( !pLib )    // Nicht geladen...
-//          continue;
-
+        // create a tree list box entry
         SvLBoxEntry* pLibRootEntry = FindEntry( pBasicManagerRootEntry, aLibName, OBJTYPE_LIB );
         if ( !pLibRootEntry )
         {
-            Image aImage( aImages.GetImage( pLib ? IMGID_LIB : IMGID_LIBNOTLOADED ) );
+            Image aImage( aImages.GetImage( bLoaded ? IMGID_LIB : IMGID_LIBNOTLOADED ) );
             pLibRootEntry = InsertEntry( aLibName, aImage, aImage,
-                pBasicManagerRootEntry, pLib ? FALSE : TRUE , LIST_APPEND );
+                pBasicManagerRootEntry, bLoaded ? FALSE : TRUE , LIST_APPEND );
             pLibRootEntry->SetUserData( new BasicEntry( OBJTYPE_LIB ) );
         }
 
-        if ( pLib )
-            ImpCreateLibSubEntries( pLibRootEntry, pLib );
+        // create the sub entries
+        if ( bLoaded )
+            ImpCreateLibSubEntries( pLibRootEntry, pShell, aLibName );
     }
 
     SetUpdateMode( TRUE );
 }
 
-void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, StarBASIC* pLib )
+void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxObjectShell* pShell, const String& rLibName )
 {
-    // modules
-    if ( pLib && ( nMode & BROWSEMODE_MODULES ) )
-    {
-        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pLib );
-        if ( pBasMgr )
-        {
-            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-            String aLibName = pLib->GetName();
+    ::rtl::OUString aOULibName( rLibName );
 
+    // modules
+    if ( nMode & BROWSEMODE_MODULES )
+    {
+        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) )
+        {
             try
             {
                 // get library
-                Reference< container::XNameContainer > xLib = BasicIDE::GetModuleLibrary( pShell, aLibName );
+                Reference< container::XNameContainer > xLib = BasicIDE::GetModuleLibrary( pShell, rLibName );
 
                 if( xLib.is() )
                 {
@@ -215,7 +252,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, StarB
                         {
                             try
                             {
-                                Sequence< ::rtl::OUString > aNames = BasicIDE::GetMethodsFromModule( pShell, aLibName, aModName );
+                                Sequence< ::rtl::OUString > aNames = BasicIDE::GetMethodsFromModule( pShell, rLibName, aModName );
                                 sal_Int32 nCount = aNames.getLength();
                                 const ::rtl::OUString* pNames = aNames.getConstArray();
 
@@ -249,18 +286,16 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, StarB
     }
 
     // dialogs
-    if ( pLib && ( nMode & BROWSEMODE_OBJS ) )
+    if ( nMode & BROWSEMODE_OBJS )
     {
-        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pLib );
-        if ( pBasMgr )
-        {
-            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-            String aLibName = pLib->GetName();
+         Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
 
+         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+         {
             try
             {
                 // get library
-                Reference< container::XNameContainer > xLib = BasicIDE::GetDialogLibrary( pShell, aLibName );
+                Reference< container::XNameContainer > xLib = BasicIDE::GetDialogLibrary( pShell, rLibName );
 
                 if( xLib.is() )
                 {

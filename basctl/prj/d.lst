@@ -2,14 +2,11 @@ touch: ..\inc\hid.lst %_DEST%\bin%_EXT%\hid.lst
 ..\%__SRC%\inc\basslots.ilb %_DEST%\inc%_EXT%\basslots.ilb
 ..\%__SRC%\inc\\*.ilb* %_DEST%\inc%_EXT%\*.ilb*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
-..\%__SRC%\slb\basctl.lib %_DEST%\lib%_EXT%\xbasctl.lib
-..\%__SRC%\lib\basctl.lib %_DEST%\lib%_EXT%\basctl.lib
 ..\%__SRC%\bin\basctl*.dll %_DEST%\bin%_EXT%\basctl*.dll
 ..\%__SRC%\bin\basctl*.res %_DEST%\bin%_EXT%\basctl*.res
 ..\%__SRC%\misc\basctl*.map %_DEST%\bin%_EXT%\basctl*.map
 ..\%__SRC%\misc\basctl.csv %_DEST%\inc%_EXT%\basctl.csv
 ..\%__SRC%\misc\*.hid %_DEST%\bin%_EXT%\*.hid
-..\%__SRC%\lib\basctl.lib %_DEST%\lib%_EXT%\basctl.lib
 ..\%__SRC%\slb\ybctl.lib %_DEST%\lib%_EXT%\ybctl.lib
 
 del %_DEST%\inc%_EXT%\baside.hxx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-15 13:54:43 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,9 +410,9 @@ public:
     virtual void    SetReadOnly( BOOL bReadOnly );
 
 
-    SbModule*       GetModule() { return xModule; }
-    void            SetModule( SbModule* pModule ) { xModule = pModule; }
-    String          GetModuleName();
+    SbModule*       GetSbModule() { return xModule; }
+    void            SetSbModule( SbModule* pModule ) { xModule = pModule; }
+    String          GetSbModuleName();
 
     BOOL            CompileBasic();
     BOOL            BasicRun();
@@ -467,8 +467,11 @@ public:
     const String&           GetLibName() const { return m_aLibName; }
     void                    SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
 
-    const String&           GetModName() const { return m_aModName; }
-    void                    SetModName( const String& aName ) { m_aModName = aName; }
+    const String&           GetModuleName() const { return m_aModName; }
+    void                    SetModuleName( const String& aName ) { m_aModName = aName; }
+
+    const ::rtl::OUString&  GetModule() const { return m_aModule; }
+    void                    SetModule( const ::rtl::OUString& aModule ) { m_aModule = aModule; }
 };
 
 class ModulWindowLayout: public Window

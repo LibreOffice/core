@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-27 18:03:04 $
+ *  last change: $Author: tbe $ $Date: 2001-08-29 12:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,35 +103,15 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
     else if ( pUser->GetType() == OBJTYPE_LIB )
     {
         String aLibName = GetEntryText( pEntry );
+        ::rtl::OUString aOULibName( aLibName );
         SvLBoxEntry* pParent = GetParent( pEntry );
         pUser = (BasicEntry*)pParent->GetUserData();
         DBG_ASSERT( pUser->GetType() == OBJTYPE_BASICMANAGER, "BasicManager?" );
         BasicManager* pBasMgr = ((BasicManagerEntry*)pUser)->GetBasicManager();
-        USHORT nLib = pBasMgr->GetLibId( aLibName );
-
-        // New library container
-        Reference< script::XLibraryContainer > xLibContainer;
         SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-        if ( pShell )
-        {
-            xLibContainer = uno::Reference< script::XLibraryContainer >
-                ( pShell->GetBasicContainer(), uno::UNO_QUERY );
-        }
-        else
-        {
-            xLibContainer = uno::Reference< script::XLibraryContainer >
-                ( SFX_APP()->GetBasicContainer(), uno::UNO_QUERY );
-        }
 
-        if( xLibContainer.is() && xLibContainer->hasByName( aLibName ) &&
-            !xLibContainer->isLibraryLoaded( aLibName ) )
-        {
-            EnterWait();
-            xLibContainer->loadLibrary( aLibName );
-            LeaveWait();
-        }
-
-
+        /*
+        // check password
         BOOL bOK = TRUE;
         if ( pBasMgr->HasPassword( nLib ) &&
                 !pBasMgr->IsPasswordVerified( nLib ) )
@@ -140,28 +120,54 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         }
         if ( bOK )
         {
-            if ( !pBasMgr->IsLibLoaded( nLib ) )
-                pBasMgr->LoadLib( nLib );
+        */
 
-            StarBASIC* pLib = pBasMgr->GetLib( nLib );
-            if ( pLib )
+        // load module library
+        BOOL bModLibLoaded = FALSE;
+        Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+        {
+            if ( !xModLibContainer->isLibraryLoaded( aOULibName ) )
             {
-                ImpCreateLibSubEntries( pEntry, pLib );
+                EnterWait();
+                xModLibContainer->loadLibrary( aOULibName );
+                LeaveWait();
+            }
+            bModLibLoaded = TRUE;
+        }
 
-                // Das Image austauschen...
-                Image aImage( aImages.GetImage( IMGID_LIB ) );
-                SetExpandedEntryBmp( pEntry, aImage );
-                SetCollapsedEntryBmp( pEntry, aImage );
-            }
-            else
+        // load dialog library
+        BOOL bDlgLibLoaded = FALSE;
+        Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
+        {
+            if ( !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
             {
-                // Lib konnte nicht geladen werden...
-                ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
+                EnterWait();
+                xDlgLibContainer->loadLibrary( aOULibName );
+                LeaveWait();
             }
+            bDlgLibLoaded = TRUE;
+        }
+
+        if ( bModLibLoaded || bDlgLibLoaded )
+        {
+            // create the sub entries
+            ImpCreateLibSubEntries( pEntry, pShell, aLibName );
+
+            // exchange image
+            Image aImage( aImages.GetImage( IMGID_LIB ) );
+            SetExpandedEntryBmp( pEntry, aImage );
+            SetCollapsedEntryBmp( pEntry, aImage );
+        }
+        else
+        {
+            // library couldn't be loaded
+            ErrorBox( this, WB_OK|WB_DEF_OK, String( IDEResId( RID_STR_ERROROPENLIB ) ) ).Execute();
         }
     }
     else
-        DBG_ERROR( "RequestingChilds: Was?" );
+        DBG_ERROR( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
 }
 
 
