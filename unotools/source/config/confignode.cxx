@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-21 12:40:41 $
+ *  last change: $Author: fs $ $Date: 2002-12-05 09:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,6 +612,15 @@ namespace utl
         return sal_False;
     }
 
+    namespace
+    {
+        static const ::rtl::OUString& lcl_getProviderServiceName( )
+        {
+            static ::rtl::OUString s_sProviderServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
+            return s_sProviderServiceName;
+        }
+    }
+
     //------------------------------------------------------------------------
     OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const ::rtl::OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite)
     {
@@ -629,7 +638,7 @@ namespace utl
                 }
                 else
                 {
-                    OSL_ENSURE(xSI->supportsService(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+                    OSL_ENSURE(xSI->supportsService( lcl_getProviderServiceName( ) ),
                         "OConfigurationTreeRoot::createWithProvider: sure this is a provider? Missing the ConfigurationProvider service!");
                 }
             }
@@ -696,12 +705,12 @@ namespace utl
     //------------------------------------------------------------------------
     OConfigurationTreeRoot OConfigurationTreeRoot::createWithServiceFactory(const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite)
     {
-        OSL_ENSURE(_rxORB.is(), "OConfigurationTreeRoot::createWithServiceFactory: invalid provider!");
+        OSL_ENSURE(_rxORB.is(), "OConfigurationTreeRoot::createWithServiceFactory: invalid service factory!");
         if (_rxORB.is())
         {
             try
             {
-                Reference< XInterface > xProvider = _rxORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")));
+                Reference< XInterface > xProvider = _rxORB->createInstance( lcl_getProviderServiceName( ) );
                 OSL_ENSURE(xProvider.is(), "OConfigurationTreeRoot::createWithServiceFactory: could not instantiate the config provider service!");
                 Reference< XMultiServiceFactory > xProviderAsFac(xProvider, UNO_QUERY);
                 OSL_ENSURE(xProviderAsFac.is() || !xProvider.is(), "OConfigurationTreeRoot::createWithServiceFactory: the provider is missing an interface!");
@@ -716,6 +725,27 @@ namespace utl
         return OConfigurationTreeRoot();
     }
 
+    //------------------------------------------------------------------------
+    OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithServiceFactory( const Reference< XMultiServiceFactory >& _rxORB,
+        const ::rtl::OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , sal_Bool _bLazyWrite )
+    {
+        OSL_ENSURE( _rxORB.is(), "OConfigurationTreeRoot::tryCreateWithServiceFactory: invalid service factory!" );
+        if ( _rxORB.is() )
+        {
+            try
+            {
+                Reference< XMultiServiceFactory > xConfigFactory( _rxORB->createInstance( lcl_getProviderServiceName( ) ), UNO_QUERY );
+                if ( xConfigFactory.is() )
+                    return createWithProvider( xConfigFactory, _rPath, _nDepth, _eMode, _bLazyWrite );
+            }
+            catch(Exception&)
+            {
+                // silent this, 'cause the contract of this method states "no assertions"
+            }
+        }
+        return OConfigurationTreeRoot();
+    }
+
 //........................................................................
 }   // namespace utl
 //........................................................................
@@ -723,6 +753,9 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/08/21 12:40:41  fs
+ *  #87721# +hasByHierarchicalName
+ *
  *  Revision 1.4  2001/07/26 09:10:58  oj
  *  #89831# new method to append an existing node with different name
  *

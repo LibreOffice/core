@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-21 12:40:00 $
+ *  last change: $Author: fs $ $Date: 2002-12-05 09:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,15 @@ namespace utl
         static OConfigurationTreeRoot createWithServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_PREFER_UPDATABLE, sal_Bool _bLazyWrite = sal_True);
 
+        /** tolerant version of the <member>createWithServiceFactory</member>
+
+            <p>No assertions are thrown in case of an failure to initialize the configuration service, but once
+            the configuration could be initialized, errors in the creation of the specific node (e.g. because the
+            given node path does not exist) are still asserted.</p>
+        */
+        static OConfigurationTreeRoot tryCreateWithServiceFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_PREFER_UPDATABLE, sal_Bool _bLazyWrite = sal_True );
+
         /** commit all changes made on the subtree the object is the root for<p/>
             All changes made on any <type>OConfigurationNode</type> object retrieved (maybe indirect) from this root
             object are committed when calling this method.
@@ -324,6 +333,9 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/21 12:40:00  fs
+ *  #87721# +hasByHierarchicalName
+ *
  *  Revision 1.2  2001/07/26 09:13:23  oj
  *  #89831# new method to append an existing node with different name
  *
