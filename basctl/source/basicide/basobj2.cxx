@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 15:51:57 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,16 +662,16 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
                         DBG_ASSERT(pBasMgr, "BasicIDE::ChooseMacro: No BasicManager found!");
                         if ( pBasMgr )
                         {
-                            // language
-                            String aLanguage = String::CreateFromAscii("StarBasic");
+                            // name
+                            String aName;
+                            aName += pBasic->GetName();
+                            aName += '.';
+                            aName += pModule->GetName();
+                            aName += '.';
+                            aName += pMethod->GetName();
 
-                            // macro
-                            String aMacro;
-                            aMacro += pBasic->GetName();
-                            aMacro += '.';
-                            aMacro += pModule->GetName();
-                            aMacro += '.';
-                            aMacro += pMethod->GetName();
+                            // language
+                            String aLanguage = String::CreateFromAscii("Basic");
 
                             // location
                             String aLocation;
@@ -699,11 +699,10 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
                             if ( !bError )
                             {
                                 aScriptURL = String::CreateFromAscii("vnd.sun.star.script:");
-                                aScriptURL += String::CreateFromAscii("language=");
+                                aScriptURL += aName;
+                                aScriptURL += String::CreateFromAscii("?language=");
                                 aScriptURL += aLanguage;
-                                aScriptURL += String::CreateFromAscii(",macro=");
-                                aScriptURL += aMacro;
-                                aScriptURL += String::CreateFromAscii(",location=");
+                                aScriptURL += String::CreateFromAscii("&location=");
                                 aScriptURL += aLocation;
                             }
                         }
