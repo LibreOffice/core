@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:12 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 19:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ service ParagraphProperties
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackColor
     /** contains the paragraph background color.
      */
-    [property] long ParaBackColor;
+    [optional, property] long ParaBackColor;
 
     //-------------------------------------------------------------------------
 
@@ -127,21 +127,21 @@ service ParagraphProperties
     /** This value is <true></true> if the paragraph background color
         is set to transparent.
      */
-    [property] boolean ParaBackTransparent;
+    [optional, property] boolean ParaBackTransparent;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackGraphicURL
     /** contains the value of a link for the background graphic of a paragraph.
      */
-    [property] string ParaBackGraphicURL;
+    [optional, property] string ParaBackGraphicURL;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackGraphicFilter
     /** contains the name of the graphic filter for the background graphic of a paragraph.
      */
-    [property] string ParaBackGraphicFilter;
+    [optional, property] string ParaBackGraphicFilter;
 
     //-------------------------------------------------------------------------
 
@@ -150,7 +150,7 @@ service ParagraphProperties
 
         <p> </p>@see com::sun::star::style::GraphicLocation</p>
      */
-    [property] com::sun::star::style::GraphicLocation ParaBackGraphicLocation;
+    [optional, property] com::sun::star::style::GraphicLocation ParaBackGraphicLocation;
 
     //-------------------------------------------------------------------------
 
@@ -174,7 +174,7 @@ service ParagraphProperties
         <p>It is only valid if <member>ParagraphProperties::ParaAdjust</member> and
         <member>ParagraphProperties::ParaLastLineAdjust</member> are also valid.</p>
      */
-    [property] boolean ParaExpandSingleWord;
+    [optional, property] boolean ParaExpandSingleWord;
 
     //-------------------------------------------------------------------------
 
@@ -232,14 +232,14 @@ service ParagraphProperties
     /** determines if the paragraph is included in the
         line numbering.
      */
-    [property] boolean ParaLineNumberCount;
+    [optional, property] boolean ParaLineNumberCount;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLineNumberStartValue
     /** contains the start value for the line numbering.
      */
-    [property] long ParaLineNumberStartValue;
+    [optional, property] long ParaLineNumberStartValue;
 
     //-------------------------------------------------------------------------
 
@@ -255,14 +255,14 @@ service ParagraphProperties
         paragraph it belongs to and assigns the value as the name
         of the new page style sheet to use.
      */
-    [property] string PageDescName;
+    [optional, property] string PageDescName;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::PageNumberOffset
     /** If a page break property is set at a paragraph, this property contains the new value for the page number.
      */
-    [property] short PageNumberOffset;
+    [optional, property] short PageNumberOffset;
 
     //-------------------------------------------------------------------------
 
@@ -275,7 +275,7 @@ service ParagraphProperties
         <p>Remark: Register mode is only used if the register
         mode property of the page style is switched on.</p>
      */
-    [property] boolean ParaRegisterModeActive;
+    [optional, property] boolean ParaRegisterModeActive;
 
     //-------------------------------------------------------------------------
 
@@ -290,7 +290,7 @@ service ParagraphProperties
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaStyleName
     /** contains the name of the current paragraph style.
      */
-    [property] string ParaStyleName;
+    [optional, property] string ParaStyleName;
 
     //-------------------------------------------------------------------------
 
@@ -299,7 +299,7 @@ service ParagraphProperties
         paragraph are displayed in capital letters and how they are
         formatted.
      */
-    [property] com::sun::star::style::DropCapFormat DropCapFormat;
+    [optional, property] com::sun::star::style::DropCapFormat DropCapFormat;
 
     //-------------------------------------------------------------------------
 
@@ -307,7 +307,7 @@ service ParagraphProperties
     /** specifies if the property <var>DropCapFormat</var>
         is applied to the whole first word.
      */
-    [property] boolean DropCapWholeWord;
+    [optional, property] boolean DropCapWholeWord;
 
     //-------------------------------------------------------------------------
 
@@ -319,7 +319,7 @@ service ParagraphProperties
         <p>This feature is useful for preventing title paragraphs to be
         the last line on a page or column.</p>
      */
-    [property] boolean ParaKeepTogether;
+    [optional, property] boolean ParaKeepTogether;
 
     //-------------------------------------------------------------------------
 
@@ -327,7 +327,7 @@ service ParagraphProperties
     /** Setting this property to FALSE prevents the paragraph from
         getting split into two pages or columns.
      */
-    [property] boolean ParaSplit;
+    [optional, property] boolean ParaSplit;
 
     //-------------------------------------------------------------------------
 
@@ -335,7 +335,7 @@ service ParagraphProperties
     /** specifies the numbering level of the
         paragraph.
      */
-    [property] short NumberingLevel;
+    [optional, property] short NumberingLevel;
 
     //-------------------------------------------------------------------------
 
@@ -349,7 +349,7 @@ service ParagraphProperties
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingStartValue
     /** specifies the start value for numbering if a new numbering starts at this paragraph.
      */
-    [property] short NumberingStartValue;
+    [optional, property] short NumberingStartValue;
 
     //-------------------------------------------------------------------------
     /** determins if the numbering rules restart counting at the current paragraph.
@@ -364,7 +364,7 @@ service ParagraphProperties
         <p>The name must be one of the names which are available via
         <type>XStyleFamiliesSupplier</type>.</p>
      */
-    [property] string NumberingStyleName;
+    [optional, property] string NumberingStyleName;
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaOrphans
@@ -372,7 +372,7 @@ service ParagraphProperties
         to be at bottom of a page if the paragraph is spread over more than
         one page.
      */
-    [property] byte ParaOrphans;
+    [optional, property] byte ParaOrphans;
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaWidows
@@ -380,12 +380,12 @@ service ParagraphProperties
         to be at top of a page if the paragraph is spread over more than
         one page.
      */
-    [property] byte ParaWidows;
+    [optional, property] byte ParaWidows;
     //-------------------------------------------------------------------------
     /** determins the type, color and size of the shadow.
      @see com.sun.star.table.ShadowFormat
      */
-    [property] com::sun::star::table::ShadowFormat ParaShadowFormat;
+    [optional, property] com::sun::star::table::ShadowFormat ParaShadowFormat;
 
 };
 
