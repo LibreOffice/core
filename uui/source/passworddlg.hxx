@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passworddlg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2001-06-26 13:35:41 $
+ *  last change: $Author: mav $ $Date: 2001-10-11 06:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,8 @@
 //============================================================================
 class MasterPasswordDialog : public ModalDialog
 {
-    FixedText       aInfoEnterPassword;
     FixedText       aFTMasterPassword;
     Edit            aEDMasterPassword;
-    FixedText       aFTMasterPasswordRepeat;
-    Edit            aEDMasterPasswordRepeat;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
@@ -107,3 +104,4 @@ private:
 };
 
 #endif // UUI_PASSWORDDLG_HXX
+

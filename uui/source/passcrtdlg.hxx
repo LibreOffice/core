@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: passworddlg.cxx,v $
+ *  $RCSfile: passcrtdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: mav $ $Date: 2001-10-11 06:53:03 $
  *
@@ -59,61 +59,49 @@
  *
  ************************************************************************/
 
-#ifndef _SVT_FILEDLG_HXX
-#include <svtools/filedlg.hxx>
+#ifndef UUI_PASSCRTDLG_HXX
+#define UUI_PASSCRTDLG_HXX
+
+#ifndef _COM_SUN_STAR_TASK_PASSWORDREQUESTMODE_HPP
+#include <com/sun/star/task/PasswordRequestMode.hpp>
 #endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
+#ifndef _STDCTRL_HXX
+#include <svtools/stdctrl.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
+#include <vcl/dialog.hxx>
+#endif
+#ifndef _SV_EDIT_HXX
+#include <vcl/edit.hxx>
+#endif
+#ifndef _SV_GROUP_HXX
+#include <vcl/group.hxx>
 #endif
 
-#ifndef UUI_IDS_HRC
-#include <ids.hrc>
-#endif
-#ifndef UUI_PASSWORDDLG_HRC
-#include <passworddlg.hrc>
-#endif
-#ifndef UUI_PASSWORDDLG_HXX
-#include <passworddlg.hxx>
-#endif
-
-// MasterPasswordDialog---------------------------------------------------
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( MasterPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+//============================================================================
+class MasterPasswordCreateDialog : public ModalDialog
 {
-    EndDialog( RET_OK );
-    return 1;
-}
+    FixedText       aFTMasterPasswordCrt;
+    Edit            aEDMasterPasswordCrt;
+    FixedText       aFTMasterPasswordRepeat;
+    Edit            aEDMasterPasswordRepeat;
+    OKButton        aOKBtn;
+    CancelButton        aCancelBtn;
+    HelpButton      aHelpBtn;
 
-// -----------------------------------------------------------------------
 
-MasterPasswordDialog::MasterPasswordDialog
-(
-    Window*                                     pParent,
-    ::com::sun::star::task::PasswordRequestMode aDialogMode,
-    ResMgr*                                     pResMgr
-) :
+    DECL_LINK( OKHdl_Impl, OKButton * );
 
-    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD, pResMgr ) ),
+public:
+    MasterPasswordCreateDialog( Window* pParent, ResMgr * pResMgr );
 
-    aFTMasterPassword       ( this, ResId( FT_MASTERPASSWORD ) ),
-    aEDMasterPassword       ( this, ResId( ED_MASTERPASSWORD ) ),
-    aOKBtn                  ( this, ResId( BTN_MASTERPASSWORD_OK ) ),
-    aCancelBtn              ( this, ResId( BTN_MASTERPASSWORD_CANCEL ) ),
-    aHelpBtn                ( this, ResId( BTN_MASTERPASSWORD_HELP ) ),
-    nDialogMode             ( aDialogMode ),
-    pResourceMgr            ( pResMgr )
-{
-    if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
-    {
-        String aErrorMsg( ResId( STR_ERROR_PASSWORD_WRONG, pResourceMgr ));
-        ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
-        aErrorBox.Execute();
-    }
+    String          GetMasterPassword() const { return aEDMasterPasswordCrt.GetText(); }
 
-    FreeResource();
-
-    aOKBtn.SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
+private:
+    ResMgr*                                         pResourceMgr;
 };
 
+#endif // UUI_PASSCRTDLG_HXX

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: passworddlg.cxx,v $
+ *  $RCSfile: passcrtdlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: mav $ $Date: 2001-10-11 06:53:03 $
  *
@@ -59,61 +59,17 @@
  *
  ************************************************************************/
 
-#ifndef _SVT_FILEDLG_HXX
-#include <svtools/filedlg.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
+#ifndef UUI_PASSCRT_HRC
+#define UUI_PASSCRT_HRC
 
-#ifndef UUI_IDS_HRC
-#include <ids.hrc>
-#endif
-#ifndef UUI_PASSWORDDLG_HRC
-#include <passworddlg.hrc>
-#endif
-#ifndef UUI_PASSWORDDLG_HXX
-#include <passworddlg.hxx>
-#endif
+//============================================================================
+#define FT_MASTERPASSWORD_CRT           20
+#define ED_MASTERPASSWORD_CRT           21
+#define FT_MASTERPASSWORD_REPEAT    22
+#define ED_MASTERPASSWORD_REPEAT    23
 
-// MasterPasswordDialog---------------------------------------------------
+#define BTN_MASTERPASSCRT_OK        50
+#define BTN_MASTERPASSCRT_CANCEL    51
+#define BTN_MASTERPASSCRT_HELP      52
 
-// -----------------------------------------------------------------------
-
-IMPL_LINK( MasterPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
-{
-    EndDialog( RET_OK );
-    return 1;
-}
-
-// -----------------------------------------------------------------------
-
-MasterPasswordDialog::MasterPasswordDialog
-(
-    Window*                                     pParent,
-    ::com::sun::star::task::PasswordRequestMode aDialogMode,
-    ResMgr*                                     pResMgr
-) :
-
-    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD, pResMgr ) ),
-
-    aFTMasterPassword       ( this, ResId( FT_MASTERPASSWORD ) ),
-    aEDMasterPassword       ( this, ResId( ED_MASTERPASSWORD ) ),
-    aOKBtn                  ( this, ResId( BTN_MASTERPASSWORD_OK ) ),
-    aCancelBtn              ( this, ResId( BTN_MASTERPASSWORD_CANCEL ) ),
-    aHelpBtn                ( this, ResId( BTN_MASTERPASSWORD_HELP ) ),
-    nDialogMode             ( aDialogMode ),
-    pResourceMgr            ( pResMgr )
-{
-    if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
-    {
-        String aErrorMsg( ResId( STR_ERROR_PASSWORD_WRONG, pResourceMgr ));
-        ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
-        aErrorBox.Execute();
-    }
-
-    FreeResource();
-
-    aOKBtn.SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
-};
-
+#endif // UUI_PASSCRT_HRC

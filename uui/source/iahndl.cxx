@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-31 13:08:43 $
+ *  last change: $Author: mav $ $Date: 2001-10-11 06:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef UUI_PASSWORDDLG_HXX
 #include "passworddlg.hxx"
+#endif
+#ifndef UUI_PASSCRTDLG_HXX
+#include "passcrtdlg.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
@@ -1054,13 +1057,27 @@ UUIInteractionHandler::executePasswordDialog(LoginErrorInfo & rInfo,
 
         std::auto_ptr< ResMgr >
             xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        std::auto_ptr< MasterPasswordDialog >
-            xDialog(new MasterPasswordDialog(
-                            getParentProperty(), nMode, xManager.get()));
-        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
+    if( nMode == star::task::PasswordRequestMode_PASSWORD_CREATE )
+    {
+            std::auto_ptr< MasterPasswordCreateDialog >
+                    xDialog(new MasterPasswordCreateDialog(
+                            getParentProperty(), xManager.get()));
+            rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                                                        ERRCODE_BUTTON_CANCEL);
-        aMaster = rtl::OUStringToOString(xDialog->GetMasterPassword(),
-                                         RTL_TEXTENCODING_UTF8);
+            aMaster = rtl::OUStringToOString(xDialog->GetMasterPassword(),
+                                                 RTL_TEXTENCODING_UTF8);
+    }
+    else
+    {
+            std::auto_ptr< MasterPasswordDialog >
+                    xDialog(new MasterPasswordDialog(
+                            getParentProperty(), nMode, xManager.get()));
+            rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
+                                                       ERRCODE_BUTTON_CANCEL);
+            aMaster = rtl::OUStringToOString(xDialog->GetMasterPassword(),
+                                                 RTL_TEXTENCODING_UTF8);
+    }
+
     }
     catch (std::bad_alloc const &)
     {

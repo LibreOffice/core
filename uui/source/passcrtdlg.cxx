@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: passworddlg.cxx,v $
+ *  $RCSfile: passcrtdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: mav $ $Date: 2001-10-11 06:53:03 $
  *
@@ -69,51 +69,55 @@
 #ifndef UUI_IDS_HRC
 #include <ids.hrc>
 #endif
-#ifndef UUI_PASSWORDDLG_HRC
-#include <passworddlg.hrc>
+#ifndef UUI_PASSCRTDLG_HRC
+#include <passcrtdlg.hrc>
 #endif
-#ifndef UUI_PASSWORDDLG_HXX
-#include <passworddlg.hxx>
+#ifndef UUI_PASSCRTDLG_HXX
+#include <passcrtdlg.hxx>
 #endif
 
-// MasterPasswordDialog---------------------------------------------------
+// MasterPasswordCreateDialog---------------------------------------------------
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MasterPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+IMPL_LINK( MasterPasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 {
-    EndDialog( RET_OK );
+    // compare both passwords and show message box if there are not equal!!
+    if( aEDMasterPasswordCrt.GetText() == aEDMasterPasswordRepeat.GetText() )
+        EndDialog( RET_OK );
+    else
+    {
+        String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, pResourceMgr ));
+        ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
+        aErrorBox.Execute();
+        aEDMasterPasswordCrt.SetText( String() );
+        aEDMasterPasswordRepeat.SetText( String() );
+        aEDMasterPasswordCrt.GrabFocus();
+    }
     return 1;
 }
 
 // -----------------------------------------------------------------------
 
-MasterPasswordDialog::MasterPasswordDialog
+MasterPasswordCreateDialog::MasterPasswordCreateDialog
 (
     Window*                                     pParent,
-    ::com::sun::star::task::PasswordRequestMode aDialogMode,
     ResMgr*                                     pResMgr
 ) :
 
-    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD, pResMgr ) ),
+    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD_CRT, pResMgr ) ),
 
-    aFTMasterPassword       ( this, ResId( FT_MASTERPASSWORD ) ),
-    aEDMasterPassword       ( this, ResId( ED_MASTERPASSWORD ) ),
-    aOKBtn                  ( this, ResId( BTN_MASTERPASSWORD_OK ) ),
-    aCancelBtn              ( this, ResId( BTN_MASTERPASSWORD_CANCEL ) ),
-    aHelpBtn                ( this, ResId( BTN_MASTERPASSWORD_HELP ) ),
-    nDialogMode             ( aDialogMode ),
+    aFTMasterPasswordCrt        ( this, ResId( FT_MASTERPASSWORD_CRT ) ),
+    aEDMasterPasswordCrt        ( this, ResId( ED_MASTERPASSWORD_CRT ) ),
+    aFTMasterPasswordRepeat ( this, ResId( FT_MASTERPASSWORD_REPEAT ) ),
+    aEDMasterPasswordRepeat ( this, ResId( ED_MASTERPASSWORD_REPEAT ) ),
+    aOKBtn                  ( this, ResId( BTN_MASTERPASSCRT_OK ) ),
+    aCancelBtn              ( this, ResId( BTN_MASTERPASSCRT_CANCEL ) ),
+    aHelpBtn                ( this, ResId( BTN_MASTERPASSCRT_HELP ) ),
     pResourceMgr            ( pResMgr )
 {
-    if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
-    {
-        String aErrorMsg( ResId( STR_ERROR_PASSWORD_WRONG, pResourceMgr ));
-        ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
-        aErrorBox.Execute();
-    }
-
     FreeResource();
 
-    aOKBtn.SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
+    aOKBtn.SetClickHdl( LINK( this, MasterPasswordCreateDialog, OKHdl_Impl ) );
 };
 

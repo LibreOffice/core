@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-31 13:08:43 $
+ *  last change: $Author: mav $ $Date: 2001-10-11 06:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #define STR_ERROR_PASSWORD_WRONG (RID_UUI_START + 14)
 // RID_UUI_START + 15, 16, 17 are misused by syncaccess/source/ui/resids.hrc
 #define RID_UUI_ERRHDL (RID_UUI_START + 20)
+#define DLG_UUI_PASSWORD_CRT (RID_UUI_START + 21)
 
 #define ERRCODE_UUI_IO_ABORT (ERRCODE_AREA_UUI + 0)
 #define ERRCODE_UUI_IO_ACCESSDENIED (ERRCODE_AREA_UUI + 1)
@@ -140,6 +141,7 @@
 #define HID_DLG_LOGIN (HID_UUI_START + 0)
 #define HID_DLG_COOKIES (HID_UUI_START + 1)
 #define HID_DLG_PASSWORD (HID_UUI_START+2)
+#define HID_DLG_PASSWORD_CRT (HID_UUI_START+3)
 // HID_UUI_END (aka HID_CHAOS_NEW_DATABASE) is reserved in
 // sfx2/util/hidother.src
 
