@@ -3,8 +3,8 @@
 #*    $Workfile:   makefile.  $
 #*
 #*    Ersterstellung    TH 01.04.97
-#*    Letzte Aenderung  $Author: ssa $ $Date: 2002-11-20 12:36:26 $
-#*    $Revision: 1.3 $
+#*    Letzte Aenderung  $Author: vg $ $Date: 2003-04-11 17:35:54 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile:   T:/sv2/win/source/gdi/makefile.__v  $
 #*
@@ -43,6 +43,8 @@ SLOFILES+=$(SLO)$/winlayout.obj
 .IF "$(GUI)" == "WNT"
 SLOFILES+=$(SLO)$/wntgdi.obj
 .ENDIF
+
+EXCEPTIONSFILES=	$(SLO)$/salprn.obj
 
 .IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/salgdi.obj   \
