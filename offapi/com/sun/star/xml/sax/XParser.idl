@@ -1,0 +1,199 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XParser.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:23:00 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xml_sax_XParser_idl__
+#define __com_sun_star_xml_sax_XParser_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_InputSource_idl__
+#include <com/sun/star/xml/sax/InputSource.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_SAXException_idl__
+#include <com/sun/star/xml/sax/SAXException.idl>
+#endif
+
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XDocumentHandler_idl__
+#include <com/sun/star/xml/sax/XDocumentHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XErrorHandler_idl__
+#include <com/sun/star/xml/sax/XErrorHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XDTDHandler_idl__
+#include <com/sun/star/xml/sax/XDTDHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XEntityResolver_idl__
+#include <com/sun/star/xml/sax/XEntityResolver.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::xml::sax::XParser
+/** specifies a SAX parser.
+
+
+
+    <p>This interface is an IDL version of the Java interface
+    <em>org.xml.sax.Parser</em> with some minor adaptations.</p>
+ */
+[ uik(4C809AF1-1281-11D3-9EC30010-5A677293), ident( "XParser", 1.0 ) ]
+interface XParser: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XParser::parseStream
+    /** parses an XML document from a stream.
+
+
+
+        <p>Set the desired handlers before calling this method.</p>
+     */
+    void parseStream( [in] com::sun::star::xml::sax::InputSource strucInputSource )
+            raises( com::sun::star::xml::sax::SAXException,
+                    com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XParser::setDocumentHandler
+    /** allows an application to register a document event handler.
+     */
+    void setDocumentHandler( [in] com::sun::star::xml::sax::XDocumentHandler xHandler );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XParser::setErrorHandler
+    /** allows an application to register an error event handler.
+
+
+
+        <p>Note that the error handler can throw an exception when an error or
+        warning occurs.  Note that an exception is thrown by the parser when
+        an unrecoverable (fatal) error occurs.</p>
+     */
+    void setErrorHandler( [in] com::sun::star::xml::sax::XErrorHandler xHandler );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XParser::setDTDHandler
+    /** allows an application to register a DTD-Handler.
+     */
+    void setDTDHandler( [in] com::sun::star::xml::sax::XDTDHandler xHandler );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XParser::setEntityResolver
+    /** allows an application to register a DTD-Handler.
+     */
+    void setEntityResolver( [in] com::sun::star::xml::sax::XEntityResolver xResolver );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XParser::setLocale
+    /** sets a locale specified for localization of warnings and error messages.
+
+
+
+        <p>Set the language of the error messages. Useful when the parsing
+        errors will be presented to the user.</p>
+     */
+    void setLocale( [in] com::sun::star::lang::Locale locale );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:22  hjs
+    initial import
+
+    Revision 1.4  2000/09/11 11:53:08  mi
+    documentation merged from XML
+
+    Revision 1.2  2000/02/23 11:41:20  mi
+    results from proofreading in layouted version
+
+    Revision 1.1.1.1  1999/11/11 09:48:47  jsc
+    new
+
+
+=============================================================================*/
+#endif

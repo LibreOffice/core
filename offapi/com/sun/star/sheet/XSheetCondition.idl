@@ -1,0 +1,209 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSheetCondition.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_XSheetCondition_idl__
+#define __com_sun_star_sheet_XSheetCondition_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_ConditionOperator_idl__
+#include <com/sun/star/sheet/ConditionOperator.idl>
+#endif
+
+#ifndef __com_sun_star_table_CellAddress_idl__
+#include <com/sun/star/table/CellAddress.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::sheet::XSheetCondition
+/** represents a condition in conditional formats or validation.@see service com::sun::star::sheet::TableValidation
+        @see service com::sun::star::sheet::TableConditionalEntry
+ */
+[ uik(E2281523-33D6-11D1-AABE00A0-249D5590), ident( "XSheetCondition", 1.0 ) ]
+interface XSheetCondition: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::getOperator
+    /** returns the operator in the condition.
+     */
+    [const] com::sun::star::sheet::ConditionOperator getOperator();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::setOperator
+    /** sets the operator in the condition.
+     */
+    void setOperator( [in] com::sun::star::sheet::ConditionOperator nOperator );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XSheetCondition::getFormula1
+
+    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::getFormula1
+    /** returns either the comparison value, which is used in
+        the condition, or the first value if two values are needed for
+        the operator.
+
+
+
+        <p>This can be a formula, a numeric constant, or a
+        string constant in quotes.</p>
+     */
+    [const] string getFormula1();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::setFormula1
+    /** sets either the comparison value, which is used in
+        the condition, or the first value if two values are needed for
+        the operator.
+
+
+
+        <p>This can be a formula, a numeric constant, or a
+        string constant in quotes.</p>
+     */
+    void setFormula1( [in] string aFormula1 );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XSheetCondition::getFormula2
+
+    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::getFormula2
+    /** if two values are needed for the operator, this method returns
+        the second one.
+
+
+
+        <p>this can be a formula, a numeric constant, or a string constant
+        in quotes.  The operators <const>ConditionOperator::BETWEEN</const>
+        and <const>ConditionOperator::NOT_BETWEEN</const> need two values
+        each.</p>
+     */
+    [const] string getFormula2();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::setFormula2
+    /** if two values are needed for the operator, this method sets
+        the second one.
+
+
+
+        <p>This can be a formula, a numeric constant, or a string constant
+        in quotes.  The operators <const>ConditionOperator::BETWEEN</const>
+        and <const>ConditionOperator::NOT_BETWEEN</const> need two values
+        each.</p>
+     */
+    void setFormula2( [in] string aFormula2 );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::getSourcePosition
+    /** returns the position in the document which
+        is used as a base for relative references in the formulas.
+     */
+    [const] com::sun::star::table::CellAddress getSourcePosition();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::setSourcePosition
+    /** sets the position in the document which is used
+        as a base for relative references in the formulas.
+     */
+    void setSourcePosition( [in] com::sun::star::table::CellAddress aSourcePosition );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/09 14:24:58  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.1.1.1  2000/09/18 23:35:51  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:52  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/03/24 17:35:24  nn
+    #74032# documentation added
+
+    Revision 1.2  2000/02/07 11:24:56  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
+    new
+
+
+=============================================================================*/
+#endif

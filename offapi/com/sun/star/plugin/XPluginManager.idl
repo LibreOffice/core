@@ -1,0 +1,184 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XPluginManager.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:52 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_plugin_XPluginManager_idl__
+#define __com_sun_star_plugin_XPluginManager_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_plugin_XPluginContext_idl__
+#include <com/sun/star/plugin/XPluginContext.idl>
+#endif
+
+#ifndef __com_sun_star_plugin_PluginDescription_idl__
+#include <com/sun/star/plugin/PluginDescription.idl>
+#endif
+
+#ifndef __com_sun_star_plugin_XPlugin_idl__
+#include <com/sun/star/plugin/XPlugin.idl>
+#endif
+
+#ifndef __com_sun_star_plugin_PluginException_idl__
+#include <com/sun/star/plugin/PluginException.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XToolkit_idl__
+#include <com/sun/star/awt/XToolkit.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XWindowPeer_idl__
+#include <com/sun/star/awt/XWindowPeer.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module plugin {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::plugin::XPluginManager
+/** manages all plugin instances.
+
+
+
+    <p>Plugins can be created only from an <type>XPluginManager</type>.
+    It also creates <type>XPluginContext</type> objects,
+    which can be overloaded by aggregation.</p>
+ */
+[ uik(131ADEC2-BC48-11D2-AB2B0060-97759B97), ident( "XPluginManager", 1.0 ) ]
+interface XPluginManager: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginManager::createPluginContext
+    /** creates a default context.
+
+
+
+        <p>This context depends on the service
+        <type scope="com::sun::star::frame">Desktop</type>.</p>
+     */
+    com::sun::star::plugin::XPluginContext createPluginContext();
+
+    //-------------------------------------------------------------------------
+
+    // DOCUMENTATION CHANGED FOR XPluginManager::getPluginDescriptions
+
+
+    // DocMerge from idl: method com::sun::star::plugin::XPluginManager::getPluginDescriptions
+    /** returns the descriptions for all available plugins.
+     */
+    sequence<com::sun::star::plugin::PluginDescription> getPluginDescriptions();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginManager::createPlugin
+    /** creates a new plugin instance.
+     */
+    com::sun::star::plugin::XPlugin createPlugin( [in] com::sun::star::plugin::XPluginContext acontext,
+             [in] short mode,
+             [in] sequence<string> argn,
+             [in] sequence<string> argv,
+             [in] com::sun::star::plugin::PluginDescription plugintype )
+            raises( com::sun::star::plugin::PluginException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginManager::createPluginFromURL
+    /** creates a new plugin instance.
+     */
+    com::sun::star::plugin::XPlugin createPluginFromURL( [in] com::sun::star::plugin::XPluginContext acontext,
+             [in] short mode,
+             [in] sequence<string> argn,
+             [in] sequence<string> argv,
+             [in] com::sun::star::awt::XToolkit toolkit,
+             [in] com::sun::star::awt::XWindowPeer parent,
+             [in] string url );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:29  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:35  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/03/17 13:15:29  pl
+    #74035# documentation
+
+    Revision 1.2  2000/02/07 11:24:42  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
+    new
+
+
+=============================================================================*/
+#endif

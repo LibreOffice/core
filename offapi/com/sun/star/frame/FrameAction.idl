@@ -1,0 +1,201 @@
+/*************************************************************************
+ *
+ *  $RCSfile: FrameAction.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_FrameAction_idl__
+#define __com_sun_star_frame_FrameAction_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+
+// DocMerge from xml: enum com::sun::star::frame::FrameAction
+/** These are the events which can happen to the components in frames
+    of the desktop.
+ */
+enum FrameAction
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: value com::sun::star::frame::FrameAction::COMPONENT_ATTACHED
+    /** An event of this kind is broadcast whenever a component is
+        attached to a frame.
+
+
+
+        <p>This is almost the same as the instanciation of the component
+        within that frame. The component is attached to the frame
+        immediately before this event is broadcast.</p>@see XFrame::activated
+     */
+    COMPONENT_ATTACHED,
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: value com::sun::star::frame::FrameAction::COMPONENT_DETACHING
+    /** An event of this kind is broadcast whenever a component is
+        detaching from a frame.
+
+
+
+        <p>This is quite the same as the destruction of the component
+        which was in that frame. At the moment when the event is broadcast
+        the component is still attached to the frame but in the next
+        moment it won't.
+
+        </p>
+     */
+    COMPONENT_DETACHING,
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: value com::sun::star::frame::FrameAction::COMPONENT_REATTACHED
+    /** An event of this kind is broadcast whenever a component is
+        attached to a new model.
+
+
+
+        <p>In this case the component remains the same but operates
+        on a new model component.</p>
+     */
+    COMPONENT_REATTACHED,
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: value com::sun::star::frame::FrameAction::FRAME_ACTIVATED
+    /** An event of this kind is broadcast whenever a component gets
+        activated.
+
+
+
+        <p>Activations are broacast from the top component which was
+        not active before, down to the inner most component.</p>@see XFrame::activated
+     */
+    FRAME_ACTIVATED,
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: value com::sun::star::frame::FrameAction::FRAME_DEACTIVATING
+    /** An event of this kind is broadcasted immediately before the
+        component is deactivated.
+
+
+
+        <p>Deactivations are broadcast from the innermost component which
+        does not stay active up to the outer most component which does not
+        stay active.
+
+        </p>@see XFrame::contextChanged
+     */
+    FRAME_DEACTIVATING,
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: value com::sun::star::frame::FrameAction::CONTEXT_CHANGED
+    /** An event of this kind is broadcast whenever a component changed
+        its internal context (i.e. the selection).
+
+
+
+        <p>If the activation status within a frame changes, this counts as
+        a context change too.
+
+        </p>
+     */
+    CONTEXT_CHANGED,
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: value com::sun::star::frame::FrameAction::FRAME_UI_ACTIVATED
+    /** An event of this kind is broadcast by an active frame when it
+        is getting UI control (tool control).
+     */
+    FRAME_UI_ACTIVATED,
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: value com::sun::star::frame::FrameAction::FRAME_UI_DEACTIVATING
+    /** An event of this kind is broadcast by an active frame when it
+        is losing UI control (tool control).
+     */
+    FRAME_UI_DEACTIVATING
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:27  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
+    new
+
+
+=============================================================================*/
+#endif

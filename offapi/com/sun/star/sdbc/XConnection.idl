@@ -1,0 +1,377 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XConnection.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XConnection_idl__
+#define __com_sun_star_sdbc_XConnection_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+ module com {  module sun {  module star {  module container {
+interface XNameAccess;
+};};};};
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_XCloseable_idl__
+#include <com/sun/star/sdbc/XCloseable.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+interface XStatement;
+interface XPreparedStatement;
+interface XDatabaseMetaData;
+
+
+// DocMerge from xml: interface com::sun::star::container::com::sun::star::sdbc::XConnection
+/** represents a connection (session) with a specific
+    database. Within the context of a Connection, SQL statements are
+    executed and results are returned.
+
+
+    <p>A Connection's database is able to provide information
+    describing its tables, its supported SQL grammar, its stored
+    procedures, and the capabilities of this connection. This
+    information is obtained with the <code>getMetaData</code> method.
+
+    </p>@see com::sun::star::sdbc::XDriverManager
+     @see com::sun::star::sdbc::XStatement
+     @see com::sun::star::sdbc::XDatabaseMetaData
+ */
+[ uik(D6B60231-9067-11d3-9EE00010-5AD7A5C4), ident("XConnection", 1.0) ]
+interface XConnection: com::sun::star::sdbc::XCloseable
+{
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::createStatement
+    /** creates a new <code>Statement</code> object for sending
+        SQL statements to the database.
+
+
+        <p>SQL statements without parameters are normally
+        executed using Statement objects. If the same SQL statement
+        is executed many times, it is more efficient to use a
+        PreparedStatement <type scope="com::sun::star::sdbc">PreparedStatement</type>.
+        </p>
+        <p>Result sets created using the returned Statement will have
+        forward-only type, and read-only concurrency, by default.
+        </p>
+        <p>Escape processing for the SQL-Statement is enabled, by default.
+        </p>
+     */
+    XStatement createStatement() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::prepareStatement
+    /** creates a <code>PreparedStatement</code> object for sending
+        parameterized SQL statements to the database.
+
+
+        <p>A SQL statement with or without IN parameters can be
+        pre-compiled and stored in a PreparedStatement object. This
+        object can then be used to efficiently execute this statement
+        multiple times.
+
+        </p>
+        <p>
+        <b>Note:</b> This method is optimized for handling
+        parametric SQL statements that benefit from precompilation. If
+        the driver supports precompilation,
+        the method <code>prepareStatement</code> will send
+        the statement to the database for precompilation. Some drivers
+        may not support precompilation. In this case, the statement may
+        not be sent to the database until the <code>PreparedStatement</code> is
+        executed.  This has no direct effect on users; however, it does
+        affect which method throws certain SQLExceptions.
+        </p>
+        <p> Result sets created using the returned PreparedStatement will have
+        forward-only type and read-only concurrency, by default.
+        </p>
+        <p>Escape processing for the SQL-Statement is enabled, by default.
+        </p>
+     */
+    XPreparedStatement prepareStatement([in]string sql) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::prepareCall
+    /** creates a <code>CallableStatement</code> object for calling
+        database stored procedures.
+
+
+        <p>The CallableStatement provides methods for setting up its IN and OUT
+        parameters, and methods for executing the call to a stored procedure.
+        </p>
+        <p>
+        <b>Note:</b> This method is optimized for handling stored
+        procedure call statements. Some drivers may send the call
+        statement to the database when the method <code>prepareCall</code>
+        is done;<br>
+        others may wait until the CallableStatement is executed. This has no
+        direct effect on users; however, it does affect which method
+        throws certain SQLExceptions.
+        Result sets created using the returned CallableStatement will have
+        forward-only type and read-only concurrency, by default.
+        </p>
+     */
+    XPreparedStatement prepareCall([in]string sql) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::nativeSQL
+    /** converts the given SQL statement into the system's native SQL grammar.
+        A driver may convert the JDBC SQL grammar into its system's
+        native SQL grammar prior to sending it; this method returns the
+        native form of the statement that the driver would have sent.
+     */
+    string nativeSQL([in]string sql) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setAutoCommit
+    /** sets this connection's auto-commit mode.
+
+
+        <p>If a connection is in auto-commit mode, then all its SQL
+        statements will be executed and committed as individual
+        transactions. Otherwise, its SQL statements are grouped into
+        transactions that are terminated by a call to either
+        the method <code>commit</code> or the method <code>rollback</code>.
+        By default, new connections are in auto-commit mode.
+        </p>
+        <p>The commit occurs when the statement completes or the next
+        execute occurs, whichever comes first. In the case of
+        statements returning a ResultSet, the statement completes when
+        the last row of the ResultSet has been retrieved or the
+        ResultSet has been closed. In advanced cases, a single
+        statement may return multiple results as well as output
+        parameter values. In these cases the commit occurs when all results and
+        output parameter values have been retrieved.
+        </p>
+     */
+    void setAutoCommit([in] boolean autoCommit) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getAutoCommit
+    /** gets the current auto-commit state.@see setAutoCommit()
+     */
+    [const] boolean getAutoCommit() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::commit
+    /** makes all changes made since the previous commit/rollback
+        permanent and releases any database locks currently held
+        by the Connection. This method should be
+        used only when auto-commit mode has been disabled.@see setAutoCommit()
+     */
+    void commit() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::rollback
+    /** drops all changes made since the previous
+        commit/rollback and releases any database locks currently held
+        by this Connection. This method should be used only when auto-commit has been disabled.@see setAutoCommit()
+     */
+    void rollback() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::isClosed
+    /** tests to see if a connection is closed.
+
+
+        <p>
+        <b>Note:</b> A Connection is automatically closed if no one references it
+        anymore. Certain fatal errors also result in a closed Connection.
+        </p>
+     */
+    [const] boolean isClosed() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getMetaData
+    /** gets the metadata regarding this connection's database.
+
+
+        <p>A Connection's database is able to provide information
+        describing its tables, its supported SQL grammar, its stored
+        procedures, the capabilities of this connection, and so on. This
+        information is made available through a DatabaseMetaData
+        object.
+        </p>
+     */
+    XDatabaseMetaData getMetaData() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setReadOnly
+    /** puts this connection in read-only mode as a hint to enable
+        database optimizations.
+
+
+        <p>
+        <b>Note:</b> This method cannot be called while in the
+        middle of a transaction; calling setReadOnly with <true></true> does not
+        necessarily cause writes to be prohibited.
+        </p>
+     */
+    void setReadOnly([in]boolean readOnly) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::isReadOnly
+    /** tests to see if the connection is in read-only mode.
+     */
+    [const] boolean isReadOnly() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setCatalog
+    /** sets a catalog name in order to select
+        a subspace of this Connection's database in which to work.
+        If the driver does not support catalogs, it will
+        silently ignore this request.
+     */
+    void setCatalog([in]string catalog) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getCatalog
+    /** returns the Connection's current catalog name.
+     */
+    [const] string getCatalog() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setTransactionIsolation
+    /** attempts to change the transaction isolation level to the one given.
+
+
+        <p>The constants defined in
+        <type scope="com::sun::star::sdbc">TransactionIsolation</type> are the possible
+        transaction isolation levels.
+        </p>
+        <p>
+        <b>Note:</b> This method cannot be called while
+        in the middle of a transaction.
+        </p>@see
+                com::sun::star::sdbc::XDatabaseMetaData::supportsTransactionIsolationLevel()
+     */
+    void setTransactionIsolation([in]long level) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getTransactionIsolation
+    /** gets this Connection's current transaction isolation level.
+     */
+    [const] long getTransactionIsolation() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getTypeMap
+    /** gets the type map object associated with this connection. Only drivers
+        how implement the custom type mapping facility will return an object otherwise
+        NULL could be returned.
+
+
+        <p>Unless the application has added an entry to the type map, the map
+        returned will be empty.
+        </p>
+     */
+    [const] com::sun::star::container::XNameAccess getTypeMap() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setTypeMap
+    /** installs the given type map as the type map for this connection.
+        The type map will be used for the custom mapping of SQL structured types
+        and distinct types.
+
+
+        <p>Only if the driver supports custom type mapping the setting of a map is
+        allowed.
+        </p>
+     */
+    void setTypeMap([in]com::sun::star::container::XNameAccess typeMap)
+        raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:41  hjs
+    initial import
+
+    Revision 1.8  2000/09/11 11:52:43  mi
+    documentation merged from XML
+
+    Revision 1.6  2000/01/28 15:42:27  dg
+    #72175# documentation of getTypeMap
+
+    Revision 1.5  2000/01/18 15:42:29  dg
+    #70278# Documentation completed
+
+    Revision 1.4  1999/12/20 16:11:35  dg
+    #70278# changes in API
+
+    Revision 1.3  1999/12/13 13:47:55  dg
+    #70278# XSQLErrorBroadcaster removed
+
+    Revision 1.2  1999/11/24 11:33:26  dg
+    chk includes
+
+    Revision 1.1  1999/11/24 08:41:04  dg
+    new StarDataBaseConnectivity
+
+===========================================================================*/
+#endif

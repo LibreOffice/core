@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XLoadable.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_component_DataForm_idl__
+#define __com_sun_star_form_XLoadable_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_form_XLoadListener_idl__
+#include <com/sun/star/form/XLoadListener.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::form::XLoadable
+/** interface provides functionality to implement objects which may be loaded.
+ */
+[ uik(9E77330E-A3F3-11d3-86A80050-04D8BBE7), ident( "XLoadable", 1.0 ) ]
+interface XLoadable: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::form::XLoadable::load
+    /** starts the data processing.@see XLoadListener
+     */
+    [oneway] void load();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::form::XLoadable::unload
+    /** stops the data processing.@see XLoadListener
+     */
+    [oneway] void unload();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::form::XLoadable::reload
+    /** does a smart refresh of the object. The final state will be the same as if
+        unload and load were called, but reload is the more efficient way to do the same.
+        If the object isn't loaded, nothing happens.@see XLoadListener
+     */
+    [oneway] void reload();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::form::XLoadable::isLoaded
+    /** returns if the object is in loaded state.@see XLoadListener
+     */
+    boolean isLoaded();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::form::XLoadable::addLoadListener
+    /** adds the specified listener to receive events "loaded" and "unloaded."
+     */
+    [oneway] void addLoadListener( [in] com::sun::star::form::XLoadListener aListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::form::XLoadable::removeLoadListener
+    /** removes the specified listener.
+     */
+    [oneway] void removeLoadListener( [in] com::sun::star::form::XLoadListener aListener );
+};
+
+}; }; }; };
+
+#endif
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:17  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:25  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/02/07 11:24:32  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.2  1999/12/22 07:10:23  fs
+    #70278# added reload
+
+    Revision 1.1  1999/11/29 15:00:33  fs
+    interface for components which can be loaded and unloaded
+
+
+
+=============================================================================*/

@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XNumberFormats.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XNumberFormats_idl__
+#define __com_sun_star_util_XNumberFormats_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_util_MalformedNumberFormatException_idl__
+#include <com/sun/star/util/MalformedNumberFormatException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::util::XNumberFormats
+/** provides access to multiple <type>NumberFormat</type>s.
+ */
+[ uik(E2280428-33D6-11D1-AABE00A0-249D5590), ident( "XNumberFormats", 1.0 ) ]
+interface XNumberFormats: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::util::XNumberFormats::getByKey
+    /** @returns
+                    a readonly <type>NumberFormatProperties</type>.
+     */
+    com::sun::star::beans::XPropertySet getByKey( [in] long nKey );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XNumberFormats::queryKeys
+
+    // DocMerge from idl: method com::sun::star::util::XNumberFormats::queryKeys
+    /** @returns
+                    a sequence of the keys of all number formats with the specified type and language.
+
+                @param  nType
+                        the type of number formats to return. Must be one of the
+                        <type>NumberFormat</type> constants.
+
+                @param  nLanguage
+                        the language of number formats to return.
+
+                @param  bCreate
+                        <TRUE/>: create new entries if no formats for the selected language exist<BR>
+                        <FALSE/>: return an empty list if no formats for the selected language exist
+     */
+    sequence<long> queryKeys( [in] short nType,
+             [in] com::sun::star::lang::Locale nLocale,
+             [in] boolean bCreate );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormats::queryKey
+    /** finds a number format by its format string and returns its key.
+     */
+    long queryKey( [in] string aFormat,
+             [in] com::sun::star::lang::Locale nLocale,
+             [in] boolean bScan );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormats::addNew
+    /** adds a new number format to the list, using a format string.
+     */
+    long addNew( [in] string aFormat,
+             [in] com::sun::star::lang::Locale nLocale )
+            raises( com::sun::star::util::MalformedNumberFormatException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormats::addNewConverted
+    /** adds a new number format to the list, using a format
+        string in a different locale than the desired locale of the
+        resulting number format.
+     */
+    long addNewConverted( [in] string aFormat,
+             [in] com::sun::star::lang::Locale nLocale,
+             [in] com::sun::star::lang::Locale nNewLocale )
+            raises( com::sun::star::util::MalformedNumberFormatException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormats::removeByKey
+    /** removes a number format from the list.
+     */
+    void removeByKey( [in] long nKey );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XNumberFormats::generateFormat
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormats::generateFormat
+    /** generates a format string from several parameters without
+        creating an actual number format.
+     */
+    string generateFormat( [in] long nBaseKey,
+             [in] com::sun::star::lang::Locale nLocale,
+             [in] boolean bThousands,
+             [in] boolean bRed,
+             [in] short nDecimals,
+             [in] short nLeading );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
+    initial import
+
+    Revision 1.9  2000/09/11 11:53:06  mi
+    documentation merged from XML
+
+    Revision 1.7  2000/03/24 13:17:00  nn
+    #74032# documentation added
+
+    Revision 1.6  2000/01/28 15:24:59  mi
+    #72210# Locale instead of Language in NumberFormatter
+
+    Revision 1.5  2000/01/28 15:01:52  mi
+    #72210# Locale instead of Language in NumberFormatter
+
+    Revision 1.4  2000/01/27 16:13:34  mi
+    #70728# missing documentation marked
+
+    Revision 1.3  2000/01/07 13:22:26  nn
+    #71543# Numberformat really as XPropertySet
+
+    Revision 1.2  2000/01/06 11:06:40  mi
+    #71543# Numberformat as XPropertySet
+
+    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
+    new
+
+
+=============================================================================*/
+#endif

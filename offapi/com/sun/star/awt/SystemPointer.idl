@@ -1,0 +1,609 @@
+/*************************************************************************
+ *
+ *  $RCSfile: SystemPointer.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_SystemPointer_idl__
+#define __com_sun_star_awt_SystemPointer_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+// DocMerge from idl: constants com::sun::star::awt::SystemPointer
+/** specifies the shape of a mouse pointer.
+ */
+constants SystemPointer
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::ARROW
+    /** specifies the normal arrow-like mouse pointer.
+     */
+    const long ARROW = 0;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::INVISIBLE
+    /** specifies an invisible mouse pointer.
+     */
+    const long INVISIBLE = 1;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::WAIT
+    /** specifies a waiting symbol as a mouse pointer (for example hourglas).
+     */
+    const long WAIT = 2;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::TEXT
+    /** specifies a mouse pointer for text (cursor-like).
+     */
+    const long TEXT = 3;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::HELP
+    /** specifies a mouse pointer for online help.
+     */
+    const long HELP = 4;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::CROSS
+    /** specifies a cross as a mouse pointer.
+     */
+    const long CROSS = 5;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::MOVE
+    /** specifies a mouse pointer which symbolizes movement.
+     */
+    const long MOVE = 6;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::NSIZE
+    /** specifies a mouse pointer which symbolizes resizing for a top border.
+     */
+    const long NSIZE = 7;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::SSIZE
+    /** specifies a mouse pointer which symbolizes resizing for a bottom border.
+     */
+    const long SSIZE = 8;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::WSIZE
+    /** specifies a mouse pointer which symbolizes resizing for a left border.
+     */
+    const long WSIZE = 9;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::ESIZE
+    /** specifies a mouse pointer which symbolizes resizing for a right border.
+     */
+    const long ESIZE = 10;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::NWSIZE
+    /** specifies a mouse pointer which symbolizes resizing for the top-left corner.
+     */
+    const long NWSIZE = 11;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::NESIZE
+    /** specifies a mouse pointer which symbolizes resizing for the top-right corner.
+     */
+    const long NESIZE = 12;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::SWSIZE
+    /** specifies a mouse pointer which symbolizes resizing for the bottom-left corner.
+     */
+    const long SWSIZE = 13;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::SESIZE
+    /** specifies a mouse pointer which symbolizes resizing for the bottom-right corner.
+     */
+    const long SESIZE = 14;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::WINDOW_NSIZE
+    /** specifies a mouse pointer which symbolizes window resizing for a top border.
+     */
+    const long WINDOW_NSIZE = 15;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::WINDOW_SSIZE
+    /** specifies a mouse pointer which symbolizes window resizing for a bottom border.
+     */
+    const long WINDOW_SSIZE = 16;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::WINDOW_WSIZE
+    /** specifies a mouse pointer which symbolizes window resizing for a left border.
+     */
+    const long WINDOW_WSIZE = 17;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::WINDOW_ESIZE
+    /** specifies a mouse pointer which symbolizes window resizing for a right border.
+     */
+    const long WINDOW_ESIZE = 18;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::WINDOW_NWSIZE
+    /** specifies a mouse pointer which symbolizes window resizing for the top-left corner.
+     */
+    const long WINDOW_NWSIZE = 19;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::WINDOW_NESIZE
+    /** specifies a mouse pointer which symbolizes window resizing for the top-right corner.
+     */
+    const long WINDOW_NESIZE = 20;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::WINDOW_SWSIZE
+    /** specifies a mouse pointer which symbolizes window resizing for the bottom-left corner.
+     */
+    const long WINDOW_SWSIZE = 21;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::WINDOW_SESIZE
+    /** specifies a mouse pointer which symbolizes window resizing for the bottom-right corner.
+     */
+    const long WINDOW_SESIZE = 22;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::HSPLIT
+    /** specifies a mouse pointer which symbolizes horzizontal splitting.
+     */
+    const long HSPLIT = 23;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::VSPLIT
+    /** specifies a mouse pointer which symbolizes vertical splitting.
+     */
+    const long VSPLIT = 24;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::HSIZEBAR
+    /** specifies a mouse pointer which symbolozes horziontal resizing.
+     */
+    const long HSIZEBAR = 25;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::VSIZEBAR
+    /** specifies a mouse pointer which symbolozes vertical resizing.
+     */
+    const long VSIZEBAR = 26;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::HAND
+    /** specifies a hand symbol as mouse pointer.
+     */
+    const long HAND = 27;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::REFHAND
+    /** specifies a pointing hand symbol as mouse pointer.
+     */
+    const long REFHAND = 28;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::PEN
+    /** specifies a pen symbol as mouse pointer.
+     */
+    const long PEN = 29;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::MAGNIFY
+    /** specifies a magnify symbol as mouse pointer.
+     */
+    const long MAGNIFY = 30;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::FILL
+    /** specifies a fill symbol as mouse pointer.
+     */
+    const long FILL = 31;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::ROTATE
+    /** specifies a rotate symbol as mouse pointer.
+     */
+    const long ROTATE = 32;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::HSHEAR
+    /** specifies a horizontal shear symbol as mouse pointer.
+     */
+    const long HSHEAR = 33;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::VSHEAR
+    /** specifies a vertical shear symbol as mouse pointer.
+     */
+    const long VSHEAR = 34;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::MIRROR
+    /** specifies a mirror symbol as mouse pointer.
+     */
+    const long MIRROR = 35;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::CROOK
+    /** specifies a crook symbol as mouse pointer.
+     */
+    const long CROOK = 36;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::CROP
+    /** specifies a crop symbol as mouse pointer.
+     */
+    const long CROP = 37;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::MOVEPOINT
+    /** specifies a mouse pointer which symbolizes moving a point.
+     */
+    const long MOVEPOINT = 38;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::MOVEBEZIERWEIGHT
+    /** specifies a mouse pointer which symbolizes moving a bezier weight.
+     */
+    const long MOVEBEZIERWEIGHT = 39;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::MOVEDATA
+    /** specifies a mouse pointer which symbolizes moving data.
+     */
+    const long MOVEDATA = 40;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::COPYDATA
+    /** specifies a mouse pointer which symbolizes copying data.
+     */
+    const long COPYDATA = 41;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::LINKDATA
+    /** specifies a mouse pointer which symbolizes linking data.
+     */
+    const long LINKDATA = 42;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::MOVEDATALINK
+    /** specifies a mouse pointer which symbolizes moving a data link.
+     */
+    const long MOVEDATALINK = 43;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::COPYDATALINK
+    /** specifies a mouse pointer which symbolizes copying a data link.
+     */
+    const long COPYDATALINK = 44;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::MOVEFILE
+    /** specifies a mouse pointer which symbolizes moving a file.
+     */
+    const long MOVEFILE = 45;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::COPYFILE
+    /** specifies a mouse pointer which symbolizes copying a file.
+     */
+    const long COPYFILE = 46;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::LINKFILE
+    /** specifies a mouse pointer which symbolizes linking a file.
+     */
+    const long LINKFILE = 47;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::MOVEFILELINK
+    /** specifies a mouse pointer which symbolizes moving a file link.
+     */
+    const long MOVEFILELINK = 48;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::COPYFILELINK
+    /** specifies a mouse pointer which symbolizes copying a file link.
+     */
+    const long COPYFILELINK = 49;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::MOVEFILES
+    /** specifies a mouse pointer which symbolizes moving multiple files.
+     */
+    const long MOVEFILES = 50;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::COPYFILES
+    /** specifies a mouse pointer which symbolizes copying multiple files.
+     */
+    const long COPYFILES = 51;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::NOTALLOWED
+    /** specifies a mouse pointer which symbolizes "not allowed".
+     */
+    const long NOTALLOWED = 52;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_LINE
+    /** specifies a mouse pointer which symbolizes drawing a line.
+     */
+    const long DRAW_LINE = 53;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_RECT
+    /** specifies a mouse pointer which symbolizes drawing a rectangle.
+     */
+    const long DRAW_RECT = 54;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_POLYGON
+    /** specifies a mouse pointer which symbolizes drawing a polygon.
+     */
+    const long DRAW_POLYGON = 55;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_BEZIER
+    /** specifies a mouse pointer which symbolizes drawing a bezier.
+     */
+    const long DRAW_BEZIER = 56;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_ARC
+    /** specifies a mouse pointer which symbolizes drawing an arc.
+     */
+    const long DRAW_ARC = 57;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_PIE
+    /** specifies a mouse pointer which symbolizes drawing a pie.
+     */
+    const long DRAW_PIE = 58;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_CIRCLECUT
+    /** specifies a mouse pointer which symbolizes drawing a circle cut.
+     */
+    const long DRAW_CIRCLECUT = 59;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_ELLIPSE
+    /** specifies a mouse pointer which symbolizes drawing an ellipse.
+     */
+    const long DRAW_ELLIPSE = 60;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_FREEHAND
+    /** specifies a mouse pointer which symbolizes drawing free handed.
+     */
+    const long DRAW_FREEHAND = 61;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_CONNECT
+    /** specifies a mouse pointer which symbolizes drawing a connector.
+     */
+    const long DRAW_CONNECT = 62;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_TEXT
+    /** specifies a mouse pointer which symbolizes drawing text.
+     */
+    const long DRAW_TEXT = 63;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DRAW_CAPTION
+    /** specifies a mouse pointer which symbolizes drawing a text caption.
+     */
+    const long DRAW_CAPTION = 64;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::CHART
+    /** specifies a mouse pointer which symbolizes a chart.
+     */
+    const long CHART = 65;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::DETECTIVE
+    /** specifies a mouse pointer which symbolizes a detective.
+     */
+    const long DETECTIVE = 66;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::PIVOT_COL
+    /** specifies a mouse pointer which symbolizes a pivot column.
+     */
+    const long PIVOT_COL = 67;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::PIVOT_ROW
+    /** specifies a mouse pointer which symbolizes a pivot row.
+     */
+    const long PIVOT_ROW = 68;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::PIVOT_FIELD
+    /** specifies a mouse pointer which symbolizes a pivot field.
+     */
+    const long PIVOT_FIELD = 69;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::CHAIN
+    /** specifies a mouse pointer which symbolizes a chain.
+     */
+    const long CHAIN = 70;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::awt::SystemPointer::CHAIN_NOTALLOWED
+    /** specifies a mouse pointer which symbolizes "chaining not allowed".
+     */
+    const long CHAIN_NOTALLOWED = 71;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:34:50  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:05  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/05/16 12:19:51  mi
+    documentation
+
+    Revision 1.3  2000/03/16 14:38:20  mt
+    Changed POINTER_NULL to POINTER_INVISIBLE
+
+    Revision 1.2  2000/02/07 11:24:13  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

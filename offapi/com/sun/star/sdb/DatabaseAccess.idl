@@ -1,0 +1,209 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DatabaseAccess.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_DatabaseAccess_idl__
+#define __com_sun_star_sdb_DatabaseAccess_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+#endif
+
+
+ module com {  module sun {  module star {  module sdb {
+
+interface XDatabaseAccess;
+interface XCompletedConnection;
+
+
+// DocMerge from xml: service com::sun::star::sdb::DatabaseAccess
+/** specifies a component, which controls DatabaseAccessConnections and acts like a
+    shared DataSource.
+ */
+service DatabaseAccess
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XPropertySet;
+
+
+    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccess: interface com::sun::star::sdb::XDatabaseAccess
+    /** controls the establishing of the connections.
+     */
+    interface XDatabaseAccess;
+
+
+    // DocMerge from xml: service com::sun::star::sdb::DatabaseAccess: interface com::sun::star::sdb::XCompletedConnection
+    /** establishing a connection with user interaction, the implementation
+             is optional.
+     */
+    interface XCompletedConnection;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::URL
+    /** is the URL of the bean.
+     */
+    [readonly, property] string URL;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::Title
+    /** is the title of the bean.
+     */
+    [property] string Title;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::ConnectURL
+    /** indicates a database url of the form <br>
+        <code> jdbc:<em>subprotocol</em>:<em>subname</em></code> or
+        <code> sdbc:<em>subprotocol</em>:<em>subname</em></code>
+     */
+    [property] string ConnectURL;
+
+
+    // DocMerge from idl: property com::sun::star::sdb::DatabaseAccess::ConnectInfo
+    /** is a list of arbitrary string tag/value pairs as
+             connection arguments; normally at least a "user" and
+             "password" property should be included.
+     */
+    [property] sequence<com::sun::star::beans::PropertyValue> ConnectInfo;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::IsReadOnly
+    /** determines whether modifications on the data access bean are allowed
+        or not.
+     */
+    [readonly, property] boolean IsReadOnly;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::NumberFormatsSupplier
+    /** provides an object for formatting numbers.
+     */
+    [property] com::sun::star::util::XNumberFormatsSupplier
+                        NumberFormatsSupplier;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DatabaseAccess::IsPasswordRequired
+    /** indicates that a password is always necessary.
+
+
+
+
+
+
+
+
+
+        @optional
+     */
+    [optional, property] boolean IsPasswordRequired;
+
+
+    // DocMerge from idl: property com::sun::star::sdb::DatabaseAccess::TableFilter
+    /** defines a list of tables, on which the bean should have it's focus.
+             If empty, all the tables of the are used.
+     */
+    [optional, property] sequence<string> TableFilter;
+
+
+    // DocMerge from idl: property com::sun::star::sdb::DatabaseAccess::TableTypeFilter
+    /** defines a list of table types, on which the bean should have it's focus.
+             If empty, all the tables types of the are used.
+     */
+    [optional, property] sequence<string> TableTypeFilter;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:36  hjs
+    initial import
+
+    Revision 1.8  2000/09/11 11:52:39  mi
+    documentation merged from XML
+
+    Revision 1.6  2000/06/05 13:20:27  dg
+    services changed
+
+    Revision 1.5  1999/12/08 14:42:24  dg
+    #70278# new Composer files
+
+    Revision 1.4  1999/11/29 16:18:08  dg
+    Documentation
+
+    Revision 1.3  1999/11/26 16:53:29  dg
+    change documentation
+
+    Revision 1.2  1999/11/25 08:48:50  dg
+    adjustments
+
+    Revision 1.1  1999/11/24 08:39:00  dg
+    new Star Data Beans
+
+===========================================================================*/
+#endif

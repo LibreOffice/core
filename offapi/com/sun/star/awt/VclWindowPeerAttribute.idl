@@ -1,0 +1,240 @@
+/*************************************************************************
+ *
+ *  $RCSfile: VclWindowPeerAttribute.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_VclWindowPeerAttribute_idl__
+#define __com_sun_star_awt_VclWindowPeerAttribute_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+// DocMerge from idl: constants com::sun::star::awt::VclWindowPeerAttribute
+/** @deprecated
+ */
+constants VclWindowPeerAttribute
+{
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::256
+
+    // DocMerge: empty anyway
+    const long HSCROLL = 256;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::512
+
+    // DocMerge: empty anyway
+    const long VSCROLL = 512;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1024
+
+    // DocMerge: empty anyway
+    const long LEFT = 1024;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::2048
+
+    // DocMerge: empty anyway
+    const long CENTER = 2048;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::4096
+
+    // DocMerge: empty anyway
+    const long RIGHT = 4096;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::8192
+
+    // DocMerge: empty anyway
+    const long SPIN = 8192;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::16384
+
+    // DocMerge: empty anyway
+    const long SORT = 16384;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::32768
+
+    // DocMerge: empty anyway
+    const long DROPDOWN = 32768;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::65536
+
+    // DocMerge: empty anyway
+    const long DEFBUTTON = 65536;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::262144
+
+    // DocMerge: empty anyway
+    const long READONLY = 262144;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::524288
+
+    // DocMerge: empty anyway
+    const long CLIPCHILDREN = 524288;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1048576
+
+    // DocMerge: empty anyway
+    const long NOBORDER = 1048576;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::2097152
+
+    // DocMerge: empty anyway
+    const long GROUP = 2097152;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::4194304
+
+    // DocMerge: empty anyway
+    const long OK = 4194304;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::8388608
+
+    // DocMerge: empty anyway
+    const long OK_CANCEL = 8388608;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::16777216
+
+    // DocMerge: empty anyway
+    const long YES_NO = 16777216;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::33554432
+
+    // DocMerge: empty anyway
+    const long YES_NO_CANCEL = 33554432;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::67108864
+
+    // DocMerge: empty anyway
+    const long RETRY_CANCEL = 67108864;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::134217728
+
+    // DocMerge: empty anyway
+    const long DEF_OK = 134217728;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::268435456
+
+    // DocMerge: empty anyway
+    const long DEF_CANCEL = 268435456;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::536870912
+
+    // DocMerge: empty anyway
+    const long DEF_RETRY = 536870912;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1073741824
+
+    // DocMerge: empty anyway
+    const long DEF_YES = 1073741824;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::-2147483648
+
+    // DocMerge: empty anyway
+    const long DEF_NO = -2147483648;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:34:51  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:07  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/05/16 12:19:52  mi
+    documentation
+
+    Revision 1.2  2000/02/07 11:24:15  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

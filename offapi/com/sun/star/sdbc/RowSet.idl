@@ -1,0 +1,228 @@
+/*************************************************************************
+ *
+ *  $RCSfile: RowSet.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_RowSet_idl__
+#define __com_sun_star_sdbc_RowSet_idl__
+
+#ifndef __com_sun_star_sdbc_ResultSet_idl__
+#include <com/sun/star/sdbc/ResultSet.idl>
+#endif
+
+ module com {  module sun {  module star {  module container {
+interface XNameAccess;
+};};};};
+
+ module com {  module sun {  module star {  module sdbc {
+
+interface XRowSet;
+interface XParameters;
+interface XClearParameters;
+
+
+// DocMerge from xml: service com::sun::star::container::com::sun::star::sdbc::RowSet
+/** is a client side ResultSet, which combines the characteristics of a Statement
+    and a ResultSet.
+
+
+    <p> It acts like a typical bean. Before you use the RowSet, you have to specify a
+    set of properties like a DataSource and a Command and other properties known of
+    Statement.<br>
+    Afterwards you can populate the RowSet by its execute method to fill the set
+    with data.
+    </p>
+    <p>On the one hand a RowSet can be used as a short cut to retrieve the data of a DataSource.
+    You don't have to establish a connection, create a Statement and then create
+    a ResultSet. On the other hand, a rowset can be used to implement capabilties for
+    a result set, which are not supported by a driver result set, like caching
+    strategies or update capabilities.</p>
+ */
+service RowSet
+{
+    // DocMerge: empty anyway
+    service com::sun::star::sdbc::ResultSet;
+
+    // DocMerge: empty anyway
+    interface XRowSet;
+
+    // DocMerge: empty anyway
+    interface XParameters;
+
+    // DocMerge: empty anyway
+    interface XClearParameters;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::DataSourceName
+    /** is the name of a named datasource to use.@see com::sun::star::sdbc:XDataSource
+     */
+    [property] string DataSourceName;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::URL
+    /** is the connection URL. Could be used instead of the DataSourceName.
+     */
+    [property] string URL;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::Command
+    /** is the command which should be executed.
+     */
+    [property] string Command;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::TransactionIsolation
+    /** indicates the transaction isolation level, which should be used for the
+        connection.@see com::sun::star::sdbc::TransactionIsolation
+     */
+    [property] long TransactionIsolation;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::TypeMap
+    /** is the type map that will be used for the custom mapping of SQL structured types
+        and distinct types.
+     */
+    [property] com::sun::star::container::XNameAccess TypeMap;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::EscapeProcessing
+    /** returns if escape processing is on or off.
+        If escape scanning is on (the default), the driver will do
+        escape substitution before sending the SQL to the database.
+        This is only evaluated, if the CommandType is COMMAND.
+     */
+    [property] boolean EscapeProcessing;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::QueryTimeOut
+    /** retrieves the number of seconds the driver will wait for a Statement
+        to execute. If the limit is exceeded, a SQLException is thrown.
+        There is no limitation if set to zero.
+     */
+    [property] long QueryTimeOut;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::MaxFieldSize
+    /** returns the maximum number of bytes allowed for any column value.
+
+
+        <p>This limit is the maximum number of bytes that can be returned
+        for any column value. The limit applies only to BINARY,
+        VARBINARY, LONGVARBINARY, CHAR, VARCHAR, and LONGVARCHAR columns.
+        If the limit is exceeded, the excess data is silently discarded.
+        <br>There is no limitation if set to zero.</p>
+     */
+    [property] long MaxFieldSize;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::MaxRows
+    /** retrieves the maximum number of rows that a ResultSet can contain.
+        If the limit is exceeded, the excess rows are silently dropped.
+        <br>There is no limitation if set to zero.
+     */
+    [property] long MaxRows;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::User
+    /** determines the user for whom to open the connection.
+     */
+    [property] string User;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::Password
+    /** determines the user for whom to open the connection.
+     */
+    [property] string Password;
+
+
+    // DocMerge from xml: property com::sun::star::container::com::sun::star::sdbc::RowSet::ResultSetType
+    /** determine the result set type.@see com::sun::star::sdbc::ResultSetType;
+     */
+    [property] long ResultSetType;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:41  hjs
+    initial import
+
+    Revision 1.7  2000/09/11 11:52:42  mi
+    documentation merged from XML
+
+    Revision 1.5  2000/01/27 08:08:01  dg
+    #72164# EscapeProcessing instead of UseEscapeProcessing
+
+    Revision 1.4  1999/12/20 16:11:34  dg
+    #70278# changes in API
+
+    Revision 1.3  1999/12/14 12:05:45  dg
+    #70278# CompareBookmark removed
+
+    Revision 1.2  1999/12/10 12:37:30  dg
+    #70278# documentation
+
+    Revision 1.1  1999/12/09 12:41:20  dg
+    #70278# new service
+
+
+===========================================================================*/
+#endif

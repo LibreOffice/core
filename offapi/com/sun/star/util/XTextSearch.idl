@@ -1,0 +1,187 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XTextSearch.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_lang_XTextSearch_idl__
+#define __com_sun_star_lang_XTextSearch_idl__
+
+
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/uno/XInterface.idl>
+//#include <com/sun/star/lang/CascadeTransliterator.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module util {
+
+//=============================================================================
+
+
+enum SearchAlgorithms {
+    ABSOLUTE,       // "normal" a kind of Boyer-Moore
+    REGEXP,                 // regular expression
+    APPROXIMATE     // Leveinstein distance
+};
+
+constants SearchFlags
+{
+// Flags for all search methods
+    const long  ALL_IGNORE_CASE     = 0x00000001;
+
+// Flags for normal (Boyer-Moore) search
+    const long  NORM_WORD_ONLY      = 0x00000010;
+
+// Flags for "regular expression" search
+    const long  REG_EXTENDED        = 0x00000100; // EXTENDED regular expressons
+    const long  REG_NOSUB       = 0x00000200; // No replace means ie avoid sub regular expresions return true/false to match
+    const long  REG_NEWLINE     = 0x00000400; // Special new  line treatment
+// A NEWLINE character in string will not be matched by  a period outside  bracket expression or by any form of a non matching list
+// A circumflex (^) in pattern when used to specify expression anhoring will match the zero
+//   length string immediately after a newline in string, regardless of the setting of REG_NOTBOL
+// A dollar-sign ($) in pattern when used to specify expression anchoring, will match zero-length
+//   string immediatlely before a new line in string regardless of the setting of REG_NOTEOL
+    const long  REG_NOT_BEGINOFLINE = 0x00000800;
+// The first character in the string is not the beginning of the line therefore ^  will not
+//   match with first character of the string
+    const long  REG_NOT_ENDOFLINE   = 0x00001000;
+
+
+// Flags for "Weight Levenshtein-Distance" search
+    const long  LEV_RELAXED     = 0x00010000;
+};
+
+
+struct SearchOptions  {
+    //-------------------------------------------------------------------------
+    /** Options for the XTextSearch interface.
+        algorithmType   - search type, can be: ABSOLUTE, REGEXP, APPROXIMATE
+        searchFlag      - some flags - can be mixed
+        searchString    - the search text
+        replaceString   - the replace text (is for optional replacing - SearchOption is only the data container for it)
+
+        Locale      - this is the language for case insensitive search
+
+                  and some values for the "Weight Levenshtein-Distance" search
+        changedChars    - so many characters can be different between the found and search word
+        deletedChars    - so many characters can be missed in the found word
+        insertedChars   - so many characters can be additional in the found word
+    */
+
+    SearchAlgorithms    algorithmType;
+    long            searchFlag;
+    string          searchString;
+    string          replaceString;
+    ::com::sun::star::lang::Locale  Locale;
+    long            changedChars, deletedChars, insertedChars;
+
+// missed and currently not used
+//  ::com::sun::star::lang::XCascadeTransliterator  transliterator;
+};
+
+
+struct SearchResult  {
+    //-------------------------------------------------------------------------
+    /** Number of subexpressions, if it is 0 , then no match found, this value is 1 for ABSOLUTE and APPROXIMATE match
+        The start and endOffset are always depends on the search direction.
+        By example:
+        if you search "X" in the text "-X-" the offset are:
+         for forward:   start = 1, end = 2
+         for backward:  start = 1, end = 0
+          The startOffset is always inclusive, the endOffset allways exclusive
+
+        For regular expressions it can be greater than 1.
+        If the value is 1, startoffset[0] and endoffset[0] points to the matching sub string
+        if value is > 1, still startoffset[0] and endoffset[0] points to the matching substring for whole regular expression
+        startoffset[i] and endoffset[i] points to the matching substring of i th matching   substring.,
+    */
+    long subRegExpressions;
+    sequence<long> startOffset;     // inclusive
+    sequence<long> endOffset;       // exclusive
+};
+
+
+
+[ uik(3dac5850-7d7d-11d4-9f990050-04d8bbe9), ident( "XTextSearch", 1.0 ) ]
+interface XTextSearch : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** set the options for the forward or backward search.
+
+    */
+    void setOptions ([in] SearchOptions options);
+    //-------------------------------------------------------------------------
+    /** search forward in the searchStr, starts at startPos and ends by endpos.
+        The result is returnt in the SearchResult.
+
+    */
+    SearchResult  searchForward  ([in] string searchStr, [in] long startPos, [in] long endPos );
+    //-------------------------------------------------------------------------
+    /** search backward in the searchStr, starts at startPos and ends by endpos.
+        The endpos must be lower then the startpos, because the function search backward!
+        The result is returnt in the SearchResult.
+
+    */
+    SearchResult  searchBackward ([in] string searchStr, [in] long startPos, [in] long endPos );
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif

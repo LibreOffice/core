@@ -1,0 +1,401 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XGraphics.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XGraphics_idl__
+#define __com_sun_star_awt_XGraphics_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_SimpleFontMetric_idl__
+#include <com/sun/star/awt/SimpleFontMetric.idl>
+#endif
+
+#ifndef __com_sun_star_awt_FontDescriptor_idl__
+#include <com/sun/star/awt/FontDescriptor.idl>
+#endif
+
+#ifndef __com_sun_star_awt_RasterOperation_idl__
+#include <com/sun/star/awt/RasterOperation.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Gradient_idl__
+#include <com/sun/star/awt/Gradient.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+interface XRegion;
+interface XDisplayBitmap;
+interface XFont;
+interface XDevice;
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::awt::XGraphics
+/** provides the basic output operation of a device.
+ */
+[ uik(E227A3AF-33D6-11D1-AABE00A0-249D5590), ident( "XGraphics", 1.0 ) ]
+interface XGraphics: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XGraphics::getDevice
+    /** @returns
+                the device of this graphics.
+     */
+    XDevice getDevice();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::getFontMetric
+    /** returns the font metric of the current font.
+     */
+    SimpleFontMetric getFontMetric();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::setFont
+    /** sets the font used by text operations.
+     */
+    [oneway] void setFont( [in] XFont xNewFont );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::selectFont
+    /** creates a new font and sets the font.
+     */
+    [oneway] void selectFont( [in] FontDescriptor aDescription );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::setTextColor
+    /** sets the text color used by text operations.
+     */
+    [oneway] void setTextColor( [in] long nColor );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::setTextFillColor
+    /** sets the fill color used by text operations.
+     */
+    [oneway] void setTextFillColor( [in] long nColor );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::setLineColor
+    /** sets the line color.
+     */
+    [oneway] void setLineColor( [in] long nColor );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::setFillColor
+    /** sets the fill color.
+     */
+    [oneway] void setFillColor( [in] long nColor );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::setRasterOp
+    /** sets the raster operation.
+
+
+
+        <p>If the device does not support raster operations
+        then this call is ignored.</p>
+     */
+    [oneway] void setRasterOp( [in] RasterOperation ROP );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::setClipRegion
+    /** sets the clip region to specified clipping.
+     */
+    [oneway] void setClipRegion( [in] XRegion Clipping );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::intersectClipRegion
+    /** builds the intersection with the current region.
+     */
+    [oneway] void intersectClipRegion( [in] XRegion xClipping );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::push
+    /** saves all current settings (Font, TextColor, TextFillColor,
+        LineColor, FillColor, RasterOp, ClipRegion).
+     */
+    [oneway] void push();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::pop
+    /** restores all previous saved settings.
+     */
+    [oneway] void pop();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::copy
+    /** copies a rectangle of pixels from another device into this one.
+     */
+    [oneway] void copy( [in] XDevice xSource,
+             [in] long nSourceX,
+             [in] long nSourceY,
+             [in] long nSourceWidth,
+             [in] long nSourceHeight,
+             [in] long nDestX,
+             [in] long nDestY,
+             [in] long nDestWidth,
+             [in] long nDestHeight );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::draw
+    /** draws a part of the specified bitmap to the output device.
+     */
+    [oneway] void draw( [in] XDisplayBitmap xBitmapHandle,
+             [in] long SourceX,
+             [in] long SourceY,
+             [in] long SourceWidth,
+             [in] long SourceHeight,
+             [in] long DestX,
+             [in] long DestY,
+             [in] long DestWidth,
+             [in] long DestHeight );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawPixel
+    /** sets a single pixel in the output device.
+     */
+    [oneway] void drawPixel( [in] long X,
+             [in] long Y );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawLine
+    /** draws a line in the output device.
+     */
+    [oneway] void drawLine( [in] long X1,
+             [in] long Y1,
+             [in] long X2,
+             [in] long Y2 );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawRect
+    /** draws a rectangle in the output device.
+     */
+    [oneway] void drawRect( [in] long X,
+             [in] long Y,
+             [in] long Width,
+             [in] long Height );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawRoundedRect
+    /** draws a rectangle with rounded corners in the output device.
+     */
+    [oneway] void drawRoundedRect( [in] long X,
+             [in] long Y,
+             [in] long Width,
+             [in] long Height,
+             [in] long nHorzRound,
+             [in] long nVertRound );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawPolyLine
+    /** draws multiple lines in the output device at once.
+     */
+    [oneway] void drawPolyLine( [in] sequence<long> DataX,
+             [in] sequence<long> DataY );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawPolygon
+    /** draws a polygon line in the output device.
+     */
+    [oneway] void drawPolygon( [in] sequence<long> DataX,
+             [in] sequence<long> DataY );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawPolyPolygon
+    /** draws multiple polygons in the output device at once.
+     */
+    [oneway] void drawPolyPolygon( [in] sequence< sequence<long> > DataX,
+             [in] sequence< sequence<long> > DataY );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawEllipse
+    /** draws an ellipse in the output device.
+     */
+    [oneway] void drawEllipse( [in] long X,
+             [in] long Y,
+             [in] long Width,
+             [in] long Height );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawArc
+    /** draws an arc (part of a circle) in the output device.
+     */
+    [oneway] void drawArc( [in] long X,
+             [in] long Y,
+             [in] long Width,
+             [in] long Height,
+             [in] long X1,
+             [in] long Y1,
+             [in] long X2,
+             [in] long Y2 );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawPie
+    /** draws a circular area in the output device.
+     */
+    [oneway] void drawPie( [in] long X,
+             [in] long Y,
+             [in] long Width,
+             [in] long Height,
+             [in] long X1,
+             [in] long Y1,
+             [in] long X2,
+             [in] long Y2 );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawChord
+    /** draws a chord of a circular area in the output device.
+
+
+
+        <p>A chord is a segment of a circle. You get two chords from a
+        circle if you intersect the circle with a straight line
+        joining two points on the circle.</p>
+     */
+    [oneway] void drawChord( [in] long nX,
+             [in] long nY,
+             [in] long nWidth,
+             [in] long nHeight,
+             [in] long nX1,
+             [in] long nY1,
+             [in] long nX2,
+             [in] long nY2 );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawGradient
+    /** draws a color dispersion in the output device.
+     */
+    [oneway] void drawGradient( [in] long nX,
+             [in] long nY,
+             [in] long nWidth,
+             [in] long Height,
+             [in] Gradient aGradient );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawText
+    /** draws text in the output device.
+     */
+    [oneway] void drawText( [in] long X,
+             [in] long Y,
+             [in] string Text );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XGraphics::drawTextArray
+    /** draws texts in the output device using an explicit kerning table.
+     */
+    [oneway] void drawTextArray( [in] long X,
+             [in] long Y,
+             [in] string Text,
+             [in] sequence<long> Longs );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:34:52  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:08  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

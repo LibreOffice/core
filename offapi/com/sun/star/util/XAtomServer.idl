@@ -1,0 +1,176 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XAtomServer.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XAtomServer_idl__
+#define __com_sun_star_util_XAtomServer_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_AtomDescription_idl__
+#include <com/sun/star/util/AtomDescription.idl>
+#endif
+
+#ifndef __com_sun_star_util_AtomClassRequest_idl__
+#include <com/sun/star/util/AtomClassRequest.idl>
+#endif
+
+
+module com
+{
+module sun
+{
+module star
+{
+module util
+{
+
+/** an interface to map between strings and ids
+
+   <p>a note on atoms:<br>
+   atoms are abbreviations for strings
+   when a string gets registered it is assigned a numeric id
+   so that said string can always be referred to by this id.
+   this way strings have to be transported only once over remote connections.
+   valid ids are (in this implementation) non zero signed 32 bit values
+   an atom of 0 means that the string in question is not registered</p>
+
+   <p>additionally there is the abstraction of atom class:<br>
+   atoms are grouped into classes, so that an id can be assigned
+   to multiple strings depending on the class context. The main
+   advantage of this is that this way atoms in one class may be kept
+   to small numbers, so that bandwidth can be reduced by sending
+   the atoms only as 16 bit values. Note that it is up to the user in this
+   case to handle overflows.</p>
+ */
+
+[ uik(74469580-E328-11d0-00000060-13090001), ident("XAtomServer", 1.0) ]
+interface XAtomServer : com::sun::star::uno::XInterface
+{
+    /** returns a whole atom class
+
+        @param atomClass
+            which class to return
+
+        @returns
+            the discriptions for all atoms of class <code>atomClass</code>
+    */
+    sequence< AtomDescription > getClass( [in] long atomClass );
+    /** returns mutltiple atom classes
+
+        @param atomClasses
+            which classes to return
+
+        @returns
+            the discriptions for all atoms of the requested classes
+    */
+    sequence< sequence< AtomDescription > > getClasses( [in] sequence< long > atomClasses );
+    /** returns a the strings for an arbitrary amount of atoms of multiple classes
+
+        @param atoms
+            describes which strings to return
+
+        @returns
+            the strings for the requested atoms
+    */
+    sequence< string > getAtomDescriptions( [in] sequence< AtomClassRequest > atoms );
+    /** returns the atoms that have been registered to a class after an
+        already known atom
+
+        <p>Hint to implementor: using ascending atoms is the easiest way
+        to decide, which atoms are recent.</p>
+
+        @param atomClass
+            the class in question
+
+        @param atom
+            the last known atom
+
+        @returns
+            all atom description that have been added to class
+            <code>atomClass</code> after <code>atom</code>
+    */
+    sequence< AtomDescription > getRecentAtoms( [in] long atomClass, [in] long atom );
+    /** registers or searches for a string
+
+        @param atomClass
+            the class of atoms in question
+
+        @param description
+            the string in question
+
+        @param create if true a new atom will be created for an unknown string
+        else the invalid atom (0) will be returned for an unknown string
+
+        @returns
+            the atom for the string <code>description</code>
+    */
+    long getAtom( [in] long atomClass, [in] string description, [in] boolean create );
+};
+
+
+}; // module util
+}; // module star
+}; // module sun
+}; // module com
+
+
+#endif

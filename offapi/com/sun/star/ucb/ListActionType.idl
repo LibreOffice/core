@@ -1,0 +1,220 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ListActionType.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_ListActionType_idl__
+#define __com_sun_star_ucb_ListActionType_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** These values are used to specify the type of change happened to a list.
+
+<p>A change happened is sended from an interface <type>XDynamicResultSet</type>
+as <type>ListAction</type> to a <type>XDynamicResultSetListener</type>.
+
+<p>The values are contained in <member>ListAction::ListActionType</member>
+*/
+
+constants ListActionType
+{
+    //-------------------------------------------------------------------------
+    /** first notification to a single listener for purpose of initialization.
+
+    <p>This type of notification is required to be sended first and only once to
+    a new listener.
+
+    <p>The member <member>ListAction::ActionInfo</member> is required to
+    contain a struct <type>WelcomeDynamicResultSetStruct</type>.
+    This struct contains two <type>XResultSet</type>s ( old and new ).
+    During and after the notification only the new is valid for access.
+    But the listener is required to remind both <type>XResultSet</type>s as he
+    will not get another chance to get them again.
+
+    <p>The members <member>ListAction::Count</member> and
+    <member>ListAction::Position</member> are useless.
+    */
+    const long WELCOME = 20;
+
+    //-------------------------------------------------------------------------
+    /** One or more rows were inserted into the list.
+
+    <p>This action is related to <type>ContentAction</type> == INSERTED.
+
+    <p>The memners <member>ListAction::Count</member> and
+    <member>ListAction::Position</member> contain the position and count of
+    newly inserted rows. If the Count is greater than one, the inserted rows
+    have to be one after the other.
+
+    <p> <member>ListAction::ActionInfo</member> could contain something but
+    this is not required.
+    E.g it could contain the properties of the new rows ( e.g. for remote
+    optimizing ), but this is not required nor unrestrictly recommended.
+    @todo ... further description of allowed contents for
+    <member>ListAction::ActionInfo</member> is needed
+    */
+    const long INSERTED = 21;
+
+    //-------------------------------------------------------------------------
+    /** One or more rows were removed from the list.
+
+    <p>This action is related to <type>ContentAction</type> == REMOVED or DELETED.
+
+    <p>The members <member>ListAction::Count</member> and
+    <member>ListAction::Position</member> contain the position and count of the
+    removed rows. If the count is greater than one, the removed rows have to be
+    one after the other.
+
+    <p>The member <member>ListAction::ListActionType</member> is useless.
+    */
+    const long REMOVED = 22;
+
+
+    //-------------------------------------------------------------------------
+    /** The whole list was destroyed and independently rebuild.
+
+    <p>If 'CLEARED' is sended you don't need to refer to the old ResultSet.
+
+    <p>The members <member>ListAction::ListActionType</member>,
+    <member>ListAction::Count</member> and <member>ListAction::Position</member>
+    are useless.
+    */
+    const long CLEARED = 23;
+
+    //-------------------------------------------------------------------------
+    /** One or more rows were moved to another position.
+
+    <p>The members <member>ListAction::Count</member> and
+    <member>ListAction::Position</member> contain the position and count of the
+    moved rows. If the count is greater than one, the moved rows have to be
+    one after the other.
+
+    <p><member>ListAction::ListActionType</member> is required to contain a 'long',
+    which gives the shift of position.
+    ( e.g. When two rows at position 3 and 4 are moved for a shift '+1',
+    they will appear at the positions 4 and 5. In this action is included, that
+    the row on old position 5 now appears on position 3.
+    No other notification is needed, to explain or complete this action ).
+    */
+    const long MOVED = 24;
+
+    //-------------------------------------------------------------------------
+    /** The properties of one or more rows have changed.
+
+    <p>This action is related to a <type>PropertyChangeEvent</type>.
+
+    <p>The members <member>ListAction::Count</member> and
+    <member>ListAction::Position</member> contain the position and count of the
+    rows, whose properties have changed. If the count is greater than one, the
+    rows with modified properties have to be one after the other.
+
+    <p> <member>ListAction::ActionInfo</member> could contain something but
+    this is not required.
+    E.g it could contain the new properties ( e.g. for remote
+    optimizing ), but this is not required nor unrestrictly recommended.
+    @todo ... further description of allowed contents for
+    <member>ListAction::ActionInfo</member> is needed
+    */
+    const long PROPERTIES_CHANGED = 25;
+
+    //-------------------------------------------------------------------------
+    /*??????????????????????????? we probably will not need this
+
+    The identity of a row has changed.
+
+    <p>This action is related to <type>ContentAction</type> == EXCHANGED.
+
+    <p>The members <member>ListAction::Count</member> and
+    <member>ListAction::Position</member> contain the position and count of the
+    rows, whose identity have changed. If the count is greater than one, the
+    rows with changed identity have to be one after the other.
+
+    <p><member>ListAction::ListActionType</member> must contain the new identities
+    @todo ...
+
+    const long EXCHANGED = 26;
+    */
+
+    //-------------------------------------------------------------------------
+    /*??????????????????????????? we probably will need this
+    After a completely notified Iteration send 'COMPLETED'.
+
+    <p>This notification is required to be send, to indicate, that now the full
+    result is reached.
+
+    <p>E.g. while a new given list is sorted, some intermediate states are
+    notified. After the last portion of sorting is done and notified you have
+    to send 'COMPLETED'. So a listener has the possibility to wait for
+    'COMPLETED' e.g. to print the full result. )
+
+    <p>The members <member>ListAction::ListActionType</member>,
+    <member>ListAction::Count</member> and <member>ListAction::Position</member>
+    are useless.
+    */
+    const long COMPLETED = 27;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

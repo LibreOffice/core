@@ -1,0 +1,218 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XContentProviderManager.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XContentProviderManager_idl__
+#define __com_sun_star_ucb_XContentProviderManager_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XContentProvider_idl__
+#include <com/sun/star/ucb/XContentProvider.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_DuplicateProviderException_idl__
+#include <com/sun/star/ucb/DuplicateProviderException.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_ContentProviderInfo_idl__
+#include <com/sun/star/ucb/ContentProviderInfo.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** makes it possible to query/register/deregister content providers.
+
+    @version  1.0
+    @author   Kai Sommerfeld
+    @see      XContentProvider
+*/
+[ uik(E2281A00-33D6-11D1-AABE00A0-249D5590), ident( "XContentProviderManager", 1.0 ) ]
+interface XContentProviderManager: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** registers a content provider for a specific URL template.
+
+        @see
+        XContentIdentifier
+
+        @param Provider
+        the content provider to register.
+
+        @param Scheme
+        the URL scheme for the provided contents. More generally, this may not
+        only be a URL scheme, but a URL template.
+
+        A URL template is a regular expression (represented as a string) that
+        specifies a subset of the set of all possible URLs (this subset
+        consists of exactly those URLs that match the regular expression).  The
+        language to denote the regular expressions is initially quite limited,
+        but it may be extended in the future:
+
+          regexp = scheme / simple / translation
+
+          scheme = ALPHA *(ALPHA / DIGIT / "+" / "-" / ".")
+
+          simple = simple-prefix / simple-authority / simple-domain
+
+          translation = trans-prefix / trans-authority / trans-domain
+
+          simple-prefix = [string] ".*"
+
+          trans-prefix = [string] "(.*)->" [string] "\1"
+
+          simple-authority = [string] "([/?#].*)?"
+
+          trans-authority = [string] "(([/?#].*)?)->" string "\1"
+
+          simple-domain = [string] "[^/?#]*" string "([/?#].*)?"
+
+          trans-domain = [string] "([^/?#]*" string "([/?#].*)?)->" string "\1"
+
+          string = DQUOTE 1*(schar / sescape) DQUOTE  ; DQUOTE is "
+
+          schar = <any UTF-16 character except " or \>
+
+          sescape = "\" (DQUOTE / "\")
+
+        A <scheme> matches any URL of exactly the given scheme (ignoring case),
+        keeping the extension from URL schemes to URL templates backwards
+        compatible.  The <simple> regexps match any URL starting with a given
+        string literal, followed by arbitrary characters (<simple-prefix>), or
+        by arbitrary characters that start with one of '/', '?', or '#', if any
+        (<simple-authority>), or by arbitrary characters not including any of
+        '/', '?', or '#', followed by a given string literal, followed by
+        arbitrary characters that start with one of '/', '?', or '#', if any.
+        The comparision of string literals is done ignoring the case of ASCII
+        letters.  The <translation> regexps match the same URLs as their
+        <simple> counterparts, but they also describe how a (local) URL is
+        mapped to another (remote) URL.  This mapping is only relevant for
+        methods of the <type>RemoteAccessContentProvider</type>'s
+        <type>XParameterizedContentProvider</type> interface; in all other
+        cases, <translation> regexps have the same semantics as their <simple>
+        counterparts.
+
+        @param ReplaceExisting
+        <TRUE/>:  replace the provider possibly registered for
+        the given URL template. The replaced provider will not be
+        deregistered automatically! If the superseding
+        provider gets deregistered, the superseded one will
+        become active again.
+        <FALSE/>: do not register, if another provider is already
+        registered for the given URL template.
+
+        @returns
+        the replaced content provider, if there was one.
+    */
+    com::sun::star::ucb::XContentProvider registerContentProvider(
+                [in] com::sun::star::ucb::XContentProvider Provider,
+                [in] string Scheme,
+                [in] boolean ReplaceExisting )
+        raises( com::sun::star::ucb::DuplicateProviderException );
+
+    //-------------------------------------------------------------------------
+    /** deregisters a content provider.
+
+        @param Provider
+        a content provider to deregister.
+
+        @param Scheme
+        the URL scheme for the provided contents. More generally, this
+        may not only be a URL scheme, but a URL template (see
+        <method>registerContentProvider</method> for a discussion of URL
+        templates).
+    */
+    [oneway] void deregisterContentProvider(
+                [in] com::sun::star::ucb::XContentProvider Provider,
+                 [in] string Scheme );
+
+    //-------------------------------------------------------------------------
+    /** returns a list of information on all registered content providers.
+
+        @returns
+        a list information on content providers.
+    */
+    sequence<com::sun::star::ucb::ContentProviderInfo> queryContentProviders();
+
+    //-------------------------------------------------------------------------
+    /** returns the currently active content provider for a URL template.
+
+        @param Scheme
+        a URL scheme. More generally, this may not only be a URL scheme, but a
+        URL template (see <method>registerContentProvider</method> for a
+        discussion of URL templates).
+
+        @returns
+        a content provider.
+    */
+    com::sun::star::ucb::XContentProvider queryContentProvider(
+                [in] string Scheme );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

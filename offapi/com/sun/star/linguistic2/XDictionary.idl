@@ -1,0 +1,302 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDictionary.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XDictionary_idl__
+#define __com_sun_star_linguistic2_XDictionary_idl__
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_DictionaryType_idl__
+#include <com/sun/star/linguistic2/DictionaryType.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XDictionaryEntry_idl__
+#include <com/sun/star/linguistic2/XDictionaryEntry.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XDictionaryEventListener_idl__
+#include <com/sun/star/linguistic2/XDictionaryEventListener.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** This interfaces enables the object to access personal dictionaries.
+
+    @see    XDictionaryEntry
+    @see    XDictionaryEvent
+    @see    XNamed
+*/
+[ uik(4BD5A950-5D68-11d4-9F090050-04D8BBC5), ident( "XDictionary", 1.0 ) ]
+interface XDictionary : com::sun::star::container::XNamed
+{
+    //-------------------------------------------------------------------------
+    /** This method returns the type of the dictionary.
+
+        @returns
+        the type of the dictionary.
+
+        @see    DictionaryType
+    */
+    com::sun::star::linguistic2::DictionaryType getDictionaryType();
+
+    //-------------------------------------------------------------------------
+    /** This method determines wether the dictionary should be
+        used or not.
+
+        @param  bAvtivate
+        <TRUE/> if the dictionary should be used, <FALSE/> else.
+    */
+    void setActive( [in] boolean bActivate );
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+        <TRUE/> if the dictionary is active, <FALSE/> otherwise.
+    */
+    boolean isActive();
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+        the number of entries in the dictionary.
+    */
+    short getCount();
+
+    //-------------------------------------------------------------------------
+    /** @returns
+         the language of the dictionary.
+
+        @see    Locale
+    */
+    com::sun::star::lang::Locale getLocale();
+
+    //-------------------------------------------------------------------------
+    /** This method sets the language of the dictionary.
+
+         @param aLocale
+         the language of the dictionary.
+
+        @see    Locale
+    */
+    void setLocale( [in] com::sun::star::lang::Locale aLocale );
+
+    //-------------------------------------------------------------------------
+    /** This method returns the reference to the dictionary entry that
+        matches the given word.
+
+        @returns
+        the reference to the entry found. If no entry was found
+        it is NULL.
+
+        @param  aWord
+        the word to be looked for.
+
+        @see    XDictionaryEntry
+    */
+    com::sun::star::linguistic2::XDictionaryEntry getEntry( [in] string aWord );
+
+    //-------------------------------------------------------------------------
+    /** This method adds an entry to the dictionary.
+
+        <P>If an entry already exists the dictionary remains unchanged
+         and <FALSE/> will be returned.</P>
+
+        <P>Of course in positive dictionaries only postiv entries
+        can be made, and in negativ ones only negativ entries.</P>
+
+        @param  xDicEntry
+        the entry to be added.
+
+        @returns
+        <TRUE/> if the entry was successfully added <FALSE/> else.
+
+         @see   add
+        @see    remove
+        @see    isFull
+        @see    XDictionaryEntry
+        @see    DictionaryType
+    */
+    boolean addEntry( [in] com::sun::star::linguistic2::XDictionaryEntry xDicEntry );
+
+    //-------------------------------------------------------------------------
+    /** This method adds an entry to the dictionary.
+
+        <P>If an entry already exists the dictionary remains unchanged
+         and <FALSE/> will be returned.</P>
+
+        <P>Of course in positive dictionaries only postiv entries
+        can be made, and in negativ ones only negativ entries.</P>
+
+        @param  aWord
+        the word to be added.
+
+        @param  bIsNegative
+        specifies wether the entry will be a negative one or not.
+
+        @param  aRplcText
+        in case of a negative entry this is the replacement text to
+        be used when replacing aWord. Otherwise it is undefined.
+
+        @returns
+        <TRUE/> if the entry was successfully added <FALSE/> else.
+
+         @see   addEntry
+        @see    remove
+        @see    isFull
+        @see    DictionaryType
+    */
+    boolean add(
+            [in] string aWord,
+            [in] boolean bIsNegative,
+            [in] string aRplcText );
+
+    //-------------------------------------------------------------------------
+    /** This method removes an entry from the dictionary.
+
+        @param  aWord
+        the word corresponding to the entry to be removed.
+
+        @returns
+        <TRUE/> if the entry was successfully removed, <FALSE/>
+        otherwise (especially if the entry was not found).
+
+         @see   addEntry
+        @see    add
+    */
+    boolean remove( [in] string aWord );
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns    <TRUE/> if the dictionary is full and no further
+        item can be added, <FALSE/> else.
+
+         @see   addEntry
+        @see    add
+    */
+    boolean isFull();
+
+    //-------------------------------------------------------------------------
+    /**
+         @returns
+         a sequence with all the entries of the dictionary.
+
+        @see    XDictionaryEntry
+    */
+
+    sequence<com::sun::star::linguistic2::XDictionaryEntry> getEntries();
+
+    //-------------------------------------------------------------------------
+    /** This method removes all entries from the dictionary.
+    */
+    void clear();
+
+    //-------------------------------------------------------------------------
+    /** add an entry to the list of dictionary event listeners.
+
+        <P>On events each entry in the list is getting a notification.</P>
+
+        @param  xListener
+        the entry to be made (i.e. the object that wants get notifications).
+
+        @returns
+        <TRUE/> if the entry was successfully made, <FALSE/> else.
+        If the object disposes it will always fail.
+
+        @see    DictionaryEvent
+        @see    removeDictionaryEventListener
+        @see    dispose
+    */
+    boolean addDictionaryEventListener(
+        [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );
+
+    //-------------------------------------------------------------------------
+    /** remove an entry from he list of dictionary event listeners.
+
+        @param  xListener
+        the reference to the listening object.
+
+        @returns
+        <TRUE/> if the object to be removed was found (and removed),
+        <FALSE/> if the object was not found in the list.
+
+        @see    DictionaryEvent
+        @see    addDictionaryEventListener
+        @see    dispose
+    */
+    boolean removeDictionaryEventListener(
+        [in] com::sun::star::linguistic2::XDictionaryEventListener xListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

@@ -1,0 +1,275 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XWindow.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XWindow_idl__
+#define __com_sun_star_awt_XWindow_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XWindowListener_idl__
+#include <com/sun/star/awt/XWindowListener.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XFocusListener_idl__
+#include <com/sun/star/awt/XFocusListener.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XKeyListener_idl__
+#include <com/sun/star/awt/XKeyListener.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XMouseListener_idl__
+#include <com/sun/star/awt/XMouseListener.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XMouseMotionListener_idl__
+#include <com/sun/star/awt/XMouseMotionListener.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XPaintListener_idl__
+#include <com/sun/star/awt/XPaintListener.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::awt::XWindow
+/** specifies the basic operations for a window component.
+
+
+
+    <p>A windows is a rectangular region on an output device with
+    its own position, size, and internal coordinate system. Despite of
+    displaying the main sense of a window is to receive events from
+    the user.</p>
+ */
+[ uik(E227A3D2-33D6-11D1-AABE00A0-249D5590), ident( "XWindow", 1.0 ) ]
+interface XWindow: com::sun::star::lang::XComponent
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::setPosSize
+    /** sets the outer bounds of the window.
+     */
+    [oneway] void setPosSize( [in] long X,
+             [in] long Y,
+             [in] long Width,
+             [in] long Height,
+             [in] short Flags );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XWindow::getPosSize
+    /** @returns
+                the outer bounds of the window.
+     */
+    [const] com::sun::star::awt::Rectangle getPosSize();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::setVisible
+    /** shows or hides the window depending on the parameter.
+     */
+    [oneway] void setVisible( [in] boolean Visible );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::setEnable
+    /** enables or disables the window depending on the parameter.
+     */
+    [oneway] void setEnable( [in] boolean Enable );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::setFocus
+    /** sets the focus to the window.
+     */
+    [oneway] void setFocus();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::addWindowListener
+    /** adds the specified component listener to receive component events
+        from this window component.
+     */
+    [oneway] void addWindowListener( [in] com::sun::star::awt::XWindowListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::removeWindowListener
+    /** removes the specified listener so it no longer receives component
+        events from this window component.
+     */
+    [oneway] void removeWindowListener( [in] com::sun::star::awt::XWindowListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::addFocusListener
+    /** adds the specified focus listener to receive focus events
+        from this window component.
+     */
+    [oneway] void addFocusListener( [in] com::sun::star::awt::XFocusListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::removeFocusListener
+    /** removes the specified focus listener so it no longer receives focus
+        events from this component.
+     */
+    [oneway] void removeFocusListener( [in] com::sun::star::awt::XFocusListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::addKeyListener
+    /** adds the specified key listener to receive key events
+        from this component.
+     */
+    [oneway] void addKeyListener( [in] com::sun::star::awt::XKeyListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::removeKeyListener
+    /** removes the specified key listener so it no longer receives key
+        events from this component.
+     */
+    [oneway] void removeKeyListener( [in] com::sun::star::awt::XKeyListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::addMouseListener
+    /** adds the specified mouse listener to receive mouse events
+        from this component.
+     */
+    [oneway] void addMouseListener( [in] com::sun::star::awt::XMouseListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::removeMouseListener
+    /** removes the specified mouse listener so it no longer receives mouse
+        events from this component.
+     */
+    [oneway] void removeMouseListener( [in] com::sun::star::awt::XMouseListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::addMouseMotionListener
+    /** adds the specified mouse motion listener to receive mouse motion events
+        from this component.
+     */
+    [oneway] void addMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::removeMouseMotionListener
+    /** removes the specified mouse motion listener so it no longer
+        receives mouse motion events from this component.
+     */
+    [oneway] void removeMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::addPaintListener
+    /** adds the specified paint listener to receive panit events
+        from this component.
+     */
+    [oneway] void addPaintListener( [in] com::sun::star::awt::XPaintListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XWindow::removePaintListener
+    /** removes the specified paint listener so it no longer
+        receives paint events from this component.
+     */
+    [oneway] void removePaintListener( [in] com::sun::star::awt::XPaintListener xListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:34:50  hjs
+    initial import
+
+    Revision 1.4  2000/09/11 11:52:10  mi
+    documentation merged from XML
+
+    Revision 1.2  1999/11/18 11:49:54  mi
+    XComponent now in module lang
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

@@ -1,0 +1,251 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Shape.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_Shape_idl__
+#define __com_sun_star_presentation_Shape_idl__
+
+#ifndef __com_sun_star_presentation_AnimationEffect_idl__
+#include <com/sun/star/presentation/AnimationEffect.idl>
+#endif
+
+#ifndef __com_sun_star_presentation_ClickAction_idl__
+#include <com/sun/star/presentation/ClickAction.idl>
+#endif
+
+#ifndef __com_sun_star_presentation_AnimationSpeed_idl__
+#include <com/sun/star/presentation/AnimationSpeed.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::presentation::Shape
+/** This is the service for a shape inside a presentation document.
+ */
+service Shape
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::Bookmark
+    /** is a generic URL for the property OnClick.
+     */
+    [property] string Bookmark;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::DimColor
+    /** This is the color for dimming this shape.
+
+
+
+        <p>This color is used if the property <member scope="com::sun::star::drawing">Shape::DimPrev</member>
+        is <true></true> and <member scope="com::sun::star::drawing">Shape::DimHide</member> is <false></false>.</p>
+     */
+    [property] long DimColor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::DimHide
+    /** If this property and the property <member scope="com::sun::star::drawing">Shape::DimPrev</member>
+        are both <true></true>, the shape is hidden instead of dimmed to a color.
+     */
+    [property] boolean DimHide;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::DimPrevious
+    /** If this property is <true></true>, this shape is dimmed to the color of
+        property <member scope="com::sun::star::drawing">Shape::DimColor</member> after executing its
+        animation effect.
+     */
+    [property] boolean DimPrevious;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::Effect
+    /** selects the animation effect of this shape.
+     */
+    [property] com::sun::star::presentation::AnimationEffect Effect;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::IsEmptyPresentationObject
+    /** If this is a default presentation object and if it is empty,
+        this property is <true></true>.
+     */
+    [readonly, property] boolean IsEmptyPresentationObject;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::IsPresentationObject
+    /** If this is a presentation object, this property is <true></true>.
+
+
+
+        <p>Presentation objects are objects like TitleTextShape and
+        OutlinerShape.</p>
+     */
+    [readonly, property] boolean IsPresentationObject;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::OnClick
+    /** selects an action performed after the user clicks
+        on this shape.
+     */
+    [property] com::sun::star::presentation::ClickAction OnClick;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::PlayFull
+    /** If this property is <true></true>, the sound of this shape is played in
+        full.
+
+
+
+        <p>The default behavior is to stop the sound after completing the
+        animation effect.</p>
+     */
+    [property] boolean PlayFull;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::PresentationOrder
+    /** This is the position of this shape in the order of the shapes which
+        can be animated on its page.
+
+
+
+        <p>The animations are executed in this order, starting at the shape
+        with the PresentationOrder "one."  You can change the order by
+        changing this number. Setting it to "one" makes this shape the
+        first shape in the execution order for the animation effects.</p>
+     */
+    [property] long PresentationOrder;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::Sound
+    /** This is the URL to a soundfile that is played while the animation
+        effect of this shape is running.
+     */
+    [property] string Sound;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::SoundOn
+    /** If this property is set to <true></true>, a sound is played while the
+        animation effect is executed.
+     */
+    [property] boolean SoundOn;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::Speed
+    /** This is the speed of the animation effect.
+     */
+    [property] com::sun::star::presentation::AnimationSpeed Speed;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::TextEffect
+    /** This is the animation effect for the text inside this shape.
+     */
+    [property] com::sun::star::presentation::AnimationEffect TextEffect;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::presentation::Shape::Verb
+    /** specifies an "ole2" verb for the ClickAction VERB in
+        the property <member scope="com::sun::star::drawing">Shape::OnClick</member>.
+     */
+    [property] long Verb;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:30  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:35  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/02/21 16:18:03  mi
+    string documentation from stardiv...*.idl-files
+
+    Revision 1.2  2000/02/07 11:24:43  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
+    new
+
+
+=============================================================================*/
+#endif

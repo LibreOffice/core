@@ -1,0 +1,262 @@
+/*************************************************************************
+ *
+ *  $RCSfile: IOErrorCode.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_IOErrorCode_idl__
+#define __com_sun_star_ucb_IOErrorCode_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** Types of input/output errors.
+*/
+enum IOErrorCode
+{
+    //-------------------------------------------------------------------------
+    /** An operation was aborted.
+    */
+    ABORT,
+
+    //-------------------------------------------------------------------------
+    /** An object cannot be accessed due to insufficient user rights.
+    */
+    ACCESS_DENIED,
+
+    //-------------------------------------------------------------------------
+    /** An object already exists.
+    */
+    ALREADY_EXISTING,
+
+    //-------------------------------------------------------------------------
+    /** A bad checksum.
+    */
+    BAD_CRC,
+
+    //-------------------------------------------------------------------------
+    /** An object could not be created.
+    */
+    CANT_CREATE,
+
+    //-------------------------------------------------------------------------
+    /** Data could not be read from a file.
+    */
+    CANT_READ,
+
+    //-------------------------------------------------------------------------
+    /** A seek operation could not be run.
+    */
+    CANT_SEEK,
+
+    //-------------------------------------------------------------------------
+    /** A tell operation could not be run.
+    */
+    CANT_TELL,
+
+    //-------------------------------------------------------------------------
+    /** Data could not be written to a file.
+    */
+    CANT_WRITE,
+
+    //-------------------------------------------------------------------------
+    /** A function is not possible because the path contains the current
+        directory.
+    */
+    CURRENT_DIRECTORY,
+
+    //-------------------------------------------------------------------------
+    /** A device (drive) not ready.
+    */
+    DEVICE_NOT_READY,
+
+    //-------------------------------------------------------------------------
+    /** A function is not possible because the devices (drives) are not
+        identical.
+    */
+    DIFFERENT_DEVICES,
+
+    //-------------------------------------------------------------------------
+    /** A general input/output error.
+    */
+    GENERAL,
+
+    //-------------------------------------------------------------------------
+    /** An invalid attempt was made to access an object.
+    */
+    INVALID_ACCESS,
+
+    //-------------------------------------------------------------------------
+    /** A file name contains invalid characters.
+    */
+    INVALID_CHARACTER,
+
+    //-------------------------------------------------------------------------
+    /** A specified device is invalid.
+    */
+    INVALID_DEVICE,
+
+    //-------------------------------------------------------------------------
+    /** Invalid data length.
+    */
+    INVALID_LENGTH,
+
+    //-------------------------------------------------------------------------
+    /** An operation was started with an invalid parameter.
+    */
+    INVALID_PARAMETER,
+
+    //-------------------------------------------------------------------------
+    /** An operation cannot be run on file names containing wildcards.
+    */
+    IS_WILDCARD,
+
+    //-------------------------------------------------------------------------
+    /** A locking problem.
+    */
+    LOCKING_VIOLATION,
+
+    //-------------------------------------------------------------------------
+    /** An invalid file name.
+    */
+    MISPLACED_CHARACTER,
+
+    //-------------------------------------------------------------------------
+    /** A file name is too long.
+    */
+    NAME_TOO_LONG,
+
+    //-------------------------------------------------------------------------
+    /** A nonexistent object.
+    */
+    NOT_EXISTING,
+
+    //-------------------------------------------------------------------------
+    /** The path to a file does not exist.
+    */
+    NOT_EXISTING_PATH,
+
+    //-------------------------------------------------------------------------
+    /** An action is not supported.
+    */
+    NOT_SUPPORTED,
+
+    //-------------------------------------------------------------------------
+    /** An object is not a directory.
+    */
+    NO_DIRECTORY,
+
+    //-------------------------------------------------------------------------
+    /** An object is not a file.
+    */
+    NO_FILE,
+
+    //-------------------------------------------------------------------------
+    /** No more space on a device.
+    */
+    OUT_OF_DISK_SPACE,
+
+    //-------------------------------------------------------------------------
+    /** No more file handles available.
+    */
+    OUT_OF_FILE_HANDLES,
+
+    //-------------------------------------------------------------------------
+    /** An operation could not be run due to insufficient memory.
+    */
+    OUT_OF_MEMORY,
+
+    //-------------------------------------------------------------------------
+    /** An operation is still pending.
+    */
+    PENDING,
+
+    //-------------------------------------------------------------------------
+    /** An object cannot be copied into itself.
+    */
+    RECURSIVE,
+
+    //-------------------------------------------------------------------------
+    /** An unknown I/O error has occurred.
+    */
+    UNKNOWN,
+
+    //-------------------------------------------------------------------------
+    /** A function is not possible because the object is write protected.
+    */
+    WRITE_PROTECTED,
+
+    //-------------------------------------------------------------------------
+    /** An incorrect file format.
+    */
+    WRONG_FORMAT,
+
+    //-------------------------------------------------------------------------
+    /** An incorrect file version.
+    */
+    WRONG_VERSION
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

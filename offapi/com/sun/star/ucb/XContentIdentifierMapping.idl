@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XContentIdentifierMapping.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XContentIdentifierMapping_idl__
+#define __com_sun_star_ucb_XContentIdentifierMapping_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+interface XContent;
+interface XContentIdentifier;
+
+//=============================================================================
+/** A mapping from a (source) set of XContentIdentifiers to another (target)
+    set of XContentIdentifiers.  For convenience and performance, mapping
+    between the string representations of source/target XContentIdentifiers,
+    as well as mapping between XContents identified by source/target
+    XContentIdentifiers is also supported.
+
+    @descr  This interface can be useful in cases where the identifieres (and
+    associated contents) returned by the various methods of an XContentAccess
+    need to be mapped to some other space of identifiers (and associated
+    contents).
+
+    @version 1.0
+    @author Stephan Bergmann
+
+    @see XContent
+    @see XContentAccess
+    @see XContentIdentifier
+*/
+
+[uik(6CCC5430-4B76-11D4-9F9D0050-04526AAD), ident("XContentIdentifierMapping", 1.0)]
+interface XContentIdentifierMapping: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Map the string representation of an XContentIdentifier.
+
+        @param Source  The string representation of an XContentIdentifier
+        from the source set.
+
+        @returns  The string representation of the target set's
+        XContentIdentifier corresponding to the source identifier.  The
+        returned string may be empty if either Source was empty already, or if
+        there's no applicable target to map to.
+    */
+    string mapContentIdentifierString([in] string Source);
+
+    //-------------------------------------------------------------------------
+    /** Map an XContentIdentifier.
+
+        @param Source  An XContentIdentifier from the source set.
+
+        @returns  The target set's XContentIdentifier corresponding to the
+        source identifier.  The returned XContentIdentifier may be null if
+        either Source was null already, or if there's no applicable target to
+        map to.
+    */
+    XContentIdentifier mapContentIdentifier([in] XContentIdentifier Source);
+
+    //-------------------------------------------------------------------------
+    /** Map the XContent identified by an XContentIdentifier.
+
+        @param Source  The XContent identified by an XContentIdentifier from
+        the source set.
+
+        @returns  The XContent identified by the target set's
+        XContentIdentifier corresponding to the source identifier.  The
+        returned XContent may be null if either Source was null already, or if
+        there's no applicable target to map to.
+    */
+    XContent mapContent([in] XContent Source);
+
+    //-------------------------------------------------------------------------
+    /** Map the content identifiers (or related data) contained in the columns
+        of a com::sun::star::sdbc::XRow.
+
+        @param Value  On input, a sequence of anys corresponding to the columns
+        of the com::sun::star::sdbc::XRow (the first column goes into the
+        zeroth position of the sequence, and so on).  On output, the same
+        sequence, but with the entries mapped as necessary.  This is an inout
+        parameter rather than a comination of in parameter and return value for
+        performance reasons (assuming that in most cases most elements in the
+        input sequence will be returned unmodified).
+
+        @returns  True if any of the columns contain data that (potentially)
+        needs mapping (though maybe no mapping occured for the concrete input
+        data of this call).  This information can be useful to decide whether,
+        for another row, a call to this function is at all necessary.
+    */
+    boolean mapRow([inout] sequence< any > Value);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

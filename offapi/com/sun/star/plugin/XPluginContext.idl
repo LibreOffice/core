@@ -1,0 +1,221 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XPluginContext.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:52 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_plugin_XPluginContext_idl__
+#define __com_sun_star_plugin_XPluginContext_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_plugin_XPlugin_idl__
+#include <com/sun/star/plugin/XPlugin.idl>
+#endif
+
+#ifndef __com_sun_star_plugin_PluginVariable_idl__
+#include <com/sun/star/plugin/PluginVariable.idl>
+#endif
+
+#ifndef __com_sun_star_plugin_PluginException_idl__
+#include <com/sun/star/plugin/PluginException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+
+#ifndef __com_sun_star_io_XActiveDataSource_idl__
+#include <com/sun/star/io/XActiveDataSource.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module plugin {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::plugin::XPluginContext
+/** implements the calls a plugin library can make on its browser.
+
+
+
+    <p>A default context can be created by a <type>XPluginManager</type>.
+
+    </p>@see XPluginManager
+ */
+[ uik(131ADEC0-BC48-11D2-AB2B0060-97759B97), ident( "XPluginContext", 1.0 ) ]
+interface XPluginContext: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XPluginContext::getValue
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::getValue
+    /** requests global application parameters like display connection on UNIX systems
+     */
+    string getValue( [in] com::sun::star::plugin::XPlugin xPlugin,
+             [in] com::sun::star::plugin::PluginVariable aVariable )
+            raises( com::sun::star::plugin::PluginException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::getURLNotify
+    /** requests a notification of completion of the operation on an URL.
+     */
+    void getURLNotify( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string url,
+             [in] string target,
+             [in] com::sun::star::lang::XEventListener listener )
+            raises( com::sun::star::plugin::PluginException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::getURL
+    /** requests an URL to be loaded into the frame target.
+     */
+    void getURL( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string url,
+             [in] string target )
+            raises( com::sun::star::plugin::PluginException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::postURLNotify
+    /** posts data from a buffer or file to an URL and receives a
+        notification upon completion.
+     */
+    void postURLNotify( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string url,
+             [in] string target,
+             [in] sequence<byte> buf,
+             [in] boolean file,
+             [in] com::sun::star::lang::XEventListener listener )
+            raises( com::sun::star::plugin::PluginException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::postURL
+    /** posts data from a buffer or file to an URL.
+     */
+    void postURL( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string url,
+             [in] string target,
+             [in] sequence<byte> buf,
+             [in] boolean file )
+            raises( com::sun::star::plugin::PluginException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::newStream
+    /** requests a new stream that is created by the plugin and cosumed
+        by the browser.
+     */
+    void newStream( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string mimetype,
+             [in] string target,
+             [in] com::sun::star::io::XActiveDataSource aSource )
+            raises( com::sun::star::plugin::PluginException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::displayStatusText
+    /** displays a message in the browser status line.
+     */
+    void displayStatusText( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string message )
+            raises( com::sun::star::plugin::PluginException );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XPluginContext::getUserAgent
+
+    // DocMerge from xml: method com::sun::star::plugin::XPluginContext::getUserAgent
+    /** returns an application dependant identification string. This is
+        the same string that is transmitted by a browser to an http server.
+     */
+    string getUserAgent( [in] com::sun::star::plugin::XPlugin plugin )
+            raises( com::sun::star::plugin::PluginException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:29  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:35  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/03/17 13:15:29  pl
+    #74035# documentation
+
+    Revision 1.2  2000/02/07 11:24:42  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
+    new
+
+
+=============================================================================*/
+#endif

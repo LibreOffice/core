@@ -1,0 +1,560 @@
+/*************************************************************************
+ *
+ *  $RCSfile: FadeEffect.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_FadeEffect_idl__
+#define __com_sun_star_presentation_FadeEffect_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
+// DocMerge from xml: enum com::sun::star::presentation::FadeEffect
+/** specifies the fade effects to fade one page into another.
+ */
+enum FadeEffect
+{
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   NONE,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::NONE
+    /** use no fade effects.
+     */
+    NONE,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   FADE_FROM_LEFT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::FADE_FROM_LEFT
+    /** use the fade effect 'Fade from Left'.
+     */
+    FADE_FROM_LEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   FADE_FROM_TOP,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::FADE_FROM_TOP
+    /** use the fade effect 'Fade from Top'.
+     */
+    FADE_FROM_TOP,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   FADE_FROM_RIGHT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::FADE_FROM_RIGHT
+    /** use the fade effect 'Fade from Right'.
+     */
+    FADE_FROM_RIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   FADE_FROM_BOTTOM,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::FADE_FROM_BOTTOM
+    /** use the fade effect 'Fade from Bottom'.
+     */
+    FADE_FROM_BOTTOM,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   FADE_TO_CENTER,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::FADE_TO_CENTER
+    /** use the fade effect 'Fade to Center'.
+     */
+    FADE_TO_CENTER,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   FADE_FROM_CENTER,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::FADE_FROM_CENTER
+    /** use the fade effect 'Fade from Center'.
+     */
+    FADE_FROM_CENTER,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   MOVE_FROM_LEFT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::MOVE_FROM_LEFT
+    /** use the fade effect 'Move from Left'.
+     */
+    MOVE_FROM_LEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   MOVE_FROM_TOP,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::MOVE_FROM_TOP
+    /** use the fade effect 'Move from Top'.
+     */
+    MOVE_FROM_TOP,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   MOVE_FROM_RIGHT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::MOVE_FROM_RIGHT
+    /** use the fade effect 'Move from Right'.
+     */
+    MOVE_FROM_RIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   MOVE_FROM_BOTTOM,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::MOVE_FROM_BOTTOM
+    /** use the fade effect 'Move from Bottom'.
+     */
+    MOVE_FROM_BOTTOM,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   ROLL_FROM_LEFT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::ROLL_FROM_LEFT
+    /** use the fade effect 'Roll from Left'.
+     */
+    ROLL_FROM_LEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   ROLL_FROM_TOP,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::ROLL_FROM_TOP
+    /** use the fade effect 'Roll from Top'.
+     */
+    ROLL_FROM_TOP,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   ROLL_FROM_RIGHT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::ROLL_FROM_RIGHT
+    /** use the fade effect 'Roll from Right'.
+     */
+    ROLL_FROM_RIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   ROLL_FROM_BOTTOM,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::ROLL_FROM_BOTTOM
+    /** use the fade effect 'Roll from Bottom'.
+     */
+    ROLL_FROM_BOTTOM,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   VERTICAL_STRIPES,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::VERTICAL_STRIPES
+    /** use the fade effect 'Vertical Stripes'.
+     */
+    VERTICAL_STRIPES,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   HORIZONTAL_STRIPES,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::HORIZONTAL_STRIPES
+    /** use the fade effect 'Horizontal Stripes'.
+     */
+    HORIZONTAL_STRIPES,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   CLOCKWISE,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::CLOCKWISE
+    /** use the fade effect 'Clockwise'.
+     */
+    CLOCKWISE,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   COUNTERCLOCKWISE,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::COUNTERCLOCKWISE
+    /** use the fade effect 'Counter Clockwise'.
+     */
+    COUNTERCLOCKWISE,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   FADE_FROM_UPPERLEFT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::FADE_FROM_UPPERLEFT
+    /** use the fade effect 'Fade from Upper Left'.
+     */
+    FADE_FROM_UPPERLEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   FADE_FROM_UPPERRIGHT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::FADE_FROM_UPPERRIGHT
+    /** use the fade effect 'Fade from Upper Right'.
+     */
+    FADE_FROM_UPPERRIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   FADE_FROM_LOWERLEFT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::FADE_FROM_LOWERLEFT
+    /** use the fade effect 'Fade from Lower Left'.
+     */
+    FADE_FROM_LOWERLEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   FADE_FROM_LOWERRIGHT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::FADE_FROM_LOWERRIGHT
+    /** use the fade effect 'Fade from Lower Right'.
+     */
+    FADE_FROM_LOWERRIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   CLOSE_VERTICAL,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::CLOSE_VERTICAL
+    /** use the fade effect 'Close Vertical'.
+     */
+    CLOSE_VERTICAL,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   CLOSE_HORIZONTAL,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::CLOSE_HORIZONTAL
+    /** use the fade effect 'Close Horizontal'.
+     */
+    CLOSE_HORIZONTAL,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   OPEN_VERTICAL,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::OPEN_VERTICAL
+    /** use the fade effect 'Open Vertical'.
+     */
+    OPEN_VERTICAL,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   OPEN_HORIZONTAL,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::OPEN_HORIZONTAL
+    /** use the fade effect 'Open Horizontal'.
+     */
+    OPEN_HORIZONTAL,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   SPIRALIN_LEFT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::SPIRALIN_LEFT
+    /** use the fade effect 'Spiral Inward Left'.
+     */
+    SPIRALIN_LEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   SPIRALIN_RIGHT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::SPIRALIN_RIGHT
+    /** use the fade effect 'Spiral Inward Right'.
+     */
+    SPIRALIN_RIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   SPIRALOUT_LEFT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::SPIRALOUT_LEFT
+    /** use the fade effect 'Spiral Outward Left'.
+     */
+    SPIRALOUT_LEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   SPIRALOUT_RIGHT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::SPIRALOUT_RIGHT
+    /** use the fade effect 'Spiral Outward Right'.
+     */
+    SPIRALOUT_RIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   DISSOLVE,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::DISSOLVE
+    /** use the fade effect 'Dissolve'.
+     */
+    DISSOLVE,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   WAVYLINE_FROM_LEFT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::WAVYLINE_FROM_LEFT
+    /** use the fade effect 'Wavy Line from Left'.
+     */
+    WAVYLINE_FROM_LEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   WAVYLINE_FROM_TOP,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::WAVYLINE_FROM_TOP
+    /** use the fade effect 'Wavy Line from Top'.
+     */
+    WAVYLINE_FROM_TOP,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   WAVYLINE_FROM_RIGHT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::WAVYLINE_FROM_RIGHT
+    /** use the fade effect 'Wavy Line from Right'.
+     */
+    WAVYLINE_FROM_RIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   WAVYLINE_FROM_BOTTOM,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::WAVYLINE_FROM_BOTTOM
+    /** use the fade effect 'Wavy Line from Bottom'.
+     */
+    WAVYLINE_FROM_BOTTOM,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   RANDOM,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::RANDOM
+    /** use the fade effect 'Random'.
+     */
+    RANDOM,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   STRETCH_FROM_LEFT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::STRETCH_FROM_LEFT
+    /** use the fade effect 'Stretch from Left'.
+     */
+    STRETCH_FROM_LEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   STRETCH_FROM_TOP,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::STRETCH_FROM_TOP
+    /** use the fade effect 'Stretch from Top'.
+     */
+    STRETCH_FROM_TOP,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   STRETCH_FROM_RIGHT,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::STRETCH_FROM_RIGHT
+    /** use the fade effect 'Stretch from Right'.
+     */
+    STRETCH_FROM_RIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   STRETCH_FROM_BOTTOM,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::STRETCH_FROM_BOTTOM
+    /** use the fade effect 'Stretch from Bottom'.
+     */
+    STRETCH_FROM_BOTTOM,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   VERTICAL_LINES,
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::VERTICAL_LINES
+    /** use the fade effect 'Vertical Lines'.
+     */
+    VERTICAL_LINES,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   HORIZONTAL_LINES
+
+    // DocMerge from xml: value com::sun::star::presentation::FadeEffect::HORIZONTAL_LINES
+    /** use the fade effect 'Horizontal Lines'.
+     */
+    HORIZONTAL_LINES,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect:: MOVE_FROM_UPPERLEFT
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::MOVE_FROM_UPPERLEFT
+    /** use the fade effect 'Move from Upper Left'.
+     */
+    MOVE_FROM_UPPERLEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect:: MOVE_FROM_UPPERRIGHT
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::MOVE_FROM_UPPERRIGHT
+    /** use the fade effect 'Move from Upper Right'.
+     */
+    MOVE_FROM_UPPERRIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect:: MOVE_FROM_LOWERRIGHT
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::MOVE_FROM_LOWERRIGHT
+    /** use the fade effect 'Move from Lower Right'.
+     */
+    MOVE_FROM_LOWERRIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect:: MOVE_FROM_LOWERLEFT
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::MOVE_FROM_LOWERLEFT
+    /** use the fade effect 'Move from Lower Left'.
+     */
+    MOVE_FROM_LOWERLEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   UNCOVER_TO_LEFT
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::UNCOVER_TO_LEFT
+    /** use the fade effect 'Uncover to Left'.
+     */
+    UNCOVER_TO_LEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   UNCOVER_TO_UPPERLEFT
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::UNCOVER_TO_UPPERLEFT
+    /** use the fade effect 'Uncover to Upper Left'.
+     */
+    UNCOVER_TO_UPPERLEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   UNCOVER_TO_TOP
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::UNCOVER_TO_TOP
+    /** use the fade effect 'Uncover to Top'.
+     */
+    UNCOVER_TO_TOP,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   UNCOVER_TO_UPPERRIGHT
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::UNCOVER_TO_UPPERRIGHT
+    /** use the fade effect 'Uncover to Upper Right'.
+     */
+    UNCOVER_TO_UPPERRIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   UNCOVER_TO_RIGHT
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::UNCOVER_TO_RIGHT
+    /** use the fade effect 'Uncover to Right'.
+     */
+    UNCOVER_TO_RIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   UNCOVER_TO_LOWERRIGHT
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::UNCOVER_TO_LOWERRIGHT
+    /** use the fade effect 'Uncover to Lower Right'.
+     */
+    UNCOVER_TO_LOWERRIGHT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   UNCOVER_TO_BOTTOM
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::UNCOVER_TO_BOTTOM
+    /** use the fade effect 'Uncover to Bottom'.
+     */
+    UNCOVER_TO_BOTTOM,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   UNCOVER_TO_LOWERLEFT
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::UNCOVER_TO_LOWERLEFT
+    /** use the fade effect 'Uncover to Lower Left'.
+     */
+    UNCOVER_TO_LOWERLEFT,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   VERTICAL_CHECKERBOARD
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::VERTICAL_CHECKERBOARD
+    /** use the fade effect 'Vertical Checkerboard'.
+     */
+    VERTICAL_CHECKERBOARD,
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR FadeEffect::   HORIZONTAL_CHECKERBOARD
+
+    // DocMerge from xml: value com::sun::star::presentation::fadeEffect::HORIZONTAL_CHECKERBOARD
+    /** use the fade effect 'Horizontal Checkerboard'.
+     */
+    HORIZONTAL_CHECKERBOARD
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/30 12:13:23  ka
+    added new Effects
+
+    Revision 1.1.1.1  2000/09/18 23:35:31  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:35  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/03/27 10:54:17  cl
+    #70728# fixed doku
+
+    Revision 1.2  2000/02/07 11:24:43  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
+    new
+
+
+=============================================================================*/
+#endif

@@ -1,0 +1,202 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSimpleText.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:21 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_XSimpleText_idl__
+#define __com_sun_star_text_XSimplText_idl__
+
+#ifndef __com_sun_star_text_XTextRange_idl__
+#include <com/sun/star/text/XTextRange.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextCursor_idl__
+#include <com/sun/star/text/XTextCursor.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextContent_idl__
+#include <com/sun/star/text/XTextContent.idl>
+#endif
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::text::XSimpleText
+/** is the main interface for a distinct text unit, i.e. the main text of
+    a document, the text for headers and footers or for single cells of a
+    table.@see XText
+ */
+[ uik(654C4FA0-D25D-11d3-9FBE0010-5AEF84A7), ident( "XSimpleText", 1.0 ) ]
+interface XSimpleText: com::sun::star::text::XTextRange
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XSimpleText::createTextCursor
+    /** @returns
+                a new instance of a <type>TextCursor</type> service which can
+                be used to travel in the given text context.
+
+                @see service com::sun::star::text::TextCursor
+     */
+    com::sun::star::text::XTextCursor createTextCursor();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XSimpleText::createTextCursorByRange
+    /** @returns
+                a new instance of a <type>TextCursor</type> which is located
+                at the specified <type>TextPosition</type> to travel in the
+                given text context.
+
+                <p>The initial position is set to <var>aTextPosition</var>.
+
+                @param aTextPosition
+                specifies the start position for the new
+                <type>TextCursor</type>.
+
+                @see service com::sun::star::text::TextCursor
+     */
+    com::sun::star::text::XTextCursor createTextCursorByRange( [in] com::sun::star::text::XTextRange aTextPosition );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::text::XSimpleText::insertString
+    /** inserts a string of characters into the text.
+
+
+
+        <p>The string may contain the following white spaces:
+
+        </p>
+        <ul>
+        <li>blank
+        </li>
+        <li>tab
+        </li>
+        <li>cr (which will insert a paragraph break)
+        </li>
+        <li>lf (which will insert a line break)
+        </li>
+        </ul>
+
+
+
+
+
+
+
+        @example <listing>
+        xText.insertString( xTextCursor, "Hello " + aName$ + ",", false )
+
+        xText.insertControlCharacter( xTextCursor,
+        ControlCharacter_PARAGRAPH_BREAK, false );
+
+        xText.insertString( xTextCursor, "more text ...", false ) </listing>
+     */
+    [oneway] void insertString( [in] com::sun::star::text::XTextRange xRange,
+             [in] string aString,
+             [in] boolean bAbsorb );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::text::XSimpleText::insertControlCharacter
+    /** inserts a control character (like a paragraph break or a hard
+        space) into the text.@see constants com::sun::star::text::ControlCharacter
+     */
+    void insertControlCharacter( [in] com::sun::star::text::XTextRange xRange,
+             [in] short nControlCharacter,
+             [in] boolean bAbsorb )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/09 14:25:02  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.1.1.1  2000/09/18 23:36:05  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:53:03  mi
+    documentation merged from XML
+
+    Revision 1.1  2000/01/24 13:18:57  mi
+    #72213# XSimpleText without insert/remove content
+
+
+
+=============================================================================*/
+#endif

@@ -1,0 +1,371 @@
+/*************************************************************************
+ *
+ *  $RCSfile: CharacterProperties.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:15 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_style_CharacterProperties_idl__
+#define __com_sun_star_style_CharacterProperties_idl__
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_awt_FontSlant_idl__
+#include <com/sun/star/awt/FontSlant.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::style::CharacterProperties
+/** This is a set of properties to describe the style of characters.@see service ParagraphProperties
+ */
+service CharacterProperties
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontName
+    /** This property specifies the name of the font style.
+
+
+
+        <p>It may contain more than one name separated by comma.</p>
+     */
+    [property] string CharFontName;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontStyleName
+    /** This property contains the name of the font style.
+
+        <p>This property may be empty.</p>
+     */
+    [property] string CharFontStyleName;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontFamily
+    /** This property contains font family as specified in
+        com.sun.star.awt.FontFamily .
+     */
+    [property] short CharFontFamily;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontCharSet
+    /** This property contains the text encoding of the font as specified in
+        com.sun.star.awt.CharSet.
+     */
+    [property] short CharFontCharSet;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontPitch
+    /** This property contains the font pitch as specified in com.sun.star.awt.FontPitch.
+     */
+    [property] short CharFontPitch;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharColor
+    /** This property contains the value of the text color.
+     */
+    [property] long CharColor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharEscapement
+    /** optional property which contains the relative value of the character
+        height in subscription or superscription.
+
+
+
+
+
+
+
+
+
+        @optional
+     */
+    [optional, property] short CharEscapement;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharHeight
+    /** This value contains the height of the characters in point.
+     */
+    [property] float CharHeight;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharUnderline
+    /** This property contains the value for the character underline.@see com::sun::star::awt::FontUnderline
+     */
+    [property] short CharUnderline;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharWeight
+    /** This property contains the value of the font weight.@see com::sun::star::awt::FontWeight
+     */
+    [property] float CharWeight;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharPosture
+    /** This property contains the value of the posture of the document.@see com::sun::star::awt::FontSlant
+     */
+    [property] com::sun::star::awt::FontSlant CharPosture;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharAutoKerning
+    /** optional property to determine whether the kerning tables from the current font are used.
+
+
+        <p>Automatic <em>kerning</em> applies a spacing in between certain
+        pairs of characters to make the text look better.</p>
+
+
+        @optional
+     */
+    [optional, property] boolean CharAutoKerning;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharBackColor
+    /** optional property which contains the text background color.
+
+        @optional
+     */
+    [optional, property] long CharBackColor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharBackTransparent
+    /** determines if the text background color is set at transparent.
+     */
+    [optional, property] boolean CharBackTransparent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharCaseMap
+    /** optional property which contains the value of the case-mapping of the
+        text for formatting and displaying.
+
+        @optional
+
+        @see constants CaseMap
+     */
+    [optional, property] short CharCaseMap;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharCrossedOut
+    /** This property is <true></true> if the character(s) is(are) crossed out.
+
+        @optional
+     */
+    [optional, property] boolean CharCrossedOut;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFlash
+    /** If this optional property is <true></true>, then the characters are flashing.
+
+        @optional
+     */
+    [optional, property] boolean CharFlash;
+
+    //-------------------------------------------------------------------------
+    /** determins the type of the strike out of the character.
+        @see com.sun.star.awt.FontStrikeout
+    */
+    [optional, property] short CharStrikeout;
+
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/>, the underline and strike-through
+        properties are not applied to white spaces.
+
+        @optional
+     */
+    [optional, property] boolean CharWordMode;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharKerning
+    /** optional property which contains the value of the kerning of the characters.
+
+        @optional
+     */
+    [optional, property] short CharKerning;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharLocale
+    /** contains the value of the locale.
+     */
+    [property] com::sun::star::lang::Locale CharLocale;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharKeepTogether
+    /** optional property which marks a range of characters to prevent it from being broken into two lines.
+
+        <p> A line break is applied before the range of characters if
+        the layout makes a break necessary within the range.</p>
+
+        @optional
+     */
+    [optional, property] boolean CharKeepTogether;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharNoLineBreak
+    /** optional property which marks a range of characters to ignore a line break in this area.
+
+        <p> A line break is applied behind the range of characters if
+        the layout makes a break necessary within the range. That means that
+        the text may go through the border.</p>
+
+        @optional
+     */
+    [optional, property] boolean CharNoLineBreak;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharShadowed
+    /** specifies if the characters are formatted and
+        displayed with a shadow effect.
+
+        @optional
+     */
+    [optional, property] boolean CharShadowed;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontType
+    /** optional property which specifies the fundamental technology of the font.
+
+        @optional@see com::sun::star::awt::FontType
+     */
+    [optional, property] short CharFontType;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharStyleName
+    /** specifies the name of the style of the font.
+     */
+    [optional, property] string CharStyleName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharContoured
+    /** specifies if the characters are formatted and
+        displayed with a contour effect.
+
+        @optional
+     */
+    [optional, property] boolean CharContoured;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/09 14:25:01  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.1.1.1  2000/09/18 23:35:54  hjs
+    initial import
+
+    Revision 1.10  2000/09/11 11:52:55  mi
+    documentation merged from XML
+
+    Revision 1.8  2000/08/25 08:44:15  os
+    property CharStrikeout
+
+    Revision 1.7  2000/08/17 11:41:20  bm
+    some properties are optional (settings got lost by merge). I set them according to old docu
+
+    Revision 1.6  2000/07/19 07:56:26  os
+    ...Style -> ...StyleName
+
+    Revision 1.5  2000/06/29 12:27:06  os
+    TransparentBackground -> ~BackTransparent
+
+    Revision 1.4  2000/06/28 15:41:11  os
+    new properties: CharFontStyleName/Family/CharSet/Pitch
+
+    Revision 1.3  2000/02/21 16:18:09  mi
+    string documentation from stardiv...*.idl-files
+
+    Revision 1.2  2000/01/28 16:32:18  mi
+    #72210# Locale instead of Language in NumberFormatter
+
+    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
+    new
+
+
+=============================================================================*/
+#endif

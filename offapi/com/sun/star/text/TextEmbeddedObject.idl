@@ -1,0 +1,521 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TextEmbeddedObject.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextEmbeddedObject_idl__
+#define __com_sun_star_text_TextEmbeddedObject_idl__
+
+#ifndef __com_sun_star_document_XEmbeddedObjectSupplier_idl__
+#include <com/sun/star/document/XEmbeddedObjectSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextEmbeddedObject_idl__
+#include <com/sun/star/text/XTextEmbeddedObject.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
+
+#ifndef __com_sun_star_style_GraphicLocation_idl__
+#include <com/sun/star/style/GraphicLocation.idl>
+#endif
+
+#ifndef __com_sun_star_table_ShadowFormat_idl__
+#include <com/sun/star/table/ShadowFormat.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextColumns_idl__
+#include <com/sun/star/text/XTextColumns.idl>
+#endif
+
+#ifndef __com_sun_star_table_BorderLine_idl__
+#include <com/sun/star/table/BorderLine.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::TextEmbeddedObject
+/** provides access to the properties and methods of an embedded object.
+ */
+service TextEmbeddedObject
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::document::XEmbeddedObjectSupplier;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::text::XTextEmbeddedObject;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::container::XNamed;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::AnchorPageNo
+    /** contains the number of the page where the objects are anchored.
+
+
+
+        <p> The value is valid only if the
+        <type>TextContentAnchorType</type> is
+        <const>TextContentAnchorType::AT_PAGE</const>.</p>
+     */
+    [property] short AnchorPageNo;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::AnchorType
+    /** determines the type of the anchor of the object.@see enum TextContentAnchorType
+     */
+    [property] short AnchorType;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::BackColor
+    /** determines the background color of the object.
+
+
+
+        <p> This is visible only if the "TransparentBackground" is <true></true>.</p>
+     */
+    [property] long BackColor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::BackTransparent
+    /** If TRUE, the "BackColor" is ignored.
+     */
+    [property] boolean BackTransparent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::ChainNextName
+    /** If the object is linked, then this property contains the name of
+        the next object in the chain.
+     */
+    [property] string ChainNextName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::ChainPrevName
+    /** If the object is linked, then this property contains the name of
+        the previous object in the chain.
+     */
+    [property] string ChainPrevName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::ContentProtected
+    /** determines if the content is protected.
+     */
+    [property] boolean ContentProtected;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::EditInReadonly
+    /** determines if the text content can be edited in read-only documents.
+     */
+    [property] boolean EditInReadonly;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::FrameStyle
+    /** contains the name of the frame style that is applied to this object.
+     */
+    [property] string FrameStyle;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::BackGraphicURL
+    /** contains the URL for the background graphic.
+     */
+    [property] string BackGraphicURL;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::BackGraphicFilter
+    /** contains the name of the file filter for the background graphic.
+     */
+    [property] string BackGraphicFilter;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::BackGraphicLocation
+    /** determines the position of the background graphic.@see enum GraphicLocation
+     */
+    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::LeftMargin
+    /** contains the left margin of the object.
+     */
+    [property] long LeftMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::RightMargin
+    /** contains the right margin of the object.
+     */
+    [property] long RightMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::TopMargin
+    /** contains the top margin of the object.
+     */
+    [property] long TopMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::BottomMargin
+    /** contains the bottom margin of the object.
+     */
+    [property] long BottomMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::Height
+    /** contains the height of the object (1/100 mm).
+
+
+
+        <p>It is only valid if <member>TextEmbeddedObject::RelativeHeight</member> is zero.</p>
+     */
+    [property] long Height;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::Width
+    /** contains the width of the object (1/100 mm).
+
+
+
+        <p>It is only valid if <member>TextEmbeddedObject::RelativeWidth</member> is zero.</p>
+     */
+    [property] long Width;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::RelativeHeight
+    /** contains the relative height of the object.
+
+
+
+        <p> It is only valid if it is greater than zero.</p>
+     */
+    [property] short RelativeHeight;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::RelativeWidth
+    /** contains the relative width of the object.
+
+
+
+        <p> It is only valid if it is greater than zero. </p>
+     */
+    [property] short RelativeWidth;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::SizeType
+    /** determines the interpretation of the height and relative
+        height properties.@see constants SizeType
+     */
+    [property] short SizeType;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::HoriOrient
+    /** determines the horizontal orientation of the object.@see constants HoriOrientation
+     */
+    [property] short HoriOrient;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::HoriOrientPosition
+    /** contains the horizontal position of the object (1/100 mm).
+
+
+
+        <p> It is only valid if "HoriOrient" is HoriOrientation_NONE.</p>
+     */
+    [property] long HoriOrientPosition;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::HoriOrientRelation
+    /** determines the environment of the object to which the orientation
+        is related.@see constants RelOrientation
+     */
+    [property] short HoriOrientRelation;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::VertOrient
+    /** determines the vertical orientation of the object.@see constants VertOrientation
+     */
+    [property] short VertOrient;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::VertOrientPosition
+    /** contains the vertical position of the object (1/100 mm).
+
+        It is only valid if <member>TextEmbeddedObject::VertOrient</member> is
+        <const>VertOrientation::NONE</const>.
+     */
+    [property] long VertOrientPosition;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::VertOrientRelation
+    /** determines the environment of the object to which the orientation is related.@see constants RelOrientation
+     */
+    [property] short VertOrientRelation;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::HyperLinkURL
+    /** contains the URL of a hyperlink that is set at the object.
+     */
+    [property] string HyperLinkURL;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::HyperLinkTarget
+    /** contains the name of the target for a hyperlink that is set at the object.
+     */
+    [property] string HyperLinkTarget;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::HyperLinkName
+    /** contains the name of the hyperlink that is set at the object.
+     */
+    [property] string HyperLinkName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::Opaque
+    /** determines if the object is opaque or transparent for text.
+     */
+    [property] boolean Opaque;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::PageToggle
+    /** determines if the object is mirrored on even pages.
+     */
+    [property] boolean PageToggle;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::PositionProtected
+    /** determines if the position is protected.
+     */
+    [property] boolean PositionProtected;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::Print
+    /** determines if the object is included in printing.
+     */
+    [property] boolean Print;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::ShadowFormat
+    /** contains the type of the shadow of the object.@see struct ShadowFormat
+     */
+    [property] com::sun::star::table::ShadowFormat ShadowFormat;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::ServerMap
+    /** determines if the object gets an image map from a server.
+     */
+    [property] boolean ServerMap;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::Size
+    /** contains the size of the object.@see Height
+                @see Width
+     */
+    [property] com::sun::star::awt::Size Size;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::SizeProtected
+    /** determines if the size is protected.
+     */
+    [property] boolean SizeProtected;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::SizeRelative
+    /** the relative size to the size from the container object.
+        That isn't a metric value, its specify how large the object relative to the container object is.
+     */
+    [property] boolean SizeRelative;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::Surround
+    /** determines the type of the surrounding text.@see enum WrapTextMode
+     */
+    [property] short Surround;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::SurroundAnchoronly
+    /** determines if the text of the paragraph in which the object
+        is anchored wraps around the object.
+     */
+    [property] boolean SurroundAnchoronly;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::TextColumns
+    /** contains the description of text columns in the object.
+     */
+    [property] com::sun::star::text::XTextColumns TextColumns;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::LeftBorder
+    /** contains the left border of the object.
+     */
+    [property] com::sun::star::table::BorderLine LeftBorder;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::RightBorder
+    /** contains the right border of the object.
+     */
+    [property] com::sun::star::table::BorderLine RightBorder;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::TopBorder
+    /** contains the top border of the object.
+     */
+    [property] com::sun::star::table::BorderLine TopBorder;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::BottomBorder
+    /** contains the bottom border of the object.
+     */
+    [property] com::sun::star::table::BorderLine BottomBorder;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextEmbeddedObject::BorderDistance
+    /** contains the distance between the object and the border.
+     */
+    [property] long BorderDistance;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:03  hjs
+    initial import
+
+    Revision 1.8  2000/09/11 11:53:01  mi
+    documentation merged from XML
+
+    Revision 1.6  2000/06/29 12:27:31  os
+    TransparentBackground -> ~BackTransparent
+
+    Revision 1.5  2000/06/16 11:42:16  os
+    #75622# BackGraphicLocation/URL/Filter added/changed
+
+    Revision 1.4  2000/02/21 16:18:15  mi
+    string documentation from stardiv...*.idl-files
+
+    Revision 1.3  2000/02/07 11:25:02  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.2  2000/01/03 12:03:22  mi
+    reference manual
+
+    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
+    new
+
+
+=============================================================================*/
+#endif

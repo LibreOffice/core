@@ -1,0 +1,429 @@
+/*************************************************************************
+ *
+ *  $RCSfile: PageProperties.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:15 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_style_PageProperties_idl__
+#define __com_sun_star_style_PageProperties_idl__
+
+#ifndef __com_sun_star_table_ShadowFormat_idl__
+#include <com/sun/star/table/ShadowFormat.idl>
+#endif
+#ifndef __com_sun_star_table_BorderLine_idl__
+#include <com/sun/star/table/BorderLine.idl>
+#endif
+#ifndef __com_sun_star_style_PageStyleLayout_idl__
+#include <com/sun/star/style/PageStyleLayout.idl>
+#endif
+#ifndef __com_sun_star_style_GraphicLocation_idl__
+#include <com/sun/star/style/GraphicLocation.idl>
+#endif
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
+#ifndef __com_sun_star_text_XText_idl__
+#include <com/sun/star/text/XText.idl>
+#endif
+#ifndef __com_sun_star_text_XTextColumns_idl__
+#include <com/sun/star/text/XTextColumns.idl>
+#endif
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
+#endif
+//=============================================================================
+
+ module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
+/** describes the style of pages.
+ */
+service PageProperties
+{
+//-----------------------------------------------------------------------------
+/** contains color of the background.
+ */
+[property] long BackColor;
+//-----------------------------------------------------------------------------
+/**
+ */
+//[property] BackGraphic;
+//-----------------------------------------------------------------------------
+/** contains the URL of the background graphic.
+ */
+[property] string BackGraphicURL;
+//-----------------------------------------------------------------------------
+/** contains the filter name of the background graphic.
+ */
+[property] string BackGraphicFilter;
+//-----------------------------------------------------------------------------
+/** determins the location of the background graphic.
+ */
+[property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+//-----------------------------------------------------------------------------
+/** determins if the background color is transparent.
+ */
+[property] boolean BackTransparent;
+//-----------------------------------------------------------------------------
+/** determins the left margin of the page.
+ */
+[property] long LeftMargin;
+//-----------------------------------------------------------------------------
+/** determins the right margin of the page.
+ */
+[property] long RightMargin;
+//-----------------------------------------------------------------------------
+/** determins the top margin of the page.
+ */
+[property] long TopMargin;
+//-----------------------------------------------------------------------------
+/** determins the bottom margin of the page.
+ */
+[property] long BottomMargin;
+//-----------------------------------------------------------------------------
+/** determins the left border of the page.
+ */
+[property] com::sun::star::table::BorderLine LeftBorder;
+//-----------------------------------------------------------------------------
+/** determins the right border of the page.
+ */
+[property] com::sun::star::table::BorderLine RightBorder;
+//-----------------------------------------------------------------------------
+/** determins the top border of the page.
+ */
+[property] com::sun::star::table::BorderLine TopBorder;
+//-----------------------------------------------------------------------------
+/** determins the bottom border of the page.
+ */
+[property] com::sun::star::table::BorderLine BottomBorder;
+//-----------------------------------------------------------------------------
+/** determins the left border distance of the page.
+ */
+[property] long LeftBorderDistance;
+//-----------------------------------------------------------------------------
+/** determins the right border distance of the page.
+ */
+[property] long RightBorderDistance;
+//-----------------------------------------------------------------------------
+/** determins the top border distance of the page.
+ */
+[property] long TopBorderDistance;
+//-----------------------------------------------------------------------------
+/** determins the bottom border distance of the page.
+ */
+[property] long BottomBorderDistance;
+//-----------------------------------------------------------------------------
+/** determins the shadow of the page.
+ */
+[property] com::sun::star::table::ShadowFormat ShadowFormat;
+//-----------------------------------------------------------------------------
+/** determins if the page format is landscape.
+ */
+[property] boolean IsLandscape;
+//-----------------------------------------------------------------------------
+/** determins the default numbering type for this page.
+ */
+[property] short NumberingType;
+//-----------------------------------------------------------------------------
+/** determins the layout of the page.
+ */
+[property] com::sun::star::style::PageStyleLayout PageStyleLayout;
+//-----------------------------------------------------------------------------
+/** contains the name of a paper tray of the selected printer.
+ */
+[property] string PrinterPaperTray;
+//-----------------------------------------------------------------------------
+/** determins if the register mode is active on that page.
+ */
+[optional, property] boolean RegisterModeActive;
+//-----------------------------------------------------------------------------
+/** contains the name of the paragraph style that is used as reference of the register mode.
+ */
+[optional, property] string RegisterParagraphStyle;
+//-----------------------------------------------------------------------------
+/** contains the paper size of the page.
+ */
+[property] com::sun::star::awt::Size Size;
+//-----------------------------------------------------------------------------
+/** contains the width of the page.
+ */
+[property] long Width;
+//-----------------------------------------------------------------------------
+/** contains the height of the page.
+ */
+[property] long Height;
+//-----------------------------------------------------------------------------
+/** contains the column settings of the page.
+ */
+[optional , property] com::sun::star::text::XTextColumns TextColumns;
+//-----------------------------------------------------------------------------
+/** contains user defined  attributes.
+ */
+[property] com::sun::star::container::XNameContainer UserDefinedAttributes;
+
+//-----------------------------------------------------------------------------
+/** contains the color of the background of the header.
+ */
+[property] long HeaderBackColor;
+//-----------------------------------------------------------------------------
+/**
+ */
+//[property] HeaderBackGraphic;
+//-----------------------------------------------------------------------------
+/** contains the URL of the background graphic of the header.
+ */
+[property] string HeaderBackGraphicURL;
+//-----------------------------------------------------------------------------
+/** contains the filter name of the background graphic of the header.
+ */
+[property] string HeaderBackGraphicFilter;
+//-----------------------------------------------------------------------------
+/** determins the location of the background graphic of the header.
+ */
+[property] com::sun::star::style::GraphicLocation HeaderBackGraphicLocation;
+//-----------------------------------------------------------------------------
+/** contains the left margin of the header.
+ */
+[property] long HeaderLeftMargin;
+//-----------------------------------------------------------------------------
+/** contains the right margin of the header.
+ */
+[property] long HeaderRightMargin;
+//-----------------------------------------------------------------------------
+/** determins if the the background color of the header is transparent.
+ */
+[property] boolean HeaderBackTransparent;
+//-----------------------------------------------------------------------------
+/** determins the left border of the header.
+ */
+[property] com::sun::star::table::BorderLine HeaderLeftBorder;
+//-----------------------------------------------------------------------------
+/** determins the right border of the header.
+ */
+[property] com::sun::star::table::BorderLine HeaderRightBorder;
+//-----------------------------------------------------------------------------
+/** determins the top border of the header.
+ */
+[property] com::sun::star::table::BorderLine HeaderTopBorder;
+//-----------------------------------------------------------------------------
+/** determins the bottom border of the header.
+ */
+[property] com::sun::star::table::BorderLine HeaderBottomBorder;
+
+//-----------------------------------------------------------------------------
+/** determins the left border distance of the header.
+ */
+[property] long HeaderLeftBorderDistance;
+//-----------------------------------------------------------------------------
+/** determins the right border distance of the header.
+ */
+[property] long HeaderRightBorderDistance;
+//-----------------------------------------------------------------------------
+/** determins the top border distance of the header.
+ */
+[property] long HeaderTopBorderDistance;
+//-----------------------------------------------------------------------------
+/** determins the bottom border distance of the header.
+ */
+[property] long HeaderBottomBorderDistance;
+//-----------------------------------------------------------------------------
+/** determins the shadow of the header.
+ */
+[property] com::sun::star::table::ShadowFormat HeaderShadowFormat;
+//-----------------------------------------------------------------------------
+/** determins the distance between the header and the body text area.
+ */
+[property] long HeaderBodyDistance;
+//-----------------------------------------------------------------------------
+/** determins if the header content on left and right pages is the same.
+ */
+[property] boolean HeaderIsShared;
+//-----------------------------------------------------------------------------
+/** contains the height of the header.
+ */
+[property] long HeaderHeight;
+//-----------------------------------------------------------------------------
+/** determins if the height of the header depends on the content.
+ */
+[property] boolean HeaderIsDynamicHeight;
+//-----------------------------------------------------------------------------
+/** determins if a header is used on the page.
+ */
+[property] boolean HeaderIsOn;
+
+//-----------------------------------------------------------------------------
+/** contains the interface to the text of the header.
+ */
+[optional, property] com::sun::star::text::XText HeaderText;
+//-----------------------------------------------------------------------------
+/** contains the interface to the text of the header of left pages.
+ */
+[optional, property] com::sun::star::text::XText HeaderTextLeft;
+//-----------------------------------------------------------------------------
+/** contains the interface to the text of the header of right pages.
+ */
+[optional, property] com::sun::star::text::XText HeaderTextRight;
+
+//-----------------------------------------------------------------------------
+/** contains the color of the background of the footer.
+ */
+[property] long FooterBackColor;
+//-----------------------------------------------------------------------------
+/**
+ */
+//[property] FooterBackGraphic;
+//-----------------------------------------------------------------------------
+/** contains the URL of the background graphic in the footer.
+ */
+[property] string FooterBackGraphicURL;
+//-----------------------------------------------------------------------------
+/** contains the filter name of the background graphic in the footer.
+ */
+[property] string FooterBackGraphicFilter;
+//-----------------------------------------------------------------------------
+/** determins the location of the background graphic in the footer.
+ */
+[property] com::sun::star::style::GraphicLocation FooterBackGraphicLocation;
+//-----------------------------------------------------------------------------
+/** determins the left margin of the footer.
+ */
+[property] long FooterLeftMargin;
+//-----------------------------------------------------------------------------
+/** determins the right margin of the footer.
+ */
+[property] long FooterRightMargin;
+//-----------------------------------------------------------------------------
+/** determins if the background is transparent.
+ */
+[property] boolean FooterBackTransparent;
+//-----------------------------------------------------------------------------
+/** contains the left border of the footer.
+ */
+[property] com::sun::star::table::BorderLine FooterLeftBorder;
+//-----------------------------------------------------------------------------
+/** contains the right border of the footer.
+ */
+[property] com::sun::star::table::BorderLine FooterRightBorder;
+//-----------------------------------------------------------------------------
+/** contains the top border of the footer.
+ */
+[property] com::sun::star::table::BorderLine FooterTopBorder;
+//-----------------------------------------------------------------------------
+/** contains the bottom border of the footer.
+ */
+[property] com::sun::star::table::BorderLine FooterBottomBorder;
+//-----------------------------------------------------------------------------
+/** contains the left border distance of the footer.
+ */
+[property] long FooterLeftBorderDistance;
+//-----------------------------------------------------------------------------
+/** contains the right border distance of the footer.
+ */
+[property] long FooterRightBorderDistance;
+//-----------------------------------------------------------------------------
+/** contains the top border distance of the footer.
+ */
+[property] long FooterTopBorderDistance;
+//-----------------------------------------------------------------------------
+/** contains the bottom border distance of the footer.
+ */
+[property] long FooterBottomBorderDistance;
+//-----------------------------------------------------------------------------
+/** determins the shadow of the footer.
+ */
+[property] com::sun::star::table::ShadowFormat FooterShadowFormat;
+//-----------------------------------------------------------------------------
+/** determins the distance between the footer and the body text area.
+ */
+[property] long FooterBodyDistance;
+//-----------------------------------------------------------------------------
+/** determins if the height of the footer depends on the content.
+ */
+[property] boolean FooterIsDynamicHeight;
+//-----------------------------------------------------------------------------
+/** determins if the footer content on left and right pages is the same.
+ */
+[property] boolean FooterIsShared;
+//-----------------------------------------------------------------------------
+/** determins the height of the footer.
+ */
+[property] long FooterHeight;
+//-----------------------------------------------------------------------------
+/** determins if a footer is used on the page.
+ */
+[property] boolean FooterIsOn;
+//-----------------------------------------------------------------------------
+/** contains the interface to the text of the footer.
+ */
+[optional,property] com::sun::star::text::XText FooterText;
+//-----------------------------------------------------------------------------
+/** contains the interface to the text of the footer of a left page.
+ */
+[optional,property] com::sun::star::text::XText FooterTextLeft;
+//-----------------------------------------------------------------------------
+/** contains the interface to the text of the footer of a right page.
+ */
+[optional,property] com::sun::star::text::XText FooterTextRight;
+
+};
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

@@ -1,0 +1,237 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XStorable.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XStorable_idl__
+#define __com_sun_star_frame_XStorable_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::frame::XStorable
+/** offers a simple way to store a component to a URL.
+
+
+
+    <p>It is usually only useful for two cases:
+
+    </p>
+    <ol>
+    <li>Large components which are wrapped with <em>StarOne</em> interfaces
+    and for which distinct filters are not available separately as
+    components.
+
+    </li>
+    <li>Very small components for which only one or very few hard
+    coded file format filters make sense or even exist.
+    </li>
+    </ol>
+ */
+[ uik(E2280112-33D6-11D1-AABE00A0-249D5590), ident( "XStorable", 1.0 ) ]
+interface XStorable: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XStorable::hasLocation
+    /** @returns
+                <TRUE/> if the object knows a location where it is persistent.
+
+                <p>The object may know the location because it was loaded from there,
+                or because it is stored there.
+     */
+    [const] boolean hasLocation();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XStorable::getLocation
+    /** @returns
+                    the URL of the resource which is represented by this object.
+
+                <p>After <method>XStorable::storeAsURL</method> it returns the
+                URL the object was stored to.
+     */
+    [const] string getLocation();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XStorable::isReadonly
+    /** @returns
+                <TRUE/> if the data store is readonly or opened readonly.
+
+                <p>It is not possible to call store() successfully when the data
+                store is read-only.
+     */
+    [const] boolean isReadonly();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XStorable::store
+    /** stores the data to the URL from which it was loaded.
+
+
+
+        <p>Only objects which know their locations can be stored.</p>
+     */
+    void store()
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XStorable::storeAsURL
+    /** stores the object's persistent data to a URL and
+        lets the object become the representation of this new URL.
+
+
+
+        <p>This is the normal behavior for UI's "save-as" feature.
+
+        </p>
+        <p>The arguments depend on the object itself. Commonly used are:
+        <dl>
+        <dt>string FilterName
+        </dt>
+        <dd>    The programmatic name of the file format filter to be used.
+
+        </dd>
+        <dt>string FilterFlags
+        </dt>
+        <dd>    This string contains flags which depend on the filter.
+        They describe how the data is to be stored. (E.g. the
+        field delimitors for text database formats or the
+        character set.)
+
+        </dd>
+        <dt>boolean Overwrite
+        </dt>
+        <dd>    Overwrites the target file if it exists. Otherwise the
+        call would result in an exception if the file exists.
+
+        </dd>
+        <dt>string Password
+        </dt>
+        <dd>    This argument specifies the password to be used to
+        encrypt the document.
+        </dd>
+        </dl>
+
+        </p>@see storeTo
+     */
+    void storeAsURL( [in] string aURL,
+             [in] sequence<com::sun::star::beans::PropertyValue> aArgs )
+            raises( com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XStorable::storeToURL
+    /** stores the object's persistent data to a URL and
+        continues to be a representation of the old URL.
+
+
+
+        <p>This is the normal behavior for UI's export feature.
+
+        </p>@see storeAs
+     */
+    void storeToURL( [in] string aURL,
+             [in] sequence<com::sun::star::beans::PropertyValue> aArgs )
+            raises( com::sun::star::io::IOException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:22  hjs
+    initial import
+
+    Revision 1.7  2000/09/11 11:52:29  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/02/23 14:49:56  mi
+    missing documentations
+
+    Revision 1.2  2000/01/31 09:44:59  mi
+    XML syntax for documentation
+
+    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
+    new
+
+
+=============================================================================*/
+#endif

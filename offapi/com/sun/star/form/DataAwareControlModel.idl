@@ -1,0 +1,189 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DataAwareControlModel.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_DataAwareControlModel_idl__
+#define __com_sun_star_form_DataAwareControlModel_idl__
+
+#ifndef __com_sun_star_form_FormControlModel_idl__
+#include <com/sun/star/form/FormControlModel.idl>
+#endif
+
+#ifndef __com_sun_star_form_XBoundComponent_idl__
+#include <com/sun/star/form/XBoundComponent.idl>
+#endif
+
+#ifndef __com_sun_star_form_XLoadListener_idl__
+#include <com/sun/star/form/XLoadListener.idl>
+#endif
+
+#ifndef __com_sun_star_form_XReset_idl__
+#include <com/sun/star/form/XReset.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::form::DataAwareControlModel
+/** is an abstract service for specialized <type>FormControlModel</type>s
+    which are data aware and thus can be bound to a data source.
+ */
+service DataAwareControlModel
+{
+    // DocMerge: empty anyway
+    service com::sun::star::form::FormControlModel;
+
+
+    // DocMerge from xml: service com::sun::star::form::DataAwareControlModel: interface com::sun::star::form::XBoundComponent
+    /** makes it possible to transfer
+                The data of the model to the connected data field.<BR>
+                This interface is optional, if a component doesn't support it,
+                it has to forward the changes of it's value to the field
+                it is connected to immediately.
+     */
+    interface com::sun::star::form::XBoundComponent;
+
+
+    // DocMerge from xml: service com::sun::star::form::DataAwareControlModel: interface com::sun::star::form::XLoadListener
+    /** must be implemented in order to recognize when the
+                containing form of the model connects to its data source
+                (loads its data). After loading the form, the model may
+                bind to its related field source.
+     */
+    interface com::sun::star::form::XLoadListener;
+
+
+    // DocMerge from xml: service com::sun::star::form::DataAwareControlModel: interface com::sun::star::form::XReset
+    /** Each <type>DataAwareControlModel</type> should be resettable for
+                setting default values.  In general the <type>XReset</type>
+                interface is used before a user starts editing a new record to
+                set the desired default values for the model.
+     */
+    interface com::sun::star::form::XReset;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::form::DataAwareControlModel::DataField
+    /** specifies the name of the bound database field.
+     */
+    [property] string DataField;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::form::DataAwareControlModel::BoundField
+    /** references to the cursor field to which the control is bound. Applies only if the form the control model
+        belongs to (the models parent) is loaded and the control is valid bound.
+        The referenced field supports the <type scope="com::sun::star::sdb">Column</type> service.
+     */
+    [readonly, property] com::sun::star::beans::XPropertySet BoundField;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::form::DataAwareControlModel::LabelControl
+    /** references to a control model within the same document which should be used as a label. Any
+        user interface action which needs to refer to the control is assumed to use this property.<br>
+        When setting this property a number of constraints apply: the object which is to be set has to support
+        the <type scope="com::sun::star::awt">XControlModel</type>,
+        <type scope="com::sun::star::lang">XServiceInfo</type>,
+        <type scope="com::sun::star::beans">XPropertySet</type> and
+        <type scope="com::sun::star::container">XChild</type>
+        interfaces. It has to be a part of the same document as the model who's property is to be modified. Additionally
+        the support of a special service, indicating that the model is of the right type, is required. Which kind of
+        service is in the request depends on the type of the control model.
+     */
+    [property] com::sun::star::beans::XPropertySet LabelControl;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:16  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:24  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/02/21 16:18:00  mi
+    string documentation from stardiv...*.idl-files
+
+    Revision 1.3  2000/02/07 11:24:31  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.2  2000/01/05 18:46:44  fs
+    #71188# interface XBoundComponent is optional
+
+    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
+    new
+
+
+=============================================================================*/
+#endif

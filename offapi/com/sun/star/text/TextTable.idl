@@ -1,0 +1,374 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TextTable.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextTable_idl__
+#define __com_sun_star_text_TextTable_idl__
+
+#ifndef __com_sun_star_text_TextContent_idl__
+#include <com/sun/star/text/TextContent.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextTable_idl__
+#include <com/sun/star/text/XTextTable.idl>
+#endif
+#ifndef __com_sun_star_text_TableColumnSeparator_idl__
+#include <com/sun/star/text/TableColumnSeparator.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_style_GraphicLocation_idl__
+#include <com/sun/star/style/GraphicLocation.idl>
+#endif
+#ifndef __com_sun_star_style_BreakType_idl__
+#include <com/sun/star/style/BreakType.idl>
+#endif
+#ifndef __com_sun_star_table_ShadowFormat_idl__
+#include <com/sun/star/table/ShadowFormat.idl>
+#endif
+#ifndef __com_sun_star_table_TableBorder_idl__
+#include <com/sun/star/table/TableBorder.idl>
+#endif
+#ifndef __com_sun_star_table_XCellRange_idl__
+#include <com/sun/star/table/XCellRange.idl>
+#endif
+#ifndef __com_sun_star_table_XAutoFormattable_idl__
+#include <com/sun/star/table/XAutoFormattable.idl>
+#endif
+#ifndef __com_sun_star_chart_XChartDataArray_idl__
+#include <com/sun/star/chart/XChartDataArray.idl>
+#endif
+#ifndef __com_sun_star_util_XSortable_idl__
+#include <com/sun/star/util/XSortable.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::TextTable
+/** is a table of text cells which is anchored to a surrounding text.
+
+
+
+    <p>If the document in which a table is to be inserted has its own
+    <type scope="com::sun::star::lang">XMultiServiceFactory</type>, this must be
+    used to create the instance.
+
+    </p>
+    <p>If a descriptor is used, a descriptor created by the same
+    <type scope="com::sun::star::lang">XMultiServiceFactory</type> must be used.
+
+    </p>
+
+
+
+
+
+    @example Create and insert a TextTable via a TextTableDescriptor:
+
+    <listing>
+    xTableProvider = xTextDoc.queryServiceProvider( "com.sun.star.text.TextTable" )
+    xTableDescriptor = xTableProvider.createDescriptor
+    xTableDescriptor.Columns = 5
+    xTableDescriptor.Rows = 8
+    xTableDescriptor.LeftBorder = 2000
+    xTableDescriptor.RightBorder = 1500
+    xTextDoc.insertNewTextContent( xTextRange, xTableDescriptor )
+    </listing>
+
+    Create and insert a TextTable directly (may be flicker):
+
+    <listing>
+    xTableProvider = xTextDoc.queryServiceProvider( "com.sun.star.text.TextTable" )
+    xTable = xTableProvider.createInstance
+    xTable.Columns = 5
+    xTable.Rows = 8
+    xTable.LeftBorder = 2000
+    xTable.RightBorder = 1500
+    xTextDoc.insertTextContent( xTextRange, xTable )
+    </listing>
+ */
+service TextTable
+{
+    // DocMerge: empty anyway
+    service com::sun::star::text::TextContent;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::text::XTextTable;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::container::XNamed;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::table::XCellRange;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::chart::XChartDataArray;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::table::XAutoFormattable;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::util::XSortable;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::BreakType
+    /** determins the type of break that is applied at the beginning of the table.@see com.sun.star.style.BreakType
+     */
+    [property] com::sun::star::style::BreakType BreakType;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::LeftMargin
+    /** contains the left margin of the table.
+     */
+    [property] long LeftMargin;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::RightMargin
+    /** contains the right margin of the table.
+     */
+    [property] long RightMargin;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::HoriOrient
+    /** contains the horizontal orientation.@see com.sun.star.text.HoriOrientation
+     */
+    [property] short HoriOrient;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::KeepTogether
+    /** Setting this property to TRUE prevents page or column
+        breaks between this table and the following paragraph or text table.
+     */
+    [property] boolean KeepTogether;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::Split
+    /** Setting this property to FALSE prevents the table from
+        getting spread on two pages.
+     */
+    [property] boolean Split;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::PageNumberOffset
+    /** If a page break property is set at the table,
+        this property contains the new value for the page number.
+     */
+    [property] short PageNumberOffset;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::PageDescName
+    /** If this property is set, it creates a page break before the
+        table and assigns the value as the name of the new page style sheet to use.
+     */
+    [property] string PageDescName;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::RelativeWidth
+    /** determins the width of the table relative to its environment.
+     */
+    [property] short RelativeWidth;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::SizeRelative
+    /** determins if the value of the relative width is valid.
+     */
+    [property] boolean SizeRelative;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::RepeatHeadline
+    /** determins if the first row of the table is repeated on every new page.
+     */
+    [property] boolean RepeatHeadline;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::ShadowFormat
+    /** determins the type, color and size of the shadow.@see com.sun.star.table.ShadowFormat
+     */
+    [property] com::sun::star::table::ShadowFormat ShadowFormat;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::TopMargin
+    /** determins the top margin.
+     */
+    [property] long TopMargin;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::BottomMargin
+    /** determins the bottom margin.
+     */
+    [property] long BottomMargin;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::BackTransparent
+    /** determins if the background color is transparent.
+     */
+    [property] boolean BackTransparent;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::Width
+    /** contains the absolute table width.
+
+        <p>As this is only a describing property the value of the actual table may vary depending on the
+        environment the table is located in and the settings of LeftMargin,
+        RightMargin and HoriOrient. </p>
+     */
+    [property] long Width;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::ChartRowAsLabel
+    /** determins if the first row of the table should be treated as
+        axis labels when a chart is to be created.
+     */
+    [property] boolean ChartRowAsLabel;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::ChartColumnAsLabel
+    /** determins if the first column of the table should be treated as
+        axis labels when a chart is to be created.
+     */
+    [property] boolean ChartColumnAsLabel;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::TableBorder
+    /** contains the description of the table borders.@see com.sun.star.table.TableBorder
+     */
+    [property] com::sun::star::table::TableBorder TableBorder;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::text::TextTable::TableColumnSeparators
+    /** contains the column description of the table.
+             @see com.sun.star.text.TableColumnSeparator
+     */
+    [property] sequence<com::sun::star::text::TableColumnSeparator> TableColumnSeparators;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::TableColumnRelativeSum
+    /** contains the sum of the column width values used in TableColumnSeparators.
+     */
+    [property] short TableColumnRelativeSum;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::BackColor
+    /** contains the color of the background.
+     */
+    [property] long BackColor;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::BackGraphicURL
+    /** contains the URL for the background graphic.
+     */
+    [property] string BackGraphicURL;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::BackGraphicFilter
+    /** contains the name of the file filter for the background graphic.
+     */
+    [property] string BackGraphicFilter;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextTable::BackGraphicLocation
+    /** determines the position of the background graphic.@see enum GraphicLocation
+     */
+    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:03  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:53:01  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/07/06 12:15:39  os
+    old docu removed
+
+    Revision 1.3  2000/06/30 12:14:43  os
+    #75739# service description updated
+
+    Revision 1.2  2000/06/16 11:42:16  os
+    #75622# BackGraphicLocation/URL/Filter added/changed
+
+    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
+    new
+
+
+=============================================================================*/
+#endif

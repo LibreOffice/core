@@ -1,0 +1,185 @@
+/*************************************************************************
+ *
+ *  $RCSfile: UniversalContentBroker.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_UniversalContentBroker_idl__
+#define __com_sun_star_ucb_UniversalContentBroker_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XContentProviderManager_idl__
+#include <com/sun/star/ucb/XContentProviderManager.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XContentProvider_idl__
+#include <com/sun/star/ucb/XContentProvider.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XContentIdentifierFactory_idl__
+#include <com/sun/star/ucb/XContentIdentifierFactory.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XContentCreator_idl__
+#include <com/sun/star/ucb/XContentCreator.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** The <type>UniversalContentBroker</type> is a one-instance service that
+    provides access to a set of various contents.
+
+    If the instance is created with a single boolean argument of value true,
+    the newly instantiated broker is also configured:  The
+    <type>Configuration</type> service is used to access the
+    <type>XContentProviderConfiguration</type> stored under key
+    "ContentProviderServices".  Each content provider service mentioned there
+    is registered at the broker.
+
+    If the instance is created without arguments, or with a single boolean
+    argument of value false, the newly instatiated broker is not configured.
+*/
+service UniversalContentBroker
+{
+    //-------------------------------------------------------------------------
+    /** must be implemented to make it possible to resolve cyclic object
+        references. Those references i.e. may occure if content provider
+        implementations hold references to the Broker. The Broker itself
+        always holds its providers.
+        If the Broker shall be released, <method>XComponent::dispose</method>
+        must be called at the Broker. The implementation of this method must
+        call <method>XEventListener::disposing</method> on the registered
+        listeners ( the providers holding the Broker must be those listeners )
+        and release the appropriate object references. At the other hand, the
+        implementation of <method>XEventListener::disposing</method> must
+        release its appropriate references.
+
+        This interface is required.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+    /** provides access to all kind of contents provided by the registered
+        content providers.
+
+        This interface is required.
+     */
+    interface com::sun::star::ucb::XContentProvider;
+
+    //-------------------------------------------------------------------------
+    /** provides access to a set of content providers registered with the UCB.
+
+        This interface is required.
+     */
+    interface com::sun::star::ucb::XContentProviderManager;
+
+    //-------------------------------------------------------------------------
+    /** creates <type>XContentIdentifier</type> implementation objects for
+        all kind of contents provided by the UCB.
+
+        This interface is required.
+      */
+    interface com::sun::star::ucb::XContentIdentifierFactory;
+
+    //-------------------------------------------------------------------------
+    /** creates new root contents (i.e. a new POP3-Account object). A content
+        is "new", if it does not physically exist before creating it using
+        this interface. A root object is an object which is no child of
+        another content. The implementation of this interface must be able
+        to provide information about all root objects creatable by the
+        registered content providers and must be able to create all root
+        objects creatable by the registered content providers. Usually this
+        will be done by delegating calls to the matching provider.
+
+        This interface is required.
+     */
+    interface com::sun::star::ucb::XContentCreator;
+
+    //-------------------------------------------------------------------------
+    /** supports the configuration of a newly created broker.
+
+        If the method <method>XInitialization::initialize</method> is called
+        with a single boolean argument of value true, the newly instantiated
+        broker is also configured:  The <type>Configuration</type> service is
+        used to access the <type>XContentProviderConfiguration</type> stored
+        under key "ContentProviderServices".  Each content provider service
+        mentioned there is registered at the broker.
+
+        If the method <method>XInitialization::initialize</method> is called
+        with a single boolean argument of value false, the newly instatiated
+        broker is not configured.
+
+        This interface is required.
+     */
+    interface com::sun::star::lang::XInitialization;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

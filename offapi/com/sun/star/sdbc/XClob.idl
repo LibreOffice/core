@@ -1,0 +1,182 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XClob.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XClob_idl__
+#define __com_sun_star_sdbc_XClob_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+ module com {  module sun {  module star {  module io {
+interface XInputStream;
+};};};};
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+
+// DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XClob
+/** is the mapping for the SQL <code>CLOB</code> type.
+
+
+    <p>A SQL <code>CLOB</code> is a built-in type
+    that stores a Character Large Object as a column value in a row of
+    a database table.
+    The driver implements a <code>Clob</code> object using a SQL
+    <code>locator(CLOB)</code>, which means that a <code>Clob</code> object
+    contains a logical pointer to the SQL <code>CLOB</code> data rather than
+    the data itself. A <code>Clob</code> object is valid for the duration
+    of the transaction in which it was created.
+    </p>
+    <p>The <code>Clob</code> interface provides methods for getting the
+    length of a SQL <code>CLOB</code> (Character Large Object) value,
+    for materializing a <code>CLOB</code> value on the client, and for
+    searching for a substring or <code>CLOB</code> object within a
+    <code>CLOB</code> value.
+    </p>
+    <p>Methods in the interfaces <type scope="com::sun::star::sdbc">XResultSet</type>,
+    and <type scope="com::sun::star::sdbc">XPreparedStatement</type>, such as
+    <code>getClob</code> and <code>setClob</code> allow a programmer to
+    access the SQL <code>CLOB</code>.<br>
+    </p>
+ */
+[ uik(D6B6023B-9067-11d3-9EE00010-5AD7A5C4), ident("XClob", 1.0) ]
+interface XClob: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::length
+    /** returns the number of characters in the <code>CLOB</code> value
+        designated by this <code>Clob</code> object.
+     */
+    hyper length() raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::getSubString
+    /** returns a copy of the specified substring in the <code>CLOB</code> value
+        designated by this <code>Clob</code> object.
+
+
+        <p>The substring begins at position <code>pos</code> and has up
+        to <code>length</code> consecutive characters.
+        </p>
+     */
+    string getSubString([in]hyper pos, [in]long length) raises (SQLException);
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::getCharacterStream
+    /** gets the <code>Clob</code> contents as a stream.
+     */
+    com::sun::star::io::XInputStream getCharacterStream() raises (SQLException);
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::position
+    /** determines the character position at which the specified substring
+        <code>searchstr</code> appears in the <code>CLOB</code>.  The search
+        begins at position <code>start</code>.
+     */
+    hyper position([in]string searchstr, [in]long start)
+        raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XClob::positionOfClob
+    /** determines the character position at which the specified
+        <code>Clob</code> object <code>searchstr</code> appears in this
+        <code>Clob</code> object.  The search begins at position
+        <code>start</code>.
+     */
+    hyper positionOfClob([in]XClob pattern, [in]hyper start)
+        raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:41  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:42  mi
+    documentation merged from XML
+
+    Revision 1.4  1999/12/20 16:11:35  dg
+    #70278# changes in API
+
+    Revision 1.3  1999/12/13 13:47:54  dg
+    #70278# XSQLErrorBroadcaster removed
+
+    Revision 1.2  1999/11/24 11:33:26  dg
+    chk includes
+
+    Revision 1.1  1999/11/24 08:41:04  dg
+    new StarDataBaseConnectivity
+
+===========================================================================*/
+#endif

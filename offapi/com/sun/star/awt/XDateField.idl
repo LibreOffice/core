@@ -1,0 +1,226 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDateField.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XDateField_idl__
+#define __com_sun_star_awt_XDateField_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::awt::XDateField
+/** makes it possible to set the limits and the value of a date field.
+ */
+[ uik(E227A517-33D6-11D1-AABE00A0-249D5590), ident( "XDateField", 1.0 ) ]
+interface XDateField: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XDateField::setDate
+    /** sets the date value to display in the date field.
+     */
+    [oneway] void setDate( [in] long Date );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XDateField::getDate
+    /** @returns
+                    the date value which is currently displayed in the date field.
+     */
+    long getDate();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XDateField::setMin
+    /** sets the minimum value to accept by the user.
+     */
+    [oneway] void setMin( [in] long Date );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XDateField::getMin
+    /** @returns
+                    the currently set minimum value accepted by the user.
+     */
+    long getMin();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XDateField::setMax
+    /** sets the maximum value to accept by the user.
+     */
+    [oneway] void setMax( [in] long Date );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XDateField::getMax
+    /** @returns
+                    the currently set maximum value accepted by the user.
+     */
+    long getMax();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XDateField::setFirst
+    /** sets the first value to set on 'Pos1' key.
+     */
+    [oneway] void setFirst( [in] long Date );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XDateField::getFirst
+    /** @returns
+                    the currently set first value which is set on 'Pos1' key.
+     */
+    long getFirst();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XDateField::setLast
+    /** sets the last value to set on 'End' key.
+     */
+    [oneway] void setLast( [in] long Date );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XDateField::getLast
+    /** @returns
+                    the currently set last value which is set on 'End' key.
+     */
+    long getLast();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XDateField::setLongFormat
+    /** determines if the long date format is to be used.
+     */
+    [oneway] void setLongFormat( [in] boolean bLong );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XDateField::isLongFormat
+    /** determines if the long date format is currently used.
+     */
+    boolean isLongFormat();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XDateField::setEmpty
+    /** sets the empty value for the date.
+     */
+    void setEmpty();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XDateField::isEmpty
+    /** @returns
+                    whether currently the empty value is set for the date.
+     */
+    boolean isEmpty();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XDateField::setStrictFormat
+    /** determines if the format is checked, even during editing.
+     */
+    [oneway] void setStrictFormat( [in] boolean bStrict );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XDateField::isStrictFormat
+    /** @returns
+                    whether the format is currently checked even during editing.
+     */
+    boolean isStrictFormat();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:34:52  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:08  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/05/16 12:19:52  mi
+    documentation
+
+    Revision 1.2  2000/02/07 11:24:15  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

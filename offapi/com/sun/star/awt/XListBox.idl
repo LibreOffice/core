@@ -1,0 +1,286 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XListBox.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XListBox_idl__
+#define __com_sun_star_awt_XListBox_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XItemListener_idl__
+#include <com/sun/star/awt/XItemListener.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XActionListener_idl__
+#include <com/sun/star/awt/XActionListener.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::awt::XListBox
+/** gives access to the items and their state and to register for
+    item and action events of a listbox.
+ */
+[ uik(E227A410-33D6-11D1-AABE00A0-249D5590), ident( "XListBox", 1.0 ) ]
+interface XListBox: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::addItemListener
+    /** registers an item event listener.
+     */
+    [oneway] void addItemListener( [in] com::sun::star::awt::XItemListener l );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::removeItemListener
+    /** unregisters an item event listener.
+     */
+    [oneway] void removeItemListener( [in] com::sun::star::awt::XItemListener l );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::addActionListener
+    /** registers an action event listener.
+     */
+    [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::removeActionListener
+    /** unregisters an action event listener.
+     */
+    [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::addItem
+    /** adds an item at a specified position.
+     */
+    [oneway] void addItem( [in] string aItem,
+             [in] short nPos );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::addItems
+    /** adds multiple items at a specified position.
+     */
+    [oneway] void addItems( [in] sequence<string> aItems,
+             [in] short nPos );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::removeItems
+    /** removes a number of items at a specified position.
+     */
+    [oneway] void removeItems( [in] short nPos,
+             [in] short nCount );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XListBox::getItemCount
+    /** @returns
+                    the number of items currently in the listbox.
+     */
+    short getItemCount();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XListBox::getItem
+    /** @returns
+                    the item at the specified position.
+     */
+    string getItem( [in] short nPos );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XListBox::getItems
+    /** @returns
+                    all items of the list box.
+     */
+    sequence<string> getItems();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XListBox::getSelectedItemPos
+    /** @returns
+                    the position of the currently selected item.
+     */
+    short getSelectedItemPos();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XListBox::getSelectedItemsPos
+    /** @returns
+                    the positions of all currently selected items.
+     */
+    sequence<short> getSelectedItemsPos();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XListBox::getSelectedItem
+    /** @returns
+                    the currently selected item.
+     */
+    string getSelectedItem();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XListBox::getSelectedItems
+    /** @returns
+                    all currently selected items.
+     */
+    sequence<string> getSelectedItems();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::selectItemPos
+    /** selects/unselects the item at the specified position.
+     */
+    [oneway] void selectItemPos( [in] short nPos,
+             [in] boolean bSelect );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::selectItemsPos
+    /** selects/unselects multiple items at the specified positions.
+     */
+    [oneway] void selectItemsPos( [in] sequence<short> aPositions,
+             [in] boolean bSelect );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::selectItem
+    /** selects/unselects the specified item.
+     */
+    [oneway] void selectItem( [in] string aItem,
+             [in] boolean bSelect );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XListBox::isMutipleMode
+    /** @returns
+                    <true/> if multiple items can be selected,
+                    <false/> if only one item can be selected.
+     */
+    boolean isMutipleMode();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::setMultipleMode
+    /** determines if only a single item or multiple items can be selected.
+     */
+    [oneway] void setMultipleMode( [in] boolean bMulti );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XListBox::getDropDownLineCount
+    /** @returns
+                    the number of visible lines in drop down mode.
+     */
+    short getDropDownLineCount();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::setDropDownLineCount
+    /** sets the number of visible lines for drop down mode.
+     */
+    [oneway] void setDropDownLineCount( [in] short nLines );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XListBox::makeVisible
+    /** makes the item at the specified position visible by scolling.
+     */
+    [oneway] void makeVisible( [in] short nEntry );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:34:53  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:08  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/05/16 12:19:53  mi
+    documentation
+
+    Revision 1.2  2000/02/07 11:24:16  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

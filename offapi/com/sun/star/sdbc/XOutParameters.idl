@@ -1,0 +1,159 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XOutParameters.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XOutParameters_idl__
+#define __com_sun_star_sdbc_XOutParameters_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+
+// DocMerge from xml: interface com::sun::star::sdbc::XOutParameters
+/** is used to register Out-Parameters for stored procedures.
+
+
+    <p>SDBC provides a stored procedure SQL escape that allows stored procedures
+    to be called in a standard way for all RDBMSs. This escape syntax has one
+    form that includes a result parameter and one that does not. If used, the
+    result parameter must be registered as an OUT parameter. The other parameters
+    can be used for input, output, or both. Parameters are referred to sequentially,
+    by number. The first parameter is 1.</p>
+ */
+[ uik(D6B60246-9067-11d3-9EE00010-5AD7A5C4), ident("XOutParameters", 1.0) ]
+interface XOutParameters: com::sun::star::uno::XInterface
+{
+
+    // DocMerge from xml: method com::sun::star::sdbc::XOutParameters::registerOutParameter
+    /** registers the designated output parameter.  This version of
+        the method <code>registerOutParameter</code>
+        should be used for a user-named or REF output parameter. Examples
+        of user-named types include: STRUCT, DISTINCT, OBJECT, and named array
+        types.
+
+
+        <p>Before executing a stored procedure call, you must explicitly
+        call <code>registerOutParameter</code> to register the type from
+        <code>DataType</code> for each OUT parameter.
+        <br>For a user-named parameter the fully-qualified SQL type name of the
+        parameter should also be given, while a REF parameter requires that the
+        fully-qualified type name of the referenced type be given.
+        An SDBC driver that does not need the type code and type name information
+        may ignore it. To be portable, however, applications should always provide
+        these values for user-named and REF parameters.
+        </p>
+        <p>Although it is intended for user-named and REF parameters,
+        this method may be used to register a parameter of any SDBC type.
+        If the parameter does not have a user-named or REF type, the
+        typeName parameter is ignored.
+        </p>
+        <p>
+        <b>Note:</b> When reading the value of an out parameter, you
+        must use the <code>getXXX</code> method whose type XXX corresponds to the
+        parameter's registered SQL type.
+        </p>
+     */
+    void registerOutParameter([in]long parameterIndex, [in]long sqlType,
+                              [in]string typeName)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XOutParameters::registerNumericOutParameter
+    /** registers the OUT parameter in ordinal position
+        <code>parameterIndex</code> to the SDBC type <code>sqlType</code>. All
+        OUT parameters must be registered before a stored procedure is executed.
+
+
+        <p>The SDBC type specified by <code>sqlType</code> for an OUT parameter
+        determines the type that must be used in the <code>get</code> method to
+        read the value of that parameter.
+        This version of <code>registerOutParameter</code> should be
+        used when the parameter is of SDBC type <code>NUMERIC</code>
+        or <code>DECIMAL</code>.
+        </p>
+     */
+    void registerNumericOutParameter([in]long parameterIndex, [in]long sqlType,
+                                       [in]long scale)
+        raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:42  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:43  mi
+    documentation merged from XML
+
+    Revision 1.1  1999/11/24 08:41:06  dg
+    new StarDataBaseConnectivity
+
+===========================================================================*/
+#endif

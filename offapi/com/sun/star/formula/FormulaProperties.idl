@@ -1,0 +1,445 @@
+/*************************************************************************
+ *
+ *  $RCSfile: FormulaProperties.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_formula_FormulaProperties_idl__
+#define __com_sun_star_formula_FormulaProperties_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module formula {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::formula::FormulaProperties
+/** The formula properties provide access to the properties of a formula
+    in a formula generator
+ */
+service FormulaProperties
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::Alignment
+    /** contains the alignment of the formula.@see HorizontalAlignment
+     */
+    [property] short    Alignment                          ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::BaseFontHeight
+    /** contains the base font height in point the formula will be
+        formatted in.
+
+
+        <p> All properties containing relative values are related to this value.
+        </p>
+     */
+    [property] short    BaseFontHeight                     ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::CustomFontNameFixed
+    /** customized name for fixed font.
+     */
+    [property] string   CustomFontNameFixed                ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontFixedIsItalic
+    /** determins if the customized fixed font italic.
+     */
+    [property] boolean FontFixedIsItalic;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontFixedIsBold
+    /** determins if the customized fixed font is bold.
+     */
+    [property] boolean FontFixedIsBold;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::CustomFontNameSans
+    /** customized name for sans serif font
+     */
+    [property] string   CustomFontNameSans                 ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontSansIsItalic
+    /** determins if the customized sans serif font is italic.
+     */
+    [property] boolean FontSansIsItalic;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontSansIsBold
+    /** determins if the customized sans serif font is bold.
+     */
+    [property] boolean FontSansIsBold;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::CustomFontNameSerif
+    /** customized name for serif font
+     */
+    [property] string   CustomFontNameSerif                ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontSerifIsItalic
+    /** determins if the customized serif is italic.
+     */
+    [property] boolean FontSerifIsItalic;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontSerifIsBold
+    /** determins if the customized serif is bold.
+     */
+    [property] boolean FontSerifIsBold;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::FontNameFunctions
+    /** contains the name of the font that is used to
+        display functions contained in the formula.
+     */
+    [property] string FontNameFunctions                  ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontFunctionsIsItalic
+    /** determins if the font that is used to
+                 display functions is italic.
+     */
+    [property] boolean FontFunctionsIsItalic;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontFunctionsIsBold
+    /** determins if the font that is used to
+                 display functions is bold.
+     */
+    [property] boolean FontFunctionsIsBold;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::FontNameNumbers
+    /** contains the name of the font that is used to
+        display numbers contained in the formula.
+     */
+    [property] string   FontNameNumbers                    ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontNumbersIsItalic
+    /** determins if the font that is used to
+                 display numbers is italic.
+     */
+    [property] boolean FontNumbersIsItalic;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontNumbersIsBold
+    /** determins if the font that is used to
+                 display numbers is bold.
+     */
+    [property] boolean FontNumbersIsBold;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::FontNameText
+    /** contains the name of the font that is used to
+        display text contained in the formula.
+     */
+    [property] string   FontNameText                       ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontTextIsItalic
+    /** determins if the font that is used to
+                 display text is italic.
+     */
+    [property] boolean FontTextIsItalic;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontTextIsBold
+    /** determins if the font that is used to
+                 display text is bold.
+     */
+    [property] boolean FontTextIsBold;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::FontNameVariables
+    /** contains the name of the font that is used to
+        display variables contained in the formula.
+     */
+    [property] string   FontNameVariables                  ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontVariablesIsItalic
+    /** determins if the font that is used to
+                 display variables is italic.
+     */
+    [property] boolean FontVariablesIsItalic;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::formula::FormulaProperties::FontVariablesIsBold
+    /** determins if the font that is used to
+                 display variables is bold.
+     */
+    [property] boolean FontVariablesIsBold;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::Formula
+    /** contains the command string of the formula
+     */
+    [property] string   Formula                            ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::IsScaleAllBrackets
+    /** decides if all brackets are scaled
+     */
+    [property] boolean  IsScaleAllBrackets                 ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::IsTextMode
+    /** switches into text mode.
+     */
+    [property] boolean  IsTextMode                         ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeFontHeightFunctions
+    /** contains the relative height of the font for functions.
+     */
+    [property] short    RelativeFontHeightFunctions        ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeFontHeightIndices
+    /** contains the relative height of the font for indices.
+     */
+    [property] short    RelativeFontHeightIndices          ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeFontHeightLimits
+    /** contains the relative height of the font for limits.
+     */
+    [property] short    RelativeFontHeightLimits           ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeFontHeightOperators
+    /** contains the relative height of the font for operators.
+     */
+    [property] short    RelativeFontHeightOperators        ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeFontHeightText
+    /** contains the relative height of the font for text.
+     */
+    [property] short    RelativeFontHeightText             ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeBracketDistance
+    /** contains the relative distance of brackets.
+     */
+    [property] short    RelativeBracketDistance            ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeBracketExcessSize
+    /** contains the relative excess size of brackets.
+     */
+    [property] short    RelativeBracketExcessSize          ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeFractionBarExcessLength
+    /** contains the relative excess length of a fraction bar.
+     */
+    [property] short    RelativeFractionBarExcessLength    ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeFractionBarLineWeight
+    /** contains the relative line weight of a fraction bar.
+     */
+    [property] short    RelativeFractionBarLineWeight      ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeFractionDenominatorDepth
+    /** contains the relative depth of the denominator of a fraction
+     */
+    [property] short    RelativeFractionDenominatorDepth   ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeFractionNumeratorHeight
+    /** contains the relative height of the numerator of a fraction.
+     */
+    [property] short    RelativeFractionNumeratorHeight    ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeIndexSubscript
+    /** contains the relative superscript of indices.
+     */
+    [property] short    RelativeIndexSubscript             ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeIndexSuperscript
+    /** contains the relative subscript of indices.
+     */
+    [property] short    RelativeIndexSuperscript           ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeLineSpacing
+    /** contains the relative line spacing.
+     */
+    [property] short    RelativeLineSpacing                ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeLowerLimitDistance
+    /** contains the relative distance of lower limits.
+     */
+    [property] short    RelativeLowerLimitDistance         ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeMatrixColumnSpacing
+    /** contains the relative column spacing of matrices.
+     */
+    [property] short    RelativeMatrixColumnSpacing        ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeMatrixLineSpacing
+    /** contains the relative line spacing of matrices.
+     */
+    [property] short    RelativeMatrixLineSpacing          ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeOperatorExcessSize
+    /** contains the relative excess of operators.
+     */
+    [property] short    RelativeOperatorExcessSize         ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeOperatorSpacing
+    /** contains the relative spacing of operators.
+     */
+    [property] short    RelativeOperatorSpacing            ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeRootSpacing
+    /** contains the relative root spacing
+     */
+    [property] short    RelativeRootSpacing                ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeScaleBracketExcessSize
+    /** contains the relative scaling of the bracket excess.
+     */
+    [property] short    RelativeScaleBracketExcessSize     ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeSpacing
+    /** contains the relative spacing.
+     */
+    [property] short    RelativeSpacing                    ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeSymbolMinimumHeight
+    /** contains the relative minimum height of the formula.
+     */
+    [property] short    RelativeSymbolMinimumHeight        ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeSymbolPrimaryHeight
+    /** contains the relative primary height of symbols.
+     */
+    [property] short    RelativeSymbolPrimaryHeight        ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RelativeUpperLimitDistance
+    /** contains the relative distance of upper limits
+     */
+    [property] short    RelativeUpperLimitDistance         ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::TopMargin
+    /** contains the metric value of the top margin of the formula.
+     */
+    [property] short    TopMargin                          ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::BottomMargin
+    /** contains the metric value of the bottom margin of the formula.
+     */
+    [property] short    BottomMargin                       ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::LeftMargin
+    /** contains the metric value of the left margin of the formula.
+     */
+    [property] short    LeftMargin                         ;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::formula::FormulaProperties::RightMargin
+    /** contains the metric value of the right margin of the formula.
+     */
+    [property] short    RightMargin                        ;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
+    initial import
+
+    Revision 1.4  2000/09/11 11:52:27  mi
+    documentation merged from XML
+
+    Revision 1.2  2000/08/11 11:22:41  os
+    #76632# IsBold/IsItalic properties
+
+    Revision 1.1  2000/01/12 08:58:01  os
+    #71637# new: FormulaProperties
+
+=============================================================================*/
+#endif

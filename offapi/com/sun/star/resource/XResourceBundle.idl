@@ -1,0 +1,276 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XResourceBundle.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_resource_XResourceBundle_idl__
+#define __com_sun_star_resource_XResourceBundle_idl__
+
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#include <com/sun/star/container/XNameAccess.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module resource {
+
+//=============================================================================
+/** Resource bundles contain locale-specific objects.
+
+    <p>When your program needs a locale-specific resource, such as
+    <code>String</code> for example, your program can load it from the
+    resource bundle that is appropriate for the current user's locale. In
+    this way, you can write program code that is largely independent of
+    the user's locale, which isolates most, if not all, of the
+    locale-specific information in resource bundles.
+
+    <p>This allows you to write programs that can:
+
+    <UL type=SQUARE>
+
+    <LI> be easily localized, or translated, into different
+    languages.
+
+    <LI> handle multiple locales at once.
+
+    <LI> be easily modified later to support even more locales.
+
+    </UL>
+
+    <P> One resource bundle is, conceptually, a set of related services
+    that supports <code>XResourceBundle</code>. Each related service of
+    <code>XResourceBundle</code> has the same base name plus an
+    additional component that identifies its locale. For example, suppose
+    your resource bundle is named <code>MyResources</code>. The first
+    service you are likely to implement is the default resource bundle,
+    which has the same name as its family--<code>MyResources</code>. You
+    can also provide as many related locale-specific services as you need.
+
+    For example, perhaps you would provide a German one named
+    <code>MyResources_de</code>.
+
+    <P>
+    Each related implementation of <code>XResourceBundle</code> contains
+    the same items, but the items have been translated for the locale
+    represented by that <code>XResourceBundle</code> implementation. For
+    example, both <code>MyResources</code> and <code>MyResources_de</code>
+    may have a <code>String</code> that is used on a button for
+    confirming operations. In <code>MyResources</code> the
+    <code>String</code> may contain <code>OK</code> and in
+    <code>MyResources_de</code> it may contain <code>Gut</code>.
+
+    <P>
+    If there are different resources for different countries, you
+    can make specializations: for example, <code>MyResources_de_CH</code>
+    is the German language (de) in Switzerland (CH). If you only want to
+    modify some of the resources in the specialization, you can do so.
+
+    <P>
+    When your program needs a locale-specific object, it loads
+
+    the <code>XResourceBundle</code> implementation using the
+    <code>com.sun.star.resource.XResourceBundleLoader</code> service:
+
+    <listing>
+    XResourceBundle myResources =
+    xLoader->getBundle("MyResources", currentLocale);
+    </listing>
+
+    <p>The first argument specifies the family name of the resource
+    bundle that contains the object in question. The second argument
+    indicates the desired locale. <code>getBundle</code> uses these two
+    arguments to construct the name of the <code>ResourceBundle</code>
+    subclass it should load according to the following specifications.
+
+    <P>The resource bundle lookup searches for services with various
+    suffixes on the basis of (1) the desired locale and (2) the current
+    default locale as returned by Locale.getDefault(), and (3) the root
+    resource bundle (baseclass), in the following order from lower-level
+    (more specific) to parent-level (less specific):
+    <p> baseclass + "_" + language1 + "_" + country1 + "_" + variant1
+    <BR> baseclass + "_" + language1 + "_" + country1
+    <BR> baseclass + "_" + language1
+    <BR> baseclass + "_" + language2 + "_" + country2 + "_" + variant2
+    <BR> baseclass + "_" + language2 + "_" + country2
+    <BR> baseclass + "_" + language2
+    <BR> baseclass
+
+    <P> For example, if the current default locale is <TT>en_US</TT>, the
+    locale that the caller is interested in is <TT>fr_CH</TT>, and the
+    resource bundle name is <TT>MyResources</TT>; resource bundle lookup
+    will search for the following services, in order:
+    <BR> <TT>MyResources_fr_CH
+    <BR> MyResources_fr
+    <BR> MyResources_en_US
+    <BR> MyResources_en
+    <BR> MyResources</TT>
+
+    <P> The result of the lookup is a service, but that service may be
+    backed by a property file on disk. If a lookup fails,
+    <code>getBundle()</code> throws a
+    <code>MissingResourceException</code>.
+
+    <P> The base service <strong>must</strong> be fully qualified (for
+    example, <code>myPackage::MyResources</code>, not just
+    <code>MyResources</code>).
+
+    <P> Resource bundles contain key/value pairs. The keys uniquely
+    identify a locale-specific object in the bundle. Here is an
+    example of a <code>XResourceBundle</code> implementation that contains
+    two key/value pairs:
+
+    <listing>
+    class MyResource extends com.sun.star.resource.XResourceBundle
+    {
+    // some queryInterface stuff
+    // ...
+    public final Object getDirectElement(String key)
+    {
+    if (key.equals("okKey")) return "Ok";
+    if (key.equals("cancelKey")) return "Cancel";
+    return null;
+    }
+    }
+    </listing>
+
+    <p>Keys are always <code>String</code>s. In this example, the keys
+    are <code>OkKey</code> and <code>CancelKey</code>. In the above
+    example, the values are also <code>String</code>s--<code>OK</code>
+    and <code>Cancel</code>--but they do not have to be. The values can
+    be any type of object.
+
+    <P> You retrieve an object from resource bundle using the appropriate
+    get method. Because <code>OkKey</code> and <code>CancelKey</code>
+    are both strings, you use <code>getByName</code> to retrieve them:
+
+    <listing>
+    button1 = new Button(myResourceBundle.getByName("OkKey").getString());
+    button2 = new Button(myResourceBundle.getByName("CancelKey").getString());
+    </listing>
+
+    <p>The get methods all require the key as an argument and return
+    the object if found. If the object is not found, the get methods
+    throw a <code>NoSuchElementException</code>.
+
+    <P> <STRONG>NOTE:</STRONG> You should always supply a base service
+    with no suffixes. This will be the class of "last resort" if a
+    locale is requested that does not exist. In fact, you must provide
+    <I>all</I> of the services in any given inheritance chain for which
+    you provide a resource.  For example, if you provide
+    <TT>MyResources_fr_BE</TT>, you must provide <I>both</I>
+    <TT>MyResources</TT> <I>and</I> <TT>MyResources_fr</TT>, or the
+    resource bundle lookup will not work right.
+
+    <P>You do not have to restrict yourself to using a single family of
+    <code>ResourceBundle</code>s. For example, you could have a set of
+    bundles for exception messages, <code>ExceptionResources</code>
+    (<code>ExceptionResources_fr</code>, <code>ExceptionResources_de</code>, ...),
+    and one for widgets, <code>WidgetResource</code> (<code>WidgetResources_fr</code>,
+    <code>WidgetResources_de</code>, ...); breaking up the resources however you like.
+
+    @see        MissingResourceException
+    @see         Locale
+    @version     0.1 26 May 1999
+    @author      Mark Davis
+    @author      Markus Meyer
+    @deprecated draft
+*/
+[ uik(3C1F4FA0-1358-11D3-ABBB00A0-249D5590), ident( "XResourceBundle", 1.0 ) ]
+interface XResourceBundle: com::sun::star::container::XNameAccess
+{
+    //-------------------------------------------------------------------------
+    /** contains the parent bundle of this bundle.
+
+        <p>The parent bundle is searched by the method
+        <method>XNameAccess::getByName</method> when this bundle does not
+        contain a particular resource.
+     */
+    [attribute] XResourceBundle Parent;
+
+    //-------------------------------------------------------------------------
+    /** @returns
+        the locale for this resource bundle.
+
+        <p>This function can be used to determine whether the
+        resource bundle that is returned really corresponds to the
+        requested locale or is a fallback.
+
+    */
+    com::sun::star::lang::Locale getLocale();
+
+    //-------------------------------------------------------------------------
+    /** @returns
+        an object from a resource bundle or NULL if no resource
+        exists.
+
+        <p>It does not look in the parents.
+    */
+    any getDirectElement( [in] string key );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

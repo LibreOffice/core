@@ -1,0 +1,193 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XImageConsumer.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XImageConsumer_idl__
+#define __com_sun_star_awt_XImageConsumer_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+interface XImageProducer;
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::awt::XImageConsumer
+/** specifies a data sink for an image, or in other words, an interface
+    for a component which wants to display or just receive an image from
+    an image producer.@see XImageProducer
+ */
+[ uik(E227A51E-33D6-11D1-AABE00A0-249D5590), ident( "XImageConsumer", 1.0 ) ]
+interface XImageConsumer: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XImageConsumer::init
+    /** This initializes the consumer with image dimensions.
+     */
+    [oneway] void init( [in] long Width,
+             [in] long Height );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XImageConsumer::setColorModel
+    /** changes color model for next pixels
+        typically called once after initialization.
+     */
+    [oneway] void setColorModel( [in] short BitCount,
+             [in] sequence<long> RGBAPal,
+             [in] long RedMask,
+             [in] long GreenMask,
+             [in] long BlueMask,
+             [in] long AlphaMask );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XImageConsumer::setPixelsByBytes
+    /** delivers a chunk of pixels as <atom>long</atom> values.
+
+
+
+        <p>The pixels of the image are delivered using one or more calls
+        to this method.  Each call specifies the location and size of the
+        rectangle of source pixels that are contained in the array of pixels.
+        The specified color model object should be used to convert
+        the pixels into their corresponding color and alpha components.  Pixel
+        (m,n) is stored in the pixels array at index (n * <var>nScanSize</var>
+        + m + nOffset).</p>
+     */
+    [oneway] void setPixelsByBytes( [in] long nX,
+             [in] long nY,
+             [in] long nWidth,
+             [in] long nHeight,
+             [in] sequence<byte> aProducerData,
+             [in] long nOffset,
+             [in] long nScanSize );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XImageConsumer::setPixelsByLongs
+    /** delivers a chunk of pixels as <atom>byte</atom> values.
+
+
+
+        <p>The pixels of the image are delivered using one or more calls
+        to this method.  Each call specifies the location and size of the
+        rectangle of source pixels that are contained in the array of pixels.
+        The specified color model object should be used to convert
+        the pixels into their corresponding color and alpha components.  Pixel
+        (m,n) is stored in the pixels array at index (n * <var>nScanSize</var>
+        + m + nOffset).  </p>
+     */
+    [oneway] void setPixelsByLongs( [in] long nX,
+             [in] long nY,
+             [in] long nWidth,
+             [in] long nHeight,
+             [in] sequence<long> aProducerData,
+             [in] long nOffset,
+             [in] long nScanSize );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XImageConsumer::complete
+    /** is called for the notification of the degree to which the
+        image is delivered.
+
+
+
+        <p>The complete method is called when the image producer
+        has finished delivering all of the pixels that the source image
+        contains, or when a single frame of a multi-frame animation has
+        been completed, or when an error in loading or producing the
+        image has occurred.  The image consumer should remove itself from the
+        list of consumers registered with the image producer
+        at this time, unless it is interested in successive frames.</p>
+     */
+    [oneway] void complete( [in] long Status,
+             [in] XImageProducer xProducer );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:34:52  hjs
+    initial import
+
+    Revision 1.4  2000/09/11 11:52:08  mi
+    documentation merged from XML
+
+    Revision 1.2  2000/05/16 12:19:53  mi
+    documentation
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

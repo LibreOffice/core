@@ -1,0 +1,510 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TextGraphicObject.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextGraphicObject_idl__
+#define __com_sun_star_text_TextGraphicObject_idl__
+
+#ifndef __com_sun_star_text_XTextContent_idl__
+#include <com/sun/star/text/XTextContent.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
+
+#ifndef __com_sun_star_text_TextContent_idl__
+#include <com/sun/star/text/TextContent.idl>
+#endif
+
+#ifndef __com_sun_star_text_GraphicCrop_idl__
+#include <com/sun/star/text/GraphicCrop.idl>
+#endif
+
+#ifndef __com_sun_star_table_ShadowFormat_idl__
+#include <com/sun/star/table/ShadowFormat.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
+
+#ifndef __com_sun_star_table_BorderLine_idl__
+#include <com/sun/star/table/BorderLine.idl>
+#endif
+#ifndef __com_sun_star_drawing_PointSequenceSequence_idl__
+#include <com/sun/star/drawing/PointSequenceSequence.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::TextGraphicObject
+/** specifies a graphic which can be embedded in <type scope="com::sun::star::drawing">Text</type>.
+ */
+service TextGraphicObject
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::text::XTextContent;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::container::XNamed;
+
+    // DocMerge: empty anyway
+    service com::sun::star::text::TextContent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::AnchorPageNo
+    /** contains the number of the page where the object is anchored. It is
+        valid only if the anchor type is "TextContentAnchorType_AT_PAGE".
+     */
+    [property] short AnchorPageNo;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::BackColor
+    /** contains the color of the background of the object.
+     */
+    [property] long BackColor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::ClientMap
+    /** determines if a client-side image map is assigned to the object.
+     */
+    [property] boolean ClientMap;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::ContentProtected
+    /** determines if the content is protected against changes from the user interface.
+     */
+    [property] boolean ContentProtected;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::ContourOutside
+    /** the text flows only around the contour of the object.
+     */
+    [property] boolean ContourOutside;
+    //-------------------------------------------------------------------------
+    /** contains the contour of the object as PolyPolygon.
+     */
+    [optional, property] com::sun::star::drawing::PointSequenceSequence ContourPolyPolygon;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::FrameStyle
+    /** contains the frame style that is assigned to this object.
+     */
+    [property] string FrameStyle;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::GraphicCrop
+    /** contains the cropping of the object.@see GraphicCrop
+     */
+    [property] com::sun::star::text::GraphicCrop GraphicCrop;
+
+    //-------------------------------------------------------------------------
+    /** determines if the object is horizontally mirrored on even pages.
+     */
+    [property] boolean HoriMirroredOnEvenPages;
+     //-------------------------------------------------------------------------
+    /** determines if the object is horizontally mirrored on odd pages.
+     */
+    [property] boolean HoriMirroredOnOddPages;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::Height
+    /** contains the height of the object.
+     */
+    [property] long Height;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::HoriOrient
+    /** contains the horizontal orientation.@see contants HoriOrientation
+     */
+    [property] short HoriOrient;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::HoriOrientPosition
+    /** contains the horizontal position.
+
+
+
+        <p>It is only valid if "HoriOrient" contains the value
+        <const>HoriOrienation::NONE</const>.</p>
+     */
+    [property] long HoriOrientPosition;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::HoriOrientRelation
+    /** contains the reference position of the "HoriOrientPosition".@see RelOrientation
+     */
+    [property] short HoriOrientRelation;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::HyperLinkURL
+    /** contains the URL of the hyperlink assigned to the object
+     */
+    [property] string HyperLinkURL;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::HyperLinkTarget
+    /** contains the name of the target frame of the hyperlink assigned to the object.
+     */
+    [property] string HyperLinkTarget;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::HyperLinkName
+    /** contains the name of the hyperlink assigned to the object.
+     */
+    [property] string HyperLinkName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::LeftMargin
+    /** contains the left margin of the object.
+     */
+    [property] long LeftMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::RightMargin
+    /** contains the right margin of the object.
+     */
+    [property] long RightMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::Opaque
+    /** decides if the object is opaque. It is only valid if "TextWrap"
+        has the value "WrapTextMode_THROUGH".
+     */
+    [property] boolean Opaque;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::PageToggle
+    /** determines if left and right pages are considered in the horizontal orientation.
+     */
+    [property] boolean PageToggle;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::PositionProtected
+    /** determines if the position is protected against changes from the user interface.
+     */
+    [property] boolean PositionProtected;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::Print
+    /** determines if the object can be printed.
+     */
+    [property] boolean Print;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::RelativeHeight
+    /** contains the relative height of the object.
+
+
+
+        <p>It is valid if the value is greater 0.</p>
+     */
+    [property] short RelativeHeight;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::RelativeWidth
+    /** contains the relative width of the object.
+
+
+
+        <p>It is valid if the value is greater 0.</p>
+     */
+    [property] short RelativeWidth;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::ServerMap
+    /** determines if a server-side image map is assigned to the object.
+     */
+    [property] boolean ServerMap;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::ShadowFormat
+    /** contains the settings of the shadow of the object.@see com::sun::star::table::ShadowFormat
+     */
+    [property] com::sun::star::table::ShadowFormat ShadowFormat;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::Size
+    /** contains the size of the object.
+     */
+    [property] com::sun::star::awt::Size Size;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::SizeRelative
+    /** determines if size, width and height or relative height and width are valid.
+     */
+    [property] boolean SizeRelative;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::SizeProtected
+    /** determines if the size is protected against changes from the user interface.
+     */
+    [property] boolean SizeProtected;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::TextWrap
+    /** contains the wrapping of the object.@see WrapTextMode
+     */
+    [property] short TextWrap;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::Surround
+    /** contains the wrapping of the object.@see WrapTextMode
+     */
+    [property] short Surround;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::SurroundAnchoronly
+    /** determines if the text wraps only in the paragraph
+        that contains the anchor of the object.
+     */
+    [property] boolean SurroundAnchoronly;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::SurroundContour
+    /** determines if the text wraps around the contour of the object.
+     */
+    [property] boolean SurroundContour;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::TopMargin
+    /** contains the top margin of the object.
+     */
+    [property] long TopMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::BottomMargin
+    /** contains the bottom margin of the object.
+     */
+    [property] long BottomMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::BackTransparent
+    /** determines if the background is transparent.
+     */
+    [property] boolean BackTransparent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::VertMirrored
+    /** determines if the object is mirrored vertically.
+     */
+    [property] boolean VertMirrored;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::VertOrient
+    /** contains the value of the vertical orientation.@see constants VertOrientation
+     */
+    [property] short VertOrient;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::VertOrientPosition
+    /** contains the vertical position.
+
+        It is only valid if "VertOrient" contains the value
+        <const>VertOrienation::NONE</const>.
+     */
+    [property] long VertOrientPosition;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::VertOrientRelation
+    /** contains the reference position of the
+        <member>TextGraphicObject::VertOrientPosition</member>.@see RelOrientation
+     */
+    [property] short VertOrientRelation;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::Width
+    /** contains the width of the object.
+     */
+    [property] long Width;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::LeftBorder
+    /** contains the left border of the object.@see com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine LeftBorder;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::RightBorder
+    /** contains the right border of the object.@see com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine RightBorder;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::TopBorder
+    /** contains the top border of the object.@see com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine TopBorder;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::BottomBorder
+    /** contains the bottom border of the object.@see com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine BottomBorder;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::BorderDistance
+    /** contains the distance from the border to the object.
+     */
+    [property] long BorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::LeftBorderDistance
+    /** contains the distance from the left border to the object.
+     */
+    [property] long LeftBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::RightBorderDistance
+    /** contains the distance from the right border to the object.
+     */
+    [property] long RightBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::TopBorderDistance
+    /** contains the distance from the top border to the object.
+     */
+    [property] long TopBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::BottomBorderDistance
+    /** contains the distance from the bottom border to the object.
+     */
+    [property] long BottomBorderDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::GraphicUrl
+    /** contains the URL of the background graphic of the object
+     */
+    [property] string GraphicURL;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::GraphicFilter
+    /** contains the name of the filter of the background graphic of the object.
+     */
+    [property] string GraphicFilter;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextGraphicObject::ActualSize
+    /** contains the original size of the bitmap in the graphic object.
+     */
+    [property] com::sun::star::awt::Size ActualSize;
+    //-------------------------------------------------------------------------
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ConfigurationUpdateAccess.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:17 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_ConfigurationUpdateAccess_idl__
+#define __com_sun_star_configuration_ConfigurationUpdateAccess_idl__
+
+#ifndef __com_sun_star_configuration_ConfigurationAccess_idl__
+#include <com/sun/star/configuration/ConfigurationAccess.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNameReplace_idl__
+#include <com/sun/star/container/XNameReplace.idl>
+#endif
+
+#ifndef __com_sun_star_util_XChangesBatch_idl__
+#include <com/sun/star/util/XChangesBatch.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides write access to a subtree of the configuration hierarchy.
+ Changes to values in the subtree will not become effective unless they are committed using
+ <member>XChangesBatch::commitChanges()</member>..
+
+    @guarantees:<B>
+    -thread safe
+
+    @author Joerg Barfurth
+    @version 1.0 2000/06/01
+*/
+service ConfigurationUpdateAccess
+{
+/** is extended by this service to allow write access.
+ The property set interfaces that were optional in the base service are
+ mandatory in this service.
+*/
+    service ConfigurationAccess;
+
+/** allows changing child values of this node.
+*/
+    interface com::sun::star::container::XNameReplace;
+
+/** allows committing changes done on this node or nodes obtained from it.
+ This interface is optional and will be present if, and only if, this is the
+ root node of the update (as initially obtained from a <type>ConfigurationProvider</type>).
+ Otherwise <member>XChild::getParent()</member> can be used to navigate to the root
+ of the update to commit any changes.
+*/
+    interface com::sun::star::util::XChangesBatch;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

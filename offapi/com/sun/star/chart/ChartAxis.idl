@@ -1,0 +1,308 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ChartAxis.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:14 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_ChartAxis_idl__
+#define __com_sun_star_chart_ChartAxis_idl__
+
+#ifndef __com_sun_star_drawing_LineShapeDescriptor_idl__
+#include <com/sun/star/drawing/LineShapeDescriptor.idl>
+#endif
+
+#ifndef __com_sun_star_style_CharacterProperties_idl__
+#include <com/sun/star/style/CharacterProperties.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_chart_ChartAxisArrangeOrderType_idl__
+#include <com/sun/star/chart/ChartAxisArrangeOrderType.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::chart::ChartAxis
+/** specifies the axes in a diagram.
+
+
+
+    <p>Note: The text properties correlate to all axis description
+    elements, not to just a single text element.</p>
+ */
+service ChartAxis
+{
+
+
+    // DocMerge from xml: service com::sun::star::chart::ChartAxis: service com::sun::star::drawing::LineShapeDescriptor
+    /** contains all the drawing and text properties.
+     */
+    service com::sun::star::drawing::LineShapeDescriptor;
+
+    // DocMerge: empty anyway
+    service com::sun::star::style::CharacterProperties;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Max
+    /** contains the maximum value for the axis scale.
+     */
+    [optional, property] double Max;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Min
+    /** contains the minimum value for the axis scale.
+     */
+    [optional, property] double Min;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Origin
+    /** contains the origin of the axis scale.
+     */
+    [optional, property] double Origin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::StepMain
+    /** contains the distance between the main tick marks.
+     */
+    [optional, property] double StepMain;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::StepHelp
+    /** contains the distance between the help tick marks.
+     */
+    [optional, property] double StepHelp;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoMax
+    /** The maximium value of the axis scale is calculated by the chart if
+        this property is <true></true>.
+     */
+    [optional, property] boolean AutoMax;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoMin
+    /** The minimum value of the axis scale is calculated by the chart if
+        this property is <true></true>.
+     */
+    [optional, property] boolean AutoMin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoOrigin
+    /** The origin is calculated by the chart if this property is .
+     */
+    [optional, property] boolean AutoOrigin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoStepHelp
+    /** The distance between the help tick marks is calculated by the
+        chart if this property is .
+     */
+    [optional, property] boolean AutoStepHelp;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::AutoStepMain
+    /** The distance between the main tick marks is calculated by the chart
+        if this property is <true></true>.
+     */
+    [optional, property] boolean AutoStepMain;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Logarithmic
+    /** determines if the axis is scaled logarithmically or
+        not (linear).
+     */
+    [optional, property] boolean Logarithmic;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::chart::ChartAxis::DisplayLabels
+    /** determines wether to display text at the axis or not.
+     */
+    [property] boolean DisplayLabels;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::TextRotation
+    /** determines the rotation of the text elements
+        (axis description) in 100th degrees
+     */
+    [property] long TextRotation;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Marks
+    /** determines the position of the marks.@see ChartAxisMarks
+     */
+    [property] long Marks;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::HelpMarks
+    /** determines the position of the help marks.@see ChartAxisMarks
+     */
+    [property] long HelpMarks;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::Overlap
+    /** determines the overlap of the bars in a bar-type chart.
+
+
+
+        <p>The value is given in percent of the width of the bars. The
+        valid range is -100 to +100. 100% means full overlap, -100%
+        indicates a distance of one bar between 2 neighboring bars.</p>
+     */
+    [property] long Overlap;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::GapWidth
+    /** specifies the width of the gaps between each set of data points
+        in a bar chart.
+
+
+
+        <p>The value is given in percent of the width of a bar; the
+        valid range is 0 to 600%.</p>
+     */
+    [property] long GapWidth;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::ArrangeOrder
+    /** The axis description may be arranged in a special order for a
+        better placement.
+     */
+    [property] com::sun::star::chart::ChartAxisArrangeOrderType ArrangeOrder;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::TextBreak
+    /** determines if long text is broken into multiple lines.
+     */
+    [property] boolean TextBreak;
+
+    //-------------------------------------------------------------------------
+
+    /** determines if certain labels are hidden if they would otherwise overlap.
+        In this case the value of this property must be set to </false>.
+     */
+    [property] boolean TextCanOverlap;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartAxis::NumberFormat
+    /** contains the type id for the number formatter of the axis.@see interface com::sun::star::util::XNumberFormatter
+     */
+    [property] long NumberFormat;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/09 14:24:54  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.2  2000/09/25 12:44:59  bm
+    TextCanOverlap was an undocumented property so far
+
+    Revision 1.1.1.1  2000/09/18 23:35:01  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:14  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/08/16 09:10:59  bm
+    +DisplayLabels
+
+    Revision 1.2  2000/08/10 08:34:43  bm
+    #74020# some properties are only valid for value axes, so they are marked as optional
+
+    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
+    new
+
+
+=============================================================================*/
+#endif

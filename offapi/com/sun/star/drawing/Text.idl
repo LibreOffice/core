@@ -1,0 +1,367 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Text.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_Text_idl__
+#define __com_sun_star_drawing_Text_idl__
+
+#ifndef __com_sun_star_text_XSimpleText_idl__
+#include <com/sun/star/text/XSimpleText.idl>
+#endif
+
+#ifndef __com_sun_star_style_CharacterProperties_idl__
+#include <com/sun/star/style/CharacterProperties.idl>
+#endif
+
+#ifndef __com_sun_star_style_ParagraphProperties_idl__
+#include <com/sun/star/style/ParagraphProperties.idl>
+#endif
+
+#ifndef __com_sun_star_container_XIndexReplace_idl__
+#include <com/sun/star/container/XIndexReplace.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextFitToSizeType_idl__
+#include <com/sun/star/drawing/TextFitToSizeType.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextAdjust_idl__
+#include <com/sun/star/drawing/TextAdjust.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextAnimationDirection_idl__
+#include <com/sun/star/drawing/TextAnimationDirection.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextAnimationKind_idl__
+#include <com/sun/star/drawing/TextAnimationKind.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::drawing::Text
+/** This abstract service specifies the general characteristics of an optional
+    text inside a <type>Shape</type>.
+ */
+service Text
+{
+
+
+    // DocMerge from xml: service com::sun::star::drawing::Text: interface com::sun::star::text::XSimpleText
+    /** With this interface you can modify the text of this
+                <type>Shape<type>.
+     */
+    interface com::sun::star::text::XSimpleText;
+
+
+    // DocMerge from xml: service com::sun::star::drawing::Text: service com::sun::star::style::CharacterProperties
+    /** The properties in this service set default formats for text
+                inside the <type>Shape</type>.
+     */
+    service com::sun::star::style::CharacterProperties;
+
+
+    // DocMerge from xml: service com::sun::star::drawing::Text: service com::sun::star::style::ParagraphProperties
+    /** The properties in this service set default formats for text
+                inside the <type>Shape</type>.
+     */
+    service com::sun::star::style::ParagraphProperties;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::IsNumbering
+    /** If this is <true></true>, numbering is ON for the text of
+        this <type>Shape</type>.
+     */
+    [property] boolean IsNumbering;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::NumberingRules
+    /** describes the numbering levels.
+
+
+
+        <p>The different rules accessible with this
+        <type scope="com::sun::star::container">XIndexReplace</type> interface
+        are sequences of property values as described in the service
+        <type scope="com::sun::star::style">NumberingRule</type>.</p>
+     */
+    [property] com::sun::star::container::XIndexReplace NumberingRules;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextAutoGrowHeight
+    /** If this value is <true></true>, the height of the <type>Shape</type> is
+        automatically expanded/shrunk when text is added to or removed from
+        the <type>Shape</type>.
+     */
+    [property] boolean TextAutoGrowHeight;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextAutoGrowWidth
+    /** If this value is <true></true>, the width of the <type>Shape</type> is
+        automatically expanded/shrunk when text is added to or removed from
+        the <type>Shape</type>.
+     */
+    [property] boolean TextAutoGrowWidth;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextContourFrame
+    /** If this value is <true></true>, the left edge of every line of text is
+        aligned with the left edge of this <type>Shape</type>.
+     */
+    [property] boolean TextContourFrame;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextFitToSize
+    /** With this set to <true></true>, the text inside of the <type>Shape</type>
+        is stretched to fit into the <type>Shape</type>.
+     */
+    [property] com::sun::star::drawing::TextFitToSizeType TextFitToSize;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextHorizontalAdjust
+    /** adjusts the horizontal position of the text inside of
+        the <type>Shape</type>.
+     */
+    [property] com::sun::star::drawing::TextAdjust TextHorizontalAdjust;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextVerticalAdjust
+    /** adjusts the vertical position of the text inside of
+        the <type>Shape</type>.
+     */
+    [property] com::sun::star::drawing::TextAdjust TextVerticalAdjust;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextLeftDistance
+    /** This is the distance from the left edge of the <type>Shape</type>
+        to the left edge of the text.
+
+
+
+        <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
+        <const>BLOCK</const> or <const>STRETCH</const> or if
+        <member>Text::TextFitSize</member> is <true></true>.</p>
+     */
+    [property] long TextLeftDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextRightDistance
+    /** This is the distance from the right edge of the <type>Shape</type>
+        to the right edge of the text.
+
+
+
+        <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
+        <const>BLOCK</const> or <const>STRETCH</const>
+        or if <member>Text::TextFitSize</member> is <true></true>.</p>
+     */
+    [property] long TextRightDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextUpperDistance
+    /** This is the distance from the upper edge of the <type>Shape</type> to
+        the upper edge of the text.
+
+
+        <p>This is only useful if <member>Text::TextVerticalAdjust</member> is
+        <const>BLOCK</const> or if <member>Text::TextFitSize</member> is
+        <true></true>.</p>
+     */
+    [property] long TextUpperDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextLowerDistance
+    /** This is the distance from the lower edge of the <type>Shape</type> to the
+        lower edge of the text.
+
+
+
+        <p>This is only useful if <type>Text::TextVerticalAdjust</type> is
+        <const>BLOCK</const> or if <member>Text::TextFitSize</member> is
+        <true></true>.</p>
+     */
+    [property] long TextLowerDistance;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR Text::TextMaximumFrameHeight
+
+    // DocMerge: empty anyway
+    [property] long TextMaximumFrameHeight;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR Text::TextMaximumFrameWidth
+
+    // DocMerge: empty anyway
+    [property] long TextMaximumFrameWidth;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR Text::TextMinimalFrameHeight
+
+    // DocMerge: empty anyway
+    [property] long TextMinimumFrameHeight;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR Text::TextMinimumFrameWidth
+
+    // DocMerge: empty anyway
+    [property] long TextMinimumFrameWidth;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextAnimationAmount
+    /** This is the number of pixels the text is moved in each animation step.
+     */
+    [property] short TextAnimationAmount;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextAnimationCount
+    /** This number defines how many times the text animation is repeated.
+
+
+
+        <p>If this is set to zero, the repeat is endless.</p>
+     */
+    [property] short TextAnimationCount;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextAnimationDelay
+    /** This is the delay in thousandths of a second between each
+        of the animation steps.
+     */
+    [property] short TextAnimationDelay;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextAnimationDirection
+    /** This enumeration defines the direction in which the text moves.
+     */
+    [property] com::sun::star::drawing::TextAnimationDirection TextAnimationDirection;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextAnimationKind
+    /** This value defines the type of animation.
+     */
+    [property] com::sun::star::drawing::TextAnimationKind TextAnimationKind;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextAnimationStartInside
+    /** If this value is <true></true>, the text is visible at the start of the
+        animation.
+     */
+    [property] boolean TextAnimationStartInside;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextAnimationStopInside
+    /** If this value is <true></true>, the text is visible at the end of the
+        animation.
+     */
+    [property] boolean TextAnimationStopInside;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:15  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:22  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/07/17 10:24:46  cl
+    chg: XSimpleText is now used instead of XText
+
+    Revision 1.3  2000/03/27 10:55:43  cl
+    #70728# fixed doku
+
+    Revision 1.2  2000/02/07 11:24:30  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
+    new
+
+
+=============================================================================*/
+#endif

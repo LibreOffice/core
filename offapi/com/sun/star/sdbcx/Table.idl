@@ -1,0 +1,208 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Table.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:00 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbcx_Table_idl__
+#define __com_sun_star_sdbcx_Table_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbcx {
+
+interface XDataDescriptorFactory;
+interface XColumnsSupplier;
+interface XIndexesSupplier;
+interface XKeysSupplier;
+interface XRename;
+interface XAlterTable;
+
+
+// DocMerge from xml: service com::sun::star::sdbcx::Table
+/** used to specify a table in a database. A table is described by its
+    name and one or more columns.
+
+
+    <p>In addition, it may contain indexes to improve the performance in
+    the retrieval of the table's data and keys and to define semantic rules for the table.
+    </p>
+    <p>
+    <b>Note:</b> All properties and columns of a table could by modified before
+    it is appended to a database. In that case the service is in fact a
+    descriptor. On existing tables, a user might alter columns, add or delete
+    columns, indexes, and keys depending on the capabilities of the database and on
+    the user's privileges.
+    </p>@see com::sun::star::sdbc::XDatabaseMetaData
+     @see com::sun::star::sdbcx::Privilege
+ */
+service Table
+{
+
+    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XDataDescriptorFactory
+    /** optional, could be used to copy an index.
+     */
+    interface XDataDescriptorFactory;
+
+
+    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XColumnsSupplier
+    /** access to the contained table columns.
+     */
+    interface XColumnsSupplier;
+
+
+    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XIndexesSupplier
+    /** optional, provides the access of the table indexes.
+     */
+    interface XIndexesSupplier;
+
+
+    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XKeysSupplier
+    /** optional, provides the access to the table keys.
+     */
+    interface XKeysSupplier;
+
+
+    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XRename
+    /** optional, allows the renaming of tables.
+     */
+    interface XRename;
+
+
+    // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XAlterTable
+    /** optional, allows the altering of columns.
+     */
+    interface XAlterTable;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XPropertySet;
+
+
+    // DocMerge from xml: property com::sun::star::sdbcx::Table::Name
+    /** is the name of the table.
+     */
+    [readonly, property] string Name;
+
+
+    // DocMerge from xml: property com::sun::star::sdbcx::Table::CatalogName
+    /** is the name of the table catalog.
+     */
+    [readonly, property] string CatalogName;
+
+
+    // DocMerge from xml: property com::sun::star::sdbcx::Table::SchemaName
+    /** is the name of the table schema.
+     */
+    [readonly, property] string SchemaName;
+
+
+    // DocMerge from xml: property com::sun::star::sdbcx::Table::Description
+    /** supplies a comment on the table. Could be empty if not supported by
+        the driver.
+     */
+    [readonly, property] string Description;
+
+
+    // DocMerge from xml: property com::sun::star::sdbcx::Table::Type
+    /** indicates the type of the table like (TABLE,VIEW,SYSTEM TABLE).
+        Could be empty if not supported by the driver.
+
+
+
+
+
+
+
+
+
+        @optional
+            t
+     */
+    [optional, readonly, property] string Type;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:44  hjs
+    initial import
+
+    Revision 1.7  2000/09/11 11:52:45  mi
+    documentation merged from XML
+
+    Revision 1.5  1999/12/20 16:26:14  dg
+    #70278# new package name
+
+    Revision 1.4  1999/11/30 17:26:51  dg
+    #70248# const as const can
+
+    Revision 1.3  1999/11/29 16:16:06  dg
+    Documentation
+
+    Revision 1.2  1999/11/29 12:15:46  dg
+    Documentation
+
+    Revision 1.1  1999/11/24 08:42:08  dg
+    new StarDataDefinitionBeans
+
+===========================================================================*/
+#endif

@@ -1,0 +1,188 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TextSection.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextSection_idl__
+#define __com_sun_star_text_TextSection_idl__
+
+#ifndef __com_sun_star_text_TextContent_idl__
+#include <com/sun/star/text/TextContent.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextSection_idl__
+#include <com/sun/star/text/XTextSection.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_text_SectionFileLink_idl__
+#include <com/sun/star/text/SectionFileLink.idl>
+#endif
+#ifndef __com_sun_star_style_GraphicLocation_idl__
+#include <com/sun/star/style/GraphicLocation.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module text {
+
+//=============================================================================
+/** A <type>TextSection</type> is a range of complete paragraphs within a text.  @
+
+    <p>The content of the section may be the content of a link into another
+    document, a link from the same document, or the result of a DDE
+    operation.
+
+    <p><type>TextSection</type> instances can be linked from and to other
+    texts.
+
+*/
+service TextSection
+{
+    service com::sun::star::text::TextContent;
+    interface com::sun::star::text::XTextSection;
+    interface com::sun::star::container::XNamed;
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+    /**  This property contains a conditional expression.
+
+    <p>If the result of the conditional expression is <true/> and the property
+    <member>TextSection::IsVisible</member> is <false/>, then the section is hidden.</p>
+    */
+    [property] string Condition;
+
+    //-------------------------------------------------------------------------
+    /** If this property is <FALSE/>, the text section is hidden.
+    */
+    [property] boolean IsVisible;
+
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/>, the text section is protected
+        and cannot be modified from the user interface.
+    */
+    [property] boolean IsProtected;
+
+    //-------------------------------------------------------------------------
+    /** If this property is set, then the content of the section is read
+        from the specified document.
+
+    */
+    [property] com::sun::star::text::SectionFileLink FileLink;
+
+    //-------------------------------------------------------------------------
+    /**  specifies the source of a file link in the document that is
+    specified in <member>TextSection::FileLink</member>.
+
+    <p>The source may be a text section or a bookmark.
+    If <member>Textsection::FileLink</member> is empty, then the
+    current document is searched for the source. If this property
+    is empty and <member>TextSection::FileLink</member> is set,
+    then the complete document content is linked into this section.</p>
+    */
+    [property] string LinkRegion;
+
+    //-------------------------------------------------------------------------
+    /**  specifies the type of the command string for a DDE operation.
+     <p>The type can be the name of the application that provides a DDE source.</p>
+    */
+    [property] string DDECommandType;
+
+    //-------------------------------------------------------------------------
+    /**  specifies the source file name of the command string for a DDE operation.
+    */
+    [property] string DDECommandFile;
+
+    //-------------------------------------------------------------------------
+    /**  specifies the source element of the command string for a DDE operation.
+     <p>The element can be i.e. a name of a cell in a sheet or a bookmark.</p>
+    */
+    [property] string DDECommandElement;
+
+    //-------------------------------------------------------------------------
+    /**  contains the URL for the background graphic.
+    */
+    [property] string BackGraphicURL;
+
+    //-------------------------------------------------------------------------
+    /**  contains the name of the file filter for the background graphic.
+    */
+    [property] string BackGraphicFilter;
+
+    //-------------------------------------------------------------------------
+    /** determines the position of the background graphic.
+
+        @see enum GraphicLocation
+    */
+    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,129 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDictionaryEntry.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XDictionaryEntry_idl__
+#define __com_sun_star_linguistic2_XDictionaryEntry_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** This interfaces gives access to a single dictionary entry.
+
+    <P>A dictionary entry can supply a word and it's hyhenation
+    and indicate if it is a neagtiv word. If the entry is a
+    negativ one a replacement text/language may have been supplied.</P>
+
+     <P>Hyphenation positions are represented by a '=' in the word.
+     If the '=' is the last character of the word this means it should not
+     be hyphenated. If there is no '=' charcter in the word hyphenation
+     positions will be determined automatically.</P>
+
+    @see    XDictionary
+    @see    XInterface
+*/
+[ uik(4BD5A952-5D68-11d4-9F090050-04D8BBC5), ident( "XDictionaryEntry", 1.0 ) ]
+interface XDictionaryEntry : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /**
+         @returns
+         the word defining this entry.
+     */
+    string getDictionaryWord();
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+        <TRUE/> if the word is a negativ one, <FALSE/> else.
+
+        @see    getReplacementText
+        @see    getReplacementLocale
+    */
+    boolean isNegative();
+
+    //-------------------------------------------------------------------------
+    /**
+         @returns
+         the replacement text for a negativ entry.
+         An empty string indicates that no replacement text is provided.
+         It is undefined if the entry is not negativ.
+
+         @see   isNegative
+        @see    getReplacementLocale
+     */
+    string getReplacementText();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

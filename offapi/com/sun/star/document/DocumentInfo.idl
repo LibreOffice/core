@@ -1,0 +1,467 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DocumentInfo.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:26 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_DocumentInfo_idl__
+#define __com_sun_star_document_DocumentInfo_idl__
+
+#ifndef __com_sun_star_document_XDocumentInfo_idl__
+#include <com/sun/star/document/XDocumentInfo.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XFastPropertySet_idl__
+#include <com/sun/star/beans/XFastPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+
+//=============================================================================
+
+  module com {   module sun {   module star {   module document {
+
+//=============================================================================
+
+// DocMerge: from xml
+
+// DocMerge from xml: service com::sun::star::document::DocumentInfo
+/** This service provides document-specific information like the
+    author, creation date and user fields.@see service StandaloneDocumentInfo
+ */
+service DocumentInfo
+{
+    // DocMerge: empty anyway
+
+    // DocMerge: empty anyway
+    interface com::sun::star::document::XDocumentInfo;
+
+    // DocMerge: empty anyway
+
+    // DocMerge: empty anyway
+    interface com::sun::star::lang::XComponent;
+
+    // DocMerge: empty anyway
+
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XPropertySet;
+
+    // DocMerge: empty anyway
+
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XFastPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::Author
+    /** contains the intial author of the document.
+     */
+    [property] string Author;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::BlindCopiesTo
+    /** contains the recipients who have received or will
+        receive a blind copy by email.
+
+
+
+        <p>Recipients who receive a blind copy are not visible to other
+        recipients.
+
+        </p>
+        <p>If there is more than one recipient, a comma is used as a delimiter.</p>
+     */
+    [property] string BlindCopiesTo;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::CopyTo
+    /** contains the recipients who have received or will
+        receive a copy by email.
+
+
+
+        <p>These recipients are visible to other recipients.
+
+        </p>
+        <p>If there is more than one recipient, a comma is used as a delimiter.</p>
+     */
+    [property] string CopyTo;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::CreationDate
+    /** contains the date and time of the first time the
+        document was stored.
+     */
+    [property] com::sun::star::util::DateTime CreationDate;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::Description
+    /** contains a multi-line comment of the document.
+
+
+
+        <p>Line delimiters can be UNIX, Macintosh or DOS style.</p>
+     */
+    [property] string Description;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::InReplyTo
+    /** contains the message ID to which this is an answer.
+     */
+    [property] string InReplyTo;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::Keywords
+    /** contains a comma separated by a list of keywords for
+        the document.
+     */
+    [property] string Keywords;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::MIMEType
+    /** contains the MIME-type of the document's resource.
+
+
+
+        <p>The MIME-type is neither stored in the document information nor in
+        the document; it is sent within a protocol header or is
+        detected, thus it cannot be changed.</p>
+     */
+    [readonly, property] string MIMEType;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::ModifyDate
+    /** contains the date and time of the last time the
+        document was stored.
+     */
+    [property] com::sun::star::util::DateTime ModifyDate;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::ModifiedBy
+    /** contains the name of the editor who was the last
+        person to store this document.
+     */
+    [property] string ModifiedBy;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::Newsgroups
+    /** contains the list of newsgroups where this document
+        was or will be posted.
+
+
+
+        <p>If there is more than one entry, the list is separated by a comma.</p>
+     */
+    [property] string Newsgroups;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::Original
+    /** contains the source of the document.
+
+
+
+        <p>E.g. the message ID for a locally stored message.</p>
+     */
+    [property] string Original;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::Priority
+    /** contains the priority of the document.
+
+
+
+        <p>The value can be between 0 (very high) and 4 (very low).</p>
+     */
+    [property] short Priority;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::Recipient
+    /** contains the recipient of the document.
+     */
+    [property] string Recipient;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::References
+    /** contains a list of referred message IDs.
+     */
+    [property] string References;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::ReplyTo
+    /** contains the mailto:-URL for where to send an answer.
+     */
+    [property] string ReplyTo;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::Theme
+    /** contains a theme describing the topic of the document.
+     */
+    [property] string Theme;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::Title
+    /** contains the title of the document.
+     */
+    [property] string Title;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::Template
+    /** contains the path and name of the template from
+        which the document was created.
+
+
+
+        <p>The value is an empty string if the document was not created
+        from a template or if it was detached from the template.</p>
+     */
+    [property] string Template;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::TemplateDate
+    /** contains the date and time of when the document
+        was created or updated from the template.
+     */
+    [property] com::sun::star::util::DateTime TemplateDate;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::IsEncrypted
+    /** determines if the document is encrypted with a
+        password.
+
+
+
+        <p>It is not possible to set this value because the document
+        which belongs to this <type>DocumentInfo</type> would no
+        longer be loadable.
+
+        </p>
+        <p>The password itself is not stored in the document.</p>
+     */
+    [readonly, property] boolean IsEncrypted;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::PrintDate
+    /** contains the date and time of when the document was
+        last printed.
+     */
+    [property] com::sun::star::util::DateTime PrintDate;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::PrintedBy
+    /** contains the name of the editor who was the last
+        person to print the document.
+     */
+    [property] string PrintedBy;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::AutoloadEnabled
+    /** determines if another (or the same) URL is to be
+        reloaded automatically after a specified time after the document
+        is loaded into a desktop frame.
+     */
+    [property] boolean AutoloadEnabled;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::AutoloadURL
+    /** contains the URL to load automatically after a
+        specified time after the document is loaded into a desktop frame.
+     */
+    [property] string AutoloadURL;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::AutoloadSecs
+    /** contains the number of seconds after which a specified
+        URL is to be loaded after the document is loaded into a desktop
+        frame.
+     */
+    [property] long AutoloadSecs;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge: from xml
+
+    // DocMerge from xml: property com::sun::star::document::DocumentInfo::DefaultTarget
+    /** contains the name of the default frame into which
+        links should be loaded if no target is specified.
+
+
+
+        <p>This applies to the autoload feature too, but to others as well.</p>
+     */
+    [property] string DefaultTarget;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:10  hjs
+    initial import
+
+    Revision 1.9  2000/09/11 11:52:18  mi
+    documentation merged from XML
+
+    Revision 1.5  2000/08/04 15:18:44  mi
+    #76800# document events
+
+    Revision 1.4  2000/02/21 16:17:58  mi
+    string documentation from stardiv...*.idl-files
+
+    Revision 1.3  2000/02/07 11:24:26  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.2  1999/11/18 11:49:55  mi
+    XComponent now in module lang
+
+    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
+    new
+
+
+=============================================================================*/
+#endif

@@ -1,0 +1,180 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XLocaleData.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_XLocaleData_idl__
+#define __com_sun_star_i18n_XLocaleData_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/Locale.idl>
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+//=============================================================================
+
+
+struct LCInfo {
+    string lang;
+    string langDefaultName;
+    string country;
+    string countryDefaultName;
+    string variant;
+};
+
+
+struct Currency {
+    string currencyID;
+    string symbol;
+    string currencyName;
+    string bankSymbol;
+    boolean isDefault;
+};
+
+
+struct CalendarItem {
+    string ID;
+    string abbrevName;
+    string fullName;
+};
+
+struct FormatElement {
+    string formatCode;
+    string formatName;
+    string formatKey;
+    string formatType;
+    string formatUsage;
+    short  formatIndex;
+    boolean isDefault;
+};
+
+
+
+struct Calendar {
+    sequence<CalendarItem>  days;
+    sequence<CalendarItem>  months;
+    sequence<CalendarItem>  eras;
+    string  startOfWeek;
+    short   minNoOfDaysForFirstWeek;
+    boolean isDefault;
+    string  implName;
+};
+
+struct LocaleDataItem {
+    string unoID;
+    string dateSeparator;
+    string thousandSeparator;
+    string decimalSeparator;
+    string timeSeparator;
+    string time100SecSeparator;
+    string listSeparator;
+    string quotationStart;
+    string quotationEnd;
+    string doubleQuotationStart;
+    string doubleQuotationEnd;
+    string timeAM;
+    string timePM;
+    string measurementSystem;
+};
+
+struct Implementation {
+    string unoID;
+    boolean isDefault;
+};
+
+struct ForbiddenCharacters {
+    string beginLine;
+    string endLine;
+};
+
+constants reservedWords {
+    const short TRUE_WORD   =0;
+    const short FALSE_WORD  =1;
+
+    //! Yes, this must be the count of known reserved words and one more than
+    //! the maximum number used above!
+    const short COUNT       =2;
+};
+
+
+
+[ uik(4359cf69-1409-481c-91be84ff-f4de3c75), ident( "XLocaleData", 1.0 ) ]
+interface XLocaleData: com::sun::star::uno::XInterface
+{
+
+    LCInfo getLCInfo([in]  com::sun::star::lang::Locale rLocale);
+    LocaleDataItem getLocaleItem ([in]  com::sun::star::lang::Locale rLocale);
+
+    sequence<Calendar> getAllCalendars ([in] com::sun::star::lang::Locale rLocale);
+    sequence<Currency> getAllCurrencies  ([in] com::sun::star::lang::Locale rLocale);
+    sequence<FormatElement> getAllFormats ([in] com::sun::star::lang::Locale rLocale);
+
+    sequence<Implementation> getCollatorImplementations ([in] com::sun::star::lang::Locale rLocale);
+
+    sequence<string> getTransliterations([in] com::sun::star::lang::Locale rLocale);
+    ForbiddenCharacters getForbiddenCharacters ([in] com::sun::star::lang::Locale rLocale);
+    sequence<string> getReservedWord ([in] com::sun::star::lang::Locale rLocale);
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,241 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DataSource.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_DataSource_idl__
+#define __com_sun_star_sdb_DataSource_idl__
+
+#ifndef __com_sun_star_io_XPersistObject_idl__
+#include <com/sun/star/io/XPersistObject.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_util_XFlushable_idl__
+#include <com/sun/star/util/XFlushable.idl>
+#endif
+
+#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+#endif
+
+
+ module com {  module sun {  module star {  module sdb {
+
+interface XCompletedConnection;
+interface XFormDocumentsSupplier;
+interface XReportDocumentsSupplier;
+interface XQueryDefinitionsSupplier;
+
+
+// DocMerge from xml: service com::sun::star::sdb::DataSource
+/** is a factory to establish database connections. It should be registered at
+    a NamingService.@see com::sun::star::sdb::DatabaseContext
+ */
+service DataSource
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XPropertySet;
+
+
+    // DocMerge from xml: service com::sun::star::sdb::DataSource: interface com::sun::star::sdb::XCompletedConnection
+    /** useful for establishing connections with the completion of connection parameters
+                provided during user interaction.
+     */
+    interface XCompletedConnection;
+
+
+    // DocMerge from xml: service com::sun::star::sdb::DataSource: interface com::sun::star::util::XFlushable
+    /** is provided to flush a DataSource within to a Database Context.
+     */
+    interface com::sun::star::util::XFlushable;
+
+
+    // DocMerge from xml: service com::sun::star::sdb::DataSource: interface com::sun::star::sdb::XFormDocumentsSupplier
+    /** provides the access to DataSource related forms.
+     */
+    interface XFormDocumentsSupplier;
+
+
+    // DocMerge from xml: service com::sun::star::sdb::DataSource: interface com::sun::star::sdb::XReportDocumentsSupplier
+    /** provides the access to DataSource related reports.
+     */
+    interface XReportDocumentsSupplier;
+
+
+    // DocMerge from xml: service com::sun::star::sdb::DataSource: interface com::sun::star::sdb::XQueryDefinitionsSupplier
+    /** provides the access to DataSource related queries.
+     */
+    interface XQueryDefinitionsSupplier;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DataSource::Name
+    /** is the name of the data source.
+     */
+    [readonly, property] string Name;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DataSource::URL
+    /** indicates a database url of the form <br>
+        <code> jdbc:<em>subprotocol</em>:<em>subname</em></code> or
+        <code> sdbc:<em>subprotocol</em>:<em>subname</em></code>
+     */
+    [property] string URL;
+
+
+    // DocMerge from idl: property com::sun::star::sdb::DataSource::Info
+    /** is a list of arbitrary string tag/value pairs as
+             connection arguments; normally at least a "user" and
+             "password" property should be included.
+     */
+    [property] sequence<com::sun::star::beans::PropertyValue> Info;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DataSource::User
+    /** determines a users login name.
+     */
+    [property] string User;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DataSource::Password
+    /** determines a users password. The password is not persistent.
+     */
+    [property] string Password;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DataSource::IsPasswordRequired
+    /** indicates that a password is always necessary.
+     */
+    [property] boolean IsPasswordRequired;
+
+
+    /** indicates that components displaying data obtained from this data source should suppress columns used for versioning.
+     */
+    [property] boolean SuppressVersionColumns;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DataSource::IsReadOnly
+    /** determines whether modifications on the data source are are allowed
+        or not.
+     */
+    [readonly, property] boolean IsReadOnly;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::DataSource::NumberFormatsSupplier
+    /** provides an object for formatting numbers.
+     */
+    [readonly, property] com::sun::star::util::XNumberFormatsSupplier
+                        NumberFormatsSupplier;
+
+
+    // DocMerge from idl: property com::sun::star::sdb::DataSource::TableFilter
+    /** defines a list of tables, on which the DataSource should have it's focus.
+             If empty, all the tables of the are used.
+     */
+    [property] sequence<string> TableFilter;
+
+
+    // DocMerge from idl: property com::sun::star::sdb::DataSource::TableTypeFilter
+    /** defines a list of table types, on which the DataSource should have it's focus.
+             If empty, all the tables types of the are used.
+     */
+    [property] sequence<string> TableTypeFilter;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/20 09:42:58  fs
+    new property SuppressVersionColumns
+
+    Revision 1.1.1.1  2000/09/18 23:35:36  hjs
+    initial import
+
+    Revision 1.8  2000/09/11 11:52:39  mi
+    documentation merged from XML
+
+    Revision 1.6  2000/07/05 17:12:07  os
+    wrong property name corrected: NumberFormats -> NumberFormatsSupplier
+
+    Revision 1.5  2000/06/27 06:57:50  dg
+    CommandPreparation new
+
+    Revision 1.4  2000/06/08 08:31:08  dg
+    XDatabaseAccess is no longer part of the DataSource
+
+    Revision 1.3  2000/06/05 13:35:37  dg
+    services changed
+
+    Revision 1.2  2000/06/05 13:20:27  dg
+    services changed
+
+    Revision 1.1  1999/11/24 08:39:00  dg
+    new Star Data Beans
+
+===========================================================================*/
+#endif

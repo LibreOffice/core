@@ -1,0 +1,230 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XHyphenator.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XHyphenator_idl__
+#define __com_sun_star_linguistic2_XHyphenator_idl__
+
+
+#ifndef __com_sun_star_lang_Localeidl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XSupportedLocales_idl__
+#include <com/sun/star/linguistic2/XSupportedLocales.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XDictionaryList_idl__
+#include <com/sun/star/linguistic2/XDictionaryList.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XHyphenatedWord_idl__
+#include <com/sun/star/linguistic2/XHyphenatedWord.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XPossibleHyphens_idl__
+#include <com/sun/star/linguistic2/XPossibleHyphens.idl>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_idl_
+#include <com/sun/star/beans/PropertyValues.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** Get a suitable hyphenation position (for breaking lines within words).
+
+    <P>A hyphenation position for a word with n characters is represented
+    by a value in the range from 0 to n-2, indicating the position
+    of the character after which the hyphenation is done. That is
+    it is after the first and before the last character.</P>
+
+    <P>A valid hyphenation position is a hyphenation position that
+    fulfills all the restrictions implied by the properties
+    MinLeading, MinTrailing and MinWordLength.</P>
+
+    @see    XSupportedLocales
+*/
+[ uik(4BD5A958-5D68-11d4-9F090050-04D8BBC5), ident( "XHyphenator", 1.0 ) ]
+interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
+{
+    //-------------------------------------------------------------------------
+    /** tries to find a valid hyphenation position relative
+        to the beginning of a word.
+
+        <P>Note: some languages (eg. arabic) are written from right
+        to left!</P>
+
+        @returns
+        the XHyphenatedWord for the last valid hyphenation position
+         that is less or equal to nMaxLeading - 1.
+        If there is no such valid hyphenation position <NULL/> is returned.
+
+        @param  aWord
+        is the word to be hyphenated.
+
+        @param  aLocale
+        defines the language to be used.
+
+        <P>If the language is not supported an IllegalArgumentException
+        exception is raised.</P>
+
+        @param  nMaxLeading
+        specifies the maximum number of characters to remain
+        before the hyphen in the hyphenated word.
+
+        <P>It has to be greater or equal 0.</P>
+
+        @see    XSupportedLocales
+        @see    XHyphenatedWord
+    */
+    com::sun::star::linguistic2::XHyphenatedWord hyphenate(
+            [in] string aWord,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] short nMaxLeading,
+            [in] com::sun::star::beans::PropertyValues aProperties )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** checks wether hyphenation at a position in a word will result in
+        an alternative spelling or not.
+
+        <P>An alternative spelling position is a hyphen position where,
+        if hyphenation is done here, the writing of the word changes.
+        Example: "B&auml;cker" in German pre spelling-reform becomes
+         "B&auml;kker" if hyphenation is done after the "c".</P>
+
+        <P>The hyphenation position needs not to be a valid one to be an
+        alternative spelling position!</P>
+
+        @returns
+        ...
+        otherwise <NULL/> is returned.
+
+        @param  aWord
+        is the (original) word to be looked at for having an alternative
+        spelling if hyphenation is done at position nIndex.
+
+        @param aLocale
+        specifies the language to be used.
+
+        <P>If the language is not supported an IllegalArgumentException
+        exception is raised.</P>
+
+        @param  nIndex
+        is the position in the word to be looked at.
+
+        <P>If the length of the word is n the value of this
+        parameter has to be in the range from 0 to n-2.</P>
+
+        @see    XSupportedLocales
+        @see    XHyphenatedWord
+    */
+    com::sun::star::linguistic2::XHyphenatedWord queryAlternativeSpelling(
+            [in] string aWord,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] short nIndex,
+            [in] com::sun::star::beans::PropertyValues aProperties )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /**
+        <P>If the language is not supported an IllegalArgumentException
+        exception is raised.</P>
+
+        @param  aWord
+        is the word for which information about the possible
+         hyphenation positions is to be retrieved.
+
+        @param  aLocale
+        defines the language of the word.
+
+        <P>If the language is not supported an IllegalArgumentException
+        exception is raised.</P>
+
+        @returns
+        a XPossibleHyphens for the given word and
+        language if there are any hyphenation positions.
+         <NULL/> otherwise.
+
+        @see    XPossibleHyphens
+        @see    Locale
+    */
+    com::sun::star::linguistic2::XPossibleHyphens createPossibleHyphens(
+            [in] string aWord,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] com::sun::star::beans::PropertyValues aProperties )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

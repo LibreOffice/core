@@ -1,0 +1,136 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XStringEscape.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XStringEscape_idl__
+#define __com_sun_star_util_XStringEscape_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module util {
+
+
+// DocMerge from xml: interface com::sun::star::util::XStringEscape
+/** This interface is used to encode an arbitrary String into a
+    escaped form.
+    <p>
+    The escaped form is chosen to be suitable for use with other interfaces
+    of the object or service providing this interface.</p>
+    <p>
+    Any characters or character sequences that are not compatible with
+    any naming rules or restrictions must be replaced by an escaped form,
+    that complies to these rules.<br>
+    The transformation should preserve all traits of the string that are
+    generally respected by the service. For example the case of a string
+    may be lost after encoding and then decoding, if the service
+    generally is case insensitive.<br>
+    Other than that the encoding is ono-to-one and can be reversed. The
+    encoding should try to preserve as much as possible of the original
+    string, to keep human-readable input human-friend where possible.
+    Strings that already conform to the naming conventions should be left
+    unchanged or minimally modified.</p>
+ */
+[ uik(D9E02321-6DCE-11d4-9F620050-DA6BA2A6), ident( "XStringEscape", 1.0 ) ]
+interface XStringEscape: com::sun::star::uno::XInterface
+{
+
+    // DocMerge from xml: method com::sun::star::util::XStringEscape::escapeString
+    /** Encodes an arbitrary string into an escaped form compatible with some naming rules.
+     */
+    [const] string escapeString([in] string aString)
+        raises( com::sun::star::lang::IllegalArgumentException);
+
+
+    // DocMerge from xml: method com::sun::star::util::XStringEscape::unescapeString
+    /** Decodes an escaped string into the original form.
+     */
+    [const] string unescapeString([in] string aEscapedString)
+        raises( com::sun::star::lang::IllegalArgumentException);
+};
+
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:21  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:53:06  mi
+    documentation merged from XML
+
+    Revision 1.1  2000/08/09 19:09:27  jb
+    New interface
+
+
+
+=============================================================================*/

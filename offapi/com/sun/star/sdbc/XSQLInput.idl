@@ -1,0 +1,285 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSQLInput.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XSQLInput_idl__
+#define __com_sun_star_sdbc_XSQLInput_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_Date_idl__
+#include <com/sun/star/util/Date.idl>
+#endif
+
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+#ifndef __com_sun_star_util_Time_idl__
+#include <com/sun/star/util/Time.idl>
+#endif
+
+ module com {  module sun {  module star {  module io {
+interface XInputStream;
+};};};};
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+interface XRef;
+interface XArray;
+interface XBlob;
+interface XClob;
+
+
+// DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XSQLInput
+/** represents an input stream that contains a stream of values representing an
+    instance of a SQL structured or distinct type.
+
+
+    <p>This interface, used only for custom mapping, is used by the driver
+    behind the scenes, and a programmer never directly invokes
+    <code>SQLInput</code> methods.
+    </p>
+    <p>When the method <code>getObject</code> is called with an
+    object of a service implementing the interface <code>SQLData</code>,
+    the SDBC driver calls the method <code>XSQLData.getSQLType</code>
+    to determine the SQL type of the user-defined type (UDT) being custom mapped.
+    The driver creates an instance of <code>XSQLInput</code>,
+    populating it with the attributes of the UDT. The driver then passes the input
+    stream to the method <code>XSQLData.readSQL</code>, which in turn
+    calls the <code>XSQLInput.readXXX</code> methods in its implementation for
+    reading the attributes from the input stream.</p>
+ */
+[ uik(D6B6023F-9067-11d3-9EE00010-5AD7A5C4), ident("XSQLInput", 1.0) ]
+interface XSQLInput: com::sun::star::uno::XInterface
+{
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readString
+    /** reads the next attribute in the stream as string.
+     */
+    string readString() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readBoolean
+    /** reads the next attribute in the stream as boolean.
+     */
+    boolean readBoolean() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readByte
+    /** reads the next attribute in the stream as byte.
+     */
+    byte readByte() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readShort
+    /** reads the next attribute in the stream as short.
+     */
+    short readShort() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readInt
+    /** reads the next attribute in the stream as long.
+     */
+    long readInt() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readLong
+    /** reads the next attribute in the stream as hyper.
+     */
+    hyper readLong() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readFloat
+    /** reads the next attribute in the stream as float.
+     */
+    float readFloat() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readDouble
+    /** reads the next attribute in the stream as double.
+     */
+    double readDouble() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readBytes
+    /** reads the next attribute in the stream as sequence of bytes.
+                 @throws SQLException
+                if a database access error occurs
+     */
+    sequence<byte> readBytes() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readDate
+    /** reads the next attribute in the stream as date.
+     */
+    com::sun::star::util::Date readDate() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readTime
+    /** reads the next attribute in the stream as time.
+     */
+    com::sun::star::util::Time readTime() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readTimestamp
+    /** reads the next attribute in the stream as DateTime.
+     */
+    com::sun::star::util::DateTime readTimestamp() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readBinaryStream
+    /** reads the next attribute in the stream as sequence of bytes.
+     */
+    com::sun::star::io::XInputStream readBinaryStream() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readCharacterStream
+    /** reads the next attribute in the stream as a unicode string.
+     */
+    com::sun::star::io::XInputStream readCharacterStream() raises (SQLException);
+       //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readObject
+    /** returns the datum at the head of the stream as an any.
+
+
+        <p>The actual type of the any returned is determined by the default
+        type mapping, and any customizations present in this stream's type map.
+
+        <br>A type map is registered with the stream by the SDBC driver before the
+        stream is passed to the application.
+
+        <br>When the datum at the head of the stream is a SQL NULL,
+        the method returns <void></void>. If the datum is a SQL structured or distinct
+        type, it determines the SQL type of the datum at the head of the stream,
+        constructs an object of the appropriate service, and calls the method
+        <code>XSQLData.readSQL</code> on that object, which reads additional data
+        from the stream using the protocol described for that method.
+
+        </p>
+     */
+    any readObject() raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readRef
+    /** reads a REF(&amp;lt;structured-type&amp;gt;) from the stream.
+     */
+    XRef readRef() raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readBlob
+    /** reads a BLOB from the stream.
+     */
+    XBlob readBlob() raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readClob
+    /** reads a CLOB from the stream.
+     */
+    XClob readClob() raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::readArray
+    /** reads an array from the stream.
+     */
+    XArray readArray() raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLInput::wasNull
+    /** determines whether the last value read was null.
+     */
+    boolean wasNull() raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:43  hjs
+    initial import
+
+    Revision 1.7  2000/09/11 11:52:44  mi
+    documentation merged from XML
+
+    Revision 1.5  2000/01/14 10:41:30  mi
+    XML syntax error in documentation
+
+    Revision 1.4  1999/12/20 16:11:35  dg
+    #70278# changes in API
+
+    Revision 1.3  1999/12/13 13:47:55  dg
+    #70278# XSQLErrorBroadcaster removed
+
+    Revision 1.2  1999/11/24 11:33:26  dg
+    chk includes
+
+    Revision 1.1  1999/11/24 08:41:12  dg
+    new StarDataBaseConnectivity
+
+===========================================================================*/
+#endif

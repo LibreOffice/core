@@ -1,0 +1,207 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TableBorder.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:17 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_table_TableBorder_idl__
+#define __com_sun_star_table_TableBorder_idl__
+
+#ifndef __com_sun_star_table_BorderLine_idl__
+#include <com/sun/star/table/BorderLine.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module table {
+
+//=============================================================================
+
+// DocMerge from xml: struct com::sun::star::table::TableBorder
+/** structure contains the values of the border lines of all boxes in
+    a table.
+
+
+
+    <p>In a queried structure, the flags in
+    <member>TableBorder::Is...LineValid</member> indicate that not all
+    lines of the boxes have the same values.
+
+    </p>
+    <p>In a structure which is used for setting, these flags determine
+    if the corresponding line should be set or if the old value should be kept.</p>
+ */
+struct TableBorder
+{
+    // DocMerge from xml: field com::sun::star::table::TableBorder::TopLine
+    /** line at the top edge.
+     */
+    com::sun::star::table::BorderLine TopLine;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::IsTopLineValid
+    /** specifies whether the value of <member>TableBorder::TopLine</member> is used.
+     */
+    boolean IsTopLineValid;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::BottomLine
+    /** line at the bottom edge.
+     */
+    com::sun::star::table::BorderLine BottomLine;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::IsBottomLineValid
+    /** specifies whether the value of <member>TableBorder::BottomLine</member> is used.
+     */
+    boolean IsBottomLineValid;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::LeftLine
+    /** line at the left edge.
+     */
+    com::sun::star::table::BorderLine LeftLine;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::IsLeftLineValid
+    /** specifies whether the value of <member>TableBorder::LeftLine</member> is used.
+     */
+    boolean IsLeftLineValid;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::RightLine
+    /** line at the right edge.
+     */
+    com::sun::star::table::BorderLine RightLine;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::IsRightLineValid
+    /** specifies whether the value of <member>TableBorder::RightLine</member> is used.
+     */
+    boolean IsRightLineValid;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::HorizontalLine
+    /** specifies the horizontal lines for the inner part of a table.
+     */
+    com::sun::star::table::BorderLine HorizontalLine;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::IsHorizontalLineValid
+    /** specifies whether the value of <member>TableBorder::HorizontalLine</member> is used.
+     */
+    boolean IsHorizontalLineValid;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::VerticalLine
+    /** vertical lines for the inner part of a table.
+     */
+    com::sun::star::table::BorderLine VerticalLine;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::IsVerticalLineValid
+    /** specifies whether the value of <member>TableBorder::VerticalLine</member> is used.
+     */
+    boolean IsVerticalLineValid;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::Distance
+    /** distance between the lines and other contents.
+     */
+    short Distance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::table::TableBorder::IsDistanceValid
+    /** specifies whether the value of <member>TableBorder::Distance</member> is used.
+     */
+    boolean IsDistanceValid;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:55  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:57  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
+    new
+
+
+=============================================================================*/
+#endif

@@ -1,0 +1,286 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSQLOutput.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XSQLOutput_idl__
+#define __com_sun_star_sdbc_XSQLOutput_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_Date_idl__
+#include <com/sun/star/util/Date.idl>
+#endif
+
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+#ifndef __com_sun_star_util_Time_idl__
+#include <com/sun/star/util/Time.idl>
+#endif
+
+ module com {  module sun {  module star {  module io {
+interface XInputStream;
+};};};};
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+interface XRef;
+interface XArray;
+interface XBlob;
+interface XClob;
+interface XStruct;
+interface XSQLData;
+
+
+// DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XSQLOutput
+/** is used as an output stream for writing the attributes of a user-defined
+    type back to the database.  This interface, used only for custom mapping,
+    is used by the driver, and its methods are never directly invoked
+    by a programmer.
+
+
+    <p>When an object of a class implementing interface <code>XSQLData</code> is
+    passed as an argument to a SQL statement, the JDBC driver calls
+    <code>SQLData.getSQLType</code> to determine the kind of SQL datum being
+    passed to the database.
+    <br>The driver then creates an instance of <code>XSQLOutput</code> and
+    passes it to the method <code>SQLData.writeSQL</code>.
+    The method <code>writeSQL</code> in turn calls the
+    appropriate <code>SQLOutput.writeXXX</code> methods
+    to write data from the <code>SQLData</code> object to
+    the <code>SQLOutput</code> output stream as the
+    representation of a SQL user-defined type.</p>
+ */
+[ uik(D6B60240-9067-11d3-9EE00010-5AD7A5C4), ident("XSQLOutput", 1.0) ]
+interface XSQLOutput: com::sun::star::uno::XInterface
+{
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeString
+    /** writes the next attribute to the stream as a string.
+     */
+    void writeString([in]string x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBoolean
+    /** writes the next attribute to the stream as boolean.
+     */
+    void writeBoolean([in]boolean x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeByte
+    /** writes the next attribute to the stream as byte.
+     */
+    void writeByte([in]byte x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeShort
+    /** writes the next attribute to the stream as short.
+     */
+    void writeShort([in]short x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeInt
+    /** writes the next attribute to the stream as long.
+     */
+    void writeInt([in]long x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeLong
+    /** writes the next attribute to the stream as hyper.
+     */
+    void writeLong([in]hyper x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeFloat
+    /** writes the next attribute to the stream as float.
+     */
+    void writeFloat([in]float x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeDouble
+    /** writes the next attribute to the stream as double.
+     */
+    void writeDouble([in]double x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBytes
+    /** writes the next attribute to the stream as byte sequence.
+     */
+    void writeBytes([in]sequence<byte> x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeDate
+    /** writes the next attribute to the stream as a date.
+     */
+    void writeDate([in]com::sun::star::util::Date x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeTime
+    /** writes the next attribute to the stream as a time.
+     */
+    void writeTime([in]com::sun::star::util::Time x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeTimestamp
+    /** writes the next attribute to the stream as a datetime.
+     */
+    void writeTimestamp([in]com::sun::star::util::DateTime x)
+        raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBinaryStream
+    /** writes the next attribute to the stream as a stream of uninterpreted
+        bytes.
+     */
+    void writeBinaryStream([in]com::sun::star::io::XInputStream x)
+        raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeCharacterStream
+    /** writes the next attribute to the stream as a stream of unicode string.
+     */
+    void writeCharacterStream([in]com::sun::star::io::XInputStream x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeObject
+    /** writes to the stream the data contained in the given
+        <code>XSQLData</code> object.
+
+
+        <p>When the <code>XSQLData</code> object is <null></null>, this
+        method writes an SQL NULL to the stream.
+        Otherwise, it calls the <code>SQLData.writeSQL</code>
+        method of the given object, which
+        writes the object's attributes to the stream.
+        The implementation of the method <code>XSQLData.writeSQL</code>
+        calls the appropriate <code>XSQLOutput.writeXXX</code> method(s)
+        for writing each of the object's attributes in order.
+        <br>The attributes must be read from an <code>XSQLInput</code>
+        input stream and written to an <code>XSQLOutput</code>
+        output stream in the same order in which they were
+        listed in the SQL definition of the user-defined type.
+        </p>
+     */
+    void writeObject([in]XSQLData x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeRef
+    /** writes a REF(&amp;lt;structured-type&amp;gt;) to the stream.
+     */
+    void writeRef([in]XRef x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeBlob
+    /** writes a BLOB to the stream.
+     */
+    void writeBlob([in]XBlob x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeClob
+    /** writes a CLOB to the stream.
+     */
+    void writeClob([in]XClob x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeStruct
+    /** writes a structured-type to the stream.
+     */
+    void writeStruct([in]XStruct x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XSQLOutput::writeArray
+    /** writes an array to the stream.
+     */
+    void writeArray([in]XArray x) raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:43  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:44  mi
+    documentation merged from XML
+
+    Revision 1.4  1999/12/20 16:11:35  dg
+    #70278# changes in API
+
+    Revision 1.3  1999/12/13 13:47:55  dg
+    #70278# XSQLErrorBroadcaster removed
+
+    Revision 1.2  1999/11/24 11:33:27  dg
+    chk includes
+
+    Revision 1.1  1999/11/24 08:41:13  dg
+    new StarDataBaseConnectivity
+
+===========================================================================*/
+#endif

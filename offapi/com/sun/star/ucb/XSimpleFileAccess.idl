@@ -1,0 +1,303 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSimpleFileAccess.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XSimpleFileAccess_idl__
+#define __com_sun_star_ucb_XSimpleFileAccess_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_uno_RuntimeException_idl__
+#include <com/sun/star/uno/RuntimeException.idl>
+#endif
+
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_CommandAbortedException_idl__
+#include <com/sun/star/ucb/CommandAbortedException.idl>
+#endif
+
+#ifndef __com_sun_star_task_XInteractionHandler_idl__
+#include <com/sun/star/task/XInteractionHandler.idl>
+#endif
+
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+#ifndef __com_sun_star_io_XOutputStream_idl__
+#include <com/sun/star/io/XOutputStream.idl>
+#endif
+
+#ifndef __com_sun_star_io_XInputStream_idl__
+#include <com/sun/star/io/XInputStream.idl>
+#endif
+
+#ifndef __com_sun_star_io_XStream_idl__
+#include <com/sun/star/io/XStream.idl>
+#endif
+
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** This is the basic interface to read data from a stream.
+*/
+[ uik(073F3410-5BBE-11d4-9F990050-04D8BBC7), ident( "XSimpleFileAccess", 1.0 ) ]
+interface XSimpleFileAccess: com::sun::star::uno::XInterface
+{
+
+    //-------------------------------------------------------------------------
+    /** Copies a file
+
+        @param SourceURL
+        URL of the file to be copied
+        @param DestURL
+        URL of the location the file should be copied to
+
+        @see move
+    */
+    void copy( [in] string SourceURL, [in] string DestURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Moves a file
+
+        @param SourceURL
+        URL of the file to be moved
+        @param DestURL
+        URL of the location the file should be moved to
+
+        @see move
+    */
+    void move( [in] string SourceURL, [in] string DestURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Removes a file. If the URL represents a folder, the folder will be
+        removed, even if it's not empty.
+
+        @param FileURL
+        File/folder to be removed
+
+        @see move
+    */
+    void kill( [in] string FileURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Checks if an URL represents a folder
+
+        @param FileURL
+        URL to be checked
+
+        @return
+        true, if the given URL represents a folder, otherwise false
+    */
+    boolean isFolder( [in] string FileURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Checks if a file is "read only"
+
+        @param FileURL
+        URL to be checked
+
+        @return
+        true, if the given File is "read only", false otherwise
+    */
+    boolean isReadOnly( [in] string FileURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Sets the "read only" of a file according to the boolean parameter,
+        if the actual process has the right to do so.
+
+        @param bReadOnly
+        true; "read only" flag will be set, false; "read only" flag will be reset
+    */
+    void setReadOnly( [in] string FileURL, [in] boolean bReadOnly )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Creates a new Folder
+
+        @param NewFolderURL
+        URL describing the location of the new folder
+    */
+    void createFolder( [in] string NewFolderURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Returns the size of a file.
+
+        @param FileURL
+        URL of the file
+
+        @return Size of the file
+    */
+    long getSize( [in] string FileURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Returns the content type of a file.
+
+        @see XContent::getContentType()
+
+        @param FileURL
+        URL of the file
+
+        @return Content type of the file
+    */
+    string getContentType( [in] string FileURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Returns the last modified date for the file
+
+        @param FileURL
+        URL of the file
+
+        @return Last modified date for the file
+    */
+    ::com::sun::star::util::DateTime getDateTimeModified( [in] string FileURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Returns the contents of a folder
+
+        @param FolderURL
+        URL of the folder
+        @param bIncludeFolders
+        true: Subfolders are included, false: No subfolders
+
+        @return The content of a folder, each file as one string
+                in a string sequence
+    */
+    sequence<string> getFolderContents( [in] string FolderURL, [in] boolean bIncludeFolders )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Checks if a file exists
+
+        @param FileURL
+        URL to be checked
+
+        @return
+        true, if the File exists, false otherwise
+    */
+    boolean exists( [in] string FileURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+
+    //-------------------------------------------------------------------------
+    /** Opens file to read
+
+        @param FileURL
+        File to open
+
+        @return
+        An XInputStream, if the file can be opened for reading
+    */
+    com::sun::star::io::XInputStream openFileRead( [in] string FileURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Opens file to write
+
+        @param FileURL
+        File to open
+
+        @return
+        An XOutputStream, if the file can be opened for writing
+    */
+    com::sun::star::io::XOutputStream openFileWrite( [in] string FileURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** Opens file to read and write
+
+        @param FileURL
+        File to open
+
+        @return
+        An XStream, if the file can be opened for reading and writing
+    */
+    com::sun::star::io::XStream openFileReadWrite( [in] string FileURL )
+        raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /**
+    */
+    void setInteractionHandler( [in] com::sun::star::task::XInteractionHandler Handler );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

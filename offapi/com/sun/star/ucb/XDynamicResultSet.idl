@@ -1,0 +1,221 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDynamicResultSet.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XDynamicResultSet_idl__
+#define __com_sun_star_ucb_XDynamicResultSet_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XDynamicResultSetListener_idl__
+#include <com/sun/star/ucb/XDynamicResultSetListener.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_ListenerAlreadySetException_idl__
+#include <com/sun/star/ucb/ListenerAlreadySetException.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_XResultSet_idl__
+#include <com/sun/star/sdbc/XResultSet.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_AlreadyInitializedException_idl__
+#include <com/sun/star/ucb/AlreadyInitializedException.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_ServiceNotFoundException_idl__
+#include <com/sun/star/ucb/ServiceNotFoundException.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** Provides read access to a <type>ContentResultSet</type>.
+
+<p>You can either get a simple static <type>ContentResultSet</type> or you can
+listen to change-notifications and than swap from the old to a new
+<type>ContentResultSet</type>.
+
+<p>The following describes the dynamic use:
+
+<p><type>XDynamicResultSet</type> provides the possibility to get notifications
+about changes on a <type>ContentResultSet</type> and have an
+listener-controlled update from one Version to the next Version. Two
+<type>ContentResultSet<type>s were given to the listener in the first sended
+notification as interface <type>XResultSet</type>s.
+
+<p>To get notifications the listener has to be of type
+<type>XDynamicResultSetListener</type>.
+
+<p>After registration you will get notifications for events of type
+<type>ListEvent</type>.
+
+<p>The calling of <method>XDynamicResultSetListener::notify()</method> has
+to happen in an own thread, because it could take a longer time and any actions
+til the listener returns the call. So don't block the notify-causing action.
+
+<p>While one notify-call is going on:
+<ol>
+  <li> The listener is allowed to access both ContentResultSets,
+        they must be both valid.
+  <li> It is not allowed to start a second notify-call.
+  <li> All addditional things we want to send as notification are to be queued.
+  <li> Any other calls are to be accepted and treated.
+</ol>
+
+
+<p>After the listener has returned the notify-call:
+<ol>
+    <li> The listener is allowed to access the new ContentResultSet.
+        The new one is first assigned in the WELCOME-event and than
+        the ResultSets are always swapped.
+    <li> The listener is not allowed to access the old ContentResultSet.
+</ol>
+*/
+
+[ uik(55E5B802-3245-11d4-8B130010-4BCAF449), ident( "XDynamicResultSet", 1.0 ) ]
+interface XDynamicResultSet: com::sun::star::lang::XComponent
+{
+    //-------------------------------------------------------------------------
+    /** Call this, if you don't care about any changes.
+
+        <p>The returned <type>XResultSet</type> is implemented as
+        <type>ContentResultSet</type>. Its content will never change.
+
+        <p>This method is not allowed to be called, if someone already has
+        registered as listener via method>XDynamicResultSet::
+        setListener(...)</method> or if someone has established a connection to
+        a <type>CashedDynamicresultSet</type> via <method>connectToCache</method>.
+        Otherwise you get the Exception <type>ListenerAlreadySetException</type>.
+    */
+    com::sun::star::sdbc::XResultSet getStaticResultSet()
+        raises( com::sun::star::ucb::ListenerAlreadySetException );
+
+    //-------------------------------------------------------------------------
+    /** Call this, if you want to get notifications about changes.
+
+        <p>This method is only allowed to be called once, otherwise you get
+            the Exception <type>ListenerAlreadySetException</type>
+
+        <p>This method is not allowed to be called, if someone already has
+            fetched the <type>ContentResultSet</type> via
+            <method>XDynamicResultSet::getStaticResultSet()</method>.
+            Otherwise you get the Exception
+            <type>ListenerAlreadySetException</type>.
+
+        <p>The implementor has to call
+        <method>XComponent::addEventListener( [in] XEventListener xListener )
+        </method> in this method, so that we can call
+        <method>XEventListener::disposing</method> to the listener
+    */
+    void setListener( [in] XDynamicResultSetListener Listener )
+        raises( com::sun::star::ucb::ListenerAlreadySetException );
+
+    //-------------------------------------------------------------------------
+    /** Connects this to a <type>CachedDynamicResultSet</type> for optimized
+        remote data transport.
+
+        <p><parameter>Cache<parameter> has to be an implementation of the
+        service <type>CachedDynamicResultSet</type>. In particular
+        <parameter>Cache<parameter> has to have an interface
+        <type>XSourceInitialization</type>.
+
+        <p>This method creates a <type>CachedDynamicResultSetStub</type>
+        and sets it as Source to the given <parameter>Cache</parameter>.
+
+        <p>After this method has returned you can and have to use the given
+        result set <parameter>Cache</parameter> for further access.
+
+        <p>This method is not allowed to be called, if someone already has
+            fetched the <type>ContentResultSet</type> via
+            <method>XDynamicResultSet::getStaticResultSet()</method>.
+            Otherwise you get the Exception
+            <type>ListenerAlreadySetException</type>.
+
+        <p>You will get an <exception>AlreadyInitializedException</exception>,
+        if <parameter> Cache</parameter> was initialized with another source
+        already.
+    */
+    void connectToCache( [in] XDynamicResultSet Cache )
+        raises( com::sun::star::ucb::ListenerAlreadySetException
+                , com::sun::star::ucb::AlreadyInitializedException
+                , com::sun::star::ucb::ServiceNotFoundException );
+
+
+    //-------------------------------------------------------------------------
+    /**
+        With this method you can get information, wether the offered
+        <type>ContentResultSet</type>s are sorted or filtered etc correctly as
+        demanded during the creation of the <type>XDynamicResultSet</type>.
+
+        The return-value may contain zero or more constants of the
+        <type>ContentResultSetCapability</type> constants group.
+    */
+    short getCapabilities();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

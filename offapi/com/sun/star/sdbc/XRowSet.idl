@@ -1,0 +1,129 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XRowSet.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XRowSet_idl__
+#define __com_sun_star_sdbc_XRowSet_idl__
+
+#ifndef __com_sun_star_sdbc_XResultSet_idl__
+#include <com/sun/star/sdbc/XResultSet.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+interface XRowSetListener;
+interface XConnection;
+
+
+// DocMerge from xml: interface com::sun::star::sdbc::XRowSet
+/** enhances the functionality of a result set. It allows implementation of
+    a special behaviour for a result set and notifies an application on
+    certain row set events such as a change in its value.
+
+
+
+    <p>The XRowSet interface is unique in that it is intended to be
+    a software layer on top of an SDBC driver. Implementations of the
+    RowSet interface can be provided by anyone.</p>
+ */
+[ uik(C76294D0-96B3-11d3-9EE40010-5AD7A5C4), ident("XRowSet", 1.0) ]
+interface XRowSet: XResultSet
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XRowSet::execute
+    /** populates a row set with data. The description of the data source and
+        other important information for filling the row set with data.
+     */
+    void execute() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XRowSet::addRowSetListener
+    /** adds the specified listener to receive the events "cursorMoved",
+        "rowChanged", and "rowSetChanged".
+     */
+    [oneway] void addRowSetListener([in]XRowSetListener listener );
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XRowSet::removeRowSetListener
+    /** removes the specified listener.
+     */
+    [oneway] void removeRowSetListener([in]XRowSetListener listener );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:43  hjs
+    initial import
+
+    Revision 1.4  2000/09/11 11:52:43  mi
+    documentation merged from XML
+
+    Revision 1.2  1999/12/14 12:05:46  dg
+    #70278# CompareBookmark removed
+
+    Revision 1.1  1999/11/24 08:41:10  dg
+    new StarDataBaseConnectivity
+
+===========================================================================*/
+#endif

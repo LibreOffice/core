@@ -1,0 +1,549 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XCharacterClassification.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_i18n_XCharacterClassification_idl__
+#define __com_sun_star_i18n_XCharacterClassification_idl__
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+//=============================================================================
+
+constants UnicodeType
+{
+    const short UNASSIGNED              = 0;
+    const short UPPERCASE_LETTER        = 1;
+    const short LOWERCASE_LETTER        = 2;
+    const short TITLECASE_LETTER        = 3;
+    const short MODIFIER_LETTER         = 4;
+    const short OTHER_LETTER            = 5;
+    const short NON_SPACING_MARK          = 6;
+    const short ENCLOSING_MARK        = 7;
+    const short COMBINING_SPACING_MARK  = 8;
+    const short DECIMAL_DIGIT_NUMBER      = 9;
+    const short LETTER_NUMBER         = 10;
+    const short OTHER_NUMBER              = 11;
+    const short SPACE_SEPARATOR       = 12;
+    const short LINE_SEPARATOR        = 13;
+    const short PARAGRAPH_SEPARATOR   = 14;
+    const short CONTROL               = 15;
+    const short FORMAT                = 16;
+    const short PRIVATE_USE           = 17;
+    const short SURROGATE             = 18;
+    const short DASH_PUNCTUATION          = 19;
+    const short START_PUNCTUATION     = 20;
+    const short END_PUNCTUATION       = 21;
+    const short CONNECTOR_PUNCTUATION   = 22;
+    const short OTHER_PUNCTUATION     = 23;
+    const short MATH_SYMBOL           = 24;
+    const short CURRENCY_SYMBOL       = 25;
+    const short MODIFIER_SYMBOL       = 26;
+    const short OTHER_SYMBOL              = 27;
+    const short INITIAL_PUNCTUATION   = 28;
+    const short FINAL_PUNCTUATION     = 29;
+    const short GENERAL_TYPES_COUNT   = 30;
+};
+
+
+enum UnicodeScript     {
+        kBasicLatin,
+        kLatin1Supplement,
+        kLatinExtendedA,
+        kLatinExtendedB,
+        kIPAExtension,
+        kSpacingModifier,
+        kCombiningDiacritical,
+        kGreek,
+        kCyrillic,
+        kArmenian,
+        kHebrew,
+        kArabic,
+        kDevanagari,
+        kBengali,
+        kGurmukhi,
+        kGujarati,
+        kOriya,
+        kTamil,
+        kTelugu,
+        kKannada,
+        kMalayalam,
+        kThai,
+        kLao,
+        kTibetan,
+        kGeorgian,
+        kHangulJamo,
+        kLatinExtendedAdditional,
+        kGreekExtended,
+        kGeneralPunctuation,
+        kSuperSubScript,
+        kCurrencySymbolScript,
+        kSymbolCombiningMark,
+        kLetterlikeSymbol,
+        kNumberForm,
+        kArrow,
+        kMathOperator,
+        kMiscTechnical,
+        kControlPicture,
+        kOpticalCharacter,
+        kEnclosedAlphanumeric,
+        kBoxDrawing,
+        kBlockElement,
+        kGeometricShape,
+        kMiscSymbol,
+        kDingbat,
+        kCJKSymbolPunctuation,
+        kHiragana,
+        kKatakana,
+        kBopomofo,
+        kHangulCompatibilityJamo,
+        kKanbun,
+        kEnclosedCJKLetterMonth,
+        kCJKCompatibility,
+        kCJKUnifiedIdeograph,
+        kHangulSyllable,
+        kHighSurrogate,
+        kHighPrivateUseSurrogate,
+        kLowSurrogate,
+        kPrivateUse,
+        kCJKCompatibilityIdeograph,
+        kAlphabeticPresentation,
+        kArabicPresentationA,
+        kCombiningHalfMark,
+        kCJKCompatibilityForm,
+        kSmallFormVariant,
+        kArabicPresentationB,
+        kNoScript,
+        kHalfwidthFullwidthForm,
+        kScriptCount
+
+    };
+
+
+enum DirectionProperty {
+        LEFT_TO_RIGHT               = 0,
+        RIGHT_TO_LEFT               = 1,
+        EUROPEAN_NUMBER             = 2,
+        EUROPEAN_NUMBER_SEPARATOR   = 3,
+        EUROPEAN_NUMBER_TERMINATOR  = 4,
+        ARABIC_NUMBER               = 5,
+        COMMON_NUMBER_SEPARATOR     = 6,
+        BLOCK_SEPARATOR             = 7,
+        SEGMENT_SEPARATOR           = 8,
+        WHITE_SPACE_NEUTRAL         = 9,
+        OTHER_NEUTRAL               = 10,
+        LEFT_TO_RIGHT_EMBEDDING     = 11,
+        LEFT_TO_RIGHT_OVERRIDE      = 12,
+        RIGHT_TO_LEFT_ARABIC        = 13,
+        RIGHT_TO_LEFT_EMBEDDING     = 14,
+        RIGHT_TO_LEFT_OVERRIDE      = 15,
+        POP_DIRECTIONAL_FORMAT      = 16,
+        DIR_NON_SPACING_MARK        = 17,
+        BOUNDARY_NEUTRAL            = 18
+    };
+
+
+/**
+    constants to identify the Character Type
+ */
+constants KCharacterType{
+    const long DIGIT                =0x0000000000000001;
+    const long UPPER                =0x0000000000000002;
+    const long LOWER                =0x0000000000000004;
+    const long TITLE_CASE           =0x0000000000000008;
+    const long ALPHA                =0x000000000000000E; // ALPHA = UPPER | LOWER | TITLE_CASE
+    const long CONTROL              =0x0000000000000010;
+    const long PRINTABLE            =0x0000000000000020;
+    const long BASE_FORM            =0x0000000000000040;
+    const long LETTER               =0x0000000000000080; // any UnicodeType::..._LETTER
+
+};
+
+
+/*
+
+Possible tokens to be parsed:
+
+UPASCALPHA=[A-Z]
+LOASCALPHA=[a-z]
+ASCALPHA=1*(UPASCALPHA|LOASCALPHA)
+ASCDIGIT=[0-9]
+ASC_UNDERSCORE='_'
+ASC_SPACE=' '
+ASC_HT='\0x9'
+ASC_VT='\0xb'
+ASC_WS=ASC_SPACE|ASC_HT|ASC_VT
+ASC_DBL_QUOTE=\";
+ASC_QUOTE=\'
+UPASC_IDENTIFIER=UPASCALPHA *(UPASCALPHA|ASCDIGIT|ASC_UNDERSCORE)
+
+ALPHA,DIGIT are the tokens which return true for isAlpha and isDigit
+ALNUM=ALPHA|DIGIT
+CHAR=anycharacter
+WS=isWhiteSpace()
+SIGN='+'|'-'
+DECSEP=<locale dependent decimal separator>
+GRPSEP=<locale dependent thousand separator>
+EXPONENT=(E|e)[SIGN]1*ASC_DIGIT
+
+
+IDENTIFIER=ALPHA *ALNUM
+UIDENTIFIER=(ALPHA | ASC_UNDERSCORE) *(ALNUM|ASC_UNDERSCORE)
+ALPHA_NAME=ALPHA *(ALNUM|DEFCHARS)
+ANY_NAME=1*(ALNUM|DEFCHARS)
+SINGLE_QUOTE_NAME=ASC_QUOTE(1*CHAR)ASC_QUOTE
+DOUBLE_QUOTE_NAME=ASC_DBL_QUOTE(*CHAR)ASC_DBL_QUOTE
+ASC_NUMBER=[SIGN]*(1*ASC_DIGIT  *(GRPSEP 1*ASC_DIGIT))[DECSEP]1*ASC_DIGIT[EXPONENT]
+NUMBER=[SIGN]*(1*DIGIT  *(GRPSEP 1*DIGIT))[DECSEP]1*DIGIT[EXPONENT]
+
+
+
+*/
+
+
+/**
+    These constants specify characters a name or identifier token to be
+    parsed can have. They are also set in the <member>ParseResult::StartFlags</member>
+    and <member>ParseResult::ContFlags</member>.
+ */
+constants KParseTokens
+{
+    /// Flags for characters below 128
+    const long ASC_UPALPHA          = 0x00000001;
+    const long ASC_LOALPHA          = 0x00000002;
+    const long ASC_DIGIT            = 0x00000004;
+    const long ASC_UNDERSCORE       = 0x00000008;       /// '_'
+    const long ASC_DOLLAR           = 0x00000010;       /// '$'
+    const long ASC_DOT              = 0x00000020;       /// '.'
+    const long ASC_COLON            = 0x00000040;       /// ':'
+    /// Special value to allow control characters (0x00 &lt; char &lt; 0x20)
+    const long ASC_CONTROL          = 0x00000200;
+    /** Special value to allow anything below 128 except control characters.
+        <strong>Not</strong> set in <type>ParseResult</type>. */
+    const long ASC_ANY_BUT_CONTROL  = 0x00000400;
+    /** Additional flags set in <member>ParseResult::StartFlags</member> or
+        <member>ParseResult::ContFlags</member>.
+        Set if none of the above ASC_... (except ASC_ANY_...) single values
+        match a character. */
+    const long ASC_OTHER            = 0x00000800;
+
+    /// Flags for characters above 127
+    const long UNI_UPALPHA          = 0x00001000;       /// UPPERCASE_LETTER
+    const long UNI_LOALPHA          = 0x00002000;       /// LOWERCASE_LETTER
+    const long UNI_DIGIT            = 0x00004000;       /// DECIMAL_DIGIT_NUMBER
+    const long UNI_TITLE_ALPHA      = 0x00008000;       /// TITLECASE_LETTER
+    const long UNI_MODIFIER_LETTER  = 0x00010000;
+    const long UNI_OTHER_LETTER     = 0x00020000;
+    const long UNI_LETTER_NUMBER    = 0x00040000;
+    const long UNI_OTHER_NUMBER     = 0x00080000;
+    /** Additional flags set in <member>ParseResult::StartFlags</member> or
+        <member>ParseResult::ContFlags</member>.
+        Set if none of the above UNI_... single values match a character. */
+    const long UNI_OTHER            = 0x40000000;
+
+    /** Only valid for <em>nStartCharFlags</em> parameter to
+        <member>ChararacterClassification::parseAnyToken</member> and
+        <member>ChararacterClassification::parsePredefinedToken</member>,
+        ignored on <em>nContCharFlags</em> parameter.
+        <strong>Not</strong> set in <type>ParseResult</type>. */
+    const long IGNORE_LEADING_WS    = 0x80000000;
+
+    /// Useful combinations
+    const long ASC_ALPHA            = ASC_UPALPHA | ASC_LOALPHA;
+    const long ASC_ALNUM            = ASC_ALPHA | ASC_DIGIT;
+    const long UNI_ALPHA            = UNI_UPALPHA | UNI_LOALPHA | UNI_TITLE_ALPHA;
+    const long UNI_ALNUM            = UNI_ALPHA | UNI_DIGIT;
+    const long UNI_LETTER           = UNI_ALPHA | UNI_MODIFIER_LETTER |
+                                        UNI_OTHER_LETTER;
+    const long UNI_NUMBER           = UNI_DIGIT | UNI_LETTER_NUMBER |
+                                        UNI_OTHER_NUMBER;
+    const long ANY_ALPHA            = ASC_ALPHA | UNI_ALPHA;
+    const long ANY_DIGIT            = ASC_DIGIT | UNI_DIGIT;
+    const long ANY_ALNUM            = ASC_ALNUM | UNI_ALNUM;
+    const long ANY_LETTER           = ASC_ALPHA | UNI_LETTER;
+    const long ANY_NUMBER           = ASC_DIGIT | UNI_NUMBER;
+    const long ANY_LETTER_OR_NUMBER = ANY_LETTER | ANY_NUMBER;
+};
+
+
+/**
+    Constants set by the parser to specify the type of the parsed final token.
+ */
+constants KParseType
+{
+    /// One single character like ! # ; : $ et al.
+    const long ONE_SINGLE_CHAR      = 0x00000001;
+    // For human .idl readers: <, >, <>, =, <=, >=
+    /// A Boolean operator like &lt;, &gt;, &lt;&gt;, =, &lt;=, &gt;=
+    const long BOOLEAN              = 0x00000002;
+    /// A name matching the conditions passed.
+    const long IDENTNAME            = 0x00000004;
+    // Hint for human .idl readers: do not get confused about the double
+    // quotation marks, they are needed for the unoidl compiler which otherwise
+    // gets confused about the single quotation marks.
+    /** "A single-quoted name matching the conditions passed ( 'na\'me' )."
+        "Dequoted name in <member>ParseResult::DequotedNameOrString</member> ( na'me )." */
+    const long SINGLE_QUOTE_NAME    = 0x00000008;
+    /** A double-quoted string ( "str\"i""ng" ).
+        Dequoted string in <member>ParseResult::DequotedNameOrString</member> ( str"i"ng ). */
+    const long DOUBLE_QUOTE_STRING  = 0x00000010;
+    /** A number where all digits are ASCII characters.
+        Numerical value in <member>ParseResult::Value</member>. */
+    const long ASC_NUMBER           = 0x00000020;
+    /** A number where at least some digits are Unicode (and maybe ASCII) characters.
+        Numerical value in <member>ParseResult::Value</member>. */
+    const long UNI_NUMBER           = 0x00000040;
+
+    /// Set (ored) if SINGLE_QUOTE_NAME or DOUBLE_QUOTE_STRING has no closing quote.
+    const long MISSING_QUOTE        = 0x80000000;
+
+    /// Useful combinations
+    const long ANY_NUMBER           = ASC_NUMBER | UNI_NUMBER;
+};
+
+
+/**
+    Struct returned by <member>XCharacterClassification::parseAnyToken</member>
+    and <member>XCharacterClassification::parsePredefinedToken</member>.
+ */
+struct ParseResult {
+    /// Number of leading whitespace characters, not codepoints.
+    long    LeadingWhiteSpace;
+    /// Code point index of first unprocessed character.
+    long    EndPos;
+    /// Number of characters that are processed.
+    long    CharLen;
+    /// Value of token in case of numeric.
+    double  Value;
+    /// <type>KParseType</type> token type like IDENTNAME.
+    long    TokenType;
+    /** <type>KParseTokens</type> flags of first character of actual token matched.
+        If <member>TokenType</member> is a <em>SINGLE_QUOTE_NAME</em> or a
+        <em>DOUBLE_QUOTE_STRING</em> the first character is the first character
+        inside the quotes. */
+    long    StartFlags;
+    /// <type>KParseTokens</type> flags of remaining characters of actual token matched.
+    long    ContFlags;
+    /// If a quoted name or string is encountered the dequoted result goes here.
+    string  DequotedNameOrString;
+};
+
+
+[ uik(2430f826-1c17-4f39-8b54e2fe-29941184), ident( "XCharacterClassification", 1.0 ) ]
+interface XCharacterClassification : com::sun::star::uno::XInterface
+
+{
+
+  /// @param nCount is code point count
+  string   toUpper    ([in] string Text, [in] long nPos, [in] long nCount, [in] com::sun::star::lang::Locale rLocale);
+  string   toLower    ([in] string Text, [in] long nPos, [in] long nCount, [in] com::sun::star::lang::Locale rLocale);
+  string   toTitle    ([in] string Text, [in] long nPos, [in] long nCount, [in] com::sun::star::lang::Locale rLocale);
+
+
+  short    getType     ([in] string Text, [in] long nPos);
+  short    getCharacterDirection([in] string Text, [in] long nPos);
+  short    getScript   ([in] string Text, [in] long nPos);
+
+  /**
+    @returns a number with appropriate flag set to indicate the type of the
+    character at position nPos; the flag value is one of KCharacterType values.
+  */
+  long getCharacterType([in] string text, [in] long nPos, [in] com::sun::star::lang::Locale rLocale);
+
+
+  /**
+    @returns a number with appropriate flags set to indicate what type of
+    characters the string contains; each flag value may be one of KCharacterType values.
+  */
+  long getStringType([in] string text, [in] long nPos, [in] long nCount, [in] com::sun::star::lang::Locale rLocale);
+
+
+    /**
+        Parse a string for a token starting at position <em>nPos</em>.
+
+        <p>A name or identifier must match the <type>KParseTokens</type> criteria
+        passed in <em>nStartCharFlags</em> and <em>nContCharFlags</em> and may
+        additionally contain characters of <em>userDefinedCharactersStart</em>
+        and/or <em>userDefinedCharactersCont</em>.
+
+
+        @returns <type>ParseResult</type>
+        If no unambigous token could be parsed, <member>ParseResult::TokenType</member>
+        will be set to zero, other fields will contain the values parsed so far.
+
+        <p>If a token may represent either a numeric value or a name according
+        to the passed Start/Cont-Flags/Chars, both <const>KParseType::ASC_NUM</const>
+        (or <const>KParseType::UNI_NUM</const>) and <const>KParseType::IDENTNAME</const>
+        are set in <member>ParseResult::TokenType</member>.
+
+
+        @param  Text
+        Text to be parsed.
+
+        @param  nPos
+        Position where parsing starts.
+
+        @param  rLocale
+        The locale e.g. for decimal and group separator or character type
+        determination.
+
+        @param  nStartCharFlags
+        A set of <type>KParseTokens</type> constants determining the allowed
+        characters a name or identifier may start with.
+
+        @param  userDefinedCharactersStart
+        A set of additionally allowed characters a name or identifier may start
+        with.
+
+        @param  nContCharFlags
+        A set of <type>KParseTokens</type> constants determining the allowed
+        characters a name or identifier may continue with.
+
+        @param  userDefinedCharactersCont
+        A set of additionally allowed characters a name or identifier may
+        continue with.
+
+
+        @example:C++
+        <listing>
+        using namespace ::com::sun::star::i18n;
+        // First character may be any alphabetic or underscore.
+        sal_Int32 nStartFlags = KParseTokens::ANY_ALPHA | KParseTokens::ASC_UNDERSCORE;
+        // Continuing characters may be any alphanumeric or underscore or dot.
+        sal_Int32 nContFlags = KParseTokens::ANY_ALNUM | KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOT;
+        // Parse any token.
+        ParseResult rRes = xCC->parseAnyToken( aText, nPos, aLocale,
+            nStartFlags, EMPTY_STRING, nContFlags, EMPTY_STRING );
+        // Get parsed token.
+        if ( rRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER) )
+            fValue = rRes.Value;
+        if ( rRes.TokenType & KParseType::IDENTNAME )
+            aName = aText.Copy( nPos, rRes.EndPos - nPos );
+        else if ( rRes.TokenType & KParseType::SINGLE_QUOTE_NAME )
+            aName = rRes.DequotedNameOrString;
+        else if ( rRes.TokenType & KParseType::DOUBLE_QUOTE_STRING )
+            aString = rRes.DequotedNameOrString;
+        else if ( rRes.TokenType & KParseType::BOOLEAN )
+            aSymbol = aText.Copy( nPos, rRes.EndPos - nPos );
+        else if ( rRes.TokenType & KParseType::ONE_SINGLE_CHAR )
+            aSymbol = aText.Copy( nPos, rRes.EndPos - nPos );
+        </listing>
+     */
+    ParseResult parseAnyToken(
+                              [in] string Text,
+                            [in] long nPos,
+                            [in] com::sun::star::lang::Locale rLocale,
+                            [in] long nStartCharFlags,
+                            [in] string userDefinedCharactersStart,
+                            [in] long nContCharFlags,
+                            [in] string userDefinedCharactersCont
+                            );
+
+    /**
+        Parse a string for a token of type <em>nTokenType</em> starting at
+        position <em>nPos</em>.
+
+        <p>Other parameters are the same as in <method>parseAnyToken</method>.
+        If the actual token does not match a <em>nTokenType</em> a
+        <member>ParseResult::TokenType</member> is returned.
+
+
+        @param  nTokenType
+        One or more of the <type>KParseType</type> constants.
+
+
+        @example:C++
+        <listing>
+        // Determine if a given name is a valid name (not quoted) and contains
+        // only allowed characters.
+        using namespace ::com::sun::star::i18n;
+        // First character may be any alphanumeric or underscore.
+        sal_Int32 nStartFlags = KParseTokens::ANY_ALNUM | KParseTokens::ASC_UNDERSCORE;
+        // Continuing characters may be any alphanumeric or underscore.
+        sal_Int32 nContFlags = nStartFlags;
+        // Additionally, continuing characters may be a blank.
+        String aContChars( RTL_CONSTASCII_USTRINGPARAM(" ") );
+        // Parse predefined (must be an IDENTNAME) token.
+        rRes = xCC->parsePredefinedToken( KParseType::IDENTNAME, rName, 0, aLocale,
+            nStartFlags, EMPTY_STRING, nContFlags, aContChars );
+        bValid = (rRes.TokenType & KParseType::IDENTNAME) && rRes.EndPos == rName.Len();
+        </listing>
+     */
+    ParseResult parsePredefinedToken(
+                            [in] long nTokenType,
+                              [in] string Text,
+                            [in] long nPos,
+                            [in] com::sun::star::lang::Locale rLocale,
+                            [in] long nStartCharFlags,
+                            [in] string userDefinedCharactersStart,
+                            [in] long nContCharFlags,
+                            [in] string userDefinedCharactersCont
+                            );
+};
+
+//=============================================================================
+}; }; }; };
+#endif

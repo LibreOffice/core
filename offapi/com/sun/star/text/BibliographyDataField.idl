@@ -1,0 +1,257 @@
+/*************************************************************************
+ *
+ *  $RCSfile: BibliographyDataField.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_BibliographyDataField_idl__
+#define __com_sun_star_text_BibliographyDataField_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+//=============================================================================
+
+// DocMerge from idl: constants com::sun::star::text::BibliographyDataField
+/** These values define parts of bibliographic data. They are used to create a
+        bibliography in a text document.
+     <p> Depending on the type of the data some of the fields will usually be left empty.
+     </p>
+ */
+constants BibliographyDataField
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::IDENTIFIER
+    /** This field contains a unique identifier for the bibliographic data.
+     */
+    const short IDENTIFIER      = 0;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::BIBILIOGRAPHIC_TYPE
+    /** This field contains the type of the bibliographic reference. It is of the
+             type BibliographyDataType.
+             @see BibliographyDataType
+     */
+    const short BIBILIOGRAPHIC_TYPE     = 1;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::ADDRESS
+    /** This field contains the address of the publisher.
+     */
+    const short ADDRESS         = 2;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::ANNOTE
+    /** This field contains an annotation.
+     */
+    const short ANNOTE          = 3;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::AUTHOR
+    /** This field contains the name(s) of the author(s)
+     */
+    const short AUTHOR          = 4;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::BOOKTITLE
+    /** This field contains the title of the book.
+     */
+    const short BOOKTITLE       = 5;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::CHAPTER
+    /** This field contains the name or number of the chapter.
+     */
+    const short CHAPTER         = 6;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::EDITION
+    /** This field contains the number or name of the edition.
+     */
+    const short EDITION         = 7;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::EDITOR
+    /** This field contains the name(s) of the editor(s)
+     */
+    const short EDITOR          = 8;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::HOWPUBLISHED
+    /** This field contains a description of the type of the publishing.
+     */
+    const short HOWPUBLISHED    = 9;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::INSTITUTION
+    /** This field contains the name of the institution where the publishing was created.
+     */
+    const short INSTITUTION     = 10;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::JOURNAL
+    /** This field contains the name of the journal.
+     */
+    const short JOURNAL         = 11;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::MONTH
+    /** This field contains number or name of the month of the publishing.
+     */
+    const short MONTH           = 12;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::NOTE
+    /** This field contains a note.
+     */
+    const short NOTE            = 13;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::NUMBER
+    /** This field contains the number of the publishing.
+     */
+    const short NUMBER          = 14;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::ORGANIZATIONS
+    /** This field contains the name of the organizations where the publishing was created.
+     */
+    const short ORGANIZATIONS   = 15;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::PAGES
+    /** This field contains the number(s) of the page(s) of the reference into a publishing.
+     */
+    const short PAGES           = 16;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::PUBLISHER
+    /** This field contains the name of the publisher.
+     */
+    const short PUBLISHER       = 17;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::SCHOOL
+    /** This field contains the name of the university or school where the publishing was created.
+     */
+    const short SCHOOL          = 18;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::SERIES
+    /** This field contains the series of the publishing.
+     */
+    const short SERIES          = 19;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::TITLE
+    /** This field contains the title of the publishing.
+     */
+    const short TITLE           = 20;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::REPORT_TYPE
+    /** This field contains a description of the type of the report.
+     */
+    const short REPORT_TYPE     = 21;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::VOLUME
+    /** This field contains the volume of the publishing.
+     */
+    const short VOLUME          = 22;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::YEAR
+    /** This field contains the year when the publishing was created.
+     */
+    const short YEAR            = 23;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::URL
+    /** This field contains URL of the publishing.
+     */
+    const short URL             = 24;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::CUSTOM1
+    /** This field contains user defined data.
+     */
+    const short CUSTOM1         = 25;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::CUSTOM2
+    /** This field contains user defined data.
+     */
+    const short CUSTOM2         = 26;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::CUSTOM3
+    /** This field contains user defined data.
+     */
+    const short CUSTOM3         = 27;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::CUSTOM4
+    /** This field contains user defined data.
+     */
+    const short CUSTOM4         = 28;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::CUSTOM5
+    /** This field contains user defined data.
+     */
+    const short CUSTOM5         = 29;
+
+    // DocMerge from idl: value com::sun::star::text::BibliographyDataField::ISBN
+    /** This field contains the ISBN data of the publishing.
+     */
+    const short ISBN            = 30;
+};
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:59  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:58  mi
+    documentation merged from XML
+
+    Revision 1.1  1999/12/07 13:11:35  os
+    #70508# bibliography field definition
+
+
+
+=============================================================================*/
+#endif
+
+

@@ -1,0 +1,334 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TablePageStyle.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_TablePageStyle_idl__
+#define __com_sun_star_sheet_TablePageStyle_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_table_ShadowFormat_idl__
+#include <com/sun/star/table/ShadowFormat.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XHeaderFooterContent_idl__
+#include <com/sun/star/sheet/XHeaderFooterContent.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::sheet::TablePageStyle
+/** a spreadsheet page format.
+ */
+service TablePageStyle
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::BackgroundColor
+    /** contains the value of the page background color.
+     */
+    [property] long BackgroundColor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::IsBackgroundTransparent
+    /** is <true></true> if the page background is transparent.
+     */
+    [property] boolean IsBackgroundTransparent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::ShadowFormat
+    /** contains the description of a shadow for the page.
+     */
+    [property] com::sun::star::table::ShadowFormat ShadowFormat;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::CenterHorizontally
+    /** if set, the page is centered horizontally.
+     */
+    [property] boolean CenterHorizontally;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::CenterVertically
+    /** if set, the page is centered vertically.
+     */
+    [property] boolean CenterVertically;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::PrintAnnotations
+    /** enables printing of cell annotations.
+     */
+    [property] boolean PrintAnnotations;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::PrintGrid
+    /** enables printing of the cell grid.
+     */
+    [property] boolean PrintGrid;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::PrintHeaders
+    /** enables printing of column and row headers.
+     */
+    [property] boolean PrintHeaders;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::PrintCharts
+    /** enables printing of charts.
+     */
+    [property] boolean PrintCharts;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::PrintObjects
+    /** enables printing of embedded objects.
+     */
+    [property] boolean PrintObjects;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::PrintDrawing
+    /** enables printing of drawing objects.
+     */
+    [property] boolean PrintDrawing;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::PrintDownFirst
+    /** specifies the print order for the pages
+        within each sheet.
+
+
+
+        <p>If <true></true>, the order for printing pages begins with top-to-bottom,
+        then continues with the next set of cell columns to the right. If
+        <false></false>, the order for printing pages begins with left-to-right,
+        then continues with the next set of cell rows to the bottom.</p>
+     */
+    [property] boolean PrintDownFirst;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::PrintFormulas
+    /** enables printing of formulas instead of their
+        results.
+     */
+    [property] boolean PrintFormulas;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::PrintZeroValues
+    /** enables printing of zero-values.
+     */
+    [property] boolean PrintZeroValues;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::LeftPageHeaderContent
+    /** contains the content of the header for left pages.
+     */
+    [property] com::sun::star::sheet::XHeaderFooterContent LeftPageHeaderContent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::LeftPageFooterContent
+    /** contains the content of the footer for left pages.
+     */
+    [property] com::sun::star::sheet::XHeaderFooterContent LeftPageFooterContent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::RightPageHeaderContent
+    /** contains the content of the header for right pages.
+     */
+    [property] com::sun::star::sheet::XHeaderFooterContent RightPageHeaderContent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::RightPageFooterContent
+    /** contains the content of the footer for right pages.
+     */
+    [property] com::sun::star::sheet::XHeaderFooterContent RightPageFooterContent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::HeaderBackgroundColor
+    /** contains the value of the header background color.
+     */
+    [property] long HeaderBackgroundColor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::TransparentHeaderBackground
+    /** is <true></true> if the header background is transparent.
+     */
+    [property] boolean TransparentHeaderBackground;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::HeaderShadowFormat
+    /** contains the description of a shadow for the header.
+     */
+    [property] com::sun::star::table::ShadowFormat HeaderShadowFormat;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::HeaderOn
+    /** enables printing of page headers.
+     */
+    [property] boolean HeaderOn;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::HeaderDynamic
+    /** if set, the header height is adjusted for the
+        contents.
+     */
+    [property] boolean HeaderDynamic;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::HeaderShared
+    /** if set, header contents are equal for left and
+        right pages.
+     */
+    [property] boolean HeaderShared;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::FooterBackgroundColor
+    /** contains the value of the footer background color.
+     */
+    [property] long FooterBackgroundColor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::TransparentFooterBackground
+    /** is <true></true> if the footer background is transparent.
+     */
+    [property] boolean TransparentFooterBackground;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::FooterShadowFormat
+    /** contains the description of a shadow for the footer.
+     */
+    [property] com::sun::star::table::ShadowFormat FooterShadowFormat;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::FooterOn
+    /** enables printing of page footers.
+     */
+    [property] boolean FooterOn;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::FooterDynamic
+    /** if set, the footer height is adjusted for the
+        contents.
+     */
+    [property] boolean FooterDynamic;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::TablePageStyle::FooterShared
+    /** if set, footer contents are equal for left and
+        right pages.
+     */
+    [property] boolean FooterShared;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:50  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
+    new
+
+
+=============================================================================*/
+#endif

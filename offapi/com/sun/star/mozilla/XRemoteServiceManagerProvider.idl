@@ -1,0 +1,46 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XRemoteServiceManagerProvider.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:51 $
+ *
+ *  Copyright according the GNU Public License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_mozilla_XRemoteServiceManagerProvider_idl__
+#define __com_sun_star_mozilla_XRemoteServiceManagerProvider_idl__
+
+#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module mozilla {
+
+//=============================================================================
+/**
+*/
+
+[ uik(63DD30AB-F137-4dec-9EE1BDB5-BC2E080A), ident( "XRemoteServiceManagerProvider", 1.0 ) ]
+
+
+interface XRemoteServiceManagerProvider: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** returns the remote service manager for the given session
+
+        @param sessionData: contains the sessiondata (host, user, ticket)
+    */
+    com::sun::star::lang::XMultiServiceFactory getServiceManager( [in] any sessionData );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+
+#endif

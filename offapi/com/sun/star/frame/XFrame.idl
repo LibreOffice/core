@@ -1,0 +1,358 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XFrame.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XFrame_idl__
+#define __com_sun_star_frame_XFrame_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+interface XFrameActionListener;
+interface XController;
+interface XFramesSupplier;
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::frame::XFrame
+/** makes it possible to control a <type>Frame</type>
+ */
+[ uik(E2280107-33D6-11D1-AABE00A0-249D5590), ident( "XFrame", 1.0 ) ]
+interface XFrame: com::sun::star::lang::XComponent
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::initialize
+    /** is called to initialize the frame within a window.@see getContainerWindow()
+     */
+    void initialize( [in] com::sun::star::awt::XWindow xWindow );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::getContainerWindow
+    /** provides access to the window of the frame.
+
+
+
+        <p>Normally this is used as the parent window of the
+        controller window.
+
+        </p>@see initialize()
+     */
+    com::sun::star::awt::XWindow getContainerWindow();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::setCreator
+    /** sets the frame container that created this frame.
+
+
+
+        <p>Only the creator is allowed to call this method.</p>
+     */
+    [oneway] void setCreator( [in] XFramesSupplier xCreator );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XFrame::getCreator
+    /** @returns
+                the frame container that created this frame.
+     */
+    [const] XFramesSupplier getCreator();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XFrame::getName
+    /** @returns
+                    the programmatic name of this frame.
+
+                <p>See specification of HTML framesets for reference.
+     */
+    [const] string getName();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::setName
+    /** sets the name of the frame.
+
+
+
+        <p>Normally the name of the frame is set initially.</p>
+     */
+    [oneway] void setName( [in] string aName );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::findFrame
+    /** searches for a frame with the specified name.
+
+
+
+        <p>Frames may contain other frames (e.g. a frameset) and may
+        be contained in other frames. This hierarchy is searched with
+        this method.</p>
+
+        <p>First some special names are taken into account, i.e. "",
+        "_self", "_top", "_active" etc. <var>nSearchFlags</var> is ignored when
+        comparing these names with <var>aTargetFrameName</var>; further steps are
+        controlled by <var>nSearchFlags</var>. If allowed, the name of the frame
+        itself is compared with the desired one, then ( again if allowed )
+        the method
+
+
+
+
+        is called for all children
+        of the frame.  Finally
+
+
+
+
+        may be called
+        for the parent frame (if allowed).</p>
+
+        <p>If no frame with the given name is found, a new top frame is
+        created if this is not suppressed by a special <type>FrameSearchFlag</type>.
+        The new frame also gets the desired name.</p>
+     */
+    com::sun::star::frame::XFrame findFrame( [in] string aTargetFrameName,
+             [in] long nSearchFlags );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::isTop
+    /** determines if the frame is a top frame.
+
+
+
+        <p>In general a top frame is the frame which is a direct child of
+        a task frame or which does not have a parent. If a frame returns
+        <true></true> for this method, all calls to
+
+
+
+
+
+        have to stop the search at such a frame unless the flag
+        <const>FrameSearchFlag::TASKS</const> is set.</p>
+     */
+    boolean isTop();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::activate
+    /** activates this frame and thus the component within.
+
+
+
+        <p>At first the frame sets itself as the active frame of its
+        creator by calling
+
+
+
+
+        ,
+        then it broadcasts a <type>FrameActionEvent</type> with
+        <const>FrameAction::FRAME_ACTIVATED</const>. The component within
+        this frame may listen to this event to grab the focus on activation.
+        For simple components this can be done by the <type>FrameLoader</type>.
+
+        </p>
+        <p>Finally, most frames may grab the focus to one of its windows
+        or forward the activation to a sub-frame.</p>
+     */
+    [oneway] void activate();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::deactivate
+    /** is called by the creator frame when another sub-frame gets activated.
+
+
+
+        <p>At first the frame deactivates its active sub-frame, if any.
+        Then broadcasts a <type>FrameActionEvent</type> with
+        <const>FrameAction::FRAME_DEACTIVATING</const>.</p>
+     */
+    [oneway] void deactivate();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::isActive
+    /** determines if the frame is active.
+     */
+    boolean isActive();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::setComponent
+    /** sets a new component into the frame.
+     */
+    boolean setComponent( [in] com::sun::star::awt::XWindow xComponentWindow,
+             [in] com::sun::star::frame::XController xController );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XFrame::getComponentWindow
+    /** @returns
+                the current visible component in this frame.
+
+                <p>The frame is the owner of the window.
+     */
+    [const] com::sun::star::awt::XWindow getComponentWindow();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XFrame::getController
+    /** @returns
+                the current controller within this frame.
+
+                <p>Normally it is set by a frame loader.
+     */
+    [const] XController getController();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::contextChanged
+    /** notifies the frame that the context of the controller within this
+        frame changed (i.e. the selection).
+
+
+
+        <p>According to a call to this interface, the frame calls
+
+
+
+
+
+        with
+        <const>FrameAction::CONTEXT_CHANGED</const> to all listeners which
+        are registered using
+
+
+
+
+        .
+        For external controllers this event can be used to requery dispatches.</p>
+     */
+    void contextChanged();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::addFrameActionListener
+    /** registers an event listener, which will be called when certain things
+        happen to the components within this frame or within sub-frames of this frame.
+
+
+
+        <p>E.g. it is possible to determine instantiation/destruction and
+        activation/deactivation of components.</p>
+     */
+    [oneway] void addFrameActionListener( [in]XFrameActionListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XFrame::removeFrameActionListener
+    /** unregisters an event listener which was registered with
+        <member>XFrame::addFrameActionListener()</member>.
+     */
+    [oneway] void removeFrameActionListener( [in] XFrameActionListener xListener );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
+    initial import
+
+    Revision 1.9  2000/09/11 11:52:29  mi
+    documentation merged from XML
+
+    Revision 1.5  2000/02/23 14:49:56  mi
+    missing documentations
+
+    Revision 1.4  2000/01/31 09:44:59  mi
+    XML syntax for documentation
+
+    Revision 1.3  1999/12/06 13:21:14  mba
+    #67620#: isActive
+
+    Revision 1.2  1999/11/18 11:49:57  mi
+    XComponent now in module lang
+
+    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
+    new
+
+
+=============================================================================*/
+#endif

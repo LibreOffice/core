@@ -1,0 +1,264 @@
+/*************************************************************************
+ *
+ *  $RCSfile: GenericDrawPage.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_GenericDrawPage_idl__
+#define __com_sun_star_drawing_GenericDrawPage_idl__
+
+#ifndef __com_sun_star_drawing_XShapes_idl__
+#include <com/sun/star/drawing/XShapes.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XShapeGrouper_idl__
+#include <com/sun/star/drawing/XShapeGrouper.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XShapeCombiner_idl__
+#include <com/sun/star/drawing/XShapeCombiner.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XShapeBinder_idl__
+#include <com/sun/star/drawing/XShapeBinder.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XServiceInfo_idl__
+#include <com/sun/star/lang/XServiceInfo.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_view_PaperOrientation_idl__
+#include <com/sun/star/view/PaperOrientation.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::drawing::GenericDrawPage
+/** This abstract service is implemented by every page of a
+    <type>DrawingDocument</type>.
+
+
+
+
+
+
+
+    @example create and insert a couple of <type>LineShape</type>s:
+
+    <listing>
+    xPage = xDoc.DrawPages(0)
+    for x% = 0 to 200
+    xShape = xProv.createInstance( "com::sun::star::drawing::LineShape" )
+    xShape.LineColor = rgb( 255, 0, n%+20 )
+    xShape.LineWidth = 20
+    xShape.Position = Point( x%, 2*x% )
+    xShape.Size = Size( 300-x%, 20 )
+    xPage.add( xShape )
+    next x%
+    </listing>
+ */
+service GenericDrawPage
+{
+
+
+    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::drawing::XShapes
+    /** manages the <type>Shape</type>s of this page.
+
+                <p>It also lets you add new <type>Shape</type>s. The program currently
+                requires that these <type>Shape</type>s be created by the factory of
+                the document.
+
+                @see    service <type>DrawingDocument</type>@see    service <type>DrawingDocument</type>
+     */
+    interface com::sun::star::drawing::XShapes;
+
+
+    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::drawing::XShapeGrouper
+    /** With this interface you can group/ungroup a collection of
+                <type>Shape</type>s.
+     */
+    interface com::sun::star::drawing::XShapeGrouper;
+
+
+    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::drawing::XShapeCombiner
+    /** With this interface you can combine/split a collection of
+                <type>Shape</type>s.
+     */
+    interface com::sun::star::drawing::XShapeCombiner;
+
+
+    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::drawing::XShapeBinder
+    /** With this interface you can bind/unbind a collection of
+                <type>Shape</type>s.
+     */
+    interface com::sun::star::drawing::XShapeBinder;
+
+
+    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::container::XNamed
+    /** Gets or sets the name of this page.
+
+                <p>Duplicated pagenames inside a document are not allowed.
+     */
+    interface com::sun::star::container::XNamed;
+
+
+    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::lang::XServiceInfo
+    /** returns the services implemented by this
+                instance.
+     */
+    interface com::sun::star::lang::XServiceInfo;
+
+
+    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::beans::XPropertySet
+    /** gives you access to the properties of this
+                <type>DrawPage</type>.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderBottom
+    /** This is the border at the bottom.
+     */
+    [property] long BorderBottom;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderLeft
+    /** This is the border at the left.
+     */
+    [property] long BorderLeft;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderRight
+    /** This is the border at the right.
+     */
+    [property] long BorderRight;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderTop
+    /** This is the border at the top.
+     */
+    [property] long BorderTop;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Height
+    /** This is the height.
+     */
+    [property] long Height;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Width
+    /** This is the width.
+     */
+    [property] long Width;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Number
+    /** This is the number of this page, starting with 1.
+     */
+    [readonly, property] short Number;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Orientation
+    /** This is the orientation of this page.
+     */
+    [property] com::sun::star::view::PaperOrientation Orientation;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/09 14:24:55  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.1.1.1  2000/09/18 23:35:12  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:20  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
+    new
+
+
+=============================================================================*/
+#endif

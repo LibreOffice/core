@@ -1,0 +1,204 @@
+/*************************************************************************
+ *
+ *  $RCSfile: SpreadsheetDocumentSettings.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_SpreadsheetDocumentSettings_idl__
+#define __com_sun_star_sheet_SpreadsheetDocumentSettings_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_util_Date_idl__
+#include <com/sun/star/util/Date.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::sheet::SpreadsheetDocumentSettings
+/** keep the configuration
+    which is global for all views of a spreadsheet document.
+ */
+service SpreadsheetDocumentSettings
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::IsIterationEnabled
+    /** enables iterated calculation of circular references.
+     */
+    [property] boolean IsIterationEnabled;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::IterationCount
+    /** specifies how many iterations are carried out if
+        iteration is enabled.
+     */
+    [property] long IterationCount;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::IterationEpsilon
+    /** if iteration is enabled, this property specifies the point at
+        which a change in results will stop the iteration.
+
+
+
+        <p>More exactly it specifies a difference in the change of the
+        result between two iterations. If the result difference
+        is less than or equal to this epsilon-value, the iteration
+        is stopped.
+
+        </p>
+        <p>only applied when iteration is enabled by
+        <member>SpreadsheetDocumentSettings::IsIterationEnabled</member>.</p>
+     */
+    [property] double IterationEpsilon;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::StandardDecimals
+    /** specifies the number of decimals in the default
+        number format.
+     */
+    [property] short StandardDecimals;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::NullDate
+    /** specifies the date that is represented by the value
+        zero.
+     */
+    [property] com::sun::star::util::Date NullDate;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::DefaultTabStop
+    /** specifies the width of default tabulators.
+     */
+    [property] short DefaultTabStop;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::IgnoreCase
+    /** specifies if upper and lower cases are treated as equal
+        when comparing cells.
+     */
+    [property] boolean IgnoreCase;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::CalcAsShown
+    /** if this property is set, calculations are performed with the rounded
+        values displayed in cells instead of the internal values.
+     */
+    [property] boolean CalcAsShown;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::MatchWholeCell
+    /** if this property is set, filter criteria must match entire cell
+        contents.
+     */
+    [property] boolean MatchWholeCell;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::SpellOnline
+    /** enables online spell checking.
+     */
+    [property] boolean SpellOnline;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetDocumentSettings::LookUpLabels
+    /** if this property is set, column or row labels are looked up from
+        anywhere on the sheet.
+     */
+    [property] boolean LookUpLabels;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:46  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:50  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
+    new
+
+
+=============================================================================*/
+#endif

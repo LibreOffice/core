@@ -1,0 +1,235 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ConfigurationAccess.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:17 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_ConfigurationAccess_idl__
+#define __com_sun_star_configuration_ConfigurationAccess_idl__
+
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#include <com/sun/star/container/XNameAccess.idl>
+#endif
+
+#ifndef __com_sun_star_container_XHierarchicalNameAccess_idl__
+#include <com/sun/star/container/XHierarchicalNameAccess.idl>
+#endif
+
+#ifndef __com_sun_star_container_XChild_idl__
+#include <com/sun/star/container/XChild.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
+
+#ifndef __com_sun_star_container_XHierarchicalName_idl__
+#include <com/sun/star/container/XHierarchicalName.idl>
+#endif
+
+#ifndef __com_sun_star_container_XContainer_idl__
+#include <com/sun/star/container/XContainer.idl>
+#endif
+
+#ifndef __com_sun_star_util_XChangesNotifier_idl__
+#include <com/sun/star/util/XChangesNotifier.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XLocalizable_idl__
+#include <com/sun/star/lang/XLocalizable.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XExactName_idl__
+#include <com/sun/star/beans/XExactName.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
+#include <com/sun/star/beans/XMultiPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertyState_idl__
+#include <com/sun/star/beans/XPropertyState.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertyAccess_idl__
+#include <com/sun/star/beans/XPropertyAccess.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides read-only access to a subtree of the configuration hierarchy.
+ Values that are direct or indirect descendants of this node can be retrieved,
+ non-value subnodes can be navigated using container interfaces.
+ Other interfaces provide access to information about this node.
+ Changes to values in the subtree can be monitored by event listeners.
+
+    @guarantees:<B>
+    -thread safe
+
+    @author Joerg Barfurth
+    @version 1.0 2000/06/01
+*/
+service ConfigurationAccess
+{
+/** allows initializing a new instance of this service, by providing a path specifying the node wanted.
+ <p>Usually this should be done by the <type>ConfigurationProvider</type> providing this object.
+*/
+    interface com::sun::star::lang::XInitialization;
+
+/** allows access to immediate children of this node.
+ <p><method scope="com::sun::star::container">XNameAccess::getByName</method>
+ returns an Any holding either a value or the same interface for another ConfigurationAccess
+ if the child is not a value.
+*/
+    interface com::sun::star::container::XNameAccess;
+
+/** allows access to all descendants of this node
+ <p><method scope="com::sun::star::container">XHierarchicalNameAccess::getByHierarchicalName</method>
+ returns an Any holding either a value or the same interface for another ConfigurationAccess,
+ if the descendant is not a value.
+*/
+    interface com::sun::star::container::XHierarchicalNameAccess;
+
+/** provides access to the parent node of this node .
+ <p>May return NULL if this object was not obtained as child of another node.
+ <p><i>Setting a different parent is generally not supported.</i>
+*/
+    interface com::sun::star::container::XChild;
+
+/** provides information about the name of this node within its parent.
+ <p><i>Renaming a node is not supported.</i>
+ <p>This interface is optional on a root node directly obtained from a <type>ConfigurationProvider</type>..
+*/
+    interface com::sun::star::container::XNamed;
+
+/** provides the complete hierarchical name of this node within the configuration tree.
+*/
+    interface com::sun::star::container::XHierarchicalName;
+
+/** allows attaching listeners to this node to monitor changes to child nodes.
+*/
+    interface com::sun::star::container::XContainer;
+
+/** allows attaching listeners to this node to monitor changes to descendant nodes.
+ Multiple changes belonging to one single transaction will be notified in a single event.
+ This is the recommended event interface for configuration clients.
+*/
+    interface com::sun::star::util::XChangesNotifier;
+
+/** allows accessing configuration items that may have different values for different nodes.
+*/
+    interface com::sun::star::lang::XLocalizable;
+
+/** provides support for inexact names for use in
+ <type scope="com::sun::star::container">XNameAccess</type>
+ <type scope="com::sun::star::container">XHierarchicalNameAccess</type>
+ <type scope="com::sun::star::beans">XPropertySet</type>, etc.
+*/
+    interface com::sun::star::beans::XExactName;
+
+/** provides access to the descendants of this node as properties.
+ This interface allows to attach property change listeners to this node.
+ Setting property values is not supported on a read-only Configuration access.
+ Providing a <type scope="com::sun::star::beans">XPropertySetInfo</type> need not
+ be supported on a read-only Configuration access.
+ <p><i>This interface is optional in this service</i>
+*/
+    interface com::sun::star::beans::XPropertySet;
+
+/** provides access to the descendants of this node as properties.
+ This interface allows accessing multiple values at once.
+ Setting property values is not supported on a read-only Configuration access.
+ Providing a <type scope="com::sun::star::beans">XPropertySetInfo</type> need not
+ be supported on a read-only Configuration access.
+ <p><i>This interface is optional in this service</i>
+*/
+    interface com::sun::star::beans::XMultiPropertySet;
+
+/** provides access to state of descendants of this node.
+ This interface allows accessing default values and determining whether a default is active for a value.
+ Setting property values is not supported by a read-only Configuration access.
+ <p><i>This interface is optional in this service</i>
+*/
+    interface com::sun::star::beans::XPropertyState;
+
+
+/** provides access to the descendants of this node as properties.
+ This interface allows accessing multiple values and their state at once.
+ Setting property values is not supported by a read-only Configuration access.
+ <p><i>This interface is optional in this service</i>
+*/
+    interface com::sun::star::beans::XPropertyAccess;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

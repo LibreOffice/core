@@ -1,0 +1,237 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XResultSetMetaData.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XResultSetMetaData_idl__
+#define __com_sun_star_sdbc_XResultSetMetaData_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+
+// DocMerge from xml: interface com::sun::star::sdbc::XResultSetMetaData
+/** can be used to find out about the types and properties
+    of the columns in a ResultSet.
+ */
+[ uik(D6B60241-9067-11d3-9EE00010-5AD7A5C4), ident("XResultSetMetaData", 1.0) ]
+interface XResultSetMetaData: com::sun::star::uno::XInterface
+{
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnCount
+    /** returns the number of columns in this ResultSet.
+     */
+    long getColumnCount() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isAutoIncrement
+    /** indicates whether the column is automatically numbered, thus read-only.
+     */
+    boolean isAutoIncrement([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isCaseSensitive
+    /** indicates whether a column's case matters.
+     */
+    boolean isCaseSensitive([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isSearchable
+    /** indicates whether the column can be used in a where clause.
+     */
+    boolean isSearchable([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isCurrency
+    /** indicates whether the column is a cash value.
+     */
+    boolean isCurrency([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isNullable
+    /** indicates the nullability of values in the designated column.@see com::sun::star::sdbc::ColumnValue
+     */
+    long isNullable([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isSigned
+    /** indicates whether values in the column are signed numbers.
+     */
+    boolean isSigned([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnDisplaySize
+    /** indicates the column's normal max width in chars.
+     */
+    long getColumnDisplaySize([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnLabel
+    /** gets the suggested column title for use in printouts and
+        displays.
+     */
+    string getColumnLabel([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnName
+    /** gets a column's name.
+     */
+    string getColumnName([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getSchemaName
+    /** gets a column's table's schema.
+     */
+    string getSchemaName([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getPrecision
+    /** gets a column's number of decimal digits.
+     */
+    long getPrecision([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getScale
+    /** gets a column's number of digits to right of the decimal point.
+     */
+    long getScale([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getTableName
+    /** gets a column's table name.
+     */
+    string getTableName([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getCatalogName
+    /** gets a column's table's catalog name.
+     */
+    string getCatalogName([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnType
+    /** retrieves a column's SQL type.
+     */
+    long getColumnType([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnTypeName
+    /** retrieves a column's database-specific type name.
+     */
+    string getColumnTypeName([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isReadOnly
+    /** indicates whether a column is definitely not writable.
+     */
+    boolean isReadOnly([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isWritable
+    /** indicates whether it is possible for a write on the column to succeed.
+     */
+    boolean isWritable([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::isDefinitelyWritable
+    /** indicates whether a write on the column will definitely succeed.
+     */
+    boolean isDefinitelyWritable([in]long column) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaData::getColumnServiceName
+    /** returns the fully-qualified name of the service whose instances
+        are manufactured if the method <code>ResultSet.getObject</code>
+        is called to retrieve a value from the column.
+     */
+    string getColumnServiceName([in]long column) raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:42  hjs
+    initial import
+
+    Revision 1.7  2000/09/11 11:52:43  mi
+    documentation merged from XML
+
+    Revision 1.5  2000/05/09 07:53:07  dg
+    #75698# Method getScale(...) was not identified as method in the idl
+
+    Revision 1.4  2000/02/07 11:24:53  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.3  1999/11/30 15:57:51  dg
+    new
+
+    Revision 1.1  1999/11/24 08:41:08  dg
+    new StarDataBaseConnectivity
+
+===========================================================================*/
+#endif

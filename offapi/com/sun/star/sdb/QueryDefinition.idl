@@ -1,0 +1,142 @@
+/*************************************************************************
+ *
+ *  $RCSfile: QueryDefinition.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_QueryDefinition_idl__
+#define __com_sun_star_sdb_QueryDefinition_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdb {
+
+
+// DocMerge from xml: service com::sun::star::sdb::QueryDefinition
+/** is a stored definition of a SQL "Select statement".
+
+    <p>It can be used, if there is a need to execute SQL statement more than once.  </p>
+ */
+service QueryDefinition
+{
+
+    // DocMerge from xml: service com::sun::star::sdb::QueryDefinition: interface com::sun::star::beans::XPropertySet
+    /** access to the owning database definition object.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::Name
+    /** is the name of the definition.
+     */
+    [readonly, property] string Name;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::Command
+    /** is the command of the query, this is typically a select statement.
+     */
+    [property] string Command;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::EscapeProcessing
+    /** should we use escape processing for the query.
+     */
+    [property] boolean EscapeProcessing;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::UpdateTableName
+    /** is the name of the table which should be updated, this is usually used
+        for queries which relate on more than one table.
+     */
+    [property] string UpdateTableName;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::UpdateCatalogName
+    /** is the name of the update table catalog.
+     */
+    [property] string UpdateCatalogName;
+
+
+    // DocMerge from xml: property com::sun::star::sdb::QueryDefinition::UpdateSchemaName
+    /** is the name of the update table schema.
+     */
+    [property] string UpdateSchemaName;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:36  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:39  mi
+    documentation merged from XML
+
+    Revision 1.1  2000/06/27 06:53:41  dg
+    renamed from CommandDefinition
+
+    Revision 1.1  2000/06/08 11:52:14  dg
+    new CommandDefinitions and DocumentDefinitions
+
+
+===========================================================================*/
+#endif

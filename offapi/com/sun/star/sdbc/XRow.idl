@@ -1,0 +1,299 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XRow.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XRow_idl__
+#define __com_sun_star_sdbc_XRow_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_Date_idl__
+#include <com/sun/star/util/Date.idl>
+#endif
+
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+#ifndef __com_sun_star_util_Time_idl__
+#include <com/sun/star/util/Time.idl>
+#endif
+
+ module com {  module sun {  module star {  module io {
+interface XInputStream;
+};};};};
+
+ module com {  module sun {  module star {  module container {
+interface XNameAccess;
+};};};};
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+interface XRef;
+interface XArray;
+interface XBlob;
+interface XClob;
+
+
+// DocMerge from xml: interface com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow
+/** is used to access data which is collected in a row.
+ */
+[ uik(D6B60247-9067-11d3-9EE00010-5AD7A5C4), ident("XRow", 1.0) ]
+interface XRow: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::wasNull
+    /** reports whether the last column read had a value of SQL NULL.
+        Note that you must first call getXXX on a column to try to read
+        its value and then call wasNull() to see if the value read was
+        SQL NULL.
+     */
+    boolean wasNull() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getString
+    /** gets the value of a column in the current row as a String.
+     */
+    string getString([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getBoolean
+    /** gets the value of a column in the current row as boolean.
+     */
+    boolean getBoolean([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getByte
+    /** get the value of a column in the current row as a byte.
+     */
+    byte getByte([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getShort
+    /** gets the value of a column in the current row as a short.
+     */
+    short getShort([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getInt
+    /** get the value of a column in the current row as a Integer.
+     */
+    long getInt([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getLong
+    /** get the value of a column in the current row as a Long.
+     */
+    hyper getLong([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getFloat
+    /** gets the value of a column in the current row as a float.
+     */
+    float getFloat([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getDouble
+    /** gets the value of a column in the current row as a double.
+     */
+    double getDouble([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getBytes
+    /** gets the value of a column in the current row as a byte array.
+             The bytes represent the raw values returned by the driver.
+             @param columnIndex
+                the first column is 1, the second is 2, ...
+             @returns
+                the column value; if the value is SQL NULL, the result is empty.
+             @throws SQLException
+                if a database access error occurs.
+     */
+    sequence<byte> getBytes([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getDate
+    /** gets the value of a column in the current row as a date object.
+     */
+    com::sun::star::util::Date getDate([in]long columnIndex)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getTime
+    /** gets the value of a column in the current row as a time object.
+     */
+    com::sun::star::util::Time getTime([in]long columnIndex)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getTimestamp
+    /** gets the value of a column in the current row as a datetime object.
+     */
+    com::sun::star::util::DateTime getTimestamp([in]long columnIndex)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getBinaryStream
+    /** gets the value of a column in the current row as a stream of
+        uninterpreted bytes. The value can then be read in chunks from the
+        stream. This method is particularly suitable for retrieving large
+        LONGVARBINARY values.
+
+
+        <p>
+        <b>Note:</b> All the data in the returned stream must be
+        read prior to getting the value of any other column. The next
+        call to a get method implicitly closes the stream. Also, a
+        stream may return 0 when the method <code>available</code>
+        is called whether there is data
+        available or not.
+        </p>
+     */
+    com::sun::star::io::XInputStream getBinaryStream([in]long columnIndex)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getCharacterStream
+    /** gets the value of a column in the current row as a stream of
+        uninterpreted bytes. The value can then be read in chunks from the
+        stream. This method is particularly suitable for retrieving large
+        LONGVARBINARY or LONGVARCHAR values.
+
+
+        <p>
+        <b>Note:</b> All the data in the returned stream must be
+        read prior to getting the value of any other column. The next
+        call to a get method implicitly closes the stream. Also, a
+        stream may return 0 when the method <code>available</code>
+        is called whether there is data
+        available or not.
+        </p>
+     */
+    com::sun::star::io::XInputStream getCharacterStream([in]long columnIndex)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getObject
+    /** returns the value of a column in the current row as an object.
+        This method uses the given <code>Map</code> object
+        for the custom mapping of the SQL structure or distinct type
+        that is being retrieved.
+     */
+    any getObject([in]long columnIndex,
+                  [in]com::sun::star::container::XNameAccess typeMap)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getRef
+    /** gets a REF(&amp;lt;structured-type&amp;gt;) column value from the current row.
+     */
+    XRef getRef([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getBlob
+    /** gets a BLOB value in the current row.
+     */
+    XBlob getBlob([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getClob
+    /** gets a CLOB value in the current row of this <code>ResultSet</code> object.
+     */
+    XClob getClob([in]long columnIndex) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::XRow::getArray
+    /** gets a SQL ARRAY value from the current row of this <code>ResultSet</code> object.
+     */
+    XArray getArray([in]long columnIndex) raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:43  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:43  mi
+    documentation merged from XML
+
+    Revision 1.4  1999/12/20 16:11:35  dg
+    #70278# changes in API
+
+    Revision 1.3  1999/12/13 13:47:55  dg
+    #70278# XSQLErrorBroadcaster removed
+
+    Revision 1.2  1999/11/24 11:33:26  dg
+    chk includes
+
+    Revision 1.1  1999/11/24 08:41:09  dg
+    new StarDataBaseConnectivity
+
+===========================================================================*/
+#endif

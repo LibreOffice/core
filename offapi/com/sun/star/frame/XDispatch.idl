@@ -1,0 +1,191 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDispatch.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XDispatch_idl__
+#define __com_sun_star_frame_XDispatch_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_URL_idl__
+#include <com/sun/star/util/URL.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XStatusListener_idl__
+#include <com/sun/star/frame/XStatusListener.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::frame::XDispatch
+/** serves state information of objects which can be connected to
+    controllers (e.g. toolbox controllers).
+
+
+
+    <p>Each state change is to be broadcast to all registered
+    status listeners. The first notification should be performed
+    synchronously from
+
+
+
+
+    ;
+    if not, controllers may flicker. State listener must be aware of this
+    synchronous notification.</p>
+
+    <p>The state consists of enabled/disabled and a short descriptive text
+    of the function (e.g. "undo insert character"). It is to be broadcast
+    whenever this state changes or the controller should reget the value
+    for the URL to which it is connected. Additionally a context-switch-event
+    is to be broadcast whenever the object may be out of scope
+    to force the state listener to requery the <type>XDispatch</type>.</p>@see      StatusEvent
+        @see        Frame
+        @see        View
+ */
+[ uik(E2280122-33D6-11D1-AABE00A0-249D5590), ident( "XDispatch", 1.0 ) ]
+interface XDispatch: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XDispatch::dispatch
+    /** dispatches (executes) an URL asynchronously.
+
+
+
+        <p>It is only allowed to dispatch URLs for which you get this
+        <type>XDispatch</type>. Additional arguments "'#..." or "?...") are
+        allowed.</p>
+
+
+
+
+
+
+
+        @example <listing>
+        // some code for a click-handler of a hyperlink in a view
+        XFrame xTargetFrame = m_xFrame-&amp;gt;findFrame(
+        m_aHyperlink-&amp;gt;getTargetFrameName(), FRAME_SEARCH_STANDARD );
+        URL aURL;
+        aURL.Original = m_aHyperlink-&amp;gt;getURL();
+        XDispatch m_xFrame-&amp;gt;queryDispatch( aURL, sequence&amp;lt;PropertyValue&amp;gt;() );
+        xDispatch-&amp;gt;dispatch( aURL );
+        </listing>
+     */
+    [oneway] void dispatch( [in] com::sun::star::util::URL aURL,
+             [in] sequence<com::sun::star::beans::PropertyValue> aArgs );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XDispatch::addStatusListener
+    /** registers a listener of a controller for a specific URL
+        to this object to receive status events.
+
+
+
+        <p>It is only allowed to register for URLs for which you got this
+        <type>XDispatch</type>. Additional arguments ("#..." or "?...") will be ignored.</p>@see Dispatch#removeStatusListener(XListener, URL)
+     */
+    [oneway] void addStatusListener( [in] com::sun::star::frame::XStatusListener xControl,
+             [in] com::sun::star::util::URL aURL );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XDispatch::removeStatusListener
+    /** unregisters a listener of a controller.@see Dispatch#addStatusListener(XListener, URL)
+     */
+    [oneway] void removeStatusListener( [in] com::sun::star::frame::XStatusListener xControl,
+             [in] com::sun::star::util::URL aURL );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:28  mi
+    documentation merged from XML
+
+    Revision 1.2  1999/11/25 16:03:32  mi
+    welforming HTML for XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
+    new
+
+
+=============================================================================*/
+#endif

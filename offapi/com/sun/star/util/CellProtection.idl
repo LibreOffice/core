@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ *  $RCSfile: CellProtection.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_CellProtection_idl__
+#define __com_sun_star_util_CellProtection_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
+// DocMerge from xml: struct com::sun::star::util::CellProtection
+/** describes the kind of protection of a protectable cell.
+ */
+struct CellProtection
+{
+    // DocMerge from xml: field com::sun::star::util::CellProtection::IsLocked
+    /** specifies if the cell is locked for modifications by the user.
+     */
+    boolean IsLocked;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::util::CellProtection::IsFormulaHidden
+    /** specifies if the formula is hidden for the user.
+     */
+    boolean IsFormulaHidden;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::util::CellProtection::IsHidden
+    /** specifies if the cell is hidden for the user.
+     */
+    boolean IsHidden;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::util::CellProtection::IsPrintHidden
+    /** specifies if the cell is hidden on printouts.
+     */
+    boolean IsPrintHidden;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:18  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:53:04  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/03/09 15:25:09  mi
+    #70728# missing documentation
+
+    Revision 1.2  2000/01/27 16:13:34  mi
+    #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
+    new
+
+
+=============================================================================*/
+#endif

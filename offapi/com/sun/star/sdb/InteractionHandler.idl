@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ *  $RCSfile: InteractionHandler.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_InteractionHandler_idl__
+#define __com_sun_star_sdb_InteractionHandler_idl__
+
+#ifndef __com_sun_star_task_XInteractionHandler_idl__
+#include <com/sun/star/task/XInteractionHandler.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdb {
+
+
+/** is a service for user interaction for databases.<p/>
+    interaction requests the handler can provide are:
+    <ul>
+        <li><b>database related errors</b><br/>
+            The general structure to transport such errors is the <type scope="com.sun.star.sdbc">SQLException</type>,
+            and if your <type scope="com.sun.star.task">XInteractionRequest</type> supplies such an <type scope="com.sun.star.sdbc">SQLException</type>
+            (or an instance of any derived class), the handler will display a generic error dialog, which is able
+            to travel the object chain which may be contained in the exception.
+        </li>
+        <li><b>authentication</b><br/>
+            If your <type scope="com.sun.star.task">XInteractionRequest</type>
+            (see <method scope="com.sun.star.task">XInteractionHandler::handle</method>) supplies an
+            <type scope="com.sun.star.ucb">AuthenticationRequest</type>, the handler will open a standard login
+            dialog to allow user authentication.
+            <br/>
+            Besides the using the members of the AuthenticationRequest in the usual manner, the member <em>Server</em>
+            (if not empty) is interpreted as data source name, thus leading to a slightly different message when
+            requesting the user to enter it's login data.
+            <br/>
+            In the case you want to use this authentication feature, you should supply a special authentication
+            continuation (<type scope="com.sun.star.ucb">XInteractionSupplyAuthentication</type>) as well, so the
+            handler can return you the entered information.
+        </li>
+        <li><b>parameter requests</b><br/>
+            If your <type scope="com.sun.star.task">XInteractionRequest</type> supplies an
+            <type scope="com.sun.star.ucb">ParametersRequest</type>, the handler will open a standard dialog asking
+            the user to fill in parameter values.
+            <br/>
+            In the case you want to use this feature of the handler, you should supply a special continuation
+            (<type scope="com.sun.star.sdb">XInteractionSupplyParameters</type>) as well, so the
+            handler can return you the entered information.
+        </li>
+    </ul>
+*/
+service InteractionHandler
+{
+    /** handles interaction requests
+    */
+    interface com::sun::star::task::XInteractionHandler;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/26 18:00:29  fs
+    added parameter request handling to the capabilities list
+
+    Revision 1.2  2000/10/25 13:19:02  fs
+    documentation extended
+
+    Revision 1.1.1.1  2000/09/18 23:35:36  hjs
+    initial import
+
+===========================================================================*/
+#endif

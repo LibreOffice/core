@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XMenu.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XMenu_idl__
+#define __com_sun_star_awt_XMenu_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+interface XPopupMenu;
+interface XMenuListener;
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::awt::XMenu
+/** represents a simple menu.
+ */
+[ uik(E227A41D-33D6-11D1-AABE00A0-249D5590), ident( "XMenu", 1.0 ) ]
+interface XMenu: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::addMenuListener
+    /** adds the specified menu listener to receive events
+        from this menu.
+     */
+    [oneway] void addMenuListener( [in] XMenuListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::removeMenuListener
+    /** removes the specified menu listener so it no longer
+        receives item events from this menu.
+     */
+    [oneway] void removeMenuListener( [in] XMenuListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::insertItem
+    /** inserts an item into the menu.
+        This appends the item if the position is greater than or equal to
+        <code>getItemCount()</code> or if it is negative.
+     */
+    [oneway] void insertItem( [in] short nItemId,
+             [in] string aText,
+             [in] short nItemStyle,
+             [in] short nPos );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::removeItem
+    /** remove one or more items from the menu.
+     */
+    [oneway] void removeItem( [in] short nPos,
+             [in] short nCount );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::getItemCount
+    /** returns the number of items in the menu.
+     */
+    short getItemCount();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::getItemId
+    /** returns the id of the item at the specified position.
+     */
+    short getItemId( [in] short nPos );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::getItemPos
+    /** returns the position of the item with the specified id.
+     */
+    short getItemPos( [in] short nId );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::enableItem
+    /** enables or disables the menu item.
+     */
+    [oneway] void enableItem( [in] short nItemId,
+             [in] boolean bEnable );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::isItemEnabled
+    /** returns the state of the menu item.
+     */
+    boolean isItemEnabled( [in] short nItemId );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::setItemText
+    /** sets the text for the menu item.
+     */
+    [oneway] void setItemText( [in] short nItemId,
+             [in] string aText );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::awt::XMenu::getItemText
+    /** @returns
+                    the string for the given item id.
+     */
+    string getItemText( [in] short nItemId );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::setPopupMenu
+    /** set the popup menu for a specified menu item.
+     */
+    [oneway] void setPopupMenu( [in] short nItemId,
+             [in] XPopupMenu aPopupMenu );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::awt::XMenu::getPopupMenu
+    /** returns the popup menu from the menu item.
+     */
+    XPopupMenu getPopupMenu( [in] short nItemId );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:34:53  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:52:09  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/05/16 12:19:53  mi
+    documentation
+
+    Revision 1.2  2000/02/07 11:24:16  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

@@ -1,0 +1,214 @@
+/*************************************************************************
+ *
+ *  $RCSfile: NumberingLevel.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_text_NumberingLevel_idl__
+#define __com_sun_star_text_NumberingLevel_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::NumberingLevel
+/** provides access to a numbering level as part of the NumberingRules.
+ */
+service NumberingLevel
+{
+
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::Adjust
+    /** adjusts the numbering (HoriOrientation_LEFT/RIGHT/CENTER)
+
+        <p>
+        </p>
+     */
+    [property] short Adjust;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::ParentNumbering
+    /** number of upper levels that are included in the current numbering symbol.
+     */
+    [property] short ParentNumbering;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::Prefix
+    /** the prefix of the numbering symbol.
+     */
+    [property] string Prefix;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::Suffix
+    /** the suffix of the numbering symbol.
+     */
+    [property] string Suffix;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::CharStyleName
+    /** Name of the character style that is used for the numbering symbol.
+     */
+    [property] string CharStyleName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::BulletId
+    /** the ID of the symbol in the given font. This is only valid if the
+        numbering type is <const>NumberingType_CHAR_SPECIAL</const>.
+          @deprecated
+     */
+    [optional, property] short BulletId;
+    //-------------------------------------------------------------------------
+    /** contains the symbol in the given font. This is only valid if the
+        numbering type is <const>NumberingType_CHAR_SPECIAL</const>.
+     */
+    [property] string BulletChar;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::BulletFontName
+    /** the name of the font for the symbol. This is only valid if the
+        numbering type is NumberingType_CHAR_SPECIAL.
+     */
+    [property] string BulletFontName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::GraphicURL
+    /** the URL of the graphic file that is used as the numbering symbol.
+
+
+        <p> This is only valid if the numbering type is
+        <const>NumberingType::BITMAP</const>.</p>
+     */
+    [property] string GraphicURL;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::VertOrient
+    /** contains the vertical orientation of a graphic.
+
+        <p> It is set using com::sun::star::text::VertOrientation.</p>
+     */
+    [optional, property] short VertOrient;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::StartWith
+    /** specifies the start value for the numbering.
+
+
+        <p>This property is only valid if the numbering type is not
+        <const scope="com::sun::star::style">NumberingType::BITMAP</const> or
+        <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.</p>
+     */
+    [property] short StartWith;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::LeftMargin
+    /** specifies the left margin of the numbering
+     */
+    [property] long LeftMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::SymbolTextDistance
+    /** specifies the distance between the numbering symbol and the text of
+        the paragraph.
+     */
+    [property] long SymbolTextDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::FirstLineOffset
+    /** specifies the offset between the beginning of the first line and
+        the beginning of the following lines of the paragraph.
+     */
+    [property] long FirstLineOffset;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::NumberingType
+    /** specifies the type of numbering.
+     */
+    [property] short NumberingType;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::NumberingLevel::HeadingStyleName
+    /** contains the name of the paragraph style that is interpreted as the
+        header of this level. It is only contained in the levels of
+        chapter numbering rules.
+     */
+    [property] string HeadingStyleName;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

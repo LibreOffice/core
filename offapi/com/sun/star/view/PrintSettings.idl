@@ -1,0 +1,185 @@
+/*************************************************************************
+ *
+ *  $RCSfile: PrintSettings.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_view_PrintSettings_idl__
+#define __com_sun_star_view_PrintSettings_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module view {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::view::PrintSettings
+/** provides access to the settings for printing documents.
+ */
+service PrintSettings
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintBlackFonts
+    /** If <true></true>, all characters are printed in black.
+
+
+
+        <p>It is useful for printing colored text on a b/w printer.</p>
+     */
+    [property] boolean PrintBlackFonts;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintControls
+    /** If <true></true>, control shapes are included in printing.
+     */
+    [property] boolean PrintControls;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintDrawings
+    /** If <true></true>, drawing objects (shapes)  are included in printing.
+     */
+    [property] boolean PrintDrawings;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintGraphics
+    /** If <true></true>, graphic objects are included in printing.
+     */
+    [property] boolean PrintGraphics;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintLeftPages
+    /** If <true></true>, left pages are included in printing.
+     */
+    [property] boolean PrintLeftPages;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintRightPages
+    /** If <true></true>, right pages are included in printing.
+     */
+    [property] boolean PrintRightPages;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintTables
+    /** If <true></true>, tables are included in printing.
+     */
+    [property] boolean PrintTables;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintReversed
+    /** If <true></true>, the pages are printed in reverse order.
+
+
+
+        <p>The last page is printed first.</p>
+     */
+    [property] boolean PrintReversed;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintProspect
+    /** If <true></true>, the pages are printed in the order of prospects.
+     */
+    [property] boolean PrintProspect;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintPageBackground
+    /** If <true></true>, the background of the page is printed.
+     */
+    [property] boolean PrintPageBackground;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::view::PrintSettings::PrintAnnotationMode
+    /** determines how annotations are printed.
+        (enum NotePrintMode)
+     */
+    [property] short PrintAnnotationMode;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:21  hjs
+    initial import
+
+    Revision 1.4  2000/09/11 11:53:07  mi
+    documentation merged from XML
+
+    Revision 1.2  2000/01/03 12:03:24  mi
+    reference manual
+
+    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
+    new
+
+
+=============================================================================*/
+#endif

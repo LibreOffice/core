@@ -1,0 +1,396 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ParagraphProperties.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:15 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_style_ParagraphProperties_idl__
+#define __com_sun_star_style_ParagraphProperties_idl__
+
+#ifndef __com_sun_star_style_ParagraphAdjust_idl__
+#include <com/sun/star/style/ParagraphAdjust.idl>
+#endif
+
+#ifndef __com_sun_star_style_LineSpacing_idl__
+#include <com/sun/star/style/LineSpacing.idl>
+#endif
+
+#ifndef __com_sun_star_style_GraphicLocation_idl__
+#include <com/sun/star/style/GraphicLocation.idl>
+#endif
+
+#ifndef __com_sun_star_style_TabStop_idl__
+#include <com/sun/star/style/TabStop.idl>
+#endif
+
+#ifndef __com_sun_star_style_DropCapFormat_idl__
+#include <com/sun/star/style/DropCapFormat.idl>
+#endif
+
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
+#ifndef __com_sun_star_table_ShadowFormat_idl__
+#include <com/sun/star/table/ShadowFormat.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::style::ParagraphProperties
+/** describes the style of paragraphs.
+ */
+service ParagraphProperties
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaAdjust
+    /** determines the adjustment of a paragraph.
+     */
+    [property] com::sun::star::style::ParagraphAdjust ParaAdjust;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLineSpacing
+    /** contains the type of the line spacing of a paragraph.
+     */
+    [property] com::sun::star::style::LineSpacing ParaLineSpacing;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackColor
+    /** contains the paragraph background color.
+     */
+    [property] long ParaBackColor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackTransparent
+    /** This value is <true></true> if the paragraph background color
+        is set to transparent.
+     */
+    [property] boolean ParaBackTransparent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackGraphicURL
+    /** contains the value of a link for the background graphic of a paragraph.
+     */
+    [property] string ParaBackGraphicURL;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackGraphicFilter
+    /** contains the name of the graphic filter for the background graphic of a paragraph.
+     */
+    [property] string ParaBackGraphicFilter;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackGraphicLocation
+    /** contains the value for the position of a background graphic.
+
+        <p> </p>@see com::sun::star::style::GraphicLocation</p>
+     */
+    [property] com::sun::star::style::GraphicLocation ParaBackGraphicLocation;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLastLineAdjust
+    /** determines the adjustment of the last line.
+
+
+
+        <p>It is only valid if <member>ParagraphProperties::ParagraphAdjust</member>
+        is set to <const>ParagraphAdjust::BLOCK</const>.</p>
+     */
+    [property] short ParaLastLineAdjust;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaExpandSingleWord
+    /** determines if single words are stretched.
+
+
+
+        <p>It is only valid if <member>ParagraphProperties::ParaAdjust</member> and
+        <member>ParagraphProperties::ParaLastLineAdjust</member> are also valid.</p>
+     */
+    [property] boolean ParaExpandSingleWord;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLeftMargin
+    /** determines the left margin of the paragraph in 100th mm.
+     */
+    [property] long ParaLeftMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaRightMargin
+    /** determines the right margin of the paragraph in 100th mm.
+     */
+    [property] long ParaRightMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaTopMargin
+    /** determines the top margin of the paragraph in 100th mm.
+
+
+
+        <p>The distance between two paragraphs is specified by:
+        </p>
+        <ul>
+        <li>either the bottom margin of the previous paragraph.</li>
+        <li>or the top margin of the following paragraph.</li>
+        </ul>
+        The greater one is chosen.
+     */
+    [property] long ParaTopMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBottomMargin
+    /** determines the bottom margin of the paragraph in 100th mm.
+
+
+
+        <p>The distance between two paragraphs is specified by:
+        </p>
+        <ul>
+        <li>either the bottom margin of the previous paragraph
+        </li>
+        <li>or the top margin of the following paragraph.
+        </li>
+        </ul>
+        The greater one is chosen.
+     */
+    [property] long ParaBottomMargin;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLineNumberCount
+    /** determines if the paragraph is included in the
+        line numbering.
+     */
+    [property] boolean ParaLineNumberCount;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLineNumberStartValue
+    /** contains the start value for the line numbering.
+     */
+    [property] long ParaLineNumberStartValue;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaIsHyphenation
+    /** prevents the paragraph from getting hyphenated.
+     */
+    [property] boolean ParaIsHyphenation;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::PageDescName
+    /** If this property is set, it creates a page break before the
+        paragraph it belongs to and assigns the value as the name
+        of the new page style sheet to use.
+     */
+    [property] string PageDescName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::PageNumberOffset
+    /** If a page break property is set at a paragraph, this property contains the new value for the page number.
+     */
+    [property] short PageNumberOffset;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaRegisterModeActive
+    /** determines if the register mode is applied to a
+        paragraph.
+
+
+
+        <p>Remark: Register mode is only used if the register
+        mode property of the page style is switched on.</p>
+     */
+    [property] boolean ParaRegisterModeActive;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: property com::sun::star::style::ParagraphProperties::ParaTabStops
+    /** specifies the positions and kinds of thei tab stops within this
+                paragraph.
+     */
+    [property] sequence<com::sun::star::style::TabStop> ParaTabStops;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaStyleName
+    /** contains the name of the current paragraph style.
+     */
+    [property] string ParaStyleName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::DropCapFormat
+    /** specifies whether the first characters of the
+        paragraph are displayed in capital letters and how they are
+        formatted.
+     */
+    [property] com::sun::star::style::DropCapFormat DropCapFormat;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::DropCapWholeWord
+    /** specifies if the property <var>DropCapFormat</var>
+        is applied to the whole first word.
+     */
+    [property] boolean DropCapWholeWord;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaKeepTogether
+    /** Setting this property to TRUE prevents page or column
+        breaks between this and the following paragraph.
+
+
+        <p>This feature is useful for preventing title paragraphs to be
+        the last line on a page or column.</p>
+     */
+    [property] boolean ParaKeepTogether;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaSplit
+    /** Setting this property to FALSE prevents the paragraph from
+        getting split into two pages or columns.
+     */
+    [property] boolean ParaSplit;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingLevel
+    /** specifies the numbering level of the
+        paragraph.
+     */
+    [property] short NumberingLevel;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingRules
+    /** contains the numbering rules applied to this paragraph.
+     */
+    [readonly, property] com::sun::star::container::XIndexAccess NumberingRules;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingStartValue
+    /** specifies the start value for numbering if a new numbering starts at this paragraph.
+     */
+    [property] short NumberingStartValue;
+
+    //-------------------------------------------------------------------------
+    /** determins if the numbering rules restart counting at the current paragraph.
+     */
+    [optional, property] boolean ParaIsNumberingRestart;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingStyleName
+    /** specifies the name of the style for the numbering.
+
+
+        <p>The name must be one of the names which are available via
+        <type>XStyleFamiliesSupplier</type>.</p>
+     */
+    [property] string NumberingStyleName;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaOrphans
+    /** specifies the minimum number of lines of the paragraph that have
+        to be at bottom of a page if the paragraph is spread over more than
+        one page.
+     */
+    [property] byte ParaOrphans;
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaWidows
+    /** specifies the minimum number of lines of the paragraph that have
+        to be at top of a page if the paragraph is spread over more than
+        one page.
+     */
+    [property] byte ParaWidows;
+    //-------------------------------------------------------------------------
+    /** determins the type, color and size of the shadow.
+     @see com.sun.star.table.ShadowFormat
+     */
+    [property] com::sun::star::table::ShadowFormat ParaShadowFormat;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

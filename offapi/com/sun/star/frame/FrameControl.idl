@@ -1,0 +1,144 @@
+/*************************************************************************
+ *
+ *  $RCSfile: FrameControl.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_FrameControl_idl__
+#define __com_sun_star_frame_FrameControl_idl__
+
+#ifndef __com_sun_star_awt_UnoControl_idl__
+#include <com/sun/star/awt/UnoControl.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::frame::FrameControl
+/** contains a frame with a desktop component.
+
+
+
+    <p>If the control is visible and has a valid (loadable) component URL,
+    then the <member>FrameControl::Frame</member> property is set.</p>
+ */
+service FrameControl
+{
+
+
+    // DocMerge from xml: service com::sun::star::frame::FrameControl: service com::sun::star::awt::UnoControl
+    /** The base service of all controls.
+     */
+    service com::sun::star::awt::UnoControl;
+
+
+    // DocMerge from xml: service com::sun::star::frame::FrameControl: interface com::sun::star::beans::XPropertySet
+    /** provides access to the properties of this service.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::frame::FrameControl::ComponentUrl
+    /** contains the type of the component which is loaded into the frame
+        or the document which implicitly specifies the type.
+     */
+    [property] string ComponentUrl;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::frame::FrameControl::Frame
+    /** The frame held by this control. The <type>Frame</type> is created if the control
+        is shown and the component's URL is set.
+     */
+    [readonly, property] string Frame;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:20  hjs
+    initial import
+
+    Revision 1.7  2000/09/11 11:52:28  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/02/21 16:18:01  mi
+    string documentation from stardiv...*.idl-files
+
+    Revision 1.2  2000/01/31 09:44:58  mi
+    XML syntax for documentation
+
+    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
+    new
+
+
+=============================================================================*/
+#endif

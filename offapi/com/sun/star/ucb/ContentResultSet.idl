@@ -1,0 +1,256 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ContentResultSet.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_ContentResultSet_idl__
+#define __com_sun_star_ucb_ContentResultSet_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_XResultSet_idl__
+#include <com/sun/star/sdbc/XResultSet.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_XResultSetMetaDataSupplier_idl__
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_XRow_idl__
+#include <com/sun/star/sdbc/XRow.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_XCloseable_idl__
+#include <com/sun/star/sdbc/XCloseable.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XContentAccess_idl__
+#include <com/sun/star/ucb/XContentAccess.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_ResultSet_idl__
+#include <com/sun/star/sdbc/ResultSet.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** A <type>Content</type> is a service that provides access to data of a
+    folder content provided by an implementation of the service
+    <type>ContentProvider</type>.
+*/
+service ContentResultSet
+{
+    //-------------------------------------------------------------------------
+    /** must be implemented to make it possible to resolve cyclic object
+        references ( i.e. between implementation of <type>XPropertySet</type>
+        - which may hold property change listeners - and
+        <type>XPropertyChangeListener</type> - which may hold the property set ).
+
+        This interface is required.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    /** provides access to the result set meta data. Meta data are for
+        example the number of columns of the result set, information
+        on the data types of columns, column names, and more.
+
+        This interface is required.
+     */
+    interface com::sun::star::sdbc::XResultSetMetaDataSupplier;
+
+    //-------------------------------------------------------------------------
+    /** enables travelling through the result set members ( the contents ).
+        This interface mainly provides a cursor for the result set.
+
+        Note that every method of this interface implementation additionally
+        may throw a <type>ResultSetException</type> ( which is derived from
+        <type>com::sun::star::sdbc::SQLException</type> to be compatible
+        to that interface ). The new exception transports another exception,
+        which indicates the reason for the failure of the method call.
+
+        This interface is required.
+     */
+    interface com::sun::star::sdbc::XResultSet;
+
+    //-------------------------------------------------------------------------
+    /** provides access to data of the content the cursor is pointing to.
+
+        Note that every method of this interface implementation additionally
+        may throw a <type>ResultSetException</type> ( which is derived from
+        <type>com::sun::star::sdbc::SQLException</type> to be compatible
+        to that interface ). The new exception transports another exception,
+        which indicates the reason for the failure of the method call.
+
+        This interface is required.
+     */
+    interface com::sun::star::sdbc::XRow;
+
+    //-------------------------------------------------------------------------
+    /** makes it possible to abort running activities ( i.e. to cancel
+        retrieving data from a server ).
+
+        Note that every method of this interface implementation additionally
+        may throw a <type>ResultSetException</type> ( which is derived from
+        <type>com::sun::star::sdbc::SQLException</type> to be compatible
+        to that interface ). The new exception transports another exception,
+        which indicates the reason for the failure of the method call.
+
+        This interface is required.
+     */
+    interface com::sun::star::sdbc::XCloseable;
+
+    //-------------------------------------------------------------------------
+    /** holds properties of the resultset.
+
+        This interface is required.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** controls the travel mode of the resultset cursor.
+
+        There are two possible travel modes:
+        <type>CursorTravelMode::BLOCKING</type> and
+        <type>CursorTravelMode::NONBLOCKING</type>.
+
+        In blocking mode each travel method of the resultset will not return
+        until the data for the new position were retrieved.
+
+        In non-blocking mode the implementation will throw a
+        <type>CursorWouldBlockException</type>, if the data for the new
+        position are not retrieved yet.
+
+        The following pseudo-code illustrates the usage of a non-blocking
+        cursor:
+
+            bProcessedAllRows = false
+            while ( !bProcessedAllRows )
+            {
+                cursor.setPropertyValue( "CursorTravelMode", BLOCKING )
+
+                cursor.travelSomeWhere()
+                collectRowData()
+
+                cursor.setPropertyValue( "CursorTravelMode", NONBLOCKING )
+
+                bGoOn = true;
+                while ( bGoOn )
+                {
+                    try
+                    {
+                        cursor.travelSomeWhere()
+                        collectRowData()
+                    }
+                    catch ( CursorWouldBlockException )
+                    {
+                        // No more data at the moment.
+                        bGoOn = false
+                    }
+                }
+
+                doSomethingWithCollectedRowData()
+
+                bProcessedAllRows = ...
+            }
+
+         If this property is not supported, the implementation must provide
+        a blocking cursor.
+
+        The implementation initially must set the value of this property
+        to <type>CursorTravelMode::BLOCKING</type>.
+
+        @see com::sun::star::ucb::CursorTravelMode;
+     */
+    [optional, property] long CursorTravelMode;
+
+    /** contains the number of rows obtained (so far) from the data source. */
+    [readonly, property] long RowCount;
+
+    /** indicates that all rows of te resultset have been obtained. */
+    [readonly, property] boolean IsRowCountFinal;
+
+    //-------------------------------------------------------------------------
+    /** provides access to the content identifier and the content object
+        itself.
+
+        This interface is required.
+     */
+    interface XContentAccess;
+
+    //-------------------------------------------------------------------------
+    /** can be implemented to provide a complete JDBC conform result set
+        interface for the implementation of this service.
+
+        The implememtation of this service is optional.
+     */
+    service com::sun::star::sdbc::ResultSet;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

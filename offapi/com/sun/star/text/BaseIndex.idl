@@ -1,0 +1,204 @@
+/*************************************************************************
+ *
+ *  $RCSfile: BaseIndex.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#ifndef __com_sun_star_text_BaseIndex_idl__
+#define __com_sun_star_text_BaseIndex_idl__
+
+#ifndef __com_sun_star_text_XDocumentIndex_idl__
+#include <com/sun/star/text/XDocumentIndex.idl>
+#endif
+#ifndef _com_sun_star_container_XIndexReplace_idl__
+#include <com/sun/star/container/XIndexReplace.idl>
+#endif
+#ifndef _com_sun_star_text_XTextColumns_idl__
+#include <com/sun/star/text/XTextColumns.idl>
+#endif
+#ifndef __com_sun_star_style_GraphicLocation_idl__
+#include <com/sun/star/style/GraphicLocation.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::BaseIndex
+/** specifies the basic service of different indexes within a document.@see com::sun::star::text::DocumentIndex
+        @see com::sun::star::text::ContentIndex
+        @see com::sun::star::text::UserDefinedIndex
+        @see com::sun::star::text::IllustrationsIndex
+        @see com::sun::star::text::TableIndex
+        @see com::sun::star::text::ObjectIndex
+ */
+service BaseIndex
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::text::XDocumentIndex;
+
+    //-------------------------------------------------------------------------
+    /** contains the title of the index.*/
+
+    // DocMerge: empty anyway
+    [property] string Title;
+    /** determins if the index is protected.*/
+
+    // DocMerge: empty anyway
+    [property] boolean IsProteced;
+    /** contains the name of the paragraph style that is applied to the heading.*/
+
+    // DocMerge: empty anyway
+    [property] string ParaStyleHeading;
+    /** contains the name of the paragraph style that is applied to the 1st level.*/
+
+    // DocMerge: empty anyway
+    [property] string ParaStyleLevel1;
+    /** contains the name of the paragraph style that is applied to the 2nd level.*/
+
+    // DocMerge: empty anyway
+    [optional, property] string ParaStyleLevel2;
+    /** contains the name of the paragraph style that is applied to the 3rd level.*/
+
+    // DocMerge: empty anyway
+    [optional, property] string ParaStyleLevel3;
+    /** contains the name of the paragraph style that is applied to the 4th level.*/
+
+    // DocMerge: empty anyway
+    [optional, property] string ParaStyleLevel4;
+    /** contains the name of the paragraph style that is applied to the 5th level.*/
+
+    // DocMerge: empty anyway
+    [optional, property] string ParaStyleLevel5;
+    /** contains the name of the paragraph style that is applied to the 6th level.*/
+
+    // DocMerge: empty anyway
+    [optional, property] string ParaStyleLevel6;
+    /** contains the name of the paragraph style that is applied to the 7th level.*/
+
+    // DocMerge: empty anyway
+    [optional, property] string ParaStyleLevel7;
+    /** contains the name of the paragraph style that is applied to the 8th level.*/
+
+    // DocMerge: empty anyway
+    [optional, property] string ParaStyleLevel8;
+    /** contains the name of the paragraph style that is applied to the 9th level.*/
+
+    // DocMerge: empty anyway
+    [optional, property] string ParaStyleLevel9;
+    /** contains the name of the paragraph style that is applied to the 10th level.*/
+
+    // DocMerge: empty anyway
+    [optional, property] string ParaStyleLevel10;
+    /** contains the name of the paragraph style that is applied to the separator level.*/
+
+    // DocMerge: empty anyway
+    [optional, property] string ParaStyleSeparator;
+    /** contains the column interface.*/
+
+    // DocMerge: empty anyway
+    [property] XTextColumns TextColumns;
+    /** contains the URL of a graphic file that is displayed as background graphic*/
+
+    // DocMerge: empty anyway
+    [property] string BackGraphicURL;
+    /** contains the name of the filter of the graphic file that is
+         displayed as background graphic*/
+
+    // DocMerge: empty anyway
+    [property] string BackGraphicFilter;
+
+    // DocMerge from xml: property com::sun::star::text::BaseIndex::BackGraphicLocation
+    /** determines the position of the background graphic.@see enum GraphicLocation
+     */
+    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+
+    // DocMerge from xml: property com::sun::star::text::BaseIndex::BackTransparent
+    /** specifies the color of the background.
+        [property] long BackColor;
+        /** If <true></true>, the background color value in "BackColor" is not visible.
+     */
+    [property] boolean BackTransparent;
+
+    /** returns the interface of the level format of the index.
+     <p>
+        The description of the format of the levels depends on the type of the document index.
+     </p>
+     @see service DocumentIndexLevelFormat
+     */
+    // DocMerge: empty anyway
+    [optional, property] com::sun::star::container::XIndexReplace LevelFormat;
+    /** determins if the content of the document index is created from the
+         complete document content or form the current chapter only.
+     <p> It is not available in the bibliography</p>*/
+    [optional, property] boolean CreateFromChapter;
+
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+

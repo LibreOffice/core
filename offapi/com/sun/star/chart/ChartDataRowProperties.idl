@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ChartDataRowProperties.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:14 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_ChartDataRowProperties_idl__
+#define __com_sun_star_chart_ChartDataRowProperties_idl__
+
+#ifndef __com_sun_star_chart_ChartDataPointProperties_idl__
+#include <com/sun/star/chart/ChartDataPointProperties.idl>
+#endif
+
+#ifndef __com_sun_star_chart_ChartStatistics_idl__
+#include <com/sun/star/chart/ChartStatistics.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::chart::ChartDataRowProperties
+/** specifies the properties for a group of graphic elements
+    which belong to a data row.
+
+
+
+    <p>For this service, the properties supported by
+    <type>ChartDataPointProperties</type> are applied to all data point
+    elements contained in this group.
+
+    </p>
+    <p>Note: Statistical properties are not available for all types of
+    diagrams.
+
+    </p>@see ChartDataPointProperties
+ */
+service ChartDataRowProperties
+{
+    // DocMerge: empty anyway
+    service com::sun::star::chart::ChartDataPointProperties;
+
+    // DocMerge: empty anyway
+    service com::sun::star::chart::ChartStatistics;
+
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartDataRowProperties::Axis
+    /** determines to which axis the row is assigned.
+
+
+
+        <p>It must be a y-axis (primary or secondary y-axis)
+
+        </p>@see ChartAxisAssign
+     */
+    [property] long Axis;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartDataRowProperties::DataRegressionProperties
+    /** holds the properties of the regression line.@see service ChartLine
+     */
+    [optional, readonly, property] com::sun::star::beans::XPropertySet DataRegressionProperties;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartDataRowProperties::DataErrorProperties
+    /** holds the properties of the error markers.@see service ChartLine
+     */
+    [optional, readonly, property] com::sun::star::beans::XPropertySet DataErrorProperties;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::chart::ChartDataRowProperties::DataMeanValueProperties
+    /** holds the properties of the average line.@see service ChartLine
+     */
+    [optional, readonly, property] com::sun::star::beans::XPropertySet DataMeanValueProperties;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:01  hjs
+    initial import
+
+    Revision 1.7  2000/09/11 11:52:15  mi
+    documentation merged from XML
+
+    Revision 1.5  1999/12/10 15:26:22  bm
+    #70718# SolidType->service Chart3DBarProperties, service ChartDataPointProperties supported now
+
+    Revision 1.4  1999/12/08 09:34:11  hr
+    #65293#: Type XPropertySet must be full qualified
+
+    Revision 1.3  1999/12/03 11:44:46  bm
+    #70231# -XStatisticSupplier + statistical properties for ChartDataRowProperties
+
+    Revision 1.2  1999/12/02 10:38:24  bm
+    #70401# -ShapeType +SolidType
+
+    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
+    new
+
+
+=============================================================================*/
+#endif

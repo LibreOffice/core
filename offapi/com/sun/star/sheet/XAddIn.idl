@@ -1,0 +1,257 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XAddIn.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_XAddIn_idl__
+#define __com_sun_star_sheet_XAddIn_idl__
+
+#ifndef __com_sun_star_lang_XLocalizable_idl__
+#include <com/sun/star/lang/XLocalizable.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::sheet::XAddIn
+/** gives access to function descriptions and user-visible names.
+ */
+[ uik(0D1CC7D0-7D6F-11D3-9F880010-5AEF84A7), ident( "XAddIn", 1.0 ) ]
+interface XAddIn: com::sun::star::lang::XLocalizable
+{
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XAddIn::getProgrammaticFuntionName
+
+    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getProgrammaticFuntionName
+    /** returns the programmatic name for a specified user-visible function
+        name.
+
+
+
+        <p>The programmatic name must be the exact name of the method within
+        its interface.</p>
+     */
+    string getProgrammaticFuntionName( [in] string aDisplayName );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XAddIn::getDisplayFunctionName
+
+    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getDisplayFunctionName
+    /** returns the user-visible name of the function.
+
+
+
+        <p>This is the name for the function that is shown to the user.
+        It may be translated to the current language of the AddIn, so it
+        is never stored in files. It should be a single word and is used
+        when entering or displaying formulas.</p>
+     */
+    string getDisplayFunctionName( [in] string aProgrammaticName );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XAddIn::getFunctionDescription
+
+    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getFunctionDescription
+    /** returns the description of the function.
+
+
+
+        <p>The description is shown to the user when selecting functions.
+        It may be translated to the current language of the AddIn.</p>
+     */
+    string getFunctionDescription( [in] string aProgrammaticName );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XAddIn::getDisplayArgumentName
+
+    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getDisplayArgumentName
+    /** returns the user-visible name of the specified argument.
+
+
+
+        <p>The argument name is shown to the user when prompting for
+        arguments. It should be a single word and may be translated
+        to the current language of the AddIn.</p>
+     */
+    string getDisplayArgumentName( [in] string aProgrammaticFunctionName,
+             [in] long nArgument );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XAddIn::getArgumentDescription
+
+    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getArgumentDescription
+    /** returns the description of the specified argument.
+
+
+
+        <p>The argument description is shown to the user when prompting
+        for arguments. It may be translated to the current language of
+        the AddIn.</p>
+     */
+    string getArgumentDescription( [in] string aProgrammaticFunctionName,
+             [in] long nArgument );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XAddIn::getProgrammaticCategoryName
+
+    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getProgrammaticCategoryName
+    /** returns the programmatic name of the category the function belongs to.
+
+
+
+        <p>The category name is used to group similar functions together.
+        The programmatic category name should always be in English, it is
+        never shown to the user.
+        It should be one of the following names if the function falls into
+        the corresponding category.</p>
+        <dl>
+        <dt>Database
+        </dt>
+        <dd>for functions that operate with data organized in tabular
+        form like databases.
+        </dd>
+        <dt>Date&amp;amp;Time
+        </dt>
+        <dd>for functions that deal with date or time values.
+        </dd>
+        <dt>Financial
+        </dt>
+        <dd>for functions that solve financial problems.
+        </dd>
+        <dt>Information
+        </dt>
+        <dd>for functions that provide information about cells.
+        </dd>
+        <dt>Logical
+        </dt>
+        <dd>for functions that deal with logical expressions.
+        </dd>
+        <dt>Mathematical
+        </dt>
+        <dd>for mathematical functions.
+        </dd>
+        <dt>Matrix
+        </dt>
+        <dd>for matrix functions.
+        </dd>
+        <dt>Statistical
+        </dt>
+        <dd>for statistical functions.
+        </dd>
+        <dt>Spreadsheet
+        </dt>
+        <dd>for functions that deal with cell ranges.
+        </dd>
+        <dt>Text
+        </dt>
+        <dd>for functions that deal with text strings.
+        </dd>
+        <dt>Add-In
+        </dt>
+        <dd>for additional functions.
+        </dd>
+        </dl>
+     */
+    string getProgrammaticCategoryName( [in] string aProgrammaticFunctionName );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XAddIn::getDisplayCategoryName
+
+    // DocMerge from xml: method com::sun::star::sheet::XAddIn::getDisplayCategoryName
+    /** returns the user-visible name of the category the function belongs to.
+
+
+
+        <p>This is used when category names are shown to the user.</p>
+     */
+    string getDisplayCategoryName( [in] string aProgrammaticFunctionName );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:49  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:50  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/03/24 17:35:23  nn
+    #74032# documentation added
+
+    Revision 1.3  2000/02/07 11:24:54  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.2  1999/12/14 11:30:35  nn
+    #70786# derive from XLocalizable
+
+    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
+    new
+
+
+=============================================================================*/
+#endif

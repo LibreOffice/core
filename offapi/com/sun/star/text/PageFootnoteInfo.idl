@@ -1,0 +1,154 @@
+/*************************************************************************
+ *
+ *  $RCSfile: PageFootnoteInfo.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_PageFootnoteInfo_idl__
+#define __com_sun_star_text_PageFootnoteInfo_idl__
+
+#ifndef __com_sun_star_text_HorizontalAdjust_idl__
+#include <com/sun/star/text/HorizontalAdjust.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::PageFootnoteInfo
+/** specifies the properties of the footnote area of a page or a
+    page style.
+ */
+service PageFootnoteInfo
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteHeight
+    /** contains the maximum height of the footnote section.
+
+
+
+        <p>If 0, the maximum is the height of the page.</p>
+     */
+    [property] long FootnoteHeight;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLineWidth
+    /** contains the relative width of the footnote separator line.
+     */
+    [property] long FootnoteSeparatorLineWidth;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteTopDistance
+    /** contains the distance between the text and footnote section.
+     */
+    [property] long FootnoteTopDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteBottomDistance
+    /** contains the distance between the separator line and the footnote section.
+     */
+    [property] long FootnoteBottomDistance;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLineWidthPercent
+    /** contains the relative width of the footnote separator line.
+     */
+    [property] short FootnoteSeparatorLineWidthPercent;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLineAdjust
+    /** contains the adjustment of the footnote separator line.
+     */
+    [property] com::sun::star::text::HorizontalAdjust FootnoteSeparatorLineAdjust;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::PageFootnoteInfo::FootnoteSeparatorLinePenWidth
+    /** contains the width of the pen for the footnote separator line.
+     */
+    [property] short FootnoteSeparatorLinePenWidth;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:01  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:53:00  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
+    new
+
+
+=============================================================================*/
+#endif

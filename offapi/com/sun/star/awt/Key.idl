@@ -1,0 +1,687 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Key.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_Key_idl__
+#define __com_sun_star_awt_Key_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+// DocMerge from idl: constants com::sun::star::awt::Key
+/** These values are used to specifies distinct physical keys.
+ */
+constants Key
+{
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::256
+
+    // DocMerge: empty anyway
+    const short NUM0 = 256;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::257
+
+    // DocMerge: empty anyway
+    const short NUM1 = 257;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::258
+
+    // DocMerge: empty anyway
+    const short NUM2 = 258;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::259
+
+    // DocMerge: empty anyway
+    const short NUM3 = 259;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::260
+
+    // DocMerge: empty anyway
+    const short NUM4 = 260;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::261
+
+    // DocMerge: empty anyway
+    const short NUM5 = 261;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::262
+
+    // DocMerge: empty anyway
+    const short NUM6 = 262;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::263
+
+    // DocMerge: empty anyway
+    const short NUM7 = 263;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::264
+
+    // DocMerge: empty anyway
+    const short NUM8 = 264;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::265
+
+    // DocMerge: empty anyway
+    const short NUM9 = 265;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::512
+
+    // DocMerge: empty anyway
+    const short A = 512;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::513
+
+    // DocMerge: empty anyway
+    const short B = 513;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::514
+
+    // DocMerge: empty anyway
+    const short C = 514;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::515
+
+    // DocMerge: empty anyway
+    const short D = 515;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::516
+
+    // DocMerge: empty anyway
+    const short E = 516;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::517
+
+    // DocMerge: empty anyway
+    const short F = 517;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::518
+
+    // DocMerge: empty anyway
+    const short G = 518;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::519
+
+    // DocMerge: empty anyway
+    const short H = 519;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::520
+
+    // DocMerge: empty anyway
+    const short I = 520;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::521
+
+    // DocMerge: empty anyway
+    const short J = 521;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::522
+
+    // DocMerge: empty anyway
+    const short K = 522;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::523
+
+    // DocMerge: empty anyway
+    const short L = 523;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::524
+
+    // DocMerge: empty anyway
+    const short M = 524;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::525
+
+    // DocMerge: empty anyway
+    const short N = 525;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::526
+
+    // DocMerge: empty anyway
+    const short O = 526;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::527
+
+    // DocMerge: empty anyway
+    const short P = 527;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::528
+
+    // DocMerge: empty anyway
+    const short Q = 528;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::529
+
+    // DocMerge: empty anyway
+    const short R = 529;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::530
+
+    // DocMerge: empty anyway
+    const short S = 530;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::531
+
+    // DocMerge: empty anyway
+    const short T = 531;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::532
+
+    // DocMerge: empty anyway
+    const short U = 532;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::533
+
+    // DocMerge: empty anyway
+    const short V = 533;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::534
+
+    // DocMerge: empty anyway
+    const short W = 534;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::535
+
+    // DocMerge: empty anyway
+    const short X = 535;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::536
+
+    // DocMerge: empty anyway
+    const short Y = 536;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::537
+
+    // DocMerge: empty anyway
+    const short Z = 537;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::768
+
+    // DocMerge: empty anyway
+    const short F1 = 768;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::769
+
+    // DocMerge: empty anyway
+    const short F2 = 769;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::770
+
+    // DocMerge: empty anyway
+    const short F3 = 770;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::771
+
+    // DocMerge: empty anyway
+    const short F4 = 771;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::772
+
+    // DocMerge: empty anyway
+    const short F5 = 772;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::773
+
+    // DocMerge: empty anyway
+    const short F6 = 773;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::774
+
+    // DocMerge: empty anyway
+    const short F7 = 774;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::775
+
+    // DocMerge: empty anyway
+    const short F8 = 775;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::776
+
+    // DocMerge: empty anyway
+    const short F9 = 776;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::777
+
+    // DocMerge: empty anyway
+    const short F10 = 777;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::778
+
+    // DocMerge: empty anyway
+    const short F11 = 778;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::779
+
+    // DocMerge: empty anyway
+    const short F12 = 779;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::780
+
+    // DocMerge: empty anyway
+    const short F13 = 780;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::781
+
+    // DocMerge: empty anyway
+    const short F14 = 781;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::782
+
+    // DocMerge: empty anyway
+    const short F15 = 782;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::783
+
+    // DocMerge: empty anyway
+    const short F16 = 783;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::784
+
+    // DocMerge: empty anyway
+    const short F17 = 784;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::785
+
+    // DocMerge: empty anyway
+    const short F18 = 785;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::786
+
+    // DocMerge: empty anyway
+    const short F19 = 786;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::787
+
+    // DocMerge: empty anyway
+    const short F20 = 787;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::788
+
+    // DocMerge: empty anyway
+    const short F21 = 788;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::789
+
+    // DocMerge: empty anyway
+    const short F22 = 789;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::790
+
+    // DocMerge: empty anyway
+    const short F23 = 790;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::791
+
+    // DocMerge: empty anyway
+    const short F24 = 791;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::792
+
+    // DocMerge: empty anyway
+    const short F25 = 792;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::793
+
+    // DocMerge: empty anyway
+    const short F26 = 793;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1024
+
+    // DocMerge: empty anyway
+    const short DOWN = 1024;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1025
+
+    // DocMerge: empty anyway
+    const short UP = 1025;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1026
+
+    // DocMerge: empty anyway
+    const short LEFT = 1026;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1027
+
+    // DocMerge: empty anyway
+    const short RIGHT = 1027;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1028
+
+    // DocMerge: empty anyway
+    const short HOME = 1028;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1029
+
+    // DocMerge: empty anyway
+    const short END = 1029;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1030
+
+    // DocMerge: empty anyway
+    const short PAGEUP = 1030;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1031
+
+    // DocMerge: empty anyway
+    const short PAGEDOWN = 1031;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1280
+
+    // DocMerge: empty anyway
+    const short RETURN = 1280;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1281
+
+    // DocMerge: empty anyway
+    const short ESCAPE = 1281;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1282
+
+    // DocMerge: empty anyway
+    const short TAB = 1282;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1283
+
+    // DocMerge: empty anyway
+    const short BACKSPACE = 1283;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1284
+
+    // DocMerge: empty anyway
+    const short SPACE = 1284;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1285
+
+    // DocMerge: empty anyway
+    const short INSERT = 1285;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1286
+
+    // DocMerge: empty anyway
+    const short DELETE = 1286;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1287
+
+    // DocMerge: empty anyway
+    const short ADD = 1287;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1288
+
+    // DocMerge: empty anyway
+    const short SUBTRACT = 1288;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1289
+
+    // DocMerge: empty anyway
+    const short MULTIPLY = 1289;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1290
+
+    // DocMerge: empty anyway
+    const short DIVIDE = 1290;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1291
+
+    // DocMerge: empty anyway
+    const short POINT = 1291;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1292
+
+    // DocMerge: empty anyway
+    const short COMMA = 1292;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1293
+
+    // DocMerge: empty anyway
+    const short LESS = 1293;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1294
+
+    // DocMerge: empty anyway
+    const short GREATER = 1294;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1295
+
+    // DocMerge: empty anyway
+    const short EQUAL = 1295;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1296
+
+    // DocMerge: empty anyway
+    const short OPEN = 1296;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1297
+
+    // DocMerge: empty anyway
+    const short CUT = 1297;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1298
+
+    // DocMerge: empty anyway
+    const short COPY = 1298;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1299
+
+    // DocMerge: empty anyway
+    const short PASTE = 1299;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1300
+
+    // DocMerge: empty anyway
+    const short UNDO = 1300;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1301
+
+    // DocMerge: empty anyway
+    const short REPEAT = 1301;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1302
+
+    // DocMerge: empty anyway
+    const short FIND = 1302;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1303
+
+    // DocMerge: empty anyway
+    const short PROPERTIES = 1303;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1304
+
+    // DocMerge: empty anyway
+    const short FRONT = 1304;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1305
+
+    // DocMerge: empty anyway
+    const short CONTEXTMENU = 1305;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR constants::1306
+
+    // DocMerge: empty anyway
+    const short HELP = 1306;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:34:49  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:04  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/05/16 12:19:51  mi
+    documentation
+
+    Revision 1.3  2000/05/15 12:50:14  mi
+    documentation
+
+    Revision 1.2  2000/02/07 11:24:12  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:40  jsc
+    new
+
+
+=============================================================================*/
+#endif

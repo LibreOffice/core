@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XExtendedDocumentHandler.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:23:00 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xml_sax_XExtendedDocumentHandler_idl__
+#define __com_sun_star_xml_sax_XExtendedDocumentHandler_idl__
+
+#ifndef __com_sun_star_xml_sax_XDocumentHandler_idl__
+#include <com/sun/star/xml/sax/XDocumentHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_SAXException_idl__
+#include <com/sun/star/xml/sax/SAXException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::xml::sax::XExtendedDocumentHandler
+/** this interface does not conform to the SAX-standard. Note: Whether or not every callback is supported is dependent
+    on the parser implementation.
+ */
+[ uik(4E1C9650-3A87-11D3-9EDE0010-5A677293), ident( "XExtendedDocumentHandler", 1.0 ) ]
+interface XExtendedDocumentHandler: com::sun::star::xml::sax::XDocumentHandler
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XExtendedDocumentHandler::startCDATA
+    /** receives notification about the start of a CDATA section in the
+        XML-source.
+
+
+
+        <p>Any string comming in via character handler may include chars,
+        that would otherwise be interpreted as markup. </p>
+     */
+    void startCDATA()
+            raises( com::sun::star::xml::sax::SAXException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XExtendedDocumentHandler::endCDATA
+    /** informs about the end of a CDATA-Section.
+
+
+
+        <p>Note that <code>startCDATA/endCDATA</code> MUST NOT enclose any
+        <code>startElement/endElement</code>-call!</p>
+     */
+    void endCDATA();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XExtendedDocumentHandler::comment
+    /** receives notification about a comment in the XML-source.
+     */
+    void comment( [in] string sComment )
+            raises( com::sun::star::xml::sax::SAXException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XExtendedDocumentHandler::allowLineBreak
+    /** informs a writer that it is allowable to insert a line break and
+        indentation before the next <type>XDocumentHandler</type>-call.
+     */
+    void allowLineBreak()
+            raises( com::sun::star::xml::sax::SAXException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::xml::sax::XExtendedDocumentHandler::unknown
+    /** notifies that any characters that cannot be handled by other callback
+        methods are announced through this method.
+     */
+    void unknown( [in] string sString )
+            raises( com::sun::star::xml::sax::SAXException );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:22  hjs
+    initial import
+
+    Revision 1.4  2000/09/11 11:53:08  mi
+    documentation merged from XML
+
+    Revision 1.2  2000/02/23 11:41:20  mi
+    results from proofreading in layouted version
+
+    Revision 1.1.1.1  1999/11/11 09:48:47  jsc
+    new
+
+
+=============================================================================*/
+#endif

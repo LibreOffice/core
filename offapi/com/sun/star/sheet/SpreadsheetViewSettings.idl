@@ -1,0 +1,243 @@
+/*************************************************************************
+ *
+ *  $RCSfile: SpreadsheetViewSettings.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_SpreadsheetViewSettings_idl__
+#define __com_sun_star_sheet_SpreadsheetViewSettings_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::sheet::SpreadsheetViewSettings
+/** settings which are specific to each view of a spreadsheet
+    document.
+ */
+service SpreadsheetViewSettings
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::ShowFormulas
+    /** if this property is set, formulas are displayed instead of their
+        results.
+     */
+    [property] boolean ShowFormulas;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::ShowZeroValues
+    /** enables display of zero-values.
+     */
+    [property] boolean ShowZeroValues;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::IsValueHighlightingEnabled
+    /** if this property is set, strings, values, and formulas are
+        displayed in different colors.
+     */
+    [property] boolean IsValueHighlightingEnabled;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::ShowNotes
+    /** if this property is set, a marker is shown for notes in cells.
+     */
+    [property] boolean ShowNotes;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::HasVerticalScrollBar
+    /** enables the vertical scroll bar of the view.
+     */
+    [property] boolean HasVerticalScrollBar;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::HasHorizontalScrollBar
+    /** enables the horizontal scroll bar of the view.
+     */
+    [property] boolean HasHorizontalScrollBar;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::HasSheetTabs
+    /** enables the sheet tabs of the view.
+     */
+    [property] boolean HasSheetTabs;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::IsOutlineSymbolsSet
+    /** enables the display of outline symbols.
+     */
+    [property] boolean IsOutlineSymbolsSet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::HasColumnRowHeaders
+    /** enables the column and row headers of the view.
+     */
+    [property] boolean HasColumnRowHeaders;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::ShowGrid
+    /** enables the display of the cell grid.
+     */
+    [property] boolean ShowGrid;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::GridColor
+    /** specifies the color in which the cell grid is
+        displayed.
+     */
+    [property] long GridColor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::ShowHelpLines
+    /** enables display of help lines when moving drawing
+        objects.
+     */
+    [property] boolean ShowHelpLines;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::ShowAnchor
+    /** enables display of anchor symbols when drawing
+        objects are selected.
+     */
+    [property] boolean ShowAnchor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::ShowPageBreaks
+    /** enables display of page breaks.
+     */
+    [property] boolean ShowPageBreaks;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::SolidHandles
+    /** enables solid (colored) handles when drawing
+        objects are selected.
+     */
+    [property] boolean SolidHandles;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::ShowObjects
+    /** enables display of embedded objects in the view.
+     */
+    [property] short ShowObjects;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::ShowCharts
+    /** enables the display of charts in the view.
+     */
+    [property] short ShowCharts;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::ShowDrawing
+    /** enables the display of drawing objects in the view.
+     */
+    [property] short ShowDrawing;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::sheet::SpreadsheetViewSettings::HideSpellMarks
+    /** disables the display of marks from online spelling.
+     */
+    [property] boolean HideSpellMarks;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:48  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:50  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:45  jsc
+    new
+
+
+=============================================================================*/
+#endif

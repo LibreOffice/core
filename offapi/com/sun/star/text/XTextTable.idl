@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XTextTable.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:21 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_XTextTable_idl__
+#define __com_sun_star_text_XTextTable_idl__
+
+#ifndef __com_sun_star_text_XTextContent_idl__
+#include <com/sun/star/text/XTextContent.idl>
+#endif
+
+#ifndef __com_sun_star_table_XTableRows_idl__
+#include <com/sun/star/table/XTableRows.idl>
+#endif
+
+#ifndef __com_sun_star_table_XTableColumns_idl__
+#include <com/sun/star/table/XTableColumns.idl>
+#endif
+
+#ifndef __com_sun_star_table_XCell_idl__
+#include <com/sun/star/table/XCell.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextTableCursor_idl__
+#include <com/sun/star/text/XTextTableCursor.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::text::XTextTable
+/** manages a text table.
+ */
+[ uik(E2281213-33D6-11D1-AABE00A0-249D5590), ident( "XTextTable", 1.0 ) ]
+interface XTextTable: com::sun::star::text::XTextContent
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::text::XTextTable::initialize
+    /** determines the numbers of rows and columns of the text table.
+
+
+
+        <p> This method must be called before the object is inserted via
+
+
+
+
+
+        .
+
+        </p>
+     */
+    void initialize( [in] long nRows,
+             [in] long nColumns );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XTextTable::getRows
+    /** @returns
+                the access object for the text table rows.
+
+                @see com::sun::star::table::XTableRows
+     */
+    [const] com::sun::star::table::XTableRows getRows();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XTextTable::getColumns
+    /** @returns
+                the access object for the text table columns.
+
+                @see com::sun::star::table::XTableColumns
+     */
+    [const] com::sun::star::table::XTableColumns getColumns();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XTextTable::getCellByName
+    /** @returns
+                the <type>XCell</type> interface of the cell with the specified name.
+
+                @param aCellName
+                is a concatenation of the alphanumeric column name and the
+                index of the row.
+
+                <p>Example: The cell in the 4th column and third row has the name "D3".
+
+                <p>In cells that are split, the naming convention is more complex.
+                In this case the name is a concatenation of the former cell name
+                (i.e. "D3") and the number of the new column and row index inside
+                of the original table cell separated by dots. This is done
+                recursively.
+
+                <p>Example: If the cell "D3" is horizontally split, it now contains
+                the cells "D3.1.1" and "D3.1.2"
+
+                @see com::sun::star::table::XCell
+     */
+    com::sun::star::table::XCell getCellByName( [in] string aCellName );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XTextTable::getCellNames
+    /** @returns
+                the names of all cells of this text table.
+     */
+    sequence<string> getCellNames();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::text::XTextTable::createCursorByCellName
+    /** creates a text table cursor and returns the
+        <type>XTextTableCursor</type> interface.
+
+
+
+        <p>Initially the cursor is positioned in the cell with the specified name.
+        </p>
+     */
+    com::sun::star::text::XTextTableCursor createCursorByCellName( [in] string aCellName );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/09 14:25:02  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.1.1.1  2000/09/18 23:36:05  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:53:03  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/03/31 11:53:57  os
+    #74034# Documentation changed
+
+    Revision 1.2  2000/02/07 11:25:04  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
+    new
+
+
+=============================================================================*/
+#endif

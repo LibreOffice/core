@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ChartDataCaption.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:14 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_ChartDataCaption_idl__
+#define __com_sun_star_chart_ChartDataCaption_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+// DocMerge from idl: constants com::sun::star::chart::ChartDataCaption
+/** These values specify how the caption of data points is displayed.
+ */
+constants ChartDataCaption
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::NONE
+    /** No caption for data points is displayed.
+     */
+    const long NONE = 0;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::VALUE
+    /** The value of the data points is displayed as caption.
+     */
+    const long VALUE = 1;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::PERCENT
+    /** The percent value of the data points is displayed as caption.
+     */
+    const long PERCENT = 2;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::TEXT
+    /** The title of the column/row of the data point is displayed as caption.
+     */
+    const long TEXT = 4;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::FORMAT
+    /** The number formatter is used for displaying the value.
+     */
+    const long FORMAT = 8;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: value com::sun::star::chart::ChartDataCaption::SYMBOL
+    /** The symbol of data column/row is additionally displayed in the caption.
+     */
+    const long SYMBOL = 16;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:01  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:15  mi
+    documentation merged from XML
+
+    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
+    new
+
+
+=============================================================================*/
+#endif

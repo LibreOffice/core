@@ -1,0 +1,294 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XModel.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XModel_idl__
+#define __com_sun_star_frame_XModel_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XController_idl__
+#include <com/sun/star/frame/XController.idl>
+#endif
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+
+// DocMerge from idl: interface com::sun::star::frame::XModel
+/** represents a component which is created from an URL and arguments.
+
+        <p>It is a representation of a resource in the sense that it was
+        created/loaded from the resource. The arguments are passed to the loader
+        to modify its behavior. An example for such an argument is "AsTemplate",
+        which loads the resource as a template for a new document.
+
+        <p>Models can be controlled by controller components, which are usually
+        views of the model.
+
+        <p>If there is at least one controller, there is by definition a
+        current controller. And if that controller supports the interface
+        <type>XSelectionSupplier</type>, it has a current selection too.
+ */
+[ uik(E2280111-33D6-11D1-AABE00A0-249D5590), ident( "XModel", 1.0 ) ]
+interface XModel: com::sun::star::lang::XComponent
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XModel::attachResource
+    /** informs a model about its resource description.
+     */
+    boolean attachResource( [in] string aURL,
+             [in] sequence<com::sun::star::beans::PropertyValue> aArgs );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XModel::getURL
+    /** @returns
+                    the URL of the resource which is represented by this model.
+
+                @see XStorable::getLocation
+     */
+    string getURL();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XModel::getArgs
+    /** @returns
+                    the arguments with which the model was originally created or
+                    stored the last time.
+     */
+    sequence<com::sun::star::beans::PropertyValue> getArgs();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XModel::connectController
+    /** is called whenever a new controller is created for this model.
+
+
+
+        <p>The <type scope="com::sun::star::lang">XComponent</type> interface of the controller must be used to
+        recognize when it is deleted.
+
+        </p>@see releaseController
+     */
+    [oneway] void connectController( [in] com::sun::star::frame::XController xController );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XModel::disconnectController
+    /** is called whenever a new controller is created for this model.
+
+
+
+        <p>The <type scope="com::sun::star::lang">XComponent</type> interface of the controller must be
+        used to recognize when it is deleted.
+
+        </p>@see registerController
+     */
+    [oneway] void disconnectController( [in] com::sun::star::frame::XController xController );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XModel::lockControllers
+    /** suspends some notifications to the controllers which are used
+        for display updates.
+
+
+
+        <p>The calls to
+
+
+
+
+        and
+
+
+
+
+
+        may be
+        nested and even overlapping, but they must be in pairs. While
+        there is at least one lock remaining, some notifications
+        for display updates are not broadcasted.</p>
+     */
+    [oneway] void lockControllers();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XModel::unlockControllers
+    /** resumes the notifications which were suspended by
+
+
+
+
+
+        .
+
+
+
+        <p>The calls to
+
+
+
+
+        and
+
+
+
+
+
+        may be
+        nested and even overlapping, but they must be in pairs. While
+        there is at least one lock remaining, some notifications for
+        display updates are not broadcasted.</p>
+     */
+    [oneway] void unlockControllers();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XModel::hasControllersLocked
+    /** determines if there is at least one lock remaining.
+
+
+
+        <p>While there is at least one lock remaining, some notifications
+        for display updates are not broadcasted to the controllers.</p>
+     */
+    boolean hasControllersLocked();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XModel::getCurrentController
+    /** @returns
+                the controller which currently controls this model.
+
+                <p>If the controller which is active is a controller of this model,
+                it will be returned. If not, the controller which was the last
+                active of this model is returned. If no controller of this model
+                ever was active, the controller first registered is returned. If no
+                controller is registered for this model, NULL is returned.
+     */
+    [const] com::sun::star::frame::XController getCurrentController();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XModel::setCurrentController
+    /** sets a registered controller as the current controller.
+     */
+    void setCurrentController( [in] com::sun::star::frame::XController xController )
+            raises( com::sun::star::container::NoSuchElementException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XModel::getCurrentSelection
+    /** @returns
+                the current selection in the current controller.
+
+                <p>If there is no current controller, it returns NULL.
+     */
+    [const] com::sun::star::uno::XInterface getCurrentSelection();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:22  hjs
+    initial import
+
+    Revision 1.8  2000/09/11 11:52:29  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/02/23 14:49:56  mi
+    missing documentations
+
+    Revision 1.3  2000/01/31 09:44:59  mi
+    XML syntax for documentation
+
+    Revision 1.2  1999/11/18 11:49:57  mi
+    XComponent now in module lang
+
+    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
+    new
+
+
+=============================================================================*/
+#endif

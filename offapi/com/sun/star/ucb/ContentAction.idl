@@ -1,0 +1,191 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ContentAction.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_ContentAction_idl__
+#define __com_sun_star_ucb_ContentAction_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** specifies actions which can be transported with content events.
+
+    The situations under which contents will send ContentEvents of the various
+    action types are described below.  The description is broken into a list of
+    useful definitions, a list of events that happen to contents, and a list of
+    reactions taken by contents in response to those events.
+
+    The definitions are as follows:
+
+    D1  A content C has an identifier id(C).
+
+    D2  A content C is in one of two states, Alive or Deleted.
+
+    D3  A folder content F has a set of children H(F) that is a set of content
+        identifiers.  (For example, an "open" command will usualy return a
+        subset of the contents denoted by H(F).)
+
+    The events that can happen to contents (and that are of interest in this
+    context) are listed next.  Note that 'event' here does not mean an
+    ContentEvent, but rather some event that occurs either because some content
+    processes a command, or because a content gets informed about a relevant
+    change in the underlying system it represents.
+
+    E1  The identifier of a content C changes from id1(C) == A to id2(C) == B,
+        denoted as
+
+            E1(C: A->B).
+
+        For example, this event may occur when content C processes a
+        "setPropertyValues" command changing its "Title" propery, or when a
+        folder that hierarchicaly contains C changes its identity.
+
+    E2  The state of a content C changes from Alive to Deleted, denoted as
+
+            E2(C).
+
+        For example, this event may occur when content C processes a "delete"
+        command, or when a content representing an IMAP message gets informed
+        by the IMAP server that the message has been deleted.
+
+    E3  The set of children of a folder content F is enlarged by some
+        identifier A (that was not previously in that set, i.e.,
+        !(A in H1(F)) && (A in H2(F))), denoted as
+
+            E3(F, A).
+
+        For example, this event may occur when a new content created at
+        folder F processes its "insert" command, or when a folder representing
+        an IMAP mailbox gets informed by the IMAP server that a new message has
+        arrived at that mailbox.
+
+    Finally, the list of reactions taken by contents in response to the above
+    events gives a description of what kinds of ContentEvents are sent in which
+    situations:
+
+    R1  E1(C: A->B)  results in C sending an EXCHANGED ContentEvent,
+        which then results in the following:  All folders F that used to have A
+        as a child, but will not have B as a child, i.e.,
+
+            (A in H1(F)) && !(B in H2(F)),
+
+        send a REMOVED ContentEvent.
+
+    R2  E2(C)  results in C sending a DELETED ContentEvent,
+        which then results in the following:  All folders F that used to have A
+        as a child, but will not continue to have A as a child, i.e.,
+
+            (A in H1(F)) && !(A in H2(F)),
+
+        send a REMOVED event.
+
+    R3  E3(F, A)  results in F sending an INSERTED event.
+*/
+constants ContentAction
+{
+    //-------------------------------------------------------------------------
+    /** A content was inserted into a folder content (i.e., while updating the
+        folder).
+
+        This action must be notified at the listeners of the folder content.
+    */
+    const long INSERTED = 0;
+
+    //-------------------------------------------------------------------------
+    /** A content was removed from a folder content, but not physically
+        destroyed (i.e., due to rules just applied to the folder).
+
+        This action must be notified at the listeners of the folder content.
+    */
+    const long REMOVED = 1;
+
+    //-------------------------------------------------------------------------
+    /** A content was physically destroyed. Events containing this action
+        may be generated at any time. So a content event listener should
+        be prepared to get notified the "death" of the related content!
+
+        This action must be notified at the listeners of the deleted
+        content.
+    */
+    const long DELETED = 2;
+
+    //-------------------------------------------------------------------------
+    /** This Action indicates that a content has changed its identity (i.e.
+        after renaming a file system folder).
+
+        This action must be notified at the listeners of the exchanged
+        content.
+    */
+    const long EXCHANGED = 4;
+
+    //-------------------------------------------------------------------------
+    /** This is obsolete and should no longer be used.
+    */
+    const long SEARCH_MATCHED = 128;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

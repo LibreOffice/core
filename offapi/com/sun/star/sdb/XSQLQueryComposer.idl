@@ -1,0 +1,196 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSQLQueryComposer.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_XSQLQueryComposer_idl__
+#define __com_sun_star_sdb_XSQLQueryComposer_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sdb {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::sdb::XSQLQueryComposer
+/** should be provided by a tool which simplifies the handling with SQL SELECT statements.
+
+
+    <p>The interface can be used for composing SELECT statements without knowing the
+    structure of the used query.</p>
+ */
+[ uik(E983BF40-ACBE-11d3-9ED80050-04D8BBD0), ident( "XSQLQueryComposer", 1.0 ) ]
+interface XSQLQueryComposer: com::sun::star::uno::XInterface
+{
+
+    // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::getQuery
+    /** returns the query used for composing.
+     */
+    [const] string getQuery();
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::setQuery
+    /** sets a new query for the composer, which may be expanded by filters
+        and sort criteria.
+     */
+    void setQuery([in] string command )
+            raises (com::sun::star::sdbc::SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::getComposedQuery
+    /** returns the query composed with filters and sort criterias.
+     */
+    [const] string getComposedQuery();
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::getFilter
+    /** returns the currently used filter.
+
+
+        <p>The filter criteria returned is part of the where condition of the
+        select command, but it does not contain the where token.</p>
+     */
+    [const] string getFilter();
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::sdb::XSQLQueryComposer::getStructuredFilter
+    /** returns the currently used filter.
+             <p>The filter criteria is splitted into levels. Each level represents the
+             OR criterias. Within each level the Filters are provided as AND criteria
+             with the name of the column and the filter condition. The filter condition
+             is of type string.
+     */
+    [const] sequence< sequence<com::sun::star::beans::PropertyValue> >
+        getStructuredFilter();
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::getOrder
+    /** returns the currently used sort order.
+
+
+        <p>The order criteria returned is part of the ORDER BY clause of the
+        select command, but it does not contain the ORDER BY keyword .</p>
+     */
+    [const] string getOrder();
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::appendFilterByColumn
+    /** appends a new filter condition by a <type>DataColumn</type> providing
+        the name and the value for the filter.
+     */
+    void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column)
+            raises (com::sun::star::sdbc::SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::appendOrderByColumn
+    /** appends an additional part to the sort order criteria of the select
+        statement.
+     */
+    void appendOrderByColumn([in] com::sun::star::beans::XPropertySet column,
+                              [in] boolean ascending)
+            raises (com::sun::star::sdbc::SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::setFilter
+    /** makes it possible to set a filter condition for the query.
+     */
+    void setFilter([in] string filter)
+            raises (com::sun::star::sdbc::SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposer::setOrder
+    /** makes it possibile to set a sort condition for the query.
+     */
+    void setOrder([in] string order)
+            raises (com::sun::star::sdbc::SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:38  hjs
+    initial import
+
+    Revision 1.3  2000/09/11 11:52:41  mi
+    documentation merged from XML
+
+    Revision 1.1  1999/12/08 14:42:26  dg
+    #70278# new Composer files
+
+    Revision 1.1.1.1  1999/11/11 09:48:41  jsc
+    new
+
+
+=============================================================================*/
+#endif

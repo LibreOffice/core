@@ -1,0 +1,219 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XNumberFormatter.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:22:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XNumberFormatter_idl__
+#define __com_sun_star_util_XNumberFormatter_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_util_NotNumericException_idl__
+#include <com/sun/star/util/NotNumericException.idl>
+#endif
+
+#ifndef __com_sun_star_util_color_idl__
+#include <com/sun/star/util/color.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::util::XNumberFormatter
+/** represents a number formatter.
+ */
+[ uik(E2280420-33D6-11D1-AABE00A0-249D5590), ident( "XNumberFormatter", 1.0 ) ]
+interface XNumberFormatter: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::attachNumberFormatsSupplier
+    /** attaches an <type>XNumberFormatsSupplier</type> to this
+        <type>NumberFormatter</type>.
+
+
+
+        <p>This <type>NumberFormatter</type> will only use the <type>NumberFormats</type>
+        specified in the attached <type>XNumberFormatsSupplier</type>. Without an attached
+        <type>XNumberFormatsSupplier</type>, no formatting is possible.</p>
+     */
+    void attachNumberFormatsSupplier( [in] com::sun::star::util::XNumberFormatsSupplier xSupplier );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::util::XNumberFormatter::getNumberFormatsSupplier
+    /** @returns
+                the attached <type>NumberFormatsSupplier</type>.
+     */
+    [const] com::sun::star::util::XNumberFormatsSupplier getNumberFormatsSupplier();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::detectNumberFormat
+    /** detects the number format in a string which contains a formatted number.
+     */
+    long detectNumberFormat( [in] long nKey,
+             [in] string aString )
+            raises( com::sun::star::util::NotNumericException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::convertStringToNumber
+    /** converts a string which contains a formatted number into a number.
+
+
+
+        <p>If this is a text format, the string will not be converted.</p>
+     */
+    double convertStringToNumber( [in] long nKey,
+             [in] string aString )
+            raises( com::sun::star::util::NotNumericException );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XNumberFormatter::convertNumberToString
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::convertNumberToString
+    /** converts a number into a string.
+     */
+    string convertNumberToString( [in] long nKey,
+             [in] double fValue );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::util::XNumberFormatter::queryColorForNumber
+    /** @returns
+                the color which is specified for the given value in the number format,
+                which is otherwise the value of <var>aDefaultColor</var>.
+     */
+    com::sun::star::util::color queryColorForNumber( [in] long nKey,
+             [in] double fValue,
+             [in] com::sun::star::util::color aDefaultColor );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XNumberFormatter::formatString
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::formatString
+    /** converts a string into another string.
+     */
+    string formatString( [in] long nKey,
+             [in] string aString );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::util::XNumberFormatter::queryColorForString
+    /** @returns
+                the color which is specified for the given string in the number format,
+                which is otherwise the value of <var>aDefaultColor</var>.
+     */
+    com::sun::star::util::color queryColorForString( [in] long nKey,
+             [in] string aString,
+             [in] com::sun::star::util::color aDefaultColor );
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION CHANGED FOR XNumberFormatter::getInputString
+
+    // DocMerge from xml: method com::sun::star::util::XNumberFormatter::getInputString
+    /** converts a number into a string with the specified format.
+
+
+
+        <p>This string can always be converted back to a number using the same
+        format.
+
+        </p>
+     */
+    string getInputString( [in] long nKey,
+             [in] double fValue );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:36:20  hjs
+    initial import
+
+    Revision 1.5  2000/09/11 11:53:06  mi
+    documentation merged from XML
+
+    Revision 1.3  2000/03/24 13:17:55  nn
+    #74032# documentation added
+
+    Revision 1.2  2000/01/27 16:13:35  mi
+    #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
+    new
+
+
+=============================================================================*/
+#endif

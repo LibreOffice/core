@@ -1,0 +1,395 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XParameters.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XParameters_idl__
+#define __com_sun_star_sdbc_XParameters_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_util_Date_idl__
+#include <com/sun/star/util/Date.idl>
+#endif
+
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+#ifndef __com_sun_star_util_Time_idl__
+#include <com/sun/star/util/Time.idl>
+#endif
+
+ module com {  module sun {  module star {  module io {
+interface XInputStream;
+};};};};
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+interface XRef;
+interface XArray;
+interface XBlob;
+interface XClob;
+
+
+// DocMerge from xml: interface com::sun::star::io::com::sun::star::sdbc::XParameters
+/** is used for parameter setting, commently implemented in conjunction with
+    PreparedStatements.
+
+
+    <p>
+    <b>Note:</b> The setXXX methods for setting IN parameter values
+    must specify types that are compatible with the defined SQL type of
+    the input parameter. For instance, if the IN parameter has SQL type
+    Integer, then the method <code>setLong</code> should be used.
+
+    </p>
+    <p>If arbitrary parameter type conversions are required, the method
+    <code>setObject</code> should be used with a target SQL type.
+    <br>
+    <br>
+    Example of setting a parameter; <code>con</code> is an active connection.
+    </p>
+
+
+
+
+
+    @example <listing>pstmt = con.prepareStatement("UPDATE EMPLOYEES SET SALARY = ? WHERE ID = ?")
+    pstmt.setDouble(1, 153833.00)
+    pstmt.setLong(2, 110592)
+    </listing>@see com::sun::star::sdbc::XPreparedStatement
+ */
+[ uik(5FFEC2E2-9520-11d3-8168D521-22976675), ident("XParameters", 1.0) ]
+interface XParameters: com::sun::star::uno::XInterface
+{
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setNull
+    /** sets the designated parameter to SQL NULL.
+     */
+    void setNull([in]long parameterIndex,
+                 [in]long sqlType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setObjectNull
+    /** sets the designated parameter to SQL NULL.  This version of setNull should
+        be used for user-named types and REF type parameters.  Examples
+        of user-named types include: STRUCT, DISTINCT, OBJECT, and
+        named array types.
+
+
+        <p>
+        <b>Note:</b> To be portable, applications must give the
+        SQL type code and the fully-qualified SQL type name when specifying
+        a NULL user-defined or REF parameter. In the case of a user-named type
+        the name is the type name of the parameter itself.  For a REF
+        parameter the name is the type name of the referenced type.  If
+        a SDBC driver does not need the type code or type name information,
+        it may ignore it.<br>
+        Although it is intended for user-named and Ref parameters,
+        this method may be used to set a null parameter of any JDBC type.
+        If the parameter does not have a user-named or REF type, the given
+        typeName is ignored.
+        </p>
+     */
+    void setObjectNull([in]long parameterIndex,
+                        [in]long sqlType,
+                        [in]string typeName) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setBoolean
+    /** sets the designated parameter to a boolean value.  The driver converts this
+        to a SQL BIT value when it sends it to the database.
+     */
+    void setBoolean([in]long parameterIndex, [in]boolean x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setByte
+    /** sets the designated parameter to a byte value.  The driver converts this
+        to a SQL TINYINT value when it sends it to the database.
+     */
+    void setByte([in]long parameterIndex, [in]byte x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setShort
+    /** sets the designated parameter to a short value.  The driver converts this
+        to a SQL SMALLINT value when it sends it to the database.
+     */
+    void setShort([in]long parameterIndex, [in]short x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setInt
+    /** sets the designated parameter to a long value.  The driver converts this
+        to a SQL INTEGER value when it sends it to the database.
+     */
+    void setInt([in]long parameterIndex, [in]long x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setLong
+    /** sets the designated parameter to a hyper value.  The driver converts this
+        to a SQL BIGINT value when it sends it to the database.
+     */
+    void setLong([in]long parameterIndex, [in]hyper x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setFloat
+    /** sets the designated parameter to a float value. The driver converts this
+        to a SQL FLOAT value when it sends it to the database.
+     */
+    void setFloat([in]long parameterIndex, [in]float x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setDouble
+    /** sets the designated parameter to a double value.  The driver converts this
+        to a SQL DOUBLE value when it sends it to the database.
+     */
+    void setDouble([in]long parameterIndex, [in]double x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setString
+    /** sets the designated parameter to a string value. The driver converts this
+        to a SQL VARCHAR or LONGVARCHAR value (depending on the argument's
+        size relative to the driver's limits on VARCHARs) when it sends
+        it to the database.
+     */
+    void setString([in]long parameterIndex, [in]string x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setBytes
+    /** sets the designated parameter to a sequence of bytes.  The driver converts
+        this to a SQL VARBINARY or LONGVARBINARY (depending on the
+        argument's size relative to the driver's limits on VARBINARYs)
+        when it sends it to the database.
+     */
+    void setBytes([in]long parameterIndex, [in]sequence<byte> x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setDate
+    /** sets the designated parameter to a date value. The driver converts this
+        to a SQL DATE value when it sends it to the database.
+     */
+    void setDate([in]long parameterIndex, [in]com::sun::star::util::Date x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setTime
+    /** sets the designated parameter to a time value. The driver converts this
+        to a SQL TIME value when it sends it to the database.
+     */
+    void setTime([in]long parameterIndex, [in]com::sun::star::util::Time x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setTimestamp
+    /** sets the designated parameter to a datetime value.  The driver
+        converts this to a SQL TIMESTAMP value when it sends it to the
+        database.
+     */
+    void setTimestamp([in]long parameterIndex,
+                      [in]com::sun::star::util::DateTime x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setBinaryStream
+    /** sets the designated parameter to the given input stream, which will have
+        the specified number of bytes.
+        When a very large binary value is input to a LONGVARBINARY or LONGVARCHAR
+        parameter, it may be more practical to send it via an
+        <type scope="com::sun::star::io">XInputStream</type>. SDBC will read the data
+        from the stream as needed, until it reaches end-of-file.
+     */
+    void setBinaryStream([in]long parameterIndex,
+                            [in]com::sun::star::io::XInputStream x,
+                             [in]long length) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setCharacterStream
+    /** sets the designated parameter to the given input stream, which will have
+        the specified number of bytes.
+        When a very large binary value is input to a LONGVARCHAR
+        parameter, it may be more practical to send it via a
+        <type scope="com::sun::star::io">XInputStream</type>. SDBC will read the data
+        from the stream as needed, until it reaches end-of-file.
+     */
+    void setCharacterStream([in]long parameterIndex,
+                             [in]com::sun::star::io::XInputStream x,
+                             [in]long length) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setObject
+    /** sets the value of a parameter using an any.
+
+
+        <p>The given object will be converted to the targetSqlType
+        before being sent to the database.
+        If the object has a custom mapping (is of a class implementing SQLData),
+        the SDBC driver should call its method <code>writeSQL</code> to write it
+        to the SQL data stream.
+        If, on the other hand, the object is of a service implementing Ref, Blob,
+        Clob, Struct, or Array, the driver should pass it to the database as a
+        value of the corresponding SQL type.
+        </p>
+        <p>Note that this method may be used to pass database-specific
+        abstract data types.
+        </p>
+     */
+    void setObject([in]long parameterIndex, [in]any x)
+            raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setObjectWithInfo
+    /** set a value from the Datatype ANY for a parameter.
+
+
+
+        <p>The given object will be converted to the targetSqlType
+        before being sent to the database.
+        If the object has a custom mapping (is of a class implementing SQLData),
+        the SDBC driver should call its method <code>writeSQL</code> to write it
+        to the SQL data stream.
+        If, on the other hand, the object is of a service implementing Ref, Blob,
+        Clob, Struct, or Array, the driver should pass it to the database as a
+        value of the corresponding SQL type.
+        </p>
+        <p>Note that this method may be used to pass database-specific
+        abstract data types.
+        </p>
+     */
+    void setObjectWithInfo([in]long parameterIndex,
+                              [in]any x, [in]long targetSqlType, [in]long scale)
+            raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setRef
+    /** sets a REF(&amp;lt;structured-type&amp;gt;) parameter.
+     */
+    void setRef ([in]long parameterIndex, [in]XRef x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setBlob
+    /** sets a BLOB parameter.
+     */
+    void setBlob ([in]long parameterIndex, [in]XBlob x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setClob
+    /** sets a CLOB parameter.
+     */
+    void setClob ([in]long parameterIndex, [in]XClob x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::setArray
+    /** sets an Array parameter.
+     */
+    void setArray ([in]long parameterIndex, [in]XArray x) raises (SQLException);
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::io::com::sun::star::sdbc::XParameters::clearParameters
+    /** clears the current parameter values immediately.
+
+
+        <p>In general, parameter values remain in force for repeated use of a
+        Statement. Setting a parameter value automatically clears its
+        previous value. However, in some cases it is useful to immediately
+        release the resources used by the current parameter values; this can
+        be done by calling clearParameters.
+        </p>
+     */
+    void clearParameters() raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:42  hjs
+    initial import
+
+    Revision 1.8  2000/09/11 11:52:43  mi
+    documentation merged from XML
+
+    Revision 1.6  2000/01/28 07:57:16  dg
+    #72121# documentation of update/setCharacterStream
+
+    Revision 1.5  1999/12/20 16:11:35  dg
+    #70278# changes in API
+
+    Revision 1.4  1999/12/13 13:47:55  dg
+    #70278# XSQLErrorBroadcaster removed
+
+    Revision 1.3  1999/12/06 07:57:52  dg
+    #70278# method renamed
+
+    Revision 1.2  1999/11/24 11:33:26  dg
+    chk includes
+
+    Revision 1.1  1999/11/24 08:41:06  dg
+    new StarDataBaseConnectivity
+
+===========================================================================*/
+#endif

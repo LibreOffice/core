@@ -1,0 +1,282 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDictionaryList.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XDictionaryList_idl__
+#define __com_sun_star_linguistic2_XDictionaryList_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XDictionary_idl__
+#include <com/sun/star/linguistic2/XDictionary.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XDictionaryListEventListener_idl__
+#include <com/sun/star/linguistic2/XDictionaryListEventListener.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** This interface allows to maintain a list of dictionaries.
+
+    @see    XDictionary
+    @see    XInterface
+*/
+[ uik(4BD5A954-5D68-11d4-9F090050-04D8BBC5), ident( "XDictionaryList", 1.0 ) ]
+interface XDictionaryList : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** This method returns the number of available dictionaries in
+        the list.
+
+        @returns
+        the number of dictionaries.
+    */
+    short getCount();
+
+    //-------------------------------------------------------------------------
+    /**
+         @returns
+         a sequence with an entry for every dictionary in the list.
+
+        @see    XDictionary
+    */
+    sequence<com::sun::star::linguistic2::XDictionary> getDictionaries();
+
+    //-------------------------------------------------------------------------
+    /** @returns
+        the XDictionary with the specified name. If no such
+        dictionary exists <NULL/> will be returned.
+
+        @param  aDictionaryName
+        specify the name of the dictionary to look for.
+
+        @see    XDictionary
+    */
+    com::sun::star::linguistic2::XDictionary getDictionaryByName(
+            [in] string aDictionaryName );
+
+    //-------------------------------------------------------------------------
+    /** This method adds a dictionary to the list.
+
+        @returns
+         <TRUE/> if the dictionary was added successfully, <FALSE/>
+         otherwise.
+
+        @param  xDictionary
+        the dictionary to be added.
+
+        @see    removeDictionary
+        @see    XDictionary
+    */
+    boolean addDictionary(
+            [in] com::sun::star::linguistic2::XDictionary xDictionary );
+
+    //-------------------------------------------------------------------------
+    /** This method removes a single dictionary from the list of
+        available ones.
+
+        <P>If the dictionary is still active it will be deactivated first.
+         The dictionary-list will remove itself from the list of dictionary
+         event listeners of the dictionary.</P>
+
+        @returns
+         <TRUE/> if the dictionary was removed successfully, <FALSE/>
+         otherwise.
+
+        @param  xDictionary
+        dictionary to be removed from the list of available dictionaries.
+
+        @see    addDictionary
+        @see    XDictionary
+    */
+    boolean removeDictionary(
+            [in] com::sun::star::linguistic2::XDictionary xDictionary );
+
+    //-------------------------------------------------------------------------
+    /** This method adds an entry to the list of dictionary-list event
+        listeners.
+
+        <P>On events each entry in the listener list will be notified.</P>
+
+        @returns
+        <TRUE/> if the entry was made, <FALSE/> else.
+        If the object disposes it will always fail.
+
+        @param  xListener
+        the object to be notified of dictionary list events.
+
+        @see    removeDictionaryListEventListener
+        @see    XDictionaryListEventListener
+    */
+    boolean addDictionaryListEventListener(
+        [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener,
+        [in] boolean bReceiveVerbose );
+
+    //-------------------------------------------------------------------------
+    /** This method removes an entry from the list of dictionary-list
+        event listeners.
+
+        @returns
+        <TRUE/> if the object to be removed was found (and removed),
+        <FALSE/> if the object was not found in the list.
+
+        @param  xListener
+        the object to be removed from the listener-list.
+
+        @see    addDictionaryListEventListener
+        @see    XDictionaryListEventListener
+    */
+    boolean removeDictionaryListEventListener(
+        [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener );
+
+    //-------------------------------------------------------------------------
+    /** increase calling level for beginCollectEvents by one.
+
+         <P>The calling level for beginCollectEvents is just an integer
+         counter that is initially set to 0.</P>
+
+        <P>As long as the calling level for beginCollectEvents is not 0
+         events will be buffered untill the next call to flushEvents.</P>
+
+        @returns
+         the current number of calling levels for beginCollectEvents.
+
+        @see    XDictionaryListEvent
+        @see    XDictionaryListEventListener
+        @see    flushEvents
+    */
+    short beginCollectEvents();
+
+    //-------------------------------------------------------------------------
+    /** flush the buffered events and decrease calling level for
+         beginCollectEvents by one.
+
+         <P>There should be one matching endCollectEvents call for every
+         beginCollectEvents call. Usually you will group these around
+         some code where you don't like to get notfied of every single
+         event.</P>
+
+        @returns
+         the current number of calling levels for beginCollectEvents.
+
+        @see    XDictionaryListEvent
+        @see    XDictionaryListEventListener
+        @see    flushEvents
+    */
+    short endCollectEvents();
+
+    //-------------------------------------------------------------------------
+    /** notifies the listeners of all buffered events and then clears
+         that buffer.
+
+        @returns
+         the current number of calling levels for beginCollectEvents.
+
+        @see    XDictionaryListEvent
+        @see    XDictionaryListEventListener
+    */
+    short flushEvents();
+
+    //-------------------------------------------------------------------------
+    /** creates a new personal dictionary.
+
+        @returns
+        an empty dictionary with the given name, language and type.
+         <NULL/> on failure.
+
+        @param  aName
+        is the name of the dictionary (should be unique).
+
+        @param  aLocale
+        defines the language of the dictionary.
+         Use an empty Locale
+        for dictionaries which may contain entries of all languages.
+
+        @param  eDicType
+        specifies the type of the dictionary.
+
+         @param aURL
+        is the URL of the location where the dictionary is persistent if
+        the XStorable interface is supported.
+        It may be empty which means the dictionary will not be persistent.
+
+        @see    XDictionary
+        @see    Locale
+        @see    DictionaryType
+    */
+    com::sun::star::linguistic2::XDictionary createDictionary(
+            [in] string aName,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] com::sun::star::linguistic2::DictionaryType eDicType,
+            [in] string aURL );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

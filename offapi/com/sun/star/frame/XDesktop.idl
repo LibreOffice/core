@@ -1,0 +1,209 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDesktop.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XDesktop_idl__
+#define __com_sun_star_frame_XDesktop_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XTerminateListener_idl__
+#include <com/sun/star/frame/XTerminateListener.idl>
+#endif
+
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XFrame_idl__
+#include <com/sun/star/frame/XFrame.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::frame::XDesktop
+/** This is the main interface of a desktop service.
+
+
+
+    <p>A desktop is an environment for components which can be viewed in
+    frames. Frames are like frames in HTML framesets. This does not imply
+    that a desktop can handle framesets; the frames may be top frames
+    only.
+
+    </p>@see service Desktop
+ */
+[ uik(E2280119-33D6-11D1-AABE00A0-249D5590), ident( "XDesktop", 1.0 ) ]
+interface XDesktop: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XDesktop::terminate
+    /** tries to terminate the desktop.
+
+
+
+        <p>First a vetoable queryTermination-event is broadcast. If no
+        TerminationVetoException was thrown, a notifyTermination-event is
+        broadcast and <true></true> will be returned; otherwise an
+        abortTermination-event is broadcast and <false></false> will be returned.
+        </p>@see exception com::sun::star::frame::TerminationVetoException
+                @see interface XTerminateListener
+     */
+    boolean terminate();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XDesktop::addTerminateListener
+    /** registers an event listener to the desktop, which is called
+        when the desktop is queried to terminate and when it really
+        terminates.
+     */
+    [oneway] void addTerminateListener( [in] com::sun::star::frame::XTerminateListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::frame::XDesktop::removeTerminateListener
+    /** unregisters an event listener which was registered with
+
+
+
+
+
+        .
+     */
+    [oneway] void removeTerminateListener( [in] com::sun::star::frame::XTerminateListener xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XDesktop::getComponents
+    /** @returns
+                a collection of all components which are loaded into a frame.
+
+                <p>The component is by definition the model of the control which
+                is loaded into a frame or, if no model exists, into the control
+                itself.
+
+                <p>The service, <type>Components</type>, which is available from this
+                method is a collection of all components of the desktop which are open
+                within a frame of the desktop.
+
+                @see service Components
+     */
+    [const] com::sun::star::container::XEnumerationAccess getComponents();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XDesktop::getCurrentComponent
+    /** @returns
+                the component within the desktop environment which has the UI focus.
+
+                <p>Normally, the component is the model part of the
+                active component. If no model existsm it is the active controller
+                (view) itself.
+     */
+    [const] com::sun::star::lang::XComponent getCurrentComponent();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::frame::XDesktop::getCurrentFrame
+    /** @returns
+                the frame of the component which has the
+                UI focus within this desktop enviroment.
+     */
+    [const] com::sun::star::frame::XFrame getCurrentFrame();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/09 14:24:56  mi
+    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
+
+    Revision 1.1.1.1  2000/09/18 23:35:21  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:28  mi
+    documentation merged from XML
+
+    Revision 1.2  1999/11/18 11:49:56  mi
+    XComponent now in module lang
+
+    Revision 1.1.1.1  1999/11/11 09:48:43  jsc
+    new
+
+
+=============================================================================*/
+#endif

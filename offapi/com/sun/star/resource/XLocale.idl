@@ -1,0 +1,338 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XLocale.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_resource_XLocale_idl__
+#define __com_sun_star_resource_XLocale_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_resource_MissingResourceException_idl__
+#include <com/sun/star/resource/MissingResourceException.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module resource {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::resource::XLocale
+/** offers some operations on <type scope="com::sun::star::lang">Locale</type>
+    structures.@see         XResourceBundle
+        @see         Locale
+ */
+[ uik(B16A2F60-1342-11D3-ABBB00A0-249D5590), ident( "XLocale", 1.0 ) ]
+interface XLocale: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::resource::XLocale::create
+    /** creates a locale from language, country, and variant.
+
+
+
+        <p>NOTE: ISO 639 is not a stable standard; some of the
+        language codes it defines (specifically iw, ji, and in) have
+        changed.  This constructor accepts both the old codes (iw, ji,
+        and in) and the new codes (he, yi, and id), but all other API
+        on XLocale will return only the <b>NEW</b> codes.
+
+        </p>
+        <p>Note: The Java class <code>Locale</code> returns the <strong>old</strong> codes.
+
+        </p>
+     */
+    com::sun::star::lang::Locale create( [in] string aLanguage,
+             [in] string aCountry,
+             [in] string aVariant );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::resource::XLocale::getDefault
+    /** the common method of getting the current default locale.
+
+
+
+        <p>It is used for the presentation (for menus, dialogs etc.).
+        It is generally set once when your applet or application is
+        initialized, then never reset. (If you do reset the default
+        locale, you probably want to reload your GUI, so that the
+        change is reflected in your interface.)
+
+        </p>
+        <p>More advanced programs allow users to use different locales
+        for different fields, for example, in a spreadsheet.
+
+        <br>Note that the initial setting will match the host system.</p>
+     */
+    com::sun::star::lang::Locale getDefault();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::resource::XLocale::setDefault
+    /** sets the default locale for the whole environment.
+
+
+
+        <p>It is normally set once at the beginning of an application,
+        then never reset. <code>setDefault</code> does not reset the host
+        locale.
+
+        </p>
+     */
+    void setDefault( [in] com::sun::star::lang::Locale newLocale );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getAvailableLocales
+    /** @returns
+                    a sequence of all locales which are available in the system.
+     */
+    sequence<com::sun::star::lang::Locale> getAvailableLocales();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getISOCountries
+    /** @returns
+                    a sequence of all ISO country codes known to the component.
+     */
+    sequence<string> getISOCountries();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getISOLanguages
+    /** @returns
+                    a sequence of all ISO language codes known to the component.
+     */
+    sequence<string> getISOLanguages();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getLanguagesForCountry
+    /** @returns
+                    a sequence for language codes which are valid within the
+                    given country.
+     */
+    sequence<string> getLanguagesForCountry( [in] string country );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getISO3Language
+    /** @returns
+                    the ISO language code for the specified locale.
+     */
+    string getISO3Language( [in] com::sun::star::lang::Locale locale )
+            raises( com::sun::star::resource::MissingResourceException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getISO3Country
+    /** @returns
+                    the ISO country code for the specified locale.
+     */
+    string getISO3Country( [in] com::sun::star::lang::Locale locale )
+            raises( com::sun::star::resource::MissingResourceException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayLanguage_Default
+    /** @returns
+                    language code for display of field to user. If the localized
+                    name is not found, returns the ISO code. The desired user language
+                    is from the default locale.
+     */
+    string getDisplayLanguage_Default( [in] com::sun::star::lang::Locale locale );
+
+    //-------------------------------------------------------------------------
+
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayLanguage
+    /** @return
+                    language code for display of field to user. If the localized
+                    name is not found, returns the ISO codes.
+
+                @param inLocale
+                    specifies the desired user language.
+
+                @example
+                    "English (UK)", "Deutch", "Germany"
+     */
+    string getDisplayLanguage( [in] com::sun::star::lang::Locale locale,
+             [in] com::sun::star::lang::Locale inLocale );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayCountry_Default
+    /** @returns
+                    country code for display of field to user. If the localized
+                    name is not found, returns the ISO code. The desired user country
+                    is from the default locale.
+     */
+    string getDisplayCountry_Default( [in] com::sun::star::lang::Locale locale );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayCountry
+    /** @returns
+                    country code for display of field to user. If the localized
+                    name is not found, returns the ISO codes.
+
+                @param inLocale
+                    specifies the desired user country.
+     */
+    string getDisplayCountry( [in] com::sun::star::lang::Locale locale,
+             [in] com::sun::star::lang::Locale inLocale );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayVariant_Default
+    /** @returns
+                    variant code for display of field to user. The desired user variant
+                    is from the default locale.
+     */
+    string getDisplayVariant_Default( [in] com::sun::star::lang::Locale locale );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayVariant
+    /** @returns
+                    variant code for display of field to user. If the localized
+                    name is not found, returns the ISO codes.
+
+                @param inLocale
+                    specifies the desired user variant.
+     */
+    string getDisplayVariant( [in] com::sun::star::lang::Locale locale,
+             [in] com::sun::star::lang::Locale inLocale );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayName_Default
+    /** @returns
+                    a string to display the entire locale to user. If the localized
+                    name is not found, uses the ISO codes. The default locale is used
+                    for the presentation language.
+     */
+    string getDisplayName_Default( [in] com::sun::star::lang::Locale locale );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayName
+    /** @returns
+                    a string to display the entire locale to user. If the localized
+                    name is not found, uses the ISO codes.
+
+                @param inLocale
+                    specifies the desired user locale.
+     */
+    string getDisplayName( [in] com::sun::star::lang::Locale locale,
+             [in] com::sun::star::lang::Locale inLocale );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::resource::XLocale::equals
+    /** @returns
+                <TRUE/> if the <type scope="com::sun::star::lang">Locale</type> <var>l1</var> is equal to the
+                other one.
+
+                <p>A locale is deemed equal to another locale with identical
+                language, country, and variant, and unequal to all other
+                objects.
+     */
+    boolean equals( [in] com::sun::star::lang::Locale l1,
+             [in] com::sun::star::lang::Locale l2 );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:32  hjs
+    initial import
+
+    Revision 1.6  2000/09/11 11:52:37  mi
+    documentation merged from XML
+
+    Revision 1.4  2000/04/20 14:08:25  mi
+    documentation
+
+    Revision 1.3  2000/02/23 11:41:17  mi
+    results from proofreading in layouted version
+
+    Revision 1.2  2000/02/07 11:24:46  mi
+    zu #70728# missing documentation marked
+
+    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
+    new
+
+
+=============================================================================*/
+#endif

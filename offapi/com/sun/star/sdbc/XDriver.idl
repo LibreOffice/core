@@ -1,0 +1,202 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDriver.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mi $ $Date: 2000-11-06 09:21:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XDriver_idl__
+#define __com_sun_star_sdbc_XDriver_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_DriverPropertyInfo_idl__
+#include <com/sun/star/sdbc/DriverPropertyInfo.idl>
+#endif
+
+ module com {  module sun {  module star {  module sdbc {
+
+interface XConnection;
+interface XDriverManager;
+
+
+// DocMerge from xml: interface com::sun::star::sdbc::XDriver
+/** is the interface that every driver class must implement.
+
+
+
+    <p>Each driver should supply a service that implements
+    the Driver interface.
+
+    </p>
+    <p>The DriverManager will try to load as many drivers as it can
+    find and then for any given connection request, it will ask each
+    driver in turn to try to connect to the target URL.
+
+    </p>
+    <p>It is strongly recommended that each Driver object should be
+    small and standalone so that the Driver object can be loaded and
+    queried without bringing in vast quantities of supporting code.
+
+    </p>@see com::sun::star::sdbc::XDriverManager
+     @see com::sun::star::sdbc::XConnection
+ */
+[ uik(D6B60233-9067-11d3-9EE00010-5AD7A5C4), ident("XDriver", 1.0) ]
+interface XDriver: com::sun::star::uno::XInterface
+{
+
+    // DocMerge from xml: method com::sun::star::sdbc::XDriver::connect
+    /** attempts to make a database connection to the given URL.
+        The driver should return <null></null> if it realizes it is the wrong kind
+        of driver to connect to the given URL.  This will be common, as when
+        the driver manager is asked to connect to a given URL it passes
+        the URL to each loaded driver in turn.
+
+
+
+        <p>The driver should raise a SQLException if it is the right
+        driver to connect to the given URL, but has trouble connecting to
+        the database.
+
+        </p>
+        <p>The info argument can be used to pass arbitrary
+        string tag/value pairs as connection arguments.
+        Normally at least "user" and "password" properties should be
+        included in the Properties.
+        </p>
+     */
+    XConnection connect(
+                [in]string url,
+                [in]sequence<com::sun::star::beans::PropertyValue> info)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XDriver::acceptsURL
+    /** returns <true></true> if the driver thinks that it can open a connection
+        to the given URL.  Typically drivers will return <true></true> if they
+        understand the subprotocol specified in the URL and <false></false> if
+        they do not.
+     */
+    boolean acceptsURL([in]string url) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::sdbc::XDriver::getPropertyInfo
+    /** gets information about the possible properties for this driver.
+             <p>The getPropertyInfo method is intended to allow a generic GUI tool to
+             discover what properties it should prompt a human for in order to get
+             enough information to connect to a database.  Note that depending on
+             the values the human has supplied so far, additional values may become
+             necessary, so it may be necessary to iterate though several calls
+             to getPropertyInfo.
+             @param url
+                is the URL of the database to which to connect.
+             @param info
+                is a proposed list of tag/value pairs that will be sent on
+                connect open.
+             @returns
+                an array of DriverPropertyInfo objects describing possible
+                properties. This array may be an empty array if no properties
+                are required.
+             @throws SQLException
+                if a database access error occurs.
+     */
+    sequence<DriverPropertyInfo> getPropertyInfo([in]string url,
+                    [in] sequence<com::sun::star::beans::PropertyValue> info)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XDriver::getMajorVersion
+    /** gets the driver's major version number. Initially this should be 1.
+     */
+    [const] long getMajorVersion();
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::sdbc::XDriver::getMinorVersion
+    /** gets the driver's minor version number. Initially this should be 0.
+     */
+    [const] long getMinorVersion();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+    $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 23:35:41  hjs
+    initial import
+
+    Revision 1.4  2000/09/11 11:52:43  mi
+    documentation merged from XML
+
+    Revision 1.2  1999/12/13 13:47:55  dg
+    #70278# XSQLErrorBroadcaster removed
+
+    Revision 1.1  1999/11/24 08:41:05  dg
+    new StarDataBaseConnectivity
+
+===========================================================================*/
+#endif
