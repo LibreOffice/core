@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-05 12:54:07 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 13:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ class SwFont
     BOOL bPaintWrong    :1;  // Flag fuer Rechtschreibfehler
     BOOL bGreyWave      :1;  // Fuers extended TextInput: Graue Wellenlinie
     BOOL bNoColReplace  :1;  // Replacement without colormanipulation
+    BOOL bAutomaticCol  :1;  // White/black color depending on background color
 
 
     BOOL operator==( const SwFont &rFnt ) const;
@@ -304,6 +305,8 @@ public:
     inline BOOL IsNoHyph() const { return bNoHyph; }
     inline void SetBlink( const BOOL bBlink );
     inline BOOL IsBlink() const { return bBlink; }
+    inline void SetAutomaticCol( const BOOL bAutomaticCol );
+    inline BOOL IsAutomaticCol() const { return bAutomaticCol; }
     inline BYTE &GetTox() { return nToxCnt; }
     inline BYTE GetTox() const { return nToxCnt; }
     inline BOOL IsTox() const { return ( 0 != nToxCnt ); }
@@ -826,6 +829,11 @@ inline void SwFont::SetNoHyph( const BOOL bNew )
 inline void SwFont::SetBlink( const BOOL bNew )
 {
     bBlink = bNew;
+}
+
+inline void SwFont::SetAutomaticCol( const BOOL bNew )
+{
+    bAutomaticCol = bNew;
 }
 
 inline void SwFont::SetURL( const BOOL bNew )
