@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ french ] = "Couleurs" ;
         Text [ swedish ] = "Färger" ;
         Text [ danish ] = "Farver" ;
-        Text [ portuguese_brazilian ] = "Farben" ;
+        Text [ portuguese_brazilian ] = "Cores" ;
         Text [ portuguese ] = "Cores" ;
         Text[ chinese_simplified ] = "é¢œè‰²";
         Text[ russian ] = "Öâåòà";
@@ -113,6 +113,9 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ catalan ] = "Colors";
         Text[ finnish ] = "Värit";
         Text[ thai ] = "à¸ªà¸µ";
+        Text[ czech ] = "Barvy";
+        Text[ hebrew ] = "â€®×¦×‘×¢×™×â€¬";
+        Text[ hindi ] = "à¤°à¤‚à¤—";
     };
     FixedText FT_1
     {
@@ -123,15 +126,15 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ dutch ] = "Uitgangskleur" ;
         Text [ english_us ] = "Source color" ;
         Text [ italian ] = "Colore origine" ;
-        Text [ spanish ] = "Color fuente" ;
+        Text [ spanish ] = "Color de origen" ;
         Text [ french ] = "Couleur d'origine" ;
         Text [ swedish ] = "Källfärg" ;
         Text [ danish ] = "Kildefarve" ;
-        Text [ portuguese_brazilian ] = "Quellfarbe" ;
+        Text [ portuguese_brazilian ] = "Cor de origem" ;
         Text [ portuguese ] = "Cor-fonte" ;
         Text[ chinese_simplified ] = "æºé¢œè‰²";
         Text[ russian ] = "Èñõîäíûé öâåò";
-        Text[ polish ] = "Kolor orygin.";
+        Text[ polish ] = "Pocz¹tkowy";
         Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ã‚«ãƒ©ãƒ¼";
         Text[ chinese_traditional ] = "æºé¡è‰²";
         Text[ arabic ] = "Çááæä ÇáÃÕáí";
@@ -142,6 +145,9 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ catalan ] = "Color font";
         Text[ finnish ] = "Lähdeväri";
         Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸ªà¸µ";
+        Text[ czech ] = "PÅ¯vodnÃ­ barva";
+        Text[ hebrew ] = "â€®×¦×‘×¢ ××§×•×¨â€¬";
+        Text[ hindi ] = "à¤®à¥‚à¤² à¤°à¤‚à¤—";
     };
     FixedText FT_2
     {
@@ -156,7 +162,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ dutch ] = "Tolerantie" ;
         Text [ swedish ] = "Tolerans" ;
         Text [ danish ] = "Tolerance" ;
-        Text [ portuguese_brazilian ] = "Toleranz" ;
+        Text [ portuguese_brazilian ] = "Tolerância" ;
         Text [ portuguese ] = "Tolerância" ;
         Text[ chinese_simplified ] = "åå·®";
         Text[ russian ] = "Äîïóñê";
@@ -171,6 +177,9 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ catalan ] = "Tolerància";
         Text[ finnish ] = "Toleranssi";
         Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸§à¹‰à¸²à¸‡";
+        Text[ czech ] = "Tolerance";
+        Text[ hebrew ] = "â€®×˜×•×œ×¨× ×¡×™×â€¬";
+        Text[ hindi ] = "à¤¸à¤¹à¤¨à¤¶à¥€à¤²à¤¤à¤¾";
     };
     FixedText FT_3
     {
@@ -185,7 +194,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ dutch ] = "Vervangen door..." ;
         Text [ swedish ] = "Ersätt med..." ;
         Text [ danish ] = "Erstat med..." ;
-        Text [ portuguese_brazilian ] = "Ersetzen durch..." ;
+        Text [ portuguese_brazilian ] = "Substituir por..." ;
         Text [ portuguese ] = "Substituir por..." ;
         Text[ chinese_simplified ] = "æ›¿æ¢ä¸º...";
         Text[ russian ] = "Çàìåíèòü íà...";
@@ -195,11 +204,14 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ...";
         Text[ greek ] = "ÁíôéêáôÜóôáóç ìå...";
         Text[ korean ] = "ë°”ê¾¸ê¸°...";
-        Text[ turkish ] = "Yeni renk...";
+        Text[ turkish ] = "Yeni değer...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplaça amb...";
         Text[ finnish ] = "Korvaa värillä...";
         Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¸”à¹‰à¸§à¸¢...";
+        Text[ czech ] = "Nahradit za...";
+        Text[ hebrew ] = "â€®×•×œ×”×—×œ×™×£ ×‘...â€¬";
+        Text[ hindi ] = "à¤¸à¥‡ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹...";
     };
 
     // line 1
@@ -376,21 +388,24 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ dutch ] = "~Transparantie" ;
         Text [ swedish ] = "~Transparens" ;
         Text [ danish ] = "Tra~nsparens" ;
-        Text [ portuguese_brazilian ] = "Transparenz" ;
+        Text [ portuguese_brazilian ] = "Tr~ansparência" ;
         Text [ portuguese ] = "~Transparência" ;
         Text[ chinese_simplified ] = "é€æ˜(~A)";
         Text[ russian ] = "Ïğîçğà÷íîñòü";
-        Text[ polish ] = "Przezroczystoœæ";
+        Text[ polish ] = "~Przezroczystoœæ";
         Text[ japanese ] = "é€éæ€§(~A)";
         Text[ chinese_traditional ] = "é€æ˜(~A)";
         Text[ arabic ] = "ÔİÇİíÉ";
         Text[ greek ] = "ÄéáöÜíåéá";
         Text[ korean ] = "íˆ¬ëª…(~A)";
-        Text[ turkish ] = "Saydamlık";
+        Text[ turkish ] = "Ş~effaflık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Transparència";
         Text[ finnish ] = "~Läpinäkyvyys";
         Text[ thai ] = "à¹‚à¸›à¸£à¹ˆ~à¸‡à¹à¸ªà¸‡";
+        Text[ czech ] = "PrÅ¯hlednost";
+        Text[ hebrew ] = "â€®×©×§×£â€¬";
+        Text[ hindi ] = "à¤ªà¤¾à¤°~à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾";
     };
 
     PushButton BTN_EXEC
@@ -407,20 +422,23 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ swedish ] = "~Ersätt" ;
         Text [ danish ] = "~Erstat" ;
         Text [ portuguese ] = "~Substituir" ;
-        Text [ portuguese_brazilian ] = "Ersetzen" ;
+        Text [ portuguese_brazilian ] = "~Substituir" ;
         Text[ chinese_simplified ] = "æ›¿æ¢(~R)";
         Text[ russian ] = "Çàìåíèòü";
-        Text[ polish ] = "Zamieñ";
+        Text[ polish ] = "~Zamieñ";
         Text[ japanese ] = "ç½®æ›(~R)";
         Text[ chinese_traditional ] = "æ›¿ä»£(~R)";
         Text[ arabic ] = "ÇÓÊÈÏÇá";
         Text[ greek ] = "ÁíôéêáôÜóôáóç";
         Text[ korean ] = "ë°”ê¾¸ê¸°(~R)";
-        Text[ turkish ] = "Değiştir";
+        Text[ turkish ] = "~Değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplaça";
         Text[ finnish ] = "~Korvaa";
         Text[ thai ] = "à¹~à¸—à¸™à¸—à¸µà¹ˆ";
+        Text[ czech ] = "Nahradit";
+        Text[ hebrew ] = "â€®×”×—×œ×¤×”â€¬";
+        Text[ hindi ] = "~à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹";
     };
 
     ListBox LB_TRANS
@@ -458,7 +476,7 @@ DockingWindow RID_SVXDLG_BMPMASK
                 Text [ swedish ] = "Pipett" ;
                 Text [ danish ] = "Pipette" ;
                 Text [ portuguese ] = "Pipeta" ;
-                Text [ portuguese_brazilian ] = "Pipette" ;
+                Text [ portuguese_brazilian ] = "Pipeta" ;
                 Text[ chinese_simplified ] = "å–è‰²å™¨";
                 Text[ russian ] = "Ïèïåòêà";
                 Text[ polish ] = "Pipeta";
@@ -472,6 +490,9 @@ DockingWindow RID_SVXDLG_BMPMASK
                 Text[ catalan ] = "Comptagotes";
                 Text[ finnish ] = "Valitse korvattava väri";
                 Text[ thai ] = "à¸•à¸±à¸§à¸«à¸¢à¸”à¸ªà¸µ";
+                Text[ czech ] = "KapÃ¡tko";
+                Text[ hebrew ] = "â€®×˜×¤×˜×¤×ªâ€¬";
+                Text[ hindi ] = "à¤…à¤‡à¤¡à¥à¤°à¤¾à¤ªà¥à¤ªà¤°";
             };
         };
     };
@@ -489,7 +510,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     Text [ dutch ] = "Pipet" ;
     Text [ swedish ] = "Pipett" ;
     Text [ danish ] = "Pipette" ;
-    Text [ portuguese_brazilian ] = "Pipette" ;
+    Text [ portuguese_brazilian ] = "Pipeta" ;
     Text [ portuguese ] = "Pipeta" ;
     Text[ chinese_simplified ] = "å–è‰²å™¨";
     Text[ russian ] = "Ïèïåòêà";
@@ -516,6 +537,9 @@ DockingWindow RID_SVXDLG_BMPMASK
         ImageBitmap = Bitmap { File = "sc10350_h.bmp" ; };
         MASKCOLOR
     };
+    Text[ czech ] = "KapÃ¡tko";
+    Text[ hebrew ] = "â€®×˜×¤×˜×¤×ªâ€¬";
+    Text[ hindi ] = "à¤…à¤‡à¤¡à¥à¤°à¤¾à¤ªà¥à¤ªà¤°";
 };
 
 String RID_SVXDLG_BMPMASK_STR_TRANSP
@@ -532,8 +556,8 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
     Text[ italian ] = "Trasparente";
     Text[ danish ] = "Transparent";
     Text[ swedish ] = "Transparent";
-    Text[ polish ] = "PrzeŸroczysty";
-    Text[ portuguese_brazilian ] = "Transparent";
+    Text[ polish ] = "Przezroczysty";
+    Text[ portuguese_brazilian ] = "Transparente";
     Text[ japanese ] = "å¡—ã‚Šã¤ã¶ã—ãªã—";
     Text[ korean ] = "íˆ¬ëª…";
     Text[ chinese_simplified ] = "é€æ˜";
@@ -543,6 +567,9 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
     Text[ catalan ] = "Transparent";
     Text[ finnish ] = "Läpinäkyvä";
     Text[ thai ] = "à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
+    Text[ czech ] = "PrÅ¯hlednÃ©";
+    Text[ hebrew ] = "â€®×©×§×•×£â€¬";
+    Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•";
 };
 
 String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
@@ -552,17 +579,45 @@ String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
     Text = "Quellfarbe";
     Text [ ENGLISH ] = "Source Color";
     Text[ english_us ] = "Source Color";
-    Text[ french ] = "Source Color";
-    Text[ spanish ] = "Source Color";
-    Text[ italian ] = "Source Color";
-    Text[ swedish ] = "Source Color";
-    Text[ japanese ] = "Source Color";
-    Text[ korean ] = "Source Color";
-    Text[ chinese_simplified ] = "Source Color";
-    Text[ chinese_traditional ] = "Source Color";
+    Text[ french ] = "Couleur d'origine";
+    Text[ spanish ] = "Color de origen";
+    Text[ italian ] = "Colore origine";
+    Text[ swedish ] = "Källfärg";
+    Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ã‚«ãƒ©ãƒ¼";
+    Text[ korean ] = "ì›ë³¸ ìƒ‰ìƒ";
+    Text[ chinese_simplified ] = "æºé¢œè‰²";
+    Text[ chinese_traditional ] = "æºé¡è‰²";
+    Text[ turkish ] = "Renk kodu";
+    Text[ greek ] = "Âáóéêü ÷ñşìá";
+    Text[ dutch ] = "Uitgangskleur";
+    Text[ finnish ] = "Lähdeväri";
+    Text[ czech ] = "PÅ¯vodnÃ­ barva";
+    Text[ danish ] = "Kildefarve";
+    Text[ arabic ] = "Çááæä ÇáÃÕáí";
+    Text[ hebrew ] = "â€®×¦×‘×¢ ××§×•×¨â€¬";
+    Text[ catalan ] = "Color font";
+    Text[ portuguese ] = "Cor-fonte";
+    Text[ russian ] = "Èñõîäíûé";
+    Text[ polish ] = "Kolor orygin.";
+    Text[ portuguese_brazilian ] = "Cor-Fonte";
+    Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸ªà¸µ";
+    Text[ hindi ] = "à¤®à¥‚à¤² à¤°à¤‚à¤—";
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
