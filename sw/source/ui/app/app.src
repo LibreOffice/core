@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 22:37:38 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 22:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1668,7 +1668,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text[ dutch ] = "%PRODUCTNAME 3.0 Tekst";
     Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 Œƒ±æ";
     Text[ greek ] = " ÂﬂÏÂÌÔ (%PRODUCTNAME 3.0)";
-    Text[ korean ] = "%PRODUCTNAME 3.0 Text ";
+    Text[ korean ] = "%PRODUCTNAME 3.0 Text";
     Text[ turkish ] = "%PRODUCTNAME 3.0 metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 3.0 Texto";
@@ -1698,7 +1698,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text[ dutch ] = "%PRODUCTNAME 4.0 Tekst";
     Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 Œƒ±æ";
     Text[ greek ] = " ÂﬂÏÂÌÔ (%PRODUCTNAME 4.0)";
-    Text[ korean ] = "%PRODUCTNAME 4.0 Text ";
+    Text[ korean ] = "%PRODUCTNAME 4.0 Text";
     Text[ turkish ] = "%PRODUCTNAME 4.0 metni";
     Text[ catalan ] = "%PRODUCTNAME 4.0 texto";
     Text[ finnish ] = "Teksti (%PRODUCTNAME 4.0)";
@@ -1753,7 +1753,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Œƒ±æŒƒµµ";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 §Â¶r§Â•Û";
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
-    Text[ arabic ] = "‰’ „‰ %PRODUCTNAME 6.0";
+    Text[ arabic ] = "„” ‰œ ‰’ „‰ %PRODUCTNAME 6.0";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Texto";
     Text[ finnish ] = "Text (%PRODUCTNAME 5.0)";
 };
@@ -3166,5 +3166,6 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ catalan ] = "desconocido";
     Text[ finnish ] = "tuntematon";
 };
+
 
 
