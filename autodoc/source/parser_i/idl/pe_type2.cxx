@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_type2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,34 @@
 #include <s2_luidl/uidl_tok.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_keyw.hxx>
+#include <s2_luidl/tk_punct.hxx>
 
+
+
+/** Implementation Concept for Parsing a Type
+
+Example Type:
+    sequence < ::abc::TName< TplType > >  AnyName;
+
+Status Changes:
+
+expect_type:
+    sequence        -> expect_type
+    <               -> expect_type
+    ::              -> expect_quname_part
+    abc             -> expect_quname_separator
+    ::              -> expect_quname_part
+    TName           -> expect_quname_separator
+    <               -> in_template_type (process in nested PE_Type instance)
+
+        expect_type:
+            TplType         ->expect_quname_separator
+            >               -> e_none (finish, '>' not handled)
+
+    >               -> expect_quname_separator
+    >               -> expect_quname_separator (not finish, because sequencecounter > 0)
+    AnyName         -> e_none  (finish)
+*/
 
 
 namespace csi
@@ -84,10 +111,13 @@ namespace uidl
 PE_Type::PE_Type( ary::idl::Type_id & o_rResult )
     :   pResult(&o_rResult),
         nIsSequenceCounter(0),
+        nSequenceDownCounter(0),
         bIsUnsigned(false),
         sFullType(),
         eState(e_none),
-        sLastPart()
+        sLastPart(),
+        pPE_TemplateType(0), // @attention Recursion, only initiate, if needed!
+        nTemplateType(0)
 {
 }
 
@@ -142,7 +172,42 @@ PE_Type::Process_NameSeparator()
 void
 PE_Type::Process_Punctuation( const TokPunctuation & i_rToken )
 {
-    Finish();
+    if (eState == expect_type)
+    {
+        csv_assert(i_rToken.Id() == TokPunctuation::Lesser);
+           SetResult(done, stay);
+    }
+    else if (eState == expect_quname_separator)
+    {
+        switch (i_rToken.Id())
+        {
+            case TokPunctuation::Lesser:
+                eState = in_template_type;
+                SetResult( done, push_sure, &MyTemplateType() );
+                break;
+
+            case TokPunctuation::Greater:
+                if (nSequenceDownCounter > 0)
+                {
+                    nSequenceDownCounter--;
+                    SetResult(done, stay);
+                }
+                else
+                {
+                    Finish();
+                }
+                break;
+
+            default:
+                Finish();
+        }   // end switch
+    }
+    else if (eState == in_template_type)
+    {
+        csv_assert( i_rToken.Id() == TokPunctuation::Greater );
+        eState = expect_quname_separator;
+        SetResult(done, stay);
+    }
 }
 
 void
@@ -156,14 +221,17 @@ PE_Type::Process_BuiltInType( const TokBuiltInType & i_rToken )
     }
     else if (eState == expect_quname_part)
     {
+        // Can this happen?
+
         sLastPart = i_rToken.Text();
         eState = expect_quname_separator;
         SetResult(done, stay);
     }
     else if (eState == expect_quname_separator)
     {
-        sFullType.SetLocalName(sLastPart);
-        SetResult(not_done, pop_success);
+        // Can this happen?
+
+        Finish();
     }
 }
 
@@ -179,6 +247,7 @@ PE_Type::Process_TypeModifier( const TokTypeModifier & i_rToken )
                     break;
             case TokTypeModifier::tmod_sequence:
                     nIsSequenceCounter++;
+                    nSequenceDownCounter++;
                     break;
             default:
                 csv_assert(false);
@@ -187,8 +256,9 @@ PE_Type::Process_TypeModifier( const TokTypeModifier & i_rToken )
     }
     else if (eState == expect_quname_separator)
     {
-        sFullType.SetLocalName(sLastPart);
-        SetResult(not_done, pop_success);
+        // Can this happen?
+
+        Finish();
     }
 }
 
@@ -201,8 +271,23 @@ PE_Type::Process_Default()
 void
 PE_Type::Finish()
 {
+    csv_assert(nSequenceDownCounter == 0);
+
     sFullType.SetLocalName(sLastPart);
     SetResult(not_done, pop_success);
+}
+
+PE_Type &
+PE_Type::MyTemplateType()
+{
+    if (NOT pPE_TemplateType)
+    {
+        pPE_TemplateType = new PE_Type(nTemplateType);
+        pPE_TemplateType->EstablishContacts( this,
+                                             Gate(),
+                                             TokenResult() );
+    }
+    return *pPE_TemplateType;
 }
 
 void
@@ -211,9 +296,11 @@ PE_Type::InitData()
     eState = expect_type;
 
     nIsSequenceCounter = 0;
+    nSequenceDownCounter = 0;
     bIsUnsigned = false;
     sFullType.Empty();
     sLastPart.clear();
+    nTemplateType = 0;
 }
 
 void
@@ -228,7 +315,8 @@ PE_Type::TransferData()
     const ary::idl::Type &
         result = Gate().Types().CheckIn_Type( sFullType,
                                               nIsSequenceCounter,
-                                              CurNamespace().CeId() );
+                                              CurNamespace().CeId(),
+                                              nTemplateType );
     *pResult = result.TypeId();
     eState = e_none;
 }
@@ -242,6 +330,3 @@ PE_Type::MyPE()
 
 }   // namespace uidl
 }   // namespace csi
-
-
-
