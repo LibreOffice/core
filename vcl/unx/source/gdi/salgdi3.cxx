@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:34:11 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1171,7 +1171,6 @@ void SalGraphicsData::DrawServerSimpleFontString( const ServerFontLayout& rSalLa
 
 #ifndef _USE_PRINT_EXTENSION_
 
-// TODO: move into psp project
 class PspFontLayout : public GenericSalLayout
 {
 public:
@@ -1195,7 +1194,7 @@ PspFontLayout::PspFontLayout( ::psp::PrinterGfx& rGfx )
     mnFontID     = mrPrinterGfx.GetFontID();
     mnFontHeight = mrPrinterGfx.GetFontHeight();
     mnFontWidth  = mrPrinterGfx.GetFontWidth();
-    mbVertical   = false;
+    mbVertical   = mrPrinterGfx.GetFontVertical();
 }
 
 //--------------------------------------------------------------------------
@@ -1218,12 +1217,12 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         int nGlyphIndex = cChar;  // printer glyphs = unicode
-#if 0
-        // TODO: find out if printer font really contains the char
+
         // update fallback_runs if needed
-        if( rGfx.HasGlyph( cChar ) )
+        psp::CharacterMetric aMetric;
+        mrPrinterGfx.GetFontMgr().getMetrics( mnFontID, cChar, cChar, &aMetric, mbVertical );
+        if( aMetric.width == -1 && aMetric.height == -1 )
             rArgs.NeedFallback( nCharPos, bRightToLeft );
-#endif
 
         // apply pair kerning to prev glyph if requested
         if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
@@ -1254,6 +1253,36 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
     SetOrientation( mrPrinterGfx.GetFontAngle() );
     SetUnitsPerPixel( nUnitsPerPixel );
     return (nOldGlyphId >= 0);
+}
+
+class PspServerFontLayout : public ServerFontLayout
+{
+public:
+    PspServerFontLayout( ::psp::PrinterGfx&, ServerFont& rFont );
+
+    virtual void        InitFont() const;
+private:
+    ::psp::PrinterGfx&  mrPrinterGfx;
+    int                 mnFontID;
+    int                 mnFontHeight;
+    int                 mnFontWidth;
+    bool                mbVertical;
+};
+
+PspServerFontLayout::PspServerFontLayout( ::psp::PrinterGfx& rGfx, ServerFont& rFont )
+        :   ServerFontLayout( rFont ),
+            mrPrinterGfx( rGfx )
+{
+    mnFontID     = mrPrinterGfx.GetFontID();
+    mnFontHeight = mrPrinterGfx.GetFontHeight();
+    mnFontWidth  = mrPrinterGfx.GetFontWidth();
+    mbVertical   = mrPrinterGfx.GetFontVertical();
+}
+
+void PspServerFontLayout::InitFont() const
+{
+    mrPrinterGfx.SetFont( mnFontID, mnFontHeight, mnFontWidth,
+        mnOrientation, mbVertical );
 }
 
 //--------------------------------------------------------------------------
@@ -2017,6 +2046,8 @@ SalLayout* SalGraphicsData::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackL
         int nFontId = m_pPrinterGfx->GetFontID();
         if( psp::fonttype::TrueType != psp::PrintFontManager::get().getFontType( nFontId ) )
             rArgs.mnFlags |= SAL_LAYOUT_DISABLE_GLYPH_PROCESSING;
+        else if( nFallbackLevel > 0 )
+            rArgs.mnFlags &= ~SAL_LAYOUT_DISABLE_GLYPH_PROCESSING;
     }
 #endif // !defined(_USE_PRINT_EXTENSION_)
 
@@ -2024,7 +2055,7 @@ SalLayout* SalGraphicsData::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackL
 
     if( mpServerFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
-        pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
+        pLayout = m_pPrinterGfx ? new PspServerFontLayout( *m_pPrinterGfx, *mpServerFont[nFallbackLevel] ) : new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
 #if !defined(_USE_PRINT_EXTENSION_)
     else if( m_pPrinterGfx != NULL )
         pLayout = new PspFontLayout( *m_pPrinterGfx );
