@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativeview.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:37:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -65,7 +65,7 @@ static LRESULT APIENTRY NativeViewWndProc( HWND , UINT , WPARAM , LPARAM );
  * Signature  : ()I
  * Description: returns an identifier for the current operating system
  */
-JNIEXPORT jint JNICALL Java_OfficeDev_samples_DesktopEnvironment_NativeView_getNativeWindowSystemType
+JNIEXPORT jint JNICALL Java_NativeView_getNativeWindowSystemType
   (JNIEnv * env, jobject obj_this)
 {
     return (SYSTEM_WIN32);
@@ -78,7 +78,7 @@ JNIEXPORT jint JNICALL Java_OfficeDev_samples_DesktopEnvironment_NativeView_getN
  * Signature  : ()J
  * Description: returns the native systemw window handle of this object
  */
-JNIEXPORT jlong JNICALL Java_OfficeDev_samples_DesktopEnvironment_NativeView_getNativeWindow
+JNIEXPORT jlong JNICALL Java_NativeView_getNativeWindow
   (JNIEnv * env, jobject obj_this)
 {
     jboolean                      result  ;
