@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecomponenthelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:25:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //.........................................................................
 namespace comphelper
@@ -90,7 +93,7 @@ namespace comphelper
     /** base class encapsulating common functionality for the helper classes implementing
         the XAccessibleComponent respectively XAccessibleExtendendComponent
     */
-    class OCommonAccessibleComponent : public OAccessibleContextHelper
+    class COMPHELPER_DLLPUBLIC OCommonAccessibleComponent : public OAccessibleContextHelper
     {
     protected:
         OCommonAccessibleComponent();
@@ -118,13 +121,14 @@ namespace comphelper
     //= OAccessibleComponentHelper
     //=====================================================================
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessibleComponent
-                                >   OAccessibleComponentHelper_Base;
+    struct OAccessibleComponentHelper_Base :
+        public ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleComponent >
+    {};
 
     /** a helper class for implementing an AccessibleContext which at the same time
         supports an XAccessibleComponent interface.
     */
-    class OAccessibleComponentHelper
+    class COMPHELPER_DLLPUBLIC OAccessibleComponentHelper
             :public OCommonAccessibleComponent
             ,public OAccessibleComponentHelper_Base
     {
@@ -156,7 +160,7 @@ namespace comphelper
     /** a helper class for implementing an AccessibleContext which at the same time
         supports an XAccessibleExtendedComponent interface.
     */
-    class OAccessibleExtendedComponentHelper
+    class COMPHELPER_DLLPUBLIC OAccessibleExtendedComponentHelper
             :public OCommonAccessibleComponent
             ,public OAccessibleExtendedComponentHelper_Base
     {
