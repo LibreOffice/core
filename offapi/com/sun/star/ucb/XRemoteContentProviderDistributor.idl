@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderDistributor.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ module com { module sun { module star { module ucb {
     @author Stephan Bergmann
     @see XRemoteContentProviderAcceptor
 */
-interface XRemoteContentProviderDistributor: com::sun::star::uno::XInterface
+published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Offer the local content broker to a remote content provider acceptor.
