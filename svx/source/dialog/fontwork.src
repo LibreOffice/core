@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:25:58 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                     MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
                 };
                 Text [ english_us ] = "Contour" ;
-                Text [ italian ] = "Bordo" ;
+                Text [ italian ] = "Contorno" ;
                 Text [ spanish ] = "Contorno" ;
                 Text [ french ] = "Contour" ;
                 Text [ dutch ] = "Contour" ;
@@ -1343,11 +1343,11 @@ String RID_SVXSTR_FONTWORK_FORM11
     Text [ swedish ] = "Stängd cirkel II" ;
     Text [ finnish ] = "Suljettu ympyrä II" ;
     Text [ english_us ] = "Closed Circle II" ;
-    Text[ chinese_simplified ] = "·â±ÕµÄÔ² II";
+    Text[ chinese_simplified ] = "·â±ÕµÄÔ²ÐÎ II";
     Text[ russian ] = "Çàìêíóòûé êðóã II";
     Text[ polish ] = "Zamkniête ko³o II";
     Text[ japanese ] = "‰~II";
-    Text[ chinese_traditional ] = "«Ê³¬ªº¶ê II";
+    Text[ chinese_traditional ] = "«Ê³¬ªº¶ê«¬ II";
     Text[ arabic ] = "ÏÇÆÑÉ ãÛáÞÉ II";
     Text[ greek ] = "Êëåéóôüò êýêëïò II";
     Text[ korean ] = "´ÝÈù ¿ø II";
@@ -1409,6 +1409,7 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ finnish ] = "Luo fonttityöobjekti";
 };
  // ********************************************************************** EOF
+
 
 
 
