@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-30 09:40:42 $
+#   last change: $Author: hjs $ $Date: 2002-09-05 11:39:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ APP1STDLIBS=shell32.lib\
             ole32.lib\
             gdi32.lib\
             oleaut32.lib\
-            tools32.lib\
             comdlg32.lib\
             kernel32.lib\
             comsupp.lib\
