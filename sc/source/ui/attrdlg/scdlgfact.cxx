@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdlgfact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:57:27 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 12:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include "namepast.hxx" //add for ScNamePasteDlg
 #include "pfiltdlg.hxx" //add for ScPivotFilterDlg
 #include "pvfundlg.hxx" //add for ScDPFunctionDlg
+#include "dpgroupdlg.hxx"
 #include "scendlg.hxx" //add for ScNewScenarioDlg
 #include "shtabdlg.hxx" //add for ScShowTabDlg
 #include "strindlg.hxx" //add for ScStringInputDlg
@@ -125,6 +126,8 @@ IMPL_ABSTDLG_BASE(AbstractScNamePasteDlg_Impl); //add for ScNamePasteDlg
 IMPL_ABSTDLG_BASE(AbstractScPivotFilterDlg_Impl); //add for ScPivotFilterDlg
 IMPL_ABSTDLG_BASE(AbstractScDPFunctionDlg_Impl); //add for ScDPFunctionDlg
 IMPL_ABSTDLG_BASE(AbstractScDPSubtotalDlg_Impl); //add for ScDPSubtotalDlg
+IMPL_ABSTDLG_BASE(AbstractScDPNumGroupDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractScDPDateGroupDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDPShowDetailDlg_Impl); //add for ScDPShowDetailDlg
 IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl); //add for ScNewScenarioDlg
 IMPL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl); //add for ScShowTabDlg
@@ -517,6 +520,21 @@ void AbstractScDPSubtotalDlg_Impl::FillLabelData( ScDPLabelData& rLabelData ) co
     pDlg->FillLabelData( rLabelData );
 }
 //add for AbstractScDPSubtotalDlg_Impl end
+
+ScDPNumGroupInfo AbstractScDPNumGroupDlg_Impl::GetGroupInfo() const
+{
+    return pDlg->GetGroupInfo();
+}
+
+ScDPNumGroupInfo AbstractScDPDateGroupDlg_Impl::GetGroupInfo() const
+{
+    return pDlg->GetGroupInfo();
+}
+
+sal_Int32 AbstractScDPDateGroupDlg_Impl::GetDatePart() const
+{
+    return pDlg->GetDatePart();
+}
 
 //add for AbstractScDPShowDetailDlg_Impl begin
 String AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
@@ -1107,6 +1125,23 @@ AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( 
     return 0;
 }
 //add for ScDPSubtotalDlg end
+
+AbstractScDPNumGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPNumGroupDlg(
+        Window* pParent, const ResId& rResId, const ScDPNumGroupInfo& rInfo )
+{
+    if( rResId.GetId() == RID_SCDLG_DPNUMGROUP )
+        return new AbstractScDPNumGroupDlg_Impl( new ScDPNumGroupDlg( pParent, rInfo ) );
+    return 0;
+}
+
+AbstractScDPDateGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPDateGroupDlg(
+        Window* pParent, const ResId& rResId,
+        const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate )
+{
+    if( rResId.GetId() == RID_SCDLG_DPDATEGROUP )
+        return new AbstractScDPDateGroupDlg_Impl( new ScDPDateGroupDlg( pParent, rInfo, nDatePart, rNullDate ) );
+    return 0;
+}
 
 //add for ScDPShowDetailDlg begin
 AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDlg (
