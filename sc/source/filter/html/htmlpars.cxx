@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-06 12:37:29 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,7 +1446,7 @@ void ScHTMLParser::TableOn( ImportInfo* pInfo )
                     }
                     break;
                     case HTML_O_BORDER:
-                        bBorderOn = TRUE;
+                        bBorderOn = ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
                         aTabName.Assign( pOption->GetString() );
@@ -1505,7 +1505,7 @@ void ScHTMLParser::TableOn( ImportInfo* pInfo )
                     }
                     break;
                     case HTML_O_BORDER:
-                        bBorderOn = TRUE;
+                        bBorderOn = ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
                         aTabName.Assign( pOption->GetString() );
