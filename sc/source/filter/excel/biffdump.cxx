@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 17:33:36 $
+ *  last change: $Author: dr $ $Date: 2002-12-09 13:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#include <tools/solmath.hxx>
 
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
