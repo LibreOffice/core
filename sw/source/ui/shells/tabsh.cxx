@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:46:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,9 @@ extern const USHORT __FAR_DATA aUITableAttrRange[] =
     RES_FRAMEDIR,                   RES_FRAMEDIR,
     RES_ROW_SPLIT,                  RES_ROW_SPLIT,
     FN_TABLE_BOX_TEXTDIRECTION,     FN_TABLE_BOX_TEXTDIRECTION,
+// --> collapsing borders FME 2005-05-27 #i29550#
+    RES_COLLAPSING_BORDERS,         RES_COLLAPSING_BORDERS,
+// <-- collapsing borders
     0
 };
 
@@ -629,6 +632,9 @@ void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
             RES_UL_SPACE,
             RES_SHADOW,
             RES_FRAMEDIR,
+            // --> collapsing borders FME 2005-05-27 #i29550#
+            RES_COLLAPSING_BORDERS,
+            // <-- collapsing borders
             0
         };
     for( const USHORT* pIds = aIds; *pIds; ++pIds )
