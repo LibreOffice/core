@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 14:05:55 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 11:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,7 +645,7 @@ String STR_QUERY_NOTABLE
     Text[ french ] = "(aucune table)";
     Text[ spanish ] = "(ninguna tabla)";
     Text[ swedish ] = "(ingen tabell)";
-    Text[ language_user1 ] = "nk26; nk26.10.99: was bedeutet  das?";
+    Text[ language_user1 ] = "nk26.10.99: was bedeutet  das?";
     Text[ russian ] = "(без таблицы)";
     Text[ italian ] = "(nessuna tabella)";
     Text[ danish ] = "(ingen tabel)";
@@ -1525,7 +1525,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         {
             Identifier = ID_EDIT_QUERY_SQL ;
             Text = "Show Parse Tree" ;
-            Text[ language_user1 ] = "; EM Oct 2002: Do Not Translate. This is only for the in-house developer \"Debugging\" version of SO.";
+            Text[ language_user1 ] = "EM Oct 2002: Do Not Translate. This is only for the in-house developer \"Debugging\" version of SO.";
             Text[ english_us ] = "Show Parse Tree";
             Text[ portuguese ] = "Show Parse Tree";
             Text[ russian ] = "Show Parse Tree";
