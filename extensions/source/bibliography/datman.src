@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-02 20:11:58 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,10 +103,10 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "Kolumnnamn";
         Text[ polish ] = "Nazwy kolumn";
         Text[ portuguese_brazilian ] = "Column names";
-        Text[ japanese ] = "—ñ–¼";
-        Text[ korean ] = "¿­ ÀÌ¸§";
-        Text[ chinese_simplified ] = "ÁĞÃû³Æ";
-        Text[ chinese_traditional ] = "Äæ¦W";
+        Text[ japanese ] = "åˆ—å";
+        Text[ korean ] = "ì—´ ì´ë¦„";
+        Text[ chinese_simplified ] = "åˆ—åç§°";
+        Text[ chinese_traditional ] = "æ¬„å";
         Text[ arabic ] = "ÃÓãÇÁ ÇáÃÚãÏÉ";
         Text[ turkish ] = "Sütun adları";
         Text[ language_user1 ] = " ";
@@ -470,10 +470,10 @@ ModalDialog RID_DLG_MAPPING
         Text[ swedish ] = "<ingen>";
         Text[ polish ] = "<brak>";
         Text[ portuguese_brazilian ] = "<none>";
-        Text[ japanese ] = "<‚È‚µ>";
-        Text[ korean ] = "<¾øÀ½>";
-        Text[ chinese_simplified ] = "<ÎŞ>";
-        Text[ chinese_traditional ] = "<µL>";
+        Text[ japanese ] = "<ãªã—>";
+        Text[ korean ] = "<ì—†ìŒ>";
+        Text[ chinese_simplified ] = "<æ— >";
+        Text[ chinese_traditional ] = "<ç„¡>";
         Text[ arabic ] = "<ÈÏæä>";
         Text[ turkish ] = "<Yok>";
         Text[ language_user1 ] = " ";
@@ -493,10 +493,10 @@ ModalDialog RID_DLG_MAPPING
     Text[ swedish ] = "Kolumntilldelning för tabell %1";
     Text[ polish ] = "Przyporz¹dkowanie kolumn tabeli %1";
     Text[ portuguese_brazilian ] = "Column assignment for table %1";
-    Text[ japanese ] = "%1 Ã°ÌŞÙ‚Ì—ñ•ª—Ş";
-    Text[ korean ] = "Å×ÀÌºí %1ÀÇ ¿­ ·¹ÀÌ¾Æ¿ô";
-    Text[ chinese_simplified ] = "Îª±í¸ñ %1 ±àÅÅÉè¼ÆÁĞ";
-    Text[ chinese_traditional ] = "½s±Æ %1 ªí®æªºÄæ";
+    Text[ japanese ] = "%1 ï¾ƒï½°ï¾Œï¾ï¾™ã®åˆ—åˆ†é¡";
+    Text[ korean ] = "í…Œì´ë¸” %1ì˜ ì—´ ë ˆì´ì•„ì›ƒ";
+    Text[ chinese_simplified ] = "ä¸ºè¡¨æ ¼ %1 ç¼–æ’è®¾è®¡åˆ—";
+    Text[ chinese_traditional ] = "ç·¨æ’ %1 è¡¨æ ¼çš„æ¬„";
     Text[ turkish ] = "Tablo %1 için sütun düzeni";
     Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ ááÌÏæá %1";
     Text[ catalan ] = "Asignación de columnas para tabla %1";
@@ -545,10 +545,10 @@ ModalDialog RID_DLG_DBCHANGE
         Text[ swedish ] = "Post";
         Text[ polish ] = "Wpis";
         Text[ portuguese_brazilian ] = "Entry";
-        Text[ japanese ] = "€–Ú";
-        Text[ korean ] = "Ç×¸ñ";
-        Text[ chinese_simplified ] = "ÌõÄ¿";
-        Text[ chinese_traditional ] = "±ø¥Ø";
+        Text[ japanese ] = "é …ç›®";
+        Text[ korean ] = "í•­ëª©";
+        Text[ chinese_simplified ] = "æ¡ç›®";
+        Text[ chinese_traditional ] = "æ¢ç›®";
         Text[ arabic ] = "ÅÏÎÇá";
         Text[ turkish ] = "Giriş";
         Text[ catalan ] = "Entrada";
@@ -568,6 +568,7 @@ ModalDialog RID_DLG_DBCHANGE
         Border = TRUE;
     };
 };
+
 
 
 
