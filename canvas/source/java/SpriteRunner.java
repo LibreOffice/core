@@ -171,7 +171,7 @@ public class SpriteRunner
                 // have been processed.
 
                 //Make changes visible
-                canvas.updateScreen();
+                canvas.updateScreen( false );
 
                 // TODO: Evaluate vs. setPriority and other means
 //                 try
