@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:02:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,7 +913,10 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     {
         ::com::sun::star::frame::status::Visibility aVisibilityStatus;
         aVisibilityStatus.bVisible = sal_False;
-        aEvent.IsEnabled           = SFX_ITEM_AVAILABLE;
+
+        // MBA: we might decide to *not* disable "invisible" slots, but this would be
+        // a change that needs to adjust at least the testtool
+        aEvent.IsEnabled           = sal_False;
         aEvent.State               = makeAny( aVisibilityStatus );
     }
 
