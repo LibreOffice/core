@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-19 07:58:04 $
+ *  last change: $Author: mba $ $Date: 2002-04-30 08:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #include "accmgr.hxx"
 #include "sfxhelp.hxx"
 
-#define MAX_TOGGLEAREA_WIDTH        100  // max. 100 Pixel
-#define MAX_TOGGLEAREA_HEIGHT       100  // max. 100 Pixel
+#define MAX_TOGGLEAREA_WIDTH        20
+#define MAX_TOGGLEAREA_HEIGHT       20
 
 // implemented in 'sfx2/source/appl/childwin.cxx'
 extern sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize );
@@ -100,6 +100,7 @@ friend class SfxDockingWindow;
     // g"ultig:
     BOOL                bEndDocked;
     Size                aSplitSize;
+    Size                aRealSplitSize;
     USHORT              nLine;
     USHORT              nPos;
     USHORT              nDockLine;
@@ -143,6 +144,13 @@ void SfxDockingWindow::Resize()
             if ( pImp->bSplitable )
                 eIdent = SFX_CHILDWIN_SPLITWINDOW;
             pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
+        }
+        else
+        {
+            if ( pImp->bSplitable )
+            {
+                pImp->aRealSplitSize = GetSizePixel();
+            }
         }
     }
 }
@@ -461,7 +469,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
                 Show( FALSE, SHOW_NOFOCUSCHANGE );
 
             // Die Gr"o\se f"urs Toggeln setzen
-            pImp->aSplitSize = rRect.GetSize();
+            pImp->aRealSplitSize = pImp->aSplitSize = rRect.GetSize();
             if ( IsFloatingMode() )
             {
                 SetFloatingMode( bFloatMode );
@@ -618,7 +626,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
         return;
     }
 
-    pImp->aSplitSize = GetOutputSizePixel();
+    pImp->aSplitSize = pImp->aRealSplitSize = GetOutputSizePixel();
     if ( !GetFloatingSize().Width() )
     {
         Size aMinSize( GetMinOutputSizePixel() );
@@ -897,108 +905,98 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
 */
 
 {
-    // Hypothetische Gr"o\sen ausrechnen
+    // calculate hypothetical sizes for different modes
     Size aFloatingSize(CalcDockingSize(SFX_ALIGN_NOALIGNMENT));
     Size aVerticalSize(CalcDockingSize(SFX_ALIGN_LEFT));
     Size aHorizontalSize(CalcDockingSize(SFX_ALIGN_TOP));
 
-    // Testen, ob das Workwindow gerade ein Andocken erlaubt
+    // check if docking is permitted
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
     if ( !pWorkWin->IsDockingAllowed() )
     {
-//      rRect.SetSize( aFloatingSize );
+        rRect.SetSize( aFloatingSize );
         return pImp->GetDockAlignment();
     }
 
-    long nLeft, nRight, nTop, nBottom;
+    // calculate borders to shrink inner area before checking for intersection with tracking rectangle
+    long nLRBorder, nTBBorder;
     if ( pImp->bSplitable )
     {
-        Size aSize = pImp->aSplitSize;
+        // take the smaller size of docked and floating mode
+        Size aSize = pImp->aRealSplitSize;
         if ( GetFloatingSize().Height() < aSize.Height() )
             aSize.Height() = GetFloatingSize().Height();
         if ( GetFloatingSize().Width() < aSize.Width() )
             aSize.Width() = GetFloatingSize().Width();
 
-        // die Gr"o\se des Umschaltbereiches sollte begrenzt sein
-        if ( aSize.Width() > MAX_TOGGLEAREA_WIDTH )
-            aSize.Width() = MAX_TOGGLEAREA_WIDTH;
-        if ( aSize.Height() > MAX_TOGGLEAREA_WIDTH )
-            aSize.Height() = MAX_TOGGLEAREA_WIDTH;
-
-        nLeft = nRight = aSize.Width();
-        nTop = nBottom = aSize.Height();
+        nLRBorder = aSize.Width();
+        nTBBorder = aSize.Height();
     }
     else
     {
-        nLeft = nRight = aVerticalSize.Width();
-        nTop = nBottom = aHorizontalSize.Height();
+        nLRBorder = aVerticalSize.Width();
+        nTBBorder = aHorizontalSize.Height();
     }
 
+    // limit border to predefined constant values
+    if ( nLRBorder > MAX_TOGGLEAREA_WIDTH )
+        nLRBorder = MAX_TOGGLEAREA_WIDTH;
+    if ( nTBBorder > MAX_TOGGLEAREA_WIDTH )
+        nTBBorder = MAX_TOGGLEAREA_WIDTH;
+
+    // shrink area for floating mode if possible
     Rectangle aInRect = GetInnerRect();
+    if ( aInRect.GetWidth() > nLRBorder )
+        aInRect.Left()   += nLRBorder/2;
+    if ( aInRect.GetWidth() > nLRBorder )
+        aInRect.Right()  -= nLRBorder/2;
+    if ( aInRect.GetHeight() > nTBBorder )
+        aInRect.Top()    += nTBBorder/2;
+    if ( aInRect.GetHeight() > nTBBorder )
+        aInRect.Bottom() -= nTBBorder/2;
 
-    // Inneres Rechteck etwas verkleinern, wenn m"oglich, au\ser wenn das
-    // Fenster an der Kante steht, wo es angedockt ist
-    if ( aInRect.GetWidth() > nLeft )
-        aInRect.Left()   += nLeft/2;
-    if ( aInRect.GetWidth() > nRight )
-        aInRect.Right()  -= nRight/2;
-    if ( aInRect.GetHeight() > nTop )
-        aInRect.Top()    += nTop/2;
-    if ( aInRect.GetHeight() > nBottom )
-        aInRect.Bottom() -= nBottom/2;
-
-    if ( !pImp->pSplitWin ||
-        pImp->nLine == pImp->pSplitWin->GetLineCount()-1 &&
-        pImp->pSplitWin->GetWindowCount(pImp->nLine) == 1)
+    // calculate alignment resulting from docking rectangle
+    BOOL bBecomesFloating = FALSE;
+    SfxChildAlignment eDockAlign = pImp->GetDockAlignment();
+    Rectangle aDockingRect( rRect );
+    if ( !IsFloatingMode() )
     {
-        // Beim Docken mit SplitWindows darf auch au\serhalb angedockt werden,
-        // um eine neue Zeile aufzumachen, es sei denn, das aktuelle Fenster
-        // ist das einzige in der letzten Zeile
-        switch ( GetAlignment() )
-        {
-            case SFX_ALIGN_LEFT:
-            case SFX_ALIGN_FIRSTLEFT:
-            case SFX_ALIGN_LASTLEFT:
-                aInRect.Left() -= nLeft/2;
-                break;
-            case SFX_ALIGN_TOP:
-            case SFX_ALIGN_LOWESTTOP:
-            case SFX_ALIGN_HIGHESTTOP:
-                aInRect.Top() -= nTop/2;
-                break;
-            case SFX_ALIGN_RIGHT:
-            case SFX_ALIGN_FIRSTRIGHT:
-            case SFX_ALIGN_LASTRIGHT:
-                aInRect.Right() += nRight/2;
-                break;
-            case SFX_ALIGN_BOTTOM:
-            case SFX_ALIGN_LOWESTBOTTOM:
-            case SFX_ALIGN_HIGHESTBOTTOM:
-                aInRect.Bottom() += nBottom/2;
-                break;
-        }
+        // don't use tracking rectangle for alignment check, because it will be too large
+        // to get a floating mode as result - switch to floating size
+        // so the calculation only depends on the position of the rectangle, not the current
+        // docking state of the window
+        aDockingRect.SetSize( GetFloatingSize() );
+
+        // in this mode docking is never done by keyboard, so it's OK to use the mouse position
+        aDockingRect.SetPos( pWorkWin->GetWindow()->GetPointerPosPixel() );
     }
 
-    // Nun das neue Alignment berechnen
-    SfxChildAlignment eDockAlign = pImp->GetDockAlignment();
-/*
-    if ( aInRect.IsInside( rPos ) )
+    Point aPos = aDockingRect.TopLeft();
+    Rectangle aIntersect = GetOuterRect().GetIntersection( aDockingRect );
+    if ( aIntersect.IsEmpty() )
+        // docking rectangle completely outside docking area -> floating mode
+        bBecomesFloating = TRUE;
+    else
     {
-        // Maus im inneren Rechteck: wird/bleibt FloatingMode
+        Rectangle aIntersect = aInRect.GetIntersection( aDockingRect );
+        if ( aIntersect == aDockingRect )
+            // docking rectangle completely inside (shrinked) inner area -> floating mode
+            bBecomesFloating = TRUE;
+    }
+
+    if ( bBecomesFloating )
+    {
         eDockAlign = CheckAlignment(pImp->GetDockAlignment(),SFX_ALIGN_NOALIGNMENT);
     }
     else
- */
     {
-        // Wir befinden uns im Dock-Bereich. Jetzt m"u\sen wir feststellen,
-        // an welcher Kante angedockt werden soll
-
-        Point aInPosTL( rPos.X()-aInRect.Left(), rPos.Y()-aInRect.Top() );
-        Point aInPosBR( rPos.X()-aInRect.Left() + rRect.GetWidth(), rPos.Y()-aInRect.Top() + rRect.GetHeight() );
+        // docking rectangle is in the "sensible area"
+        Point aInPosTL( aPos.X()-aInRect.Left(), aPos.Y()-aInRect.Top() );
+        Point aInPosBR( aPos.X()-aInRect.Left() + aDockingRect.GetWidth(), aPos.Y()-aInRect.Top() + aDockingRect.GetHeight() );
         Size  aInSize = aInRect.GetSize();
         BOOL  bNoChange = FALSE;
 
-        // Zuerst feststellen, ob das Alignment unver"andert bleiben kann
+        // check if alignment is still unchanged
         switch ( GetAlignment() )
         {
             case SFX_ALIGN_LEFT:
@@ -1043,8 +1041,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
 
         if ( !bNoChange )
         {
-            // Wenn dem nicht so ist, links/oben/rechts/unten in dieser Reihenfolge
-            // testen
+            // alignment will change, test alignment according to distance of the docking rectangles edges
             BOOL bForbidden = TRUE;
             if ( aInPosTL.X() <= 0)
             {
@@ -1078,12 +1075,9 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
                                eDockAlign != SFX_ALIGN_LOWESTBOTTOM );
             }
 
-            // Wenn wir zwar im Dockbereich sind, da\s einzig m"ogliche Alignment
-            // aber verboten ist, mu\s in den FloatingMode geschaltet werden
+            // the calculated alignment was rejected by the window -> take floating mode
             if ( bForbidden )
-            {
                 eDockAlign = CheckAlignment(pImp->GetDockAlignment(),SFX_ALIGN_NOALIGNMENT);
-            }
         }
     }
 
@@ -1093,19 +1087,113 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
         // wg. SV-Bug darf rRect nur ver"andert werden, wenn sich das
         // Alignment "andert !
         if ( eDockAlign != pImp->GetDockAlignment() )
-            rRect.SetSize( aFloatingSize );
+            aDockingRect.SetSize( aFloatingSize );
     }
     else if ( pImp->bSplitable )
     {
-        // Bei DockingWindows in SplitWindows sind Position und Gr"o\se zu
-        // berechnen, auch wenn sich das Alignment nicht ge"andert hat, da
-        // sich die Zeile ge"andert haben k"onnte.
-        CalcSplitPosition(rPos, rRect, eDockAlign);
+        USHORT nLine, nPos;
+        SfxSplitWindow *pSplitWin = pWorkWin->GetSplitWindow_Impl(eDockAlign);
+        if ( pSplitWin->GetWindowPos( aPos, nLine, nPos ) )
+        {
+            // mouse over splitwindow, get line and position
+            pImp->nDockLine = nLine;
+            pImp->nDockPos = nPos;
+            pImp->bNewLine = FALSE;
+        }
+        else
+        {
+            if ( 0 )
+            {
+                // mouse touches outer border -> treated as floating mode
+                eDockAlign = SFX_ALIGN_NOALIGNMENT;
+                aDockingRect.SetSize( aFloatingSize );
+                rRect = aDockingRect;
+                return eDockAlign;
+            }
+
+            // mouse touches inner border -> create new line
+            if ( eDockAlign == GetAlignment() && pImp->pSplitWin &&
+                 pImp->nLine == pImp->pSplitWin->GetLineCount()-1 && pImp->pSplitWin->GetWindowCount(pImp->nLine) == 1 )
+            {
+                // if this window is the only one in the last line, it can't be docked as new line in the same splitwindow
+                pImp->nDockLine = pImp->nLine;
+                pImp->nDockPos = pImp->nPos;
+                pImp->bNewLine = FALSE;
+            }
+            else
+            {
+                // create new line
+                pImp->nDockLine = pSplitWin->GetLineCount();
+                pImp->nDockPos = 0;
+                pImp->bNewLine = TRUE;
+            }
+        }
+
+        BOOL bChanged = pImp->nLine != pImp->nDockLine || pImp->nPos != pImp->nDockPos || eDockAlign != GetAlignment();
+        if ( !bChanged )
+        {
+            // window only sightly moved, no change of any property
+            rRect.SetSize( pImp->aRealSplitSize );
+            rRect.SetPos( aPos );
+            return eDockAlign;
+        }
+
+        // calculate new size and position
+        Size aSize = pImp->aRealSplitSize;
+        Point aPos = aDockingRect.TopLeft();
+        Size aInnerSize = GetInnerRect().GetSize();
+        if ( eDockAlign == SFX_ALIGN_LEFT || eDockAlign == SFX_ALIGN_RIGHT )
+        {
+            if ( pImp->bNewLine )
+            {
+                // set height to height of free area
+                aSize.Height() = aInnerSize.Height();
+                if ( eDockAlign == SFX_ALIGN_LEFT )
+                {
+                    aPos = aInnerRect.TopLeft();
+                }
+                else
+                {
+                    aPos = aInnerRect.TopRight();
+                    aPos.X() -= aSize.Width();
+                }
+            }
+            else
+            {
+                // get width from splitwindow
+                aSize.Width() = pSplitWin->GetLineSize(nLine);
+            }
+        }
+        else
+        {
+            if ( pImp->bNewLine )
+            {
+                // set width to width of free area
+                aSize.Width() = aInnerSize.Width();
+                if ( eDockAlign == SFX_ALIGN_TOP )
+                {
+                    aPos = aInnerRect.TopLeft();
+                }
+                else
+                {
+                    aPos = aInnerRect.BottomLeft();
+                    aPos.Y() -= aSize.Height();
+                }
+            }
+            else
+            {
+                // get height from splitwindow
+                aSize.Height() = pSplitWin->GetLineSize(nLine);
+            }
+        }
+
+        aDockingRect.SetSize( aSize );
+        aDockingRect.SetPos( aPos );
     }
     else
     {
-        // Bei individuell angedockten Fenstern mu\s das tracking rectangle
-        // nur ge"andert werden, wenn sich das Dock-Alignment ge"andert hat.
+        // window can be docked, but outside our splitwindows
+        // tracking rectangle only needs to be modified if alignment was changed
         if ( eDockAlign != pImp->GetDockAlignment() )
         {
             switch ( eDockAlign )
@@ -1113,58 +1201,41 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
                 case SFX_ALIGN_LEFT:
                 case SFX_ALIGN_RIGHT:
                 case SFX_ALIGN_FIRSTLEFT:
+                    aDockingRect.SetPos( aInnerRect.TopLeft() );
+                    aDockingRect.SetSize( aVerticalSize );
+                    break;
                 case SFX_ALIGN_LASTLEFT:
                 case SFX_ALIGN_FIRSTRIGHT:
                 case SFX_ALIGN_LASTRIGHT:
-                    rRect.SetSize( aVerticalSize );
+                {
+                    Point aPt( aInnerRect.TopRight() );
+                    aPt.X() -= aDockingRect.GetWidth();
+                    aDockingRect.SetPos( aPt );
+                    aDockingRect.SetSize( aVerticalSize );
                     break;
+                }
 
                 case SFX_ALIGN_TOP:
                 case SFX_ALIGN_BOTTOM:
                 case SFX_ALIGN_LOWESTTOP:
+                    aDockingRect.SetPos( aInnerRect.TopLeft() );
+                    aDockingRect.SetSize( aHorizontalSize );
+                    break;
                 case SFX_ALIGN_HIGHESTTOP:
                 case SFX_ALIGN_LOWESTBOTTOM:
                 case SFX_ALIGN_HIGHESTBOTTOM:
-                    rRect.SetSize( aHorizontalSize );
+                {
+                    Point aPt( aInnerRect.BottomLeft() );
+                    aPt.Y() -= aDockingRect.GetHeight();
+                    aDockingRect.SetPos( aPt );
+                    aDockingRect.SetSize( aHorizontalSize );
                     break;
+                }
             }
         }
     }
 
-    switch ( eDockAlign )
-    {
-        case SFX_ALIGN_LEFT:
-        case SFX_ALIGN_FIRSTLEFT:
-        case SFX_ALIGN_LASTLEFT:
-            rRect.SetPos( aInnerRect.TopLeft() );
-            break;
-        case SFX_ALIGN_RIGHT:
-        case SFX_ALIGN_FIRSTRIGHT:
-        case SFX_ALIGN_LASTRIGHT:
-        {
-            Point aPt( aInnerRect.TopRight() );
-            aPt.X() -= rRect.GetWidth();
-            rRect.SetPos( aPt );
-            break;
-        }
-
-        case SFX_ALIGN_TOP:
-        case SFX_ALIGN_LOWESTTOP:
-        case SFX_ALIGN_HIGHESTTOP:
-            rRect.SetPos( aInnerRect.TopLeft() );
-            break;
-
-        case SFX_ALIGN_BOTTOM:
-        case SFX_ALIGN_LOWESTBOTTOM:
-        case SFX_ALIGN_HIGHESTBOTTOM:
-        {
-            Point aPt( aInnerRect.BottomLeft() );
-            aPt.Y() -= rRect.GetHeight();
-            rRect.SetPos( aPt );
-            break;
-        }
-    }
-
+    rRect = aDockingRect;
     return eDockAlign;
 }
 
@@ -1356,9 +1427,7 @@ void SfxDockingWindow::CalcSplitPosition(const Point rPos, Rectangle& rRect,
     SfxSplitWindow *pSplitWin = pWorkWin->GetSplitWindow_Impl(eAlign);
     USHORT nLine, nPos;
 
-    // Mausposition in Koordinaten des Splitwindows
-    Point aPos(pSplitWin->ScreenToOutputPixel(rPos));
-    if ( pSplitWin->GetWindowPos(aPos, nLine, nPos ) )
+    if ( pSplitWin->GetWindowPos(rPos, nLine, nPos ) )
     {
         // Maus innerhalb des Splitwindows
         pImp->nDockLine = nLine;
@@ -1366,18 +1435,31 @@ void SfxDockingWindow::CalcSplitPosition(const Point rPos, Rectangle& rRect,
     }
     else
     {
-        // Maus au\serhalb, aber au\serhalb des InnerRects (sonst w"are diese
-        // Methode gar nicht gerufen worden ), also soll eine neue Zeile
-        // aufgemacht werden
-        pImp->nDockLine = pSplitWin->GetLineCount();
-        pImp->nDockPos = 0;
+        if ( pImp->nLine == pImp->pSplitWin->GetLineCount()-1 && pImp->pSplitWin->GetWindowCount(pImp->nLine) == 1 )
+        {
+            pImp->nDockLine = pImp->nLine;
+            pImp->nDockPos = pImp->nPos;
+        }
+        else
+        {
+            pImp->nDockLine = pSplitWin->GetLineCount();
+            pImp->nDockPos = 0;
+        }
+    }
+
+    // Tracking rectangle auf gemerkte Splitsize setzen
+    Size aSize = pImp->aRealSplitSize;
+
+    BOOL bChanged = pImp->nLine != pImp->nDockLine || pImp->nPos != pImp->nDockPos || eAlign != GetAlignment();
+    if ( !bChanged )
+    {
+        rRect.SetSize( aSize );
+        rRect.SetPos( rPos );
+        return;
     }
 
     // Neue Zeile aufmachen ?
     pImp->bNewLine = (pImp->nDockLine >= pSplitWin->GetLineCount());
-
-    // Tracking rectangle auf gemerkte Splitsize setzen
-    Size aSize = pImp->aSplitSize;
 
     // Gr"o\se der noch freien client area
     Size aInnerSize = GetInnerRect().GetSize();
@@ -1391,14 +1473,14 @@ void SfxDockingWindow::CalcSplitPosition(const Point rPos, Rectangle& rRect,
         {
             aSize.Width()  = aInnerSize.Width();
             if ( aSize.Height() > aInnerSize.Height() / 2 &&
-                GetFloatingSize().Height() < aSize.Height() )
+                    GetFloatingSize().Height() < aSize.Height() )
                 aSize.Height() = GetFloatingSize().Height();
         }
         else
         {
             aSize.Height() = pSplitWin->GetLineSize(nLine);
             if ( aSize.Width() > aInnerSize.Width() / 2 &&
-                GetFloatingSize().Width() < aSize.Width() )
+                    GetFloatingSize().Width() < aSize.Width() )
                 aSize.Width() = GetFloatingSize().Width();
         }
     }
@@ -1408,19 +1490,55 @@ void SfxDockingWindow::CalcSplitPosition(const Point rPos, Rectangle& rRect,
         {
             aSize.Height() = aInnerSize.Height();
             if ( aSize.Width() > aInnerSize.Width() / 2 &&
-                GetFloatingSize().Width() < aSize.Width() )
+                    GetFloatingSize().Width() < aSize.Width() )
                 aSize.Width() = GetFloatingSize().Width();
         }
         else
         {
             aSize.Width()  = pSplitWin->GetLineSize(nLine);
             if ( aSize.Height() > aInnerSize.Height() / 2 &&
-                GetFloatingSize().Height() < aSize.Height() )
+                    GetFloatingSize().Height() < aSize.Height() )
                 aSize.Height() = GetFloatingSize().Height();
         }
     }
 
     rRect.SetSize(aSize);
+    if ( pImp->bNewLine )
+    {
+        switch ( eAlign )
+        {
+            case SFX_ALIGN_LEFT:
+            case SFX_ALIGN_FIRSTLEFT:
+            case SFX_ALIGN_LASTLEFT:
+                rRect.SetPos( aInnerRect.TopLeft() );
+                break;
+            case SFX_ALIGN_RIGHT:
+            case SFX_ALIGN_FIRSTRIGHT:
+            case SFX_ALIGN_LASTRIGHT:
+            {
+                Point aPt( aInnerRect.TopRight() );
+                aPt.X() -= rRect.GetWidth();
+                rRect.SetPos( aPt );
+                break;
+            }
+
+            case SFX_ALIGN_TOP:
+            case SFX_ALIGN_LOWESTTOP:
+            case SFX_ALIGN_HIGHESTTOP:
+                rRect.SetPos( aInnerRect.TopLeft() );
+                break;
+
+            case SFX_ALIGN_BOTTOM:
+            case SFX_ALIGN_LOWESTBOTTOM:
+            case SFX_ALIGN_HIGHESTBOTTOM:
+            {
+                Point aPt( aInnerRect.BottomLeft() );
+                aPt.Y() -= rRect.GetHeight();
+                rRect.SetPos( aPt );
+                break;
+            }
+        }
+    }
 }
 
 //-------------------------------------------------------------------------
