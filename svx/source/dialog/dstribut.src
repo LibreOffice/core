@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:16:47 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮אופקי‬";
         Text[ hindi ] = "समतल";
         Text[ slovak ] = "Vodorovne";
+        Text[ hungarian ] = "Vízszintes";
+        Text[ slovenian ] = "Vodoravno";
     };
 
     RadioButton BTN_HOR_NONE
@@ -139,6 +141,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "~कोई नहीं";
         Text[ slovak ] = "~Nič";
+        Text[ hungarian ] = "~Nincs";
+        Text[ slovenian ] = "~Brez";
     };
 
     RadioButton BTN_HOR_LEFT
@@ -172,6 +176,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮שמאל‬";
         Text[ hindi ] = "~बायाँ";
         Text[ slovak ] = "Vľ~avo";
+        Text[ hungarian ] = "~Bal";
+        Text[ slovenian ] = "~Levo";
     };
 
     RadioButton BTN_HOR_CENTER
@@ -205,6 +211,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮מרכז‬";
         Text[ hindi ] = "~मध्य";
         Text[ slovak ] = "Na ~stred";
+        Text[ hungarian ] = "~Közép";
+        Text[ slovenian ] = "~Sredina";
     };
 
     RadioButton BTN_HOR_DISTANCE
@@ -238,6 +246,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~बीच में अंतर देना";
         Text[ slovak ] = "R~ozostupy";
+        Text[ hungarian ] = "~Térköz";
+        Text[ slovenian ] = "~Razmik";
     };
 
     RadioButton BTN_HOR_RIGHT
@@ -254,7 +264,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ french ] = "� droite";
         Text[ spanish ] = "Derecha";
         Text[ italian ] = "A destra";
-        Text[ danish ] = "H~�jre";
+        Text[ danish ] = "~H�jre";
         Text[ swedish ] = "H�ge~r";
         Text[ polish ] = "Z p~rawej";
         Text[ portuguese_brazilian ] = "~Direita";
@@ -271,6 +281,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮ימין‬";
         Text[ hindi ] = "~दाहिना";
         Text[ slovak ] = "V~pravo";
+        Text[ hungarian ] = "~Jobb";
+        Text[ slovenian ] = "~Desno";
     };
 
     FixedImage IMG_HOR_LOW {
@@ -344,6 +356,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮אנכי‬";
         Text[ hindi ] = "लम्ब";
         Text[ slovak ] = "Zvislé";
+        Text[ hungarian ] = "Függőleges";
+        Text[ slovenian ] = "Navpično";
     };
 
     RadioButton BTN_VER_NONE
@@ -377,6 +391,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮אף אחד‬";
         Text[ hindi ] = "~कोई नहीं";
         Text[ slovak ] = "N~ič";
+        Text[ hungarian ] = "Nin~cs";
+        Text[ slovenian ] = "B~rez";
     };
 
     RadioButton BTN_VER_TOP
@@ -393,7 +409,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ french ] = "En haut";
         Text[ spanish ] = "Arriba";
         Text[ italian ] = "In alto";
-        Text[ danish ] = "T~op";
+        Text[ danish ] = "~Top";
         Text[ swedish ] = "~Uppe";
         Text[ polish ] = "U ~g�ry";
         Text[ portuguese_brazilian ] = "Em ~Cima";
@@ -410,6 +426,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮עליון‬";
         Text[ hindi ] = "~ऊपर";
         Text[ slovak ] = "~Navrchu";
+        Text[ hungarian ] = "T~eteje";
+        Text[ slovenian ] = "~Zgoraj";
     };
 
     RadioButton BTN_VER_CENTER
@@ -443,6 +461,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮מרכז‬";
         Text[ hindi ] = "~मध्य";
         Text[ slovak ] = "Stre~d";
+        Text[ hungarian ] = "Kö~zép";
+        Text[ slovenian ] = "S~redina";
     };
 
     RadioButton BTN_VER_DISTANCE
@@ -459,7 +479,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ french ] = "�cart";
         Text[ spanish ] = "Espacio";
         Text[ italian ] = "Distanza";
-        Text[ danish ] = "A~fstand";
+        Text[ danish ] = "~Afstand";
         Text[ swedish ] = "Av~st�nd";
         Text[ polish ] = "Odst�~p";
         Text[ portuguese_brazilian ] = "A~fastamento";
@@ -476,6 +496,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~बीच में अंतर देना";
         Text[ slovak ] = "Rozostu~py";
+        Text[ hungarian ] = "Té~rköz";
+        Text[ slovenian ] = "Ra~zmik";
     };
 
     RadioButton BTN_VER_BOTTOM
@@ -509,6 +531,8 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ hebrew ] = "‮תחתון‬";
         Text[ hindi ] = "~तल";
         Text[ slovak ] = "Na ~spodku";
+        Text[ hungarian ] = "~Alja";
+        Text[ slovenian ] = "~Spodaj";
     };
 
     FixedImage IMG_VER_HIGH {
@@ -558,7 +582,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     Text[ french ] = "R�partition";
     Text[ spanish ] = "Distribuci�n";
     Text[ italian ] = "Distribuzione";
-    Text[ danish ] = "Distribution";
+    Text[ danish ] = "Fordeling";
     Text[ swedish ] = "F�rdelning";
     Text[ polish ] = "Rozmieszczenie";
     Text[ portuguese_brazilian ] = "Distribui��o";
@@ -624,9 +648,12 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     Text[ hebrew ] = "‮תפוצה‬";
     Text[ hindi ] = "वितरण";
     Text[ slovak ] = "Distribúcia";
+    Text[ hungarian ] = "Tagolás";
+    Text[ slovenian ] = "Distribucija";
 };
 
 // ********************************************************************** EOF
+
 
 
 
