@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:58:38 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,7 +782,9 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::r
 Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUString& _sServiceSpecifier ) throw (Exception, RuntimeException)
 {
     Reference< XServiceInfo > xRet;
-    if ( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER == _sServiceSpecifier )
+    if  (  ( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER == _sServiceSpecifier )
+        || ( _sServiceSpecifier.equalsAscii( "com.sun.star.sdb.SingleSelectQueryAnalyzer" ) )
+        )
     {
         xRet = new OSingleSelectQueryComposer(getTables(),this, m_xORB);
         m_aComposers.push_back(WeakReferenceHelper(xRet));
