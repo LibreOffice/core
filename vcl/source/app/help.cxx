@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-29 09:37:49 $
+ *  last change: $Author: ssa $ $Date: 2001-11-29 13:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
 
     SetHelpText( rText );
 
-    const HelpSettings& rHelpSettings = GetSettings().GetHelpSettings();
+    const HelpSettings& rHelpSettings = pParent->GetSettings().GetHelpSettings();
     maShowTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
     maHideTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
     maHideTimer.SetTimeout( rHelpSettings.GetTipTimeout() );
@@ -517,7 +517,7 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
         {
             // Auto-Hide nicht bei einem Tip-Fenster (ShowTip)
             ImplSVData* pSVData = ImplGetSVData();
-            if ( this == pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbNoHide )
+            if ( this == pSVData->maHelpData.mpHelpWin )
                 maHideTimer.Start();
         }
     }
@@ -554,10 +554,9 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
                          const Point& rScreenPos, const Rectangle* pHelpArea )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maHelpData.mbNoHide = FALSE;   // no hide for tool tips should be active only once
 
-    //if( !rHelpText.Len() )
-    //  return;
+    if( !rHelpText.Len() && !pSVData->maHelpData.mbRequestingHelp )
+        return;
 
     HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
     USHORT nDelayMode = HELPDELAY_NORMAL;
