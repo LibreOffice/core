@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-23 10:31:52 $
+ *  last change: $Author: tbe $ $Date: 2002-08-26 13:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ DBG_NAME(VCLXAccessibleComponent);
 //  class VCLXAccessibleComponent
 //  ----------------------------------------------------
 VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
-    : VCLXAccessibleComponentBase( new VCLExternalSolarLock() )
+    : AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
     , OAccessibleImplementationAccess( )
 {
     DBG_CTOR( VCLXAccessibleComponent, 0 );
@@ -180,8 +180,33 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
     // @see OAccessibleContextHelper::OAccessibleContextHelper( IMutex* )
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleComponent, VCLXAccessibleComponentBase, OAccessibleImplementationAccess )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleComponent, VCLXAccessibleComponentBase, OAccessibleImplementationAccess )
+IMPLEMENT_FORWARD_XINTERFACE3( VCLXAccessibleComponent, AccessibleExtendedComponentHelper_BASE, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
+IMPLEMENT_FORWARD_XTYPEPROVIDER3( VCLXAccessibleComponent, AccessibleExtendedComponentHelper_BASE, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
+
+::rtl::OUString VCLXAccessibleComponent::getImplementationName() throw (uno::RuntimeException)
+{
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleExtendedComponent" );
+}
+
+sal_Bool VCLXAccessibleComponent::supportsService( const ::rtl::OUString& rServiceName ) throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
+    const ::rtl::OUString* pNames = aNames.getConstArray();
+    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
+        ;
+
+    return pNames != pEnd;
+}
+
+uno::Sequence< ::rtl::OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aNames(3);
+    aNames[0] = ::rtl::OUString::createFromAscii( "drafts.com.sun.star.accessibility.AccessibleContext" );
+    aNames[1] = ::rtl::OUString::createFromAscii( "drafts.com.sun.star.accessibility.AccessibleComponent" );
+    aNames[2] = ::rtl::OUString::createFromAscii( "drafts.com.sun.star.accessibility.AccessibleExtendedComponent" );
+    return aNames;
+}
 
 IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent )
 {
@@ -400,7 +425,7 @@ void VCLXAccessibleComponent::disposing()
         mpVCLXindow->GetWindow()->RemoveChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
     }
 
-    VCLXAccessibleComponentBase::disposing();
+    AccessibleExtendedComponentHelper_BASE::disposing();
 
     mxWindow.clear();
     mpVCLXindow = NULL;
@@ -536,7 +561,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::Ru
     if ( xAcc.is() )
     {   // we _do_ have a foreign-controlled parent -> use the base class' implementation,
         // which goes the UNO way
-        nIndex = VCLXAccessibleComponentBase::getAccessibleIndexInParent( );
+        nIndex = AccessibleExtendedComponentHelper_BASE::getAccessibleIndexInParent( );
     }
     else
     {

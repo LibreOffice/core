@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-03 15:54:17 $
+ *  last change: $Author: tbe $ $Date: 2002-08-26 13:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,15 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef COMPHELPER_ACCIMPLACCESS_HXX
 #include <comphelper/accimplaccess.hxx>
@@ -100,16 +106,21 @@ namespace utl {
 class AccessibleStateSetHelper;
 }
 
-typedef ::comphelper::OAccessibleExtendedComponentHelper    VCLXAccessibleComponentBase;
 
 //  ----------------------------------------------------
 //  class VCLXAccessibleComponent
 //  ----------------------------------------------------
 
+typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
+
+typedef ::cppu::ImplHelper1<
+    ::com::sun::star::lang::XServiceInfo > VCLXAccessibleComponent_BASE;
+
 class VCLExternalSolarLock;
 class VCLXAccessibleComponent
-        :public VCLXAccessibleComponentBase
+        :public AccessibleExtendedComponentHelper_BASE
         ,public ::comphelper::OAccessibleImplementationAccess
+        ,public VCLXAccessibleComponent_BASE
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> mxWindow;
@@ -143,6 +154,11 @@ public:
     DECLARE_XINTERFACE()
     // ::com::sun::star::lang::XTypeProvider
     DECLARE_XTYPEPROVIDER()
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& rServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
 
     // ::drafts::com::sun::star::accessibility::XAccessibleContext
     sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
