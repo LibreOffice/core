@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:33:30 $
+ *  last change: $Author: dr $ $Date: 2001-08-01 13:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@
 //_________________________________________________________
 // (0x0236) TABLE
 
+#define EXC_TABOP_CALCULATE         0x0003
 #define EXC_TABOP_ROW               0x0004
 #define EXC_TABOP_BOTH              0x0008
 

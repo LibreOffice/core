@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:28:24 $
+ *  last change: $Author: dr $ $Date: 2001-08-01 13:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5046,15 +5046,16 @@ void XclExpTableOp::UpdateCells()
 
 void XclExpTableOp::SaveCont( XclExpStream& rStrm )
 {
+    UINT16 nFlags = EXC_TABOP_CALCULATE;
+    nFlags |= ((nMode == 2) ? EXC_TABOP_BOTH : ((nMode == 1) ? EXC_TABOP_ROW : 0x0000));
     rStrm   << (UINT16) nFirstRow << (UINT16) nLastRow
-            << (UINT8) nFirstCol << (UINT8) nLastCol;
+            << (UINT8) nFirstCol << (UINT8) nLastCol
+            << nFlags;
     if( nMode == 2 )
-        rStrm   << (UINT16) EXC_TABOP_BOTH
-                << (UINT16) nRowInpRow << (UINT16) nRowInpCol
+        rStrm   << (UINT16) nRowInpRow << (UINT16) nRowInpCol
                 << (UINT16) nColInpRow << (UINT16) nColInpCol;
     else
-        rStrm   << (UINT16)((nMode == 1) ? EXC_TABOP_ROW : 0x0000)
-                << (UINT16) nColInpRow << (UINT16) nColInpCol       // ref to col AND row stored in nColInp***
+        rStrm   << (UINT16) nColInpRow << (UINT16) nColInpCol       // ref to col AND row stored in nColInp***
                 << (UINT16) 0 << (UINT16) 0;
 }
 
