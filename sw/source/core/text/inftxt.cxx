@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-22 11:40:34 $
+ *  last change: $Author: ama $ $Date: 2000-09-28 13:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,7 +1066,8 @@ SwFontSave::SwFontSave( const SwTxtSizeInfo &rInf, SwFont *pNewFnt )
     if( pFnt )
     {
         pInf = &((SwTxtSizeInfo&)rInf);
-        if( pFnt->DifferentMagic( pNewFnt, pFnt->GetActual() ) )
+        if( pFnt->DifferentMagic( pNewFnt, pFnt->GetActual() ) ||
+            pNewFnt->GetActual() != pFnt->GetActual() )
         {
             pNewFnt->SetTransparent( sal_True );
             pNewFnt->SetAlign( ALIGN_BASELINE );
