@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XContentProviderManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:29:40 $
+ *  last change:$Date: 2003-09-08 11:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 package ifc.ucb;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.ContentProviderInfo;
 import com.sun.star.ucb.DuplicateProviderException;
@@ -68,9 +72,6 @@ import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XContentProviderManager;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Tests XContentProviderManager. The test registers two ContentProviders, calls
@@ -257,12 +258,12 @@ public class _XContentProviderManager extends MultiMethodTest {
             }
         }
 
-        boolean gotTheRightOne = util.ValueComparer.equalValue
-            (result,contentProvider);
+//        boolean gotTheRightOne = util.ValueComparer.equalValue
+//            (result,contentProvider);
 
         tRes.tested("queryContentProvider()", found);
 
-        gotTheRightOne = result.equals(contentProvider);
+//        gotTheRightOne = result.equals(contentProvider);
 
     }
 
