@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:24:41 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,58 @@ class SwFlowFrm
     //Wird auch vom MoveBwd des TabFrm ausgewertet!
     static BOOL bMoveBwdJump;
 
+    /** helper method to determine previous frame for calculation of the
+        upper space
+
+        OD 2004-03-10 #i11860#
+
+        @param _pProposedPrevFrm
+        optional input parameter - pointer to frame, which should be used
+        instead of the direct previous frame.
+
+        @author OD
+    */
+    const SwFrm* _GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPrevFrm = 0L ) const;
+
+    /** method to determine the spacing values of previous frame
+
+        OD 2004-03-10 #i11860#
+        Note: line spacing value is only determined for text frames
+
+        @param _rFrm
+        input parameter - frame, for which the spacing values are determined.
+
+        @param _roPrevLowerSpacing
+        output parameter - lower spacing of previous frame in SwTwips
+
+        @param _roPrevLineSpacing
+        output parameter - line spacing of previous frame in SwTwips
+
+        @author OD
+    */
+    void _GetSpacingValuesOfFrm( const SwFrm& _rFrm,
+                                 SwTwips& _roLowerSpacing,
+                                 SwTwips& _roLineSpacing ) const;
+
+    /** method to detemine the upper space amount, which is considered for
+        the previous frame
+
+        OD 2004-03-11 #i11860#
+
+        @author OD
+    */
+    SwTwips _GetUpperSpaceAmountConsideredForPrevFrm() const;
+
+    /** method to detemine the upper space amount, which is considered for
+        the page grid
+
+        OD 2004-03-12 #i11860#
+
+        @author OD
+    */
+    SwTwips _GetUpperSpaceAmountConsideredForPageGrid(
+                                const SwTwips _nUpperSpaceWithoutGrid ) const;
+
 protected:
 
     SwFlowFrm *pFollow;
@@ -188,8 +240,29 @@ public:
     sal_Bool HasLockedFollow() const;
 
     BOOL HasParaSpaceAtPages( BOOL bSct ) const;
+
+    /** method to determine the upper space hold by the frame
+
+        OD 2004-03-12 #i11860# - add 3rd parameter <_bConsiderGrid> to get
+        the upper space with and without considering the page grid
+        (default value: <TRUE>)
+
+        @author ?
+    */
     SwTwips CalcUpperSpace( const SwBorderAttrs *pAttrs = NULL,
-                            const SwFrm* pPr = NULL ) const;
+                            const SwFrm* pPr = NULL,
+                            const bool _bConsiderGrid = true ) const;
+
+    /** method to determine the upper space amount, which is considered for
+        the previous frame and the page grid, if option 'Use former object
+        positioning' is OFF
+
+        OD 2004-03-18 #i11860#
+
+        @author OD
+    */
+    SwTwips GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const;
+
     /** calculation of lower space
 
         OD 2004-03-02 #106629#
