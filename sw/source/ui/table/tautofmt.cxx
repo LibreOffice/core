@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:06 $
+ *  last change: $Author: os $ $Date: 2001-01-26 15:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,7 +1202,7 @@ MAKENUMSTR:
                 pNumFmt->GetOutputString( nVal, nKey, cellString, &pDummy );
             }
             else
-                cellString = (USHORT)nVal;
+                cellString = String::CreateFromInt32(nVal);
             break;
 
     }
@@ -1724,6 +1724,9 @@ void lcl_SwLinkLine(const SwLineStruct& dLine,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/20 14:18:06  os
+    use comphelper methods
+
     Revision 1.2  2000/10/20 09:51:34  os
     change: use SvNumberFormatter ctor using XMultiServiceFactory
 
