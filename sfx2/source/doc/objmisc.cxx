@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:38:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,11 +137,6 @@
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 
-// xmlsec05, check with SFX team
-// MT: HACK
-#include <storagehelper.hxx>
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -201,7 +196,6 @@ using namespace ::com::sun::star::script;
 #include "doc.hrc"
 #include "workwin.hxx"
 #include "helpid.hrc"
-// xmlsec05 - think Gunnar shouldn't do that...
 #include "../appl/app.hrc"
 #include "secmacrowarnings.hxx"
 #include "sfxdlg.hxx"
@@ -474,6 +468,7 @@ void SfxObjectShell::ModifyChanged()
 
 
     Invalidate( SID_SIGNATURE );
+    Invalidate( SID_MACRO_SIGNATURE );
     Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );    // xmlsec05, signed state might change in title...
 
     pSfxApp->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, this ) );
@@ -1858,12 +1853,8 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
             }
             else if ( nSignatureState == SIGNATURESTATE_SIGNATURES_OK )
             {
-                // HACK: No Storage API befoer CWS MAV09
-                rtl::OUString aDocFileNameURL = GetMedium()->GetName();
-                xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
-                           aDocFileNameURL, embed::ElementModes::READ, comphelper::getProcessServiceFactory() );
-                if ( xStore.is() )
-                       aScriptingSignatureInformations = xSignatures->VerifyScriptingContentSignatures( xStore );
+                if ( GetMedium()->GetStorage().is() )
+                       aScriptingSignatureInformations = xSignatures->VerifyScriptingContentSignatures( GetMedium()->GetStorage() );
             }
 
             sal_Int32 nNumOfInfos = aScriptingSignatureInformations.getLength();
