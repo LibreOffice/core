@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:29:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ TabDialog RID_RTS_RTSDIALOG
     Moveable = TRUE;
     Closeable = TRUE;
     SVLook = TRUE;
-    Text = "Eigenschaften von %s" ; 
+    Text = "Eigenschaften von %s" ;
     Text [ English ] = "Properties of %s" ;
 
     TabControl RID_RTS_RTSDIALOG_TABCONTROL
@@ -82,7 +82,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ english_us ] = "Command";
                 Text[ portuguese ] = "Comando";
                 Text[ russian ] = "Κξμΰνδΰ";
-                Text[ greek ] = "Command";
+                Text[ greek ] = "Εντολή";
                 Text[ dutch ] = "Commando";
                 Text[ french ] = "Commande";
                 Text[ spanish ] = "Orden";
@@ -175,7 +175,7 @@ TabDialog RID_RTS_RTSDIALOG
                 Text[ english_us ] = "Font Replacement";
                 Text[ portuguese ] = "Substituiηγo de tipos de letra";
                 Text[ russian ] = "Ηΰμενΰ ψπθτςΰ";
-                Text[ greek ] = "Fontsubstitution";
+                Text[ greek ] = "Αντικατάσταση γραμματοσειράς";
                 Text[ dutch ] = "Vervanging van lettertypen";
                 Text[ french ] = "Substitution de police";
                 Text[ spanish ] = "Sustituciσn de fuente";
@@ -294,7 +294,7 @@ TabDialog RID_RTS_RTSDIALOG
     Text[ english_us ] = "Properties of %s";
     Text[ portuguese ] = "Propriedades de %s";
     Text[ russian ] = "Ρβξιρςβΰ %s";
-    Text[ greek ] = "Ρυθμίσεις του %s";
+    Text[ greek ] = "Ιδιότητες του %s";
     Text[ dutch ] = "Eigenschappen van %s";
     Text[ french ] = "Propriιtιs de %s";
     Text[ spanish ] = "Propiedades de %s";
@@ -480,10 +480,10 @@ TabPage RID_RTS_PAPERPAGE
     };
     FixedText RID_RTS_PAPER_SCALE_TXT
     {
-        Pos = MAP_APPFONT ( 5 , 65 ) ; 
-        Size = MAP_APPFONT ( 80 , 8 ) ; 
-        Text = "~Skalierung" ; 
-        Text [ English ] = "~Scale" ; 
+        Pos = MAP_APPFONT ( 5 , 65 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text = "~Skalierung" ;
+        Text [ English ] = "~Scale" ;
         Text[ english_us ] = "~Scale";
         Text[ portuguese ] = "~Escala";
         Text[ russian ] = "~Μΰρψςΰαθπξβΰνθε";
@@ -512,10 +512,10 @@ TabPage RID_RTS_PAPERPAGE
     };
     MetricField RID_RTS_PAPER_SCALE_BOX
     {
-        Border = TRUE ; 
+        Border = TRUE ;
         Spin = TRUE;
-        Pos = MAP_APPFONT ( 115 , 65 ) ; 
-        Size = MAP_APPFONT ( 110 , 12 ) ; 
+        Pos = MAP_APPFONT ( 115 , 65 ) ;
+        Size = MAP_APPFONT ( 110 , 12 ) ;
     };
 };
 
@@ -797,7 +797,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ english_us ] = "~Enable font replacement";
         Text[ portuguese ] = "~Activar substituiηγo de caracteres";
         Text[ russian ] = "~Βκλώχθςό ηΰμενσ ψπθτςΰ";
-        Text[ greek ] = "~Enable font substitution";
+        Text[ greek ] = "~Ενεργοποίηση της αντικατάστασης γραμματοσειράς";
         Text[ dutch ] = "~Vervanging van lettertype activeren";
         Text[ french ] = "Activer la ~substitution de police";
         Text[ spanish ] = "~Activar sustituciσn de fuente";
@@ -830,7 +830,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ english_us ] = "Replaced ~fonts";
         Text[ portuguese ] = "~Tipos de letra substituνdos";
         Text[ russian ] = "Ηΰμενεννϋε ψπθτςϋ";
-        Text[ greek ] = "Substituted ~fonts";
+        Text[ greek ] = "~Γραμματοσειρές που αντικαταστάθηκαν";
         Text[ dutch ] = "Vervangen ~lettertypen";
         Text[ french ] = "Polices su~bstituιes";
         Text[ spanish ] = "~Fuentes sustituidas";
@@ -871,7 +871,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ english_us ] = "~Add";
         Text[ portuguese ] = "~Adicionar";
         Text[ russian ] = "~Δξαΰβθςό";
-        Text[ greek ] = "Προσθήκ~η";
+        Text[ greek ] = "Π~ροσθήκη";
         Text[ dutch ] = "~Toevoegen";
         Text[ french ] = "Ajouter";
         Text[ spanish ] = "~Aρadir";
@@ -903,7 +903,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ english_us ] = "~Remove";
         Text[ portuguese ] = "~Remover";
         Text[ russian ] = "~Σδΰλθςό";
-        Text[ greek ] = "Διαγραφή";
+        Text[ greek ] = "Κ~ατάργηση";
         Text[ dutch ] = "~Verwijderen";
         Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Borrar";
@@ -935,7 +935,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ english_us ] = "Repla~ce font";
         Text[ portuguese ] = "~Substituir tipo de letra";
         Text[ russian ] = "~Ηΰμενθςό ψπθτς";
-        Text[ greek ] = "~Substitute font";
+        Text[ greek ] = "Α~ντικατάσταση γραμματοσειράς";
         Text[ dutch ] = "Lettertype ~vervangen";
         Text[ french ] = "Substitution de la police";
         Text[ spanish ] = "~Sustituir fuente";
@@ -975,7 +975,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
         Text[ english_us ] = "by ~printer font";
         Text[ portuguese ] = "pelo tipo de ~letra da impressora";
         Text[ russian ] = "ψπθτςξμ οπθνςεπΰ";
-        Text[ greek ] = "by ~printer font";
+        Text[ greek ] = "από τη γρα~μματοσειρά του εκτυπωτή";
         Text[ dutch ] = "door ~printerlettertype";
         Text[ french ] = "Par la police d'~imprimante";
         Text[ spanish ] = "por la ~fuente de la impresora";
@@ -1089,7 +1089,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "Fax";
         Text[ portuguese ] = "Fax";
         Text[ russian ] = "Τΰκρ";
-        Text[ greek ] = "~Fax";
+        Text[ greek ] = "Fax";
         Text[ dutch ] = "fax";
         Text[ french ] = "Fax";
         Text[ spanish ] = "Fax";
@@ -1119,7 +1119,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "PDF converter";
         Text[ portuguese ] = "Conversor PDF";
         Text[ russian ] = "Κξνβεπςξπ PDF";
-        Text[ greek ] = "PDF converter";
+        Text[ greek ] = "Μετατροπέας αρχείων PDF";
         Text[ dutch ] = "PDF-converter";
         Text[ french ] = "Convertisseur PDF";
         Text[ spanish ] = "Convertidor PDF";
@@ -1142,7 +1142,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ hindi ] = "PDF ΰ¤•ΰ¤¨ΰ¤µΰ¤°ΰ¥ΰ¤ΰ¤°";
         Text[ slovak ] = "PDF konvertor";
     };
-    
+
     ListBox RID_RTS_CMD_LB_CONFIGURE
     {
         DropDown = true;
@@ -1159,7 +1159,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "~Configure as";
         Text[ portuguese ] = "~Configurar como";
         Text[ russian ] = "Νΰρςπξικΰ";
-        Text[ greek ] = "Configure as : ";
+        Text[ greek ] = "~Διαμόρφωση ως";
         Text[ dutch ] = "~Configureren als";
         Text[ french ] = "Configurer comme";
         Text[ spanish ] = "Con~figurar como";
@@ -1192,7 +1192,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "~Fax number will be removed from output";
         Text[ portuguese ] = "~O nΊ do fax serα removido da saνda";
         Text[ russian ] = "Νε σκΰηϋβΰςό νξμεπ τΰκρΰ";
-        Text[ greek ] = "~Fax number will be removed from output";
+        Text[ greek ] = "Ο αρι~θμός φαξ θα αφαιρεθεί από την έξοδο";
         Text[ dutch ] = "~Faxnummer wordt niet weergegeven";
         Text[ french ] = "Le numιro de fax ne sera pas indiquι.";
         Text[ spanish ] = "El nϊmero de fa~x no se mostrarα";
@@ -1224,7 +1224,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "PDF target directory :";
         Text[ portuguese ] = "Directσrio destino PDF:";
         Text[ russian ] = "Κΰςΰλξγ νΰηνΰχενθÿ δλÿ PDF:";
-        Text[ greek ] = "PDF target directory :";
+        Text[ greek ] = "Κατάλογος προορισμού για αρχεία PDF:";
         Text[ dutch ] = "PDF-doeldirectory:";
         Text[ french ] = "Rιpertoire cible PDF :";
         Text[ spanish ] = "Directorio destino PDF :";
@@ -1273,7 +1273,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "Command: ";
         Text[ portuguese ] = "Comando: ";
         Text[ russian ] = "Κξμΰνδΰ: ";
-        Text[ greek ] = "Εντολή: ";
+        Text[ greek ] = "Εντολή:";
         Text[ dutch ] = "Commando: ";
         Text[ french ] = "Commande : ";
         Text[ spanish ] = "Orden: ";
@@ -1369,7 +1369,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "~Remove";
         Text[ portuguese ] = "~Remover";
         Text[ russian ] = "~Σδΰλθςό";
-        Text[ greek ] = "Διαγραφή";
+        Text[ greek ] = "Κ~ατάργηση";
         Text[ dutch ] = "~Verwijderen";
         Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Borrar";
@@ -1399,7 +1399,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "The command line for PDF converters is executed as follows: for each document printed, \"(TMP)\" in the command line is replaced by a temporary file and \"(OUTFILE)\" in the command line is replaced by the target PDF file name. If \"(TMP)\" is in the command line, the PostScript code will be supplied via a file, otherwise via standard input (i.e. as a pipe).";
         Text[ portuguese ] = "A linha de comando dos conversores PDF ι executada da seguinte maneira: em todos os documentos impressos, o \"(TMP)\" ι substituνdo por um ficheiro temporαrio e o \"(OUTFILE)\" pelo ficheiro a ser criado. Quando \"(TMP)\" aparece na linha de comando, o cσdigo PostScript ι transmitido para um ficheiro; caso contrαrio ι transmitido para a entrada padrγo (na forma de pipe).";
         Text[ russian ] = "Κξμΰνδνΰÿ ρςπξκΰ δλÿ κξνβεπςξπξβ PDF ξαπΰαΰςϋβΰεςρÿ ρλεδσώωθμ ξαπΰηξμ: δλÿ κΰζδξγξ οεχΰςΰεμξγξ δξκσμενςΰ β κξμΰνδνξι ρςπξκε \"(TMP)\" ηΰμενÿεςρÿ βπεμεννϋμ τΰιλξμ, ΰ \"(OUTFILE)\" τΰιλξμ PDF, κξςξπϋι νεξαυξδθμξ ρξηδΰςό. Ερλθ \"(TMP)\" σζε ρσωερςβσες β κξμΰνδνξι ρςπξκε, ςξ κξδ PostScript οεπεδΰεςρÿ β τΰιλ, θνΰχε ξν οεπεδΰεςρÿ ρςΰνδΰπςνϋμ ξαπΰηξμ (ς.ε. κΰκ pipe).";
-        Text[ greek ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ greek ] = "Η γραμμή εντολών για μετατροπείς αρχείων PDF εκτελείται ως εξής: για κάθε έγγραφο που εκτυπώνεται, το \"(TMP)\" στη γραμμή εντολών αντικαθίσταται από ένα προσωρινό αρχείο και το \"(OUTFILE)\" στη γραμμή εντολών αντικαθίσταται από το όνομα του PDF αρχείου προορισμού. Αν το \"(TMP)\" είναι στη γραμμή εντολών, ο κώδικας PostScript θα δοθεί μέσω ενός αρχείου, αλλιώς μέσω της κανονικής εισόδου (δηλαδή ως δίαυλος).";
         Text[ dutch ] = "De commandoregel voor PDF-converters wordt als volgt uitgevoerd: bij ieder afgedrukt document wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(OUTFILE)\" door het te maken PDF-bestand. Als er \"(TMP)\" staat in de commandoregel, wordt de PostScript-code in een bestand opgeslagen ofwel via de standaardinvoer (bijvoorbeeld als Pipe) doorgegeven.";
         Text[ french ] = "Traitement de la ligne de commande pour les convertisseurs PDF : pour chaque document imprimι, \"(TMP)\" est remplacι par un fichier temporaire et \"(OUTFILE)\" par le fichier PDF ΰ gιnιrer. Si \"(TMP)\" apparaξt dans la ligne de commande, le code PostScript est transmis dans un fichier ; en cas contraire, il est transmis via l'entrιe par dιfaut (c'est-ΰ-dire comme tube (pipe)).";
         Text[ spanish ] = "La fila de orden en los convertidores PDF se ejecutarα de la siguiente manera: con cada documento que se imprima se sustituirα \"(TMP)\" en la lνnea de σrdenes por un archivo temporal y \"(OUTFILE)\" por el archivo PDF que se vaya a crear. Si \"(TMP)\" aparece en la lνnea de orden, el cσdigo PostScript se transferirα a un archivo, si no, a travιs de una entrada predeterminada, o sea, como pipe.";
@@ -1429,7 +1429,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "The command line for printer devices is executed as follows: the generated PostScript code is supplied as standard input (i.e. as a pipe) to the command line.";
         Text[ portuguese ] = "A linha de comando para impressoras ι executada da seguinte forma: o cσdigo PostScript gerado ι transmitido ΰ linha de comando como entrada padrγo (como Pipe).";
         Text[ russian ] = "Κξμΰνδνΰÿ ρςπξκΰ δλÿ οπθνςεπξβ ξαπΰαΰςϋβΰεςρÿ ρλεδσώωθμ ξαπΰηξμ: ρξηδΰννϋι PostScript κξδ οεπεδΰεςρÿ β κξμΰνδνσώ ρςπξκσ  ρςΰνδΰπςνϋμ ξαπΰηξμ (ς.ε. κΰκ pipe).";
-        Text[ greek ] = "The command line for printer devices is executed in the following way: the generated PostScript code will be delivered as standard input (as a pipe) to the command line.";
+        Text[ greek ] = "Η γραμμή εντολών για συσκευές εκτυπωτή εκτελείται ως εξής: ο παραγόμενος κώδικας Postscript δίνεται ως κανονική είσοδος (δηλαδή ως δίαυλος) στη γραμμή εντολών.";
         Text[ dutch ] = "De commandoregel bij printers wordt als PostScript-code (standaardinvoer ofwel Pipe) verwerkt.";
         Text[ french ] = "Traitement de la ligne de commande pour les imprimantes : le code PostScript gιnιrι est transmis ΰ la ligne de commande comme entrιe par dιfaut (c'est-ΰ-dire comme tube (pipe)).";
         Text[ spanish ] = "La lνnea de orden para impresoras se ejecutarα de la siguiente manera: el cσdigo PostScript generado se transmite a la lνnea de orden como una entrada predeterminada (es decir, como pipe).";
@@ -1459,7 +1459,7 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ english_us ] = "The command line for fax devices is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
         Text[ portuguese ] = "A linha de comando para aparelhos de telefax ι executada da seguinte forma: em todos os faxes enviados o \"(TMP)\" ι substituνdo por um ficheiro temporαrio e \"(PHONE)\" pelo nϊmero de fax. Quando \"(TMP)\" aparece na linha de comando, o cσdigo PostScript ι transmitido para um ficheiro, caso contrαrio para a entrada padrγo (como Pipe).";
         Text[ russian ] = "Κξμΰνδνΰÿ ρςπξκΰ δλÿ τΰκρξβ ξαπΰαΰςϋβΰεςρÿ ρλεδσώωθμ ξαπΰηξμ: βξ βπεμÿ οεπεδΰχθ κΰζδξγξ τΰκρΰ \"(TMP)\" β κξμΰνδνξι ρςπξκε ηΰμενÿεςρÿ βπεμεννϋμ τΰιλξμ, ΰ \"(PHONE)\" - νξμεπξμ τΰκρΰ. Ερλθ \"(TMP)\" σζε ρσωερςβσες β κξμΰνδνξι ρςπξκε, ςξ κξδ PostScript οεπεδΰεςρÿ β τΰιλε, θνΰχε ξν οεπεδΰεςρÿ ρςΰνδΰπςνϋμ ξαπΰηξμ (ς.ε. κΰκ  pipe).";
-        Text[ greek ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text[ greek ] = "Η γραμμή εντολών για συσκευές φαξ εκτελείται ως εξής: για κάθε φαξ που αποστέλλεται, το \"(TMP)\" στη γραμμή εντολών αντικαθίσταται από ένα προσωρινό αρχείο και το \"(PHONE)\" στη γραμμή εντολών αντικαθίσταται από τον αριθμό φαξ. Αν το \"(TMP)\" εμφανίζεται στη γραμμή εντολών, ο κώδικας PostScript θα δοθεί μέσω ενός αρχείου, αλλιώς διαβιβάζεται μέσω της κανονικής εισόδου (δηλαδή ως δίαυλος).";
         Text[ dutch ] = "De commandoregel voor fax wordt als volgt uitgevoerd: op iedere fax die wordt verzonden wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(PHONE)\" door het faxnummer. Als er \"(TMP)\" staat in de commandoregel, wordt de PostScript-code opgenomen in een bestand ofwel als standaardinvoer (dat wil zeggen, als Pipe) behandeld.";
         Text[ french ] = "Traitement de la ligne de commande pour les pιriphιriques fax : pour chaque envoi de fax, \"(TMP)\" est remplacι par un fichier temporaire et \"(PHONE)\" par le numιro de fax. Si \"(TMP)\" apparaξt dans la ligne de commande, le code PostScript est transmis dans un fichier ; en cas contraire, il est transmis via l'entrιe par dιfaut (c'est-ΰ-dire comme tube (pipe)).";
         Text[ spanish ] = "La lνnea de orden en dispositivos de fax se ejecutarα de la siguiente manera: Por cada fax enviado se sustituye en la fila de orden \"(TMP)\" por un archivo temporal y \"(PHONE)\" por un nϊmero de fax. Si \"(TMP)\" aparece en la fila de orden se transmitirα el cσdigo PostScript a un archivo; en caso contrario se harα mediante una entrada predeterminada (es decir, como pipe).";
@@ -1498,7 +1498,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ english_us ] = "~Left margin";
         Text[ portuguese ] = "~Ajuste da margem esquerda";
         Text[ russian ] = "Ξςρςσο ρλεβΰ";
-        Text[ greek ] = "Διόρθωση αριστερού περιθωρίου :";
+        Text[ greek ] = "Α~ριστερό περιθώριο";
         Text[ dutch ] = "~Linkermarge";
         Text[ french ] = "Marge gauche";
         Text[ spanish ] = "~Margen izquierdo";
@@ -1508,7 +1508,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "~Lewy margines";
         Text[ portuguese_brazilian ] = "Margem ~esquerda :";
         Text[ japanese ] = "ε·¦δ½™η™½(~L)";
-        Text[ korean ] = "μ™Όμª½ μ—¬λ°±";
+        Text[ korean ] = "μ™Όμª½ μ—¬λ°±(~L)";
         Text[ chinese_simplified ] = "ε·¦θΎΉθ·(~L)";
         Text[ chinese_traditional ] = "ε·¦ι‚θ·(~L)";
         Text[ turkish ] = "~Sol kenar ayarlama :";
@@ -1540,7 +1540,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ english_us ] = "~Top margin";
         Text[ portuguese ] = "Aju~ste da margem superior";
         Text[ russian ] = "Ξςρςσο ρβεπυσ";
-        Text[ greek ] = "Διόρθωση πάνω περιθωρί~ου :";
+        Text[ greek ] = "Άνω π~εριθώριο";
         Text[ dutch ] = "~Bovenmarge";
         Text[ french ] = "Marge supιrieure";
         Text[ spanish ] = "~Margen superior";
@@ -1550,7 +1550,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "Margines ~gσrny";
         Text[ portuguese_brazilian ] = "Margem ~superior :";
         Text[ japanese ] = "δΈδ½™η™½(~T)";
-        Text[ korean ] = "μ„μª½ μ—¬λ°±:";
+        Text[ korean ] = "μ„μª½ μ—¬λ°±(~T):";
         Text[ chinese_simplified ] = "δΈθΎΉθ·(~T)";
         Text[ chinese_traditional ] = "δΈι‚θ·(~T)";
         Text[ turkish ] = "~άst kenar ayarlama :";
@@ -1582,7 +1582,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ english_us ] = "~Right margin";
         Text[ portuguese ] = "Ajuste ~da margem direita";
         Text[ russian ] = "Ξςρςσο ροπΰβΰ";
-        Text[ greek ] = "Διόρθωση δεξιού πε~ριθωρίου :";
+        Text[ greek ] = "Δε~ξί περιθώριο";
         Text[ dutch ] = "~Rechtermarge";
         Text[ french ] = "Marge droite";
         Text[ spanish ] = "~Margen derecho";
@@ -1592,7 +1592,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "~Prawy margines";
         Text[ portuguese_brazilian ] = "Margem ~direita :";
         Text[ japanese ] = "ε³δ½™η™½(~R)";
-        Text[ korean ] = "μ¤λ¥Έμª½ μ—¬λ°±:";
+        Text[ korean ] = "μ¤λ¥Έμª½ μ—¬λ°±(~R):";
         Text[ chinese_simplified ] = "ε³θΎΉθ·(~R)";
         Text[ chinese_traditional ] = "ε³ι‚θ·(~R)";
         Text[ turkish ] = "~Saπ kenar ayarlama :";
@@ -1624,7 +1624,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ english_us ] = "~Bottom margin";
         Text[ portuguese ] = "Ajuste da margem ~inferior";
         Text[ russian ] = "Ξςρςσο ρνθησ";
-        Text[ greek ] = "Διόρθωση κάτω περιθωρίο~υ :";
+        Text[ greek ] = "Κά~τω περιθώριο";
         Text[ dutch ] = "~Benedenmarge";
         Text[ french ] = "Marge infιrieure";
         Text[ spanish ] = "~Margen inferior";
@@ -1634,7 +1634,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ polish ] = "~Dolny margines";
         Text[ portuguese_brazilian ] = "Margem ~inferior :";
         Text[ japanese ] = "δΈ‹δ½™η™½(~B)";
-        Text[ korean ] = "μ•„λμª½ μ—¬λ°±:";
+        Text[ korean ] = "μ•„λμª½ μ—¬λ°±(~B):";
         Text[ chinese_simplified ] = "δΈ‹θΎΉθ·(~B)";
         Text[ chinese_traditional ] = "δΈ‹ι‚θ·(~B)";
         Text[ turkish ] = "~Alt kenar ayarlama :";
@@ -1662,11 +1662,11 @@ TabPage RID_RTS_OTHERPAGE
         Pos = MAP_APPFONT( 5, 65 );
         Size = MAP_APPFONT( 85, 8 );
         Text = "~Kommentar" ;
-        Text [ English ] = "~Comment" ;     
+        Text [ English ] = "~Comment" ;
         Text[ english_us ] = "~Comment";
         Text[ portuguese ] = "~Comentαrio";
         Text[ russian ] = "~Κξμμενςΰπθι";
-        Text[ greek ] = "Παρατήρηση :";
+        Text[ greek ] = "Σ~χόλιο";
         Text[ dutch ] = "~Opmerkingen";
         Text[ french ] = "Commentaire";
         Text[ spanish ] = "~Comentario";
@@ -1704,7 +1704,7 @@ TabPage RID_RTS_OTHERPAGE
         Text[ english_us ] = "~Default";
         Text[ portuguese ] = "~Padrγo";
         Text[ russian ] = "~Ρςΰνδΰπς";
-        Text[ greek ] = "Τιμέ~ς προεπιλογής";
+        Text[ greek ] = "Π~ροεπιλογή";
         Text[ dutch ] = "~Standaard";
         Text[ french ] = "Par dιfaut";
         Text[ spanish ] = "~Predeterminado";
@@ -1736,7 +1736,7 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ english_us ] = "Please enter the fax number.";
     Text[ portuguese ] = "Indique o nϊmero de fax.";
     Text[ russian ] = "Ββεδθςε νξμεπ τΰκρΰ.";
-    Text[ greek ] = "Παρακαλώ εισάγετε τον αριθμό του Fax.";
+    Text[ greek ] = "Παρακαλώ εισάγετε τον αριθμό του φαξ.";
     Text[ dutch ] = "Vul het faxnummer in.";
     Text[ french ] = "Saisissez le numιro de fax.";
     Text[ spanish ] = "Indique el nϊmero de fax";
@@ -1759,6 +1759,7 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ hindi ] = "ΰ¤•ΰ¥ƒΰ¤ªΰ¤―ΰ¤Ύ ΰ¤«ΰ¤Όΰ¥‰ΰ¤•ΰ¥ΰ¤Έ ΰ¤Έΰ¤‚ΰ¤–ΰ¥ΰ¤―ΰ¤Ύ ΰ¤•ΰ¥‹ ΰ¤ªΰ¥ΰ¤°ΰ¤µΰ¤Ώΰ¤·ΰ¥ΰ¤ ΰ¤•ΰ¥€ΰ¤ΰ¤Ώΰ¤ ΰ¥¤";
     Text[ slovak ] = "ProsΓ­m zadajte faxovΓ© ΔΓ­slo.";
 };
+
 
 
 
