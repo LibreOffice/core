@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:50:22 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ String STR_PRINT_MERGE_MACRO
     Text [ french ] = "Imprimer les lettres types" ;
     Text [ dutch ] = "Standaardbrieven afdrukken" ;
     Text [ swedish ] = "Skriv ut standardbrev" ;
-    Text [ danish ] = "Udskriv flettede breve" ;
+    Text [ danish ] = "Udskriv formularbreve" ;
     Text [ portuguese_brazilian ] = "Imprimir mala direta" ;
     Text [ portuguese ] = "Imprimir cartas em s�rie" ;
     Text[ chinese_simplified ] = "打印邮件合并";
@@ -112,6 +112,8 @@ String STR_PRINT_MERGE_MACRO
     Text[ hebrew ] = "Serienbriefe drucken";
     Text[ hindi ] = "फ़ॉर्म पत्रों को छपाई करो";
     Text[ slovak ] = "Tlačiť štandardný list";
+    Text[ hungarian ] = "Körlevelek nyomtatása";
+    Text[ slovenian ] = "Natisni tipska pisma";
 };
 
 String STR_PAGE_COUNT_MACRO
@@ -146,6 +148,8 @@ String STR_PAGE_COUNT_MACRO
     Text[ hebrew ] = "Änderung der Seitenanzahl";
     Text[ hindi ] = "पृष्ठ गिनती को बदलना";
     Text[ slovak ] = "Zmeniť číslo stránky";
+    Text[ hungarian ] = "Oldalszám változtatása";
+    Text[ slovenian ] = "Spreminjanje števila strani";
 };
 
  // Image-Liste ----------------------------------------------------------------
@@ -570,7 +574,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Indexopmaakprofielen" ; SWSTYLEBIT_IDX ; > ;
             < "Opmaakprof. speciale bereiken" ; SWSTYLEBIT_EXTRA ; > ;
             < "HTML-opmaakprofielen" ; SWSTYLEBIT_HTML ; > ;
-            < "Conditionele opmaakprofielen" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Voorwaardelijke opmaakprofielen" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
         FilterList [ french ] =
         {
@@ -630,15 +634,15 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ danish ] =
         {
-         < "Alle skabeloner" ; SFXSTYLEBIT_ALL ; > ;
-            < "Anvendte skabeloner" ; SFXSTYLEBIT_USED ; > ;
-            < "Brugertypografier" ; SFXSTYLEBIT_USERDEF ; > ;
+         < "Alle typografier" ; SFXSTYLEBIT_ALL ; > ;
+            < "Anvendte typografier" ; SFXSTYLEBIT_USED ; > ;
+            < "Brugerdefinerede typografier" ; SFXSTYLEBIT_USERDEF ; > ;
             < "Automatisk" ; SFXSTYLEBIT_AUTO ; > ;
             < "Teksttypografier" ; SWSTYLEBIT_TEXT ; > ;
             < "Kapiteltypografier" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Listetypografier" ; SWSTYLEBIT_LIST ; > ;
             < "Indekstypografier" ; SWSTYLEBIT_IDX ; > ;
-            < "Typografi s�romr�der" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Special typografier" ; SWSTYLEBIT_EXTRA ; > ;
             < "HTML-typografier" ; SWSTYLEBIT_HTML ; > ;
             < "Betingede typografier" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
@@ -871,6 +875,36 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "HTML štýly" ; SWSTYLEBIT_HTML ; > ;
             < "Podmienené štýly" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
+        Text[ hungarian ] = "Bekezdésstílusok";
+            Text[ slovenian ] = "Slogi odstavka";
+            FilterList [ hungarian ] =
+        {
+         < "Minden stílus" ; SFXSTYLEBIT_ALL ; > ;
+            < "Alkalmazott stílusok" ; SFXSTYLEBIT_USED ; > ;
+            < "Egyéni stílusok" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Automatikus" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Szövegstílusok" ; SWSTYLEBIT_TEXT ; > ;
+            < "Fejezetstílusok" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Listastílusok" ; SWSTYLEBIT_LIST ; > ;
+            < "Tárgymutatóstílusok" ; SWSTYLEBIT_IDX ; > ;
+            < "Speciális stílusok" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML-stílusok" ; SWSTYLEBIT_HTML ; > ;
+            < "Feltételes stílusok" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ slovenian ] =
+        {
+         < "Vsi slogi" ; SFXSTYLEBIT_ALL ; > ;
+            < "Uporabljeni slogi" ; SFXSTYLEBIT_USED ; > ;
+            < "Slogi po meri" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Samodejno" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Slogi besedila" ; SWSTYLEBIT_TEXT ; > ;
+            < "Slogi poglavja" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Slogi seznama" ; SWSTYLEBIT_LIST ; > ;
+            < "Slogi kazala" ; SWSTYLEBIT_IDX ; > ;
+            < "Posebni slogi" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML slogi" ; SWSTYLEBIT_HTML ; > ;
+            < "Pogojni slogi" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
     };
         SfxStyleFamilyItem
         {
@@ -1091,6 +1125,20 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
          < "Všetko" ; SFXSTYLEBIT_ALL ; > ;
             < "Použité štýly" ; SFXSTYLEBIT_USED ; > ;
             < "Vlastné štýly" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ hungarian ] = "Karakterstílusok";
+            Text[ slovenian ] = "Znakovni slogi";
+            FilterList [ hungarian ] =
+        {
+         < "Minden" ; SFXSTYLEBIT_ALL ; > ;
+            < "Alkalmazott stílusok" ; SFXSTYLEBIT_USED ; > ;
+            < "Egyéni stílusok" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ slovenian ] =
+        {
+         < "Vse" ; SFXSTYLEBIT_ALL ; > ;
+            < "Uporabljeni slogi" ; SFXSTYLEBIT_USED ; > ;
+            < "Slogi po meri" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
         SfxStyleFamilyItem
@@ -1313,6 +1361,20 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Použité štýly" ; SFXSTYLEBIT_USED ; > ;
             < "Vlastné štýly" ; SFXSTYLEBIT_USERDEF ; > ;
         };
+        Text[ hungarian ] = "Keretstílusok";
+            Text[ slovenian ] = "Slogi okvira";
+            FilterList [ hungarian ] =
+        {
+         < "Minden" ; SFXSTYLEBIT_ALL ; > ;
+            < "Alkalmazott stílusok" ; SFXSTYLEBIT_USED ; > ;
+            < "Egyéni stílusok" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ slovenian ] =
+        {
+         < "Vse" ; SFXSTYLEBIT_ALL ; > ;
+            < "Uporabljeni slogi" ; SFXSTYLEBIT_USED ; > ;
+            < "Slogi po meri" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
     };
         SfxStyleFamilyItem
         {
@@ -1534,6 +1596,20 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Použité štýly" ; SFXSTYLEBIT_USED ; > ;
             < "Vlastné štýly" ; SFXSTYLEBIT_USERDEF ; > ;
         };
+        Text[ hungarian ] = "Oldalstílusok";
+            Text[ slovenian ] = "Slogi strani";
+            FilterList [ hungarian ] =
+        {
+         < "Minden" ; SFXSTYLEBIT_ALL ; > ;
+            < "Alkalmazott stílusok" ; SFXSTYLEBIT_USED ; > ;
+            < "Egyéni stílusok" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ slovenian ] =
+        {
+         < "Vse" ; SFXSTYLEBIT_ALL ; > ;
+            < "Uporabljeni slogi" ; SFXSTYLEBIT_USED ; > ;
+            < "Slogi po meri" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
     };
         SfxStyleFamilyItem
         {
@@ -1754,6 +1830,20 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Použité štýly" ; SFXSTYLEBIT_USED ; > ;
             < "Vlastné štýly" ; SFXSTYLEBIT_USERDEF ; > ;
         };
+        Text[ hungarian ] = "Számozásstílusok";
+            Text[ slovenian ] = "Slogi oštevilčevanja";
+            FilterList [ hungarian ] =
+        {
+         < "Minden" ; SFXSTYLEBIT_ALL ; > ;
+            < "Alkalmazott stílusok" ; SFXSTYLEBIT_USED ; > ;
+            < "Egyéni stílusok" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ slovenian ] =
+        {
+         < "Vse" ; SFXSTYLEBIT_ALL ; > ;
+            < "Uporabljeni slogi" ; SFXSTYLEBIT_USED ; > ;
+            < "Slogi po meri" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
     };
     };
 
@@ -1810,6 +1900,8 @@ String STR_ENV_TITLE
     Text[ hebrew ] = "‮מעטפה‬";
     Text[ hindi ] = "लिफाफा ";
     Text[ slovak ] = "Obálka";
+    Text[ hungarian ] = "Boríték";
+    Text[ slovenian ] = "Ovojnica";
 };
 
 String STR_LAB_TITLE
@@ -1845,6 +1937,8 @@ String STR_LAB_TITLE
     Text[ hebrew ] = "‮מדבקות‬";
     Text[ hindi ] = "लेबिलें";
     Text[ slovak ] = "Štítky";
+    Text[ hungarian ] = "Címkék";
+    Text[ slovenian ] = "Oznake";
 };
 
  // ShortName!!!
@@ -1881,6 +1975,8 @@ String STR_HUMAN_SWDOC_NAME
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
     Text[ slovak ] = "Text";
+    Text[ hungarian ] = "Szöveg";
+    Text[ slovenian ] = "Besedilo";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE_31
@@ -1890,7 +1986,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text [ english_us ] = "Text (%PRODUCTNAME 3.0)" ;
     Text [ portuguese_brazilian ] = "Texto (%PRODUCTNAME 3.0)" ;
     Text [ swedish ] = "%PRODUCTNAME 3.0 text" ;
-    Text [ danish ] = "%PRODUCTNAME 3.0 tekst" ;
+    Text [ danish ] = "%PRODUCTNAME 3.0-tekst" ;
     Text [ italian ] = "Test %PRODUCTNAME 3.0" ;
     Text [ spanish ] = "%PRODUCTNAME 3.0 - Texto" ;
     Text [ french ] = "%PRODUCTNAME 3.0 Texte" ;
@@ -1915,6 +2011,8 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text[ hebrew ] = "%PRODUCTNAME 3.0 Text";
     Text[ hindi ] = "टेक्स्ट् (%PRODUCTNAME 3.0)";
     Text[ slovak ] = "Text (%PRODUCTNAME 3.0)";
+    Text[ hungarian ] = "Szöveg (%PRODUCTNAME 3.0)";
+    Text[ slovenian ] = "Besedilo (%PRODUCTNAME 3.0)";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE_40
@@ -1924,7 +2022,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text [ english_us ] = "Text (%PRODUCTNAME 4.0)" ;
     Text [ portuguese_brazilian ] = "Texto (%PRODUCTNAME 4.0)" ;
     Text [ swedish ] = "%PRODUCTNAME 4.0 text" ;
-    Text [ danish ] = "%PRODUCTNAME 4.0 tekst" ;
+    Text [ danish ] = "%PRODUCTNAME 4.0-tekst" ;
     Text [ italian ] = "Testo %PRODUCTNAME 4.0" ;
     Text [ spanish ] = "%PRODUCTNAME 4.0 - Texto" ;
     Text [ french ] = "%PRODUCTNAME 4.0 Texte" ;
@@ -1949,6 +2047,8 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text[ hebrew ] = "%PRODUCTNAME 4.0 Text";
     Text[ hindi ] = "टेक्स्ट् (%PRODUCTNAME 4.0";
     Text[ slovak ] = "Text (%PRODUCTNAME 4.0)";
+    Text[ hungarian ] = "Szöveg (%PRODUCTNAME 4.0)";
+    Text[ slovenian ] = "Besedilo (%PRODUCTNAME 4.0)";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE_50
@@ -1958,7 +2058,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text [ english_us ] = "Text (%PRODUCTNAME 5.0)" ;
     Text [ portuguese_brazilian ] = "Texto (%PRODUCTNAME 5.0)" ;
     Text [ swedish ] = "%PRODUCTNAME 5.0 text" ;
-    Text [ danish ] = "%PRODUCTNAME 5.0 Tekst" ;
+    Text [ danish ] = "%PRODUCTNAME 5.0-Tekst" ;
     Text [ italian ] = "Testo %PRODUCTNAME 5.0" ;
     Text [ spanish ] = "%PRODUCTNAME 5.0 - Texto" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Texte" ;
@@ -1983,6 +2083,8 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text[ hebrew ] = "%PRODUCTNAME 5.0 Text";
     Text[ hindi ] = "टेक्स्ट् (%PRODUCTNAME 5.0";
     Text[ slovak ] = "Text (%PRODUCTNAME 5.0)";
+    Text[ hungarian ] = "Szöveg (%PRODUCTNAME 5.0)";
+    Text[ slovenian ] = "Besedilo (%PRODUCTNAME 5.0)";
 };
 String STR_WRITER_DOCUMENT_FULLTYPE
 {
@@ -1992,11 +2094,11 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Texto";
     Text[ russian ] = "��������� �������� (%PRODUCTNAME 6.0)";
     Text[ greek ] = "������� �������� %PRODUCTNAME 6.0";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 Tekstdocument";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION Tekstdocument";
     Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION Texte";
     Text[ spanish ] = "Documento de texto %PRODUCTNAME %PRODUCTVERSION ";
     Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION Documento di testo ";
-    Text[ danish ] = "%PRODUCTNAME 6.0 Tekstdokument";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION-tekstdokument";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION-textdokument";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Dokument tekstowy";
     Text[ portuguese_brazilian ] = "Documento Texto %PRODUCTNAME 4.0";
@@ -2014,6 +2116,8 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ hebrew ] = "%PRODUCTNAME 6.0 Text Dokument";
     Text[ hindi ] = "%PRODUCTNAME 6.0 टेक्स्ट् लेखपत्र";
     Text[ slovak ] = "Textový dokument %PRODUCTNAME %PRODUCTVERSION";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION-szövegesdokumentum";
+    Text[ slovenian ] = "Dokument z besedilom programa %PRODUCTNAME 6.0";
 };
 
 
@@ -2050,6 +2154,8 @@ String STR_CANTOPEN
     TEXT[ hebrew ] = "Kann das Dokument nicht öffnen.";
     TEXT[ hindi ] = "लेखपत्र को नहीं खोल सकते है ।";
     TEXT[ slovak ] = "Dokument nie je možné otvoriť";
+    TEXT[ hungarian ] = "A dokumentum nem nyitható meg.";
+    TEXT[ slovenian ] = "Ni mogoče odpreti dokumenta.";
 };
 
 String STR_CANTCREATE
@@ -2062,7 +2168,7 @@ String STR_CANTCREATE
     TEXT[ danish ] = "Det var ikke muligt at oprette dokumentet.";
     TEXT[ french ] = "Impossible de cr�er le document.";
     TEXT[ swedish ] = "Det gick inte att skapa dokumentet.";
-    TEXT[ dutch ] = "Het document kan niet worden gemaakt.";
+    TEXT[ dutch ] = "Het document kan niet worden aangemaakt.";
     TEXT[ spanish ] = "El documento no pudo ser creado.";
     TEXT[ english_us ] = "Can't create document.";
     TEXT[ chinese_simplified ] = "无法生成文档";
@@ -2071,7 +2177,7 @@ String STR_CANTCREATE
     TEXT[ japanese ] = "ドキュメントを作成できません。";
     TEXT[ chinese_traditional ] = "無法建立這個文件";
     TEXT[ arabic ] = "���� ����� �������.";
-    TEXT[ dutch ] = "Het document kan niet worden gemaakt.";
+    TEXT[ dutch ] = "Het document kan niet worden aangemaakt.";
     TEXT[ chinese_simplified ] = "无法生成文档";
     TEXT[ greek ] = "��� ����� ������ � ���������� ��� ��������.";
     TEXT[ korean ] = "문서를 만들 수 없었습니다.";
@@ -2084,6 +2190,8 @@ String STR_CANTCREATE
     TEXT[ hebrew ] = "Das Dokument konnte nicht erzeugt werden.";
     TEXT[ hindi ] = "लेखपत्र को उत्पन्न नहीं कर सकते है ।";
     TEXT[ slovak ] = "Súbor nie je možné vytvoriť.";
+    TEXT[ hungarian ] = "A dokumentum nem hozható létre.";
+    TEXT[ slovenian ] = "Ni mogoče ustvariti dokumenta.";
 };
 String STR_DLLNOTFOUND
 {
@@ -2118,6 +2226,8 @@ String STR_DLLNOTFOUND
     TEXT[ hebrew ] = "Filter nicht gefunden.";
     TEXT[ hindi ] = "फिल्टर नहीं मिला ।";
     TEXT[ slovak ] = "Filter nenájdený.";
+    TEXT[ hungarian ] = "A szűrő nem található.";
+    TEXT[ slovenian ] = "Filtra ni mogoče najti.";
 };
 
 
@@ -2154,6 +2264,8 @@ String STR_UNBENANNT
     TEXT[ hebrew ] = "Unbenannt";
     TEXT[ hindi ] = "नाम रहित";
     TEXT[ slovak ] = "Bez_názvu";
+    TEXT[ hungarian ] = "Névtelen";
+    TEXT[ slovenian ] = "Neimenovano";
 };
 
 
@@ -2189,6 +2301,8 @@ String STR_LOAD_GLOBAL_DOC
     Text[ hebrew ] = "Name und Pfad des Globaldokuments";
     Text[ hindi ] = "मास्टर लेखपत्र का नाम और मार्ग";
     Text[ slovak ] = "Meno a cesta hlavného dokumentu";
+    Text[ hungarian ] = "Fődokumentum neve és elérési útvonala";
+    Text[ slovenian ] = "Ime in pot do glavnega dokumenta";
 };
 
 String STR_LOAD_HTML_DOC
@@ -2223,6 +2337,8 @@ String STR_LOAD_HTML_DOC
     Text[ hebrew ] = "Name und Pfad des HTML Dokuments";
     Text[ hindi ] = "HTML लेखपत्र का नाम और मार्ग";
     Text[ slovak ] = "Meno a cesta HTML dokumentu";
+    Text[ hungarian ] = "A HTML-dokumentum neve és elérési útvonala";
+    Text[ slovenian ] = "Ime in pot do HTML dokumenta";
 };
 
 InfoBox MSG_ERROR_SEND_MAIL
@@ -2260,6 +2376,8 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE[ hebrew ] = "Fehler beim Versenden der Nachricht.";
     MESSAGE[ hindi ] = "मेइल को भेजने के समय गलती ।";
     MESSAGE[ slovak ] = "Chyba pri odosielaní­ pošty.";
+    MESSAGE[ hungarian ] = "A levél küldésekor hiba lépett fel.";
+    MESSAGE[ slovenian ] = "Napaka pri pošiljanju pošte.";
 };
 InfoBox MSG_ERROR_PASSWD
 {
@@ -2272,7 +2390,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE [ portuguese_brazilian ] = "Senha inv�lida" ;
     MESSAGE [ portuguese ] = "A senha n�o � v�lida." ;
     MESSAGE [ finnish ] = "Virheellinen salasana" ;
-    MESSAGE [ danish ] = "Fejagtig adgangskode" ;
+    MESSAGE [ danish ] = "Forkert adgangskode" ;
     MESSAGE [ french ] = "Mot de passe incorrect." ;
     MESSAGE [ swedish ] = "Felaktigt l�senord." ;
     MESSAGE [ dutch ] = "Wachtwoord niet juist." ;
@@ -2296,6 +2414,8 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE[ hebrew ] = "Fehlerhaftes Kennwort.";
     MESSAGE[ hindi ] = "अमान्य कूटशब्द ।";
     MESSAGE[ slovak ] = "Neplatné heslo.";
+    MESSAGE[ hungarian ] = "Érvénytelen jelszó";
+    MESSAGE[ slovenian ] = "Neveljavno geslo";
 };
 
 /*
@@ -2416,6 +2536,8 @@ String STR_FMT_STD
     TEXT[ hebrew ] = "(keins)";
     TEXT[ hindi ] = "(कोई नहीं)";
     TEXT[ slovak ] = "(nič)";
+    TEXT[ hungarian ] = "(nincs)";
+    TEXT[ slovenian ] = "(brez)";
 };
 
 String STR_DOC_STAT
@@ -2451,6 +2573,8 @@ String STR_DOC_STAT
     TEXT[ hebrew ] = "סטטיסטיקות";
     TEXT[ hindi ] = "अंकशास्त्र";
     TEXT[ slovak ] = "Štatistika";
+    TEXT[ hungarian ] = "Statisztikák";
+    TEXT[ slovenian ] = "Statistika";
 };
 
  // ----------------------------
@@ -2490,6 +2614,8 @@ String STR_STATSTR_W4WREAD
     Text[ hebrew ] = "Dokument wird importiert...";
     Text[ hindi ] = "लेखपत्र को निर्यात कर रहा है...";
     Text[ slovak ] = "Prebieha import dokumentu...";
+    Text[ hungarian ] = "Dokumentum importálása...";
+    Text[ slovenian ] = "Uvažanje dokumenta...";
 };
 
 String STR_STATSTR_W4WWRITE
@@ -2501,7 +2627,7 @@ String STR_STATSTR_W4WWRITE
     Text [ portuguese_brazilian ] = "Exportando o documento..." ;
     Text [ portuguese ] = "A exportar documento..." ;
     Text [ finnish ] = "Vied��n asiakirjaa..." ;
-    Text [ danish ] = "Eksporterer dokument" ;
+    Text [ danish ] = "Eksporterer dokument..." ;
     Text [ french ] = "Export du document..." ;
     Text [ swedish ] = "Dokument exporteras..." ;
     Text [ dutch ] = "Document wordt ge�xporteerd..." ;
@@ -2525,6 +2651,8 @@ String STR_STATSTR_W4WWRITE
     Text[ hebrew ] = "Dokument wird exportiert...";
     Text[ hindi ] = "लेखपत्र को निर्यात कर रहा है...";
     Text[ slovak ] = "Prebieha export dokumentu...";
+    Text[ hungarian ] = "Dokumentum exportálása...";
+    Text[ slovenian ] = "Izvažanje dokumenta...";
 };
 
 String STR_STATSTR_SWGREAD
@@ -2560,6 +2688,8 @@ String STR_STATSTR_SWGREAD
     Text[ hebrew ] = "Dokument wird geladen...";
     Text[ hindi ] = "लेखपत्र को लोड़ कर रहा है...";
     Text[ slovak ] = "Načíta sa súbor...";
+    Text[ hungarian ] = "Dokumentum megnyitása...";
+    Text[ slovenian ] = "Nalaganje dokumenta...";
 };
 
 String STR_STATSTR_SWGWRITE
@@ -2571,7 +2701,7 @@ String STR_STATSTR_SWGWRITE
     Text [ portuguese_brazilian ] = "Salvando o documento..." ;
     Text [ portuguese ] = "A guardar documento..." ;
     Text [ finnish ] = "Tallennetaan asiakirjaa..." ;
-    Text [ danish ] = "Gemmer dokument..." ;
+    Text [ danish ] = "Dokumentet gemmes..." ;
     Text [ french ] = "Enregistrement du document..." ;
     Text [ swedish ] = "Dokument sparas..." ;
     Text [ dutch ] = "Document wordt opgeslagen..." ;
@@ -2596,6 +2726,8 @@ String STR_STATSTR_SWGWRITE
     Text[ hebrew ] = "Dokument wird gespeichert...";
     Text[ hindi ] = "लेखपत्र को संचित कर रहा है...";
     Text[ slovak ] = "Súbor sa ukladá...";
+    Text[ hungarian ] = "Dokumentum mentése ...";
+    Text[ slovenian ] = "Shranjevanje dokumenta...";
 };
 
 String STR_STATSTR_REFORMAT
@@ -2631,6 +2763,8 @@ String STR_STATSTR_REFORMAT
     TEXT[ hebrew ] = "Neuformatierung des Dokumentes...";
     TEXT[ hindi ] = "रिपेजिनेशन...";
     TEXT[ slovak ] = "Prestránkovanie...";
+    TEXT[ hungarian ] = "Újratördelés...";
+    TEXT[ slovenian ] = "Preštevilčenje...";
 };
 
 String STR_STATSTR_AUTOFORMAT
@@ -2666,6 +2800,8 @@ String STR_STATSTR_AUTOFORMAT
     TEXT[ hebrew ] = "Autoformatierung des Dokumentes...";
     TEXT[ hindi ] = "स्वचालित ढंग से लेखपत्र का रचना करता है...";
     TEXT[ slovak ] = "Automatické formátovanie dokumentu...";
+    TEXT[ hungarian ] = "Dokumentum automatikus formázása...";
+    TEXT[ slovenian ] = "Samodejno oblikovanje dokumenta...";
 };
 
 String STR_STATSTR_IMPGRF
@@ -2701,6 +2837,8 @@ String STR_STATSTR_IMPGRF
     Text[ hebrew ] = "Grafik wird importiert...";
     Text[ hindi ] = "सुचित्र को निर्यात कर रहा है...";
     Text[ slovak ] = "Importujú sa obrázky...";
+    Text[ hungarian ] = "Kép importálása...";
+    Text[ slovenian ] = "Uvažanje grafike...";
 };
 
 String STR_STATSTR_SEARCH
@@ -2712,7 +2850,7 @@ String STR_STATSTR_SEARCH
     Text [ portuguese_brazilian ] = "Pesquisar..." ;
     Text [ portuguese ] = "A localizar..." ;
     Text [ finnish ] = "Etsi..." ;
-    Text [ danish ] = "S�ger..." ;
+    Text [ danish ] = "S�g..." ;
     Text [ french ] = "Recherche..." ;
     Text [ swedish ] = "S�ker..." ;
     Text [ dutch ] = "Bezig met zoeken..." ;
@@ -2736,6 +2874,8 @@ String STR_STATSTR_SEARCH
     Text[ hebrew ] = "Suche...";
     Text[ hindi ] = "खोज...";
     Text[ slovak ] = "Hľadať...";
+    Text[ hungarian ] = "Keresés...";
+    Text[ slovenian ] = "Iskanje...";
 };
 
 String STR_STATSTR_FORMAT
@@ -2771,6 +2911,8 @@ String STR_STATSTR_FORMAT
     Text[ hebrew ] = "Formatiere...";
     Text[ hindi ] = "रचना कर रहा है...";
     Text[ slovak ] = "Formátovanie...";
+    Text[ hungarian ] = "Formázás...";
+    Text[ slovenian ] = "Oblikovanje...";
 };
 
 String STR_STATSTR_PRINT
@@ -2806,6 +2948,8 @@ String STR_STATSTR_PRINT
     Text[ hebrew ] = "Drucke...";
     Text[ hindi ] = "छपाई कर रहा है...";
     Text[ slovak ] = "Tlač...";
+    Text[ hungarian ] = "Nyomtatás...";
+    Text[ slovenian ] = "Tiskanje...";
 };
 
 String STR_STATSTR_LAYOUTINIT
@@ -2841,6 +2985,8 @@ String STR_STATSTR_LAYOUTINIT
     Text[ hebrew ] = "Konvertiere...";
     Text[ hindi ] = "बदल रहा है...";
     Text[ slovak ] = "Prebieha konverzia...";
+    Text[ hungarian ] = "Átalakítás...";
+    Text[ slovenian ] = "Pretvarjanje...";
 };
 
 String STR_STATSTR_LETTER
@@ -2875,6 +3021,8 @@ String STR_STATSTR_LETTER
     Text[ hebrew ] = "‮מכתב‬";
     Text[ hindi ] = "पत्र";
     Text[ slovak ] = "List";
+    Text[ hungarian ] = "Betű";
+    Text[ slovenian ] = "Pismo";
 };
 
 String STR_STATSTR_SPELL
@@ -2909,6 +3057,8 @@ String STR_STATSTR_SPELL
     Text[ hebrew ] = "‮בדיקת איות...‬";
     Text[ hindi ] = "अक्षर की जाँच...";
     Text[ slovak ] = "Prebieha kontrola pravopisu...";
+    Text[ hungarian ] = "Helyesírás-ellenőrzés...";
+    Text[ slovenian ] = "Preverjanje črkovanja...";
 };
 
 String STR_STATSTR_HYPHEN
@@ -2943,6 +3093,8 @@ String STR_STATSTR_HYPHEN
     Text[ hebrew ] = "‮שבירת מלים...‬";
     Text[ hindi ] = "हाइफ़नेशन्...";
     Text[ slovak ] = "Prebieha delenie slov...";
+    Text[ hungarian ] = "Elválasztás...";
+    Text[ slovenian ] = "Deljenje besed...";
 };
 
 String STR_STATSTR_TOX_INSERT
@@ -2977,6 +3129,8 @@ String STR_STATSTR_TOX_INSERT
     Text[ hebrew ] = "Verzeichnis wird eingefügt...";
     Text[ hindi ] = "अनुक्रमणिका को जोड़ रहा है...";
     Text[ slovak ] = "Vkladám register...";
+    Text[ hungarian ] = "Tárgymutató beszúrása...";
+    Text[ slovenian ] = "Vstavljanje kazala...";
 };
 
 String STR_STATSTR_TOX_UPDATE
@@ -3011,6 +3165,8 @@ String STR_STATSTR_TOX_UPDATE
     Text[ hebrew ] = "Verzeichnis wird aktualisiert...";
     Text[ hindi ] = "अनुक्रमणिका को अपडेट् कर रहा है...";
     Text[ slovak ] = "Aktualizujem register...";
+    Text[ hungarian ] = "Tárgymutató frissítése...";
+    Text[ slovenian ] = "Posodabljanje kazala...";
 };
 
 String STR_STATSTR_SUMMARY
@@ -3020,7 +3176,7 @@ String STR_STATSTR_SUMMARY
     Text [ english_us ] = "Creating abstract..." ;
     Text [ portuguese_brazilian ] = "Criando o resumo..." ;
     Text [ swedish ] = "Utdrag skapas..." ;
-    Text [ danish ] = "Opretter abstract..." ;
+    Text [ danish ] = "Opretter resume..." ;
     Text [ italian ] = "Il sunto viene creato..." ;
     Text [ spanish ] = "Creaci�n del resumen..." ;
     Text [ french ] = "Cr�ation de la synth�se..." ;
@@ -3045,6 +3201,8 @@ String STR_STATSTR_SUMMARY
     Text[ hebrew ] = "Abstrakt wird erstellt...";
     Text[ hindi ] = "सारांश को उत्पन्न कर रहा है...";
     Text[ slovak ] = "Vytváram abstrakt...";
+    Text[ hungarian ] = "Összefoglaló készítése...";
+    Text[ slovenian ] = "Ustvarjanje povzetka...";
 };
 
 String STR_STATSTR_SWGPRTOLENOTIFY
@@ -3079,6 +3237,8 @@ String STR_STATSTR_SWGPRTOLENOTIFY
     Text[ hebrew ] = "Objekte Anpassen...";
     Text[ hindi ] = "वस्तुओं को स्वीकार करो...";
     Text[ slovak ] = "Adaptujem objekty...";
+    Text[ hungarian ] = "Objektum alkalmazása...";
+    Text[ slovenian ] = "Prilagodi predmete...";
 };
 
 
@@ -3093,7 +3253,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message [ portuguese_brazilian ] = "Esta a��o requer muita mem�ria para ser desfeita.\nDeseja desativar a fun��o desfazer?" ;
     Message [ portuguese ] = "Para poder anular esta ac��o � necess�ria muita mem�ria.\nDeseja cancelar esta fun��o?" ;
     Message [ finnish ] = "T�m�n toiminnon kumoamiseen tarvitaan suuri m��r� muistia.\nHaluatko peruuttaa kumoamisen?" ;
-    Message [ danish ] = "Denne handling kr�ver megen hukommelse til fortryd-funktionen\nVil du sl� fortryd-funktionen fra?" ;
+    Message [ danish ] = "For at forts�tte skal \"fortryd\" funktionen sl�s fra. Vil du sl� \"fortryd\" funktionen fra?" ;
     Message [ french ] = "La fonction d'annulation doit �tre d�sactiv�e, ce sans quoi il sera impossible d'ex�cuter cette op�ration. Voulez-vous d�sactiver la fonction d'annulation ?" ;
     Message [ swedish ] = "F�r att kunna forts�tta med den h�r �tg�rden m�ste du st�nga av �ngrafunktionen f�rst. Vill du st�nga av �ngrafunktionen?" ;
     Message [ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U 'Ongedaan maken' opheffen?" ;
@@ -3117,6 +3277,8 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message[ hebrew ] = "Zum Fortsetzen des Vorgangs, muss die Rückgängig-Funktion abgeschaltet werden. Wollen Sie die Rückgängig-Funktion abschalten?";
     Message[ hindi ] = "इस कार्य को आनावृत्ति करने केलिए अधिक प्रमाण का मेमरी की आवश्यकता है ।\nआप आनावृत्ति को रद्द करना चाहते है?";
     Message[ slovak ] = "Na vrátenie tejto akcie je potrebné veľké množstvo pamäti.\nPrajete si vrátenie zrušiť?";
+    Message[ hungarian ] = "A művelet folytatásához ki kell kapcsolnia a \"visszavonás\" funkciót. Kikapcsolja a \"visszavonás\" funkciót?";
+    Message[ slovenian ] = "Za nadaljevanje tega postopka morate izključiti funkcijo \"razveljavi\". Ali želite izključiti funkcijo \"razveljavi\"?";
 };
 
 Bitmap RID_GRAPHIC_REPLACEBMP
@@ -3162,6 +3324,8 @@ String STR_TABLE_DEFNAME
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
     Text[ slovak ] = "Tabuľka";
+    Text[ hungarian ] = "Táblázat";
+    Text[ slovenian ] = "Tabela";
 };
 
 String STR_GRAPHIC_DEFNAME
@@ -3197,6 +3361,8 @@ String STR_GRAPHIC_DEFNAME
     TEXT[ hebrew ] = "Grafik";
     TEXT[ hindi ] = "सुचित्र";
     TEXT[ slovak ] = "Obrázok";
+    TEXT[ hungarian ] = "Kép";
+    TEXT[ slovenian ] = "Grafika";
 };
 
 String STR_OBJECT_DEFNAME
@@ -3232,6 +3398,8 @@ String STR_OBJECT_DEFNAME
     TEXT[ hebrew ] = "‮אוביקט‬";
     TEXT[ hindi ] = "वस्तु";
     TEXT[ slovak ] = "Objekt";
+    TEXT[ hungarian ] = "Objektum";
+    TEXT[ slovenian ] = "Predmet";
 };
 
 String STR_FRAME_DEFNAME
@@ -3267,6 +3435,8 @@ String STR_FRAME_DEFNAME
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम ";
     Text[ slovak ] = "Rámček";
+    Text[ hungarian ] = "Keret";
+    Text[ slovenian ] = "Okvir";
 };
 String STR_REGION_DEFNAME
 {
@@ -3277,7 +3447,7 @@ String STR_REGION_DEFNAME
     Text [ portuguese_brazilian ] = "Se��o" ;
     Text [ portuguese ] = "Sec��o" ;
     Text [ finnish ] = "Osa" ;
-    Text [ danish ] = "Omr�de" ;
+    Text [ danish ] = "Sektion" ;
     Text [ french ] = "Section" ;
     Text [ swedish ] = "Omr�de" ;
     Text [ dutch ] = "Bereik" ;
@@ -3301,6 +3471,8 @@ String STR_REGION_DEFNAME
     Text[ hebrew ] = "‮מיקטע‬";
     Text[ hindi ] = "विभाग";
     Text[ slovak ] = "Sekcia";
+    Text[ hungarian ] = "Szakasz";
+    Text[ slovenian ] = "Odsek";
 };
 String STR_NUMRULE_DEFNAME
 {
@@ -3335,6 +3507,8 @@ String STR_NUMRULE_DEFNAME
     Text[ hebrew ] = "‮מיספור‬";
     Text[ hindi ] = "संख्या देना";
     Text[ slovak ] = "Číslovanie";
+    Text[ hungarian ] = "Számozás";
+    Text[ slovenian ] = "Oštevilčevanje";
 };
 String STR_EMPTYPAGE
 {
@@ -3368,6 +3542,8 @@ String STR_EMPTYPAGE
     Text[ hebrew ] = "leere Seite";
     Text[ hindi ] = "खाली पृष्ठ";
     Text[ slovak ] = "prázdna stránka";
+    Text[ hungarian ] = "üres oldal";
+    Text[ slovenian ] = "prazna stran";
 };
 
 QueryBox MSG_CLPBRD_CLEAR
@@ -3405,6 +3581,8 @@ QueryBox MSG_CLPBRD_CLEAR
     MESSAGE[ hebrew ] = "Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden?";
     MESSAGE[ hindi ] = "आपका क्लिपबोर्ड में अधिक प्रमाण में ड़ॉटा को संचित किया है ।\nक्लिपबोर्ड विषयों को अन्य कार्यक्रम में भी प्राप्त करना चाहते है?";
     MESSAGE[ slovak ] = "Do schránky ste umiestnili veľa dát.\nMá sa obsah schránky zachovať pre iné aplikácie?";
+    MESSAGE[ hungarian ] = "A vágólapon nagy mennyiségű adat van.\nOtthagyja ezeket más alkalmazások számára?";
+    MESSAGE[ slovenian ] = "V odložišču je shranjenih veliko podatkov.\nAli želite, da ostanejo na voljo drugim aplikacijam?";
 };
 
 QueryBox MSG_SAVE_HTML_QUERY
@@ -3442,6 +3620,8 @@ QueryBox MSG_SAVE_HTML_QUERY
     Message[ hebrew ] = "Die Umwandlung in das HTML-Format \nkann Informationsverlust verursachen. \nMöchten Sie das Dokument speichern?";
     Message[ hindi ] = "HTML रचना में परिवर्तन करने से \nसूचना नष्ट हो सकता है । \nआप लेखपत्र को संचित करना चाहते है?";
     Message[ slovak ] = "Pri konverzii do HTML formátu \nmôže dôjsť k strate informácií. \nPrajete si dokument uložiť?";
+    Message[ hungarian ] = "A HTML formátumba való átalakítás\ninformációvesztéssel járhat.\nFolytatja a dokumentum mentését?";
+    Message[ slovenian ] = "Pretvarjanje v HTML format lahko \npovzroči izgubo informacij. \nAli želite shraniti dokument?";
 };
 QueryBox MSG_SAVEAS_HTML_QUERY
 {
@@ -3474,6 +3654,8 @@ QueryBox MSG_SAVEAS_HTML_QUERY
     MESSAGE[ hebrew ] = "Die Quelltextansicht kann nur angezeigt werden, wenn das Dokument im HTML-Format gespeichert wurde.\nMöchten Sie das Dokument jetzt im HTML-Format speichern?";
     MESSAGE[ hindi ] = "अगर लेखपत्र को HTML रचना में संचित करेंगे तो ही आप मूल कोड् को दिखा सकते है ।\nआप लेखपत्र को HTML जैसे संचित करना चाहते है?";
     MESSAGE[ slovak ] = "Zdrojový kód sa dá zobraziť len ak je dokument uložený vo formáte HTML.\nPrajete si uložiť dokument ako HTML?";
+    MESSAGE[ hungarian ] = "A forráskód csak akkor jeleníthető meg, ha a dokumentum HTML formátumban van mentve. \nSzeretné a dokumentumot HTML-ként menteni?";
+    MESSAGE[ slovenian ] = "Izvorna koda je lahko prikazana le, če je dokument shranjen v HTML obliki zapisa. \nAli želite dokument shraniti kot HTML?";
 };
 String STR_ABSTRACT_TITLE
 {
@@ -3483,7 +3665,7 @@ String STR_ABSTRACT_TITLE
     Text [ english_us ] = "Abstract: " ;
     Text [ portuguese_brazilian ] = "Resumo: " ;
     Text [ swedish ] = "Utdrag:  " ;
-    Text [ danish ] = "Abstract : " ;
+    Text [ danish ] = "Resume: " ;
     Text [ italian ] = "Sunto: " ;
     Text [ spanish ] = "Resumen:  " ;
     Text [ french ] = "Synth�se :  " ;
@@ -3497,7 +3679,7 @@ String STR_ABSTRACT_TITLE
     Text[ arabic ] = "�������: ";
     Text[ dutch ] = "Overzicht:";
     Text[ chinese_simplified ] = "摘要： ";
-    Text[ greek ] = "Abstract: ";
+    Text[ greek ] = "��������: ";
     Text[ korean ] = "요약: ";
     Text[ turkish ] = "�zet: ";
     Text[ catalan ] = "Resum:";
@@ -3507,6 +3689,8 @@ String STR_ABSTRACT_TITLE
     Text[ hebrew ] = "Abstrakt :";
     Text[ hindi ] = "सारांश: ";
     Text[ slovak ] = "Abstrakt:";
+    Text[ hungarian ] = "Összefoglaló:";
+    Text[ slovenian ] = "Povzetek:";
 };
 
 String STR_FDLG_TEMPLATE_BUTTON
@@ -3516,7 +3700,7 @@ String STR_FDLG_TEMPLATE_BUTTON
     Text [ english_us ] = "Style" ;
     Text [ portuguese_brazilian ] = "Estilo" ;
     Text [ swedish ] = "Formatmall" ;
-    Text [ danish ] = "Skabelon" ;
+    Text [ danish ] = "Typografi" ;
     Text [ italian ] = "Modello" ;
     Text [ spanish ] = "Estilo" ;
     Text [ french ] = "Style" ;
@@ -3541,6 +3725,8 @@ String STR_FDLG_TEMPLATE_BUTTON
     Text[ hebrew ] = "Vorlage";
     Text[ hindi ] = "शैली";
     Text[ slovak ] = "Štýl";
+    Text[ hungarian ] = "Stílus";
+    Text[ slovenian ] = "Slog";
 };
 
 String STR_FDLG_TEMPLATE_NAME
@@ -3549,7 +3735,7 @@ String STR_FDLG_TEMPLATE_NAME
     Text [ english_us ] = "Styles: " ;
     Text [ portuguese_brazilian ] = "Estilo Atual: " ;
     Text [ swedish ] = "Formatmallar: " ;
-    Text [ danish ] = "Aktuel skabelon: " ;
+    Text [ danish ] = "Typografier: " ;
     Text [ italian ] = "Modelli di formato: " ;
     Text [ spanish ] = "Estilos: " ;
     Text [ french ] = "Styles : " ;
@@ -3574,6 +3760,8 @@ String STR_FDLG_TEMPLATE_NAME
     Text[ hebrew ] = ":‮סגנונות‬";
     Text[ hindi ] = "वर्तमान शैली: ";
     Text[ slovak ] = "Aktuálny štýl:";
+    Text[ hungarian ] = "Stílusok:";
+    Text[ slovenian ] = "Slogi:";
 };
 
 String STR_PAGEOFFSET
@@ -3608,6 +3796,8 @@ String STR_PAGEOFFSET
     Text[ hebrew ] = "Seitennummer:";
     Text[ hindi ] = "पृष्ठ संख्या: ";
     Text[ slovak ] = "Číslo stránky: ";
+    Text[ hungarian ] = "Oldalszám:";
+    Text[ slovenian ] = "Številka strani:";
 };
 String STR_PAGEBREAK
 {
@@ -3642,6 +3832,8 @@ String STR_PAGEBREAK
     Text[ hebrew ] = "Umbruch vor neuer Seite";
     Text[ hindi ] = "नया पृष्ठ से पहिले खण्डन";
     Text[ slovak ] = "Zalomiť pred novou stránkou";
+    Text[ hungarian ] = "Új oldal előtti törés";
+    Text[ slovenian ] = "Prelom pred novo stranjo";
 };
 String STR_WESTERN_FONT
 {
@@ -3651,7 +3843,7 @@ String STR_WESTERN_FONT
     Text[ portuguese ] = "Texto ocidental:";
     Text[ russian ] = "�������� �����:";
     Text[ greek ] = "������� ������� ������:";
-    Text[ dutch ] = "Westelijke tekst:";
+    Text[ dutch ] = "Westerse tekst:";
     Text[ french ] = "Texte occidental : ";
     Text[ spanish ] = "Texto occidental: ";
     Text[ finnish ] = "L�nsimainen teksti: ";
@@ -3672,6 +3864,8 @@ String STR_WESTERN_FONT
     Text[ hebrew ] = "Westlicher Text:";
     Text[ hindi ] = "पाश्चात्य टेक्स्ट्: ";
     Text[ slovak ] = "Západní text:";
+    Text[ hungarian ] = "Nyugati szöveg:";
+    Text[ slovenian ] = "Zahodno besedilo:";
 };
 String STR_CJK_FONT
 {
@@ -3702,6 +3896,8 @@ String STR_CJK_FONT
     Text[ hebrew ] = "Asiatischer Text:";
     Text[ hindi ] = "ऐशियन टेक्स्ट्: ";
     Text[ slovak ] = "Ázijský text: ";
+    Text[ hungarian ] = "Ázsiai szöveg";
+    Text[ slovenian ] = "Azijsko besedilo:";
 };
 String STR_REDLINE_UNKNOWN_AUTHOR
 {
@@ -3732,6 +3928,8 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ hebrew ] = "unbekannt";
     Text[ hindi ] = "अज्ञात";
     Text[ slovak ] = "neznámy";
+    Text[ hungarian ] = "ismeretlen";
+    Text[ slovenian ] = "neznano";
 };
 
 WarningBox MSG_DISABLE_UNDO_QUESTION
@@ -3743,13 +3941,13 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
     Message [ english_us ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ portuguese ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ russian ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-    Message[ greek ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-    Message[ dutch ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
+    Message[ greek ] = "���� � �������� ��������� �� ����� ��������� ��� ������� �� ����������. �� ������� ��� ����� ��� ����� ��� ������� ����� ����� ������� ���� ��� ������� �� ����������. ������ �� ���������� �� �����������;";
+    Message[ dutch ] = "Deze handeling wist de lijst van bewerkingen die ongedaan kunnen worden gemaakt. Eerdere wijzigingen aan het document blijven geldig, maar kunnen niet ongedaan worden gemaakt. Doorgaan met de opmaak?";
     Message[ french ] = "Cette action supprime la liste des op�rations pouvant �tre annul�es. Ceci n'affecte pas les modifications apport�es au document, mais emp�che de les annuler. Poursuivre le formatage ?";
     Message[ spanish ] = "Esta acci�n borra la lista de las acciones que se pueden deshacer. Las modificaciones realizadas hasta ahora en el documento seguir�n siendo v�lidas, sin embargo no se podr�n deshacer. �Desea continuar con el formateado?";
     Message[ finnish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ italian ] = "Questa azione elimina l'elenco delle azioni da annullare. I cambiamenti effettuati al documento sono ancora validi ma non possono essere annullati. Volete proseguire la formattazione?";
-    Message[ danish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
+    Message[ danish ] = "Denne handling nulstiller listen over handlinger, der kan fortrydes. Hidtige �ndringer er stadige g�ldende for dokumentet, men de kan ikke fortrydes. Vil du forts�tte med formateringen?";
     Message[ swedish ] = "Den h�r �tg�rden raderar listan med arbetssteg som g�r att �ngra. �ndringar som har gjorts hittills i dokumentet finns kvar men g�r inte att �ngra l�ngre. Vill du forts�tta med formateringen?";
     Message[ polish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ portuguese_brazilian ] = "Esta a��o exclui a lista de a��es pass�veis de serem desfeitas. As altera��es anteriores feitas no documento continuam v�lidas, mas n�o podem ser desfeitas. Deseja continuar a formata��o?";
@@ -3765,6 +3963,8 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
     Message[ hebrew ] = "Diese Aktion löscht die Liste der Arbeitsschritte, die rückgängig gemacht werden können. Bisher gemachte Änderungen am Dokument bleiben erhalten, können jedoch nicht mehr rückgängig gemacht werden. Wollen Sie mit der Formatierung fortfahren?";
     Message[ hindi ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ slovak ] = "Tento krok zmaže zoznam krokov ktoré môžu byť vzaté späť. Predchádzajúce zmeny urobené v dokumete ostávajú platné, ale nemôžu byť vzaté späť. Chcete pokračovať vo formátovaní?";
+    Message[ hungarian ] = "Ez a művelet törli a visszavonható műveletek listáját. A dokumentumon végrehajtott módosítások megmaradnak, azonban nincs mód az esetleges visszaállításra. Folytatja a formázást?";
+    Message[ slovenian ] = "S tem dejanjem boste izbrisali seznam dejanj, ki jih je mogoče razveljaviti. Vse dosedanje spremembe v dokumentu bodo ostale veljavne, vendar jih ne bo mogoče razveljaviti. Ali želite nadaljevati z oblikovanjem?";
 };
 /*QueryBox MSG_INS_MERGE_FIELDS
 {
@@ -3813,11 +4013,11 @@ QueryBox MSG_PRINT_AS_MERGE
     Message[ korean ] = "문서에 데이터베이스 주소 필드가 있습니다. 편지 양식을 인쇄하시겠습니까?";
     Message[ turkish ] = "Belgenizde veritaban� alanlar� adresi var. Form mektubu yazmak ister misiniz?";
     Message[ thai ] = "Your document contains address database fields. Do you want to print a form letter?";
-    Message[ greek ] = "Your document contains address database fields. Do you want to print a form letter?";
-    Message[ dutch ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ greek ] = "�� ������� ��� �������� ����� ����� ��������� ����� �����������. ������ �� ���������� ��� �������� ��������;";
+    Message[ dutch ] = "Uw document bevat database-adresvelden. Wilt u een standaardbrief afdrukken?";
     Message[ french ] = "Le document contient des champs de base de donn�es d'adresses. Voulez-vous imprimer une lettre type ?";
     Message[ finnish ] = "Your document contains address database fields. Do you want to print a form letter?";
-    Message[ danish ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ danish ] = "Dit dokumentet indeholder adressekartoteksfelter. Vil du udskrive et formularbrev?";
     Message[ chinese_simplified ] = "您的文档含有一个通讯簿数据字段。要采用邮件合并方式打印？";
     Message[ chinese_traditional ] = "您的文件包含地址資料欄位。要合併列印？";
     Message[ arabic ] = "Your document contains address database fields. Do you want to print a form letter?";
@@ -3826,6 +4026,8 @@ QueryBox MSG_PRINT_AS_MERGE
     Message[ hebrew ] = "Your document contains address database fields. Do you want to print a form letter?";
     Message[ hindi ] = "Your document contains address database fields. Do you want to print a form letter?";
     Message[ slovak ] = "Váš dokumet obsahuje databázové polia s adresami. Chcete vytlačiť formulárový list?";
+    Message[ hungarian ] = "A dokumentum címadatbázis-mezőket tartalmaz. Körlevelet szeretne nyomtatni?";
+    Message[ slovenian ] = "Dokument vsebuje polja iz adresarja. Ali želite natisniti tipsko pismo?";
 };
 WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
 {
@@ -3846,10 +4048,10 @@ WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
     Message[ turkish ] = "Veri kayna�� \'%1\' bulunamad�. \n\'Tools - Data Sources...\' i�indeki ayarlar� kontrol et";
     Message[ thai ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
     Message[ greek ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
-    Message[ dutch ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ dutch ] = "De gegevensbron \"%1\" is niet gevonden.\nControleer de instellingen in \'Extra - Gegevensbronnen...\'";
     Message[ french ] = "Impossible de d�tecter la source de donn�es \"%1\" !\nV�rifiez les param�tres sous \'Outils - Sources de donn�es...\'";
     Message[ finnish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
-    Message[ danish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ danish ] = "Datakilden \'%1\' blev ikke fundet.\nKontroller indstillingerne i \'Funktioner - Datakilder...\'";
     Message[ chinese_simplified ] = "没有找到数据源 \"%1\" 。\n请检查在\'工具 - 数据源...\' 之下的设定。";
     Message[ chinese_traditional ] = "找不到資料源 \"%1\"。\n檢查 \'工具 - 資料源...\' 中的設定";
     Message[ arabic ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
@@ -3858,6 +4060,8 @@ WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
     Message[ hebrew ] = "The data source \'%1\' was not found.\nCheck the settings in \'Tools - Data Sources...\'";
     Message[ hindi ] = "The data source \'%1\' was not found.\nCheck the settings in \'Tools - Data Sources...\'";
     Message[ slovak ] = "Zdroj dát \'%1\' nebol nájdený.\nPreverte nastavenia v \'Nástroje - Zdroje dát...\'";
+    Message[ hungarian ] = "A(z) \'%1\' adatforrás nem található.\nEllenőrizze a megfelelő beállításokat az \'Eszközök -> Adatforrások...\' menüpont alatt.";
+    Message[ slovenian ] = "Vira podatkov \'%1\' ni mogoče najti.\nPreverite nastavitve v \'Orodja - Viri podatkov...\'";
 };
 WarningBox MSG_DATA_SOURCES_UNAVAILABLE
 {
@@ -3877,10 +4081,10 @@ WarningBox MSG_DATA_SOURCES_UNAVAILABLE
     Message[ turkish ] = "Veri kayna�� hen�z kurulmad�. Alanlara veri giri�i i�in (�rnek: adresler ve isimler) veri kayna��na gereksiniminiz var.";
     Message[ thai ] = "There is no data source available.\nDo you want to establish a data source connnection?";
     Message[ greek ] = "There is no data source available.\nDo you want to establish a data source connnection?";
-    Message[ dutch ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ dutch ] = "Er is geen gegevensbron ingesteld. Wilt u een databaseverbinding opzetten?";
     Message[ french ] = "Aucune source de donn�es n'a �t� d�finie. Une source de donn�es est requise pour fournir des donn�es (noms, adresses, etc.) aux champs.";
     Message[ finnish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
-    Message[ danish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ danish ] = "Der er endnu ikke oprettet en datakilde. Du skal bruge en datakilde som f.eks. en database for at g�re data (f.eks. navne og adresser) tilg�ngelig for felterne.";
     Message[ chinese_simplified ] = "还没有建立数据库。您需要一个例如含有姓名、地址等字段的数据库。";
     Message[ chinese_traditional ] = "還沒有建立資料源。您需要一個例如含有姓名、地址欄位的資料源。";
     Message[ arabic ] = "There is no data source available.\nDo you want to establish a data source connnection?";
@@ -3889,6 +4093,8 @@ WarningBox MSG_DATA_SOURCES_UNAVAILABLE
     Message[ hebrew ] = "No data source has been set up yet. You need a data source, such as a database, to supply data (for example, names and addresses) for the fields.";
     Message[ hindi ] = "No data source has been set up yet. You need a data source, such as a database, to supply data (for example, names and addresses) for the fields.";
     Message[ slovak ] = "Nebol nastavený zdroj dát. Zdroj dát, ako napr. databázu, potrebujete pre získavanie dát (napríklad mená a adresy) do polí.";
+    Message[ hungarian ] = "Még nem állított be adatforrást. Szüksége van egy adatforrásra - ez rendszerint egy adatbázis - a mező adatainak (pl. név, cím stb.) kitöltéséhez.";
+    Message[ slovenian ] = "Niste še nastavili vira podatkov. Vir podatkov, npr. zbirka podatkov, bo zagotavljal podatke (npr. imena in naslove) za polja.";
 };
 
 String RID_MODULE_TOOLBOX
@@ -3901,7 +4107,7 @@ String RID_MODULE_TOOLBOX
     Text [ spanish ] = "Barra de funciones (modo vista)" ;
     Text [ french ] = "Barre de fonctions (mode visualisation)" ;
     Text [ swedish ] = "Funktionslist (visningsl�ge)" ;
-    Text [ danish ] = "Funktionslinje" ;
+    Text [ danish ] = "Funktionslinje (visningstilstand)" ;
     Text [ portuguese_brazilian ] = "Barra de fun��es" ;
     Text [ portuguese ] = "Barra de fun��es" ;
     Text[ chinese_simplified ] = "功能栏(视图模式)";
@@ -3923,6 +4129,8 @@ String RID_MODULE_TOOLBOX
     Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
     Text[ hindi ] = "फंक्शन् पट्टी";
     Text[ slovak ] = "Panel funkcií (mód náhľadu)";
+    Text[ hungarian ] = "Műveletek eszköztár (nézeti mód)";
+    Text[ slovenian ] = "Funkcijska vrstica";
 };
 
 ToolBox RID_MODULE_TOOLBOX
@@ -4019,10 +4227,10 @@ WarningBox MSG_DISABLE_READLINE_QUESTION
     Message[ slovak ] = "V aktívnom dokumente sa nahrávajú zmeny, ale program ich neeviduje. Vo veľkých dokumentoch, môže nastať oneskorenie pri úpravách. Chcete zobraziť zmeny, aby sa zabránilo oneskoreniu?";
     Message[ portuguese_brazilian ] = "No documento atual, as modifica��es s�o gravadas mas n�o s�o apresentadas como tal. Em documentos grandes, atrasos poder�o ocorrer quando o documento � editado. Deseja exibir as modifical��es para evitar os atrasos?";
     Message[ greek ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
-    Message[ dutch ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ dutch ] = "In het actuele document worden wijzigingen opgetekend maar niet als zodanig getoond. In grote documenten kan dit tot vertraging bij het bewerken leiden. Wilt u de wijzigingen tonen om vertraging te vermijden?";
     Message[ finnish ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
     Message[ czech ] = "Změny v současném dokumentu jsou zaznamenávány, ale nejsou zobrazovány. Ve velkých dokumentech mohou nastat prodlevy při jejich úpravách. Chcete zobrazovat změny pro snížení této prodlevy?";
-    Message[ danish ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ danish ] = "�ndringer i det nuv�rende dokument registreres men vises ikke. I st�rre dokumenter kan der opst� forsinkelser, n�r dokumentet redigeres. Vil du vise �ndringerne for at undg� forsinkelser?";
     Message[ arabic ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
     Message[ hebrew ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
     Message[ catalan ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
@@ -4032,7 +4240,16 @@ WarningBox MSG_DISABLE_READLINE_QUESTION
     Message[ polish ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
     Message[ turkish ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
     Message[ thai ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ hungarian ] = "A jelenlegi dokumentumban a változások követése be van állítva, azok megjelenítése azonban nem. Nagyobb dokumentumok szerkesztésekor ez késleltetéshez vezethet. Megjeleníti a változásokat a késleltetés elkerülése érdekében?";
+    Message[ slovenian ] = "V trenutnem dokumentu so spremembe zapisane, vendar niso prikazane. V večjih dokumentih lahko pri urejanju pride do zamika. Ali želite prikazati spremembe, da se izognete zamiku?";
 };
+
+
+
+
+
+
+
 
 
 
