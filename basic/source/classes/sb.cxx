@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-23 08:51:30 $
+ *  last change: $Author: ab $ $Date: 2001-06-08 13:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ struct SFX_VB_ErrorItem
 
 const SFX_VB_ErrorItem __FAR_DATA SFX_VB_ErrorTab[] =
 {
+    { 1, SbERR_BASIC_EXCEPTION },  // #87844 Map exception to error code 1
     { 2, SbERR_SYNTAX },
     { 3, SbERR_NO_GOSUB },
     { 4, SbERR_REDO_FROM_START },
@@ -400,6 +401,8 @@ void StarBASIC::Remove( SbxVariable* pVar )
 {
     if( pVar->IsA( TYPE(SbModule) ) )
     {
+        // #87540 Can be last reference!
+        SbxVariableRef xVar = pVar;
         pModules->Remove( pVar );
         pVar->SetParent( 0 );
         EndListening( pVar->GetBroadcaster() );
