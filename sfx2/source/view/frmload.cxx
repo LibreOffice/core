@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-21 10:53:55 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 08:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
         // special filters that can or must (!) be detected inside the medium without further investigation
         // f.e. disk spanned jar files
-        pFilter = aMedium.GetFilter();
+        if ( aMedium.GetFilter() )
+            pFilter = aMedium.GetFilter();
 
         // remember input stream and put it into the descriptor later
         xStream = aMedium.GetInputStream();
