@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-15 10:52:44 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,6 +653,9 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
                 sMenuRes.appendAscii("private:resource/");
                 sMenuRes.append     (sResName           );
                 sMenuRes.appendAscii("/261"             );
+                sMenuRes.appendAscii("?accel="          );
+                sMenuRes.append     (sResName           );
+                sMenuRes.appendAscii("/262"             );
 
                 css::util::URL aURL;
                 aURL.Complete = sMenuRes.makeStringAndClear();
