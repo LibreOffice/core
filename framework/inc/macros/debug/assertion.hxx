@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assertion.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:23 $
+ *  last change: $Author: as $ $Date: 2001-02-01 09:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
     #include <osl/diagnose.h>
     #endif
 
+    #ifndef _RTL_USTRBUF_HXX_
+    #include <rtl/ustrbuf.hxx>
+    #endif
+
     /*_____________________________________________________________________________________________________________
         LOGFILE_ASSERTIONS
 
@@ -87,6 +91,8 @@
                     "assertions.log"
     #endif
 
+    #if LOGTYPE==LOGTYPE_FILECONTINUE
+
     /*_____________________________________________________________________________________________________________
         LOG_ASSERT( BCONDITION, STEXT )
 
@@ -95,13 +101,34 @@
         BCONDITION is inserted in "(...)" because user can call this macro with an complex expression!
     _____________________________________________________________________________________________________________*/
 
-    #if LOGTYPE==LOGTYPE_FILECONTINUE
         #define LOG_ASSERT( BCONDITION, STEXT )                                                                 \
                     if ( ( BCONDITION ) == sal_False )                                                          \
                     {                                                                                           \
                         WRITE_LOGFILE( LOGFILE_ASSERTIONS, STEXT )                                              \
                     }
+
+    /*_____________________________________________________________________________________________________________
+        LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )
+
+        Forward information about occured exception into logfile and continue with program.
+        Set LOGTYPE to LOGTYPE_FILECONTINUE to do this.
+    _____________________________________________________________________________________________________________*/
+
+        #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )                                        \
+                    {                                                                                           \
+                        ::rtl::OUStringBuffer sBuffer( 1000 );                                                  \
+                        sBuffer.appendAscii ( SMETHOD           );                                              \
+                        sBuffer.appendAscii ( "\n"              );                                              \
+                        sBuffer.appendAscii ( SOWNMESSAGE       );                                              \
+                        sBuffer.appendAscii ( "\n"              );                                              \
+                        sBuffer.append      ( SEXCEPTIONMESSAGE );                                              \
+                        sBuffer.appendAscii ( "\n"              );                                              \
+                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, U2B(sBuffer.makeStringAndClear()).getStr() )         \
+                    }
+
     #endif
+
+    #if LOGTYPE==LOGTYPE_FILEXIT
 
     /*_____________________________________________________________________________________________________________
         LOG_ASSERT( BCONDITION, STEXT )
@@ -111,14 +138,36 @@
         BCONDITION is inserted in "(...)" because user can call this macro with an complex expression!
     _____________________________________________________________________________________________________________*/
 
-    #if LOGTYPE==LOGTYPE_FILEXIT
         #define LOG_ASSERT( BCONDITION, STEXT )                                                                 \
                     if ( ( BCONDITION ) == sal_False )                                                          \
                     {                                                                                           \
                         WRITE_LOGFILE( LOGFILE_ASSERTIONS, STEXT )                                              \
                         exit(-1);                                                                               \
                     }
+
+    /*_____________________________________________________________________________________________________________
+        LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )
+
+        Forward information about occured exception into logfile and exit the program.
+        Set LOGTYPE to LOGTYPE_FILECONTINUE to do this.
+    _____________________________________________________________________________________________________________*/
+
+        #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )                                        \
+                    {                                                                                           \
+                        ::rtl::OUStringBuffer sBuffer( 1000 );                                                  \
+                        sBuffer.appendAscii ( SMETHOD           );                                              \
+                        sBuffer.appendAscii ( "\n"              );                                              \
+                        sBuffer.appendAscii ( SOWNMESSAGE       );                                              \
+                        sBuffer.appendAscii ( "\n"              );                                              \
+                        sBuffer.append      ( SEXCEPTIONMESSAGE );                                              \
+                        sBuffer.appendAscii ( "\n"              );                                              \
+                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, U2B(sBuffer.makeStringAndClear()).getStr() )         \
+                        exit(-1);                                                                               \
+                    }
+
     #endif
+
+    #if LOGTYPE==LOGTYPE_MESSAGEBOX
 
     /*_____________________________________________________________________________________________________________
         LOG_ASSERT( BCONDITION, STEXT )
@@ -128,9 +177,28 @@
         BCONDITION is inserted in "(...)" because user can call this macro with an complex expression!
     _____________________________________________________________________________________________________________*/
 
-    #if LOGTYPE==LOGTYPE_MESSAGEBOX
         #define LOG_ASSERT( BCONDITION, STEXT )                                                                 \
                     OSL_ENSHURE( ( BCONDITION ), STEXT );
+
+    /*_____________________________________________________________________________________________________________
+        LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )
+
+        Forward information about occured exception into messagebox.
+        Set LOGTYPE to LOGTYPE_FILECONTINUE to do this.
+    _____________________________________________________________________________________________________________*/
+
+        #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )                                        \
+                    {                                                                                           \
+                        ::rtl::OUStringBuffer sBuffer( 1000 );                                                  \
+                        sBuffer.appendAscii ( SMETHOD           );                                              \
+                        sBuffer.appendAscii ( "\n"              );                                              \
+                        sBuffer.appendAscii ( SOWNMESSAGE       );                                              \
+                        sBuffer.appendAscii ( "\n"              );                                              \
+                        sBuffer.append      ( SEXCEPTIONMESSAGE );                                              \
+                        sBuffer.appendAscii ( "\n"              );                                              \
+                        OSL_ENSHURE( sal_False, U2B(sBuffer.makeStringAndClear()).getStr() );                   \
+                    }
+
     #endif
 
 #else   // #ifdef ENABLE_ASSERTIONS
@@ -141,6 +209,7 @@
 
     #undef  LOGFILE_ASSERTIONS
     #define LOG_ASSERT( BCONDITION, STEXT )
+    #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )
 
 #endif  // #ifdef ENABLE_ASSERTIONS
 
