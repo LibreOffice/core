@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 11:31:29 $
+ *  last change: $Author: sab $ $Date: 2000-11-23 14:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ XML_CONSTASCII_ACTION( sXML_automatic, "automatic");
 XML_CONSTASCII_ACTION( sXML_automatic_order, "automatic-order" );
 XML_CONSTASCII_ACTION( sXML_automatic_styles, "automatic-styles" );
 XML_CONSTASCII_ACTION( sXML_automatic_update, "automatic-update" );
+XML_CONSTASCII_ACTION( sXML_automatic_find_labels, "automatic-find-labels" );
 XML_CONSTASCII_ACTION( sXML_average, "average" );
 XML_CONSTASCII_ACTION( sXML_axis, "axis" );
 XML_CONSTASCII_ACTION( sXML_background, "background" );
@@ -274,6 +275,7 @@ XML_CONSTASCII_ACTION( sXML_bullet_char, "bullet-char" );
 XML_CONSTASCII_ACTION( sXML_buttons, "buttons");
 XML_CONSTASCII_ACTION( sXML_bvar, "bvar");
 XML_CONSTASCII_ACTION( sXML_c, "c" );
+XML_CONSTASCII_ACTION( sXML_calculation_settings, "calculation-settings" );
 XML_CONSTASCII_ACTION( sXML_capitalize_entries, "capitalize-entries" );
 XML_CONSTASCII_ACTION( sXML_caption, "caption" );
 XML_CONSTASCII_ACTION( sXML_caption_sequence_format, "caption-sequence-format" );
@@ -742,6 +744,7 @@ XML_CONSTASCII_ACTION( sXML_is_data_layout_field, "is-data-layout-field");
 XML_CONSTASCII_ACTION( sXML_is_selection, "is-selection");
 XML_CONSTASCII_ACTION( sXML_isbn, "isbn" );
 XML_CONSTASCII_ACTION( sXML_italic, "italic" );
+XML_CONSTASCII_ACTION( sXML_iteration, "iteration" );
 XML_CONSTASCII_ACTION( sXML_journal, "journal" );
 XML_CONSTASCII_ACTION( sXML_justified, "justified" );
 XML_CONSTASCII_ACTION( sXML_justify, "justify" );
@@ -835,6 +838,7 @@ XML_CONSTASCII_ACTION( sXML_matrix, "matrix");
 XML_CONSTASCII_ACTION( sXML_matrixrow, "matrixrow");
 XML_CONSTASCII_ACTION( sXML_max, "max" );
 XML_CONSTASCII_ACTION( sXML_maximum, "maximum" );
+XML_CONSTASCII_ACTION( sXML_maximum_difference, "maximum-difference" );
 XML_CONSTASCII_ACTION( sXML_may_break_between_rows, "may-break-between-rows" );
 XML_CONSTASCII_ACTION( sXML_mean, "mean" );
 XML_CONSTASCII_ACTION( sXML_mean_value, "mean-value" );
@@ -919,6 +923,7 @@ XML_CONSTASCII_ACTION( sXML_note, "note" );
 XML_CONSTASCII_ACTION( sXML_notes, "notes" );
 XML_CONSTASCII_ACTION( sXML_notin, "notin" );
 XML_CONSTASCII_ACTION( sXML_notsubset, "notsubset" );
+XML_CONSTASCII_ACTION( sXML_null_date, "null-date" );
 XML_CONSTASCII_ACTION( sXML_num_format, "num-format" );
 XML_CONSTASCII_ACTION( sXML_num_letter_sync, "num-letter-sync" );
 XML_CONSTASCII_ACTION( sXML_num_prefix, "num-prefix" );
@@ -1029,6 +1034,7 @@ XML_CONSTASCII_ACTION( sXML_posture_normal, "normal" );
 XML_CONSTASCII_ACTION( sXML_posture_oblique, "oblique" );
 XML_CONSTASCII_ACTION( sXML_power, "power" );
 XML_CONSTASCII_ACTION( sXML_prefix, "prefix" );
+XML_CONSTASCII_ACTION( sXML_precision_as_shown, "precision-as-shown" );
 XML_CONSTASCII_ACTION( sXML_presentation_chart , "chart" );
 XML_CONSTASCII_ACTION( sXML_presentation_graphic , "graphic" );
 XML_CONSTASCII_ACTION( sXML_presentation_notes , "notes" );
@@ -1173,6 +1179,7 @@ XML_CONSTASCII_ACTION( sXML_sequence, "sequence" );
 XML_CONSTASCII_ACTION( sXML_sequence_decl, "sequence-decl" );
 XML_CONSTASCII_ACTION( sXML_sequence_decls, "sequence-decls" );
 XML_CONSTASCII_ACTION( sXML_sequence_ref, "sequence-ref" );
+XML_CONSTASCII_ACTION( sXML_search_criteria_must_apply_to_whole_cell, "search-criteria-must-apply-to-whole-cell" );
 XML_CONSTASCII_ACTION( sXML_series, "series" );
 XML_CONSTASCII_ACTION( sXML_server_map, "server-map" );
 XML_CONSTASCII_ACTION( sXML_set, "set" );
@@ -1224,8 +1231,10 @@ XML_CONSTASCII_ACTION( sXML_start_numbering_at, "start-numbering-at" );
 XML_CONSTASCII_ACTION( sXML_start_transparency, "start-transparency" );
 XML_CONSTASCII_ACTION( sXML_start_value, "start-value" );
 XML_CONSTASCII_ACTION( sXML_statistics, "statistics" );
+XML_CONSTASCII_ACTION( sXML_status, "status" );
 XML_CONSTASCII_ACTION( sXML_stdev, "stdev" );
 XML_CONSTASCII_ACTION( sXML_stdevp, "stdevp" );
+XML_CONSTASCII_ACTION( sXML_steps, "steps" );
 XML_CONSTASCII_ACTION( sXML_stock, "stock" );
 XML_CONSTASCII_ACTION( sXML_stock_updown_bars, "stock-updown-bars" );
 XML_CONSTASCII_ACTION( sXML_stock_with_volume, "stock-with-volume" );
