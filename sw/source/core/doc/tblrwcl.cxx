@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:14:22 $
+ *  last change: $Author: jp $ $Date: 2002-03-19 12:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,21 +792,23 @@ BOOL SwTable::AppendRow( SwDoc* pDoc, USHORT nCnt )
 
 
 void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
-                            SwShareBoxFmts& rShareFmts );
+                            BOOL bFirst, SwShareBoxFmts& rShareFmts );
 
 void lcl_LastBoxSetWidthLine( SwTableLines &rLines, const long nOffset,
-                                SwShareBoxFmts& rShareFmts )
+                                BOOL bFirst, SwShareBoxFmts& rShareFmts )
 {
     for ( USHORT i = 0; i < rLines.Count(); ++i )
-        ::lcl_LastBoxSetWidth( rLines[i]->GetTabBoxes(), nOffset, rShareFmts) ;
+        ::lcl_LastBoxSetWidth( rLines[i]->GetTabBoxes(), nOffset, bFirst,
+                                rShareFmts );
 }
 
 void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
-                            SwShareBoxFmts& rShareFmts )
+                            BOOL bFirst, SwShareBoxFmts& rShareFmts )
 {
-    SwTableBox& rBox = *rBoxes[ rBoxes.Count() - 1 ];
+    SwTableBox& rBox = *rBoxes[ bFirst ? 0 : rBoxes.Count() - 1 ];
     if( !rBox.GetSttNd() )
-        ::lcl_LastBoxSetWidthLine( rBox.GetTabLines(), nOffset, rShareFmts );
+        ::lcl_LastBoxSetWidthLine( rBox.GetTabLines(), nOffset,
+                                    bFirst, rShareFmts );
 
     //Die Box anpassen
     SwFrmFmt *pBoxFmt = rBox.GetFrmFmt();
@@ -914,7 +916,8 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
         if( rTblBoxes.Count() )
         {
             // dann passe noch die Frame-SSize an
-            if( nDelPos == rTblBoxes.Count() )
+            BOOL bLastBox = nDelPos == rTblBoxes.Count();
+            if( bLastBox )
                 --nDelPos;
             pBox = rTblBoxes[nDelPos];
             if( bCalcNewSize )
@@ -932,6 +935,7 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
                     // Zellen erfolgen!
                     SwShareBoxFmts aShareFmts;
                     ::lcl_LastBoxSetWidthLine( pBox->GetTabLines(), nBoxSz,
+                                                !bLastBox,
                                                 pShareFmts ? *pShareFmts
                                                            : aShareFmts );
                 }
