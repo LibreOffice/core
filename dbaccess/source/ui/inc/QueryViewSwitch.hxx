@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 09:31:30 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 07:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ namespace dbaui
     {
         OQueryDesignView*   m_pDesignView;
         OQueryTextView*     m_pTextView;
+        sal_Bool            m_bAddTableDialogWasVisible; // true if so
     public:
         OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~OQueryViewSwitch();
