@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-15 20:17:26 $
+ *  last change: $Author: bm $ $Date: 2001-03-22 12:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,10 +474,6 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
             if( bWasChanged )
             {
                 xData->setData( xArray );
-
-                uno::Reference< chart::XChartData > xChData( xData, uno::UNO_QUERY );
-                if( xChData.is())
-                    mxChartDoc->attachData( xChData );
             }
         }
     }
