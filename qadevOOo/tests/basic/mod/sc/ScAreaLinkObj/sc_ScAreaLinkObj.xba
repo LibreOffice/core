@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScAreaLinkObj.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:59:06 $ 
+'*  last change:$Date: 2003-11-18 16:19:20 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -85,8 +85,10 @@ On Error Goto ErrHndl
     bOK = true
     oDoc = utils.createDocument("scalc", cObjectName)
 
+    Dim aSourceArea as String
+    aSourceArea = utils.Path2URL(cTestDocsDir + "/" + "calcshapes.sxc")
     oLinks = oDoc.AreaLinks
-    oLinks.InsertAtPosition(com.sun.star.table.CellAddress(1, 2, 3), cObjectName, "Sheet1.a1:b2", "", "")
+    oLinks.InsertAtPosition(com.sun.star.table.CellAddress(1, 2, 3), aSourceArea, "a1:b2", "", "")
 
     oObj = oLinks.getByIndex(0)
 
