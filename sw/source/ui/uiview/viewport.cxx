@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 10:52:27 $
+ *  last change: $Author: jp $ $Date: 2001-10-11 07:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1044,7 +1044,7 @@ void SwView::ShowAtResize()
 }
 
 
-void __EXPORT SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
+void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
 {
     SvBorder aBorder;
     CalcAndSetBorderPixel( aBorder, TRUE );
@@ -1088,9 +1088,9 @@ void __EXPORT SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
 }
 
 
-void __EXPORT SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
+void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 {
-    if ( bInOuterResizePixel )
+    if( bInOuterResizePixel )
         return;
     bInOuterResizePixel = TRUE;
 
@@ -1100,9 +1100,9 @@ void __EXPORT SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
              bShowV,
              bAuto = FALSE,
              bHAuto= bBrowse;
-    switch ( GetScrollingMode() )
+    switch( GetScrollingMode() )
     {
-        case SCROLLING_DEFAULT:
+    case SCROLLING_DEFAULT:
         {
             const SwViewOption *pVOpt = pWrtShell->GetViewOptions();
             if ( !pVOpt->IsReadonly() || pVOpt->IsStarOneSetting() )
@@ -1112,16 +1112,16 @@ void __EXPORT SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
                 break;
             }
         }
-            /* kein break hier */
-        case SCROLLING_AUTO:
-            bAuto = bHAuto = TRUE;
-            bShowH = bShowV = TRUE;
+        /* kein break hier */
+    case SCROLLING_AUTO:
+        bAuto = bHAuto = TRUE;
+        bShowH = bShowV = TRUE;
         break;
-        case SCROLLING_YES:
-            bShowH = bShowV = TRUE;
+    case SCROLLING_YES:
+        bShowH = bShowV = TRUE;
         break;
-        case SCROLLING_NO:
-            bShowH = bShowV = bHAuto = FALSE;
+    case SCROLLING_NO:
+        bShowH = bShowV = bHAuto = FALSE;
         break;
     }
     SwDocShell* pDocSh = GetDocShell();
@@ -1148,9 +1148,13 @@ void __EXPORT SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     SET_CURR_SHELL( pWrtShell );
     FASTBOOL bRepeat = FALSE;
     long nCnt = 0;
+
+    BOOL bUnLockView = !pWrtShell->IsViewLocked();
+    pWrtShell->LockView( TRUE );
     pWrtShell->LockPaint();
-    do
-    {   ++nCnt;
+
+    do {
+        ++nCnt;
         const FASTBOOL bScroll1 = pVScrollbar ? pVScrollbar->IsVisible() : FALSE;
         const FASTBOOL bScroll2 = pHScrollbar ? pHScrollbar->IsVisible() : FALSE;
         SvBorder aBorder;
@@ -1208,10 +1212,10 @@ void __EXPORT SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     }while ( bRepeat );
 
-    if ( pHScrollbar )
+    if( pHScrollbar )
         pHScrollbar->SetUpdateMode(TRUE);
 
-    if(pVScrollbar)
+    if( pVScrollbar )
     {
         pVScrollbar->SetUpdateMode(TRUE);
         BOOL bShowButtons = pVScrollbar->IsVisible(TRUE);
@@ -1226,11 +1230,14 @@ void __EXPORT SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     }
 
     pWrtShell->UnlockPaint();
+    if( bUnLockView )
+        pWrtShell->LockView( FALSE );
+
     bInOuterResizePixel = FALSE;
 }
 
 
-void __EXPORT SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
+void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
     const Fraction &rFrac = rX < rY ? rX : rY;
     SetZoom( SVX_ZOOM_PERCENT, (short) long(rFrac * Fraction( 100, 1 )) );
@@ -1241,7 +1248,7 @@ void __EXPORT SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 }
 
 
-Size __EXPORT SwView::GetOptimalSizePixel() const
+Size SwView::GetOptimalSizePixel() const
 {
     Size aPgSize;
     if ( pWrtShell->IsBrowseMode() )
@@ -1331,7 +1338,7 @@ BOOL SwView::UpdateScrollbars()
 }
 
 
-void __EXPORT SwView::Move()
+void SwView::Move()
 {
     if ( GetWrtShell().IsInSelect() )
         GetWrtShell().EndSelect();  //#32427#
