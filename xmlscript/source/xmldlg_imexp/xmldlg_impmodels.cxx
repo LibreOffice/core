@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
+ *  last change: $Author: dbo $ $Date: 2001-08-16 14:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,6 +852,11 @@ Reference< xml::XImportContext > TitledBoxElement::createChildContext(
         _radios.push_back( xRet );
         return xRet;
     }
+    // event
+    else if (isEventElement( nUid, rLocalName ))
+    {
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
+    }
     else
     {
         return BulletinBoardElement::createChildContext( nUid, rLocalName, xAttributes );
@@ -882,6 +887,7 @@ void TitledBoxElement::endElement()
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                                          makeAny( _label ) );
     }
+    ctx.importEvents( _events );
     }
 
     // create radios AFTER group box!

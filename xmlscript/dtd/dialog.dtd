@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-        $Id: dialog.dtd,v 1.16 2001-08-07 10:55:46 dbo Exp $
+        $Id: dialog.dtd,v 1.17 2001-08-16 14:11:24 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -218,14 +218,14 @@
                     dlg:tabstop %boolean; #IMPLIED
                     >
 
-<!ELEMENT dlg:titledbox (dlg:title?, dlg:radio*, (%control;)*)>
+<!ELEMENT dlg:titledbox (dlg:title?, dlg:radio*, (%control;)*, (%event;)*)>
 <!ATTLIST dlg:titledbox %default-attributes;
                         >
 <!ELEMENT dlg:title EMPTY>
 <!ATTLIST dlg:title dlg:value CDATA #IMPLIED
                     >
 
-<!ELEMENT dlg:text EMPTY>
+<!ELEMENT dlg:text ((%event;)*)>
 <!ATTLIST dlg:text %default-attributes;
                    dlg:align (left|center|right|none) #IMPLIED
                    dlg:multiline %boolean; #IMPLIED

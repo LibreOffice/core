@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
+ *  last change: $Author: dbo $ $Date: 2001-08-16 14:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,7 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
                              aTitle );
         addSubElement( title );
     }
+    readEvents();
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
@@ -374,6 +375,7 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
     readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
+    readEvents();
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readEditModel( StyleBag * all_styles )

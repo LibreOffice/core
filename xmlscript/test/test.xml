@@ -66,16 +66,21 @@
         </radiogroup>
 
         <titledbox id="groupbox1" left="250" top="250" width="120" height="100">
+            <script:listener-event script:macro-name="ExecutingMacro" script:location="application" script:language="StarBasic" script:listener-type="com.sun.star.awt.XMouseListener" script:listener-method="mouseEntered"/>
             <title value="grouped"/>
             <radio id="radio5" value="default radio" left="5" top="15" width="100" height="20"/>
             <radio id="radio7" value="unchecked" left="5" top="35" width="100" height="20" checked="false"/>
             <radio id="radio8" value="checked" left="5" top="55" width="100" height="20" checked="true"/>
         </titledbox>
 
-        <text id="fixed1" left="50" top="520" width="180" height="20" value="fixed text is here..." multiline="true" align="center"/>
+        <text id="fixed1" left="50" top="520" width="180" height="20" value="fixed text is here..." multiline="true" align="center">
+            <script:listener-event script:macro-name="ExecutingMacro" script:location="application" script:language="StarBasic" script:listener-type="com.sun.star.awt.XMouseListener" script:listener-method="mouseEntered"/>
+        </text>
         <textfield id="field1" left="250" top="520" width="50" height="40" value="edit no text here..." readonly="true" vscroll="true" multiline="true" align="right" style-id="no_border"/>
         <textfield id="field2" left="320" top="520" width="50" height="40" value="hidden text" hscroll="true" echochar="*" align="left"/>
-        <img id="image1" left="50" top="585" width="80" height="20" src="../../test/w3c.jpg"/>
+        <img id="image1" left="50" top="585" width="80" height="20" src="../../test/w3c.jpg">
+            <script:listener-event script:macro-name="ExecutingMacro" script:location="application" script:language="StarBasic" script:listener-type="com.sun.star.awt.XMouseListener" script:listener-method="mouseEntered"/>
+        </img>
         <filecontrol id="file1" left="150" top="585" width="100" height="20" value="../../test/w3c.jpg"/>
 
         <datefield id="datefield1" left="20" top="610" width="100" height="20" date-format="short_DDMMYY" spin="true" value="20010301"/>
