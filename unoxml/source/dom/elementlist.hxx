@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementlist.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@ namespace DOM
         const OUString m_aName;
         xmlChar *xName;
         xmlChar *xURI;
-        
-        
+
+
         void buildlist(nodevector& v, xmlNodePtr pNode, sal_Bool start=sal_True);
 
     public:

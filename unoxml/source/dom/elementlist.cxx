@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementlist.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ namespace DOM
 {
 
     CElementList::CElementList(const CElement* aElement, const OUString& aName)
-        : m_pElement(aElement)        
+        : m_pElement(aElement)
         , m_aName(aName)
         , xURI(0)
     {
@@ -74,7 +74,7 @@ namespace DOM
         strcpy((char*)xName, o1.getStr());
     }
     CElementList::CElementList(const CElement* aElement, const OUString& aName, const OUString& aURI)
-        : m_pElement(aElement)        
+        : m_pElement(aElement)
         , m_aName(aName)
         , m_aURI(aURI)
     {
@@ -90,9 +90,9 @@ namespace DOM
     {
         while (pNode != NULL)
         {
-            if (strcmp((char*)pNode->name, (char*)xName)==0) 
+            if (strcmp((char*)pNode->name, (char*)xName)==0)
             {
-                if (xURI == NULL) 
+                if (xURI == NULL)
                     v.push_back(pNode);
                 else
                     if (pNode->ns != NULL && strcmp((char*)pNode->ns->href, (char*)xURI) == 0)
@@ -103,7 +103,7 @@ namespace DOM
             else break;
         }
     }
-        
+
     /**
     The number of nodes in the list.
     */
