@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docu_pe2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:43:37 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
     // COMPONENTS
     // PARAMETERS
 
+class ParserInfo;
+
 namespace ary
 {
 namespace info
@@ -93,7 +95,8 @@ class DT_AtTag;
 class SapiDocu_PE : public TokenInterpreter
 {
   public:
-                        SapiDocu_PE();
+                        SapiDocu_PE(
+                            ParserInfo &        io_rPositionInfo );
                         ~SapiDocu_PE();
 
     void                ProcessToken(
@@ -175,10 +178,11 @@ class SapiDocu_PE : public TokenInterpreter
     Dyn<ary::info::CodeInformation>
                         pDocu;
     E_State             eState;
+    ParserInfo *        pPositionInfo;
     F_TokenAdder        fCurTokenAddFunction;
 
     Dyn<DT_AtTag>       pCurAtTag;
-    udmstri             sCurDimAttribute;
+    String              sCurDimAttribute;
 };
 
 }   // namespace dsapi
