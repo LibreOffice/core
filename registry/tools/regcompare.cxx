@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-02-15 16:01:07 $
+ *  last change: $Author: jsc $ $Date: 2001-02-15 16:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,7 +798,7 @@ static sal_uInt32 checkField(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Field %d: Doku1 = %s  !=  Doku2 = %s\n", index,
+            fprintf(stderr, "    Field %d: Doku1 = %s\n             Doku2 = %s\n", index,
                     U2S(reader1.getFieldDoku(index)), U2S(reader2.getFieldDoku(index)));
         }
         nError++;
@@ -1055,7 +1055,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Method %d: Doku1 = %s  !=  Doku2 = %s\n", index,
+            fprintf(stderr, "    Method %d: Doku1 = %s\n              Doku2 = %s\n", index,
                     U2S(reader1.getMethodDoku(index)),
                     U2S(reader2.getMethodDoku(index)));
         }
@@ -1130,7 +1130,7 @@ static sal_uInt32 checkReference(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Reference %d: Doku1 = %s  !=  Doku2 = %s\n", index,
+            fprintf(stderr, "    Reference %d: Doku1 = %s\n                 Doku2 = %s\n", index,
                     U2S(reader1.getReferenceDoku(index)),
                     U2S(reader2.getReferenceDoku(index)));
         }
@@ -1349,7 +1349,7 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Doku1 = %s  !=  Doku2 = %s\n",
+            fprintf(stderr, "    Doku1 = %s\n    Doku2 = %s\n",
                     U2S(reader1.getDoku()), U2S(reader2.getDoku()));
         }
         nError++;
