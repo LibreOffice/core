@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:46:19 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1939,236 +1939,197 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     }
 #endif
 
-    MSHORT nRepeat = 0;
-
     SWRECTFN( this )
 
-    do
+    // Vom Berichtsautopiloten oder ueber die BASIC-Schnittstelle kommen
+    // gelegentlich TxtFrms mit einer Breite <=0.
+    if( (Prt().*fnRect->fnGetWidth)() <= 0 )
     {
-        // Vom Berichtsautopiloten oder ueber die BASIC-Schnittstelle kommen
-        // gelegentlich TxtFrms mit einer Breite <=0.
-        if( (Prt().*fnRect->fnGetWidth)() <= 0 )
+        // Wenn MustFit gesetzt ist, schrumpfen wir ggf. auf die Unterkante
+        // des Uppers, ansonsten nehmen wir einfach eine Standardgroesse
+        // von 12 Pt. ein (240 Twip).
+        SwTxtLineAccess aAccess( this );
+        long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
+        if( aAccess.GetPara()->IsPrepMustFit() )
         {
-            // Wenn MustFit gesetzt ist, schrumpfen wir ggf. auf die Unterkante
-            // des Uppers, ansonsten nehmen wir einfach eine Standardgroesse
-            // von 12 Pt. ein (240 Twip).
-            SwTxtLineAccess aAccess( this );
-            long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
-            if( aAccess.GetPara()->IsPrepMustFit() )
-            {
-                const SwTwips nLimit = (GetUpper()->*fnRect->fnGetPrtBottom)();
-                const SwTwips nDiff = - (Frm().*fnRect->fnBottomDist)( nLimit );
-                if( nDiff > 0 )
-                    Shrink( nDiff );
-            }
-            else if( 240 < nFrmHeight )
-                Shrink( nFrmHeight - 240 );
-            else if( 240 > nFrmHeight )
-                Grow( 240 - nFrmHeight );
-            nFrmHeight = (Frm().*fnRect->fnGetHeight)();
+            const SwTwips nLimit = (GetUpper()->*fnRect->fnGetPrtBottom)();
+            const SwTwips nDiff = - (Frm().*fnRect->fnBottomDist)( nLimit );
+            if( nDiff > 0 )
+                Shrink( nDiff );
+        }
+        else if( 240 < nFrmHeight )
+            Shrink( nFrmHeight - 240 );
+        else if( 240 > nFrmHeight )
+            Grow( 240 - nFrmHeight );
+        nFrmHeight = (Frm().*fnRect->fnGetHeight)();
 
-            long nTop = (this->*fnRect->fnGetTopMargin)();
-            if( nTop > nFrmHeight )
-                (this->*fnRect->fnSetYMargins)( nFrmHeight, 0 );
-            else if( (Prt().*fnRect->fnGetHeight)() < 0 )
-                (Prt().*fnRect->fnSetHeight)( 0 );
+        long nTop = (this->*fnRect->fnGetTopMargin)();
+        if( nTop > nFrmHeight )
+            (this->*fnRect->fnSetYMargins)( nFrmHeight, 0 );
+        else if( (Prt().*fnRect->fnGetHeight)() < 0 )
+            (Prt().*fnRect->fnSetHeight)( 0 );
+        return;
+    }
+
+    const xub_StrLen nStrLen = GetTxtNode()->GetTxt().Len();
+    if ( nStrLen || !FormatEmpty() )
+    {
+
+        SetEmpty( sal_False );
+        // Um nicht durch verschachtelte Formats irritiert zu werden.
+        FormatLevel aLevel;
+        if( 12 == aLevel.GetLevel() )
+            return;
+
+        // Die Formatinformationen duerfen u.U. nicht veraendert werden.
+        if( IsLocked() )
+            return;
+
+#if OSL_DEBUG_LEVEL > 1
+//MA 25. Jan. 94 Das Flag stimmt sehr haufig beim Eintritt nicht. Das muss
+//             bei naechster Gelegenheit geprueft und gefixt werden.
+        const sal_Bool bOldFtnFlag = HasFtn();
+        CalcFtnFlag();
+        if ( bOldFtnFlag != HasFtn() )
+            {int bla = 5;}
+#endif
+
+        // 8708: Vorsicht, das Format() kann auch durch GetFormatted()
+        // angestossen werden.
+        if( IsHiddenNow() )
+        {
+            long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
+            if( nPrtHeight )
+            {
+                HideHidden();
+                Shrink( nPrtHeight );
+            }
+            else
+            {
+                // OD 2004-01-20 #110582# - assure that objects anchored
+                // at paragraph resp. at/as character inside paragraph
+                // are hidden.
+                HideAndShowObjects();
+            }
+            ChgThisLines();
             return;
         }
 
-        // OD 18.11.2003 #113049# - always check Writer fly frames, that are
-        // anchored to character.
-        //sal_Bool bChkAtCnt = sal_False;
-        const xub_StrLen nStrLen = GetTxtNode()->GetTxt().Len();
-        if ( nStrLen || !FormatEmpty() )
+        // Waehrend wir formatieren, wollen wir nicht gestoert werden.
+        SwTxtFrmLocker aLock(this);
+        SwTxtLineAccess aAccess( this );
+        const sal_Bool bNew = !aAccess.SwTxtLineAccess::IsAvailable();
+        sal_Bool bSetOfst = sal_False;
+
+        if( CalcPreps() )
+            ; // nothing
+        // Wir returnen, wenn schon formatiert wurde, nicht aber, wenn
+        // der TxtFrm gerade erzeugt wurde und ueberhaupt keine Format-
+        // informationen vorliegen.
+        else if( !bNew && !aAccess.GetPara()->GetReformat()->Len() )
         {
-
-            SetEmpty( sal_False );
-        // Um nicht durch verschachtelte Formats irritiert zu werden.
-            FormatLevel aLevel;
-            if( 12 == aLevel.GetLevel() )
-                return;
-
-            // Die Formatinformationen duerfen u.U. nicht veraendert werden.
-            if( IsLocked() )
-                return;
-
-#if OSL_DEBUG_LEVEL > 1
-    //MA 25. Jan. 94 Das Flag stimmt sehr haufig beim Eintritt nicht. Das muss
-    //             bei naechster Gelegenheit geprueft und gefixt werden.
-            const sal_Bool bOldFtnFlag = HasFtn();
-            CalcFtnFlag();
-            if ( bOldFtnFlag != HasFtn() )
-                {int bla = 5;}
-#endif
-
-            // 8708: Vorsicht, das Format() kann auch durch GetFormatted()
-            // angestossen werden.
-            if( IsHiddenNow() )
+            if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue() )
             {
-                long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
-                if( nPrtHeight )
-                {
-                    HideHidden();
-                    Shrink( nPrtHeight );
-                }
-                else
-                {
-                    // OD 2004-01-20 #110582# - assure that objects anchored
-                    // at paragraph resp. at/as character inside paragraph
-                    // are hidden.
-                    HideAndShowObjects();
-                }
-                ChgThisLines();
-                return;
+                aAccess.GetPara()->SetPrepAdjust( sal_True );
+                aAccess.GetPara()->SetPrep( sal_True );
+                CalcPreps();
             }
-
-            // Waehrend wir formatieren, wollen wir nicht gestoert werden.
-            SwTxtFrmLocker aLock(this);
-            SwTxtLineAccess aAccess( this );
-            const sal_Bool bNew = !aAccess.SwTxtLineAccess::IsAvailable();
-            sal_Bool bSetOfst = sal_False;
-
-            if( CalcPreps() )
-                ; // nothing
-            // Wir returnen, wenn schon formatiert wurde, nicht aber, wenn
-            // der TxtFrm gerade erzeugt wurde und ueberhaupt keine Format-
-            // informationen vorliegen.
-            else if( !bNew && !aAccess.GetPara()->GetReformat()->Len() )
-            {
-                if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue() )
-                {
-                    aAccess.GetPara()->SetPrepAdjust( sal_True );
-                    aAccess.GetPara()->SetPrep( sal_True );
-                    CalcPreps();
-                }
-                SetWidow( sal_False );
-            }
-            else if( ( bSetOfst = ( GetOfst() && GetOfst() > GetTxtNode()->GetTxt().Len() ) ) &&
-                     IsFollow() )
-            {
-                SwTxtFrm *pMaster = FindMaster();
-                ASSERT( pMaster, "SwTxtFrm::Format: homeless follow" );
-                if( pMaster )
-                    pMaster->Prepare( PREP_FOLLOW_FOLLOWS );
-                SwTwips nMaxY = (GetUpper()->*fnRect->fnGetPrtBottom)();
-                if( (Frm().*fnRect->fnOverStep)( nMaxY  ) )
-                    (this->*fnRect->fnSetLimit)( nMaxY );
-                else if( (Frm().*fnRect->fnBottomDist)( nMaxY  ) < 0 )
-                    (Frm().*fnRect->fnAddBottom)( -(Frm().*fnRect->fnGetHeight)() );
-            }
-            else
-            {
-                // bSetOfst here means that we have the "red arrow situation"
-                if ( bSetOfst )
-                    _SetOfst( 0 );
-
-                const sal_Bool bOrphan = IsWidow();
-                const SwFtnBossFrm* pFtnBoss = HasFtn() ? FindFtnBossFrm() : 0;
-                SwTwips nFtnHeight;
-                if( pFtnBoss )
-                {
-                    const SwFtnContFrm* pCont = pFtnBoss->FindFtnCont();
-                    nFtnHeight = pCont ? (pCont->Frm().*fnRect->fnGetHeight)() : 0;
-                }
-                do
-                {
-                    _Format( aAccess.GetPara() );
-                    if( pFtnBoss && nFtnHeight )
-                    {
-                        const SwFtnContFrm* pCont = pFtnBoss->FindFtnCont();
-                        SwTwips nNewHeight = pCont ? (pCont->Frm().*fnRect->fnGetHeight)() : 0;
-                        // If we lost some footnotes, we may have more space
-                        // for our main text, so we have to format again ...
-                        if( nNewHeight < nFtnHeight )
-                            nFtnHeight = nNewHeight;
-                        else
-                            break;
-                    }
-                    else
-                        break;
-                } while ( pFtnBoss );
-                if( bOrphan )
-                {
-                    ValidateFrm();
-                    SetWidow( sal_False );
-                }
-            }
-            if( IsEmptyMaster() )
-            {
-                SwFrm* pPre = GetPrev();
-                if( pPre && pPre->GetAttrSet()->GetKeep().GetValue() )
-                    pPre->InvalidatePos();
-            }
+            SetWidow( sal_False );
         }
-        MSHORT nMaxRepeat = 2;
-        if ( nRepeat < nMaxRepeat )
+        else if( ( bSetOfst = ( GetOfst() && GetOfst() > GetTxtNode()->GetTxt().Len() ) ) &&
+                 IsFollow() )
         {
-            sal_Bool bRepeat = sal_False;
-            MSHORT nRepAdd = 0;
-            SwDrawObjs *pObjs;
-            SwTxtFrm *pMaster = IsFollow() ? FindMaster() : this;
-            if( pMaster && !pMaster->IsFlyLock() )
-            {
-                if ( 0 != (pObjs = pMaster->GetDrawObjs()) )
-                {
-                    MSHORT nAutoCnt = 0;
-                    for( MSHORT i = 0; i < pObjs->Count(); ++i )
-                    {
-                        SdrObject *pO = (*pObjs)[i];
-                        if ( pO->ISA(SwVirtFlyDrawObj) )
-                        {
-                            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                            // OD 07.10.2003 #110978# - allow invalidation,
-                            // even if formatting of the fly frame or another fly frame
-                            // is in progress
-                            //if ( pFly->IsAutoPos() && !::IsInProgress( pFly ) )
-                            if ( pFly->IsAutoPos() )
-                            {
-                                ++nAutoCnt;
-                                ASSERT( pFly->IsFlyAtCntFrm(), "Not at content, but autopos.?" );
-                                // OD 11.11.2003 #i22341#
-                                if ( pFly->IsFlyAtCntFrm() )
-                                {
-                                    static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
-                                }
-
-                                // OD 07.10.2003 #110978# - no format of the fly frame
-                                /*
-                                // we have to check if the anchor of the fly
-                                // is inside this frame before calling
-                                // pFly->Calc. Otherwise the master could
-                                // be invalidated -> loop
-                                const SwFlyFrmFmt *pFmt =
-                                        (SwFlyFrmFmt*)pFly->GetFmt();
-                                const SwPosition* pPos = pFmt->GetAnchor().GetCntntAnchor();
-
-                                if( !pFly->IsValid() && pPos &&
-                                     pPos->nContent.GetIndex() >= GetOfst() )
-                                {
-                                    SwTwips nOldTop = (pFly->Frm().*fnRect->fnGetTop)();
-
-                                    pFly->Calc();
-
-                                    bRepeat = sal_True;
-                                    if( !nRepAdd && nOldTop >= (pFly->Frm().*fnRect->fnGetTop)() )
-                                        nRepAdd = 1;
-                                }
-                                */
-                            }
-                        }
-                    }
-                    if( nAutoCnt > 11 )
-                        nMaxRepeat = nAutoCnt/4;
-                }
-            }
-            if( bRepeat )
-                nRepeat += nRepAdd;
-            else
-                nRepeat = 0;
+            SwTxtFrm *pMaster = FindMaster();
+            ASSERT( pMaster, "SwTxtFrm::Format: homeless follow" );
+            if( pMaster )
+                pMaster->Prepare( PREP_FOLLOW_FOLLOWS );
+            SwTwips nMaxY = (GetUpper()->*fnRect->fnGetPrtBottom)();
+            if( (Frm().*fnRect->fnOverStep)( nMaxY  ) )
+                (this->*fnRect->fnSetLimit)( nMaxY );
+            else if( (Frm().*fnRect->fnBottomDist)( nMaxY  ) < 0 )
+                (Frm().*fnRect->fnAddBottom)( -(Frm().*fnRect->fnGetHeight)() );
         }
         else
-            nRepeat = 0;
-    } while( nRepeat );
+        {
+            // bSetOfst here means that we have the "red arrow situation"
+            if ( bSetOfst )
+                _SetOfst( 0 );
+
+            const sal_Bool bOrphan = IsWidow();
+            const SwFtnBossFrm* pFtnBoss = HasFtn() ? FindFtnBossFrm() : 0;
+            SwTwips nFtnHeight;
+            if( pFtnBoss )
+            {
+                const SwFtnContFrm* pCont = pFtnBoss->FindFtnCont();
+                nFtnHeight = pCont ? (pCont->Frm().*fnRect->fnGetHeight)() : 0;
+            }
+            do
+            {
+                _Format( aAccess.GetPara() );
+                if( pFtnBoss && nFtnHeight )
+                {
+                    const SwFtnContFrm* pCont = pFtnBoss->FindFtnCont();
+                    SwTwips nNewHeight = pCont ? (pCont->Frm().*fnRect->fnGetHeight)() : 0;
+                    // If we lost some footnotes, we may have more space
+                    // for our main text, so we have to format again ...
+                    if( nNewHeight < nFtnHeight )
+                        nFtnHeight = nNewHeight;
+                    else
+                        break;
+                }
+                else
+                    break;
+            } while ( pFtnBoss );
+            if( bOrphan )
+            {
+                ValidateFrm();
+                SetWidow( sal_False );
+            }
+        }
+        if( IsEmptyMaster() )
+        {
+            SwFrm* pPre = GetPrev();
+            if( pPre && pPre->GetAttrSet()->GetKeep().GetValue() )
+                pPre->InvalidatePos();
+        }
+    }
+    SwTxtFrm *pMaster = IsFollow() ? FindMaster() : this;
+    // OD 2004-03-29 #i26791#
+    if ( pMaster && !pMaster->IsFlyLock() &&
+         pMaster->GetDrawObjs() )
+    {
+        SwDrawObjs* pObjs = pMaster->GetDrawObjs();
+        for( MSHORT i = 0; i < pObjs->Count(); ++i )
+        {
+            // OD 2004-03-29 #i26791#
+            SdrObject* pSdrObj = (*pObjs)[i];
+            SwContact* pContact = static_cast<SwContact*>(GetUserCall( pSdrObj ));
+            ASSERT( pContact,
+                    "<SwTxtFrm::Format(..) - missing contact object. Please inform OD." );
+            if ( pContact && pContact->ObjAnchoredAtChar() )
+            {
+                pContact->GetAnchoredObj( pSdrObj )->CheckCharRectAndTopOfLine();
+            }
+//            SdrObject* pO = (*pObjs)[i];
+//            if ( pO->ISA(SwVirtFlyDrawObj) )
+//            {
+//                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+//                // OD 07.10.2003 #110978# - allow invalidation,
+//                // even if formatting of the fly frame or another fly frame
+//                // is in progress
+//                //if ( pFly->IsAutoPos() && !::IsInProgress( pFly ) )
+//                if ( pFly->IsAutoPos() )
+//                {
+//                    ASSERT( pFly->IsFlyAtCntFrm(), "Not at content, but autopos.?" );
+//                    // OD 11.11.2003 #i22341#
+//                    if ( pFly->IsFlyAtCntFrm() )
+//                    {
+//                        static_cast<SwFlyAtCntFrm*>(pFly)->CheckCharRectAndTopOfLine();
+//                    }
+//                }
+//            }
+        }
+    }
 
     ChgThisLines();
 
