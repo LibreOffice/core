@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-19 14:08:37 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 11:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1721,7 +1721,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         copyData(pNewTable,0);
 
         // now drop the old one
-        if(DropImpl())
+        if( DropImpl() ) // we don't want to delete the memo columns too
         {
             // rename the new one to the old one
             pNewTable->renameImpl(m_Name);
@@ -1766,48 +1766,59 @@ void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com:
     if(m_pColumns)
         m_pColumns->refresh();
 }
+namespace
+{
+    void renameFile(OConnection* _pConenction,const ::rtl::OUString& oldName,
+                    const ::rtl::OUString& newName,const String& _sExtension)
+    {
+        String aName = ODbaseTable::getEntry(_pConenction,oldName);
+        if(!aName.Len())
+        {
+            ::rtl::OUString aIdent = _pConenction->getContent()->getIdentifier()->getContentIdentifier();
+            aIdent += ::rtl::OUString::createFromAscii("/");
+            aIdent += oldName;
+            aName = aIdent;
+        }
+        INetURLObject aURL;
+        aURL.SetURL(aName);
+
+        aURL.setExtension( _sExtension );
+        String sNewName(newName);
+        sNewName.AppendAscii(".");
+        sNewName += _sExtension;
+
+        try
+        {
+            Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
+
+            Sequence< PropertyValue > aProps( 1 );
+            aProps[0].Name      = ::rtl::OUString::createFromAscii("Title");
+            aProps[0].Handle    = -1; // n/a
+            aProps[0].Value     = makeAny( ::rtl::OUString(sNewName) );
+            Sequence< Any > aValues;
+            aContent.executeCommand( rtl::OUString::createFromAscii( "setPropertyValues" ),makeAny(aProps) ) >>= aValues;
+            if(aValues.getLength() && aValues[0].hasValue())
+                throw Exception();
+        }
+        catch(Exception&)
+        {
+            throw ElementExistException(newName,NULL);
+        }
+    }
+}
 // -------------------------------------------------------------------------
 void SAL_CALL ODbaseTable::renameImpl( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     FileClose();
-    String aName = getEntry(m_pConnection,m_Name);
-    if(!aName.Len())
-    {
-        ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
-        aIdent += ::rtl::OUString::createFromAscii("/");
-        aIdent += m_Name;
-        aName = aIdent;
-    }
-    INetURLObject aURL;
-    aURL.SetURL(aName);
 
-    if ( !m_pConnection->matchesExtension( aURL.getExtension() ) )
-        aURL.setExtension(m_pConnection->getExtension());
-    String sNewName(newName);
-    sNewName.AppendAscii(".");
-    sNewName += m_pConnection->getExtension();
 
-    try
-    {
-        String sOldName = aURL.GetMainURL(INetURLObject::NO_DECODE);
-        //  ::utl::UCBContentHelper::MoveTo(sOldName,sNewName);
-        Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
-        Sequence< PropertyValue > aProps( 1 );
-        aProps[0].Name      = ::rtl::OUString::createFromAscii("Title");
-        aProps[0].Handle    = -1; // n/a
-        aProps[0].Value     = makeAny( ::rtl::OUString(sNewName) );
-        Sequence< Any > aValues;
-        aContent.executeCommand( rtl::OUString::createFromAscii( "setPropertyValues" ),makeAny(aProps) ) >>= aValues;
-        if(aValues.getLength() && aValues[0].hasValue())
-            throw Exception();
-
-        //  aContent.setPropertyValue( rtl::OUString::createFromAscii( "Title" ),makeAny( ::rtl::OUString(sNewName) ) );
-    }
-    catch(Exception&)
-    {
-        throw ElementExistException(newName,*this);
+    renameFile(m_pConnection,m_Name,newName,m_pConnection->getExtension());
+    if ( HasMemoFields() )
+    {  // delete the memo fields
+        String sExt = String::CreateFromAscii("dbt");
+        renameFile(m_pConnection,m_Name,newName,sExt);
     }
 }
 // -----------------------------------------------------------------------------
