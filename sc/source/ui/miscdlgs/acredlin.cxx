@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:27:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,9 +129,9 @@ ScRedlinData::ScRedlinData()
     bDisabled=FALSE;
     bIsRejectable=FALSE;
     bIsAcceptable=FALSE;
-    nTable=0xffff;
-    nCol=0xffff;
-    nRow=0xffff;
+    nTable=SCTAB_MAX;
+    nCol=SCCOL_MAX;
+    nRow=SCROW_MAX;
 }
 
 ScRedlinData::~ScRedlinData()
@@ -1390,7 +1390,7 @@ BOOL ScAcceptChgDlg::InsertAcceptedORejected(SvLBoxEntry* pParent)
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     BOOL bTheTestFlag=TRUE;
 
-    ScChangeActionState eState;
+    ScChangeActionState eState = SC_CAS_VIRGIN;
     String aString=pTheView->GetEntryText( pParent);
     String a2String=aString.Copy(0,aStrAllAccepted.Len());
     if(a2String==aStrAllAccepted)
@@ -1913,7 +1913,7 @@ IMPL_LINK( ScAcceptChgDlg, CommandHdl, Control*, pCtr)
             aPopup.Deactivate();
         }
 
-        USHORT  nSortedCol=pTheView->GetSortedCol();
+        USHORT nSortedCol= pTheView->GetSortedCol();
 
         if(nSortedCol!=0xFFFF)
         {
@@ -1964,9 +1964,9 @@ IMPL_LINK( ScAcceptChgDlg, CommandHdl, Control*, pCtr)
             else
             {
                 BOOL bSortDir=pTheView->GetSortDirection();
-                USHORT nCol=nCommand-SC_SUB_SORT-1;
-                if(nSortedCol==nCol) bSortDir=!bSortDir;
-                pTheView->SortByCol(nCol,bSortDir);
+                USHORT nDialogCol=nCommand-SC_SUB_SORT-1;
+                if(nSortedCol==nDialogCol) bSortDir=!bSortDir;
+                pTheView->SortByCol(nDialogCol,bSortDir);
                 /*
                 SC_SUB_SORT
                 SC_SORT_ACTION
@@ -2084,7 +2084,7 @@ IMPL_LINK( ScAcceptChgDlg, FilterModified, SvxTPFilter*, pRef )
 IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
 {
     StringCompare eCompare=COMPARE_EQUAL;
-    USHORT nSortCol=pTheView->GetSortedCol();
+    SCCOL nSortCol= static_cast<SCCOL>(pTheView->GetSortedCol());
 
     if(pSortData)
     {
@@ -2145,8 +2145,8 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
             }
         }
 
-        SvLBoxItem* pLeftItem = pTheView->GetEntryAtPos( pLeft, nSortCol);
-        SvLBoxItem* pRightItem = pTheView->GetEntryAtPos( pRight, nSortCol);
+        SvLBoxItem* pLeftItem = pTheView->GetEntryAtPos( pLeft, static_cast<sal_uInt16>(nSortCol));
+        SvLBoxItem* pRightItem = pTheView->GetEntryAtPos( pRight, static_cast<sal_uInt16>(nSortCol));
 
         if(pLeftItem != NULL && pRightItem != NULL)
         {
