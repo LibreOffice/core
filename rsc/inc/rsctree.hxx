@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public:
             NameNode*   Right() const{ return (NameNode *)pRight ; };
             NameNode*   Search( const NameNode * pName ) const;
                         // insert a new node in the b-tree
-            BOOL        Insert( NameNode * pTN, USHORT * nDepth );
+            BOOL        Insert( NameNode * pTN, sal_uInt32 * nDepth );
             BOOL        Insert( NameNode* pTN );
     virtual COMPARE     Compare( const NameNode * ) const;
     virtual COMPARE     Compare( const void * ) const;
@@ -129,8 +129,8 @@ class IdNode : public NameNode
 
 public:
 
-    IdNode*         Search( USHORT nTypName ) const;
-    virtual USHORT  GetId() const;
+    IdNode*         Search( sal_uInt32 nTypName ) const;
+    virtual sal_uInt32  GetId() const;
 };
 
 /*************************************************************************/
