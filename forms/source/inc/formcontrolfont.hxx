@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontrolfont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:17:08 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,15 @@ namespace frm
     class FontControlModel
     {
     private:
+        // <properties>
         ::com::sun::star::awt::FontDescriptor   m_aFont;
         sal_Int16                               m_nFontRelief;
         sal_Int16                               m_nFontEmphasis;
         ::com::sun::star::uno::Any              m_aTextLineColor;
         ::com::sun::star::uno::Any              m_aTextColor;
+        // </properties>
+
+        bool                                    m_bToolkitCompatibleDefaults;
 
     protected:
         const ::com::sun::star::awt::FontDescriptor& getFont() const { return m_aFont; }
@@ -107,7 +111,7 @@ namespace frm
         sal_Int32   getTextLineColor( ) const;
 
     protected:
-        FontControlModel( );
+        FontControlModel( bool _bToolkitCompatibleDefaults );
         FontControlModel( const FontControlModel* _pOriginal );
 
     protected:
@@ -123,6 +127,13 @@ namespace frm
         void     setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue ) throw ( ::com::sun::star::uno::Exception );
         ::com::sun::star::uno::Any
                  getPropertyDefaultByHandle      ( sal_Int32 _nHandle ) const;
+
+    private:
+
+    private:
+        FontControlModel();                                     // never implemented
+        FontControlModel( const FontControlModel& );            // never implemented
+        FontControlModel& operator=( const FontControlModel& ); // never implemented
     };
 
 //.........................................................................
