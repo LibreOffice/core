@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2002-05-28 12:57:57 $
+ *  last change: $Author: as $ $Date: 2002-05-31 13:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1362,158 +1362,6 @@ void SAL_CALL Frame::contextChanged() throw( css::uno::RuntimeException )
 sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow ,
                                         const   css::uno::Reference< css::frame::XController >& xController      ) throw( css::uno::RuntimeException )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Sometimes used by dispose() => soft exceptions!
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-
-    /*HACK
-        ... for sfx2! Sometimes he call me by using this combination.
-    */
-
-    return impl_setComponent(xComponentWindow, xController);
-
-    if  (
-            (
-                ( xController.is()      ==  sal_True    )   &&
-                ( xComponentWindow.is() ==  sal_False   )
-            ) == sal_False
-        )
-    {
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
-        // Normaly a ReadLock is enough ... but we need some write locks at later time.
-        // It's better to create it yet und use it later to create read AND write locks!!!
-        WriteGuard aWriteLock( m_aLock );
-
-        // Make snapshot of our internal member and states and release lock!
-        css::uno::Reference< css::awt::XWindow >        xContainerWindow    = m_xContainerWindow                                                    ;
-        css::uno::Reference< css::awt::XWindow >        xOldComponentWindow = m_xComponentWindow                                                    ;
-        css::uno::Reference< css::frame::XController >  xOldController      = m_xController                                                         ;
-        sal_Bool                                        bControllerChange   = ( m_xController       !=  xController         )                       ;
-        sal_Bool                                        bWindowChange       = ( m_xComponentWindow  !=  xComponentWindow    )                       ;
-        sal_Bool                                        bConnected          = m_bConnected                                                          ;
-        sal_Bool                                        bHasFocus           = ( m_eActiveState==E_FOCUS && m_xComponentWindow.is()==sal_True    )   ;
-
-        aWriteLock.unlock();
-        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
-
-        // Release current component, if there is any.
-        if  (
-                ( xOldComponentWindow.is()  ==  sal_True    )   ||
-                ( xOldController.is()       ==  sal_True    )
-            )
-        {
-            implts_sendFrameActionEvent( css::frame::FrameAction_COMPONENT_DETACHING );
-        }
-
-        // Always release controller before releasing window, because controller may want to access its window!
-        if( bControllerChange == sal_True )
-        {
-            if( xOldController.is() == sal_True )
-            {
-                /* SAFE AREA ----------------------------------------------------------------------------------- */
-                aWriteLock.lock();
-                m_xController->dispose();
-                m_xController   = css::uno::Reference< css::frame::XController >();
-                xOldController  = css::uno::Reference< css::frame::XController >(); // Don't forget to release last reference to m_xController!
-                aWriteLock.unlock();
-                /* UNSAFE AREA --------------------------------------------------------------------------------- */
-            }
-        }
-
-        // Release component window.
-        if( bWindowChange == sal_True )
-        {
-            // Set new one ...
-            // resize it to fill our containerwindow ...
-            // and dispose the old one.
-
-            /* SAFE AREA --------------------------------------------------------------------------------------- */
-            aWriteLock.lock();
-            // We can set the new one here ... because we hold it as xOldComponentWindow too!
-            m_xComponentWindow = xComponentWindow;
-            aWriteLock.unlock();
-            /* UNSAFE AREA ------------------------------------------------------------------------------------- */
-
-            implts_resizeComponentWindow();
-            if( xOldComponentWindow.is() == sal_True )
-            {
-                // All VclComponents are XComponents; so call dispose before discarding
-                // a css::uno::Reference< XVclComponent >, because this frame is the owner of the Component.
-                ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-                Window* pContainerWindow    = VCLUnoHelper::GetWindow( xContainerWindow     );
-                Window* pOldComponentWindow = VCLUnoHelper::GetWindow( xOldComponentWindow  );
-                if  (
-                        ( pOldComponentWindow                       !=  NULL                )   &&
-                        ( Application::GetDefModalDialogParent()    ==  pOldComponentWindow )
-                    )
-                {
-                    Application::SetDefModalDialogParent( pContainerWindow );
-                }
-                aSolarGuard.clear();
-                xOldComponentWindow->dispose();
-                xOldComponentWindow = css::uno::Reference< css::awt::XWindow >();
-            }
-        }
-
-        // Set new controller.
-        if( bControllerChange == sal_True )
-        {
-            /* SAFE AREA --------------------------------------------------------------------------------------- */
-            aWriteLock.lock();
-            m_xController = xController;
-            aWriteLock.unlock();
-            /* UNSAFE AREA ------------------------------------------------------------------------------------- */
-        }
-
-        // Send action events to all listener - depends from our connect state
-        if  (
-                ( xController.is()        ==  sal_True    )   ||
-                ( xComponentWindow.is()   ==  sal_True    )
-            )
-        {
-            if( bConnected == sal_True )
-            {
-                implts_sendFrameActionEvent( css::frame::FrameAction_COMPONENT_REATTACHED );
-            }
-            else
-            {
-                implts_sendFrameActionEvent( css::frame::FrameAction_COMPONENT_ATTACHED   );
-            }
-        }
-
-        // A new component doesn't know anything about current active/focus states.
-        // Give her this information!
-        if  (
-                ( bHasFocus             == sal_True )   &&
-                ( xComponentWindow.is() == sal_True )
-            )
-        {
-            xComponentWindow->setFocus();
-            ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-            Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
-            if( pWindow != NULL )
-            {
-                Application::SetDefModalDialogParent( pWindow );
-            }
-            aSolarGuard.clear();
-        }
-
-        // New component should change our current icon ...
-        implts_setIconOnWindow();
-
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
-        aWriteLock.lock();
-        m_bConnected = sal_True;
-        aWriteLock.unlock();
-        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
-    }
-
-    return sal_True;
-}
-
-sal_Bool Frame::impl_setComponent(  const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow ,
-                             const   css::uno::Reference< css::frame::XController >& xController      ) throw( css::uno::RuntimeException )
-{
     //_____________________________________________________________________________________________________
     // Ignore this HACK of sfx2!
     // He call us with an valid controller without a valid window ... Thats not allowed!
@@ -1555,14 +1403,10 @@ sal_Bool Frame::impl_setComponent(  const   css::uno::Reference< css::awt::XWind
         (xOldController != xController)
        )
     {
-        // try to suspend him
-        // If he disagree with that - return false.
-        if ( ! xOldController->suspend(sal_True) )
-        {
-            // It was disabled before - reactivate it!
-            implts_startWindowListening();
-            return sal_False;
-        }
+        /* ATTENTION
+            Don't suspend the old controller here. Because the outside caller must do that
+            by definition. We have to dispose it here only.
+         */
 
         // Before we dispose this controller we should hide it inside this frame instance.
         // We hold it alive for next calls by using xOldController!
@@ -1824,24 +1668,42 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
     if (Frame::isActionLocked())
     {
         if (bDeliverOwnerShip)
-        /* SAFE */{
+        {
+            /* SAFE */
             WriteGuard aWriteLock( m_aLock );
             m_bSelfClose = sal_True;
-        }/* SAFE */
-        throw css::util::CloseVetoException(DECLARE_ASCII("Frame in use for loading document ..."),static_cast< ::cppu::OWeakObject*>(this));
+            aWriteLock.unlock();
+            /* SAFE */
+            throw css::util::CloseVetoException(DECLARE_ASCII("Frame in use for loading document ..."),static_cast< ::cppu::OWeakObject*>(this));
+        }
     }
 
     // If no load proccesses could be detected ... ask controller for his agreement.
-    sal_Bool bComponentInside = sal_False;
-    /* SAFE */{
-        ReadGuard aReadLock( m_aLock );
-        bComponentInside = ( m_xController.is() || m_xComponentWindow.is() );
-    }/* SAFE */
+    /* SAFE */
+    ReadGuard aReadLock( m_aLock );
+    sal_Bool bComponentInside = m_bConnected;
+    css::uno::Reference< css::frame::XController > xController = m_xController;
+    aReadLock.unlock();
+    /* SAFE */
 
     if (bComponentInside)
     {
+        // Attention: setComponent() call doesn't suspend any existing or modified view (means controller)
+        // It must be done from outside.
+        if (xController.is())
+        {
+            if ( ! xController->suspend(sal_True) )
+            {
+                LOG_ASSERT2( bDeliverOwnerShip==sal_True, "Frame::close()", "Can't accept ownership realy. Because my controller disagree ... but I have no chance to delegate ownership to him!" )
+                throw css::util::CloseVetoException(DECLARE_ASCII("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));
+            }
+        }
+        // It's better to forget this reference here - because
+        // this controller will be disposed inside next setComponent() call ...
+        xController = css::uno::Reference< css::frame::XController >();
+
         if ( ! setComponent(NULL,NULL) )
-            throw css::util::CloseVetoException(DECLARE_ASCII("Controller disagree with that ..."),static_cast< ::cppu::OWeakObject*>(this));
+            throw css::util::CloseVetoException(DECLARE_ASCII("Component couldn't be deattached ..."),static_cast< ::cppu::OWeakObject*>(this));
     }
 
     // If closing is allowed ... inform all istener and dispose this frame!

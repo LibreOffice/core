@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:50:40 $
+ *  last change: $Author: as $ $Date: 2002-05-31 13:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,9 +492,6 @@ class Frame :   // interfaces
         void                                                    implts_saveWindowAttributes     (                                                                        );
         void                                                    implts_checkSuicide             (                                                                        );
         DECL_LINK( implts_windowClosing, void* );
-
-sal_Bool impl_setComponent(  const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow ,
-                             const   css::uno::Reference< css::frame::XController >& xController      ) throw( css::uno::RuntimeException );
 
         // non threadsafe
         void                                                    impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
