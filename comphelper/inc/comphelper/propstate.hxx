@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propstate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:23:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _CPPUHELPER_PROPTYPEHLP_HXX
 #include <cppuhelper/proptypehlp.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //=========================================================================
 //= property helper classes
@@ -90,7 +93,7 @@ namespace comphelper
 //= OPropertyStateHelper
 //==================================================================
 /// helper class for implementing property states
-class OPropertyStateHelper  :public ::cppu::OPropertySetHelper
+class COMPHELPER_DLLPUBLIC OPropertyStateHelper :public ::cppu::OPropertySetHelper
                             ,public ::com::sun::star::beans::XPropertyState
 {
 public:
