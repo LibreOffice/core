@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:02:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,6 +461,12 @@ public:
     // invalidiert die am Node gesetzte NumRule. Diese wird
     // spaetestend in EndAction einer Shell geupdatet
     BOOL InvalidateNumRule();
+
+    // --> OD 2005-02-21 #i42921# - determines the text direction for a certain
+    // position. Return -1, if text direction could *not* be determined.
+    short GetTextDirection( const SwPosition& rPos,
+                            const Point* pPt ) const;
+    // <--
 
 private:
     // privater Constructor, weil nie kopiert werden darf !!
