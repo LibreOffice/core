@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-16 14:03:12 $
+ *  last change: $Author: tra $ $Date: 2001-11-15 16:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@
 
 #ifndef _WINFILEOPENIMPL_HXX_
 #include "WinFileOpenImpl.hxx"
+#endif
+
+#ifndef _ASYNCEVENTNOTIFIER_HXX_
+#include "asynceventnotifier.hxx"
 #endif
 
 #include <memory>
@@ -285,15 +289,14 @@ public:
     // FilePicker Event functions
     //------------------------------------------------------------------------------------
 
-    void SAL_CALL fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
-    void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
+    void SAL_CALL fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+    void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
     rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
-    void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
-    void SAL_CALL dialogSizeChanged( ) const;
+    void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+    void SAL_CALL dialogSizeChanged( );
 
 private:
-    typedef void (SAL_CALL ::com::sun::star::ui::dialogs::XFilePickerListener::*PFNCXFPLISTENER)(const ::com::sun::star::ui::dialogs::FilePickerEvent&);
-    void SAL_CALL notifyAllListener( PFNCXFPLISTENER pfncFPListener, ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
+    void SAL_CALL notifyAllListener( CAsyncFilePickerEventNotifier::FilePickerEventListenerMethod_t pfncFPListener, ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
 
 private:
     // prevent copy and assignment
@@ -303,6 +306,7 @@ private:
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;   // to instanciate own services
     std::auto_ptr< CWinFileOpenImpl  >                                               m_pImpl;
+    CAsyncFilePickerEventNotifier                                                    m_aAsyncEventNotifier;
 };
 
 #endif

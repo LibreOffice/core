@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-16 14:03:12 $
+ *  last change: $Author: tra $ $Date: 2001-11-15 16:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,8 @@ CFilePicker::CFilePicker( const Reference< XMultiServiceFactory >& xServiceMgr )
         XInitialization,
         XCancellable,
         XEventListener,
-        XServiceInfo >( m_rbHelperMtx )
+        XServiceInfo >( m_rbHelperMtx ),
+    m_aAsyncEventNotifier( rBHelper )
 {
     HINSTANCE hInstance = GetModuleHandleA( FILE_PICKER_DLL_NAME );
     OSL_POSTCOND( hInstance, "The name of the service dll must have changed" );
@@ -212,9 +213,9 @@ void SAL_CALL CFilePicker::disposing( const EventObject& aEvent ) throw(RuntimeE
 //
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CFilePicker::fileSelectionChanged( FilePickerEvent aEvent ) const
+void SAL_CALL CFilePicker::fileSelectionChanged( FilePickerEvent aEvent )
 {
-    PFNCXFPLISTENER pfncFPListener = &XFilePickerListener::fileSelectionChanged;
+    CAsyncFilePickerEventNotifier::FilePickerEventListenerMethod_t pfncFPListener = &XFilePickerListener::fileSelectionChanged;
     aEvent.Source = Reference< XInterface > (
         static_cast< XFilePickerNotifier* >(
             const_cast< CFilePicker* >( this ) ) );
@@ -225,9 +226,9 @@ void SAL_CALL CFilePicker::fileSelectionChanged( FilePickerEvent aEvent ) const
 //
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CFilePicker::directoryChanged( FilePickerEvent aEvent ) const
+void SAL_CALL CFilePicker::directoryChanged( FilePickerEvent aEvent )
 {
-    PFNCXFPLISTENER pfncFPListener = &XFilePickerListener::directoryChanged;
+    CAsyncFilePickerEventNotifier::FilePickerEventListenerMethod_t pfncFPListener = &XFilePickerListener::directoryChanged;
     aEvent.Source = Reference< XInterface > (
         static_cast< XFilePickerNotifier* >(
             const_cast< CFilePicker* >( this ) ) );
@@ -294,9 +295,9 @@ OUString SAL_CALL CFilePicker::helpRequested( FilePickerEvent aEvent ) const
 //
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CFilePicker::controlStateChanged( FilePickerEvent aEvent ) const
+void SAL_CALL CFilePicker::controlStateChanged( FilePickerEvent aEvent )
 {
-    PFNCXFPLISTENER pfncFPListener = &XFilePickerListener::controlStateChanged;
+    CAsyncFilePickerEventNotifier::FilePickerEventListenerMethod_t pfncFPListener = &XFilePickerListener::controlStateChanged;
     aEvent.Source = Reference< XInterface > (
         static_cast< XFilePickerNotifier* >(
             const_cast< CFilePicker* >( this ) ) );
@@ -307,7 +308,7 @@ void SAL_CALL CFilePicker::controlStateChanged( FilePickerEvent aEvent ) const
 //
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CFilePicker::dialogSizeChanged( ) const
+void SAL_CALL CFilePicker::dialogSizeChanged( )
 {
     // not yet implemented
 }
@@ -316,40 +317,16 @@ void SAL_CALL CFilePicker::dialogSizeChanged( ) const
 //
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CFilePicker::notifyAllListener( PFNCXFPLISTENER pfncFPListener, FilePickerEvent aEvent ) const
+void SAL_CALL CFilePicker::notifyAllListener( CAsyncFilePickerEventNotifier::FilePickerEventListenerMethod_t pfncFPListener, FilePickerEvent aEvent )
 {
-    OSL_ASSERT( 0 != pfncFPListener );
+    OSL_ASSERT( pfncFPListener );
 
     if ( !rBHelper.bDisposed )
     {
-        ::osl::ClearableMutexGuard aGuard( rBHelper.rMutex );
+        ::osl::MutexGuard aGuard( rBHelper.rMutex );
 
         if ( !rBHelper.bDisposed )
-        {
-            aGuard.clear( );
-
-            ::cppu::OInterfaceContainerHelper* pICHelper =
-                rBHelper.aLC.getContainer( getCppuType( ( Reference< XFilePickerListener > * ) 0 ) );
-
-            if ( pICHelper )
-            {
-                ::cppu::OInterfaceIteratorHelper iter( *pICHelper );
-
-                while( iter.hasMoreElements( ) )
-                {
-                    try
-                    {
-                        Reference< XFilePickerListener > xFPListener( iter.next( ), ::com::sun::star::uno::UNO_QUERY );
-                        if ( xFPListener.is( ) )
-                            (xFPListener.get( )->*pfncFPListener)(aEvent);
-                    }
-                    catch( RuntimeException& )
-                    {
-                        OSL_ENSURE( false, "RuntimeException during event dispatching" );
-                    }
-                }
-            }
-        }
+            m_aAsyncEventNotifier.notifyEvent( pfncFPListener, aEvent );
     }
 }
 
