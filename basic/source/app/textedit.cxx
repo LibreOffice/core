@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2001-05-15 15:09:11 $
+ *  last change: $Author: ab $ $Date: 2001-07-05 10:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,8 +530,8 @@ void TextEditImp::MouseButtonUp( const MouseEvent& rMouseEvent ){ pTextView->Mou
 //void TextEditImp::MouseButtonDown( const MouseEvent& rMouseEvent ){ pTextView->MouseButtonDown( rMouseEvent );}
 //void TextEditImp::MouseMove( const MouseEvent& rMouseEvent ){ pTextView->MouseMove( rMouseEvent );}
 //void TextEditImp::Command( const CommandEvent& rCEvt ){ pTextView->Command( rCEvt );}
-BOOL TextEditImp::Drop( const DropEvent& rEvt ){ return FALSE /*pTextView->Drop( rEvt )*/;}
-BOOL TextEditImp::QueryDrop( DropEvent& rEvt ){ return FALSE /*pTextView->QueryDrop( rEvt )*/;}
+//BOOL TextEditImp::Drop( const DropEvent& rEvt ){ return FALSE /*pTextView->Drop( rEvt )*/;}
+//BOOL TextEditImp::QueryDrop( DropEvent& rEvt ){ return FALSE /*pTextView->QueryDrop( rEvt )*/;}
 
 
 void TextEditImp::Command( const CommandEvent& rCEvt )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: ab $ $Date: 2001-07-05 10:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@ public:
     void                MouseButtonDown( const MouseEvent& rMouseEvent );
 //  void                MouseMove( const MouseEvent& rMouseEvent );
     void                Command( const CommandEvent& rCEvt );
-    BOOL                Drop( const DropEvent& rEvt );
-    BOOL                QueryDrop( DropEvent& rEvt );
+    //BOOL              Drop( const DropEvent& rEvt );
+    //BOOL              QueryDrop( DropEvent& rEvt );
 
 
     void DoDelayedSyntaxHighlight( xub_StrLen nPara );
