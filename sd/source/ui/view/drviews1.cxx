@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 15:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1503,7 +1503,8 @@ void SdDrawViewShell::SetHelpIdBySelection()
 |*
 \************************************************************************/
 
-sal_Int8 SdDrawViewShell::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+sal_Int8 SdDrawViewShell::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                                      SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = pDoc->GetSdPage( nPage, ePageKind )->GetPageNum();
@@ -1512,7 +1513,7 @@ sal_Int8 SdDrawViewShell::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWi
     {
     }
 
-    return( pDrView->AcceptDrop( rEvt, pWin, nPage, nLayer ) );
+    return( pDrView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) );
 }
 
 /*************************************************************************
@@ -1521,7 +1522,8 @@ sal_Int8 SdDrawViewShell::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWi
 |*
 \************************************************************************/
 
-sal_Int8 SdDrawViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+sal_Int8 SdDrawViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                                       SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = pDoc->GetSdPage( nPage, ePageKind )->GetPageNum();
@@ -1530,7 +1532,7 @@ sal_Int8 SdDrawViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* p
     {
     }
 
-    return( pDrView->ExecuteDrop( rEvt, pWin, nPage, nLayer ) );
+    return( pDrView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) );
 }
 
 #ifdef WNT

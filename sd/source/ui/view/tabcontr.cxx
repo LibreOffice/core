@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-04 16:41:39 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 15:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ sal_Int8 SdTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
             {
                 SdWindow* pWindow = NULL;
 
-                nRet = pDrViewSh->AcceptDrop( rEvt, pWindow, nPageId, SDRLAYER_NOTFOUND );
+                nRet = pDrViewSh->AcceptDrop( rEvt, *this, NULL, nPageId, SDRLAYER_NOTFOUND );
                 SwitchPage( aPos );
             }
         }
@@ -302,9 +302,7 @@ sal_Int8 SdTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
         if( ( nPageId >= 0 ) && pDoc->GetPage( nPageId ) )
         {
-            SdWindow* pWindow = NULL;
-
-            nRet = pDrViewSh->ExecuteDrop( rEvt, pWindow, nPageId, SDRLAYER_NOTFOUND );
+            nRet = pDrViewSh->ExecuteDrop( rEvt, *this, NULL, nPageId, SDRLAYER_NOTFOUND );
         }
     }
 

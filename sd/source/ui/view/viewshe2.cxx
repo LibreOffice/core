@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-11 07:52:08 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 15:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,10 +1325,11 @@ void SdViewShell::SetRuler(BOOL bRuler)
 |*
 \************************************************************************/
 
-sal_Int8 SdViewShell::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+sal_Int8 SdViewShell::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                                  SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     SdView* pView = GetView();
-    return( pView ? pView->AcceptDrop( rEvt, pWin, nPage, nLayer ) : DND_ACTION_NONE );
+    return( pView ? pView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
 }
 
 /*************************************************************************
@@ -1337,10 +1338,11 @@ sal_Int8 SdViewShell::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, U
 |*
 \************************************************************************/
 
-sal_Int8 SdViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+sal_Int8 SdViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                                   SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     SdView* pView = GetView();
-    return( pView ? pView->ExecuteDrop( rEvt, pWin, nPage, nLayer ) : DND_ACTION_NONE );
+    return( pView ? pView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
 }
 
 #ifdef WNT

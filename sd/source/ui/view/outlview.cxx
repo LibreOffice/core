@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-06 14:23:14 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 15:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1975,13 +1975,10 @@ void SdOutlineView::ResetLinks() const
 |*
 \************************************************************************/
 
-sal_Int8 SdOutlineView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+sal_Int8 SdOutlineView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                                    SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     return DND_ACTION_NONE;
-/*!!!DND
-    OutlinerView* pOlView = GetViewByWindow( pWin );
-    return( pOlView ? pOlView->AcceptDrop( nDropAction, rPointerPos, nDnDSourceActions, pWin, nPage, nLayer ) : DND_ACTION_NONE );
-*/
 }
 
 /*************************************************************************
@@ -1990,15 +1987,8 @@ sal_Int8 SdOutlineView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin,
 |*
 \************************************************************************/
 
-sal_Int8 SdOutlineView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+sal_Int8 SdOutlineView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                                     SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     return DND_ACTION_NONE;
-/*!!!DND
-    OutlinerView*   pOlView = GetViewByWindow( pWin );
-    sal_Int8        nRet = ( pOlView ? pOlView->ExecuteDrop( nDropAction, rPointerPos, nDnDSourceActions, rxTransferable, pWin, nPage, nLayer ) : DND_ACTION_NONE );
-
-    ( pOutlineViewShell ? pOutlineViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Invalidate( SidArray );
-
-    return nRet;
-*/
 }

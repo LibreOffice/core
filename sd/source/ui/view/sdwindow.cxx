@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-04 16:41:39 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 15:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,7 +818,7 @@ sal_Int8 SdWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     if( pViewShell && !pViewShell->GetDocSh()->IsReadOnly() )
     {
         if( pViewShell )
-            nRet = pViewShell->AcceptDrop( rEvt, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
+            nRet = pViewShell->AcceptDrop( rEvt, *this, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
 
         if( !pViewShell->ISA( SdOutlineViewShell ) )
             DropScroll( rEvt.maPosPixel );
@@ -839,7 +839,7 @@ sal_Int8 SdWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     if( pViewShell )
     {
-        nRet = pViewShell->ExecuteDrop( rEvt, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
+        nRet = pViewShell->ExecuteDrop( rEvt, *this, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
     }
 
     return nRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 10:55:42 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 15:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,14 +155,20 @@ using namespace ::com::sun::star;
 
 struct SdNavigatorDropEvent : public ExecuteDropEvent
 {
-    SdWindow*               mpWin;
+    DropTargetHelper&       mrTargetHelper;
+    SdWindow*               mpTargetWindow;
     USHORT                  mnPage;
     USHORT                  mnLayer;
     const SdDrawDocShell*   mpNavigatorDragDocShell;
 
-                SdNavigatorDropEvent( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer,
-                                      const SdDrawDocShell* pNavigatorDragDocShell ) :
-                    ExecuteDropEvent( rEvt ), mpWin( pWin ), mnPage( nPage ), mnLayer( nLayer ), mpNavigatorDragDocShell( pNavigatorDragDocShell ) {}
+                SdNavigatorDropEvent( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                                      SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer, const SdDrawDocShell* pNavigatorDragDocShell ) :
+                    ExecuteDropEvent( rEvt ),
+                    mrTargetHelper( rTargetHelper ),
+                    mpTargetWindow( pTargetWindow ),
+                    mnPage( nPage ),
+                    mnLayer( nLayer ),
+                    mpNavigatorDragDocShell( pNavigatorDragDocShell ) {}
 };
 
 /*************************************************************************
@@ -543,7 +549,8 @@ void SdView::DragFinished( sal_Int8 nDropAction )
 |*
 \************************************************************************/
 
-sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                             SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     String          aLayerName( GetActiveLayer() );
     SdrPageView*    pPV = GetPageViewPvNum(0);
@@ -594,16 +601,16 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT
             }
             else
             {
-                BOOL            bDrawing = pWin->IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING );
-                BOOL            bGraphic = pWin->IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB );
-                BOOL            bMtf = pWin->IsDropFormatSupported( FORMAT_GDIMETAFILE );
-                BOOL            bBitmap = pWin->IsDropFormatSupported( FORMAT_BITMAP );
-                BOOL            bBookmark = pWin->IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-                BOOL            bXFillExchange = pWin->IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
-                BOOL            bSBAFormat = pWin->IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
+                BOOL            bDrawing = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING );
+                BOOL            bGraphic = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB );
+                BOOL            bMtf = rTargetHelper.IsDropFormatSupported( FORMAT_GDIMETAFILE );
+                BOOL            bBitmap = rTargetHelper.IsDropFormatSupported( FORMAT_BITMAP );
+                BOOL            bBookmark = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
+                BOOL            bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
+                BOOL            bSBAFormat = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
                 BOOL            bIsPresTarget = FALSE;
                 BOOL            nDefaultDrop = DND_ACTION_NONE;
-                //!!!DND BOOL   nDefaultDrop = nRet = FmFormView::AcceptDrop( rEvt, pWin, nPage, nLayer );
+                //!!!DND BOOL   nDefaultDrop = nRet = FmFormView::AcceptDrop( rEvt, rTargetHelper, nPage, nLayer );
 
                 nDropAction = ( ( nDropAction & DND_ACTION_MOVE ) ? DND_ACTION_COPY : nDropAction );
 
@@ -660,9 +667,9 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT
                 }
 
 
-                BOOL bFile = ( pWin->IsDropFormatSupported( FORMAT_FILE ) && pViewSh && !pViewSh->GetSlideShow() && !( nDropAction & DND_ACTION_MOVE ) );
+                BOOL bFile = ( rTargetHelper.IsDropFormatSupported( FORMAT_FILE ) && pViewSh && !pViewSh->GetSlideShow() && !( nDropAction & DND_ACTION_MOVE ) );
 
-                if( bBookmark && !bFile && pWin->IsDropFormatSupported( FORMAT_FILE ) )
+                if( bBookmark && !bFile && rTargetHelper.IsDropFormatSupported( FORMAT_FILE ) )
                     bBookmark = FALSE;
 
                 if( IsDragDropFormatSupported() || bFile || bBookmark || bGraphic || bXFillExchange || bSBAFormat || nDefaultDrop )
@@ -680,7 +687,8 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT
 |*
 \************************************************************************/
 
-sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer )
+sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
+                              SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
     if( pDropMarker )
     {
@@ -725,8 +733,8 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
             SdrPage*                pPage = NULL;
             TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
 
-            if( pWin )
-                aPos = pWin->PixelToLogic( rEvt.maPosPixel );
+            if( pTargetWindow )
+                aPos = pTargetWindow->PixelToLogic( rEvt.maPosPixel );
 
             //!!!DND if( !( bReturn = FmFormView::Drop(rMEvt, pWin) ) ) )
             if( !InsertData( aDataHelper, aPos, nDropAction, TRUE, 0, nPage, nLayer ) && pViewSh )
@@ -744,7 +752,9 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
                     {
                         // insert bookmark from own navigator (handled async. due to possible message box )
                         Application::PostUserEvent( LINK( this, SdView, ExecuteNavigatorDrop ),
-                                                    new SdNavigatorDropEvent( rEvt, pWin, nPage, nLayer, SD_MOD()->GetCurrentNavigatorDragDocShell() ) );
+                                                    new SdNavigatorDropEvent( rEvt, rTargetHelper, pTargetWindow,
+                                                                              nPage, nLayer,
+                                                                              SD_MOD()->GetCurrentNavigatorDragDocShell() ) );
                         nRet = nDropAction;
                     }
                     else
@@ -847,8 +857,8 @@ IMPL_LINK( SdView, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDrop
         SdPage* pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
         USHORT  nPgPos = 0xFFFF;
 
-        if( pSdNavigatorDropEvent->mpWin )
-            aPos = pSdNavigatorDropEvent->mpWin->PixelToLogic( pSdNavigatorDropEvent->maPosPixel );
+        if( pSdNavigatorDropEvent->mpTargetWindow )
+            aPos = pSdNavigatorDropEvent->mpTargetWindow->PixelToLogic( pSdNavigatorDropEvent->maPosPixel );
 
         aFile = aINetBookmark.GetURL().GetToken( 0, '#' );
         aBookmark = aINetBookmark.GetURL().GetToken( 1, '#' );
