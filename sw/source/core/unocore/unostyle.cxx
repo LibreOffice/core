@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-06 18:52:15 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2167,15 +2167,14 @@ void SwXStyle::setPropertyValues(
             throw RuntimeException();
     }
 
-    for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+    for(sal_Int16 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         pMap = SfxItemPropertyMap::GetByName( pMap, pNames[nProp]);
+
         if(!pMap)
-        {
-            UnknownPropertyException aExcept;
-            aExcept.Message = pNames[nProp];
-            throw aExcept;
-        }
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+        if ( pMap->nFlags & PropertyAttribute::READONLY)
+            throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ), nProp );
         if(aBaseImpl.pNewBase)
         {
             lcl_SetStyleProperty(pMap, aPropSet, pValues[nProp], aBaseImpl,
@@ -2369,12 +2368,7 @@ Sequence< Any > SwXStyle::getPropertyValues(
     {
         pMap = SfxItemPropertyMap::GetByName( pMap, pNames[nProp]);
         if(!pMap)
-        {
-            RuntimeException aExcept;
-            aExcept.Message = pNames[nProp];
-            throw aExcept;
-        }
-
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if(pBasePool)
         {
             if(!pBase)
@@ -2582,7 +2576,8 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
                     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                     rStylePropSet.getPropertyMap(), sPropName);
                     if(!pMap)
-                        throw UnknownPropertyException();
+                        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + sPropName, static_cast < cppu::OWeakObject * > ( this ) );
+
                     sal_uInt16 nResId = lcl_ConvertFNToRES(pMap->nWID);
                     BOOL bFooter = sPropName.EqualsAscii("Footer", 0, 6);
                     const SvxSetItem* pSetItem;
@@ -2638,7 +2633,6 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const Sequence< OUString >& aPro
         if(pBase)
         {
             SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
-            sal_Int8 nPropSetId;
             switch(eFamily)
             {
                 case SFX_STYLE_FAMILY_CHAR: pTargetFmt = aStyle.GetCharFmt(); break;
@@ -2940,15 +2934,14 @@ void SwXPageStyle::setPropertyValues(
             throw RuntimeException();
     }
 
-    for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
+    for(sal_Int16 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         pMap = SfxItemPropertyMap::GetByName( pMap, pNames[nProp]);
-        if(!pMap)
-        {
-            UnknownPropertyException aExcept;
-            aExcept.Message = pNames[nProp];
-            throw aExcept;
-        }
+        if (!pMap)
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+        if ( pMap->nFlags & PropertyAttribute::READONLY)
+            throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ), nProp );
+
         if(GetBasePool())
         {
             switch(pMap->nWID)
@@ -3136,12 +3129,8 @@ Sequence< Any > SwXPageStyle::getPropertyValues(
     for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
     {
         pMap = SfxItemPropertyMap::GetByName( pMap, pNames[nProp]);
-        if(!pMap)
-        {
-            RuntimeException aExcept;
-            aExcept.Message = pNames[nProp];
-            throw aExcept;
-        }
+        if (!pMap)
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
         if(GetBasePool())
         {
