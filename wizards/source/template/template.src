@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-16 20:04:56 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 20:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ String CorrespondenceNoTextmark
     Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„ï¾ï½°ï½¸ 'Recipient' ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
     Text[ korean ] = "ì±…ê°ˆí”¼'Recipient'ê°€ ì—†ìŠµë‹ˆë‹¤.";
     Text[ chinese_simplified ] = "ä¹¦ç­¾ 'Recipient' ä¸å­˜åœ¨ã€‚";
-    Text[ chinese_traditional ] = "æ¨™è¨˜ 'Recipient' ä¸å­˜åœ¨ã€‚";
+    Text[ chinese_traditional ] = "æ¨™è¨˜<Recipient>ä¸å­˜åœ¨ã€‚";
     Text[ arabic ] = "ÇáÅÔÇÑÉ ÇáãÑÌÚíÉ 'Recipient' äÇŞÕÉ.";
     Text[ turkish ] = "'Alıcı' Belirteci mevcut değil.";
     Text[ catalan ] = "Falta la marca de texto 'Recipient'.";
@@ -1459,13 +1459,13 @@ String Newsletter
     Text[ portuguese ] = "General Layout";
     Text[ russian ] = "Îáùàÿ ğàçìåòêà";
     Text[ greek ] = "General Layout";
-    Text[ dutch ] = "General Layout";
+    Text[ dutch ] = "Algemeen lay-out";
     Text[ french ] = "Mise en page universelle";
     Text[ spanish ] = "Diseño general";
     Text[ finnish ] = "General Layout";
     Text[ italian ] = "Layout generale";
     Text[ danish ] = "General Layout";
-    Text[ swedish ] = "General Layout";
+    Text[ swedish ] = "Allmän layout";
     Text[ polish ] = "General Layout";
     Text[ portuguese_brazilian ] = "General Layout";
     Text[ japanese ] = "å…¨èˆ¬ï¾šï½²ï½±ï½³ï¾„";
@@ -1487,13 +1487,13 @@ String Newsletter + 1
     Text[ portuguese ] = "Standard Layout";
     Text[ russian ] = "Ñòàíäàğòíàÿ ğàçìåòêà";
     Text[ greek ] = "Standard Layout";
-    Text[ dutch ] = "Standard Layout";
+    Text[ dutch ] = "Standaard lay-out";
     Text[ french ] = "Mide en page standard";
     Text[ spanish ] = "Diseño predeterminado";
     Text[ finnish ] = "Standard Layout";
     Text[ italian ] = "Layout standard";
     Text[ danish ] = "Standard Layout";
-    Text[ swedish ] = "Standard Layout";
+    Text[ swedish ] = "Standardlayout";
     Text[ polish ] = "Standard Layout";
     Text[ portuguese_brazilian ] = "Standard Layout";
     Text[ japanese ] = "æ¨™æº–ï¾šï½²ï½±ï½³ï¾„";
@@ -1514,13 +1514,13 @@ String Newsletter + 2
     Text[ portuguese ] = "Party Layout";
     Text[ russian ] = "Şáèëåéíàÿ ñòàòüÿ";
     Text[ greek ] = "Party Layout";
-    Text[ dutch ] = "Party Layout";
+    Text[ dutch ] = "Feestelijk lay-out";
     Text[ french ] = "Mise en page Fête";
     Text[ spanish ] = "Diseño festivo";
     Text[ finnish ] = "Party Layout";
     Text[ italian ] = "Layout per una festa";
     Text[ danish ] = "Party Layout";
-    Text[ swedish ] = "Party Layout";
+    Text[ swedish ] = "Festskrift";
     Text[ polish ] = "Party Layout";
     Text[ portuguese_brazilian ] = "Party Layout";
     Text[ japanese ] = "è¨˜å¿µåˆŠè¡Œç‰©ï¾šï½²ï½±ï½³ï¾„";
@@ -1541,13 +1541,13 @@ String Newsletter + 3
     Text[ portuguese ] = "Brochure Layout";
     Text[ russian ] = "Ğàçìåòêà áğîøşğû";
     Text[ greek ] = "Brochure Layout";
-    Text[ dutch ] = "Brochure Layout";
+    Text[ dutch ] = "Brochure lay-out";
     Text[ french ] = "Mise en page Prospectus";
     Text[ spanish ] = "Diseño prospecto";
     Text[ finnish ] = "Brochure Layout";
     Text[ italian ] = "Layout depliant";
     Text[ danish ] = "Brochure Layout";
-    Text[ swedish ] = "Brochure Layout";
+    Text[ swedish ] = "Broschyrlayout";
     Text[ polish ] = "Brochure Layout";
     Text[ portuguese_brazilian ] = "Brochure Layout";
     Text[ japanese ] = "ï¾ï¾—ï½¼åºƒå‘Šï¾šï½²ï½±ï½³ï¾„";
@@ -1595,13 +1595,13 @@ String Newsletter + 11
     Text[ portuguese ] = "Single sided";
     Text[ russian ] = "Ñ îäíîé ñòîğîíû";
     Text[ greek ] = "Single sided";
-    Text[ dutch ] = "Single sided";
-    Text[ french ] = "Page unique";
+    Text[ dutch ] = "Enkelzijdig";
+    Text[ french ] = "Une page";
     Text[ spanish ] = "Por un lado";
     Text[ finnish ] = "Single sided";
     Text[ italian ] = "Una pagina";
     Text[ danish ] = "Single sided";
-    Text[ swedish ] = "Single sided";
+    Text[ swedish ] = "En sida";
     Text[ polish ] = "Single sided";
     Text[ portuguese_brazilian ] = "Single sided";
     Text[ japanese ] = "1é¢";
@@ -1622,13 +1622,13 @@ String Newsletter + 12
     Text[ portuguese ] = "double sided";
     Text[ russian ] = "Ñ äâóõ ñòîğîí";
     Text[ greek ] = "double sided";
-    Text[ dutch ] = "double sided";
+    Text[ dutch ] = "Dubbelzijdig";
     Text[ french ] = "Pages vis-à-vis";
     Text[ spanish ] = "Ambas caras";
     Text[ finnish ] = "double sided";
     Text[ italian ] = "Due pagine";
     Text[ danish ] = "double sided";
-    Text[ swedish ] = "double sided";
+    Text[ swedish ] = "Dubbla sidor";
     Text[ polish ] = "double sided";
     Text[ portuguese_brazilian ] = "double sided";
     Text[ japanese ] = "2é¢";
@@ -1639,6 +1639,7 @@ String Newsletter + 12
     Text[ arabic ] = "double sided";
     Text[ catalan ] = "double sided";
 };
+
 
 
 
