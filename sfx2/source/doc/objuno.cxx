@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-26 15:43:11 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,7 @@ void SAL_CALL  SfxDocumentInfoObject::setPropertyValues( const ::com::sun::star:
 
 void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aValue) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     sal_Bool bModified = sal_True;
 
     if ( _pInfo && aValue.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
@@ -591,6 +592,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
 
 ::com::sun::star::uno::Any SAL_CALL  SfxDocumentInfoObject::getFastPropertyValue(sal_Int32 nHandle) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     ::com::sun::star::uno::Any aValue;
     if ( nHandle == WID_CONTENT_TYPE )
     {
@@ -741,6 +743,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
 
 sal_Int16 SAL_CALL  SfxDocumentInfoObject::getUserFieldCount() throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     return _pInfo->GetUserKeyCount();
 }
 
@@ -748,6 +751,7 @@ sal_Int16 SAL_CALL  SfxDocumentInfoObject::getUserFieldCount() throw( ::com::sun
 
 ::rtl::OUString SAL_CALL  SfxDocumentInfoObject::getUserFieldName(sal_Int16 nIndex) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( _pInfo && nIndex < _pInfo->GetUserKeyCount() )
         return _pInfo->GetUserKey( nIndex ).GetTitle();
     else
@@ -758,6 +762,7 @@ sal_Int16 SAL_CALL  SfxDocumentInfoObject::getUserFieldCount() throw( ::com::sun
 
 ::rtl::OUString SAL_CALL  SfxDocumentInfoObject::getUserFieldValue(sal_Int16 nIndex) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( _pInfo && nIndex < _pInfo->GetUserKeyCount() )
         return _pInfo->GetUserKey( nIndex ).GetWord();
     else
@@ -768,6 +773,7 @@ sal_Int16 SAL_CALL  SfxDocumentInfoObject::getUserFieldCount() throw( ::com::sun
 
 void  SAL_CALL SfxDocumentInfoObject::setUserFieldName(sal_Int16 nIndex, const ::rtl::OUString& aName ) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( _pInfo && nIndex < _pInfo->GetUserKeyCount() )
     {
         const SfxDocUserKey& rKey = _pInfo->GetUserKey( nIndex );
@@ -782,6 +788,7 @@ void  SAL_CALL SfxDocumentInfoObject::setUserFieldName(sal_Int16 nIndex, const :
 
 void SAL_CALL  SfxDocumentInfoObject::setUserFieldValue( sal_Int16 nIndex, const ::rtl::OUString& aValue ) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( _pInfo && nIndex < _pInfo->GetUserKeyCount() )
     {
         const SfxDocUserKey& rKey = _pInfo->GetUserKey( nIndex );
@@ -816,8 +823,6 @@ SfxStandaloneDocumentInfoObject::~SfxStandaloneDocumentInfoObject()
 
 SvStorage* SfxStandaloneDocumentInfoObject::GetStorage_Impl( const String& rName, sal_Bool bWrite )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
     // Medium erstellen
     if ( _pMedium )
         delete _pMedium;
@@ -879,6 +884,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::setUserFieldValue( sal_Int16 nIn
 
 void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUString& aURL) throw( ::com::sun::star::io::IOException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     sal_Bool bOK = sal_False;
     String aName( aURL );
     SvStorage* pStorage = GetStorage_Impl( aName, sal_False );
@@ -943,6 +949,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
 
 void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUString& aURL) throw( ::com::sun::star::io::IOException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     sal_Bool bOK = sal_False;
     String aName( aURL );
     SvStorage* pStor = GetStorage_Impl( aName, sal_True );
