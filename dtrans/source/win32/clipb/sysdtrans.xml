@@ -10,7 +10,7 @@
 </description>
         <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
         <language>  c++ </language>
-        <status value="experimental"/>
+        <status value="beta"/>
         <supported-service> com.sun.star.datatransfer.clipboard.SystemClipboard </supported-service>
         <service-dependency>    ... </service-dependency>
         <type>   com.sun.star.datatransfer.clipboard.XClipboardEx   </type>
