@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 10:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,15 @@
 #include <unotools/ucblockbytes.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
+#include <com/sun/star/ui/FilePickerElementID.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
@@ -138,6 +147,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
@@ -618,44 +628,37 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
 
         ::rtl::OUString sTitle = FRM_RES_STRING(RID_STR_IMPORT_GRAPHIC);
         // build some arguments for the upcoming dialog
-        Sequence<Any> aParams(4);
-        aParams.getArray()[0] = makeAny(PropertyValue(
-            ::rtl::OUString::createFromAscii("Title"), -1,
-            makeAny(sTitle), PropertyState_DIRECT_VALUE
-        ));
-        aParams.getArray()[1] = makeAny(PropertyValue(
-            ::rtl::OUString::createFromAscii("PreviewActive"), -1,
-            makeAny((sal_Bool)sal_True), PropertyState_DIRECT_VALUE
-        ));
-        aParams.getArray()[2] = makeAny(PropertyValue(
-            ::rtl::OUString::createFromAscii("AllowEmptyFileNames"), -1,
-            makeAny((sal_Bool)sal_True), PropertyState_DIRECT_VALUE
-        ));
-        Reference<XWindow> xWindow(getPeer(), UNO_QUERY);
-        aParams.getArray()[3] = makeAny(PropertyValue(
-            ::rtl::OUString::createFromAscii("ParentWindow"), -1,
-            makeAny(xWindow), PropertyState_DIRECT_VALUE
-        ));
-
         try
         {
-            Reference<XDialog> xDialog(
-                m_xServiceFactory->createInstanceWithArguments(
-                    ::rtl::OUString::createFromAscii("com.sun.star.dialogs.ImportGraphicsDialog"),
-                    aParams),
-                UNO_QUERY
-            );
+            const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii("com.sun.star.ui.FilePicker");
+            const ::rtl::OUString sInitializer = ::rtl::OUString::createFromAscii("FileOpen_LinkPreviewBox");
 
-            Reference<XPropertySet> xDialogProps(xDialog, UNO_QUERY);
-            if (xDialog.is() && xDialogProps.is() && xDialog->execute())
+            Reference< XFilePicker > xDialog(m_xServiceFactory->createInstance(sServiceName), UNO_QUERY);
+            Reference< XFilePickerControlAccess > xController(xDialog, UNO_QUERY);
+            Reference< XInitialization > xInit(xController, UNO_QUERY);
+            if (!xInit.is())
             {
-                Any aSelectedPath = xDialogProps->getPropertyValue(::rtl::OUString::createFromAscii("SelectedPath"));
-                if (aSelectedPath.getValueType().getTypeClass() == TypeClass_STRING)
+                DBG_ERROR("OImageControlControl::mousePressed: coult not instantiate the file picker!");
+                return;
+            }
+
+            Sequence< Any > aInitArguments(1);
+            aInitArguments[0] <<= sInitializer;
+            xInit->initialize(aInitArguments);
+            xDialog->setTitle(sTitle);
+            xController->setValue(FilePickerElementID::CBX_PREVIEW, ::cppu::bool2any(sal_True));
+            xController->enableControl(FilePickerElementID::CBX_INSERT_AS_LINK, sal_False);
+
+            if (xDialog->execute())
+            {
+                Sequence< ::rtl::OUString > aPaths = xDialog->getPath();
+                ::rtl::OUString sSelectedPath;
+                if (aPaths.getLength() > 0)
                 {
                     xSet->setPropertyValue(PROPERTY_IMAGE_URL, ::com::sun::star::uno::makeAny(::rtl::OUString()));
                         // reset the url property in case it already has the value we're about to set - in this case
                         // our propertyChanged would not get called without this.
-                    xSet->setPropertyValue(PROPERTY_IMAGE_URL, aSelectedPath);
+                    xSet->setPropertyValue(PROPERTY_IMAGE_URL, makeAny(aPaths[0]));
                 }
             }
         }
