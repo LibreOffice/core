@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-04 15:49:09 $
+ *  last change: $Author: cl $ $Date: 2001-05-30 08:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
         if( Index < 4 ) // default glue point?
         {
             SdrGluePoint aTempPoint = mpObject->GetVertexGluePoint( (USHORT)Index );
-            aGluePoint.IsUserDefined = sal_True;
+            aGluePoint.IsUserDefined = sal_False;
             convert( aTempPoint, aGluePoint );
             uno::Any aAny;
             aAny <<= aGluePoint;
@@ -382,7 +382,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
             if( pList && Index < pList->GetCount() )
             {
                 const SdrGluePoint& rTempPoint = (*pList)[(USHORT)Index];
-                aGluePoint.IsUserDefined = sal_False;
+                aGluePoint.IsUserDefined = sal_True;
                 convert( rTempPoint, aGluePoint );
                 uno::Any aAny;
                 aAny <<= aGluePoint;
