@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:39:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,8 +419,8 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bI
 void ScViewFunc::PasteDraw()
 {
     ScViewData* pViewData = GetViewData();
-    USHORT nPosX = pViewData->GetCurX();
-    USHORT nPosY = pViewData->GetCurY();
+    SCCOL nPosX = pViewData->GetCurX();
+    SCROW nPosY = pViewData->GetCurY();
     Window* pWin = GetActiveWin();
     Point aPos = pWin->PixelToLogic( pViewData->GetScrPos( nPosX, nPosY,
                                      pViewData->GetActivePart() ) );
@@ -626,11 +626,12 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     ScDocument* pTransClip = NULL;
     if ( bTranspose )
     {
-        USHORT nX,nY;
+        SCCOL nX;
+        SCROW nY;
         // include filtered rows until TransposeClip can skip them
         bIncludeFiltered = TRUE;
         pClipDoc->GetClipArea( nX, nY, TRUE );
-        if ( nY > MAXCOL )                      // zuviele Zeilen zum Transponieren
+        if ( nY > static_cast<sal_Int32>(MAXCOL) )                      // zuviele Zeilen zum Transponieren
         {
             ErrorMessage(STR_PASTE_FULL);
             return FALSE;
@@ -651,19 +652,19 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         ScDrawLayer::SetGlobalDrawPersist(NULL);
     }
 
-    USHORT nStartCol;
-    USHORT nStartRow;
-    USHORT nStartTab;
-    USHORT nEndCol;
-    USHORT nEndRow;
-    USHORT nEndTab;
-    USHORT nClipSizeX;
-    USHORT nClipSizeY;
+    SCCOL nStartCol;
+    SCROW nStartRow;
+    SCTAB nStartTab;
+    SCCOL nEndCol;
+    SCROW nEndRow;
+    SCTAB nEndTab;
+    SCCOL nClipSizeX;
+    SCROW nClipSizeY;
     pClipDoc->GetClipArea( nClipSizeX, nClipSizeY, TRUE );      // size in clipboard doc
 
     //  size in target doc: include filtered rows only if CutMode is set
-    USHORT nDestSizeX;
-    USHORT nDestSizeY;
+    SCCOL nDestSizeX;
+    SCROW nDestSizeY;
     pClipDoc->GetClipArea( nDestSizeX, nDestSizeY, bIncludeFiltered );
 
     ScDocument* pDoc = GetViewData()->GetDocument();
@@ -685,8 +686,8 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         }
     }
 
-    USHORT nMarkAddX = 0;
-    USHORT nMarkAddY = 0;
+    SCCOL nMarkAddX = 0;
+    SCROW nMarkAddY = 0;
 
     if ( rMark.IsMarked() )
     {
@@ -698,15 +699,15 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         nEndCol = aMarkRange.aEnd.Col();
         nEndRow = aMarkRange.aEnd.Row();
         nEndTab = aMarkRange.aEnd.Tab();
-        USHORT nBlockAddX = nEndCol-nStartCol;
-        USHORT nBlockAddY = nEndRow-nStartRow;
+        SCCOL nBlockAddX = nEndCol-nStartCol;
+        SCROW nBlockAddY = nEndRow-nStartRow;
 
         //  #58422# Nachfrage, wenn die Selektion groesser als 1 Zeile/Spalte, aber kleiner
         //  als das Clipboard ist (dann wird ueber die Selektion hinaus eingefuegt)
 
         //  ClipSize ist nicht Groesse, sondern Differenz
-        if ( ( nBlockAddX && nBlockAddX < nDestSizeX ) ||
-             ( nBlockAddY && nBlockAddY < nDestSizeY ) )
+        if ( ( nBlockAddX != 0 && nBlockAddX < nDestSizeX ) ||
+             ( nBlockAddY != 0 && nBlockAddY < nDestSizeY ) )
         {
             ScWaitCursorOff aWaitOff( GetFrameWin() );
             String aMessage = ScGlobal::GetRscString( STR_PASTE_BIGGER );
@@ -739,12 +740,14 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         nEndTab = nStartTab;
     }
 
+    bool bOffLimits = !ValidCol(nEndCol) || !ValidRow(nEndRow);
+
     //  Zielbereich, wie er angezeigt wird:
     ScRange aUserRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
 
     //  Sollen Zellen eingefuegt werden?
     //  (zu grosse nEndCol/nEndRow werden weiter unten erkannt)
-    BOOL bInsertCells = ( eMoveMode != INS_NONE && nEndCol <= MAXCOL && nEndRow <= MAXROW );
+    BOOL bInsertCells = ( eMoveMode != INS_NONE && !bOffLimits );
     if ( bInsertCells )
     {
         //  #94115# Instead of EnterListAction, the paste undo action is merged into the
@@ -764,7 +767,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         if ( bCut )
             pClipDoc->SetCutMode( bCut );
     }
-    else
+    else if (!bOffLimits)
     {
         BOOL bAskIfNotEmpty = bAllowDialogs &&
                                 ( nFlags & IDF_CONTENTS ) &&
@@ -773,8 +776,8 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         if ( bAskIfNotEmpty )
         {
             BOOL bIsEmpty = TRUE;
-            USHORT nTabCount = pDoc->GetTableCount();
-            for (USHORT nTab=0; nTab<nTabCount && bIsEmpty; nTab++)
+            SCTAB nTabCount = pDoc->GetTableCount();
+            for (SCTAB nTab=0; nTab<nTabCount && bIsEmpty; nTab++)
                 if ( rMark.GetTableSelect(nTab) &&
                         !pDoc->IsBlockEmpty( nTab, aUserRange.aStart.Col(), aUserRange.aStart.Row(),
                                                    aUserRange.aEnd.Col(), aUserRange.aEnd.Row() ) )
@@ -793,11 +796,11 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         }
     }
 
-    USHORT nClipStartX;                         // Clipboard-Bereich erweitern
-    USHORT nClipStartY;
+    SCCOL nClipStartX;                      // Clipboard-Bereich erweitern
+    SCROW nClipStartY;
     pClipDoc->GetClipStart( nClipStartX, nClipStartY );
-    USHORT nUndoEndCol = nClipStartX + nClipSizeX;
-    USHORT nUndoEndRow = nClipStartY + nClipSizeY;  // end of source area in clipboard document
+    SCCOL nUndoEndCol = nClipStartX + nClipSizeX;
+    SCROW nUndoEndRow = nClipStartY + nClipSizeY;   // end of source area in clipboard document
     BOOL bClipOver = pClipDoc->
         ExtendMerge( nClipStartX,nClipStartY, nUndoEndCol,nUndoEndRow, nStartTab, FALSE );
     nUndoEndCol -= nClipStartX + nClipSizeX;
@@ -989,7 +992,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
 
             //      angepasste Referenzen ins Redo-Doc
 
-            USHORT nTabCount = pDoc->GetTableCount();
+            SCTAB nTabCount = pDoc->GetTableCount();
             pRedoDoc->AddUndoTab( 0, nTabCount-1 );
             pDoc->CopyUpdated( pRefUndoDoc, pRedoDoc );
 
@@ -1068,7 +1071,7 @@ BOOL ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
     HideAllCursors();       // wegen zusammengefassten
 
     BOOL bSuccess = TRUE;
-    USHORT nDestTab = rDestPos.Tab();
+    SCTAB nDestTab = rDestPos.Tab();
     const ScMarkData& rMark = GetViewData()->GetMarkData();
     if ( rSource.aStart.Tab() == nDestTab && rSource.aEnd.Tab() == nDestTab && rMark.GetSelectCount() > 1 )
     {
@@ -1084,15 +1087,15 @@ BOOL ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
 
         ScRange aLocalSource = rSource;
         ScAddress aLocalDest = rDestPos;
-        USHORT nTabCount = pDocSh->GetDocument()->GetTableCount();
-        USHORT nStartTab = 0;
+        SCTAB nTabCount = pDocSh->GetDocument()->GetTableCount();
+        SCTAB nStartTab = 0;
         while ( nStartTab < nTabCount && bSuccess )
         {
             while ( nStartTab < nTabCount && !rMark.GetTableSelect(nStartTab) )
                 ++nStartTab;
             if ( nStartTab < nTabCount )
             {
-                USHORT nEndTab = nStartTab;
+                SCTAB nEndTab = nStartTab;
                 while ( nEndTab+1 < nTabCount && rMark.GetTableSelect(nEndTab+1) )
                     ++nEndTab;
 
@@ -1130,11 +1133,11 @@ BOOL ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
         if ( !bIncludeFiltered )
         {
             //  manually find number of non-filtered rows
-            USHORT nPastedCount = 0;
-            USHORT nTestEndRow = rSource.aEnd.Row();
-            USHORT nFlagTab = rSource.aStart.Tab();
+            SCROW nPastedCount = 0;
+            SCROW nTestEndRow = rSource.aEnd.Row();
+            SCTAB nFlagTab = rSource.aStart.Tab();
             ScDocument* pDoc = pDocSh->GetDocument();
-            for (USHORT nRow = rSource.aStart.Row(); nRow <= nTestEndRow; nRow++)
+            for (SCROW nRow = rSource.aStart.Row(); nRow <= nTestEndRow; nRow++)
                 if ( ( pDoc->GetRowFlags( nRow, nFlagTab ) & CR_FILTERED ) == 0 )
                     ++nPastedCount;
             if ( nPastedCount == 0 )
@@ -1158,8 +1161,8 @@ BOOL ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, B
 
     if ( rSource.aStart.Tab() == rDestPos.Tab() )
     {
-        USHORT nDestEndCol = rDestPos.Col() + ( rSource.aEnd.Col() - rSource.aStart.Col() );
-        USHORT nDestEndRow = rDestPos.Row() + ( rSource.aEnd.Row() - rSource.aStart.Row() );
+        SCCOL nDestEndCol = rDestPos.Col() + ( rSource.aEnd.Col() - rSource.aStart.Col() );
+        SCROW nDestEndRow = rDestPos.Row() + ( rSource.aEnd.Row() - rSource.aStart.Row() );
 
         if ( rSource.aStart.Col() <= nDestEndCol && rDestPos.Col() <= rSource.aEnd.Col() &&
              rSource.aStart.Row() <= nDestEndRow && rDestPos.Row() <= rSource.aEnd.Row() )
