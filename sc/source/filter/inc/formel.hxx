@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,6 @@ public:
     const ScRange*              First( const UINT16 nTab = 0 );
     const ScRange*              Next( void );
 //      const ScRange*              NextContinue( void );
-    inline INT32                GetActTab( void ) const;    // < 0 -> keine aktuelle Tab
     inline const _ScRangeList*  GetActList( void ) const;
 };
 
@@ -218,15 +217,6 @@ public:
 inline BOOL _ScRangeListTabs::HasRanges( void ) const
 {
     return bHasRanges;
-}
-
-
-inline INT32 _ScRangeListTabs::GetActTab( void ) const
-{
-    if( pAct )
-        return nAct;
-    else
-        return -1;
 }
 
 
