@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBoxItem.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change:$Date: 2004-07-23 10:49:50 $
+ *  last change:$Date: 2004-11-02 12:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ public class AccessibleToolBoxItem extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
 
-        //at.printAccessibleTree(log,xRoot);
+        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         oObj = at.getAccessibleObjectForRole(xRoot,
                                              AccessibleRole.TOGGLE_BUTTON,
                                              "Bold");
