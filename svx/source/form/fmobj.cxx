@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:47:04 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,49 +409,50 @@ SdrObject* FmFormObj::Clone() const
 }
 
 //------------------------------------------------------------------
-SdrObject* FmFormObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const
-{
-    SdrObject* pReturn = SdrUnoObj::Clone(_pPage, _pModel);
-    if (!pReturn)
-        return pReturn;
-
-    FmFormObj* pCloneAsFormObj = PTR_CAST(FmFormObj, pReturn);
-    if (!pCloneAsFormObj)
-        return pReturn;
-
-    FmFormPage* pClonesPage = PTR_CAST(FmFormPage, pReturn->GetPage());
-    if (!pClonesPage || !pClonesPage->GetForms().is())
-        return pReturn;
-
-    // build an form environment equivalent to my own withín the destination page
-    Reference< XChild >  xMeAsChild(GetUnoControlModel(), UNO_QUERY);
-    if (!xMeAsChild.is())
-        return pReturn;
-
-    try
-    {
-        Reference< XInterface >  xMyParent = xMeAsChild->getParent();
-        Reference< XInterface >  xClonesParent = ensureModelEnv(xMyParent, Reference< XIndexContainer > (pClonesPage->GetForms(), ::com::sun::star::uno::UNO_QUERY));
-        Reference< XIndexContainer >  xNewParentContainer(xClonesParent, UNO_QUERY);
-        Reference< XFormComponent >  xCloneAsFormComponent(PTR_CAST(FmFormObj, pReturn)->GetUnoControlModel(), UNO_QUERY);
-        if (xNewParentContainer.is() && xCloneAsFormComponent.is())
-        {
-            sal_Int32 nPos = xNewParentContainer->getCount();
-            xNewParentContainer->insertByIndex(nPos, makeAny(xCloneAsFormComponent));
-            // transfer the events, too
-            Reference< XEventAttacherManager >  xEventManager(xNewParentContainer, UNO_QUERY);
-            if (xEventManager.is())
-                xEventManager->registerScriptEvents(nPos, pCloneAsFormObj->GetEvents());
-        }
-    }
-    catch(...)
-    {
-        DBG_ERROR("FmFormObj::Clone : error while placing the model within it's new env");
-    }
-
-
-    return pReturn;
-}
+// #116235#
+//SdrObject* FmFormObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const
+//{
+//  SdrObject* pReturn = SdrUnoObj::Clone(_pPage, _pModel);
+//  if (!pReturn)
+//      return pReturn;
+//
+//  FmFormObj* pCloneAsFormObj = PTR_CAST(FmFormObj, pReturn);
+//  if (!pCloneAsFormObj)
+//      return pReturn;
+//
+//  FmFormPage* pClonesPage = PTR_CAST(FmFormPage, pReturn->GetPage());
+//  if (!pClonesPage || !pClonesPage->GetForms().is())
+//      return pReturn;
+//
+//  // build an form environment equivalent to my own withín the destination page
+//  Reference< XChild >  xMeAsChild(GetUnoControlModel(), UNO_QUERY);
+//  if (!xMeAsChild.is())
+//      return pReturn;
+//
+//  try
+//  {
+//      Reference< XInterface >  xMyParent = xMeAsChild->getParent();
+//      Reference< XInterface >  xClonesParent = ensureModelEnv(xMyParent, Reference< XIndexContainer > (pClonesPage->GetForms(), ::com::sun::star::uno::UNO_QUERY));
+//      Reference< XIndexContainer >  xNewParentContainer(xClonesParent, UNO_QUERY);
+//      Reference< XFormComponent >  xCloneAsFormComponent(PTR_CAST(FmFormObj, pReturn)->GetUnoControlModel(), UNO_QUERY);
+//      if (xNewParentContainer.is() && xCloneAsFormComponent.is())
+//      {
+//          sal_Int32 nPos = xNewParentContainer->getCount();
+//          xNewParentContainer->insertByIndex(nPos, makeAny(xCloneAsFormComponent));
+//          // transfer the events, too
+//          Reference< XEventAttacherManager >  xEventManager(xNewParentContainer, UNO_QUERY);
+//          if (xEventManager.is())
+//              xEventManager->registerScriptEvents(nPos, pCloneAsFormObj->GetEvents());
+//      }
+//  }
+//  catch(...)
+//  {
+//      DBG_ERROR("FmFormObj::Clone : error while placing the model within it's new env");
+//  }
+//
+//
+//  return pReturn;
+//}
 
 //------------------------------------------------------------------
 void FmFormObj::ReformatText()
