@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-11 15:44:44 $
+ *  last change: $Author: pl $ $Date: 2002-02-13 09:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1966,6 +1966,23 @@ void Printer::PrintRemotePage( ULONG nPage )
 {
     if ( mpPrinter && mpPrinter->mxRemotePrinter.is() )
     {
+        if( nPage >=  mpRemotePages->size() )
+            return;
+
+        if( mpGraphics ) {
+            REF( XRmOutputDevice ) aTmp;
+            mpGraphics->SetInterface( aTmp );
+            delete mpGraphics;
+        }
+
+        PrinterPage* pPage = (*mpRemotePages)[nPage];
+        if( pPage->IsNewJobSetup() )
+        {
+            RmJobSetup aSetup;
+            pPage->GetJobSetup().SetRmJobSetup( aSetup );
+            mpPrinter->SetJobSetup( aSetup );
+        }
+
         CHECK_FOR_RVPSYNC_NORMAL();
         try
         {
@@ -1976,37 +1993,9 @@ void Printer::PrintRemotePage( ULONG nPage )
             rvpExceptionHandler();
         }
 
-        if( nPage >=  mpRemotePages->size() )
-        {
-            CHECK_FOR_RVPSYNC_NORMAL();
-            try
-            {
-                mpPrinter->mxRemotePrinter->EndPage();
-            }
-            catch( RuntimeException &e )
-            {
-                rvpExceptionHandler();
-            }
-            return;
-        }
-
-        if( mpGraphics ) {
-            REF( XRmOutputDevice ) aTmp;
-            mpGraphics->SetInterface( aTmp );
-            delete mpGraphics;
-        }
-
         mpGraphics = new ImplServerGraphics( ImplGetSVData()->mpAtoms );
         Reference< XRmOutputDevice > temp( mpPrinter->mxRemotePrinter, UNO_QUERY );
         mpGraphics->SetInterface( temp );
-
-        PrinterPage* pPage = (*mpRemotePages)[nPage];
-        if( pPage->IsNewJobSetup() )
-        {
-            RmJobSetup aSetup;
-            pPage->GetJobSetup().SetRmJobSetup( aSetup );
-            mpPrinter->SetJobSetup( aSetup );
-        }
 
         mbDevOutput     = TRUE;
         mbInPrintPage   = TRUE;
