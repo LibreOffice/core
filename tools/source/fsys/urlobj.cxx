@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:02:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,8 +197,9 @@ using namespace com::sun;
 
 
    ; private
-   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://" name ["/" *alphanum] ["?" *uric]
+   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://" name *("/" segment) ["?" *uric]
    name = *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
+   segment = *(escaped / alphanum / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
 
    ; private
@@ -430,7 +431,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "private", "private:", 0, false, false, false, false, false,
           false, false, true },
         { "vnd.sun.star.help", "vnd.sun.star.help://", 0, true, false, false,
-          false, false, false, false, true },
+          false, false, false, true, true },
         { "https", "https://", 443, true, false, false, false, true, true,
           true, true },
         { "slot", "slot:", 0, false, false, false, false, false, false,
@@ -2660,13 +2661,18 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 aTheSynPath = '/';
             else
             {
-                if (*pPos++ != '/')
+                if (*pPos != '/')
                     return false;
                 while (pPos < pEnd && *pPos != nQueryDelimiter
                        && *pPos != nFragmentDelimiter)
-                    if (!INetMIME::isAlphanumeric(*pPos++))
-                        return false;
-                aTheSynPath = UniString(*pBegin, pPos - *pBegin);
+                {
+                    EscapeType eEscapeType;
+                    sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
+                                                 '%', eMechanism,
+                                                 eCharset, eEscapeType);
+                    appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
+                               PART_HTTP_PATH, '%', eCharset, true);
+                }
             }
             break;
 
