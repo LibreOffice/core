@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.22 2001-02-01 19:12:31 cl Exp $
+	$Id: text.mod,v 1.23 2001-02-14 19:17:57 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -106,7 +106,7 @@
 				   text:creator |
 				   text:conditional-text |
 				   text:hidden-text |
-				   text:hide-paragraph |
+				   text:hidden-paragraph |
 				   text:chapter |
 				   text:file-name |
 				   text:template-name |
@@ -428,7 +428,6 @@
 <!ELEMENT text:database-display (#PCDATA)>
 <!ATTLIST text:database-display %database-table;>
 <!ATTLIST text:database-display text:column-name %string; #REQUIRED>
-<!ATTLIST text:database-display %valueAttr;>
 <!ATTLIST text:database-display style:data-style-name %styleName; #IMPLIED>
 
 <!ELEMENT text:database-next (#PCDATA)>
@@ -514,13 +513,14 @@
 <!ELEMENT text:conditional-text (#PCDATA)>
 <!ATTLIST text:conditional-text text:condition %formula; #REQUIRED>
 <!ATTLIST text:conditional-text text:string-value-if-false %string; #REQUIRED>
+<!ATTLIST text:conditional-text text:string-value-if-true %string; #REQUIRED>
 
 <!ELEMENT text:hidden-text (#PCDATA)>
 <!ATTLIST text:hidden-text text:condition %formula; #REQUIRED>
 <!ATTLIST text:hidden-text text:string-value %string; #REQUIRED>
 
-<!ELEMENT text:hide-paragraph EMPTY>
-<!ATTLIST text:hide-paragraph text:condition %formula; #REQUIRED>
+<!ELEMENT text:hidden-paragraph EMPTY>
+<!ATTLIST text:hidden-paragraph text:condition %formula; #REQUIRED>
 
 <!ELEMENT text:chapter (#PCDATA)>
 <!ATTLIST text:chapter text:display (name|number|number-and-name|
