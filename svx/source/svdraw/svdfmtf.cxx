@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:33:59 $
+ *  last change: $Author: sj $ $Date: 2001-03-22 17:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
             case META_LINECOLOR_ACTION      : DoAction((MetaLineColorAction      &)*pAct); break;
             case META_FILLCOLOR_ACTION      : DoAction((MetaFillColorAction      &)*pAct); break;
             case META_TEXTCOLOR_ACTION      : DoAction((MetaTextColorAction      &)*pAct); break;
-                case META_TEXTFILLCOLOR_ACTION  : DoAction((MetaTextFillColorAction  &)*pAct); break;
+            case META_TEXTFILLCOLOR_ACTION  : DoAction((MetaTextFillColorAction  &)*pAct); break;
             case META_FONT_ACTION           : DoAction((MetaFontAction           &)*pAct); break;
             case META_MAPMODE_ACTION        : DoAction((MetaMapModeAction        &)*pAct); break;
             case META_CLIPREGION_ACTION     : DoAction((MetaClipRegionAction     &)*pAct); break;
@@ -405,7 +405,12 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
         pObj->SetLayer(nLayer);
         if (bLine) pObj->SetItemSet(*pLineAttr);
         if (bFill) pObj->SetItemSet(*pFillAttr);
-        if (bText) pObj->SetItemSet(*pTextAttr);
+        if (bText)
+        {
+            pObj->SetItemSet(*pTextAttr);
+            pObj->SetItem( SdrTextAutoGrowWidthItem( sal_True ) );              // don't break the text, only one line used always (SJ)
+            pObj->SetItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_LEFT ) );
+        }
     }
 }
 
@@ -580,14 +585,11 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyLineAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaPolygonAction& rAct)
 {
-    XPolygon aXP(rAct.GetPolygon());
-    if (aXP.GetPointCount()!=0) {
-        Point aPt(aXP[0]);
-        USHORT nPntAnz=aXP.GetPointCount();
-        if (aPt==aXP[nPntAnz-1]) { // Polygon ggf. schliessen
-            aXP.Insert(nPntAnz,aPt,XPOLY_NORMAL);
-        }
-        if (!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(XPolyPolygon(aXP))) {
+    XPolygon aXP( rAct.GetPolygon() );
+    if ( aXP.GetPointCount() != 0 )
+    {
+        if (!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(XPolyPolygon(aXP)))
+        {
             SdrPathObj* pPath=new SdrPathObj(OBJ_POLY,XPolyPolygon(aXP));
             SetAttributes(pPath);
             InsertObj(pPath);
@@ -597,22 +599,19 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolygonAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction& rAct)
 {
-    XPolyPolygon aXPP(rAct.GetPolyPolygon());
-    USHORT nPolyAnz=aXPP.Count();
-    for (USHORT nPolyNum=nPolyAnz; nPolyNum>0;) {
+    XPolyPolygon aXPP( rAct.GetPolyPolygon() );
+    sal_uInt16 nPolyAnz = aXPP.Count();
+    for ( sal_uInt16 nPolyNum = nPolyAnz; nPolyNum > 0; )
+    {
         nPolyNum--;
-        USHORT nPntAnz=aXPP[nPolyNum].GetPointCount();
-        if (nPntAnz>0) {
-            Point aPt(aXPP[nPolyNum][0]);
-            if (aPt==aXPP[nPolyNum][nPntAnz-1]) { // Polygon ggf. schliessen
-                aXPP[nPolyNum].Insert(nPntAnz,aPt,XPOLY_NORMAL);
-            }
-        } else {
-            aXPP.Remove(nPolyNum); // leere Polys entfernen
-        }
+        sal_uInt16 nPntAnz = aXPP[ nPolyNum ].GetPointCount();
+        if ( !nPntAnz )
+            aXPP.Remove( nPolyNum ); // leere Polys entfernen
     }
-    if (aXPP.Count()!=0) {
-        if (!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(XPolyPolygon(aXPP))) {
+    if ( aXPP.Count() )
+    {
+        if (!bLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(XPolyPolygon(aXPP)))
+        {
             SdrPathObj* pPath=new SdrPathObj(OBJ_POLY,aXPP);
             SetAttributes(pPath);
             InsertObj(pPath);
@@ -634,35 +633,13 @@ void ImpSdrGDIMetaFileImport::ImportText(const Point& rPos, const XubString& rSt
     Rectangle aTextRect(rPos + Point(0, -aFontMetric.GetAscent()), aSize);
 
     // correct aTextRect when eAlg != ALIGN_BASELINE
-    if(ALIGN_BASELINE != eAlg)
+    if ( ALIGN_BASELINE != eAlg )
     {
-        const OutputDevice* pOut = NULL;
+        if ( eAlg == ALIGN_TOP )
+            aTextRect.Move( 0, (INT32)aFontMetric.GetAscent() );
 
-        if(pModel)
-            pOut = pModel->GetRefDevice();
-
-        if(!pOut)
-        {
-            pOut = Application::GetDefaultDevice();
-        }
-
-        if(pOut)
-        {
-            FontMetric aMetr(pOut->GetFontMetric(aFnt));
-            static BOOL bDoItAtAll = TRUE;
-
-            if(eAlg == ALIGN_TOP)
-            {
-                if(bDoItAtAll)
-                    aTextRect.Move(0, -(INT32)aMetr.GetDescent());
-            }
-
-            if(eAlg == ALIGN_BOTTOM)
-            {
-                if(bDoItAtAll)
-                    aTextRect.Move(0, (INT32)aMetr.GetAscent());
-            }
-        }
+        if ( eAlg == ALIGN_BOTTOM )
+            aTextRect.Move( 0, (INT32)-aFontMetric.GetDescent() );
     }
 
     SdrRectObj* pText=new SdrRectObj(OBJ_TEXT,aTextRect);
@@ -687,7 +664,6 @@ void ImpSdrGDIMetaFileImport::ImportText(const Point& rPos, const XubString& rSt
     }
     InsertObj(pText);
     // Das fehlt noch:
-    // FontAlign GetAlign() const { return pImpFont->eAlign; }
     // short     GetCharOrientation() const { return pImpFont->nCharOrientation; }
 }
 
