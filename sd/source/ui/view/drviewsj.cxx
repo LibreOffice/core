@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-29 07:13:02 $
+ *  last change: $Author: dl $ $Date: 2001-09-10 11:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _SVDOGRAF_HXX //autogen
 #include <svx/svdograf.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX //autogen
+#include <svx/svdoole2.hxx>
 #endif
 #ifndef _SXELDITM_HXX //autogen
 #include <svx/sxelditm.hxx>
@@ -199,7 +202,7 @@ void __EXPORT SdDrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem(SID_UNGROUP);
             }
 
-            if (!pObj->ISA(SdrObjGroup) && !pObj->ISA(SdrGrafObj))
+            if (!pObj->ISA(SdrObjGroup) && !pObj->ISA(SdrGrafObj) && !pObj->ISA(SdrOle2Obj))
             {
                 rSet.DisableItem( SID_NAME_GROUP );
             }

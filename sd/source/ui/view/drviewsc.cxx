@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-14 11:23:28 $
+ *  last change: $Author: dl $ $Date: 2001-09-10 11:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _SVDOGRP_HXX //autogen
 #include <svx/svdogrp.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX //autogen
+#include <svx/svdoole2.hxx>
 #endif
 #ifndef _SVDOGRAF_HXX //autogen
 #include <svx/svdograf.hxx>
@@ -169,7 +172,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
             if( nMarkCount == 1 )
             {
                 pObj = rMarkList.GetMark( 0 )->GetObj();
-                if (pObj->ISA(SdrObjGroup) || pObj->ISA(SdrGrafObj))
+                if (pObj->ISA(SdrObjGroup) || pObj->ISA(SdrGrafObj) || pObj->ISA(SdrOle2Obj))
                 {
                     aName = pObj->GetName();
                 }
@@ -181,7 +184,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
 
                     if( pDocSh->CheckObjectName( NULL, aName ) )
                     {
-                        if (pObj->ISA(SdrObjGroup) || pObj->ISA(SdrGrafObj))
+                        if (pObj->ISA(SdrObjGroup) || pObj->ISA(SdrGrafObj) || pObj->ISA(SdrOle2Obj))
                         {
                             pObj->SetName(aName);
                         }
@@ -190,7 +193,6 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
                 delete pDlg;
             }
 
-            // In der Hoffnung, dass Dieter die nachfolgende Zeile stehen laesst
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
             rBindings.Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
             rBindings.Invalidate( SID_CONTEXT );
