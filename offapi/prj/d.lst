@@ -5,9 +5,6 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sync
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\geometry
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\rendering
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\provider
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\browse
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\frame\status
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\formula
@@ -63,6 +60,9 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\presentation
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\animations
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\resource
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\scanner
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script\provider
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script\browse
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbc
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbcx
@@ -153,6 +153,8 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\resource\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\resource
 ..\com\sun\star\scanner\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\scanner
 ..\com\sun\star\script\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script
+..\com\sun\star\script\browse\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script\browse
+..\com\sun\star\script\provider\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script\provider
 ..\com\sun\star\sdb\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdb
 ..\com\sun\star\sdbc\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbc
 ..\com\sun\star\sdbcx\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\sdbcx
@@ -192,8 +194,6 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\drafts\com\sun\star\drawing\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\drawing
 ..\drafts\com\sun\star\sheet\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\sheet
 ..\drafts\com\sun\star\table\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\table
-..\drafts\com\sun\star\script\browse\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\browse
-..\drafts\com\sun\star\script\provider\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\script\provider
 ..\drafts\com\sun\star\chart\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\chart
 ..\drafts\com\sun\star\form\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
 
