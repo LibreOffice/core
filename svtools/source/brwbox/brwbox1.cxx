@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:24:53 $
+ *  last change: $Author: fs $ $Date: 2002-04-11 16:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1812,9 +1812,15 @@ void BrowseBox::SelectRow( long nRow, BOOL _bSelect, BOOL bExpand )
     }
 
     // set new selection
-    if ( !bHideSelect &&
-         ( (bMultiSelection && uRow.pSel->GetTotalRange().Max() >= nRow && uRow.pSel->Select(nRow,_bSelect)) ||
-           (!bMultiSelection && ( uRow.nSel = nRow ) != BROWSER_ENDOFSELECTION ) ) )
+    if  (   !bHideSelect
+        &&  (   (   bMultiSelection
+                &&  uRow.pSel->GetTotalRange().Max() >= nRow
+                &&  uRow.pSel->Select( nRow, _bSelect )
+                )
+            ||  (   !bMultiSelection
+                &&  ( uRow.nSel = nRow ) != BROWSER_ENDOFSELECTION )
+                )
+            )
     {
         // Handle-Column nicht highlighten
         BrowserColumn *pFirstCol = pCols->GetObject(0);
@@ -1883,7 +1889,7 @@ void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL _bSelect, BOOL bMakeVis
         uRow.nSel = BROWSER_ENDOFSELECTION;
     pColSel->SelectAll(FALSE);
 
-    if ( pColSel->Select( nNewColPos ) )
+    if ( pColSel->Select( nNewColPos, _bSelect ) )
     {
         // GoToColumnId( pCols->GetObject(nNewColPos)->GetId(), bMakeVisible );
 
@@ -1920,6 +1926,18 @@ USHORT BrowseBox::GetSelectColumnCount() const
     // while bAutoSelect (==!pColSel), 1 if any rows (yes rows!) else none
     return pColSel ? (USHORT) pColSel->GetSelectCount() :
            nCurRow >= 0 ? 1 : 0;
+}
+
+//-------------------------------------------------------------------
+USHORT BrowseBox::FirstSelectedColumn( ) const
+{
+    return pColSel ? pColSel->FirstSelected() : BROWSER_ENDOFSELECTION;
+}
+
+//-------------------------------------------------------------------
+USHORT BrowseBox::NextSelectedColumn( ) const
+{
+    return pColSel ? pColSel->NextSelected() : BROWSER_ENDOFSELECTION;
 }
 
 //-------------------------------------------------------------------
@@ -2312,6 +2330,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
 
     bHideSelect = ((nMode & BROWSER_HIDESELECT) == BROWSER_HIDESELECT);
     bHideCursor = ((nMode & BROWSER_HIDECURSOR) == BROWSER_HIDECURSOR);
+
     m_bFocusOnlyCursor = ((nMode & BROWSER_CURSOR_WO_FOCUS) == 0);
 
     bHLines = ( nMode & BROWSER_HLINESFULL ) == BROWSER_HLINESFULL;
