@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 14:01:49 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 14:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,37 +733,4 @@ namespace svt
 }   // namespace svt
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.6.344.2  2004/04/07 08:35:37  tv
- *  #100000# compiler problems under solaris fixed
- *
- *  Revision 1.6.344.1  2004/04/05 12:26:18  fs
- *  some cleanup / additions for #i27457#
- *
- *  Revision 1.6  2001/08/08 14:57:10  fs
- *  #90716# the help button is the most-left one
- *
- *  Revision 1.5  2001/08/02 10:37:38  fs
- *  #88530# added functionality for adding a WizardHeader (upon request of the derived class)
- *
- *  Revision 1.4  2001/02/23 10:55:00  fs
- *  small fixes in skip
- *
- *  Revision 1.3  2001/02/23 08:21:21  fs
- *  +skip / +implCheckNextButton / +determineNextButtonState
- *
- *  Revision 1.2  2001/02/19 16:20:00  kz
- *  locale using of projectheaders
- *
- *  Revision 1.1  2001/02/15 14:08:27  fs
- *  initial checkin - a wizard dialog base class
- *
- *  Revision 1.1  2001/02/12 07:16:52  fs
- *  initial checkin - importing StarOffice 5.2 database files
- *
- *
- *  Revision 1.0 30.01.01 17:04:12  fs
- ************************************************************************/
 
