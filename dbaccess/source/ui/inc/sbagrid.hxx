@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:12:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,6 @@ namespace dbaui
     // Attributes
     protected:
         ::svx::ODataAccessDescriptor                                                    m_aDataDescriptor;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;    // for DnD we need a composed query ...
         SbaGridListener*    m_pMasterListener;
         sal_Int32           m_nAsyncDropEvent;
         sal_uInt16          m_nLastColId;
@@ -316,10 +315,6 @@ namespace dbaui
         void ActivateCell() { FmGridControl::ActivateCell(); }
 
         sal_Bool IsAllSelected() const { return (GetSelectRowCount() == GetRowCount()) && (GetRowCount() > 0); }
-
-        virtual void setDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & rCursor,
-            sal_uInt16 nOpts = OPT_INSERT | OPT_UPDATE | OPT_DELETE);
-            // m_xComposer has to be initialized depending on the data source
 
         HeaderBar* GetHeaderBar() const { return FmGridControl::GetHeaderBar(); }
 
