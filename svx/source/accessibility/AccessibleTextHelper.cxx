@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-16 16:10:57 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 17:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,9 @@ private:
     // the object handling our children (guarded by solar mutex)
     accessibility::AccessibleParaManager maParaManager;
 
+    // spin lock to prevent notify in notify
+    sal_Bool mbInNotify;
+
     // must be before maStateListeners, has to live longer
     mutable ::osl::Mutex maMutex;
 
@@ -285,6 +288,7 @@ SvxAccessibleTextHelper_Impl::SvxAccessibleTextHelper_Impl( const uno::Reference
     maLastSelection( 0,0,0,0 ),
     mnFirstVisibleChild( -1 ),
     mnLastVisibleChild( -2 ),
+    mbInNotify( sal_False ),
     maStateListeners( maMutex )
 {
 }
@@ -631,6 +635,12 @@ void SvxAccessibleTextHelper_Impl::CheckInvariants() const
 
 void SvxAccessibleTextHelper_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
+    // do not recurse
+    if( mbInNotify )
+        return;
+
+    mbInNotify = sal_True;
+
     const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
     const TextHint* pTextHint = PTR_CAST( TextHint, &rHint );
     const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
@@ -864,11 +874,10 @@ void SvxAccessibleTextHelper_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& r
             {
                 case SVX_HINT_VIEWCHANGED:
                     // just check visibility
+                    UpdateVisibleData();
+                    UpdateVisibleChildren();
                     break;
             }
-
-            // in all cases, check visibility afterwards.
-            UpdateVisibleChildren();
         }
         // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
         else if( pSimpleHint )
@@ -895,6 +904,8 @@ void SvxAccessibleTextHelper_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& r
         DBG_ERROR("SvxAccessibleTextHelper_Impl::Notify: Unhandled exception.");
 #endif
     }
+
+    mbInNotify = sal_False;
 }
 
 void SvxAccessibleTextHelper_Impl::FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const

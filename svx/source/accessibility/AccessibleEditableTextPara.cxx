@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-16 16:10:05 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 17:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,6 +904,12 @@ namespace accessibility
 
     uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
+#if 1
+        // TODO: getCharacterAttributes() does not work for paragraphs containing fields (SIGSEV in SvxUnoTextField::~SvxUnoTextField() throw())
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot query XPropertySetInfo")),
+                                    uno::Reference< uno::XInterface >
+                                    ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
+#else
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
@@ -947,6 +953,7 @@ namespace accessibility
         }
 
         return aOutSequence;
+#endif
     }
 
     awt::Rectangle SAL_CALL AccessibleEditableTextPara::getCharacterBounds( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)

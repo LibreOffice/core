@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-16 16:10:32 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 17:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,12 +277,16 @@ namespace accessibility
 
         SvxTextForwarder& rCacheTF = GetTextForwarder();
         EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo( static_cast< USHORT > (GetParagraphIndex()) );
+        Rectangle aParentRect = rCacheTF.GetParaBounds( static_cast< USHORT >( GetParagraphIndex() ) );
 
         if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
             aBulletInfo.bVisible &&
             aBulletInfo.nType == SVX_NUM_BITMAP )
         {
             Rectangle aRect = aBulletInfo.aBounds;
+
+            // subtract paragraph position (bullet pos is absolute in EditEngine/Outliner)
+            aRect.Move( -aParentRect.Left(), -aParentRect.Top() );
 
             // convert to screen coordinates
             Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
