@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:43 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,7 +806,7 @@ SC_SIMPLE_SERVICE_INFO( ScTableRowObj, "ScTableRowObj", "com.sun.star.table.Tabl
 
 //------------------------------------------------------------------------
 
-SV_IMPL_PTRARR( XPropertyChangeListenerArr_Impl, XPropertyChangeListenerPtr );
+SV_IMPL_PTRARR( XModifyListenerArr_Impl, XModifyListenerPtr );
 SV_IMPL_PTRARR( ScNamedEntryArr_Impl, ScNamedEntryPtr );
 
 //------------------------------------------------------------------------
@@ -1372,7 +1372,7 @@ ScCellRangesBase::ScCellRangesBase() :
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
     pValueListener( NULL ),
-    bValueChangePosted( FALSE ),
+    bGotDataChangedHint( FALSE ),
     pMarkData( NULL ),
     aValueListeners( 0 )
 {
@@ -1388,7 +1388,7 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
     pValueListener( NULL ),
-    bValueChangePosted( FALSE ),
+    bGotDataChangedHint( FALSE ),
     pMarkData( NULL ),
     aValueListeners( 0 )
 {
@@ -1411,7 +1411,7 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
     pValueListener( NULL ),
-    bValueChangePosted( FALSE ),
+    bGotDataChangedHint( FALSE ),
     pMarkData( NULL ),
     aValueListeners( 0 )
 {
@@ -1529,20 +1529,55 @@ void ScCellRangesBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             ForgetCurrentAttrs();
             pDocShell = NULL;           // invalid
+
+            if ( aValueListeners.Count() != 0 )
+            {
+                //  dispose listeners
+
+                lang::EventObject aEvent;
+                aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                for ( USHORT n=0; n<aValueListeners.Count(); n++ )
+                    (*aValueListeners[n])->disposing( aEvent );
+
+                aValueListeners.DeleteAndDestroy( 0, aValueListeners.Count() );
+
+                //  The listeners can't have the last ref to this, as it's still held
+                //  by the DocShell.
+            }
         }
         else if ( nId == SFX_HINT_DATACHANGED )
         {
             // document content changed -> forget cached attributes
             ForgetCurrentAttrs();
+
+            if ( bGotDataChangedHint && pDocShell )
+            {
+                //  This object was notified of content changes, so one call
+                //  for each listener is generated now.
+                //  The calls can't be executed directly because the document's
+                //  UNO broadcaster list must not be modified.
+                //  Instead, add to the document's list of listener calls,
+                //  which will be executed directly after the broadcast of
+                //  SFX_HINT_DATACHANGED.
+
+                lang::EventObject aEvent;
+                aEvent.Source = (cppu::OWeakObject*)this;
+
+                // the EventObject holds a Ref to this object until after the listener calls
+
+                ScDocument* pDoc = pDocShell->GetDocument();
+                for ( USHORT n=0; n<aValueListeners.Count(); n++ )
+                    pDoc->AddUnoListenerCall( *aValueListeners[n], aEvent );
+
+                bGotDataChangedHint = FALSE;
+            }
         }
     }
 }
 
 void ScCellRangesBase::RefChanged()
 {
-    //! XChartDataChangeEventListener anpassen
-
-    //! Test !!!
+    //! adjust XChartDataChangeEventListener
 
     if ( pValueListener && aValueListeners.Count() != 0 )
     {
@@ -1553,7 +1588,6 @@ void ScCellRangesBase::RefChanged()
         for (ULONG i=0; i<nCount; i++)
             pDoc->StartListeningArea( *aRanges.GetObject(i), pValueListener );
     }
-    //! Test !!!
 
     ForgetCurrentAttrs();
 }
@@ -1630,6 +1664,7 @@ uno::Any SAL_CALL ScCellRangesBase::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( sheet::XFormulaQuery )
     SC_QUERYINTERFACE( util::XReplaceable )
     SC_QUERYINTERFACE( util::XSearchable )
+    SC_QUERYINTERFACE( util::XModifyBroadcaster )
     SC_QUERYINTERFACE( lang::XServiceInfo )
     SC_QUERYINTERFACE( lang::XUnoTunnel )
     SC_QUERYINTERFACE( lang::XTypeProvider )
@@ -1652,7 +1687,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangesBase::getTypes() throw(uno::Runtim
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
     {
-        aTypes.realloc(12);
+        aTypes.realloc(13);
         uno::Type* pPtr = aTypes.getArray();
         pPtr[0] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
         pPtr[1] = getCppuType((const uno::Reference<beans::XMultiPropertySet>*)0);
@@ -1663,9 +1698,10 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangesBase::getTypes() throw(uno::Runtim
         pPtr[6] = getCppuType((const uno::Reference<sheet::XCellRangesQuery>*)0);
         pPtr[7] = getCppuType((const uno::Reference<sheet::XFormulaQuery>*)0);
         pPtr[8] = getCppuType((const uno::Reference<util::XReplaceable>*)0);
-        pPtr[9] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
-        pPtr[10] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
-        pPtr[11]= getCppuType((const uno::Reference<lang::XTypeProvider>*)0);
+        pPtr[9] = getCppuType((const uno::Reference<util::XModifyBroadcaster>*)0);
+        pPtr[10]= getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
+        pPtr[11]= getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
+        pPtr[12]= getCppuType((const uno::Reference<lang::XTypeProvider>*)0);
     }
     return aTypes;
 }
@@ -2435,30 +2471,6 @@ void SAL_CALL ScCellRangesBase::addPropertyChangeListener( const rtl::OUString& 
     if ( aRanges.Count() == 0 )
         throw uno::RuntimeException();
 
-    //! Test !!!!!
-    if (String(aPropertyName).EqualsAscii( "Test" ))
-    {
-        uno::Reference<beans::XPropertyChangeListener> *pObj =
-                new uno::Reference<beans::XPropertyChangeListener>( aListener );
-        aValueListeners.Insert( pObj, aValueListeners.Count() );
-
-        if ( aValueListeners.Count() == 1 )
-        {
-            if (!pValueListener)
-                pValueListener = new ScLinkListener( LINK( this, ScCellRangesBase, ValueListenerHdl ) );
-
-            ScDocument* pDoc = pDocShell->GetDocument();
-            ULONG nCount = aRanges.Count();
-            for (ULONG i=0; i<nCount; i++)
-                pDoc->StartListeningArea( *aRanges.GetObject(i), pValueListener );
-
-            acquire();  // nicht verlieren (eine Ref fuer alle Listener)
-        }
-
-        return;
-    }
-    //! Test !!!!!
-
     DBG_ERROR("not implemented");
 }
 
@@ -2470,36 +2482,6 @@ void SAL_CALL ScCellRangesBase::removePropertyChangeListener( const rtl::OUStrin
     ScUnoGuard aGuard;
     if ( aRanges.Count() == 0 )
         throw uno::RuntimeException();
-
-    //! Test !!!!!
-    if (String(aPropertyName).EqualsAscii( "Test" ))
-    {
-        acquire();      // falls fuer Listener die letzte Ref existiert - wird unten freigegeben
-
-        USHORT nCount = aValueListeners.Count();
-        for ( USHORT n=nCount; n--; )
-        {
-            uno::Reference<beans::XPropertyChangeListener> *pObj = aValueListeners[n];
-            if ( *pObj == aListener )
-            {
-                aValueListeners.DeleteAndDestroy( n );
-
-                if ( aValueListeners.Count() == 0 )
-                {
-                    if (pValueListener)
-                        pValueListener->EndListeningAll();
-
-                    release();      // Listener-Ref freigeben
-                }
-
-                break;
-            }
-        }
-
-        release();      // damit kann dieses Objekt geloescht werden
-        return;
-    }
-    //! Test !!!!!
 
     DBG_ERROR("not implemented");
 }
@@ -2642,56 +2624,19 @@ void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< 
     DBG_ERROR("not implemented");
 }
 
-//! Test !!!
-
 IMPL_LINK( ScCellRangesBase, ValueListenerHdl, SfxHint*, pHint )
 {
     if ( pDocShell && pHint && pHint->ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint*)pHint)->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING) )
     {
-        //  nicht doppelt notifien, wenn sich mehrere Formeln im Bereich aendern...
+        //  This may be called several times for a single change, if several formulas
+        //  in the range are notified. So only a flag is set that is checked when
+        //  SFX_HINT_DATACHANGED is received.
 
-        if ( aValueListeners.Count() && !bValueChangePosted )
-        {
-            //  Die Listener koennen nur asynchron benachrichtigt werden, weil im
-            //  Formel-Broadcast auf keinen Fall Reschedule gerufen werden darf
-
-            beans::PropertyChangeEvent* pEvent = new beans::PropertyChangeEvent;
-            pEvent->Source         = (cppu::OWeakObject*)this;
-            pEvent->PropertyName   = rtl::OUString::createFromAscii( "Test" );
-            pEvent->Further        = FALSE;
-            pEvent->PropertyHandle = -1;
-            pEvent->OldValue       = uno::Any();
-            pEvent->NewValue       = uno::Any();
-
-            // Die Ref im Event-Objekt haelt dieses Objekt fest
-            // Das Event-Objekt wird im Link-Handler geloescht
-
-            bValueChangePosted = TRUE;
-            Application::PostUserEvent( LINK( this, ScCellRangesBase, ValueChanged ), pEvent );
-        }
+        bGotDataChangedHint = TRUE;
     }
     return 0;
 }
-
-//  ValueChanged wird asynchron gerufen
-
-IMPL_LINK( ScCellRangesBase, ValueChanged, beans::PropertyChangeEvent*, pEvent )
-{
-    if ( pEvent )
-    {
-        if ( pDocShell )
-            for ( USHORT n=0; n<aValueListeners.Count(); n++ )
-                (*aValueListeners[n])->propertyChange( *pEvent );
-
-        bValueChangePosted = FALSE;
-
-        delete pEvent;  // damit kann auch dieses Objekt geloescht werden
-    }
-    return 0;
-}
-
-//! Test !!!!!
 
 // XIndent
 
@@ -3099,6 +3044,66 @@ sal_Bool SAL_CALL ScCellRangesBase::isNotANumber( double nNumber ) throw(uno::Ru
 {
     //  im ScChartArray wird DBL_MIN verwendet, weil das Chart es so will
     return (nNumber == DBL_MIN);
+}
+
+// XModifyBroadcaster
+
+void SAL_CALL ScCellRangesBase::addModifyListener( const uno::Reference<util::XModifyListener>& aListener )
+                                throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if ( aRanges.Count() == 0 )
+        throw uno::RuntimeException();
+
+    uno::Reference<util::XModifyListener> *pObj =
+            new uno::Reference<util::XModifyListener>( aListener );
+    aValueListeners.Insert( pObj, aValueListeners.Count() );
+
+    if ( aValueListeners.Count() == 1 )
+    {
+        if (!pValueListener)
+            pValueListener = new ScLinkListener( LINK( this, ScCellRangesBase, ValueListenerHdl ) );
+
+        ScDocument* pDoc = pDocShell->GetDocument();
+        ULONG nCount = aRanges.Count();
+        for (ULONG i=0; i<nCount; i++)
+            pDoc->StartListeningArea( *aRanges.GetObject(i), pValueListener );
+
+        acquire();  // don't lose this object (one ref for all listeners)
+    }
+}
+
+void SAL_CALL ScCellRangesBase::removeModifyListener( const uno::Reference<util::XModifyListener>& aListener )
+                                throw(uno::RuntimeException)
+{
+
+    ScUnoGuard aGuard;
+    if ( aRanges.Count() == 0 )
+        throw uno::RuntimeException();
+
+    acquire();      // in case the listeners have the last ref - released below
+
+    USHORT nCount = aValueListeners.Count();
+    for ( USHORT n=nCount; n--; )
+    {
+        uno::Reference<util::XModifyListener> *pObj = aValueListeners[n];
+        if ( *pObj == aListener )
+        {
+            aValueListeners.DeleteAndDestroy( n );
+
+            if ( aValueListeners.Count() == 0 )
+            {
+                if (pValueListener)
+                    pValueListener->EndListeningAll();
+
+                release();      // release the ref for the listeners
+            }
+
+            break;
+        }
+    }
+
+    release();      // might delete this object
 }
 
 // XCellRangesQuery
