@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Draw.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:38 $
+ *  last change: $Author: af $ $Date: 2002-12-03 16:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,8 +465,16 @@
 						<label xml:lang="en-US">Steps</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="1"/>
-						<maxInclusive oor:value="256"/>
+						<minInclusive oor:value="1">
+							<info>
+								<desc xml:lang="en-US">There have to be at least one morphing step.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="256">
+							<info>
+									<desc xml:lang="en-US">There may be at least this much morphing steps.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>16</value>
 				</prop>
@@ -591,8 +599,16 @@
 						<label xml:lang="en-US">Snap range</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="1"/>
-						<maxInclusive oor:value="50"/>
+						<minInclusive oor:value="1">
+							<info>
+								<desc xml:lang="en-US">Minimal snap range is 1.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="50">
+							<info>
+								<desc xml:lang="en-US">Maximal snap range is 50.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>5</value>
 				</prop>
@@ -644,8 +660,16 @@
 						<label xml:lang="en-US">When rotating</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="0"/>
-						<maxInclusive oor:value="18000"/>
+						<minInclusive oor:value="0">
+							<info>
+								<desc xml:lang="en-US">Minimal rotation angle is 0/100 degree.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="18000">
+							<info>
+								<desc xml:lang="en-US">Maximal rotation angle is 18000/100 degree.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>1500</value>
 				</prop>
@@ -662,8 +686,16 @@
 						<label xml:lang="en-US">Point reduction</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="100"/>
-						<maxInclusive oor:value="9000"/>
+						<minInclusive oor:value="100">
+							<info>
+								<desc xml:lang="en-US">Minimal angle is 100/100 degree.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="9000">
+							<info>
+								<desc xml:lang="en-US">Maximal angle is 9000/100 degree.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>1500</value>
 				</prop>
