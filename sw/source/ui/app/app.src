@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-03 16:50:57 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,7 +1063,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "¨Ï¥Îªº¼Ë¦¡" ; SFXSTYLEBIT_USED ; > ;
             < "¦Û­q¼Ë¦¡" ; SFXSTYLEBIT_USERDEF ; > ;
         };
-        Text[ arabic ] = "ÃäãÇØ ÅØÇÑ";
+        Text[ arabic ] = "ÃäãÇØ ßÇÏÑ";
             FilterList [ arabic ] =
         {
             < "Çáßá" ; SFXSTYLEBIT_ALL ; > ;
@@ -1815,7 +1815,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE = "Fehler beim Versenden der Nachricht." ;
     MESSAGE [ English ] = "Error while sending mail." ;
     MESSAGE [ norwegian ] = "Feil ved sending av mail." ;
-    MESSAGE [ italian ] = "Errore durante l'invio di un messaggio." ;
+    MESSAGE [ italian ] = "Errore durante l'invio del messaggio." ;
     MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
     MESSAGE [ finnish ] = "Virhe sähköpostia lähetettäessä." ;
@@ -2674,7 +2674,7 @@ String STR_FRAME_DEFNAME
     Text[ polish ] = "Ramka";
     Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
-    Text[ arabic ] = "ÅØÇÑ";
+    Text[ arabic ] = "ßÇÏÑ";
     Text[ dutch ] = "Kader";
     Text[ chinese_simplified ] = "¿ò";
     Text[ greek ] = "Ğåñßãñáììá";
@@ -2815,7 +2815,7 @@ QueryBox MSG_SAVE_HTML_QUERY
     Message[ chinese_simplified ] = "ÎÄ¼ş×ª»»³É HTML ¸ñÊ½\n¿ÉÄÜ»áÒıÆğ×ÊÁÏËğÊ§¡£\nÄúÒª´æÅÌÕâ¸öÎÄ¼şÂğ?";
     Message[ russian ] = "Ïåğåõîä â ôîğìàò HTML \nìîæåò ïğèâåñòè ê ïîòåğå èíôîğìàöèè. \n Âû õîòèòå ñîõğàíèòü ıòîò äîêóìåíò?";
     Message[ polish ] = "Konwersja na format HTML \nmo¿e spowodowaæ utratê informacji. \nCzy chcesz zapisaæ dokument?";
-    Message[ japanese ] = "HTMLŒ`®‚É•ÏŠ·‚·‚é‚Æ\nî•ñ‚ª¸‚í‚ê‚é‰Â”\\«‚ª‚ ‚è‚Ü‚·B\n‚±‚Ì•¶‘‚ğ•Û‘¶‚µ‚Ü‚·‚©?";
+    Message[ japanese ] = "HTMLŒ`®‚É•ÏŠ·‚·‚é‚Æ\nî•ñ‚ª¸‚í‚ê‚é‰Â”\\«‚ª‚ ‚è‚Ü‚·B\n‚±‚Ì•¶‘‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ chinese_traditional ] = "ÀÉ®×Âà´«¦¨ HTML ®æ¦¡\n¥i¯à·|¤Ş°_¸ê®Æ·l¥¢¡C\n±z­nÀx¦s³o­ÓÀÉ®×¡H";
     Message[ arabic ] = "ÇáÊÍæá Åáì ÊäÓíŞ HTML \níãßä Ãä íÄÏí Åáì İŞÏÇä ÈÚÖ ÇáãÚáæãÇÊ. \nåá ÊÑíÏ ÍİÙ ÇáãÓÊäÏ¿";
     Message[ dutch ] = "De convertering naar het HTML-formaat \nkan verlies van gegevens veroorzaken. \nWilt u het document opslaan?";
@@ -2967,13 +2967,13 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text = "unbekannt" ;
     Text [ ENGLISH ] = "unknown" ;
     Text[ english_us ] = "unknown";
-    Text[ portuguese ] = "unknown";
+    Text[ portuguese ] = "desconhecido";
     Text[ russian ] = "íåèçâåñòíî";
     Text[ greek ] = "Üãíùóôï";
-    Text[ dutch ] = "unknown";
+    Text[ dutch ] = "onbekend";
     Text[ french ] = "inconnu";
     Text[ spanish ] = "desconocido";
-    Text[ italian ] = "unknown";
+    Text[ italian ] = "Sconosciuto";
     Text[ danish ] = "unknown";
     Text[ swedish ] = "okänd";
     Text[ polish ] = "nieznany";
