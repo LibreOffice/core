@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:31:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,30 +258,45 @@ void lclGetAbsPath( String& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShell 
 }
 
 /** Inserts the URL into a text cell. Does not modify value or formula cells. */
-void lclInsertUrl( const XclImpRoot& rRoot, const String& rURL, SCCOL nScCol, SCROW nScRow )
+void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SCROW nScRow, SCTAB nScTab )
 {
     ScDocument& rDoc = rRoot.GetDoc();
-    SCTAB nScTab = rRoot.GetCurrScTab();
-    ScAddress aPos( nScCol, nScRow, nScTab );
-    CellType eCellType = rDoc.GetCellType( aPos );
+    ScAddress aScPos( nScCol, nScRow, nScTab );
+    CellType eCellType = rDoc.GetCellType( aScPos );
 
     // hyperlinks in value/formula cells not supported
     if( (eCellType != CELLTYPE_FORMULA) && (eCellType != CELLTYPE_VALUE) )
     {
-        String aOrigText;
-        rDoc.GetString( nScCol, nScRow, nScTab, aOrigText );
-        if( !aOrigText.Len() )
-            aOrigText = rURL;
+        String aDisplText;
+        rDoc.GetString( nScCol, nScRow, nScTab, aDisplText );
+        if( !aDisplText.Len() )
+            aDisplText = rUrl;
 
-        EditEngine& rEE = rRoot.GetEditEngine();
-        rEE.SetText( EMPTY_STRING );
+        ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
+        SvxURLField aUrlField( rUrl, aDisplText, SVXURLFORMAT_APPDEFAULT );
 
-        SvxURLField aUrlField( rURL, aOrigText, SVXURLFORMAT_APPDEFAULT );
-        rEE.QuickInsertField( SvxFieldItem( aUrlField ), ESelection( 0xFFFF, 0xFFFF ) );
+        const ScEditCell* pEditCell = (eCellType == CELLTYPE_EDIT) ? static_cast< const ScEditCell* >( rDoc.GetCell( aScPos ) ) : 0;
+        const EditTextObject* pEditObj = pEditCell ? pEditCell->GetData() : 0;
+        if( pEditObj )
+        {
+            rEE.SetText( *pEditObj );
+            rEE.QuickInsertField( SvxFieldItem( aUrlField ), ESelection( 0, 0, 0xFFFF, 0 ) );
+        }
+        else
+        {
+            rEE.SetText( EMPTY_STRING );
+            rEE.QuickInsertField( SvxFieldItem( aUrlField ), ESelection() );
+            if( const ScPatternAttr* pPattern = rDoc.GetPattern( aScPos.Col(), aScPos.Row(), nScTab ) )
+            {
+                SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
+                pPattern->FillEditItemSet( &aItemSet );
+                rEE.QuickSetAttribs( aItemSet, ESelection( 0, 0, 0xFFFF, 0 ) );
+            }
+        }
         ::std::auto_ptr< EditTextObject > xTextObj( rEE.CreateTextObject() );
 
         ScEditCell* pCell = new ScEditCell( xTextObj.get(), &rDoc, rEE.GetEditTextObjectPool() );
-        rDoc.PutCell( aPos, pCell );
+        rDoc.PutCell( aScPos, pCell );
     }
 }
 
@@ -392,21 +407,25 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
         {
             if( !xLongName->Len() )
                 xTextMark->SearchAndReplaceAll( '!', '.' );
-            *xLongName += '#';
-            *xLongName += *xTextMark;
+            xLongName->Append( '#' );
+            xLongName->Append( *xTextMark );
         }
+        rRoot.GetXFRangeBuffer().SetHyperlink( aXclRange, *xLongName );
+    }
+}
 
-        SCTAB nScTab = rRoot.GetCurrScTab();
-        ScRange aScRange( ScAddress::UNINITIALIZED );
-        if( rRoot.GetAddressConverter().ConvertRange( aScRange, aXclRange, nScTab, nScTab, true ) )
-        {
-            SCCOL nScCol1, nScCol2;
-            SCROW nScRow1, nScRow2;
-            aScRange.GetVars( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab );
-            for( SCCOL nScCol = nScCol1; nScCol <= nScCol2; ++nScCol )
-                for( SCROW nScRow = nScRow1; nScRow <= nScRow2; ++nScRow )
-                    lclInsertUrl( rRoot, *xLongName, nScCol, nScRow );
-        }
+void XclImpHyperlink::InsertUrl( const XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl )
+{
+    SCTAB nScTab = rRoot.GetCurrScTab();
+    ScRange aScRange( ScAddress::UNINITIALIZED );
+    if( rRoot.GetAddressConverter().ConvertRange( aScRange, rXclRange, nScTab, nScTab, true ) )
+    {
+        SCCOL nScCol1, nScCol2;
+        SCROW nScRow1, nScRow2;
+        aScRange.GetVars( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab );
+        for( SCCOL nScCol = nScCol1; nScCol <= nScCol2; ++nScCol )
+            for( SCROW nScRow = nScRow1; nScRow <= nScRow2; ++nScRow )
+                lclInsertUrl( rRoot, rUrl, nScCol, nScRow, nScTab );
     }
 }
 
