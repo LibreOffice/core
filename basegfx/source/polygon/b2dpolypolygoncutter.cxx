@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:29:33 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,21 +242,26 @@ namespace basegfx
             return aRetval;
         }
 
-        sal_Bool B2DPolygonNode::isInside(const ::basegfx::point::B2DPoint& rPnt) const
+        sal_Bool B2DPolygonNode::isInside(const ::basegfx::point::B2DPoint& rPoint, sal_Bool bWithBorder) const
         {
             sal_Bool bInside(sal_False);
             const B2DPolygonNode* pCurrent = this;
 
             do
             {
+                if(bWithBorder && pCurrent->getPosition().equal(rPoint))
+                {
+                    return sal_True;
+                }
+
                 B2DPolygonNode* pNext = pCurrent->getNext();
-                const sal_Bool bCompYA(::basegfx::numeric::fTools::more(pCurrent->getPosition().getY(), rPnt.getY()));
-                const sal_Bool bCompYB(::basegfx::numeric::fTools::more(pNext->getPosition().getY(), rPnt.getY()));
+                const sal_Bool bCompYA(::basegfx::numeric::fTools::more(pCurrent->getPosition().getY(), rPoint.getY()));
+                const sal_Bool bCompYB(::basegfx::numeric::fTools::more(pNext->getPosition().getY(), rPoint.getY()));
 
                 if(bCompYA != bCompYB)
                 {
-                    const sal_Bool bCompXA(::basegfx::numeric::fTools::more(pCurrent->getPosition().getX(), rPnt.getX()));
-                    const sal_Bool bCompXB(::basegfx::numeric::fTools::more(pNext->getPosition().getX(), rPnt.getX()));
+                    const sal_Bool bCompXA(::basegfx::numeric::fTools::more(pCurrent->getPosition().getX(), rPoint.getX()));
+                    const sal_Bool bCompXB(::basegfx::numeric::fTools::more(pNext->getPosition().getX(), rPoint.getX()));
 
                     if(bCompXA == bCompXB)
                     {
@@ -268,11 +273,15 @@ namespace basegfx
                     else
                     {
                         double fCmp =
-                            pNext->getPosition().getX() - (pNext->getPosition().getY() - rPnt.getY()) *
+                            pNext->getPosition().getX() - (pNext->getPosition().getY() - rPoint.getY()) *
                             (pCurrent->getPosition().getX() - pNext->getPosition().getX()) /
                             (pCurrent->getPosition().getY() - pNext->getPosition().getY());
 
-                        if(::basegfx::numeric::fTools::more(fCmp, rPnt.getX()))
+                        if(bWithBorder && ::basegfx::numeric::fTools::more(fCmp, rPoint.getX()))
+                        {
+                            bInside = !bInside;
+                        }
+                        else if(::basegfx::numeric::fTools::moreOrEqual(fCmp, rPoint.getX()))
                         {
                             bInside = !bInside;
                         }
@@ -287,13 +296,13 @@ namespace basegfx
             return bInside;
         }
 
-        sal_Bool B2DPolygonNode::isPolygonInside(B2DPolygonNode* pPoly) const
+        sal_Bool B2DPolygonNode::isPolygonInside(B2DPolygonNode* pPoly, sal_Bool bWithBorder) const
         {
             B2DPolygonNode* pTest = pPoly;
             sal_Bool bAllAInside(sal_True);
 
             do {
-                bAllAInside = isInside(pTest->getPosition());
+                bAllAInside = isInside(pTest->getPosition(), bWithBorder);
                 pTest = pTest->getNext();
             } while(bAllAInside && pTest != pPoly);
 
@@ -397,8 +406,8 @@ namespace basegfx
 
                     if(a != b && doRangesInclude(rInfoA.getRange(), rInfoB.getRange()))
                     {
-                        // volume B in A, test pA, pB for inclusion
-                        if(maPolygonList[a]->isPolygonInside(maPolygonList[b]))
+                        // volume B in A, test pA, pB for inclusion, with border
+                        if(maPolygonList[a]->isPolygonInside(maPolygonList[b], sal_True))
                         {
                             // pB is inside pA
                             rInfoB.changeDepth(rInfoA.getOrientation());
@@ -567,10 +576,9 @@ namespace basegfx
                 if(nCount > 2L)
                 {
                     B2DPolygon aNewPolygon;
-                    nCount = 0L;
 
                     do {
-                        aNewPolygon.setB2DPoint(nCount++, pAct->getPosition());
+                        aNewPolygon.append(pAct->getPosition());
                         pAct = pAct->getNext();
                     } while(pAct != pCand);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:29 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,21 @@ namespace basegfx
             }
         }
 
+        sal_Bool B2DPolyPolygon::areControlPointsUsed() const
+        {
+            for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+            {
+                const ::basegfx::polygon::B2DPolygon& rPolygon = mpPolyPolygon->getPolygon(a);
+
+                if(rPolygon.areControlPointsUsed())
+                {
+                    return sal_True;
+                }
+            }
+
+            return sal_False;
+        }
+
         void B2DPolyPolygon::insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount)
         {
             DBG_ASSERT(nIndex <= mpPolyPolygon->count(), "B2DPolyPolygon Insert outside range (!)");
@@ -354,7 +369,7 @@ namespace basegfx
 
         void B2DPolyPolygon::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
         {
-            DBG_ASSERT(nIndex + nCount > mpPolyPolygon->count(), "B2DPolyPolygon Remove outside range (!)");
+            DBG_ASSERT(nIndex + nCount <= mpPolyPolygon->count(), "B2DPolyPolygon Remove outside range (!)");
 
             if(nCount)
             {

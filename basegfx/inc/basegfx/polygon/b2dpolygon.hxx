@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:24 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,10 +157,6 @@ namespace basegfx
 
             // remove double points, at the begin/end and follow-ups, too
             void removeDoublePoints();
-
-            // isInside tests for B2dPoint and other B2dPolygon. On border is not inside.
-            sal_Bool isInside(const ::basegfx::point::B2DPoint& rPoint);
-            sal_Bool isInside(const B2DPolygon& rPolygon);
         };
     } // end of namespace polygon
 } // end of namespace basegfx

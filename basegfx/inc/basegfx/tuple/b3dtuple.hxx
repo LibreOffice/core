@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:46 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,9 +374,9 @@ namespace basegfx
         inline B3DTuple interpolate(const B3DTuple& rOld1, const B3DTuple& rOld2, double t)
         {
             B3DTuple aInt(
-                ((rOld2.getX() - rOld1.getX()) + t) + rOld1.getX(),
-                ((rOld2.getY() - rOld1.getY()) + t) + rOld1.getY(),
-                ((rOld2.getZ() - rOld1.getZ()) + t) + rOld1.getZ());
+                ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
+                ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY(),
+                ((rOld2.getZ() - rOld1.getZ()) * t) + rOld1.getZ());
             return aInt;
         }
 

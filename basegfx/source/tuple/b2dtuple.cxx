@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:56 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ namespace basegfx
     namespace tuple
     {
         // initialize static member
-        B2DTuple B2DTuple::maEmptyTuple(0.0, 0.0);
+        ::basegfx::tuple::B2DTuple B2DTuple::maEmptyTuple(0.0, 0.0);
 
         sal_Bool B2DTuple::equalZero() const
         {

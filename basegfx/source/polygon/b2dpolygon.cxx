@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:29 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,10 @@ public:
     {
     }
 
+    ~CoordinateDataArray2D()
+    {
+    }
+
     sal_uInt32 count() const
     {
         return maVector.size();
@@ -182,7 +186,7 @@ public:
         {
             const sal_uInt32 nHalfSize(maVector.size() >> 1L);
             CoordinateData2DVector::iterator aStart(maVector.begin());
-            CoordinateData2DVector::iterator aEnd(maVector.end());
+            CoordinateData2DVector::iterator aEnd(maVector.end() - 1L);
 
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
@@ -288,6 +292,10 @@ public:
 
             maVector.push_back(*aStart);
         }
+    }
+
+    ~ControlVectorArray2D()
+    {
     }
 
     sal_uInt32 count() const
@@ -1137,7 +1145,7 @@ namespace basegfx
 
         void B2DPolygon::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
         {
-            DBG_ASSERT(nIndex + nCount > mpPolygon->count(), "B2DPolygon Remove outside range (!)");
+            DBG_ASSERT(nIndex + nCount <= mpPolygon->count(), "B2DPolygon Remove outside range (!)");
 
             if(nCount)
             {

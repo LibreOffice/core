@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:45 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,8 +290,8 @@ namespace basegfx
         inline B2DTuple interpolate(const B2DTuple& rOld1, const B2DTuple& rOld2, double t)
         {
             B2DTuple aInt(
-                ((rOld2.getX() - rOld1.getX()) + t) + rOld1.getX(),
-                ((rOld2.getY() - rOld1.getY()) + t) + rOld1.getY());
+                ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
+                ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY());
             return aInt;
         }
 

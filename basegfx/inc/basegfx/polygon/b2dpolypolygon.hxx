@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:25 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@ namespace basegfx
 
             B2DPolygon getPolygon(sal_uInt32 nIndex) const;
             void setPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon);
+
+            // test for curve
+            sal_Bool areControlPointsUsed() const;
 
             // insert/append single polygon
             void insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount = 1);

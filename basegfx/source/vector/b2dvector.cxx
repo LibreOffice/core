@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:30 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,13 +163,13 @@ namespace basegfx
 
         sal_Bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB )
         {
-            double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecA.getX());
+            double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
             return ::basegfx::numeric::fTools::equalZero(fVal);
         }
 
         B2DVectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
         {
-            double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecA.getX());
+            double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
 
             if(fVal > 0.0)
             {
@@ -194,6 +194,29 @@ namespace basegfx
         {
             B2DVector aRes( rVec );
             return aRes*=rMat;
+        }
+
+        ::basegfx::vector::B2DVectorContinuity getContinuity(const B2DVector& rBackVector, const B2DVector& rForwardVector )
+        {
+            ::basegfx::vector::B2DVectorContinuity eRetval(::basegfx::vector::CONTINUITY_NONE);
+
+            if(!rBackVector.equalZero() && !rForwardVector.equalZero())
+            {
+                const B2DVector aInverseForwardVector(-rForwardVector.getX(), -rForwardVector.getY());
+
+                if(rBackVector.equal(aInverseForwardVector))
+                {
+                    // same direction and same length -> C2
+                    eRetval = ::basegfx::vector::CONTINUITY_C2;
+                }
+                else if(areParallel(rBackVector, aInverseForwardVector))
+                {
+                    // same direction -> C1
+                    eRetval = ::basegfx::vector::CONTINUITY_C1;
+                }
+            }
+
+            return eRetval;
         }
     } // end of namespace vector
 } // end of namespace basegfx

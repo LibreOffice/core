@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:24 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,10 @@ namespace basegfx
             // Get orientation of Polygon
             ::basegfx::vector::B2DVectorOrientation getOrientation(const ::basegfx::polygon::B2DPolygon& rCandidate);
 
-            // isInside tests for B2dPoint and other B2dPolygon. On border is not inside.
-            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::point::B2DPoint& rPoint);
-            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::polygon::B2DPolygon& rPolygon);
+            // isInside tests for B2dPoint and other B2dPolygon. On border is not inside as long as
+            // not sal_True is given in bWithBorder flag.
+            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::point::B2DPoint& rPoint, sal_Bool bWithBorder = sal_False);
+            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::polygon::B2DPolygon& rPolygon, sal_Bool bWithBorder = sal_False);
 
             // get size of polygon
             ::basegfx::range::B2DRange getRange(const ::basegfx::polygon::B2DPolygon& rCandidate);
@@ -148,6 +149,9 @@ namespace basegfx
 
             // get orientation at given polygon point
             ::basegfx::vector::B2DVectorOrientation getPointOrientation(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex);
+
+            // Continuity check for point with given index
+            ::basegfx::vector::B2DVectorContinuity getContinuityInPoint(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
             // Definitions for the cut flags used from the findCut methods
             typedef sal_uInt16 CutFlagValue;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:26 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,20 @@ namespace basegfx
 
             /// mathematically neutral, thus parallel
             ORIENTATION_NEUTRAL
+        };
+
+        /** Descriptor for the mathematical continuity of two 2D Vectors
+        */
+        enum B2DVectorContinuity
+        {
+            /// none
+            CONTINUITY_NONE = 0,
+
+            /// mathematically negative oriented
+            CONTINUITY_C1,
+
+            /// mathematically neutral, thus parallel
+            CONTINUITY_C2
         };
 
         /** Base Point class with two double values
@@ -244,6 +258,14 @@ namespace basegfx
             matrix are disregarded.
         */
         B2DVector operator*( const matrix::B2DHomMatrix& rMat, const B2DVector& rVec );
+
+        /** Test continuity between given vectors.
+
+            The two given vectors are assumed to describe control points on a
+            common point. Calculate if there is a continuity between them.
+        */
+        ::basegfx::vector::B2DVectorContinuity getContinuity( const B2DVector& rBackVector, const B2DVector& rForwardVector );
+
     } // end of namespace vector
 } // end of namespace basegfx
 

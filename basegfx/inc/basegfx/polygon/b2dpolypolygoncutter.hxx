@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:28:48 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,10 @@ namespace basegfx
             void swapOrientation();
             ::basegfx::range::B2DRange getRange() const;
 
-            sal_Bool isInside(const ::basegfx::point::B2DPoint& rPnt) const;
-            sal_Bool isPolygonInside(B2DPolygonNode* pPoly) const;
+            // isInside tests for B2dPoint and other B2DPolygonNode Polygon. On border is not inside as long as
+            // not sal_True is given in bWithBorder flag.
+            sal_Bool isInside(const ::basegfx::point::B2DPoint& rPnt, sal_Bool bWithBorder = sal_False) const;
+            sal_Bool isPolygonInside(B2DPolygonNode* pPoly, sal_Bool bWithBorder = sal_False) const;
         };
 
         // a type definition to have a vector of pointers to B2DPolygonNodes

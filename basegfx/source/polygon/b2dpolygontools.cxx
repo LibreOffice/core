@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:29 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,15 +86,11 @@ namespace basegfx
             // B2DPolygon tools
             void checkClosed(polygon::B2DPolygon& rCandidate)
             {
-                while(rCandidate.count() > 1L)
+                while(rCandidate.count() > 1L
+                    && rCandidate.getB2DPoint(0L).equal(rCandidate.getB2DPoint(rCandidate.count() - 1L)))
                 {
-                    sal_Bool bFirstLastPointEqual(rCandidate.getB2DPoint(0L).equal(rCandidate.getB2DPoint(rCandidate.count() - 1L)));
-
-                    if(bFirstLastPointEqual)
-                    {
-                        rCandidate.setClosed(sal_True);
-                        rCandidate.remove(rCandidate.count() - 1L);
-                    }
+                    rCandidate.setClosed(sal_True);
+                    rCandidate.remove(rCandidate.count() - 1L);
                 }
             }
 
@@ -134,6 +130,8 @@ namespace basegfx
             // is none. Same for successor.
             sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
             {
+                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+
                 if(nIndex)
                 {
                     return nIndex - 1L;
@@ -150,6 +148,8 @@ namespace basegfx
 
             sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
             {
+                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+
                 if(nIndex + 1L < rCandidate.count())
                 {
                     return nIndex + 1L;
@@ -162,9 +162,12 @@ namespace basegfx
 
             sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
             {
+                sal_uInt32 nNewIndex(nIndex);
+                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+
                 if(rCandidate.count() > 1)
                 {
-                    sal_uInt32 nNewIndex = getIndexOfPredecessor(nIndex, rCandidate);
+                    nNewIndex = getIndexOfPredecessor(nIndex, rCandidate);
                     ::basegfx::point::B2DPoint aPoint(rCandidate.getB2DPoint(nIndex));
 
                     while(nNewIndex != nIndex
@@ -174,14 +177,17 @@ namespace basegfx
                     }
                 }
 
-                return nIndex;
+                return nNewIndex;
             }
 
             sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
             {
+                sal_uInt32 nNewIndex(nIndex);
+                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+
                 if(rCandidate.count() > 1)
                 {
-                    sal_uInt32 nNewIndex = getIndexOfSuccessor(nIndex, rCandidate);
+                    nNewIndex = getIndexOfSuccessor(nIndex, rCandidate);
                     ::basegfx::point::B2DPoint aPoint(rCandidate.getB2DPoint(nIndex));
 
                     while(nNewIndex != nIndex
@@ -191,7 +197,7 @@ namespace basegfx
                     }
                 }
 
-                return nIndex;
+                return nNewIndex;
             }
 
             ::basegfx::vector::B2DVectorOrientation getOrientation(const ::basegfx::polygon::B2DPolygon& rCandidate)
@@ -207,7 +213,24 @@ namespace basegfx
                 return eRetval;
             }
 
-            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::point::B2DPoint& rPoint)
+            ::basegfx::vector::B2DVectorContinuity getContinuityInPoint(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex)
+            {
+                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+                ::basegfx::vector::B2DVectorContinuity eRetval(::basegfx::vector::CONTINUITY_NONE);
+
+                if(rCandidate.count() > 1L && rCandidate.areControlPointsUsed())
+                {
+                    sal_uInt32 nPrevInd(getIndexOfPredecessor(nIndex, rCandidate));
+                    const ::basegfx::vector::B2DVector aForwardVector(rCandidate.getControlVectorA(nIndex));
+                    const ::basegfx::vector::B2DVector aBackVector(rCandidate.getControlVectorB(nPrevInd));
+
+                    eRetval = ::basegfx::vector::getContinuity(aBackVector, aForwardVector);
+                }
+
+                return eRetval;
+            }
+
+            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::point::B2DPoint& rPoint, sal_Bool bWithBorder)
             {
                 sal_Bool bRetval(sal_False);
                 const sal_uInt32 nPointCount(rCandidate.count());
@@ -215,9 +238,14 @@ namespace basegfx
                 for(sal_uInt32 a(0L); a < nPointCount; a++)
                 {
                     const ::basegfx::point::B2DPoint aCurrentPoint(rCandidate.getB2DPoint(a));
-                    const ::basegfx::point::B2DPoint aPreviousPoint(rCandidate.getB2DPoint((!a) ? nPointCount - 1L : a - 1L));
+
+                    if(bWithBorder && aCurrentPoint.equal(rPoint))
+                    {
+                        return sal_True;
+                    }
 
                     // cross-over in Y?
+                    const ::basegfx::point::B2DPoint aPreviousPoint(rCandidate.getB2DPoint((!a) ? nPointCount - 1L : a - 1L));
                     const sal_Bool bCompYA(::basegfx::numeric::fTools::more(aPreviousPoint.getY(), rPoint.getY()));
                     const sal_Bool bCompYB(::basegfx::numeric::fTools::more(aCurrentPoint.getY(), rPoint.getY()));
 
@@ -240,7 +268,11 @@ namespace basegfx
                                 (aPreviousPoint.getX() - aCurrentPoint.getX()) /
                                 (aPreviousPoint.getY() - aCurrentPoint.getY());
 
-                            if(::basegfx::numeric::fTools::more(fCompare, rPoint.getX()))
+                            if(bWithBorder && ::basegfx::numeric::fTools::more(fCompare, rPoint.getX()))
+                            {
+                                bRetval = !bRetval;
+                            }
+                            else if(::basegfx::numeric::fTools::moreOrEqual(fCompare, rPoint.getX()))
                             {
                                 bRetval = !bRetval;
                             }
@@ -251,7 +283,7 @@ namespace basegfx
                 return bRetval;
             }
 
-            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::polygon::B2DPolygon& rPolygon)
+            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::polygon::B2DPolygon& rPolygon, sal_Bool bWithBorder)
             {
                 const sal_uInt32 nPointCount(rPolygon.count());
 
@@ -259,7 +291,7 @@ namespace basegfx
                 {
                     const ::basegfx::point::B2DPoint aTestPoint(rPolygon.getB2DPoint(a));
 
-                    if(!isInside(rCandidate, aTestPoint))
+                    if(!isInside(rCandidate, aTestPoint, bWithBorder))
                     {
                         return sal_False;
                     }
@@ -313,6 +345,7 @@ namespace basegfx
 
             double getEdgeLength(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex)
             {
+                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
                 double fRetval(0.0);
                 const sal_uInt32 nPointCount(rCandidate.count());
 
@@ -476,6 +509,7 @@ namespace basegfx
 
             ::basegfx::vector::B2DVectorOrientation getPointOrientation(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex)
             {
+                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
                 ::basegfx::vector::B2DVectorOrientation eRetval(::basegfx::vector::ORIENTATION_NEUTRAL);
 
                 if(rCandidate.count() > 2)

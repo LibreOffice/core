@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhompoint.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:24 $
+ *  last change: $Author: aw $ $Date: 2003-11-10 11:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,9 +375,9 @@ namespace basegfx
         inline B3DHomPoint interpolate(B3DHomPoint& rOld1, B3DHomPoint& rOld2, double t)
         {
             B3DHomPoint aInt(
-                ((rOld2.getX() - rOld1.getX()) + t) + rOld1.getX(),
-                ((rOld2.getY() - rOld1.getY()) + t) + rOld1.getY(),
-                ((rOld2.getZ() - rOld1.getZ()) + t) + rOld1.getZ());
+                ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
+                ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY(),
+                ((rOld2.getZ() - rOld1.getZ()) * t) + rOld1.getZ());
             return aInt;
         }
 
