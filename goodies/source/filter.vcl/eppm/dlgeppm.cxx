@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeppm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 09:40:02 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 #include <tools/ref.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <vcl/msgbox.hxx>
