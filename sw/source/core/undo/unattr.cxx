@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:58:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,16 +250,35 @@ SwUndoFmtAttr::~SwUndoFmtAttr()
 
 void SwUndoFmtAttr::Undo( SwUndoIter& rUndoIter)
 {
+    // OD 2004-10-26 #i35443#
+    // Important note: <Undo(..)> also called by <ReDo(..)>
+
     if( !pOldSet || !pFmt || !IsFmtInDoc( &rUndoIter.GetDoc() ))
         return;
 
-    if( SFX_ITEM_SET == pOldSet->GetItemState( RES_ANCHOR, FALSE ))
+    // --> OD 2004-10-26 #i35443# - If anchor attribute has been successfull
+    // restored, all other attributes are also restored.
+    // Thus, keep track of its restoration
+    bool bAnchorAttrRestored( false );
+    if ( SFX_ITEM_SET == pOldSet->GetItemState( RES_ANCHOR, FALSE ))
     {
-        RestoreFlyAnchor( rUndoIter );
-        SaveFlyAnchor();
-        pOldSet->ClearItem(RES_ANCHOR);
+        bAnchorAttrRestored = RestoreFlyAnchor( rUndoIter );
+        if ( bAnchorAttrRestored )
+        {
+            // Anchor attribute successfull restored.
+            // Thus, keep anchor position for redo
+            SaveFlyAnchor();
+        }
+        else
+        {
+            // Anchor attribute not restored due to invalid anchor position.
+            // Thus, delete anchor attribute.
+            pOldSet->ClearItem( RES_ANCHOR );
+        }
     }
-    //else
+
+    if ( !bAnchorAttrRestored )
+    // <--
     {
         _UndoFmtAttr aTmp( *pFmt, bSaveDrawPt );
         pFmt->SetAttr( *pOldSet );
@@ -342,33 +361,10 @@ SwFmt* SwUndoFmtAttr::GetFmt( SwDoc& rDoc )
 
 void SwUndoFmtAttr::Redo( SwUndoIter& rUndoIter)
 {
-    if( !pOldSet || !pFmt || !IsFmtInDoc( &rUndoIter.GetDoc() ))
-        return;
-
-    if( SFX_ITEM_SET == pOldSet->GetItemState( RES_ANCHOR, FALSE ))
-    {
-        RestoreFlyAnchor( rUndoIter );
-        SaveFlyAnchor();
-        return;     // der Rest passierte schon im RestoreFlyAnchor !!
-    }
-    else
-    {
-        _UndoFmtAttr aTmp( *pFmt, bSaveDrawPt );
-        pFmt->SetAttr( *pOldSet );
-        if( aTmp.pUndo )
-        {
-            delete pOldSet;
-            pOldSet = aTmp.pUndo->pOldSet;
-            aTmp.pUndo->pOldSet = 0;    // den Pointer auf 0 setzen (nicht
-                                        // doppelt loeschen) !!
-            delete aTmp.pUndo;          // Undo-Object wieder loeschen
-        }
-        else
-            pOldSet->ClearItem();
-
-        if( RES_FLYFRMFMT == nFmtWhich || RES_DRAWFRMFMT == nFmtWhich )
-            rUndoIter.pSelFmt = (SwFrmFmt*)pFmt;
-    }
+    // --> OD 2004-10-26 #i35443# - Because the undo stores the attributes for
+    // redo, the same code as for <Undo(..)> can be applied for <Redo(..)>
+    Undo( rUndoIter );
+    // <--
 }
 
 void SwUndoFmtAttr::Repeat( SwUndoIter& rUndoIter)
@@ -491,7 +487,11 @@ void SwUndoFmtAttr::SaveFlyAnchor( BOOL bSvDrwPt )
     pOldSet->Put( aAnchor );
 }
 
-void SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
+// --> OD 2004-10-26 #i35443# - Add return value, type <bool>.
+// Return value indicates, if anchor attribute is restored.
+// Note: If anchor attribute is restored, all other existing attributes
+//       are also restored.
+bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
 {
     SwDoc* pDoc = &rIter.GetDoc();
     SwFlyFrmFmt* pFrmFmt = (SwFlyFrmFmt*)pFmt;
@@ -506,7 +506,12 @@ void SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         if( FLY_AT_FLY == rAnchor.GetAnchorId() ? ( !pNd->IsStartNode() ||
             SwFlyStartNode != ((SwStartNode*)pNd)->GetStartNodeType() ) :
             !pNd->IsTxtNode() )
-            return;     // ungueltige Position
+        {
+            // --> OD 2004-10-26 #i35443# - invalid position.
+            // Thus, anchor attribute not restored
+            return false;
+            // <--
+        }
 
         SwPosition aPos( *pNd );
         if( FLY_IN_CNTNT == rAnchor.GetAnchorId() ||
@@ -514,7 +519,12 @@ void SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         {
             aPos.nContent.Assign( (SwTxtNode*)pNd, rAnchor.GetPageNum() );
             if( aPos.nContent.GetIndex() > ((SwTxtNode*)pNd)->GetTxt().Len() )
-                return;     // ungueltige Position
+            {
+                // --> OD 2004-10-26 #i35443# - invalid position.
+                // Thus, anchor attribute not restored
+                return false;
+                // <--
+            }
         }
         aNewAnchor.SetAnchor( &aPos );
     }
@@ -620,6 +630,10 @@ void SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         pFrmFmt->MakeFrms();
 
     rIter.pSelFmt = pFrmFmt;
+
+    // --> OD 2004-10-26 #i35443# - anchor attribute restored.
+    return true;
+    // <--
 }
 
 /*  */
