@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:10:22 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,9 +391,6 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                                                                                                                         "drafts.com.sun.star.frame.LayoutManager" )),
                                                                                                                                  css::uno::UNO_QUERY );
                                             m_xLayoutManager = xLayoutManager;
-                                            m_xLayoutManager->attachFrame( this );
-
-                                            addFrameActionListener( css::uno::Reference< css::frame::XFrameActionListener >( m_xLayoutManager, css::uno::UNO_QUERY ));
                                         }
                                     )
 
@@ -702,6 +699,8 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // Provide container window to our layout manager implementation
     if ( m_xLayoutManager.is() )
     {
+        m_xLayoutManager->attachFrame( this );
+        addFrameActionListener( css::uno::Reference< css::frame::XFrameActionListener >( m_xLayoutManager, css::uno::UNO_QUERY ));
         css::uno::Reference< drafts::com::sun::star::ui::XDockingAreaAcceptor > xDockingAreaAcceptor( static_cast< ::cppu::OWeakObject *>( new DockingAreaDefaultAcceptor( this )), css::uno::UNO_QUERY );
         m_xLayoutManager->setDockingAreaAcceptor( xDockingAreaAcceptor );
     }
