@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-15 09:06:38 $
+ *  last change: $Author: fs $ $Date: 2001-03-16 16:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@ namespace dbaui
 
         void createNewConnection(sal_Bool _bUI = sal_False);
 
+        void doEditIndexes();
+
     public:
         OTableController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
@@ -199,6 +201,12 @@ namespace dbaui
         virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
         virtual void Save(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOut);
 
+    protected:
+        void startConnectionListening();
+        void stopConnectionListening();
+
+        void startTableListening();
+        void stopTableListening();
     };
 }
 #endif // DBUI_TABLECONTROLLER_HXX
