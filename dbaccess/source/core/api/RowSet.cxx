@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-06 12:36:30 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 14:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,7 +827,7 @@ void SAL_CALL ORowSet::updateDouble( sal_Int32 columnIndex, double x ) throw(SQL
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateDouble(columnIndex,x);
     // we have to notify all listeners
-    //  (*(*m_aCurrentRow))[columnIndex] = x;
+    (*(*m_aCurrentRow))[columnIndex].setFromDouble(x,(*(*m_pCache->m_aInsertRow))[columnIndex].getTypeKind());
     firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
