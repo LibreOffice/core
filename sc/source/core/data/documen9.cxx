@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-24 17:52:17 $
+ *  last change: $Author: nn $ $Date: 2000-11-06 10:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,10 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/xtable.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/saveopt.hxx>
+#include <svtools/pathoptions.hxx>
 #include <so3/ipobj.hxx>
 #include <sch/schdll.hxx>
 #include <sch/schdll0.hxx>
@@ -130,9 +130,8 @@ XColorTable* ScDocument::GetColorTable()
     {
         if (!pColorTable)
         {
-            SfxIniManager* pIni = SFX_APP()->GetIniManager();
-            DBG_ASSERT( pIni, "SfxIniManager ???" );
-            pColorTable = new XColorTable( pIni->Get( SFX_KEY_PALETTE_PATH ) );
+            SvtPathOptions aPathOpt;
+            pColorTable = new XColorTable( aPathOpt.GetPalettePath() );
         }
 
         return pColorTable;
