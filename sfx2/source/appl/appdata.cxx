@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 12:59:19 $
+ *  last change: $Author: mba $ $Date: 2001-01-17 16:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,13 +215,20 @@ SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
 
 void SfxAppData_Impl::Notify( SfxBroadcaster &rBC, const SfxHint &rHint )
 {
-#if SUPD<613//MUSTINI
-    const SfxIniManagerHint* pIniManHint = PTR_CAST(SfxIniManagerHint, &rHint);
-    if ( pIniManHint && pIniManHint->GetIniKey() == SFX_KEY_DONTHIDE_DISABLEDENTRIES )
+    SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
+    if( pHint && pHint->GetId() == SFX_HINT_CANCELLABLE )
     {
-        sal_Bool bDontHide = (sal_Bool)(sal_uInt16)pIniManHint->GetNewValue().ToInt32();
-        UpdateApplicationSettings( bDontHide );
+        // vom Cancel-Manager
+        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
+              pFrame;
+              pFrame = SfxViewFrame::GetNext(*pFrame) )
+        {
+            SfxBindings &rBind = pFrame->GetBindings();
+            rBind.Invalidate( SID_BROWSE_STOP );
+            if ( !rBind.IsInRegistrations() )
+                rBind.Update( SID_BROWSE_STOP );
+            rBind.Invalidate( SID_BROWSE_STOP );
+        }
     }
-#endif
 }
 
