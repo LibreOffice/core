@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svditer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:58:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <tools/list.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SdrObjList;
 class SdrObject;
 
@@ -79,7 +83,7 @@ class SdrObject;
 // IM_DEEPNOGROUPS      : Mit rekursivem Abstieg, Next() liefert keine Gruppenobjekte
 enum SdrIterMode { IM_FLAT, IM_DEEPWITHGROUPS, IM_DEEPNOGROUPS};
 
-class SdrObjListIter
+class SVX_DLLPUBLIC SdrObjListIter
 {
     List                        maObjList;
     sal_uInt32                  mnIndex;
