@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassContextImpl.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cdt $ $Date: 2001-02-06 16:23:22 $
+ *  last change: $Author: kr $ $Date: 2001-04-10 15:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ final class ClassContextImpl extends ClassLoader implements ClassContext {
         return threadGroup != null && !threadGroup.isDestroyed();
     }
 
-    public synchronized ThreadGroup getThreadGroup() {
+    public ThreadGroup getThreadGroup() {
         if(threadGroup == null || threadGroup.isDestroyed()) {
             threadGroup = new ThreadGroup(codeBase.toString());
             threadGroup.setDaemon(true);
