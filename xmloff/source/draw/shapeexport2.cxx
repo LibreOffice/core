@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 11:18:38 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 12:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,10 +1376,18 @@ void XMLShapeExport::ImpExportPageShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        OUString aStr;
-
         // #86163# Transformation
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+        // export page number used for this page
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+        const OUString aPageNumberStr(RTL_CONSTASCII_USTRINGPARAM("PageNumber"));
+        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
+        {
+            sal_Int32 nPageNumber = 0;
+            xPropSet->getPropertyValue(aPageNumberStr) >>= nPageNumber;
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_page_number, OUString::valueOf(nPageNumber));
+        }
 
         // a presentation page shape, normally used on notes pages only. If
         // it is used not as presentation shape, it may have been created with
