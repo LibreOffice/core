@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:36:29 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,8 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLExce
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
     if(aField.IsValid())
     {
-        return (aField.GetAttributes() & adFldNegativeScale) == adFldNegativeScale;
+        DataTypeEnum eType = aField.GetADOType();
+        return !(eType == adUnsignedBigInt || eType == adUnsignedInt || eType == adUnsignedSmallInt || eType == adUnsignedTinyInt);
     }
     return sal_False;
 }
