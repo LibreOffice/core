@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 12:04:56 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,14 +513,11 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         pProps[nPos++].Value <<= eAdjust;
 
         sal_Int32 nLeftMargin = nSpaceBefore + nMinLabelWidth;
-        if( nLeftMargin < 0 )
-            nLeftMargin = 0;
         pProps[nPos].Name =
             OUString::createFromAscii( XML_UNO_NAME_NRULE_LEFT_MARGIN );
         pProps[nPos++].Value <<= (sal_Int32)nLeftMargin;
 
-        sal_Int32 nFirstLineOffset =
-                nMinLabelWidth <= nLeftMargin ? -nMinLabelWidth : -nLeftMargin;
+        sal_Int32 nFirstLineOffset = -nMinLabelWidth;
 
         pProps[nPos].Name =
                 OUString::createFromAscii( XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET );
@@ -736,7 +733,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         switch( aTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_SPACE_BEFORE:
-            if( rUnitConv.convertMeasure( nVal, rValue, 0, USHRT_MAX ) )
+            if( rUnitConv.convertMeasure( nVal, rValue, SHRT_MIN, SHRT_MAX ) )
                 rListLevel.SetSpaceBefore( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_WIDTH:
