@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-09 18:04:24 $
+#   last change: $Author: hjs $ $Date: 2002-08-12 15:30:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -149,7 +149,6 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -168,17 +167,17 @@ $(DEF$(TNR)TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
+    @+$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF$(TNR)CEXP)"!=""
-    @$(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL$(TNR)TARGET).exp
+    @+$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && +-$(RM) $(SHL$(TNR)TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -188,7 +187,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(RM) $(TMP)$/$(DEF$(TNR)UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""

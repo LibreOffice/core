@@ -46,7 +46,6 @@ $(DEF1TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF1UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB1NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -65,17 +64,17 @@ $(DEF1TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 .IF "$(DEFLIB1NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
+    @+$(TMP)$/$(DEF1UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF1CEXP)"!=""
-    @$(LDUMP2) -A $(DEF1CEXP) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF1UNIQE:b).bat && $(LDUMP2) -A $(DEF1CEXP) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF1UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF1UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL1TARGET).exp
+    @+$(TMP)$/$(DEF1UNIQE:b).bat && +-$(RM) $(SHL1TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -85,7 +84,7 @@ $(DEF1TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF1UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF1UNIQE:b).bat && $(RM) $(TMP)$/$(DEF1UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -226,7 +225,6 @@ $(DEF2TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF2UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB2NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -245,17 +243,17 @@ $(DEF2TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 .IF "$(DEFLIB2NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
+    @+$(TMP)$/$(DEF2UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF2CEXP)"!=""
-    @$(LDUMP2) -A $(DEF2CEXP) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF2UNIQE:b).bat && $(LDUMP2) -A $(DEF2CEXP) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF2UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF2UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL2TARGET).exp
+    @+$(TMP)$/$(DEF2UNIQE:b).bat && +-$(RM) $(SHL2TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -265,7 +263,7 @@ $(DEF2TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF2UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF2UNIQE:b).bat && $(RM) $(TMP)$/$(DEF2UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -406,7 +404,6 @@ $(DEF3TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF3UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB3NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -425,17 +422,17 @@ $(DEF3TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 .IF "$(DEFLIB3NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
+    @+$(TMP)$/$(DEF3UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF3CEXP)"!=""
-    @$(LDUMP2) -A $(DEF3CEXP) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF3UNIQE:b).bat && $(LDUMP2) -A $(DEF3CEXP) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF3UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF3UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL3TARGET).exp
+    @+$(TMP)$/$(DEF3UNIQE:b).bat && +-$(RM) $(SHL3TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -445,7 +442,7 @@ $(DEF3TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF3UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF3UNIQE:b).bat && $(RM) $(TMP)$/$(DEF3UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -586,7 +583,6 @@ $(DEF4TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF4UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB4NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -605,17 +601,17 @@ $(DEF4TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 .IF "$(DEFLIB4NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
+    @+$(TMP)$/$(DEF4UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF4CEXP)"!=""
-    @$(LDUMP2) -A $(DEF4CEXP) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF4UNIQE:b).bat && $(LDUMP2) -A $(DEF4CEXP) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF4UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF4UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL4TARGET).exp
+    @+$(TMP)$/$(DEF4UNIQE:b).bat && +-$(RM) $(SHL4TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -625,7 +621,7 @@ $(DEF4TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF4UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF4UNIQE:b).bat && $(RM) $(TMP)$/$(DEF4UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -766,7 +762,6 @@ $(DEF5TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF5UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB5NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -785,17 +780,17 @@ $(DEF5TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 .IF "$(DEFLIB5NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
+    @+$(TMP)$/$(DEF5UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF5CEXP)"!=""
-    @$(LDUMP2) -A $(DEF5CEXP) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF5UNIQE:b).bat && $(LDUMP2) -A $(DEF5CEXP) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF5UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF5UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL5TARGET).exp
+    @+$(TMP)$/$(DEF5UNIQE:b).bat && +-$(RM) $(SHL5TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -805,7 +800,7 @@ $(DEF5TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF5UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF5UNIQE:b).bat && $(RM) $(TMP)$/$(DEF5UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -946,7 +941,6 @@ $(DEF6TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF6UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB6NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -965,17 +959,17 @@ $(DEF6TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 .IF "$(DEFLIB6NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
+    @+$(TMP)$/$(DEF6UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF6CEXP)"!=""
-    @$(LDUMP2) -A $(DEF6CEXP) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF6UNIQE:b).bat && $(LDUMP2) -A $(DEF6CEXP) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF6UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF6UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL6TARGET).exp
+    @+$(TMP)$/$(DEF6UNIQE:b).bat && +-$(RM) $(SHL6TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -985,7 +979,7 @@ $(DEF6TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF6UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF6UNIQE:b).bat && $(RM) $(TMP)$/$(DEF6UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1126,7 +1120,6 @@ $(DEF7TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF7UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB7NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -1145,17 +1138,17 @@ $(DEF7TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 .IF "$(DEFLIB7NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
+    @+$(TMP)$/$(DEF7UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF7CEXP)"!=""
-    @$(LDUMP2) -A $(DEF7CEXP) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF7UNIQE:b).bat && $(LDUMP2) -A $(DEF7CEXP) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF7UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF7UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL7TARGET).exp
+    @+$(TMP)$/$(DEF7UNIQE:b).bat && +-$(RM) $(SHL7TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -1165,7 +1158,7 @@ $(DEF7TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF7UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF7UNIQE:b).bat && $(RM) $(TMP)$/$(DEF7UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1306,7 +1299,6 @@ $(DEF8TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF8UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB8NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -1325,17 +1317,17 @@ $(DEF8TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 .IF "$(DEFLIB8NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
+    @+$(TMP)$/$(DEF8UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF8CEXP)"!=""
-    @$(LDUMP2) -A $(DEF8CEXP) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF8UNIQE:b).bat && $(LDUMP2) -A $(DEF8CEXP) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF8UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF8UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL8TARGET).exp
+    @+$(TMP)$/$(DEF8UNIQE:b).bat && +-$(RM) $(SHL8TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -1345,7 +1337,7 @@ $(DEF8TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF8UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF8UNIQE:b).bat && $(RM) $(TMP)$/$(DEF8UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1486,7 +1478,6 @@ $(DEF9TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF9UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB9NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -1505,17 +1496,17 @@ $(DEF9TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 .IF "$(DEFLIB9NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
+    @+$(TMP)$/$(DEF9UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF9CEXP)"!=""
-    @$(LDUMP2) -A $(DEF9CEXP) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF9UNIQE:b).bat && $(LDUMP2) -A $(DEF9CEXP) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF9UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF9UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL9TARGET).exp
+    @+$(TMP)$/$(DEF9UNIQE:b).bat && +-$(RM) $(SHL9TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -1525,7 +1516,7 @@ $(DEF9TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF9UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF9UNIQE:b).bat && $(RM) $(TMP)$/$(DEF9UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1666,7 +1657,6 @@ $(DEF10TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF10UNIQE:b) update $(DEFSTAG)
-    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB10NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -1685,17 +1675,17 @@ $(DEF10TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
 .IF "$(DEFLIB10NAME)"!=""
-    $(LIBMGR) -EXTRACT:/ /OUT:$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
+    @+$(TMP)$/$(DEF10UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF10CEXP)"!=""
-    @$(LDUMP2) -A $(DEF10CEXP) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF10UNIQE:b).bat && $(LDUMP2) -A $(DEF10CEXP) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ELSE
-    @$(LDUMP2) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF10UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E 20 -F$(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
+    @+$(TMP)$/$(DEF10UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    +-$(RM) $(SHL10TARGET).exp
+    @+$(TMP)$/$(DEF10UNIQE:b).bat && +-$(RM) $(SHL10TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
@@ -1705,7 +1695,7 @@ $(DEF10TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF10UNIQE:b) commit
-    +ok.bat && $(RM) ok.bat
+    +$(TMP)$/$(DEF10UNIQE:b).bat && $(RM) $(TMP)$/$(DEF10UNIQE:b).bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
