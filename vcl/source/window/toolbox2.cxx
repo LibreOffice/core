@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-20 14:44:06 $
+ *  last change: $Author: ssa $ $Date: 2002-03-07 16:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,11 @@ void ToolBox::ImplUpdateItem( USHORT nIndex )
             // Nur direkt neu ausgeben, wenn nicht neu formatiert
             // werden muss
             if ( !mbFormat )
-                ImplDrawItem( nIndex, (nIndex == mnCurPos) ? TRUE : FALSE );
+            {
+                ImplToolItem* pItem = mpItemList->GetObject( nIndex );
+                //ImplDrawItem( nIndex, (nIndex == mnCurPos) ? TRUE : FALSE );
+                ImplDrawItem( nIndex, (pItem->mnId == mnHighItemId) ? 2 : FALSE );
+            }
             else
                 maPaintRect.Union( mpItemList->GetObject( nIndex )->maRect );
         }
