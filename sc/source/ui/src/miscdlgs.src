@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-28 17:14:59 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 11:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ turkish ] = "S~�tunun t�m�n� sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Suprimeix la(es) ~columna(es) sencera(es)";
+        Text[ thai ] = "ลบ~คอลัมน์ทั้งหมด";
     };
     RadioButton BTN_DELROWS
     {
@@ -164,6 +165,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ turkish ] = "S~at�r�n t�m�n� sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Suprimeix la(es) ~fila(es) sencera(es)";
+        Text[ thai ] = "ลบแ~ถวทั้งหมด";
     };
     RadioButton BTN_CELLSLEFT
     {
@@ -194,6 +196,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ turkish ] = "H�creleri s~ola ta��";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Despla�a les cel?les cap a ~l'esquerra";
+        Text[ thai ] = "เลื่อนเซลล์ไปทาง~ซ้าย";
     };
     RadioButton BTN_CELLSUP
     {
@@ -224,6 +227,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ turkish ] = "H�creleri y~ukar�ya ta��";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Despla�a les cel?les cap am~unt";
+        Text[ thai ] = "เลื่อนเซลล์~ขึ้น";
     };
     FixedLine FL_FRAME
     {
@@ -253,6 +257,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ turkish ] = "Se�im";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
+        Text[ thai ] = "เลือก";
     };
     Text[ chinese_simplified ] = "删除单元格";
     Text[ russian ] = "������� ������";
@@ -265,6 +270,7 @@ ModalDialog RID_SCDLG_DELCELL
     Text[ turkish ] = "H�creleri sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix les cel�les";
+    Text[ thai ] = "ลบเซลล์";
 };
 ModalDialog RID_SCDLG_INSCELL
 {
@@ -337,6 +343,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ turkish ] = "Tam s~�tun ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Columna sencera";
+        Text[ thai ] = "~คอลัมน์ทั้งหมด";
     };
     RadioButton BTN_INSROWS
     {
@@ -368,6 +375,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ turkish ] = "Tam s~at�r ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fila sencera";
+        Text[ thai ] = "แถ~วทั้งหมด";
     };
     RadioButton BTN_CELLSRIGHT
     {
@@ -398,6 +406,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ turkish ] = "H�creleri s ~a�a ta��";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Despla�a les cel�les cap a la d~reta";
+        Text[ thai ] = "เลื่อนเซลล์ไปทางข~วา";
     };
     RadioButton BTN_CELLSDOWN
     {
@@ -428,6 +437,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ turkish ] = "H�creleri ~a�a�� ta��";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Despla�a les cel�les cap a~vall";
+        Text[ thai ] = "เลื่อนเซลล์~ลง";
     };
     FixedLine FL_FRAME
     {
@@ -457,6 +467,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ turkish ] = "Se�im";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
+        Text[ thai ] = "เลือก";
     };
     Text[ chinese_simplified ] = "插入单元格";
     Text[ russian ] = "�������� ������";
@@ -469,6 +480,7 @@ ModalDialog RID_SCDLG_INSCELL
     Text[ turkish ] = "H�cre ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix les cel�les";
+    Text[ thai ] = "แทรกเซลล์";
 };
 
 Bitmap RID_SCTEAMDLGBMP1
@@ -547,6 +559,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ turkish ] = "~T�m�n� sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Suprimeix-les ~totes";
+        Text[ thai ] = "ลบ~ทั้งหมด";
     };
     CheckBox BTN_DELSTRINGS
     {
@@ -577,6 +590,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ turkish ] = "~Dize";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cadenes";
+        Text[ thai ] = "~สายอักขระ";
     };
     CheckBox BTN_DELNUMBERS
     {
@@ -607,6 +621,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ turkish ] = "~Say�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~N�meros";
+        Text[ thai ] = "~ตัวเลข";
     };
     CheckBox BTN_DELDATETIME
     {
@@ -637,6 +652,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ turkish ] = "~Tarih & Saat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Dia i hora";
+        Text[ thai ] = "~วันที่และเวลา";
     };
     CheckBox BTN_DELFORMULAS
     {
@@ -667,6 +683,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ turkish ] = "~Form�l";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~F�rmules";
+        Text[ thai ] = "~สูตร";
     };
     CheckBox BTN_DELATTRS
     {
@@ -697,6 +714,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ turkish ] = "Forma~t";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "For~mats";
+        Text[ thai ] = "รูปแ~บบ";
     };
     CheckBox BTN_DELNOTES
     {
@@ -727,6 +745,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ turkish ] = "~Not";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Not~es";
+        Text[ thai ] = "บันทึก~ย่อ";
     };
     CheckBox BTN_DELOBJECTS
     {
@@ -756,6 +775,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Objectes";
         Text[ finnish ] = "~Objektit";
+        Text[ thai ] = "~วัตถุ";
     };
     FixedLine FL_FRAME
     {
@@ -785,6 +805,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ turkish ] = "Se�im";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
+        Text[ thai ] = "เลือก";
     };
     Text[ chinese_simplified ] = "删除内容";
     Text[ russian ] = "������� ����������";
@@ -797,6 +818,7 @@ ModalDialog RID_SCDLG_DELCONT
     Text[ turkish ] = "��erikleri sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suprimeix el contingut";
+    Text[ thai ] = "ลบเนื้อหา";
 };
 
 
@@ -871,6 +893,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "~T�m�n� yap��t�r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En~ganxa-ho tot";
+        Text[ thai ] = "~วางทั้งหมด";
     };
     CheckBox BTN_INSSTRINGS
     {
@@ -901,6 +924,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "~Dize";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cadenes";
+        Text[ thai ] = "~สายอักขระ";
     };
     CheckBox BTN_INSNUMBERS
     {
@@ -931,6 +955,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "~Say�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~N�meros";
+        Text[ thai ] = "~ตัวเลข";
     };
     CheckBox BTN_INSDATETIME
     {
@@ -961,6 +986,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "~Tarih & Saat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Dia i hora";
+        Text[ thai ] = "~วันที่และเวลา";
     };
     CheckBox BTN_INSFORMULAS
     {
@@ -991,6 +1017,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "~Form�l";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~F�rmules";
+        Text[ thai ] = "~สูตร";
     };
     CheckBox BTN_INSATTRS
     {
@@ -1021,6 +1048,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "Forma~t";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "For~mats";
+        Text[ thai ] = "รูปแ~บบ";
     };
     CheckBox BTN_INSNOTES
     {
@@ -1051,6 +1079,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "~Not";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "N~otes";
+        Text[ thai ] = "บันทึก~ย่อ";
     };
     FixedLine FL_FRAME
     {
@@ -1080,6 +1109,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "Se�im";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selecci�";
+        Text[ thai ] = "เลือก";
     };
     RadioButton BTN_OP_NOOP
     {
@@ -1108,6 +1138,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ca~p";
         Text[ finnish ] = "Ei ~mit��n";
+        Text[ thai ] = "ไ~ม่มี";
     };
     RadioButton BTN_OP_ADD
     {
@@ -1136,6 +1167,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Afegeix";
         Text[ finnish ] = "~Lis��";
+        Text[ thai ] = "เ~พิ่ม";
     };
     RadioButton BTN_OP_SUB
     {
@@ -1164,6 +1196,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Resta";
         Text[ finnish ] = "V�~henn�";
+        Text[ thai ] = "ล~บ";
     };
     RadioButton BTN_OP_MUL
     {
@@ -1192,6 +1225,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "M~ultiplica";
         Text[ finnish ] = "Ker~ro";
+        Text[ thai ] = "คู~ณ";
     };
     RadioButton BTN_OP_DIV
     {
@@ -1220,6 +1254,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Di~videix";
         Text[ finnish ] = "J~aa";
+        Text[ thai ] = "หา~ร";
     };
     FixedLine FL_OPERATION
     {
@@ -1248,6 +1283,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Operacions";
         Text[ finnish ] = "Toiminnot";
+        Text[ thai ] = "ปฏิบัติการ";
     };
     CheckBox BTN_SKIP_EMPTY
     {
@@ -1277,6 +1313,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ome~t les cel�les buides";
         Text[ finnish ] = "O~hita tyhj�t solut";
+        Text[ thai ] = "ข้า~มเซลล์ที่ว่าง";
     };
     CheckBox BTN_TRANSPOSE
     {
@@ -1305,6 +1342,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Transposa";
         Text[ finnish ] = "~Transponoi";
+        Text[ thai ] = "~สลับเปลี่ยนแถวกับคอลัมน์";
     };
     CheckBox BTN_LINK
     {
@@ -1334,6 +1372,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En~lla�";
         Text[ finnish ] = "~Linkki";
+        Text[ thai ] = "เ~ชื่อมโยง";
     };
     FixedLine FL_OPTIONS
     {
@@ -1362,6 +1401,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "ตัวเลือก";
     };
     RadioButton BTN_MV_NONE
     {
@@ -1390,6 +1430,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No desplacis";
         Text[ finnish ] = "�l� siir~r�";
+        Text[ thai ] = "ห้ามเลื่อ~น";
     };
     RadioButton BTN_MV_DOWN
     {
@@ -1418,6 +1459,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~vall";
         Text[ finnish ] = "A~las";
+        Text[ thai ] = "ล~ง";
     };
     RadioButton BTN_MV_RIGHT
     {
@@ -1446,6 +1488,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "D~reta";
         Text[ finnish ] = "~Oikea";
+        Text[ thai ] = "~ขวา";
     };
     FixedLine FL_MOVE
     {
@@ -1474,6 +1517,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "H�creleri ta��";
         Text[ catalan ] = "Mou les cel�les";
         Text[ finnish ] = "Siirr� solut";
+        Text[ thai ] = "เลื่อนเซลล์";
     };
     FixedLine FL_SEP1
     {
@@ -1496,6 +1540,7 @@ ModalDialog RID_SCDLG_INSCONT
     Text[ turkish ] = "�zel yap��t�r";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Enganxament especial";
+    Text[ thai ] = "วางพิเศษ";
 };
 ModalDialog RID_SCDLG_MOVETAB
 {
@@ -1565,6 +1610,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ turkish ] = "~Belgeye";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Al ~document";
+        Text[ thai ] = "ไปยังเ~อกสาร";
     };
     ListBox LB_DEST
     {
@@ -1603,6 +1649,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ turkish ] = "~�ne ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Insereix abans de";
+        Text[ thai ] = "แ~ทรกก่อน";
     };
     ListBox LB_INSERT
     {
@@ -1640,6 +1687,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ turkish ] = "~Kopyala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Copia";
+        Text[ thai ] = "~คัดลอก";
     };
     String STR_NEWDOC
     {
@@ -1667,6 +1715,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ turkish ] = "- yeni belge -";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "- document nou -";
+        Text[ thai ] = "- เอกสารใหม่ -";
     };
     Text[ chinese_simplified ] = "移动或复制工作表";
     Text[ russian ] = "�����������/����������� ����";
@@ -1679,6 +1728,7 @@ ModalDialog RID_SCDLG_MOVETAB
     Text[ turkish ] = "Sayfay� ta��/kopyala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mou/Copia el full";
+    Text[ thai ] = "ย้าย/คัดลอกแผ่นงาน";
 };
 ModalDialog RID_SCDLG_STRINPUT
 {
@@ -1855,6 +1905,7 @@ ModalDialog RID_SCDLG_COL_MAN
         Text[ turkish ] = "Geni�lik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Amplada";
+        Text[ thai ] = "ความกว้าง";
     };
     MetricField ED_VALUE
     {
@@ -1895,6 +1946,7 @@ ModalDialog RID_SCDLG_COL_MAN
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor per ~defecte";
         Text[ finnish ] = "~Oletusarvo";
+        Text[ thai ] = "~ค่าเริ่มต้น";
     };
     Text[ russian ] = "������ �������";
     Text[ polish ] = "Szeroko�� kolumn";
@@ -1906,6 +1958,7 @@ ModalDialog RID_SCDLG_COL_MAN
     Text[ turkish ] = "S�tun geni�li�i";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Amplada de la columna";
+    Text[ thai ] = "ความกว้างคอลัมน์";
 };
 
 ModalDialog RID_SCDLG_COL_OPT
@@ -1978,6 +2031,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Afegeix";
+        Text[ thai ] = "เพิ่ม";
     };
     MetricField ED_VALUE
     {
@@ -2019,6 +2073,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor per ~defecte";
         Text[ finnish ] = "~Oletusarvo";
+        Text[ thai ] = "~ค่าเริ่มต้น";
     };
     Text[ russian ] = "����������� ������ �������";
     Text[ polish ] = "Optymalna szeroko�� kolumn";
@@ -2030,6 +2085,7 @@ ModalDialog RID_SCDLG_COL_OPT
     Text[ turkish ] = "En uygun s�tun geni�li�i";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Amplada �ptima de la columna";
+    Text[ thai ] = "ความกว้างคอลัมน์ที่เหมาะที่สุด";
 };
 
 ModalDialog RID_SCDLG_ROW_MAN
@@ -2102,6 +2158,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text[ turkish ] = "Y�kseklik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Al�ada";
+        Text[ thai ] = "ความสูง";
     };
     MetricField ED_VALUE
     {
@@ -2143,6 +2200,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text[ turkish ] = "~Standart de�er";
         Text[ catalan ] = "Valor per ~defecte";
         Text[ finnish ] = "~Oletusarvo";
+        Text[ thai ] = "~ค่าเริ่มต้น";
     };
     Text[ russian ] = "������ �����";
     Text[ polish ] = "Wysoko�� wierszy";
@@ -2154,6 +2212,7 @@ ModalDialog RID_SCDLG_ROW_MAN
     Text[ turkish ] = "Sat�r y�ksekli�i";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al�ada de la fila";
+    Text[ thai ] = "ความยาวแถว";
 };
 
 ModalDialog RID_SCDLG_ROW_OPT
@@ -2226,6 +2285,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Afegeix";
+        Text[ thai ] = "เพิ่ม";
     };
     MetricField ED_VALUE
     {
@@ -2266,6 +2326,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor per ~defecte";
         Text[ finnish ] = "~Oletusarvo";
+        Text[ thai ] = "~ค่าเริ่มต้น";
     };
     Text[ russian ] = "����������� ������ ������";
     Text[ polish ] = "Optymalna wysoko�� wierszy";
@@ -2277,6 +2338,7 @@ ModalDialog RID_SCDLG_ROW_OPT
     Text[ turkish ] = "En uygun sat�r y�ksekli�i";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al�ada �ptima de la fila";
+    Text[ thai ] = "ความยาวแถวที่เหมาะที่สุด";
 };
 
 
@@ -2349,6 +2411,7 @@ ModalDialog RID_SCDLG_SELECTDB
     Text[ korean ] = "선정";
     Text[ turkish ] = "Se�im";
     Text[ catalan ] = "Selecciona";
+    Text[ thai ] = "เลือก";
 };
 
 ModalDialog RID_SCDLG_SHOW_TAB
@@ -2398,7 +2461,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 100 , 75 ) ;
         TabStop = TRUE ;
-        Sort = TRUE ;
+        Sort = FALSE ;
     };
     FixedText FT_LABEL
     {
@@ -2428,6 +2491,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
         Text[ turkish ] = "Gizlenmi� tablolar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fulls ocults";
+        Text[ thai ] = "ซ่อนแผ่นงาน";
     };
     Text[ chinese_simplified ] = "显示工作表";
     Text[ russian ] = "�������� ����";
@@ -2440,6 +2504,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
     Text[ turkish ] = "�al��ma sayfas�n� g�ster";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostra el full";
+    Text[ thai ] = "แสดงแผ่นงาน";
 };
 
 
@@ -2494,6 +2559,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "~G�n";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "D~ia";
+        Text[ thai ] = "Da~y";
     };
     RadioButton BTN_DAY_OF_WEEK
     {
@@ -2524,6 +2590,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "~�� g�n�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dia de la ~setmana";
+        Text[ thai ] = "~Weekday";
     };
     RadioButton BTN_MONTH
     {
@@ -2554,6 +2621,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "A~y";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mes";
+        Text[ thai ] = "~Month";
     };
     RadioButton BTN_YEAR
     {
@@ -2584,6 +2652,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "Y~�l";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "An~y";
+        Text[ thai ] = "Y~ear";
     };
     FixedLine FL_TIME_UNIT
     {
@@ -2613,6 +2682,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "Zaman birimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Unitat de temps";
+        Text[ thai ] = "หน่วยเวลา";
     };
     RadioButton BTN_RIGHT
     {
@@ -2643,6 +2713,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "S~a�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A la d~reta";
+        Text[ thai ] = "~ขวา";
     };
     RadioButton BTN_LEFT
     {
@@ -2673,6 +2744,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "S~ol";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A l'~esquerra";
+        Text[ thai ] = "~ซ้าย";
     };
     RadioButton BTN_TOP
     {
@@ -2703,6 +2775,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "~Yukar�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Am~unt";
+        Text[ thai ] = "~ขึ้น";
     };
     RadioButton BTN_BOTTOM
     {
@@ -2733,6 +2806,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "~A�a��";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~vall";
+        Text[ thai ] = "~ลง";
     };
     FixedLine FL_DIRECTION
     {
@@ -2762,6 +2836,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "Y�n";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Direcci�";
+        Text[ thai ] = "ทิศทาง";
     };
     RadioButton BTN_ARITHMETIC
     {
@@ -2792,6 +2867,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "~Aritmetik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Li~neal";
+        Text[ thai ] = "Li~near";
     };
     RadioButton BTN_GEOMETRIC
     {
@@ -2822,6 +2898,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "~Geometrik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Creixement";
+        Text[ thai ] = "~Growth";
     };
     RadioButton BTN_DATE
     {
@@ -2852,6 +2929,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "~Tarih";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Da~ta";
+        Text[ thai ] = "Da~te";
     };
     RadioButton BTN_AUTOFILL
     {
@@ -2883,6 +2961,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "Otomatik~Doldur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Compleci� ~autom�tica";
+        Text[ thai ] = "~AutoFill";
     };
     FixedLine FL_TYPE
     {
@@ -2912,6 +2991,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "S�ra t�r�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus";
+        Text[ thai ] = "ชนิดชุดข้อมูล";
     };
     FixedLine FL_SEP1
     {
@@ -2950,6 +3030,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor ~inicial";
         Text[ finnish ] = "~Aloitusarvo";
+        Text[ thai ] = "เ~ริ่มค่า";
     };
     Edit ED_START_VALUES
     {
@@ -2986,6 +3067,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "~Biti� de�eri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Valor final";
+        Text[ thai ] = "จบ~ค่า";
     };
     Edit ED_END_VALUES
     {
@@ -3022,6 +3104,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "~Artan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Au~gment";
+        Text[ thai ] = "ส่ว~นเพิ่ม";
     };
     Edit ED_INCREMENT
     {
@@ -3057,6 +3140,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ turkish ] = "Ge�ersiz de�er";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El valor no �s v�lid";
+        Text[ thai ] = "ค่าไม่ถูกต้อง";
     };
     OKButton BTN_OK
     {
@@ -3088,6 +3172,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ turkish ] = "S�ray� doldur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Emplena les s�ries";
+    Text[ thai ] = "เติมชุดข้อมูล";
 };
 
 #define TXT_COLS \
@@ -3114,7 +3199,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ korean ] = "열(~C)"; \
     Text[ turkish ] = "~S�tun"; \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Columnes";
+    Text[ catalan ] = "~Columnes";  \
+    Text[ thai ] = "~คอลัมน์";
 
 
 #define TXT_ROWS \
@@ -3141,7 +3227,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ korean ] = "행(~R)"; \
     Text[ turkish ] = "S~at�r"; \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Files";
+    Text[ catalan ] = "~Files"; \
+    Text[ thai ] = "แ~ถว";
 
 
 ModalDialog RID_SCDLG_GROUP
@@ -3221,6 +3308,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ turkish ] = "�unun i�in etkinle�tir:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Inclou";
+        Text[ thai ] = "รวม";
     };
     String STR_UNGROUP
     {
@@ -3249,6 +3337,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ turkish ] = "�unun i�in etkinli�ini kald�r:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desactiva durant";
+        Text[ thai ] = "ไม่เรียกใช้เพื่อ";
     };
     Text = "Gruppierung" ;
     Text [ ENGLISH ] = "Group" ;
@@ -3274,6 +3363,7 @@ ModalDialog RID_SCDLG_GROUP
     Text[ turkish ] = "Grup";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Grup";
+    Text[ thai ] = "จัดกลุ่ม";
 };
 
  // Ableitungen
@@ -3364,6 +3454,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cap�a~lera";
         Text[ finnish ] = "O~tsikko";
+        Text[ thai ] = "หั~วกระดาษ";
     };
     CheckBox BTN_LEFT
     {
@@ -3393,6 +3484,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Columna es~querra";
         Text[ finnish ] = "~Vasen sarake";
+        Text[ thai ] = "คอลัมน์~ซ้าย";
     };
     CheckBox BTN_BOTTOM
     {
@@ -3423,6 +3515,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Peu de p�gina";
         Text[ finnish ] = "~Alaselite";
+        Text[ thai ] = "~ท้ายกระดาษ";
     };
     CheckBox BTN_RIGHT
     {
@@ -3452,6 +3545,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Columna ~dreta";
         Text[ finnish ] = "~Oikea sarake";
+        Text[ thai ] = "คอลัมน์~ขวา";
     };
     OKButton BTN_OK
     {
@@ -3499,6 +3593,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre a partir de ";
         Text[ finnish ] = "Luo nimi kohteesta";
+        Text[ thai ] = "สร้างชื่อจาก";
     };
     Text = "Namen erzeugen" ;
     Text [ ENGLISH ] = "Create Names" ;
@@ -3523,6 +3618,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crea els noms";
     Text[ finnish ] = "Luo nimet";
+    Text[ thai ] = "สร้างชื่อ";
 };
 
 ModalDialog RID_SCDLG_NAMES_PASTE
@@ -3560,6 +3656,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Enganxa el nom";
         Text[ finnish ] = "Liit� nimi";
+        Text[ thai ] = "วางชื่อ";
     };
     ListBox LB_ENTRYLIST
     {
@@ -3617,6 +3714,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Enganxa la ~llista";
         Text[ finnish ] = "Liit� ~luettelo";
+        Text[ thai ] = "วาง~รายการ";
     };
     /* ### ACHTUNG: Neuer Text in Resource? Namen einf�gen : Namen einf�gen */
     Text = "Namen einf�gen" ;
@@ -3642,6 +3740,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Enganxa el nom";
     Text[ finnish ] = "Liit� nimi";
+    Text[ thai ] = "วางชื่อ";
 };
 
 FloatingWindow RID_SCDLG_TEAM
@@ -3676,6 +3775,7 @@ FloatingWindow RID_SCDLG_TEAM
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "L'equip %PRODUCTNAME Calc";
     Text[ finnish ] = "%PRODUCTNAME Calc -ryhm�";
+    Text[ thai ] = "ทีม  %PRODUCTNAME Calc ";
 };
 
 ModalDialog RID_SCDLG_CHARTCOLROW
@@ -3711,6 +3811,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La primera ~columna com a etiqueta";
         Text[ finnish ] = "Ensimm�inen ~sarake nimi�n�";
+        Text[ thai ] = "~คอลัมน์แรกเป็นป้ายชื่อ";
     };
     CheckBox 2
     {
@@ -3739,6 +3840,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La primera ~fila com a etiqueta";
         Text[ finnish ] = "Ensimm�inen ~rivi nimi�n�";
+        Text[ thai ] = "แ~ถวแรกเป็นป้ายชื่อ";
     };
     FixedLine 6
     {
@@ -3767,6 +3869,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Etiqueta";
         Text[ finnish ] = "Nimi�t";
+        Text[ thai ] = "ป้ายชื่อ";
     };
     OKButton 3
     {
@@ -3808,6 +3911,6 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modifica les dades font";
     Text[ finnish ] = "Vaihda l�hdetietoalue";
+    Text[ thai ] = "เปลี่ยนช่วงแหล่งข้อมูล";
 };
-
 
