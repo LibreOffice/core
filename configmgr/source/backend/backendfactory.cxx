@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-09-02 17:23:43 $
+ *  last change: $Author: jb $ $Date: 2002-09-19 10:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,21 +155,6 @@ UnoBackend createOfflineBackend(ConnectionSettings const & _aSettings, CreationC
 // -------------------------------------------------------------------------
 
 static
-sal_Bool createOfflineBackend_nothrow(UnoBackend & _rxResult, ConnectionSettings const & _aSettings, CreationContext const & _xCtx, UnoInitArgs const & _aInitArgs)
-{
-    try
-    {
-        _rxResult = createOfflineBackend(_aSettings,_xCtx,_aInitArgs);
-        return _rxResult.is();
-    }
-    catch (uno::Exception &)
-    {
-        return false;
-    }
-}
-// -------------------------------------------------------------------------
-
-static
 uno::Reference< uno::XInterface > createRealBackend(ConnectionSettings const & _aSettings, CreationContext const & _xCtx, UnoInitArgs const & _aInitArgs)
 {
     OUString const aBackendServiceName = _aSettings.hasUnoBackendService() ?
@@ -177,7 +162,7 @@ uno::Reference< uno::XInterface > createRealBackend(ConnectionSettings const & _
                                         OUString::createFromAscii(k_DefaultBackendService);
 
     uno::Reference< uno::XInterface > xResult =
-        createService(_xCtx,_aInitArgs,_aSettings.getUnoBackendService());
+        createService(_xCtx,_aInitArgs,aBackendServiceName);
 
     return xResult;
 }
@@ -215,7 +200,7 @@ UnoBackend createOnlineBackend(ConnectionSettings const & _aSettings, CreationCo
                 xResult = wrapSingleBackend(_aSettings,_xCtx,_aInitArgs,xSingleRealBackend);
 
             else
-                OSL_ENSURE( !xRealBackend.is(), "Configuration Backend implements no known backendinterface" );
+                OSL_ENSURE( !xRealBackend.is(), "Configuration Backend implements no known backend interface" );
         }
     }
 
@@ -228,18 +213,12 @@ UnoBackend createUnoBackend(ConnectionSettings const & _aSettings, CreationConte
 {
     UnoInitArgs aArguments = createInitArgs(_aSettings);
 
-    UnoBackend xResult;
-    try
-    {
-       xResult = createOnlineBackend(_aSettings,_xCtx,aArguments);
-    }
+    sal_Bool bOffline = _aSettings.hasOfflineSetting() ? _aSettings.getOfflineSetting() : !_aSettings.hasUnoBackendService();
 
-    // for CannotLoadConfigurationException, try fallback to wrapper-only (offline) mode
-    catch (com::sun::star::configuration::CannotLoadConfigurationException & )
-    {
-        if (!createOfflineBackend_nothrow(xResult,_aSettings,_xCtx,aArguments))
-            throw;
-    }
+    UnoBackend xResult;
+
+    if (!bOffline)
+        xResult = createOnlineBackend(_aSettings,_xCtx,aArguments);
 
     if (!xResult.is())
         xResult = createOfflineBackend(_aSettings,_xCtx,aArguments);
