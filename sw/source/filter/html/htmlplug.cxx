@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:27:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,6 +812,8 @@ void SwHTMLParser::InsertApplet()
         return;
     }
 
+    if ( aCodeBase.Len() )
+        aCodeBase = INetURLObject::GetAbsURL( sBaseURL, aCodeBase );
     pAppletImpl->CreateApplet( aCode, aName, bMayScript, aCodeBase, sBaseURL );//, aAlt );
     pAppletImpl->SetAltText( aAlt );
 
