@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-23 12:44:58 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 12:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,7 @@
 #endif
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbcx;
@@ -319,22 +320,27 @@ sal_uInt16 FmGridHeader::GetModelColumnPos(sal_uInt16 nId) const
 {
     return static_cast<FmGridControl*>(GetParent())->GetModelColumnPos(nId);
 }
-
+//---------------------------------------------------------------------------------------
+void FmGridHeader::notifyColumnSelect(sal_uInt16 nColumnId)
+{
+    sal_uInt16 nPos = GetModelColumnPos(nColumnId);
+    Reference< XIndexAccess >  xColumns(((FmGridControl*)GetParent())->GetPeer()->getColumns(), UNO_QUERY);
+    if ( nPos < xColumns->getCount() )
+    {
+        Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
+        if ( xSelSupplier.is() )
+        {
+            Reference< XPropertySet >  xColumn;
+            xColumns->getByIndex(nPos) >>= xColumn;
+            xSelSupplier->select(makeAny(xColumn));
+        }
+    }
+}
 //------------------------------------------------------------------------------
 void FmGridHeader::Select()
 {
     EditBrowserHeader::Select();
-    if (static_cast<FmGridControl*>(GetParent())->IsDesignMode())
-    {
-        sal_uInt16 nPos = GetModelColumnPos(GetCurItemId());
-
-        Reference< ::com::sun::star::container::XIndexContainer >  xColumns(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
-        Reference< ::com::sun::star::beans::XPropertySet> xColumn;
-        ::cppu::extractInterface(xColumn, xColumns->getByIndex(nPos));
-        Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
-        if (xSelSupplier.is())
-            xSelSupplier->select(makeAny(xColumn));
-    }
+    notifyColumnSelect(GetCurItemId());
 }
 
 //------------------------------------------------------------------------------
@@ -1181,6 +1187,8 @@ FmGridControl::FmGridControl(
         ,m_bInColumnMove(sal_False)
         ,m_nMarkedColumnId(BROWSER_INVALIDID)
         ,m_pPeer(_pPeer)
+        ,m_bSelecting(sal_False)
+        ,m_nCurrentSelectedColumn(-1)
 {
 }
 
@@ -1192,7 +1200,7 @@ void FmGridControl::Command(const CommandEvent& _rEvt)
         FmGridHeader* pHeader = static_cast< FmGridHeader* >( GetHeaderBar() );
         if ( pHeader && !_rEvt.IsMouseEvent() )
         {   // context menu requested by keyboard
-            if  ( 1 == GetSelectColumnCount() )
+            if  ( 1 == GetSelectColumnCount() || IsDesignMode() )
             {
                 sal_uInt16 nSelId = GetColumnId( FirstSelectedColumn() );
                 ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
@@ -1706,6 +1714,9 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
         aElement <<= xCol;
         xColumns->insertByIndex(GetModelColumnPos(nId), aElement);
         pCol->setModel(xCol);
+        // if the column which is shown here is selected ...
+        if ( isColumnSelected(nId,pCol) )
+            markColumn(nId); // ... -> mark it
     }
 
     m_bInColumnMove = sal_False;
@@ -1880,6 +1891,21 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
     if (nId == m_nMarkedColumnId)
         m_nMarkedColumnId = (sal_uInt16)-1;
 }
+// -----------------------------------------------------------------------------
+sal_Bool FmGridControl::isColumnSelected(sal_uInt16 nId,DbGridColumn* _pColumn)
+{
+    OSL_ENSURE(_pColumn,"Column can not be null!");
+    sal_Bool bSelected = sal_False;
+    // if the column which is shown here is selected ...
+    Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(GetPeer()->getColumns(), UNO_QUERY);
+    if ( xSelSupplier.is() )
+    {
+        Reference< ::com::sun::star::beans::XPropertySet >  xColumn;
+        xSelSupplier->getSelection() >>= xColumn;
+        bSelected = (xColumn.get() == _pColumn->getModel().get());
+    }
+    return bSelected;
+}
 
 //------------------------------------------------------------------------------
 void FmGridControl::ShowColumn(sal_uInt16 nId)
@@ -1895,15 +1921,8 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
         GetPeer()->columnVisible(pColumn);
 
     // if the column which is shown here is selected ...
-    Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(GetPeer()->getColumns(), UNO_QUERY);
-    if (xSelSupplier.is())
-    {
-        Reference< ::com::sun::star::beans::XPropertySet >  xColumn;
-        ::cppu::extractInterface(xColumn, xSelSupplier->getSelection());
-        if (xColumn.get() == pColumn->getModel().get())
-            // ... -> mark it
-            markColumn(nId);
-    }
+    if ( isColumnSelected(nId,pColumn) )
+        markColumn(nId); // ... -> mark it
 }
 
 //------------------------------------------------------------------------------
@@ -2079,6 +2098,110 @@ namespace
             sRetText = DbGridControl::GetAccessibleDescription(_eObjType,_nPosition);
     }
     return sRetText;
+}
+// -----------------------------------------------------------------------------
+void FmGridControl::Select()
+{
+    DbGridControl::Select();
+    // ... betrifft das unsere Spalten ?
+    const MultiSelection* pColumnSelection = GetColumnSelection();
+
+    long nSelectedColumn =
+        pColumnSelection && pColumnSelection->GetSelectCount()
+            ? ((MultiSelection*)pColumnSelection)->FirstSelected()
+            : -1L;
+    // die HandleColumn wird nicht selektiert
+    switch (nSelectedColumn)
+    {
+        case -1 : break;    // no selection
+        case  0 : nSelectedColumn = -1; break;  // handle col can't be seledted
+        default :
+            // get the model col pos instead of the view col pos
+            nSelectedColumn = GetModelColumnPos(GetColumnIdFromViewPos(nSelectedColumn - 1));
+            break;
+    }
+
+    if (nSelectedColumn != m_nCurrentSelectedColumn)
+    {
+        // VOR dem Aufruf des select am SelectionSupplier !
+        m_nCurrentSelectedColumn = nSelectedColumn;
+
+        if (!m_bSelecting)
+        {
+            m_bSelecting = sal_True;
+
+            try
+            {
+                Reference< XIndexAccess >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
+                Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
+                if (xSelSupplier.is())
+                    if (nSelectedColumn != -1)
+                    {
+                        Reference< XPropertySet >  xColumn;
+                        ::cppu::extractInterface(xColumn,xColumns->getByIndex(nSelectedColumn));
+                        xSelSupplier->select(makeAny(xColumn));
+                    }
+                    else
+                    {
+                        xSelSupplier->select(Any());
+                    }
+            }
+            catch(Exception&)
+            {
+            }
+
+
+            m_bSelecting = sal_False;
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+long FmGridControl::GetSelectedColumn() const
+{
+    return m_nCurrentSelectedColumn;
+}
+// -----------------------------------------------------------------------------
+void FmGridControl::KeyInput( const KeyEvent& rKEvt )
+{
+    sal_Bool bDone = sal_False;
+    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    if (    IsDesignMode()
+        &&  !rKeyCode.IsShift()
+        &&  !rKeyCode.IsMod1()
+        &&  !rKeyCode.IsMod2()
+        &&  GetParent() )
+    {
+        switch ( rKeyCode.GetCode() )
+        {
+            case KEY_ESCAPE:
+                GetParent()->GrabFocus();
+                bDone = sal_True;
+                break;
+            case KEY_DELETE:
+                if ( GetSelectColumnCount() && GetPeer() )
+                {
+                    Reference< ::com::sun::star::container::XIndexContainer >  xCols(GetPeer()->getColumns());
+                    if ( xCols.is() )
+                    {
+                        try
+                        {
+                            Reference< XInterface >  xCol;
+                            xCols->getByIndex(m_nCurrentSelectedColumn) >>= xCol;
+                            xCols->removeByIndex(m_nCurrentSelectedColumn);
+                            ::comphelper::disposeComponent(xCol);
+                        }
+                        catch(const Exception&)
+                        {
+                            OSL_ENSURE(0,"exception occured while droping column");
+                        }
+                    }
+                }
+                bDone = sal_True;
+                break;
+        }
+    }
+    if ( !bDone )
+        DbGridControl::KeyInput( rKEvt );
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:09:48 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 12:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2650,6 +2650,7 @@ void DbGridControl::SetDesignMode(sal_Bool bMode)
         m_bDesignMode = bMode;
         GetDataWindow().SetMouseTransparent(bMode);
         SetMouseTransparent(bMode);
+
         m_aBar.InvalidateAll(m_nCurrentPos, sal_True);
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-23 12:44:14 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 12:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2307,6 +2307,8 @@ void FmXGridPeer::setCurrentColumnPosition(sal_Int16 nPos) throw( RuntimeExcepti
 //------------------------------------------------------------------------------
 void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeException )
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     if (pGrid)
     {
@@ -2314,18 +2316,35 @@ void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeExcepti
         Any aSelection = xSelSupplier->getSelection();
         DBG_ASSERT(aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE, "FmXGridPeer::selectionChanged : invalid selection !");
         Reference< XPropertySet >  xSelection;
-        ::cppu::extractInterface(xSelection, aSelection);
+         aSelection >>= xSelection;
         if (xSelection.is())
         {
             Reference< XPropertySet > xCol;
-            for (sal_Int32 i = 0; i < m_xColumns->getCount(); i++)
+            sal_Int32 i = 0;
+            sal_Int32 nColCount = m_xColumns->getCount();
+
+            for (; i < nColCount; ++i)
             {
-                ::cppu::extractInterface(xCol, m_xColumns->getByIndex(i));
-                if (xCol == xSelection)
+                m_xColumns->getByIndex(i) >>= xCol;
+                if ( xCol == xSelection )
                 {
                     pGrid->markColumn(pGrid->GetColumnIdFromModelPos((sal_uInt16)i));
                     break;
                 }
+            }
+            // fuer das VCL-Control muessen die Columns 1-basiert sein
+            // die Selektion an das VCL-Control weiterreichen, wenn noetig
+            if ( i != pGrid->GetSelectedColumn() )
+            {   // (wenn das nicht greift, wurde das selectionChanged implizit von dem Control selber ausgeloest
+                if ( i < nColCount )
+                {
+                    pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( (sal_uInt16)i )) + 1, sal_True);
+                    // SelectColumnPos hat wieder zu einem impliziten ActivateCell gefuehrt
+                    if (pGrid->IsEditing())
+                        pGrid->DeactivateCell();
+                }
+                else
+                    pGrid->SetNoSelection();
             }
         }
         else
