@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:01:19 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,7 +882,8 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot,
     XclExpRoot( rRoot ),
     mrPCache( rPCache ),
     maDataOrientField( *this, EXC_SXIVD_DATA ),
-    maOutputRange( rDPObj.GetOutRange() )
+    maOutputRange( rDPObj.GetOutRange() ),
+    mbFilterBtn( false )
 {
     mbValid = CheckCellRange( maOutputRange );
     if( mbValid )
@@ -1011,6 +1012,9 @@ void XclExpPivotTable::Finalize()
     maPTInfo.mnPageFields = static_cast< sal_uInt16 >( maPageFields.size() );
     maPTInfo.mnDataFields = static_cast< sal_uInt16 >( maDataFields.size() );
 
+    maPTExtInfo.mnPagePerRow = maPTInfo.mnPageFields ? 1 : 0;
+    maPTExtInfo.mnPagePerCol = maPTInfo.mnPageFields;
+
     // subtotal items
     for( XclExpPTField* pField = maFieldList.First(); pField; pField = maFieldList.Next() )
         pField->AppendSubtotalItems();
@@ -1040,8 +1044,14 @@ void XclExpPivotTable::Finalize()
     maPTInfo.mnLastRow = static_cast< sal_uInt16 >( maOutputRange.aEnd.Row() );
     maPTInfo.mnFirstCol = static_cast< sal_uInt16 >( maOutputRange.aStart.Col() );
     maPTInfo.mnLastCol = static_cast< sal_uInt16 >( maOutputRange.aEnd.Col() );
-    // exclude filter button and page fields
-    maPTInfo.mnFirstRow += 2 + maPTInfo.mnPageFields;
+    // exclude page fields from output range
+    maPTInfo.mnFirstRow += maPTInfo.mnPageFields;
+    // exclude filter button from output range
+    if( mbFilterBtn )
+        ++maPTInfo.mnFirstRow;
+    // exclude empty row between (filter button and/or page fields) and table
+    if( mbFilterBtn || maPTInfo.mnPageFields )
+        ++maPTInfo.mnFirstRow;
 
     // data area
     maPTInfo.mnFirstDataRow = maPTInfo.mnFirstRow + maPTInfo.mnColFields + 1;
@@ -1059,9 +1069,10 @@ void XclExpPivotTable::Finalize()
 
 void XclExpPivotTable::SetPropertiesFromDP( const ScDPSaveData& rSaveData )
 {
-    // grand totals
     ::set_flag( maPTInfo.mnFlags, EXC_SXVIEW_ROWGRAND, rSaveData.GetRowGrand() );
     ::set_flag( maPTInfo.mnFlags, EXC_SXVIEW_COLGRAND, rSaveData.GetColumnGrand() );
+    ::set_flag( maPTExtInfo.mnFlags, EXC_SXEX_DRILLDOWN, rSaveData.GetDrillDown() );
+    mbFilterBtn = rSaveData.GetFilterButton();
 }
 
 void XclExpPivotTable::SetFieldPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
@@ -1173,22 +1184,8 @@ void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sa
 
 void XclExpPivotTable::WriteSxex( XclExpStream& rStrm ) const
 {
-    sal_uInt16 nPagePerRow = maPTInfo.mnPageFields ? 1 : 0;
-    sal_uInt16 nPagePerCol = maPTInfo.mnPageFields;
-
     rStrm.StartRecord( EXC_ID_SXEX, 24 );
-    rStrm   << sal_uInt16( 0 )              // number of SXFORMULA records
-            << EXC_PT_NOSTRING              // length of alt. error text
-            << EXC_PT_NOSTRING              // length of alt. empty text
-            << EXC_PT_NOSTRING              // length of tag
-            << sal_uInt16( 0 )              // number of RTSXSELECT records
-            << nPagePerRow                  // number of page fields per row
-            << nPagePerCol                  // number of page fields per column
-            << EXC_SXEX_DEFAULTFLAGS1
-            << EXC_SXEX_DEFAULTFLAGS2
-            << EXC_PT_NOSTRING              // length of page field style name
-            << EXC_PT_NOSTRING              // length of table style name
-            << EXC_PT_NOSTRING;             // length of vacate style name
+    rStrm << maPTExtInfo;
     rStrm.EndRecord();
 }
 
