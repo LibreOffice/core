@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:32:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,25 +1273,6 @@ BOOL SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
     return !pNewColl->GetInfo( aGetHt );
 }
 
-
-
-USHORT lcl_CheckAutoFmtId( USHORT nId )
-{
-    if( RES_POOLCHR_BEGIN <= nId && nId < RES_POOLCHR_END )
-        return RES_POOL_CHRFMT;
-    if( RES_POOLFRM_BEGIN <= nId && nId < RES_POOLFRM_END )
-        return RES_POOL_FRMFMT;
-    if( (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END) ||
-        (RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END) ||
-        (RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END) ||
-        (RES_POOLCOLL_REGISTER_BEGIN <= nId && nId < RES_POOLCOLL_REGISTER_END) ||
-        (RES_POOLCOLL_DOC_BEGIN <= nId && nId < RES_POOLCOLL_DOC_END) ||
-        (RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END) )
-        return RES_POOL_TXTCOLL;
-
-    ASSERT( FALSE, "ungueltige Id" );
-    return 0;
-}
 
 
     // Gebe das "Auto[matische]-Format" mit der Id zurueck. Existiert
