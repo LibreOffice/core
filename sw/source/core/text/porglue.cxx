@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porglue.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:28:31 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 #endif
         if( 1 == GetLen() )
         {
-            String aBullet( CH_BULLET, RTL_TEXTENCODING_MS_1252 );
+            String aBullet( CH_BULLET );
             SwPosSize aBulletSize( rInf.GetTxtSize( aBullet ) );
             Point aPos( rInf.GetPos() );
             aPos.X() += (Width()/2) - (aBulletSize.Width()/2);
