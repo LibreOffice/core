@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 10:51:49 $
+ *  last change: $Author: mav $ $Date: 2002-06-05 14:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1951,6 +1951,8 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     // in "SaveAs" title and password will be cleared ( maybe the new itemset contains new values, otherwise they will be empty )
     pMergedParams->ClearItem( SID_PASSWORD );
     pMergedParams->ClearItem( SID_DOCINFO_TITLE );
+
+    pMergedParams->ClearItem( SID_INPUTSTREAM );
 
     // "SaveAs" will never store any version information - it's a complete new file !
     pMergedParams->ClearItem( SID_VERSION );
