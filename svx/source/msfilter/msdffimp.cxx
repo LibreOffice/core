@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-06 17:22:16 $
+ *  last change: $Author: sj $ $Date: 2001-02-14 16:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,8 +367,8 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
 
     for( UINT32 nPropNum = 0; nPropNum < nPropCount; nPropNum++ )
     {
-        UINT16 nTmp;
-        UINT32 nRecType, nContent, nContentEx = 0xffff0000;
+        sal_uInt16 nTmp;
+        sal_uInt32 nRecType, nContent, nContentEx = 0xffff0000;
         rIn >> nTmp
             >> nContent;
 
@@ -403,7 +403,7 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
                         rIn >>  nNumElem >> nSize >> nSize;
                         if ( nSize < 0 )
                             nSize = ( -nSize ) >> 2;
-                        if ( ( nSize * nNumElem ) == nContent )
+                        if ( (sal_uInt32)( nSize * nNumElem ) == nContent )
                             nContent += 6;
                         rIn.Seek( nOldPos );
                     }
@@ -2253,12 +2253,9 @@ void SvxMSDffManager::RetrieveNameOfBLIP(SvStream&      rSt,
 void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
                                     ULONG nRecLen, FASTBOOL bUniCode ) const
 {
-    if( nRecLen > STRING_NOTFOUND )
-        nRecLen = STRING_NOTFOUND;
-
-    if( nRecLen )
+    sal_uInt16 nLen = (sal_uInt16)nRecLen;
+    if( nLen )
     {
-        sal_uInt32 nLen = nRecLen;
         if ( bUniCode )
             nLen >>= 1;
 
@@ -2270,7 +2267,7 @@ void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
             rIn.Read( (sal_Char*)pBuf, nLen << 1 );
 
 #ifdef __BIGENDIAN
-            for( sal_uInt32 n = 0; n < nLen; ++n, ++pBuf )
+            for( sal_uInt16 n = 0; n < nLen; ++n, ++pBuf )
                 *pBuf = SWAPSHORT( *pBuf );
 #endif // ifdef __BIGENDIAN
         }
@@ -2280,9 +2277,8 @@ void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
             // change then all to unicode
             sal_Char* pReadPos = ((sal_Char*)pBuf) + nLen;
             rIn.Read( (sal_Char*)pReadPos, nLen );
-            for( ULONG n = 0; n < nLen; ++n, ++pBuf, ++pReadPos )
-                *pBuf = ByteString::ConvertToUnicode( *pReadPos,
-                                            RTL_TEXTENCODING_MS_1252 );
+            for( sal_uInt16 n = 0; n < nLen; ++n, ++pBuf, ++pReadPos )
+                *pBuf = ByteString::ConvertToUnicode( *pReadPos, RTL_TEXTENCODING_MS_1252 );
         }
 
         rStr = sBuf.EraseTrailingChars( 0 );
@@ -4046,7 +4042,7 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
     if( !this->ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) ) return;
 
     BOOL bOk;
-    ULONG nPos = nOffsDgg + nHeaderSize;
+    ULONG nPos = nOffsDgg + DFF_COMMON_RECORD_HEADER_SIZE;
 
     // Fall A: erst Drawing Group Container, dann n Mal Drawing Container
     if( DFF_msofbtDggContainer == nFbt )
@@ -4070,7 +4066,7 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
             }
             if( bOk )
                 GetDrawingContainerData( rStCtrl, nLength );
-            nPos += nHeaderSize + nLength;
+            nPos += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
         }
         while( bOk );
     }
@@ -4097,7 +4093,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, ULONG nLenDgg
     do
     {
         if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
-        nRead += nHeaderSize + nLength;
+        nRead += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
         if( DFF_msofbtBstoreContainer == nFbt )
         {
             nLenBStoreCont = nLength;       break;
@@ -4121,7 +4117,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, ULONG nLenDgg
     do
     {
         if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
-        nRead += nHeaderSize + nLength;
+        nRead += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
         if( DFF_msofbtBSE == nFbt )
         {
             nLenFBSE = nLength;
@@ -4183,7 +4179,7 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, ULONG nLenDg )
     do
     {
         if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
-        nReadDg += nHeaderSize;
+        nReadDg += DFF_COMMON_RECORD_HEADER_SIZE;
         // Patriarch gefunden (der oberste Shape Group Container) ?
         if( DFF_msofbtSpgrContainer == nFbt )
         {
@@ -4219,11 +4215,11 @@ BOOL SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
     {
         if( !this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength ) )
             return FALSE;
-        nReadSpGrCont += nHeaderSize;
+        nReadSpGrCont += DFF_COMMON_RECORD_HEADER_SIZE;
         // Shape Container ?
         if( DFF_msofbtSpContainer == nFbt )
         {
-            ULONG nGroupOffs = bFirst ? nStartShapeGroupCont - nHeaderSize : ULONG_MAX;
+            ULONG nGroupOffs = bFirst ? nStartShapeGroupCont - DFF_COMMON_RECORD_HEADER_SIZE : ULONG_MAX;
             if ( !this->GetShapeContainerData( rSt, nLength, nGroupOffs ) )
                 return FALSE;
             bFirst = FALSE;
@@ -4259,7 +4255,7 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
     // File Offset des Shape-Containers bzw. der Gruppe(!) vermerken
     //
     ULONG nStartOffs = (ULONG_MAX > nPosGroup) ?
-                            nPosGroup : nStartShapeCont - nHeaderSize;
+                            nPosGroup : nStartShapeCont - DFF_COMMON_RECORD_HEADER_SIZE;
     SvxMSDffShapeInfo aInfo( nStartOffs );
 
     // duerfte das Shape durch einen Rahmen ersetzt werden ?
@@ -4277,7 +4273,7 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
     do
     {
         if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return FALSE;
-        nReadSpCont += nHeaderSize;
+        nReadSpCont += DFF_COMMON_RECORD_HEADER_SIZE;
         // FSP ?
         if( ( DFF_msofbtSp == nFbt ) && ( 4 <= nLength ) )
         {
@@ -5092,12 +5088,10 @@ SdrObject* SvxMSDffManager::GetAutoForm( MSO_SPT eTyp ) const
     SdrObject* pRet = NULL;
     switch ( eTyp )
     {
-        case mso_sptUturnArrow                : nNewType= 49; break;
         case mso_sptCurvedLeftArrow           : nNewType= 53; break;
         case mso_sptCurvedRightArrow          : nNewType= 52; break;
         case mso_sptCurvedUpArrow             : nNewType= 54; break;
         case mso_sptCurvedDownArrow           : nNewType= 55; break;
-        case mso_sptNotchedRightArrow         : nNewType= 57; break;
         case mso_sptWave                      : nNewType= 89; break;
         case mso_sptDoubleWave                : nNewType= 90; break;
 
