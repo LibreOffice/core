@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 14:13:05 $
+ *  last change: $Author: cl $ $Date: 2002-05-30 12:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,8 @@ SdNavigatorWin::SdNavigatorWin( Window* pParent,
     SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
     pBindings->GetDispatcher()->Execute(
         SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+
+    ApplyImageList();
 }
 
 // -----------------------------------------------------------------------
