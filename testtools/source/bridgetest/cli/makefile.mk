@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-03 15:15:34 $
+#   last change: $Author: rt $ $Date: 2004-07-12 13:03:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,6 +133,7 @@ ALLTAR : $(DESTDIR)$/cli_bridgetest_inprocess.exe
 CLI_URE = $(SOLARBINDIR)$/cli_ure.dll
 CLI_TYPES = $(SOLARBINDIR)$/cli_types.dll
 CLI_CPPUHELPER = $(SOLARBINDIR)$/cli_cppuhelper.dll
+CLI_TYPES_BRIDGETEST = $(BIN)$/cli_types_bridgetest.dll
 
 CSCFLAGS = -warnaserror+ -incremental-
 VBC_FLAGS = -warnaserror+
@@ -152,18 +153,21 @@ VBC_FLAGS += -debug+ -define:DEBUG=1 -define:TRACE=1
 # C# ----------------------------------------------
 $(DESTDIR)$/cli_cs_testobj.uno.dll : \
         cli_cs_testobj.cs \
+        cli_cs_multi.cs \
         $(CLI_TYPES) \
         $(CLI_URE)
     +csc $(CSCFLAGS) -target:library -out:$@ \
-        -reference:$(CLI_TYPES) \
+        -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_URE) \
-        cli_cs_testobj.cs
+         -reference:$(CLI_TYPES) \
+        cli_cs_testobj.cs cli_cs_multi.cs
 
 $(DESTDIR)$/cli_cs_bridgetest.uno.dll : \
         cli_cs_bridgetest.cs \
         $(CLI_TYPES) \
         $(CLI_URE)
     +csc $(CSCFLAGS) -target:library -out:$@ \
+        -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_TYPES) \
         -reference:$(CLI_URE) \
         -reference:System.dll \
@@ -179,6 +183,7 @@ $(DESTDIR)$/cli_vb_bridgetest.uno.dll : \
         -out:$@ \
         -reference:$(CLI_TYPES) \
         -reference:$(CLI_URE) \
+        -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:System.dll \
         -reference:System.Drawing.dll \
         -reference:System.Windows.Forms.dll \
@@ -193,6 +198,7 @@ $(DESTDIR)$/cli_vb_testobj.uno.dll : \
         -out:$@ \
         -reference:$(CLI_TYPES) \
         -reference:$(CLI_URE) \
+        -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:System.dll \
         -reference:System.Drawing.dll \
         -reference:System.Windows.Forms.dll \
@@ -210,6 +216,7 @@ $(DESTDIR)$/cli_bridgetest_inprocess.exe : \
         $(CLI_URE) \
         $(CLI_CPPUHELPER)
     +csc $(CSCFLAGS) -target:exe -out:$@ \
+        -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_TYPES) \
         -reference:$(CLI_URE) \
         -reference:$(CLI_CPPUHELPER) \
