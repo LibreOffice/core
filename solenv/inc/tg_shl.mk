@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-02 17:11:54 $
+#   last change: $Author: pluby $ $Date: 2001-02-24 08:35:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -430,6 +430,20 @@ $(SHL$(TNR)TARGETN) : \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"

@@ -330,6 +330,20 @@ $(SHL1TARGETN) : \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -690,6 +704,20 @@ $(SHL2TARGETN) : \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -1050,6 +1078,20 @@ $(SHL3TARGETN) : \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -1410,6 +1452,20 @@ $(SHL4TARGETN) : \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -1770,6 +1826,20 @@ $(SHL5TARGETN) : \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -2130,6 +2200,20 @@ $(SHL6TARGETN) : \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -2490,6 +2574,20 @@ $(SHL7TARGETN) : \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -2850,6 +2948,20 @@ $(SHL8TARGETN) : \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -3210,6 +3322,20 @@ $(SHL9TARGETN) : \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -3570,6 +3696,20 @@ $(SHL10TARGETN) : \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="MACOSX"
+    @cat $(MISC)$/$(@:b).cmd
+    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
+    if ( $$status == 0 ) \
+      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
+      if ( $$status == 0 ) \
+        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
+        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
+        echo "------------------------------" ; \
+        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
+      endif ; \
+    endif
+    @+-$(RM) $(MISC)$/$(@:b).cmd.out
+.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
