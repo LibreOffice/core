@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 14:27:29 $
+ *  last change: $Author: jb $ $Date: 2001-06-21 12:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,18 +78,20 @@ namespace configmgr
 
 struct UStringDescription
 {
-    const sal_Char* m_pZeroTerminatedName;
-    sal_Int32 m_nLen;
-    rtl_TextEncoding m_encoding;
+    const sal_Char*     m_pZeroTerminatedName;
+    sal_Int32           m_nLen;
+    rtl_TextEncoding    m_encoding;
 
     UStringDescription(const sal_Char* _pName, sal_Int32 _nLen, rtl_TextEncoding _encoding)
+        : m_pZeroTerminatedName( _pName )
+        , m_nLen( _nLen )
+        , m_encoding(_encoding )
+        , m_aString (_pName, _nLen, _encoding)
         {
-            m_pZeroTerminatedName = _pName;
-            m_nLen = _nLen;
-            m_encoding = _encoding;
-            m_aString = ::rtl::OUString(_pName, _nLen, _encoding);
         }
-    operator ::rtl::OUString() const { return m_aString; }
+
+    sal_Int32 getLength() const { return m_nLen; }
+    operator ::rtl::OUString const&() const { return m_aString; }
     operator const sal_Char*() const { return m_pZeroTerminatedName; }
 
 private:
