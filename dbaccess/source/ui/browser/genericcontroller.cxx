@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 14:15:52 $
+ *  last change: $Author: oj $ $Date: 2001-09-19 13:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ using namespace ::comphelper;
 OGenericUnoController::OGenericUnoController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
     :OGenericUnoController_COMPBASE(m_aMutex)
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
+    ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
     ,m_xMultiServiceFacatory(_rM)
     ,m_bCurrentlyModified(sal_False)
     ,m_bFrameUiActive(sal_False)
@@ -981,9 +982,18 @@ String OGenericUnoController::getMenu() const
 // -----------------------------------------------------------------------------
 void OGenericUnoController::closeTask()
 {
-    Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
-    if(xTask.is())
-        xTask->close();
+    m_aAsyncCloseTask.Call();
+}
+// -----------------------------------------------------------------------------
+IMPL_LINK(OGenericUnoController, OnAsyncCloseTask, void*, EMPTYARG)
+{
+    if(!OGenericUnoController_COMPBASE::rBHelper.bInDispose)
+    {
+        Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
+        if(xTask.is())
+            xTask->close();
+    }
+    return 0L;
 }
 // -----------------------------------------------------------------------------
 
