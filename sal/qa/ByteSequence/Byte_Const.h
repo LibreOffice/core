@@ -37,10 +37,12 @@ char kTestChar = 45;
 char kTestChar0 = 0;
 char kTestChar1 = 500;
 char kTestChar2 = 78;
+char kTestChar3 = 34;
 
 sal_Int32 kTestSeqLen0 = 0;
-sal_Int32 kTestSeqLen1 = 4;
+sal_Int32 kTestSeqLen1 = 5;
 sal_Int32 kTestSeqLen2 = 34;
+sal_Int32 kTestSeqLen3 = 270;
 
 sal_Sequence kTestEmptyByteSeq =
 {
@@ -61,6 +63,13 @@ sal_Sequence kTestByteSeq2 =
     3,              /* sal_Int32    refCount;   */
     kTestSeqLen2,       /* sal_Int32    length;     */
     { kTestChar2 }      /* sal_Unicode  buffer[1];  */
+};
+
+sal_Sequence kTestByteSeq3 =
+{
+    2,              /* sal_Int32    refCount;   */
+    kTestSeqLen3,       /* sal_Int32    length;     */
+    { kTestChar3 }      /* sal_Unicode  buffer[1];  */
 };
 
 //------------------------------------------------------------------------
