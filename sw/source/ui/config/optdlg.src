@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:01:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ TabPage TP_CONTENT_OPT
         Text[ finnish ] = "Vaakavierityspalkki";
         Text[ catalan ] = "Barra de despla�ament ~horitzontal";
         Text[ thai ] = "แถบเลื่อนแนวน~อน";
-        Text[ czech ] = "Vodorovná posuvná lišta";
+        Text[ czech ] = "Vodorovný posuvník";
         Text[ hebrew ] = "Horizontale Bildla~ufleiste";
         Text[ hindi ] = "स~मतल स्क्रॉल पट्टी";
         Text[ slovak ] = "V~odorovná posuvná lišta";
@@ -305,7 +305,7 @@ TabPage TP_CONTENT_OPT
         Text[ finnish ] = "Pystyvierityspalkki";
         Text[ catalan ] = "Barra de despla�ament ~vertical";
         Text[ thai ] = "แถบเลื่อนแนว~ตั้ง";
-        Text[ czech ] = "Svislá posuvná lišta";
+        Text[ czech ] = "Svislý posuvník";
         Text[ hebrew ] = "‮פס גלילה אנכי‬";
         Text[ hindi ] = "~लंबरूप स्क्रॉल पट्टी";
         Text[ slovak ] = "Z~vislá posuvná lišta";
@@ -3434,6 +3434,10 @@ TabPage TP_OPTSHDWCRSR
         Text[ slovak ] = "Aktivovať";
     };
 };
+
+
+
+
 
 
 
