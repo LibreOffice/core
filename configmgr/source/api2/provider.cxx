@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 17:15:44 $
+ *  last change: $Author: dg $ $Date: 2001-02-08 12:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,15 +103,23 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     OProvider::OProvider(Module& aModule, ServiceInfo const* pInfo)
               :ServiceComponentImpl(pInfo)
+              ,OPropertyContainer(ServiceComponentImpl::rBHelper)
               ,m_aModule(aModule)
     {
     }
 
-    // XTypeOProvider
+    // XTypeProvider
     //-----------------------------------------------------------------------------
     uno::Sequence< uno::Type > SAL_CALL OProvider::getTypes(  ) throw(uno::RuntimeException)
     {
         return ::comphelper::concatSequences(ServiceComponentImpl::getTypes(), OProvider_Base::getTypes());
+    }
+
+    // XPropertySet
+    //-----------------------------------------------------------------------------
+    uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OProvider::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+    {
+        return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
     }
 
     // XInterface

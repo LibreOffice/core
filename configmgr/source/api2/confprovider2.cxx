@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-05 09:57:27 $
+ *  last change: $Author: dg $ $Date: 2001-02-08 12:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,8 @@ namespace configmgr
         return 0;
     }
 
+    #define ID_PREFETCH     1
+
     //=============================================================================
     //= OConfigurationProvider
     //=============================================================================
@@ -181,6 +183,7 @@ namespace configmgr
                            :OProvider(aModule,&aProviderInfo)
                            ,m_pImpl(NULL)
     {
+        registerProperty(rtl::OUString::createFromAscii("PrefetchNodes"),   ID_PREFETCH,            0,&m_aPrefetchNodes, ::getCppuType(static_cast< uno::Sequence< rtl::OUString > const * >(0) ));
     }
 
     //-----------------------------------------------------------------------------
@@ -302,6 +305,58 @@ namespace configmgr
 
         return aNames;
     }
+
+    // XInterface
+    //-----------------------------------------------------------------------------
+    ::com::sun::star::uno::Any SAL_CALL OConfigurationProvider::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+    {
+
+        uno::Any aRet( OProvider::queryInterface(rType) );
+        if ( !aRet.hasValue() )
+            aRet = queryPropertyInterface(rType);
+        return aRet;
+    }
+
+    //XTypeProvider
+    //-----------------------------------------------------------------------------
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OConfigurationProvider::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
+    {
+        cppu::OTypeCollection aCollection(::getCppuType( (const uno::Reference< beans::XPropertySet > *)0 ),
+                                          ::getCppuType( (const uno::Reference< beans::XFastPropertySet > *)0 ),
+                                          ::getCppuType( (const uno::Reference< beans::XMultiPropertySet > *)0 ),
+                                          OProvider::getTypes());
+        return aCollection.getTypes();
+    }
+
+    // OPropertyArrayUsageHelper
+    // -------------------------------------------------------------------------
+    ::cppu::IPropertyArrayHelper* OConfigurationProvider::createArrayHelper( ) const
+    {
+        uno::Sequence< beans::Property > aProps;
+        describeProperties(aProps);
+        return new ::cppu::OPropertyArrayHelper(aProps);
+    }
+    // -------------------------------------------------------------------------
+    ::cppu::IPropertyArrayHelper & OConfigurationProvider::getInfoHelper()
+    {
+        return *const_cast<OConfigurationProvider*>(this)->getArrayHelper();
+    }
+
+    //-----------------------------------------------------------------------------
+    void SAL_CALL OConfigurationProvider::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue)
+                                                 throw (::com::sun::star::uno::Exception)
+    {
+        OProvider::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+
+        uno::Sequence< OUString > aNodeList;
+        rValue >>= aNodeList;
+
+        ::vos::ORef<OOptions> xOptions(new OOptions(m_pImpl->getDefaultOptions()));
+
+        for (sal_Int32 i = 0; i < aNodeList.getLength(); i++)
+            m_pImpl->fetchSubtree(aNodeList[i], xOptions);
+    }
+
 } // namespace configmgr
 
 

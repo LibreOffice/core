@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: lla $ $Date: 2001-02-01 15:49:36 $
+ *  last change: $Author: dg $ $Date: 2001-02-08 12:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,12 @@ namespace configmgr
     void OProviderImpl::notifyUpdate(TreeChangeList const& aChanges) throw (uno::RuntimeException)
     {
         m_pTreeMgr->notifyUpdate(aChanges);
+    }
+
+    //-----------------------------------------------------------------------------
+    void OProviderImpl::fetchSubtree(OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) throw()
+    {
+        m_pTreeMgr->fetchSubtree(aSubtreePath, _xOptions, nMinLevels);
     }
 
     // IInterface
