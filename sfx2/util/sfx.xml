@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <module-name> sfx </module-name>
+
+    <component-description>
+        <author> Dirk Voelzke </author>
+        <name> com.sun.star.comp.sfx2.DocumentTemplates </name>
+        <description>
+            A service to access the document templates and to manipulate them.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.DocumentTemplates </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Stefan Schaefer </author>
+        <name> com.sun.star.comp.desktop.QuickstartWrapper </name>
+        <description>
+            The Quickstarter.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.office.Quickstart </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Mathias Bauer </author>
+        <name> com.sun.star.comp.office.FrameLoader </name>
+        <description>
+            FrameLoader.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.ExtendedFilterDetect </supported-service>
+        <supported-service> com.sun.star.frame.FrameLoader </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Mathias Bauer </author>
+        <name> com.sun.star.comp.sfx2.AppDispatchProvider </name>
+        <description>
+            AppDispatchProvider.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.DispatchProvider </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Mathias Bauer </author>
+        <name> com.sun.star.comp.sfx2.SfxMacroLoader </name>
+        <description>
+            SfxMacroLoader.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.FrameLoader </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Mathias Bauer </author>
+        <name> com.sun.star.comp.sfx2.StandaloneDocumentInfo </name>
+        <description>
+            StandaloneDocumentInfo.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.document.StandaloneDocumentInfo </supported-service>
+    </component-description>
+
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  vos         </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <project-build-dependency>  tools       </project-build-dependency>
+    <project-build-dependency>  svtools     </project-build-dependency>
+    <project-build-dependency>  toolkit     </project-build-dependency>
+    <project-build-dependency>  sv          </project-build-dependency>
+    <project-build-dependency>  comphelper  </project-build-dependency>
+    <project-build-dependency>  unotools    </project-build-dependency>
+    <project-build-dependency>  ucbhelper   </project-build-dependency>
+    <project-build-dependency>  svl         </project-build-dependency>
+    <project-build-dependency>  sot         </project-build-dependency>
+
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> vos2$(COM)  </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+    <runtime-module-dependency> tl          </runtime-module-dependency>
+    <runtime-module-dependency> svt         </runtime-module-dependency>
+    <runtime-module-dependency> svl         </runtime-module-dependency>
+    <runtime-module-dependency> tk          </runtime-module-dependency>
+    <runtime-module-dependency> sv          </runtime-module-dependency>
+    <runtime-module-dependency> comphelp2   </runtime-module-dependency>
+    <runtime-module-dependency> utl         </runtime-module-dependency>
+    <runtime-module-dependency> ucb         </runtime-module-dependency>
+    <runtime-module-dependency> sot         </runtime-module-dependency>
+
+</module-description>
