@@ -82,6 +82,10 @@ FORMAT*=-format rpm
 FORMAT*=-format pkg
 .ENDIF
 
+.IF "$(OS)"=="MACOSX"
+FORMAT*=-format osx
+.ENDIF
+
 # epm supports the following formats:
 # aix - AIX software distribution
 # bsd - FreeBSD, NetBSD, or OpenBSD software distribution
