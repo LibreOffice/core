@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.67 $
+*  $Revision: 1.68 $
 *
-*  last change: $Author: obo $ $Date: 2004-11-16 12:51:52 $
+*  last change: $Author: obo $ $Date: 2004-11-18 09:14:01 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -381,7 +381,7 @@ File gid_File_Lib_Cppuhelper
   #endif
 End
 
-#ifdef LINUX
+#ifdef UNX
 #ifdef ENABLE_GNOMEVFS
 File gid_File_Lib_Gnomevfs
     TXT_FILE_BODY;
@@ -1028,6 +1028,17 @@ File gid_File_Lib_Jvmaccess
   #endif
     Styles = (PACKED, SETUPZIP);
 End
+
+#ifdef WNT
+
+File gid_File_Lib_Lngpckinsthlp
+    BIN_FILE_BODY;
+    Styles = (PACKED, LANGUAGEPACK);
+    Dir = gid_Dir_Program;
+    Name = "lngpckinsthlp.dll";
+End
+
+#endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Lng, lng)
 
@@ -1739,8 +1750,15 @@ End
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Syssh, syssh.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Localebe, localebe1.uno )
 
-#if defined(LINUX) && defined(ENABLE_GNOMEVFS)
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Gconfebe, gconfbe1.uno )
+#if defined(UNX) && defined(ENABLE_GNOMEVFS)
+File gid_File_Lib_Gconfebe
+    TXT_FILE_BODY;
+    Name = STRING(CONCAT2(gconfbe1.uno,UNXSUFFIX));
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Regmergefile = "gconfbe1-ucd.txt";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+End
 #endif
 
 #ifdef WNT
