@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.48 $
+*  $Revision: 1.49 $
 *
-*  last change: $Author: rt $ $Date: 2004-09-20 12:09:08 $
+*  last change: $Author: rt $ $Date: 2004-09-20 14:39:22 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -249,6 +249,17 @@ File gid_File_Lib_Cli_Types_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED);
     Name = "cli_types.dll";
+    Dir = gid_Dir_Program;
+End
+
+#endif
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Cli_Basetypes
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Name = "cli_basetypes.dll";
     Dir = gid_Dir_Program;
 End
 
