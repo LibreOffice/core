@@ -84,10 +84,18 @@ public class AccessibilityWorkBench
             }
         }
 
-        new AccessibilityWorkBench (nPortNumber, sFileName);
+        aWorkBench = new AccessibilityWorkBench (nPortNumber, sFileName);
     }
 
 
+    /** the Singleton Workbench object */
+    private static AccessibilityWorkBench aWorkBench;
+
+    /** access to the Singleton Workbench object */
+    public static AccessibilityWorkBench get()
+    {
+        return aWorkBench;
+    }
 
 
     public  AccessibilityWorkBench (int nPortNumber, String sFileName)
