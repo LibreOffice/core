@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:20:38 $
+ *  last change: $Author: os $ $Date: 2001-06-29 12:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,9 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 130 , 14 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text = "Felder und Diagramme" ;
-        Text [ English ] = "Fields and Charts" ;
-        Text[ english_us ] = "Update automatically";
+        Text = "Automatisch" ;
+        Text [ English ] = "Automatically" ;
+        Text[ english_us ] = "Automatically";
         Text[ portuguese ] = "Actualizar campos e grбficos";
         Text[ russian ] = "Поля и диаграммы";
         Text[ greek ] = "РедЯб кбй дйбгсЬммбфб";
@@ -247,8 +247,8 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 136 , 26) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text = "F~eldbefehle automatisch" ;
-        Text [ English ] = "Fields automatically" ;
+        Text = "F~eldbefehle" ;
+        Text [ English ] = "Fields" ;
         Text[ english_us ] = "~Fields";
         Text[ portuguese ] = "Actualizar ~campos automaticamente";
         Text[ russian ] = "Поля автоматически";
@@ -274,8 +274,8 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 145 , 39) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text = "Dia~gramme automatisch" ;
-        Text [ English ] = "Charts automatically" ;
+        Text = "Dia~gramme" ;
+        Text [ English ] = "Charts" ;
         Text[ english_us ] = "~Charts";
         Text[ portuguese ] = "Actualizar ~grбficos automaticamente";
         Text[ russian ] = "Диаграммы автоматически";
