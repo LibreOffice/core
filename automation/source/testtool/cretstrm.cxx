@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cretstrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:40:40 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ void CRetStream::Read ( String &aString )
 {
     comm_UniChar* pStr;
     USHORT nLenInChars;
-    Read( pStr, nLenInChars );
+    CmdBaseStream::Read( pStr, nLenInChars );
 
     aString = String( pStr, nLenInChars );
     delete [] pStr;

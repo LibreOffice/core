@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cretstrm.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:53:48 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@ public:
 //  CmdBaseStream::Read;
     void Read ( comm_USHORT &nNr ){CmdBaseStream::Read ( nNr );}
     void Read ( comm_ULONG &nNr ){CmdBaseStream::Read ( nNr );}
-    void Read ( comm_UniChar* &aString, comm_USHORT &nLenInChars ){CmdBaseStream::Read ( aString, nLenInChars );}
+//  void Read ( comm_UniChar* &aString, comm_USHORT &nLenInChars ){CmdBaseStream::Read ( aString, nLenInChars );}
+    virtual void Read ( SmartId* &pId ){CmdBaseStream::Read ( pId );}
     void Read ( comm_BOOL &bBool ){CmdBaseStream::Read ( bBool );}
 //  new
     void Read( String &aString );
