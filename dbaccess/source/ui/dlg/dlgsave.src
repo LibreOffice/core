@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 11:01:35 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,24 @@ ModalDialog DLG_SAVE_AS
         Size = MAP_APPFONT ( 174 - 12 , 16 ) ;
         Text = "Bitte geben Sie einen Namen für das anzulegende Object an:";
         Text [ english ] = "Please enter the name of the object to be created:";
-        Text [ english_us ] = "Please enter the name of the object to be created:";
+        Text [ english_us ] = "Please enter a name for the object to be created:";
+        Text[ portuguese ] = "Please enter the name of the object to be created:";
+        Text[ russian ] = "Please enter the name of the object to be created:";
+        Text[ greek ] = "Please enter the name of the object to be created:";
+        Text[ dutch ] = "Please enter the name of the object to be created:";
+        Text[ french ] = "Please enter the name of the object to be created:";
+        Text[ spanish ] = "Please enter the name of the object to be created:";
+        Text[ italian ] = "Indicate il nome dell'oggetto da creare:";
+        Text[ danish ] = "Please enter the name of the object to be created:";
+        Text[ swedish ] = "Ange ett namn för objektet som ska skapas:";
+        Text[ polish ] = "Please enter the name of the object to be created:";
+        Text[ portuguese_brazilian ] = "Please enter the name of the object to be created:";
+        Text[ japanese ] = "Ši”[‚·‚éµÌŞ¼Şª¸Ä‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢:";
+        Text[ korean ] = "Please enter the name of the object to be created:";
+        Text[ chinese_simplified ] = "Please enter the name of the object to be created:";
+        Text[ chinese_traditional ] = "½Ğ±z¿é¤J¤@­Ó­n·s«Øª«¥óªº¦WºÙ¡G";
+        Text[ turkish ] = "Please enter the name of the object to be created:";
+        Text[ arabic ] = "Please enter the name of the object to be created:";
     };
 
     FixedText FT_CATALOG
@@ -111,7 +128,7 @@ ModalDialog DLG_SAVE_AS
         Text[ japanese ] = "¶ÀÛ¸Ş(~C)";
         Text[ korean ] = "~Catalog";
         Text[ chinese_simplified ] = "·ÖÀà(~C)";
-        Text[ chinese_traditional ] = "¤ÀÃş";
+        Text[ chinese_traditional ] = "¤ÀÃş(~C)";
         Text[ turkish ] = "~Catalog";
         Text[ arabic ] = "ßÊÇáæÌ";
     };
@@ -143,8 +160,8 @@ ModalDialog DLG_SAVE_AS
         Text[ portuguese_brazilian ] = "~Schema";
         Text[ japanese ] = "‚Ğ‚ÈŒ^(~S)";
         Text[ korean ] = "~Schema";
-        Text[ chinese_simplified ] = "ÂÔÍ¼";
-        Text[ chinese_traditional ] = "²¤¹Ï";
+        Text[ chinese_simplified ] = "ÂÔÍ¼(~S)";
+        Text[ chinese_traditional ] = "²¤¹Ï(~S)";
         Text[ turkish ] = "~Schema";
         Text[ arabic ] = "äãæĞÌ";
     };
@@ -203,14 +220,14 @@ ModalDialog DLG_SAVE_AS
         Text [ spanish ] = "~Nombre de la tabla" ;
         Text [ french ] = "~Nom de la table" ;
         Text [ dutch ] = "~Naam van de tabel" ;
-        Text[ chinese_simplified ] = "±í¸ñÃû³Æ";
+        Text[ chinese_simplified ] = "±í¸ñÃû³Æ(~T)";
         Text[ russian ] = "Èìÿ òàáëèöû";
         Text[ polish ] = "Nazwa tabeli";
-        Text[ japanese ] = "Ã°ÌŞÙ–¼";
-        Text[ chinese_traditional ] = "ªí®æ¦WºÙ";
+        Text[ japanese ] = "Ã°ÌŞÙ–¼(~T)";
+        Text[ chinese_traditional ] = "ªí®æ¦WºÙ(~T)";
         Text[ arabic ] = "ÇÓã ÇáÌÏæá";
         Text[ greek ] = "¼íï~ìá ğßíáêá";
-        Text[ korean ] = "Å×ÀÌºí ÀÌ¸§";
+        Text[ korean ] = "Å×ÀÌºí ÀÌ¸§(~T)";
         Text[ turkish ] = "Tablo adı";
     };
     String STR_VW_LABEL
@@ -226,14 +243,14 @@ ModalDialog DLG_SAVE_AS
         Text [ spanish ] = "Nombre del ~modo tabla" ;
         Text [ french ] = "~Nom de la vue" ;
         Text [ dutch ] = "~Naam van de tabelmodus" ;
-        Text[ chinese_simplified ] = "±í¸ñÊÓÍ¼Ãû³Æ";
+        Text[ chinese_simplified ] = "±í¸ñÊÓÍ¼Ãû³Æ(~N)";
         Text[ russian ] = "Èìÿ âèäà òàáëèöû";
         Text[ polish ] = "Nazwa widoku tabeli";
-        Text[ japanese ] = "Ã°ÌŞÙËŞ­°‚Ì–¼‘O";
-        Text[ chinese_traditional ] = "ªí®æÀËµø¦WºÙ";
+        Text[ japanese ] = "Ã°ÌŞÙËŞ­°‚Ì–¼‘O(~N)";
+        Text[ chinese_traditional ] = "ªí®æÀËµø¦WºÙ(~N)";
         Text[ arabic ] = "ÇÓã ÚÑÖ ÇáÌÏæá";
         Text[ greek ] = "¼íï~ìá ğñïâïëŞò ğßíáêá";
-        Text[ korean ] = "Å×ÀÌºí º¸±âÀÇ ÀÌ¸§";
+        Text[ korean ] = "Å×ÀÌºí º¸±âÀÇ ÀÌ¸§(~N)";
         Text[ turkish ] = "Tablo görünümü adı";
     };
     String STR_QRY_LABEL
@@ -249,14 +266,14 @@ ModalDialog DLG_SAVE_AS
         Text [ spanish ] = "Nombre de la ~consulta" ;
         Text [ french ] = "~Nom de la requête" ;
         Text [ dutch ] = "~Naam van de query" ;
-        Text[ chinese_simplified ] = "²éÑ¯Ãû³Æ";
+        Text[ chinese_simplified ] = "²éÑ¯Ãû³Æ(~Q)";
         Text[ russian ] = "Èìÿ çàïğîñà";
         Text[ polish ] = "Nazwa kwerendy";
-        Text[ japanese ] = "¸´Ø°–¼";
-        Text[ chinese_traditional ] = "¬d¸ß¦WºÙ";
+        Text[ japanese ] = "¸´Ø°–¼(~Q)";
+        Text[ chinese_traditional ] = "¬d¸ß¦WºÙ(~Q)";
         Text[ arabic ] = "ÇÓã ÇáÇÓÊİÓÇÑ";
         Text[ greek ] = "¼íï~ìá åñùôŞìáôïò";
-        Text[ korean ] = "ÁúÀÇ ÀÌ¸§";
+        Text[ korean ] = "ÁúÀÇ ÀÌ¸§(~Q)";
         Text[ turkish ] = "Sorgu adı";
     };
     String STR_FRM_LABEL
@@ -272,14 +289,14 @@ ModalDialog DLG_SAVE_AS
         Text [ spanish ] = "Nombre del form~ulario" ;
         Text [ french ] = "~Nom du formulaire" ;
         Text [ dutch ] = "~Naam van het formulier" ;
-        Text[ chinese_simplified ] = "±íµ¥Ãû³Æ";
+        Text[ chinese_simplified ] = "±íµ¥Ãû³Æ(~O)";
         Text[ russian ] = "Èìÿ ôîğìóëÿğà";
         Text[ polish ] = "Nazwa formularza";
-        Text[ japanese ] = "Ì«°Ñ–¼";
-        Text[ chinese_traditional ] = "ªí³æ¦WºÙ";
+        Text[ japanese ] = "Ì«°Ñ–¼(~O)";
+        Text[ chinese_traditional ] = "ªí³æ¦WºÙ(~O)";
         Text[ arabic ] = "ÇÓã ÇáÇÓÊãÇÑÉ";
         Text[ greek ] = "¼íï~ìá öüñìáò";
-        Text[ korean ] = "¾ç½Ä ÀÌ¸§";
+        Text[ korean ] = "¾ç½Ä ÀÌ¸§(~O)";
         Text[ turkish ] = "Form adı";
     };
     String STR_RPT_LABEL
@@ -295,14 +312,14 @@ ModalDialog DLG_SAVE_AS
         Text [ spanish ] = "Nombre del inform~e" ;
         Text [ french ] = "~Nom de l'état" ;
         Text [ dutch ] = "~Naam van het bericht" ;
-        Text[ chinese_simplified ] = "±¨±íÃû³Æ";
+        Text[ chinese_simplified ] = "±¨±íÃû³Æ(~R)";
         Text[ russian ] = "Èìÿ îò÷åòà";
         Text[ polish ] = "Nazwa raportu";
-        Text[ japanese ] = "ÚÎß°Ä–¼";
-        Text[ chinese_traditional ] = "³øªí¦WºÙ";
+        Text[ japanese ] = "ÚÎß°Ä–¼(~R)";
+        Text[ chinese_traditional ] = "³øªí¦WºÙ(~R)";
         Text[ arabic ] = "ÇÓã ÇáÊŞÑíÑ";
         Text[ greek ] = "¼ío~ìá áíáöïñÜò";
-        Text[ korean ] = "º¸°í¼­ ÀÌ¸§";
+        Text[ korean ] = "º¸°í¼­ ÀÌ¸§(~R)";
         Text[ turkish ] = "Rapor adı";
     };
     String STR_OBJECT_EXISTS_ALREADY
@@ -358,6 +375,23 @@ ModalDialog DLG_SAVE_AS
         Text = "Einfügen als";
         Text [ english ] = "Paste as";
         Text [ english_us ] = "Paste as";
+        Text[ portuguese ] = "Paste as";
+        Text[ russian ] = "Paste as";
+        Text[ greek ] = "Paste as";
+        Text[ dutch ] = "Paste as";
+        Text[ french ] = "Paste as";
+        Text[ spanish ] = "Paste as";
+        Text[ italian ] = "Incolla come";
+        Text[ danish ] = "Paste as";
+        Text[ swedish ] = "Klistra in som";
+        Text[ polish ] = "Paste as";
+        Text[ portuguese_brazilian ] = "Paste as";
+        Text[ japanese ] = "“\\‚è•t‚¯";
+        Text[ korean ] = "Paste as";
+        Text[ chinese_simplified ] = "Paste as";
+        Text[ chinese_traditional ] = "´¡¤J¤è¦¡¬°";
+        Text[ turkish ] = "Paste as";
+        Text[ arabic ] = "Paste as";
     };
     Text [ portuguese_brazilian ] = "Speichern unter" ;
     Text [ swedish ] = "Spara som" ;
