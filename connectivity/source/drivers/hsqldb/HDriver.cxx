@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 15:29:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #include "hsqldb/HDriver.hxx"
 #endif
 #include "hsqldb/HConnection.hxx"
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -525,7 +524,9 @@ namespace connectivity
                 {
                     Reference< XStatement> xStmt = xConnection->createStatement();
                     if ( xStmt.is() )
-                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET WRITE_DELAY 60")));
+                    {
+                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET WRITE_DELAY 2")));
+                    }
                 }
             }
             catch(Exception&)
