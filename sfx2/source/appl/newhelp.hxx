@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-07 08:22:49 $
+ *  last change: $Author: gt $ $Date: 2001-09-11 09:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,8 @@ public:
     void            SetOpenHdl( const Link& rLink ) { aContentBox.SetOpenHdl( rLink ); }
     String          GetSelectEntry() const { return aContentBox.GetSelectEntry(); }
     void            SetFocusOnBox() { aContentBox.GrabFocus(); }
+
+    virtual void    ActivatePage();
 };
 
 // class IndexTabPage_Impl -----------------------------------------------
@@ -172,8 +174,6 @@ public:
     virtual long        Notify( NotifyEvent& rNEvt );
 
     void                SelectExecutableEntry();
-
-//  virtual long        PreNotify( NotifyEvent& rNEvt );
 };
 
 class IndexTabPage_Impl : public TabPage
@@ -266,6 +266,7 @@ public:
     void                ClearPage();
     void                SetFocusOnBox() { aResultsLB.GrabFocus(); }
     sal_Bool            HasFocusOnEdit() const { return aSearchED.HasChildPathFocus(); }
+    virtual void        ActivatePage();
 };
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -302,6 +303,7 @@ public:
     String              GetSelectEntry() const;
     void                AddBookmarks( const String& rTitle, const String& rURL );
     void                SetFocusOnBox() { aBookmarksBox.GrabFocus(); }
+    virtual void        ActivatePage();
 };
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------

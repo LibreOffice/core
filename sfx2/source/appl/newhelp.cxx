@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
+ *  last change: $Author: gt $ $Date: 2001-09-11 09:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,6 +413,11 @@ void ContentTabPage_Impl::Resize()
     aContentBox.SetPosSizePixel( Point( 4, 4 ), aSize );
 }
 
+void ContentTabPage_Impl::ActivatePage()
+{
+    SetFocusOnBox();
+}
+
 // class IndexBox_Impl ---------------------------------------------------
 
 IndexBox_Impl::IndexBox_Impl( Window* pParent, const ResId& rResId ) :
@@ -708,6 +713,8 @@ void IndexTabPage_Impl::ActivatePage()
         bIsActivated = sal_True;
         aFactoryTimer.Start();
     }
+
+    SetFocusOnBox();
 }
 
 // -----------------------------------------------------------------------
@@ -1032,6 +1039,11 @@ void SearchTabPage_Impl::ClearPage()
     aSearchED.SetText( String() );
 }
 
+void SearchTabPage_Impl::ActivatePage()
+{
+    aSearchED.GrabFocus();
+}
+
 // class BookmarksTabPage_Impl -------------------------------------------
 
 void GetMenuEntry_Impl
@@ -1270,6 +1282,11 @@ void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rU
     aImageURL += INetURLObject( rURL ).GetHost();
     USHORT nPos = aBookmarksBox.InsertEntry( rTitle, SvFileInformationManager::GetImage( aImageURL ) );
     aBookmarksBox.SetEntryData( nPos, (void*)(ULONG)( new String( rURL ) ) );
+}
+
+void BookmarksTabPage_Impl::ActivatePage()
+{
+    SetFocusOnBox();
 }
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
