@@ -1,0 +1,4 @@
+..\%__SRC%\bin\regcomp.exe %_DEST%\bin%_EXT%\regcomp.exe
+..\%__SRC%\bin\regcomp %_DEST%\bin%_EXT%\regcomp
+..\%__SRC%\bin\uno.exe %_DEST%\bin%_EXT%\uno.exe
+..\%__SRC%\bin\uno %_DEST%\bin%_EXT%\uno
