@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:02:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,16 @@ namespace dbaui
         const TNameMapping*         GetNameMapping()        const { return &m_mNameMapping; }
 
         void insertColumn(sal_Int32 _nPos,OFieldDescription* _pField);
+
+        /** replaces a field description with another one. The name must not be known so far.
+            @param  _nPos
+                The pos inside the vector, 0 based.
+            @param  _pField
+                The field to set.
+            @param  _sOldName
+                The name of column to be replaced.
+        */
+        void replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const ::rtl::OUString& _sOldName);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDestObject() const { return m_xDestObject; }
         /**
