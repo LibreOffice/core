@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-19 13:52:21 $
+ *  last change: $Author: dvo $ $Date: 2001-04-20 15:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,18 +392,23 @@ void FilterPropertiesInfo_Impl::AddProperty(
             bInserted = sal_True;
             nCount++;
         }
-        else if (aItr->GetApiName() > rApiName)
+        else
         {
-            aLastItr = aPropInfos.insert(aItr,
-                            FilterPropertyInfo_Impl(rApiName, nIndex));
-            bInserted = sal_True;
-            nCount++;
-        }
-        else if (aItr->GetApiName() == rApiName)
-        {
-            aItr->AddIndex( nIndex );
-            bInserted = sal_True;
-            aLastItr = aItr;
+            sal_Int32 nCompare = aItr->GetApiName().compareTo(rApiName);
+            if (nCompare > 0)
+            {
+                aLastItr = aPropInfos.insert(aItr,
+                                FilterPropertyInfo_Impl(rApiName, nIndex));
+                bInserted = sal_True;
+                nCount++;
+            }
+            else if (nCompare == 0)
+            {
+                aItr->AddIndex( nIndex );
+                bInserted = sal_True;
+                aLastItr = aItr;
+            }
+            // else: we need to iterate further
         }
     }
     while(!bInserted && (aItr++ != aPropInfos.end()));
