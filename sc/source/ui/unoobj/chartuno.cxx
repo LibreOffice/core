@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:20:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject() throw(
 {
     ScUnoGuard aGuard;
     SdrOle2Obj* pObject = lcl_FindChartObj( pDocShell, nTab, aChartName );
-    if (pObject && pObject->GetObjRef().is() )
+    if ( pObject && svt::EmbeddedObjectRef::TryRunningState( pObject->GetObjRef() ) )
     {
         //TODO/LATER: is it OK that something is returned for *all* objects, not only own objects?
         return uno::Reference < lang::XComponent > ( pObject->GetObjRef()->getComponent(), uno::UNO_QUERY );
