@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:33:37 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,13 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -77,6 +84,8 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
+
+#include <comphelper/storagehelper.hxx>
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -123,18 +132,19 @@
 #define STREAM_STGREAD  ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE )
 #define STREAM_STGWRITE ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE )
 
+using namespace ::com::sun::star;
 
 
-void SwXMLTextBlocks::InitBlockMode ( SvStorageRef & rStorage )
+void SwXMLTextBlocks::InitBlockMode ( const uno::Reference < embed::XStorage >& rStorage )
 {
     xBlkRoot = rStorage;
-    xRoot.Clear();
+    xRoot = 0;
 }
 
 void SwXMLTextBlocks::ResetBlockMode ( )
 {
-    xBlkRoot.Clear();
-    xRoot.Clear();
+    xBlkRoot = 0;
+    xRoot = 0;
 }
 
 SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
@@ -152,15 +162,15 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
 
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
         Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
-    SvStorageRef refStg  = new SvStorage( TRUE, rFile, STREAM_STD_READWRITE | STREAM_SHARE_DENYNONE );
+    uno::Reference < embed::XStorage > refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
     InitBlockMode ( refStg );
     ReadInfo();
     ResetBlockMode ();
     bInfoChanged = FALSE;
 }
 
-SwXMLTextBlocks::SwXMLTextBlocks( SvStorage& rStg )
-: SwImpBlocks( rStg.GetName() )
+SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg, const String& rName  )
+: SwImpBlocks( rName )
 , bAutocorrBlock( TRUE )
 , nFlags ( 0 )
 {
@@ -174,8 +184,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( SvStorage& rStg )
     pDoc->DoUndo( FALSE );
     pDoc->AddLink();
 
-    SvStorageRef refStg = &rStg;
-    InitBlockMode ( refStg );
+    InitBlockMode ( rStg );
     ReadInfo();
     bInfoChanged = FALSE;
 }
@@ -194,7 +203,9 @@ void SwXMLTextBlocks::ClearDoc()
     SwDocShell * pDocShell = pDoc->GetDocShell();
     pDocShell->InvalidateModel();
     pDocShell->ReactivateModel();
-    static_cast < SfxObjectShell * > (pDocShell)->Clear();
+
+    // TODO/MBA: testing
+    pDocShell->ClearEmbeddedObjects();
     pDoc->ClearDoc();
 }
 void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong, BOOL bOnlyTxt )
@@ -228,11 +239,21 @@ void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong,
 ULONG SwXMLTextBlocks::Delete( USHORT n )
 {
     String aName (aNames[ n ]->aPackageName);
-
-    if ( xBlkRoot->IsContained( aName ) )
+    uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
+    if ( xAccess->hasByName( aName ) && xBlkRoot->isStreamElement( aName ) )
     {
-        xBlkRoot->Remove ( aName );
-        return xBlkRoot->Commit() ? 0 : ERR_SWG_WRITE_ERROR;
+        try
+        {
+            xBlkRoot->removeElement ( aName );
+            uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+            if ( xTrans.is() )
+                xTrans->commit();
+            return 0;
+        }
+        catch ( uno::Exception)
+        {
+            return ERR_SWG_WRITE_ERROR;
+        }
     }
     return 0;
 }
@@ -248,13 +269,18 @@ ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const Strin
         String aOldStreamName( aOldName ); aOldStreamName += sExt;
         String aNewStreamName( aPackageName ); aNewStreamName += sExt;
 
-        xRoot = xBlkRoot->OpenUCBStorage ( aOldName, STREAM_STGWRITE );
-        xRoot->Rename ( aOldStreamName, aNewStreamName );
-        xRoot->Commit();
-        xRoot.Clear();
+        xRoot = xBlkRoot->openStorageElement( aOldName, embed::ElementModes::READWRITE );
+        xRoot->renameElement ( aOldStreamName, aNewStreamName );
+        uno::Reference < embed::XTransactedObject > xTrans( xRoot, uno::UNO_QUERY );
+        if ( xTrans.is() )
+            xTrans->commit();
+        xRoot = 0;
     }
-    xBlkRoot->Rename ( aOldName, aPackageName );
-    xBlkRoot->Commit();
+
+    xBlkRoot->renameElement ( aOldName, aPackageName );
+    uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+    if ( xTrans.is() )
+        xTrans->commit();
     // No need to commit xBlkRoot here as SwTextBlocks::Rename calls
     // WriteInfo which does the commit
     return 0;
@@ -272,7 +298,8 @@ ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
     String sDestShortName( GetPackageName (nIndex) );
     USHORT nIdx = 0;
 
-    while(((SwXMLTextBlocks&)rDestImp).xBlkRoot->IsContained( sDestShortName ))
+    uno::Reference < container::XNameAccess > xAccess( ((SwXMLTextBlocks&)rDestImp).xBlkRoot, uno::UNO_QUERY );
+    while ( xAccess->hasByName( sDestShortName ) )
     {
         ++nIdx;
         //falls wirklich mal einer so verrueckt ist
@@ -285,22 +312,21 @@ ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
         sDestShortName += String::CreateFromInt32( nIdx );
     }
 
-    /*if(!bTextOnly)*/
+    try
     {
-        SvStorageRef rSourceRoot = xBlkRoot->OpenUCBStorage( aGroup, STREAM_STGREAD );
-        DBG_ASSERT(rSourceRoot.Is(), "Block existiert nicht!")
-        if(!rSourceRoot.Is())
-            nError = ERR_SWG_READ_ERROR;
-        else
-        {
-            //jetzt muss der Storage kopiert werden
-            if(!xBlkRoot->CopyTo( aGroup, ((SwXMLTextBlocks&)rDestImp).xBlkRoot, sDestShortName ))
-            {
-                //nError = rSourceRoot->GetError();
-                nError = ERR_SWG_WRITE_ERROR;
-            }
-        }
+        uno::Reference < embed::XStorage > rSourceRoot = xBlkRoot->openStorageElement( aGroup, embed::ElementModes::READ );
+        uno::Reference < embed::XStorage > rDestRoot = ((SwXMLTextBlocks&)rDestImp).xBlkRoot->openStorageElement( sDestShortName, embed::ElementModes::READWRITE );
+        //if(!rSourceRoot.Is())
+        //    nError = ERR_SWG_READ_ERROR;
+        //else
+        //{
+        rSourceRoot->copyToStorage( rDestRoot );
     }
+    catch ( uno::Exception& )
+    {
+        nError = ERR_SWG_WRITE_ERROR;
+    }
+
     /* I think this should work now that text only blocks are in sub-storages as well
     else
     {
@@ -320,7 +346,7 @@ ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
     if(!nError)
     {
         rShort = sDestShortName;
-        ((SwXMLTextBlocks&)rDestImp).xBlkRoot->Commit();
+        //((SwXMLTextBlocks&)rDestImp).xBlkRoot->Commit();
         ((SwXMLTextBlocks&)rDestImp).AddName( rShort, rLong, bTextOnly );
         ((SwXMLTextBlocks&)rDestImp).MakeBlockList();
     }
@@ -340,12 +366,18 @@ ULONG SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPacka
         xBlkRoot->Commit();
     }
     */
-    xRoot = xBlkRoot->OpenUCBStorage( rPackageName, STREAM_STGWRITE );
-    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-    ::rtl::OUString aMime( SotExchange::GetFormatMimeType( SOT_FORMATSTR_ID_STARWRITER_8 ) );
-    ::com::sun::star::uno::Any aAny;
-    aAny <<= aMime;
-    xRoot->SetProperty( aPropName, aAny );
+    try
+    {
+        xRoot = xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::READWRITE );
+
+        uno::Reference< beans::XPropertySet > xRootProps( xRoot, uno::UNO_QUERY_THROW );
+        ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("MediaType") );
+        ::rtl::OUString aMime( SotExchange::GetFormatMimeType( SOT_FORMATSTR_ID_STARWRITER_8 ) );
+        xRootProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+    }
+    catch (uno::Exception&)
+    {
+    }
     return 0;
 }
 ULONG SwXMLTextBlocks::BeginPutDoc( const String& rShort, const String& rLong )
@@ -368,7 +400,7 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
     WriterRef xWrt;
     //::GetXMLWriter ( String::CreateFromAscii(FILTER_XML), xWrt);
     ::GetXMLWriter ( aEmptyStr, xWrt);
-    SwWriter aWriter (*xRoot, *pDoc );
+    SwWriter aWriter (xRoot, *pDoc );
 
     xWrt->bBlock = sal_True;
     nRes = aWriter.Write ( xWrt );
@@ -376,28 +408,43 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
     // Save OLE objects if there are some
     SwDocShell *pDocSh = pDoc->GetDocShell();
 
-    sal_Bool bHasChilds = pDocSh && pDocSh->GetObjectList() &&
-                          pDocSh->GetObjectList()->Count() > 0;
-    if( !nRes && bHasChilds )
+    sal_Bool bHasChildren = pDocSh && pDocSh->GetEmbeddedObjectContainer().HasEmbeddedObjects();
+    if( !nRes && bHasChildren )
     {
-        sal_Bool bOK = pDocSh->SaveAsChilds( xRoot );
+        sal_Bool bOK = pDocSh->SaveAsChildren( xRoot );
         if( bOK )
-            bOK = pDocSh->SaveCompletedChilds( xRoot );
+            bOK = pDocSh->SaveCompletedChildren( sal_True );
         if( !bOK )
             nRes = ERR_SWG_WRITE_ERROR;
     }
 
-    xRoot->Commit();
-    xRoot.Clear();
-    if ( !nCommitFlags )
-        xBlkRoot->Commit();
+    try
+    {
+        uno::Reference < embed::XTransactedObject > xTrans( xRoot, uno::UNO_QUERY );
+        if ( xTrans.is() )
+            xTrans->commit();
+        xRoot = 0;
+        if ( !nCommitFlags )
+        {
+            uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+            if ( xTrans.is() )
+                xTrans->commit();
+        }
+    }
+    catch (uno::Exception&)
+    {
+    }
+
+    //TODO/LATER: error handling
+    /*
     ULONG nErr = xBlkRoot->GetError();
     if( nErr == SVSTREAM_DISK_FULL )
         nRes = ERR_W4W_WRITE_FULL;
     else if( nErr != SVSTREAM_OK )
         nRes = ERR_SWG_WRITE_ERROR;
     nFlags |= nCommitFlags;
-    return nErr;
+    return nErr;*/
+    return 0;
 }
 
 ULONG SwXMLTextBlocks::PutDoc()
@@ -432,11 +479,18 @@ ULONG SwXMLTextBlocks::SetConvertMode( BOOL bOn )
     else
     {
         nFlags &= SWXML_CONVBLOCK;
-        if ( xBlkRoot.Is() )
+        if ( xBlkRoot.is() )
         {
-            xBlkRoot->Commit();
-            if ( xBlkRoot->GetError() != SVSTREAM_OK )
+            try
+            {
+                uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+                if ( xTrans.is() )
+                    xTrans->commit();
+            }
+            catch (uno::Exception&)
+            {
                 return ERR_SWG_WRITE_ERROR;
+            }
         }
     }
     return 0;
@@ -464,16 +518,21 @@ BOOL SwXMLTextBlocks::PutMuchEntries( BOOL bOn )
     else if( bInPutMuchBlocks )
     {
         nFlags &= ~SWXML_NOROOTCOMMIT;
-        if( xBlkRoot.Is() )
+        if( xBlkRoot.is() )
         {
-            xBlkRoot->Commit();
-            if( SVSTREAM_OK == xBlkRoot->GetError() )
+            try
             {
+                uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
+                if ( xTrans.is() )
+                    xTrans->commit();
                 MakeBlockList();
                 CloseFile();
                 Touch();
                 bInPutMuchBlocks = FALSE;
                 bRet = TRUE;
+            }
+            catch (uno::Exception&)
+            {
             }
         }
     }
@@ -485,11 +544,19 @@ ULONG SwXMLTextBlocks::OpenFile( BOOL bReadOnly )
     if( bAutocorrBlock )
         return 0;
 
-    SvStorageRef refStg = new SvStorage( TRUE, aFile,
-                            bReadOnly ? (STREAM_READ | STREAM_SHARE_DENYNONE)
-                                      : STREAM_STD_READWRITE);
-    InitBlockMode ( refStg );
-    return xBlkRoot->GetError();
+    try
+    {
+        uno::Reference < embed::XStorage > refStg  = comphelper::OStorageHelper::GetStorageFromURL( aFile,
+                bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE );
+        InitBlockMode ( refStg );
+    }
+    catch ( uno::Exception& )
+    {
+        //TODO/LATER: error handling
+    }
+
+    return 0;
+    //return xBlkRoot->GetError();
 }
 
 void SwXMLTextBlocks::CloseFile()
