@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:41:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,12 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
         return;
     DBG_ASSERT( eFamily != XML_TOKEN_INVALID, "family must be specified" );
     // style:name="..."
-    AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, rFmt.GetName() );
+    sal_Bool bEncoded = sal_False;
+    AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, EncodeStyleName(
+                    rFmt.GetName(), &bEncoded ) );
+    if( bEncoded )
+        AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, rFmt.GetName() );
+
 
     if( eFamily != XML_TOKEN_INVALID )
         AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, eFamily );
@@ -184,7 +189,8 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
                                     sName,
                                     GET_POOLID_PAGEDESC,
                                     sal_True);
-            AddAttribute( XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME, sName );
+            AddAttribute( XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME,
+                          EncodeStyleName( sName ) );
         }
     }
 
@@ -219,12 +225,21 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
                                   sal_True, sal_True );
 
         SvXMLItemMapEntriesRef xItemMap;
+        XMLTokenEnum ePropToken = XML_TABLE_PROPERTIES;
         if( XML_TABLE == eFamily )
+        {
             xItemMap = xTableItemMap;
+        }
         else if( XML_TABLE_ROW == eFamily )
+        {
             xItemMap = xTableRowItemMap;
+            ePropToken = XML_TABLE_ROW_PROPERTIES;
+        }
         else if( XML_TABLE_CELL == eFamily )
+        {
             xItemMap = xTableCellItemMap;
+            ePropToken = XML_TABLE_CELL_PROPERTIES;
+        }
 
         if( xItemMap.Is() )
         {
@@ -234,6 +249,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
             GetTableItemMapper().exportXML( *this,
                                            rFmt.GetAttrSet(),
                                            GetTwipUnitConverter(),
+                                           ePropToken,
                                            XML_EXPORT_FLAG_IGN_WS );
         }
     }
@@ -389,32 +405,31 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
             {
                 switch( rPropExp.getPropertySetMapper()->
                         GetEntryContextId( aProperty->mnIndex ) )
+            {
+            case CTF_NUMBERINGSTYLENAME:
                 {
-                case CTF_NUMBERINGSTYLENAME:
+                    OUString sStyleName;
+                    aProperty->maValue >>= sStyleName;
+                    if( sStyleName.getLength() )
                     {
-                        OUString sStyleName;
-                        aProperty->maValue >>= sStyleName;
-                        if( sStyleName.getLength() )
-                        {
-                            OUString sTmp = rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );
-                            if( sTmp.getLength() )
-                                sStyleName = sTmp;
-                            GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                      sListStyleName, sStyleName );
-                        }
-                    }
-                    break;
-                case CTF_PAGEDESCNAME:
-                    {
-                        OUString sStyleName;
-                        aProperty->maValue >>= sStyleName;
+                        OUString sTmp = rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );
+                        if( sTmp.getLength() )
+                            sStyleName = sTmp;
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                                  sMasterPageName, sStyleName );
+                              sListStyleName,
+                              GetExport().EncodeStyleName( sStyleName ) );
                     }
-                    break;
-                default:
-                    break;
                 }
+                break;
+            case CTF_PAGEDESCNAME:
+                {
+                    OUString sStyleName;
+                    aProperty->maValue >>= sStyleName;
+                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                  sMasterPageName,
+                                  GetExport().EncodeStyleName( sStyleName ) );
+                }
+                break;
             }
         }
     }
