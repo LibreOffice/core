@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-12 07:05:46 $
+ *  last change: $Author: hdu $ $Date: 2002-09-16 07:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,8 +241,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     }
 
     DWORD nRC;
-    // if( aSalShlData.mbWNT )  // TODO: remove when unicode layer successful
-    if( true )
+    if( aSalShlData.mbWNT )  // TODO: remove when unicode layer successful
     {
         if( mpGlyphOrigAdvs )
         {
@@ -254,7 +253,6 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnMinCharPos,
                     nMaxGlyphCount, 0, &aGCP, nGcpOption );
     }
-/* TODO: remove when unicode layer successful
     else
     {
         // convert into ANSI code page
@@ -270,9 +268,12 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
             WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
             rArgs.mpStr + rArgs.mnMinCharPos, nMaxGlyphCount,
             pMBStr, nMBLen, NULL, NULL );
-        if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
+        if( aGCP.lpOutString )
+        {
             aGCP.nGlyphs *= 2;  // ascii length = 2 * unicode length
-        // note: because aGCP.lpOutString==NULL GCP_RESULTSA is compatible with GCP_RESULTSW
+            delete[] mpGlyphAdvances;
+            aGCP.lpDx = mpGlyphAdvances = new int[ aGCP.nGlyphs ];
+        }
         if( mpGlyphOrigAdvs )
         {
             aGCP.lpDx = mpGlyphOrigAdvs;
@@ -283,10 +284,9 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     0, (GCP_RESULTSA*)&aGCP, nGcpOption );
     }
-*/
 
     // cache essential layout properties
-    mnGlyphCount = (mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) ? aGCP.nMaxFit : aGCP.nGlyphs;
+    mnGlyphCount = aGCP.lpOutString ? aGCP.nMaxFit : aGCP.nGlyphs;
     mnWidth = nRC & 0xFFFF; // TODO: check API docs for clarification
 
     if( !nRC )
