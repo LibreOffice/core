@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 22:04:32 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -70,6 +69,9 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLIST_HPP_
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #endif
+
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
 
 #ifndef _TOOLS_RCID_H
 #include <tools/rcid.h>
@@ -938,21 +940,43 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                         pTemp = aTreeLB.Next(pTemp);
                     }
                 }
-                if(!pGroupInfo->pInItemSet)
-                    pGroupInfo->pInItemSet = pGroupInfo->pShell ? pGroupInfo->pShell->CreateItemSet( pGroupInfo->nDialogId ) : CreateItemSet( pGroupInfo->nDialogId );
-                if(!pGroupInfo->pOutItemSet)
-                    pGroupInfo->pOutItemSet = new SfxItemSet(*pGroupInfo->pInItemSet->GetPool(),
-                                                                    pGroupInfo->pInItemSet->GetRanges());
 
+                if ( pPageInfo->nPageId != SID_SCH_TP_DEFCOLORS )
+                {
+                    if(!pGroupInfo->pInItemSet)
+                        pGroupInfo->pInItemSet = pGroupInfo->pShell ? pGroupInfo->pShell->CreateItemSet( pGroupInfo->nDialogId ) : CreateItemSet( pGroupInfo->nDialogId );
+                    if(!pGroupInfo->pOutItemSet)
+                        pGroupInfo->pOutItemSet = new SfxItemSet(*pGroupInfo->pInItemSet->GetPool(), pGroupInfo->pInItemSet->GetRanges());
+                }
             }
+
             if(pGroupInfo->pModule)
             {
-                pPageInfo->pPage = pGroupInfo->pModule->CreateTabPage(
-                                pPageInfo->nPageId, this, *pGroupInfo->pInItemSet );
+                pPageInfo->pPage = pGroupInfo->pModule->CreateTabPage( pPageInfo->nPageId, this, *pGroupInfo->pInItemSet );
+            }
+            else if ( SID_SCH_TP_DEFCOLORS == pPageInfo->nPageId )
+            {
+                // Hack: force chart library to be loaded
+                Reference < util::XCloseable > xCloseable ( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.chart.ChartDocument") ), UNO_QUERY );
+                if ( xCloseable.is() )
+                {
+                    Reference < frame::XLoadable > xLoadable( xCloseable, UNO_QUERY );
+                    xLoadable->initNew();
+                    xCloseable->close( sal_True );
+                }
+
+                SfxModule *pSchMod = (*(SfxModule**) GetAppData(SHL_SCH));
+                if ( pSchMod )
+                {
+                    if( !pGroupInfo->pInItemSet )
+                        pGroupInfo->pInItemSet = pSchMod->CreateItemSet( pGroupInfo->nDialogId );
+                    pPageInfo->pPage = pSchMod->CreateTabPage( pPageInfo->nPageId, this, *pGroupInfo->pInItemSet );
+                    if( !pGroupInfo->pOutItemSet )
+                        pGroupInfo->pOutItemSet = new SfxItemSet(*pGroupInfo->pInItemSet->GetPool(), pGroupInfo->pInItemSet->GetRanges());
+                }
             }
             else if(RID_SVXPAGE_COLOR != pPageInfo->nPageId)
-                pPageInfo->pPage = ::CreateGeneralTabPage(
-                                pPageInfo->nPageId, this, *pGroupInfo->pInItemSet );
+                pPageInfo->pPage = ::CreateGeneralTabPage( pPageInfo->nPageId, this, *pGroupInfo->pInItemSet );
             else
             {
                 pPageInfo->pPage = ::CreateGeneralTabPage( pPageInfo->nPageId, this, *pColorPageItemSet );
@@ -1692,6 +1716,12 @@ void OfaTreeOptionsDialog::Initialize()
         for(i = 1; i < rFilterArray.Count(); ++i )
             AddTabPage( (sal_uInt16)rFilterArray.GetValue(i),
                                 rFilterArray.GetString(i), nGroup );
+
+        // new spec: always show chart pages in general options
+        ResStringArray& rChartArray = aDlgResource.GetChartArray();
+        nGroup = AddGroup( rChartArray.GetString(0), 0, 0, SID_SCH_EDITOPTIONS );
+        for(USHORT i1 = 1; i1 < rChartArray.Count(); i1++)
+            AddTabPage( (sal_uInt16)rChartArray.GetValue(i1), rChartArray.GetString(i1), nGroup);
     }
 
     SvtLanguageOptions aLanguageOptions;
@@ -1840,7 +1870,7 @@ void OfaTreeOptionsDialog::Initialize()
                     AddTabPage( (sal_uInt16)rStarMathArray.GetValue(i), rStarMathArray.GetString(i), nGroup);
             }
         }
-
+/*
         if ( aModuleOpt.IsChart() )
         {
             //Diagramm
@@ -1853,7 +1883,7 @@ void OfaTreeOptionsDialog::Initialize()
                     AddTabPage( (sal_uInt16)rChartArray.GetValue(i), rChartArray.GetString(i), nGroup);
             }
         }
-
+*/
         if (sal_True)
         {   // Data access (always installed)
             ResStringArray& rDSArray = aDlgResource.GetDatasourcesArray();
