@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ChartType.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 13:28:38 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 18:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,10 +202,10 @@ public:
 
 //BM    void    GetAttr(SfxItemSet& rOutAttrs);
 
-     sal_Int32 GetDepth();
+     sal_Int32 GetDepth() const;
     void      SetDepth( sal_Int32 nDeep );
 
-     sal_Int32 GetGranularity();
+     sal_Int32 GetGranularity() const;
      void      SetGranularity( sal_Int32 nGranularity );
 
     /** The value set here determines the maximum number of lines in a line/bar

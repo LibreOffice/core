@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScatterChartType.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 17:02:23 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 18:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,12 +178,20 @@ namespace chart
 
 ScatterChartType::ScatterChartType(
     sal_Int32 nDim /* = 2 */,
-    chart2::CurveStyle eCurveStyle /* chart2::CurveStyle_LINES */ ) :
+    chart2::CurveStyle eCurveStyle /* chart2::CurveStyle_LINES */ ,
+    sal_Int32 nResolution /* = 20 */,
+    sal_Int32 nOrder /* = 3 */ ) :
         ChartType( nDim )
 {
     if( eCurveStyle != chart2::CurveStyle_LINES )
         setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_CURVE_STYLE,
                                           uno::makeAny( eCurveStyle ));
+    if( nResolution != 20 )
+        setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_CURVE_RESOLUTION,
+                                          uno::makeAny( nResolution ));
+    if( nOrder != 3 )
+        setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_SPLINE_ORDER,
+                                          uno::makeAny( nOrder ));
 }
 
 ScatterChartType::~ScatterChartType()

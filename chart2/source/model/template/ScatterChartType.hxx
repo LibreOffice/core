@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScatterChartType.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 17:02:33 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 18:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@ class ScatterChartType : public ChartType
 public:
     ScatterChartType( sal_Int32 nDim = 2,
                       ::drafts::com::sun::star::chart2::CurveStyle eCurveStyle =
-                          ::drafts::com::sun::star::chart2::CurveStyle_LINES );
+                          ::drafts::com::sun::star::chart2::CurveStyle_LINES,
+                      sal_Int32 nResolution = 20,
+                      sal_Int32 nOrder = 3 );
     virtual ~ScatterChartType();
 
 protected:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 17:07:36 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 18:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,16 +199,26 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
             if( aChartTypes[0]->getChartType()->getChartType().equals(
                     getDefaultChartType()->getChartType()))
             {
-                uno::Reference< beans::XPropertySet > xProp( aChartTypes[0], uno::UNO_QUERY );
-                sal_Int32 nDim;
-                if( xProp.is() &&
-                    (xProp->getPropertyValue( C2U( "Dimension" )) >>= nDim ))
+                try
                 {
-                    bResult = (nDim == getDimension());
+                    uno::Reference< beans::XPropertySet > xProp( aChartTypes[0]->getChartType(),
+                                                                 uno::UNO_QUERY_THROW );
+                    uno::Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo() );
+                    sal_Int32 nDim;
+                    if( xInfo.is() &&
+                        xInfo->hasPropertyByName( C2U( "Dimension" )) &&
+                        (xProp->getPropertyValue( C2U( "Dimension" )) >>= nDim ))
+                    {
+                        bResult = (nDim == getDimension());
+                    }
+                    else
+                        // correct chart type, but without Dimension property
+                        bResult = sal_True;
                 }
-                else
-                    // correct chart type, but without Dimension property
-                    bResult = sal_True;
+                catch( uno::Exception & ex )
+                {
+                    ASSERT_EXCEPTION( ex );
+                }
 
                 if( bResult )
                     bResult = ( helper::DataSeriesTreeHelper::getStackMode( xParent ) ==

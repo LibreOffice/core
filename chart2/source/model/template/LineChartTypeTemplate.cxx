@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 17:07:38 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 18:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include "LineChartTypeTemplate.hxx"
 #include "LineChartType.hxx"
 #include "macros.hxx"
+#include "algohelper.hxx"
 #include "DataSeriesTreeHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
@@ -70,8 +71,103 @@
 #include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
 #endif
 
+#ifndef CHART_PROPERTYHELPER_HXX
+#include "PropertyHelper.hxx"
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
+#include <algorithm>
+
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
+using ::com::sun::star::beans::Property;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
+using ::osl::MutexGuard;
+
+namespace
+{
+
+static const OUString lcl_aServiceName(
+    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LineChartTypeTemplate" ));
+
+enum
+{
+    PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION,
+    PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER
+
+};
+
+void lcl_AddPropertiesToVector(
+    ::std::vector< Property > & rOutProperties )
+{
+    rOutProperties.push_back(
+        Property( C2U( "CurveResolution" ),
+                  PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "SplineOrder" ),
+                  PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+}
+
+void lcl_AddDefaultsToMap(
+    ::chart::helper::tPropertyValueMap & rOutMap )
+{
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+    rOutMap[ PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ] =
+        uno::makeAny( sal_Int32( 20 ) );
+
+    // todo: check whether order 3 means polygons of order 3 or 2. (see
+    // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
+    rOutMap[ PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ] =
+        uno::makeAny( sal_Int32( 3 ) );
+}
+
+const Sequence< Property > & lcl_GetPropertySequence()
+{
+    static Sequence< Property > aPropSeq;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
+    {
+        // get properties
+        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        lcl_AddPropertiesToVector( aProperties );
+
+        // and sort them for access via bsearch
+        ::std::sort( aProperties.begin(), aProperties.end(),
+                     ::chart::helper::PropertyNameLess() );
+
+        // transfer result to static Sequence
+        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+    }
+
+    return aPropSeq;
+}
+
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
+{
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
+
+    return aArrayHelper;
+}
+
+} // anonymous namespace
 
 namespace chart
 {
@@ -85,14 +181,63 @@ LineChartTypeTemplate::LineChartTypeTemplate(
     bool bSymbols,
     sal_Int32 nDim /* = 2 */ ) :
         ChartTypeTemplate( xContext, rServiceName ),
-        m_eStackMode( eStackMode ),
-        m_eCurveStyle( eCurveStyle ),
-        m_bHasSymbols( bSymbols ),
-        m_nDim( nDim )
+        ::property::OPropertySet( m_aMutex ),
+    m_eStackMode( eStackMode ),
+    m_eCurveStyle( eCurveStyle ),
+    m_bHasSymbols( bSymbols ),
+    m_nDim( nDim )
 {}
 
 LineChartTypeTemplate::~LineChartTypeTemplate()
 {}
+// ____ OPropertySet ____
+uno::Any LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
+    throw(beans::UnknownPropertyException)
+{
+    static helper::tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    helper::tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
+        return uno::Any();
+
+    return (*aFound).second;
+    // \--
+}
+
+::cppu::IPropertyArrayHelper & SAL_CALL LineChartTypeTemplate::getInfoHelper()
+{
+    return lcl_getInfoHelper();
+}
+
+
+// ____ XPropertySet ____
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    LineChartTypeTemplate::getPropertySetInfo()
+    throw (uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
+}
 
 sal_Int32 LineChartTypeTemplate::getDimension() const
 {
@@ -107,6 +252,15 @@ chart2::StackMode LineChartTypeTemplate::getStackMode() const
 uno::Reference< chart2::XChartType > LineChartTypeTemplate::getDefaultChartType()
     throw (uno::RuntimeException)
 {
+    sal_Int32 nRes;
+    sal_Int32 nOrder;
+
+    if( ( getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ) >>= nRes ) &&
+        ( getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ) >>= nOrder ) )
+    {
+        return new LineChartType( m_nDim, m_eCurveStyle, nRes, nOrder );
+    }
+
     return new LineChartType( m_nDim, m_eCurveStyle );
 }
 
@@ -205,5 +359,21 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
 
     return bResult;
 }
+
+// ----------------------------------------
+
+Sequence< OUString > LineChartTypeTemplate::getSupportedServiceNames_Static()
+{
+    Sequence< OUString > aServices( 2 );
+    aServices[ 0 ] = lcl_aServiceName;
+    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.ChartTypeTemplate" );
+    return aServices;
+}
+
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( LineChartTypeTemplate, lcl_aServiceName );
+
+IMPLEMENT_FORWARD_XINTERFACE2( LineChartTypeTemplate, ChartTypeTemplate, OPropertySet )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( LineChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 
 } //  namespace chart

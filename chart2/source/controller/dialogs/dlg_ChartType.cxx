@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ChartType.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-20 17:07:34 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 18:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ bool lcl_IsCombiChart( SvxChartStyle eStyle )
     {
         try
         {
-            OSL_TRACE( U2C( aServiceNames[i] ));
+//             OSL_TRACE( U2C( aServiceNames[i] ));
             uno::Reference< chart2::XChartTypeTemplate > xTempl(
                 xCTManager->createInstance( aServiceNames[ i ] ), uno::UNO_QUERY_THROW );
 
@@ -1143,7 +1143,7 @@ IMPL_LINK( SchDiagramTypeDlg, DoubleClickHdl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-sal_Int32 SchDiagramTypeDlg::GetDepth()
+sal_Int32 SchDiagramTypeDlg::GetDepth() const
 {
     return aMtrFldDeep.GetValue();
 }
@@ -1208,7 +1208,7 @@ IMPL_LINK( SchDiagramTypeDlg, ClickHdl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-sal_Int32 SchDiagramTypeDlg::GetGranularity()
+sal_Int32 SchDiagramTypeDlg::GetGranularity() const
 {
     return aMtrFldGran.GetValue();
 }
@@ -1278,6 +1278,23 @@ uno::Reference< chart2::XChartTypeTemplate > SchDiagramTypeDlg::getTemplate() co
         xResult.set( m_xTemplateManager->createInstance(
                          lcl_GetTemplateServiceNameForChartStyle( eStyle )),
                      uno::UNO_QUERY );
+
+        if( lcl_IsBSplineChart( eStyle ) ||
+            lcl_IsCubicSplineChart( eStyle ))
+        {
+            try
+            {
+                uno::Reference< beans::XPropertySet > xProp( xResult, uno::UNO_QUERY_THROW );
+                xProp->setPropertyValue( C2U( "CurveResolution" ), uno::makeAny( GetGranularity()));
+
+                if( lcl_IsBSplineChart( eStyle ))
+                    xProp->setPropertyValue( C2U( "SplineOrder" ), uno::makeAny( GetDepth()));
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+        }
 
         if( lcl_IsCombiChart( eStyle ))
         {

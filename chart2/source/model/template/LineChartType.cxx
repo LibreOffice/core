@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartType.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-19 17:27:01 $
+ *  last change: $Author: bm $ $Date: 2003-11-20 18:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,12 +178,20 @@ namespace chart
 
 LineChartType::LineChartType(
     sal_Int32 nDim /* = 2 */,
-    chart2::CurveStyle eCurveStyle /* chart2::CurveStyle_LINES */ ) :
+    chart2::CurveStyle eCurveStyle /* chart2::CurveStyle_LINES */,
+    sal_Int32 nResolution /* = 20 */,
+    sal_Int32 nOrder /* = 3 */ ) :
         ChartType( nDim )
 {
     if( eCurveStyle != chart2::CurveStyle_LINES )
         setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_CURVE_STYLE,
                                           uno::makeAny( eCurveStyle ));
+    if( nResolution != 20 )
+        setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_CURVE_RESOLUTION,
+                                          uno::makeAny( nResolution ));
+    if( nOrder != 3 )
+        setFastPropertyValue_NoBroadcast( PROP_LINECHARTTYPE_SPLINE_ORDER,
+                                          uno::makeAny( nOrder ));
 }
 
 LineChartType::~LineChartType()
