@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:10:39 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 #include "moduleoptions.hxx"
 
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
+
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
@@ -75,8 +79,16 @@
 #include <unotools/configitem.hxx>
 #endif
 
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
@@ -91,14 +103,36 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
+#include <com/sun/star/container/XContainerQuery.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include <com/sun/star/container/XEnumeration.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
 
-#ifdef css
-    #error  "Who defined css? I use it as namespace value ...!"
-#else
-    #define css     ::com::sun::star
+#ifndef css
+namespace css = ::com::sun::star;
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -1215,6 +1249,155 @@ sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
     }
 
     return ::rtl::OUString();
+}
+
+/*-----------------------------------------------
+    31.07.2003 10:41
+-----------------------------------------------*/
+SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const ::rtl::OUString& sName)
+{
+    if (sName.equals(FACTORYNAME_WRITERGLOBAL))
+        return E_WRITERGLOBAL;
+    if (sName.equals(FACTORYNAME_WRITERWEB))
+        return E_WRITERWEB;
+    if (sName.equals(FACTORYNAME_WRITER))
+        return E_WRITER;
+    if (sName.equals(FACTORYNAME_CALC))
+        return E_CALC;
+    if (sName.equals(FACTORYNAME_DRAW))
+        return E_DRAW;
+    if (sName.equals(FACTORYNAME_IMPRESS))
+        return E_IMPRESS;
+    if (sName.equals(FACTORYNAME_MATH))
+        return E_MATH;
+    if (sName.equals(FACTORYNAME_CHART))
+        return E_CHART;
+
+    return E_UNKNOWN_FACTORY;
+}
+
+/*-----------------------------------------------
+    31.07.2003 14:39
+-----------------------------------------------*/
+SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::OUString&                                 sURL            ,
+                                                                  const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
+{
+    // needed!
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::utl::getProcessServiceFactory();
+    if (!xSMGR.is())
+        return E_UNKNOWN_FACTORY;
+
+    // needed! The only chance to find the application module is
+    // the property "DocumentService" of a filter ...
+    css::uno::Reference< css::container::XNameAccess > xFilterCfg;
+    try
+    {
+        xFilterCfg = css::uno::Reference< css::container::XNameAccess >(
+            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory")), css::uno::UNO_QUERY);
+    }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
+    catch(const css::uno::Exception&)
+        { return E_UNKNOWN_FACTORY; }
+
+    ::comphelper::SequenceAsHashMap stlDesc(lMediaDescriptor);
+
+    // is there already a filter inside the descriptor?
+    ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("FilterName"), ::rtl::OUString());
+    if (sFilterName.getLength())
+    {
+        try
+        {
+            ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sFilterName));
+            ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("DocumentService"), ::rtl::OUString());
+            SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
+
+            if (eApp != E_UNKNOWN_FACTORY)
+                return eApp;
+        }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
+        catch(const css::uno::Exception&)
+            { /* do nothing here ... may the following code can help!*/ }
+    }
+
+    // is there already a type inside the descriptor?
+    ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("TypeName"), ::rtl::OUString());
+    if (!sTypeName.getLength())
+    {
+        // no :-(
+        // start flat detection of URL
+        css::uno::Reference< css::document::XTypeDetection > xDetect;
+        try
+        {
+            xDetect = css::uno::Reference< css::document::XTypeDetection >(
+                xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), css::uno::UNO_QUERY);
+        }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
+        catch(const css::uno::Exception&)
+            { return E_UNKNOWN_FACTORY; }
+
+        sTypeName = xDetect->queryTypeByURL(sURL);
+    }
+
+    if (!sTypeName.getLength())
+        return E_UNKNOWN_FACTORY;
+
+    // yes - there is a type info
+    // Try to find the default filter.
+    try
+    {
+        css::uno::Reference< css::container::XContainerQuery > xQuery(xFilterCfg, css::uno::UNO_QUERY);
+        if (xQuery.is())
+        {
+            ::rtl::OUStringBuffer sQuery(256);
+            sQuery.appendAscii("getDefaultFilterForType:");
+            sQuery.append     (sTypeName                 );
+            css::uno::Reference< css::container::XEnumeration > xSet = xQuery->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
+            if (
+                (xSet.is()              ) &&
+                (xSet->hasMoreElements())
+               )
+            {
+                ::comphelper::SequenceAsHashMap stlFilterProps   (xSet->nextElement());
+                ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("DocumentService"), ::rtl::OUString());
+                SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
+
+                if (eApp != E_UNKNOWN_FACTORY)
+                    return eApp;
+            }
+        }
+    }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
+    catch(const css::uno::Exception&)
+        { /* do nothing here ... may the following code can help!*/ }
+
+    // no filter/no type/no detection result => no fun :-)
+    return E_UNKNOWN_FACTORY;
+}
+
+/*-----------------------------------------------
+    31.07.2003 10:41
+-----------------------------------------------*/
+SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::uno::Reference< css::frame::XModel >& xModel)
+{
+    css::uno::Reference< css::lang::XServiceInfo > xInfo(xModel, css::uno::UNO_QUERY);
+    if (!xInfo.is())
+        return E_UNKNOWN_FACTORY;
+
+    const css::uno::Sequence< ::rtl::OUString > lServices = xInfo->getSupportedServiceNames();
+    const ::rtl::OUString*                      pServices = lServices.getConstArray();
+
+    for (sal_Int32 i=0; i<lServices.getLength() ; ++i)
+    {
+        SvtModuleOptions::EFactory eApp = SvtModuleOptions::ClassifyFactoryByServiceName(pServices[i]);
+        if (eApp != E_UNKNOWN_FACTORY)
+            return eApp;
+    }
+
+    return E_UNKNOWN_FACTORY;
 }
 
 ::com::sun::star::uno::Sequence < ::rtl::OUString > SvtModuleOptions::GetAllServiceNames()
