@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomPresentation.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
     <p>Such a presentation can use certain pages more than once,
     but it does not necessarily use all of the pages.</p>
  */
-service CustomPresentation
+published service CustomPresentation
 {
     /** This is the container of the names of pages in this customized
                 presentation.
