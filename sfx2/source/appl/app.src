@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 16:56:10 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ ErrorBox MSG_SIGNAL
     Message [ portuguese ] = "Surgiu um erro de programa inesperado!\n\nPoderб agora, sob o seu prуprio risco, \ntentar guardar todos os documentos abertos.\nTentar guardar o seu trabalho antes que a aplicaзгo seja fechada?" ;
     Message [ portuguese_brazilian ] = "Es ist ein unerwarter Anwendungsfehler aufgetreten!\nSie kцnnen jetzt auf eigene Gefahr hin versuchen,\nalle offenen Dokumente zu sichern!\n\nSoll versucht werden, Ihre Arbeit zu sichern, bevor die Applikation beendet wird?" ;
     Message[ chinese_simplified ] = "ЈҐ…ъЅЋ“їЄц“вЌвµƒ≥ћ–тінќу£°\nƒъѕ÷‘Џњ…“‘≥Ґ ‘±£іжЋщ”–±їітњ™µƒќƒЉю£°\nƒъ“™‘ЏєЎ±’’вЄц”¶”√≥ћ–т÷Ѓ«∞±£іжЋщ”–µƒќƒЉю¬р£њ";
-    Message[ russian ] = "ѕроизошла неожиданна€ ошибка приложени€!\n¬ы можете сейчас попытатьс€ под вашу ответственность,\n сохранить все открытые документы!\n\nѕопытатьс€ сохранить вашу работу до выхода из приложени€?";
+    Message[ russian ] = "ѕроизошла неожиданна€ ошибка приложени€!\n¬ы можете сейчас попытатьс€\nсохранить все открытые документы!\n\nѕопытатьс€ сохранить ¬ашу работу до выхода из приложени€?";
     Message[ polish ] = "Wystєpi≥ nieoczekiwany b≥єd w programie!\nNa w≥asnє odpowiedzialnoЬж moњesz sprуbowaж \nzapisaж wszystkie otwarte dokumenty!\n\nCzy sprуbowaж zapisaж twojк pracк przed zamkniкciem aplikacji?";
     Message[ japanese ] = "Ч\\КъВµВ»ВҐћяџЄё„— і„∞В™Ф≠РґВµВ№ВµВљБB\nЎљЄВЌВ†ВиВ№ВЈВ™\nКJВ©ВкВƒВҐВйƒёЈ≠“ЁƒВЌВЈВ„ВƒХџСґВµВƒВЁВƒВ≠ВЊВ≥ВҐБB\n\n±ћяЎє∞ЉЃЁВрПIЧєВЈВйСOВ…БAНмЛ∆ТЖВћƒёЈ≠“ЁƒВрХџСґВµВƒВЁВ№ВЈВ©БH";
     Message[ chinese_traditional ] = "µo•Ќ§F§@≠”ЈN•~™Їµ{¶°њщї~°I\n±z≤{¶b•i•HєЅЄ’ЂO¶s©“¶≥≥Qґ}±“™Їј…Ѓ„°I\n±z≠n¶b√ц≥ђ≥o≠”ј≥•ќµ{¶°§ІЂeјx¶s©“¶≥™Їј…Ѓ„°H";
@@ -902,7 +902,7 @@ String GID_FRAME
     Text[ polish ] = "Ramka";
     Text[ japanese ] = "Шg";
     Text[ chinese_traditional ] = "∞TЃЎ";
-    Text[ arabic ] = "≈Ў«—";
+    Text[ arabic ] = "я«ѕ—";
     Text[ dutch ] = "Kader";
     Text[ chinese_simplified ] = "њт";
     Text[ greek ] = "–есягсбммб";
@@ -1585,7 +1585,7 @@ String STR_ISMODIFIED
     TEXT[ chinese_simplified ] = "“™іж≈ћЄьЄƒ %1 £њ";
     TEXT[ russian ] = "—охранить изменени€ в %1 ?";
     TEXT[ polish ] = "Zapisaж modyfikacje w %1 ?";
-    TEXT[ japanese ] = "ХѕНXВр %1 В…ХџСґВµВ№ВЈВ©БH";
+    TEXT[ japanese ] = "ХѕНXВр %1 В…ХџСґВµВ№ВЈВ©БB";
     TEXT[ chinese_traditional ] = "јx¶s≈№Іу %1 °H";
     TEXT[ arabic ] = "еб  —нѕ ЌЁў «б џнн—«  Ён %1њ";
     TEXT[ dutch ] = "Wijzigingen opslaan in %1?";
