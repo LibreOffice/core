@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-29 08:30:20 $
+ *  last change: $Author: sab $ $Date: 2001-09-06 14:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,12 +933,18 @@ void ScXMLExport::WriteRowContent()
 {
     ScMyRowFormatRange aRange;
     sal_Int32 nIndex(-1);
+#ifndef PRODUCT
+    sal_Int32 nPrevCol(0);
+#endif
     sal_Int32 nCols(0);
     sal_Int32 nPrevValidationIndex(-1);
     sal_Bool bIsAutoStyle(sal_True);
     sal_Bool bIsFirst(sal_True);
     while (pRowFormatRanges->GetNext(aRange))
     {
+#ifndef PRODUCT
+        DBG_ASSERT(bIsFirst || (!bIsFirst && (nPrevCol + nCols == aRange.nStartColumn)), "here are some columns missing");
+#endif
         if (bIsFirst)
         {
             nIndex = aRange.nIndex;
@@ -946,6 +952,9 @@ void ScXMLExport::WriteRowContent()
             bIsAutoStyle = aRange.bIsAutoStyle;
             nCols = aRange.nRepeatColumns;
             bIsFirst = sal_False;
+#ifndef PRODUCT
+            nPrevCol = aRange.nStartColumn;
+#endif
         }
         else
         {
@@ -970,6 +979,9 @@ void ScXMLExport::WriteRowContent()
                 bIsAutoStyle = aRange.bIsAutoStyle;
                 nCols = aRange.nRepeatColumns;
                 nPrevValidationIndex = aRange.nValidationIndex;
+#ifndef PRODUCT
+                nPrevCol = aRange.nStartColumn;
+#endif
             }
         }
     }
