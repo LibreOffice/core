@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-24 09:50:27 $
+ *  last change: $Author: ka $ $Date: 2001-04-25 10:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,10 +1111,10 @@ void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
                         bImageOLE = TRUE;
                     else if( pModel->GetPersist() )
                     {
-                        SvInfoObjectRef             xInfo( pModel->GetPersist()->Find( pOLEObj->GetName() ) );
-                        static const SvGlobalName   aSim30Name( SO3_SIM_CLASSID_30 );
-                        static const SvGlobalName   aSim40Name( SO3_SIM_CLASSID_40 );
-                        static const SvGlobalName   aSim50Name( SO3_SIM_CLASSID_50 );
+                        SvInfoObjectRef     xInfo( pModel->GetPersist()->Find( pOLEObj->GetName() ) );
+                        const SvGlobalName  aSim30Name( SO3_SIM_CLASSID_30 );
+                        const SvGlobalName  aSim40Name( SO3_SIM_CLASSID_40 );
+                        const SvGlobalName  aSim50Name( SO3_SIM_CLASSID_50 );
 
                         if( xInfo.Is() &&
                             ( xInfo->GetClassName() == aSim30Name ||
