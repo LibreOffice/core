@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:18:13 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,12 @@ throw(  SAXException, RuntimeException )
 
 // -----------------------------------------------------------------------------
 
-OReadMenuDocumentHandler::OReadMenuDocumentHandler( MenuBar* pMenuBar ) :
+// #110897#
+OReadMenuDocumentHandler::OReadMenuDocumentHandler(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    MenuBar* pMenuBar )
+:   // #110897#
+    mxServiceFactory(xServiceFactory),
     m_pMenuBar( pMenuBar ),
     m_nElementDepth( 0 ),
     m_bMenuBarMode( sal_False ),
@@ -207,6 +212,12 @@ OReadMenuDocumentHandler::OReadMenuDocumentHandler( MenuBar* pMenuBar ) :
 {
 }
 
+// #110897#
+const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& OReadMenuDocumentHandler::getServiceFactory()
+{
+    // #110897#
+    return mxServiceFactory;
+}
 
 OReadMenuDocumentHandler::~OReadMenuDocumentHandler()
 {
@@ -244,7 +255,10 @@ throw( SAXException, RuntimeException )
     {
         ++m_nElementDepth;
         m_bMenuBarMode = sal_True;
-        m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( m_pMenuBar, &m_nItemId ));
+
+        // #110897# m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( m_pMenuBar, &m_nItemId ));
+        m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( getServiceFactory(), m_pMenuBar, &m_nItemId ));
+
         m_xReader->startDocument();
     }
 }
@@ -282,7 +296,12 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
 // -----------------------------------------------------------------------------
 
 
-OReadMenuBarHandler::OReadMenuBarHandler( MenuBar* pMenuBar, USHORT* pItemId ) :
+// #110897#
+OReadMenuBarHandler::OReadMenuBarHandler(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    MenuBar* pMenuBar, USHORT* pItemId )
+:   // #110897#
+    mxServiceFactory( xServiceFactory ),
     m_pMenuBar( pMenuBar ),
     m_nElementDepth( 0 ),
     m_bMenuMode( sal_False ),
@@ -290,6 +309,12 @@ OReadMenuBarHandler::OReadMenuBarHandler( MenuBar* pMenuBar, USHORT* pItemId ) :
 {
 }
 
+// #110897#
+const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& OReadMenuBarHandler::getServiceFactory()
+{
+    // #110897#
+    return mxServiceFactory;
+}
 
 OReadMenuBarHandler::~OReadMenuBarHandler()
 {
