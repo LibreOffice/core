@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kr $ $Date: 2001-06-25 13:35:43 $
+ *  last change: $Author: kr $ $Date: 2001-09-11 15:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.11 $ $ $Date: 2001-06-25 13:35:43 $
+ * @version     $Revision: 1.12 $ $ $Date: 2001-09-11 15:57:18 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -207,10 +207,10 @@ public class TypeDescription implements ITypeDescription {
             }
         }
         catch(NoSuchFieldException noSuchFieldException) {
-            if(DEBUG) System.err.println("__getTypeInfos:" + zInterface + " - exception:" + noSuchFieldException);
+              if(DEBUG) System.err.println("__getTypeInfos:" + zInterface + " - exception:" + noSuchFieldException);
         }
         catch(ClassNotFoundException classNotFoundException) {
-            if(DEBUG) System.err.println("__getTypeInfos:" + zInterface + " - exception:" + classNotFoundException);
+              if(DEBUG) System.err.println("__getTypeInfos:" + zInterface + " - exception:" + classNotFoundException);
         }
         catch(IllegalAccessException illegalAccessException) {
             System.err.println("__getTypeInfos:" + zInterface + " - exception:" + illegalAccessException);
@@ -569,11 +569,11 @@ public class TypeDescription implements ITypeDescription {
 
     protected TypeDescription _superType; // if this is a struct or an interface
 
-    protected int            _offset;
-    protected MethodDescription _methodDescriptionsByIndex[];
-    protected Hashtable      _methodDescriptionsByName;
-    protected Hashtable      _iFieldDescriptionsByName;
+    protected int               _offset;
+    protected MethodDescription _methodDescriptions[];
+    protected Hashtable         _methodDescriptionsByName;
 
+    protected Hashtable         _iFieldDescriptionsByName;
     protected IFieldDescription _iFieldDescriptions[];
 
     protected ITypeDescription _componentType;
@@ -621,8 +621,6 @@ public class TypeDescription implements ITypeDescription {
             Class interfaces[] = _class.getInterfaces();
             if(interfaces.length > 0)
                 _superType = getTypeDescription(interfaces[0]); // uno only supports single inheritance
-
-            _initMethodTypeInfos();
         }
         else if(zClass.isArray()) {
             _typeClass = TypeClass.SEQUENCE;
@@ -641,8 +639,6 @@ public class TypeDescription implements ITypeDescription {
             Class superClass = _class.getSuperclass();
             if(superClass != null && superClass != Object.class)
                 _superType = getTypeDescription(superClass);
-
-            _initMemberTypeInfos();
         }
         else {
             _typeClass = TypeClass.STRUCT;
@@ -653,8 +649,6 @@ public class TypeDescription implements ITypeDescription {
             Class superClass = _class.getSuperclass();
             if(superClass != null && superClass != Object.class)
                 _superType = getTypeDescription(superClass);
-
-            _initMemberTypeInfos();
         }
 
           __cyclicTypes.remove(zClass.getName());
@@ -692,10 +686,9 @@ public class TypeDescription implements ITypeDescription {
     }
 
     private void _initMethodTypeInfos() {
-        if(_methodDescriptionsByName != null)
-            return;
+        if(DEBUG) System.err.println("TypeDescription._initMethodTypeInfos");
 
-        _methodDescriptionsByName = new Hashtable();
+        Hashtable methodDescriptionsByName = new Hashtable();
 
         int superOffset = 0;
 
@@ -710,9 +703,9 @@ public class TypeDescription implements ITypeDescription {
             MethodDescription release = new MethodDescription("release", 2, TypeInfo.ONEWAY);
             release.init(new Class[0], null, Void.class);
 
-            _methodDescriptionsByName.put("queryInterface", queryInterface);
-            _methodDescriptionsByName.put("acquire", acquire);
-            _methodDescriptionsByName.put("release", release);
+            methodDescriptionsByName.put("queryInterface", queryInterface);
+            methodDescriptionsByName.put("acquire", acquire);
+            methodDescriptionsByName.put("release", release);
 
             _offset = 3;
         }
@@ -753,30 +746,36 @@ public class TypeDescription implements ITypeDescription {
                 if(methodDescription != null) {
                     methodDescription.init(methods[i], parameterTypeInfos, superOffset);
 
-                    _methodDescriptionsByName.put(methodDescription.getName(), methodDescription);
+                    methodDescriptionsByName.put(methodDescription.getName(), methodDescription);
                 }
             }
 
         }
 
-        _methodDescriptionsByIndex = new MethodDescription[_methodDescriptionsByName.size()];
-        Enumeration element = _methodDescriptionsByName.elements();
+        MethodDescription methodDescriptions[] = new MethodDescription[methodDescriptionsByName.size()];
+        Enumeration element = methodDescriptionsByName.elements();
         while(element.hasMoreElements()) {
             MethodDescription methodDescription = (MethodDescription)element.nextElement();
 
-            _methodDescriptionsByIndex[methodDescription.getIndex() - superOffset] = methodDescription;
+            methodDescriptions[methodDescription.getIndex() - superOffset] = methodDescription;
         }
 
-        _offset = superOffset + _methodDescriptionsByIndex.length;
+        _offset = superOffset + methodDescriptions.length;
+
+        // transactional assignment
+        _methodDescriptions       = methodDescriptions;
+        _methodDescriptionsByName = methodDescriptionsByName;
     }
 
     private void _initMemberTypeInfos() {
+        if(DEBUG) System.err.println("TypeDescription._initMemberTypeInfos");
+
         TypeInfo typeInfos[] = __getTypeInfos(_class);
         Field fields[] = _class.getFields();
         int index = 0;
-        IFieldDescription iFieldDescriptions[] = new IFieldDescription[fields.length];
+        IFieldDescription tmp_iFieldDescriptions[] = new IFieldDescription[fields.length];
 
-        _iFieldDescriptionsByName = new Hashtable();
+        Hashtable iFieldDescriptionsByName = new Hashtable();
 
 
         for(int i = 0; i < fields.length; ++ i) {
@@ -797,13 +796,17 @@ public class TypeDescription implements ITypeDescription {
                     iFieldDescription = new FieldDescription(memberTypeInfo, fields[i]);
                 }
 
-                _iFieldDescriptionsByName.put(iFieldDescription.getName(), iFieldDescription);
-                iFieldDescriptions[index ++] = iFieldDescription;
+                iFieldDescriptionsByName.put(iFieldDescription.getName(), iFieldDescription);
+                tmp_iFieldDescriptions[index ++] = iFieldDescription;
             }
         }
 
-        _iFieldDescriptions = new IFieldDescription[index];
-        System.arraycopy(iFieldDescriptions, 0, _iFieldDescriptions, 0, index);
+        IFieldDescription iFieldDescriptions[] = new IFieldDescription[index];
+        System.arraycopy(tmp_iFieldDescriptions, 0, iFieldDescriptions, 0, index);
+
+        // transactional assignment
+        _iFieldDescriptions = iFieldDescriptions;
+        _iFieldDescriptionsByName = iFieldDescriptionsByName;
     }
 
     public ITypeDescription getSuperType() {
@@ -811,24 +814,22 @@ public class TypeDescription implements ITypeDescription {
     }
 
     public IMethodDescription []getMethodDescriptions() {
-        IMethodDescription iMethodDescriptions[] = null;
+        if(_methodDescriptions == null)
+            _initMethodTypeInfos();
 
-        if(_methodDescriptionsByIndex != null) {
-            iMethodDescriptions = new IMethodDescription[_methodDescriptionsByIndex.length];
-
-            System.arraycopy(_methodDescriptionsByIndex, 0, iMethodDescriptions, 0, _methodDescriptionsByIndex.length);
-        }
-
-        return iMethodDescriptions;
+        return _methodDescriptions;
     }
 
     public IMethodDescription getMethodDescription(int methodId) {
+        if(_methodDescriptionsByName == null)
+            _initMethodTypeInfos();
+
         IMethodDescription iMethodDescription = null;
 
-        int relMethodId = methodId - (_offset - _methodDescriptionsByIndex.length);
+        int relMethodId = methodId - (_offset - _methodDescriptions.length);
 
-        if(relMethodId >= 0 && relMethodId < _methodDescriptionsByIndex.length)
-            iMethodDescription = _methodDescriptionsByIndex[relMethodId];
+        if(relMethodId >= 0 && relMethodId < _methodDescriptions.length)
+            iMethodDescription = _methodDescriptions[relMethodId];
 
         else if(_superType != null)
             iMethodDescription = _superType.getMethodDescription(methodId);
@@ -837,6 +838,9 @@ public class TypeDescription implements ITypeDescription {
     }
 
     public IMethodDescription getMethodDescription(String name) {
+        if(_methodDescriptionsByName == null)
+            _initMethodTypeInfos();
+
         IMethodDescription iMethodDescription = (MethodDescription)_methodDescriptionsByName.get(name);
         if(iMethodDescription == null && _superType != null)
             iMethodDescription = _superType.getMethodDescription(name);
@@ -845,10 +849,16 @@ public class TypeDescription implements ITypeDescription {
     }
 
     public IFieldDescription []getFieldDescriptions() {
+        if(_iFieldDescriptions == null)
+            _initMemberTypeInfos();
+
         return _iFieldDescriptions;
     }
 
     public IFieldDescription getFieldDescription(String name) {
+        if(_iFieldDescriptions == null)
+            _initMemberTypeInfos();
+
         IFieldDescription iFieldDescription = (IFieldDescription)_iFieldDescriptionsByName.get(name);
         if(iFieldDescription == null && _superType != null)
             iFieldDescription = _superType.getFieldDescription(name);
