@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: os $ $Date: 2000-11-16 10:54:00 $
+#   last change: $Author: os $ $Date: 2001-04-20 11:39:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,11 @@ PACKAGE=com$/sun$/star$/text$/fieldmaster
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    Database.idl\
+    DDE.idl\
     Bibliography.idl\
+    SetExpression.idl\
+    User.idl\
 
 # ------------------------------------------------------------------
 
