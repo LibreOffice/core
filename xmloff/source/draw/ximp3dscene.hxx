@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 16:36:47 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@
 #include <goodies/vector3d.hxx>
 #endif
 
+#ifndef _XIMPSHAPE_HXX
+#include <ximpshap.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // dr3d:3dlight context
 
@@ -131,7 +135,7 @@ DECLARE_LIST(Imp3DLightList, SdXML3DLightContext*);
 //////////////////////////////////////////////////////////////////////////////
 // dr3d:3dscene context
 
-class SdXML3DSceneShapeContext : public SvXMLImportContext
+class SdXML3DSceneShapeContext : public SdXMLShapeContext
 {
     // the shape group this group is working on
     // this is the scene at the same time

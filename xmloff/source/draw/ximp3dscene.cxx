@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 16:36:47 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SvXMLImportContext( rImport, nPrfx, rLocalName ),
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
     mxShapes(rShapes),
     mbSetTransform( FALSE ),
     mxPrjMode(drawing::ProjectionMode_PERSPECTIVE),
