@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strdecl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-17 08:34:06 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 12:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ namespace configmgr
     DECLARE_CONSTASCII_USTRING(STATE_REPLACED);
     DECLARE_CONSTASCII_USTRING(STATE_DELETED);
 
+    DECLARE_CONSTASCII_USTRING(DEFAULT_SEPARATOR);
 
     DECLARE_CONSTASCII_USTRING(XML_CDATA);
 } // namespace configmgr

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-15 07:14:58 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 12:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,6 @@ namespace configmgr
     public:
           virtual void disposing(ITreeNotifier* pNotifier) = 0;
           virtual void changes(TreeChangeList const& , sal_Bool _bError) = 0;
-//        virtual void changes(sal_Int32 _nNotificationId,const ::rtl::OUString& _rNotifyReason) = 0;
     };
 
     //==========================================================================
@@ -215,23 +214,9 @@ namespace configmgr
     {
     public:
         /** called whenever another session modified a node which the listener is registered for
-            @param      _rNodePath      the path of the node which was updated. If you're interested in the new
-                                        node values, you should call getNode on the session.
+            @param      _rChanges       The list of changes for a node.
         */
-        virtual void    nodeUpdated(const ::rtl::OUString& _rNodePath, std::auto_ptr<INode> node) = 0;
-
-        /** called whenever another session deleted a new node (assumed the the listener is registered for an ancestor
-            of this new node)
-            @param      _rNodePath      the path of the node which was deleted.
-        */
-        virtual void    nodeDeleted(const ::rtl::OUString& _rNodePath, std::auto_ptr<INode> node) = 0;
-
-        /** called whenever another session added a new node (assumed the the listener is registered for an ancestor
-            of this new node)
-            @param      _rNodePath      the path of the node which was added. If you're interested in the new
-                                        node values, you should call getNode on the session.
-        */
-        virtual void    nodeAdded(const ::rtl::OUString& _rNodePath, std::auto_ptr<INode> node) = 0;
+        virtual void    nodeUpdated(TreeChangeList& _rChanges) = 0;
     };
 
     //==========================================================================
