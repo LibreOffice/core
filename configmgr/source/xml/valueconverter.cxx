@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2001-05-04 10:13:46 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 19:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,10 @@
 
 #include "msc_msg.hxx"
 
-#ifndef _RTL_CHAR_H_
-#include <rtl/char.h>
-#endif
+inline sal_Bool rtl_ascii_isWhitespace( sal_Unicode ch )
+{
+    return ch <= 0x20 && ch;
+}
 
 // #define ASCII(x) OUString::createFromAscii(x)
 namespace configmgr
@@ -172,12 +173,12 @@ namespace Encoding {
             eEncoding = Encoding::DEFAULT;
         }
 
-        else if (sEncoding.equalsIgnoreCase(ENCODING_HEX))
+        else if (sEncoding.equalsIgnoreAsciiCase(ENCODING_HEX))
         {
             eEncoding = Encoding::hex;
         }
 
-        else if (sEncoding.equalsIgnoreCase(ENCODING_BASE64))
+        else if (sEncoding.equalsIgnoreAsciiCase(ENCODING_BASE64))
         {
             eEncoding = Encoding::base64;
         }
@@ -260,12 +261,12 @@ bool OValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rVa
         CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
 {
     OSL_PRECOND(!m_aValueDesc.isNull,"OValueConverter::convertScalarToAny - check for NULL before calling");
-    OSL_ENSURE(!m_aValueDesc.sType.equalsIgnoreCase(TYPE_ANY),"'Any' values must be NULL");
+    OSL_ENSURE(!m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_ANY),"'Any' values must be NULL");
 
     bool bResult = false;
 
     // check for Binary
-    if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_BINARY))
+    if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_BINARY))
     {
         Sequence<sal_Int8> aBinarySeq = parseBinary(aContent);
         rValue <<= aBinarySeq;
@@ -280,14 +281,14 @@ bool OValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rVa
 
     if (!bResult)
     {
-        if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_STRING))
+        if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_STRING))
         {
             OSL_ENSURE(m_xTypeConverter.is(), "Warning: OValueConverter has no TypeConverter");
             rValue <<= aContent;
             bResult = true;
         }
 
-        else if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_ANY))
+        else if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_ANY))
         {
             rValue.clear();
             bResult = false;
@@ -371,45 +372,45 @@ bool OValueConverter::convertListToAny(StringList const& aContentList, uno::Any&
         CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
 {
     OSL_PRECOND(!m_aValueDesc.isNull,"OValueConverter::convertListToAny - check for NULL before calling");
-    OSL_ENSURE(!m_aValueDesc.sType.equalsIgnoreCase(TYPE_ANY),"'Any' not allowed for lists");
+    OSL_ENSURE(!m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_ANY),"'Any' not allowed for lists");
 
-    if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_STRING))
+    if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_STRING))
     {
         Sequence< OUString > aSequence;
         convertListToSequence(aContentList,aSequence,*this);
         rValue <<= aSequence;
     }
-    else if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_BOOLEAN))
+    else if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_BOOLEAN))
     {
         Sequence< sal_Bool > aSequence;
         convertListToSequence(aContentList,aSequence,*this);
         rValue <<= aSequence;
     }
-    else if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_SHORT))
+    else if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_SHORT))
     {
         Sequence< sal_Int16 > aSequence;
         convertListToSequence(aContentList,aSequence,*this);
         rValue <<= aSequence;
     }
-    else if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_INT))
+    else if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_INT))
     {
         Sequence< sal_Int32 > aSequence;
         convertListToSequence(aContentList,aSequence,*this);
         rValue <<= aSequence;
     }
-    else if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_LONG))
+    else if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_LONG))
     {
         Sequence< sal_Int64 > aSequence;
         convertListToSequence(aContentList,aSequence,*this);
         rValue <<= aSequence;
     }
-    else if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_DOUBLE))
+    else if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_DOUBLE))
     {
         Sequence< double > aSequence;
         convertListToSequence(aContentList,aSequence,*this);
         rValue <<= aSequence;
     }
-    else if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_BINARY))
+    else if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_BINARY))
     {
         Sequence< Sequence<sal_Int8> > aSequence;
         convertListToSequence(aContentList,aSequence,*this);
@@ -446,7 +447,7 @@ namespace
             if (ch == 0xA) return true;
             return (ch == c_chWhite0) || (ch == c_chWhite1);
 */
-            return rtl_char_isWhitespace(ch) ? true : false;
+            return rtl_ascii_isWhitespace(ch) ? true : false;
         }
 
         sal_Int32 findFirstTokenStart(OUString const& sText) const throw()

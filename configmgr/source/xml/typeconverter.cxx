@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-05 09:19:37 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 19:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,15 +185,15 @@ namespace configmgr
     {
         uno::TypeClass aRet = uno::TypeClass_VOID;
 
-        if     (_rType.equalsIgnoreCase(TYPE_BOOLEAN))  aRet = uno::TypeClass_BOOLEAN;
-        else if(_rType.equalsIgnoreCase(TYPE_SHORT))       aRet = uno::TypeClass_SHORT;
-        else if(_rType.equalsIgnoreCase(TYPE_INT))     aRet = uno::TypeClass_LONG;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("integer")))  aRet = uno::TypeClass_LONG;
-        else if(_rType.equalsIgnoreCase(TYPE_LONG))    aRet = uno::TypeClass_HYPER;
-        else if(_rType.equalsIgnoreCase(TYPE_DOUBLE))   aRet = uno::TypeClass_DOUBLE;
-        else if(_rType.equalsIgnoreCase(TYPE_STRING))   aRet = uno::TypeClass_STRING;
-        else if(_rType.equalsIgnoreCase(TYPE_BINARY))   aRet = uno::TypeClass_SEQUENCE;
-        else if(_rType.equalsIgnoreCase(TYPE_ANY))   aRet = uno::TypeClass_ANY;
+        if     (_rType.equalsIgnoreAsciiCase(TYPE_BOOLEAN))  aRet = uno::TypeClass_BOOLEAN;
+        else if(_rType.equalsIgnoreAsciiCase(TYPE_SHORT))      aRet = uno::TypeClass_SHORT;
+        else if(_rType.equalsIgnoreAsciiCase(TYPE_INT))    aRet = uno::TypeClass_LONG;
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("integer")))  aRet = uno::TypeClass_LONG;
+        else if(_rType.equalsIgnoreAsciiCase(TYPE_LONG))       aRet = uno::TypeClass_HYPER;
+        else if(_rType.equalsIgnoreAsciiCase(TYPE_DOUBLE))   aRet = uno::TypeClass_DOUBLE;
+        else if(_rType.equalsIgnoreAsciiCase(TYPE_STRING))   aRet = uno::TypeClass_STRING;
+        else if(_rType.equalsIgnoreAsciiCase(TYPE_BINARY))   aRet = uno::TypeClass_SEQUENCE;
+        else if(_rType.equalsIgnoreAsciiCase(TYPE_ANY))   aRet = uno::TypeClass_ANY;
         else
         {
             ::rtl::OString aStr("Wrong typeclass! ");
@@ -277,20 +277,20 @@ namespace configmgr
     {
         uno::Type aRet;
 
-        if     (_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("boolean")))  aRet = getBooleanType();
+        if     (_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("boolean")))  aRet = getBooleanType();
 
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("short")))    aRet = getShortType();
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("int")))      aRet = getIntType();
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("integer")))  aRet = getIntType();
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("long")))     aRet = getLongType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("short")))       aRet = getShortType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("int")))     aRet = getIntType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("integer")))  aRet = getIntType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("long")))    aRet = getLongType();
 
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("double")))   aRet = getDoubleType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("double")))   aRet = getDoubleType();
 
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("string")))   aRet = getStringType();
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("binary")))   aRet = getBinaryType();
-//  else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("sequence"))) aRet = uno::TypeClass_SEQUENCE;
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("string")))   aRet = getStringType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("binary")))   aRet = getBinaryType();
+//  else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("sequence"))) aRet = uno::TypeClass_SEQUENCE;
 
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("any")))   aRet = getAnyType();
+        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("any")))   aRet = getAnyType();
         else
         {
             ::rtl::OString aStr("Unknown type! ");
@@ -304,30 +304,30 @@ namespace configmgr
     {
         uno::Type aRet;
 
-        if     (_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("boolean")))
+        if     (_rsElementType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("boolean")))
             aRet = ::getCppuType(static_cast<uno::Sequence<sal_Bool> const*>(0));
 
-        else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("short")))
+        else if(_rsElementType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("short")))
             aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int16> const*>(0));
 
-        else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("int")))
+        else if(_rsElementType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("int")))
             aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int32> const*>(0));
-        else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("integer")))
+        else if(_rsElementType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("integer")))
             aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int32> const*>(0));
 
-        else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("long")))
+        else if(_rsElementType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("long")))
             aRet = ::getCppuType(static_cast<uno::Sequence<sal_Int64> const*>(0));
 
-        else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("double")))
+        else if(_rsElementType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("double")))
             aRet = ::getCppuType(static_cast<uno::Sequence<double> const*>(0));
 
-        else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("string")))
+        else if(_rsElementType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("string")))
             aRet = ::getCppuType(static_cast<uno::Sequence<rtl::OUString> const*>(0));
 
-        else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("binary")))
+        else if(_rsElementType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("binary")))
             aRet = ::getCppuType(static_cast<uno::Sequence<uno::Sequence<sal_Int8> > const*>(0));
 
-//  else if(_rsElementType.equalsIgnoreCase(::rtl::OUString::createFromAscii("sequence"))) aRet = uno::TypeClass_SEQUENCE;
+//  else if(_rsElementType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("sequence"))) aRet = uno::TypeClass_SEQUENCE;
         else
         {
             ::rtl::OString aStr("Unknown type! ");

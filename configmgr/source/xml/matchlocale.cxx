@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-10 14:04:38 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 19:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,16 +137,16 @@ namespace configmgr
         sal_Int32 nCountryPos = countrySeparatorPos(aLocaleName_);
         if (nCountryPos >= 0)
         {
-            rLanguage_ = aLocaleName_.copy(0,nCountryPos).toLowerCase();
+            rLanguage_ = aLocaleName_.copy(0,nCountryPos).toAsciiLowerCase();
 
             ++nCountryPos; // advance past separator
             sal_Int32 nCountryLength = countryLength(aLocaleName_, nCountryPos);
 
-            rCountry_  = aLocaleName_.copy(nCountryPos,nCountryLength).toUpperCase();
+            rCountry_  = aLocaleName_.copy(nCountryPos,nCountryLength).toAsciiUpperCase();
         }
         else
         {
-            rLanguage_ = aLocaleName_.toLowerCase();
+            rLanguage_ = aLocaleName_.toAsciiLowerCase();
             rCountry_  = OUString();
         }
     }
@@ -165,8 +165,8 @@ Locale makeLocale(OUString const& sLocaleName_)
 Locale makeLocale(lang::Locale const& aUnoLocale_)
 {
     Locale aResult;
-    aResult.aLanguage = aUnoLocale_.Language.toLowerCase();
-    aResult.aCountry  = aUnoLocale_.Country.toUpperCase();
+    aResult.aLanguage = aUnoLocale_.Language.toAsciiLowerCase();
+    aResult.aCountry  = aUnoLocale_.Country.toAsciiUpperCase();
     return aResult;
 }
 static

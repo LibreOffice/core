@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:46:27 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 19:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,17 +594,17 @@ namespace configmgr
             if (*pCurrent >>= aCurrent)
             {
                 sal_Bool bExtractSuccess = sal_True;    // defaulted to TRUE, so we skip unknown arguments
-                if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sNodePath))
+                if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sNodePath))
                     bExtractSuccess = (aCurrent.Value >>= sPath);
-                else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sUser))
+                else if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sUser))
                     bExtractSuccess = (aCurrent.Value >>= sUser);
-                else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sDepth))
+                else if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sDepth))
                     bExtractSuccess = (aCurrent.Value >>= nLevelDepth);
-                else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sLocale))
+                else if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sLocale))
                     bExtractSuccess = (aCurrent.Value >>= sLocale);
-                else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sNoCache))
+                else if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sNoCache))
                     bExtractSuccess = (aCurrent.Value >>= bNoCache);
-                else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sLazyWrite))
+                else if (aCurrent.Name.equalsIgnoreAsciiCase(OProviderImpl::FactoryArguments::sLazyWrite))
                     bExtractSuccess = (aCurrent.Value >>= bLazyWrite);
 /*
 #ifdef DBG_UTIL

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 13:42:38 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 19:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ namespace internal
         // find inexact match (the first one, but the order is unspecified)
         // TODO: Add support for node-type-specific element names
         Name aNodeName = aNode.getName();
-        if (aNodeName.toString().equalsIgnoreCase(pSearchComponent->toString()))
+        if (aNodeName.toString().equalsIgnoreAsciiCase(pSearchComponent->toString()))
         {
             *pSearchComponent = aNodeName;
             return DONE; // for this level
