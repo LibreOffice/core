@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:32:12 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "πq§l∂l•Û(~M)";
         Text[ arabic ] = "ﬂ»—Ìœ ≈·ﬂ —Ê‰Ì";
         Text[ greek ] = "¡ÎÎÁÎÔ„Ò·ˆﬂ·";
-        Text[ korean ] = "øÏ∆Ì(~M)";
+        Text[ korean ] = "øÏ∆Ì";
         Text[ turkish ] = "E-posta";
         Text[ language_user1 ] = "ENG:the anglicism \"Mailing\" as used in German cannot be used in Eng. because the real meaning has nothing to do with e-mail.EM17.5.00";
     };
@@ -726,7 +726,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "~%PRODUCTNAME Writer";
         Text[ arabic ] = "%PRODUCTNAME Writer~";
         Text[ greek ] = "%PRODUCTNAME Writer";
-        Text[ korean ] = "~%PRODUCTNAME Writer";
+        Text[ korean ] = "%PRODUCTNAME Writer";
         Text[ turkish ] = "~%PRODUCTNAME Writer";
         Text[ language_user1 ] = " ";
     };
