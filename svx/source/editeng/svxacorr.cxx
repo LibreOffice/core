@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 14:08:19 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 21:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,6 +1494,14 @@ BOOL SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, BOOL bNewFile )
     {
         // no need to test the file, because the last check is not older then
         // 2 minutes.
+        if( bNewFile )
+        {
+            sShareDirFile = sUserDirFile;
+            pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
+                                                        sUserDirFile, eLang );
+            pLangTable->Insert( ULONG(eLang), pLists );
+            pLastFileTable->Remove( ULONG( eLang ) );
+        }
     }
     else if( ( FStatHelper::IsDocument( sUserDirFile ) ||
                 FStatHelper::IsDocument( sShareDirFile =
@@ -1976,7 +1984,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
     MakeUserStorage_Impl();
 
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
-    SvStorageRef xStg = aMedium.GetStorage();
+    SvStorageRef xStg = aMedium.GetOutputStorage();
 
     if( xStg.Is() )
     {
@@ -2322,7 +2330,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         SfxMedium aSrcMedium( sShareAutoCorrFile, STREAM_STD_READ, TRUE );
         SvStorageRef xSrcStg = aSrcMedium.GetStorage();
         SfxMedium aDstMedium( sUserAutoCorrFile, STREAM_STD_WRITE, TRUE );
-        SvStorageRef xDstStg = aDstMedium.GetStorage();
+        SvStorageRef xDstStg = aDstMedium.GetOutputStorage();
 
         if( xSrcStg.Is() && xDstStg.Is() )
         {
@@ -2402,7 +2410,7 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
     MakeUserStorage_Impl();
 
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_STD_READWRITE, TRUE );
-    SvStorageRef xStg = aMedium.GetStorage();
+    SvStorageRef xStg = aMedium.GetOutputStorage();
     BOOL bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
 
 /*  if( bRet )
@@ -2452,7 +2460,7 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
 
     String sLong;
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_STD_READWRITE, TRUE );
-    SvStorageRef xStg = aMedium.GetStorage();
+    SvStorageRef xStg = aMedium.GetOutputStorage();
     BOOL bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
 
     if( bRet )
