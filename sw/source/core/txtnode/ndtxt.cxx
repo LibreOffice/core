@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:34:21 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2273,6 +2273,9 @@ void SwTxtNode::GCAttr()
 
 const SwNodeNum* SwTxtNode::UpdateNum( const SwNodeNum& rNum )
 {
+    // #111955#
+    const SwNodeNum * pOldNum = pNdNum;
+
     if( NO_NUMBERING == rNum.GetLevel() )       // kein Nummerierung mehr ?
     {
         if( !pNdNum )
@@ -2286,6 +2289,11 @@ const SwNodeNum* SwTxtNode::UpdateNum( const SwNodeNum& rNum )
         else if( !( *pNdNum == rNum ))
             *pNdNum = rNum;
     }
+
+    // #111955#
+    if ((0 == pOldNum || 0 == pNdNum) && pOldNum != pNdNum)
+        GetDoc()->UpdateNumRule(*GetDoc()->GetOutlineNumRule(), 0, TRUE);
+
     NumRuleChgd();
     return pNdNum;
 }
@@ -2317,6 +2325,7 @@ void SwTxtNode::NumRuleChgd()
     SetInSwFntCache( FALSE );
 
     SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)GetSwAttrSet().GetLRSpace();
+
     SwModify::Modify( &rLR, &rLR );
 
 #endif
@@ -2341,6 +2350,12 @@ const SwNodeNum* SwTxtNode::UpdateOutlineNum( const SwNodeNum& rNum )
     // 6969: Aktualisierung der NumPortions auch bei leeren Zeilen!
     NumRuleChgd();
     return pNdOutl;
+}
+
+// #111955#
+BOOL SwTxtNode::IsOutlineNum() const
+{
+    return pNdOutl != NULL && pNdNum == NULL;
 }
 
 SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
@@ -2400,9 +2415,9 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
 
             // Ein SplitNode erzeugt !!immer!! einen neuen Level, NO_NUM
             // kann nur ueber eine entsprechende Methode erzeugt werden !!
-            if( NO_NUMLEVEL & pNdNum->GetLevel() )
+            if( ! pNdNum->IsNum())
             {
-                pNdNum->SetLevel( pNdNum->GetLevel() & ~NO_NUMLEVEL );
+                pNdNum->SetNoNum(FALSE);
 #ifndef NUM_RELSPACE
                 SetNumLSpace( TRUE );
 #endif
@@ -2498,7 +2513,7 @@ long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
             0 != ( pRule = GetNumRule() )) ||
             ( 0 != ( pNum = GetOutlineNum() ) &&
             0 != ( pRule = GetDoc()->GetOutlineNumRule() ) ) ) &&
-            pNum->GetLevel() < NO_NUM )
+            pNum->GetLevel() < NO_NUMBERING )
     {
         const SwNumFmt& rFmt = pRule->Get( GetRealLevel( pNum->GetLevel() ) );
         nOffset = rFmt.GetAbsLSpace();
@@ -2528,9 +2543,9 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             0 != ( pRule = GetNumRule() )) ||
             ( 0 != ( pNum = GetOutlineNum() ) &&
             0 != ( pRule = GetDoc()->GetOutlineNumRule() ) ) ) &&
-            pNum->GetLevel() < NO_NUM )
+            pNum->GetLevel() < NO_NUMBERING )
     {
-        if( NO_NUMLEVEL & pNum->GetLevel() )
+        if( ! pNum->IsNum() )
             rFLOffset = 0;
         else
             rFLOffset = pRule->Get( pNum->GetLevel() ).GetFirstLineOffset();
