@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtqry.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:12:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,131 +64,23 @@
 
 String RID_SVXSTR_QRY_PRINT_TITLE
 {
-    Text = "Drucken der Selektion" ;
-    Text [ English ] = "Printing of selection" ;
-    Text[ italian ] = "Stampa la selezione";
-    Text[ portuguese_brazilian ] = "Imprimindo a seleção";
-    Text[ portuguese ] = "A imprimir selecção";
-    Text[ danish ] = "Udskriv det markerede";
-    Text[ french ] = "Imprimer la sélection";
-    Text[ swedish ] = "Skriv ut markering";
-    Text[ dutch ] = "Selectie afdrukken";
-    Text[ spanish ] = "Imprimir la selección";
-    Text[ english_us ] = "Printing selection";
-    Text[ chinese_simplified ] = "æ‰“å°é€‰ä¸­çš„éƒ¨åˆ†";
-    Text[ russian ] = "Ïå÷àòü âûäåëåííîãî ôğàãìåíòà";
-    Text[ polish ] = "Drukowanie zaznaczonego fragmentu";
-    Text[ japanese ] = "é¸æŠã—ãŸéƒ¨åˆ†ã®å°åˆ·";
-    Text[ chinese_traditional ] = "åˆ—å°é¸å–éƒ¨ä»½";
-    Text[ arabic ] = "ØÈÇÚÉ ÇáÊÍÏíÏ";
-    Text[ greek ] = "Åêôığùóç åğéëïãŞò";
-    Text[ korean ] = "ì„ íƒí•œ ë²”ìœ„ ì¸ì‡„";
-    Text[ turkish ] = "Seçilen aralık yazdırılıyor";
-    Text[ catalan ] = "Imprimeix la selecció";
-    Text[ finnish ] = "Tulostusvalinta";
-    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸à¸´à¸¡à¸à¹Œà¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸";
-    Text[ czech ] = "Tisk vybranÃ½ch ÄÃ¡stÃ­";
-    Text[ hebrew ] = "Drucken der Selektion";
-    Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ à¤•à¤¾ à¤šà¥à¤¨à¤¾à¤µ";
-    Text[ slovak ] = "TlaÄ vybranÃ½ch ÄastÃ­";
-    Text[ hungarian ] = "KijelÃ¶lÃ©s nyomtatÃ¡sa";
-    Text[ slovenian ] = "Izbor za tiskanje";
+    Text [ de ] = "Drucken der Selektion" ;
+    Text [ en-US ] = "Printing selection";
 };
 String RID_SVXSTR_QRY_PRINT_MSG
 {
-    Text = "Wollen Sie die Selektion oder das gesamte Dokument drucken?" ;
-    Text [ English ] = "Print selection or whole document?" ;
-    Text[ italian ] = "Volete stampare la selezione o l'intero documento?";
-    Text[ portuguese_brazilian ] = "Deseja imprimir apenas a área selecionada ou o documento inteiro?";
-    Text[ portuguese ] = "Deseja imprimir a selecção ou o documento inteiro?";
-    Text[ danish ] = "Vil du udskrive det markerede eller hele dokumentet?";
-    Text[ french ] = "Souhaitez vous imprimer uniquement la sélection ou bien le document entier ?";
-    Text[ swedish ] = "Vill du skriva ut det markerade eller hela dokumentet?";
-    Text[ dutch ] = "Wilt u de selectie of het hele document afdrukken?";
-    Text[ spanish ] = "¿Desea imprimir solo la selección o todo el documento?";
-    Text[ english_us ] = "Do you want to print the selection or the entire document?";
-    Text[ chinese_simplified ] = "è¦æ‰“å°é€‰ä¸­çš„éƒ¨åˆ†è¿˜æ˜¯è¦æ‰“å°æ•´ä¸ªæ–‡æ¡£ï¼Ÿ";
-    Text[ russian ] = "Âû õîòèòå íàïå÷àòàòü âåñü äîêóìåíò èëè òîëüêî âûäåëåííûé ôğàãìåíò?";
-    Text[ polish ] = "Czy chcesz wydrukowaæ zaznaczony obszar czy ca³y dokument?";
-    Text[ japanese ] = "å°åˆ·ã¯é¸æŠã—ãŸéƒ¨åˆ†ã«ã—ã¾ã™ã‹ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆå…¨ä½“ã—ã¾ã™ã‹ï¼Ÿ";
-    Text[ chinese_traditional ] = "è¦åˆ—å°é¸å–çš„éƒ¨ä»½é‚„æ˜¯è¦åˆ—å°æ•´å€‹æ–‡ä»¶ï¼Ÿ";
-    Text[ arabic ] = "åá ÊÑíÏ ØÈÇÚÉ ÇáÊÍÏíÏ İŞØ¡ Ãã ÇáãÓÊäÏ ÈÃßãáå¿";
-    Text[ greek ] = "Èİëåôå íá åêôõğşóåôå ôçí åğéëåãìİíç ğåñéï÷Ş Ş ïëüêëçñï ôï İããñáöï;";
-    Text[ korean ] = "ì„ íƒí•œ ë²”ìœ„ ë˜ëŠ” ë¬¸ì„œ ì „ì²´ë¥¼ ì¸ì‡„í•˜ê² ìŠµë‹ˆê¹Œ?";
-    Text[ turkish ] = "Seçilen aralık ya da belgenin tümü mü yazdırılsın?";
-    Text[ catalan ] = "Voleu imprimir només la selecció o tot el document?";
-    Text[ finnish ] = "Haluatko tulostaa vain valinnan vai koko asiakirjan?";
-    Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œà¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸à¸«à¸£à¸·à¸­à¸—à¸±à¹‰à¸‡à¹€à¸­à¸à¸ªà¸²à¸£?";
-    Text[ czech ] = "Chcete vytisknout pouze vÃ½bÄ›r nebo celÃ½ dokument?";
-    Text[ hebrew ] = "Wollen Sie die Selektion oder das gesamte Dokument drucken?";
-    Text[ hindi ] = "à¤†à¤ª à¤šà¥à¤¨à¤¾à¤µ à¤•à¥‹ à¤…à¤¥à¤µà¤¾ à¤¸à¤‚à¤ªà¥‚à¤°à¥à¤£ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‹ à¤›à¤ªà¤¾à¤ˆ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    Text[ slovak ] = "Chcete vytlaÄiÅ¥ iba vybranÃº ÄasÅ¥ alebo celÃ½ dokument?";
-    Text[ hungarian ] = "A teljes dokumentumot vagy csak a kijelÃ¶lt rÃ©szt kÃ­vÃ¡nja nyomtatni?";
-    Text[ slovenian ] = "Ali Å¾elite natisniti izbrano ali ves dokument?";
+    Text [ de ] = "Wollen Sie die Selektion oder das gesamte Dokument drucken?" ;
+    Text [ en-US ] = "Do you want to print the selection or the entire document?";
 };
 String RID_SVXSTR_QRY_PRINT_ALL
 {
-    Text = "~Alles" ;
-    Text [ English ] = "All" ;
-    Text[ italian ] = "~Tutto";
-    Text[ portuguese_brazilian ] = "~Tudo";
-    Text[ portuguese ] = "~Tudo";
-    Text[ danish ] = "~Alt";
-    Text[ french ] = "~Tout";
-    Text[ swedish ] = "~Allt";
-    Text[ dutch ] = "~Alles";
-    Text[ spanish ] = "~Todo";
-    Text[ english_us ] = "~All";
-    Text[ chinese_simplified ] = "å…¨éƒ¨(~A)";
-    Text[ russian ] = "Âñå";
-    Text[ polish ] = "~Wszystko";
-    Text[ japanese ] = "ã™ã¹ã¦(~A)";
-    Text[ chinese_traditional ] = "å…¨éƒ¨(~A)";
-    Text[ arabic ] = "Çáßá";
-    Text[ greek ] = "¼ë~á";
-    Text[ korean ] = "ëª¨ë‘(~A)";
-    Text[ turkish ] = "~Tümü";
-    Text[ catalan ] = "~Tot";
-    Text[ finnish ] = "~Kaikki";
-    Text[ thai ] = "~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-    Text[ czech ] = "VÅ¡e";
-    Text[ hebrew ] = "â€®×”×›×œâ€¬";
-    Text[ hindi ] = "~à¤¸à¤¬";
-    Text[ slovak ] = "~VÅ¡etko";
-    Text[ hungarian ] = "~Minden";
-    Text[ slovenian ] = "~Vse";
+    Text [ de ] = "~Alles" ;
+    Text [ en-US ] = "~All";
 };
 String RID_SVXSTR_QRY_PRINT_SELECTION
 {
-    Text = "~Selektion" ;
-    Text [ English ] = "Selection" ;
-    Text[ italian ] = "~Selezione";
-    Text[ portuguese_brazilian ] = "~Seleção";
-    Text[ portuguese ] = "~Selecção";
-    Text[ danish ] = "~Markering";
-    Text[ french ] = "~Sélection";
-    Text[ swedish ] = "~Markering";
-    Text[ dutch ] = "~Selectie";
-    Text[ spanish ] = "Sele~cción";
-    Text[ english_us ] = "~Selection";
-    Text[ chinese_simplified ] = "é€‰ä¸­(~S)";
-    Text[ russian ] = "Âûäåëåíèå";
-    Text[ polish ] = "~Wybór";
-    Text[ japanese ] = "é¸æŠç¯„å›²(~S)";
-    Text[ chinese_traditional ] = "é¸å–(~S)";
-    Text[ arabic ] = "ÇáÊÍÏíÏ";
-    Text[ greek ] = "ÅğéëïãŞ";
-    Text[ korean ] = "ì„ íƒí•œ ë²”ìœ„(~S)";
-    Text[ turkish ] = "~Seçilen aralık";
-    Text[ catalan ] = "~Selecció";
-    Text[ finnish ] = "V~alinta";
-    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¹€~à¸¥à¸·à¸­à¸";
-    Text[ czech ] = "VÃ½bÄ›r";
-    Text[ hebrew ] = "â€®××‘×—×¨â€¬";
-    Text[ hindi ] = "~à¤šà¥à¤¨à¤¾à¤µ";
-    Text[ slovak ] = "~VÃ½ber";
-    Text[ hungarian ] = "~KijelÃ¶lÃ©s";
-    Text[ slovenian ] = "I~zbor";
+    Text [ de ] = "~Selektion" ;
+    Text [ en-US ] = "~Selection";
 };
 
 
