@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-13 10:06:41 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,7 +925,7 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
         if ( IsBulletFI() )
         {
             // Ab 6.0 keine Magicnumber schreiben...
-            DBG_ASSERT( SOFFICE_FILEFORMAT_NOW <= SOFFICE_FILEFORMAT_50, "MT: Fileformat SvxLRSpaceItem aendern!" );
+            DBG_ASSERT( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_50, "MT: Fileformat SvxLRSpaceItem aendern!" );
             rStrm << (sal_uInt32) BULLETLR_MARKER;
             rStrm << nSaveFI;
         }
@@ -3223,7 +3223,7 @@ sal_uInt16 SvxBoxItem::GetVersion( sal_uInt16 nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            SOFFICE_FILEFORMAT_50==nFFVer,
             "SvxBoxItem: Gibt es ein neues Fileformat?" );
     return SOFFICE_FILEFORMAT_31==nFFVer ||
            SOFFICE_FILEFORMAT_40==nFFVer ? 0 : BOX_4DISTS_VERSION;
@@ -3902,7 +3902,7 @@ sal_uInt16 SvxFmtBreakItem::GetVersion( sal_uInt16 nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            SOFFICE_FILEFORMAT_50==nFFVer,
             "SvxFmtBreakItem: Gibt es ein neues Fileformat?" );
     return SOFFICE_FILEFORMAT_31==nFFVer ||
            SOFFICE_FILEFORMAT_40==nFFVer ? 0 : FMTBREAK_NOAUTO;

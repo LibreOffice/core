@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:42:20 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1754,10 +1754,10 @@ USHORT  SvxScriptSpaceItem::GetVersion( USHORT nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            SOFFICE_FILEFORMAT_50==nFFVer,
             "SvxTwoLinesItem: Gibt es ein neues Fileformat?" );
 
-    return SOFFICE_FILEFORMAT_NOW > nFFVer ? USHRT_MAX : 0;
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
 SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
@@ -1807,10 +1807,10 @@ USHORT SvxHangingPunctuationItem::GetVersion( USHORT nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            SOFFICE_FILEFORMAT_50==nFFVer,
             "SvxHangingPunctuationItem: Gibt es ein neues Fileformat?" );
 
-    return SOFFICE_FILEFORMAT_NOW > nFFVer ? USHRT_MAX : 0;
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
 SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
@@ -1865,10 +1865,10 @@ USHORT SvxForbiddenRuleItem::GetVersion( USHORT nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            SOFFICE_FILEFORMAT_50==nFFVer,
             "SvxForbiddenRuleItem: Gibt es ein neues Fileformat?" );
 
-    return SOFFICE_FILEFORMAT_NOW > nFFVer ? USHRT_MAX : 0;
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 /* -----------------------------29.11.00 11:23--------------------------------
 

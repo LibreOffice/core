@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-31 12:08:47 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,7 +539,7 @@ void SdrExchangeView::ImpYank(ULONG nFormat, BOOL bClp) const
             pModel->SetStreamingSdrModel(TRUE);
             pModel->RemoveNotPersistentObjects(TRUE); // OLE, etc. entfernen
             SvMemoryStream aMemStream(4096,4096);
-            aMemStream.SetVersion(SOFFICE_FILEFORMAT_NOW);
+            aMemStream.SetVersion(SOFFICE_FILEFORMAT_50);
             // StyleSheetPool und Persist fehlt hier wohl noch ...
             pModel->GetItemPool().SetFileFormatVersion( aMemStream.GetVersion() );
             pModel->GetItemPool().Store(aMemStream);
@@ -576,7 +576,7 @@ void SdrExchangeView::ImpYank(ULONG nFormat, BOOL bClp) const
                     {
                         if (nFormat==SDR_ANYFORMAT || nFormat==nEEFormat) {
                             SvMemoryStream aMemStream(4096,4096);
-                            aMemStream.SetVersion(SOFFICE_FILEFORMAT_NOW);
+                            aMemStream.SetVersion(SOFFICE_FILEFORMAT_50);
                             ((EditEngine&)rOutliner.GetEditEngine()).Write(aMemStream,EE_FORMAT_BIN);
                             if (bClp) Clipboard::CopyData(aMemStream.GetData(),aMemStream.GetSize(),nEEFormat);
                             else DragServer::CopyData(aMemStream.GetData(),aMemStream.GetSize(),nEEFormat);
@@ -829,7 +829,7 @@ BOOL SdrExchangeView::ImpPaste(ULONG nFormat, BOOL bClp, USHORT nItemNum, const 
         {
             SvMemoryStream aMemStream(pDataBuf, nDataLen, STREAM_READ);
 
-            aMemStream.SetVersion(SOFFICE_FILEFORMAT_NOW);
+            aMemStream.SetVersion(SOFFICE_FILEFORMAT_50);
 
             SdrModel* pModel = pMod->AllocModel();
 

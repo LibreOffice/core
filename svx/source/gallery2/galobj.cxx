@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-21 13:08:52 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ void SgaObject::WriteData( SvStream& rOut ) const
         const ULONG     nOldVersion = rOut.GetVersion();
 
         rOut.SetCompressMode( COMPRESSMODE_ZBITMAP );
-        rOut.SetVersion( SOFFICE_FILEFORMAT_NOW );
+        rOut.SetVersion( SOFFICE_FILEFORMAT_50 );
 
         rOut << aThumbBmp;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-01 14:17:31 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3862,10 +3862,10 @@ USHORT SvxEmphasisMarkItem::GetVersion( USHORT nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            SOFFICE_FILEFORMAT_50==nFFVer,
             "SvxEmphasisMarkItem: Gibt es ein neues Fileformat?" );
 
-    return SOFFICE_FILEFORMAT_NOW > nFFVer ? USHRT_MAX : 0;
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
 
@@ -4013,10 +4013,10 @@ USHORT SvxTwoLinesItem::GetVersion( USHORT nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
-            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            SOFFICE_FILEFORMAT_50==nFFVer,
             "SvxTwoLinesItem: Gibt es ein neues Fileformat?" );
 
-    return SOFFICE_FILEFORMAT_NOW > nFFVer ? USHRT_MAX : 0;
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
 
 

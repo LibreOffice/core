@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-31 11:22:20 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,7 +824,7 @@ BOOL GalleryTheme::InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos )
 
             if( pOStm )
             {
-                pOStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+                pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                 bRet = ( GraphicConverter::Export( *pOStm, rGraphic, nExportFormat ) == ERRCODE_NONE );
                 delete pOStm;
             }
@@ -839,7 +839,7 @@ BOOL GalleryTheme::InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos )
 
             if( pOStm )
             {
-                pOStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+                pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                 aMtf.Write( *pOStm );
                 bRet = ( pOStm->GetError() == ERRCODE_NONE );
                 delete pOStm;
@@ -904,8 +904,7 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
             RLECodec        aCodec( *xOStm );
             FmFormModel*    pFormModel = (FmFormModel*) &rModel;
 
-
-            aMemStm.SetVersion( SOFFICE_FILEFORMAT_NOW );
+            aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
             pFormModel->SetStreamingSdrModel( TRUE );
             pFormModel->PreSave();
             pFormModel->GetItemPool().SetFileFormatVersion( aMemStm.GetVersion() );
