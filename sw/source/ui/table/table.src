@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 23:35:24 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 03:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ InfoBox MSG_ERR_TABLE_MERGE
     MESSAGE[ turkish ] = "Seçilen tablo hücreleri birleþtirilmek için fazla karmaþýk.";
     MESSAGE[ catalan ] = "Las celdas seleccionadas de la tabla son demasiado complejas para enlazarlas.";
 };
+
 
 
 
