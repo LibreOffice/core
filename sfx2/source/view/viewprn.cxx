@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:29:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 15:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,10 +416,13 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         if( !pPrinter || !pPrinter->IsValid() )
         {
             // no valid printer either in ItemSet or at the document
-            if ( !bSilent )
+            if ( bSilent )
+            {
+                rReq.SetReturnValue(SfxBoolItem(0,FALSE));
+                return;
+            }
+            else
                 ErrorBox( NULL, WB_OK | WB_DEF_OK, String( SfxResId( STR_NODEFPRINTER ) ) ).Execute();
-            rReq.SetReturnValue(SfxBoolItem(0,FALSE));
-            return;
         }
 
         if ( !pPrinter->IsOriginal() && rReq.GetArgs() && !UseStandardPrinter_Impl( NULL, pPrinter ) )
@@ -650,6 +653,14 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             // if no printer was selected before
             if ( !pPrinter )
                 pPrinter = GetPrinter(TRUE);
+
+            if( !pPrinter->IsValid() )
+            {
+                // redirect slot to call the print dialog if the document's printer is not valid!
+                rReq.SetSlot( SID_PRINTDOC );
+                ExecPrint_Impl( rReq );
+                return;
+            }
 
             if( pPrinter->IsOriginal() && pPrinter->GetName() != Printer::GetDefaultPrinterName() )
             {
