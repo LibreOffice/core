@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 10:48:18 $
+ *  last change: $Author: os $ $Date: 2002-12-06 13:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,11 @@
 
 #include "dialogs.hrc"
 #include "layctrl.hxx"
+#ifndef _SVX_DIALMGR_HXX
+#include <dialmgr.hxx>
+#endif
+
+
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTableToolBoxControl,SfxUInt16Item);
 SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
@@ -428,6 +433,12 @@ void TableWindow::Paint( const Rectangle& )
         aText += String::CreateFromInt32( nCol );
         aText.AppendAscii( " x " );
         aText += String::CreateFromInt32( nLine );
+        if(GetId() == FN_SHOW_MULTIPLE_PAGES)
+        {
+            aText += ' ';
+            aText += String(SVX_RESSTR(RID_SVXSTR_PAGES));
+        }
+
     }
     else
         aText = Button::GetStandardText( BUTTON_CANCEL );
