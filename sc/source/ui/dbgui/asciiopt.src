@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:08:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ ModalDialog RID_SCDLG_ASCII
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "¹Ì¶¨µÄ¿í¶È(~F)";
         Text[ russian ] = "Ôèêñ.  øèğèíà";
-        Text[ polish ] = "Sta³a szerokoœæ";
+        Text[ polish ] = "Sta³a szeroko?æ";
         Text[ japanese ] = "ŒÅ’è•(~F)";
         Text[ chinese_traditional ] = "©T©wªº¼e«×(~F)";
         Text[ arabic ] = "ÚÑÖ ËÇÈÊ";
@@ -467,7 +467,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ portuguese ] = "~Ponto e vírgula" ;
         Text[ chinese_simplified ] = "·ÖºÅ(~E)";
         Text[ russian ] = "Òî÷êà ñ çàïÿòîé";
-        Text[ polish ] = "Œrednik";
+        Text[ polish ] = "?rednik";
         Text[ japanese ] = "¾ĞºÛİ(~E)";
         Text[ chinese_traditional ] = "¤À¸¹(~E)";
         Text[ arabic ] = "İÇÕáÉ ãäŞæØÉ";
@@ -648,7 +648,7 @@ ModalDialog RID_SCDLG_ASCII
         Text = "Fel~dtrenner zusammenfassen" ;
         Text [ ENGLISH ] = "Treat delimiters as one" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Compressed ~display" ;
+        Text [ english_us ] = "Merge ~delimiters" ;
         Text [ portuguese_brazilian ] = "Fel~dtrenner zusammenfassen" ;
         Text [ swedish ] = "Sammanfatta f~ältavgränsare" ;
         Text [ danish ] = "Kombiner feltseparatorer" ;
